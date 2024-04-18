@@ -81,16 +81,16 @@ it{
                         other{"0"}
                     }
                     1000000{
-                        one{"0 Mio ¤"}
-                        other{"0 Mio ¤"}
+                        one{"0 Mln ¤"}
+                        other{"0 Mln ¤"}
                     }
                     10000000{
-                        one{"00 Mio ¤"}
-                        other{"00 Mio ¤"}
+                        one{"00 Mln ¤"}
+                        other{"00 Mln ¤"}
                     }
                     100000000{
-                        one{"000 Mio ¤"}
-                        other{"000 Mio ¤"}
+                        one{"000 Mln ¤"}
+                        other{"000 Mln ¤"}
                     }
                     1000000000{
                         one{"0 Mrd ¤"}
@@ -131,16 +131,16 @@ it{
                         other{"0"}
                     }
                     1000000{
-                        one{"0 Mio"}
-                        other{"0 Mio"}
+                        one{"0 Mln"}
+                        other{"0 Mln"}
                     }
                     10000000{
-                        one{"00 Mio"}
-                        other{"00 Mio"}
+                        one{"00 Mln"}
+                        other{"00 Mln"}
                     }
                     100000000{
-                        one{"000 Mio"}
-                        other{"000 Mio"}
+                        one{"000 Mln"}
+                        other{"000 Mln"}
                     }
                     1000000000{
                         one{"0 Mrd"}

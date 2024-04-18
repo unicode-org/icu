@@ -156,223 +156,223 @@ Added in ICU 75
 |---|---|---|---|
 | calendar.h | <tt>#define</tt> DECLARE_OVERRIDE_SYSTEM_DEFAULT_CENTURY |  (missing) | Internal
 | caniter.h | <tt>static</tt> void icu::CanonicalIterator::permute(UnicodeString&amp;, bool, Hashtable*, UErrorCode&amp;, int32_t depth=) |  (missing) | Internal
-| messageformat2_arguments.h | MessageArguments&amp; icu::message2::MessageArguments::operator=(MessageArguments&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_arguments.h | icu::message2::MessageArguments::MessageArguments()=default |  (missing) | InternalICU 75.0
-| messageformat2_arguments.h | icu::message2::MessageArguments::MessageArguments(const std::map&lt;, Formattable &gt;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_arguments.h | icu::message2::MessageArguments::~MessageArguments() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder &amp; icu::message2::data_model::Markup::Builder::setClose() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder &amp; icu::message2::data_model::Markup::Builder::setOpen() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder &amp; icu::message2::data_model::Markup::Builder::setStandalone() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addBinding(Binding&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addSelector(Expression&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addUnsupportedStatement(UnsupportedStatement&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addVariant(SelectorKeys&amp;&amp;, Pattern&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::setPattern(Pattern&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Expression::Builder::addAttribute(const UnicodeString&amp;, Operand&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Expression::Builder::setOperand(Operand&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Expression::Builder::setOperator(Operator&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Markup::Builder::addAttribute(const UnicodeString&amp;, Operand&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Markup::Builder::addOption(const UnicodeString&amp;, Operand&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Markup::Builder::setName(const UnicodeString&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Operator::Builder::addOption(const UnicodeString&amp;, Operand&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Operator::Builder::setFunctionName(FunctionName&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Operator::Builder::setReserved(Reserved&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Pattern::Builder::add(Expression&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Pattern::Builder::add(Markup&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Pattern::Builder::add(UnicodeString&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Reserved::Builder::add(Literal&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::SelectorKeys::Builder::add(Key&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::UnsupportedStatement::Builder::addExpression(Expression&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::UnsupportedStatement::Builder::setBody(Reserved&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::UnsupportedStatement::Builder::setKeyword(const UnicodeString&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Expression icu::message2::data_model::Expression::Builder::build(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Expression&amp; icu::message2::data_model::Expression::operator=(Expression) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Literal&amp; icu::message2::data_model::Literal::operator=(Literal) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | MFDataModel icu::message2::MFDataModel::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Markup icu::message2::data_model::Markup::Builder::build(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Operator icu::message2::data_model::Operator::Builder::build(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Option&amp; icu::message2::data_model::Option::operator=(Option) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Pattern icu::message2::data_model::Pattern::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | PatternPart&amp; icu::message2::data_model::PatternPart::operator=(PatternPart) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Reserved icu::message2::data_model::Reserved::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | Reserved&amp; icu::message2::data_model::Reserved::operator=(Reserved) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | SelectorKeys icu::message2::data_model::SelectorKeys::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | UnicodeString icu::message2::data_model::Literal::quoted() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | UnsupportedStatement icu::message2::data_model::UnsupportedStatement::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | UnsupportedStatement&amp; icu::message2::data_model::UnsupportedStatement::operator=(UnsupportedStatement) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | bool icu::message2::data_model::Expression::isFunctionCall() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | bool icu::message2::data_model::Expression::isReserved() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | bool icu::message2::data_model::Expression::isStandaloneAnnotation() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | bool icu::message2::data_model::Literal::isQuoted() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | bool icu::message2::data_model::Literal::operator&lt;(const Literal&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | bool icu::message2::data_model::Literal::operator==(const Literal&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | bool icu::message2::data_model::Markup::isClose() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | bool icu::message2::data_model::Markup::isOpen() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | bool icu::message2::data_model::Markup::isStandalone() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | bool icu::message2::data_model::PatternPart::isExpression() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | bool icu::message2::data_model::PatternPart::isMarkup() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | bool icu::message2::data_model::PatternPart::isText() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | const Expression &amp; icu::message2::data_model::PatternPart::contents() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | const Literal&amp; icu::message2::data_model::Reserved::getPart(int32_t) const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | const Markup &amp; icu::message2::data_model::PatternPart::asMarkup() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | const Operand &amp; icu::message2::data_model::Expression::getOperand() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | const Operand &amp; icu::message2::data_model::Option::getValue() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | const Operator* icu::message2::data_model::Expression::getOperator(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | const Reserved* icu::message2::data_model::UnsupportedStatement::getBody(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | const UnicodeString &amp; icu::message2::data_model::Literal::unquoted() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | const UnicodeString &amp; icu::message2::data_model::Markup::getName() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | const UnicodeString &amp; icu::message2::data_model::Option::getName() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | const UnicodeString &amp; icu::message2::data_model::PatternPart::asText() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | const UnicodeString &amp; icu::message2::data_model::UnsupportedStatement::getKeyword() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::MFDataModel::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::MFDataModel::Builder::~Builder() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Expression::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Expression::Builder::~Builder() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Expression::Expression() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Expression::Expression(const Expression&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Expression::~Expression() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Literal::Literal()=default |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Literal::Literal(bool, const UnicodeString&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Literal::Literal(const Literal&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Literal::~Literal() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Markup::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Markup::Builder::~Builder() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Markup::Markup() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Markup::~Markup() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Operator::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Operator::Builder::~Builder() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Option::Option() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Option::Option(const Option&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Option::Option(const UnicodeString&amp;, Operand&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Option::~Option() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Pattern::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Pattern::Builder::~Builder() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::PatternPart::PatternPart()=default |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::PatternPart::PatternPart(Expression&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::PatternPart::PatternPart(Markup&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::PatternPart::PatternPart(const PatternPart&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::PatternPart::PatternPart(const UnicodeString&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::PatternPart::~PatternPart() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Reserved::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Reserved::Builder::~Builder() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Reserved::Reserved() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Reserved::Reserved(const Reserved&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::Reserved::~Reserved() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::SelectorKeys::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::SelectorKeys::Builder::~Builder() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::Builder::~Builder() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::UnsupportedStatement() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::UnsupportedStatement(const UnsupportedStatement&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::~UnsupportedStatement() |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | int32_t icu::message2::data_model::Reserved::numParts() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | std::vector&lt; Expression &gt; icu::message2::data_model::UnsupportedStatement::getExpressions() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | std::vector&lt; Option &gt; icu::message2::data_model::Expression::getAttributes() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | std::vector&lt; Option &gt; icu::message2::data_model::Markup::getAttributes() const |  (missing) | InternalICU 75.0
-| messageformat2_data_model.h | std::vector&lt; Option &gt; icu::message2::data_model::Markup::getOptions() const |  (missing) | InternalICU 75.0
+| messageformat2_arguments.h | MessageArguments&amp; icu::message2::MessageArguments::operator=(MessageArguments&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_arguments.h | icu::message2::MessageArguments::MessageArguments()=default |  (missing) | InternalICU 75
+| messageformat2_arguments.h | icu::message2::MessageArguments::MessageArguments(const std::map&lt;, Formattable &gt;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_arguments.h | icu::message2::MessageArguments::~MessageArguments() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder &amp; icu::message2::data_model::Markup::Builder::setClose() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder &amp; icu::message2::data_model::Markup::Builder::setOpen() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder &amp; icu::message2::data_model::Markup::Builder::setStandalone() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addBinding(Binding&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addSelector(Expression&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addUnsupportedStatement(UnsupportedStatement&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addVariant(SelectorKeys&amp;&amp;, Pattern&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::setPattern(Pattern&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Expression::Builder::addAttribute(const UnicodeString&amp;, Operand&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Expression::Builder::setOperand(Operand&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Expression::Builder::setOperator(Operator&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Markup::Builder::addAttribute(const UnicodeString&amp;, Operand&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Markup::Builder::addOption(const UnicodeString&amp;, Operand&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Markup::Builder::setName(const UnicodeString&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Operator::Builder::addOption(const UnicodeString&amp;, Operand&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Operator::Builder::setFunctionName(FunctionName&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Operator::Builder::setReserved(Reserved&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Pattern::Builder::add(Expression&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Pattern::Builder::add(Markup&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Pattern::Builder::add(UnicodeString&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Reserved::Builder::add(Literal&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::SelectorKeys::Builder::add(Key&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::UnsupportedStatement::Builder::addExpression(Expression&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::UnsupportedStatement::Builder::setBody(Reserved&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::UnsupportedStatement::Builder::setKeyword(const UnicodeString&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Expression icu::message2::data_model::Expression::Builder::build(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Expression&amp; icu::message2::data_model::Expression::operator=(Expression) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Literal&amp; icu::message2::data_model::Literal::operator=(Literal) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | MFDataModel icu::message2::MFDataModel::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Markup icu::message2::data_model::Markup::Builder::build(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Operator icu::message2::data_model::Operator::Builder::build(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Option&amp; icu::message2::data_model::Option::operator=(Option) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Pattern icu::message2::data_model::Pattern::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | PatternPart&amp; icu::message2::data_model::PatternPart::operator=(PatternPart) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Reserved icu::message2::data_model::Reserved::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | Reserved&amp; icu::message2::data_model::Reserved::operator=(Reserved) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | SelectorKeys icu::message2::data_model::SelectorKeys::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | UnicodeString icu::message2::data_model::Literal::quoted() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | UnsupportedStatement icu::message2::data_model::UnsupportedStatement::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | UnsupportedStatement&amp; icu::message2::data_model::UnsupportedStatement::operator=(UnsupportedStatement) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | bool icu::message2::data_model::Expression::isFunctionCall() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | bool icu::message2::data_model::Expression::isReserved() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | bool icu::message2::data_model::Expression::isStandaloneAnnotation() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | bool icu::message2::data_model::Literal::isQuoted() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | bool icu::message2::data_model::Literal::operator&lt;(const Literal&amp;) const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | bool icu::message2::data_model::Literal::operator==(const Literal&amp;) const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | bool icu::message2::data_model::Markup::isClose() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | bool icu::message2::data_model::Markup::isOpen() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | bool icu::message2::data_model::Markup::isStandalone() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | bool icu::message2::data_model::PatternPart::isExpression() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | bool icu::message2::data_model::PatternPart::isMarkup() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | bool icu::message2::data_model::PatternPart::isText() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | const Expression &amp; icu::message2::data_model::PatternPart::contents() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | const Literal&amp; icu::message2::data_model::Reserved::getPart(int32_t) const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | const Markup &amp; icu::message2::data_model::PatternPart::asMarkup() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | const Operand &amp; icu::message2::data_model::Expression::getOperand() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | const Operand &amp; icu::message2::data_model::Option::getValue() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | const Operator* icu::message2::data_model::Expression::getOperator(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | const Reserved* icu::message2::data_model::UnsupportedStatement::getBody(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | const UnicodeString &amp; icu::message2::data_model::Literal::unquoted() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | const UnicodeString &amp; icu::message2::data_model::Markup::getName() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | const UnicodeString &amp; icu::message2::data_model::Option::getName() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | const UnicodeString &amp; icu::message2::data_model::PatternPart::asText() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | const UnicodeString &amp; icu::message2::data_model::UnsupportedStatement::getKeyword() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::MFDataModel::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::MFDataModel::Builder::~Builder() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Expression::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Expression::Builder::~Builder() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Expression::Expression() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Expression::Expression(const Expression&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Expression::~Expression() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Literal::Literal()=default |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Literal::Literal(bool, const UnicodeString&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Literal::Literal(const Literal&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Literal::~Literal() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Markup::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Markup::Builder::~Builder() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Markup::Markup() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Markup::~Markup() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Operator::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Operator::Builder::~Builder() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Option::Option() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Option::Option(const Option&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Option::Option(const UnicodeString&amp;, Operand&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Option::~Option() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Pattern::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Pattern::Builder::~Builder() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::PatternPart::PatternPart()=default |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::PatternPart::PatternPart(Expression&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::PatternPart::PatternPart(Markup&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::PatternPart::PatternPart(const PatternPart&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::PatternPart::PatternPart(const UnicodeString&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::PatternPart::~PatternPart() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Reserved::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Reserved::Builder::~Builder() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Reserved::Reserved() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Reserved::Reserved(const Reserved&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::Reserved::~Reserved() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::SelectorKeys::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::SelectorKeys::Builder::~Builder() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::Builder::~Builder() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::UnsupportedStatement() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::UnsupportedStatement(const UnsupportedStatement&amp;) |  (missing) | InternalICU 75
+| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::~UnsupportedStatement() |  (missing) | InternalICU 75
+| messageformat2_data_model.h | int32_t icu::message2::data_model::Reserved::numParts() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | std::vector&lt; Expression &gt; icu::message2::data_model::UnsupportedStatement::getExpressions() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | std::vector&lt; Option &gt; icu::message2::data_model::Expression::getAttributes() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | std::vector&lt; Option &gt; icu::message2::data_model::Markup::getAttributes() const |  (missing) | InternalICU 75
+| messageformat2_data_model.h | std::vector&lt; Option &gt; icu::message2::data_model::Markup::getOptions() const |  (missing) | InternalICU 75
 | messageformat2_formattable.h | Appendable&amp; icu::message2::FormattedMessage::appendTo(Appendable&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75
 | messageformat2_formattable.h | CharacterIterator* icu::message2::FormattedMessage::toCharacterIterator(UErrorCode&amp;) |  (missing) | InternalICU 75
-| messageformat2_formattable.h | Formattable&amp; icu::message2::Formattable::operator=(Formattable) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | FormattedPlaceholder&amp; icu::message2::FormattedPlaceholder::operator=(FormattedPlaceholder&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | FormattedValue&amp; icu::message2::FormattedValue::operator=(FormattedValue&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | FunctionOptions&amp; icu::message2::FunctionOptions::operator=(FunctionOptions&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | FunctionOptions&amp; icu::message2::FunctionOptions::operator=(const FunctionOptions&amp;)=delete |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | FunctionOptionsMap icu::message2::FunctionOptions::getOptions() const |  (missing) | InternalICU 75.0
+| messageformat2_formattable.h | Formattable&amp; icu::message2::Formattable::operator=(Formattable) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | FormattedPlaceholder&amp; icu::message2::FormattedPlaceholder::operator=(FormattedPlaceholder&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | FormattedValue&amp; icu::message2::FormattedValue::operator=(FormattedValue&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | FunctionOptions&amp; icu::message2::FunctionOptions::operator=(FunctionOptions&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | FunctionOptions&amp; icu::message2::FunctionOptions::operator=(const FunctionOptions&amp;)=delete |  (missing) | InternalICU 75
+| messageformat2_formattable.h | FunctionOptionsMap icu::message2::FunctionOptions::getOptions() const |  (missing) | InternalICU 75
 | messageformat2_formattable.h | StringPiece icu::message2::FormattedMessage::subSequence(int32_t, int32_t, UErrorCode&amp;) const |  (missing) | InternalICU 75
-| messageformat2_formattable.h | UDate icu::message2::Formattable::getDate(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | UFormattableType icu::message2::Formattable::getType() const |  (missing) | InternalICU 75.0
+| messageformat2_formattable.h | UDate icu::message2::Formattable::getDate(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | UFormattableType icu::message2::Formattable::getType() const |  (missing) | InternalICU 75
 | messageformat2_formattable.h | UnicodeString icu::message2::FormattedMessage::toString(UErrorCode&amp;) const |  (missing) | InternalICU 75
 | messageformat2_formattable.h | UnicodeString icu::message2::FormattedMessage::toTempString(UErrorCode&amp;) const |  (missing) | InternalICU 75
-| messageformat2_formattable.h | UnicodeString icu::message2::FormattedPlaceholder::formatToString(const Locale&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | bool icu::message2::Formattable::isNumeric() const |  (missing) | InternalICU 75.0
+| messageformat2_formattable.h | UnicodeString icu::message2::FormattedPlaceholder::formatToString(const Locale&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | bool icu::message2::Formattable::isNumeric() const |  (missing) | InternalICU 75
 | messageformat2_formattable.h | bool icu::message2::FormattedMessage::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75
-| messageformat2_formattable.h | bool icu::message2::FormattedPlaceholder::canFormat() const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | bool icu::message2::FormattedPlaceholder::isEvaluated() const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | bool icu::message2::FormattedPlaceholder::isFallback() const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | bool icu::message2::FormattedPlaceholder::isNullOperand() const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | bool icu::message2::FormattedValue::isNumber() const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | bool icu::message2::FormattedValue::isString() const |  (missing) | InternalICU 75.0
+| messageformat2_formattable.h | bool icu::message2::FormattedPlaceholder::canFormat() const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | bool icu::message2::FormattedPlaceholder::isEvaluated() const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | bool icu::message2::FormattedPlaceholder::isFallback() const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | bool icu::message2::FormattedPlaceholder::isNullOperand() const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | bool icu::message2::FormattedValue::isNumber() const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | bool icu::message2::FormattedValue::isString() const |  (missing) | InternalICU 75
 | messageformat2_formattable.h | char16_t icu::message2::FormattedMessage::charAt(int32_t, UErrorCode&amp;) const |  (missing) | InternalICU 75
-| messageformat2_formattable.h | const Formattable* icu::message2::Formattable::getArray(int32_t&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | const FormattableObject* icu::message2::Formattable::getObject(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | const FormattedValue &amp; icu::message2::FormattedPlaceholder::output() const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | const FunctionOptions &amp; icu::message2::FormattedPlaceholder::options() const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | const UnicodeString &amp; icu::message2::FormattableObject::tag() const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | const UnicodeString &amp; icu::message2::FormattedPlaceholder::getFallback() const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | const UnicodeString &amp; icu::message2::FormattedValue::getString() const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | const UnicodeString&amp; icu::message2::Formattable::getString(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | const message2::Formattable &amp; icu::message2::FormattedPlaceholder::asFormattable() const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | const number::FormattedNumber &amp; icu::message2::FormattedValue::getNumber() const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | double icu::message2::Formattable::getDouble(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::Formattable icu::message2::Formattable::asICUFormattable(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::Formattable::Formattable() |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::Formattable::Formattable(const Formattable&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::Formattable::Formattable(const Formattable*, int32_t) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::Formattable::Formattable(const FormattableObject*) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::Formattable::Formattable(const UnicodeString&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::Formattable::Formattable(double) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::Formattable::Formattable(int64_t) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::Formattable::~Formattable() |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FormattableObject::~FormattableObject() |  (missing) | InternalICU 75.0
+| messageformat2_formattable.h | const Formattable* icu::message2::Formattable::getArray(int32_t&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | const FormattableObject* icu::message2::Formattable::getObject(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | const FormattedValue &amp; icu::message2::FormattedPlaceholder::output() const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | const FunctionOptions &amp; icu::message2::FormattedPlaceholder::options() const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | const UnicodeString &amp; icu::message2::FormattableObject::tag() const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | const UnicodeString &amp; icu::message2::FormattedPlaceholder::getFallback() const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | const UnicodeString &amp; icu::message2::FormattedValue::getString() const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | const UnicodeString&amp; icu::message2::Formattable::getString(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | const message2::Formattable &amp; icu::message2::FormattedPlaceholder::asFormattable() const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | const number::FormattedNumber &amp; icu::message2::FormattedValue::getNumber() const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | double icu::message2::Formattable::getDouble(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::Formattable icu::message2::Formattable::asICUFormattable(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::Formattable::Formattable() |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::Formattable::Formattable(const Formattable&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::Formattable::Formattable(const Formattable*, int32_t) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::Formattable::Formattable(const FormattableObject*) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::Formattable::Formattable(const UnicodeString&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::Formattable::Formattable(double) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::Formattable::Formattable(int64_t) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::Formattable::~Formattable() |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FormattableObject::~FormattableObject() |  (missing) | InternalICU 75
 | messageformat2_formattable.h | icu::message2::FormattedMessage::FormattedMessage(UErrorCode&amp;) |  (missing) | InternalICU 75
 | messageformat2_formattable.h | icu::message2::FormattedMessage::~FormattedMessage() |  (missing) | InternalICU 75
-| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder() |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(FormattedPlaceholder&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(const Formattable&amp;, const UnicodeString&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(const FormattedPlaceholder&amp;, FormattedValue&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(const FormattedPlaceholder&amp;, FunctionOptions&amp;&amp;, FormattedValue&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(const UnicodeString&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FormattedValue::FormattedValue() |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FormattedValue::FormattedValue(FormattedValue&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FormattedValue::FormattedValue(const UnicodeString&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FormattedValue::FormattedValue(number::FormattedNumber&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FormattedValue::~FormattedValue() |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FunctionOptions::FunctionOptions() |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FunctionOptions::FunctionOptions(FunctionOptions&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | icu::message2::FunctionOptions::~FunctionOptions() |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | int32_t icu::message2::Formattable::getLong(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
+| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder() |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(FormattedPlaceholder&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(const Formattable&amp;, const UnicodeString&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(const FormattedPlaceholder&amp;, FormattedValue&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(const FormattedPlaceholder&amp;, FunctionOptions&amp;&amp;, FormattedValue&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(const UnicodeString&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FormattedValue::FormattedValue() |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FormattedValue::FormattedValue(FormattedValue&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FormattedValue::FormattedValue(const UnicodeString&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FormattedValue::FormattedValue(number::FormattedNumber&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FormattedValue::~FormattedValue() |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FunctionOptions::FunctionOptions() |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FunctionOptions::FunctionOptions(FunctionOptions&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FunctionOptions::~FunctionOptions() |  (missing) | InternalICU 75
+| messageformat2_formattable.h | int32_t icu::message2::Formattable::getLong(UErrorCode&amp;) const |  (missing) | InternalICU 75
 | messageformat2_formattable.h | int32_t icu::message2::FormattedMessage::length(UErrorCode&amp;) const |  (missing) | InternalICU 75
-| messageformat2_formattable.h | int64_t icu::message2::Formattable::getInt64(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | int64_t icu::message2::Formattable::getInt64Value(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | <tt>static</tt> Formattable icu::message2::Formattable::forDate(UDate) |  (missing) | InternalICU 75.0
-| messageformat2_formattable.h | <tt>static</tt> Formattable icu::message2::Formattable::forDecimal(std::string_view, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | Builder&amp; icu::message2::MFFunctionRegistry::Builder::adoptFormatter(const data_model::FunctionName&amp;, FormatterFactory*, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | Builder&amp; icu::message2::MFFunctionRegistry::Builder::adoptSelector(const data_model::FunctionName&amp;, SelectorFactory*, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | Builder&amp; icu::message2::MFFunctionRegistry::Builder::setDefaultFormatterNameByType(const UnicodeString&amp;, const data_model::FunctionName&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | FormattedPlaceholder icu::message2::Formatter::format(FormattedPlaceholder&amp;&amp;, FunctionOptions&amp;&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | Formatter* icu::message2::FormatterFactory::createFormatter(const Locale&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | FormatterFactory&amp; icu::message2::FormatterFactory::operator=(const FormatterFactory&amp;)=delete |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | FormatterFactory* icu::message2::MFFunctionRegistry::getFormatter(const FunctionName&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | MFFunctionRegistry icu::message2::MFFunctionRegistry::Builder::build() |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | MFFunctionRegistry&amp; icu::message2::MFFunctionRegistry::operator=(MFFunctionRegistry&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | Selector* icu::message2::SelectorFactory::createSelector(const Locale&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | SelectorFactory&amp; icu::message2::SelectorFactory::operator=(const SelectorFactory&amp;)=delete |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | bool icu::message2::MFFunctionRegistry::getDefaultFormatterNameByType(const UnicodeString&amp;, FunctionName&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | const SelectorFactory* icu::message2::MFFunctionRegistry::getSelector(const FunctionName&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | icu::message2::Formatter::~Formatter() |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | icu::message2::FormatterFactory::~FormatterFactory() |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | icu::message2::MFFunctionRegistry::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | icu::message2::MFFunctionRegistry::Builder::~Builder() |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | icu::message2::MFFunctionRegistry::MFFunctionRegistry(MFFunctionRegistry&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | icu::message2::MFFunctionRegistry::~MFFunctionRegistry() |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | icu::message2::Selector::~Selector() |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | icu::message2::SelectorFactory::~SelectorFactory() |  (missing) | InternalICU 75.0
-| messageformat2_function_registry.h | void icu::message2::Selector::selectKey(FormattedPlaceholder&amp;&amp;, FunctionOptions&amp;&amp;, const UnicodeString*, int32_t, UnicodeString*, int32_t&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2.h | Builder&amp; icu::message2::MessageFormatter::Builder::setDataModel(MFDataModel&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2.h | Builder&amp; icu::message2::MessageFormatter::Builder::setFunctionRegistry(const MFFunctionRegistry&amp;) |  (missing) | InternalICU 75.0
-| messageformat2.h | Builder&amp; icu::message2::MessageFormatter::Builder::setLocale(const Locale&amp;) |  (missing) | InternalICU 75.0
-| messageformat2.h | Builder&amp; icu::message2::MessageFormatter::Builder::setPattern(const UnicodeString&amp;, UParseError&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2.h | FormattedMessage icu::message2::MessageFormatter::format(const MessageArguments&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2.h | MessageFormatter icu::message2::MessageFormatter::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75.0
-| messageformat2.h | MessageFormatter&amp; icu::message2::MessageFormatter::operator=(MessageFormatter&amp;&amp;) |  (missing) | InternalICU 75.0
-| messageformat2.h | UnicodeString icu::message2::MessageFormatter::formatToString(const MessageArguments&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2.h | UnicodeString icu::message2::MessageFormatter::getPattern() const |  (missing) | InternalICU 75.0
-| messageformat2.h | const Locale &amp; icu::message2::MessageFormatter::getLocale() const |  (missing) | InternalICU 75.0
-| messageformat2.h | const MFDataModel &amp; icu::message2::MessageFormatter::getDataModel() const |  (missing) | InternalICU 75.0
-| messageformat2.h | const UnicodeString &amp; icu::message2::MessageFormatter::getNormalizedPattern() const |  (missing) | InternalICU 75.0
-| messageformat2.h | icu::message2::MessageFormatter::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75.0
-| messageformat2.h | icu::message2::MessageFormatter::Builder::~Builder() |  (missing) | InternalICU 75.0
-| messageformat2.h | icu::message2::MessageFormatter::~MessageFormatter() |  (missing) | InternalICU 75.0
+| messageformat2_formattable.h | int64_t icu::message2::Formattable::getInt64(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | int64_t icu::message2::Formattable::getInt64Value(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_formattable.h | <tt>static</tt> Formattable icu::message2::Formattable::forDate(UDate) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | <tt>static</tt> Formattable icu::message2::Formattable::forDecimal(std::string_view, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | Builder&amp; icu::message2::MFFunctionRegistry::Builder::adoptFormatter(const data_model::FunctionName&amp;, FormatterFactory*, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | Builder&amp; icu::message2::MFFunctionRegistry::Builder::adoptSelector(const data_model::FunctionName&amp;, SelectorFactory*, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | Builder&amp; icu::message2::MFFunctionRegistry::Builder::setDefaultFormatterNameByType(const UnicodeString&amp;, const data_model::FunctionName&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | FormattedPlaceholder icu::message2::Formatter::format(FormattedPlaceholder&amp;&amp;, FunctionOptions&amp;&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | Formatter* icu::message2::FormatterFactory::createFormatter(const Locale&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | FormatterFactory&amp; icu::message2::FormatterFactory::operator=(const FormatterFactory&amp;)=delete |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | FormatterFactory* icu::message2::MFFunctionRegistry::getFormatter(const FunctionName&amp;) const |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | MFFunctionRegistry icu::message2::MFFunctionRegistry::Builder::build() |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | MFFunctionRegistry&amp; icu::message2::MFFunctionRegistry::operator=(MFFunctionRegistry&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | Selector* icu::message2::SelectorFactory::createSelector(const Locale&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | SelectorFactory&amp; icu::message2::SelectorFactory::operator=(const SelectorFactory&amp;)=delete |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | bool icu::message2::MFFunctionRegistry::getDefaultFormatterNameByType(const UnicodeString&amp;, FunctionName&amp;) const |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | const SelectorFactory* icu::message2::MFFunctionRegistry::getSelector(const FunctionName&amp;) const |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | icu::message2::Formatter::~Formatter() |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | icu::message2::FormatterFactory::~FormatterFactory() |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | icu::message2::MFFunctionRegistry::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | icu::message2::MFFunctionRegistry::Builder::~Builder() |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | icu::message2::MFFunctionRegistry::MFFunctionRegistry(MFFunctionRegistry&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | icu::message2::MFFunctionRegistry::~MFFunctionRegistry() |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | icu::message2::Selector::~Selector() |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | icu::message2::SelectorFactory::~SelectorFactory() |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | void icu::message2::Selector::selectKey(FormattedPlaceholder&amp;&amp;, FunctionOptions&amp;&amp;, const UnicodeString*, int32_t, UnicodeString*, int32_t&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2.h | Builder&amp; icu::message2::MessageFormatter::Builder::setDataModel(MFDataModel&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2.h | Builder&amp; icu::message2::MessageFormatter::Builder::setFunctionRegistry(const MFFunctionRegistry&amp;) |  (missing) | InternalICU 75
+| messageformat2.h | Builder&amp; icu::message2::MessageFormatter::Builder::setLocale(const Locale&amp;) |  (missing) | InternalICU 75
+| messageformat2.h | Builder&amp; icu::message2::MessageFormatter::Builder::setPattern(const UnicodeString&amp;, UParseError&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2.h | FormattedMessage icu::message2::MessageFormatter::format(const MessageArguments&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2.h | MessageFormatter icu::message2::MessageFormatter::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75
+| messageformat2.h | MessageFormatter&amp; icu::message2::MessageFormatter::operator=(MessageFormatter&amp;&amp;) |  (missing) | InternalICU 75
+| messageformat2.h | UnicodeString icu::message2::MessageFormatter::formatToString(const MessageArguments&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2.h | UnicodeString icu::message2::MessageFormatter::getPattern() const |  (missing) | InternalICU 75
+| messageformat2.h | const Locale &amp; icu::message2::MessageFormatter::getLocale() const |  (missing) | InternalICU 75
+| messageformat2.h | const MFDataModel &amp; icu::message2::MessageFormatter::getDataModel() const |  (missing) | InternalICU 75
+| messageformat2.h | const UnicodeString &amp; icu::message2::MessageFormatter::getNormalizedPattern() const |  (missing) | InternalICU 75
+| messageformat2.h | icu::message2::MessageFormatter::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75
+| messageformat2.h | icu::message2::MessageFormatter::Builder::~Builder() |  (missing) | InternalICU 75
+| messageformat2.h | icu::message2::MessageFormatter::~MessageFormatter() |  (missing) | InternalICU 75
 | numberformatter.h | UnlocalizedNumberFormatter icu::number::LocalizedNumberFormatter::withoutLocale() &amp;&amp; |  (missing) | DraftICU 75
 | numberformatter.h | UnlocalizedNumberFormatter icu::number::LocalizedNumberFormatter::withoutLocale() const &amp; |  (missing) | DraftICU 75
 | numberrangeformatter.h | UnlocalizedNumberRangeFormatter icu::number::LocalizedNumberRangeFormatter::withoutLocale() &amp;&amp; |  (missing) | DraftICU 75
@@ -396,22 +396,22 @@ Added in ICU 75
 | uchar.h | <tt>enum</tt> UProperty::UCHAR_IDENTIFIER_STATUS |  (missing) | DraftICU 75
 | uchar.h | <tt>enum</tt> UProperty::UCHAR_IDENTIFIER_TYPE |  (missing) | DraftICU 75
 | uchar.h | int32_t u_getIDTypes(UChar32, UIdentifierType*, int32_t, UErrorCode*) |  (missing) | DraftICU 75
-| uconfig.h | <tt>#define</tt> UCONFIG_NO_MF2 |  (missing) | InternalICU 75.0
+| uconfig.h | <tt>#define</tt> UCONFIG_NO_MF2 |  (missing) | InternalICU 75
 | uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_ARABIC_NASTALIQ |  (missing) | StableICU 75| *(Born Stable)* |
 | usimplenumberformatter.h | void usnum_setMaximumIntegerDigits(USimpleNumber*, int32_t, UErrorCode*) |  (missing) | DraftICU 75
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_DUPLICATE_DECLARATION_ERROR |  (missing) | InternalICU 75.0
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_DUPLICATE_OPTION_NAME_ERROR |  (missing) | InternalICU 75.0
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_FORMATTING_ERROR |  (missing) | InternalICU 75.0
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_MISSING_SELECTOR_ANNOTATION_ERROR |  (missing) | InternalICU 75.0
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_NONEXHAUSTIVE_PATTERN_ERROR |  (missing) | InternalICU 75.0
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_OPERAND_MISMATCH_ERROR |  (missing) | InternalICU 75.0
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_SELECTOR_ERROR |  (missing) | InternalICU 75.0
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_SYNTAX_ERROR |  (missing) | InternalICU 75.0
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_UNKNOWN_FUNCTION_ERROR |  (missing) | InternalICU 75.0
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_UNRESOLVED_VARIABLE_ERROR |  (missing) | InternalICU 75.0
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_UNSUPPORTED_EXPRESSION_ERROR |  (missing) | InternalICU 75.0
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_UNSUPPORTED_STATEMENT_ERROR |  (missing) | InternalICU 75.0
-| utypes.h | <tt>enum</tt> UErrorCode::U_MF_VARIANT_KEY_MISMATCH_ERROR |  (missing) | InternalICU 75.0
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_DUPLICATE_DECLARATION_ERROR |  (missing) | InternalICU 75
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_DUPLICATE_OPTION_NAME_ERROR |  (missing) | InternalICU 75
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_FORMATTING_ERROR |  (missing) | InternalICU 75
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_MISSING_SELECTOR_ANNOTATION_ERROR |  (missing) | InternalICU 75
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_NONEXHAUSTIVE_PATTERN_ERROR |  (missing) | InternalICU 75
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_OPERAND_MISMATCH_ERROR |  (missing) | InternalICU 75
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_SELECTOR_ERROR |  (missing) | InternalICU 75
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_SYNTAX_ERROR |  (missing) | InternalICU 75
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_UNKNOWN_FUNCTION_ERROR |  (missing) | InternalICU 75
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_UNRESOLVED_VARIABLE_ERROR |  (missing) | InternalICU 75
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_UNSUPPORTED_EXPRESSION_ERROR |  (missing) | InternalICU 75
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_UNSUPPORTED_STATEMENT_ERROR |  (missing) | InternalICU 75
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_VARIANT_KEY_MISMATCH_ERROR |  (missing) | InternalICU 75
 
 ## Other
 

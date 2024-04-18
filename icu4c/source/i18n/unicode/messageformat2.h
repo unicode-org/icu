@@ -28,7 +28,6 @@ U_NAMESPACE_BEGIN
 
 namespace message2 {
 
-    class CachedFormatters;
     class Environment;
     class MessageContext;
     class ResolvedSelector;
@@ -46,7 +45,7 @@ namespace message2 {
      * `FormatterFactory` objects implementing custom formatters, which are allowed to contain
      * mutable state.)
      *
-     * @internal ICU 75.0 technology preview
+     * @internal ICU 75 technology preview
      * @deprecated This API is for technology preview only.
      */
     class U_I18N_API MessageFormatter : public UObject {
@@ -57,14 +56,14 @@ namespace message2 {
          * Move assignment operator:
          * The source MessageFormatter will be left in a valid but undefined state.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         MessageFormatter& operator=(MessageFormatter&&) noexcept;
         /**
          * Destructor.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         virtual ~MessageFormatter();
@@ -80,7 +79,7 @@ namespace message2 {
          *                  is still provided in the presence of most error types.
          * @return          The string result of formatting the message with the given arguments.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         UnicodeString formatToString(const MessageArguments& arguments, UErrorCode &status);
@@ -97,7 +96,7 @@ namespace message2 {
          *                  is still provided in the presence of most error types.
          * @return          The `FormattedMessage` representing the formatted message.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         FormattedMessage format(const MessageArguments& arguments, UErrorCode &status) const {
@@ -113,7 +112,7 @@ namespace message2 {
          *
          * @return A reference to the locale.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         const Locale& getLocale() const { return locale; }
@@ -124,7 +123,7 @@ namespace message2 {
          * @return result    A string representation of the data model.
          *                   The string is a valid MessageFormat 2.0 message.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         UnicodeString getPattern() const;
@@ -135,7 +134,7 @@ namespace message2 {
          *
          * @return A reference to the data model.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         const MFDataModel& getDataModel() const;
@@ -175,7 +174,7 @@ namespace message2 {
              * @param locale The desired locale.
              * @return       A reference to the builder.
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             Builder& setLocale(const Locale& locale);
@@ -191,7 +190,7 @@ namespace message2 {
              *                  pattern cannot be parsed, set to failure code.
              * @return       A reference to the builder.
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             Builder& setPattern(const UnicodeString& pattern, UParseError& parseError, UErrorCode& status);
@@ -205,7 +204,7 @@ namespace message2 {
              *        builder.
              * @return       A reference to the builder.
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             Builder& setFunctionRegistry(const MFFunctionRegistry& functionRegistry);
@@ -215,7 +214,7 @@ namespace message2 {
              * @param dataModel Data model to format. Passed by move.
              * @return       A reference to the builder.
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             Builder& setDataModel(MFDataModel&& dataModel);
@@ -230,7 +229,7 @@ namespace message2 {
              *                  nor the data model is set, set to failure code.
              * @return          The new MessageFormatter object
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             MessageFormatter build(UErrorCode& status) const;
@@ -242,14 +241,14 @@ namespace message2 {
              *
              * @param status    Input/output error code.
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             Builder(UErrorCode& status);
             /**
              * Destructor.
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             virtual ~Builder();
@@ -261,7 +260,7 @@ namespace message2 {
          *
          * @return        A normalized string representation of the input
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         const UnicodeString& getNormalizedPattern() const { return normalizedInput; }
@@ -328,17 +327,17 @@ namespace message2 {
         const MFFunctionRegistry& getCustomMFFunctionRegistry() const;
 
         bool isCustomFormatter(const FunctionName&) const;
-        FormatterFactory* lookupFormatterFactory(MessageContext&, const FunctionName&, UErrorCode& status) const;
+        FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode& status) const;
         bool isBuiltInSelector(const FunctionName&) const;
         bool isBuiltInFormatter(const FunctionName&) const;
         bool isCustomSelector(const FunctionName&) const;
         const SelectorFactory* lookupSelectorFactory(MessageContext&, const FunctionName&, UErrorCode&) const;
         bool isSelector(const FunctionName& fn) const { return isBuiltInSelector(fn) || isCustomSelector(fn); }
         bool isFormatter(const FunctionName& fn) const { return isBuiltInFormatter(fn) || isCustomFormatter(fn); }
-        const Formatter* maybeCachedFormatter(MessageContext&, const FunctionName&, UErrorCode&) const;
+        const Formatter* lookupFormatter(const FunctionName&, UErrorCode&) const;
 
         Selector* getSelector(MessageContext&, const FunctionName&, UErrorCode&) const;
-        const Formatter& getFormatter(MessageContext&, const FunctionName&, UErrorCode&) const;
+        Formatter* getFormatter(const FunctionName&, UErrorCode&) const;
         bool getDefaultFormatterNameByType(const UnicodeString&, FunctionName&) const;
 
         // Checking for resolution errors
@@ -373,16 +372,6 @@ namespace message2 {
 
         // Normalized version of the input string (optional whitespace removed)
         UnicodeString normalizedInput;
-
-        // Formatter cache
-        // Must be a raw pointer to avoid including the internal header file
-        // defining CachedFormatters
-        // Owned by `this`
-        // TODO: This is an optimization that the "TemperatureFormatter" test
-        // (ported from ICU4J) was checking for; however, that test was removed
-        // in order to make `setFormatter()` safe, so maybe this should be
-        // removed too
-        CachedFormatters* cachedFormatters;
 
         // Errors -- only used while parsing and checking for data model errors; then
         // the MessageContext keeps track of errors

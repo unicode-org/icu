@@ -1199,8 +1199,8 @@ supplementalData:table(nofallback){
         CW{
             {
                 from:intvector{
-                    398,
-                    -1834351104,
+                    405,
+                    -363122176,
                 }
                 id{"XCG"}
             }
@@ -1211,8 +1211,8 @@ supplementalData:table(nofallback){
                 }
                 id{"ANG"}
                 to:intvector{
-                    400,
-                    1819481599,
+                    407,
+                    -1004256769,
                 }
             }
         }
@@ -3960,8 +3960,8 @@ supplementalData:table(nofallback){
         SX{
             {
                 from:intvector{
-                    398,
-                    -1834351104,
+                    405,
+                    -363122176,
                 }
                 id{"XCG"}
             }
@@ -3972,8 +3972,8 @@ supplementalData:table(nofallback){
                 }
                 id{"ANG"}
                 to:intvector{
-                    400,
-                    1819481599,
+                    407,
+                    -1004256769,
                 }
             }
         }

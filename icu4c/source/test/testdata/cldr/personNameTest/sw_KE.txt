@@ -1,7 +1,7 @@
 # Test data for unit conversions
 #  Copyright © 1991-2023 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
-#  SPDX-License-Identifier: Unicode-DFS-2016
+#  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
 #
 # CLDR person name formatting test data for: sw_KE
@@ -24,7 +24,7 @@
 #   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
 #
 # parameters; <options>; <length>; <usage>; <formality>
-#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters,
 #   the expected value is produced.
 #
 # endName
