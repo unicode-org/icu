@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1713480395781,
+  "lastUpdate": 1713485402905,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20878,6 +20878,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 1.9605536911130774,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "0e4c2d8bc68bbd46f2b74c0404e0cc26a98251f7",
+          "message": "ICU-22724 ICU BRS 76: front-load update version to 76.0.1",
+          "timestamp": "2024-04-18T16:57:47-07:00",
+          "tree_id": "f47281914dafe91618107b8894a161510d8225e4",
+          "url": "https://github.com/unicode-org/icu/commit/0e4c2d8bc68bbd46f2b74c0404e0cc26a98251f7"
+        },
+        "date": 1713485294475,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 1.9275111509240865,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
