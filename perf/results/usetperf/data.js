@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1713486012886,
+  "lastUpdate": 1713817767682,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -61696,6 +61696,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1448.2335,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "4c9770f73d8bafee7fe63dc6f6fbf2947ba78839",
+          "message": "ICU-22721 Remove now obsolete disabled warnings for LocalPointerBase.\n\nThe missing operators that used to be warned about were all deleted by\ncommit 75eab42060d6a73b62db2bc639216eae1f8ec47e.",
+          "timestamp": "2024-04-22T21:58:17+02:00",
+          "tree_id": "c9fb1e12be0cf7706cf075eb2d5d1f1a5b733d74",
+          "url": "https://github.com/unicode-org/icu/commit/4c9770f73d8bafee7fe63dc6f6fbf2947ba78839"
+        },
+        "date": 1713817653430,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77832.3625,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177859.3537,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.539,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.0548,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.6844,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8470.1822,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 31806.2714,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1455.7386,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
