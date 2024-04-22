@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1713485948429,
+  "lastUpdate": 1713817673428,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42658,6 +42658,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2098356.4049,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "4c9770f73d8bafee7fe63dc6f6fbf2947ba78839",
+          "message": "ICU-22721 Remove now obsolete disabled warnings for LocalPointerBase.\n\nThe missing operators that used to be warned about were all deleted by\ncommit 75eab42060d6a73b62db2bc639216eae1f8ec47e.",
+          "timestamp": "2024-04-22T21:58:17+02:00",
+          "tree_id": "c9fb1e12be0cf7706cf075eb2d5d1f1a5b733d74",
+          "url": "https://github.com/unicode-org/icu/commit/4c9770f73d8bafee7fe63dc6f6fbf2947ba78839"
+        },
+        "date": 1713817570417,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 151.2834,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8842426.9642,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2220201.1324,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7811031.4738,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2146083.1896,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
