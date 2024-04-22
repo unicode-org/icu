@@ -164,7 +164,7 @@ jobs:
       displayName: 'Build only (WarningsAsErrors)'
       env:
         CC: clang-16
-        CPPFLAGS: '-Werror -Wno-strict-prototypes -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wsuggest-override'
+        CPPFLAGS: '-Werror -Wno-strict-prototypes -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wsuggest-override -Wctad-maybe-unsupported'
         CXX: clang++-16
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang16_Cpp20_Ubuntu_2004
@@ -555,7 +555,7 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU MacOSX && make -j -l2.5 check
+        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wctad-maybe-unsupported" && cd icu4c/source && ./runConfigureICU MacOSX && make -j -l2.5 check
       displayName: 'Build and Test (WarningsAsErrors)'
       env:
         CC: clang
