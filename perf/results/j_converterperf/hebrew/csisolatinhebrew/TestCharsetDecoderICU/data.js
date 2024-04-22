@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1713817260240,
+  "lastUpdate": 1713825938714,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20908,6 +20908,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.008054034403039081,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "0312308566b5a232102d1bce41070b0498cd8579",
+          "message": "ICU-22721 Prevent inconsistent ICU4J Maven deploys via CI",
+          "timestamp": "2024-04-22T15:28:56-07:00",
+          "tree_id": "05e4284185557af4393ea84306911ca7e8365b49",
+          "url": "https://github.com/unicode-org/icu/commit/0312308566b5a232102d1bce41070b0498cd8579"
+        },
+        "date": 1713825828762,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.007931035150640331,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
