@@ -1762,6 +1762,9 @@ void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& statu
         {
             int32_t min = getActualMinimum(field,status);
             int32_t max = getActualMaximum(field,status);
+            if (U_FAILURE(status)) {
+               return;
+            }
             int32_t gap = max - min + 1;
 
             int64_t value = internalGet(field);

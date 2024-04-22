@@ -209,6 +209,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
 
     TESTCASE_AUTO(TestAddOverflow);
 
+    TESTCASE_AUTO(Test22750Roll);
 
     TESTCASE_AUTO(TestChineseCalendarComputeMonthStart);
 
@@ -5929,6 +5930,25 @@ void CalendarTest::TestAddOverflow() {
         }
     }
 }
+
+void CalendarTest::Test22750Roll() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    std::unique_ptr<icu::StringEnumeration> enumeration(
+        Calendar::getKeywordValuesForLocale("calendar", l, false, status));
+    // Test every calendar
+    for (const char* name = enumeration->next(nullptr, status);
+            U_SUCCESS(status) && name != nullptr;
+            name = enumeration->next(nullptr, status)) {
+        UErrorCode status2 = U_ZERO_ERROR;
+        l.setKeywordValue("calendar", name, status2);
+        LocalPointer<Calendar> calendar(Calendar::createInstance(l, status2));
+        if (failure(status2, "Calendar::createInstance")) return;
+        calendar->add(UCAL_DAY_OF_WEEK_IN_MONTH, 538976288, status2);
+        calendar->roll(UCAL_DATE, 538976288, status2);
+    }
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
