@@ -301,11 +301,11 @@ public:
      *
      * @draft ICU 3.8
      */
-    virtual inline UClassID getDynamicClassID() const;
+    inline UClassID getDynamicClassID() const override;
 
 protected:
-    virtual void init(le_int32 capacity);
-    virtual void grow(le_int32 capacity);
+    void init(le_int32 capacity) override;
+    void grow(le_int32 capacity) override;
 
 private:
 

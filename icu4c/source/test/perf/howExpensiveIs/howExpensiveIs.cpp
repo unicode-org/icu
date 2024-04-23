@@ -237,12 +237,12 @@ class SieveTest : public HowExpensiveTest {
 public:
   virtual ~SieveTest(){}
   SieveTest():HowExpensiveTest("SieveTest",__FILE__,__LINE__){}
-  virtual int32_t run(){return 0;} // dummy
-  int32_t runTest(double *subTime) {
+  int32_t run() override { return 0; } // dummy
+  int32_t runTest(double *subTime) override {
     *subTime = uprv_getSieveTime(nullptr);
     return U_LOTS_OF_TIMES;
   }
-  virtual int32_t runTests(double *subTime, double *marginOfError) {
+  int32_t runTests(double* subTime, double* marginOfError) override {
     *subTime = uprv_getSieveTime(marginOfError);
     return U_LOTS_OF_TIMES;
   }
@@ -256,8 +256,8 @@ public:
 #define OCStr(svc,ub,suffix,n) "Test_" # svc # ub # suffix # n
 #define OCRun(svc,ub,suffix) svc ## ub ## suffix
 // TODO: run away screaming
-#define OpenCloseTest(n, svc,suffix,c,a,d) class OCName(svc,_,Test_,suffix,n) : public HowExpensiveTest { public: OCName(svc,_,Test_,suffix,n)():HowExpensiveTest(OCStr(svc,_,suffix,n),__FILE__,__LINE__) c int32_t run() { int32_t i; for(i=0;i<U_LOTS_OF_TIMES;i++){ OCRun(svc,_,close) (  OCRun(svc,_,suffix) a );  } return i; }   void warmup() { OCRun(svc,_,close) ( OCRun(svc,_,suffix) a); } virtual ~ OCName(svc,_,Test_,suffix,n) () d };
-#define QuickTest(n,c,r,d)  class n : public HowExpensiveTest { public: n():HowExpensiveTest(#n,__FILE__,__LINE__) c int32_t run() r virtual ~n () d };
+#define OpenCloseTest(n, svc,suffix,c,a,d) class OCName(svc,_,Test_,suffix,n) : public HowExpensiveTest { public: OCName(svc,_,Test_,suffix,n)():HowExpensiveTest(OCStr(svc,_,suffix,n),__FILE__,__LINE__) c int32_t run() override { int32_t i; for(i=0;i<U_LOTS_OF_TIMES;i++){ OCRun(svc,_,close) (  OCRun(svc,_,suffix) a );  } return i; }   void warmup() override { OCRun(svc,_,close) ( OCRun(svc,_,suffix) a); } virtual ~ OCName(svc,_,Test_,suffix,n) () d };
+#define QuickTest(n,c,r,d)  class n : public HowExpensiveTest { public: n():HowExpensiveTest(#n,__FILE__,__LINE__) c int32_t run() override r virtual ~n () d };
 
 class NumTest : public HowExpensiveTest {
 private:
@@ -273,7 +273,7 @@ private:
   const char *fCStr;
   char name[100];
 public:
-  virtual const char *getName() {
+  const char* getName() override {
     if(name[0]==0) {
       sprintf(name,"%s:p=|%s|,str=|%s|",getClassName(),fCPat,fCStr);
     }
@@ -302,7 +302,7 @@ public:
   {
     name[0]=0;
   }
-  void warmup() {
+  void warmup() override {
     fFmt = initFmt();
     if(U_SUCCESS(setupStatus)) {
       double trial = unum_parseDouble(fFmt,fStr,fLen, nullptr, &setupStatus);
@@ -313,7 +313,7 @@ public:
       }
     }
   }
-  int32_t run() {
+  int32_t run() override {
     double trial=0.0;
     int i;
     for(i=0;i<U_LOTS_OF_TIMES;i++){
@@ -334,7 +334,7 @@ private:
   int32_t fAttrValue;
   char name2[100];
 protected:
-  virtual const char *getClassName() {
+  const char* getClassName() override {
     sprintf(name2,"AttrNumTest:%d=%d", fAttr,fAttrValue);
     return name2;
   }
@@ -345,7 +345,7 @@ public:
       fAttrValue(newValue)
   {
   }
-  virtual UNumberFormat* initFmt() {
+  UNumberFormat* initFmt() override {
     UNumberFormat *fmt = NumTest::initFmt();
     unum_setAttribute(fmt, fAttr,fAttrValue);
     return fmt;
@@ -362,7 +362,7 @@ private:
   int32_t fAttrValue;
   char name2[100];
 protected:
-  virtual const char *getClassName() {
+  const char* getClassName() override {
     sprintf(name2,"NOXNumTest:%d=%d", fAttr,fAttrValue);
     return name2;
   }
@@ -373,7 +373,7 @@ public:
       fAttrValue(newValue) */
   {
   }
-  virtual UNumberFormat* initFmt() {
+  UNumberFormat* initFmt() override {
     UNumberFormat *fmt = NumTest::initFmt();
     //unum_setAttribute(fmt, fAttr,fAttrValue);
     return fmt;
@@ -401,7 +401,7 @@ private:
   const char *fCStr;
   char name[100];
 public:
-  virtual const char *getName() {
+  const char* getName() override {
     if(name[0]==0) {
       sprintf(name,"%s:p=|%s|,str=|%s|",getClassName(),fCPat,fCStr);
     }
@@ -430,7 +430,7 @@ public:
   {
     name[0]=0;
   }
-  void warmup() {
+  void warmup() override {
     fFmt = initFmt();
     char16_t buf[100];
     if(U_SUCCESS(setupStatus)) {
@@ -447,7 +447,7 @@ public:
       }
     }
   }
-  int32_t run() {
+  int32_t run() override {
     int32_t trial;
     int i;
     char16_t buf[100];
@@ -486,7 +486,7 @@ private:
   const char *fCStr;
   char name[100];
 public:
-  virtual const char *getName() {
+  const char* getName() override {
     if(name[0]==0) {
       sprintf(name,"%s:p=|%s|,str=|%s|",getClassName(),fCPat,fCStr);
     }
@@ -554,7 +554,7 @@ public:
   {
     name[0]=0;
   }
-  void warmup() {
+  void warmup() override {
     fFmt = initFmt();
     char16_t buf[100];
     if(U_SUCCESS(setupStatus)) {
@@ -571,7 +571,7 @@ public:
       }
     }
   }
-  int32_t run() {
+  int32_t run() override {
     int32_t trial;
     int i;
     char16_t buf[100];
@@ -613,7 +613,7 @@ private:
   const char *fCStr;
   char name[100];
 public:
-  virtual const char *getName() {
+  const char* getName() override {
     if(name[0]==0) {
       sprintf(name,"%s:p=|%s|,str=|%s|,sp=|%s|",getClassName(),fCPat,fCStr, fExpect.data());
     }
@@ -645,7 +645,7 @@ public:
   {
     name[0]=0;
   }
-  void warmup() {
+  void warmup() override {
     fFmt = initFmt();
     UnicodeString buf;
     if(U_SUCCESS(setupStatus)) {
@@ -663,7 +663,7 @@ public:
     }
   }
 
-  int32_t run() {
+  int32_t run() override {
 #if U_DEBUG
     int32_t trial;
 #endif

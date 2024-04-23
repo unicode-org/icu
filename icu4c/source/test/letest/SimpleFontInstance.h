@@ -36,37 +36,37 @@ public:
 
     virtual ~SimpleFontInstance();
 
-    virtual const void *getFontTable(LETag tableTag, size_t &length) const;
+    const void *getFontTable(LETag tableTag, size_t &length) const override;
 
-    virtual le_int32 getUnitsPerEM() const;
+    le_int32 getUnitsPerEM() const override;
 
-    virtual le_int32 getAscent() const;
+    le_int32 getAscent() const override;
 
-    virtual le_int32 getDescent() const;
+    le_int32 getDescent() const override;
 
-    virtual le_int32 getLeading() const;
+    le_int32 getLeading() const override;
 
     // We really want to inherit this method from the superclass, but some compilers
     // issue a warning if we don't implement it...
-    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper, le_bool filterZeroWidth) const;
+    LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper, le_bool filterZeroWidth) const override;
     
     // We really want to inherit this method from the superclass, but some compilers
     // issue a warning if we don't implement it...
-    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const;
+    LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const override;
 
-    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch) const;
+    LEGlyphID mapCharToGlyph(LEUnicode32 ch) const override;
 
-    virtual void getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const;
+    void getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const override;
 
-    virtual le_bool getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LEPoint &point) const;
+    le_bool getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LEPoint &point) const override;
 
-    float getXPixelsPerEm() const;
+    float getXPixelsPerEm() const override;
 
-    float getYPixelsPerEm() const;
+    float getYPixelsPerEm() const override;
 
-    float getScaleFactorX() const;
+    float getScaleFactorX() const override;
 
-    float getScaleFactorY() const;
+    float getScaleFactorY() const override;
 
 };
 

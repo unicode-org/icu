@@ -81,7 +81,7 @@ public:
         }
     }
 
-    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr);
+    UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 
     const char16_t *getBuffer() const { return buffer; }
     int32_t getBufferLen() const { return bufferLen; }
@@ -103,7 +103,7 @@ public:
 
     // virtual void call(UErrorCode* pErrorCode) { ... }
 
-    virtual long getOperationsPerIteration() {
+    long getOperationsPerIteration() override {
         // Number of code points tested.
         return testcase.countInputCodePoints;
     }
@@ -121,7 +121,7 @@ public:
     static UPerfFunction* get(const UTrie2PerfTest &testcase) {
         return new CheckFCD(testcase);
     }
-    virtual void call(UErrorCode* pErrorCode) {
+    void call(UErrorCode* pErrorCode) override {
         UErrorCode errorCode=U_ZERO_ERROR;
         qcResult=unorm_quickCheck(testcase.getBuffer(), testcase.getBufferLen(),
                                   UNORM_FCD, &errorCode);
@@ -189,7 +189,7 @@ public:
     static UPerfFunction* get(const UTrie2PerfTest &testcase) {
         return new ToNFC(testcase);
     }
-    virtual void call(UErrorCode* pErrorCode) {
+    void call(UErrorCode* pErrorCode) override {
         UErrorCode errorCode=U_ZERO_ERROR;
         int32_t destLength=unorm_normalize(testcase.getBuffer(), testcase.getBufferLen(),
                                            UNORM_NFC, 0,
@@ -213,7 +213,7 @@ public:
     static UPerfFunction* get(const UTrie2PerfTest &testcase) {
         return new GetBiDiClass(testcase);
     }
-    virtual void call(UErrorCode* pErrorCode) {
+    void call(UErrorCode* pErrorCode) override {
         const char16_t *buffer=testcase.getBuffer();
         int32_t length=testcase.getBufferLen();
         UChar32 c;

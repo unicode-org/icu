@@ -156,7 +156,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+        inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
     private:
 
@@ -319,7 +319,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+        inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
     private:
 
@@ -550,7 +550,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
 private:
 
