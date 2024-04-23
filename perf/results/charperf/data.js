@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1713826584658,
+  "lastUpdate": 1713892583415,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -71368,6 +71368,96 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIsWhiteSpace",
             "value": 4.5874,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "a91cbd65789d69b06904d68b9dd680a80cc6d35c",
+          "message": "ICU-22750 Fix Floating-point-exception in icu::Calendar::roll\n\nSee #2979",
+          "timestamp": "2024-04-23T09:46:29-07:00",
+          "tree_id": "84d8fb8d2bd35874ce2736c261d828e8dec61b02",
+          "url": "https://github.com/unicode-org/icu/commit/a91cbd65789d69b06904d68b9dd680a80cc6d35c"
+        },
+        "date": 1713892474803,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIsAlpha",
+            "value": 4.2804,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsUpper",
+            "value": 4.5733,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsLower",
+            "value": 4.2809,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsDigit",
+            "value": 4.2621,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsSpace",
+            "value": 4.9051,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsAlphaNumeric",
+            "value": 4.2641,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsPrint",
+            "value": 5.1898,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsControl",
+            "value": 4.2822,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToLower",
+            "value": 5.4478,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToUpper",
+            "value": 5.4858,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsWhiteSpace",
+            "value": 4.5882,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
