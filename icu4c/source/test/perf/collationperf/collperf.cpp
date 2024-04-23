@@ -1196,7 +1196,7 @@ void  UnixConvert() {
             exit(-1);
         }
         gFileLines[line].unixName[sizeNeeded] = 0;
-    };
+    }
     ucnv_close(cvrtr);
 }
 
@@ -1212,12 +1212,12 @@ public:
     UCharFile(const char *fileName);
     ~UCharFile();
     char16_t   get();
-    UBool   eof() {return fEof;};
-    UBool   error() {return fError;};
+    UBool   eof() {return fEof;}
+    UBool   error() {return fError;}
     
 private:
-    UCharFile (const UCharFile & /*other*/) {};                         // No copy constructor.
-    UCharFile & operator = (const UCharFile &/*other*/) {return *this;};   // No assignment op
+    UCharFile (const UCharFile & /*other*/) {}                         // No copy constructor.
+    UCharFile & operator = (const UCharFile &/*other*/) {return *this;}   // No assignment op
 
     FILE         *fFile;
     const char   *fName;
@@ -1357,7 +1357,7 @@ char16_t UCharFile::get() {
                 c = utf16Buf[0];
             }
             break;
-        };
+        }
     default:
         c = 0xFFFD; /* Error, unspecified codepage*/
         fprintf(stderr, "UCharFile: Error: unknown fEncoding\n");
