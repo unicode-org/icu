@@ -116,7 +116,7 @@ public:
     // fileName  - the path name of the file
     // charCount - set to the number of UChars read from the file
     // returns   - the address of the char16_t array containing the characters
-    static const char16_t *readFile(char *fileName, int32_t &charCount);
+    static const char16_t *readFile(const char *fileName, int32_t &charCount);
 
     // removes spaces form the input char16_t array:
     // spaces        - pointer to the input char16_t array
@@ -310,7 +310,7 @@ void ThaiWordbreakTest::foundInvalidBreak(int32_t br)
  * Read the text from a file. The text must start with a Unicode Byte
  * Order Mark (BOM) so that we know what order to read the bytes in.
  */
-const char16_t *ThaiWordbreakTest::readFile(char *fileName, int32_t &charCount)
+const char16_t *ThaiWordbreakTest::readFile(const char *fileName, int32_t &charCount)
 {
     FILE *f;
     int32_t fileSize;
@@ -445,7 +445,7 @@ int generateFile(const char16_t *chars, int32_t length) {
  */
 int main(int argc, char **argv)
 {
-    char *fileName = "space.txt";
+    const char *fileName = "space.txt";
     int arg = 1;
     UBool verbose = false;
     UBool generate = false;
