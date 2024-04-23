@@ -214,7 +214,7 @@ private:
 
     inline RunArray();
     inline RunArray(const RunArray & /*other*/);
-    inline RunArray &operator=(const RunArray & /*other*/) { return *this; };
+    inline RunArray &operator=(const RunArray & /*other*/) { return *this; }
 
     const le_int32 *fLimits;
           le_int32  fCount;
@@ -371,7 +371,7 @@ private:
 
     inline FontRuns();
     inline FontRuns(const FontRuns &other);
-    inline FontRuns &operator=(const FontRuns & /*other*/) { return *this; };
+    inline FontRuns &operator=(const FontRuns & /*other*/) { return *this; }
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -513,7 +513,7 @@ private:
 
     inline LocaleRuns();
     inline LocaleRuns(const LocaleRuns &other);
-    inline LocaleRuns &operator=(const LocaleRuns & /*other*/) { return *this; };
+    inline LocaleRuns &operator=(const LocaleRuns & /*other*/) { return *this; }
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -645,7 +645,7 @@ private:
 
     inline ValueRuns();
     inline ValueRuns(const ValueRuns &other);
-    inline ValueRuns &operator=(const ValueRuns & /*other*/) { return *this; };
+    inline ValueRuns &operator=(const ValueRuns & /*other*/) { return *this; }
 
     /**
      * The address of this static class variable serves as this class's ID

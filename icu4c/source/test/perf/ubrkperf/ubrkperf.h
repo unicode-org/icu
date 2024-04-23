@@ -109,7 +109,7 @@ public:
 
 class DarwinBreakFunction : public UPerfFunction {
 public:
-  void call(UErrorCode* status) override {};
+  void call(UErrorCode* status) override {}
 };
 
 class BreakIteratorPerformanceTest : public UPerfTest {

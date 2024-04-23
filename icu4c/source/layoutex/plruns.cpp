@@ -311,7 +311,7 @@ private:
 
     inline ULocRuns();
     inline ULocRuns(const ULocRuns &other);
-    inline ULocRuns &operator=(const ULocRuns & /*other*/) { return *this; };
+    inline ULocRuns &operator=(const ULocRuns & /*other*/) { return *this; }
     const char **fLocaleNames;
 };
 
