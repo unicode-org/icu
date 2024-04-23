@@ -40,7 +40,7 @@ struct CompactArrays{\
     UNIT    * data; /*the real space to hold strings*/ \
     \
     ~CompactArrays(){free(index);free(data);} \
-    CompactArrays():data(nullptr), index(nullptr), count(0){ \
+    CompactArrays():count(0), index(nullptr), data(nullptr){ \
     index = (int32_t *) realloc(index, sizeof(int32_t)); \
     index[0] = 0; \
     } \
@@ -355,7 +355,7 @@ private:
     void *  backup; //copy source of base
 public:
     CmdQsort(UErrorCode & status,void *theBase, int32_t num, int32_t width, Func fn, int32_t,int32_t)
-        :backup(theBase),num(num),width(width),fn(fn){
+        :fn(fn),num(num),width(width),backup(theBase){
             base = malloc(num * width);
             time_empty(100, &status); // warm memory/cache
         }
