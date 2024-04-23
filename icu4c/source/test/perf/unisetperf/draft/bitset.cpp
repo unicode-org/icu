@@ -188,7 +188,7 @@ public:
         delete restSet;
     }
 
-    UBool contains(UChar32 c) const {
+    UBool contains(UChar32 c) const override {
         if((uint32_t)c<=0xff) {
             return (UBool)((latin1Set[c>>5]&((uint32_t)1<<(c&0x1f)))!=0);
         } else if((uint32_t)c<0xffff) {

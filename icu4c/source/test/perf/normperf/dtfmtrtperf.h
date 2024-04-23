@@ -66,7 +66,7 @@ public:
 		nLocales = locs;
 	}
 
-	virtual void call(UErrorCode* status)
+	void call(UErrorCode* status) override
 	{
         *status = U_ZERO_ERROR;
 
@@ -207,7 +207,7 @@ public:
 
 	}
 
-	virtual long getOperationsPerIteration()
+	long getOperationsPerIteration() override
 	{
 		return NUM_PATTERNS * nLocales * 6;
 	}
@@ -222,7 +222,7 @@ public:
 
 	DateTimeRoundTripPerfTest(int32_t argc, const char* argv[], UErrorCode& status);
 	~DateTimeRoundTripPerfTest();
-	virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,const char* &name, char* par);
+	UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char*& name, char* par) override;
 
 	UPerfFunction* RoundTripLocale1();
 	UPerfFunction* RoundTripLocale10();

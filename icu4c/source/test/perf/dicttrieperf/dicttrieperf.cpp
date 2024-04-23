@@ -66,7 +66,7 @@ public:
         }
     }
 
-    virtual UPerfFunction *runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr);
+    UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 
     const char *getSourceDir() const { return sourceDir; }
 
@@ -99,7 +99,7 @@ public:
 
     // virtual void call(UErrorCode* pErrorCode) { ... }
 
-    virtual long getOperationsPerIteration() {
+    long getOperationsPerIteration() override {
         return pkg.getItemCount();
     }
 
@@ -159,7 +159,7 @@ public:
         delete[] toc;
     }
 
-    virtual void call(UErrorCode * /*pErrorCode*/) {
+    void call(UErrorCode* /*pErrorCode*/) override {
         int32_t count=pkg.getItemCount();
         const char *itemNameChars=itemNames.data();
         const char *name=itemNameChars;
@@ -249,7 +249,7 @@ public:
     PrefixBinarySearchPackageLookup(const DictionaryTriePerfTest &perf)
             : BinarySearchPackageLookup(perf) {}
 
-    virtual void call(UErrorCode * /*pErrorCode*/) {
+    void call(UErrorCode* /*pErrorCode*/) override {
         int32_t count=pkg.getItemCount();
         const char *itemNameChars=itemNames.data();
         const char *name=itemNameChars;
@@ -306,7 +306,7 @@ public:
         delete builder;
     }
 
-    virtual void call(UErrorCode *pErrorCode) {
+    void call(UErrorCode* pErrorCode) override {
         int32_t count=pkg.getItemCount();
         const char *nameTrieBytes=builder->buildStringPiece(USTRINGTRIE_BUILD_SMALL, *pErrorCode).data();
         const char *name=itemNames.data();
@@ -331,7 +331,7 @@ class DictLookup : public UPerfFunction {
 public:
     DictLookup(const DictionaryTriePerfTest &perfTest) : perf(perfTest) {}
 
-    virtual long getOperationsPerIteration() {
+    long getOperationsPerIteration() override {
         return perf.numTextLines;
     }
 
@@ -439,7 +439,7 @@ public:
     UCharsTrieDictMatches(const DictionaryTriePerfTest &perfTest)
             : UCharsTrieDictLookup(perfTest) {}
 
-    virtual void call(UErrorCode *pErrorCode) {
+    void call(UErrorCode* pErrorCode) override {
         UText text=UTEXT_INITIALIZER;
         int32_t lengths[20];
         const ULine *lines=perf.getCachedLines();
@@ -465,7 +465,7 @@ public:
     UCharsTrieDictContains(const DictionaryTriePerfTest &perfTest)
             : UCharsTrieDictLookup(perfTest) {}
 
-    virtual void call(UErrorCode * /*pErrorCode*/) {
+    void call(UErrorCode* /*pErrorCode*/) override {
         const ULine *lines=perf.getCachedLines();
         int32_t numLines=perf.getNumLines();
         for(int32_t i=0; i<numLines; ++i) {
@@ -585,7 +585,7 @@ public:
     BytesTrieDictMatches(const DictionaryTriePerfTest &perfTest)
             : BytesTrieDictLookup(perfTest) {}
 
-    virtual void call(UErrorCode *pErrorCode) {
+    void call(UErrorCode* pErrorCode) override {
         if(noDict) {
             return;
         }
@@ -614,7 +614,7 @@ public:
     BytesTrieDictContains(const DictionaryTriePerfTest &perfTest)
             : BytesTrieDictLookup(perfTest) {}
 
-    virtual void call(UErrorCode * /*pErrorCode*/) {
+    void call(UErrorCode* /*pErrorCode*/) override {
         if(noDict) {
             return;
         }

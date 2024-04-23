@@ -161,7 +161,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
 protected:
     /**
@@ -361,11 +361,11 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
 protected:
-    virtual void init(le_int32 capacity);
-    virtual void grow(le_int32 capacity);
+    void init(le_int32 capacity) override;
+    void grow(le_int32 capacity) override;
 
 private:
 
@@ -498,11 +498,11 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
 protected:
-    virtual void init(le_int32 capacity);
-    virtual void grow(le_int32 capacity);
+    void init(le_int32 capacity) override;
+    void grow(le_int32 capacity) override;
 
     /**
      * @internal
@@ -635,11 +635,11 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
 protected:
-    virtual void init(le_int32 capacity);
-    virtual void grow(le_int32 capacity);
+    void init(le_int32 capacity) override;
+    void grow(le_int32 capacity) override;
 
 private:
 

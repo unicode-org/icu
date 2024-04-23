@@ -26,14 +26,14 @@ typedef void (*StdLibCharPerfFn)(wchar_t ch);
 class CharPerfFunction : public UPerfFunction
 {
 public:
-    virtual void call(UErrorCode* status)
+    void call(UErrorCode* status) override
     {
         for (UChar32 i = MIN_; i < MAX_; i ++) {
             (*m_fn_)(i);
         }
     }
 
-    virtual long getOperationsPerIteration()
+    long getOperationsPerIteration() override
     {
         return MAX_ - MIN_;
     }
@@ -53,7 +53,7 @@ private:
 class StdLibCharPerfFunction : public UPerfFunction
 {
 public:
-    virtual void call(UErrorCode* status)
+    void call(UErrorCode* status) override
     {
         // note wchar_t is unsigned, it will revert to 0 once it reaches 
         // 65535
@@ -62,7 +62,7 @@ public:
         }
     }
 
-    virtual long getOperationsPerIteration()
+    long getOperationsPerIteration() override
     {
         return MAX_ - MIN_;
     }
@@ -89,9 +89,9 @@ class CharPerformanceTest : public UPerfTest
 public:
     CharPerformanceTest(int32_t argc, const char *argv[], UErrorCode &status);
     ~CharPerformanceTest();
-    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,
-        const char *&name, 
-        char *par = nullptr);
+    UPerfFunction* runIndexedTest(int32_t index, UBool exec,
+        const char*& name,
+        char* par = nullptr) override;
     UPerfFunction* TestIsAlpha();
     UPerfFunction* TestIsUpper();
     UPerfFunction* TestIsLower();

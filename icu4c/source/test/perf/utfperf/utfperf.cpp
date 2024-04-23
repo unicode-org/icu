@@ -93,7 +93,7 @@ public:
         }
     }
 
-    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr);
+    UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 
     const char16_t *getBuffer() const { return buffer; }
     int32_t getBufferLen() const { return bufferLen; }
@@ -139,7 +139,7 @@ public:
         }
     }
     // virtual void call(UErrorCode* pErrorCode) { ... }
-    virtual long getOperationsPerIteration(){
+    long getOperationsPerIteration() override {
         return countInputCodePoints;
     }
 
@@ -164,7 +164,7 @@ public:
             return nullptr;
         }
     }
-    virtual void call(UErrorCode* pErrorCode){
+    void call(UErrorCode* pErrorCode) override {
         const char16_t *pIn, *pInLimit;
         char16_t *pOut, *pOutLimit;
         char *pInter, *pInterLimit;
@@ -231,7 +231,7 @@ public:
             return nullptr;
         }
     }
-    virtual void call(UErrorCode* pErrorCode){
+    void call(UErrorCode* pErrorCode) override {
         const char16_t *pIn, *pInLimit;
         char *pInter, *pInterLimit;
 
@@ -284,7 +284,7 @@ public:
     ~FromUTF8() {
         ucnv_close(utf8Cnv);
     }
-    virtual void call(UErrorCode* pErrorCode){
+    void call(UErrorCode* pErrorCode) override {
         const char *pIn, *pInLimit;
         char *pInter, *pInterLimit;
         char16_t *pivotSource, *pivotTarget, *pivotLimit;

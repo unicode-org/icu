@@ -40,7 +40,7 @@ public:
 
     virtual ~CMAPFormat4Mapper();
 
-    virtual LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const;
+    LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const override;
 
 protected:
     CMAPFormat4Mapper() {};
@@ -61,7 +61,7 @@ public:
 
     virtual ~CMAPGroupMapper();
 
-    virtual LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const;
+    LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const override;
 
 protected:
     CMAPGroupMapper() {};

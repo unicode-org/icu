@@ -236,7 +236,7 @@ public:
     NormalizeUTF16(const Normalizer2 &n2, const UnicodeString &text) :
             norm2(n2), src(text), s(src.getBuffer()) {}
     virtual ~NormalizeUTF16();
-    virtual double call(int32_t iterations, int32_t pieceLength);
+    double call(int32_t iterations, int32_t pieceLength) override;
 
 private:
     const Normalizer2 &norm2;
@@ -269,7 +269,7 @@ public:
         s = src.data();
     }
     virtual ~NormalizeUTF8();
-    virtual double call(int32_t iterations, int32_t pieceLength);
+    double call(int32_t iterations, int32_t pieceLength) override;
 
 private:
     const Normalizer2 &norm2;

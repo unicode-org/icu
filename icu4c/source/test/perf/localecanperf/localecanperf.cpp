@@ -25,7 +25,7 @@ public:
         testCases.emplace_back("hy-SU");
     }
     ~LocaleCreateCanonical() {  }
-    virtual void call(UErrorCode* /* status */)
+    void call(UErrorCode* /*status*/) override
     {
         std::for_each(testCases.begin(), testCases.end(),
                       [](const std::string& s)
@@ -33,8 +33,8 @@ public:
                           Locale l = Locale::createCanonical(s.c_str());
                       });
     }
-    virtual long getOperationsPerIteration() { return testCases.size(); }
-    virtual long getEventsPerIteration() { return testCases.size(); }
+    long getOperationsPerIteration() override { return testCases.size(); }
+    long getEventsPerIteration() override { return testCases.size(); }
 private:
     std::vector<std::string> testCases;
 };
@@ -51,8 +51,8 @@ public:
     ~LocaleCanonicalizationPerfTest()
     {
     }
-    virtual UPerfFunction* runIndexedTest(
-        int32_t index, UBool exec, const char *&name, char *par = nullptr);
+    UPerfFunction* runIndexedTest(
+        int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 
 private:
     UPerfFunction* TestLocaleCreateCanonical()

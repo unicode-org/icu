@@ -68,7 +68,7 @@ class StringPerfFunction : public UPerfFunction
 {
 public:
 
-    virtual long getEventsPerIteration(){
+    long getEventsPerIteration() override {
         int loops = LOOPS;
         delete catICU;
         delete catStd;
@@ -90,7 +90,7 @@ public:
         return -1;
     }
 
-    virtual void call(UErrorCode* status)
+    void call(UErrorCode* status) override
     {
         if(line_mode_==true){
             if(uselen_){
@@ -127,7 +127,7 @@ public:
         }
     }
 
-    virtual long getOperationsPerIteration()
+    long getOperationsPerIteration() override
     {
         if(line_mode_==true){
             return numLines_;
@@ -350,9 +350,9 @@ class StringPerformanceTest : public UPerfTest
 public:
     StringPerformanceTest(int32_t argc, const char *argv[], UErrorCode &status);
     ~StringPerformanceTest();
-    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,
-                                          const char *&name,
-                                          char *par = nullptr);
+    UPerfFunction* runIndexedTest(int32_t index, UBool exec,
+                                  const char*& name,
+                                  char* par = nullptr) override;
     UPerfFunction* TestCtor();
     UPerfFunction* TestCtor1();
     UPerfFunction* TestCtor2();

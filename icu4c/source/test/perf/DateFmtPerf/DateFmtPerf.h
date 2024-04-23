@@ -61,7 +61,7 @@ public:
 	BreakItFunction(){num = -1;}
 	BreakItFunction(int a, bool b){num = a; wordIteration = b;}
 
-	virtual void call(UErrorCode * status)
+	void call(UErrorCode* status) override
 	{		
 		BreakIterator* boundary;
 
@@ -102,7 +102,7 @@ public:
 
 	}
 
-	virtual long getOperationsPerIteration()
+	long getOperationsPerIteration() override
 	{
 		if(wordIteration) return 125*num;
 		else return 355*num;
@@ -161,7 +161,7 @@ public:
         strcpy(locale, loc);
 	}
 
-	virtual void call(UErrorCode* status)
+	void call(UErrorCode* status) override
 	{
 
 		UErrorCode status2 = U_ZERO_ERROR;		
@@ -208,7 +208,7 @@ public:
 		//u_cleanup();
 	}
 
-	virtual long getOperationsPerIteration()
+	long getOperationsPerIteration() override
 	{
 		return NUM_DATES * num;
 	}
@@ -250,7 +250,7 @@ public:
                 strcpy(locale, loc);
         }
 
-        virtual void call(UErrorCode* /* status */)
+        void call(UErrorCode* /*status*/) override
         {
 
                 Locale loc(locale);
@@ -263,7 +263,7 @@ public:
                 }
         }
 
-        virtual long getOperationsPerIteration()
+        long getOperationsPerIteration() override
         {
                 return num;
         }
@@ -289,7 +289,7 @@ public:
         strcpy(locale, loc);
         }
 
-        virtual void call(UErrorCode* /* status */)
+        void call(UErrorCode* /*status*/) override
         {
                 Locale loc(locale);
                 UErrorCode status2 = U_ZERO_ERROR;
@@ -302,7 +302,7 @@ public:
                 delete fmt;
         }
 
-        virtual long getOperationsPerIteration()
+        long getOperationsPerIteration() override
         {
                 return num;
         }
@@ -336,7 +336,7 @@ public:
         strcpy(locale, loc);
 	}
 
-	virtual void call(UErrorCode* /* status */)
+	void call(UErrorCode* /*status*/) override
 	{
 		UErrorCode status2 = U_ZERO_ERROR;		
 		Calendar *cal;
@@ -357,7 +357,7 @@ public:
                 delete cal;
 	}
 
-	virtual long getOperationsPerIteration()
+	long getOperationsPerIteration() override
 	{
 		return num;
 	}
@@ -391,7 +391,7 @@ public:
         strcpy(locale, loc);
 	}
 
-	virtual void call(UErrorCode* /* status */)
+	void call(UErrorCode* /*status*/) override
 	{
 		Locale loc(locale);
                 UnicodeString tzname("UTC");
@@ -401,7 +401,7 @@ public:
                 }
 	}
 
-	virtual long getOperationsPerIteration()
+	long getOperationsPerIteration() override
 	{
 		return num;
 	}
@@ -435,7 +435,7 @@ public:
         strcpy(locale, loc);
 	}
 
-	virtual void call(UErrorCode* /* status */)
+	void call(UErrorCode* /*status*/) override
 	{
 		UErrorCode status2 = U_ZERO_ERROR;		
 		Locale loc(locale);
@@ -446,7 +446,7 @@ public:
                 }
 	}
 
-	virtual long getOperationsPerIteration()
+	long getOperationsPerIteration() override
 	{
 		return num;
 	}
@@ -480,7 +480,7 @@ public:
         strcpy(locale, loc);
 	}
 
-	virtual void call(UErrorCode* /* status */)
+	void call(UErrorCode* /*status*/) override
 	{
 		UErrorCode status2 = U_ZERO_ERROR;		
 		Locale loc(locale);
@@ -493,7 +493,7 @@ public:
                 delete gen;
 	}
 
-	virtual long getOperationsPerIteration()
+	long getOperationsPerIteration() override
 	{
 		return num;
 	}
@@ -527,7 +527,7 @@ public:
         strcpy(locale, loc);
 	}
 
-	virtual void call(UErrorCode* /* status */)
+	void call(UErrorCode* /*status*/) override
 	{
 		UErrorCode status2 = U_ZERO_ERROR;		
 		Locale loc(locale);
@@ -541,7 +541,7 @@ public:
                 delete gen;
 	}
 
-	virtual long getOperationsPerIteration()
+	long getOperationsPerIteration() override
 	{
 		return num;
 	}
@@ -575,7 +575,7 @@ public:
         strcpy(locale, loc);
 	}
 
-	virtual void call(UErrorCode* status2)
+	void call(UErrorCode* status2) override
 	{
         Locale loc(locale);
         UErrorCode status = U_ZERO_ERROR;
@@ -657,7 +657,7 @@ public:
         }
     }
 
-	virtual long getOperationsPerIteration()
+	long getOperationsPerIteration() override
 	{
 		return num;
 	}
@@ -704,7 +704,7 @@ class StdioNumFmtFunction : public UPerfFunction
       strcpy(locale, loc);
     }
 
-  virtual void call(UErrorCode* status2)
+  void call(UErrorCode* status2) override
   {
     Locale loc(locale);
     UErrorCode status = U_ZERO_ERROR;
@@ -737,7 +737,7 @@ class StdioNumFmtFunction : public UPerfFunction
     }
   }
  
-  virtual long getOperationsPerIteration()
+  long getOperationsPerIteration() override
   {
     return num;
   }
@@ -783,7 +783,7 @@ public:
 		init();
 	}
 
-	virtual void call(UErrorCode* status2)
+	void call(UErrorCode* status2) override
 	{
         uint32_t listSize = UPRV_LENGTHOF(collation_strings_escaped);
         UErrorCode status = U_ZERO_ERROR; 
@@ -803,7 +803,7 @@ public:
         delete coll; 
     }
 
-	virtual long getOperationsPerIteration()
+	long getOperationsPerIteration() override
 	{
 		return num;
 	}
@@ -817,7 +817,7 @@ public:
 
 	DateFormatPerfTest(int32_t argc, const char* argv[], UErrorCode& status);
 	~DateFormatPerfTest();
-	virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,const char* &name, char* par);
+	UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char*& name, char* par) override;
 
 	UPerfFunction* DateFmt250();
 	UPerfFunction* DateFmt10000();
