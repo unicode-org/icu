@@ -254,7 +254,7 @@ class TestUtils {
             return;
         }
         if (testCase.expectSuccess() && U_FAILURE(errorCode)) {
-            failExpectedSuccess(tmsg, testCase, errorCode);
+            failExpectedSuccess(tmsg, testCase, errorCode, parseError.line, parseError.offset);
             return;
         }
         if (testCase.expectFailure() && errorCode != testCase.expectedErrorCode()) {
@@ -281,9 +281,10 @@ class TestUtils {
         tmsg.logln(testCase.getTestName() + " failed test with pattern: " + testCase.getPattern() + " and error code U_MF_SYNTAX_WARNING; expected no syntax error");
     }
 
-    static void failExpectedSuccess(IntlTest& tmsg, const TestCase& testCase, IcuTestErrorCode& errorCode) {
+    static void failExpectedSuccess(IntlTest& tmsg, const TestCase& testCase, IcuTestErrorCode& errorCode, int32_t line, int32_t offset) {
         tmsg.dataerrln(testCase.getTestName());
         tmsg.logln(testCase.getTestName() + " failed test with pattern: " + testCase.getPattern() + " and error code " + UnicodeString(u_errorName(errorCode)));
+        tmsg.dataerrln("line = %d offset = %d", line, offset);
         errorCode.reset();
     }
     static void failExpectedFailure(IntlTest& tmsg, const TestCase& testCase, IcuTestErrorCode& errorCode) {
