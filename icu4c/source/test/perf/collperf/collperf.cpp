@@ -188,7 +188,6 @@ public:
 class CmdIterAll : public UPerfFunction {
     typedef	void (CmdIterAll::* Func)(UErrorCode* status);
     int32_t     count;
-    char16_t *     data;
     Func        fn;
     UCollationElements *iter;
     int32_t     exec_count;
@@ -200,7 +199,7 @@ public:
         ucol_closeElements(iter);
     }
     CmdIterAll(UErrorCode & status, UCollator * col, int32_t count,  char16_t * data, CALL call,int32_t,int32_t)
-        :count(count),data(data)
+        :count(count)
     {
         exec_count = 0;
         if (call == forward_null || call == backward_null) {

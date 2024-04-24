@@ -443,7 +443,7 @@ inline void catenate(const char16_t* src,int32_t srcLen, UnicodeString s0)
     *catICU += s0;
 
     utimer_getTime(&mystop);
-    double mytime = utimer_getDeltaSeconds(&mystart,&mystop);
+    utimer_getDeltaSeconds(&mystart,&mystop);
 
     *catICU += uCatenate_STR;
 }
@@ -531,7 +531,7 @@ inline void StdLibCatenate(const wchar_t* src,int32_t srcLen, stlstring s0)
     *catStd += sCatenate_STR;
 
     utimer_getTime(&mystop);
-    double mytime = utimer_getDeltaSeconds(&mystart,&mystop);
+    utimer_getDeltaSeconds(&mystart,&mystop);
 
 }
 

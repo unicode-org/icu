@@ -292,7 +292,6 @@ public:
         void call(UErrorCode* /*status*/) override
         {
                 Locale loc(locale);
-                UErrorCode status2 = U_ZERO_ERROR;
                 DateFormat *fmt = DateFormat::createDateTimeInstance(
                             DateFormat::kShort, DateFormat::kFull, loc);
                 for(int j = 0; j < num; j++) {
@@ -707,8 +706,7 @@ class StdioNumFmtFunction : public UPerfFunction
   void call(UErrorCode* status2) override
   {
     Locale loc(locale);
-    UErrorCode status = U_ZERO_ERROR;
-        
+
     // Parse a string.  The string uses the digits '0' through '9'
     // and the decimal separator '.', standard in the US locale
 
