@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1713892178840,
+  "lastUpdate": 1713998430373,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26134,6 +26134,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 80.1924,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "3aa8b8c5eefa10d4916428955fb39dacc39f06c1",
+          "message": "ICU-22742 Fix handling of XA,XB,XC for addLikelySubtags\n\nAdd more tests.\n\nICU-22742 Add PS... variants\n\nICU-22742 Add java tests\n\nICU-22742 extend tests\n\nICU-22742 wrap java",
+          "timestamp": "2024-04-24T15:24:35-07:00",
+          "tree_id": "054171e40051372b5bdf0fe29e8207ba2e9371dc",
+          "url": "https://github.com/unicode-org/icu/commit/3aa8b8c5eefa10d4916428955fb39dacc39f06c1"
+        },
+        "date": 1713998320010,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 33.9954,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 80.1584,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
