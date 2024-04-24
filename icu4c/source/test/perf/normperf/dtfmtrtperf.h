@@ -90,11 +90,10 @@ public:
         }
 
         // Set up rule equivalency test range
-        UDate low, high;
         cal->set(1900, UCAL_JANUARY, 1);
-        low = cal->getTime(*status);
+        cal->getTime(*status);
         cal->set(2040, UCAL_JANUARY, 1);
-        high = cal->getTime(*status);
+        cal->getTime(*status);
         if (U_FAILURE(*status)) {
             //errln("getTime failed");
             return;

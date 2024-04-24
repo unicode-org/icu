@@ -310,15 +310,14 @@ void GetSortKey::call(UErrorCode* status)
     if (U_FAILURE(*status)) return;
 
     uint8_t key[KEY_BUF_SIZE];
-    int32_t len;
 
     if (useLen) {
         for (int32_t i = 0; i < source->count; i++) {
-            len = ucol_getSortKey(coll, source->dataOf(i), source->lengthOf(i), key, KEY_BUF_SIZE);
+            ucol_getSortKey(coll, source->dataOf(i), source->lengthOf(i), key, KEY_BUF_SIZE);
         }
     } else {
         for (int32_t i = 0; i < source->count; i++) {
-            len = ucol_getSortKey(coll, source->dataOf(i), -1, key, KEY_BUF_SIZE);
+            ucol_getSortKey(coll, source->dataOf(i), -1, key, KEY_BUF_SIZE);
         }
     }
 }

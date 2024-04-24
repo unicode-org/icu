@@ -314,10 +314,9 @@ public:
     }
   }
   int32_t run() override {
-    double trial=0.0;
     int i;
     for(i=0;i<U_LOTS_OF_TIMES;i++){
-      trial = unum_parse(fFmt,fStr,fLen, nullptr, &setupStatus);
+      unum_parse(fFmt,fStr,fLen, nullptr, &setupStatus);
     }
     return i;
   }
@@ -692,13 +691,13 @@ static char16_t strbeng[] = {0x09E8,0x09E8,0x09E8,0x09E8, 0 };
 UNumberFormat *NumParseTest_fmt;
 
 // TODO: de-uglify.
-QuickTest(NumParseTest,{    static char16_t pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    static char16_t str[] = { 0x31 };double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,str,1,nullptr,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
+QuickTest(NumParseTest,{    static char16_t pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    static char16_t str[] = { 0x31 };    for(i=0;i<U_LOTS_OF_TIMES;i++) {      unum_parse(NumParseTest_fmt,str,1,nullptr,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
 
-QuickTest(NumParseTestdot,{    static char16_t pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;  double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,strdot,1,nullptr,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
-QuickTest(NumParseTestspc,{    static char16_t pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,strspc,1,nullptr,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
-QuickTest(NumParseTestgrp,{    static char16_t pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,strgrp,-1,nullptr,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
+QuickTest(NumParseTestdot,{    static char16_t pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      unum_parse(NumParseTest_fmt,strdot,1,nullptr,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
+QuickTest(NumParseTestspc,{    static char16_t pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      unum_parse(NumParseTest_fmt,strspc,1,nullptr,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
+QuickTest(NumParseTestgrp,{    static char16_t pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      unum_parse(NumParseTest_fmt,strgrp,-1,nullptr,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
 
-QuickTest(NumParseTestbeng,{    static char16_t pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,strbeng,-1,nullptr,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
+QuickTest(NumParseTestbeng,{    static char16_t pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      unum_parse(NumParseTest_fmt,strbeng,-1,nullptr,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
 
 UDateFormat *DateFormatTest_fmt = nullptr;
 UDate sometime = 100000000.0;
