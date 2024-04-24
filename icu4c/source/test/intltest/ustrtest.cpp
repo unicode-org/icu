@@ -1669,7 +1669,9 @@ UnicodeStringTest::TestBogus() {
 // most of StringEnumeration is tested elsewhere
 // this test improves code coverage
 
-static const char *const
+namespace {
+
+const char* const
 testEnumStrings[]={
     "a",
     "b",
@@ -1677,6 +1679,8 @@ testEnumStrings[]={
     "this is a long string which helps us test some buffer limits",
     "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
 };
+
+}  // namespace
 
 class TestEnumeration : public StringEnumeration {
 public:
@@ -1873,6 +1877,8 @@ UnicodeStringTest::TestUTF32() {
     }
 }
 
+namespace {
+
 class TestCheckedArrayByteSink : public CheckedArrayByteSink {
 public:
     TestCheckedArrayByteSink(char* outbuf, int32_t capacity)
@@ -1880,6 +1886,8 @@ public:
     virtual void Flush() override { calledFlush = true; }
     UBool calledFlush;
 };
+
+}  // namespace
 
 void
 UnicodeStringTest::TestUTF8() {
@@ -2148,10 +2156,14 @@ UnicodeStringTest::TestSizeofUnicodeString() {
     }
 }
 
+namespace {
+
 // Try to avoid clang -Wself-move warnings from s1 = std::move(s1);
 void moveFrom(UnicodeString &dest, UnicodeString &src) {
     dest = std::move(src);
 }
+
+}  // namespace
 
 void
 UnicodeStringTest::TestMoveSwap() {

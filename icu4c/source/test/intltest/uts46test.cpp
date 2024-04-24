@@ -94,6 +94,8 @@ void UTS46Test::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_END;
 }
 
+namespace {
+
 const uint32_t severeErrors=
     UIDNA_ERROR_LEADING_COMBINING_MARK|
     UIDNA_ERROR_DISALLOWED|
@@ -101,7 +103,7 @@ const uint32_t severeErrors=
     UIDNA_ERROR_LABEL_HAS_DOT|
     UIDNA_ERROR_INVALID_ACE_LABEL;
 
-static UBool isASCII(const UnicodeString &str) {
+UBool isASCII(const UnicodeString &str) {
     const char16_t *s=str.getBuffer();
     int32_t length=str.length();
     for(int32_t i=0; i<length; ++i) {
@@ -124,6 +126,8 @@ public:
     virtual void Flush() override { calledFlush = true; }
     UBool calledFlush;
 };
+
+}  // namespace
 
 void UTS46Test::TestAPI() {
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -352,6 +356,8 @@ void UTS46Test::TestTooLong() {
     assertEquals("decode: expected an error for too-long input", U_INPUT_TOO_LONG_ERROR, errorCode);
 }
 
+namespace {
+
 struct TestCase {
     // Input string and options string (Nontransitional/Transitional/Both).
     const char *s, *o;
@@ -360,7 +366,7 @@ struct TestCase {
     uint32_t errors;
 };
 
-static const TestCase testCases[]={
+const TestCase testCases[] = {
     { "www.eXample.cOm", "B",  // all ASCII
       "www.example.com", 0 },
     { "B\\u00FCcher.de", "B",  // u-umlaut
@@ -698,6 +704,8 @@ static const TestCase testCases[]={
     // { "", "B",
     //   "", 0 },
 };
+
+}  // namespace
 
 void UTS46Test::TestSomeCases() {
     IcuTestErrorCode errorCode(*this, "TestSomeCases");
@@ -1118,8 +1126,12 @@ void UTS46Test::idnaTestOneLine(char *fields[][2], UErrorCode &errorCode) {
                         toAsciiTStatus.c_str(), aTInfo);
 }
 
+namespace {
+
 // TODO: de-duplicate
 U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
+
+}  // namespace
 
 // http://www.unicode.org/Public/idna/latest/IdnaTest.txt
 void UTS46Test::IdnaTest() {
