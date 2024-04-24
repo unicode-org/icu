@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1713892553184,
+  "lastUpdate": 1713998763950,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -47638,6 +47638,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 27.0546,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "3aa8b8c5eefa10d4916428955fb39dacc39f06c1",
+          "message": "ICU-22742 Fix handling of XA,XB,XC for addLikelySubtags\n\nAdd more tests.\n\nICU-22742 Add PS... variants\n\nICU-22742 Add java tests\n\nICU-22742 extend tests\n\nICU-22742 wrap java",
+          "timestamp": "2024-04-24T15:24:35-07:00",
+          "tree_id": "054171e40051372b5bdf0fe29e8207ba2e9371dc",
+          "url": "https://github.com/unicode-org/icu/commit/3aa8b8c5eefa10d4916428955fb39dacc39f06c1"
+        },
+        "date": 1713998655206,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 10.2574,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 17.0222,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 17.0748,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 9.1785,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 27.184,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 26.9713,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
