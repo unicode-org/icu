@@ -40,13 +40,9 @@ public:
      * test MessageFormat2 with various given patterns
      **/
     void dataDrivenTests(void);
-    void featureTests(void);
-    void messageFormat1Tests(void);
     void testAPICustomFunctions(void);
     // Test custom functions
     void testCustomFunctions(void);
-    // Test standard functions
-    void testBuiltInFunctions(void);
     // Test the data model API
     void testDataModelAPI(void);
     void testAPI(void);
@@ -56,7 +52,6 @@ private:
     void jsonTestsFromFiles(IcuTestErrorCode&);
 
     // Built-in function testing
-    void testDateTime(IcuTestErrorCode&);
     void testNumbers(IcuTestErrorCode&);
 
     // Custom function testing

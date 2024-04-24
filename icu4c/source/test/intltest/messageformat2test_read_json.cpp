@@ -12,6 +12,7 @@
 #include "charstr.h"
 #include "json-json.hpp"
 #include "messageformat2test.h"
+#include "messageformat2test_utils.h"
 
 using namespace nlohmann;
 
@@ -81,15 +82,64 @@ static void makeTestName(char* buffer, size_t size, std::string fileName, int32_
     snprintf(buffer, size, "test from file: %s[%u]", fileName.c_str(), ++testNum);
 }
 
+static bool setArguments(TestCase::Builder& test, const json::object_t& params, UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return true;
+    }
+    for (auto argsIter = params.begin(); argsIter != params.end(); ++argsIter) {
+        const UnicodeString argName = u_str(argsIter->first);
+        // Determine type of value
+        if (argsIter->second.is_number()) {
+            test.setArgument(argName,
+                             argsIter->second.template get<double>());
+        } else if (argsIter->second.is_string()) {
+            test.setArgument(argName,
+                             u_str(argsIter->second.template get<std::string>()));
+        } else if (argsIter->second.is_object()) {
+            // Dates: represent in tests as { "date" : timestamp }, to distinguish
+            // from number values
+            auto obj = argsIter->second.template get<json::object_t>();
+            if (obj["date"].is_number()) {
+                test.setDateArgument(argName, obj["date"]);
+            } else if (obj["decimal"].is_string()) {
+                // Decimal strings: represent in tests as { "decimal" : string },
+                // to distinguish from string values
+                test.setDecimalArgument(argName, obj["decimal"].template get<std::string>(), errorCode);
+            }
+        } else if (argsIter->second.is_boolean() || argsIter->second.is_null()) {
+            return false; // For now, boolean and null arguments are unsupported
+        }
+    }
+    return true;
+}
+
 static void runValidTest(TestMessageFormat2& icuTest,
                          const std::string& testName,
                          const json& j,
                          IcuTestErrorCode& errorCode) {
-    auto messageText = j["src"].template get<std::string>();
+    auto j_object = j.template get<json::object_t>();
+    std::string messageText;
+
+    if (!j_object["src"].is_null()) {
+        messageText = j_object["src"].template get<std::string>();
+    } else {
+        if (!j_object["srcs"].is_null()) {
+            auto strings = j_object["srcs"].template get<std::vector<std::string>>();
+            for (const auto &piece : strings) {
+                messageText += piece;
+            }
+        }
+        // Otherwise, it should probably be an error, but we just
+        // treat this as the empty string
+    }
 
     TestCase::Builder test = successTest(testName, messageText);
 
-    auto j_object = j.template get<json::object_t>();
+    // Certain ICU4J tests don't work yet in ICU4C.
+    // See ICU-22754
+    if (!j_object["ignoreTest"].is_null()) {
+        return;
+    }
 
     if (!j_object["exp"].is_null()) {
         // Set expected result if it's present
@@ -105,18 +155,8 @@ static void runValidTest(TestMessageFormat2& icuTest,
     if (!j_object["params"].is_null()) {
         // Map from string to json
         auto params = j_object["params"].template get<json::object_t>();
-        for (auto argsIter = params.begin(); argsIter != params.end(); ++argsIter) {
-            const UnicodeString argName = u_str(argsIter->first);
-            // Determine type of value
-            if (argsIter->second.is_number()) {
-                test.setArgument(argName,
-                                 argsIter->second.template get<double>());
-            } else if (argsIter->second.is_string()) {
-                test.setArgument(argName,
-                                 u_str(argsIter->second.template get<std::string>()));
-            } else if (argsIter->second.is_boolean() || argsIter->second.is_null()) {
-                return; // For now, boolean and null arguments are unsupported
-            }
+        if (!setArguments(test, params, errorCode)) {
+            return; // Skip tests with unsupported arguments
         }
     }
 
@@ -164,6 +204,111 @@ static void runSyntaxErrorTest(TestMessageFormat2& icuTest,
     }
     TestCase t = test.build();
     TestUtils::runTestCase(icuTest, t, errorCode);
+}
+
+// File name is relative to message2/ in the test data directory
+static void runICU4JSyntaxTestsFromJsonFile(TestMessageFormat2& t,
+                                            const std::string& fileName,
+                                            IcuTestErrorCode& errorCode) {
+    const char* testDataDirectory = IntlTest::getSourceTestData(errorCode);
+    CHECK_ERROR(errorCode);
+
+    std::string testFileName(testDataDirectory);
+    testFileName.append("message2/");
+    testFileName.append(fileName);
+    std::ifstream testFile(testFileName);
+    json data = json::parse(testFile);
+
+    // Map from string to json, where the strings are the function names
+    auto tests = data.template get<json::object_t>();
+    for (auto iter = tests.begin(); iter != tests.end(); ++iter) {
+        int32_t testNum = 0;
+        auto categoryName = iter->first;
+        t.logln("ICU4J syntax tests:");
+        t.logln(u_str(iter->second.dump()));
+
+        // Array of tests
+        auto testsForThisCategory = iter->second.template get<std::vector<std::string>>();
+
+        TestCase::Builder test;
+        test.setNoSyntaxError();
+        for (auto testsIter = testsForThisCategory.begin();
+             testsIter != testsForThisCategory.end();
+             ++testsIter) {
+            char testName[100];
+            makeTestName(testName, sizeof(testName), categoryName, ++testNum);
+            t.logln(testName);
+
+            // Tests here are just strings, and we test that they run without syntax errors
+            test.setPattern(u_str(*testsIter));
+            TestCase testCase = test.build();
+            TestUtils::runTestCase(t, testCase, errorCode);
+        }
+
+    }
+}
+
+// File name is relative to message2/ in the test data directory
+static void runICU4JSelectionTestsFromJsonFile(TestMessageFormat2& t,
+                                            const std::string& fileName,
+                                            IcuTestErrorCode& errorCode) {
+    const char* testDataDirectory = IntlTest::getSourceTestData(errorCode);
+    CHECK_ERROR(errorCode);
+
+    std::string testFileName(testDataDirectory);
+    testFileName.append("message2/");
+    testFileName.append(fileName);
+    std::ifstream testFile(testFileName);
+    json data = json::parse(testFile);
+
+    int32_t testNum = 0;
+
+    for (auto iter = data.begin(); iter != data.end(); ++iter) {
+        // Each test has a "shared" and a "variations" field
+        auto j_object = iter->get<json::object_t>();
+        auto shared = j_object["shared"];
+        auto variations = j_object["variations"];
+
+        // Skip ignored tests
+        if (!j_object["ignoreTest"].is_null()) {
+            return;
+        }
+
+        // shared has a "srcs" field
+        auto strings = shared["srcs"].template get<std::vector<std::string>>();
+        std::string messageText;
+        for (const auto &piece : strings) {
+            messageText += piece;
+        }
+
+        t.logln("ICU4J selectors tests:");
+        t.logln(u_str(iter->dump()));
+
+        TestCase::Builder test;
+        char testName[100];
+        makeTestName(testName, sizeof(testName), fileName, ++testNum);
+        test.setName(testName);
+
+        // variations has "params" and "exp" fields, and an optional "locale"
+        for (auto variationsIter = variations.begin(); variationsIter != variations.end(); ++variationsIter) {
+            auto variation = variationsIter->get<json::object_t>();
+            auto params = variation["params"];
+            auto exp = variation["exp"];
+
+            test.setExpected(u_str(exp));
+            test.setPattern(u_str(messageText));
+            test.setExpectSuccess();
+            setArguments(test, params, errorCode);
+
+            if (!variation["locale"].is_null()) {
+                std::string localeStr = variation["locale"].template get<std::string>();
+                test.setLocale(Locale(localeStr.c_str()));
+            }
+
+            TestCase testCase = test.build();
+            TestUtils::runTestCase(t, testCase, errorCode);
+        }
+    }
 }
 
 // File name is relative to message2/ in the test data directory
@@ -304,9 +449,6 @@ static void runFunctionTestsFromJsonFile(TestMessageFormat2& t,
     const char* testDataDirectory = IntlTest::getSourceTestData(errorCode);
     CHECK_ERROR(errorCode);
 
-    // TODO: Need more test coverage for all the :number and other built-in
-    // function options. For now this just runs spec tests.
-
     std::string functionTestsFileName(testDataDirectory);
     functionTestsFileName.append("message2/");
     functionTestsFileName.append(fileName);
@@ -357,6 +499,7 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     runFunctionTestsFromJsonFile(*this, "spec/test-functions.json", errorCode);
 
     // Other tests (non-spec)
+    runFunctionTestsFromJsonFile(*this, "more-functions.json", errorCode);
     runValidTestsFromJsonFile(*this, "valid-tests.json", errorCode);
     runValidTestsFromJsonFile(*this, "resolution-errors.json", errorCode);
     runValidTestsFromJsonFile(*this, "reserved-syntax.json", errorCode);
@@ -395,6 +538,15 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     runSyntaxTestsWithDiagnosticsFromJsonFile(*this, "syntax-errors-diagnostics.json", errorCode);
     runSyntaxTestsWithDiagnosticsFromJsonFile(*this, "invalid-number-literals-diagnostics.json", errorCode);
     runSyntaxTestsWithDiagnosticsFromJsonFile(*this, "syntax-errors-diagnostics-multiline.json", errorCode);
+
+    // ICU4J tests
+    runFunctionTestsFromJsonFile(*this, "icu4j/icu-test-functions.json", errorCode);
+    // Changes made to get these tests to work:
+    // * removed double backslashes from  "Hello \\t \\n \\r \\{ world!"
+    // * added empty {{}} pattern at the end of the tests under "Simple messages, with declarations"
+    //   and the first one under "Multiple declarations in one message"
+    runICU4JSyntaxTestsFromJsonFile(*this, "icu4j/icu-parser-tests.json", errorCode);
+    runICU4JSelectionTestsFromJsonFile(*this, "icu4j/icu-test-selectors.json", errorCode);
 }
 
 #endif /* #if !UCONFIG_NO_MF2 */
