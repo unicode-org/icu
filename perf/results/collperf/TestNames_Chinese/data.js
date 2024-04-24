@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1713892379730,
+  "lastUpdate": 1713998620394,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42928,6 +42928,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2082930.2383,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "3aa8b8c5eefa10d4916428955fb39dacc39f06c1",
+          "message": "ICU-22742 Fix handling of XA,XB,XC for addLikelySubtags\n\nAdd more tests.\n\nICU-22742 Add PS... variants\n\nICU-22742 Add java tests\n\nICU-22742 extend tests\n\nICU-22742 wrap java",
+          "timestamp": "2024-04-24T15:24:35-07:00",
+          "tree_id": "054171e40051372b5bdf0fe29e8207ba2e9371dc",
+          "url": "https://github.com/unicode-org/icu/commit/3aa8b8c5eefa10d4916428955fb39dacc39f06c1"
+        },
+        "date": 1713998511851,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 149.8491,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8772738.2646,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2241904.2117,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7749646.3339,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2087884.8979,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
