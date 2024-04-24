@@ -21,16 +21,18 @@
 #include "unicode/unum.h"
 #include "cmemory.h"
 
+namespace {
+
 typedef struct ExpectedResult {
   double value;
   // Invariant characters, will be converted to UTF-16 and then unescaped.
   const char *expected;
 } ExpectedResult;
 
-static const char *kShortStr = "Short";
-static const char *kLongStr = "Long";
+const char* kShortStr = "Short";
+const char* kLongStr = "Long";
 
-static ExpectedResult kEnglishShort[] = {
+ExpectedResult kEnglishShort[] = {
   {0.0, "0"},
   {0.17, "0.17"},
   {1.0, "1"},
@@ -48,7 +50,7 @@ static ExpectedResult kEnglishShort[] = {
   {1.23456789E14, "120T"},
   {1.23456789E15, "1200T"}};
 
-static ExpectedResult kSerbianShort[] = {
+ExpectedResult kSerbianShort[] = {
   {1234.0, "1,2\\u00a0\\u0445\\u0438\\u0459."},
   {12345.0, "12\\u00a0\\u0445\\u0438\\u0459."},
   {20789.0, "21\\u00a0\\u0445\\u0438\\u0459."},
@@ -64,7 +66,7 @@ static ExpectedResult kSerbianShort[] = {
   {1.23456789E14, "120\\u00A0\\u0431\\u0438\\u043B."},
   {1.23456789E15, "1200\\u00A0\\u0431\\u0438\\u043B."}};
 
-static ExpectedResult kSerbianLong[] = {
+ExpectedResult kSerbianLong[] = {
   {1234.0, "1,2 \\u0445\\u0438\\u0459\\u0430\\u0434\\u0435"}, // 10^3 few
   {12345.0, "12 \\u0445\\u0438\\u0459\\u0430\\u0434\\u0430"}, // 10^3 other
   {21789.0, "22 \\u0445\\u0438\\u0459\\u0430\\u0434\\u0435"}, // 10^3 few
@@ -83,7 +85,7 @@ static ExpectedResult kSerbianLong[] = {
   {1.23456789E14, "120 \\u0431\\u0438\\u043B\\u0438\\u043E\\u043D\\u0430"}, // 10^12 other
   {1.23456789E15, "1200 \\u0431\\u0438\\u043B\\u0438\\u043E\\u043D\\u0430"}}; // 10^12 other
 
-static ExpectedResult kSerbianLongNegative[] = {
+ExpectedResult kSerbianLongNegative[] = {
   {-1234.0, "-1,2 \\u0445\\u0438\\u0459\\u0430\\u0434\\u0435"},
   {-12345.0, "-12 \\u0445\\u0438\\u0459\\u0430\\u0434\\u0430"},
   {-21789.0, "-22 \\u0445\\u0438\\u0459\\u0430\\u0434\\u0435"},
@@ -102,7 +104,7 @@ static ExpectedResult kSerbianLongNegative[] = {
   {-1.23456789E14, "-120 \\u0431\\u0438\\u043B\\u0438\\u043E\\u043D\\u0430"},
   {-1.23456789E15, "-1200 \\u0431\\u0438\\u043B\\u0438\\u043E\\u043D\\u0430"}};
 
-static ExpectedResult kJapaneseShort[] = {
+ExpectedResult kJapaneseShort[] = {
   {1234.0, "1200"},
   {12345.0, "1.2\\u4E07"},
   {123456.0, "12\\u4E07"},
@@ -121,7 +123,7 @@ static ExpectedResult kJapaneseShort[] = {
   {1.23456789E18, "120\\u4EAC"},
   {1.23456789E19, "1200\\u4EAC"}};
 
-static ExpectedResult kSwahiliShort[] = {
+ExpectedResult kSwahiliShort[] = {
   {1234.0, "elfu\\u00a01.2"},
   {12345.0, "elfu\\u00a012"},
   {123456.0, "elfu\\u00a0120"},
@@ -135,7 +137,7 @@ static ExpectedResult kSwahiliShort[] = {
   {1.23456789E13, "12T"},
   {1.23456789E15, "1200T"}};
 
-static ExpectedResult kCsShort[] = {
+ExpectedResult kCsShort[] = {
   {1000.0, "1\\u00a0tis."},
   {1500.0, "1,5\\u00a0tis."},
   {5000.0, "5\\u00a0tis."},
@@ -151,12 +153,12 @@ static ExpectedResult kCsShort[] = {
   {1.27123456E13, "13\\u00a0bil."},
   {1.27123456E14, "130\\u00a0bil."}};
 
-static ExpectedResult kSkLong[] = {
+ExpectedResult kSkLong[] = {
   {1000.0, "1 tis\\u00edc"},
   {1572.0, "1,6 tis\\u00edca"},
   {5184.0, "5,2 tis\\u00edca"}};
 
-static ExpectedResult kSwahiliShortNegative[] = {
+ExpectedResult kSwahiliShortNegative[] = {
   {-1234.0, "elfu\\u00a0-1.2"},
   {-12345.0, "elfu\\u00a0-12"},
   {-123456.0, "elfu\\u00a0-120"},
@@ -170,10 +172,10 @@ static ExpectedResult kSwahiliShortNegative[] = {
   {-1.23456789E13, "-12T"},
   {-1.23456789E15, "-1200T"}};
 
-static ExpectedResult kArabicLong[] = {
+ExpectedResult kArabicLong[] = {
   {-5300.0, "\\u061C-\\u0665\\u066B\\u0663 \\u0623\\u0644\\u0641"}};
 
-static ExpectedResult kChineseCurrencyTestData[] = {
+ExpectedResult kChineseCurrencyTestData[] = {
         {1.0, "\\u00A51"},
         {12.0, "\\u00A512"},
         {123.0, "\\u00A5120"},
@@ -190,7 +192,8 @@ static ExpectedResult kChineseCurrencyTestData[] = {
         {12345678901234.0, "\\u00A512\\u4E07\\u4EBF"},
         {123456789012345.0, "\\u00A5120\\u4E07\\u4EBF"},
 };
-static ExpectedResult kGermanCurrencyTestData[] = {
+
+ExpectedResult kGermanCurrencyTestData[] = {
         {1.0, "1\\u00A0\\u20AC"},
         {12.0, "12\\u00A0\\u20AC"},
         {123.0, "120\\u00A0\\u20AC"},
@@ -207,7 +210,8 @@ static ExpectedResult kGermanCurrencyTestData[] = {
         {12345678901234.0, "12\\u00A0Bio.\\u00A0\\u20AC"},
         {123456789012345.0, "120\\u00A0Bio.\\u00A0\\u20AC"},
 };
-static ExpectedResult kEnglishCurrencyTestData[] = {
+
+ExpectedResult kEnglishCurrencyTestData[] = {
         {1.0, "$1"},
         {12.0, "$12"},
         {123.0, "$120"},
@@ -225,6 +229,7 @@ static ExpectedResult kEnglishCurrencyTestData[] = {
         {123456789012345.0, "$120T"},
 };
 
+}  // namespace
 
 class CompactDecimalFormatTest : public IntlTest {
 public:

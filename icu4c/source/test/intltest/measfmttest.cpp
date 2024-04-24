@@ -32,11 +32,15 @@
 #include "unicode/reldatefmt.h"
 #include "unicode/rbnf.h"
 
+namespace {
+
 struct ExpectedResult {
     const Measure *measures;
     int32_t count;
     const char *expected;
 };
+
+}  // namespace
 
 class MeasureFormatTest : public IntlTest {
 public:
