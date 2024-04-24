@@ -11,167 +11,137 @@
 
 #define MAXLEN 200
 
-static void sub2(UBiDi *bidi) {
-  UErrorCode errorCode = U_ZERO_ERROR;
-  int32_t i;
-  int32_t runCount;
+static void testGetVisualRun(UBiDi *bidi) {
+  UErrorCode status = U_ZERO_ERROR;
   ubidi_getDirection(bidi);
   ubidi_getParaLevel(bidi);
   ubidi_getReorderingMode(bidi);
   ubidi_getReorderingOptions(bidi);
-  runCount = ubidi_countRuns(bidi, &errorCode);
-  if (U_FAILURE(errorCode)) {
-  } else {
-    for (i = 0; i < runCount; i++) {
-      int32_t start, len;
-      ubidi_getVisualRun(bidi, i, &start, &len);
-    }
+  int32_t runCount = ubidi_countRuns(bidi, &status);
+  if (U_FAILURE(status)) {
+    return;
+  }
+  for (int32_t runIndex = 0; runIndex < runCount; runIndex++) {
+    int32_t start, len;
+    ubidi_getVisualRun(bidi, runIndex, &start, &len);
   }
 }
 
-static void matchingPair(UBiDi *bidi, int32_t i) {
-  UBiDiLevel level;
-  ubidi_getLogicalRun(bidi, i, NULL, &level);
-}
 
-static bool sub1(UBiDi *bidi) {
-  int32_t i, idx, logLimit, visLimit;
-  bool testOK, errMap, errDst;
-  UErrorCode errorCode = U_ZERO_ERROR;
-  int32_t visMap[MAXLEN];
-  int32_t logMap[MAXLEN];
-  ubidi_getVisualMap(bidi, visMap, &errorCode);
-  ubidi_getLogicalMap(bidi, logMap, &errorCode);
-  if (U_FAILURE(errorCode)) {
-    return false;
+static void testVisual(UBiDi *bidi) {
+  UErrorCode status = U_ZERO_ERROR;
+  int32_t visualToLogical[MAXLEN];
+  int32_t logicalToVisual[MAXLEN];
+  int32_t logicalLimit = ubidi_getProcessedLength(bidi);
+  int32_t visualLimit = ubidi_getResultLength(bidi);
+  if (visualLimit > MAXLEN) {
+    return;
+  }
+  ubidi_getVisualMap(bidi, visualToLogical, &status);
+  ubidi_getLogicalMap(bidi, logicalToVisual, &status);
+  if (U_FAILURE(status)) {
+    return;
   }
 
-  testOK = true;
-  errMap = errDst = false;
-  logLimit = ubidi_getProcessedLength(bidi);
-  visLimit = ubidi_getResultLength(bidi);
-  for (i = 0; i < logLimit; i++) {
-    idx = ubidi_getVisualIndex(bidi, i, &errorCode);
-    if (idx != logMap[i]) {
-      errMap = true;
+  bool mapIsIncorrect = false;
+  for (int32_t logicalIndex = 0; logicalIndex < logicalLimit; logicalIndex++) {
+    int32_t visualIndex = ubidi_getVisualIndex(bidi, logicalIndex, &status);
+    if (visualIndex != logicalToVisual[logicalIndex]) {
+      mapIsIncorrect = true;
     }
-    if (idx == UBIDI_MAP_NOWHERE) {
-      continue;
-    }
-    if (idx >= visLimit) {
-      continue;
-    }
-    matchingPair(bidi, i);
-  }
-
-  if (U_FAILURE(errorCode)) {
-    return false;
-  }
-  if (errMap) {
-    if (testOK) {
-      sub2(bidi);
-      testOK = false;
-    }
-    for (i = 0; i < logLimit; i++) {
-      ubidi_getVisualIndex(bidi, i, &errorCode);
+    if (visualIndex != UBIDI_MAP_NOWHERE && visualIndex < visualLimit) {
+        UBiDiLevel level;
+        ubidi_getLogicalRun(bidi, logicalIndex, nullptr, &level);
     }
   }
 
-  if (errDst) {
-    if (testOK) {
-      sub2(bidi);
-      testOK = false;
+  if (U_FAILURE(status)) {
+    return;
+  }
+  bool checkGetVisualRun = true;
+  if (mapIsIncorrect) {
+    testGetVisualRun(bidi);
+    checkGetVisualRun = false;
+    for (int32_t logicalIndex = 0; logicalIndex < logicalLimit; logicalIndex++) {
+      ubidi_getVisualIndex(bidi, logicalIndex, &status);
     }
   }
 
-  errMap = errDst = false;
-  for (i = 0; i < visLimit; i++) {
-    idx = ubidi_getLogicalIndex(bidi, i, &errorCode);
-    if (idx != visMap[i]) {
-      errMap = true;
+  mapIsIncorrect = false;
+  for (int32_t visualIndex = 0; visualIndex < visualLimit; visualIndex++) {
+    int32_t logicalIndex = ubidi_getLogicalIndex(bidi, visualIndex, &status);
+    if (logicalIndex != visualToLogical[visualIndex]) {
+      mapIsIncorrect = true;
     }
-    if (idx == UBIDI_MAP_NOWHERE) {
-      continue;
-    }
-    if (idx >= logLimit) {
-      continue;
-    }
-    matchingPair(bidi, idx);
-  }
-  if (U_FAILURE(errorCode)) {
-    return false;
-  }
-  if (errMap) {
-    if (testOK) {
-      sub2(bidi);
-      testOK = false;
+    if (logicalIndex != UBIDI_MAP_NOWHERE && logicalIndex < logicalLimit) {
+      UBiDiLevel level;
+      ubidi_getLogicalRun(bidi, logicalIndex, nullptr, &level);
     }
   }
-  if (errDst) {
-    if (testOK) {
-      sub2(bidi);
-      testOK = false;
-    }
+  if (U_FAILURE(status)) {
+    return;
   }
-  return testOK;
+  if (mapIsIncorrect && checkGetVisualRun) {
+    testGetVisualRun(bidi);
+  }
 }
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   icu::StringPiece fuzzData(reinterpret_cast<const char *>(data), size);
 
-  UErrorCode ec = U_ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   UBiDi* bidi = ubidi_open();
-  UChar input1[MAXLEN];
-  UChar dest[MAXLEN];
-  int32_t destSize;
-  unsigned char input1size;
+  UChar inputText[MAXLEN];
+  UChar reorderedText[MAXLEN];
+  int32_t reorderedTextLength;
+  unsigned char inputTextLength;
 
-  std::memcpy(&input1size, fuzzData.data(), sizeof(input1size));
-  fuzzData.remove_prefix(sizeof(input1size));
-  if (input1size > MAXLEN) input1size = MAXLEN;
+  std::memcpy(&inputTextLength, fuzzData.data(), sizeof(inputTextLength));
+  fuzzData.remove_prefix(sizeof(inputTextLength));
+  if (inputTextLength > MAXLEN) inputTextLength = MAXLEN;
 
-  std::memcpy(&input1, fuzzData.data(), sizeof(UChar)*input1size);
-  fuzzData.remove_prefix(sizeof(UChar)*input1size);
+  std::memcpy(&inputText, fuzzData.data(), sizeof(UChar)*inputTextLength);
+  fuzzData.remove_prefix(sizeof(UChar)*inputTextLength);
 
-  UBiDiLevel input2;
-  std::memcpy(&input2, fuzzData.data(), sizeof(input2));
-  fuzzData.remove_prefix(sizeof(input2));
+  UBiDiLevel paraLevel;
+  std::memcpy(&paraLevel, fuzzData.data(), sizeof(paraLevel));
+  fuzzData.remove_prefix(sizeof(paraLevel));
 
-  int16_t input3;
-  std::memcpy(&input3, fuzzData.data(), sizeof(input3));
-  fuzzData.remove_prefix(sizeof(input3));
+  int16_t options;
+  std::memcpy(&options, fuzzData.data(), sizeof(options));
+  fuzzData.remove_prefix(sizeof(options));
 
-  unsigned char input4;
-  std::memcpy(&input4, fuzzData.data(), sizeof(input4));
-  fuzzData.remove_prefix(sizeof(input4));
-  if (input4 > MAXLEN) input4 = MAXLEN;
+  unsigned char reorderedTextSize;
+  std::memcpy(&reorderedTextSize, fuzzData.data(), sizeof(reorderedTextSize));
+  fuzzData.remove_prefix(sizeof(reorderedTextSize));
+  if (reorderedTextSize > MAXLEN) reorderedTextSize = MAXLEN;
 
-  bool flow1, flow2;
-  flow1 = (*(fuzzData.data()) & 0x01) == 0;
-  fuzzData.remove_prefix(sizeof(flow1));
+  bool checkSetInverse, checkVisual;
+  checkSetInverse = (*(fuzzData.data()) & 0x01) == 0;
+  fuzzData.remove_prefix(sizeof(checkSetInverse));
 
-  flow2 = (*(fuzzData.data()) & 0x01) == 0;
-  fuzzData.remove_prefix(sizeof(flow2));
+  checkVisual = (*(fuzzData.data()) & 0x01) == 0;
+  fuzzData.remove_prefix(sizeof(checkVisual));
 
-  if (flow1) {
-    bool input1_1_1;
-    std::memcpy(&input1_1_1, fuzzData.data(), sizeof(input1_1_1));
-    fuzzData.remove_prefix(sizeof(input1_1_1));
-    ubidi_setInverse(bidi, input1_1_1);
+  if (checkSetInverse) {
+    bool isInverse;
+    std::memcpy(&isInverse, fuzzData.data(), sizeof(isInverse));
+    fuzzData.remove_prefix(sizeof(isInverse));
+    ubidi_setInverse(bidi, isInverse);
   }
-  ubidi_setPara(bidi, input1, input1size, input2, NULL, &ec);
-  if (U_FAILURE(ec)) goto out;
+  ubidi_setPara(bidi, inputText, inputTextLength, paraLevel, nullptr, &status);
+  if (U_FAILURE(status)) goto out;
 
-  destSize = ubidi_writeReordered(bidi, dest, input4, input3, &ec);
-  if (U_FAILURE(ec)) goto out;
+  reorderedTextLength = ubidi_writeReordered(bidi, reorderedText, reorderedTextSize, options, &status);
+  if (U_FAILURE(status)) goto out;
 
-  if (flow2) {
-    sub1(bidi);
+  if (checkVisual) {
+    testVisual(bidi);
   } else {
-    int16_t input2_2_1;
-    std::memcpy(&input2_2_1, fuzzData.data(), sizeof(input2_2_1));
-    fuzzData.remove_prefix(sizeof(input2_2_1));
-    ubidi_writeReordered(bidi, dest, destSize+1, input2_2_1, &ec);
+    int16_t options2;
+    std::memcpy(&options2, fuzzData.data(), sizeof(options2));
+    fuzzData.remove_prefix(sizeof(options2));
+    ubidi_writeReordered(bidi, reorderedText, reorderedTextLength+1, options2, &status);
   }
 
 out:
