@@ -189,10 +189,12 @@ namespace message2 {
     void StaticErrors::addError(StaticError&& e, UErrorCode& status) {
         CHECK_ERROR(status);
 
+        StaticErrorType type = e.type;
+
         void* errorP = static_cast<void*>(create<StaticError>(std::move(e), status));
         U_ASSERT(syntaxAndDataModelErrors.isValid());
 
-        switch (e.type) {
+        switch (type) {
         case StaticErrorType::SyntaxError: {
             syntaxError = true;
             break;
@@ -229,10 +231,12 @@ namespace message2 {
     void DynamicErrors::addError(DynamicError&& e, UErrorCode& status) {
         CHECK_ERROR(status);
 
+        DynamicErrorType type = e.type;
+
         void* errorP = static_cast<void*>(create<DynamicError>(std::move(e), status));
         U_ASSERT(resolutionAndFormattingErrors.isValid());
 
-        switch (e.type) {
+        switch (type) {
         case DynamicErrorType::UnresolvedVariable: {
             unresolvedVariableError = true;
             resolutionAndFormattingErrors->adoptElement(errorP, status);
