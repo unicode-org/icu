@@ -227,8 +227,6 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
 - build/bootstrap/generate new files:
     icu4c/source/data/unidata/generate.sh
 
-TODO
-
 * run & fix ICU4C tests
 - Note: Some of the collation data and test data will be updated below,
   so at this time we might get some collation test failures.
@@ -263,17 +261,21 @@ TODO
   from the CLDR root files (..._CLDR_..._SHORT.txt)
     cp -v $CLDR_SRC/common/uca/CollationTest_CLDR_NON_IGNORABLE_SHORT.txt $ICU_SRC/icu4c/source/test/testdata/CollationTest_NON_IGNORABLE_SHORT.txt
     cp -v $CLDR_SRC/common/uca/CollationTest_CLDR_SHIFTED_SHORT.txt $ICU_SRC/icu4c/source/test/testdata/CollationTest_SHIFTED_SHORT.txt
-    cp -v $ICU_SRC/icu4c/source/test/testdata/CollationTest_*.txt $ICU_SRC/icu4j/main/tests/collate/src/com/ibm/icu/dev/data
+    cp -v $ICU_SRC/icu4c/source/test/testdata/CollationTest_*.txt $ICU_SRC/icu4j/main/collate/src/test/resources/com/ibm/icu/dev/data
 - if CLDR common/uca/unihan-index.txt changes, then update
   CLDR common/collation/root.xml <collation type="private-unihan">
   and regenerate (or update in parallel) $ICU_SRC/icu4c/source/data/coll/root.txt
 
-- generate data files, as above (generate.sh), now to pick up new collation data
 - update CollationFCD.java:
-  copy & paste the initializers of lcccIndex[] etc. from
-    ICU4C/source/i18n/collationfcd.cpp to
-    ICU4J/main/classes/collate/src/com/ibm/icu/impl/coll/CollationFCD.java
+  copy & paste the initializers of lcccIndex[] etc.
+  from
+    $ICU_SRC/icu4c/source/i18n/collationfcd.cpp
+  to
+    $ICU_SRC/icu4j/main/collate/src/main/java/com/ibm/icu/impl/coll/CollationFCD.java
+- generate data files, as above (generate.sh), now to pick up new collation data
 - rebuild ICU4C (make clean, make check, as usual)
+
+TODO
 
 * Unihan collators
     https://github.com/unicode-org/unicodetools/blob/main/docs/unihan.md
@@ -337,7 +339,7 @@ TODO
     make[1]: Leaving directory '/usr/local/google/home/mscherer/icu/uni/dbg/icu4c/data'
 - copy the binary data files into the ICU4J tree
     cd $ICU_OUT/icu4c/data/out/icu4j
-    cp -v com/ibm/icu/impl/data/$ICUDT/coll/* $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/$ICUDT/coll
+    cp -v com/ibm/icu/impl/data/$ICUDT/coll/* $ICU_SRC/icu4j/main/collate/src/main/resources/com/ibm/icu/impl/data/$ICUDT/coll
     cp -v com/ibm/icu/impl/data/$ICUDT/brkitr/* $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/$ICUDT/brkitr
     cp -v com/ibm/icu/impl/data/$ICUDT/confusables.cfu $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/$ICUDT
     cp -v com/ibm/icu/impl/data/$ICUDT/*.nrm $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/$ICUDT
@@ -360,25 +362,24 @@ TODO
 
 * run & fix ICU4J tests
 
+TODO
+
 *** API additions
 - send notice to icu-design about new born-@stable API (enum constants etc.)
 
 *** CLDR numbering systems
 - look for new sets of decimal digits (gc=ND & nv=4) and add to CLDR
   for example:
-    ~/icu/mine/src$ egrep ';gc=Nd.+;nv=4' icu4c/source/data/unidata/ppucd.txt > /tmp/icu/nv4-15.1.txt
-    ~/icu/uni/src$ egrep ';gc=Nd.+;nv=4' icu4c/source/data/unidata/ppucd.txt > /tmp/icu/nv4-16.0.txt
-    ~/icu/uni/src$ diff -u /tmp/icu/nv4-15.1.txt /tmp/icu/nv4-16.0.txt
-    -->
-    (empty this time)
-  or:
     ~/unitools/mine/src$ diff -u unicodetools/data/ucd/15.1.0/extracted/DerivedGeneralCategory.txt unicodetools/data/ucd/dev/extracted/DerivedGeneralCategory.txt | grep '; Nd' | egrep '^\+'
     -->
-    TODO
-    (empty this time)
-  Unicode 16.0:
-    TODO
-    (none this time)
+      +10D40..10D49  ; Nd #  [10] GARAY DIGIT ZERO..GARAY DIGIT NINE
+      +116D0..116E3  ; Nd #  [20] MYANMAR PAO DIGIT ZERO..MYANMAR EASTERN PWO KAREN DIGIT NINE
+      +11BF0..11BF9  ; Nd #  [10] SUNUWAR DIGIT ZERO..SUNUWAR DIGIT NINE
+      +16130..16139  ; Nd #  [10] GURUNG KHEMA DIGIT ZERO..GURUNG KHEMA DIGIT NINE
+      +16D70..16D79  ; Nd #  [10] KIRAT RAI DIGIT ZERO..KIRAT RAI DIGIT NINE
+      +1CCF0..1CCF9  ; Nd #  [10] OUTLINED DIGIT ZERO..OUTLINED DIGIT NINE
+      +1E5F1..1E5FA  ; Nd #  [10] OL ONAL DIGIT ZERO..OL ONAL DIGIT NINE
+  --> https://github.com/unicode-org/cldr/pull/3658
 
 *** merge the Unicode update branch back onto the main branch
 - make sure that changes to Unicode tools are checked in:
