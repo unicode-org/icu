@@ -588,9 +588,9 @@ jobs:
     - script: |
         cd icu4c/source
         mkdir -p icuexportdata/norm/fast
-        ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/fast --trie-type fast --all
+        # TODO ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/fast --trie-type fast --all
         mkdir -p icuexportdata/norm/small
-        ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/small --trie-type small --all
+        # TODO ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/small --trie-type small --all
       displayName: 'Build normalization data files'
       env:
         LD_LIBRARY_PATH: lib
