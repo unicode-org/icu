@@ -34,24 +34,34 @@ public abstract class LocaleObjectCache<K, V> {
         }
         if (value == null) {
             key = normalizeKey(key);
+            // subclass must return non-null key object
+            if (key == null) {
+                return null;
+            }
+
+            entry = _map.get(key);
+            if (entry != null) {
+                value = entry.get();
+            }
+            // hit cache
+            if (value != null) {
+                return value;
+            }
+
+            // if map not contains key or the referent value of CacheEntry is set to be null
+            // both need create a new value
             V newVal = createObject(key);
-            if (key == null || newVal == null) {
-                // subclass must return non-null key/value object
+            if (newVal == null) {
+                // subclass must return non-null value object
                 return null;
             }
 
             CacheEntry<K, V> newEntry = new CacheEntry<K, V>(key, newVal, _queue);
-
-            while (value == null) {
-                cleanStaleEntries();
-                entry = _map.putIfAbsent(key, newEntry);
-                if (entry == null) {
-                    value = newVal;
-                    break;
-                } else {
-                    value = entry.get();
-                }
-            }
+            // just replace it
+            _map.put(key, newEntry);
+            // clean recycled SoftReferences again
+            cleanStaleEntries();
+            return newVal;
         }
         return value;
     }
