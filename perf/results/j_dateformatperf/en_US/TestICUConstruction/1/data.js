@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1714412300207,
+  "lastUpdate": 1714417238038,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21298,6 +21298,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1961.6990157726036,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "8b84ae1ddae19412d5fecc88661593136a6f6144",
+          "message": "ICU-22721 Comment out variables only used in commented out code.",
+          "timestamp": "2024-04-29T11:43:21-07:00",
+          "tree_id": "bce9c9c0982d94ccb68818a95c029fe0b8be8604",
+          "url": "https://github.com/unicode-org/icu/commit/8b84ae1ddae19412d5fecc88661593136a6f6144"
+        },
+        "date": 1714417128554,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1957.2580233395927,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
