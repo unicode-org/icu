@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1714418148248,
+  "lastUpdate": 1714428287924,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21418,6 +21418,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.4332205946179722,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "a57c68364eed30d6c4565ecd5c43e38929ed42ca",
+          "message": "ICU-22079 Rename",
+          "timestamp": "2024-04-29T14:51:13-07:00",
+          "tree_id": "bcb4d406f0b95ce240a84c105cb1aff949214386",
+          "url": "https://github.com/unicode-org/icu/commit/a57c68364eed30d6c4565ecd5c43e38929ed42ca"
+        },
+        "date": 1714428177250,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.4332959392967306,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
