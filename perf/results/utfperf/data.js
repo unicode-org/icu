@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1713998495782,
+  "lastUpdate": 1714412683733,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33346,6 +33346,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.9822,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "a7e23a531c9f35ad804e3ae161ac0179745a6888",
+          "message": "ICU-22721 Clang-Tidy: modernize-use-override\n\nhttps://releases.llvm.org/17.0.1/tools/clang/tools/extra/docs/clang-tidy/checks/modernize/use-override.html",
+          "timestamp": "2024-04-29T19:28:40+02:00",
+          "tree_id": "a95359f5b53a2d900256780cc28c11f62ee935bb",
+          "url": "https://github.com/unicode-org/icu/commit/a7e23a531c9f35ad804e3ae161ac0179745a6888"
+        },
+        "date": 1714412571703,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.2258,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.0327,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.9788,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
