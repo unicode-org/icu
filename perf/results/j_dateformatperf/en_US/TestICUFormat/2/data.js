@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1713998131279,
+  "lastUpdate": 1714412316521,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21028,6 +21028,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 190.37948305010426,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "a7e23a531c9f35ad804e3ae161ac0179745a6888",
+          "message": "ICU-22721 Clang-Tidy: modernize-use-override\n\nhttps://releases.llvm.org/17.0.1/tools/clang/tools/extra/docs/clang-tidy/checks/modernize/use-override.html",
+          "timestamp": "2024-04-29T19:28:40+02:00",
+          "tree_id": "a95359f5b53a2d900256780cc28c11f62ee935bb",
+          "url": "https://github.com/unicode-org/icu/commit/a7e23a531c9f35ad804e3ae161ac0179745a6888"
+        },
+        "date": 1714412202812,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 211.3066085289331,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
