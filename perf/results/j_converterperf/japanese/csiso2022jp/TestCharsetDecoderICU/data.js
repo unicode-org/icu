@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1714417303984,
+  "lastUpdate": 1714418205898,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21238,6 +21238,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.009217342602087866,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "755b0981ec0af447c51fa362cbf9d143fa56092c",
+          "message": "ICU-22721 Reorder initializer to match declaration (-Wreorder-ctor).",
+          "timestamp": "2024-04-29T11:44:35-07:00",
+          "tree_id": "4a741e418af2eac3d234f6fd0d53acadec4dec35",
+          "url": "https://github.com/unicode-org/icu/commit/755b0981ec0af447c51fa362cbf9d143fa56092c"
+        },
+        "date": 1714418092542,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.009146396844908608,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
