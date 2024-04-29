@@ -112,8 +112,16 @@ class TestCase : public UMemory {
             arguments[k] = Formattable(val);
             return *this;
         }
-        Builder& setDateArgument(const UnicodeString& k, UDate date) {
-            arguments[k] = Formattable::forDate(date);
+        Builder& setDateArgument(const UnicodeString& k, UDate date, UErrorCode& errorCode) {
+            // This ignores time zones; the data-driven tests represent date/time values
+            // as a datestamp, so this code suffices to handle those.
+            // Date/time literal strings would be handled using `setArgument()` with a string
+            // argument.
+            GregorianCalendar cal(errorCode);
+            THIS_ON_ERROR(errorCode);
+            cal.setTime(date, errorCode);
+            THIS_ON_ERROR(errorCode);
+            arguments[k] = Formattable(std::move(cal));
             return *this;
         }
         Builder& setDecimalArgument(const UnicodeString& k, std::string_view decimal, UErrorCode& errorCode) {

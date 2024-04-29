@@ -37,7 +37,6 @@ namespace message2 {
 
     Formattable::Formattable(const Formattable& other) {
         contents = other.contents;
-        holdsDate = other.holdsDate;
     }
 
     Formattable Formattable::forDecimal(std::string_view number, UErrorCode &status) {
@@ -55,7 +54,7 @@ namespace message2 {
 
     UFormattableType Formattable::getType() const {
         if (std::holds_alternative<double>(contents)) {
-            return holdsDate ? UFMT_DATE : UFMT_DOUBLE;
+            return UFMT_DOUBLE;
         }
         if (std::holds_alternative<int64_t>(contents)) {
             return UFMT_INT64;
@@ -75,6 +74,9 @@ namespace message2 {
                 return UFMT_INT64;
             }
             }
+        }
+        if (isDate()) {
+            return UFMT_DATE;
         }
         if (std::holds_alternative<const FormattableObject*>(contents)) {
             return UFMT_OBJECT;
@@ -225,12 +227,19 @@ namespace message2 {
         return df.orphan();
     }
 
-    void formatDateWithDefaults(const Locale& locale, UDate date, UnicodeString& result, UErrorCode& errorCode) {
+    void formatDateWithDefaults(const Locale& locale, const GregorianCalendar& cal, UnicodeString& result, UErrorCode& errorCode) {
         CHECK_ERROR(errorCode);
 
         LocalPointer<DateFormat> df(defaultDateTimeInstance(locale, errorCode));
         CHECK_ERROR(errorCode);
-        df->format(date, result, 0, errorCode);
+        // We have to copy the `const` reference that was passed in,
+        // because DateFormat::format() takes a non-const reference.
+        LocalPointer<GregorianCalendar> copied(new GregorianCalendar(cal));
+        if (!copied.isValid()) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        df->format(*copied, result, nullptr, errorCode);
     }
 
     // Called when output is required and the contents are an unevaluated `Formattable`;
@@ -261,9 +270,9 @@ namespace message2 {
         switch (type) {
         case UFMT_DATE: {
             UnicodeString result;
-            UDate d = toFormat.getDate(status);
+            const GregorianCalendar* cal = toFormat.getDate(status);
             U_ASSERT(U_SUCCESS(status));
-            formatDateWithDefaults(locale, d, result, status);
+            formatDateWithDefaults(locale, *cal, result, status);
             return FormattedPlaceholder(input, FormattedValue(std::move(result)));
         }
         case UFMT_DOUBLE: {

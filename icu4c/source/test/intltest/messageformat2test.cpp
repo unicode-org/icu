@@ -158,13 +158,12 @@ void TestMessageFormat2::testAPISimple() {
         .setLocale(locale)
         .build(errorCode);
 
-    Calendar* cal(Calendar::createInstance(errorCode)); 
+    GregorianCalendar cal(errorCode);
    // Sunday, October 28, 2136 8:39:12 AM PST
-    cal->set(2136, Calendar::OCTOBER, 28, 8, 39, 12);
-    UDate date = cal->getTime(errorCode);
+    cal.set(2136, Calendar::OCTOBER, 28, 8, 39, 12);
 
     argsBuilder.clear();
-    argsBuilder["today"] = message2::Formattable::forDate(date);
+    argsBuilder["today"] = message2::Formattable(std::move(cal));
     args = MessageArguments(argsBuilder, errorCode);
     result = mf.formatToString(args, errorCode);
     assertEquals("testAPI", "Today is Sunday, October 28, 2136.", result);
@@ -187,8 +186,6 @@ void TestMessageFormat2::testAPISimple() {
         .build(errorCode);
     result = mf.formatToString(args, errorCode);
     assertEquals("testAPI", "Maria added 12 photos to her album.", result);
-
-    delete cal;
 }
 
 // Design doc example, with more details
@@ -213,7 +210,7 @@ void TestMessageFormat2::testAPI() {
 
     test = testBuilder.setName("testAPI")
         .setPattern("Today is {$today :date style=full}.")
-        .setDateArgument("today", date)
+        .setDateArgument("today", date, errorCode)
         .setExpected("Today is Sunday, October 28, 2136.")
         .setLocale("en_US")
         .build();

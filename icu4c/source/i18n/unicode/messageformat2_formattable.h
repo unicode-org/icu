@@ -15,8 +15,10 @@
 #if !UCONFIG_NO_MF2
 
 #include "unicode/chariter.h"
+#include "unicode/gregocal.h"
 #include "unicode/numberformatter.h"
 #include "unicode/messageformat2_data_model_names.h"
+#include "unicode/smpdtfmt.h"
 
 #ifndef U_HIDE_DEPRECATED_API
 
@@ -84,6 +86,7 @@ template class U_I18N_API std::_Variant_storage_<false,
   int64_t,
   icu::UnicodeString,
   icu::Formattable,
+  icu::GregorianCalendar,
   const icu::message2::FormattableObject *,
   std::pair<const icu::message2::Formattable *,int32_t>>;
 #endif
@@ -92,6 +95,7 @@ template class U_I18N_API std::variant<double,
 				       int64_t,
 				       icu::UnicodeString,
 				       icu::Formattable,
+                                       icu::GregorianCalendar,
 				       const icu::message2::FormattableObject*,
                                        P>;
 #endif
@@ -228,22 +232,24 @@ namespace message2 {
         }
 
         /**
-         * Gets the Date value of this object. If this object is not of type
-         * kDate then the result is undefined and the error code is set.
+         * Gets the calendar representing the date value of this object.
+         * If this object is not of type kDate then the result is
+         * undefined and the error code is set.
          *
          * @param status Input/output error code.
-         * @return    the Date value of this object.
+         * @return   A non-owned pointer to a GregorianCalendar object
+         *           representing the underlying date of this object.
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        UDate getDate(UErrorCode& status) const {
+        const GregorianCalendar* getDate(UErrorCode& status) const {
             if (U_SUCCESS(status)) {
                 if (isDate()) {
-                    return *std::get_if<double>(&contents);
+                    return std::get_if<GregorianCalendar>(&contents);
                 }
                 status = U_ILLEGAL_ARGUMENT_ERROR;
             }
-            return 0;
+            return nullptr;
         }
 
         /**
@@ -301,7 +307,6 @@ namespace message2 {
             using std::swap;
 
             swap(f1.contents, f2.contents);
-            swap(f1.holdsDate, f2.holdsDate);
         }
         /**
          * Copy constructor.
@@ -353,18 +358,15 @@ namespace message2 {
          */
         Formattable(int64_t i) : contents(i) {}
         /**
-         * Date factory method.
+         * Date constructor.
          *
-         * @param d A UDate value to wrap as a Formattable.
+         * @param c A GregorianCalendar value representing a date,
+         *          to wrap as a Formattable.
+         *          Passed by move
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        static Formattable forDate(UDate d) {
-            Formattable f;
-            f.contents = d;
-            f.holdsDate = true;
-            return f;
-        }
+        Formattable(GregorianCalendar&& c) : contents(std::move(c)) {}
         /**
          * Creates a Formattable object of an appropriate numeric type from a
          * a decimal number in string form.  The Formattable will retain the
@@ -424,16 +426,16 @@ namespace message2 {
                      int64_t,
                      UnicodeString,
                      icu::Formattable, // represents a Decimal
+                     GregorianCalendar,
                      const FormattableObject*,
                      std::pair<const Formattable*, int32_t>> contents;
-        bool holdsDate = false; // otherwise, we get type errors about UDate being a duplicate type
         UnicodeString bogusString; // :((((
 
         UBool isDecimal() const {
             return std::holds_alternative<icu::Formattable>(contents);
         }
         UBool isDate() const {
-            return std::holds_alternative<double>(contents) && holdsDate;
+            return std::holds_alternative<GregorianCalendar>(contents);
         }
     }; // class Formattable
 

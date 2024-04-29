@@ -17,6 +17,7 @@
 #include "unicode/messageformat2_data_model_names.h"
 #include "unicode/messageformat2_function_registry.h"
 #include "unicode/normalizer2.h"
+#include "unicode/simpletz.h"
 #include "unicode/smpdtfmt.h"
 #include "charstr.h"
 #include "double-conversion.h"
@@ -1007,6 +1008,135 @@ Formatter* StandardFunctions::DateTimeFactory::createFormatter(const Locale& loc
     return result;
 }
 
+static UDate tryPattern(const char* pat, const UnicodeString& sourceStr, UErrorCode& errorCode) {
+    LocalPointer<DateFormat> dateParser(new SimpleDateFormat(UnicodeString(pat), errorCode));
+    if (U_FAILURE(errorCode)) {
+        return 0;
+    }
+    return dateParser->parse(sourceStr, errorCode);
+}
+
+static UDate tryPatterns(const UnicodeString& sourceStr, UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return 0;
+    }
+    UDate d = tryPattern("YYYY-MM-dd'T'HH:mm:ss", sourceStr, errorCode);
+    if (U_FAILURE(errorCode)) {
+        errorCode = U_ZERO_ERROR;
+        d = tryPattern("YYYY-MM-dd", sourceStr, errorCode);
+    }
+    return d;
+}
+
+static UDate tryTimeZonePatterns(const UnicodeString& sourceStr, UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return 0;
+    }
+    UDate d = tryPattern("YYYY-MM-dd'T'HH:mm:sszzzz", sourceStr, errorCode);
+    if (U_FAILURE(errorCode)) {
+        errorCode = U_ZERO_ERROR;
+        d = tryPattern("YYYY-MM-dd'T'HH:mm:ssZ", sourceStr, errorCode);
+    }
+    return d;
+}
+
+SimpleTimeZone* createTimeZonePart(const UnicodeString& offsetStr, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    int32_t len = offsetStr.length();
+
+    // `offsetStr` has a format like +03:30 or -03:30
+    if (len <= 2) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
+
+    int32_t sign = offsetStr.charAt(0) == '-' ? -1 : 1;
+    int32_t indexOfColon = offsetStr.indexOf(':');
+    if (indexOfColon <= 2) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
+    UnicodeString tzPart1 = offsetStr.tempSubString(1, indexOfColon);
+    UnicodeString tzPart2 = offsetStr.tempSubString(indexOfColon + 1, len);
+    double tzHour, tzMin;
+    strToDouble(tzPart1, tzHour, errorCode);
+    strToDouble(tzPart2, tzMin, errorCode);
+    if (U_FAILURE(errorCode)) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
+    int32_t offset = sign * (static_cast<int32_t>(tzHour) * 60 + static_cast<int32_t>(tzMin)) * 60 * 1000;
+    LocalPointer<SimpleTimeZone> tz(new SimpleTimeZone(offset, UnicodeString("offset")));
+    if (!tz.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return tz.orphan();
+}
+
+static bool hasTzOffset(const UnicodeString& sourceStr) {
+    int32_t len = sourceStr.length();
+
+    if (len <= 6) {
+        return false;
+    }
+    return ((sourceStr[len - 6] == PLUS || sourceStr[len - 6] == HYPHEN)
+            && sourceStr[len - 3] == COLON);
+}
+
+static GregorianCalendar* createCalendarFromDateString(const UnicodeString& sourceStr, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    UDate absoluteDate;
+
+    // Try time zone part
+    int32_t indexOfZ = sourceStr.indexOf('Z');
+    int32_t indexOfPlus = sourceStr.lastIndexOf('+');
+    int32_t indexOfMinus = sourceStr.lastIndexOf('-');
+    int32_t indexOfSign = indexOfPlus > -1 ? indexOfPlus : indexOfMinus;
+    bool isTzOffset = hasTzOffset(sourceStr);
+    bool isGMT = indexOfZ > 0;
+    UnicodeString offsetPart;
+    bool hasTimeZone = isTzOffset || isGMT;
+    if (!hasTimeZone) {
+        // No time zone
+        absoluteDate = tryPatterns(sourceStr, errorCode);
+    } else {
+        // Try to split into time zone and non-time-zone parts
+        UnicodeString noTimeZone;
+        if (isGMT) {
+            noTimeZone = sourceStr.tempSubString(0, indexOfZ);
+        } else {
+            noTimeZone = sourceStr.tempSubString(0, indexOfSign);
+        }
+        tryPatterns(noTimeZone, errorCode);
+        // Failure -- can't parse this string
+        NULL_ON_ERROR(errorCode);
+        // Success -- now handle the time zone part
+        if (isGMT) {
+            noTimeZone += UnicodeString("GMT");
+            absoluteDate = tryTimeZonePatterns(noTimeZone, errorCode);
+        } else {
+            // Finally, try [+-]nn:nn
+            absoluteDate = tryTimeZonePatterns(sourceStr, errorCode);
+            offsetPart = sourceStr.tempSubString(indexOfSign, sourceStr.length());
+        }
+    }
+    LocalPointer<GregorianCalendar> cal(new GregorianCalendar(errorCode));
+    NULL_ON_ERROR(errorCode);
+    cal->setTime(absoluteDate, errorCode);
+    if (hasTimeZone) {
+        if (isGMT) {
+            cal->setTimeZone(*TimeZone::getGMT());
+        } else {
+            LocalPointer<SimpleTimeZone> tz(createTimeZonePart(offsetPart, errorCode));
+            NULL_ON_ERROR(errorCode);
+            cal->adoptTimeZone(tz.orphan());
+        }
+    }
+    return cal.orphan();
+}
+
 FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& toFormat,
                                                    FunctionOptions&& opts,
                                                    UErrorCode& errorCode) const {
@@ -1195,39 +1325,32 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     case UFMT_STRING: {
         const UnicodeString& sourceStr = source.getString(errorCode);
         U_ASSERT(U_SUCCESS(errorCode));
-        // Pattern for ISO 8601 format - datetime
-        UnicodeString pattern("YYYY-MM-dd'T'HH:mm:ss");
-        LocalPointer<DateFormat> dateParser(new SimpleDateFormat(pattern, errorCode));
+
+        LocalPointer<GregorianCalendar> cal(createCalendarFromDateString(sourceStr, errorCode));
+
         if (U_FAILURE(errorCode)) {
-            errorCode = U_MF_FORMATTING_ERROR;
-        } else {
-            // Parse the date
-            UDate d = dateParser->parse(sourceStr, errorCode);
-            if (U_FAILURE(errorCode)) {
-                // Pattern for ISO 8601 format - date
-                UnicodeString pattern("YYYY-MM-dd");
-                errorCode = U_ZERO_ERROR;
-                dateParser.adoptInstead(new SimpleDateFormat(pattern, errorCode));
-                if (U_FAILURE(errorCode)) {
-                    errorCode = U_MF_FORMATTING_ERROR;
-                } else {
-                    d = dateParser->parse(sourceStr, errorCode);
-                    if (U_FAILURE(errorCode)) {
-                        errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-                    }
-                }
-            }
-            // Use the parsed date as the source value
-            // in the returned FormattedPlaceholder; this is necessary
-            // so the date can be re-formatted
-            toFormat = FormattedPlaceholder(message2::Formattable::forDate(d),
-                                            toFormat.getFallback());
-            df->format(d, result, 0, errorCode);
+            errorCode = U_MF_OPERAND_MISMATCH_ERROR;
+            return {};
         }
+
+        // Use the parsed date as the source value
+        // in the returned FormattedPlaceholder; this is necessary
+        // so the date can be re-formatted
+        df->format(*cal, result, 0, errorCode);
+        toFormat = FormattedPlaceholder(message2::Formattable(std::move(*cal)),
+                                        toFormat.getFallback());
         break;
     }
     case UFMT_DATE: {
-        df->format(source.asICUFormattable(errorCode), result, 0, errorCode);
+        const GregorianCalendar* cal = source.getDate(errorCode);
+        U_ASSERT(U_SUCCESS(errorCode));
+        U_ASSERT(cal != nullptr);
+        LocalPointer<GregorianCalendar> copied(new GregorianCalendar(*cal));
+        if (!copied.isValid()) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return {};
+        }
+        df->format(*copied, result, 0, errorCode);
         if (U_FAILURE(errorCode)) {
             if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
                 errorCode = U_MF_OPERAND_MISMATCH_ERROR;
