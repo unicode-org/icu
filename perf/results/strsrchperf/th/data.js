@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1714428409699,
+  "lastUpdate": 1714436267761,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26314,6 +26314,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 80.4691,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "6e6b57672958de52cb71dbd17d9caab0e19f5574",
+          "message": "ICU-22707 Azure ICU4J timeout 20->25min",
+          "timestamp": "2024-04-29T17:00:55-07:00",
+          "tree_id": "24e9c858e42ce146cf87a15ed660a421641c5e4f",
+          "url": "https://github.com/unicode-org/icu/commit/6e6b57672958de52cb71dbd17d9caab0e19f5574"
+        },
+        "date": 1714436154144,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 33.3695,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 80.607,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
