@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.StringJoiner;
 import java.util.TreeSet;
 
 import org.junit.Test;
@@ -31,7 +32,6 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.SortedSetRelation;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.CharacterProperties;
@@ -2649,7 +2649,11 @@ public class UnicodeSetTest extends CoreTestFmwk {
     @Test
     public void TestIteration() {
         UnicodeSet us1 = new UnicodeSet("[abcM{xy}]");
-        assertEquals("", "M, a-c", CollectionUtilities.join(us1.ranges(), ", "));
+        StringJoiner joiner = new StringJoiner(", ");
+        for (EntryRange range : us1.ranges()) {
+            joiner.add(range.toString());
+        }
+        assertEquals("", "M, a-c", joiner.toString());
 
         // Sample code
         for (@SuppressWarnings("unused") EntryRange range : us1.ranges()) {

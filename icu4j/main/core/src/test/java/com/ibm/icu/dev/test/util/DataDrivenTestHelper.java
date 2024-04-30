@@ -11,7 +11,6 @@ import java.util.Objects;
 
 import com.ibm.icu.dev.test.AbstractTestLog;
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.locale.XCldrStub.FileUtilities;
 import com.ibm.icu.impl.locale.XCldrStub.Splitter;
 import com.ibm.icu.util.ICUUncheckedIOException;
@@ -46,7 +45,7 @@ abstract public class DataDrivenTestHelper {
                 } else {
                     String first = components.iterator().next();
                     String sep = first.startsWith("@") ? "=" : SEPARATOR;
-                    out.append(CollectionUtilities.join(components, sep));
+                    out.append(String.join(sep, components));
                     if (!comment.isEmpty()) {
                         out.append("\t# ").append(comment);
                     }

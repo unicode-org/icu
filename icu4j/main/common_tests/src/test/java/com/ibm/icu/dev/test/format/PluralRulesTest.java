@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -44,7 +45,6 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
-import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.Relation;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.DecimalQuantity;
@@ -1505,12 +1505,31 @@ public class PluralRulesTest extends CoreTestFmwk {
         }
     };
 
+    private static final Comparator<Collection<StandardPluralCategories>> STDPLURALCATEG_COLLECTION_COMPARATOR = (o1, o2) -> {
+        int diff = o1.size() - o2.size();
+        if (diff != 0) {
+            return diff;
+        }
+        Iterator<StandardPluralCategories> iterator1 = o1.iterator();
+        Iterator<StandardPluralCategories> iterator2 = o2.iterator();
+        while (true) {
+            // We already know they have the same length, we tested if first thing.
+            if (!iterator1.hasNext() || !iterator2.hasNext()) {
+                // At the end of both iterators, and everything was equal until here.
+                return 0;
+            }
+            diff = iterator1.next().compareTo(iterator2.next());
+            if (diff != 0) {
+                return diff;
+            }
+        }
+    };
+
     private void generateLOCALE_SNAPSHOT() {
-        Comparator c = new CollectionUtilities.CollectionComparator<>();
         Relation<Set<StandardPluralCategories>, PluralRules> setsToRules = Relation.of(
-                new TreeMap<Set<StandardPluralCategories>, Set<PluralRules>>(c), TreeSet.class, PLURAL_RULE_COMPARATOR);
+                new TreeMap<>(STDPLURALCATEG_COLLECTION_COMPARATOR), TreeSet.class, PLURAL_RULE_COMPARATOR);
         Relation<PluralRules, ULocale> data = Relation.of(
-                new TreeMap<PluralRules, Set<ULocale>>(PLURAL_RULE_COMPARATOR), TreeSet.class);
+                new TreeMap<>(PLURAL_RULE_COMPARATOR), TreeSet.class);
         for (ULocale locale : PluralRules.getAvailableULocales()) {
             PluralRules pr = PluralRules.forLocale(locale);
             EnumSet<StandardPluralCategories> set = getCanonicalSet(pr.getKeywords());
@@ -1523,7 +1542,8 @@ public class PluralRulesTest extends CoreTestFmwk {
             System.out.println("\n        // " + set);
             for (PluralRules rule : rules) {
                 Set<ULocale> locales = data.get(rule);
-                System.out.print("        \"" + CollectionUtilities.join(locales, ","));
+                String toShow = locales.stream().map(ULocale::toString).collect(Collectors.joining(","));
+                System.out.print("        \"" + toShow);
                 for (StandardPluralCategories spc : set) {
                     String keyword = spc.toString();
                     DecimalQuantitySamples samples = rule.getDecimalSamples(keyword, SampleType.INTEGER);
