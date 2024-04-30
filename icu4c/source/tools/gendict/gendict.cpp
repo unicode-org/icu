@@ -438,7 +438,9 @@ int  main(int argc, char **argv) {
         fprintf(f, "transform_type = \"%s\"\n", isOffset ? "offset" : "none");
         fprintf(f, "transform_offset = %d\n", offset);
 
-        usrc_writeArray(f, "trie_data = [\n  ",  outData, isBytesTrie ? 8 : 16, outDataSize, "  ", "\n]\n");
+        int32_t outDataWidth = isBytesTrie ? 8 : 16;
+        int32_t outDataLength = isBytesTrie ? outDataSize : outDataSize / U_SIZEOF_UCHAR;
+        usrc_writeArray(f, "trie_data = [\n  ",  outData, outDataWidth, outDataLength, "  ", "\n]\n");
 
 
         fclose(f);
