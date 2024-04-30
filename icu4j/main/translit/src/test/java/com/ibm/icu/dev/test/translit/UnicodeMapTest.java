@@ -18,6 +18,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.StringJoiner;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -27,7 +28,6 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestBoilerplate;
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.dev.util.UnicodeMap;
 import com.ibm.icu.dev.util.UnicodeMap.EntryRange;
 import com.ibm.icu.dev.util.UnicodeMapIterator;
@@ -66,7 +66,11 @@ public class UnicodeMapTest extends TestFmwk {
     }
 
     public void checkToString(UnicodeMap<Double> foo, String expected) {
-        assertEquals("EntryRange<T>", expected, CollectionUtilities.join(foo.entryRanges(), "\n") + (foo.size() == 0 ? "" : "\n"));
+        StringJoiner joiner = new StringJoiner("\n");
+        for (EntryRange range : foo.entryRanges()) {
+            joiner.add(range.toString());
+        }
+        assertEquals("EntryRange<T>", expected, joiner.toString() + (foo.size() == 0 ? "" : "\n"));
         assertEquals("EntryRange<T>", expected, foo.toString());
     }
 

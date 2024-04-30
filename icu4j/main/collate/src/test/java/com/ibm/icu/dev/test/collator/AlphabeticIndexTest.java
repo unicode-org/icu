@@ -22,7 +22,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R4;
@@ -384,7 +383,8 @@ public class AlphabeticIndexTest extends TestFmwk {
                         indexCharacters2.addLabels((UnicodeSet)test[i]);
                     }
                 }
-                List<Bucket<Double>> buckets = CollectionUtilities.addAll(alphabeticIndex.iterator(), new ArrayList<Bucket<Double>>());
+                List<Bucket<Double>> buckets = new ArrayList<>(alphabeticIndex.getBucketCount());
+                alphabeticIndex.iterator().forEachRemaining(buckets::add);
                 logln(buckets.toString());
             }
             assertEquals(LabelType.OVERFLOW + "\t" + printList, 1, counter.get(LabelType.OVERFLOW));
