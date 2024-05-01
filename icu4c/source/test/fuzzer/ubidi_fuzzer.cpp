@@ -90,61 +90,69 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   icu::StringPiece fuzzData(reinterpret_cast<const char *>(data), size);
 
   UErrorCode status = U_ZERO_ERROR;
-  UBiDi* bidi = ubidi_open();
   UChar inputText[MAXLEN];
   UChar reorderedText[MAXLEN];
-  int32_t reorderedTextLength;
-  unsigned char inputTextLength;
 
+  unsigned char inputTextLength;
+  UBiDiLevel paraLevel;
+  int16_t options, options2;
+  unsigned char reorderedTextSize;
+  bool checkSetInverse, checkVisual;
+  bool isInverse;
+
+  if (static_cast<size_t>(fuzzData.length()) <
+      sizeof(inputTextLength) + sizeof(paraLevel) + sizeof(options) +
+      sizeof(reorderedTextSize) + sizeof(checkSetInverse) + sizeof(checkVisual) +
+      sizeof(isInverse) + sizeof(options2) + sizeof(UChar)) {
+    return 0;
+  }
   std::memcpy(&inputTextLength, fuzzData.data(), sizeof(inputTextLength));
   fuzzData.remove_prefix(sizeof(inputTextLength));
-  if (inputTextLength > MAXLEN) inputTextLength = MAXLEN;
 
-  std::memcpy(&inputText, fuzzData.data(), sizeof(UChar)*inputTextLength);
-  fuzzData.remove_prefix(sizeof(UChar)*inputTextLength);
-
-  UBiDiLevel paraLevel;
   std::memcpy(&paraLevel, fuzzData.data(), sizeof(paraLevel));
   fuzzData.remove_prefix(sizeof(paraLevel));
 
-  int16_t options;
   std::memcpy(&options, fuzzData.data(), sizeof(options));
   fuzzData.remove_prefix(sizeof(options));
 
-  unsigned char reorderedTextSize;
   std::memcpy(&reorderedTextSize, fuzzData.data(), sizeof(reorderedTextSize));
   fuzzData.remove_prefix(sizeof(reorderedTextSize));
   if (reorderedTextSize > MAXLEN) reorderedTextSize = MAXLEN;
 
-  bool checkSetInverse, checkVisual;
   checkSetInverse = (*(fuzzData.data()) & 0x01) == 0;
   fuzzData.remove_prefix(sizeof(checkSetInverse));
 
   checkVisual = (*(fuzzData.data()) & 0x01) == 0;
   fuzzData.remove_prefix(sizeof(checkVisual));
 
+  std::memcpy(&isInverse, fuzzData.data(), sizeof(isInverse));
+  fuzzData.remove_prefix(sizeof(isInverse));
+
+  std::memcpy(&options2, fuzzData.data(), sizeof(options2));
+  fuzzData.remove_prefix(sizeof(options2));
+
+  if (inputTextLength > MAXLEN) inputTextLength = MAXLEN;
+  if (inputTextLength > fuzzData.length() / sizeof(UChar)) {
+      inputTextLength = fuzzData.length() / sizeof(UChar);
+  }
+  std::memcpy(&inputText, fuzzData.data(), sizeof(UChar)*inputTextLength);
+  fuzzData.remove_prefix(sizeof(UChar)*inputTextLength);
+
+  UBiDi* bidi = ubidi_open();
   if (checkSetInverse) {
-    bool isInverse;
-    std::memcpy(&isInverse, fuzzData.data(), sizeof(isInverse));
-    fuzzData.remove_prefix(sizeof(isInverse));
     ubidi_setInverse(bidi, isInverse);
   }
   ubidi_setPara(bidi, inputText, inputTextLength, paraLevel, nullptr, &status);
-  if (U_FAILURE(status)) goto out;
-
-  reorderedTextLength = ubidi_writeReordered(bidi, reorderedText, reorderedTextSize, options, &status);
-  if (U_FAILURE(status)) goto out;
-
-  if (checkVisual) {
-    testVisual(bidi);
-  } else {
-    int16_t options2;
-    std::memcpy(&options2, fuzzData.data(), sizeof(options2));
-    fuzzData.remove_prefix(sizeof(options2));
-    ubidi_writeReordered(bidi, reorderedText, reorderedTextLength+1, options2, &status);
+  if (U_SUCCESS(status)) {
+    int32_t reorderedTextLength = ubidi_writeReordered(bidi, reorderedText, reorderedTextSize, options, &status);
+    if (U_SUCCESS(status)) {
+      if (checkVisual) {
+        testVisual(bidi);
+      } else {
+        ubidi_writeReordered(bidi, reorderedText, reorderedTextLength+1, options2, &status);
+      }
+    }
   }
-
-out:
   ubidi_close(bidi);
 
   return EXIT_SUCCESS;
