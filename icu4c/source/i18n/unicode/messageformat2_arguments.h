@@ -87,13 +87,12 @@ namespace message2 {
             }
         }
         /**
-         * Move operator:
-         * The source MessageArguments will be left in a valid but undefined state.
+         * Assignment operator
          *
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        MessageArguments& operator=(MessageArguments&&) noexcept;
+        MessageArguments& operator=(MessageArguments) noexcept;
         /**
          * Default constructor.
          * Returns an empty arguments mapping.
@@ -109,6 +108,23 @@ namespace message2 {
          * @deprecated This API is for technology preview only.
          */
         virtual ~MessageArguments();
+
+        /**
+         * Non-member swap function.
+         * @param a1 will get a2's contents
+         * @param a2 will get a1's contents
+         *
+         * @internal ICU 75 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        friend inline void swap(MessageArguments& r1, MessageArguments& r2) noexcept {
+            using std::swap;
+
+            swap(r1.argumentNames, r2.argumentNames);
+            swap(r1.arguments, r2.arguments);
+            swap(r1.argsLen, r2.argsLen);
+        }
+
     private:
         friend class MessageContext;
 

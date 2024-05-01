@@ -7,8 +7,8 @@
 
 #if !UCONFIG_NO_MF2
 
+#include "unicode/messageformat2_evaluation.h"
 #include "messageformat2_allocation.h"
-#include "messageformat2_evaluation.h"
 #include "messageformat2_macros.h"
 #include "uvector.h" // U_ASSERT
 
@@ -185,10 +185,12 @@ PrioritizedVariant::~PrioritizedVariant() {}
 
     // MessageContext methods
 
+/*
     void MessageContext::checkErrors(UErrorCode& status) const {
         CHECK_ERROR(status);
         errors.checkErrors(status);
     }
+*/
 
     const Formattable* MessageContext::getGlobal(const VariableName& v, UErrorCode& errorCode) const {
        return arguments.getArgument(v, errorCode);

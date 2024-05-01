@@ -276,7 +276,8 @@ void TestMessageFormat2::testAPISimple() {
     MessageArguments args(argsBuilder, errorCode);
 
     UnicodeString result;
-    result = mf.formatToString(args, errorCode);
+    std::vector<UErrorCode> errors;
+    result = mf.formatToString(args, errors, errorCode);
     assertEquals("testAPI", result, "Hello, John!");
 
     mf = builder.setPattern("Today is {$today :date style=full}.", parseError, errorCode)
@@ -291,7 +292,7 @@ void TestMessageFormat2::testAPISimple() {
     argsBuilder.clear();
     argsBuilder["today"] = message2::Formattable::forDate(date);
     args = MessageArguments(argsBuilder, errorCode);
-    result = mf.formatToString(args, errorCode);
+    result = mf.formatToString(args, errors, errorCode);
     assertEquals("testAPI", "Today is Sunday, October 28, 2136.", result);
 
     argsBuilder.clear();
@@ -309,7 +310,7 @@ void TestMessageFormat2::testAPISimple() {
                       * * {{{$userName} added {$photoCount} photos to their album.}}", parseError, errorCode)
         .setLocale(locale)
         .build(errorCode);
-    result = mf.formatToString(args, errorCode);
+    result = mf.formatToString(args, errors, errorCode);
     assertEquals("testAPI", "Maria added 12 photos to her album.", result);
 
     delete cal;
@@ -407,29 +408,31 @@ void TestMessageFormat2::testAPICustomFunctions() {
 
     MessageFormatter::Builder mfBuilder(errorCode);
     UnicodeString result;
+    std::vector<UErrorCode> errors;
     // This fails, because we did not provide a function registry:
     MessageFormatter mf = mfBuilder.setPattern("Hello {$name :person formality=informal}", parseError, errorCode)
                                     .setLocale(locale)
                                     .build(errorCode);
-    result = mf.formatToString(arguments, errorCode);
-    assertEquals("testAPICustomFunctions", U_MF_UNKNOWN_FUNCTION_ERROR, errorCode);
+    result = mf.formatToString(arguments, errors, errorCode);
+    assertEquals("testAPICustomFunctions", 1, errors.size());
+    assertEquals("testAPICustomFunctions", U_MF_UNKNOWN_FUNCTION_ERROR, errors[0]);
 
     errorCode = U_ZERO_ERROR;
     mfBuilder.setFunctionRegistry(functionRegistry).setLocale(locale);
 
     mf = mfBuilder.setPattern("Hello {$name :person formality=informal}", parseError, errorCode)
                     .build(errorCode);
-    result = mf.formatToString(arguments, errorCode);
+    result = mf.formatToString(arguments, errors, errorCode);
     assertEquals("testAPICustomFunctions", "Hello John", result);
 
     mf = mfBuilder.setPattern("Hello {$name :person formality=formal}", parseError, errorCode)
                     .build(errorCode);
-    result = mf.formatToString(arguments, errorCode);
+    result = mf.formatToString(arguments, errors, errorCode);
     assertEquals("testAPICustomFunctions", "Hello Mr. Doe", result);
 
     mf = mfBuilder.setPattern("Hello {$name :person formality=formal length=long}", parseError, errorCode)
                     .build(errorCode);
-    result = mf.formatToString(arguments, errorCode);
+    result = mf.formatToString(arguments, errors, errorCode);
     assertEquals("testAPICustomFunctions", "Hello Mr. John Doe", result);
 
     // By type
@@ -447,7 +450,7 @@ void TestMessageFormat2::testAPICustomFunctions() {
     mf = mfBuilder.setPattern("Hello {$name}", parseError, errorCode)
         .setLocale(locale)
         .build(errorCode);
-    result = mf.formatToString(arguments, errorCode);
+    result = mf.formatToString(arguments, errors, errorCode);
     assertEquals("testAPICustomFunctions", U_ZERO_ERROR, errorCode);
     // Expect "Hello John" because in the custom function we registered,
     // "informal" is the default formality and "length" is the default length

@@ -639,7 +639,8 @@ message2::FormattedPlaceholder ResourceManager::format(FormattedPlaceholder&& ar
         }
 
         UErrorCode savedStatus = errorCode;
-        UnicodeString result = mf.formatToString(arguments, errorCode);
+        std::vector<UErrorCode> errors;
+        UnicodeString result = mf.formatToString(arguments, errors, errorCode);
         // Here, we want to ignore errors (this matches the behavior in the ICU4J test).
         // For example: we want $gcase to default to "$gcase" if the gcase option was
         // omitted.

@@ -15,7 +15,7 @@
 #if !UCONFIG_NO_MF2
 
 #include "unicode/messageformat2_data_model.h"
-#include "messageformat2_errors.h"
+#include "unicode/messageformat2_errors.h"
 
 U_NAMESPACE_BEGIN
 
@@ -61,7 +61,7 @@ namespace message2 {
     class Checker {
     public:
         void check(UErrorCode&);
-        Checker(const MFDataModel& m, StaticErrors& e) : dataModel(m), errors(e) {}
+        Checker(const MFDataModel& m, StaticErrors::Builder& e) : dataModel(m), errors(e) {}
     private:
 
         void requireAnnotated(const TypeEnvironment&, const Expression&, UErrorCode&);
@@ -77,7 +77,7 @@ namespace message2 {
         void check(const Expression&);
         void check(const Pattern&);
         const MFDataModel& dataModel;
-        StaticErrors& errors;
+        StaticErrors::Builder& errors;
     }; // class Checker
 
 } // namespace message2

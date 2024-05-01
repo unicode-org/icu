@@ -10,11 +10,6 @@
 
 #if U_SHOW_CPLUSPLUS_API
 
-/**
- * \file
- * \brief C++ API: Formats messages using the draft MessageFormat 2.0.
- */
-
 #if !UCONFIG_NO_FORMATTING
 
 #if !UCONFIG_NO_MF2
@@ -25,6 +20,9 @@
 #include "messageformat2_errors.h"
 
 // Auxiliary data structures used during formatting a message
+// This entire header file is internal-only, but included under unicode/
+// so that header-only code can construct a std::vector
+// (see formatToString() in message2format2.h)
 
 U_NAMESPACE_BEGIN
 
@@ -172,7 +170,7 @@ namespace message2 {
     };
 
     // The context contains all the information needed to process
-    // an entire message: arguments, formatter cache, and error list
+    // an entire message: arguments and error list
 
     class MessageContext : public UMemory {
     public:
@@ -180,17 +178,24 @@ namespace message2 {
 
         const Formattable* getGlobal(const VariableName&, UErrorCode&) const;
 
-        // If any errors were set, update `status` accordingly
-        void checkErrors(UErrorCode& status) const;
-        DynamicErrors& getErrors() { return errors; }
+        // If any errors were set, translate them to error codes and copy to
+        // `output`
+        void errorsToVector(std::vector<UErrorCode>& output, UErrorCode& errorCode) {
+            DynamicErrors errs = errors.build(errorCode);
+            errs.errorsToVector(output);
+        }
+        DynamicErrors::Builder& getErrors() { return errors; }
 
         virtual ~MessageContext();
-
+        MessageContext& operator=(const MessageContext&) = delete;
+        MessageContext& operator=(MessageContext&&) = delete;
+        MessageContext(const MessageContext&) = delete;
+        MessageContext(MessageContext&&) = delete;
     private:
 
         const MessageArguments& arguments; // External message arguments
         // Errors accumulated during parsing/formatting
-        DynamicErrors errors;
+        DynamicErrors::Builder errors;
     }; // class MessageContext
 
 } // namespace message2

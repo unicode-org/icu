@@ -40,13 +40,8 @@ namespace message2 {
     // Message arguments
     // -----------------
 
-    MessageArguments& MessageArguments::operator=(MessageArguments&& other) noexcept {
-        U_ASSERT(other.arguments.isValid() || other.argsLen == 0);
-        argsLen = other.argsLen;
-        if (argsLen != 0) {
-            argumentNames.adoptInstead(other.argumentNames.orphan());
-            arguments.adoptInstead(other.arguments.orphan());
-        }
+    MessageArguments& MessageArguments::operator=(MessageArguments other) noexcept {
+        swap(*this, other);
         return *this;
     }
 

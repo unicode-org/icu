@@ -9,11 +9,11 @@
 
 #include "unicode/messageformat2_arguments.h"
 #include "unicode/messageformat2_data_model.h"
+#include "unicode/messageformat2_evaluation.h"
 #include "unicode/messageformat2_formattable.h"
 #include "unicode/messageformat2.h"
 #include "unicode/unistr.h"
 #include "messageformat2_allocation.h"
-#include "messageformat2_evaluation.h"
 #include "messageformat2_macros.h"
 
 
@@ -180,7 +180,7 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env, const O
         return {};
     }
 
-    DynamicErrors& errs = context.getErrors();
+    DynamicErrors::Builder& errs = context.getErrors();
 
     UnicodeString fallback(COLON);
     fallback += functionName;
@@ -369,7 +369,7 @@ void MessageFormatter::resolveSelectors(MessageContext& context, const Environme
             // Emit a Selection Error.
             // (Note: in this case, rv, being a fallback, serves as `nomatch`)
             #if U_DEBUG
-            const DynamicErrors& err = context.getErrors();
+            const DynamicErrors::Builder& err = context.getErrors();
             U_ASSERT(err.hasError());
             U_ASSERT(rv.argument().isFallback());
             #endif
@@ -721,7 +721,7 @@ ResolvedSelector MessageFormatter::formatSelectorExpression(const Environment& g
     // Resolve expression to determine if it's a function call
     ResolvedSelector exprResult = resolveVariables(globalEnv, expr, context, status);
 
-    DynamicErrors& err = context.getErrors();
+    DynamicErrors::Builder& err = context.getErrors();
 
     // If there is a selector, then `resolveVariables()` recorded it in the context
     if (exprResult.hasSelector()) {
@@ -788,13 +788,11 @@ void MessageFormatter::formatSelectors(MessageContext& context, const Environmen
 // due to the values (`FormatterFactory` objects in the map) having mutable state.
 // In other words, formatting a message can mutate the underlying `MessageFormatter` by changing
 // state within the factory objects that represent custom formatters.
-UnicodeString MessageFormatter::formatToString(const MessageArguments& arguments, UErrorCode &status) {
+UnicodeString MessageFormatter::formatToStringInternal(MessageContext& context, UErrorCode &status) {
     EMPTY_ON_ERROR(status);
 
     // Create a new environment that will store closures for all local variables
     Environment* env = Environment::create(status);
-    // Create a new context with the given arguments and the `errors` structure
-    MessageContext context(arguments, *errors, status);
 
     // Check for unresolved variable errors
     checkDeclarations(context, env, status);
@@ -806,15 +804,13 @@ UnicodeString MessageFormatter::formatToString(const MessageArguments& arguments
     } else {
         // Check for errors/warnings -- if so, then the result of pattern selection is the fallback value
         // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
-        const DynamicErrors& err = context.getErrors();
+        const DynamicErrors::Builder& err = context.getErrors();
         if (err.hasSyntaxError() || err.hasDataModelError()) {
             result += REPLACEMENT;
         } else {
             formatSelectors(context, *globalEnv, status, result);
         }
     }
-    // Update status according to all errors seen while formatting
-    context.checkErrors(status);
     return result;
 }
 
