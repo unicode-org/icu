@@ -7,7 +7,7 @@
 
 #if !UCONFIG_NO_MF2
 
-#include "messageformat2_errors.h"
+#include "unicode/messageformat2_errors.h"
 #include "messageformat2_macros.h"
 #include "messageformat2_parser.h"
 #include "uvector.h" // U_ASSERT

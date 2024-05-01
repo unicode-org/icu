@@ -212,6 +212,24 @@ class TestCase : public UMemory {
     }
 }; // class TestCase
 
+static bool hasError(std::vector<UErrorCode> errors, UErrorCode err) {
+    return std::find(errors.begin(), errors.end(), err) != errors.end();
+}
+
+static UnicodeString stringifyErrors(std::vector<UErrorCode> errors) {
+    UnicodeString result = "[";
+    bool first = true;
+    for (auto iter = errors.begin(); iter != errors.end(); ++iter) {
+        if (!first) {
+            result += ", ";
+        }
+        first = false;
+        result += u_errorName(*iter);
+    }
+    result += "]";
+    return result;
+}
+
 class TestUtils {
     public:
 
@@ -231,8 +249,14 @@ class TestUtils {
 	MessageFormatter mf = mfBuilder.build(errorCode);
         UnicodeString result;
 
+        std::vector<UErrorCode> errors;
         if (U_SUCCESS(errorCode)) {
-            result = mf.formatToString(MessageArguments(testCase.getArguments(), errorCode), errorCode);
+            result = mf.formatToString(MessageArguments(testCase.getArguments(), errorCode), errors, errorCode);
+        }
+
+        if (U_FAILURE(errorCode)) {
+            failWrongError(tmsg, testCase, errorCode);
+            return;
         }
 
         if (testCase.expectSuccess() || (testCase.expectedErrorCode() != U_MF_SYNTAX_ERROR
@@ -247,18 +271,23 @@ class TestUtils {
         }
 
         if (testCase.expectNoSyntaxError()) {
-            if (errorCode == U_MF_SYNTAX_ERROR) {
+            if (hasError(errors, U_MF_SYNTAX_ERROR) ){
                 failSyntaxError(tmsg, testCase);
             }
             errorCode.reset();
             return;
         }
-        if (testCase.expectSuccess() && U_FAILURE(errorCode)) {
-            failExpectedSuccess(tmsg, testCase, errorCode);
+        if (testCase.expectSuccess() && errors.size() > 0) {
+            failExpectedSuccess(tmsg, testCase, errors);
             return;
         }
-        if (testCase.expectFailure() && errorCode != testCase.expectedErrorCode()) {
-            failExpectedFailure(tmsg, testCase, errorCode);
+        // This is not as strict as it could be: as long as the
+        // expected error is _one_ of the errors, the test passes
+        // (That is, we don't test for _only_ the expected error
+        // being emitted.)
+        if (testCase.expectFailure()
+            && !hasError(errors, testCase.expectedErrorCode())) {
+            failExpectedFailure(tmsg, testCase, errors);
             return;
         }
         if (!testCase.lineNumberAndOffsetMatch(parseError.line, parseError.offset)) {
@@ -281,16 +310,21 @@ class TestUtils {
         tmsg.logln(testCase.getTestName() + " failed test with pattern: " + testCase.getPattern() + " and error code U_MF_SYNTAX_WARNING; expected no syntax error");
     }
 
-    static void failExpectedSuccess(IntlTest& tmsg, const TestCase& testCase, IcuTestErrorCode& errorCode) {
+    static void failExpectedSuccess(IntlTest& tmsg, const TestCase& testCase, std::vector<UErrorCode>& errors) {
         tmsg.dataerrln(testCase.getTestName());
-        tmsg.logln(testCase.getTestName() + " failed test with pattern: " + testCase.getPattern() + " and error code " + ((int32_t) errorCode));
+        tmsg.logln(testCase.getTestName() + " failed test with pattern: " + testCase.getPattern() + " and errors: " + stringifyErrors(errors));
+    }
+    static void failExpectedFailure(IntlTest& tmsg, const TestCase& testCase, std::vector<UErrorCode>& errors) {
+        tmsg.dataerrln(testCase.getTestName());
+        tmsg.logln(testCase.getTestName() + " failed test with wrong error code; pattern: " + testCase.getPattern() + " and errors " + stringifyErrors(errors) + " (expected error code: " + u_errorName(testCase.expectedErrorCode()) + " )");
+    }
+
+    static void failWrongError(IntlTest& tmsg, const TestCase& testCase, IcuTestErrorCode& errorCode) {
+        tmsg.dataerrln(testCase.getTestName());
+        tmsg.logln(testCase.getTestName() + " failed test with error code " + u_errorName(errorCode) + "; pattern = " + testCase.getPattern());
         errorCode.reset();
     }
-    static void failExpectedFailure(IntlTest& tmsg, const TestCase& testCase, IcuTestErrorCode& errorCode) {
-        tmsg.dataerrln(testCase.getTestName());
-        tmsg.logln(testCase.getTestName() + " failed test with wrong error code; pattern: " + testCase.getPattern() + " and error code " + ((int32_t) errorCode) + "(expected error code: " + ((int32_t) testCase.expectedErrorCode()) + " )");
-        errorCode.reset();
-    }
+
     static void failWrongOutput(IntlTest& tmsg, const TestCase& testCase, const UnicodeString& result) {
         tmsg.dataerrln(testCase.getTestName());
         tmsg.logln(testCase.getTestName() + " failed test with wrong output; pattern: " + testCase.getPattern() + " and expected output = " + testCase.expectedOutput() + " and actual output = " + result);

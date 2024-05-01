@@ -7,8 +7,8 @@
 
 #if !UCONFIG_NO_MF2
 
+#include "unicode/messageformat2_errors.h"
 #include "messageformat2_allocation.h"
-#include "messageformat2_errors.h"
 #include "messageformat2_macros.h"
 #include "uvector.h" // U_ASSERT
 
@@ -19,98 +19,191 @@ namespace message2 {
     // Errors
     // -----------
 
-    void DynamicErrors::setReservedError(UErrorCode& status) {
+    void DynamicErrors::Builder::setReservedError(UErrorCode& status) {
         addError(DynamicError(DynamicErrorType::ReservedError), status);
     }
 
-    void DynamicErrors::setFormattingError(const FunctionName& formatterName, UErrorCode& status) {
+    void DynamicErrors::Builder::setFormattingError(const FunctionName& formatterName, UErrorCode& status) {
         addError(DynamicError(DynamicErrorType::FormattingError, formatterName), status);
     }
 
-    void DynamicErrors::setFormattingError(UErrorCode& status) {
+    void DynamicErrors::Builder::setFormattingError(UErrorCode& status) {
         addError(DynamicError(DynamicErrorType::FormattingError, UnicodeString("unknown formatter")), status);
     }
 
-    void DynamicErrors::setOperandMismatchError(const FunctionName& formatterName, UErrorCode& status) {
+    void DynamicErrors::Builder::setOperandMismatchError(const FunctionName& formatterName, UErrorCode& status) {
         addError(DynamicError(DynamicErrorType::OperandMismatchError, formatterName), status);
     }
 
-    void StaticErrors::setDuplicateOptionName(UErrorCode& status) {
+    void StaticErrors::Builder::setDuplicateOptionName(UErrorCode& status) {
         addError(StaticError(StaticErrorType::DuplicateOptionName), status);
     }
 
-    void StaticErrors::setMissingSelectorAnnotation(UErrorCode& status) {
+    void StaticErrors::Builder::setMissingSelectorAnnotation(UErrorCode& status) {
         addError(StaticError(StaticErrorType::MissingSelectorAnnotation), status);
     }
 
-    void DynamicErrors::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
+    void DynamicErrors::Builder::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
         addError(DynamicError(DynamicErrorType::SelectorError, selectorName), status);
     }
 
-    void DynamicErrors::setUnknownFunction(const FunctionName& functionName, UErrorCode& status) {
+    void DynamicErrors::Builder::setUnknownFunction(const FunctionName& functionName, UErrorCode& status) {
         addError(DynamicError(DynamicErrorType::UnknownFunction, functionName), status);
     }
 
-    void DynamicErrors::setUnresolvedVariable(const VariableName& v, UErrorCode& status) {
+    void DynamicErrors::Builder::setUnresolvedVariable(const VariableName& v, UErrorCode& status) {
         addError(DynamicError(DynamicErrorType::UnresolvedVariable, v), status);
     }
 
-    DynamicErrors::DynamicErrors(const StaticErrors& e, UErrorCode& status) : staticErrors(e) {
-        resolutionAndFormattingErrors.adoptInstead(createUVector(status));
+    DynamicErrors::Builder::Builder(const StaticErrors& e, UErrorCode& status) : staticErrors(e) {
+        dynamicErrors.adoptInstead(createUVector(status));
     }
 
-    StaticErrors::StaticErrors(UErrorCode& status) {
-        syntaxAndDataModelErrors.adoptInstead(createUVector(status));
+    StaticErrors::Builder::Builder(UErrorCode& status) {
+        staticErrors.adoptInstead(createUVector(status));
     }
 
-    StaticErrors::StaticErrors(StaticErrors&& other) noexcept {
-        U_ASSERT(other.syntaxAndDataModelErrors.isValid());
-        syntaxAndDataModelErrors.adoptInstead(other.syntaxAndDataModelErrors.orphan());
-        dataModelError = other.dataModelError;
-        missingSelectorAnnotationError = other.missingSelectorAnnotationError;
-        syntaxError = other.syntaxError;
-    }
-
-    StaticErrors::StaticErrors(const StaticErrors& other, UErrorCode& errorCode) {
-        CHECK_ERROR(errorCode);
-
-        U_ASSERT(other.syntaxAndDataModelErrors.isValid());
-        syntaxAndDataModelErrors.adoptInstead(createUVector(errorCode));
-        CHECK_ERROR(errorCode);
-        for (int32_t i = 0; i < other.syntaxAndDataModelErrors->size(); i++) {
-            StaticError* e = static_cast<StaticError*>(other.syntaxAndDataModelErrors->elementAt(i));
+    StaticErrors::Builder::Builder(const StaticErrors::Builder& other) {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        U_ASSERT(other.staticErrors.isValid());
+        staticErrors.adoptInstead(createUVector(errorCode));
+        if (U_FAILURE(errorCode)) {
+            bogus = true;
+            return;
+        }
+        for (int32_t i = 0; i < other.staticErrors->size(); i++) {
+            StaticError* e = static_cast<StaticError*>(other.staticErrors->elementAt(i));
             U_ASSERT(e != nullptr);
             StaticError* copy = new StaticError(*e);
             if (copy == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
+                bogus = true;
                 return;
             }
-            syntaxAndDataModelErrors->adoptElement(copy, errorCode);
+            staticErrors->adoptElement(copy, errorCode);
+            if (U_FAILURE(errorCode)) {
+                bogus = true;
+                return;
+            }
         }
         dataModelError = other.dataModelError;
         missingSelectorAnnotationError = other.missingSelectorAnnotationError;
         syntaxError = other.syntaxError;
     }
 
-    int32_t DynamicErrors::count() const {
-        U_ASSERT(resolutionAndFormattingErrors.isValid() && staticErrors.syntaxAndDataModelErrors.isValid());
-        return resolutionAndFormattingErrors->size() + staticErrors.syntaxAndDataModelErrors->size();
+    StaticErrors::StaticErrors(const StaticErrors& other) : len(other.len),
+    syntaxError(other.syntaxError), dataModelError(other.dataModelError),
+    missingSelectorAnnotationError(other.missingSelectorAnnotationError) {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        U_ASSERT(!other.bogus);
+
+        if (len > 0) {
+            U_ASSERT(other.syntaxAndDataModelErrors.isValid());
+            syntaxAndDataModelErrors
+                .adoptInstead(copyArray<StaticError>(other.syntaxAndDataModelErrors.getAlias(),
+                                                     other.len,
+                                                     errorCode));
+            if (U_FAILURE(errorCode)) {
+                bogus = true;
+            }
+        }
     }
 
-    bool DynamicErrors::hasError() const {
-        return count() > 0;
+    StaticErrors::Builder& StaticErrors::Builder::operator=(StaticErrors::Builder other) noexcept {
+        swap(*this, other);
+        return *this;
     }
 
-    bool DynamicErrors::hasStaticError() const {
-        U_ASSERT(staticErrors.syntaxAndDataModelErrors.isValid());
-        return staticErrors.syntaxAndDataModelErrors->size() > 0;
+    bool DynamicErrors::Builder::hasError() const {
+        return dynamicErrors->size() > 0;
     }
 
-    const DynamicError& DynamicErrors::first() const {
-        U_ASSERT(resolutionAndFormattingErrors->size() > 0);
-        return *static_cast<DynamicError*>(resolutionAndFormattingErrors->elementAt(0));
+    DynamicErrors DynamicErrors::Builder::build(UErrorCode& errorCode) const {
+        return DynamicErrors(*this, errorCode);
     }
 
+    StaticErrors StaticErrors::Builder::build(UErrorCode& errorCode) const {
+        return StaticErrors(*this, errorCode);
+    }
+
+    DynamicErrors::DynamicErrors(const DynamicErrors::Builder& b, UErrorCode& errorCode)
+        : staticErrors(b.staticErrors),
+          dynamicErrorsLen(b.dynamicErrors->size()) {
+        resolutionAndFormattingErrors
+            .adoptInstead(copyVectorToArray<DynamicError>(*(b.dynamicErrors), errorCode));
+    }
+
+
+    StaticErrors::StaticErrors(const StaticErrors::Builder& b, UErrorCode& errorCode)
+        : len(b.staticErrors->size()),
+          syntaxError(b.syntaxError),
+          dataModelError(b.dataModelError),
+          missingSelectorAnnotationError(b.missingSelectorAnnotationError) {
+        syntaxAndDataModelErrors
+            .adoptInstead(copyVectorToArray<StaticError>(*(b.staticErrors), errorCode));
+    }
+
+    /* static */ UErrorCode StaticErrors::toErrorCode(const StaticError& e) {
+        switch (e.type) {
+        case StaticErrorType::DuplicateDeclarationError: {
+            return U_MF_DUPLICATE_DECLARATION_ERROR;
+            break;
+        }
+        case StaticErrorType::DuplicateOptionName: {
+            return U_MF_DUPLICATE_OPTION_NAME_ERROR;
+            break;
+        }
+        case StaticErrorType::VariantKeyMismatchError: {
+            return U_MF_VARIANT_KEY_MISMATCH_ERROR;
+            break;
+        }
+        case StaticErrorType::NonexhaustivePattern: {
+            return U_MF_NONEXHAUSTIVE_PATTERN_ERROR;
+            break;
+        }
+        case StaticErrorType::MissingSelectorAnnotation: {
+            return U_MF_MISSING_SELECTOR_ANNOTATION_ERROR;
+            break;
+        }
+        case StaticErrorType::SyntaxError: {
+            return U_MF_SYNTAX_ERROR;
+            break;
+        }
+        case StaticErrorType::UnsupportedStatementError: {
+            return U_MF_UNSUPPORTED_STATEMENT_ERROR;
+        }
+        }
+    }
+
+/* static */ UErrorCode DynamicErrors::toErrorCode(const DynamicError& e) {
+        switch (e.type) {
+        case DynamicErrorType::UnknownFunction: {
+            return U_MF_UNKNOWN_FUNCTION_ERROR;
+            break;
+        }
+        case DynamicErrorType::UnresolvedVariable: {
+            return U_MF_UNRESOLVED_VARIABLE_ERROR;
+            break;
+        }
+        case DynamicErrorType::FormattingError: {
+            return U_MF_FORMATTING_ERROR;
+            break;
+        }
+        case DynamicErrorType::OperandMismatchError: {
+            return U_MF_OPERAND_MISMATCH_ERROR;
+            break;
+        }
+        case DynamicErrorType::ReservedError: {
+            return U_MF_UNSUPPORTED_EXPRESSION_ERROR;
+            break;
+        }
+        case DynamicErrorType::SelectorError: {
+            return U_MF_SELECTOR_ERROR;
+            break;
+        }
+        }
+    }
+
+/*
     void DynamicErrors::checkErrors(UErrorCode& status) const {
         if (status != U_ZERO_ERROR) {
             return;
@@ -181,16 +274,19 @@ namespace message2 {
             }
         }
     }
+*/
 
-    void StaticErrors::addSyntaxError(UErrorCode& status) {
+    void StaticErrors::Builder::addSyntaxError(UErrorCode& status) {
         addError(StaticError(StaticErrorType::SyntaxError), status);
     }
 
-    void StaticErrors::addError(StaticError&& e, UErrorCode& status) {
+    void StaticErrors::Builder::addError(StaticError&& e, UErrorCode& status) {
         CHECK_ERROR(status);
 
+        U_ASSERT(!bogus);
+
         void* errorP = static_cast<void*>(create<StaticError>(std::move(e), status));
-        U_ASSERT(syntaxAndDataModelErrors.isValid());
+        U_ASSERT(staticErrors.isValid());
 
         switch (e.type) {
         case StaticErrorType::SyntaxError: {
@@ -223,52 +319,54 @@ namespace message2 {
             break;
         }
         }
-        syntaxAndDataModelErrors->adoptElement(errorP, status);
+        staticErrors->adoptElement(errorP, status);
     }
 
-    void DynamicErrors::addError(DynamicError&& e, UErrorCode& status) {
+    void DynamicErrors::Builder::addError(DynamicError&& e, UErrorCode& status) {
         CHECK_ERROR(status);
 
         void* errorP = static_cast<void*>(create<DynamicError>(std::move(e), status));
-        U_ASSERT(resolutionAndFormattingErrors.isValid());
+        U_ASSERT(dynamicErrors.isValid());
 
         switch (e.type) {
         case DynamicErrorType::UnresolvedVariable: {
             unresolvedVariableError = true;
-            resolutionAndFormattingErrors->adoptElement(errorP, status);
+            dynamicErrors->adoptElement(errorP, status);
             break;
         }
         case DynamicErrorType::FormattingError: {
             formattingError = true;
-            resolutionAndFormattingErrors->adoptElement(errorP, status);
+            dynamicErrors->adoptElement(errorP, status);
             break;
         }
         case DynamicErrorType::OperandMismatchError: {
             formattingError = true;
-            resolutionAndFormattingErrors->adoptElement(errorP, status);
+            dynamicErrors->adoptElement(errorP, status);
             break;
         }
         case DynamicErrorType::ReservedError: {
-            resolutionAndFormattingErrors->adoptElement(errorP, status);
+            dynamicErrors->adoptElement(errorP, status);
             break;
         }
         case DynamicErrorType::SelectorError: {
             selectorError = true;
-            resolutionAndFormattingErrors->adoptElement(errorP, status);
+            dynamicErrors->adoptElement(errorP, status);
             break;
         }
         case DynamicErrorType::UnknownFunction: {
             unknownFunctionError = true;
-            resolutionAndFormattingErrors->adoptElement(errorP, status);
+            dynamicErrors->adoptElement(errorP, status);
             break;
         }
         }
     }
 
+/*
     const StaticError& StaticErrors::first() const {
         U_ASSERT(syntaxAndDataModelErrors.isValid() && syntaxAndDataModelErrors->size() > 0);
         return *static_cast<StaticError*>(syntaxAndDataModelErrors->elementAt(0));
     }
+*/
 
     StaticErrors::~StaticErrors() {}
     DynamicErrors::~DynamicErrors() {}

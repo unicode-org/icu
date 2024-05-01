@@ -8,10 +8,10 @@
 #if !UCONFIG_NO_MF2
 
 #include "unicode/messageformat2.h"
+#include "unicode/messageformat2_errors.h"
+#include "unicode/messageformat2_evaluation.h"
 #include "messageformat2_allocation.h"
 #include "messageformat2_checker.h"
-#include "messageformat2_errors.h"
-#include "messageformat2_evaluation.h"
 #include "messageformat2_function_registry_internal.h"
 #include "messageformat2_macros.h"
 #include "messageformat2_parser.h"
@@ -31,7 +31,7 @@ namespace message2 {
         normalizedInput.remove();
         // Parse the pattern
         MFDataModel::Builder tree(errorCode);
-        Parser(pat, tree, *errors, normalizedInput).parse(parseError, errorCode);
+        Parser(pat, tree, errors, normalizedInput).parse(parseError, errorCode);
 
         // Build the data model based on what was parsed
         dataModel = tree.build(errorCode);
@@ -56,8 +56,6 @@ namespace message2 {
 
     MessageFormatter::Builder& MessageFormatter::Builder::setDataModel(MFDataModel&& newDataModel) {
         normalizedInput.remove();
-        delete errors;
-        errors = nullptr;
         hasPattern = false;
         hasDataModel = true;
         dataModel = std::move(newDataModel);
@@ -74,24 +72,16 @@ namespace message2 {
         return MessageFormatter(*this, errorCode);
     }
 
-    MessageFormatter::Builder::Builder(UErrorCode& errorCode) : locale(Locale::getDefault()), customMFFunctionRegistry(nullptr) {
-        // Initialize errors
-        errors = new StaticErrors(errorCode);
-        CHECK_ERROR(errorCode);
-        if (errors == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-        }
-    }
+    MessageFormatter::Builder::Builder(UErrorCode& errorCode) : errors(errorCode), locale(Locale::getDefault()), customMFFunctionRegistry(nullptr) {}
 
-    MessageFormatter::Builder::~Builder() {
-        if (errors != nullptr) {
-            delete errors;
-        }
-    }
+    MessageFormatter::Builder::~Builder() {}
 
     // MessageFormatter
 
-    MessageFormatter::MessageFormatter(const MessageFormatter::Builder& builder, UErrorCode &success) : locale(builder.locale), customMFFunctionRegistry(builder.customMFFunctionRegistry) {
+    MessageFormatter::MessageFormatter(const MessageFormatter::Builder& builder, UErrorCode &success)
+        : locale(builder.locale),
+          customMFFunctionRegistry(builder.customMFFunctionRegistry),
+          errors(builder.errors) {
         CHECK_ERROR(success);
 
         // Set up the standard function registry
@@ -128,14 +118,6 @@ namespace message2 {
         }
 
         dataModel = builder.dataModel;
-        if (builder.errors != nullptr) {
-            errors = new StaticErrors(*builder.errors, success);
-        } else {
-            // Initialize errors
-            LocalPointer<StaticErrors> errorsNew(new StaticErrors(success));
-            CHECK_ERROR(success);
-            errors = errorsNew.orphan();
-        }
 
         // Note: we currently evaluate variables lazily,
         // without memoization. This call is still necessary
@@ -144,25 +126,16 @@ namespace message2 {
         // only be checked when arguments are known)
 
         // Check for resolution errors
-        Checker(dataModel, *errors).check(success);
-    }
-
-    void MessageFormatter::cleanup() noexcept {
-        if (errors != nullptr) {
-            delete errors;
-        }
+        Checker(dataModel, errors).check(success);
     }
 
     MessageFormatter& MessageFormatter::operator=(MessageFormatter&& other) noexcept {
-        cleanup();
-
         locale = std::move(other.locale);
         standardMFFunctionRegistry = std::move(other.standardMFFunctionRegistry);
         customMFFunctionRegistry = other.customMFFunctionRegistry;
         dataModel = std::move(other.dataModel);
         normalizedInput = std::move(other.normalizedInput);
-        errors = other.errors;
-        other.errors = nullptr;
+        errors = std::move(other.errors);
         return *this;
     }
 
@@ -182,9 +155,7 @@ namespace message2 {
         return *customMFFunctionRegistry;
     }
 
-    MessageFormatter::~MessageFormatter() {
-        cleanup();
-    }
+    MessageFormatter::~MessageFormatter() {}
 
     // Selector and formatter lookup
     // -----------------------------
@@ -250,7 +221,7 @@ namespace message2 {
     // Formatter used as selector  = selector error
     // Selector used as formatter = formatting error
     const SelectorFactory* MessageFormatter::lookupSelectorFactory(MessageContext& context, const FunctionName& functionName, UErrorCode& status) const {
-        DynamicErrors& err = context.getErrors();
+        DynamicErrors::Builder& err = context.getErrors();
 
         if (isBuiltInSelector(functionName)) {
             return standardMFFunctionRegistry.getSelector(functionName);

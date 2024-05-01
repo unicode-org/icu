@@ -9,10 +9,10 @@
 #define MESSAGEFORMAT_PARSER_H
 
 #include "unicode/messageformat2_data_model.h"
+#include "unicode/messageformat2_errors.h"
 #include "unicode/parseerr.h"
 
 #include "messageformat2_allocation.h"
-#include "messageformat2_errors.h"
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -82,7 +82,10 @@ namespace message2 {
 	    UChar   postContext[U_PARSE_CONTEXT_LEN];
 	} MessageParseError;
 
-	Parser(const UnicodeString &input, MFDataModel::Builder& dataModelBuilder, StaticErrors& e, UnicodeString& normalizedInputRef)
+	Parser(const UnicodeString &input,
+               MFDataModel::Builder& dataModelBuilder,
+               StaticErrors::Builder& e,
+               UnicodeString& normalizedInputRef)
 	  : source(input), index(0), errors(e), normalizedInput(normalizedInputRef), dataModel(dataModelBuilder) {
 	  parseError.line = 0;
 	  parseError.offset = 0;
@@ -159,7 +162,7 @@ namespace message2 {
 	MessageParseError parseError;
 
 	// The structure to use for recording errors
-	StaticErrors& errors;
+	StaticErrors::Builder& errors;
 
 	// Normalized version of the input string (optional whitespace removed)
 	UnicodeString& normalizedInput;

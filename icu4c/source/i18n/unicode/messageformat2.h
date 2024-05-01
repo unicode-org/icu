@@ -19,6 +19,7 @@
 
 #include "unicode/messageformat2_arguments.h"
 #include "unicode/messageformat2_data_model.h"
+#include "unicode/messageformat2_evaluation.h"
 #include "unicode/messageformat2_function_registry.h"
 #include "unicode/unistr.h"
 
@@ -29,7 +30,6 @@ U_NAMESPACE_BEGIN
 namespace message2 {
 
     class Environment;
-    class MessageContext;
     class ResolvedSelector;
     class StaticErrors;
 
@@ -73,16 +73,28 @@ namespace message2 {
          * and the given `arguments` object.
          *
          * @param arguments Reference to message arguments
-         * @param status    Input/output error code used to indicate syntax errors, data model
-         *                  errors, resolution errors, formatting errors, selection errors, as well
-         *                  as other errors (such as memory allocation failures). Partial output
-         *                  is still provided in the presence of most error types.
+         * @param mfErrors  A vector that will be filled with MessageFormat 2 errors, if any.
+         *                  Multiple errors are reported to the caller. Partial output is still
+         *                  provided in some cases.
+         * @param status    Input/output error code. This error code is separate from the errors
+         *                  signaled in mfErrors and indicates non-MF2-specific errors such as
+         *                  memory allocation failures).
          * @return          The string result of formatting the message with the given arguments.
          *
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        UnicodeString formatToString(const MessageArguments& arguments, UErrorCode &status);
+        UnicodeString formatToString(const MessageArguments& arguments,
+                                     std::vector<UErrorCode>& mfErrors,
+                                     UErrorCode &status) {
+            if (U_FAILURE(status)) {
+                return {};
+            }
+            MessageContext context(arguments, errors.build(status), status);
+            UnicodeString result = formatToStringInternal(context, status);
+            context.errorsToVector(mfErrors, status);
+            return result;
+        }
 
         /**
          * Not yet implemented; formats the message to a `FormattedMessage` object,
@@ -162,7 +174,7 @@ namespace message2 {
             UnicodeString normalizedInput;
             // Errors (internal representation of parse errors)
             // Ignored if `setPattern()` wasn't called
-            StaticErrors* errors;
+            StaticErrors::Builder errors;
             Locale locale;
             // Not owned
             const MFFunctionRegistry* customMFFunctionRegistry;
@@ -348,8 +360,8 @@ namespace message2 {
 
         void initErrors(UErrorCode&);
         void clearErrors() const;
-        void cleanup() noexcept;
 
+        UnicodeString formatToStringInternal(MessageContext&, UErrorCode&);
         // The locale this MessageFormatter was created with
         /* const */ Locale locale;
 
@@ -375,10 +387,7 @@ namespace message2 {
 
         // Errors -- only used while parsing and checking for data model errors; then
         // the MessageContext keeps track of errors
-        // Must be a raw pointer to avoid including the internal header file
-        // defining StaticErrors
-        // Owned by `this`
-        StaticErrors* errors;
+        StaticErrors::Builder errors;
 
     }; // class MessageFormatter
 
