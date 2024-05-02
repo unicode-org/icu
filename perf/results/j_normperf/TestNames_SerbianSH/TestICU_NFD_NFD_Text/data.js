@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1714663129883,
+  "lastUpdate": 1714667691344,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21508,6 +21508,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 2.930023821483713,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "1ff249b73f8a8c3c5c355c976622fc8e39a863cb",
+          "message": "ICU-21589 Remove format-overflow warning\n\n1. double size one stack buffer\n2. add pragma to ignore some theorical case because the array are in\n   same length but some fields are shorter than the other.\n\nICU-21589 wrap with defined(__GNUC__)\n\nICU-21589 avoid clang",
+          "timestamp": "2024-05-02T18:23:08+02:00",
+          "tree_id": "ca2c175a1238111eab7b38d68ba6be5196a2a13c",
+          "url": "https://github.com/unicode-org/icu/commit/1ff249b73f8a8c3c5c355c976622fc8e39a863cb"
+        },
+        "date": 1714667580769,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 2.9204619248981607,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
