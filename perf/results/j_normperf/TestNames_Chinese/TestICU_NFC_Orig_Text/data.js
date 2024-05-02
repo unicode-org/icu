@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1714667585365,
+  "lastUpdate": 1714677351991,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21328,6 +21328,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 4.063981592399065,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "464531eb8e08abe0bd183401525a05e32423cb30",
+          "message": "ICU-22079 Fix bidi fuzzer\n\nCheck data length to avoid memcpy out of bound.",
+          "timestamp": "2024-05-02T11:59:22-07:00",
+          "tree_id": "9da25f1634a7e5a2ba7a58a36e47e07de7e0de8a",
+          "url": "https://github.com/unicode-org/icu/commit/464531eb8e08abe0bd183401525a05e32423cb30"
+        },
+        "date": 1714677240139,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 4.062022574429278,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
