@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1714668119933,
+  "lastUpdate": 1714677882691,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43468,6 +43468,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16795989.9026,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "464531eb8e08abe0bd183401525a05e32423cb30",
+          "message": "ICU-22079 Fix bidi fuzzer\n\nCheck data length to avoid memcpy out of bound.",
+          "timestamp": "2024-05-02T11:59:22-07:00",
+          "tree_id": "9da25f1634a7e5a2ba7a58a36e47e07de7e0de8a",
+          "url": "https://github.com/unicode-org/icu/commit/464531eb8e08abe0bd183401525a05e32423cb30"
+        },
+        "date": 1714677767763,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 317.0218,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 35232693.462,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 15030958.3676,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 38346738.1118,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16928898.6166,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
