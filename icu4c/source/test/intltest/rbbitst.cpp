@@ -2915,7 +2915,6 @@ void RBBILineMonkey::rule9Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPos
 
 
 int32_t RBBILineMonkey::next(int32_t startPos) {
-    UErrorCode status = U_ZERO_ERROR;
     int32_t    pos;       //  Index of the char following a potential break position
     UChar32    thisChar;  //  Character at above position "pos"
 
@@ -3301,71 +3300,51 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
-        // appliedRule: "LB 25 numbers match"; // moved up, before LB 8a,
-        // The regular expression for numbers is
-        // (PR | PO)? (OP | HY)? IS? NU (NU | SY | IS)* (CL | CP)? (PR | PO)?
-        // Which turns into these rules:
-        // 1. (PR | PO) × (OP | HY)? IS? NU
-        //    itself splittable into:
-        //      a. (PR | PO) × NU
-        if ((fPR->contains(prevChar) || fPO->contains(prevChar)) && fNU->contains(thisChar)) {
-            setAppliedRule(pos, "LB 25/1a");
-            continue;
-        }
-        //      b. (PR | PO) × (OP | HY | IS) NU
-        if (nextPos < fText->length()) {
-            const UChar32 nextChar = fText->char32At(nextPos);
-            if ((fPR->contains(prevChar) || fPO->contains(prevChar)) &&
-                (fOP->contains(thisChar) || fHY->contains(thisChar) || fIS->contains(thisChar)) &&
-                fNU->contains(nextChar)) {
-                setAppliedRule(pos, "LB 25/1b");
-                continue;
-            }
-            int nextPosX2 = fText->moveIndex32(nextPos, 1);
-            while (nextPosX2 < fText->length() && fCM->contains(fText->char32At(nextPosX2))) {
-                nextPosX2 = fText->moveIndex32(nextPosX2, 1);
-            }
-
-            // c. (PR | PO) × (OP | HY) IS NU
-            if (nextPosX2 < fText->length()) {
-                const UChar32 nextCharX2 = fText->char32At(nextPosX2);
-                if ((fPR->contains(prevChar) || fPO->contains(prevChar)) &&
-                    (fOP->contains(thisChar) || fHY->contains(thisChar)) &&
-                    fIS->contains(nextChar) &&
-                    fNU->contains(nextCharX2)) {
-                    setAppliedRule(pos, "LB 25/1c");
-                    continue;
+        bool continueToNextPosition = false;
+        // LB 25.
+        for (const auto& [left, right] : {
+                 std::pair{fCL, fPO}, // 1. NU (SY | IS)* CL × PO
+                 std::pair{fCP, fPO}, // 2. NU (SY | IS)* CP × PO
+                 std::pair{fCL, fPR}, // 3. NU (SY | IS)* CL × PR
+                 std::pair{fCP, fPR}, // 4. NU (SY | IS)* CP × PR
+             }) {
+            if (left->contains(prevChar) && right->contains(thisChar)) {
+                // Check for the NU (SY | IS)* part.
+                bool leftHandSideMatches = false;
+                tPos = fText->moveIndex32(prevPos, -1);
+                for (;;) {
+                    while (tPos > 0 && fCM->contains(fText->char32At(tPos))) {
+                        tPos = fText->moveIndex32(tPos, -1);
+                    }
+                    const UChar32 tChar = fText->char32At(tPos);
+                    if (fSY->contains(tChar) || fIS->contains(tChar)) {
+                        if (tPos == 0) {
+                            leftHandSideMatches = false;
+                            break;
+                        }
+                        tPos = fText->moveIndex32(tPos, -1);
+                    } else if (fNU->contains(tChar)) {
+                        leftHandSideMatches = true;
+                        break;
+                    } else {
+                        leftHandSideMatches = false;
+                        break;
+                    }
+                }
+                if (leftHandSideMatches) {
+                    setAppliedRule(pos, "LB 25/1..4");
+                    continueToNextPosition = true;
+                    break;
                 }
             }
         }
-        // 2. (OP | HY) × IS? NU
-        //    itself splittable into:
-        //      a. (OP | HY) × NU
-        if ((fOP->contains(prevChar) || fHY->contains(prevChar)) && fNU->contains(thisChar)) {
-            setAppliedRule(pos, "LB 25/2a");
+        if (continueToNextPosition) {
             continue;
         }
-        //      b. (OP | HY) × IS NU
-        if (nextPos < fText->length()) {
-            const UChar32 nextChar = fText->char32At(nextPos);
-            if ((fOP->contains(prevChar) || fHY->contains(prevChar)) && fIS->contains(thisChar) &&
-                fNU->contains(nextChar)) {
-                setAppliedRule(pos, "LB 25/2b");
-                continue;
-            }
-        }
-        // 3. IS × NU
-        if (fIS->contains(prevChar) && fNU->contains(thisChar)) {
-            setAppliedRule(pos, "LB 25/3");
-            continue;
-        }
-        // 4. NU × (NU | SY | IS)
-        if (fNU->contains(prevChar) &&
-            (fNU->contains(thisChar) || fSY->contains(thisChar) || fIS->contains(thisChar))) {
-            setAppliedRule(pos, "LB 25/4");
-            continue;
-        }
-        // 5. NU (SY | IS)* × (NU | SY | IS | CL | CP)
+        // 5. NU (SY | IS)* × PO
+        // 6. NU (SY | IS)* × PR
+        // 13. NU (SY | IS)* × NU
+        // 14. NU (SY | IS)* × SY
         bool leftHandSideMatches;
         tPos = prevPos;
         for (;;) {
@@ -3375,8 +3354,8 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             const UChar32 tChar = fText->char32At(tPos);
             if (fSY->contains(tChar) || fIS->contains(tChar)) {
                 if (tPos == 0) {
-                  leftHandSideMatches = false;
-                  break;
+                    leftHandSideMatches = false;
+                    break;
                 }
                 tPos = fText->moveIndex32(tPos, -1);
             } else if (fNU->contains(tChar)) {
@@ -3387,45 +3366,57 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
                 break;
             }
         }
-        if (leftHandSideMatches &&
-            (fNU->contains(thisChar) || fSY->contains(thisChar) || fIS->contains(thisChar) ||
-             fCL->contains(thisChar) || fCP->contains(thisChar))) {
-            setAppliedRule(pos, "LB 25/5");
+        if (leftHandSideMatches && (fPO->contains(thisChar) || fPR->contains(thisChar) ||
+                                    fNU->contains(thisChar) || fSY->contains(thisChar))) {
+            setAppliedRule(pos, "LB 25/5,6,13,14");
             continue;
         }
-        // 6. NU (SY | IS)* (CL | CP)? × (PR|PO)
-        //    itself splittable into:
-        //      a. NU (SY | IS)* × (PR|PO)
-        if (leftHandSideMatches && (fPR->contains(thisChar) || fPO->contains(thisChar))) {
-            setAppliedRule(pos, "LB 25/6a");
-            continue;
-        }
-        //      b. NU (SY | IS)* (CL | CP) × (PR|PO)
-        if (fCL->contains(prevChar) || fCP->contains(prevChar)) {
-            tPos = fText->moveIndex32(prevPos, -1);
-            for (;;) {
-                while (tPos > 0 && fCM->contains(fText->char32At(tPos))) {
-                    tPos = fText->moveIndex32(tPos, -1);
-                }
-                const UChar32 tChar = fText->char32At(tPos);
-                if (fSY->contains(tChar) || fIS->contains(tChar)) {
-                    if (tPos == 0) {
-                        leftHandSideMatches = false;
-                        break;
-                    }
-                    tPos = fText->moveIndex32(tPos, -1);
-                } else if (fNU->contains(tChar)) {
-                    leftHandSideMatches = true;
-                    break;
-                } else {
-                    leftHandSideMatches = false;
-                    break;
-                }
-            }
-            if (leftHandSideMatches && (fPR->contains(thisChar) || fPO->contains(thisChar))) {
-                setAppliedRule(pos, "LB 25/6b");
+        if (nextPos < fText->length()) {
+            const UChar32 nextChar = fText->char32At(nextPos);
+            // 7. PO × OP NU
+            if (fPO->contains(prevChar) && fOP->contains(thisChar) && fNU->contains(nextChar)) {
+                setAppliedRule(pos, "LB 25/7");
                 continue;
             }
+            // 9. PR × OP NU
+            if (fPR->contains(prevChar) && fOP->contains(thisChar) && fNU->contains(nextChar)) {
+                setAppliedRule(pos, "LB 25/9");
+                continue;
+            }
+            int nextPosX2 = fText->moveIndex32(nextPos, 1);
+            while (nextPosX2 < fText->length() && fCM->contains(fText->char32At(nextPosX2))) {
+                nextPosX2 = fText->moveIndex32(nextPosX2, 1);
+            }
+
+            if (nextPosX2 < fText->length()) {
+                const UChar32 nextCharX2 = fText->char32At(nextPosX2);
+                // 7bis. PO × OP IS NU
+                if (fPO->contains(prevChar) && fOP->contains(thisChar) && fIS->contains(nextChar) &&
+                    fNU->contains(nextCharX2)) {
+                    setAppliedRule(pos, "LB 25/7bis");
+                    continue;
+                }
+                // 9bis. PR × OP IS NU
+                if (fPR->contains(prevChar) && fOP->contains(thisChar) && fIS->contains(nextChar) &&
+                    fNU->contains(nextCharX2)) {
+                    setAppliedRule(pos, "LB 25/9bis");
+                    continue;
+                }
+            }
+        }
+        for (const auto& [left, right] : {
+                 std::pair{fPO, fNU}, // 8. PO × NU
+                 std::pair{fPR, fNU}, // 10. PR × NU
+                 std::pair{fHY, fNU}, // 11. HY × NU
+                 std::pair{fIS, fNU}, // 12. IS × NU
+             }) {
+            if (left->contains(prevChar) && right->contains(thisChar)) {
+                continueToNextPosition = true;
+                break;
+            }
+        }
+        if (continueToNextPosition) {
+          continue;
         }
 
 
@@ -4262,7 +4253,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
             // If test is running in an infinite loop, display a periodic tic so
             //   we can tell that it is making progress.
             constexpr std::array<std::string_view, 5> monkeys{"🙈", "🙉", "🙊", "🐵", "🐒"};
-            fprintf(stderr, monkeys[m_seed % monkeys.size()].data());
+            fprintf(stderr, "%s", monkeys[m_seed % monkeys.size()].data());
             if (loopCount % 1'000'000 == 0) {
                 fprintf(stderr, "\nTested %d million random strings with %d errors…\n",
                         loopCount / 1'000'000, getErrors());
