@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1714663625556,
+  "lastUpdate": 1714668097608,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43252,6 +43252,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2042276.1885,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "1ff249b73f8a8c3c5c355c976622fc8e39a863cb",
+          "message": "ICU-21589 Remove format-overflow warning\n\n1. double size one stack buffer\n2. add pragma to ignore some theorical case because the array are in\n   same length but some fields are shorter than the other.\n\nICU-21589 wrap with defined(__GNUC__)\n\nICU-21589 avoid clang",
+          "timestamp": "2024-05-02T18:23:08+02:00",
+          "tree_id": "ca2c175a1238111eab7b38d68ba6be5196a2a13c",
+          "url": "https://github.com/unicode-org/icu/commit/1ff249b73f8a8c3c5c355c976622fc8e39a863cb"
+        },
+        "date": 1714667985993,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 202.1528,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8889838.0456,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1959514.1721,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 8099057.2588,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1997868.6204,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
