@@ -6,7 +6,7 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.dev.util;
+package com.ibm.icu.impl;
 
 import java.util.Iterator;
 import java.util.Set;

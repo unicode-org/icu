@@ -35,8 +35,8 @@ jobs:
           version="`mvn help:evaluate -Dexpression=project.version -q -DforceStdout`"
           echo "version=$version"  # debug/info logging for our own purposes, before sending to Github
           echo "version=$version" >> "$GITHUB_OUTPUT"
-      # Set version-type=snapshot for tags that contain SNAPSHOT,  
-      # as well as for unicode-org-internal artifacts with a dash like `icu4j-for-cldr`. 
+      # Set version-type=snapshot for tags that contain SNAPSHOT,
+      # as well as for unicode-org-internal artifacts with a dash like `icu4j-for-cldr`.
       - name: Assess Maven version release/snapshot
         id: mvn-proj-version-type
         run: |
@@ -49,33 +49,18 @@ jobs:
         run: |
           echo "Manual deployments of publishing artifacts should only be attempted for snapshot versions"
           exit 1;
-      - name: Build artifacts (icu4j, utilities-for-cldr)
+      - name: Build artifacts (icu4j)
         run: |
           cd icu4j
           mvn ${SHARED_MVN_ARGS} clean install -DskipTests -DskipIT -P with_sources
-      # For snapshot versions, publish icu4j & utilities-for-cldr
+      # For snapshot versions, publish icu4j
       - name: Deploy to Github (snapshot version)
         if: steps.mvn-proj-version-type.outputs.version-type == 'snapshot'
         run: |
           echo Github Ref ${GITHUB_REF} @ ${GITHUB_SHA};
           cd icu4j
           mvn deploy ${SHARED_MVN_ARGS} \
-            -pl :icu4j,:utilities-for-cldr,:icu4j-root \
-            -DaltDeploymentRepository=github::https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
-            -P cldr_utilities,with_sources
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # For release versions, publish utilities-for-cldr,
-      # but do not publish icu4j because the Maven artifact "coordinates"
-      # will conflict with the public-facing coordinates on Maven Central
-      # ("coordinates" = groupId, artifactId, version)
-      - name: Deploy to Github (release version)
-        if: steps.mvn-proj-version-type.outputs.version-type == 'release'
-        run: |
-          echo Github Ref ${GITHUB_REF} @ ${GITHUB_SHA};
-          cd icu4j
-          mvn deploy ${SHARED_MVN_ARGS} \
-            -pl :utilities-for-cldr,:icu4j-root \
+            -pl :icu4j,:icu4j-root \
             -DaltDeploymentRepository=github::https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
             -P cldr_utilities,with_sources
         env:

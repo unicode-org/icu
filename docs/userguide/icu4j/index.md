@@ -288,11 +288,10 @@ Once the JDK and Maven are installed, run the desired Maven target. For example:
 [INFO] demos                                                              [jar]
 [INFO] samples                                                            [jar]
 [INFO] tools_misc                                                         [jar]
-[INFO] utilities-for-cldr                                                 [jar]
 [INFO] perf-tests                                                         [jar]
 [INFO] 
 [INFO] -----------------------< com.ibm.icu:icu4j-root >-----------------------
-[INFO] Building International Components for Unicode for Java (icu4j-root) 74.1-SNAPSHOT [1/17]
+[INFO] Building International Components for Unicode for Java (icu4j-root) 74.1-SNAPSHOT [1/16]
 [INFO] --------------------------------[ pom ]---------------------------------
 [INFO] 
 [INFO] --- maven-enforcer-plugin:3.3.0:enforce (enforce-maven) @ icu4j-root ---
@@ -320,12 +319,11 @@ Once the JDK and Maven are installed, run the desired Maven target. For example:
 [INFO] demos .............................................. SUCCESS [  0.111 s]
 [INFO] samples ............................................ SUCCESS [  0.076 s]
 [INFO] tools_misc ......................................... SUCCESS [  0.079 s]
-[INFO] utilities-for-cldr ................................. SUCCESS [  1.284 s]
 [INFO] perf-tests ......................................... SUCCESS [  0.128 s]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  04:16 min
+[INFO] Total time:  04:15 min
 [INFO] Finished at: 2023-10-03T16:16:06-07:00
 [INFO] ------------------------------------------------------------------------
 ~~~
