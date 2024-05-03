@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/env perl
 # * © 2016 and later: Unicode, Inc. and others.
 # * License & terms of use: http://www.unicode.org/copyright.html
 # *******************************************************************************
@@ -16,7 +16,13 @@ use Dataset;
 # Test class
 my $TESTCLASS = 'com.ibm.icu.dev.test.perf.ConverterPerformanceTest';
 
-my $CLASSES = './out/bin:../tools/misc/out/bin/:../icu4j.jar:../icu4j-charset.jar';
+my $OS=$^O;
+my $CLASSPATH;
+if ($^O eq "MSWin32") {
+	$CLASSPATH = './target/*;./target/dependency/*';
+} else {
+	$CLASSPATH = './target/*:./target/dependency/*';
+}
 
 # Methods to be tested.  Each pair represents a test method and
 # a baseline method which is used for comparison.
@@ -301,7 +307,7 @@ sub callJava {
     my $fileName = $SOURCEDIR.@$pat[0] ;
     my $n = ($n < 0) ? "-t ".(-$n) : "-i ".$n;
 
-    my $cmd = "java -classpath $CLASSES $TESTCLASS $method $n -p $passes -f $fileName -e @$pat[1] -T @$pat[2]";
+    my $cmd = "java -classpath $CLASSPATH $TESTCLASS $method $n -p $passes -f $fileName -e @$pat[1] -T @$pat[2]";
     print "[$cmd]\n"; # for debugging
     open(PIPE, "$cmd|") or die "Can't run \"$cmd\"";
     my @out;
