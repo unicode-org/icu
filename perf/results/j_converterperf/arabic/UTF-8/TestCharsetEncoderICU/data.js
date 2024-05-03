@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1714677308743,
+  "lastUpdate": 1714760503968,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21448,6 +21448,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.298418316276316,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "23bf38f10f146d5b637922321119926b5e60bf03",
+          "message": "ICU-22764 Fix gendict memory safety in toml uchars mode",
+          "timestamp": "2024-05-03T11:02:29-07:00",
+          "tree_id": "5241a78e2af87e50e31760e0eab9caf07385b4d7",
+          "url": "https://github.com/unicode-org/icu/commit/23bf38f10f146d5b637922321119926b5e60bf03"
+        },
+        "date": 1714760392119,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.34009100054951,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
