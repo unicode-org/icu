@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 #/**
 # * © 2016 and later: Unicode, Inc. and others.
 # * License & terms of use: http://www.unicode.org/copyright.html
@@ -39,10 +40,12 @@ print "Running performance tests...\n";
    "ko_KR",         "TestNames_Latin.txt TestNames_Korean.txt",
    );
 
+my $OS=$^O;
+my $CLASSPATH;
 if ($^O eq "MSWin32") {
-    $classPath = "out\\lib\\icu4j-perf-tests.jar;..\\icu4j.jar";
+	$CLASSPATH = './target/*;./target/dependency/*';
 } else {
-    $classPath = "out/lib/icu4j-perf-tests.jar:../icu4j.jar";
+	$CLASSPATH = './target/*:./target/dependency/*';
 }
 
 #
@@ -75,9 +78,9 @@ if ($^O eq "MSWin32") {
           #
           # Run ICU Test for this (locale, data file) pair.
           #
-          $iStrCol = `java -classpath $classPath com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file data/collation/$data -locale $locale -loop 1000 -binsearch`;
+          $iStrCol = `java -classpath $CLASSPATH com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file data/collation/$data -locale $locale -loop 1000 -binsearch`;
           $iStrCol =~s/[,\s]*//g;  # whack off the leading "  ," in the returned result.
-          doKeyTimes("java -classpath $classPath com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file data/collation/$data -locale $locale -loop 1000 -keygen",
+          doKeyTimes("java -classpath $CLASSPATH com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file data/collation/$data -locale $locale -loop 1000 -keygen",
                      $iKeyGen, $iKeyLen);
 
 
@@ -87,9 +90,9 @@ if ($^O eq "MSWin32") {
           #    for the locale.
           #
           $wStrCol = $wKeyGen = $wKeyLen = 0;
-          $wStrCol = `java -classpath $classPath com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file data/collation/$data -locale $locale -loop 1000 -binsearch -java`;
+          $wStrCol = `java -classpath $CLASSPATH com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file data/collation/$data -locale $locale -loop 1000 -binsearch -java`;
           $wStrCol =~s/[,\s]*//g;  # whack off the leading "  ," in the returned result.
-          doKeyTimes("java -classpath $classPath com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file data/collation/$data -locale $locale -loop 1000 -keygen -java",
+          doKeyTimes("java -classpath $CLASSPATH com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file data/collation/$data -locale $locale -loop 1000 -keygen -java",
                      $wKeyGen, $wKeyLen);
                      
           $collDiff = $keyGenDiff = $keyLenDiff = 0;

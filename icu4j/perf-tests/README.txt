@@ -20,13 +20,16 @@ but require reworking to locate, compile, and run different versions.
 
 Note: To run the performance test for ICU4J as a part of continuous build, you will
 need to set up Perl with the following modules:
-    a) Statistics/Distribution.pm
+    a) Statistics/Distributions.pm
     b) Statistics/Descriptive.pm
     c) XML/LibXML.pm
 
 CONTINUOUS BUILD:
-    To run a set of performance tests defined in file perlftests.pl, use this command:
-    ant continuous-build
+    To run a set of performance tests defined in file perlftests.pl, use these commands:
+    cd <icu_root>/icu4j
+    mvn install -DskipTests -DskipITs
+    cd perf-tests
+    ... run tests from here ...
 
 Output is created in perf.xml. This output contains results comparing ICU and JDK for the
 following operations
