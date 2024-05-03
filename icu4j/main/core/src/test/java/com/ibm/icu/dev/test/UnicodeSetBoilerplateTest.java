@@ -6,25 +6,23 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.dev.test.translit;
+package com.ibm.icu.dev.test;
 
 import java.util.List;
 
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestBoilerplate;
-import com.ibm.icu.dev.util.UnicodeMap;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * Moved from UnicodeMapTest
  */
-public class UnicodeMapBoilerplateTest extends TestBoilerplate<UnicodeMap> {
+public class UnicodeSetBoilerplateTest extends TestBoilerplate<UnicodeSet> {
 
-    private static String[] TEST_VALUES = {"A", "B", "C", "D", "E", "F"};
-
-    public void TestUnicodeMapBoilerplate() throws Exception {
+    public void TestUnicodeSetBoilerplate() throws Exception {
     }
-
+ 
     @Test
     public void test() throws Exception {
         _test();
@@ -33,7 +31,8 @@ public class UnicodeMapBoilerplateTest extends TestBoilerplate<UnicodeMap> {
     /* (non-Javadoc)
      * @see com.ibm.icu.dev.test.TestBoilerplate#_hasSameBehavior(java.lang.Object, java.lang.Object)
      */
-    protected boolean _hasSameBehavior(UnicodeMap a, UnicodeMap b) {
+    @Override
+    protected boolean _hasSameBehavior(UnicodeSet a, UnicodeSet b) {
         // we are pretty confident in the equals method, so won't bother with this right now.
         return true;
     }
@@ -41,16 +40,14 @@ public class UnicodeMapBoilerplateTest extends TestBoilerplate<UnicodeMap> {
     /* (non-Javadoc)
      * @see com.ibm.icu.dev.test.TestBoilerplate#_addTestObject(java.util.List)
      */
-    protected boolean _addTestObject(List<UnicodeMap> list) {
-        if (list.size() > 30) return false;
-        UnicodeMap result = new UnicodeMap();
+    @Override
+    protected boolean _addTestObject(List<UnicodeSet> list) {
+        if (list.size() > 32) return false;
+        UnicodeSet result = new UnicodeSet();
         for (int i = 0; i < 50; ++i) {
-            int start = random.nextInt(25);
-            String value = TEST_VALUES[random.nextInt(TEST_VALUES.length)];
-            result.put(start, value);
+            result.add(random.nextInt(100));
         }
         list.add(result);
         return true;
     }
-
 }

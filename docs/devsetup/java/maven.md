@@ -102,10 +102,6 @@ To import into IntelliJ:
 Navigating the source code files between main code and test code, and running tests individually or for an entire module,
 work as they do normally in IntelliJ.
 
-> :point_right: **Note**: Currently, Maven cannot build the entire project due to settings for `tools/utilities-for-cldr`. To work around this so that `Build > Build Project` works: in the "Project" toolbar, navigate to the `tools/utilities-for-cldr` folder, right click for the contextual menu, then `Maven > Ignore Projects`.
->
-> When this workaround is no longer needed, the project can be reenabled by: `View > Tool Windows > Maven`, then expand "International Components for Unicode (ICU)", right click on `utilities-for-cldr`, then select `Unignore Projects`.
-
 ### Eclipse
 
 [Eclipse's Maven plugin](https://eclipse.dev/m2e/)

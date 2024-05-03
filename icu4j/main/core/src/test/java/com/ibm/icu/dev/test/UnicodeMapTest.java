@@ -6,7 +6,7 @@
  * others. All Rights Reserved.
  *******************************************************************************
  */
-package com.ibm.icu.dev.test.translit;
+package com.ibm.icu.dev.test;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -26,11 +26,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestBoilerplate;
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.util.UnicodeMap;
-import com.ibm.icu.dev.util.UnicodeMap.EntryRange;
-import com.ibm.icu.dev.util.UnicodeMapIterator;
+import com.ibm.icu.impl.UnicodeMap;
+import com.ibm.icu.impl.UnicodeMapIterator;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
@@ -59,7 +56,7 @@ public class UnicodeMapTest extends TestFmwk {
         checkToString(foo, "0003=6.0\n0005=10.0\n10FFFF=666.0\n006E,0065,0067=-555.0\n");
 
         double i = 0;
-        for (EntryRange<Double> entryRange : foo.entryRanges()) {
+        for (UnicodeMap.EntryRange<Double> entryRange : foo.entryRanges()) {
             i += entryRange.value;
         }
         assertEquals("EntryRange<T>", 127d, i);
@@ -67,7 +64,7 @@ public class UnicodeMapTest extends TestFmwk {
 
     public void checkToString(UnicodeMap<Double> foo, String expected) {
         StringJoiner joiner = new StringJoiner("\n");
-        for (EntryRange range : foo.entryRanges()) {
+        for (UnicodeMap.EntryRange range : foo.entryRanges()) {
             joiner.add(range.toString());
         }
         assertEquals("EntryRange<T>", expected, joiner.toString() + (foo.size() == 0 ? "" : "\n"));
