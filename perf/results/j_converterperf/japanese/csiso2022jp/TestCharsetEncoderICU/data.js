@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1714779702672,
+  "lastUpdate": 1715009962349,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21328,6 +21328,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 28.334715637918766,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "hsivonen@hsivonen.fi",
+            "name": "Henri Sivonen",
+            "username": "hsivonen"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "7eaefe076e719d58d06fc42a723e84a5b6e158a3",
+          "message": "ICU-22758 Make icuexportdata compatible with Unicode 16 normalization",
+          "timestamp": "2024-05-06T08:27:06-07:00",
+          "tree_id": "84ea3bc068509d161e47dcab414d9d04ec2e121c",
+          "url": "https://github.com/unicode-org/icu/commit/7eaefe076e719d58d06fc42a723e84a5b6e158a3"
+        },
+        "date": 1715009847945,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 28.209338672020657,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
