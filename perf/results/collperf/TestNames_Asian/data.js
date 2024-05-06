@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715020676584,
+  "lastUpdate": 1715036891280,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43630,6 +43630,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2036530.075,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "9369b7a20914322ba9cc2eb115bf2ac7dcefefbe",
+          "message": "ICU-21757 Stop sharing `utilities-for-cldr`\n\nMoves UnicodeMap and related classes to core.\nAlso removes `CollectionUtilities`, `UOption`, and `ElapsedTimer`.\nThey will end up in UnicodeTools, CLDR, and CLDR respectively.",
+          "timestamp": "2024-05-06T15:49:03-07:00",
+          "tree_id": "91582562ad92a37a5f9f17bdbfadda69d1d2af7c",
+          "url": "https://github.com/unicode-org/icu/commit/9369b7a20914322ba9cc2eb115bf2ac7dcefefbe"
+        },
+        "date": 1715036774872,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 205.6777,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8989190.1068,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2004664.4131,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 8228464.5799,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2039199.121,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
