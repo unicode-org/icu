@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715020838978,
+  "lastUpdate": 1715037104654,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -63100,6 +63100,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1505.833,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "9369b7a20914322ba9cc2eb115bf2ac7dcefefbe",
+          "message": "ICU-21757 Stop sharing `utilities-for-cldr`\n\nMoves UnicodeMap and related classes to core.\nAlso removes `CollectionUtilities`, `UOption`, and `ElapsedTimer`.\nThey will end up in UnicodeTools, CLDR, and CLDR respectively.",
+          "timestamp": "2024-05-06T15:49:03-07:00",
+          "tree_id": "91582562ad92a37a5f9f17bdbfadda69d1d2af7c",
+          "url": "https://github.com/unicode-org/icu/commit/9369b7a20914322ba9cc2eb115bf2ac7dcefefbe"
+        },
+        "date": 1715036988207,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77826.1831,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177814.3432,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.529,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.6928,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.7257,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8857.6865,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 33898.5703,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1498.2838,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
