@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715020511261,
+  "lastUpdate": 1715036777840,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33934,6 +33934,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.911,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "9369b7a20914322ba9cc2eb115bf2ac7dcefefbe",
+          "message": "ICU-21757 Stop sharing `utilities-for-cldr`\n\nMoves UnicodeMap and related classes to core.\nAlso removes `CollectionUtilities`, `UOption`, and `ElapsedTimer`.\nThey will end up in UnicodeTools, CLDR, and CLDR respectively.",
+          "timestamp": "2024-05-06T15:49:03-07:00",
+          "tree_id": "91582562ad92a37a5f9f17bdbfadda69d1d2af7c",
+          "url": "https://github.com/unicode-org/icu/commit/9369b7a20914322ba9cc2eb115bf2ac7dcefefbe"
+        },
+        "date": 1715036662867,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.2547,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.0137,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.836,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
