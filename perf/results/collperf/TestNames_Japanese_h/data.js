@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715036899386,
+  "lastUpdate": 1715117283968,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43846,6 +43846,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5777338.14,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "85a9b2ee8458ffbe9fe7ef7a48f4512db2c49e8d",
+          "message": "ICU-22746 Refactor MF2 tests to be data-driven and add JSON lib\n\nThis change moves all test strings out of test/intltest/messageformat2test.cpp\nand into JSON files, which are parsed/run by code in\na new file, test/intltest/messageformat2test_read_json.cpp .\nIt also removes the file test/intltest/messageformat2test_fromjson.cpp ,\nwhich contained tests that are now stored in JSON files.\n\nTo enable this, a new vendored library is added:\nnlohmann/json .\nThis library is introduced as a dependency for the MF2 tests.\nThe required part of the library is a single header file,\nwhich is added under icu4c/source/tools/toolutil/.\nAlso adds a wrapper file for the vendored JSON header file\nthat defines macros that disable exceptions.\n\nCo-authored-by: Steven R. Loomis <srl295@gmail.com>",
+          "timestamp": "2024-05-07T14:09:24-07:00",
+          "tree_id": "756a8fad2832177a0445c0a0752b43f302164c0b",
+          "url": "https://github.com/unicode-org/icu/commit/85a9b2ee8458ffbe9fe7ef7a48f4512db2c49e8d"
+        },
+        "date": 1715117168288,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 206.9835,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20805031.6235,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5293208.8546,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19827863.6263,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5805933.5331,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
