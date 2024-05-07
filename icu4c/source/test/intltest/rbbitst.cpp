@@ -4771,8 +4771,14 @@ void RBBITest::TestTableRedundancies() {
     for (int32_t column = 0; column < numCharClasses; column++) {
         UnicodeString s;
         for (int32_t r = 1; r < (int32_t)fwtbl->fNumStates; r++) {
-            RBBIStateTableRow  *row = reinterpret_cast<RBBIStateTableRow *>(const_cast<char*>(fwtbl->fTableData + (fwtbl->fRowLen * r)));
-            s.append(in8Bits ? row->r8.fNextState[column] : row->r16.fNextState[column]);
+            char *rowBytes = const_cast<char*>(fwtbl->fTableData + (fwtbl->fRowLen * r));
+            if (in8Bits) {
+                RBBIStateTableRow8 *row = reinterpret_cast<RBBIStateTableRow8 *>(rowBytes);
+                s.append(row->fNextState[column]);
+            } else {
+                RBBIStateTableRow16 *row = reinterpret_cast<RBBIStateTableRow16 *>(rowBytes);
+                s.append(row->fNextState[column]);
+            }
         }
         columns.push_back(s);
     }
@@ -4792,20 +4798,22 @@ void RBBITest::TestTableRedundancies() {
     std::vector<UnicodeString> rows;
     for (int32_t r=0; r < (int32_t)fwtbl->fNumStates; r++) {
         UnicodeString s;
-        RBBIStateTableRow  *row = reinterpret_cast<RBBIStateTableRow *>(const_cast<char*>((fwtbl->fTableData + (fwtbl->fRowLen * r))));
+        char *rowBytes = const_cast<char*>(fwtbl->fTableData + (fwtbl->fRowLen * r));
         if (in8Bits) {
-            s.append(row->r8.fAccepting);
-            s.append(row->r8.fLookAhead);
-            s.append(row->r8.fTagsIdx);
+            RBBIStateTableRow8 *row = reinterpret_cast<RBBIStateTableRow8 *>(rowBytes);
+            s.append(row->fAccepting);
+            s.append(row->fLookAhead);
+            s.append(row->fTagsIdx);
             for (int32_t column = 0; column < numCharClasses; column++) {
-                s.append(row->r8.fNextState[column]);
+                s.append(row->fNextState[column]);
             }
         } else {
-            s.append(row->r16.fAccepting);
-            s.append(row->r16.fLookAhead);
-            s.append(row->r16.fTagsIdx);
+            RBBIStateTableRow16 *row = reinterpret_cast<RBBIStateTableRow16 *>(rowBytes);
+            s.append(row->fAccepting);
+            s.append(row->fLookAhead);
+            s.append(row->fTagsIdx);
             for (int32_t column = 0; column < numCharClasses; column++) {
-                s.append(row->r16.fNextState[column]);
+                s.append(row->fNextState[column]);
             }
         }
         rows.push_back(s);

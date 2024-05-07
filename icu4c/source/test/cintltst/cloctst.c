@@ -3868,6 +3868,27 @@ const char* const basic_maximize_data[][2] = {
     "aaaa",
     "aaaa",
   }, {
+    // ICU-22727
+    // unicode_language_subtag = alpha{2,3} | alpha{5,8};
+    // so "bbbbb", "cccccc", "ddddddd", "eeeeeeee" are
+    // well-formed unicode_language_subtag and therefore
+    // well-formed unicode_language_id
+    // but "fffffffff" is not.
+    "bbbbb",
+    "bbbbb",
+  }, {
+    // ICU-22727
+    "cccccc",
+    "cccccc",
+  }, {
+    // ICU-22727
+    "ddddddd",
+    "ddddddd",
+  }, {
+    // ICU-22727
+    "eeeeeeee",
+    "eeeeeeee",
+  }, {
     // ICU-22546
     "und-Zzzz",
     "en_Latn_US" // If change, please also update common/unicode/uloc.h
@@ -3892,17 +3913,17 @@ const char* const basic_maximize_data[][2] = {
     "zh_Hani",
     "zh_Hani_CN" // If change, please also update common/unicode/uloc.h
   }, {
-    // ICU-22545
+    // ICU-22545 & ICU-22742
     "en_XA",
-    "en_XA"
+    "en_Latn_XA"
   }, {
-    // ICU-22545
-    "en_XB",
-    "en_XB"
+    // ICU-22545 & ICU-22742
+    "ar_XB",
+    "ar_Arab_XB"
   }, {
-    // ICU-22545
-    "en_XC",
-    "en_XC"
+    // ICU-22545 & ICU-22742
+    "ru_XC",
+    "ru_Cyrl_XC"
   }
 };
 
@@ -6048,6 +6069,16 @@ const errorData maximizeErrors[] = {
         "en_Latn_US_POSIX@currency=EURO",
         U_STRING_NOT_TERMINATED_WARNING,
         30
+    },
+    {
+        // ICU-22727
+        // unicode_language_subtag = alpha{2,3} | alpha{5,8};
+        // so "bbbbb", "cccccc", "ddddddd", "eeeeeeee" are
+        // well-formed unicode_language_id but "fffffffff" is not.
+        "fffffffff",
+        NULL,
+        U_ILLEGAL_ARGUMENT_ERROR,
+        0
     }
 };
 

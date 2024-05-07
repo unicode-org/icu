@@ -80,10 +80,10 @@ We meet once a week by phone. See the [agenda & meeting minutes][meetings].
 
 ## Setup & Workflow
 
-- [Source Code Access][repository]
 - [git for ICU Developers][git4icu]
-- [Tips for developers][tips]
-- [Eclipse and other setup][setup]
+- [Setup for Contributors][setup]
+  - [Source Code Access][repository]
+  - [Tips for C++ Contributors][tips]
 - [Submitting ICU Bugs and Feature Requests][bugs]
 - [ICU Ticket Life cycle][ticket-lifecycle]
 
@@ -111,7 +111,7 @@ The project is released under [LICENSE](./LICENSE).
 [contacts]: https://icu.unicode.org/contacts
 [copyright]: http://www.unicode.org/copyright.html
 [design]: docs/userguide/icu/design.md
-[git4icu]: https://icu.unicode.org/repository/gitdev
+[git4icu]: https://unicode-org.github.io/icu/userguide/dev/gitdev
 [howtouse]: docs/userguide/icu/howtouseicu.md
 [icu4c-api]: https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/
 [icu4j-api]: https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/
@@ -121,12 +121,12 @@ The project is released under [LICENSE](./LICENSE).
 [osi-Unicode-License-3.0]: https://opensource.org/license/unicode-license-v3/
 [policies]: https://www.unicode.org/policies/licensing_policy.html
 [proposal-template]: https://icu.unicode.org/processes/proposal-template
-[repository]: https://icu.unicode.org/repository
-[setup]: https://icu.unicode.org/setup
+[repository]: https://unicode-org.github.io/icu/devsetup/source/
+[setup]: https://unicode-org.github.io/icu/devsetup/
 [sign-cla]: https://cla-assistant.io/unicode-org/.github
 [signing]: https://www.unicode.org/policies/licensing_policy.html#signing
 [ticket-lifecycle]: https://icu.unicode.org/processes/ticket-lifecycle
-[tips]: https://icu.unicode.org/repository/tips
+[tips]: https://unicode-org.github.io/icu/devsetup/cpp/
 [unicode-announcement]: http://blog.unicode.org/2016/05/icu-joins-unicode-consortium.html
 [unicode-corporate-clas]: https://www.unicode.org/policies/corporate-cla-list/
 [unicode-license]: https://www.unicode.org/license.txt

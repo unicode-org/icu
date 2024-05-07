@@ -66,7 +66,7 @@ public:
 		nLocales = locs;
 	}
 
-	virtual void call(UErrorCode* status)
+	void call(UErrorCode* status) override
 	{
         *status = U_ZERO_ERROR;
 
@@ -90,11 +90,10 @@ public:
         }
 
         // Set up rule equivalency test range
-        UDate low, high;
         cal->set(1900, UCAL_JANUARY, 1);
-        low = cal->getTime(*status);
+        cal->getTime(*status);
         cal->set(2040, UCAL_JANUARY, 1);
-        high = cal->getTime(*status);
+        cal->getTime(*status);
         if (U_FAILURE(*status)) {
             //errln("getTime failed");
             return;
@@ -207,7 +206,7 @@ public:
 
 	}
 
-	virtual long getOperationsPerIteration()
+	long getOperationsPerIteration() override
 	{
 		return NUM_PATTERNS * nLocales * 6;
 	}
@@ -222,7 +221,7 @@ public:
 
 	DateTimeRoundTripPerfTest(int32_t argc, const char* argv[], UErrorCode& status);
 	~DateTimeRoundTripPerfTest();
-	virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,const char* &name, char* par);
+	UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char*& name, char* par) override;
 
 	UPerfFunction* RoundTripLocale1();
 	UPerfFunction* RoundTripLocale10();

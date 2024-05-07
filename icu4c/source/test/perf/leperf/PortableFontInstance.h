@@ -70,7 +70,7 @@ private:
 
 protected:
     const void *readFontTable(LETag tableTag) const { size_t ignored; return readFontTable(tableTag, ignored); }
-    const void *readFontTable(LETag tableTag, size_t &length) const;
+    const void *readFontTable(LETag tableTag, size_t &length) const override;
 
 public:
     PortableFontInstance(const char *fileName, float pointSize, LEErrorCode &status);
@@ -78,7 +78,7 @@ public:
     virtual ~PortableFontInstance();
 
     virtual const void *getFontTable(LETag tableTag) const;
-    virtual const void *getFontTable(LETag tableTag, size_t &length) const;
+    const void *getFontTable(LETag tableTag, size_t &length) const override;
 
     virtual const char *getNameString(le_uint16 nameID, le_uint16 platform, le_uint16 encoding, le_uint16 language) const;
 
@@ -88,39 +88,39 @@ public:
 
     virtual void deleteNameString(const LEUnicode16 *name) const;
 
-    virtual le_int32 getUnitsPerEM() const;
+    le_int32 getUnitsPerEM() const override;
 
     virtual le_uint32 getFontChecksum() const;
 
     virtual le_uint32 getRawChecksum() const;
 
-    virtual le_int32 getAscent() const;
+    le_int32 getAscent() const override;
 
-    virtual le_int32 getDescent() const;
+    le_int32 getDescent() const override;
 
-    virtual le_int32 getLeading() const;
+    le_int32 getLeading() const override;
 
     // We really want to inherit this method from the superclass, but some compilers
     // issue a warning if we don't implement it...
-    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper, le_bool filterZeroWidth) const;
+    LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper, le_bool filterZeroWidth) const override;
     
     // We really want to inherit this method from the superclass, but some compilers
     // issue a warning if we don't implement it...
-    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const;
+    LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const override;
 
-    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch) const;
+    LEGlyphID mapCharToGlyph(LEUnicode32 ch) const override;
 
-    virtual void getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const;
+    void getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const override;
 
-    virtual le_bool getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LEPoint &point) const;
+    le_bool getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LEPoint &point) const override;
 
-    float getXPixelsPerEm() const;
+    float getXPixelsPerEm() const override;
 
-    float getYPixelsPerEm() const;
+    float getYPixelsPerEm() const override;
 
-    float getScaleFactorX() const;
+    float getScaleFactorX() const override;
 
-    float getScaleFactorY() const;
+    float getScaleFactorY() const override;
 
 };
 

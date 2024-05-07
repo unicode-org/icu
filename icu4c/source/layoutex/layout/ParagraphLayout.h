@@ -156,7 +156,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+        inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
     private:
 
@@ -179,7 +179,7 @@ public:
 
         inline Line();
         inline Line(const Line &other);
-        inline Line &operator=(const Line & /*other*/) { return *this; };
+        inline Line &operator=(const Line & /*other*/) { return *this; }
 
         void computeMetrics();
 
@@ -319,7 +319,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+        inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
     private:
 
@@ -342,7 +342,7 @@ public:
 
         inline VisualRun();
         inline VisualRun(const VisualRun &other);
-        inline VisualRun &operator=(const VisualRun &/*other*/) { return *this; };
+        inline VisualRun &operator=(const VisualRun &/*other*/) { return *this; }
 
         inline VisualRun(const LEFontInstance *font, UBiDiDirection direction, le_int32 glyphCount,
                   const LEGlyphID glyphs[], const float positions[], const le_int32 glyphToCharMap[]);
@@ -550,7 +550,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
 private:
 
@@ -576,9 +576,9 @@ private:
           le_int32        glyphCount;
     };
 
-    ParagraphLayout() {};
-    ParagraphLayout(const ParagraphLayout & /*other*/) : UObject( ){};
-    inline ParagraphLayout &operator=(const ParagraphLayout & /*other*/) { return *this; };
+    ParagraphLayout() {}
+    ParagraphLayout(const ParagraphLayout & /*other*/) : UObject( ){}
+    inline ParagraphLayout &operator=(const ParagraphLayout & /*other*/) { return *this; }
 
     void computeLevels(UBiDiLevel paragraphLevel);
 

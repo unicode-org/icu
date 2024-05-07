@@ -77,13 +77,8 @@ SelectorKeys::Builder::~Builder() {
 }
 
 SelectorKeys::SelectorKeys(const UVector& ks, UErrorCode& status) : len(ks.size()) {
+    Key* result = copyVectorToArray<Key>(ks, status);
     if (U_FAILURE(status)) {
-        return;
-    }
-    Key* result = copyVectorToArray<Key>(ks, len);
-    if (result == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        len = 0;
         return;
     }
     keys.adoptInstead(result);
@@ -95,7 +90,13 @@ SelectorKeys& SelectorKeys::operator=(SelectorKeys other) noexcept {
 }
 
 SelectorKeys::SelectorKeys(const SelectorKeys& other) : len(other.len) {
-    keys.adoptInstead(copyArray(other.keys.getAlias(), len));
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    if (len != 0) {
+        keys.adoptInstead(copyArray(other.keys.getAlias(), len, localErrorCode));
+    }
+    if (U_FAILURE(localErrorCode)) {
+        len = 0;
+    }
 }
 
 SelectorKeys::~SelectorKeys() {
@@ -198,9 +199,18 @@ Key::~Key() {}
 // ------------ Reserved
 
 // Copy constructor
-Reserved::Reserved(const Reserved& other) {
-    len = other.len;
-    parts.adoptInstead(copyArray(other.parts.getAlias(), len));
+Reserved::Reserved(const Reserved& other) : len(other.len) {
+    U_ASSERT(!other.bogus);
+
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    if (len == 0) {
+        parts.adoptInstead(nullptr);
+    } else {
+        parts.adoptInstead(copyArray(other.parts.getAlias(), len, localErrorCode));
+    }
+    if (U_FAILURE(localErrorCode)) {
+        bogus = true;
+    }
 }
 
 Reserved& Reserved::operator=(Reserved other) noexcept {
@@ -212,14 +222,16 @@ Reserved::Reserved(const UVector& ps, UErrorCode& status) noexcept : len(ps.size
     if (U_FAILURE(status)) {
         return;
     }
-    parts = LocalArray<Literal>(copyVectorToArray<Literal>(ps, len));
+    parts = LocalArray<Literal>(copyVectorToArray<Literal>(ps, status));
 }
 
 int32_t Reserved::numParts() const {
+    U_ASSERT(!bogus);
     return len;
 }
 
 const Literal& Reserved::getPart(int32_t i) const {
+    U_ASSERT(!bogus);
     U_ASSERT(i < numParts());
     return parts[i];
 }
@@ -257,14 +269,10 @@ Reserved::~Reserved() {
 
 //------------------------ Operator
 
-OptionMap::OptionMap(const UVector& opts, UErrorCode& status) {
-    CHECK_ERROR(status);
-
-    len = opts.size();
-    Option* result = copyVectorToArray<Option>(opts, len);
-    if (result == nullptr) {
+OptionMap::OptionMap(const UVector& opts, UErrorCode& status) : len(opts.size()) {
+    Option* result = copyVectorToArray<Option>(opts, status);
+    if (U_FAILURE(status)) {
         bogus = true;
-        status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
     options.adoptInstead(result);
@@ -273,8 +281,9 @@ OptionMap::OptionMap(const UVector& opts, UErrorCode& status) {
 
 OptionMap::OptionMap(const OptionMap& other) : len(other.len) {
     U_ASSERT(!other.bogus);
-    Option* result = copyArray(other.options.getAlias(), len);
-    if (result == nullptr && len != 0) {
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    Option* result = copyArray(other.options.getAlias(), len, localErrorCode);
+    if (U_FAILURE(localErrorCode)) {
         bogus = true;
         return;
     }
@@ -304,14 +313,64 @@ int32_t OptionMap::size() const {
     return len;
 }
 
-Operator::Builder& Operator::Builder::setOptionMap(OptionMap&& m) {
-    optionMap = std::move(m);
-    delete options;
-    options = nullptr;
+OptionMap::~OptionMap() {}
+
+OptionMap OptionMap::Builder::build(UErrorCode& status) {
+    return OptionMap(*options, status);
+}
+
+OptionMap::Builder::Builder(UErrorCode& status) {
+    options = createStringUVector(status);
+}
+
+OptionMap::Builder::Builder(OptionMap::Builder&& other) {
+    checkDuplicates = other.checkDuplicates;
+    options = other.options;
+    other.options = nullptr;
+}
+
+OptionMap::Builder& OptionMap::Builder::operator=(OptionMap::Builder other) noexcept {
+    swap(*this, other);
     return *this;
 }
 
-OptionMap::~OptionMap() {}
+/* static */ OptionMap::Builder OptionMap::Builder::attributes(UErrorCode& status) {
+    Builder b(status);
+    // The same code is re-used for representing attributes and options.
+    // Duplicate attributes are allowed, while duplicate options are disallowed.
+    b.checkDuplicates = false;
+    return b;
+}
+
+static UBool hasOptionNamed(const UVector& v, const UnicodeString& s) {
+    for (int32_t i = 0; i < v.size(); i++) {
+        const Option* opt = static_cast<Option*>(v[i]);
+        U_ASSERT(opt != nullptr);
+        if (opt->getName() == s) {
+            return true;
+        }
+    }
+    return false;
+}
+
+OptionMap::Builder& OptionMap::Builder::add(Option&& opt, UErrorCode& status) {
+    THIS_ON_ERROR(status);
+
+    // If the option name is already in the map, emit a data model error
+    if (checkDuplicates && hasOptionNamed(*options, opt.getName())) {
+        status = U_MF_DUPLICATE_OPTION_NAME_ERROR;
+    } else {
+        Option* newOption = create<Option>(std::move(opt), status);
+        options->adoptElement(newOption, status);
+    }
+    return *this;
+}
+
+OptionMap::Builder::~Builder() {
+    if (options != nullptr) {
+        delete options;
+    }
+}
 
 const Reserved& Operator::asReserved() const {
     U_ASSERT(isReserved());
@@ -332,13 +391,12 @@ Option& Option::operator=(Option other) noexcept {
 
 Option::~Option() {}
 
-Operator::Builder::Builder(UErrorCode& status) {
-    options = createStringUVector(status);
-}
+Operator::Builder::Builder(UErrorCode& status) : options(OptionMap::Builder(status)) {}
 
 Operator::Builder& Operator::Builder::setReserved(Reserved&& reserved) {
     isReservedSequence = true;
     hasFunctionName = false;
+    hasOptions = false;
     asReserved = std::move(reserved);
     return *this;
 }
@@ -355,31 +413,12 @@ const FunctionName& Operator::getFunctionName() const {
     return std::get_if<Callable>(&contents)->getName();
 }
 
-static UBool hasOptionNamed(const UVector& v, const UnicodeString& s) {
-    for (int32_t i = 0; i < v.size(); i++) {
-        const Option* opt = static_cast<Option*>(v[i]);
-        U_ASSERT(opt != nullptr);
-        if (opt->getName() == s) {
-            return true;
-        }
-    }
-    return false;
-}
-
 Operator::Builder& Operator::Builder::addOption(const UnicodeString &key, Operand&& value, UErrorCode& errorCode) noexcept {
     THIS_ON_ERROR(errorCode);
 
     isReservedSequence = false;
     hasOptions = true;
-    U_ASSERT(options != nullptr);
-    // If the option name is already in the map, emit a data model error
-    if (hasOptionNamed(*options, key)) {
-        errorCode = U_MF_DUPLICATE_OPTION_NAME_ERROR;
-    } else {
-        Option* newOption = create<Option>(Option(key, std::move(value)), errorCode);
-        THIS_ON_ERROR(errorCode);
-        options->adoptElement(newOption, errorCode);
-    }
+    options.add(Option(key, std::move(value)), errorCode);
     return *this;
 }
 
@@ -404,11 +443,7 @@ Operator Operator::Builder::build(UErrorCode& errorCode) {
             errorCode = U_INVALID_STATE_ERROR;
             return result;
         }
-        if (options != nullptr) {
-            // Initialize options from what was set with setOptions()
-            optionMap = OptionMap(*options, errorCode);
-         }
-        result = Operator(functionName, optionMap);
+        result = Operator(functionName, options.build(errorCode));
     }
     return result;
 }
@@ -425,11 +460,7 @@ Operator::Operator(const FunctionName& f, const UVector& optsVector, UErrorCode&
 
 Operator::Operator(const FunctionName& f, const OptionMap& opts) : contents(Callable(f, opts)) {}
 
-Operator::Builder::~Builder() {
-    if (options != nullptr) {
-        delete options;
-    }
-}
+Operator::Builder::~Builder() {}
 
 Operator::~Operator() {}
 
@@ -444,26 +475,24 @@ Callable::~Callable() {}
 
 // ------------ Markup
 
-Markup::Builder::Builder(UErrorCode& status) {
-    options = createUVector(status);
-    attributes = createUVector(status);
-}
+Markup::Builder::Builder(UErrorCode& status)
+    : options(OptionMap::Builder(status)), attributes(OptionMap::Builder::attributes(status)) {}
 
-Markup::Builder& Markup::Builder::setAttributeMap(OptionMap&& m) {
-    attributeMap = std::move(m);
-    delete attributes;
-    attributes = nullptr;
+Markup::Markup(UMarkupType ty, UnicodeString n, OptionMap&& o, OptionMap&& a)
+    : type(ty), name(n), options(std::move(o)), attributes(std::move(a)) {}
+
+Markup::Builder& Markup::Builder::addOption(const UnicodeString &key,
+                                            Operand&& value,
+                                            UErrorCode& errorCode) {
+    options.add(Option(key, std::move(value)), errorCode);
     return *this;
 }
 
-Markup::Builder& Markup::Builder::setOptionMap(OptionMap&& m) {
-    optionMap = std::move(m);
-    delete options;
-    options = nullptr;
+Markup::Builder& Markup::Builder::addAttribute(const UnicodeString &key,
+                                               Operand&& value,
+                                               UErrorCode& errorCode) {
+    attributes.add(Option(key, std::move(value)), errorCode);
     return *this;
-}
-
-Markup::Markup(UMarkupType ty, UnicodeString n, OptionMap&& o, OptionMap&& a) : type(ty), name(n), options(std::move(o)), attributes(std::move(a)) {
 }
 
 Markup Markup::Builder::build(UErrorCode& errorCode) {
@@ -479,34 +508,22 @@ Markup Markup::Builder::build(UErrorCode& errorCode) {
         // setName() must be called before calling build()
         errorCode = U_INVALID_STATE_ERROR;
     } else {
-        if (options != nullptr) {
-            // Initialize options from what was done with setOptions
-            optionMap = OptionMap(*options, errorCode);
-        }
-        if (attributes != nullptr) {
-            attributeMap = OptionMap(*attributes, errorCode);
-        }
-        result = Markup(type, name, std::move(optionMap), std::move(attributeMap));
+        result = Markup(type,
+                        name,
+                        options.build(errorCode),
+                        attributes.build(errorCode));
     }
     return result;
 }
 
-Markup::Builder::~Builder() {
-    if (options != nullptr) {
-        delete options;
-    }
-    if (attributes != nullptr) {
-        delete attributes;
-    }
-}
+Markup::Builder::~Builder() {}
 
 Markup::~Markup() {}
 
 // ------------ Expression
 
-Expression::Builder::Builder(UErrorCode& status) {
-    attributes = createUVector(status);
-}
+Expression::Builder::Builder(UErrorCode& status)
+    : attributes(OptionMap::Builder::attributes(status)) {}
 
 UBool Expression::isStandaloneAnnotation() const {
     return rand.isNull();
@@ -549,10 +566,10 @@ Expression::Builder& Expression::Builder::setOperator(Operator&& rAtor) {
     return *this;
 }
 
-Expression::Builder& Expression::Builder::setAttributeMap(OptionMap&& m) {
-    attributeMap = std::move(m);
-    delete attributes;
-    attributes = nullptr;
+Expression::Builder& Expression::Builder::addAttribute(const UnicodeString& k,
+                                                       Operand&& v,
+                                                       UErrorCode& status) {
+    attributes.add(Option(k, std::move(v)), status);
     return *this;
 }
 
@@ -568,16 +585,14 @@ Expression Expression::Builder::build(UErrorCode& errorCode) {
         return result;
     }
 
-    if (attributes != nullptr) {
-        attributeMap = OptionMap(*attributes, errorCode);
-    }
+    OptionMap attributeMap = attributes.build(errorCode);
     if (hasOperand && hasOperator) {
-        result = Expression(rator, rand, attributeMap);
+        result = Expression(rator, rand, std::move(attributeMap));
     } else if (hasOperand && !hasOperator) {
-        result = Expression(rand, attributeMap);
+        result = Expression(rand, std::move(attributeMap));
     } else {
         // rator is valid, rand is not valid
-        result = Expression(rator, attributeMap);
+        result = Expression(rator, std::move(attributeMap));
     }
     return result;
 }
@@ -591,11 +606,7 @@ Expression& Expression::operator=(Expression other) noexcept {
     return *this;
 }
 
-Expression::Builder::~Builder() {
-    if (attributes != nullptr) {
-        delete attributes;
-    }
-}
+Expression::Builder::~Builder() {}
 
 Expression::~Expression() {}
 
@@ -651,16 +662,13 @@ const Reserved* UnsupportedStatement::getBody(UErrorCode& errorCode) const {
 UnsupportedStatement::UnsupportedStatement(const UnicodeString& k,
                                            const std::optional<Reserved>& r,
                                            const UVector& es,
-                                           UErrorCode& status) : keyword(k), body(r) {
+                                           UErrorCode& status)
+    : keyword(k), body(r), expressionsLen(es.size()) {
     CHECK_ERROR(status);
 
-    U_ASSERT(es.size() >= 1);
-    Expression* result = copyVectorToArray<Expression>(es, expressionsLen);
-    if (result == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        expressionsLen = 0;
-        return;
-    }
+    U_ASSERT(expressionsLen >= 1);
+    Expression* result = copyVectorToArray<Expression>(es, status);
+    CHECK_ERROR(status);
     expressions.adoptInstead(result);
 }
 
@@ -669,7 +677,11 @@ UnsupportedStatement::UnsupportedStatement(const UnsupportedStatement& other) {
     body = other.body;
     expressionsLen = other.expressionsLen;
     U_ASSERT(expressionsLen > 0);
-    expressions.adoptInstead(copyArray(other.expressions.getAlias(), expressionsLen));
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    expressions.adoptInstead(copyArray(other.expressions.getAlias(), expressionsLen, localErrorCode));
+    if (U_FAILURE(localErrorCode)) {
+        expressionsLen = 0;
+    }
 }
 
 UnsupportedStatement& UnsupportedStatement::operator=(UnsupportedStatement other) noexcept {
@@ -720,21 +732,32 @@ Pattern::Pattern(const UVector& ps, UErrorCode& status) : len(ps.size()) {
     if (U_FAILURE(status)) {
         return;
     }
-    PatternPart* result = copyVectorToArray<PatternPart>(ps, len);
-    if (result == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
+    PatternPart* result = copyVectorToArray<PatternPart>(ps, status);
+    CHECK_ERROR(status);
     parts.adoptInstead(result);
 }
 
 // Copy constructor
-Pattern::Pattern(const Pattern& other) noexcept : len(other.len) {
-    parts.adoptInstead(copyArray(other.parts.getAlias(), len));
+Pattern::Pattern(const Pattern& other) : len(other.len) {
+    U_ASSERT(!other.bogus);
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    if (len == 0) {
+        parts.adoptInstead(nullptr);
+    } else {
+        parts.adoptInstead(copyArray(other.parts.getAlias(), len, localErrorCode));
+    }
+    if (U_FAILURE(localErrorCode)) {
+        bogus = true;
+    }
+}
+
+int32_t Pattern::numParts() const {
+    U_ASSERT(!bogus);
+    return len;
 }
 
 const PatternPart& Pattern::getPart(int32_t i) const {
-    U_ASSERT(i < numParts());
+    U_ASSERT(!bogus && i < numParts());
     return parts[i];
 }
 
@@ -873,11 +896,25 @@ Matcher& Matcher::operator=(Matcher other) {
 }
 
 Matcher::Matcher(const Matcher& other) {
+    U_ASSERT(!other.bogus);
     numSelectors = other.numSelectors;
     numVariants = other.numVariants;
-    selectors.adoptInstead(copyArray<Expression>(other.selectors.getAlias(), numSelectors));
-    variants.adoptInstead(copyArray<Variant>(other.variants.getAlias(), numVariants));
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    selectors.adoptInstead(copyArray<Expression>(other.selectors.getAlias(),
+                                                 numSelectors,
+                                                 localErrorCode));
+    variants.adoptInstead(copyArray<Variant>(other.variants.getAlias(),
+                                             numVariants,
+                                             localErrorCode));
+    if (U_FAILURE(localErrorCode)) {
+        bogus = true;
+    }
 }
+
+Matcher::Matcher(Expression* ss, int32_t ns, Variant* vs, int32_t nv)
+    : selectors(ss), numSelectors(ns), variants(vs), numVariants(nv) {}
+
+Matcher::~Matcher() {}
 
 // --------------- MFDataModel
 
@@ -1012,29 +1049,34 @@ MFDataModel::Builder& MFDataModel::Builder::setPattern(Pattern&& pat) {
 MFDataModel::MFDataModel(const MFDataModel& other) : body(Pattern()) {
     U_ASSERT(!other.bogus);
 
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+
     if (other.hasPattern()) {
-        body.emplace<Pattern>(Pattern(*std::get_if<Pattern>(&other.body)));
+        //        body.emplace<Pattern>(Pattern(*std::get_if<Pattern>(&other.body)));
+        body = *std::get_if<Pattern>(&other.body);
     } else {
         const Expression* otherSelectors = other.getSelectorsInternal();
         const Variant* otherVariants = other.getVariantsInternal();
         int32_t numSelectors = other.numSelectors();
         int32_t numVariants = other.numVariants();
-        Expression* copiedSelectors = copyArray(otherSelectors, numSelectors);
-        Variant* copiedVariants = copyArray(otherVariants, numVariants);
-        if (!(copiedSelectors != nullptr && copiedVariants != nullptr)) {
+        Expression* copiedSelectors = copyArray(otherSelectors, numSelectors, localErrorCode);
+        Variant* copiedVariants = copyArray(otherVariants, numVariants, localErrorCode);
+        if (U_FAILURE(localErrorCode)) {
             bogus = true;
+            return;
         }
-        body.emplace<Matcher>(Matcher(copiedSelectors, numSelectors, copiedVariants, numVariants));
+        //        body.emplace<Matcher>(Matcher(copiedSelectors, numSelectors, copiedVariants, numVariants));
+        body = Matcher(copiedSelectors, numSelectors, copiedVariants, numVariants);
     }
 
     bindingsLen = other.bindingsLen;
-    bindings.adoptInstead(copyArray(other.bindings.getAlias(), bindingsLen));
-    if (!bindings.isValid()) {
+    bindings.adoptInstead(copyArray(other.bindings.getAlias(), bindingsLen, localErrorCode));
+    if (U_FAILURE(localErrorCode)) {
         bogus = true;
     }
     unsupportedStatementsLen = other.unsupportedStatementsLen;
-    unsupportedStatements.adoptInstead(copyArray(other.unsupportedStatements.getAlias(), unsupportedStatementsLen));
-    if (!unsupportedStatements.isValid()) {
+    unsupportedStatements.adoptInstead(copyArray(other.unsupportedStatements.getAlias(), unsupportedStatementsLen, localErrorCode));
+    if (U_FAILURE(localErrorCode)) {
         bogus = true;
     }
 }
@@ -1045,25 +1087,33 @@ MFDataModel::MFDataModel(const MFDataModel::Builder& builder, UErrorCode& errorC
     if (builder.hasPattern) {
         body.emplace<Pattern>(builder.pattern);
     } else {
-        int32_t numVariants = builder.variants == nullptr ? 0 : builder.variants->size();
-        int32_t numSelectors = builder.selectors == nullptr ? 0 : builder.selectors->size();
-        Variant* variants = copyVectorToArray<Variant>(*builder.variants, numVariants);
-        Expression* selectors = copyVectorToArray<Expression>(*builder.selectors, numSelectors);
-        bogus &= (variants != nullptr && selectors != nullptr);
+        U_ASSERT(builder.variants != nullptr);
+        U_ASSERT(builder.selectors != nullptr);
+        int32_t numVariants = builder.variants->size();
+        int32_t numSelectors = builder.selectors->size();
+        Variant* variants = copyVectorToArray<Variant>(*builder.variants, errorCode);
+        Expression* selectors = copyVectorToArray<Expression>(*builder.selectors, errorCode);
+        if (U_FAILURE(errorCode)) {
+            bogus = true;
+            return;
+        }
         body.emplace<Matcher>(Matcher(selectors, numSelectors, variants, numVariants));
     }
 
     U_ASSERT(builder.bindings != nullptr);
     bindingsLen = builder.bindings->size();
-    bindings.adoptInstead(copyVectorToArray<Binding>(*builder.bindings, bindingsLen));
+    bindings.adoptInstead(copyVectorToArray<Binding>(*builder.bindings, errorCode));
     unsupportedStatementsLen = builder.unsupportedStatements->size();
-    unsupportedStatements.adoptInstead(copyVectorToArray<UnsupportedStatement>(*builder.unsupportedStatements, unsupportedStatementsLen));
-    bogus &= ((bool) (bindings.isValid() && unsupportedStatements.isValid()));
+    unsupportedStatements.adoptInstead(copyVectorToArray<UnsupportedStatement>(*builder.unsupportedStatements, errorCode));
+    if (U_FAILURE(errorCode)) {
+        bogus = true;
+    }
 }
 
 MFDataModel::MFDataModel() : body(Pattern()) {}
 
 MFDataModel& MFDataModel::operator=(MFDataModel other) noexcept {
+    U_ASSERT(!other.bogus);
     swap(*this, other);
     return *this;
 }

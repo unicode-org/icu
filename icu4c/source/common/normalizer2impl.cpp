@@ -284,7 +284,7 @@ UBool ReorderingBuffer::append(const char16_t *s, int32_t length, UBool isNFD,
             U16_NEXT(s, i, length, c);
             if(i<length) {
                 if (isNFD) {
-                    leadCC = Normalizer2Impl::getCCFromYesOrMaybe(impl.getRawNorm16(c));
+                    leadCC = Normalizer2Impl::getCCFromYesOrMaybeYes(impl.getRawNorm16(c));
                 } else {
                     leadCC = impl.getCC(impl.getNorm16(c));
                 }
@@ -392,7 +392,7 @@ uint8_t ReorderingBuffer::previousCC() {
         --codePointStart;
         c=U16_GET_SUPPLEMENTARY(c2, c);
     }
-    return impl.getCCFromYesOrMaybeCP(c);
+    return impl.getCCFromYesOrMaybeYesCP(c);
 }
 
 // Inserts c somewhere before the last character.
@@ -440,15 +440,14 @@ Normalizer2Impl::init(const int32_t *inIndexes, const UCPTrie *inTrie,
     minNoNoCompNoMaybeCC = static_cast<uint16_t>(inIndexes[IX_MIN_NO_NO_COMP_NO_MAYBE_CC]);
     minNoNoEmpty = static_cast<uint16_t>(inIndexes[IX_MIN_NO_NO_EMPTY]);
     limitNoNo = static_cast<uint16_t>(inIndexes[IX_LIMIT_NO_NO]);
+    minMaybeNo = static_cast<uint16_t>(inIndexes[IX_MIN_MAYBE_NO]);
+    minMaybeNoCombinesFwd = static_cast<uint16_t>(inIndexes[IX_MIN_MAYBE_NO_COMBINES_FWD]);
     minMaybeYes = static_cast<uint16_t>(inIndexes[IX_MIN_MAYBE_YES]);
-    U_ASSERT((minMaybeYes & 7) == 0);  // 8-aligned for noNoDelta bit fields
-    centerNoNoDelta = (minMaybeYes >> DELTA_SHIFT) - MAX_DELTA - 1;
+    U_ASSERT((minMaybeNo & 7) == 0);  // 8-aligned for noNoDelta bit fields
+    centerNoNoDelta = (minMaybeNo >> DELTA_SHIFT) - MAX_DELTA - 1;
 
     normTrie=inTrie;
-
-    maybeYesCompositions=inExtraData;
-    extraData=maybeYesCompositions+((MIN_NORMAL_MAYBE_YES-minMaybeYes)>>OFFSET_SHIFT);
-
+    extraData=inExtraData;
     smallFCD=inSmallFCD;
 }
 
@@ -650,7 +649,7 @@ Normalizer2Impl::decompose(const char16_t *src, const char16_t *limit,
             }
         } else {
             if(isDecompYes(norm16)) {
-                uint8_t cc=getCCFromYesOrMaybe(norm16);
+                uint8_t cc=getCCFromYesOrMaybeYes(norm16);
                 if(prevCC<=cc || cc==0) {
                     prevCC=cc;
                     if(cc<=1) {
@@ -702,12 +701,13 @@ UBool Normalizer2Impl::decompose(UChar32 c, uint16_t norm16,
                                  UErrorCode &errorCode) const {
     // get the decomposition and the lead and trail cc's
     if (norm16 >= limitNoNo) {
-        if (isMaybeOrNonZeroCC(norm16)) {
-            return buffer.append(c, getCCFromYesOrMaybe(norm16), errorCode);
+        if (isMaybeYesOrNonZeroCC(norm16)) {
+            return buffer.append(c, getCCFromYesOrMaybeYes(norm16), errorCode);
+        } else if (norm16 < minMaybeNo) {
+            // Maps to an isCompYesAndZeroCC.
+            c=mapAlgorithmic(c, norm16);
+            norm16=getRawNorm16(c);
         }
-        // Maps to an isCompYesAndZeroCC.
-        c=mapAlgorithmic(c, norm16);
-        norm16=getRawNorm16(c);
     }
     if (norm16 < minYesNo) {
         // c does not decompose
@@ -718,7 +718,7 @@ UBool Normalizer2Impl::decompose(UChar32 c, uint16_t norm16,
         return buffer.appendZeroCC(jamos, jamos+Hangul::decompose(c, jamos), errorCode);
     }
     // c decomposes, get everything from the variable-length extra data
-    const uint16_t *mapping=getMapping(norm16);
+    const uint16_t *mapping=getData(norm16);
     uint16_t firstUnit=*mapping;
     int32_t length=firstUnit&MAPPING_LENGTH_MASK;
     uint8_t leadCC, trailCC;
@@ -787,9 +787,9 @@ Normalizer2Impl::decomposeUTF8(uint32_t options,
         }
 
         // Medium-fast path: Quick check.
-        if (isMaybeOrNonZeroCC(norm16)) {
+        if (isMaybeYesOrNonZeroCC(norm16)) {
             // Does not decompose.
-            uint8_t cc = getCCFromYesOrMaybe(norm16);
+            uint8_t cc = getCCFromYesOrMaybeYes(norm16);
             if (prevCC <= cc || cc == 0) {
                 prevCC = cc;
                 if (cc <= 1) {
@@ -836,7 +836,7 @@ Normalizer2Impl::decomposeUTF8(uint32_t options,
         }
         // We already know there was a change if the original character decomposed;
         // otherwise compare.
-        if (isMaybeOrNonZeroCC(norm16) && buffer.equals(prevBoundary, src)) {
+        if (isMaybeYesOrNonZeroCC(norm16) && buffer.equals(prevBoundary, src)) {
             if (!ByteSinkUtil::appendUnchanged(prevBoundary, src,
                                                *sink, options, edits, errorCode)) {
                 break;
@@ -867,9 +867,9 @@ Normalizer2Impl::decomposeShort(const uint8_t *src, const uint8_t *limit,
         // Get the decomposition and the lead and trail cc's.
         UChar32 c = U_SENTINEL;
         if (norm16 >= limitNoNo) {
-            if (isMaybeOrNonZeroCC(norm16)) {
+            if (isMaybeYesOrNonZeroCC(norm16)) {
                 // No comp boundaries around this character.
-                uint8_t cc = getCCFromYesOrMaybe(norm16);
+                uint8_t cc = getCCFromYesOrMaybeYes(norm16);
                 if (cc == 0 && stopAt == STOP_AT_DECOMP_BOUNDARY) {
                     return prevSrc;
                 }
@@ -881,14 +881,15 @@ Normalizer2Impl::decomposeShort(const uint8_t *src, const uint8_t *limit,
                     return src;
                 }
                 continue;
+            } else if (norm16 < minMaybeNo) {
+                // Maps to an isCompYesAndZeroCC.
+                if (stopAt != STOP_AT_LIMIT) {
+                    return prevSrc;
+                }
+                c = codePointFromValidUTF8(prevSrc, src);
+                c = mapAlgorithmic(c, norm16);
+                norm16 = getRawNorm16(c);
             }
-            // Maps to an isCompYesAndZeroCC.
-            if (stopAt != STOP_AT_LIMIT) {
-                return prevSrc;
-            }
-            c = codePointFromValidUTF8(prevSrc, src);
-            c = mapAlgorithmic(c, norm16);
-            norm16 = getRawNorm16(c);
         } else if (stopAt != STOP_AT_LIMIT && norm16 < minNoNoCompNoMaybeCC) {
             return prevSrc;
         }
@@ -918,7 +919,7 @@ Normalizer2Impl::decomposeShort(const uint8_t *src, const uint8_t *limit,
             }
         } else {
             // The character decomposes, get everything from the variable-length extra data.
-            const uint16_t *mapping = getMapping(norm16);
+            const uint16_t *mapping = getData(norm16);
             uint16_t firstUnit = *mapping;
             int32_t length = firstUnit & MAPPING_LENGTH_MASK;
             uint8_t trailCC = (uint8_t)(firstUnit >> 8);
@@ -946,7 +947,7 @@ Normalizer2Impl::decomposeShort(const uint8_t *src, const uint8_t *limit,
 const char16_t *
 Normalizer2Impl::getDecomposition(UChar32 c, char16_t buffer[4], int32_t &length) const {
     uint16_t norm16;
-    if(c<minDecompNoCP || isMaybeOrNonZeroCC(norm16=getNorm16(c))) {
+    if(c<minDecompNoCP || isMaybeYesOrNonZeroCC(norm16=getNorm16(c))) {
         // c does not decompose
         return nullptr;
     }
@@ -968,7 +969,7 @@ Normalizer2Impl::getDecomposition(UChar32 c, char16_t buffer[4], int32_t &length
         return buffer;
     }
     // c decomposes, get everything from the variable-length extra data
-    const uint16_t *mapping=getMapping(norm16);
+    const uint16_t *mapping=getData(norm16);
     length=*mapping&MAPPING_LENGTH_MASK;
     return (const char16_t *)mapping+1;
 }
@@ -995,7 +996,7 @@ Normalizer2Impl::getRawDecomposition(UChar32 c, char16_t buffer[30], int32_t &le
         return buffer;
     }
     // c decomposes, get everything from the variable-length extra data
-    const uint16_t *mapping=getMapping(norm16);
+    const uint16_t *mapping=getData(norm16);
     uint16_t firstUnit=*mapping;
     int32_t mLength=firstUnit&MAPPING_LENGTH_MASK;  // length of normal mapping
     if(firstUnit&MAPPING_HAS_RAW_MAPPING) {
@@ -1070,7 +1071,7 @@ UBool Normalizer2Impl::norm16HasDecompBoundaryBefore(uint16_t norm16) const {
         return norm16 <= MIN_NORMAL_MAYBE_YES || norm16 == JAMO_VT;
     }
     // c decomposes, get everything from the variable-length extra data
-    const uint16_t *mapping=getMapping(norm16);
+    const uint16_t *mapping=getDataForYesOrNo(norm16);
     uint16_t firstUnit=*mapping;
     // true if leadCC==0 (hasFCDBoundaryBefore())
     return (firstUnit&MAPPING_HAS_CCC_LCCC_WORD)==0 || (*(mapping-1)&0xff00)==0;
@@ -1091,14 +1092,15 @@ UBool Normalizer2Impl::norm16HasDecompBoundaryAfter(uint16_t norm16) const {
         return true;
     }
     if (norm16 >= limitNoNo) {
-        if (isMaybeOrNonZeroCC(norm16)) {
+        if (isMaybeYesOrNonZeroCC(norm16)) {
             return norm16 <= MIN_NORMAL_MAYBE_YES || norm16 == JAMO_VT;
+        } else if (norm16 < minMaybeNo) {
+            // Maps to an isCompYesAndZeroCC.
+            return (norm16 & DELTA_TCCC_MASK) <= DELTA_TCCC_1;
         }
-        // Maps to an isCompYesAndZeroCC.
-        return (norm16 & DELTA_TCCC_MASK) <= DELTA_TCCC_1;
     }
     // c decomposes, get everything from the variable-length extra data
-    const uint16_t *mapping=getMapping(norm16);
+    const uint16_t *mapping=getData(norm16);
     uint16_t firstUnit=*mapping;
     // decomp after-boundary: same as hasFCDBoundaryAfter(),
     // fcd16<=1 || trailCC==0
@@ -1240,7 +1242,7 @@ void Normalizer2Impl::recompose(ReorderingBuffer &buffer, int32_t recomposeStart
 
     for(;;) {
         UCPTRIE_FAST_U16_NEXT(normTrie, UCPTRIE_16, p, limit, c, norm16);
-        cc=getCCFromYesOrMaybe(norm16);
+        cc=getCCFromYesOrMaybeYes(norm16);
         if( // this character combines backward and
             isMaybe(norm16) &&
             // we have seen a starter that combines forward and
@@ -1414,17 +1416,22 @@ Normalizer2Impl::composePair(UChar32 a, UChar32 b) const {
             }
         } else {
             // 'a' has a compositions list in extraData
-            list=getMapping(norm16);
+            list=getDataForYesOrNo(norm16);
             if(norm16>minYesNo) {  // composite 'a' has both mapping & compositions list
                 list+=  // mapping pointer
                     1+  // +1 to skip the first unit with the mapping length
                     (*list&MAPPING_LENGTH_MASK);  // + mapping length
             }
         }
-    } else if(norm16<minMaybeYes || MIN_NORMAL_MAYBE_YES<=norm16) {
+    } else if(norm16<minMaybeNoCombinesFwd || MIN_NORMAL_MAYBE_YES<=norm16) {
         return U_SENTINEL;
     } else {
-        list=getCompositionsListForMaybe(norm16);
+        list=getDataForMaybe(norm16);
+        if(norm16<minMaybeYes) {  // composite 'a' has both mapping & compositions list
+            list+=  // mapping pointer
+                1+  // +1 to skip the first unit with the mapping length
+                (*list&MAPPING_LENGTH_MASK);  // + mapping length
+        }
     }
     if(b<0 || 0x10ffff<b) {  // combine(list, b) requires a valid code point b
         return U_SENTINEL;
@@ -1502,12 +1509,12 @@ Normalizer2Impl::compose(const char16_t *src, const char16_t *limit,
         }
         // isCompYesAndZeroCC(norm16) is false, that is, norm16>=minNoNo.
         // The current character is either a "noNo" (has a mapping)
-        // or a "maybeYes" (combines backward)
+        // or a "maybeYes" / "maybeNo" (combines backward)
         // or a "yesYes" with ccc!=0.
         // It is not a Hangul syllable or Jamo L because those have "yes" properties.
 
         // Medium-fast path: Handle cases that do not require full decomposition and recomposition.
-        if (!isMaybeOrNonZeroCC(norm16)) {  // minNoNo <= norm16 < minMaybeYes
+        if (norm16 < minMaybeNo) {  // minNoNo <= norm16 < minMaybeNo
             if (!doCompose) {
                 return false;
             }
@@ -1534,7 +1541,7 @@ Normalizer2Impl::compose(const char16_t *src, const char16_t *limit,
                     if (prevBoundary != prevSrc && !buffer.appendZeroCC(prevBoundary, prevSrc, errorCode)) {
                         break;
                     }
-                    const char16_t *mapping = reinterpret_cast<const char16_t *>(getMapping(norm16));
+                    const char16_t *mapping = reinterpret_cast<const char16_t *>(getDataForYesOrNo(norm16));
                     int32_t length = *mapping++ & MAPPING_LENGTH_MASK;
                     if(!buffer.appendZeroCC(mapping, mapping + length, errorCode)) {
                         break;
@@ -1763,7 +1770,7 @@ Normalizer2Impl::composeQuickCheck(const char16_t *src, const char16_t *limit,
         }
         // isCompYesAndZeroCC(norm16) is false, that is, norm16>=minNoNo.
         // The current character is either a "noNo" (has a mapping)
-        // or a "maybeYes" (combines backward)
+        // or a "maybeYes" / "maybeNo" (combines backward)
         // or a "yesYes" with ccc!=0.
         // It is not a Hangul syllable or Jamo L because those have "yes" properties.
 
@@ -1784,8 +1791,9 @@ Normalizer2Impl::composeQuickCheck(const char16_t *src, const char16_t *limit,
             }
         }
 
-        if(isMaybeOrNonZeroCC(norm16)) {
-            uint8_t cc=getCCFromYesOrMaybe(norm16);
+        if (norm16 >= minMaybeNo) {
+            uint16_t fcd16 = getFCD16FromMaybeOrNonZeroCC(norm16);
+            uint8_t cc = fcd16 >> 8;
             if (onlyContiguous /* FCC */ && cc != 0 &&
                     getTrailCCFromCompYesAndZeroCC(prevNorm16) > cc) {
                 // The [prevBoundary..prevSrc[ character
@@ -1806,11 +1814,12 @@ Normalizer2Impl::composeQuickCheck(const char16_t *src, const char16_t *limit,
                     if (src == limit) {
                         return src;
                     }
-                    uint8_t prevCC = cc;
+                    uint8_t prevCC = fcd16;
                     nextSrc = src;
                     UCPTRIE_FAST_U16_NEXT(normTrie, UCPTRIE_16, nextSrc, limit, c, norm16);
-                    if (isMaybeOrNonZeroCC(norm16)) {
-                        cc = getCCFromYesOrMaybe(norm16);
+                    if (norm16 >= minMaybeNo) {
+                        fcd16 = getFCD16FromMaybeOrNonZeroCC(norm16);
+                        cc = fcd16 >> 8;
                         if (!(prevCC <= cc || cc == 0)) {
                             break;
                         }
@@ -1903,12 +1912,12 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
         }
         // isCompYesAndZeroCC(norm16) is false, that is, norm16>=minNoNo.
         // The current character is either a "noNo" (has a mapping)
-        // or a "maybeYes" (combines backward)
+        // or a "maybeYes" / "maybeNo" (combines backward)
         // or a "yesYes" with ccc!=0.
         // It is not a Hangul syllable or Jamo L because those have "yes" properties.
 
         // Medium-fast path: Handle cases that do not require full decomposition and recomposition.
-        if (!isMaybeOrNonZeroCC(norm16)) {  // minNoNo <= norm16 < minMaybeYes
+        if (norm16 < minMaybeNo) {  // minNoNo <= norm16 < minMaybeNo
             if (sink == nullptr) {
                 return false;
             }
@@ -1937,7 +1946,7 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
                                                            *sink, options, edits, errorCode)) {
                         break;
                     }
-                    const uint16_t *mapping = getMapping(norm16);
+                    const uint16_t *mapping = getDataForYesOrNo(norm16);
                     int32_t length = *mapping++ & MAPPING_LENGTH_MASK;
                     if (!ByteSinkUtil::appendChange(prevSrc, src, (const char16_t *)mapping, length,
                                                     *sink, edits, errorCode)) {
@@ -2245,7 +2254,7 @@ uint16_t Normalizer2Impl::getFCD16FromNormData(UChar32 c) const {
             return norm16|(norm16<<8);
         } else if(norm16>=minMaybeYes) {
             return 0;
-        } else {  // isDecompNoAlgorithmic(norm16)
+        } else if(norm16<minMaybeNo) {  // isDecompNoAlgorithmic(norm16)
             uint16_t deltaTrailCC = norm16 & DELTA_TCCC_MASK;
             if (deltaTrailCC <= DELTA_TCCC_1) {
                 return deltaTrailCC >> OFFSET_SHIFT;
@@ -2260,7 +2269,7 @@ uint16_t Normalizer2Impl::getFCD16FromNormData(UChar32 c) const {
         return 0;
     }
     // c decomposes, get everything from the variable-length extra data
-    const uint16_t *mapping=getMapping(norm16);
+    const uint16_t *mapping=getData(norm16);
     uint16_t firstUnit=*mapping;
     norm16=firstUnit>>8;  // tccc
     if(firstUnit&MAPPING_HAS_CCC_LCCC_WORD) {
@@ -2271,6 +2280,23 @@ uint16_t Normalizer2Impl::getFCD16FromNormData(UChar32 c) const {
 #if (defined(_MSC_VER) && (defined(_M_ARM64)) && (_MSC_VER < 1924))
 #pragma optimize( "", on )
 #endif
+
+uint16_t Normalizer2Impl::getFCD16FromMaybeOrNonZeroCC(uint16_t norm16) const {
+    U_ASSERT(norm16 >= minMaybeNo);
+    if (norm16 >= MIN_NORMAL_MAYBE_YES) {
+        // combining mark
+        norm16 = getCCFromNormalYesOrMaybe(norm16);
+        return norm16 | (norm16<<8);
+    } else if (norm16 >= minMaybeYes) {
+        return 0;
+    }
+    // c decomposes, get everything from the variable-length extra data
+    const uint16_t *mapping = getDataForMaybe(norm16);
+    uint16_t firstUnit = *mapping;
+    // maybeNo has lccc = 0
+    U_ASSERT((firstUnit & MAPPING_HAS_CCC_LCCC_WORD) == 0 || (*(mapping - 1) & 0xff00) == 0);
+    return firstUnit >> 8;  // tccc
+}
 
 // Dual functionality:
 // buffer!=nullptr: normalize
@@ -2575,9 +2601,11 @@ void InitCanonIterData::doInit(Normalizer2Impl *impl, UErrorCode &errorCode) {
 void Normalizer2Impl::makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, const uint16_t norm16,
                                                   CanonIterData &newData,
                                                   UErrorCode &errorCode) const {
-    if(isInert(norm16) || (minYesNo<=norm16 && norm16<minNoNo)) {
+    if(isInert(norm16) ||
+            (minYesNo<=norm16 && norm16<minNoNo) ||
+            (minMaybeNo<=norm16 && norm16<minMaybeYes)) {
         // Inert, or 2-way mapping (including Hangul syllable).
-        // We do not write a canonStartSet for any yesNo character.
+        // We do not write a canonStartSet for any yesNo/maybeNo character.
         // Composites from 2-way mappings are added at runtime from the
         // starter's compositions list, and the other characters in
         // 2-way mappings get CANON_NOT_SEGMENT_STARTER set because they are
@@ -2587,7 +2615,7 @@ void Normalizer2Impl::makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, co
     for(UChar32 c=start; c<=end; ++c) {
         uint32_t oldValue = umutablecptrie_get(newData.mutableTrie, c);
         uint32_t newValue=oldValue;
-        if(isMaybeOrNonZeroCC(norm16)) {
+        if(isMaybeYesOrNonZeroCC(norm16)) {
             // not a segment starter if it occurs in a decomposition or has cc!=0
             newValue|=CANON_NOT_SEGMENT_STARTER;
             if(norm16<MIN_NORMAL_MAYBE_YES) {
@@ -2609,7 +2637,7 @@ void Normalizer2Impl::makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, co
             }
             if (norm16_2 > minYesNo) {
                 // c decomposes, get everything from the variable-length extra data
-                const uint16_t *mapping=getMapping(norm16_2);
+                const uint16_t *mapping=getDataForYesOrNo(norm16_2);
                 uint16_t firstUnit=*mapping;
                 int32_t length=firstUnit&MAPPING_LENGTH_MASK;
                 if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
@@ -2728,7 +2756,7 @@ unorm2_swap(const UDataSwapper *ds,
         pInfo->dataFormat[1]==0x72 &&
         pInfo->dataFormat[2]==0x6d &&
         pInfo->dataFormat[3]==0x32 &&
-        (1<=formatVersion0 && formatVersion0<=4)
+        (1<=formatVersion0 && formatVersion0<=5)
     )) {
         udata_printError(ds, "unorm2_swap(): data format %02x.%02x.%02x.%02x (format version %02x) is not recognized as Normalizer2 data\n",
                          pInfo->dataFormat[0], pInfo->dataFormat[1],
@@ -2747,8 +2775,10 @@ unorm2_swap(const UDataSwapper *ds,
         minIndexesLength=Normalizer2Impl::IX_MIN_MAYBE_YES+1;
     } else if(formatVersion0==2) {
         minIndexesLength=Normalizer2Impl::IX_MIN_YES_NO_MAPPINGS_ONLY+1;
-    } else {
+    } else if(formatVersion0<=4) {
         minIndexesLength=Normalizer2Impl::IX_MIN_LCCC_CP+1;
+    } else {
+        minIndexesLength=Normalizer2Impl::IX_MIN_MAYBE_NO_COMBINES_FWD+1;
     }
 
     if(length>=0) {

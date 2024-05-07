@@ -89,7 +89,7 @@ public:
         }
     }
 
-    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr);
+    UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 
     // Count spans of characters that are in the set,
     // and spans of characters that are not in the set.
@@ -142,13 +142,13 @@ public:
 
     // virtual void call(UErrorCode* pErrorCode) { ... }
 
-    virtual long getOperationsPerIteration() {
+    long getOperationsPerIteration() override {
         // Number of code points tested:
         // Input code points, plus one for the end of each span except the last span.
         return testcase.countInputCodePoints+testcase.spanCount-1;
     }
 
-    virtual long getEventsPerIteration() {
+    long getEventsPerIteration() override {
         return testcase.spanCount;
     }
 
@@ -175,7 +175,7 @@ public:
     static UPerfFunction* get(const UnicodeSetPerformanceTest &testcase) {
         return new Contains(testcase);
     }
-    virtual void call(UErrorCode* pErrorCode) {
+    void call(UErrorCode* pErrorCode) override {
         const UnicodeSet &set=testcase.set;
         const char16_t *s=testcase.getBuffer();
         int32_t length=testcase.getBufferLen();
@@ -237,7 +237,7 @@ public:
     static UPerfFunction* get(const UnicodeSetPerformanceTest &testcase) {
         return new SpanUTF16(testcase);
     }
-    virtual void call(UErrorCode* pErrorCode) {
+    void call(UErrorCode* pErrorCode) override {
         const UnicodeSet &set=testcase.set;
         const char16_t *s=testcase.getBuffer();
         int32_t length=testcase.getBufferLen();
@@ -288,7 +288,7 @@ public:
     static UPerfFunction* get(const UnicodeSetPerformanceTest &testcase) {
         return new SpanBackUTF16(testcase);
     }
-    virtual void call(UErrorCode* pErrorCode) {
+    void call(UErrorCode* pErrorCode) override {
         const UnicodeSet &set=testcase.set;
         const char16_t *s=testcase.getBuffer();
         int32_t length=testcase.getBufferLen();
@@ -338,7 +338,7 @@ public:
     static UPerfFunction* get(const UnicodeSetPerformanceTest &testcase) {
         return new SpanUTF8(testcase);
     }
-    virtual void call(UErrorCode* pErrorCode) {
+    void call(UErrorCode* pErrorCode) override {
         const UnicodeSet &set=testcase.set;
         const char *s=testcase.utf8;
         int32_t length=testcase.utf8Length;
@@ -384,7 +384,7 @@ public:
     static UPerfFunction* get(const UnicodeSetPerformanceTest &testcase) {
         return new SpanBackUTF8(testcase);
     }
-    virtual void call(UErrorCode* pErrorCode) {
+    void call(UErrorCode* pErrorCode) override {
         const UnicodeSet &set=testcase.set;
         const char *s=testcase.utf8;
         int32_t length=testcase.utf8Length;

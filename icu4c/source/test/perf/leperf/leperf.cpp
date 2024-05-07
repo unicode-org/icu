@@ -73,7 +73,7 @@ int main(int argc, const char *argv[]) {
     }
   }
   u_printf("leperf: Testing %s for %.fs...\n", U_ICU_VERSION, len);
-  LEErrorCode status = LE_NO_ERROR;
+  //LEErrorCode status = LE_NO_ERROR;
   //uloc_setDefault("en_US", &status);
   Params p;
 

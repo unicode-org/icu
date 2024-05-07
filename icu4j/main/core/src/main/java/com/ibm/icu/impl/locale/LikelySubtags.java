@@ -213,49 +213,42 @@ public final class LikelySubtags {
         // Handle pseudolocales like en-XA, ar-XB, fr-PSCRACK.
         // They should match only themselves,
         // not other locales with what looks like the same language and script subtags.
-        if (region.length() == 2 && region.charAt(0) == 'X') {
-            switch (region.charAt(1)) {
-            case 'A':
-                if (returnInputIfUnmatch) {
-                    return new LSR(language, script, region, LSR.EXPLICIT_LSR);
+        if (!returnInputIfUnmatch) {
+            if (region.length() == 2 && region.charAt(0) == 'X') {
+                switch (region.charAt(1)) {
+                case 'A':
+                    return new LSR(PSEUDO_ACCENTS_PREFIX + language,
+                            PSEUDO_ACCENTS_PREFIX + script, region, LSR.EXPLICIT_LSR);
+                case 'B':
+                    return new LSR(PSEUDO_BIDI_PREFIX + language,
+                            PSEUDO_BIDI_PREFIX + script, region, LSR.EXPLICIT_LSR);
+                case 'C':
+                    return new LSR(PSEUDO_CRACKED_PREFIX + language,
+                            PSEUDO_CRACKED_PREFIX + script, region, LSR.EXPLICIT_LSR);
+                default:  // normal locale
+                    break;
                 }
-                return new LSR(PSEUDO_ACCENTS_PREFIX + language,
-                        PSEUDO_ACCENTS_PREFIX + script, region, LSR.EXPLICIT_LSR);
-            case 'B':
-                if (returnInputIfUnmatch) {
-                    return new LSR(language, script, region, LSR.EXPLICIT_LSR);
-                }
-                return new LSR(PSEUDO_BIDI_PREFIX + language,
-                        PSEUDO_BIDI_PREFIX + script, region, LSR.EXPLICIT_LSR);
-            case 'C':
-                if (returnInputIfUnmatch) {
-                    return new LSR(language, script, region, LSR.EXPLICIT_LSR);
-                }
-                return new LSR(PSEUDO_CRACKED_PREFIX + language,
-                        PSEUDO_CRACKED_PREFIX + script, region, LSR.EXPLICIT_LSR);
-            default:  // normal locale
-                break;
             }
-        }
 
-        if (variant.startsWith("PS")) {
-            int lsrFlags = region.isEmpty() ?
-                    LSR.EXPLICIT_LANGUAGE | LSR.EXPLICIT_SCRIPT : LSR.EXPLICIT_LSR;
-            switch (variant) {
-            case "PSACCENT":
-                return new LSR(PSEUDO_ACCENTS_PREFIX + language,
-                        PSEUDO_ACCENTS_PREFIX + script,
-                        region.isEmpty() ? "XA" : region, lsrFlags);
-            case "PSBIDI":
-                return new LSR(PSEUDO_BIDI_PREFIX + language,
-                        PSEUDO_BIDI_PREFIX + script,
-                        region.isEmpty() ? "XB" : region, lsrFlags);
-            case "PSCRACK":
-                return new LSR(PSEUDO_CRACKED_PREFIX + language,
-                        PSEUDO_CRACKED_PREFIX + script,
-                        region.isEmpty() ? "XC" : region, lsrFlags);
-            default:  // normal locale
-                break;
+            if (variant.startsWith("PS")) {
+                int lsrFlags = region.isEmpty() ?
+                            LSR.EXPLICIT_LANGUAGE | LSR.EXPLICIT_SCRIPT : LSR.EXPLICIT_LSR;
+                switch (variant) {
+                case "PSACCENT":
+                    return new LSR(PSEUDO_ACCENTS_PREFIX + language,
+                            PSEUDO_ACCENTS_PREFIX + script,
+                            region.isEmpty() ? "XA" : region, lsrFlags);
+                case "PSBIDI":
+                    return new LSR(PSEUDO_BIDI_PREFIX + language,
+                            PSEUDO_BIDI_PREFIX + script,
+                            region.isEmpty() ? "XB" : region, lsrFlags);
+                case "PSCRACK":
+                    return new LSR(PSEUDO_CRACKED_PREFIX + language,
+                            PSEUDO_CRACKED_PREFIX + script,
+                            region.isEmpty() ? "XC" : region, lsrFlags);
+                default:  // normal locale
+                    break;
+                }
             }
         }
 

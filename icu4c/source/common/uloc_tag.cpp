@@ -2406,7 +2406,7 @@ ultag_close(ULanguageTag* langtag) {
         ExtensionListEntry *curExt = langtag->extensions;
         while (curExt) {
             ExtensionListEntry *nextExt = curExt->next;
-            uprv_free(curExt);
+            delete curExt;
             curExt = nextExt;
         }
     }

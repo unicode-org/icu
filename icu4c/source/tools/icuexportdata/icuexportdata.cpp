@@ -569,7 +569,7 @@ void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t 
     for (int32_t i = pendingTrieInsertions.size() - 1; i >= 0; --i) {
         const PendingDescriptor& pending = pendingTrieInsertions[i];
         uint32_t additional = 0;
-        if (!(pending.descriptor & 0xFFFE0000)) {
+        if (!(pending.descriptor & 0xFFFC0000)) {
             uint32_t offset = pending.descriptor & 0xFFF;
             if (!pending.supplementary) {
                 if (offset >= baseSize16) {
@@ -678,7 +678,18 @@ const int32_t BACKWARD_COMBINING_STARTER_MARKER = 1;
 
 /// Marker that a complex decomposition isn't round-trippable
 /// under re-composition.
+///
+/// TODO: When taking a data format break, swap this around with
+/// `BACKWARD_COMBINING_STARTER_DECOMPOSITION_MARKER`.
 const uint32_t NON_ROUND_TRIP_MARKER = 1;
+
+/// Marker that a complex decomposition starts with a starter
+/// that can combine backwards.
+///
+/// TODO: When taking a data format break, swap this around with
+/// `NON_ROUND_TRIP_MARKER` to use the same bit as with characters
+/// that decompose to self but can combine backwards.
+const uint32_t BACKWARD_COMBINING_STARTER_DECOMPOSITION_MARKER = 2;
 
 UBool permissibleBmpPair(UBool knownToRoundTrip, UChar32 c, UChar32 second) {
     if (knownToRoundTrip) {
@@ -951,21 +962,18 @@ void computeDecompositions(const char* basename,
         if (!nonNfdOrRoundTrips) {
             compositionPassthroughBound = c;
         }
-        if (len == 1 && utf32[0] <= 0xFFFF) {
-            if (startsWithBackwardCombiningStarter) {
-                if (mainNormalizer == nfdNormalizer) {
-                    // Not supposed to happen in NFD
-                    status.set(U_INTERNAL_PROGRAM_ERROR);
-                    handleError(status, basename);
-                } else if (!((utf32[0] >= 0x1161 && utf32[0] <= 0x1175) || (utf32[0] >= 0x11A8 && utf32[0] <= 0x11C2))) {
-                    // Other than conjoining jamo vowels and trails
-                    // unsupported for non-NFD.
-                    status.set(U_INTERNAL_PROGRAM_ERROR);
-                    handleError(status, basename);
-                }
+        if (len == 1 && ((utf32[0] >= 0x1161 && utf32[0] <= 0x1175) || (utf32[0] >= 0x11A8 && utf32[0] <= 0x11C2))) {
+            // Singleton decompositions to conjoining jamo.
+            if (mainNormalizer == nfdNormalizer) {
+                // Not supposed to happen in NFD
+                status.set(U_INTERNAL_PROGRAM_ERROR);
+                handleError(status, basename);
             }
             pendingTrieInsertions.push_back({c, uint32_t(utf32[0]) << 16, false});
-        } else if (len == 2 &&
+        } else if (!startsWithBackwardCombiningStarter && len == 1 && utf32[0] <= 0xFFFF) {
+            pendingTrieInsertions.push_back({c, uint32_t(utf32[0]) << 16, false});
+        } else if (!startsWithBackwardCombiningStarter &&
+                   len == 2 &&
                    utf32[0] <= 0xFFFF &&
                    utf32[1] <= 0xFFFF &&
                    !u_getCombiningClass(utf32[0]) &&
@@ -979,17 +987,8 @@ void computeDecompositions(const char* basename,
                     handleError(status, basename);
                 }
             }
-            if (startsWithBackwardCombiningStarter) {
-                status.set(U_INTERNAL_PROGRAM_ERROR);
-                handleError(status, basename);
-            }
             pendingTrieInsertions.push_back({c, (uint32_t(utf32[0]) << 16) | uint32_t(utf32[1]), false});
         } else {
-            if (startsWithBackwardCombiningStarter) {
-                status.set(U_INTERNAL_PROGRAM_ERROR);
-                handleError(status, basename);
-            }
-
             UBool supplementary = false;
             UBool nonInitialStarter = false;
             for (int32_t i = 0; i < len; ++i) {
@@ -1010,6 +1009,13 @@ void computeDecompositions(const char* basename,
                 if (i != 0 && !u_getCombiningClass(utf32[i])) {
                     nonInitialStarter = true;
                 }
+            }
+            if (len == 1) {
+                // The format doesn't allow for length 1 for BMP,
+                // so if these ever occur, they need to be promoted
+                // to wider storage. As of Unicode 16 alpha, this
+                // case does not arise.
+                supplementary = true;
             }
             if (!supplementary) {
                 if (len > LONGEST_ENCODABLE_LENGTH_16 || !len || len == 1) {
@@ -1074,7 +1080,11 @@ void computeDecompositions(const char* basename,
             if (!nonNfdOrRoundTrips) {
                 nonRoundTripMarker = (NON_ROUND_TRIP_MARKER << 16);
             }
-            pendingTrieInsertions.push_back({c, descriptor | nonRoundTripMarker, supplementary});
+            uint32_t canCombineBackwardsMarker = 0;
+            if (startsWithBackwardCombiningStarter) {
+                canCombineBackwardsMarker = (BACKWARD_COMBINING_STARTER_DECOMPOSITION_MARKER << 16);
+            }
+            pendingTrieInsertions.push_back({c, descriptor | nonRoundTripMarker | canCombineBackwardsMarker, supplementary});
         }
     }
     if (storage16.size() + storage32.size() > 0xFFF) {

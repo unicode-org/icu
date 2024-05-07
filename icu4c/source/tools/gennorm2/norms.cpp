@@ -245,6 +245,14 @@ void Decomposer::rangeHandler(UChar32 start, UChar32 end, Norm &norm) {
             exit(U_INVALID_FORMAT_ERROR);
         }
         const Norm &cNorm=norms.getNormRef(c);
+        if(norm.mappingType==Norm::ROUND_TRIP && prev==0 &&
+                !norm.combinesBack && cNorm.combinesBack) {
+            // If a two-way mapping starts with an NFC_QC=Maybe character,
+            // then mark the composite as NFC_QC=Maybe as well,
+            // so that we trigger decomposition and recomposition.
+            norm.combinesBack=true;
+            didDecompose|=true;
+        }
         if(cNorm.hasMapping()) {
             if(norm.mappingType==Norm::ROUND_TRIP) {
                 if(prev==0) {

@@ -104,9 +104,8 @@ le_int32 getLanguageCode(const char *lang)
         return -1;
     }
 
-    LETag langTag = (LETag) ((lang[0] << 24) + (lang[1] << 16) + (lang[2] << 8) + 0x20);
-
 #ifndef USING_ICULEHB
+    LETag langTag = (LETag) ((lang[0] << 24) + (lang[1] << 16) + (lang[2] << 8) + 0x20);
     for (le_int32 i = 0; i < languageCodeCount; i += 1) {
         if (langTag == OpenTypeLayoutEngine::languageTags[i]) {
             return i;

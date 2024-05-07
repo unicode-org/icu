@@ -1926,6 +1926,26 @@ public class ULocaleTest extends CoreTestFmwk {
                     "aaaa",
                     "aaaa",
                 }, {
+                    // ICU-22727
+                    // unicode_language_subtag = alpha{2,3} | alpha{5,8};
+                    // so "bbbbb", "cccccc", "ddddddd", "eeeeeeee" are
+                    // well-formed unicode_language_subtag and therefore
+                    // well-formed unicode_language_id
+                    "bbbbb",
+                    "bbbbb",
+                }, {
+                    // ICU-22727
+                    "cccccc",
+                    "cccccc",
+                }, {
+                    // ICU-22727
+                    "ddddddd",
+                    "ddddddd",
+                }, {
+                    // ICU-22727
+                    "eeeeeeee",
+                    "eeeeeeee",
+                }, {
                     // ICU-22546
                     "und-Zzzz",
                     "en_Latn_US" // If change, please also update ULocale.java
@@ -1950,17 +1970,36 @@ public class ULocaleTest extends CoreTestFmwk {
                     "zh_Hani",
                     "zh_Hani_CN" // If change, please also update ULocale.java
                 }, {
-                    // ICU-22545
+                    // ICU-22545 & ICU-22742
                     "en_XA",
-                    "en_XA",
+                    "en_Latn_XA",
                 }, {
-                    // ICU-22545
-                    "en_XB",
-                    "en_XB",
+                    // ICU-22545 & ICU-22742
+                    "ar_XB",
+                    "ar_Arab_XB",
                 }, {
-                    // ICU-22545
-                    "en_XC",
-                    "en_XC",
+                    // ICU-22545 & ICU-22742
+                    "ru_XC",
+                    "ru_Cyrl_XC",
+                }, {
+                    // ICU-22742
+                    "en_PSACCENT",
+                    "en_Latn_US_PSACCENT",
+                }, {
+                    "ar_PSBIDI",
+                    "ar_Arab_EG_PSBIDI",
+                }, {
+                    "ru_PSCRACK",
+                    "ru_Cyrl_RU_PSCRACK",
+                }, {
+                    "ar_PSACCENT",
+                    "ar_Arab_EG_PSACCENT",
+                }, {
+                    "ru_PSBIDI",
+                    "ru_Cyrl_RU_PSBIDI",
+                }, {
+                    "en_PSCRACK",
+                    "en_Latn_US_PSCRACK",
                 }
         };
 
@@ -5568,6 +5607,103 @@ public class ULocaleTest extends CoreTestFmwk {
             testFile.close();
         }
         return tests;
+    }
+
+    // ICU-22742, test addLikelySubtags with pseudo-locales
+    @Test
+    public void TestPseudoLocales() {
+        // input locale tag, expected locale tag
+        String[][] testCases = new String[][] {
+                // language + region, en
+                { "en-XA", "en-Latn-XA" },
+                { "en-XB", "en-Latn-XB" },
+                { "en-XC", "en-Latn-XC" },
+
+                // language + region, ar
+                { "ar-XA", "ar-Arab-XA" },
+                { "ar-XB", "ar-Arab-XB" },
+                { "ar-XC", "ar-Arab-XC" },
+
+                // language + region, something other than en, ar
+                { "ru-XA", "ru-Cyrl-XA" },
+                { "el-XB", "el-Grek-XB" },
+
+                // undefined language - region
+                { "und-XA", "en-Latn-XA" },
+                { "und-XB", "en-Latn-XB" },
+                { "und-XC", "en-Latn-XC" },
+
+                // language + script + region
+                { "und-Latn-XA", "en-Latn-XA" },
+                { "und-Latn-XB", "en-Latn-XB" },
+                { "und-Latn-XC", "en-Latn-XC" },
+                { "und-Arab-XA", "ar-Arab-XA" },
+                { "und-Arab-XB", "ar-Arab-XB" },
+                { "und-Arab-XC", "ar-Arab-XC" },
+                { "und-Cyrl-XA", "ru-Cyrl-XA" },
+                { "und-Grek-XB", "el-Grek-XB" },
+
+                // Make sure the script is not damaged, when correct
+                { "ru-Cyrl-XA", "ru-Cyrl-XA" },
+                { "el-Grek-XB", "el-Grek-XB" },
+
+                // Make sure the script is not damaged, even if it is wrong
+                { "ru-Grek-XA", "ru-Grek-XA" },
+                { "el-Cyrl-XB", "el-Cyrl-XB" },
+
+                // PS Variants
+                { "en-XA-PSACCENT", "en-Latn-XA-psaccent" },
+                { "en-XA-PSBIDI", "en-Latn-XA-psbidi" },
+                { "en-XA-PSCRACK", "en-Latn-XA-pscrack" },
+                { "ar-XB-PSACCENT", "ar-Arab-XB-psaccent" },
+                { "ar-XB-PSBIDI", "ar-Arab-XB-psbidi" },
+                { "ar-XB-PSCRACK", "ar-Arab-XB-pscrack" },
+                { "en-XC-PSACCENT", "en-Latn-XC-psaccent" },
+                { "en-XC-PSBIDI", "en-Latn-XC-psbidi" },
+                { "en-XC-PSCRACK", "en-Latn-XC-pscrack" },
+
+                { "en-US-PSACCENT", "en-Latn-US-psaccent" },
+                { "en-US-PSBIDI", "en-Latn-US-psbidi" },
+                { "en-US-PSCRACK", "en-Latn-US-pscrack" },
+                { "ar-EG-PSACCENT", "ar-Arab-EG-psaccent" },
+                { "ar-EG-PSBIDI", "ar-Arab-EG-psbidi" },
+                { "ar-EG-PSCRACK", "ar-Arab-EG-pscrack" },
+
+                { "en-PSACCENT", "en-Latn-US-psaccent" },
+                { "en-PSBIDI", "en-Latn-US-psbidi" },
+                { "en-PSCRACK", "en-Latn-US-pscrack" },
+                { "ar-PSACCENT", "ar-Arab-EG-psaccent" },
+                { "ar-PSBIDI", "ar-Arab-EG-psbidi" },
+                { "ar-PSCRACK", "ar-Arab-EG-pscrack" },
+
+                { "und-US-PSACCENT", "en-Latn-US-psaccent" },
+                { "und-US-PSBIDI", "en-Latn-US-psbidi" },
+                { "und-US-PSCRACK", "en-Latn-US-pscrack" },
+                { "und-EG-PSACCENT", "ar-Arab-EG-psaccent" },
+                { "und-EG-PSBIDI", "ar-Arab-EG-psbidi" },
+                { "und-EG-PSCRACK", "ar-Arab-EG-pscrack" },
+
+                { "und-PSACCENT", "en-Latn-US-psaccent" },
+                { "und-PSBIDI", "en-Latn-US-psbidi" },
+                { "und-PSCRACK", "en-Latn-US-pscrack" },
+                { "und-PSACCENT", "en-Latn-US-psaccent" },
+                { "und-PSBIDI", "en-Latn-US-psbidi" },
+                { "und-PSCRACK", "en-Latn-US-pscrack" },
+        };
+        String extensions = "-u-nu-Deva-hc-h23-fw-mon-mu-celsius-x-something-more";
+
+        for (String[] testCase : testCases) {
+            String inputTag = testCase[0];
+            String expectedTag = testCase[1];
+            ULocale result = ULocale.addLikelySubtags(ULocale.forLanguageTag(inputTag));
+            ULocale expected = ULocale.forLanguageTag(expectedTag);
+            assertEquals("pseudo-locales(" + inputTag + ")", expected, result);
+
+            // Make sure this also works with extensions. Kind of hacky...
+            result = ULocale.addLikelySubtags(ULocale.forLanguageTag(inputTag + extensions));
+            expected = ULocale.forLanguageTag(expectedTag + extensions);
+            assertEquals("pseudo-locales(" + inputTag + ")", expected, result);
+        }
     }
 
     @Test

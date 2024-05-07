@@ -6,7 +6,7 @@
 // Build date:  Wed Feb  7 16:30:19 2024
 // tz database: ftp://ftp.iana.org/tz/
 // tz version:  2024a
-// ICU version: 75.0.1
+// ICU version: 75.1
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
 // >> !!! >>>            DO NOT EDIT             <<< !!! <<

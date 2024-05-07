@@ -29,7 +29,7 @@ class UnaccentTransliterator : public Transliterator {
      */
     virtual ~UnaccentTransliterator();
 
-    virtual UClassID getDynamicClassID() const override;
+    UClassID getDynamicClassID() const override;
     U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
 
  protected:
@@ -37,9 +37,9 @@ class UnaccentTransliterator : public Transliterator {
     /**
      * Implement Transliterator API
      */
-    virtual void handleTransliterate(Replaceable& text,
-                                     UTransPosition& index,
-                                     UBool incremental) const;
+    void handleTransliterate(Replaceable& text,
+                             UTransPosition& index,
+                             UBool incremental) const override;
 
  private:
 

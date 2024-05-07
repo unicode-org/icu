@@ -9,7 +9,6 @@
 
 #include "unicode/messageformat2.h"
 #include "messageformat2_allocation.h"
-#include "messageformat2_cached_formatters.h"
 #include "messageformat2_checker.h"
 #include "messageformat2_errors.h"
 #include "messageformat2_evaluation.h"
@@ -138,13 +137,6 @@ namespace message2 {
             errors = errorsNew.orphan();
         }
 
-        // Initialize formatter cache
-        cachedFormatters = new CachedFormatters();
-        if (cachedFormatters == nullptr) {
-            success = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-
         // Note: we currently evaluate variables lazily,
         // without memoization. This call is still necessary
         // to check out-of-scope uses of local variables in
@@ -156,9 +148,6 @@ namespace message2 {
     }
 
     void MessageFormatter::cleanup() noexcept {
-        if (cachedFormatters != nullptr) {
-            delete cachedFormatters;
-        }
         if (errors != nullptr) {
             delete errors;
         }
@@ -172,8 +161,6 @@ namespace message2 {
         customMFFunctionRegistry = other.customMFFunctionRegistry;
         dataModel = std::move(other.dataModel);
         normalizedInput = std::move(other.normalizedInput);
-        cachedFormatters = other.cachedFormatters;
-        other.cachedFormatters = nullptr;
         errors = other.errors;
         other.errors = nullptr;
         return *this;
@@ -219,10 +206,26 @@ namespace message2 {
         return result;
     }
 
-    // Precondition: formatter is defined
-    const Formatter& MessageFormatter::getFormatter(MessageContext& context, const FunctionName& functionName, UErrorCode& status) const {
-        U_ASSERT(isFormatter(functionName));
-        return *maybeCachedFormatter(context, functionName, status);
+    // Returns an owned pointer
+    Formatter* MessageFormatter::getFormatter(const FunctionName& functionName, UErrorCode& status) const {
+        NULL_ON_ERROR(status);
+
+        // Create the formatter
+
+        // First, look up the formatter factory for this function
+        FormatterFactory* formatterFactory = lookupFormatterFactory(functionName, status);
+        NULL_ON_ERROR(status);
+
+        U_ASSERT(formatterFactory != nullptr);
+
+        // Create a specific instance of the formatter
+        Formatter* formatter = formatterFactory->createFormatter(locale, status);
+        NULL_ON_ERROR(status);
+        if (formatter == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        return formatter;
     }
 
     bool MessageFormatter::getDefaultFormatterNameByType(const UnicodeString& type, FunctionName& name) const {
@@ -275,16 +278,15 @@ namespace message2 {
         return nullptr;
     }
 
-    // Returns non-owned pointer. Returns pointer rather than reference because it can fail.
-    // Returns non-const because FormatterFactory is mutable.
-    FormatterFactory* MessageFormatter::lookupFormatterFactory(MessageContext& context, const FunctionName& functionName, UErrorCode& status) const {
-        DynamicErrors& err = context.getErrors();
+    FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionName& functionName,
+                                                               UErrorCode& status) const {
+        NULL_ON_ERROR(status);
 
         if (isBuiltInFormatter(functionName)) {
             return standardMFFunctionRegistry.getFormatter(functionName);
         }
         if (isBuiltInSelector(functionName)) {
-            err.setFormattingError(functionName, status);
+            status = U_MF_FORMATTING_ERROR;
             return nullptr;
         }
         if (hasCustomMFFunctionRegistry()) {
@@ -294,7 +296,7 @@ namespace message2 {
                 return formatterFactory;
             }
             if (customMFFunctionRegistry.getSelector(functionName) != nullptr) {
-                err.setFormattingError(functionName, status);
+                status = U_MF_FORMATTING_ERROR;
                 return nullptr;
             }
         }
@@ -302,7 +304,7 @@ namespace message2 {
         // isn't built-in, or the function doesn't exist in either the built-in
         // or custom registry.
         // Unknown function error
-        err.setUnknownFunction(functionName, status);
+        status = U_MF_UNKNOWN_FUNCTION_ERROR;
         return nullptr;
     }
 
@@ -313,39 +315,6 @@ namespace message2 {
 
     bool MessageFormatter::isCustomSelector(const FunctionName& fn) const {
         return hasCustomMFFunctionRegistry() && getCustomMFFunctionRegistry().getSelector(fn) != nullptr;
-    }
-
-    const Formatter* MessageFormatter::maybeCachedFormatter(MessageContext& context, const FunctionName& functionName, UErrorCode& errorCode) const {
-        NULL_ON_ERROR(errorCode);
-        U_ASSERT(cachedFormatters != nullptr);
-
-        const Formatter* result = cachedFormatters->getFormatter(functionName);
-        if (result == nullptr) {
-            // Create the formatter
-
-            // First, look up the formatter factory for this function
-            FormatterFactory* formatterFactory = lookupFormatterFactory(context, functionName, errorCode);
-            NULL_ON_ERROR(errorCode);
-
-            // If the formatter factory was null, there must have been
-            // an earlier error/warning
-            if (formatterFactory == nullptr) {
-                U_ASSERT(context.getErrors().hasUnknownFunctionError() || context.getErrors().hasFormattingError());
-                return nullptr;
-            }
-
-            // Create a specific instance of the formatter
-            Formatter* formatter = formatterFactory->createFormatter(locale, errorCode);
-            NULL_ON_ERROR(errorCode);
-            if (formatter == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-                return nullptr;
-            }
-            cachedFormatters->adoptFormatter(functionName, formatter, errorCode);
-            return formatter;
-        } else {
-            return result;
-        }
     }
 
 } // namespace message2

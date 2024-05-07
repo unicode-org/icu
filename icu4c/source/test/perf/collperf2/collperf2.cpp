@@ -60,8 +60,8 @@ class Strcoll : public UPerfFunction
 public:
     Strcoll(const UCollator* coll, const CA_uchar* source, UBool useLen);
     ~Strcoll();
-    virtual void call(UErrorCode* status);
-    virtual long getOperationsPerIteration();
+    void call(UErrorCode* status) override;
+    long getOperationsPerIteration() override;
 
 private:
     const UCollator *coll;
@@ -120,8 +120,8 @@ class Strcoll_2 : public UPerfFunction
 public:
     Strcoll_2(const UCollator* coll, const CA_uchar* source, const CA_uchar* target, UBool useLen);
     ~Strcoll_2();
-    virtual void call(UErrorCode* status);
-    virtual long getOperationsPerIteration();
+    void call(UErrorCode* status) override;
+    long getOperationsPerIteration() override;
 
 private:
     const UCollator *coll;
@@ -172,8 +172,8 @@ class StrcollUTF8 : public UPerfFunction
 public:
     StrcollUTF8(const UCollator* coll, const CA_char* source, UBool useLen);
     ~StrcollUTF8();
-    virtual void call(UErrorCode* status);
-    virtual long getOperationsPerIteration();
+    void call(UErrorCode* status) override;
+    long getOperationsPerIteration() override;
 
 private:
     const UCollator *coll;
@@ -232,8 +232,8 @@ class StrcollUTF8_2 : public UPerfFunction
 public:
     StrcollUTF8_2(const UCollator* coll, const CA_char* source, const CA_char* target, UBool useLen);
     ~StrcollUTF8_2();
-    virtual void call(UErrorCode* status);
-    virtual long getOperationsPerIteration();
+    void call(UErrorCode* status) override;
+    long getOperationsPerIteration() override;
 
 private:
     const UCollator *coll;
@@ -283,8 +283,8 @@ class GetSortKey : public UPerfFunction
 public:
     GetSortKey(const UCollator* coll, const CA_uchar* source, UBool useLen);
     ~GetSortKey();
-    virtual void call(UErrorCode* status);
-    virtual long getOperationsPerIteration();
+    void call(UErrorCode* status) override;
+    long getOperationsPerIteration() override;
 
 private:
     const UCollator *coll;
@@ -310,15 +310,14 @@ void GetSortKey::call(UErrorCode* status)
     if (U_FAILURE(*status)) return;
 
     uint8_t key[KEY_BUF_SIZE];
-    int32_t len;
 
     if (useLen) {
         for (int32_t i = 0; i < source->count; i++) {
-            len = ucol_getSortKey(coll, source->dataOf(i), source->lengthOf(i), key, KEY_BUF_SIZE);
+            ucol_getSortKey(coll, source->dataOf(i), source->lengthOf(i), key, KEY_BUF_SIZE);
         }
     } else {
         for (int32_t i = 0; i < source->count; i++) {
-            len = ucol_getSortKey(coll, source->dataOf(i), -1, key, KEY_BUF_SIZE);
+            ucol_getSortKey(coll, source->dataOf(i), -1, key, KEY_BUF_SIZE);
         }
     }
 }
@@ -337,9 +336,9 @@ class NextSortKeyPart : public UPerfFunction
 public:
     NextSortKeyPart(const UCollator* coll, const CA_uchar* source, int32_t bufSize, int32_t maxIteration = -1);
     ~NextSortKeyPart();
-    virtual void call(UErrorCode* status);
-    virtual long getOperationsPerIteration();
-    virtual long getEventsPerIteration();
+    void call(UErrorCode* status) override;
+    long getOperationsPerIteration() override;
+    long getEventsPerIteration() override;
 
 private:
     const UCollator *coll;
@@ -404,9 +403,9 @@ class NextSortKeyPartUTF8 : public UPerfFunction
 public:
     NextSortKeyPartUTF8(const UCollator* coll, const CA_char* source, int32_t bufSize, int32_t maxIteration = -1);
     ~NextSortKeyPartUTF8();
-    virtual void call(UErrorCode* status);
-    virtual long getOperationsPerIteration();
-    virtual long getEventsPerIteration();
+    void call(UErrorCode* status) override;
+    long getOperationsPerIteration() override;
+    long getEventsPerIteration() override;
 
 private:
     const UCollator *coll;
@@ -472,8 +471,8 @@ class CppCompare : public UPerfFunction
 public:
     CppCompare(const Collator* coll, const CA_uchar* source, UBool useLen);
     ~CppCompare();
-    virtual void call(UErrorCode* status);
-    virtual long getOperationsPerIteration();
+    void call(UErrorCode* status) override;
+    long getOperationsPerIteration() override;
 
 private:
     const Collator *coll;
@@ -531,8 +530,8 @@ class CppCompare_2 : public UPerfFunction
 public:
     CppCompare_2(const Collator* coll, const CA_uchar* source, const CA_uchar* target, UBool useLen);
     ~CppCompare_2();
-    virtual void call(UErrorCode* status);
-    virtual long getOperationsPerIteration();
+    void call(UErrorCode* status) override;
+    long getOperationsPerIteration() override;
 
 private:
     const Collator *coll;
@@ -582,8 +581,8 @@ class CppCompareUTF8 : public UPerfFunction
 public:
     CppCompareUTF8(const Collator* coll, const CA_char* source, UBool useLen);
     ~CppCompareUTF8();
-    virtual void call(UErrorCode* status);
-    virtual long getOperationsPerIteration();
+    void call(UErrorCode* status) override;
+    long getOperationsPerIteration() override;
 
 private:
     const Collator *coll;
@@ -652,8 +651,8 @@ class CppCompareUTF8_2 : public UPerfFunction
 public:
     CppCompareUTF8_2(const Collator* coll, const CA_char* source, const CA_char* target, UBool useLen);
     ~CppCompareUTF8_2();
-    virtual void call(UErrorCode* status);
-    virtual long getOperationsPerIteration();
+    void call(UErrorCode* status) override;
+    long getOperationsPerIteration() override;
 
 private:
     const Collator *coll;
@@ -709,8 +708,8 @@ class CppGetCollationKey : public UPerfFunction
 public:
     CppGetCollationKey(const Collator* coll, const CA_uchar* source, UBool useLen);
     ~CppGetCollationKey();
-    virtual void call(UErrorCode* status);
-    virtual long getOperationsPerIteration();
+    void call(UErrorCode* status) override;
+    long getOperationsPerIteration() override;
 
 private:
     const Collator *coll;
@@ -772,7 +771,7 @@ public:
             : coll(coll), ucoll(ucoll), ops(0) {}
     virtual ~CollPerfFunction();
     /** Calls call() to set the ops field, and returns that. */
-    virtual long getOperationsPerIteration();
+    long getOperationsPerIteration() override;
 
 protected:
     const Collator& coll;
@@ -820,7 +819,7 @@ public:
             : UniStrCollPerfFunction(coll, ucoll, data16),
               dest(new UnicodeString*[d16->count]) {}
     virtual ~UniStrSort();
-    virtual void call(UErrorCode* status);
+    void call(UErrorCode* status) override;
 
 private:
     UnicodeString** dest;  // aliases only
@@ -910,7 +909,7 @@ public:
     StringPieceSortCpp(const Collator& coll, const UCollator *ucoll, const CA_char* data8)
             : StringPieceSort(coll, ucoll, data8) {}
     virtual ~StringPieceSortCpp();
-    virtual void call(UErrorCode* status);
+    void call(UErrorCode* status) override;
 };
 
 StringPieceSortCpp::~StringPieceSortCpp() {}
@@ -934,7 +933,7 @@ public:
     StringPieceSortC(const Collator& coll, const UCollator *ucoll, const CA_char* data8)
             : StringPieceSort(coll, ucoll, data8) {}
     virtual ~StringPieceSortC();
-    virtual void call(UErrorCode* status);
+    void call(UErrorCode* status) override;
 };
 
 StringPieceSortC::~StringPieceSortC() {}
@@ -958,7 +957,7 @@ public:
     UniStrBinSearch(const Collator& coll, const UCollator *ucoll, const CA_uchar* data16)
             : UniStrCollPerfFunction(coll, ucoll, data16) {}
     virtual ~UniStrBinSearch();
-    virtual void call(UErrorCode* status);
+    void call(UErrorCode* status) override;
 };
 
 UniStrBinSearch::~UniStrBinSearch() {}
@@ -994,7 +993,7 @@ public:
     StringPieceBinSearchCpp(const Collator& coll, const UCollator *ucoll, const CA_char* data8)
             : StringPieceBinSearch(coll, ucoll, data8) {}
     virtual ~StringPieceBinSearchCpp();
-    virtual void call(UErrorCode* status);
+    void call(UErrorCode* status) override;
 };
 
 StringPieceBinSearchCpp::~StringPieceBinSearchCpp() {}
@@ -1021,7 +1020,7 @@ public:
     StringPieceBinSearchC(const Collator& coll, const UCollator *ucoll, const CA_char* data8)
             : StringPieceBinSearch(coll, ucoll, data8) {}
     virtual ~StringPieceBinSearchC();
-    virtual void call(UErrorCode* status);
+    void call(UErrorCode* status) override;
 };
 
 StringPieceBinSearchC::~StringPieceBinSearchC() {}
@@ -1045,8 +1044,8 @@ class CollPerf2Test : public UPerfTest
 public:
     CollPerf2Test(int32_t argc, const char *argv[], UErrorCode &status);
     ~CollPerf2Test();
-    virtual UPerfFunction* runIndexedTest(
-        int32_t index, UBool exec, const char *&name, char *par = nullptr);
+    UPerfFunction* runIndexedTest(
+        int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 
 private:
     UCollator* coll;

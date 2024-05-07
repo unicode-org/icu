@@ -31,7 +31,7 @@ namespace message2 {
     /**
      * Interface that factory classes for creating formatters must implement.
      *
-     * @internal ICU 75.0 technology preview
+     * @internal ICU 75 technology preview
      * @deprecated This API is for technology preview only.
      */
     class U_I18N_API FormatterFactory : public UObject {
@@ -49,21 +49,21 @@ namespace message2 {
          * @param status    Input/output error code.
          * @return The new Formatter, which is non-null if U_SUCCESS(status).
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         virtual Formatter* createFormatter(const Locale& locale, UErrorCode& status) = 0;
         /**
          * Destructor.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         virtual ~FormatterFactory();
         /**
          * Copy constructor.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         FormatterFactory& operator=(const FormatterFactory&) = delete;
@@ -72,7 +72,7 @@ namespace message2 {
     /**
      * Interface that factory classes for creating selectors must implement.
      *
-     * @internal ICU 75.0 technology preview
+     * @internal ICU 75 technology preview
      * @deprecated This API is for technology preview only.
      */
     class U_I18N_API SelectorFactory : public UObject {
@@ -84,21 +84,21 @@ namespace message2 {
          * @param status    Input/output error code.
          * @return          The new selector, which is non-null if U_SUCCESS(status).
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         virtual Selector* createSelector(const Locale& locale, UErrorCode& status) const = 0;
         /**
          * Destructor.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         virtual ~SelectorFactory();
         /**
          * Copy constructor.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         SelectorFactory& operator=(const SelectorFactory&) = delete;
@@ -111,7 +111,7 @@ namespace message2 {
      *
      * `MFFunctionRegistry` is immutable and movable. It is not copyable.
      *
-     * @internal ICU 75.0 technology preview
+     * @internal ICU 75 technology preview
      * @deprecated This API is for technology preview only.
      */
     class U_I18N_API MFFunctionRegistry : public UObject {
@@ -131,7 +131,7 @@ namespace message2 {
          *         if no formatter was registered under that name. The pointer is not owned
          *         by the caller.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         FormatterFactory* getFormatter(const FunctionName& formatterName) const;
@@ -143,7 +143,7 @@ namespace message2 {
          * @return A pointer to the `SelectorFactory` registered under `selectorName`, or null
          *         if no formatter was registered under that name.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         const SelectorFactory* getSelector(const FunctionName& selectorName) const;
@@ -157,7 +157,7 @@ namespace message2 {
          * @return True if and only if the function registry contains a default formatter for `formatterType`.
          *         If the return value is false, then the value of `name` is undefined.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         UBool getDefaultFormatterNameByType(const UnicodeString& formatterType, FunctionName& name) const;
@@ -168,7 +168,7 @@ namespace message2 {
          *
          * Builder is not copyable or movable.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         class U_I18N_API Builder : public UObject {
@@ -208,7 +208,7 @@ namespace message2 {
              * @param errorCode Input/output error code
              * @return A reference to the builder.
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             Builder& adoptFormatter(const data_model::FunctionName& formatterName, FormatterFactory* formatterFactory, UErrorCode& errorCode);
@@ -222,7 +222,7 @@ namespace message2 {
              * @param errorCode Input/output error code
              * @return A reference to the builder.
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             Builder& setDefaultFormatterNameByType(const UnicodeString& type, const data_model::FunctionName& functionName, UErrorCode& errorCode);
@@ -236,7 +236,7 @@ namespace message2 {
              * @param errorCode Input/output error code
              * @return A reference to the builder.
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             Builder& adoptSelector(const data_model::FunctionName& selectorName, SelectorFactory* selectorFactory, UErrorCode& errorCode);
@@ -250,7 +250,7 @@ namespace message2 {
              *
              * @return The new MFFunctionRegistry
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             MFFunctionRegistry build();
@@ -260,14 +260,14 @@ namespace message2 {
              *
              * @param errorCode Input/output error code
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             Builder(UErrorCode& errorCode);
             /**
              * Destructor.
              *
-             * @internal ICU 75.0 technology preview
+             * @internal ICU 75 technology preview
              * @deprecated This API is for technology preview only.
              */
             virtual ~Builder();
@@ -277,7 +277,7 @@ namespace message2 {
          * Move assignment operator:
          * The source MFFunctionRegistry will be left in a valid but undefined state.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         MFFunctionRegistry& operator=(MFFunctionRegistry&&) noexcept;
@@ -285,14 +285,14 @@ namespace message2 {
          * Move constructor:
          * The source MFFunctionRegistry will be left in a valid but undefined state.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         MFFunctionRegistry(MFFunctionRegistry&& other) { *this = std::move(other); }
         /**
          * Destructor.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         virtual ~MFFunctionRegistry();
@@ -329,7 +329,7 @@ namespace message2 {
     /**
      * Interface that formatter classes must implement.
      *
-     * @internal ICU 75.0 technology preview
+     * @internal ICU 75 technology preview
      * @deprecated This API is for technology preview only.
      */
     class U_I18N_API Formatter : public UObject {
@@ -349,7 +349,7 @@ namespace message2 {
          *
          * @return The formatted value.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         virtual FormattedPlaceholder format(FormattedPlaceholder&& toFormat,
@@ -358,7 +358,7 @@ namespace message2 {
         /**
          * Destructor.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         virtual ~Formatter();
@@ -367,7 +367,7 @@ namespace message2 {
     /**
      * Interface that selector classes must implement.
      *
-     * @internal ICU 75.0 technology preview
+     * @internal ICU 75 technology preview
      * @deprecated This API is for technology preview only.
      */
     class U_I18N_API Selector : public UObject {
@@ -391,7 +391,7 @@ namespace message2 {
          *        to signal errors. The custom selector may pass `status` to other ICU functions
          *        that can signal errors using this mechanism.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         virtual void selectKey(FormattedPlaceholder&& toFormat,
@@ -406,7 +406,7 @@ namespace message2 {
         /**
          * Destructor.
          *
-         * @internal ICU 75.0 technology preview
+         * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
         virtual ~Selector();

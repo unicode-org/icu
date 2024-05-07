@@ -34,6 +34,7 @@ DEFS += -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
 LIBS = $(LIBCTESTFW) $(LIBICUTOOLUTIL) $(LIBICUIO) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 FUZZER_TARGETS = \
+		 ubidi_fuzzer \
 		 break_iterator_fuzzer \
 		 calendar_fuzzer collator_compare_fuzzer \
 		 collator_rulebased_fuzzer \

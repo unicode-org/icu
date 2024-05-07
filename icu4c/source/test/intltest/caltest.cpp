@@ -205,9 +205,11 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(Test22633RollTwiceGetTimeOverflow);
 
     TESTCASE_AUTO(Test22633HebrewLargeNegativeDay);
+    TESTCASE_AUTO(Test22730JapaneseOverflow);
 
     TESTCASE_AUTO(TestAddOverflow);
 
+    TESTCASE_AUTO(Test22750Roll);
 
     TESTCASE_AUTO(TestChineseCalendarComputeMonthStart);
 
@@ -5650,7 +5652,7 @@ void CalendarTest::Test22633ChineseOverflow() {
     U_ASSERT(U_SUCCESS(status));
     cal->set(UCAL_EXTENDED_YEAR, -1594662558);
     cal->get(UCAL_YEAR, status);
-    assertTrue("Should return success", U_SUCCESS(status));
+    assertTrue("Should return failure", U_FAILURE(status));
 
     cal->setTime(17000065021099877464213620139773683829419175940649608600213244013003611130029599692535053209683880603725167923910423116397083334648012657787978113960494455603744210944.000000, status);
     cal->add(UCAL_YEAR, 1935762034, status);
@@ -5876,6 +5878,16 @@ void CalendarTest::Test22633HebrewLargeNegativeDay() {
     assertEquals("status return without hang", status, U_ILLEGAL_ARGUMENT_ERROR);
 }
 
+void CalendarTest::Test22730JapaneseOverflow() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> calendar(
+        Calendar::createInstance(Locale("en-u-ca-japanese"), status),
+        status);
+    calendar->clear();
+    calendar->roll(UCAL_EXTENDED_YEAR, -1946156856, status);
+    assertEquals("status return without overflow", status, U_ILLEGAL_ARGUMENT_ERROR);
+}
+
 void CalendarTest::TestAddOverflow() {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -5918,6 +5930,25 @@ void CalendarTest::TestAddOverflow() {
         }
     }
 }
+
+void CalendarTest::Test22750Roll() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    std::unique_ptr<icu::StringEnumeration> enumeration(
+        Calendar::getKeywordValuesForLocale("calendar", l, false, status));
+    // Test every calendar
+    for (const char* name = enumeration->next(nullptr, status);
+            U_SUCCESS(status) && name != nullptr;
+            name = enumeration->next(nullptr, status)) {
+        UErrorCode status2 = U_ZERO_ERROR;
+        l.setKeywordValue("calendar", name, status2);
+        LocalPointer<Calendar> calendar(Calendar::createInstance(l, status2));
+        if (failure(status2, "Calendar::createInstance")) return;
+        calendar->add(UCAL_DAY_OF_WEEK_IN_MONTH, 538976288, status2);
+        calendar->roll(UCAL_DATE, 538976288, status2);
+    }
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

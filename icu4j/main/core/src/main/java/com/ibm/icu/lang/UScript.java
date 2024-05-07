@@ -1068,6 +1068,21 @@ public final class UScript {
     /** @stable ICU 75 */
     public static final int ARABIC_NASTALIQ = 200; /* Aran */
 
+    /** @stable ICU 76 */
+    public static final int GARAY = 201; /* Gara */
+    /** @stable ICU 76 */
+    public static final int GURUNG_KHEMA = 202; /* Gukh */
+    /** @stable ICU 76 */
+    public static final int KIRAT_RAI = 203; /* Krai */
+    /** @stable ICU 76 */
+    public static final int OL_ONAL = 204; /* Onao */
+    /** @stable ICU 76 */
+    public static final int SUNUWAR = 205; /* Sunu */
+    /** @stable ICU 76 */
+    public static final int TODHRI = 206; /* Todr */
+    /** @stable ICU 76 */
+    public static final int TULU_TIGALARI = 207; /* Tutg */
+
     /**
      * One more than the highest normal UScript code.
      * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT).
@@ -1075,7 +1090,7 @@ public final class UScript {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int CODE_LIMIT   = 201;
+    public static final int CODE_LIMIT   = 208;
 
     private static int[] getCodesFromLocale(ULocale locale) {
         // Multi-script languages, equivalent to the LocaleScript data
@@ -1570,6 +1585,14 @@ public final class UScript {
             0x10582 | EXCLUSION | CASED,  // Vith
             0x11F1B | EXCLUSION | LB_LETTERS,  // Kawi
             0x1E4E6 | EXCLUSION,  // Nagm
+            0,
+            0x10D5D | EXCLUSION | RTL | CASED,  // Gara
+            0x1611C | EXCLUSION,  // Gukh
+            0x16D45 | EXCLUSION,  // Krai
+            0x1E5D0 | EXCLUSION,  // Onao
+            0x11BC4 | EXCLUSION,  // Sunu
+            0x105C2 | EXCLUSION,  // Todr
+            0x11392 | EXCLUSION,  // Tutg
             // End copy-paste from parsescriptmetadata.py
         };
 

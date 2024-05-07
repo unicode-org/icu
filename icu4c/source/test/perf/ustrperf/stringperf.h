@@ -68,7 +68,7 @@ class StringPerfFunction : public UPerfFunction
 {
 public:
 
-    virtual long getEventsPerIteration(){
+    long getEventsPerIteration() override {
         int loops = LOOPS;
         delete catICU;
         delete catStd;
@@ -90,7 +90,7 @@ public:
         return -1;
     }
 
-    virtual void call(UErrorCode* status)
+    void call(UErrorCode* status) override
     {
         if(line_mode_==true){
             if(uselen_){
@@ -127,7 +127,7 @@ public:
         }
     }
 
-    virtual long getOperationsPerIteration()
+    long getOperationsPerIteration() override
     {
         if(line_mode_==true){
             return numLines_;
@@ -350,9 +350,9 @@ class StringPerformanceTest : public UPerfTest
 public:
     StringPerformanceTest(int32_t argc, const char *argv[], UErrorCode &status);
     ~StringPerformanceTest();
-    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,
-                                          const char *&name,
-                                          char *par = nullptr);
+    UPerfFunction* runIndexedTest(int32_t index, UBool exec,
+                                  const char*& name,
+                                  char* par = nullptr) override;
     UPerfFunction* TestCtor();
     UPerfFunction* TestCtor1();
     UPerfFunction* TestCtor2();
@@ -443,7 +443,7 @@ inline void catenate(const char16_t* src,int32_t srcLen, UnicodeString s0)
     *catICU += s0;
 
     utimer_getTime(&mystop);
-    double mytime = utimer_getDeltaSeconds(&mystart,&mystop);
+    utimer_getDeltaSeconds(&mystart,&mystop);
 
     *catICU += uCatenate_STR;
 }
@@ -531,7 +531,7 @@ inline void StdLibCatenate(const wchar_t* src,int32_t srcLen, stlstring s0)
     *catStd += sCatenate_STR;
 
     utimer_getTime(&mystop);
-    double mytime = utimer_getDeltaSeconds(&mystart,&mystop);
+    utimer_getDeltaSeconds(&mystart,&mystop);
 
 }
 

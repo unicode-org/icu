@@ -1740,7 +1740,9 @@ _files = {
   "WordBreakProperty.txt": (DontCopy, ParseWordBreak),
   "WordBreakTest.txt": (CopyOnly, "testdata"),
   # From www.unicode.org/Public/idna/<version>/
-  "IdnaMappingTable.txt": (IdnaToUTS46TextFile, "norm2")
+  "IdnaMappingTable.txt": (IdnaToUTS46TextFile, "norm2"),
+  # From www.unicode.org/Public/security/<version>/
+  "confusables.txt": (CopyOnly, "unidata")
 }
 
 # List of lists of files to be parsed in order.
@@ -2169,6 +2171,53 @@ def CheckPNamesData():
     #       (ICU's gcm property has all of the UCD gc property values.)
     if vnames and not (prop[0] == "Binary" or pname in ("age", "gc")):
       missing_enums.append((pname, vnames))
+      # Print new API constants.
+      if pname == "blk":
+        block_starts = {}
+        for (start, _, props) in _blocks:
+          block_name = props["blk"]
+          if block_name in vnames:
+            block_starts[block_name] = start
+        print("# New Block constants: C")
+        print("    // New blocks in Unicode " + _ucd_version)
+        for vname in sorted(vnames):
+          long_name = prop[3][vname][1]
+          print("    UBLOCK_%s = nnn, /*[%04lX]*/" %
+                (long_name.upper(), block_starts[vname]))
+        print("# New Block constants: Java numeric")
+        print("        // New blocks in Unicode " + _ucd_version)
+        for vname in sorted(vnames):
+          long_name = prop[3][vname][1]
+          print("        public static final int %s_ID = nnn; /*[%04lX]*/" %
+                (long_name.upper(), block_starts[vname]))
+        print("# New Block constants: Java objects")
+        print("        // New blocks in Unicode " + _ucd_version)
+        for vname in sorted(vnames):
+          long_name = prop[3][vname][1].upper()
+          print(("        public static final UnicodeBlock %s ="
+                 " new UnicodeBlock(\"%s\", %s_ID);") %
+                (long_name, long_name, long_name))
+      if pname == "sc":
+        print("# New Script constants: C")
+        for vname in sorted(vnames):
+          long_name = prop[3][vname][1]
+          pad = " " * (29 - len(long_name))
+          print("      USCRIPT_%s%s = nnn, /* %s */" %
+                (long_name.upper(), pad, vname))
+        print("# New Script constants: Java")
+        for vname in sorted(vnames):
+          long_name = prop[3][vname][1]
+          print("    public static final int %s = nnn; /* %s */" %
+                (long_name.upper(), vname))
+      if pname == "InSC":
+        print("# New Indic_Syllabic_Category constants: C")
+        for vname in sorted(vnames):
+          long_name = prop[3][vname][1]
+          print("    U_INSC_%s," % long_name.upper())
+        print("# New Indic_Syllabic_Category constants: Java")
+        for vname in sorted(vnames):
+          long_name = prop[3][vname][1]
+          print("        public static final int %s = nnn;" % long_name.upper())
   if missing_enums:
     raise ValueError(
         "missing uchar.h enum constants for some property values: %s" %
@@ -2277,6 +2326,8 @@ def main():
   for root, dirs, files in os.walk(ucd_root):
     for file in files:
       source_files.append(os.path.join(root, file))
+  if not source_files:
+    raise Exception("no files found to process; bad path? %s" % ucd_root)
   PreprocessFiles(source_files, icu4c_src_root)
   # Parse the processed files in a particular order.
   for files in _files_to_parse:

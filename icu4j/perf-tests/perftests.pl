@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/env perl
 # * © 2016 and later: Unicode, Inc. and others.
 # * License & terms of use: http://www.unicode.org/copyright.html
 # *******************************************************************************
@@ -11,14 +11,15 @@ use XML::LibXML;
 # Assume we are running within the icu4j root directory
 use lib '.';
 use Dataset;
-my $OS=$^O;
 
+my $OS=$^O;
 my $CLASSPATH;
-if ($OS eq "linux" || $OS eq "darwin") {
-	$CLASSPATH="../icu4j.jar:../tools/misc/out/lib/icu4j-tools.jar:out/bin";
+if ($^O eq "MSWin32") {
+	$CLASSPATH = './target/*;./target/dependency/*';
 } else {
-	$CLASSPATH="../icu4j.jar;../tools/misc/out/lib/icu4j-tools.jar;out/bin";
+	$CLASSPATH = './target/*:./target/dependency/*';
 }
+
 #---------------------------------------------------------------------
 
 # Methods to be tested.  Each pair represents a test method and

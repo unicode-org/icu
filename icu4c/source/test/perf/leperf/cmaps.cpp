@@ -63,10 +63,10 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
     le_uint16 nSubtables = SWAPW(cmap->numberSubtables);
     const CMAPEncodingSubtable *subtable = nullptr;
     le_bool found = false;
-    le_uint16 foundPlatformID = 0xFFFF;
-    le_uint16 foundPlatformSpecificID = 0xFFFF;
+    //le_uint16 foundPlatformID = 0xFFFF;
+    //le_uint16 foundPlatformSpecificID = 0xFFFF;
     le_uint32 foundOffset = 0;
-    le_uint16 foundTable = 0xFFFF;
+    //le_uint16 foundTable = 0xFFFF;
     // first pass, look for MS table. (preferred?)
     for (i = 0; i < nSubtables && !found; i += 1) {
         const CMAPEncodingSubtableHeader *esh = &cmap->encodingSubtableHeaders[i];
@@ -78,10 +78,10 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
             case 1: // Unicode BMP (UCS-2)
             case 10: // Unicode UCS-4
                 foundOffset = SWAPL(esh->encodingOffset);
-                foundPlatformID = platformID;
-                foundPlatformSpecificID = platformSpecificID;
+                //foundPlatformID = platformID;
+                //foundPlatformSpecificID = platformSpecificID;
                 found = true;
-                foundTable = i;
+                //foundTable = i;
                 break;
 
                 //default:
@@ -107,9 +107,9 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
           case 2:
           case 3:
             foundOffset = SWAPL(esh->encodingOffset);
-            foundPlatformID = platformID;
-            foundPlatformSpecificID = platformSpecificID;
-            foundTable = i;
+            //foundPlatformID = platformID;
+            //foundPlatformSpecificID = platformSpecificID;
+            //foundTable = i;
             found = true;
             break;
 

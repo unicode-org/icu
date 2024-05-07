@@ -40,7 +40,7 @@ struct CompactArrays{\
     UNIT    * data; /*the real space to hold strings*/ \
     \
     ~CompactArrays(){free(index);free(data);} \
-    CompactArrays():data(nullptr), index(nullptr), count(0){ \
+    CompactArrays():count(0), index(nullptr), data(nullptr){ \
     index = (int32_t *) realloc(index, sizeof(int32_t)); \
     index[0] = 0; \
     } \
@@ -102,9 +102,9 @@ public:
     CmdKeyGen(UErrorCode, UCollator * col,DWORD win_langid, int32_t count, DataIndex * data,Func fn,int32_t)
         :col(col),win_langid(win_langid), count(count), data(data), fn(fn){}
 
-        virtual long getOperationsPerIteration(){return count;}
+        long getOperationsPerIteration() override { return count; }
 
-        virtual void call(UErrorCode* status){
+        void call(UErrorCode* status) override {
             for(int32_t i = 0; i< count; i++){
                 (this->*fn)(i);
             }
@@ -155,9 +155,9 @@ public:
             ucol_closeElements(iter);
         }
 
-        virtual long getOperationsPerIteration(){return exec_count ? exec_count : 1;}
+        long getOperationsPerIteration() override { return exec_count ? exec_count : 1; }
 
-        virtual void call(UErrorCode* status){
+        void call(UErrorCode* status) override {
             exec_count = 0;
             for(int32_t i = 0; i< count; i++){
                 (this->*fn)(status, i);
@@ -188,7 +188,6 @@ public:
 class CmdIterAll : public UPerfFunction {
     typedef	void (CmdIterAll::* Func)(UErrorCode* status);
     int32_t     count;
-    char16_t *     data;
     Func        fn;
     UCollationElements *iter;
     int32_t     exec_count;
@@ -200,7 +199,7 @@ public:
         ucol_closeElements(iter);
     }
     CmdIterAll(UErrorCode & status, UCollator * col, int32_t count,  char16_t * data, CALL call,int32_t,int32_t)
-        :count(count),data(data)
+        :count(count)
     {
         exec_count = 0;
         if (call == forward_null || call == backward_null) {
@@ -215,9 +214,9 @@ public:
             fn = &CmdIterAll::icu_backward_all;
         }
     }
-    virtual long getOperationsPerIteration(){return exec_count ? exec_count : 1;}
+    long getOperationsPerIteration() override { return exec_count ? exec_count : 1; }
 
-    virtual void call(UErrorCode* status){
+    void call(UErrorCode* status) override {
         (this->*fn)(status);
     }
 
@@ -355,7 +354,7 @@ private:
     void *  backup; //copy source of base
 public:
     CmdQsort(UErrorCode & status,void *theBase, int32_t num, int32_t width, Func fn, int32_t,int32_t)
-        :backup(theBase),num(num),width(width),fn(fn){
+        :fn(fn),num(num),width(width),backup(theBase){
             base = malloc(num * width);
             time_empty(100, &status); // warm memory/cache
         }
@@ -379,18 +378,18 @@ public:
             return utimer_getDeltaSeconds(&start,&stop); // ms
         }
 
-        virtual void call(UErrorCode* status){
+        void call(UErrorCode* status) override {
             exec_count = 0;
             memcpy(base, backup, num * width);
             qsort(base, num, width, fn);
         }
-        virtual double time(int32_t n, UErrorCode* status) {
+        double time(int32_t n, UErrorCode* status) override {
             double t1 = time_empty(n,status);
             double t2 = UPerfFunction::time(n, status);
             return  t2-t1;// < 0 ? t2 : t2-t1;
         }
 
-        virtual long getOperationsPerIteration(){ return exec_count?exec_count:1;}
+        long getOperationsPerIteration() override { return exec_count ? exec_count : 1; }
 };
 int32_t CmdQsort::exec_count;
 
@@ -411,13 +410,13 @@ public:
         :col(col),win_langid(win_langid), count(count), rnd(rnd), ord(ord), fn(fn),exec_count(0){}
 
 
-        virtual void call(UErrorCode* status){
+        void call(UErrorCode* status) override {
             exec_count = 0;
             for(int32_t i = 0; i< count; i++){ // search all data
                 binary_search(i);
             }
         }
-        virtual long getOperationsPerIteration(){ return exec_count?exec_count:1;}
+        long getOperationsPerIteration() override { return exec_count ? exec_count : 1; }
 
         void binary_search(int32_t random)	{
             int low   = 0;
@@ -684,7 +683,7 @@ public:
     temp++\
 
 
-    virtual UPerfFunction* runIndexedTest( /*[in]*/int32_t index, /*[in]*/UBool exec, /*[out]*/const char* &name, /*[in]*/ char* par = nullptr ){
+    UPerfFunction* runIndexedTest(/*[in]*/int32_t index, /*[in]*/UBool exec, /*[out]*/const char*& name, /*[in]*/char* par = nullptr) override {
         int temp = 0;
 
 #define TEST_KEYGEN(testname, func)\

@@ -31,7 +31,7 @@ public:
 protected:
     CMAPMapper(const CMAPTable *cmap);
 
-    CMAPMapper() {};
+    CMAPMapper() {}
 
 private:
     const CMAPTable *fcmap;
@@ -44,10 +44,10 @@ public:
 
     virtual ~CMAPFormat4Mapper();
 
-    virtual LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const;
+    LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const override;
 
 protected:
-    CMAPFormat4Mapper() {};
+    CMAPFormat4Mapper() {}
 
 private:
     le_uint16       fEntrySelector;
@@ -65,10 +65,10 @@ public:
 
     virtual ~CMAPGroupMapper();
 
-    virtual LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const;
+    LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const override;
 
 protected:
-    CMAPGroupMapper() {};
+    CMAPGroupMapper() {}
 
 private:
     le_int32 fPower;

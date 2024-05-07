@@ -109,16 +109,23 @@ Per starter that combines forward, old and new data stores a linear, sorted list
 *   Canonical ordering requires ccc data.
 *   Composition only combines the most recent starter with one other character, if such a mapping is defined. It only ever combines one pair into one composite per step.
 *   Every composition is the reverse of a corresponding decomposition. That is, a decomposition can either be a one-way mapping (from one code point to a sequence of one or more others but not back from that sequence to the original), or it can be a two-way mapping (from one code point to a pair of others, and back).
-    *   Note: Custom mappings may also map some characters away, that is, to an empty string. The ICU 4.2 implementation is not prepared to handle such a case because it does not occur in standard Unicode normalization. This will need to be supported for custom tables.
-    *   Note: Unicode NFKC\_Casefold and UTS #46 map each Default\_Ignorable\_Code\_Point to an empty string.
+    *   Note: Mappings may also map some characters away, that is, to an empty string. The ICU 4.2 implementation was not prepared to handle such a case.
+        This needs to be supported for custom tables.
+        For example, Unicode NFKC\_Casefold and UTS #46 map each Default\_Ignorable\_Code\_Point to an empty string.
 *   A starter is defined as a character with ccc=0.
 *   Only a starter can combine-forward, but most starters don't. (The set of compositions/2-way mappings in standard Unicode normalization increases only slowly.)
 *   A composite (result of combining a pair of characters) must have ccc=0, or else the result of composition may not be in canonical order because there is not another reordering step.
 *   A composite can combine-forward. The composition algorithm tries to combine the new composite with following characters. (For example, base characters with two diacritics, and Hangul LVT.)
     *   The ICU implementation recomposes starting from a fully decomposed sequence. Therefore, the lookup value needs to indicate combines-forward only for characters that do not have a mapping. The composition table result then indicates whether a composite combines-forward, and the index to the combined mapping+composition data is then found via the index from the composite's lookup result.
     *   ICU 49 composePair() needs to know whether the first character combines forward even if it is a composite. formatVersion 2 separates the YesNo range into two parts accordingly, adding the yesNoMappingsOnly threshold.
-*   A composite cannot combine-back because the composition algorithm does not try to combine an earlier starter with the new composite.
-*   The algorithm allows for a character to both combine-back and combine-forward, although this seems like a strange situation and it does not occur in Unicode 5.2..10.
+*   A composite itself cannot combine-back because the composition algorithm does not try to combine
+    an earlier starter with the new composite.
+    However, when a character has a two-way mapping which starts with a combine-back character,
+    then the composite needs to be marked as combine-back (NF*C_QC=Maybe)
+    so that normalization and the quick check work properly.
+    Such characters occur in Unicode 16 for the first time.
+*   The algorithm allows for a character to both combine-back and combine-forward.
+    Such characters occur in Unicode 16 for the first time.
 *   Hangul syllables are algorithmically decomposed into Jamos, and algorithmically recomposed from them. The actual mappings are not stored in the table.
 *   In the ICU implementation, recomposition is done only on a fully decomposed sequence. Composition then sees only YesYes and MaybeYes characters which do not have mappings.
 *   A character that maps to an empty string (that is, one that is deleted during normalization) does not have normalization boundaries before or after it. Its FCD value would be the worst-case 0x1ff (lccc=1, tccc=0xff). (The standard Unicode normalization forms do not delete characters, but NFKC\_Casefold and UTS #46 do.)
@@ -143,16 +150,22 @@ A simple mapping to one code point can be stored directly in the lookup value, w
 
 ICU does not allow tailoring of Hangul/Jamo mappings and compositions, except to make the relevant characters completely inert.
 
-MaybeNo is both forbidden and irrelevant:
+MaybeNo is possible, and Unicode 16 adds the first such characters.
 
-*   Forbidden: If it has a one-way mapping, it has NoNo quick check values. If it has a two-way mapping, then it is a composite, but the Unicode composition would not try to combine it with a preceding character.
-*   Irrelevant: Composition sees NFD, so it sees no characters with mappings. A combines-backward character would never combine with anything.
-        
+*   If a character has a one-way mapping, it has NoNo quick check values.
+*   If it has a two-way mapping, then it is a composite, but the Unicode composition would not try to combine it with a preceding character.
+*   Composition sees NFD, so it sees no characters with mappings.
+*   However, if a two-way mapping starts with a "Maybe" character (combines-back),
+    then the composite must also be marked as combines-back, that is, MaybeNo rather than YesNo.
+*   The character and some surrounding ones need to be decomposed,
+    and composition may combine the first character in the mapping with a previous starter,
+    in which case the original composite would not occur in the result.
+
 NoYes is impossible: If it has no mapping, it will occur in NFC.
 
 A YesNo only ever decomposes into a YesYes+MaybeYes sequence or a YesNo+MaybeYes sequence. That is, a YesNo's decomposition (A=B+C) decomposes further if and only if the first (B) of its two components has a decomposition.
 
-A YesNo always has ccc=lccc=0.
+A YesNo or MaybeNo always has ccc=lccc=0.
 
 Only a starter can combine-forward, therefore no character can have ccc≠0 and combine forward.
 
@@ -160,11 +173,9 @@ A NoNo can have any of its components decompose further, but this is only visibl
 
 NoNo with combine-forward is impossible: A one-way mapping prevents composition (which starts from NFD where there are no decomposable characters).
 
-### Per-character lookup values, .nrm formatVersion 3
+### Per-character lookup values, .nrm formatVersion 3+
 
-Since ICU 60
-
-Changes from version 2:
+Changes from version 2 to 3 (ICU 60):
 
 *   16-bit value bit 0 used for has-composition-boundary-after, ccc & indexes shifted left by 1.
 *   16-bit values for delta mappings carry tccc data in bits 2..1.
@@ -177,7 +188,16 @@ Changes from version 2:
 *   The extraData firstUnit bit 5 is no longer necessary (norm16 bit 0 used instead of firstUnit `MAPPING_NO_COMP_BOUNDARY_AFTER`), is reserved again, and always set to 0.
 *   A mapping to an empty string has explicit lccc=1 and tccc=255 values.
 
-Possible combinations and their encoding:
+Changes from version 3 to 4 (ICU 63):
+
+Switch to UCPTrie=CodePointTrie. No more explicit mappings for surrogate code points.
+
+Changes from version 4 to 5 (ICU 76):
+
+Support for MaybeNo characters. Addition of two new ranges between "algorithmic NoNo" and MaybeYes,
+with thresholds minMaybeNo and minMaybeNoCombinesFwd.
+
+#### Possible combinations and their encoding
 
 _The rows of the table, from bottom to top, are encoded with increasing 16-bit "norm16" values as noted in the last column. Per-row and per-row-group properties are determined via norm16 range checks._
 
@@ -347,15 +367,45 @@ _The rows of the table, from bottom to top, are encoded with increasing 16-bit "
         <br />
       </td>
       <td style="width:476px;height:31px">
-        Both combine-back &amp; combine-fwd: strange but allowed
-        <br />
+        Both combine-back &amp; combine-fwd
       </td>
-      <td style="width:60px">none</td>
+      <td style="width:60px">U+1611E GURUNG KHEMA VOWEL SIGN AA</td>
       <td style="width:456px;height:31px">
-        ≥minMaybeYes which is 8-aligned
+        ≥minMaybeYes
         <br />
-        index into composition table
+        index into maybeData composition table
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color:rgb(255,242,204);width:71px;height:31px">Maybe</td>
+      <td style="background-color:rgb(244,204,204);width:71px;height:47px">No</td>
+      <td style="width:52px;height:31px">0</td>
+      <td style="width:75px;height:31px">no</td>
+      <td style="width:74px;height:31px">yes</td>
+      <td style="width:476px;height:31px">
+        Has 2-way mapping, both combine-back &amp; combine-fwd
+      </td>
+      <td style="width:60px">U+16121 GURUNG KHEMA VOWEL SIGN U</td>
+      <td style="width:456px;height:31px">
+        ≥minMaybeNoCombinesFwd
         <br />
+        index into maybeData decomp+comp table
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color:rgb(255,242,204);width:71px;height:31px">Maybe</td>
+      <td style="background-color:rgb(244,204,204);width:71px;height:47px">No</td>
+      <td style="width:52px;height:31px">0</td>
+      <td style="width:75px;height:31px">no</td>
+      <td style="width:74px;height:31px">no</td>
+      <td style="width:476px;height:31px">
+        Has 2-way mapping &amp; combine-back
+      </td>
+      <td style="width:60px">U+16126 GURUNG KHEMA VOWEL SIGN O</td>
+      <td style="width:456px;height:31px">
+        ≥minMaybeNo which is 8-aligned
+        <br />
+        index into maybeData decomposition table
       </td>
     </tr>
     <tr>
@@ -384,9 +434,9 @@ _The rows of the table, from bottom to top, are encoded with increasing 16-bit "
       </td>
       <td style="width:60px">A</td>
       <td style="width:456px;height:47px">
-        ≥minNoNoDelta=minMaybeYes-((2*maxDelta+1)&lt;&lt;3)
+        ≥minNoNoDelta=minMaybeNo-((2*maxDelta+1)&lt;&lt;3)
         <br />
-        delta=0 is at minMaybeYes-((maxDelta-1)&lt;&lt;3); it must not be used
+        delta=0 is at minMaybeNo-((maxDelta-1)&lt;&lt;3); it must not be used
         <br />
         bits 2..1: tccc=0 or 1 or &gt;1
       </td>
@@ -1157,15 +1207,28 @@ The minYesNoMappingsOnly distinction was added in ICU 49, .nrm formatVersion 2.0
 
 ### Additional data indexed by the trie value
 
-(**Implemented in ICU 4.4, .nrm formatVersion 1.0. Modified in ICU 49, .nrm formatVersion 2.0 and in ICU 60, .nrm formatVersion 3.0.**)
+ICU | formatVersion
+--- | -------------
+4.4 | 1
+49  | 2
+60  | 3
+63  | 4
+76  | 5
 
-"Extra data" per code point, if it has a mapping or if it combines-forward, is stored in 16-bit-unit arrays. The character's lookup value is an index into one of these arrays. It is probably handy to have two arrays, so that indexes can be allocated independently for the two ranges of 16-bit lookup values that are indexes into extra data.
+"Extra data" per code point, if it has a mapping or if it combines-forward, is stored in a 16-bit-unit array with many per-character data sections. The character's lookup value, or part of its bits, is an index to one of these sections.
 
-*   One array with composition lists for MaybeYes characters which don't also have a mapping.
-    *   Usually, MaybeYes characters don't have composition lists, so this array will usually be empty.
-*   One array with
-    *   Composition lists for YesYes characters which don't also have a mapping
-    *   Mappings and optional composition lists for YesNo characters which do have a mapping
+*   Composition lists for YesYes and MaybeYes characters which combine-forward but
+    don't also have a mapping
+*   Mappings and composition lists for YesNo and MaybeNo characters which have a two-way mapping
+*   Only mappings for characters which have a one-way mapping
+
+In formatVersions 4 and below, the composition lists for MaybeYes characters were stored before
+the data for other characters.
+
+In formatVersion 5, the data for MaybeNo and MaybeYes characters is stored after
+the data for other characters.
+
+There is no data in these arrays corresponding to the gap between limitNoNo and minMaybeNo.
 
 Threshold values like minYesNo depend on the mapping data.
 
@@ -1176,7 +1239,8 @@ Mapping to an empty string is encoded as a regular mapping with length 0.
 *   formatVersion 3 stores explicit worst-case values lccc=1 and tccc=255.
 *   formatVersion 1 & 2 store ccc=lccc=tccc=0, and the worst-case values are computed at runtime.
 
-If both a mapping and a composition list are stored for a character (only possible for YesNo), the mapping comes first.
+If both a mapping and a composition list are stored for a character (for YesNo & MaybeNo),
+the mapping comes first.
 
 *   In formatVersion 2+, the trie value thresholds indicate whether there is a composition list.
 *   In formatVersion 1, a bit in the first word indicates that there is a composition list.
@@ -1225,9 +1289,9 @@ Optional composition list
     *   Second unit bits 15..6 contain the combining-back code point's bits 9..0
     *   The remaining second/third unit bits are the same as for the previous case
 
-In the ICU implementation, it is ok to not store the ccc value directly in the lookup value for NoNo characters. When the quick check fails with YesNo, NoNo or MaybeYes, the surrounding sequence is decomposed, which does not use the original characters' ccc values. Composition then sees only YesYes and MaybeYes characters which do have their ccc values in the lookup value.
+In the ICU implementation, it is ok to not store the ccc value directly in the lookup value for NoNo characters. When the quick check fails with YesNo, MaybeNo, NoNo or MaybeYes, the surrounding sequence is decomposed, which does not use the original characters' ccc values. Composition then sees only YesYes and MaybeYes characters which do have their ccc values in the lookup value.
 
-A composite that combines-forward has quick check flags YesNo, has a mapping, has ccc=0 (it's a starter) and lccc=0 (it composes from a starter plus another character) and has a composition list (it combines-forward).
+A composite that combines-forward has quick check flags YesNo or MaybeNo, has a mapping, has ccc=0 (it's a starter) and lccc=0 (it composes from a starter plus another character) and has a composition list (it combines-forward).
 
 Old vs. new: The old composition data uses combine-forward and combine-back indexes stored in the extra data next to the mapping. In the new data structure, the combine-forward index is replaced by appending the composition list after the mapping, and the combine-back index is replaced by searching in the list for the back-combining code point itself.
 

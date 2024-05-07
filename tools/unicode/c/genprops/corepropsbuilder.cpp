@@ -47,7 +47,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 8.0 .
+The following is a description of format version 9.0 .
 
 Data contents:
 
@@ -295,6 +295,10 @@ The 6 bits in vector word 2 that stored emoji properties are unused again.
 
 ICU 75 uses the vector word 2 bits 31..26 for encoded Identifier_Type bit sets.
 
+--- Changes in format version 9.0 (ICU 76) ---
+
+Age major:minor version bit fields changed from 4:4 to 6:2 so that age=16.0 fits.
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
@@ -312,8 +316,8 @@ UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 8, 0, 0, 0 },                             /* formatVersion */
-    { 15, 1, 0, 0 }                             /* dataVersion */
+    { 9, 0, 0, 0 },                             /* formatVersion */
+    { 16, 0, 0, 0 }                             /* dataVersion */
 };
 
 inline uint32_t splitScriptCodeOrIndex(uint32_t v) {
@@ -518,7 +522,7 @@ encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
     return ntv;
 }
 
-uint32_t encodeIdentifierType(const UnicodeSet &idType, bool isA9CF, UErrorCode &errorCode) {
+uint32_t encodeIdentifierType(const UnicodeSet &idType, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return 0; }
     if(idType.isEmpty()) {
         fprintf(stderr, "genprops error: data line has an empty Identifier_Type\n");
@@ -528,12 +532,6 @@ uint32_t encodeIdentifierType(const UnicodeSet &idType, bool isA9CF, UErrorCode 
     if(idType.contains(U_ID_TYPE_EXCLUSION) && idType.contains(U_ID_TYPE_LIMITED_USE)) {
         // By definition, Exclusion and Limited_Use are mutually exclusive.
         // We rely on that for the data structure.
-        if(isA9CF) {
-            // TODO: Known bug in Unicode 15.1 and before.
-            // See PAG issue #217.
-            // See L2/24-064: UTC #179 properties feedback & recommendations
-            return (UPROPS_ID_TYPE_LIMITED_USE|UPROPS_ID_TYPE_UNCOMMON_USE)&~UPROPS_ID_TYPE_BIT;
-        }
         fprintf(stderr,
                 "genprops error: data line has both Identifier_Type Exclusion and Limited_Use\n");
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -712,9 +710,10 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
 
     UChar32 start=props.start;
     UChar32 end=props.end;
+    UChar32 pvecEnd=end;
     if(start==0 && end==0x10ffff) {
         // Also set bits for initialValue and errorValue.
-        end=UPVEC_MAX_CP;
+        pvecEnd=UPVEC_MAX_CP;
     }
 
     if(newValues.containsSome(0, UCHAR_BINARY_LIMIT-1)) {
@@ -724,7 +723,7 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
             if(newValues.contains(p2b.prop)) {
                 uint32_t mask=U_MASK(p2b.vecShift);
                 uint32_t value= props.binProps[p2b.prop] ? mask : 0;
-                upvec_setValue(pv, start, end, p2b.vecWord, value, mask, &errorCode);
+                upvec_setValue(pv, start, pvecEnd, p2b.vecWord, value, mask, &errorCode);
             }
         }
     }
@@ -738,20 +737,21 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
                 uint32_t mask=p2e.vecMask;
                 uint32_t value=(uint32_t)(props.getIntProp(p2e.prop)<<p2e.vecShift);
                 U_ASSERT((value&mask)==value);
-                upvec_setValue(pv, start, end, p2e.vecWord, value, mask, &errorCode);
+                upvec_setValue(pv, start, pvecEnd, p2e.vecWord, value, mask, &errorCode);
             }
         }
     }
     if(newValues.contains(UCHAR_AGE)) {
-        if(props.age[0]>15 || props.age[1]>15 || props.age[2]!=0 || props.age[3]!=0) {
+        if(props.age[0]>UPROPS_AGE_MAJOR_MAX || props.age[1]>UPROPS_AGE_MINOR_MAX ||
+                props.age[2]!=0 || props.age[3]!=0) {
             char buffer[U_MAX_VERSION_STRING_LENGTH];
             u_versionToString(props.age, buffer);
             fprintf(stderr, "genprops error: age %s cannot be encoded\n", buffer);
             errorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
-        uint32_t version=(props.age[0]<<4)|props.age[1];
-        upvec_setValue(pv, start, end,
+        uint32_t version=(props.age[0]<<2)|props.age[1];
+        upvec_setValue(pv, start, pvecEnd,
                        0, version<<UPROPS_AGE_SHIFT, UPROPS_AGE_MASK,
                        &errorCode);
     }
@@ -773,7 +773,7 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         // Use UPROPS_SCRIPT_X_MASK:
         // When writing a Script code, remove Script_Extensions bits as well.
         // If needed, they will get written again.
-        upvec_setValue(pv, start, end, 0, value, UPROPS_SCRIPT_X_MASK, &errorCode);
+        upvec_setValue(pv, start, pvecEnd, 0, value, UPROPS_SCRIPT_X_MASK, &errorCode);
     }
     // Write a new (Script, Script_Extensions) value if there are Script_Extensions
     // and either Script or Script_Extensions are new on the current line.
@@ -820,12 +820,12 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
             return;
         }
         scriptX|=splitScriptCodeOrIndex(index);
-        upvec_setValue(pv, start, end, 0, scriptX, UPROPS_SCRIPT_X_MASK, &errorCode);
+        upvec_setValue(pv, start, pvecEnd, 0, scriptX, UPROPS_SCRIPT_X_MASK, &errorCode);
     }
     if(newValues.contains(UCHAR_IDENTIFIER_TYPE)) {
-        uint32_t encodedType=encodeIdentifierType(props.idType, start==0xA9CF && start==end, errorCode);
+        uint32_t encodedType=encodeIdentifierType(props.idType, errorCode);
         upvec_setValue(
-            pv, start, end, 2,
+            pv, start, pvecEnd, 2,
             encodedType << UPROPS_2_ID_TYPE_SHIFT, UPROPS_2_ID_TYPE_MASK,
             &errorCode);
     }

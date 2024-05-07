@@ -97,7 +97,6 @@ unsigned long timeGetTime() {
 inline int LCMapStringW(DWORD, DWORD, char16_t *, int, char16_t *, int) {return 0;}
 const int LCMAP_SORTKEY = 0;
 #define MAKELCID(a,b) 0
-const int SORT_DEFAULT = 0;
 #endif
 
 
@@ -947,7 +946,6 @@ void doForwardIterTest(UBool haslen) {
     printf("elapsedTime %ld\n", elapsedTime);
     
     // empty loop recalculation
-    int tempgCount = 0;
     count = 0;
     startTime = timeGetTime();
     while (count < opt_loopCount) {
@@ -955,7 +953,6 @@ void doForwardIterTest(UBool haslen) {
         strindex = 0;
         ucol_setOffset(iter, strindex, &error);
         while (true) {
-            tempgCount ++;
             count5 --;
             if (count5 == 0) {
                 strindex += 10;
@@ -1111,14 +1108,12 @@ void doBackwardIterTest(UBool haslen) {
     
     // empty loop recalculation
     count = 0;
-    int tempgCount = 0;
     startTime = timeGetTime();
     while (count < opt_loopCount) {
         int count5 = 5;
         strindex = 5;
         ucol_setOffset(iter, strindex, &error);
         while (true) {
-             tempgCount ++;
              count5 --;
              if (count5 == 0) {
                  strindex += 10;
@@ -1196,7 +1191,7 @@ void  UnixConvert() {
             exit(-1);
         }
         gFileLines[line].unixName[sizeNeeded] = 0;
-    };
+    }
     ucnv_close(cvrtr);
 }
 
@@ -1212,12 +1207,12 @@ public:
     UCharFile(const char *fileName);
     ~UCharFile();
     char16_t   get();
-    UBool   eof() {return fEof;};
-    UBool   error() {return fError;};
+    UBool   eof() {return fEof;}
+    UBool   error() {return fError;}
     
 private:
-    UCharFile (const UCharFile & /*other*/) {};                         // No copy constructor.
-    UCharFile & operator = (const UCharFile &/*other*/) {return *this;};   // No assignment op
+    UCharFile (const UCharFile & /*other*/) {}                         // No copy constructor.
+    UCharFile & operator = (const UCharFile &/*other*/) {return *this;}   // No assignment op
 
     FILE         *fFile;
     const char   *fName;
@@ -1357,7 +1352,7 @@ char16_t UCharFile::get() {
                 c = utf16Buf[0];
             }
             break;
-        };
+        }
     default:
         c = 0xFFFD; /* Error, unspecified codepage*/
         fprintf(stderr, "UCharFile: Error: unknown fEncoding\n");

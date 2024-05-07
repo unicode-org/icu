@@ -25,7 +25,7 @@ import com.ibm.icu.util.VersionInfo;
  * Low-level implementation of the Unicode Normalization Algorithm.
  * For the data structure and details see the documentation at the end of
  * C++ normalizer2impl.h and in the design doc at
- * https://icu.unicode.org/design/normalization/custom
+ * https://unicode-org.github.io/icu/design/normalization/custom.html
  */
 public final class Normalizer2Impl {
     public static final class Hangul {
@@ -204,7 +204,7 @@ public final class Normalizer2Impl {
                     start+=Character.charCount(c);
                     if(start<limit) {
                         if (isNFD) {
-                            leadCC = getCCFromYesOrMaybe(impl.getNorm16(c));
+                            leadCC = getCCFromYesOrMaybeYes(impl.getNorm16(c));
                         } else {
                             leadCC = impl.getCC(impl.getNorm16(c));
                         }
@@ -353,7 +353,7 @@ public final class Normalizer2Impl {
             }
             int c=str.codePointBefore(codePointStart);
             codePointStart-=Character.charCount(c);
-            return impl.getCCFromYesOrMaybeCP(c);
+            return impl.getCCFromYesOrMaybeYesCP(c);
         }
 
         private int codePointStart, codePointLimit;
@@ -442,7 +442,7 @@ public final class Normalizer2Impl {
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         @Override
         public boolean isDataVersionAcceptable(byte version[]) {
-            return version[0]==4;
+            return version[0]==5;
         }
     }
     private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
@@ -472,9 +472,11 @@ public final class Normalizer2Impl {
             minNoNoCompNoMaybeCC=inIndexes[IX_MIN_NO_NO_COMP_NO_MAYBE_CC];
             minNoNoEmpty=inIndexes[IX_MIN_NO_NO_EMPTY];
             limitNoNo=inIndexes[IX_LIMIT_NO_NO];
+            minMaybeNo=inIndexes[IX_MIN_MAYBE_NO];
+            minMaybeNoCombinesFwd=inIndexes[IX_MIN_MAYBE_NO_COMBINES_FWD];
             minMaybeYes=inIndexes[IX_MIN_MAYBE_YES];
-            assert((minMaybeYes&7)==0);  // 8-aligned for noNoDelta bit fields
-            centerNoNoDelta=(minMaybeYes>>DELTA_SHIFT)-MAX_DELTA-1;
+            assert((minMaybeNo&7)==0);  // 8-aligned for noNoDelta bit fields
+            centerNoNoDelta=(minMaybeNo>>DELTA_SHIFT)-MAX_DELTA-1;
 
             // Read the normTrie.
             int offset=inIndexes[IX_NORM_TRIE_OFFSET];
@@ -492,8 +494,7 @@ public final class Normalizer2Impl {
             nextOffset=inIndexes[IX_SMALL_FCD_OFFSET];
             int numChars=(nextOffset-offset)/2;
             if(numChars!=0) {
-                maybeYesCompositions=ICUBinary.getString(bytes, numChars, 0);
-                extraData=maybeYesCompositions.substring((MIN_NORMAL_MAYBE_YES-minMaybeYes)>>OFFSET_SHIFT);
+                extraData=ICUBinary.getString(bytes, numChars, 0);
             }
 
             // smallFCD: new in formatVersion 2
@@ -606,9 +607,11 @@ public final class Normalizer2Impl {
                     null, range)) {
                 final int end = range.getEnd();
                 final int norm16 = range.getValue();
-                if(isInert(norm16) || (minYesNo<=norm16 && norm16<minNoNo)) {
+                if(isInert(norm16) ||
+                        (minYesNo<=norm16 && norm16<minNoNo) ||
+                        (minMaybeNo<=norm16 && norm16<minMaybeYes)) {
                     // Inert, or 2-way mapping (including Hangul syllable).
-                    // We do not write a canonStartSet for any yesNo character.
+                    // We do not write a canonStartSet for any yesNo/maybeNo character.
                     // Composites from 2-way mappings are added at runtime from the
                     // starter's compositions list, and the other characters in
                     // 2-way mappings get CANON_NOT_SEGMENT_STARTER set because they are
@@ -619,7 +622,7 @@ public final class Normalizer2Impl {
                 for (int c = start; c <= end; ++c) {
                     final int oldValue = mutableTrie.get(c);
                     int newValue=oldValue;
-                    if(isMaybeOrNonZeroCC(norm16)) {
+                    if(isMaybeYesOrNonZeroCC(norm16)) {
                         // not a segment starter if it occurs in a decomposition or has cc!=0
                         newValue|=CANON_NOT_SEGMENT_STARTER;
                         if(norm16<MIN_NORMAL_MAYBE_YES) {
@@ -641,7 +644,7 @@ public final class Normalizer2Impl {
                         }
                         if (norm16_2 > minYesNo) {
                             // c decomposes, get everything from the variable-length extra data
-                            int mapping=norm16_2>>OFFSET_SHIFT;
+                            int mapping=getDataForYesOrNo(norm16_2);
                             int firstUnit=extraData.charAt(mapping);
                             int length=firstUnit&MAPPING_LENGTH_MASK;
                             if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
@@ -696,14 +699,14 @@ public final class Normalizer2Impl {
     public int getCompQuickCheck(int norm16) {
         if(norm16<minNoNo || MIN_YES_YES_WITH_CC<=norm16) {
             return 1;  // yes
-        } else if(minMaybeYes<=norm16) {
+        } else if(minMaybeNo<=norm16) {
             return 2;  // maybe
         } else {
             return 0;  // no
         }
     }
-    public boolean isAlgorithmicNoNo(int norm16) { return limitNoNo<=norm16 && norm16<minMaybeYes; }
-    public boolean isCompNo(int norm16) { return minNoNo<=norm16 && norm16<minMaybeYes; }
+    public boolean isAlgorithmicNoNo(int norm16) { return limitNoNo<=norm16 && norm16<minMaybeNo; }
+    public boolean isCompNo(int norm16) { return minNoNo<=norm16 && norm16<minMaybeNo; }
     public boolean isDecompYes(int norm16) { return norm16<minYesNo || minMaybeYes<=norm16; }
 
     public int getCC(int norm16) {
@@ -718,12 +721,12 @@ public final class Normalizer2Impl {
     public static int getCCFromNormalYesOrMaybe(int norm16) {
         return (norm16 >> OFFSET_SHIFT) & 0xff;
     }
-    public static int getCCFromYesOrMaybe(int norm16) {
+    public static int getCCFromYesOrMaybeYes(int norm16) {
         return norm16>=MIN_NORMAL_MAYBE_YES ? getCCFromNormalYesOrMaybe(norm16) : 0;
     }
-    public int getCCFromYesOrMaybeCP(int c) {
+    public int getCCFromYesOrMaybeYesCP(int c) {
         if (c < minCompNoMaybeCP) { return 0; }
-        return getCCFromYesOrMaybe(getNorm16(c));
+        return getCCFromYesOrMaybeYes(getNorm16(c));
     }
 
     /**
@@ -757,7 +760,7 @@ public final class Normalizer2Impl {
                 return norm16|(norm16<<8);
             } else if(norm16>=minMaybeYes) {
                 return 0;
-            } else {  // isDecompNoAlgorithmic(norm16)
+            } else if(norm16<minMaybeNo) {  // isDecompNoAlgorithmic(norm16)
                 int deltaTrailCC = norm16 & DELTA_TCCC_MASK;
                 if (deltaTrailCC <= DELTA_TCCC_1) {
                     return deltaTrailCC >> OFFSET_SHIFT;
@@ -772,13 +775,31 @@ public final class Normalizer2Impl {
             return 0;
         }
         // c decomposes, get everything from the variable-length extra data
-        int mapping=norm16>>OFFSET_SHIFT;
+        int mapping=getData(norm16);
         int firstUnit=extraData.charAt(mapping);
         int fcd16=firstUnit>>8;  // tccc
         if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
             fcd16|=extraData.charAt(mapping-1)&0xff00;  // lccc
         }
         return fcd16;
+    }
+
+    private int getFCD16FromMaybeOrNonZeroCC(int norm16) {
+        assert norm16 >= minMaybeNo;
+        if (norm16 >= MIN_NORMAL_MAYBE_YES) {
+            // combining mark
+            norm16 = getCCFromNormalYesOrMaybe(norm16);
+            return norm16 | (norm16<<8);
+        } else if (norm16 >= minMaybeYes) {
+            return 0;
+        }
+        // c decomposes, get everything from the variable-length extra data
+        int mapping = getDataForMaybe(norm16);
+        int firstUnit = extraData.charAt(mapping);
+        // maybeNo has lccc = 0
+        assert (firstUnit & MAPPING_HAS_CCC_LCCC_WORD) == 0 ||
+                (extraData.charAt(mapping - 1) & 0xff00) == 0;
+        return firstUnit >> 8;  // tccc
     }
 
     /**
@@ -788,7 +809,7 @@ public final class Normalizer2Impl {
      */
     public String getDecomposition(int c) {
         int norm16;
-        if(c<minDecompNoCP || isMaybeOrNonZeroCC(norm16=getNorm16(c))) {
+        if(c<minDecompNoCP || isMaybeYesOrNonZeroCC(norm16=getNorm16(c))) {
             // c does not decompose
             return null;
         }
@@ -812,7 +833,7 @@ public final class Normalizer2Impl {
             return buffer.toString();
         }
         // c decomposes, get everything from the variable-length extra data
-        int mapping=norm16>>OFFSET_SHIFT;
+        int mapping=getData(norm16);
         int length=extraData.charAt(mapping++)&MAPPING_LENGTH_MASK;
         return extraData.substring(mapping, mapping+length);
     }
@@ -836,7 +857,7 @@ public final class Normalizer2Impl {
             return UTF16.valueOf(mapAlgorithmic(c, norm16));
         }
         // c decomposes, get everything from the variable-length extra data
-        int mapping=norm16>>OFFSET_SHIFT;
+        int mapping=getData(norm16);
         int firstUnit=extraData.charAt(mapping);
         int mLength=firstUnit&MAPPING_LENGTH_MASK;  // length of normal mapping
         if((firstUnit&MAPPING_HAS_RAW_MAPPING)!=0) {
@@ -953,7 +974,13 @@ public final class Normalizer2Impl {
     public static final int IX_MIN_NO_NO_EMPTY=17;
 
     public static final int IX_MIN_LCCC_CP=18;
-    public static final int IX_COUNT=20;
+
+    /** Two-way mappings; each starts with a character that combines backward. */
+    public static final int IX_MIN_MAYBE_NO=20;
+    /** Two-way mappings & compositions. */
+    public static final int IX_MIN_MAYBE_NO_COMBINES_FWD=21;
+
+    //blic static final int IX_COUNT=22;
 
     public static final int MAPPING_HAS_CCC_LCCC_WORD=0x80;
     public static final int MAPPING_HAS_RAW_MAPPING=0x40;
@@ -1048,7 +1075,7 @@ public final class Normalizer2Impl {
                 decompose(c, norm16, buffer);
             } else {
                 if(isDecompYes(norm16)) {
-                    int cc=getCCFromYesOrMaybe(norm16);
+                    int cc=getCCFromYesOrMaybeYes(norm16);
                     if(prevCC<=cc || cc==0) {
                         prevCC=cc;
                         if(cc<=1) {
@@ -1135,12 +1162,12 @@ public final class Normalizer2Impl {
             }
             // isCompYesAndZeroCC(norm16) is false, that is, norm16>=minNoNo.
             // The current character is either a "noNo" (has a mapping)
-            // or a "maybeYes" (combines backward)
+            // or a "maybeYes" / "maybeNo" (combines backward)
             // or a "yesYes" with ccc!=0.
             // It is not a Hangul syllable or Jamo L because those have "yes" properties.
 
             // Medium-fast path: Handle cases that do not require full decomposition and recomposition.
-            if (!isMaybeOrNonZeroCC(norm16)) {  // minNoNo <= norm16 < minMaybeYes
+            if (norm16 < minMaybeNo) { // minNoNo <= norm16 < minMaybeNo
                 if (!doCompose) {
                     return false;
                 }
@@ -1165,7 +1192,7 @@ public final class Normalizer2Impl {
                         if (prevBoundary != prevSrc) {
                             buffer.append(s, prevBoundary, prevSrc);
                         }
-                        int mapping = norm16 >> OFFSET_SHIFT;
+                        int mapping = getDataForYesOrNo(norm16);
                         int length = extraData.charAt(mapping++) & MAPPING_LENGTH_MASK;
                         buffer.append(extraData, mapping, mapping + length);
                         prevBoundary = src;
@@ -1371,7 +1398,7 @@ public final class Normalizer2Impl {
             }
             // isCompYesAndZeroCC(norm16) is false, that is, norm16>=minNoNo.
             // The current character is either a "noNo" (has a mapping)
-            // or a "maybeYes" (combines backward)
+            // or a "maybeYes" / "maybeNo" (combines backward)
             // or a "yesYes" with ccc!=0.
             // It is not a Hangul syllable or Jamo L because those have "yes" properties.
 
@@ -1388,8 +1415,9 @@ public final class Normalizer2Impl {
                 }
             }
 
-            if(isMaybeOrNonZeroCC(norm16)) {
-                int cc=getCCFromYesOrMaybe(norm16);
+            if (norm16 >= minMaybeNo) {
+                int fcd16 = getFCD16FromMaybeOrNonZeroCC(norm16);
+                int cc = (fcd16 >> 8) & 0xff;
                 if (onlyContiguous /* FCC */ && cc != 0 &&
                         getTrailCCFromCompYesAndZeroCC(prevNorm16) > cc) {
                     // The [prevBoundary..prevSrc[ character
@@ -1409,11 +1437,12 @@ public final class Normalizer2Impl {
                         if (src == limit) {
                             return (src<<1) | qcResult;  // "yes" or "maybe"
                         }
-                        int prevCC = cc;
+                        int prevCC = fcd16 & 0xff;
                         c = Character.codePointAt(s, src);
                         norm16 = getNorm16(c);
-                        if (isMaybeOrNonZeroCC(norm16)) {
-                            cc = getCCFromYesOrMaybe(norm16);
+                        if (norm16 >= minMaybeNo) {
+                            fcd16 = getFCD16FromMaybeOrNonZeroCC(norm16);
+                            cc = (fcd16 >> 8) & 0xff;
                             if (!(prevCC <= cc || cc == 0)) {
                                 break;
                             }
@@ -1621,7 +1650,7 @@ public final class Normalizer2Impl {
             return norm16 <= MIN_NORMAL_MAYBE_YES || norm16 == JAMO_VT;
         }
         // c decomposes, get everything from the variable-length extra data
-        int mapping=norm16>>OFFSET_SHIFT;
+        int mapping=getDataForYesOrNo(norm16);
         int firstUnit=extraData.charAt(mapping);
         // true if leadCC==0 (hasFCDBoundaryBefore())
         return (firstUnit&MAPPING_HAS_CCC_LCCC_WORD)==0 || (extraData.charAt(mapping-1)&0xff00)==0;
@@ -1640,14 +1669,15 @@ public final class Normalizer2Impl {
             return true;
         }
         if (norm16 >= limitNoNo) {
-            if (isMaybeOrNonZeroCC(norm16)) {
+            if (isMaybeYesOrNonZeroCC(norm16)) {
                 return norm16 <= MIN_NORMAL_MAYBE_YES || norm16 == JAMO_VT;
+            } else if (norm16 < minMaybeNo) {
+                // Maps to an isCompYesAndZeroCC.
+                return (norm16 & DELTA_TCCC_MASK) <= DELTA_TCCC_1;
             }
-            // Maps to an isCompYesAndZeroCC.
-            return (norm16 & DELTA_TCCC_MASK) <= DELTA_TCCC_1;
         }
         // c decomposes, get everything from the variable-length extra data
-        int mapping=norm16>>OFFSET_SHIFT;
+        int mapping=getData(norm16);
         int firstUnit=extraData.charAt(mapping);
         // decomp after-boundary: same as hasFCDBoundaryAfter(),
         // fcd16<=1 || trailCC==0
@@ -1673,15 +1703,17 @@ public final class Normalizer2Impl {
         int norm16=getNorm16(c);
         return isCompYesAndZeroCC(norm16) &&
             (norm16 & HAS_COMP_BOUNDARY_AFTER) != 0 &&
-            (!onlyContiguous || isInert(norm16) || extraData.charAt(norm16>>OFFSET_SHIFT) <= 0x1ff);
+            (!onlyContiguous || isInert(norm16) ||
+                    extraData.charAt(getDataForYesOrNo(norm16)) <= 0x1ff);
+        // The last check fetches the mapping's first unit and checks tccc<=1.
     }
 
     public boolean hasFCDBoundaryBefore(int c) { return hasDecompBoundaryBefore(c); }
     public boolean hasFCDBoundaryAfter(int c) { return hasDecompBoundaryAfter(c); }
     public boolean isFCDInert(int c) { return getFCD16(c)<=1; }
 
-    private boolean isMaybe(int norm16) { return minMaybeYes<=norm16 && norm16<=JAMO_VT; }
-    private boolean isMaybeOrNonZeroCC(int norm16) { return norm16>=minMaybeYes; }
+    private boolean isMaybe(int norm16) { return minMaybeNo<=norm16 && norm16<=JAMO_VT; }
+    private boolean isMaybeYesOrNonZeroCC(int norm16) { return norm16>=minMaybeYes; }
     private static boolean isInert(int norm16) { return norm16==INERT; }
     private static boolean isJamoL(int norm16) { return norm16==JAMO_L; }
     private static boolean isJamoVT(int norm16) { return norm16==JAMO_VT; }
@@ -1695,7 +1727,7 @@ public final class Normalizer2Impl {
     //     return norm16>=MIN_YES_YES_WITH_CC || norm16<minNoNo;
     // }
     // UBool isCompYesOrMaybe(uint16_t norm16) const {
-    //     return norm16<minNoNo || minMaybeYes<=norm16;
+    //     return norm16<minNoNo || minMaybeNo<=norm16;
     // }
     // private boolean hasZeroCCFromDecompYes(int norm16) {
     //     return norm16<=MIN_NORMAL_MAYBE_YES || norm16==JAMO_VT;
@@ -1708,12 +1740,14 @@ public final class Normalizer2Impl {
     /**
      * A little faster and simpler than isDecompYesAndZeroCC() but does not include
      * the MaybeYes which combine-forward and have ccc=0.
-     * (Standard Unicode 10 normalization does not have such characters.)
      */
     private boolean isMostDecompYesAndZeroCC(int norm16) {
         return norm16<minYesNo || norm16==MIN_NORMAL_MAYBE_YES || norm16==JAMO_VT;
     }
-    private boolean isDecompNoAlgorithmic(int norm16) { return norm16>=limitNoNo; }
+    /** Since formatVersion 5: same as isAlgorithmicNoNo() */
+    private boolean isDecompNoAlgorithmic(int norm16) {
+        return limitNoNo<=norm16 && norm16<minMaybeNo;
+    }
 
     // For use with isCompYes().
     // Perhaps the compiler can combine the two tests for MIN_YES_YES_WITH_CC.
@@ -1721,7 +1755,7 @@ public final class Normalizer2Impl {
     //     return norm16>=MIN_YES_YES_WITH_CC ? getCCFromNormalYesOrMaybe(norm16) : 0;
     // }
     private int getCCFromNoNo(int norm16) {
-        int mapping=norm16>>OFFSET_SHIFT;
+        int mapping=getDataForYesOrNo(norm16);
         if((extraData.charAt(mapping)&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
             return extraData.charAt(mapping-1)&0xff;
         } else {
@@ -1733,7 +1767,7 @@ public final class Normalizer2Impl {
             return 0;  // yesYes and Hangul LV have ccc=tccc=0
         } else {
             // For Hangul LVT we harmlessly fetch a firstUnit with tccc=0 here.
-            return extraData.charAt(norm16>>OFFSET_SHIFT)>>8;  // tccc from yesNo
+            return extraData.charAt(getDataForYesOrNo(norm16))>>8;  // tccc from yesNo
         }
     }
 
@@ -1742,23 +1776,28 @@ public final class Normalizer2Impl {
         return c+(norm16>>DELTA_SHIFT)-centerNoNoDelta;
     }
 
-    // Requires minYesNo<norm16<limitNoNo.
-    // private int getMapping(int norm16) { return extraData+(norm16>>OFFSET_SHIFT); }
+    private int getDataForYesOrNo(int norm16) {
+        return norm16>>OFFSET_SHIFT;
+    }
+    private int getDataForMaybe(int norm16) {
+        return (norm16-minMaybeNo+limitNoNo)>>OFFSET_SHIFT;
+    }
+    private int getData(int norm16) {
+        if(norm16>=minMaybeNo) {
+            norm16=norm16-minMaybeNo+limitNoNo;
+        }
+        return norm16>>OFFSET_SHIFT;
+    }
 
     /**
-     * @return index into maybeYesCompositions, or -1
+     * @return index into extraData, or -1
      */
     private int getCompositionsListForDecompYes(int norm16) {
         if(norm16<JAMO_L || MIN_NORMAL_MAYBE_YES<=norm16) {
             return -1;
         } else {
-            if((norm16-=minMaybeYes)<0) {
-                // norm16<minMaybeYes: index into extraData which is a substring at
-                //     maybeYesCompositions[MIN_NORMAL_MAYBE_YES-minMaybeYes]
-                // same as (MIN_NORMAL_MAYBE_YES-minMaybeYes)+norm16
-                norm16+=MIN_NORMAL_MAYBE_YES;  // for yesYes; if Jamo L: harmless empty list
-            }
-            return norm16>>OFFSET_SHIFT;
+            // if yesYes: if Jamo L: harmless empty list
+            return getData(norm16);
         }
     }
     /**
@@ -1766,15 +1805,11 @@ public final class Normalizer2Impl {
      */
     private int getCompositionsListForComposite(int norm16) {
         // A composite has both mapping & compositions list.
-        int list=((MIN_NORMAL_MAYBE_YES-minMaybeYes)+norm16)>>OFFSET_SHIFT;
-        int firstUnit=maybeYesCompositions.charAt(list);
+        int list=getData(norm16);
+        int firstUnit=extraData.charAt(list);
         return list+  // mapping in maybeYesCompositions
             1+  // +1 to skip the first unit with the mapping length
             (firstUnit&MAPPING_LENGTH_MASK);  // + mapping length
-    }
-    private int getCompositionsListForMaybe(int norm16) {
-        // minMaybeYes<=norm16<MIN_NORMAL_MAYBE_YES
-        return (norm16-minMaybeYes)>>OFFSET_SHIFT;
     }
     /**
      * @param c code point must have compositions
@@ -1815,13 +1850,14 @@ public final class Normalizer2Impl {
     private void decompose(int c, int norm16, ReorderingBuffer buffer) {
         // get the decomposition and the lead and trail cc's
         if (norm16 >= limitNoNo) {
-            if (isMaybeOrNonZeroCC(norm16)) {
-                buffer.append(c, getCCFromYesOrMaybe(norm16));
+            if (isMaybeYesOrNonZeroCC(norm16)) {
+                buffer.append(c, getCCFromYesOrMaybeYes(norm16));
                 return;
+            } else if (norm16 < minMaybeNo) {
+                // Maps to an isCompYesAndZeroCC.
+                c=mapAlgorithmic(c, norm16);
+                norm16 = getRawNorm16(c);
             }
-            // Maps to an isCompYesAndZeroCC.
-            c=mapAlgorithmic(c, norm16);
-            norm16 = getRawNorm16(c);
         }
         if (norm16 < minYesNo) {
             // c does not decompose
@@ -1831,7 +1867,7 @@ public final class Normalizer2Impl {
             Hangul.decompose(c, buffer);
         } else {
             // c decomposes, get everything from the variable-length extra data
-            int mapping=norm16>>OFFSET_SHIFT;
+            int mapping=getData(norm16);
             int firstUnit=extraData.charAt(mapping);
             int length=firstUnit&MAPPING_LENGTH_MASK;
             int leadCC, trailCC;
@@ -1870,20 +1906,20 @@ public final class Normalizer2Impl {
      * <p>See normalizer2impl.h for a more detailed description
      * of the compositions list format.
      */
-    private static int combine(String compositions, int list, int trail) {
+    private int combine(int list, int trail) {
         int key1, firstUnit;
         if(trail<COMP_1_TRAIL_LIMIT) {
             // trail character is 0..33FF
             // result entry may have 2 or 3 units
             key1=(trail<<1);
-            while(key1>(firstUnit=compositions.charAt(list))) {
+            while(key1>(firstUnit=extraData.charAt(list))) {
                 list+=2+(firstUnit&COMP_1_TRIPLE);
             }
             if(key1==(firstUnit&COMP_1_TRAIL_MASK)) {
                 if((firstUnit&COMP_1_TRIPLE)!=0) {
-                    return (compositions.charAt(list+1)<<16)|compositions.charAt(list+2);
+                    return (extraData.charAt(list+1)<<16)|extraData.charAt(list+2);
                 } else {
-                    return compositions.charAt(list+1);
+                    return extraData.charAt(list+1);
                 }
             }
         } else {
@@ -1893,17 +1929,17 @@ public final class Normalizer2Impl {
             int key2=(trail<<COMP_2_TRAIL_SHIFT)&0xffff;
             int secondUnit;
             for(;;) {
-                if(key1>(firstUnit=compositions.charAt(list))) {
+                if(key1>(firstUnit=extraData.charAt(list))) {
                     list+=2+(firstUnit&COMP_1_TRIPLE);
                 } else if(key1==(firstUnit&COMP_1_TRAIL_MASK)) {
-                    if(key2>(secondUnit=compositions.charAt(list+1))) {
+                    if(key2>(secondUnit=extraData.charAt(list+1))) {
                         if((firstUnit&COMP_1_LAST_TUPLE)!=0) {
                             break;
                         } else {
                             list+=3;
                         }
                     } else if(key2==(secondUnit&COMP_2_TRAIL_MASK)) {
-                        return ((secondUnit&~COMP_2_TRAIL_MASK)<<16)|compositions.charAt(list+2);
+                        return ((secondUnit&~COMP_2_TRAIL_MASK)<<16)|extraData.charAt(list+2);
                     } else {
                         break;
                     }
@@ -1921,13 +1957,13 @@ public final class Normalizer2Impl {
     private void addComposites(int list, UnicodeSet set) {
         int firstUnit, compositeAndFwd;
         do {
-            firstUnit=maybeYesCompositions.charAt(list);
+            firstUnit=extraData.charAt(list);
             if((firstUnit&COMP_1_TRIPLE)==0) {
-                compositeAndFwd=maybeYesCompositions.charAt(list+1);
+                compositeAndFwd=extraData.charAt(list+1);
                 list+=2;
             } else {
-                compositeAndFwd=((maybeYesCompositions.charAt(list+1)&~COMP_2_TRAIL_MASK)<<16)|
-                                maybeYesCompositions.charAt(list+2);
+                compositeAndFwd=((extraData.charAt(list+1)&~COMP_2_TRAIL_MASK)<<16)|
+                        extraData.charAt(list+2);
                 list+=3;
             }
             int composite=compositeAndFwd>>1;
@@ -1973,7 +2009,7 @@ public final class Normalizer2Impl {
             c=sb.codePointAt(p);
             p+=Character.charCount(c);
             norm16=getNorm16(c);
-            cc=getCCFromYesOrMaybe(norm16);
+            cc=getCCFromYesOrMaybeYes(norm16);
             if( // this character combines backward and
                 isMaybe(norm16) &&
                 // we have seen a starter that combines forward and
@@ -2014,7 +2050,7 @@ public final class Normalizer2Impl {
                     }
                     compositionsList=-1;
                     continue;
-                } else if((compositeAndFwd=combine(maybeYesCompositions, compositionsList, c))>=0) {
+                } else if((compositeAndFwd=combine(compositionsList, c))>=0) {
                     // The starter and the combining mark (c) do combine.
                     int composite=compositeAndFwd>>1;
 
@@ -2119,22 +2155,27 @@ public final class Normalizer2Impl {
                 }
             } else {
                 // 'a' has a compositions list in extraData
-                list=((MIN_NORMAL_MAYBE_YES-minMaybeYes)+norm16)>>OFFSET_SHIFT;
+                list=getDataForYesOrNo(norm16);
                 if(norm16>minYesNo) {  // composite 'a' has both mapping & compositions list
                     list+=  // mapping pointer
                         1+  // +1 to skip the first unit with the mapping length
-                        (maybeYesCompositions.charAt(list)&MAPPING_LENGTH_MASK);  // + mapping length
+                        (extraData.charAt(list)&MAPPING_LENGTH_MASK);  // + mapping length
                 }
             }
-        } else if(norm16<minMaybeYes || MIN_NORMAL_MAYBE_YES<=norm16) {
+        } else if(norm16<minMaybeNoCombinesFwd || MIN_NORMAL_MAYBE_YES<=norm16) {
             return -1;
         } else {
-            list=getCompositionsListForMaybe(norm16);  // offset into maybeYesCompositions
+            list=getDataForMaybe(norm16);
+            if(norm16<minMaybeYes) {  // composite 'a' has both mapping & compositions list
+                list+=  // mapping pointer
+                    1+  // +1 to skip the first unit with the mapping length
+                    (extraData.charAt(list)&MAPPING_LENGTH_MASK);  // + mapping length
+            }
         }
         if(b<0 || 0x10ffff<b) {  // combine(list, b) requires a valid code point b
             return -1;
         }
-        return combine(maybeYesCompositions, list, b)>>1;
+        return combine(list, b)>>1;
     }
 
     /**
@@ -2163,7 +2204,8 @@ public final class Normalizer2Impl {
     /** For FCC: Given norm16 HAS_COMP_BOUNDARY_AFTER, does it have tccc<=1? */
     private boolean isTrailCC01ForCompBoundaryAfter(int norm16) {
         return isInert(norm16) || (isDecompNoAlgorithmic(norm16) ?
-            (norm16 & DELTA_TCCC_MASK) <= DELTA_TCCC_1 : extraData.charAt(norm16 >> OFFSET_SHIFT) <= 0x1ff);
+                (norm16 & DELTA_TCCC_MASK) <= DELTA_TCCC_1 :
+                extraData.charAt(getDataForYesOrNo(norm16)) <= 0x1ff);
     }
 
     private int findPreviousCompBoundary(CharSequence s, int p, boolean onlyContiguous) {
@@ -2272,11 +2314,12 @@ public final class Normalizer2Impl {
     private int minNoNoEmpty;
     private int limitNoNo;
     private int centerNoNoDelta;
+    private int minMaybeNo;
+    private int minMaybeNoCombinesFwd;
     private int minMaybeYes;
 
     private CodePointTrie.Fast16 normTrie;
-    private String maybeYesCompositions;
-    private String extraData;  // mappings and/or compositions for yesYes, yesNo & noNo characters
+    private String extraData;  // mappings and/or compositions
     private byte[] smallFCD;  // [0x100] one bit per 32 BMP code points, set if any FCD!=0
 
     private CodePointTrie canonIterData;

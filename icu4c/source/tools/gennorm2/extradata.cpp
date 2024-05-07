@@ -138,7 +138,7 @@ void ExtraData::writeCompositions(UChar32 c, const Norm &norm, UnicodeString &da
         const CompositionPair &pair=pairs[i];
         // 22 bits for the composite character and whether it combines forward.
         UChar32 compositeAndFwd=pair.composite<<1;
-        if(norms.getNormRef(pair.composite).compositions!=nullptr) {
+        if(norms.getNormRef(pair.composite).combinesFwd()) {
             compositeAndFwd|=1;  // The composite character also combines-forward.
         }
         // Encode most pairs in two units and some in three.
@@ -230,6 +230,15 @@ void ExtraData::writeExtraData(UChar32 c, Norm &norm) {
         // There can be multiple extra data entries for mappings to the empty string
         // if they have different raw mappings.
         norm.offset=writeNoNoMapping(c, norm, noNoMappingsEmpty, previousNoNoMappingsEmpty);
+        break;
+    case Norm::MAYBE_NO_MAPPING_ONLY:
+        norm.offset=maybeNoMappingsOnly.length()+
+                writeMapping(c, norm, maybeNoMappingsOnly);
+        break;
+    case Norm::MAYBE_NO_COMBINES_FWD:
+        norm.offset=maybeNoMappingsAndCompositions.length()+
+                writeMapping(c, norm, maybeNoMappingsAndCompositions);
+        writeCompositions(c, norm, maybeNoMappingsAndCompositions);
         break;
     case Norm::MAYBE_YES_COMBINES_FWD:
         norm.offset=maybeYesCompositions.length();

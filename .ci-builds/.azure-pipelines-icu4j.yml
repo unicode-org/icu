@@ -27,7 +27,7 @@ jobs:
 #-------------------------------------------------------------------------
 - job: ICU4J_OpenJDK_Ubuntu_2204
   displayName: 'J: Linux OpenJDK (Ubuntu 22.04)'
-  timeoutInMinutes: 20
+  timeoutInMinutes: 25
   pool:
     vmImage: 'ubuntu-22.04'
     demands: ant

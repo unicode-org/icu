@@ -52,7 +52,7 @@ public:
     void TestPropertyNames();
     void TestIDSUnaryOperator();
     void TestIDCompatMath();
-    void TestBinaryPropertyUsingPpucd();
+    void TestPropertiesUsingPpucd();
     void TestIDStatus();
     void TestIDType();
 

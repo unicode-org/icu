@@ -374,21 +374,20 @@ Note: This is also referenced below [Upload API documentations](docs.md#upload-a
 Build the API documentation pages for the new release:
 
 ```
-ant releaseDocs
+cd icu4j
+releases_tools/github_release.sh
 ```
+The API documentation will be found in targets/github_release/
 
-#### Alternative method:
+Next, update the documents for this version:
+* Copy the `icu4j-<version>-fulljavadoc.jar` to the to `icu-docs/apidoc` directory, either dev (for release candidates) or released (for public distribution).
+* Unzip the `icu4j-<version>-fulljavadoc.jar` in that directory.
+* Verify that the documentation is updated, then remove the .jar file.
+* Update the file README.md for either the Released or the Dev line with the new version.
+* Use `git add .` then create a github commit with the ICU issue for this version, e.g., [Pull request #58](https://github.com/unicode-org/icu-docs/pull/58).
+* Create the pull request, obtain a review, and merge when all is OK.
 
-**Note:** JCite must be installed for building ICU4J documentation:
-<https://icu.unicode.org/setup/java/ant#TOC-Building-ICU4J-API-Reference-Document-with-JCite>
 
-Use the release target
-
-```
-ant releaseVer
-```
-
-which generate all release files.
 
 *   Upload the output files including icu4j-docs.jar to the release page first,
 *   Then update the live API docs from the generated docs.jar.
