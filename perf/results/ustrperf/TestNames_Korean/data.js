@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715037437189,
+  "lastUpdate": 1715117865564,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -77758,6 +77758,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 38.9849,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "85a9b2ee8458ffbe9fe7ef7a48f4512db2c49e8d",
+          "message": "ICU-22746 Refactor MF2 tests to be data-driven and add JSON lib\n\nThis change moves all test strings out of test/intltest/messageformat2test.cpp\nand into JSON files, which are parsed/run by code in\na new file, test/intltest/messageformat2test_read_json.cpp .\nIt also removes the file test/intltest/messageformat2test_fromjson.cpp ,\nwhich contained tests that are now stored in JSON files.\n\nTo enable this, a new vendored library is added:\nnlohmann/json .\nThis library is introduced as a dependency for the MF2 tests.\nThe required part of the library is a single header file,\nwhich is added under icu4c/source/tools/toolutil/.\nAlso adds a wrapper file for the vendored JSON header file\nthat defines macros that disable exceptions.\n\nCo-authored-by: Steven R. Loomis <srl295@gmail.com>",
+          "timestamp": "2024-05-07T14:09:24-07:00",
+          "tree_id": "756a8fad2832177a0445c0a0752b43f302164c0b",
+          "url": "https://github.com/unicode-org/icu/commit/85a9b2ee8458ffbe9fe7ef7a48f4512db2c49e8d"
+        },
+        "date": 1715117756030,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.1868,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.1278,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.2213,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 26.2589,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 36.6855,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.9266,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.416,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.8783,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 90.71,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.4678,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 39.0619,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.3646,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
