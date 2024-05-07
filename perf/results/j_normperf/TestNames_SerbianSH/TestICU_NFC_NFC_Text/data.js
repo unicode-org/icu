@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715036450237,
+  "lastUpdate": 1715116831590,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21478,6 +21478,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 1.954390650637409,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "85a9b2ee8458ffbe9fe7ef7a48f4512db2c49e8d",
+          "message": "ICU-22746 Refactor MF2 tests to be data-driven and add JSON lib\n\nThis change moves all test strings out of test/intltest/messageformat2test.cpp\nand into JSON files, which are parsed/run by code in\na new file, test/intltest/messageformat2test_read_json.cpp .\nIt also removes the file test/intltest/messageformat2test_fromjson.cpp ,\nwhich contained tests that are now stored in JSON files.\n\nTo enable this, a new vendored library is added:\nnlohmann/json .\nThis library is introduced as a dependency for the MF2 tests.\nThe required part of the library is a single header file,\nwhich is added under icu4c/source/tools/toolutil/.\nAlso adds a wrapper file for the vendored JSON header file\nthat defines macros that disable exceptions.\n\nCo-authored-by: Steven R. Loomis <srl295@gmail.com>",
+          "timestamp": "2024-05-07T14:09:24-07:00",
+          "tree_id": "756a8fad2832177a0445c0a0752b43f302164c0b",
+          "url": "https://github.com/unicode-org/icu/commit/85a9b2ee8458ffbe9fe7ef7a48f4512db2c49e8d"
+        },
+        "date": 1715116717173,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 1.9577769993482403,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
