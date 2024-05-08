@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715198440626,
+  "lastUpdate": 1715203342132,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21778,6 +21778,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2014.1011069159001,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "f133a0bd9bc6567a5ae943a5e4aaeda1cad04628",
+          "message": "ICU-22723 Cleanup: remove the icu4j/maven-migration/ folder",
+          "timestamp": "2024-05-08T14:17:44-07:00",
+          "tree_id": "195fdecdc0b63354168cdffd1a13f7f91b32d9dd",
+          "url": "https://github.com/unicode-org/icu/commit/f133a0bd9bc6567a5ae943a5e4aaeda1cad04628"
+        },
+        "date": 1715203226248,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2005.5874795010395,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
