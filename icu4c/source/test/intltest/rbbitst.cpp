@@ -3344,7 +3344,6 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         // 5. NU (SY | IS)* × PO
         // 6. NU (SY | IS)* × PR
         // 13. NU (SY | IS)* × NU
-        // 14. NU (SY | IS)* × SY
         bool leftHandSideMatches;
         tPos = prevPos;
         for (;;) {
@@ -3366,8 +3365,8 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
                 break;
             }
         }
-        if (leftHandSideMatches && (fPO->contains(thisChar) || fPR->contains(thisChar) ||
-                                    fNU->contains(thisChar) || fSY->contains(thisChar))) {
+        if (leftHandSideMatches &&
+            (fPO->contains(thisChar) || fPR->contains(thisChar) || fNU->contains(thisChar))) {
             setAppliedRule(pos, "LB 25/5,6,13,14");
             continue;
         }
