@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715203332667,
+  "lastUpdate": 1715207850694,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21568,6 +21568,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetAdd",
             "value": 7.369527942944766,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "63afc7642582622f4c27925835e9e95828efea76",
+          "message": "ICU-22769 Rename of the ICU4J data folder to not contain a version (script)",
+          "timestamp": "2024-05-08T15:33:21-07:00",
+          "tree_id": "cf1737606cf01c3fd54ef28de6dda4e3bc4c2011",
+          "url": "https://github.com/unicode-org/icu/commit/63afc7642582622f4c27925835e9e95828efea76"
+        },
+        "date": 1715207734334,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetAdd",
+            "value": 7.249764195330282,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
