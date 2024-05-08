@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715116874621,
+  "lastUpdate": 1715198573402,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21628,6 +21628,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 388.78473575127566,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "cb0d0d4e5649c89069d2939ddf175c11c62c57c6",
+          "message": "ICU-21757 Small GitHub workflow cleanup",
+          "timestamp": "2024-05-08T12:51:27-07:00",
+          "tree_id": "0c0c3d24415b4a4ec47e16281ffbe0b0c2631d47",
+          "url": "https://github.com/unicode-org/icu/commit/cb0d0d4e5649c89069d2939ddf175c11c62c57c6"
+        },
+        "date": 1715198458909,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 358.35717623285547,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
