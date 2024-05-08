@@ -1,4 +1,4 @@
-name: Publish icu4j.jar/utilities.jar to GH Maven
+name: Publish icu4j.jar to GH Maven
 on:
   release:
     types: [created]
@@ -62,7 +62,7 @@ jobs:
           mvn deploy ${SHARED_MVN_ARGS} \
             -pl :icu4j,:icu4j-root \
             -DaltDeploymentRepository=github::https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
-            -P cldr_utilities,with_sources
+            -P with_sources
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 # Note: can use 0.0.0-${GITHUB_SHA} as the version for hash-based.
