@@ -586,27 +586,19 @@ CollationDataBuilder::addCE32(const UnicodeString &prefix, const UnicodeString &
         if (s != sInNfd) {
             // s is not in NFD, so it cannot match in ICU4X, since ICU4X only
             // does NFD lookups.
-            // Now check that we're only rejecting known cases.
-            if (s.length() == 2) {
-                char16_t second = s.charAt(1);
-                if (second == 0x0F73 || second == 0x0F75 || second == 0x0F81) {
-                    // Second is a special decomposing Tibetan vowel sign.
-                    // These also get added in the decomposed form, so ignoring
-                    // this instance is OK.
-                    return;
-                }
-                if (c == 0xFDD1 && second == 0xAC00) {
-                    // This strange contraction exists in the root and
-                    // doesn't have a decomposed counterpart there.
-                    // This won't match in ICU4X anyway and is very strange:
-                    // Unassigned Arabic presentation form contracting with
-                    // the very first Hangul syllable. Let's ignore this
-                    // explicitly.
-                    return;
-                }
-            }
-            // Unknown case worth investigating if ever found.
-            errorCode = U_UNSUPPORTED_ERROR;
+
+            // As of Unicode 16 alpha, the cases that come here are:
+            //
+            // 1. The second character is a special decomposing Tibetan vowel
+            //    sign. These are OK to ignore in the precomposed form, since
+            //    the decomposed form is added also.
+            // 2. Likewise for KIRAT RAI VOWEL SIGN AA followed by KIRAT RAI VOWEL SIGN AI
+            //    and other such cases.
+            //    For details see the normalization section of
+            //    https://www.unicode.org/review/pri497/pri497-background.html
+            // 3. U+FDD1 followed by U+AC00 is a marker for the alphabetical
+            //    index feature of ICU4C, which at this time does not have
+            //    a counterpart in ICU4X.
             return;
         }
 
