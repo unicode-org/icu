@@ -33,12 +33,13 @@ public final class ICUData {
      * The ICU data package name.
      * This is normally the name of the .dat package, and the prefix (plus '/')
      * of the package entry names.
+     * Not used when loading from resources packaged in the .jar.
      */
     static final String PACKAGE_NAME = "icudt" + VersionInfo.ICU_DATA_VERSION_PATH;
     /**
      * The data path to be used with Class.getResourceAsStream().
      */
-    public static final String ICU_BUNDLE = "data/" + PACKAGE_NAME;
+    public static final String ICU_BUNDLE = "data/icudata";
 
     /**
      * The base name of ICU data to be used with ClassLoader.getResourceAsStream(),
