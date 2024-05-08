@@ -9,6 +9,7 @@
 
 package com.ibm.icu.util;
 
+import com.ibm.icu.impl.ICUData;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -230,7 +231,8 @@ public final class VersionInfo implements Comparable<VersionInfo>
     public static final VersionInfo ICU_VERSION;
 
     /**
-     * Data version string for ICU's internal data.
+     * Data version string for ICU's data file.
+     * Not used when loading from resources packaged in the .jar.
      * Used for appending to data path (e.g. icudt43b)
      * @internal
      * @deprecated This API is ICU internal only.
@@ -703,8 +705,8 @@ public final class VersionInfo implements Comparable<VersionInfo>
         if (TZDATA_VERSION == null) {
             synchronized (VersionInfo.class) {
                 if (TZDATA_VERSION == null) {
-                    UResourceBundle tzbundle = UResourceBundle.getBundleInstance("com/ibm/icu/impl/data/icudt"
-                            + VersionInfo.ICU_DATA_VERSION_PATH, "zoneinfo64");
+                    UResourceBundle tzbundle =
+                            UResourceBundle.getBundleInstance("com/ibm/icu/impl/" + ICUData.ICU_BUNDLE, "zoneinfo64");
                     TZDATA_VERSION = tzbundle.getString("TZVersion");
                 }
             }
