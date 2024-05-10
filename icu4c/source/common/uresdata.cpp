@@ -1457,6 +1457,9 @@ ures_swap(const UDataSwapper *ds,
                                     outBundle+keysBottom, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             udata_printError(ds, "ures_swap().udata_swapInvStringBlock(keys[%d]) failed\n", 4*(keysTop-keysBottom));
+            if(tempTable.resFlags!=stackResFlags) {
+                uprv_free(tempTable.resFlags);
+            }
             return 0;
         }
 
@@ -1465,6 +1468,9 @@ ures_swap(const UDataSwapper *ds,
             ds->swapArray16(ds, inBundle+keysTop, (resBottom-keysTop)*4, outBundle+keysTop, pErrorCode);
             if(U_FAILURE(*pErrorCode)) {
                 udata_printError(ds, "ures_swap().swapArray16(16-bit units[%d]) failed\n", 2*(resBottom-keysTop));
+                if(tempTable.resFlags!=stackResFlags) {
+                    uprv_free(tempTable.resFlags);
+                }
                 return 0;
             }
         }
