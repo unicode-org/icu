@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715208578487,
+  "lastUpdate": 1715383980486,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -63490,6 +63490,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1492.8704,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "564c92d666354a8ed0f99cba0f239eba790bd148",
+          "message": "ICU-22721 Delete obsolete __STRICT_ANSI__ workaround for MinGW.\n\nThis was originally added in the year 2004 for ICU-3854 but is no longer\nneeded with contemporary versions of MinGW where it instead as of GCC 14\ncauses this problem:\n\n__STRICT_ANSI__ seems to have been undefined; this is not supported.",
+          "timestamp": "2024-05-10T16:11:21-07:00",
+          "tree_id": "fa5d9f5763bd3693b31481b6ea279d34741c798d",
+          "url": "https://github.com/unicode-org/icu/commit/564c92d666354a8ed0f99cba0f239eba790bd148"
+        },
+        "date": 1715383864754,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77836.0862,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177832.408,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5292,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.6883,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.728,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8925.2251,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 33888.0421,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1495.7539,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
