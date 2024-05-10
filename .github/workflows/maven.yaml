@@ -1,4 +1,4 @@
-name: Publish icu4j.jar to GH Maven
+name: Publish snapshot icu4j.jar to GH Maven
 on:
   release:
     types: [created]
