@@ -569,7 +569,10 @@ UBool OlsonTimeZone::useDaylightTime() const {
     }
 
     int32_t year, month, dom, dow, doy, mid;
-    Grego::timeToFields(current, year, month, dom, dow, doy, mid);
+    UErrorCode status = U_ZERO_ERROR;
+    Grego::timeToFields(current, year, month, dom, dow, doy, mid, status);
+    U_ASSERT(U_SUCCESS(status));
+    if (U_FAILURE(status)) return false; // If error, just return false.
 
     // Find start of this year, and start of next year
     double start = Grego::fieldsToDay(year, 0, 1) * SECONDS_PER_DAY;
