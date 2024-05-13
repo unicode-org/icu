@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715628482253,
+  "lastUpdate": 1715638761610,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -78334,6 +78334,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.2555,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "6d5555a739179b5d177e73db7c111c5ef1cac22d",
+          "message": "ICU-22746 Import ICU4J tests\n\nIncludes code fixes for `numberingSystem`, `percent`,\nand `precision` options in `:number`\n\nAlso includes a code fix for number selection:\n  Refactor code to conform more closely to the steps in the spec,\n  and call the number formatter before the selector so that a FormattedNumber\n  with the right options is selected on\n\nSome modifications were needed to add missing params\nand to mark some tests as ignored (see ICU-22754).\nAlso added decimal arguments in JSON test reader\n\nFinally, some redundant tests are removed:\nall tests in messageformat2test_features and\nmessageformat2test_icu, and\nmessageformat2test_builtin are now covered by JSON tests",
+          "timestamp": "2024-05-13T14:51:14-07:00",
+          "tree_id": "2ec4275f6f6122b813de2a87ea9cb416dce79385",
+          "url": "https://github.com/unicode-org/icu/commit/6d5555a739179b5d177e73db7c111c5ef1cac22d"
+        },
+        "date": 1715638644971,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.0784,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.1289,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.2173,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 27.3566,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 37.9832,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 36.458,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.428,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.1743,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 98.2044,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.3518,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 38.908,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.7099,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
