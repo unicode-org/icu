@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715627965929,
+  "lastUpdate": 1715638249108,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44170,6 +44170,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2080633.1261,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "6d5555a739179b5d177e73db7c111c5ef1cac22d",
+          "message": "ICU-22746 Import ICU4J tests\n\nIncludes code fixes for `numberingSystem`, `percent`,\nand `precision` options in `:number`\n\nAlso includes a code fix for number selection:\n  Refactor code to conform more closely to the steps in the spec,\n  and call the number formatter before the selector so that a FormattedNumber\n  with the right options is selected on\n\nSome modifications were needed to add missing params\nand to mark some tests as ignored (see ICU-22754).\nAlso added decimal arguments in JSON test reader\n\nFinally, some redundant tests are removed:\nall tests in messageformat2test_features and\nmessageformat2test_icu, and\nmessageformat2test_builtin are now covered by JSON tests",
+          "timestamp": "2024-05-13T14:51:14-07:00",
+          "tree_id": "2ec4275f6f6122b813de2a87ea9cb416dce79385",
+          "url": "https://github.com/unicode-org/icu/commit/6d5555a739179b5d177e73db7c111c5ef1cac22d"
+        },
+        "date": 1715638137309,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 387.3655,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 12528066.6607,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2090047.4181,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 11609762.311,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2055465.179,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
