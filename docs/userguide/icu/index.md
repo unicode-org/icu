@@ -106,4 +106,4 @@ included, building, installing, etc.
 
 Current license: <https://github.com/unicode-org/icu/blob/main/LICENSE>
 
-See also FAQ section ["How is the ICU licensed"](icufaq/index#how-is-icu-licensed)
+See also FAQ section ["How is the ICU licensed"](../icu4c/faq.md#how-is-icu-licensed)
