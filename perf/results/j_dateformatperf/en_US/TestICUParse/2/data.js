@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715688252355,
+  "lastUpdate": 1715706928804,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21718,6 +21718,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 153.2881533234145,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "ed52e0a25b084b71bad0272b73b7f9634b615fb5",
+          "message": "ICU-22721 Rename scoped variable to not shadow variable in outer scope.",
+          "timestamp": "2024-05-14T19:03:14+02:00",
+          "tree_id": "f2af96bc732f5bc48891788aa78dada8a326bdb8",
+          "url": "https://github.com/unicode-org/icu/commit/ed52e0a25b084b71bad0272b73b7f9634b615fb5"
+        },
+        "date": 1715706813323,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 139.74687230180095,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
