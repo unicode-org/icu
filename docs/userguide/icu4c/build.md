@@ -368,55 +368,54 @@ Some platforms use package management tools to control the installation and unin
 
 ## How To Build And Install On z/OS (OS/390)
 
-You can install ICU on z/OS or OS/390 (the previous name of z/OS), but IBM tests only the z/OS installation. You install ICU in a z/OS UNIX system services file system such as HFS or zFS. On this platform, it is important that you understand a few details:
+You can install ICU on z/OS or OS/390 (the previous name of z/OS), but IBM tests only the z/OS installation. You install ICU in a z/OS UNIX System Services (z/OS UNIX) file system such as HFS or zFS. On this platform, it is important that you understand a few details:
 
 *   The makedep and GNU make tools are required for building ICU. If it is not already installed on your system, it is available at the [z/OS UNIX - Tools and Toys](http://www-03.ibm.com/servers/eserver/zseries/zos/unix/bpxa1toy.html) site. The PATH environment variable should be updated to contain the location of this executable prior to build. Failure to add these tools to your PATH will cause ICU build failures or cause pkgdata to fail to run.
-*   Since USS does not support using the mmap() function over NFS, it is recommended that you build ICU on a local filesystem. Once ICU has been built, you should not have this problem while using ICU when the data library has been built as a shared library, which is this is the default setting.
-*   Encoding considerations: The source code assumes that it is compiled with codepage ibm-1047 (to be exact, the UNIX System Services variant of it). The pax command converts all of the source code files from ASCII to codepage ibm-1047 (USS) EBCDIC. However, some files are binary files and must not be converted, or must be converted back to their original state. You can use the [unpax-icu.sh](https://github.com/unicode-org/icu/blob/main/icu4c/as_is/os390/unpax-icu.sh) script to do this for you automatically. It will unpackage the tar file and convert all the necessary files for you automatically.
-*   z/OS supports both native S/390 hexadecimal floating point and (with OS/390 2.6 and later) IEEE 754 binary floating point. This is a compile time option. Applications built with IEEE should use ICU DLLs that are built with IEEE (and vice versa). The environment variable IEEE390=0 will cause the z/OS version of ICU to be built without IEEE floating point support and use the native hexadecimal floating point. By default ICU is built with IEEE 754 support. Native floating point support is sufficient for codepage conversion, resource bundle and UnicodeString operations, but the Format APIs require IEEE binary floating point.
-*   z/OS introduced the concept of Extra Performance Linkage (XPLINK) to bring performance improvement opportunities to call-intensive C and C++ applications such as ICU. XPLINK is enabled on a DLL-by-DLL basis, so if you are considering using XPLINK in your application that uses ICU, you should consider building the XPLINK-enabled version of ICU. You need to set ICU's environment variable `OS390_XPLINK=1` prior to invoking the make process to produce binaries that are enabled for XPLINK. The XPLINK option, which is available for z/OS 1.2 and later, requires the PTF PQ69418 to build XPLINK enabled binaries.
-*   ICU requires XPLINK for the icuio library. If you want to use the rest of ICU without XPLINK, then you must use the --disable-icuio configure option.
-*   The latest versions of z/OS use [XPLINK version (C128) of the C++ standard library](https://www.ibm.com/support/knowledgecenter/SSLTBW_2.2.0/com.ibm.zos.v2r2.cbcux01/oebind6.htm) by default. You may see [an error](https://www.ibm.com/support/knowledgecenter/SSLTBW_2.2.0/com.ibm.zos.v2r2.cbcux01/oebind5.htm) when running with XPLINK disabled. To avoid this error, set the following environment variable or similar:
+*   Since z/OS UNIX does not support using the mmap() function over NFS, it is recommended that you build ICU on a local filesystem. Once ICU has been built, you should not have this problem while using ICU when the data library has been built as a shared library, which is this is the default setting.
+*   Encoding considerations: The source code assumes that it is compiled with codepage ibm-1047 (to be exact, the z/OS UNIX variant of it). The pax command converts all of the source code files from ASCII to codepage ibm-1047 (z/OS UNIX) EBCDIC. However, some files are binary files and must not be converted, or must be converted back to their original state. You can use the [unpax-icu.sh](https://github.com/unicode-org/icu/blob/main/icu4c/as_is/os390/unpax-icu.sh) script to do this for you automatically. It will unpackage the tar file and convert all the necessary files for you automatically.
+*   z/OS supports both native S/390 hexadecimal floating point and (with OS/390 2.6 and later) IEEE 754 binary floating point. This is a compile time option. Applications built with IEEE should use ICU DLLs that are built with IEEE (and vice versa). The environment variable ICU_IS_NOT_IEEE754=1 will disable IEEE floating point support on z/OS and use the native hexadecimal floating point. By default, ICU is built with IEEE 754 support. Native hexadecimal floating point support is sufficient for codepage conversion, resource bundle and UnicodeString operations, but the Format APIs require IEEE binary floating point.
+*   Use IBM Open XL C/C++ 2.1 for z/OS (or later) for z/OS build of ICU library. IBM XL C/C++ for z/OS does not support C++17 and can only build up to ICU v58. Target architecture can be controlled with TARGET_ICU_ARCH enviromental variable, default is arch10.
+
+When building ICU data, you might need to set the following environment variables:
 
 ```
-export _CXX_PSYSIX="CEE.SCEELIB(C128N)":"CBC.SCLBSID(IOSTREAM,COMPLEX)"
+export _ENCODE_FILE_NEW=IBM-1047
+export _ENCODE_FILE_EXISTING=IBM-1047
+export _CEE_RUNOPTS="FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)"
+export _BPXK_AUTOCVT=ON
+export _TAG_REDIR_ERR=txt
+export _TAG_REDIR_IN=txt
+export _TAG_REDIR_OUT=txt
 ```
 
-*   When building ICU data, the heap size may need to be increased with the following environment variable:
+The rest of the instructions for building and testing ICU on z/OS UNIX are the same as the [How To Build And Install On UNIX](#how-to-build-and-install-on-unix) section.
+
+### z/OS (Batch/PDS) support outside the z/OS UNIX environment
+
+ICU on z/OS builds its libraries into the z/OS UNIX file system (HFS). In addition, some libraries are built with batch-ready names. The default batch-ready ICU naming convention is LICU as prefix, 2 characters for version of ICU library, and 2 characters for specific ICU library name (see examples below). Use the following environmental variables to control z/OS batch-ready build of ICU:
+
+*   ICU_PDS_NAME_PREFIX sets the library name prefix.
+*   ICU_PDS_NAME_SUFFIX sets the library name suffix. If not set, the suffix is empty by default.
+*   ICU_PDS_NAME overrides ICU_PDS_NAME_PREFIX and two-character ICU library version. The two-character code for the specific ICU library will be appended.
+*   ICU_PLUGINS_DD indicates the ICU plug-ins location. A value of 1 forces the ICU to load plug-ins from //DD:ICUPLUG. ICU_PLUGINS_DD is not set by default, which means the ICU reads plug-ins from an HFS directory.
+
+Detailed schema of batch-ready naming:
 
 ```
-export _CEE_RUNOPTS="HEAPPOOLS(ON),HEAP(4M,1M,ANY,FREE,0K,4080)"
+{ICU_PDS_NAME_PREFIX}{two-character ICU library version}{two-character ICU library code}{ICU_PDS_NAME_SUFFIX}
+{                    ICU_PDS_NAME                      }
 ```
 
-*   The rest of the instructions for building and testing ICU on z/OS with UNIX System Services are the same as the [How To Build And Install On UNIX](#how-to-build-and-install-on-unix) section.
-
-### z/OS (Batch/PDS) support outside the UNIX system services environment
-
-By default, ICU builds its libraries into the UNIX file system (HFS). In addition, there is a z/OS specific environment variable (OS390BATCH) to build some libraries into the z/OS native file system. This is useful, for example, when your application is externalized via Job Control Language (JCL).
-
-The OS390BATCH environment variable enables non-UNIX support including the batch environment. When OS390BATCH is set, the libicui18n_XX_.dll, libicuuc_XX_.dll, and libicudt_XX_e.dll binaries are built into data sets (the native file system). Turning on OS390BATCH does not turn off the normal z/OS UNIX build. This means that the z/OS UNIX (HFS) DLLs will always be created.
-
-Two additional environment variables indicate the names of the z/OS data sets to use. The LOADMOD environment variable identifies the name of the data set that contains the dynamic link libraries (DLLs) and the LOADEXP environment variable identifies the name of the data set that contains the side decks, which are normally the files with the .x suffix in the UNIX file system.
-
-A data set is roughly equivalent to a UNIX or Windows file. For most kinds of data sets the operating system maintains record boundaries. UNIX and Windows files are byte streams. Two kinds of data sets are PDS and PDSE. Each data set of these two types contains a directory. It is like a UNIX directory. Each "file" is called a "member". Each member name is limited to eight bytes, normally EBCDIC.
-
-Here is an example of some environment variables that you can set prior to building ICU:
+Default batch-ready library subset names mapped to original UNIX names:
 
 ```
-OS390BATCH=1
-LOADMOD=_USER_.ICU.LOAD
-LOADEXP=_USER_.ICU.EXP
+LICU76DA - libicudata.so
+LICU76IN - libicui18n.so
+LICU76IO - libicuio.so
+LICU76UC - libicuuc.so
 ```
 
-The PDS member names for the DLL file names are as follows:
-
-```
-IXMI_XX_IN --> libicui18n_XX_.dll
-IXMI_XX_UC --> libicuuc_XX_.dll
-IXMI_XX_DA --> libicudt_XX_e.dll
-```
-
-You should point the LOADMOD environment variable at a partitioned data set extended (PDSE) and point the LOADEXP environment variable at a partitioned data set (PDS). The PDSE can be allocated with the following attributes:
+To use ICU from batch, copy the ICU libraries to a PDSE data set with the following attributes:
 
 ```
 Data Set Name . . . : USER.ICU.LOAD
@@ -432,24 +431,6 @@ Block size  . . . . : 32760
 1st extent cylinders: 1
 Secondary cylinders : 5
 Data set name type  : LIBRARY
-```
-
-The PDS can be allocated with the following attributes:
-
-```
-Data Set Name . . . : USER.ICU.EXP
-Management class. . : **None**
-Storage class . . . : BASE
-Volume serial . . . : TSO007
-Device type . . . . : 3390
-Data class. . . . . : **None**
-Organization  . . . : PO
-Record format . . . : FB
-Record length . . . : 80
-Block size  . . . . : 3200
-1st extent cylinders: 3
-Secondary cylinders : 3
-Data set name type  : PDS
 ```
 
 ## How To Build And Install On The IBM i Family (IBM i, i5/OS OS/400)

@@ -23,11 +23,6 @@
 
 U_NAMESPACE_USE
 
-#if U_PLATFORM == U_PF_OS390
-// avoid collision with math.h/log()
-// this must be after including utypes.h so that U_PLATFORM is actually defined
-#pragma map(IntlTest::log( const UnicodeString &message ),"logos390")
-#endif
 
 //-----------------------------------------------------------------------------
 //convenience classes to ease porting code that uses the Java
