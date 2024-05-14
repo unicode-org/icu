@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715717148993,
+  "lastUpdate": 1715718056380,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44278,6 +44278,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16675030.4121,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "e6ac2a292fac59032eb3ba11847a43bd5837c30c",
+          "message": "ICU-22753 Fix read-after-move in MF2\n\nIn StaticErrors::addError() and DynamicErrors::addError(),\ndon't read from `e` after moving out of it.",
+          "timestamp": "2024-05-14T12:40:06-07:00",
+          "tree_id": "dbccda0408e9cc3b85aeba6b58373101a1b0acc5",
+          "url": "https://github.com/unicode-org/icu/commit/e6ac2a292fac59032eb3ba11847a43bd5837c30c"
+        },
+        "date": 1715717944117,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 362.8756,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 52166153.9872,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 15137110.1163,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 51670695.606,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16558059.0566,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
