@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715637608660,
+  "lastUpdate": 1715688206105,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21958,6 +21958,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 310.46557269440507,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "hsivonen@hsivonen.fi",
+            "name": "Henri Sivonen",
+            "username": "hsivonen"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f5056cb46aaf377f52e96cf02554f7c6e830955a",
+          "message": "ICU-22757 Remove allow list of known contractions with precomposed form from ICU4X mode of genuca\n\nThis assumes that future cases will work OK, since the addition that was seen in Unicode 16 alpha\nwas OK.",
+          "timestamp": "2024-05-13T11:25:01-07:00",
+          "tree_id": "33242c83e28f940ad31c70ce52a4883715223d14",
+          "url": "https://github.com/unicode-org/icu/commit/f5056cb46aaf377f52e96cf02554f7c6e830955a"
+        },
+        "date": 1715688088212,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 315.6897294961398,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
