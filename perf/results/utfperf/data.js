@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715716961444,
+  "lastUpdate": 1715717874140,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34438,6 +34438,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.87,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "e6ac2a292fac59032eb3ba11847a43bd5837c30c",
+          "message": "ICU-22753 Fix read-after-move in MF2\n\nIn StaticErrors::addError() and DynamicErrors::addError(),\ndon't read from `e` after moving out of it.",
+          "timestamp": "2024-05-14T12:40:06-07:00",
+          "tree_id": "dbccda0408e9cc3b85aeba6b58373101a1b0acc5",
+          "url": "https://github.com/unicode-org/icu/commit/e6ac2a292fac59032eb3ba11847a43bd5837c30c"
+        },
+        "date": 1715717756896,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.2493,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.0155,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.9008,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
