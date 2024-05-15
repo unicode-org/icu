@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715717589926,
+  "lastUpdate": 1715798005425,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22138,6 +22138,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.4338637157448808,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "hsivonen@hsivonen.fi",
+            "name": "Henri Sivonen",
+            "username": "hsivonen"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "398890853d4937e8ea886d44776edb2cc49f1081",
+          "message": "ICU-22718 Export disallowed/ignored UTS 46 data for ICU4X",
+          "timestamp": "2024-05-15T11:20:09-07:00",
+          "tree_id": "6e6ed82255a9a0ec91985a25805cbe0be7bf7d8a",
+          "url": "https://github.com/unicode-org/icu/commit/398890853d4937e8ea886d44776edb2cc49f1081"
+        },
+        "date": 1715797887589,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.43346381161389913,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
