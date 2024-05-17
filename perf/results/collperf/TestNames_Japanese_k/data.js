@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715866956599,
+  "lastUpdate": 1715983259388,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44602,6 +44602,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5976302.1974,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "aszasz@users.noreply.github.com",
+            "name": "aszasz",
+            "username": "aszasz"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "0ef4da943c1cfc694e84fcb85cee5c78bae89d71",
+          "message": "ICU-22722 Fix broken link to faq in docs/userguide/icu/index.md\n\nSee #3006",
+          "timestamp": "2024-05-17T14:43:28-07:00",
+          "tree_id": "4f02fd9d47f9f78577b0db9e62a5522f7fc034cc",
+          "url": "https://github.com/unicode-org/icu/commit/0ef4da943c1cfc694e84fcb85cee5c78bae89d71"
+        },
+        "date": 1715983139092,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 229.2228,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20484812.9887,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5356753.1947,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19391164.0584,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5808330.9644,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
