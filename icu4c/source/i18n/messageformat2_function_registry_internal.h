@@ -122,11 +122,12 @@ namespace message2 {
             static Number integer(const Locale& loc);
 
         // These options have their own accessor methods, since they have different default values.
-            int32_t maximumFractionDigits(const FunctionOptions& options) const;
-            int32_t minimumFractionDigits(const FunctionOptions& options) const;
-            int32_t minimumSignificantDigits(const FunctionOptions& options) const;
-            int32_t maximumSignificantDigits(const FunctionOptions& options) const;
-            int32_t minimumIntegerDigits(const FunctionOptions& options) const;
+            int32_t intValuedOption(const FunctionOptions&, const UnicodeString&, int32_t, UErrorCode&) const;
+            int32_t maximumFractionDigits(const FunctionOptions& options, UErrorCode& status) const;
+            int32_t minimumFractionDigits(const FunctionOptions& options, UErrorCode& status) const;
+            int32_t minimumSignificantDigits(const FunctionOptions& options, UErrorCode& status) const;
+            int32_t maximumSignificantDigits(const FunctionOptions& options, UErrorCode& status) const;
+            int32_t minimumIntegerDigits(const FunctionOptions& options, UErrorCode& status) const;
 
             bool usePercent(const FunctionOptions& options) const;
             const Locale& locale;
