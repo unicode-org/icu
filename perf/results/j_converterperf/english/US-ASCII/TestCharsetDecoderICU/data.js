@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715866796817,
+  "lastUpdate": 1715982999150,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22198,6 +22198,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.5550149082404409,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "aszasz@users.noreply.github.com",
+            "name": "aszasz",
+            "username": "aszasz"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "0ef4da943c1cfc694e84fcb85cee5c78bae89d71",
+          "message": "ICU-22722 Fix broken link to faq in docs/userguide/icu/index.md\n\nSee #3006",
+          "timestamp": "2024-05-17T14:43:28-07:00",
+          "tree_id": "4f02fd9d47f9f78577b0db9e62a5522f7fc034cc",
+          "url": "https://github.com/unicode-org/icu/commit/0ef4da943c1cfc694e84fcb85cee5c78bae89d71"
+        },
+        "date": 1715982881077,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5527231881362032,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
