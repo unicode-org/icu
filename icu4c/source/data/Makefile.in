@@ -313,7 +313,7 @@ JAR=jar
 
 ICU4J_TZDATA=$(OUTDIR)/icu4j/icutzdata.jar
 ICU4J_TZDATA_FILES=zoneinfo64 metaZones timezoneTypes windowsZones
-ICU4J_DATA_DIRNAME=com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
+ICU4J_DATA_DIRNAME=com/ibm/icu/impl/data/icudata
 ICU4J_TZDATA_PATHS=$(ICU4J_TZDATA_FILES:%="$(ICU4J_DATA_DIRNAME)/%.res")
 
 # generate icu4j-related data to $(OUTDIR)/icu4j/com/ibm/icu/impl/data/...
