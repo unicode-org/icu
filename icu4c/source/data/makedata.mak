@@ -330,7 +330,7 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\uprops.icu" "$(I
 # see icu4j-readme.txt
 
 ICU4J_TZDATA="$(ICUOUT)\icu4j\icutzdata.jar"
-ICU4J_DATA_DIRNAME=com\ibm\icu\impl\data\$(U_ICUDATA_NAME)b
+ICU4J_DATA_DIRNAME=com\ibm\icu\impl\data\icudata
 ICU4J_TZDATA_PATHS=$(ICU4J_DATA_DIRNAME)\zoneinfo64.res $(ICU4J_DATA_DIRNAME)\metaZones.res $(ICU4J_DATA_DIRNAME)\timezoneTypes.res $(ICU4J_DATA_DIRNAME)\windowsZones.res
 
 generate-data: GODATA "$(ICUOUT)\$(ICUPKG).dat" uni-core-data
