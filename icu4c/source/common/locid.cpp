@@ -2665,11 +2665,11 @@ Locale::setKeywordValue(const char* keywordName, const char* keywordValue, UErro
         }
         uprv_strcpy(newFullName, fullName);
         if (fullName != fullNameBuffer) {
-            // if full Name is already on the heap, need to free it.
-            uprv_free(fullName);
             if (baseName == fullName) {
                 baseName = newFullName; // baseName should not point to freed memory.
             }
+            // if full Name is already on the heap, need to free it.
+            uprv_free(fullName);
         }
         fullName = newFullName;
         status = U_ZERO_ERROR;
