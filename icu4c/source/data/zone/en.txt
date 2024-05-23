@@ -401,6 +401,9 @@ en{
             lg{"Petropavlovsk-Kamchatski Time"}
             ls{"Petropavlovsk-Kamchatski Standard Time"}
         }
+        "meta:Kazakhstan"{
+            ls{"Kazakhstan Time"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"East Kazakhstan Time"}
         }

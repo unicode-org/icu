@@ -229,7 +229,6 @@ lt{
         gmh{"Vidurio Aukštosios Vokietijos"}
         gn{"gvaranių"}
         goh{"senoji Aukštosios Vokietijos"}
-        gom{"Goa konkanių"}
         gon{"gondi"}
         gor{"gorontalo"}
         got{"gotų"}

@@ -219,7 +219,6 @@ vi{
         gmh{"Tiếng Thượng Giéc-man Trung cổ"}
         gn{"Tiếng Guarani"}
         goh{"Tiếng Thượng Giéc-man cổ"}
-        gom{"Tiếng Goan Konkani"}
         gon{"Tiếng Gondi"}
         gor{"Tiếng Gorontalo"}
         got{"Tiếng Gô-tích"}

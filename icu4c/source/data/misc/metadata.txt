@@ -552,6 +552,10 @@ metadata:table(nofallback){
                 reason{"macrolanguage"}
                 replacement{"gon"}
             }
+            gom{
+                reason{"macrolanguage"}
+                replacement{"kok"}
+            }
             gre{
                 reason{"bibliographic"}
                 replacement{"el"}
@@ -863,10 +867,6 @@ metadata:table(nofallback){
             kng{
                 reason{"macrolanguage"}
                 replacement{"kg"}
-            }
-            knn{
-                reason{"macrolanguage"}
-                replacement{"kok"}
             }
             koj{
                 reason{"deprecated"}
@@ -5335,6 +5335,9 @@ metadata:table(nofallback){
         "jmc_TZ",
         "jv_ID",
         "ka_GE",
+        "kaa_Cyrl",
+        "kaa_Cyrl_UZ",
+        "kaa_Latn_UZ",
         "kab_DZ",
         "kaj_NG",
         "kam_KE",
@@ -5345,14 +5348,18 @@ metadata:table(nofallback){
         "kgp_BR",
         "khq_ML",
         "ki_KE",
-        "kk_KZ",
+        "kk_Arab_CN",
+        "kk_Cyrl",
+        "kk_Cyrl_KZ",
         "kkj_CM",
         "kl_GL",
         "kln_KE",
         "km_KH",
         "kn_IN",
         "ko_KR",
-        "kok_IN",
+        "kok_Deva",
+        "kok_Deva_IN",
+        "kok_Latn_IN",
         "kpe_LR",
         "ks_Arab",
         "ks_Arab_IN",
@@ -5374,11 +5381,13 @@ metadata:table(nofallback){
         "lg_UG",
         "lij_IT",
         "lkt_US",
+        "lld_IT",
         "lmo_IT",
         "ln_CD",
         "lo_LA",
         "lrc_IR",
         "lt_LT",
+        "ltg_LV",
         "lu_CD",
         "luo_KE",
         "luy_KE",
@@ -5391,6 +5400,7 @@ metadata:table(nofallback){
         "mg_MG",
         "mgh_MZ",
         "mgo_CM",
+        "mhn_IT",
         "mi_NZ",
         "mic_CA",
         "mk_MK",

@@ -230,7 +230,6 @@ pl{
         gmh{"średnio-wysoko-niemiecki"}
         gn{"guarani"}
         goh{"staro-wysoko-niemiecki"}
-        gom{"konkani (Goa)"}
         gon{"gondi"}
         gor{"gorontalo"}
         got{"gocki"}

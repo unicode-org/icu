@@ -21,7 +21,7 @@ ar{
                 nan{"ليس رقم"}
             }
         }
-        default{"arab"}
+        default{"latn"}
         default_latn{"latn"}
         latn{
             miscPatterns{

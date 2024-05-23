@@ -231,7 +231,6 @@ tr{
         gmh{"Ortaçağ Yüksek Almancası"}
         gn{"Guarani dili"}
         goh{"Eski Yüksek Almanca"}
-        gom{"Goa Konkanicesi"}
         gon{"Gondi dili"}
         gor{"Gorontalo dili"}
         got{"Gotça"}

@@ -223,7 +223,6 @@ cs{
         gmh{"hornoněmčina (středověká)"}
         gn{"guaranština"}
         goh{"hornoněmčina (stará)"}
-        gom{"konkánština (Goa)"}
         gon{"góndština"}
         gor{"gorontalo"}
         got{"gótština"}
