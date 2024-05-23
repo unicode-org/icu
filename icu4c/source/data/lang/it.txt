@@ -230,7 +230,6 @@ it{
         gmh{"tedesco medio alto"}
         gn{"guaraní"}
         goh{"tedesco antico alto"}
-        gom{"konkani goano"}
         gon{"gondi"}
         gor{"gorontalo"}
         got{"gotico"}

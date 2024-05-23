@@ -1273,63 +1273,63 @@ pl{
             day{
                 case{
                     accusative{
-                        few{"{0} doby"}
-                        many{"{0} dób"}
-                        one{"{0} dobę"}
-                        other{"{0} doby"}
+                        few{"{0} dni"}
+                        many{"{0} dni"}
+                        one{"{0} dzień"}
+                        other{"{0} dnia"}
                     }
                     dative{
-                        few{"{0} dobom"}
-                        many{"{0} dobom"}
-                        one{"{0} dobie"}
+                        few{"{0} dniom"}
+                        many{"{0} dniom"}
+                        one{"{0} dniowi"}
                     }
                     genitive{
-                        few{"{0} dób"}
-                        many{"{0} dób"}
-                        one{"{0} doby"}
-                        other{"{0} doby"}
+                        few{"{0} dni"}
+                        many{"{0} dni"}
+                        one{"{0} dnia"}
+                        other{"{0} dnia"}
                     }
                     instrumental{
-                        few{"{0} dobami"}
-                        many{"{0} dobami"}
-                        one{"{0} dobą"}
+                        few{"{0} dniami"}
+                        many{"{0} dniami"}
+                        one{"{0} dniem"}
                     }
                     locative{
-                        few{"{0} dobach"}
-                        many{"{0} dobach"}
-                        one{"{0} dobie"}
+                        few{"{0} dniach"}
+                        many{"{0} dniach"}
+                        one{"{0} dniu"}
                     }
                     vocative{
-                        one{"{0} dobo"}
+                        one{"{0} dniu"}
                     }
                 }
-                few{"{0} doby"}
-                gender{"feminine"}
-                many{"{0} dób"}
-                one{"{0} doba"}
-                other{"{0} doby"}
+                few{"{0} dni"}
+                gender{"inanimate"}
+                many{"{0} dni"}
+                one{"{0} dzień"}
+                other{"{0} dnia"}
                 per{"{0} na dobę"}
             }
             day-person{
                 case{
                     accusative{
-                        few{"{0} doby"}
-                        many{"{0} dób"}
-                        one{"{0} dobę"}
-                        other{"{0} doby"}
+                        few{"{0} dni"}
+                        many{"{0} dni"}
+                        one{"{0} dzień"}
+                        other{"{0} dnia"}
                     }
                     genitive{
-                        few{"{0} dób"}
-                        many{"{0} dób"}
-                        one{"{0} doby"}
-                        other{"{0} doby"}
+                        few{"{0} dni"}
+                        many{"{0} dni"}
+                        one{"{0} dnia"}
+                        other{"{0} dnia"}
                     }
                 }
-                few{"{0} doby"}
-                gender{"feminine"}
-                many{"{0} dób"}
-                one{"{0} doba"}
-                other{"{0} doby"}
+                few{"{0} dni"}
+                gender{"inanimate"}
+                many{"{0} dni"}
+                one{"{0} dzień"}
+                other{"{0} dnia"}
             }
             decade{
                 case{
@@ -5114,7 +5114,7 @@ pl{
         }
         duration{
             day{
-                dnam{"doba"}
+                dnam{"dzień"}
                 few{"{0} d."}
                 many{"{0} d."}
                 one{"{0} d."}
@@ -5423,11 +5423,11 @@ pl{
                 other{"{0} w."}
             }
             day{
-                dnam{"doby"}
-                few{"{0} doby"}
-                many{"{0} dób"}
-                one{"{0} doba"}
-                other{"{0} doby"}
+                dnam{"dzień"}
+                few{"{0} dni"}
+                many{"{0} dni"}
+                one{"{0} dzień"}
+                other{"{0} dnia"}
                 per{"{0}/dobę"}
             }
             decade{

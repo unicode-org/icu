@@ -230,7 +230,6 @@ sv{
         gmh{"medelhögtyska"}
         gn{"guaraní"}
         goh{"fornhögtyska"}
-        gom{"Goa-konkani"}
         gon{"gondi"}
         gor{"gorontalo"}
         got{"gotiska"}

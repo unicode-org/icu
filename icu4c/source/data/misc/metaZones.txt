@@ -433,6 +433,9 @@ metaZones:table(nofallback){
         Karachi{
             001{"Asia/Karachi"}
         }
+        Kazakhstan{
+            001{"Asia/Almaty"}
+        }
         Kazakhstan_Eastern{
             001{"Asia/Almaty"}
         }
@@ -790,6 +793,7 @@ metaZones:table(nofallback){
         kaea{"Kazakhstan_Eastern"}
         kamc{"Kamchatka"}
         kawe{"Kazakhstan_Western"}
+        kaza{"Kazakhstan"}
         kore{"Korea"}
         kosr{"Kosrae"}
         kras{"Krasnoyarsk"}
@@ -2851,7 +2855,7 @@ metaZones:table(nofallback){
                 "2024-02-29 18:00",
             }
             {
-                "Kazakhstan_Western",
+                "Kazakhstan",
                 "2024-02-29 18:00",
                 "9999-12-31 23:59",
             }
@@ -2894,6 +2898,11 @@ metaZones:table(nofallback){
             {
                 "Kazakhstan_Western",
                 "2004-10-30 22:00",
+                "2024-02-29 18:00",
+            }
+            {
+                "Kazakhstan",
+                "2024-02-29 18:00",
                 "9999-12-31 23:59",
             }
         }
@@ -2911,6 +2920,11 @@ metaZones:table(nofallback){
             {
                 "Kazakhstan_Western",
                 "2004-10-30 21:00",
+                "2024-02-29 18:00",
+            }
+            {
+                "Kazakhstan",
+                "2024-02-29 18:00",
                 "9999-12-31 23:59",
             }
         }
@@ -2930,6 +2944,11 @@ metaZones:table(nofallback){
             {
                 "Kazakhstan_Western",
                 "2004-10-30 22:00",
+                "2024-02-29 18:00",
+            }
+            {
+                "Kazakhstan",
+                "2024-02-29 18:00",
                 "9999-12-31 23:59",
             }
         }
@@ -3212,11 +3231,11 @@ metaZones:table(nofallback){
             {
                 "Malaya",
                 "1970-01-01 00:00",
-                "1981-12-31 16:30",
+                "1981-12-31 16:00",
             }
             {
                 "Malaysia",
-                "1981-12-31 16:30",
+                "1981-12-31 16:00",
                 "9999-12-31 23:59",
             }
         }
@@ -3315,6 +3334,11 @@ metaZones:table(nofallback){
             {
                 "Kazakhstan_Western",
                 "2004-10-30 22:00",
+                "2024-02-29 18:00",
+            }
+            {
+                "Kazakhstan",
+                "2024-02-29 18:00",
                 "9999-12-31 23:59",
             }
         }
@@ -3371,7 +3395,7 @@ metaZones:table(nofallback){
                 "2024-02-29 18:00",
             }
             {
-                "Kazakhstan_Western",
+                "Kazakhstan",
                 "2024-02-29 18:00",
                 "9999-12-31 23:59",
             }
@@ -3395,6 +3419,11 @@ metaZones:table(nofallback){
             {
                 "Kazakhstan_Western",
                 "2018-12-20 18:00",
+                "2024-02-29 18:00",
+            }
+            {
+                "Kazakhstan",
+                "2024-02-29 18:00",
                 "9999-12-31 23:59",
             }
         }

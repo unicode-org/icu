@@ -221,7 +221,6 @@ de{
         gmh{"Mittelhochdeutsch"}
         gn{"Guaraní"}
         goh{"Althochdeutsch"}
-        gom{"Goa-Konkani"}
         gon{"Gondi"}
         gor{"Mongondou"}
         got{"Gotisch"}

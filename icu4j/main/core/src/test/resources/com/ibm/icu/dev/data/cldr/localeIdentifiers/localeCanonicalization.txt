@@ -176,6 +176,7 @@ glg	;	gl
 gli	;	kzk
 glv	;	gv
 gno	;	gon
+gom	;	kok
 gre	;	el
 grn	;	gn
 gti	;	nyc
@@ -239,7 +240,6 @@ kir	;	ky
 kmr	;	ku
 knc	;	kr
 kng	;	kg
-knn	;	kok
 koj	;	kwv
 kom	;	kv
 kon	;	kg
@@ -1424,6 +1424,7 @@ glg_Adlm_AC_fonipa	;	gl_Adlm_AC_fonipa
 gli_Adlm_AC_fonipa	;	kzk_Adlm_AC_fonipa
 glv_Adlm_AC_fonipa	;	gv_Adlm_AC_fonipa
 gno_Adlm_AC_fonipa	;	gon_Adlm_AC_fonipa
+gom_Adlm_AC_fonipa	;	kok_Adlm_AC_fonipa
 gre_Adlm_AC_fonipa	;	el_Adlm_AC_fonipa
 grn_Adlm_AC_fonipa	;	gn_Adlm_AC_fonipa
 gti_Adlm_AC_fonipa	;	nyc_Adlm_AC_fonipa
@@ -1493,7 +1494,6 @@ kir_Adlm_AC_fonipa	;	ky_Adlm_AC_fonipa
 kmr_Adlm_AC_fonipa	;	ku_Adlm_AC_fonipa
 knc_Adlm_AC_fonipa	;	kr_Adlm_AC_fonipa
 kng_Adlm_AC_fonipa	;	kg_Adlm_AC_fonipa
-knn_Adlm_AC_fonipa	;	kok_Adlm_AC_fonipa
 koj_Adlm_AC_fonipa	;	kwv_Adlm_AC_fonipa
 kom_Adlm_AC_fonipa	;	kv_Adlm_AC_fonipa
 kon_Adlm_AC_fonipa	;	kg_Adlm_AC_fonipa

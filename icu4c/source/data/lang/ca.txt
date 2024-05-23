@@ -215,7 +215,6 @@ ca{
         gmh{"alt alemany mitjà"}
         gn{"guaraní"}
         goh{"alt alemany antic"}
-        gom{"concani de Goa"}
         gon{"gondi"}
         gor{"gorontalo"}
         got{"gòtic"}

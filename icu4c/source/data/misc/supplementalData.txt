@@ -4821,6 +4821,7 @@ supplementalData:table(nofallback){
                 "gji",
                 "gli",
                 "gno",
+                "gom",
                 "gti",
                 "gug",
                 "guv",
@@ -4852,7 +4853,6 @@ supplementalData:table(nofallback){
                 "kmr",
                 "knc",
                 "kng",
-                "knn",
                 "koj",
                 "kox",
                 "kpp",
@@ -5303,7 +5303,7 @@ supplementalData:table(nofallback){
                 "cle",
                 "clh~m",
                 "clo",
-                "clt~u",
+                "cls~u",
                 "clw",
                 "cly",
                 "cma",
@@ -5718,7 +5718,8 @@ supplementalData:table(nofallback){
                 "gnt~u",
                 "gnw",
                 "gnz",
-                "goa~z",
+                "goa~l",
+                "gon~z",
                 "gpa",
                 "gpe",
                 "gpn",
@@ -6105,8 +6106,7 @@ supplementalData:table(nofallback){
                 "kn",
                 "kna~b",
                 "knd~f",
-                "kni~m",
-                "kno~z",
+                "kni~z",
                 "ko",
                 "koa",
                 "koc~i",
@@ -6796,6 +6796,7 @@ supplementalData:table(nofallback){
                 "rpn",
                 "rpt",
                 "rri",
+                "rrm",
                 "rro",
                 "rrt",
                 "rsb",
@@ -7208,6 +7209,7 @@ supplementalData:table(nofallback){
                 "vrs~t",
                 "vsi",
                 "vsl",
+                "vsn",
                 "vsv",
                 "vto",
                 "vum~n",
@@ -7893,6 +7895,7 @@ supplementalData:table(nofallback){
                 "Elba",
                 "Elym",
                 "Ethi",
+                "Gara",
                 "Geor",
                 "Glag",
                 "Gong",
@@ -7901,6 +7904,7 @@ supplementalData:table(nofallback){
                 "Gran",
                 "Grek",
                 "Gujr",
+                "Gukh",
                 "Guru",
                 "Hanb",
                 "Hang",
@@ -7928,6 +7932,7 @@ supplementalData:table(nofallback){
                 "Kits",
                 "Knda",
                 "Kore",
+                "Krai",
                 "Kthi",
                 "Lana",
                 "Laoo",
@@ -7964,6 +7969,7 @@ supplementalData:table(nofallback){
                 "Nshu",
                 "Ogam",
                 "Olck",
+                "Onao",
                 "Orkh",
                 "Orya",
                 "Osge",
@@ -7995,6 +8001,7 @@ supplementalData:table(nofallback){
                 "Sora",
                 "Soyo",
                 "Sund",
+                "Sunu",
                 "Sylo",
                 "Syrc",
                 "Syre",
@@ -8015,7 +8022,9 @@ supplementalData:table(nofallback){
                 "Tibt",
                 "Tirh",
                 "Tnsa",
+                "Todr",
                 "Toto",
+                "Tutg",
                 "Ugar",
                 "Vaii",
                 "Vith",
@@ -11921,6 +11930,7 @@ supplementalData:table(nofallback){
                 "akuapem",
                 "alalc97",
                 "aluku",
+                "anpezo",
                 "ao1990",
                 "aranes",
                 "arkaika",
@@ -11946,6 +11956,8 @@ supplementalData:table(nofallback){
                 "dajnko",
                 "ekavsk",
                 "emodeng",
+                "fascia",
+                "fodom",
                 "fonipa",
                 "fonkirsh",
                 "fonnapa",
@@ -11953,6 +11965,7 @@ supplementalData:table(nofallback){
                 "fonxsamp",
                 "gallo",
                 "gascon",
+                "gherd",
                 "grclass",
                 "grital",
                 "grmistr",
@@ -11987,6 +12000,7 @@ supplementalData:table(nofallback){
                 "pahawh2~4",
                 "pamaka",
                 "peano",
+                "pehoeji",
                 "petr1708",
                 "pinyin",
                 "polyton",
@@ -12005,6 +12019,7 @@ supplementalData:table(nofallback){
                 "sursilv",
                 "sutsilv",
                 "synnejyl",
+                "tailo",
                 "tarask",
                 "tongyong",
                 "tunumiit",
@@ -12013,6 +12028,7 @@ supplementalData:table(nofallback){
                 "ulster",
                 "unifon",
                 "vaidika",
+                "valbadia",
                 "valencia",
                 "vallader",
                 "vecdruka",
@@ -13939,14 +13955,6 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
-        gom{
-            primary{
-                scripts{"Deva"}
-            }
-            secondary{
-                territories{"IN"}
-            }
-        }
         gon{
             primary{
                 scripts{
@@ -14485,7 +14493,10 @@ supplementalData:table(nofallback){
         }
         kaa{
             primary{
-                scripts{"Cyrl"}
+                scripts{
+                    "Cyrl",
+                    "Latn",
+                }
             }
         }
         kab{
@@ -14731,6 +14742,14 @@ supplementalData:table(nofallback){
                 territories{"SN"}
             }
         }
+        knn{
+            primary{
+                scripts{"Deva"}
+            }
+            secondary{
+                territories{"IN"}
+            }
+        }
         ko{
             primary{
                 scripts{"Kore"}
@@ -14756,7 +14775,10 @@ supplementalData:table(nofallback){
         }
         kok{
             primary{
-                scripts{"Deva"}
+                scripts{
+                    "Deva",
+                    "Latn",
+                }
             }
             secondary{
                 territories{"IN"}
@@ -15086,6 +15108,11 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        lld{
+            primary{
+                scripts{"Latn"}
+            }
+        }
         lmn{
             primary{
                 scripts{"Telu"}
@@ -15406,6 +15433,12 @@ supplementalData:table(nofallback){
             primary{
                 scripts{"Latn"}
                 territories{"MH"}
+            }
+        }
+        mhn{
+            primary{
+                scripts{"Latn"}
+                territories{"IT"}
             }
         }
         mi{
@@ -18963,7 +18996,7 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "gom",
+                "knn",
                 "kok",
                 "10",
                 "1",
@@ -20449,54 +20482,6 @@ supplementalData:table(nofallback){
             "pt_MZ",
             "pt_ST",
             "pt_TL",
-        }
-        root{
-            "az_Arab",
-            "az_Cyrl",
-            "bal_Latn",
-            "blt_Latn",
-            "bm_Nkoo",
-            "bs_Cyrl",
-            "byn_Latn",
-            "cu_Glag",
-            "dje_Arab",
-            "dyo_Arab",
-            "en_Dsrt",
-            "en_Shaw",
-            "ff_Adlm",
-            "ff_Arab",
-            "ha_Arab",
-            "iu_Latn",
-            "kk_Arab",
-            "ks_Deva",
-            "ku_Arab",
-            "kxv_Deva",
-            "kxv_Orya",
-            "kxv_Telu",
-            "ky_Arab",
-            "ky_Latn",
-            "ml_Arab",
-            "mn_Mong",
-            "mni_Mtei",
-            "ms_Arab",
-            "pa_Arab",
-            "sat_Deva",
-            "sd_Deva",
-            "sd_Khoj",
-            "sd_Sind",
-            "shi_Latn",
-            "so_Arab",
-            "sr_Latn",
-            "sw_Arab",
-            "tg_Arab",
-            "ug_Cyrl",
-            "uz_Arab",
-            "uz_Cyrl",
-            "vai_Latn",
-            "wo_Arab",
-            "yo_Arab",
-            "yue_Hans",
-            "zh_Hant",
         }
         zh_Hant_HK{"zh_Hant_MO"}
     }
@@ -27094,6 +27079,9 @@ supplementalData:table(nofallback){
             haz{
                 populationShareF:int{48590000}
             }
+            kaa{
+                populationShareF:int{45960000}
+            }
             kk_Arab{
                 populationShareF:int{45550000}
             }
@@ -29924,9 +29912,6 @@ supplementalData:table(nofallback){
             gbm{
                 populationShareF:int{47270000}
             }
-            gom{
-                populationShareF:int{47320000}
-            }
             gon{
                 populationShareF:int{47240000}
             }
@@ -29974,9 +29959,12 @@ supplementalData:table(nofallback){
                 officialStatus{"official_regional"}
                 populationShareF:int{48370000}
             }
+            knn{
+                populationShareF:int{47370000}
+            }
             kok{
                 officialStatus{"official_regional"}
-                populationShareF:int{47370000}
+                populationShareF:int{47320000}
             }
             kru{
                 populationShareF:int{47190000}
@@ -30200,6 +30188,9 @@ supplementalData:table(nofallback){
             ka{
                 populationShareF:int{46710000}
             }
+            kaa{
+                populationShareF:int{47670000}
+            }
             kk_Arab{
                 populationShareF:int{45350000}
             }
@@ -30286,8 +30277,14 @@ supplementalData:table(nofallback){
             lij{
                 populationShareF:int{47860000}
             }
+            lld{
+                populationShareF:int{46480000}
+            }
             lmo{
                 populationShareF:int{48570000}
+            }
+            mhn{
+                populationShareF:int{45220000}
             }
             nap{
                 populationShareF:int{47970000}
@@ -30457,6 +30454,9 @@ supplementalData:table(nofallback){
             }
         }
         KG{
+            kaa{
+                populationShareF:int{46200000}
+            }
             ky{
                 officialStatus{"official"}
                 populationShareF:int{49480000}
@@ -30587,6 +30587,9 @@ supplementalData:table(nofallback){
             }
             en{
                 populationShareF:int{49150000}
+            }
+            kaa{
+                populationShareF:int{46190000}
             }
             kk{
                 officialStatus{"official"}
@@ -32334,6 +32337,9 @@ supplementalData:table(nofallback){
             izh{
                 populationShareF:int{44100000}
             }
+            kaa{
+                populationShareF:int{44600000}
+            }
             kbd{
                 officialStatus{"official_regional"}
                 populationShareF:int{47310000}
@@ -33113,6 +33119,9 @@ supplementalData:table(nofallback){
             }
         }
         TM{
+            kaa{
+                populationShareF:int{47110000}
+            }
             ku{
                 populationShareF:int{47400000}
             }
@@ -33201,6 +33210,9 @@ supplementalData:table(nofallback){
             }
             ka{
                 populationShareF:int{46560000}
+            }
+            kaa{
+                populationShareF:int{48100000}
             }
             kbd{
                 populationShareF:int{47770000}
@@ -33561,7 +33573,7 @@ supplementalData:table(nofallback){
         }
         UZ{
             kaa{
-                populationShareF:int{48160000}
+                populationShareF:int{48210000}
             }
             ru{
                 populationShareF:int{49140000}
@@ -33569,7 +33581,7 @@ supplementalData:table(nofallback){
             territoryF:intvector{
                 61223000,
                 49994000,
-                57305654,
+                57367998,
             }
             tr{
                 populationShareF:int{47760000}

@@ -221,7 +221,6 @@ nl{
         gmh{"Middelhoogduits"}
         gn{"Guaraní"}
         goh{"Oudhoogduits"}
-        gom{"Goa Konkani"}
         gon{"Gondi"}
         gor{"Gorontalo"}
         got{"Gothisch"}

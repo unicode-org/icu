@@ -219,7 +219,6 @@ no{
         gmh{"mellomhøytysk"}
         gn{"guarani"}
         goh{"gammelhøytysk"}
-        gom{"goansk konkani"}
         gon{"gondi"}
         gor{"gorontalo"}
         got{"gotisk"}

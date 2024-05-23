@@ -234,7 +234,6 @@ fi{
         gmh{"keskiyläsaksa"}
         gn{"guarani"}
         goh{"muinaisyläsaksa"}
-        gom{"goankonkani"}
         gon{"gondi"}
         gor{"gorontalo"}
         got{"gootti"}

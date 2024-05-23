@@ -219,7 +219,6 @@ gd{
         gmh{"Meadhan-Àrd-Gearmailtis"}
         gn{"Guaraní"}
         goh{"Seann-Àrd-Gearmailtis"}
-        gom{"Konkani Goa"}
         gon{"Gondi"}
         gor{"Gorontalo"}
         got{"Gotais"}
