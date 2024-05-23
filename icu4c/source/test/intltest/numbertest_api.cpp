@@ -3011,7 +3011,7 @@ void NumberFormatterApiTest::unitLocaleTags() {
         {"Test the region of `de` --> region should be DE", "de", "celsius", 1, "default", "celsius",
          1.0, u"1 Grad Celsius"},
         {"Test the region of `ar` --> region should be EG", "ar", "celsius", 1, "default", "celsius",
-         1.0, u"١ درجة مئوية"},
+         1.0, u"1 درجة مئوية"},
     };
 
     for (const auto &testCase : cases) {
