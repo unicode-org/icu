@@ -1384,7 +1384,8 @@ void IntlTestDateTimePatternGeneratorAPI::testJjMapping() {
             continue;
         }
         // Now check that shortPattern and jPattern use the same hour cycle
-        if ((uprv_strncmp(localeID, "csw", 3) == 0 || uprv_strncmp(localeID, "kxv_", 4) == 0) && logKnownIssue("CLDR-17199", "Need timeFormats with h for csw, kxv_Xxxx")) {
+        if ((uprv_strncmp(localeID, "csw", 3) == 0 || uprv_strncmp(localeID, "kxv_", 4) == 0 || uprv_strncmp(localeID, "zh_Hans_MY", 10) == 0) 
+        		&& logKnownIssue("CLDR-17199", "Need timeFormats with h for csw, kxv_Xxxx, zh_Hans_MY")) {
             continue;
         }
         UnicodeString jPatSkeleton = DateTimePatternGenerator::staticGetSkeleton(jPattern, status);

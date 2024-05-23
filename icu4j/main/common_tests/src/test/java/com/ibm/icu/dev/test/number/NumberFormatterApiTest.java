@@ -522,7 +522,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 // Test the liklihood of the languages
                 {"Test the region of `en` --> region should be US", "en", "celsius", "1", "default", "fahrenheit", "34.0", "34 degrees Fahrenheit"},
                 {"Test the region of `de` --> region should be DE", "de", "celsius", "1", "default", "celsius", "1.0", "1 Grad Celsius"},
-                {"Test the region of `ar` --> region should be EG", "ar", "celsius", "1", "default", "celsius", "1.0", "١ درجة مئوية"},
+                {"Test the region of `ar` --> region should be EG", "ar", "celsius", "1", "default", "celsius", "1.0", "1 درجة مئوية"},
         };
 
         int testIndex = 0;
