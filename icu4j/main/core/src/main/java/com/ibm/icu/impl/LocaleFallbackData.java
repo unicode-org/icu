@@ -304,7 +304,6 @@ class LocaleFallbackData {
         t.put("goe", "Tibt");
         t.put("gof", "Ethi");
         t.put("gok", "Deva");
-        t.put("gom", "Deva");
         t.put("gon", "Telu");
         t.put("got", "Goth");
         t.put("gra", "Deva");
@@ -466,6 +465,7 @@ class LocaleFallbackData {
         t.put("kmj", "Deva");
         t.put("kmz", "Arab");
         t.put("kn", "Knda");
+        t.put("knn", "Deva");
         t.put("ko", "Kore");
         t.put("koi", "Cyrl");
         t.put("kok", "Deva");
@@ -1178,7 +1178,9 @@ class LocaleFallbackData {
         t.put("hi_Latn", "en_IN");
         t.put("ht", "fr_HT");
         t.put("iu_Latn", "root");
+        t.put("kaa_Latn", "root");
         t.put("kk_Arab", "root");
+        t.put("kok_Latn", "root");
         t.put("ks_Deva", "root");
         t.put("ku_Arab", "root");
         t.put("kxv_Deva", "root");
