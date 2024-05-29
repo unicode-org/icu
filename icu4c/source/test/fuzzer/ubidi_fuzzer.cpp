@@ -125,7 +125,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   checkVisual = (*(fuzzData.data()) & 0x01) == 0;
   fuzzData.remove_prefix(sizeof(checkVisual));
 
-  std::memcpy(&isInverse, fuzzData.data(), sizeof(isInverse));
+  isInverse = (*(fuzzData.data()) & 0x01) != 0;
   fuzzData.remove_prefix(sizeof(isInverse));
 
   std::memcpy(&options2, fuzzData.data(), sizeof(options2));
