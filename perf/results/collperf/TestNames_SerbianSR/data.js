@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1717068440021,
+  "lastUpdate": 1717072003725,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44980,6 +44980,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16698728.6018,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "edfe255de360eed46e653c7d35983a757568dec8",
+          "message": "ICU-22001 Put translation unit local definitions in unnamed namespaces.\n\nAny symbol that isn't intended to have external linkage should either be\ndeclared static (legacy code) or put in an unnamed namespace.",
+          "timestamp": "2024-05-30T14:06:12+02:00",
+          "tree_id": "9dd54a00adab863b738e37e513567501489645a8",
+          "url": "https://github.com/unicode-org/icu/commit/edfe255de360eed46e653c7d35983a757568dec8"
+        },
+        "date": 1717071884691,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 356.7374,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 51304054.757,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 15116746.7237,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 50194359.8972,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16360146.1938,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
