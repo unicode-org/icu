@@ -296,13 +296,21 @@ uprops_swap(const UDataSwapper *ds,
         // SCX const uint16_t scriptExtensions[2*(i7-i6)];
         ds->swapArray16(ds,
             inData32+dataIndexes[UPROPS_SCRIPT_EXTENSIONS_INDEX],
-            4*(dataIndexes[UPROPS_RESERVED_INDEX_7]-dataIndexes[UPROPS_SCRIPT_EXTENSIONS_INDEX]),
+            4*(dataIndexes[UPROPS_BLOCK_TRIE_INDEX]-dataIndexes[UPROPS_SCRIPT_EXTENSIONS_INDEX]),
             outData32+dataIndexes[UPROPS_SCRIPT_EXTENSIONS_INDEX],
             pErrorCode);
+
+        // Swap the Block UCPTrie=CodePointTrie.
+        int32_t partOffset = dataIndexes[UPROPS_BLOCK_TRIE_INDEX];
+        int32_t nextOffset = dataIndexes[UPROPS_RESERVED_INDEX_8];
+        int32_t partLength = 4 * (nextOffset - partOffset);
+        if (partLength >= 0) {
+            utrie_swapAnyVersion(ds, inData32 + partOffset, partLength,
+                                 outData32 + partOffset, pErrorCode);
+        }
     }
 
-    /* i7 reservedIndex7; -- 32-bit unit index to the top of the Script_Extensions data */
-    return headerSize+4*dataIndexes[UPROPS_RESERVED_INDEX_7];
+    return headerSize+4*dataIndexes[UPROPS_RESERVED_INDEX_8];
 }
 
 /* Unicode case mapping data swapping --------------------------------------- */

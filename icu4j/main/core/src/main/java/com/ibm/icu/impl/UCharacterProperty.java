@@ -114,8 +114,9 @@ public final class UCharacterProperty
     public static final int SRC_EMOJI=15;
     public static final int SRC_IDSU=16;
     public static final int SRC_ID_COMPAT_MATH=17;
+    public static final int SRC_BLOCK=18;
     /** One more than the highest UPropertySource (SRC_) constant. */
-    public static final int SRC_COUNT=18;
+    public static final int SRC_COUNT=19;
 
     private static final class LayoutProps {
         private static final class IsAcceptable implements ICUBinary.Authenticate {
@@ -736,7 +737,24 @@ public final class UCharacterProperty
                 return UBiDiProps.INSTANCE.getClass(c);
             }
         },
-        new IntProperty(0, BLOCK_MASK_, BLOCK_SHIFT_),
+        new IntProperty(SRC_BLOCK) {  // BLOCK
+            @Override
+            int getValue(int c) {
+                // We store Block values indexed by the code point shifted right 4 bits
+                // and use a "small" UCPTrie=CodePointTrie for minimal data size.
+                // This works because blocks have xxx0..xxxF ranges.
+                int c4 = c;
+                // Shift unless out of range, in which case we fetch the trie's error value.
+                if (c4 <= 0x10ffff) {
+                    c4 >>= 4;
+                }
+                return m_blockTrie_.get(c4);
+            }
+            @Override
+            int getMaxValue(int which) {
+                return m_maxValuesOther_ & MAX_BLOCK;
+            }
+        },
         new CombiningClassIntProperty(SRC_NFC) {  // CANONICAL_COMBINING_CLASS
             @Override
             int getValue(int c) {
@@ -1273,12 +1291,16 @@ public final class UCharacterProperty
      * Maximum values for script, bits used as in vector word
      * 0
      */
-     int m_maxJTGValue_;
+    int m_maxJTGValue_;
+    /** maximum values for other code values */
+    int m_maxValuesOther_;
 
     /**
      * Script_Extensions data
      */
     public char[] m_scriptExtensions_;
+
+    CodePointTrie m_blockTrie_;
 
     // private variables -------------------------------------------------
 
@@ -1346,7 +1368,8 @@ public final class UCharacterProperty
     /*
      * Properties in vector word 0
      * Bits
-     * 31..24   DerivedAge version major/minor one nibble each
+     * 31..26   Age major version (0..63)
+     * 25..24   Age minor version (0..3)
      * 23..22   3..1: Bits 21..20 & 7..0 = Script_Extensions index
      *             3: Script value from Script_Extensions
      *             2: Script=Inherited
@@ -1354,7 +1377,7 @@ public final class UCharacterProperty
      *             0: Script=bits 21..20 & 7..0
      * 21..20   Bits 9..8 of the UScriptCode, or index to Script_Extensions
      * 19..17   East Asian Width
-     * 16.. 8   UBlockCode
+     * 16.. 8   reserved since format version 9; was UBlockCode
      *  7.. 0   UScriptCode, or index to Script_Extensions
      */
 
@@ -1381,16 +1404,6 @@ public final class UCharacterProperty
      * Equivalent to icu4c UPROPS_EA_SHIFT
      */
     private static final int EAST_ASIAN_SHIFT_ = 17;
-    /**
-     * Integer properties mask and shift values for blocks.
-     * Equivalent to icu4c UPROPS_BLOCK_MASK
-     */
-    private static final int BLOCK_MASK_ = 0x0001ff00;
-    /**
-     * Integer properties mask and shift values for blocks.
-     * Equivalent to icu4c UPROPS_BLOCK_SHIFT
-     */
-    private static final int BLOCK_SHIFT_ = 8;
     /**
      * Integer properties mask and shift values for scripts.
      * Equivalent to icu4c UPROPS_SHIFT_LOW_MASK.
@@ -1549,6 +1562,8 @@ public final class UCharacterProperty
      */
     private static final int AGE_SHIFT_ = 24;
 
+    // Bits 9..0 in UPROPS_MAX_VALUES_OTHER_INDEX
+    private static final int MAX_BLOCK = 0x3ff;
 
     // private constructors --------------------------------------------------
 
@@ -1577,12 +1592,13 @@ public final class UCharacterProperty
         int additionalVectorsOffset = bytes.getInt();
         m_additionalColumnsCount_ = bytes.getInt();
         int scriptExtensionsOffset = bytes.getInt();
-        int reservedOffset7 = bytes.getInt();
-        /* reservedOffset8 = */ bytes.getInt();
+        int blockTrieOffset = bytes.getInt();
+        int reservedOffset8 = bytes.getInt();
         /* dataTopOffset = */ bytes.getInt();
         m_maxBlockScriptValue_ = bytes.getInt();
         m_maxJTGValue_ = bytes.getInt();
-        ICUBinary.skipBytes(bytes, (16 - 12) << 2);
+        m_maxValuesOther_ = bytes.getInt();
+        ICUBinary.skipBytes(bytes, (16 - 13) << 2);
 
         // read the main properties trie
         m_trie_ = Trie2_16.createFromSerialized(bytes);
@@ -1614,10 +1630,20 @@ public final class UCharacterProperty
         }
 
         // Script_Extensions
-        int numChars = (reservedOffset7 - scriptExtensionsOffset) * 2;
+        int numChars = (blockTrieOffset - scriptExtensionsOffset) * 2;
         if(numChars > 0) {
             m_scriptExtensions_ = ICUBinary.getChars(bytes, numChars, 0);
         }
+
+        // Read the blockTrie.
+        int partLength = (reservedOffset8 - blockTrieOffset) * 4;
+        int triePosition = bytes.position();
+        m_blockTrie_ = CodePointTrie.fromBinary(null, CodePointTrie.ValueWidth.BITS_16, bytes);
+        trieLength = bytes.position() - triePosition;
+        if (trieLength > partLength) {
+            throw new ICUUncheckedIOException("uprops.icu: not enough bytes for blockTrie");
+        }
+        ICUBinary.skipBytes(bytes, partLength - trieLength);  // skip padding after trie bytes
     }
 
     private static final class IsAcceptable implements ICUBinary.Authenticate {
@@ -1791,6 +1817,19 @@ public final class UCharacterProperty
         for (int c : ID_COMPAT_MATH_START) {
             set.add(c);
             set.add(c + 1);
+        }
+    }
+
+    public void ublock_addPropertyStarts(UnicodeSet set) {
+        // Add the start code point of each same-value range of the trie.
+        // We store Block values indexed by the code point shifted right 4 bits;
+        // see ublock_getCode().
+        CodePointMap.Range range = new CodePointMap.Range();
+        int start = 0;
+        while (start < 0x11000 &&  // limit: (max code point + 1) >> 4
+                m_blockTrie_.getRange(start, null, range)) {
+            set.add(start << 4);
+            start = range.getEnd() + 1;
         }
     }
 

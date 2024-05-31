@@ -440,7 +440,7 @@ group: script_runs
 group: uchar
     uchar.o
   deps
-    utrie2
+    ucptrie utrie2
 
 group: messagepattern  # for MessageFormat and tools
     messagepattern.o

@@ -22,7 +22,9 @@
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/ucptrie.h"
 #include "unicode/udata.h"
+#include "unicode/umutablecptrie.h"
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
 #include "unicode/usetiter.h"
@@ -81,13 +83,14 @@ Formally, the file contains the following structures:
     i5 additionalVectorsColumns; -- number of 32-bit words per properties vector
 
     i6 scriptExtensionsIndex; -- 32-bit unit index to the Script_Extensions data
-    i7 reservedIndex7; -- 32-bit unit index to the top of the Script_Extensions data
-    i8 reservedIndex8; -- for now: i7, i8 and i9 have the same values
+    i7 blockTrieIndex; -- 32-bit unit index to the Block property trie (format version 9+)
+    i8 reservedIndex8; -- top of the previous part of the data; i8 and i9 have the same values
     i9 dataTopIndex; -- size of the data file (number of 32-bit units after the header)
 
     i10 maxValues; -- maximum code values for vector word 0, see uprops.h (new in format version 3.1+)
     i11 maxValues2; -- maximum code values for vector word 2, see uprops.h (new in format version 3.2)
-    i12..i15 reservedIndexes; -- reserved values; 0 for now
+    i12 maxValuesOther; -- additional maximum values, see uprops.h (format version 9+)
+    i13..i15 reservedIndexes; -- reserved values; 0 for now
 
     PT serialized properties trie, see utrie2.h (byte size: 4*(i0-16))
 
@@ -113,6 +116,10 @@ Formally, the file contains the following structures:
       indicate whether the main Script value is Common or Inherited (and the index is to a list)
       vs. another value (and the index is to a pair).
       (See UPROPS_SCRIPT_X_WITH_COMMON etc. in uprops.h.)
+
+    blockTrie serialized CodePointTrie/UCPTrie for the Block property (format version 9+)
+
+      Indexed by (code point >> 4). Takes advantage of each Block having xxx0..xxxF boundaries.
 
 Trie lookup and properties:
 
@@ -299,6 +306,10 @@ ICU 75 uses the vector word 2 bits 31..26 for encoded Identifier_Type bit sets.
 
 Age major:minor version bit fields changed from 4:4 to 6:2 so that age=16.0 fits.
 
+Block data moved from props vector 0 into its own new CodePointTrie.
+Reserve 10 bits in the new indexes[UPROPS_MAX_VALUES_OTHER_INDEX] for the max Block value,
+although the trie can hold 16-bit values.
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
@@ -343,7 +354,11 @@ private:
     UTrie2 *pTrie;
     UTrie2 *props2Trie;
     UPropsVectors *pv;
+    UMutableCPTrie *mutableBlockTrie = nullptr;
+    UCPTrie *blockTrie = nullptr;
     UnicodeString scriptExtensions;
+    uint8_t blockTrieBytes[100000];
+    int32_t blockTrieSize = 0;
 };
 
 CorePropsBuilder::CorePropsBuilder(UErrorCode &errorCode)
@@ -358,12 +373,19 @@ CorePropsBuilder::CorePropsBuilder(UErrorCode &errorCode)
         fprintf(stderr, "genprops error: corepropsbuilder upvec_open() failed - %s\n",
                 u_errorName(errorCode));
     }
+    mutableBlockTrie = umutablecptrie_open(0, 0, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops/Block error: umutablecptrie_open() failed: %s\n",
+                u_errorName(errorCode));
+    }
 }
 
 CorePropsBuilder::~CorePropsBuilder() {
     utrie2_close(pTrie);
     utrie2_close(props2Trie);
     upvec_close(pv);
+    umutablecptrie_close(mutableBlockTrie);
+    ucptrie_close(blockTrie);
 }
 
 void
@@ -693,7 +715,6 @@ struct PropToEnum {
 
 const PropToEnum
 propToEnums[]={
-    { UCHAR_BLOCK,                      0, UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK },
     { UCHAR_EAST_ASIAN_WIDTH,           0, UPROPS_EA_SHIFT, UPROPS_EA_MASK },
     { UCHAR_DECOMPOSITION_TYPE,         2, 0, UPROPS_DT_MASK },
     { UCHAR_GRAPHEME_CLUSTER_BREAK,     2, UPROPS_GCB_SHIFT, UPROPS_GCB_MASK },
@@ -754,6 +775,16 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         upvec_setValue(pv, start, pvecEnd,
                        0, version<<UPROPS_AGE_SHIFT, UPROPS_AGE_MASK,
                        &errorCode);
+    }
+    if (newValues.contains(UCHAR_BLOCK)) {
+        uint32_t value = props.getIntProp(UCHAR_BLOCK);
+        if ((start & 0xf) != 0 || (end & 0xf) != 0xf || value > UPROPS_MAX_BLOCK) {
+            fprintf(stderr, "genprops error: %04lX..%04lX Block 0x%x cannot be encoded\n",
+                    (long)start, (long)end, (int)value);
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        umutablecptrie_setRange(mutableBlockTrie, start >> 4, end >> 4, value, &errorCode);
     }
 
     // Set the script value if the Script_Extensions revert to {Script}.
@@ -895,6 +926,24 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
         scriptExtensions.append((char16_t)0);
     }
 
+    blockTrie = umutablecptrie_buildImmutable(
+        mutableBlockTrie, UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_16, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr,
+                "genprops/Block error: umutablecptrie_buildImmutable() failed: %s\n",
+                u_errorName(errorCode));
+        return;
+    }
+    blockTrieSize = ucptrie_toBinary(blockTrie,
+                                     blockTrieBytes, sizeof(blockTrieBytes), &errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr,
+                "genprops/Block error: ucptrie_toBinary() failed: %s (length %ld)\n",
+                u_errorName(errorCode), (long)trieSize);
+        return;
+    }
+    U_ASSERT((blockTrieSize & 3) == 0);  // multiple of 4 bytes
+
     /* set indexes */
     int32_t offset=sizeof(indexes)/4;       /* uint32_t offset to the properties trie */
     offset+=trieSize>>2;
@@ -909,14 +958,14 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
     offset+=pvCount;
     indexes[UPROPS_SCRIPT_EXTENSIONS_INDEX]=offset;
     offset+=scriptExtensions.length()/2;
-    indexes[UPROPS_RESERVED_INDEX_7]=offset;
+    indexes[UPROPS_BLOCK_TRIE_INDEX]=offset;
+    offset+=blockTrieSize/4;
     indexes[UPROPS_RESERVED_INDEX_8]=offset;
     indexes[UPROPS_DATA_TOP_INDEX]=offset;
     totalSize=4*offset;
 
     indexes[UPROPS_MAX_VALUES_INDEX]=
         (((int32_t)U_EA_COUNT-1)<<UPROPS_EA_SHIFT)|
-        (((int32_t)UBLOCK_COUNT-1)<<UPROPS_BLOCK_SHIFT)|
         (int32_t)splitScriptCodeOrIndex(USCRIPT_CODE_LIMIT-1);
     indexes[UPROPS_MAX_VALUES_2_INDEX]=
         (((int32_t)U_LB_COUNT-1)<<UPROPS_LB_SHIFT)|
@@ -924,6 +973,8 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
         (((int32_t)U_WB_COUNT-1)<<UPROPS_WB_SHIFT)|
         (((int32_t)U_GCB_COUNT-1)<<UPROPS_GCB_SHIFT)|
         ((int32_t)U_DT_COUNT-1);
+    indexes[UPROPS_MAX_VALUES_OTHER_INDEX]=
+        (int32_t)UBLOCK_COUNT-1;
 
     if(!beQuiet) {
         puts("* uprops.icu stats *");
@@ -932,6 +983,7 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
         printf("number of additional props vectors:    %5u\n", (int)pvRows);
         printf("number of 32-bit words per vector:     %5u\n", UPROPS_VECTOR_WORDS);
         printf("number of 16-bit scriptExtensions:     %5u\n", (int)scriptExtensions.length());
+        printf("size in bytes of Block trie:           %5u\n", (int)blockTrieSize);
         printf("data size:                            %6ld\n", (long)totalSize);
     }
 }
@@ -988,6 +1040,8 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         "",
         "};\n\n");
 
+    usrc_writeUCPTrie(f, "block", blockTrie, UPRV_TARGET_SYNTAX_CCODE);
+
     usrc_writeArray(f,
         "static const int32_t indexes[UPROPS_INDEX_COUNT]={",
         indexes, 32, UPROPS_INDEX_COUNT,
@@ -1018,6 +1072,7 @@ CorePropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorC
     udata_writeBlock(pData, props2TrieBlock, props2TrieSize);
     udata_writeBlock(pData, pvArray, pvCount*4);
     udata_writeBlock(pData, scriptExtensions.getBuffer(), scriptExtensions.length()*2);
+    udata_writeBlock(pData, blockTrieBytes, blockTrieSize);
 
     long dataLength=udata_finish(pData, &errorCode);
     if(U_FAILURE(errorCode)) {
