@@ -162,7 +162,18 @@ $ ant -f build-icu-data.xml
   $ ant -f build-icu-data.xml <options>
   ```
 
-See build-icu-data.xml for documentation of all options and additional customization.
+## Config syntax details
+
+Note: some elements have an implicit default attributes associated with them, according to [`ldml.dtd`](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/dtd/cldr/common/dtd/ldml.dtd).
+For example, for the `timeFormat` element,
+the following excerpt of the DTD schema indicates that there is a default value `"standard"` for the `type` attribute:
+
+```
+<!ELEMENT timeFormat ... >
+<!ATTLIST timeFormat type NMTOKEN "standard" >
+```
+
+See `build-icu-data.xml` for documentation of all options and additional customization.
 
 
 ## Running unit tests

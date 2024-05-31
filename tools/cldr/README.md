@@ -14,6 +14,6 @@ more directories to the list, modify the `cldrTestData` fileset.
 The cldr-to-icu directory contains tools to convert from CLDR's XML
 data to ICU resource files.
 
-See [cldr-to-icu/README.txt](cldr-to-icu/README.txt) and
+See the [cldr-to-icu README](https://github.com/unicode-org/icu/tree/main/tools/cldr/cldr-to-icu) and
 [cldr-icu-readme.txt](../../icu4c/source/data/cldr-icu-readme.txt) for
 more information.
