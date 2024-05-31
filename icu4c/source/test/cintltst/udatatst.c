@@ -46,6 +46,7 @@
 #include "ucol_imp.h"
 #include "ucol_swp.h"
 #include "ucnv_bld.h"
+#include "udataswp.h"
 #include "sprpimpl.h"
 #include "rbbidata.h"
 

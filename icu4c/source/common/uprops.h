@@ -39,16 +39,18 @@ enum {
 
     UPROPS_SCRIPT_EXTENSIONS_INDEX,
 
-    UPROPS_RESERVED_INDEX_7,
+    UPROPS_BLOCK_TRIE_INDEX,
     UPROPS_RESERVED_INDEX_8,
 
-    /* size of the data file (number of 32-bit units after the header) */
+    /** size of the data file (number of 32-bit units after the header) */
     UPROPS_DATA_TOP_INDEX,
 
-    /* maximum values for code values in vector word 0 */
+    /** maximum values for code values in vector word 0 */
     UPROPS_MAX_VALUES_INDEX=10,
-    /* maximum values for code values in vector word 2 */
+    /** maximum values for code values in vector word 2 */
     UPROPS_MAX_VALUES_2_INDEX,
+    /** maximum values for other code values */
+    UPROPS_MAX_VALUES_OTHER_INDEX,
 
     UPROPS_INDEX_COUNT=16
 };
@@ -117,6 +119,7 @@ enum {
 /* number of properties vector words */
 #define UPROPS_VECTOR_WORDS     3
 
+// TODO: merge scx+Script bit sets together
 /*
  * Properties in vector word 0
  * Bits
@@ -129,7 +132,7 @@ enum {
  *             0: Script=bits 21..20 & 7..0
  * 21..20   Bits 9..8 of the UScriptCode, or index to Script_Extensions
  * 19..17   East Asian Width
- * 16.. 8   UBlockCode
+ * 16.. 8   reserved since format version 9; was UBlockCode
  *  7.. 0   UScriptCode, or index to Script_Extensions
  */
 
@@ -150,8 +153,8 @@ enum {
 #define UPROPS_EA_MASK          0x000e0000
 #define UPROPS_EA_SHIFT         17
 
-#define UPROPS_BLOCK_MASK       0x0001ff00
-#define UPROPS_BLOCK_SHIFT      8
+// fine UPROPS_BLOCK_MASK       0x0001ff00
+// fine UPROPS_BLOCK_SHIFT      8
 
 #define UPROPS_SCRIPT_LOW_MASK  0x000000ff
 
@@ -319,6 +322,17 @@ inline constexpr uint8_t uprops_idTypeToEncoded[] = {
 
 #define UPROPS_DT_MASK          0x0000001f
 
+#ifdef __cplusplus
+
+namespace {
+
+// Bits 9..0 in UPROPS_MAX_VALUES_OTHER_INDEX
+inline constexpr uint32_t UPROPS_MAX_BLOCK = 0x3ff;
+
+}  // namespace
+
+#endif  // __cplusplus
+
 /**
  * Gets the main properties value for a code point.
  * Implemented in uchar.c for uprops.cpp.
@@ -392,6 +406,8 @@ enum {
     ZWNBSP  =0xfeff
 };
 
+// TODO: Move these two functions into a different header file (new unames.h?) so that uprops.h
+// need not be C-compatible any more.
 /**
  * Get the maximum length of a (regular/1.0/extended) character name.
  * @return 0 if no character names available.
@@ -445,6 +461,7 @@ enum UPropertySource {
     UPROPS_SRC_EMOJI,
     UPROPS_SRC_IDSU,
     UPROPS_SRC_ID_COMPAT_MATH,
+    UPROPS_SRC_BLOCK,
     /** One more than the highest UPropertySource (UPROPS_SRC_) constant. */
     UPROPS_SRC_COUNT
 };
@@ -476,6 +493,13 @@ upropsvec_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
 U_CFUNC void U_EXPORT2
 uprops_addPropertyStarts(UPropertySource src, const USetAdder *sa, UErrorCode *pErrorCode);
 
+#ifdef __cplusplus
+
+U_CFUNC void U_EXPORT2
+ublock_addPropertyStarts(const USetAdder *sa, UErrorCode &errorCode);
+
+#endif  // __cplusplus
+
 /**
  * Return a set of characters for property enumeration.
  * For each two consecutive characters (start, limit) in the set,
@@ -488,6 +512,8 @@ uprops_addPropertyStarts(UPropertySource src, const USetAdder *sa, UErrorCode *p
 uprv_getInclusions(const USetAdder *sa, UErrorCode *pErrorCode);
 */
 
+// TODO: Move this into a different header file (udataswp.h? new unames.h?) so that uprops.h
+// need not be C-compatible any more.
 /**
  * Swap the ICU Unicode character names file. See uchar.c.
  * @internal

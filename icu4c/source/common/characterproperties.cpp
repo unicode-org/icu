@@ -186,6 +186,9 @@ void U_CALLCONV initInclusion(UPropertySource src, UErrorCode &errorCode) {
     case UPROPS_SRC_ID_COMPAT_MATH:
         uprops_addPropertyStarts(src, &sa, &errorCode);
         break;
+    case UPROPS_SRC_BLOCK:
+        ublock_addPropertyStarts(&sa, errorCode);
+        break;
     default:
         errorCode = U_INTERNAL_PROGRAM_ERROR;
         break;

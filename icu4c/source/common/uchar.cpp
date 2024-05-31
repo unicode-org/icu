@@ -23,6 +23,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/ucptrie.h"
 #include "unicode/uscript.h"
 #include "unicode/udata.h"
 #include "uassert.h"
@@ -515,6 +516,8 @@ uprv_getMaxValues(int32_t column) {
         return indexes[UPROPS_MAX_VALUES_INDEX];
     case 2:
         return indexes[UPROPS_MAX_VALUES_2_INDEX];
+    case UPROPS_MAX_VALUES_OTHER_INDEX:
+        return indexes[column];
     default:
         return 0;
     }
@@ -618,7 +621,15 @@ uscript_getScriptExtensions(UChar32 c,
 
 U_CAPI UBlockCode U_EXPORT2
 ublock_getCode(UChar32 c) {
-    return (UBlockCode)((u_getUnicodeProperties(c, 0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT);
+    // We store Block values indexed by the code point shifted right 4 bits
+    // and use a "small" UCPTrie=CodePointTrie for minimal data size.
+    // This works because blocks have xxx0..xxxF ranges.
+    uint32_t c4 = c;  // unsigned so that shifting right does not worry the compiler
+    // Shift unless out of range, in which case we fetch the trie's error value.
+    if (c4 <= 0x10ffff) {
+        c4 >>= 4;
+    }
+    return (UBlockCode)ucptrie_get(&block_trie, c4);
 }
 
 /* property starts for UnicodeSet ------------------------------------------- */
@@ -705,4 +716,19 @@ upropsvec_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
 
     /* add the start code point of each same-value range of the properties vectors trie */
     utrie2_enum(&propsVectorsTrie, nullptr, _enumPropertyStartsRange, sa);
+}
+
+U_CFUNC void U_EXPORT2
+ublock_addPropertyStarts(const USetAdder *sa, UErrorCode & /*errorCode*/) {
+    // Add the start code point of each same-value range of the trie.
+    // We store Block values indexed by the code point shifted right 4 bits;
+    // see ublock_getCode().
+    UChar32 start = 0, end;
+    uint32_t value;
+    while (start < 0x11000 &&  // limit: (max code point + 1) >> 4
+            (end = ucptrie_getRange(&block_trie, start, UCPMAP_RANGE_NORMAL, 0,
+                                    nullptr, nullptr, &value)) >= 0) {
+        sa->add(sa->set, start << 4);
+        start = end + 1;
+    }
 }

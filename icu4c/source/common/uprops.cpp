@@ -544,6 +544,14 @@ static int32_t biDiGetMaxValue(const IntProperty &/*prop*/, UProperty which) {
     return ubidi_getMaxValue(which);
 }
 
+static int32_t getBlock(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
+    return (int32_t)ublock_getCode(c);
+}
+
+static int32_t blockGetMaxValue(const IntProperty &/*prop*/, UProperty /*which*/) {
+    return uprv_getMaxValues(UPROPS_MAX_VALUES_OTHER_INDEX) & UPROPS_MAX_BLOCK;
+}
+
 #if UCONFIG_NO_NORMALIZATION
 static int32_t getCombiningClass(const IntProperty &, UChar32, UProperty) {
     return 0;
@@ -683,7 +691,7 @@ static const IntProperty intProps[UCHAR_INT_LIMIT-UCHAR_INT_START]={
      * For them, column is the UPropertySource value.
      */
     { UPROPS_SRC_BIDI,  0, 0,                               getBiDiClass, biDiGetMaxValue },
-    { 0,                UPROPS_BLOCK_MASK, UPROPS_BLOCK_SHIFT, defaultGetValue, defaultGetMaxValue },
+    { UPROPS_SRC_BLOCK, 0, 0,                               getBlock, blockGetMaxValue },
     { UPROPS_SRC_NFC,   0, 0xff,                            getCombiningClass, getMaxValueFromShift },
     { 2,                UPROPS_DT_MASK, 0,                  defaultGetValue, defaultGetMaxValue },
     { 0,                UPROPS_EA_MASK, UPROPS_EA_SHIFT,    defaultGetValue, defaultGetMaxValue },

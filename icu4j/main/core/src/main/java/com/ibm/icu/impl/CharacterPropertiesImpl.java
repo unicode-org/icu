@@ -82,6 +82,9 @@ public final class CharacterPropertiesImpl {
             case UCharacterProperty.SRC_ID_COMPAT_MATH:
                 UCharacterProperty.mathCompat_addPropertyStarts(incl);
                 break;
+            case UCharacterProperty.SRC_BLOCK:
+                UCharacterProperty.INSTANCE.ublock_addPropertyStarts(incl);
+                break;
             default:
                 throw new IllegalStateException("getInclusions(unknown src " + src + ")");
             }
