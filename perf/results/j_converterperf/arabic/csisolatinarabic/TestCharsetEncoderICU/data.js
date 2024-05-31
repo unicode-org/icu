@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1717084516991,
+  "lastUpdate": 1717138750633,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22378,6 +22378,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.6338253603677697,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "3235c38f24711a86d7fc5adf5e536bf6a4f1d10a",
+          "message": "ICU-22777 Fix incorrect pointer comparision",
+          "timestamp": "2024-05-30T23:46:56-07:00",
+          "tree_id": "d98a8c3629e843dd88cfe0580c3f3fe80da78fc0",
+          "url": "https://github.com/unicode-org/icu/commit/3235c38f24711a86d7fc5adf5e536bf6a4f1d10a"
+        },
+        "date": 1717138630230,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.6463344406946727,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
