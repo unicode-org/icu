@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1717138929913,
+  "lastUpdate": 1717191105459,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22768,6 +22768,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.243558366685687,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "b9b324ccc5da8e16bf338d15d4acc6429aa8bad2",
+          "message": "ICU-22722 Update docs for cldr-to-icu converter",
+          "timestamp": "2024-05-31T14:21:24-07:00",
+          "tree_id": "c185d5bf44258b0582c01f0e5b763554e542c619",
+          "url": "https://github.com/unicode-org/icu/commit/b9b324ccc5da8e16bf338d15d4acc6429aa8bad2"
+        },
+        "date": 1717190985956,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.6428485247195048,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
