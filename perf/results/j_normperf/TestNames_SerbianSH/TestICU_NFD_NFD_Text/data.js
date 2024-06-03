@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1717190768802,
+  "lastUpdate": 1717390066885,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22588,6 +22588,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 3.0688431016911686,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "81492ae9a238884d47f55bf115e660d0afa4f0e0",
+          "message": "ICU-22722 Make example config for cldr-to-icu work over all locales",
+          "timestamp": "2024-06-02T21:41:48-07:00",
+          "tree_id": "a1df215cf27196dbb77a747aeed22794bc4db92f",
+          "url": "https://github.com/unicode-org/icu/commit/81492ae9a238884d47f55bf115e660d0afa4f0e0"
+        },
+        "date": 1717389949725,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.027822947074065,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
