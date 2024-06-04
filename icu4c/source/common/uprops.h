@@ -136,6 +136,19 @@ namespace {
 //             0: Script=bits 9..0
 //  9.. 0   UScriptCode, or index to Script_Extensions
 
+// *Note*: If we need more than the available bits for new properties,
+// then we could move the Age property out of the properties vectors.
+// For example, we could store the Age property in its own trie.
+// In a small, 8-bit-value-width CodePointTrie, it would be larger than
+// the amount of data that we would save in the properties vectors and their trie,
+// but the size increase would be a small percentage of the total uprops.icu size.
+// It would certainly be a much smaller increase than widening the properties vectors.
+// The savings in the properties vectors+trie from pulling out the Age property
+// are partly from mediocre correlation between Age and other property values.
+// (Adding new characters to existing scripts tends to split property vectors where
+// new characters are similar to old ones.)
+// See https://github.com/unicode-org/icu/pull/3025 for details.
+
 inline constexpr uint32_t UPROPS_AGE_MASK = 0xff000000;
 inline constexpr int32_t UPROPS_AGE_SHIFT = 24;
 
