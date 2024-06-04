@@ -1227,7 +1227,7 @@ public final class UScript {
     public static final int getScript(int codepoint){
         if (codepoint >= UCharacter.MIN_VALUE & codepoint <= UCharacter.MAX_VALUE) {
             int scriptX=UCharacterProperty.INSTANCE.getAdditional(codepoint, 0)&UCharacterProperty.SCRIPT_X_MASK;
-            int codeOrIndex=UCharacterProperty.mergeScriptCodeOrIndex(scriptX);
+            int codeOrIndex=scriptX&UCharacterProperty.MAX_SCRIPT;
             if(scriptX<UCharacterProperty.SCRIPT_X_WITH_COMMON) {
                 return codeOrIndex;
             } else if(scriptX<UCharacterProperty.SCRIPT_X_WITH_INHERITED) {
@@ -1257,7 +1257,7 @@ public final class UScript {
      */
     public static final boolean hasScript(int c, int sc) {
         int scriptX=UCharacterProperty.INSTANCE.getAdditional(c, 0)&UCharacterProperty.SCRIPT_X_MASK;
-        int codeOrIndex=UCharacterProperty.mergeScriptCodeOrIndex(scriptX);
+        int codeOrIndex=scriptX&UCharacterProperty.MAX_SCRIPT;
         if(scriptX<UCharacterProperty.SCRIPT_X_WITH_COMMON) {
             return sc==codeOrIndex;
         }
@@ -1307,7 +1307,7 @@ public final class UScript {
     public static final int getScriptExtensions(int c, BitSet set) {
         set.clear();
         int scriptX=UCharacterProperty.INSTANCE.getAdditional(c, 0)&UCharacterProperty.SCRIPT_X_MASK;
-        int codeOrIndex=UCharacterProperty.mergeScriptCodeOrIndex(scriptX);
+        int codeOrIndex=scriptX&UCharacterProperty.MAX_SCRIPT;
         if(scriptX<UCharacterProperty.SCRIPT_X_WITH_COMMON) {
             set.set(codeOrIndex);
             return codeOrIndex;

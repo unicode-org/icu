@@ -543,7 +543,7 @@ uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
         return USCRIPT_INVALID_CODE;
     }
     uint32_t scriptX=u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_X_MASK;
-    uint32_t codeOrIndex=uprops_mergeScriptCodeOrIndex(scriptX);
+    uint32_t codeOrIndex=scriptX&UPROPS_MAX_SCRIPT;
     if(scriptX<UPROPS_SCRIPT_X_WITH_COMMON) {
         return (UScriptCode)codeOrIndex;
     } else if(scriptX<UPROPS_SCRIPT_X_WITH_INHERITED) {
@@ -558,7 +558,7 @@ uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
 U_CAPI UBool U_EXPORT2
 uscript_hasScript(UChar32 c, UScriptCode sc) UPRV_NO_SANITIZE_UNDEFINED {
     uint32_t scriptX=u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_X_MASK;
-    uint32_t codeOrIndex=uprops_mergeScriptCodeOrIndex(scriptX);
+    uint32_t codeOrIndex=scriptX&UPROPS_MAX_SCRIPT;
     if(scriptX<UPROPS_SCRIPT_X_WITH_COMMON) {
         return sc==(UScriptCode)codeOrIndex;
     }
@@ -590,7 +590,7 @@ uscript_getScriptExtensions(UChar32 c,
         return 0;
     }
     uint32_t scriptX=u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_X_MASK;
-    uint32_t codeOrIndex=uprops_mergeScriptCodeOrIndex(scriptX);
+    uint32_t codeOrIndex=scriptX&UPROPS_MAX_SCRIPT;
     if(scriptX<UPROPS_SCRIPT_X_WITH_COMMON) {
         if(capacity==0) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
