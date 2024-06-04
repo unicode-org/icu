@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1717390083059,
+  "lastUpdate": 1717524134520,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22588,6 +22588,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 316.15599760648195,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "0d8a3ccd111b35a295a571db1f5c79cd20525b6d",
+          "message": "ICU-22785 move Block bits from propsvec0 to new trie",
+          "timestamp": "2024-06-04T10:49:53-07:00",
+          "tree_id": "aeb420d5812d340fc08f8211d6d3a06b1504da12",
+          "url": "https://github.com/unicode-org/icu/commit/0d8a3ccd111b35a295a571db1f5c79cd20525b6d"
+        },
+        "date": 1717524012707,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 310.35711060048266,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
