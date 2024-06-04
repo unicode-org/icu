@@ -2699,6 +2699,10 @@ TestAdditionalProperties(void) {
 
         { 0xd7a4, UCHAR_HANGUL_SYLLABLE_TYPE, 0 },
 
+        // GCB=V but hst=NA (exception to GCB=hst for relevant values)
+        { 0x16D67, UCHAR_HANGUL_SYLLABLE_TYPE, U_HST_NOT_APPLICABLE },
+        { 0x16D6A, UCHAR_HANGUL_SYLLABLE_TYPE, U_HST_NOT_APPLICABLE },
+
         { -1, 0x410, 0 }, /* version break for Unicode 4.1 */
 
         { 0x00d7, UCHAR_PATTERN_SYNTAX, true },
