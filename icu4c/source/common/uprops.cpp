@@ -585,8 +585,7 @@ static int32_t getScript(const IntProperty &/*prop*/, UChar32 c, UProperty /*whi
 }
 
 static int32_t scriptGetMaxValue(const IntProperty &/*prop*/, UProperty /*which*/) {
-    uint32_t scriptX=uprv_getMaxValues(0)&UPROPS_SCRIPT_X_MASK;
-    return uprops_mergeScriptCodeOrIndex(scriptX);
+    return uprv_getMaxValues(0)&UPROPS_MAX_SCRIPT;
 }
 
 /*

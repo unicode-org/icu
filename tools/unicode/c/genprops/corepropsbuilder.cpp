@@ -310,6 +310,8 @@ Block data moved from props vector 0 into its own new CodePointTrie.
 Reserve 10 bits in the new indexes[UPROPS_MAX_VALUES_OTHER_INDEX] for the max Block value,
 although the trie can hold 16-bit values.
 
+Props vector 0 bits shuffled so that script and script extensions bits are contiguous.
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
@@ -330,12 +332,6 @@ UDataInfo dataInfo={
     { 9, 0, 0, 0 },                             /* formatVersion */
     { 16, 0, 0, 0 }                             /* dataVersion */
 };
-
-inline uint32_t splitScriptCodeOrIndex(uint32_t v) {
-    return
-        ((v << UPROPS_SCRIPT_HIGH_SHIFT) & UPROPS_SCRIPT_HIGH_MASK) |
-        (v & UPROPS_SCRIPT_LOW_MASK);
-}
 
 class CorePropsBuilder : public PropsBuilder {
 public:
@@ -800,11 +796,10 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         !newValues.contains(UCHAR_SCRIPT);
     if(newValues.contains(UCHAR_SCRIPT) || revertToScript) {
         int32_t script=props.getIntProp(UCHAR_SCRIPT);
-        uint32_t value=splitScriptCodeOrIndex(script);
         // Use UPROPS_SCRIPT_X_MASK:
         // When writing a Script code, remove Script_Extensions bits as well.
         // If needed, they will get written again.
-        upvec_setValue(pv, start, pvecEnd, 0, value, UPROPS_SCRIPT_X_MASK, &errorCode);
+        upvec_setValue(pv, start, pvecEnd, 0, script, UPROPS_SCRIPT_X_MASK, &errorCode);
     }
     // Write a new (Script, Script_Extensions) value if there are Script_Extensions
     // and either Script or Script_Extensions are new on the current line.
@@ -850,7 +845,7 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
             errorCode=U_BUFFER_OVERFLOW_ERROR;
             return;
         }
-        scriptX|=splitScriptCodeOrIndex(index);
+        scriptX|=index;
         upvec_setValue(pv, start, pvecEnd, 0, scriptX, UPROPS_SCRIPT_X_MASK, &errorCode);
     }
     if(newValues.contains(UCHAR_IDENTIFIER_TYPE)) {
@@ -966,7 +961,7 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
 
     indexes[UPROPS_MAX_VALUES_INDEX]=
         (((int32_t)U_EA_COUNT-1)<<UPROPS_EA_SHIFT)|
-        (int32_t)splitScriptCodeOrIndex(USCRIPT_CODE_LIMIT-1);
+        ((int32_t)USCRIPT_CODE_LIMIT-1);
     indexes[UPROPS_MAX_VALUES_2_INDEX]=
         (((int32_t)U_LB_COUNT-1)<<UPROPS_LB_SHIFT)|
         (((int32_t)U_SB_COUNT-1)<<UPROPS_SB_SHIFT)|

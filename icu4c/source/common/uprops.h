@@ -119,66 +119,40 @@ enum {
 /* number of properties vector words */
 #define UPROPS_VECTOR_WORDS     3
 
-// TODO: merge scx+Script bit sets together
-/*
- * Properties in vector word 0
- * Bits
- * 31..26   Age major version (0..63)
- * 25..24   Age minor version (0..3)
- * 23..22   3..1: Bits 21..20 & 7..0 = Script_Extensions index
- *             3: Script value from Script_Extensions
- *             2: Script=Inherited
- *             1: Script=Common
- *             0: Script=bits 21..20 & 7..0
- * 21..20   Bits 9..8 of the UScriptCode, or index to Script_Extensions
- * 19..17   East Asian Width
- * 16.. 8   reserved since format version 9; was UBlockCode
- *  7.. 0   UScriptCode, or index to Script_Extensions
- */
-
-#define UPROPS_AGE_MASK         0xff000000
-#define UPROPS_AGE_SHIFT        24
-
-/* Script_Extensions: mask includes Script */
-#define UPROPS_SCRIPT_X_MASK    0x00f000ff
-#define UPROPS_SCRIPT_X_SHIFT   22
-
-// The UScriptCode or Script_Extensions index is split across two bit fields.
-// (Starting with Unicode 13/ICU 66/2019 due to more varied Script_Extensions.)
-// Shift the high bits right by 12 to assemble the full value.
-#define UPROPS_SCRIPT_HIGH_MASK    0x00300000
-#define UPROPS_SCRIPT_HIGH_SHIFT   12
-#define UPROPS_MAX_SCRIPT          0x3ff
-
-#define UPROPS_EA_MASK          0x000e0000
-#define UPROPS_EA_SHIFT         17
-
-// fine UPROPS_BLOCK_MASK       0x0001ff00
-// fine UPROPS_BLOCK_SHIFT      8
-
-#define UPROPS_SCRIPT_LOW_MASK  0x000000ff
-
-/* UPROPS_SCRIPT_X_WITH_COMMON must be the lowest value that involves Script_Extensions. */
-#define UPROPS_SCRIPT_X_WITH_COMMON     0x400000
-#define UPROPS_SCRIPT_X_WITH_INHERITED  0x800000
-#define UPROPS_SCRIPT_X_WITH_OTHER      0xc00000
-
 #ifdef __cplusplus
 
 namespace {
 
+// Properties in vector word 0
+// Bits
+// 31..26   Age major version (major=0..63)
+// 25..24   Age minor version (minor=0..3)
+// 23..15   reserved
+// 14..12   East Asian Width
+// 11..10   3..1: Bits 9..0 = Script_Extensions index
+//             3: Script value from Script_Extensions
+//             2: Script=Inherited
+//             1: Script=Common
+//             0: Script=bits 9..0
+//  9.. 0   UScriptCode, or index to Script_Extensions
+
+inline constexpr uint32_t UPROPS_AGE_MASK = 0xff000000;
+inline constexpr int32_t UPROPS_AGE_SHIFT = 24;
+
 inline constexpr uint8_t UPROPS_AGE_MAJOR_MAX = 63;
 inline constexpr uint8_t UPROPS_AGE_MINOR_MAX = 3;
 
-inline uint32_t uprops_mergeScriptCodeOrIndex(uint32_t scriptX) {
-    return
-        ((scriptX & UPROPS_SCRIPT_HIGH_MASK) >> UPROPS_SCRIPT_HIGH_SHIFT) |
-        (scriptX & UPROPS_SCRIPT_LOW_MASK);
-}
+inline constexpr uint32_t UPROPS_EA_MASK = 0x00007000;
+inline constexpr int32_t UPROPS_EA_SHIFT = 12;
 
-}  // namespace
+/** Script_Extensions: mask includes Script */
+inline constexpr uint32_t UPROPS_SCRIPT_X_MASK = 0x00000fff;
 
-#endif  // __cplusplus
+// UPROPS_SCRIPT_X_WITH_COMMON must be the lowest value that involves Script_Extensions.
+inline constexpr uint32_t UPROPS_SCRIPT_X_WITH_OTHER = 0xc00;
+inline constexpr uint32_t UPROPS_SCRIPT_X_WITH_INHERITED = 0x800;
+inline constexpr uint32_t UPROPS_SCRIPT_X_WITH_COMMON = 0x400;
+inline constexpr int32_t UPROPS_MAX_SCRIPT = 0x3ff;
 
 /*
  * Properties in vector word 1
@@ -239,10 +213,6 @@ enum {
  *  9.. 5   Grapheme Cluster Break
  *  4.. 0   Decomposition Type
  */
-
-#ifdef __cplusplus
-
-namespace {
 
 // https://www.unicode.org/reports/tr39/#Identifier_Status_and_Type
 // The Identifier_Type maps each code point to a *set* of one or more values.

@@ -803,8 +803,7 @@ public final class UCharacterProperty
             }
             @Override
             int getMaxValue(int which) {
-                int scriptX=getMaxValues(0)&SCRIPT_X_MASK;
-                return mergeScriptCodeOrIndex(scriptX);
+                return getMaxValues(0)&MAX_SCRIPT;
             }
         },
         new IntProperty(SRC_PROPSVEC) {  // HANGUL_SYLLABLE_TYPE
@@ -1365,61 +1364,30 @@ public final class UCharacterProperty
             NumericType.NUMERIC;
     }
 
-    /*
-     * Properties in vector word 0
-     * Bits
-     * 31..26   Age major version (0..63)
-     * 25..24   Age minor version (0..3)
-     * 23..22   3..1: Bits 21..20 & 7..0 = Script_Extensions index
-     *             3: Script value from Script_Extensions
-     *             2: Script=Inherited
-     *             1: Script=Common
-     *             0: Script=bits 21..20 & 7..0
-     * 21..20   Bits 9..8 of the UScriptCode, or index to Script_Extensions
-     * 19..17   East Asian Width
-     * 16.. 8   reserved since format version 9; was UBlockCode
-     *  7.. 0   UScriptCode, or index to Script_Extensions
-     */
+    // Properties in vector word 0
+    // Bits
+    // 31..26   Age major version (major=0..63)
+    // 25..24   Age minor version (minor=0..3)
+    // 23..15   reserved
+    // 14..12   East Asian Width
+    // 11..10   3..1: Bits 9..0 = Script_Extensions index
+    //             3: Script value from Script_Extensions
+    //             2: Script=Inherited
+    //             1: Script=Common
+    //             0: Script=bits 9..0
+    //  9.. 0   UScriptCode, or index to Script_Extensions
 
-    /**
-     * Script_Extensions: mask includes Script
-     */
-    public static final int SCRIPT_X_MASK = 0x00f000ff;
-    //private static final int SCRIPT_X_SHIFT = 22;
+    private static final int EAST_ASIAN_MASK_ = 0x00007000;
+    private static final int EAST_ASIAN_SHIFT_ = 12;
 
-    // The UScriptCode or Script_Extensions index is split across two bit fields.
-    // (Starting with Unicode 13/ICU 66/2019 due to more varied Script_Extensions.)
-    // Shift the high bits right by 12 to assemble the full value.
-    public static final int SCRIPT_HIGH_MASK = 0x00300000;
-    public static final int SCRIPT_HIGH_SHIFT = 12;
+    /** Script_Extensions: mask includes Script */
+    public static final int SCRIPT_X_MASK = 0x00000fff;
+
+    // SCRIPT_X_WITH_COMMON must be the lowest value that involves Script_Extensions.
+    public static final int SCRIPT_X_WITH_OTHER = 0xc00;
+    public static final int SCRIPT_X_WITH_INHERITED = 0x800;
+    public static final int SCRIPT_X_WITH_COMMON = 0x400;
     public static final int MAX_SCRIPT = 0x3ff;
-
-    /**
-     * Integer properties mask and shift values for East Asian cell width.
-     * Equivalent to icu4c UPROPS_EA_MASK
-     */
-    private static final int EAST_ASIAN_MASK_ = 0x000e0000;
-    /**
-     * Integer properties mask and shift values for East Asian cell width.
-     * Equivalent to icu4c UPROPS_EA_SHIFT
-     */
-    private static final int EAST_ASIAN_SHIFT_ = 17;
-    /**
-     * Integer properties mask and shift values for scripts.
-     * Equivalent to icu4c UPROPS_SHIFT_LOW_MASK.
-     */
-    public static final int SCRIPT_LOW_MASK = 0x000000ff;
-
-    /* SCRIPT_X_WITH_COMMON must be the lowest value that involves Script_Extensions. */
-    public static final int SCRIPT_X_WITH_COMMON = 0x400000;
-    public static final int SCRIPT_X_WITH_INHERITED = 0x800000;
-    public static final int SCRIPT_X_WITH_OTHER = 0xc00000;
-
-    public static final int mergeScriptCodeOrIndex(int scriptX) {
-        return
-            ((scriptX & SCRIPT_HIGH_MASK) >> SCRIPT_HIGH_SHIFT) |
-            (scriptX & SCRIPT_LOW_MASK);
-    }
 
     /**
      * Additional properties used in internal trie data
