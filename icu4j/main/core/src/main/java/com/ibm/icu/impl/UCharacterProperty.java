@@ -648,7 +648,11 @@ public final class UCharacterProperty
 
     /*
      * Map some of the Grapheme Cluster Break values to Hangul Syllable Types.
-     * Hangul_Syllable_Type is fully redundant with a subset of Grapheme_Cluster_Break.
+     * Hangul_Syllable_Type is redundant with a subset of Grapheme_Cluster_Break.
+     *
+     * Starting with Unicode 16, there is an exception:
+     * Some Kirat Rai vowels are given GCB=V for proper grapheme clustering, but
+     * they are of course not related to Hangul syllables.
      */
     private static final int /* UHangulSyllableType */ gcbToHst[]={
         HangulSyllableType.NOT_APPLICABLE,   /* U_GCB_OTHER */
@@ -809,6 +813,12 @@ public final class UCharacterProperty
         new IntProperty(SRC_PROPSVEC) {  // HANGUL_SYLLABLE_TYPE
             @Override
             int getValue(int c) {
+                // Ignore supplementary code points: They all have HST=NA.
+                // This is a simple way to handle the GCB!=hst cases since Unicode 16
+                // (Kirat Rai vowels).
+                if(c>0xffff) {
+                    return HangulSyllableType.NOT_APPLICABLE;
+                }
                 /* see comments on gcbToHst[] above */
                 int gcb=(getAdditional(c, 2)&GCB_MASK)>>>GCB_SHIFT;
                 if(gcb<gcbToHst.length) {

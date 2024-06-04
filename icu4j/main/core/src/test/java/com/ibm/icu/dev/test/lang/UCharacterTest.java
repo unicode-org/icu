@@ -2109,6 +2109,10 @@ public final class UCharacterTest extends CoreTestFmwk
 
             { 0xd7a4, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
 
+            // GCB=V but hst=NA (exception to GCB=hst for relevant values)
+            { 0x16D67, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.NOT_APPLICABLE },
+            { 0x16D6A, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.NOT_APPLICABLE },
+
             { -1, 0x410, 0 }, /* version break for Unicode 4.1 */
 
             { 0x00d7, UProperty.PATTERN_SYNTAX, 1 },
