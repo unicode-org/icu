@@ -172,7 +172,7 @@ public final class CanonicalIterator {
         permute(source, skipZeros, output, 0);
     }
 
-    private static int PERMUTE_DEPTH_LIMIT = 8;
+    private static final int PERMUTE_DEPTH_LIMIT = 8;
     /**
      * Simple implementation of permutation.
      * <br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
@@ -308,6 +308,7 @@ public final class CanonicalIterator {
     }
 
 
+    static private final int RESULT_LIMIT = 4096;
     private Set<String> getEquivalents2(String segment) {
 
         Set<String> result = new HashSet<String>();
@@ -341,6 +342,12 @@ public final class CanonicalIterator {
                 for (String item : remainder) {
                     result.add(prefix + item);
                 }
+            }
+
+            // ICU-22642 Guards against strings that have so many permutations
+            // that they would otherwise hang the function.
+            if (result.size() > RESULT_LIMIT) {
+                throw new UnsupportedOperationException("Too many permutations");
             }
         }
         return result;
