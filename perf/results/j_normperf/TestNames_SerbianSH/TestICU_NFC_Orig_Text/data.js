@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1717553000122,
+  "lastUpdate": 1717601087089,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22498,6 +22498,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 1.9172130464532595,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "6543634649d0a5686273bf3f75e51fe6a50292db",
+          "message": "ICU-22707 fix hst=V: hst=NA for Kirat Rai",
+          "timestamp": "2024-06-05T08:10:21-07:00",
+          "tree_id": "da3f28d634fa44a28489b9d955d5441f3cdd30ef",
+          "url": "https://github.com/unicode-org/icu/commit/6543634649d0a5686273bf3f75e51fe6a50292db"
+        },
+        "date": 1717600966189,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 1.9251241441996436,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
