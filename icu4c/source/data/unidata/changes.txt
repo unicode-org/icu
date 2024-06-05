@@ -339,10 +339,10 @@ TODO
     make[1]: Leaving directory '/usr/local/google/home/mscherer/icu/uni/dbg/icu4c/data'
 - copy the binary data files into the ICU4J tree
     cd $ICU_OUT/icu4c/data/out/icu4j
-    cp -v com/ibm/icu/impl/data/$ICUDT/coll/* $ICU_SRC/icu4j/main/collate/src/main/resources/com/ibm/icu/impl/data/$ICUDT/coll
-    cp -v com/ibm/icu/impl/data/$ICUDT/brkitr/* $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/$ICUDT/brkitr
-    cp -v com/ibm/icu/impl/data/$ICUDT/confusables.cfu $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/$ICUDT
-    cp -v com/ibm/icu/impl/data/$ICUDT/*.nrm $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/$ICUDT
+    cp -v com/ibm/icu/impl/data/icudata/coll/* $ICU_SRC/icu4j/main/collate/src/main/resources/com/ibm/icu/impl/data/icudata/coll
+    cp -v com/ibm/icu/impl/data/icudata/brkitr/* $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/icudata/brkitr
+    cp -v com/ibm/icu/impl/data/icudata/confusables.cfu $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/icudata
+    cp -v com/ibm/icu/impl/data/icudata/*.nrm $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/icudata
     cd com/ibm/icu/impl/data/icudata/
     ls *.icu | egrep -v "cnvalias.icu" | awk '{print "cp " $0 " $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/icudata";}' | sh
 - The procedure above is very conservative:
