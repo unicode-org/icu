@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1717524350907,
+  "lastUpdate": 1717553295723,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27790,6 +27790,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 49.2219,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "47e9389b8e356aa3d7646ee523a73c36d3aa58ae",
+          "message": "ICU-22785 move cptrie bit setter to toolutil; add getCPTrieSize()",
+          "timestamp": "2024-06-04T18:51:53-07:00",
+          "tree_id": "884de7681cfa19cf7de83524becf182fa413e23b",
+          "url": "https://github.com/unicode-org/icu/commit/47e9389b8e356aa3d7646ee523a73c36d3aa58ae"
+        },
+        "date": 1717553172657,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.6616,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 54.7062,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
