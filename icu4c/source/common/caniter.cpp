@@ -363,6 +363,9 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     char16_t USeg[256];
     int32_t segLen = segment.extract(USeg, 256, status);
     getEquivalents2(&basic, USeg, segLen, status);
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
 
     // now get all the permutations
     // add only the ones that are canonically equivalent
@@ -466,6 +469,9 @@ Hashtable *CanonicalIterator::getEquivalents2(Hashtable *fillinResult, const cha
             Hashtable remainder(status);
             remainder.setValueDeleter(uprv_deleteUObject);
             if (extract(&remainder, cp2, segment, segLen, i, status) == nullptr) {
+                if (U_FAILURE(status)) {
+                    return nullptr;
+                }
                 continue;
             }
 
@@ -489,6 +495,13 @@ Hashtable *CanonicalIterator::getEquivalents2(Hashtable *fillinResult, const cha
                 //if (PROGRESS) printf("Adding: %s\n", UToS(Tr(*toAdd)));
 
                 ne = remainder.nextElement(el);
+            }
+            // ICU-22642 Guards against strings that have so many permutations
+            // that they would otherwise hang the function.
+            constexpr int32_t kResultLimit = 4096;
+            if (fillinResult->count() > kResultLimit) {
+                status = U_UNSUPPORTED_ERROR;
+                return nullptr;
             }
         }
     }
