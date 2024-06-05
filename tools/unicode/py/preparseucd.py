@@ -417,14 +417,18 @@ def ReadUCDLines(in_file, want_ranges=True, want_other=False,
       raise SyntaxError("unable to parse line\n  %s\n" % line)
 
 
-def AddBinaryProperty(short_name, long_name):
-  _null_values[short_name] = False
-  bin_prop = _properties["Math"]
-  prop = ("Binary", [short_name, long_name], bin_prop[2], bin_prop[3])
+def AddProperty(short_name, long_name, null_value, prop):
+  _null_values[short_name] = null_value
   _properties[short_name] = prop
   _properties[long_name] = prop
   _properties[NormPropName(short_name)] = prop
   _properties[NormPropName(long_name)] = prop
+
+
+def AddBinaryProperty(short_name, long_name):
+  bin_prop = _properties["Math"]
+  prop = ("Binary", [short_name, long_name], bin_prop[2], bin_prop[3])
+  AddProperty(short_name, long_name, False, prop)
 
 
 def AddSingleNameBinaryProperty(name):
@@ -590,22 +594,24 @@ def ParsePropertyAliases(in_file):
   # https://www.unicode.org/reports/tr39/#Identifier_Status_and_Type
   # Property definition:
   # https://www.unicode.org/Public/security/latest/IdentifierStatus.txt
-  name = "Identifier_Status"
-  _null_values[name] = "??"  # Must be specified in an @missing line.
-  prop = ("Enumerated", [name, name], set(), {})
-  _properties[name] = prop
-  _properties[NormPropName(name)] = prop
+  short_name = "ID_Status"
+  long_name = "Identifier_Status"
+  prop = ("Enumerated", [short_name, long_name], set(), {})
+  AddProperty(short_name, long_name,
+              "??",  # Must be specified in an @missing line.
+              prop)
   AddEnumeratedValue(prop, "Allowed")
   AddEnumeratedValue(prop, "Restricted")
   # Property definition:
   # https://www.unicode.org/Public/security/latest/IdentifierType.txt
   # "Miscellaneous" like Script_Extensions:
   # Each code point maps to a *set* of one or more of the listed values.
-  name = "Identifier_Type"
-  _null_values[name] = "??"  # Must be specified in an @missing line.
-  prop = ("Miscellaneous", [name, name], set(), {})
-  _properties[name] = prop
-  _properties[NormPropName(name)] = prop
+  short_name = "ID_Type"
+  long_name = "Identifier_Type"
+  prop = ("Miscellaneous", [short_name, long_name], set(), {})
+  AddProperty(short_name, long_name,
+              "??",  # Must be specified in an @missing line.
+              prop)
   AddEnumeratedValue(prop, "Not_Character")
   AddEnumeratedValue(prop, "Deprecated")
   AddEnumeratedValue(prop, "Default_Ignorable")
