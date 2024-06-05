@@ -841,6 +841,10 @@ public class UTS46Test extends CoreTestFmwk {
 
     @Test
     public void IdnaTest() throws IOException {
+        if (logKnownIssue("ICU-22707",
+                "The UTS #46 spec is changing for Unicode 16; need to adjust ICU impl")) {
+            return;
+        }
         BufferedReader idnaTestFile = TestUtil.getDataReader("unicode/IdnaTestV2.txt", "UTF-8");
         Pattern semi = Pattern.compile(";");
         try {
