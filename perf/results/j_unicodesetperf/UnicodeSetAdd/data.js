@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1717552801929,
+  "lastUpdate": 1717600837455,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22408,6 +22408,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetAdd",
             "value": 7.397037185246535,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "6543634649d0a5686273bf3f75e51fe6a50292db",
+          "message": "ICU-22707 fix hst=V: hst=NA for Kirat Rai",
+          "timestamp": "2024-06-05T08:10:21-07:00",
+          "tree_id": "da3f28d634fa44a28489b9d955d5441f3cdd30ef",
+          "url": "https://github.com/unicode-org/icu/commit/6543634649d0a5686273bf3f75e51fe6a50292db"
+        },
+        "date": 1717600712765,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetAdd",
+            "value": 7.77613008741982,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
