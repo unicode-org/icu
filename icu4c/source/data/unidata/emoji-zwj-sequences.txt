@@ -1,8 +1,8 @@
 # emoji-zwj-sequences.txt
-# Date: 2024-01-11, 17:46:08 GMT
+# Date: 2024-05-01, 21:25:24 GMT
 # © 2024 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
-# For terms of use, see https://www.unicode.org/terms_of_use.html
+# For terms of use and license, see https://www.unicode.org/terms_of_use.html
 #
 # Emoji ZWJ Sequences for UTS #51
 # Version: 16.0

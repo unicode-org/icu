@@ -67,7 +67,7 @@ https://github.com/unicode-org/unicodetools/issues/492 adjust cldr/*BreakTest ge
 Markus:
 
 export UNIDATA_ROOT=~/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni16/alpha
+export UNICODE_DATA=$UNIDATA_ROOT/uni16/beta
 export CLDR_SRC=~/cldr/uni/src
 export ICU_ROOT=~/icu/uni
 export ICU_SRC=$ICU_ROOT/src
@@ -81,7 +81,7 @@ export UNICODE_TOOLS=~/unitools/mine/src
 Elango:
 
 export UNIDATA_ROOT=~/oss/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni16/alpha
+export UNICODE_DATA=$UNIDATA_ROOT/uni16/beta
 export CLDR_SRC=~/oss/cldr/mine/src
 export ICU_ROOT=~/oss/icu
 export ICU_SRC=$ICU_ROOT
@@ -274,8 +274,6 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
     $ICU_SRC/icu4j/main/collate/src/main/java/com/ibm/icu/impl/coll/CollationFCD.java
 - generate data files, as above (generate.sh), now to pick up new collation data
 - rebuild ICU4C (make clean, make check, as usual)
-
-TODO
 
 * Unihan collators
     https://github.com/unicode-org/unicodetools/blob/main/docs/unihan.md
