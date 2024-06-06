@@ -196,11 +196,6 @@ AC_PROG_INSTALL
 
 AC_SUBST(cross_compiling)
 
-dnl use the pld hack to get ac_fn_cxx_try_link defined globally and not local
-AC_LANG_PUSH([C++])
-AC_LINK_IFELSE([AC_LANG_PROGRAM()])
-AC_LANG_POP([C++])
-
 # make sure install is relative to srcdir - if a script
 if test "$srcdir" = "."; then
   # If srcdir isn't just ., then (srcdir) is already prepended.
