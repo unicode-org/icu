@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1717601326622,
+  "lastUpdate": 1717672196805,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22648,6 +22648,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 5.819480762611225,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "87fce2423373e1e89049b0f43b4881b456414216",
+          "message": "ICU-22642 Avoid spending too much time inside CanonicalIterator\n\nSee #3017",
+          "timestamp": "2024-06-06T12:48:59+02:00",
+          "tree_id": "f76dffdf81413d8965eae656da8526dd8a6b3375",
+          "url": "https://github.com/unicode-org/icu/commit/87fce2423373e1e89049b0f43b4881b456414216"
+        },
+        "date": 1717671921040,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 5.772666099543674,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
