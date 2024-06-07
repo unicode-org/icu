@@ -858,14 +858,17 @@ getArchitecture(
         // this would potentially be problematic when cross-compiling as this code
         // would most likely be ran on host machine to generate the .obj file for
         // the target architecture.
-#       if defined(__clang__)
+#       ifdef U_CLANG_CL
             if (strcmp(optCpuArch, "x64") == 0) {
                 *pCPU = IMAGE_FILE_MACHINE_AMD64;
+            } else if (strcmp(optCpuArch, "x86") == 0) {
+                *pCPU = IMAGE_FILE_MACHINE_I386;
             } else if (strcmp(optCpuArch, "arm64") == 0) {
                 *pCPU = IMAGE_FILE_MACHINE_ARM64;
             } else {
                 // This should never happen.
-                *pCPU = IMAGE_FILE_MACHINE_UNKNOWN;
+                fprintf(stderr, "genccode: unable to process %s CPU architecture\n", optCpuArch);
+                exit(U_ILLEGAL_ARGUMENT_ERROR);
             }
 #       else
             *pCPU = IMAGE_FILE_MACHINE_UNKNOWN;

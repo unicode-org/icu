@@ -218,6 +218,16 @@
 #endif
 
 /**
+ * \def U_CLANG_CL
+ * Defined if the compiler is Clang compatible with MSVC (Clang on Windows).
+ * Otherwise undefined.
+ * @internal
+ */
+#if (defined(_MSC_VER) && defined(__clang__) && __clang__)
+#   define U_CLANG_CL
+#endif
+
+/**
  * \def CYGWINMSVC
  * Defined if this is Windows with Cygwin, but using MSVC rather than gcc.
  * Otherwise undefined.
@@ -235,7 +245,7 @@
 /**
  * \def U_PLATFORM_USES_ONLY_WIN32_API
  * Defines whether the platform uses only the Win32 API.
- * Set to 1 for Windows/MSVC and MinGW but not Cygwin.
+ * Set to 1 for Windows/MSVC, ClangCL and MinGW but not Cygwin.
  * @internal
  */
 #ifdef U_PLATFORM_USES_ONLY_WIN32_API
@@ -250,7 +260,7 @@
 /**
  * \def U_PLATFORM_HAS_WIN32_API
  * Defines whether the Win32 API is available on the platform.
- * Set to 1 for Windows/MSVC, MinGW and Cygwin.
+ * Set to 1 for Windows/MSVC, ClangCL, MinGW and Cygwin.
  * @internal
  */
 #ifdef U_PLATFORM_HAS_WIN32_API

@@ -70,7 +70,9 @@ enum {
 #ifdef CAN_GENERATE_OBJECTS
   kOptObject,
   kOptMatchArch,
+#ifdef U_CLANG_CL
   kOptCpuArch,
+#endif
   kOptSkipDllExport,
 #endif
   kOptFilename,
@@ -87,7 +89,9 @@ static UOption options[]={
 #ifdef CAN_GENERATE_OBJECTS
 /*6*/UOPTION_DEF("object", 'o', UOPT_NO_ARG),
      UOPTION_DEF("match-arch", 'm', UOPT_REQUIRES_ARG),
+#ifdef U_CLANG_CL
      UOPTION_DEF("cpu-arch", 'c', UOPT_REQUIRES_ARG),
+#endif
      UOPTION_DEF("skip-dll-export", '\0', UOPT_NO_ARG),
 #endif
      UOPTION_DEF("filename", 'f', UOPT_REQUIRES_ARG),
@@ -133,7 +137,9 @@ main(int argc, char* argv[]) {
             "\t-o or --object      write a .obj file instead of .c\n"
             "\t-m or --match-arch file.o  match the architecture (CPU, 32/64 bits) of the specified .o\n"
             "\t                    ELF format defaults to i386. Windows defaults to the native platform.\n"
+#ifdef U_CLANG_CL
             "\t-c or --cpu-arch    Specify a CPU architecture for which to write a .obj file for ClangCL on Windows\n"
+#endif
             "\t--skip-dll-export   Don't export the ICU data entry point symbol (for use when statically linking)\n");
 #endif
         fprintf(stderr,
@@ -199,7 +205,11 @@ main(int argc, char* argv[]) {
                 writeObjectCode(filename, options[kOptDestDir].value,
                                 options[kOptEntryPoint].doesOccur ? options[kOptEntryPoint].value : NULL,
                                 options[kOptMatchArch].doesOccur ? options[kOptMatchArch].value : NULL,
+#ifdef U_CLANG_CL
                                 options[kOptCpuArch].doesOccur ? options[kOptCpuArch].value : NULL,
+#else
+                                NULL,
+#endif
                                 options[kOptFilename].doesOccur ? options[kOptFilename].value : NULL,
                                 NULL,
                                 0,
