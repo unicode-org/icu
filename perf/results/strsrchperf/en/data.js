@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1717705983186,
+  "lastUpdate": 1717786522179,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27754,6 +27754,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 49.3196,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "aefbea616201f69cd800744791baa3ebc4e258f1",
+          "message": "ICU-22722 Make cldr-to-icu verbiage on alt=\"ascii\" sound more authoritative",
+          "timestamp": "2024-06-07T11:45:29-07:00",
+          "tree_id": "5362ef240de0d2859db4e0069dd42d32d455ff22",
+          "url": "https://github.com/unicode-org/icu/commit/aefbea616201f69cd800744791baa3ebc4e258f1"
+        },
+        "date": 1717786400905,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 21.8466,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 49.3287,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
