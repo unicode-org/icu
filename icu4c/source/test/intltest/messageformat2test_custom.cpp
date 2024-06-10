@@ -205,6 +205,20 @@ void TestMessageFormat2::testComplexOptions(IcuTestErrorCode& errorCode) {
         .setExpected("accusative singular adjective")
         .build();
     TestUtils::runTestCase(*this, test, errorCode);
+
+    // Test that the same noun can be used multiple times
+    test = testBuilder.setPattern(".input {$item :noun case=accusative count=1} \
+                                            .local $colorMatchingGrammaticalNumberGenderCase = {$color :adjective accord=$item} \
+                                            .local $sizeMatchingGrammaticalNumberGenderCase = {$size :adjective accord=$item} \
+                                            {{{$colorMatchingGrammaticalNumberGenderCase}, {$sizeMatchingGrammaticalNumberGenderCase}}}")
+
+        .setArgument(UnicodeString("color"), UnicodeString("red"))
+        .setArgument(UnicodeString("item"), UnicodeString("balloon"))
+        .setArgument(UnicodeString("size"), UnicodeString("huge"))
+        .setExpected("accusative singular adjective, accusative singular adjective")
+        .build();
+    TestUtils::runTestCase(*this, test, errorCode);
+
 }
 
 void TestMessageFormat2::testCustomFunctions() {
@@ -236,6 +250,16 @@ Formatter* PersonNameFormatterFactory::createFormatter(const Locale& locale, UEr
     return result;
 }
 
+static bool hasStringOption(const FunctionOptionsMap& opt,
+                            const UnicodeString& k, const UnicodeString& v) {
+    if (opt.count(k) == 0) {
+        return false;
+    }
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    UnicodeString optVal = opt.at(k).asFormattable().getString(localErrorCode);
+    return U_SUCCESS(localErrorCode) && optVal == v;
+}
+
 message2::FormattedPlaceholder PersonNameFormatter::format(FormattedPlaceholder&& arg, FunctionOptions&& options, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return {};
@@ -248,12 +272,10 @@ message2::FormattedPlaceholder PersonNameFormatter::format(FormattedPlaceholder&
     }
     const Formattable& toFormat = arg.asFormattable();
 
-    FunctionOptionsMap opt = options.getOptions();
-    bool hasFormality = opt.count("formality") > 0 && opt["formality"].getType() == UFMT_STRING;
-    bool hasLength = opt.count("length") > 0 && opt["length"].getType() == UFMT_STRING;
+    FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
 
-    bool useFormal = hasFormality && opt["formality"].getString(errorCode) == "formal";
-    UnicodeString length = hasLength ? opt["length"].getString(errorCode) : "short";
+    bool useFormal = hasStringOption(opt, "formality", "formal");
+    UnicodeString length = hasStringOption(opt, "length", "short");
 
     const FormattableObject* fp = toFormat.getObject(errorCode);
     U_ASSERT(U_SUCCESS(errorCode));
@@ -357,14 +379,17 @@ message2::FormattedPlaceholder GrammarCasesFormatter::format(FormattedPlaceholde
     const Formattable& toFormat = arg.asFormattable();
     UnicodeString result;
 
-    FunctionOptionsMap opt = options.getOptions();
+    FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
     switch (toFormat.getType()) {
         case UFMT_STRING: {
             const UnicodeString& in = toFormat.getString(errorCode);
             bool hasCase = opt.count("case") > 0;
-            bool caseIsString = opt["case"].getType() == UFMT_STRING;
-            if (hasCase && caseIsString && (opt["case"].getString(errorCode) == "dative" || opt["case"].getString(errorCode) == "genitive")) {
-                getDativeAndGenitive(in, result);
+            bool caseIsString = opt["case"].asFormattable().getType() == UFMT_STRING;
+            if (hasCase && caseIsString) {
+                const UnicodeString& caseOpt = opt["case"].asFormattable().getString(errorCode);
+                if (caseOpt == "dative" || caseOpt == "genitive") {
+                    getDativeAndGenitive(in, result);
+                }
             } else {
                 result += in;
             }
@@ -466,26 +491,19 @@ message2::FormattedPlaceholder message2::ListFormatter::format(FormattedPlacehol
     // Assumes arg is not-yet-formatted
     const Formattable& toFormat = arg.asFormattable();
 
-    FunctionOptionsMap opt = options.getOptions();
-    bool hasType = opt.count("type") > 0 && opt["type"].getType() == UFMT_STRING;
+    FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
     UListFormatterType type = UListFormatterType::ULISTFMT_TYPE_AND;
-    if (hasType) {
-        if (opt["type"].getString(errorCode) == "OR") {
-            type = UListFormatterType::ULISTFMT_TYPE_OR;
-        } else if (opt["type"].getString(errorCode) == "UNITS") {
-            type = UListFormatterType::ULISTFMT_TYPE_UNITS;
-        }
+    if (hasStringOption(opt, "type", "OR")) {
+        type = UListFormatterType::ULISTFMT_TYPE_OR;
+    } else if (hasStringOption(opt, "type", "UNITS")) {
+        type = UListFormatterType::ULISTFMT_TYPE_UNITS;
     }
-    bool hasWidth = opt.count("width") > 0 && opt["width"].getType() == UFMT_STRING;
     UListFormatterWidth width = UListFormatterWidth::ULISTFMT_WIDTH_WIDE;
-    if (hasWidth) {
-        if (opt["width"].getString(errorCode) == "SHORT") {
-            width = UListFormatterWidth::ULISTFMT_WIDTH_SHORT;
-        } else if (opt["width"].getString(errorCode) == "NARROW") {
-            width = UListFormatterWidth::ULISTFMT_WIDTH_NARROW;
-        }
+    if (hasStringOption(opt, "width", "SHORT")) {
+        width = UListFormatterWidth::ULISTFMT_WIDTH_SHORT;
+    } else if (hasStringOption(opt, "width", "NARROW")) {
+        width = UListFormatterWidth::ULISTFMT_WIDTH_NARROW;
     }
-    U_ASSERT(U_SUCCESS(errorCode));
     LocalPointer<icu::ListFormatter> lf(icu::ListFormatter::createInstance(locale, type, width, errorCode));
     if (U_FAILURE(errorCode)) {
         return {};
@@ -608,6 +626,10 @@ Formatter* ResourceManagerFactory::createFormatter(const Locale& locale, UErrorC
 
 using Arguments = MessageArguments;
 
+// TODO: The next test is commented out because we need to write code
+// to convert an options map to a MessageArguments (mapping FormattedPlaceholder
+// back to Formattable)
+#if false
 static Arguments localToGlobal(const FunctionOptionsMap& opts, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return {};
@@ -752,6 +774,129 @@ void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
                                 .build();
     TestUtils::runTestCase(*this, test, errorCode);
 }
+#endif
+
+Formatter* NounFormatterFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+
+    // Locale not used
+    (void) locale;
+
+    Formatter* result = new NounFormatter();
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+Formatter* AdjectiveFormatterFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+
+    // Locale not used
+    (void) locale;
+
+    Formatter* result = new AdjectiveFormatter();
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+message2::FormattedPlaceholder NounFormatter::format(FormattedPlaceholder&& arg, FunctionOptions&& options, UErrorCode& errorCode) const {
+    if (U_FAILURE(errorCode)) {
+        return {};
+    }
+
+    message2::FormattedPlaceholder errorVal = message2::FormattedPlaceholder("noun: not a string");
+
+    if (!arg.canFormat() || arg.asFormattable().getType() != UFMT_STRING) {
+        return errorVal;
+    }
+
+    const Formattable& toFormat = arg.asFormattable();
+    FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
+
+    // very simplified example
+    bool useAccusative = hasStringOption(opt, "case", "accusative");
+    bool useSingular = hasStringOption(opt, "count", "1");
+    const UnicodeString& noun = toFormat.getString(errorCode);
+    U_ASSERT(U_SUCCESS(errorCode));
+
+    UnicodeString result;
+    if (useAccusative) {
+        if (useSingular) {
+            result = noun + " accusative, singular noun";
+        } else {
+            result = noun + " accusative, plural noun";
+        }
+    } else {
+        if (useSingular) {
+            result = noun + " dative, singular noun";
+        } else {
+            result = noun + " dative, plural noun";
+        }
+    }
+
+    // This will fail, since the result doesn't encode the options
+    return FormattedPlaceholder(arg, FormattedValue(result));
+}
+
+message2::FormattedPlaceholder AdjectiveFormatter::format(FormattedPlaceholder&& arg, FunctionOptions&& options, UErrorCode& errorCode) const {
+    if (U_FAILURE(errorCode)) {
+        return {};
+    }
+
+    message2::FormattedPlaceholder errorVal = message2::FormattedPlaceholder("adjective: not a string");
+
+    if (!arg.canFormat() || arg.asFormattable().getType() != UFMT_STRING) {
+        return errorVal;
+    }
+
+    const Formattable& toFormat = arg.asFormattable();
+    FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
+    // Return empty string if no accord is provided
+    if (opt.count("accord") <= 0) {
+        return {};
+    }
+
+    const FormattedPlaceholder& accordOpt = opt["accord"];
+    // Fail if no accord is provided, as this is a simplified example
+    UnicodeString accord = accordOpt.asFormattable().getString(errorCode);
+    const UnicodeString& adjective = toFormat.getString(errorCode);
+    if (U_FAILURE(errorCode)) {
+        return {};
+    }
+
+    UnicodeString result = adjective + " " + accord;
+    // very simplified example
+    const FunctionOptions& accordOptions = accordOpt.options();
+       // But this won't work, because getting a FunctionOptionsMap means
+       // moving out of accordOptions, and that can't be done -- the same placeholder
+       // might be used multiple times
+    const FunctionOptionsMap accordOptionsMap = FunctionOptions::getOptions(std::move(accordOptions));
+    bool accordIsAccusative = hasStringOption(accordOptions, "case", "accusative");
+    bool accordIsSingular = hasStringOption(accordOptions, "count", "1");
+    if (accordIsAccusative) {
+        if (accordIsSingular) {
+            result += " (accusative, singular adjective)";
+        } else {
+            result += " (accusative, plural adjective)";
+        }
+    } else {
+        if (accordIsSingular) {
+            result = += " (dative, singular adjective)";
+        } else {
+            result = += " (dative, plural adjective)";
+        }
+    }
+
+    return FormattedPlaceholder(arg, FormattedValue(result));
+}
+
 
 #endif /* #if !UCONFIG_NO_MF2 */
 

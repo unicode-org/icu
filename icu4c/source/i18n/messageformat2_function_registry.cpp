@@ -172,6 +172,7 @@ static void strToDouble(const UnicodeString& s, double& result, UErrorCode& erro
     result = asNumber.getDouble(errorCode);
 }
 
+/*
 static double tryStringAsNumber(const Locale& locale, const Formattable& val, UErrorCode& errorCode) {
     // Check for a string option, try to parse it as a number if present
     UnicodeString tempString = val.getString(errorCode);
@@ -185,7 +186,9 @@ static double tryStringAsNumber(const Locale& locale, const Formattable& val, UE
     }
     return 0;
 }
+*/
 
+/*
 static int64_t getInt64Value(const Locale& locale, const Formattable& value, UErrorCode& errorCode) {
     if (U_SUCCESS(errorCode)) {
         if (!value.isNumeric()) {
@@ -204,6 +207,7 @@ static int64_t getInt64Value(const Locale& locale, const Formattable& value, UEr
     // Option was numeric but couldn't be converted to int64_t -- could be overflow
     return 0;
 }
+*/
 
 // Adopts its arguments
 MFFunctionRegistry::MFFunctionRegistry(FormatterMap* f, SelectorMap* s, Hashtable* byType) : formatters(f), selectors(s), formattersByType(byType) {
@@ -442,13 +446,26 @@ static FormattedPlaceholder stringAsNumber(const number::LocalizedNumberFormatte
     return FormattedPlaceholder(input, FormattedValue(std::move(result)));
 }
 
-int32_t StandardFunctions::Number::maximumFractionDigits(const FunctionOptions& opts) const {
-    Formattable opt;
+// Returns -1 if option is not present
+int32_t FunctionOptions::numberOption(const UnicodeString& optionName) const {
+    UErrorCode localErrorCode = U_ZERO_ERROR;
 
+    int32_t result = getIntFunctionOption(optionName, localErrorCode);
+    if (U_SUCCESS(localErrorCode)) {
+        return result;
+    }
+    // Returning -1 indicates that the option wasn't provided or was a non-integer.
+    // The caller needs to check for that case, since passing -1 to certain methods
+    // is an error.
+    return -1;
+}
+
+int32_t StandardFunctions::Number::maximumFractionDigits(const FunctionOptions& opts) const {
     if (isInteger) {
         return 0;
     }
 
+/*
     if (opts.getFunctionOption(UnicodeString("maximumFractionDigits"), opt)) {
         UErrorCode localErrorCode = U_ZERO_ERROR;
         int64_t val = getInt64Value(locale, opt, localErrorCode);
@@ -456,87 +473,39 @@ int32_t StandardFunctions::Number::maximumFractionDigits(const FunctionOptions& 
             return static_cast<int32_t>(val);
         }
     }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::maxFraction()
-    // is an error.
-    return -1;
+*/
+    return opts.numberOption(UnicodeString("maximumFraction Digits"));
 }
 
 int32_t StandardFunctions::Number::minimumFractionDigits(const FunctionOptions& opts) const {
     Formattable opt;
 
-    if (!isInteger) {
-        if (opts.getFunctionOption(UnicodeString("minimumFractionDigits"), opt)) {
-            UErrorCode localErrorCode = U_ZERO_ERROR;
-            int64_t val = getInt64Value(locale, opt, localErrorCode);
-            if (U_SUCCESS(localErrorCode)) {
-                return static_cast<int32_t>(val);
-            }
-        }
+    if (isInteger) {
+        return 0;
     }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::minFraction()
-    // is an error.
-    return -1;
+
+    return opts.numberOption(UnicodeString("minimumFractionDigits"));
 }
 
 int32_t StandardFunctions::Number::minimumIntegerDigits(const FunctionOptions& opts) const {
-    Formattable opt;
 
-    if (opts.getFunctionOption(UnicodeString("minimumIntegerDigits"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        int64_t val = getInt64Value(locale, opt, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return static_cast<int32_t>(val);
-        }
-    }
-    return 0;
+    int32_t result = opts.numberOption(UnicodeString("minimumIntegerDigits"));
+    return (result == -1) ? 0 : result;
 }
 
 int32_t StandardFunctions::Number::minimumSignificantDigits(const FunctionOptions& opts) const {
-    Formattable opt;
-
-    if (!isInteger) {
-        if (opts.getFunctionOption(UnicodeString("minimumSignificantDigits"), opt)) {
-            UErrorCode localErrorCode = U_ZERO_ERROR;
-            int64_t val = getInt64Value(locale, opt, localErrorCode);
-            if (U_SUCCESS(localErrorCode)) {
-                return static_cast<int32_t>(val);
-            }
-        }
-    }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::minSignificantDigits()
-    // is an error.
-    return -1;
+    return opts.numberOption(UnicodeString("minimumSignificantDigits"));
 }
 
 int32_t StandardFunctions::Number::maximumSignificantDigits(const FunctionOptions& opts) const {
-    Formattable opt;
-
-    if (opts.getFunctionOption(UnicodeString("maximumSignificantDigits"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        int64_t val = getInt64Value(locale, opt, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return static_cast<int32_t>(val);
-        }
-    }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::maxSignificantDigits()
-    // is an error.
-    return -1; // Not a valid value for Precision; has to be checked
+    return opts.numberOption(UnicodeString("maximumSignificantDigits"));
 }
 
 bool StandardFunctions::Number::usePercent(const FunctionOptions& opts) const {
-    Formattable opt;
-    if (isInteger
-        || !opts.getFunctionOption(UnicodeString("style"), opt)
-        || opt.getType() != UFMT_STRING) {
+    if (isInteger) {
         return false;
     }
-    UErrorCode localErrorCode = U_ZERO_ERROR;
-    const UnicodeString& style = opt.getString(localErrorCode);
-    U_ASSERT(U_SUCCESS(localErrorCode));
+    UnicodeString style = opts.getStringFunctionOption(UnicodeString("style"));
     return (style == UnicodeString("percent"));
 }
 
@@ -603,19 +572,12 @@ StandardFunctions::NumberFactory::~NumberFactory() {}
 
 
 StandardFunctions::Plural::PluralType StandardFunctions::Plural::pluralType(const FunctionOptions& opts) const {
-    Formattable opt;
+    UnicodeString pluralType = opts.getStringFunctionOption(UnicodeString("select"));
 
-    if (opts.getFunctionOption(UnicodeString("select"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        UnicodeString val = opt.getString(localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            if (val == UnicodeString("ordinal")) {
-                return PluralType::PLURAL_ORDINAL;
-            }
-            if (val == UnicodeString("exact")) {
-                return PluralType::PLURAL_EXACT;
-            }
-        }
+    if (pluralType == UnicodeString("ordinal")) {
+        return PluralType::PLURAL_ORDINAL;
+    } else if (pluralType == UnicodeString("exact")) {
+        return PluralType::PLURAL_EXACT;
     }
     return PluralType::PLURAL_CARDINAL;
 }
@@ -768,11 +730,12 @@ StandardFunctions::PluralFactory::~PluralFactory() {}
                                                               const UnicodeString& optionName,
                                                               UErrorCode& errorCode) {
     if (U_SUCCESS(errorCode)) {
-        Formattable opt;
-        if (opts.getFunctionOption(optionName, opt)) {
-            return opt.getString(errorCode); // In case it's not a string, error code will be set
-        } else {
-            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        const FormattedPlaceholder* opt = opts.getFunctionOption(optionName, errorCode);
+        if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
+            errorCode = U_ZERO_ERROR;
+        } else if (U_SUCCESS(errorCode)) {
+            // In case it's not a string, error code will be set
+            return opt->asFormattable().getString(errorCode);
         }
     }
     // Default is empty string
@@ -928,8 +891,10 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     UnicodeString timeStyleName("timeStyle");
     UnicodeString styleName("style");
 
-    bool hasDateStyleOption = opts.getFunctionOption(dateStyleName, opt);
-    bool hasTimeStyleOption = opts.getFunctionOption(timeStyleName, opt);
+    UnicodeString dateStyleOption = opts.getStringFunctionOption(dateStyleName);
+    UnicodeString timeStyleOption = opts.getStringFunctionOption(timeStyleName);
+    bool hasDateStyleOption = dateStyleOption.length() > 0;
+    bool hasTimeStyleOption = timeStyleOption.length() > 0;
     bool noOptions = opts.optionsCount() == 0;
 
     bool useStyle = (type == DateTimeFactory::DateTimeType::DateTime

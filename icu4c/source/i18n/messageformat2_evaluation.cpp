@@ -30,11 +30,11 @@ ResolvedFunctionOption::ResolvedFunctionOption(ResolvedFunctionOption&& other) {
 
 ResolvedFunctionOption::~ResolvedFunctionOption() {}
 
-
-const ResolvedFunctionOption* FunctionOptions::getResolvedFunctionOptions(int32_t& len) const {
-    len = functionOptionsLen;
-    U_ASSERT(len == 0 || options != nullptr);
-    return options;
+/* static */ ResolvedFunctionOption* FunctionOptions::getResolvedFunctionOptions(
+    FunctionOptions&& opts, int32_t& len) {
+    len = opts.functionOptionsLen;
+    U_ASSERT(len == 0 || opts.options != nullptr);
+    return std::move(opts).options;
 }
 
 FunctionOptions::FunctionOptions(UVector&& optionsVector, UErrorCode& status) {
@@ -44,26 +44,31 @@ FunctionOptions::FunctionOptions(UVector&& optionsVector, UErrorCode& status) {
     options = moveVectorToArray<ResolvedFunctionOption>(optionsVector, status);
 }
 
-UBool FunctionOptions::getFunctionOption(const UnicodeString& key, Formattable& option) const {
-    if (options == nullptr) {
-        U_ASSERT(functionOptionsLen == 0);
-    }
-    for (int32_t i = 0; i < functionOptionsLen; i++) {
-        const ResolvedFunctionOption& opt = options[i];
-        if (opt.getName() == key) {
-            option = opt.getValue();
-            return true;
+const FormattedPlaceholder* FunctionOptions::getFunctionOption(const UnicodeString& key,
+                                                               UErrorCode& status) const {
+    NULL_ON_ERROR(status);
+    if (options != nullptr) {
+        for (int32_t i = 0; i < functionOptionsLen; i++) {
+            const ResolvedFunctionOption& opt = options[i];
+            if (opt.getName() == key) {
+                return opt.getValue();
+            }
         }
     }
-    return false;
+    else {
+        U_ASSERT(functionOptionsLen == 0);
+    }
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+    return nullptr;
 }
 
 UnicodeString FunctionOptions::getStringFunctionOption(const UnicodeString& key) const {
-    Formattable option;
-    if (getFunctionOption(key, option)) {
-        if (option.getType() == UFMT_STRING) {
-            UErrorCode localErrorCode = U_ZERO_ERROR;
-            UnicodeString val = option.getString(localErrorCode);
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    const FormattedPlaceholder* option = getFunctionOption(key, localErrorCode);
+    if (U_SUCCESS(localErrorCode)) {
+        Formattable opt = option->asFormattable();
+        if (opt.getType() == UFMT_STRING) {
+            UnicodeString val = opt.getString(localErrorCode);
             U_ASSERT(U_SUCCESS(localErrorCode));
             return val;
         }

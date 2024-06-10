@@ -119,7 +119,9 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env, const O
             return {};
         }
         if (!rhsVal.isFallback()) {
-            resolvedOpt.adoptInstead(create<ResolvedFunctionOption>(ResolvedFunctionOption(k, rhsVal.asFormattable()), status));
+            resolvedOpt.adoptInstead(create<ResolvedFunctionOption>
+                                     (ResolvedFunctionOption(k, std::move(rhsVal)),
+                                      status));
             if (U_FAILURE(status)) {
                 return {};
             }
