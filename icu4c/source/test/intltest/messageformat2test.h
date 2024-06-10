@@ -176,6 +176,18 @@ class ResourceManager : public Formatter {
     const Locale& locale;
 };
 
+class NounFormatterFactory : public FormatterFactory {
+
+    public:
+    Formatter* createFormatter(const Locale&, UErrorCode&) override;
+};
+
+class AdjectiveFormatterFactory : public FormatterFactory {
+
+    public:
+    Formatter* createFormatter(const Locale&, UErrorCode&) override;
+};
+
 } // namespace message2
 U_NAMESPACE_END
 

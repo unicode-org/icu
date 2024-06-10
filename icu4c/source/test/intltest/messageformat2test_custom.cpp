@@ -182,6 +182,31 @@ void TestMessageFormat2::testCustomFunctionsComplexMessage(IcuTestErrorCode& err
     TestUtils::runTestCase(*this, test, errorCode);
 }
 
+void TestMessageFormat2::testComplexOptions(IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    MFFunctionRegistry customRegistry(MFFunctionRegistry::Builder(errorCode)
+                                      .adoptFormatter(FunctionName("noun"), new NounFormatterFactory(), errorCode)
+                                      .adoptFormatter(FunctionName("adjective"), new AdjectiveFormatterFactory(), errorCode)
+                                      .build());
+    UnicodeString name = "name";
+    TestCase::Builder testBuilder;
+    testBuilder.setName("testComplexOptions");
+    testBuilder.setLocale(Locale("en"));
+
+    // Test that options can be values with their own resolved
+    // options attached
+    TestCase test = testBuilder.setPattern(".input {$item :noun case=accusative count=1} \
+                                            .local $colorMatchingGrammaticalNumberGenderCase = {$color :adjective accord=$item} \
+                                            {{{$colorMatchingGrammaticalNumberGenderCase}}}")
+
+        .setArgument(UnicodeString("color"), UnicodeString("red"))
+        .setArgument(UnicodeString("item"), UnicodeString("balloon"))
+        .setExpected("accusative singular adjective")
+        .build();
+    TestUtils::runTestCase(*this, test, errorCode);
+}
+
 void TestMessageFormat2::testCustomFunctions() {
   IcuTestErrorCode errorCode(*this, "testCustomFunctions");
 
@@ -190,6 +215,7 @@ void TestMessageFormat2::testCustomFunctions() {
   testGrammarCasesFormatter(errorCode);
   testListFormatter(errorCode);
   testMessageRefFormatter(errorCode);
+  testComplexOptions(errorCode);
 }
 
 
