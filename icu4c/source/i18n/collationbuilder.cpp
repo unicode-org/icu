@@ -1138,12 +1138,12 @@ CollationBuilder::addOnlyClosure(const UnicodeString &nfdPrefix, const UnicodeSt
         for(;;) {
             UnicodeString str = stringIter.next();
             if(str.isBogus()) { break; }
-            if(ignoreString(str, errorCode) || str == nfdString) { continue; }
             if (loop++ > kClosureLoopLimit) {
                 // To avoid hang as in ICU-22517, return with error.
                 errorCode = U_INPUT_TOO_LONG_ERROR;
                 return ce32;
             }
+            if(ignoreString(str, errorCode) || str == nfdString) { continue; }
             ce32 = addIfDifferent(prefix, str, newCEs, newCEsLength, ce32, errorCode);
             if(U_FAILURE(errorCode)) { return ce32; }
         }
@@ -1159,12 +1159,12 @@ CollationBuilder::addOnlyClosure(const UnicodeString &nfdPrefix, const UnicodeSt
             for(;;) {
                 UnicodeString str = stringIter.next();
                 if(str.isBogus()) { break; }
-                if(ignoreString(str, errorCode) || (samePrefix && str == nfdString)) { continue; }
                 if (loop++ > kClosureLoopLimit) {
                     // To avoid hang as in ICU-22517, return with error.
                     errorCode = U_INPUT_TOO_LONG_ERROR;
                     return ce32;
                 }
+                if(ignoreString(str, errorCode) || (samePrefix && str == nfdString)) { continue; }
                 ce32 = addIfDifferent(prefix, str, newCEs, newCEsLength, ce32, errorCode);
                 if(U_FAILURE(errorCode)) { return ce32; }
             }
