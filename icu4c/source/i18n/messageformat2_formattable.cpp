@@ -9,6 +9,7 @@
 
 #include "unicode/messageformat2_formattable.h"
 #include "unicode/smpdtfmt.h"
+#include "messageformat2_allocation.h"
 #include "messageformat2_macros.h"
 
 #include "limits.h"
@@ -184,14 +185,97 @@ namespace message2 {
         source = other.source;
         if (type == kEvaluated) {
             formatted = std::move(other.formatted);
-            previousOptions = std::move(other.previousOptions);
         }
+        previousOptions = other.previousOptions;
+        other.previousOptions = nullptr;
         fallback = other.fallback;
         return *this;
     }
 
     const Formattable& FormattedPlaceholder::asFormattable() const {
         return source;
+    }
+
+    FormattedPlaceholder FormattedPlaceholder::withOutput(FormattedValue&& output,
+                                                          UErrorCode& status) const {
+        if (U_FAILURE(status)) {
+            return {};
+        }
+
+        return FormattedPlaceholder(source,
+                                    fallback,
+                                    create<FunctionOptions>(FunctionOptions(), status),
+                                    std::move(output));
+    }
+
+    FormattedPlaceholder FormattedPlaceholder::withOutputAndOptions(FunctionOptions&& options,
+                                                                    FormattedValue&& output,
+                                                                    UErrorCode& status) const {
+        if (U_FAILURE(status)) {
+            return {};
+        }
+
+        return FormattedPlaceholder(source,
+                                    fallback,
+                                    create<FunctionOptions>(std::move(options), status),
+                                    std::move(output));
+    }
+
+    FormattedPlaceholder FormattedPlaceholder::fromFormattable(const Formattable& input,
+                                                               const UnicodeString& fb,
+                                                               UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return {};
+        }
+
+        return FormattedPlaceholder(input,
+                                    fb,
+                                    create<FunctionOptions>(FunctionOptions(), status),
+                                    kUnevaluated);
+    }
+
+    /* static */ FormattedPlaceholder FormattedPlaceholder::fallbackPlaceholder(
+        const UnicodeString& fb, UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return {};
+        }
+
+        return FormattedPlaceholder(Formattable(),
+                                    fb,
+                                    create<FunctionOptions>(FunctionOptions(), status),
+                                    kFallback);
+    }
+
+    FormattedPlaceholder::FormattedPlaceholder(const Formattable& input,
+                                               const UnicodeString& fb,
+                                               FunctionOptions* opts,
+                                               FormattedValue&& output) {
+        fallback = fb;
+        source = input;
+        formatted = std::move(output);
+        previousOptions = opts;
+        type = kEvaluated;
+    }
+
+    FormattedPlaceholder::FormattedPlaceholder(const Formattable& input,
+                                               const UnicodeString& fb,
+                                               FunctionOptions* opts,
+                                               Type t) {
+        fallback = fb;
+        source = input;
+        previousOptions = opts;
+        type = t;
+    }
+
+
+    const FunctionOptions& FormattedPlaceholder::options() const {
+        U_ASSERT(previousOptions != nullptr);
+        return *previousOptions;
+    }
+
+    FormattedPlaceholder::~FormattedPlaceholder() {
+        delete previousOptions;
+        previousOptions = nullptr;
     }
 
     // Default formatters
@@ -251,7 +335,10 @@ namespace message2 {
                 return {};
             }
             if (asDecimal != nullptr) {
-                return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, asDecimal, status)));
+                return input.withOutput(FormattedValue(formatNumberWithDefaults(locale,
+                                                                                asDecimal,
+                                                                                status)),
+                                        status);
             }
         }
 
@@ -262,27 +349,31 @@ namespace message2 {
             UDate d = toFormat.getDate(status);
             U_ASSERT(U_SUCCESS(status));
             formatDateWithDefaults(locale, d, result, status);
-            return FormattedPlaceholder(input, FormattedValue(std::move(result)));
+            return input.withOutput(FormattedValue(std::move(result)), status);
         }
         case UFMT_DOUBLE: {
             double d = toFormat.getDouble(status);
             U_ASSERT(U_SUCCESS(status));
-            return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, d, status)));
+            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, d, status)),
+                                    status);
         }
         case UFMT_LONG: {
             int32_t l = toFormat.getLong(status);
             U_ASSERT(U_SUCCESS(status));
-            return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, l, status)));
+            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, l, status)),
+                                    status);
         }
         case UFMT_INT64: {
             int64_t i = toFormat.getInt64Value(status);
             U_ASSERT(U_SUCCESS(status));
-            return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, i, status)));
+            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, i, status)),
+                                    status);
         }
         case UFMT_STRING: {
             const UnicodeString& s = toFormat.getString(status);
             U_ASSERT(U_SUCCESS(status));
-            return FormattedPlaceholder(input, FormattedValue(UnicodeString(s)));
+            return input.withOutput(FormattedValue(UnicodeString(s)),
+                                    status);
         }
         default: {
             // No default formatters for other types; use fallback
@@ -290,7 +381,7 @@ namespace message2 {
             // Note: it would be better to set an internal formatting error so that a string
             // (e.g. the type tag) can be provided. However, this  method is called by the
             // public method formatToString() and thus can't take a MessageContext
-            return FormattedPlaceholder(input.getFallback());
+            return FormattedPlaceholder::fallbackPlaceholder(input.getFallback(), status);
         }
         }
     }

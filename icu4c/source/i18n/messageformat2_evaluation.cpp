@@ -28,13 +28,21 @@ ResolvedFunctionOption::ResolvedFunctionOption(ResolvedFunctionOption&& other) {
     value = std::move(other.value);
 }
 
+ResolvedFunctionOption::ResolvedFunctionOption(const UnicodeString& n,
+                                               FormattedPlaceholder&& v,
+                                               UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+    name = n;
+    value.adoptInstead(create<FormattedPlaceholder>(std::move(v), errorCode));
+}
+
 ResolvedFunctionOption::~ResolvedFunctionOption() {}
 
-/* static */ ResolvedFunctionOption* FunctionOptions::getResolvedFunctionOptions(
-    FunctionOptions&& opts, int32_t& len) {
+/* static */ const ResolvedFunctionOption* FunctionOptions::getResolvedFunctionOptions(
+    const FunctionOptions& opts, int32_t& len) {
     len = opts.functionOptionsLen;
     U_ASSERT(len == 0 || opts.options != nullptr);
-    return std::move(opts).options;
+    return opts.options;
 }
 
 FunctionOptions::FunctionOptions(UVector&& optionsVector, UErrorCode& status) {
@@ -79,6 +87,74 @@ UnicodeString FunctionOptions::getStringFunctionOption(const UnicodeString& key)
     return {};
 }
 
+static double tryStringAsNumber(const Locale& locale, const Formattable& val, UErrorCode& errorCode) {
+    // Check for a string option, try to parse it as a number if present
+    UnicodeString tempString = val.getString(errorCode);
+    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(locale, errorCode));
+    if (U_SUCCESS(errorCode)) {
+        icu::Formattable asNumber;
+        numberFormat->parse(tempString, asNumber, errorCode);
+        if (U_SUCCESS(errorCode)) {
+            return asNumber.getDouble(errorCode);
+        }
+    }
+    return 0;
+}
+
+/*
+static int64_t getInt64Value(const Locale& locale, const Formattable& value, UErrorCode& errorCode) {
+    if (U_SUCCESS(errorCode)) {
+        if (!value.isNumeric()) {
+            double doubleResult = tryStringAsNumber(locale, value, errorCode);
+            if (U_SUCCESS(errorCode)) {
+                return static_cast<int64_t>(doubleResult);
+            }
+        }
+        else {
+            int64_t result = value.getInt64(errorCode);
+            if (U_SUCCESS(errorCode)) {
+                return result;
+            }
+        }
+    }
+    // Option was numeric but couldn't be converted to int64_t -- could be overflow
+    return 0;
+}
+*/
+
+int32_t FunctionOptions::getIntFunctionOption(const UnicodeString& key, UErrorCode& errorCode) const {
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    const FormattedPlaceholder* option = getFunctionOption(key, localErrorCode);
+    if (U_SUCCESS(localErrorCode)) {
+        Formattable opt = option->asFormattable();
+        switch (opt.getType()) {
+            case UFMT_STRING: {
+                int64_t result = tryStringAsNumber(Locale("en"), opt, localErrorCode);
+                if (U_SUCCESS(localErrorCode)) {
+                    return static_cast<int32_t>(result);
+                }
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+                break;
+            }
+            case UFMT_DOUBLE: {
+                return static_cast<int32_t>(opt.getDouble(localErrorCode));
+            }
+            case UFMT_LONG: {
+                return opt.getLong(localErrorCode);
+            }
+            case UFMT_INT64: {
+                return static_cast<int32_t>(opt.getInt64(localErrorCode));
+            }
+            default: {
+                // Other types can't be parsed as a number
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+                break;
+            }
+        }
+    }
+    return -1; // Caller must check for this case
+}
+
 FunctionOptions& FunctionOptions::operator=(FunctionOptions&& other) noexcept {
     functionOptionsLen = other.functionOptionsLen;
     options = other.options;
@@ -94,6 +170,8 @@ FunctionOptions::FunctionOptions(FunctionOptions&& other) {
 FunctionOptions::~FunctionOptions() {
     if (options != nullptr) {
         delete[] options;
+        options = nullptr;
+        functionOptionsLen = 0;
     }
 }
 // ResolvedSelector

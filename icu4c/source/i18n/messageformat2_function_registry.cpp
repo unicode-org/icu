@@ -172,43 +172,6 @@ static void strToDouble(const UnicodeString& s, double& result, UErrorCode& erro
     result = asNumber.getDouble(errorCode);
 }
 
-/*
-static double tryStringAsNumber(const Locale& locale, const Formattable& val, UErrorCode& errorCode) {
-    // Check for a string option, try to parse it as a number if present
-    UnicodeString tempString = val.getString(errorCode);
-    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(locale, errorCode));
-    if (U_SUCCESS(errorCode)) {
-        icu::Formattable asNumber;
-        numberFormat->parse(tempString, asNumber, errorCode);
-        if (U_SUCCESS(errorCode)) {
-            return asNumber.getDouble(errorCode);
-        }
-    }
-    return 0;
-}
-*/
-
-/*
-static int64_t getInt64Value(const Locale& locale, const Formattable& value, UErrorCode& errorCode) {
-    if (U_SUCCESS(errorCode)) {
-        if (!value.isNumeric()) {
-            double doubleResult = tryStringAsNumber(locale, value, errorCode);
-            if (U_SUCCESS(errorCode)) {
-                return static_cast<int64_t>(doubleResult);
-            }
-        }
-        else {
-            int64_t result = value.getInt64(errorCode);
-            if (U_SUCCESS(errorCode)) {
-                return result;
-            }
-        }
-    }
-    // Option was numeric but couldn't be converted to int64_t -- could be overflow
-    return 0;
-}
-*/
-
 // Adopts its arguments
 MFFunctionRegistry::MFFunctionRegistry(FormatterMap* f, SelectorMap* s, Hashtable* byType) : formatters(f), selectors(s), formattersByType(byType) {
     U_ASSERT(f != nullptr && s != nullptr && byType != nullptr);
@@ -414,8 +377,8 @@ Formatter* StandardFunctions::IntegerFactory::createFormatter(const Locale& loca
 
 StandardFunctions::IntegerFactory::~IntegerFactory() {}
 
-static FormattedPlaceholder notANumber(const FormattedPlaceholder& input) {
-    return FormattedPlaceholder(input, FormattedValue(UnicodeString("NaN")));
+static FormattedPlaceholder notANumber(const FormattedPlaceholder& input, UErrorCode& status) {
+    return input.withOutput(FormattedValue(UnicodeString("NaN")), status);
 }
 
 static FormattedPlaceholder stringAsNumber(const number::LocalizedNumberFormatter& nf, const FormattedPlaceholder& input, UErrorCode& errorCode) {
@@ -435,7 +398,7 @@ static FormattedPlaceholder stringAsNumber(const number::LocalizedNumberFormatte
     strToDouble(inputStr, numberValue, localErrorCode);
     if (U_FAILURE(localErrorCode)) {
         errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-        return notANumber(input);
+        return notANumber(input, errorCode);
     }
     UErrorCode savedStatus = errorCode;
     number::FormattedNumber result = nf.formatDouble(numberValue, errorCode);
@@ -443,7 +406,7 @@ static FormattedPlaceholder stringAsNumber(const number::LocalizedNumberFormatte
     if (errorCode == U_USING_DEFAULT_WARNING) {
         errorCode = savedStatus;
     }
-    return FormattedPlaceholder(input, FormattedValue(std::move(result)));
+    return input.withOutput(FormattedValue(std::move(result)), errorCode);
 }
 
 // Returns -1 if option is not present
@@ -521,16 +484,17 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
     // No argument => return "NaN"
     if (!arg.canFormat()) {
         errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-        return notANumber(arg);
+        return notANumber(arg, errorCode);
     }
 
     number::LocalizedNumberFormatter realFormatter;
     realFormatter = formatterForOptions(*this, opts, errorCode);
 
+    // Already checked that contents can be formatted
+    const Formattable& toFormat = arg.asFormattable();
+
     number::FormattedNumber numberResult;
     if (U_SUCCESS(errorCode)) {
-        // Already checked that contents can be formatted
-        const Formattable& toFormat = arg.asFormattable();
         switch (toFormat.getType()) {
         case UFMT_DOUBLE: {
             double d = toFormat.getDouble(errorCode);
@@ -557,12 +521,12 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
         default: {
             // Other types can't be parsed as a number
             errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-            return notANumber(arg);
+            return notANumber(arg, errorCode);
         }
         }
     }
 
-    return FormattedPlaceholder(arg, FormattedValue(std::move(numberResult)));
+    return arg.withOutput(FormattedValue(std::move(numberResult)), errorCode);
 }
 
 StandardFunctions::Number::~Number() {}
@@ -869,7 +833,7 @@ Formatter* StandardFunctions::DateTimeFactory::createFormatter(const Locale& loc
 }
 
 FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& toFormat,
-                                                   FunctionOptions&& opts,
+                                                   FunctionOptions&& optsIn,
                                                    UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return {};
@@ -891,10 +855,28 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     UnicodeString timeStyleName("timeStyle");
     UnicodeString styleName("style");
 
+// Problem: now we get sharing of option values (FormattedPlaceholder*)
+    FunctionOptions opts = mergeOptions(optsIn, toFormat.opts);
+
     UnicodeString dateStyleOption = opts.getStringFunctionOption(dateStyleName);
     UnicodeString timeStyleOption = opts.getStringFunctionOption(timeStyleName);
+    UnicodeString styleOption = opts.getStringFunctionOption(styleName);
     bool hasDateStyleOption = dateStyleOption.length() > 0;
     bool hasTimeStyleOption = timeStyleOption.length() > 0;
+    bool hasStyleOption = styleOption.length() > 0;
+    if (!hasDateStyleOption && !hasStyleOption) {
+        dateStyleOption = UnicodeString("short");
+    }
+    if (!hasTimeStyleOption && !hasStyleOption) {
+        timeStyleOption = UnicodeString("short");
+    }
+    if (!hasDateStyleOption && hasStyleOption) {
+        dateStyleOption = styleOption;
+    }
+    if (!hasTimeStyleOption && hasStyleOption) {
+        timeStyleOption = styleOption;
+    }
+
     bool noOptions = opts.optionsCount() == 0;
 
     bool useStyle = (type == DateTimeFactory::DateTimeType::DateTime
@@ -915,8 +897,8 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
             // Note that the options-getting has to be repeated across the three cases,
             // since `:datetime` uses "dateStyle"/"timeStyle" and `:date` and `:time`
             // use "style"
-            dateStyle = stringToStyle(getFunctionOption(toFormat, opts, dateStyleName), errorCode);
-            timeStyle = stringToStyle(getFunctionOption(toFormat, opts, timeStyleName), errorCode);
+            dateStyle = stringToStyle(dateStyleOption, errorCode);
+            timeStyle = stringToStyle(timeStyleOption, errorCode);
 
             if (useDate && !useTime) {
                 df.adoptInstead(DateFormat::createDateInstance(dateStyle, locale));
@@ -926,11 +908,11 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 df.adoptInstead(DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
             }
         } else if (type == DateTimeFactory::DateTimeType::Date) {
-            dateStyle = stringToStyle(getFunctionOption(toFormat, opts, styleName), errorCode);
+            dateStyle = stringToStyle(dateStyleOption, errorCode);
             df.adoptInstead(DateFormat::createDateInstance(dateStyle, locale));
         } else {
             // :time
-            timeStyle = stringToStyle(getFunctionOption(toFormat, opts, styleName), errorCode);
+            timeStyle = stringToStyle(timeStyleOption, errorCode);
             df.adoptInstead(DateFormat::createTimeInstance(timeStyle, locale));
         }
     } else {
@@ -1083,8 +1065,10 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
             // Use the parsed date as the source value
             // in the returned FormattedPlaceholder; this is necessary
             // so the date can be re-formatted
-            toFormat = FormattedPlaceholder(message2::Formattable::forDate(d),
-                                            toFormat.getFallback());
+            toFormat =
+                FormattedPlaceholder::fromFormattable(message2::Formattable::forDate(d),
+                                                      toFormat.getFallback(),
+                                                      errorCode);
             df->format(d, result, 0, errorCode);
         }
         break;
@@ -1107,7 +1091,9 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     if (U_FAILURE(errorCode)) {
         return {};
     }
-    return FormattedPlaceholder(toFormat, std::move(opts), FormattedValue(std::move(result)));
+    return toFormat.withOutputAndOptions(std::move(opts),
+                                         FormattedValue(std::move(result)),
+                                         errorCode);
 }
 
 StandardFunctions::DateTimeFactory::~DateTimeFactory() {}
