@@ -48,6 +48,7 @@ jobs:
         solution: icu4c/source/allinone/allinone.sln
         platform: $(platform)
         configuration: $(config)
+        msvcVersion: '14.39.33519' #Temp Fix: clamp MSVC version to latest working one
     - task: BatchScript@1
       displayName: 'Run Tests (icucheck.bat)'
       inputs:
@@ -59,6 +60,7 @@ jobs:
         solution: icu4c/source/samples/all/all.sln
         platform: $(arch)
         configuration: $(config)
+        msvcVersion: '14.39.33519' #Temp Fix: clamp MSVC version to latest working one
     - task: BatchScript@1
       displayName: 'Test Samples (samplecheck.bat)'
       inputs:
