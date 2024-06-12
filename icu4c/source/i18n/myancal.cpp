@@ -275,7 +275,7 @@ void MyanmarCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*statu
     int32_t og_julian = julianDay;
     long myan_year = long(floor((julianDay - 0.5 - MYANMAR_EPOCH) / SOLAR_YEAR)); //Myanmar year
     /* long watat correction from 2015-2018 CE */
-    if (julianDay > 2457190 && julianDay < 2458287) {
+    if (julianDay > 2457190 && julianDay < 2458283) {
       julianDay--;
     }
     cal_my(myan_year, myan_year_type, startOfTagu, full_moon_waso_2, addedOffset); //check year
