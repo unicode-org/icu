@@ -261,7 +261,7 @@ static UnicodeString getStringOption(const FunctionOptionsMap& opt,
         return {};
     }
     UErrorCode localErrorCode = U_ZERO_ERROR;
-    UnicodeString optVal = opt.at(k)->asFormattable().getString(localErrorCode);
+    UnicodeString optVal = opt.at(k).getValue().getString(localErrorCode);
     if (U_SUCCESS(localErrorCode)) {
         return optVal;
     }
@@ -279,12 +279,12 @@ message2::FormattedPlaceholder PersonNameFormatter::format(FormattedPlaceholder&
     }
 
     message2::FormattedPlaceholder errorVal =
-        message2::FormattedPlaceholder::fallbackPlaceholder("not a person", errorCode);
+        message2::FormattedPlaceholder::fallbackPlaceholder("not a person");
 
-    if (!arg.canFormat() || arg.asFormattable().getType() != UFMT_OBJECT) {
+    if (!arg.canFormat() || arg.asFormattable().getValue().getType() != UFMT_OBJECT) {
         return errorVal;
     }
-    const Formattable& toFormat = arg.asFormattable();
+    const Formattable& toFormat = arg.asFormattable().getValue();
 
     FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
 
@@ -389,11 +389,11 @@ message2::FormattedPlaceholder GrammarCasesFormatter::format(FormattedPlaceholde
     // Argument must be present
     if (!arg.canFormat()) {
         errorCode = U_MF_FORMATTING_ERROR;
-        return message2::FormattedPlaceholder::fallbackPlaceholder("grammarBB", errorCode);
+        return message2::FormattedPlaceholder::fallbackPlaceholder("grammarBB");
     }
 
     // Assumes the argument is not-yet-formatted
-    const Formattable& toFormat = arg.asFormattable();
+    const Formattable& toFormat = arg.asFormattable().getValue();
     UnicodeString result;
 
     const FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
@@ -401,9 +401,9 @@ message2::FormattedPlaceholder GrammarCasesFormatter::format(FormattedPlaceholde
         case UFMT_STRING: {
             const UnicodeString& in = toFormat.getString(errorCode);
             bool hasCase = opt.count("case") > 0;
-            bool caseIsString = opt.at("case")->asFormattable().getType() == UFMT_STRING;
+            bool caseIsString = opt.at("case").getValue().getType() == UFMT_STRING;
             if (hasCase && caseIsString) {
-                const UnicodeString& caseOpt = opt.at("case")->asFormattable().getString(errorCode);
+                const UnicodeString& caseOpt = opt.at("case").getValue().getString(errorCode);
                 if (caseOpt == "dative" || caseOpt == "genitive") {
                     getDativeAndGenitive(in, result);
                 }
@@ -500,7 +500,7 @@ message2::FormattedPlaceholder message2::ListFormatter::format(FormattedPlacehol
     }
 
     message2::FormattedPlaceholder errorVal =
-        FormattedPlaceholder::fallbackPlaceholder("listformat", errorCode);
+        FormattedPlaceholder::fallbackPlaceholder("listformat");
 
     // Argument must be present
     if (!arg.canFormat()) {
@@ -508,7 +508,7 @@ message2::FormattedPlaceholder message2::ListFormatter::format(FormattedPlacehol
         return errorVal;
     }
     // Assumes arg is not-yet-formatted
-    const Formattable& toFormat = arg.asFormattable();
+    const Formattable& toFormat = arg.asFormattable().getValue();
 
     FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
     UListFormatterType type = UListFormatterType::ULISTFMT_TYPE_AND;
@@ -832,13 +832,13 @@ message2::FormattedPlaceholder NounFormatter::format(FormattedPlaceholder&& arg,
     }
 
     message2::FormattedPlaceholder errorVal =
-        message2::FormattedPlaceholder::fallbackPlaceholder("noun: not a string", errorCode);
+        message2::FormattedPlaceholder::fallbackPlaceholder("noun: not a string");
 
-    if (!arg.canFormat() || arg.asFormattable().getType() != UFMT_STRING) {
+    if (!arg.canFormat() || arg.asFormattable().getValue().getType() != UFMT_STRING) {
         return errorVal;
     }
 
-    const Formattable& toFormat = arg.asFormattable();
+    const Formattable& toFormat = arg.asFormattable().getValue();
     FunctionOptionsMap opt = FunctionOptions::getOptions(options);
 
     // very simplified example
@@ -871,22 +871,22 @@ message2::FormattedPlaceholder AdjectiveFormatter::format(FormattedPlaceholder&&
     }
 
     message2::FormattedPlaceholder errorVal =
-        message2::FormattedPlaceholder::fallbackPlaceholder("adjective: not a string", errorCode);
+        message2::FormattedPlaceholder::fallbackPlaceholder("adjective: not a string");
 
-    if (!arg.canFormat() || arg.asFormattable().getType() != UFMT_STRING) {
+    if (!arg.canFormat() || arg.asFormattable().getValue().getType() != UFMT_STRING) {
         return errorVal;
     }
 
-    const Formattable& toFormat = arg.asFormattable();
+    const Formattable& toFormat = arg.asFormattable().getValue();
     const FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
     // Return empty string if no accord is provided
     if (opt.count("accord") <= 0) {
         return {};
     }
 
-    const FormattedPlaceholder* accordOpt = opt.at("accord");
+    const FormattableWithOptions& accordOpt = opt.at("accord");
     // Fail if no accord is provided, as this is a simplified example
-    UnicodeString accord = accordOpt->asFormattable().getString(errorCode);
+    UnicodeString accord = accordOpt.getValue().getString(errorCode);
     const UnicodeString& adjective = toFormat.getString(errorCode);
     if (U_FAILURE(errorCode)) {
         return {};
@@ -894,11 +894,7 @@ message2::FormattedPlaceholder AdjectiveFormatter::format(FormattedPlaceholder&&
 
     UnicodeString result = adjective + " " + accord;
     // very simplified example
-    const FunctionOptions& accordOptions = accordOpt->options();
-    // TODO
-    // This is why the range of FunctionOptionsMap needs to be (const FormattedPlaceholder*)
-    // -- it wouldn't be safe to move out of `accordOptions` here, because it's part of `options`,
-    // which needs to be returned
+    const FunctionOptions& accordOptions = accordOpt.getOptions();
     const FunctionOptionsMap accordOptionsMap = FunctionOptions::getOptions(accordOptions);
     bool accordIsAccusative = hasStringOption(accordOptionsMap, "case", "accusative");
     bool accordIsSingular = hasStringOption(accordOptionsMap, "count", "1");
@@ -917,8 +913,7 @@ message2::FormattedPlaceholder AdjectiveFormatter::format(FormattedPlaceholder&&
     }
 
     return arg.withOutputAndOptions(std::move(options),
-                                    FormattedValue(std::move(result)),
-                                    errorCode);
+                                    FormattedValue(std::move(result)), errorCode);
 }
 
 

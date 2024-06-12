@@ -389,7 +389,7 @@ static FormattedPlaceholder stringAsNumber(const number::LocalizedNumberFormatte
     double numberValue;
     // Copying string to avoid GCC dangling-reference warning
     // (although the reference is safe)
-    UnicodeString inputStr = input.asFormattable().getString(errorCode);
+    UnicodeString inputStr = input.asFormattable().getValue().getString(errorCode);
     // Precondition: `input`'s source Formattable has type string
     if (U_FAILURE(errorCode)) {
         return {};
@@ -427,17 +427,7 @@ int32_t StandardFunctions::Number::maximumFractionDigits(const FunctionOptions& 
     if (isInteger) {
         return 0;
     }
-
-/*
-    if (opts.getFunctionOption(UnicodeString("maximumFractionDigits"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        int64_t val = getInt64Value(locale, opt, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return static_cast<int32_t>(val);
-        }
-    }
-*/
-    return opts.numberOption(UnicodeString("maximumFraction Digits"));
+    return opts.numberOption(UnicodeString("maximumFractionDigits"));
 }
 
 int32_t StandardFunctions::Number::minimumFractionDigits(const FunctionOptions& opts) const {
@@ -487,11 +477,14 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
         return notANumber(arg, errorCode);
     }
 
+// TODO: merge options
+
     number::LocalizedNumberFormatter realFormatter;
     realFormatter = formatterForOptions(*this, opts, errorCode);
 
     // Already checked that contents can be formatted
-    const Formattable& toFormat = arg.asFormattable();
+    const FormattableWithOptions& toFormatWithOptions = arg.asFormattable();
+    const Formattable& toFormat = toFormatWithOptions.getValue();
 
     number::FormattedNumber numberResult;
     if (U_SUCCESS(errorCode)) {
@@ -694,12 +687,12 @@ StandardFunctions::PluralFactory::~PluralFactory() {}
                                                               const UnicodeString& optionName,
                                                               UErrorCode& errorCode) {
     if (U_SUCCESS(errorCode)) {
-        const FormattedPlaceholder* opt = opts.getFunctionOption(optionName, errorCode);
+        const FormattableWithOptions* opt = opts.getFunctionOption(optionName, errorCode);
         if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
             errorCode = U_ZERO_ERROR;
         } else if (U_SUCCESS(errorCode)) {
             // In case it's not a string, error code will be set
-            return opt->asFormattable().getString(errorCode);
+            return opt->getValue().getString(errorCode);
         }
     }
     // Default is empty string
@@ -856,7 +849,18 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     UnicodeString styleName("style");
 
 // Problem: now we get sharing of option values (FormattedPlaceholder*)
-    FunctionOptions opts = mergeOptions(optsIn, toFormat.opts);
+// Solution: make a resolved option a (Formattable + Options)?
+// Then, options can be copyable
+// The right-hand side of an option *must* be a copyable type,
+// or else it's just too hard to merge different option maps together
+
+// Wait, what am I talking about? We own toFormat, and thus its
+// options map; we also own optsIn, so why can't we define mergeOptions
+// so both maps are passed by move?
+    FunctionOptions opts = optsIn.mergeOptions(toFormat.options(), errorCode);
+    if (U_FAILURE(errorCode)) {
+        return {};
+    }
 
     UnicodeString dateStyleOption = opts.getStringFunctionOption(dateStyleName);
     UnicodeString timeStyleOption = opts.getStringFunctionOption(timeStyleName);
@@ -865,10 +869,10 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     bool hasTimeStyleOption = timeStyleOption.length() > 0;
     bool hasStyleOption = styleOption.length() > 0;
     if (!hasDateStyleOption && !hasStyleOption) {
-        dateStyleOption = UnicodeString("short");
+        dateStyleOption = styleOption = UnicodeString("short");
     }
     if (!hasTimeStyleOption && !hasStyleOption) {
-        timeStyleOption = UnicodeString("short");
+        timeStyleOption = styleOption = UnicodeString("short");
     }
     if (!hasDateStyleOption && hasStyleOption) {
         dateStyleOption = styleOption;
@@ -908,11 +912,11 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 df.adoptInstead(DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
             }
         } else if (type == DateTimeFactory::DateTimeType::Date) {
-            dateStyle = stringToStyle(dateStyleOption, errorCode);
+            dateStyle = stringToStyle(styleOption, errorCode);
             df.adoptInstead(DateFormat::createDateInstance(dateStyle, locale));
         } else {
             // :time
-            timeStyle = stringToStyle(timeStyleOption, errorCode);
+            timeStyle = stringToStyle(styleOption, errorCode);
             df.adoptInstead(DateFormat::createTimeInstance(timeStyle, locale));
         }
     } else {
@@ -1035,7 +1039,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     }
 
     UnicodeString result;
-    const Formattable& source = toFormat.asFormattable();
+    const Formattable& source = toFormat.asFormattable().getValue();
     switch (source.getType()) {
     case UFMT_STRING: {
         const UnicodeString& sourceStr = source.getString(errorCode);
@@ -1091,6 +1095,8 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     if (U_FAILURE(errorCode)) {
         return {};
     }
+
+    // The result's options are the merged options
     return toFormat.withOutputAndOptions(std::move(opts),
                                          FormattedValue(std::move(result)),
                                          errorCode);

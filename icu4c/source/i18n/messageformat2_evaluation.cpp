@@ -23,23 +23,20 @@ using namespace data_model;
 // Functions
 // -------------
 
-ResolvedFunctionOption::ResolvedFunctionOption(ResolvedFunctionOption&& other) {
-    name = std::move(other.name);
-    value = std::move(other.value);
-}
-
 ResolvedFunctionOption::ResolvedFunctionOption(const UnicodeString& n,
-                                               FormattedPlaceholder&& v,
-                                               UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-    name = n;
-    value.adoptInstead(create<FormattedPlaceholder>(std::move(v), errorCode));
+                                               const FormattableWithOptions& v) : name(n), value(v) {}
+
+ResolvedFunctionOption::ResolvedFunctionOption(const ResolvedFunctionOption& other) {
+    name = other.name;
+    value = other.value;
 }
 
 ResolvedFunctionOption::~ResolvedFunctionOption() {}
 
 /* static */ const ResolvedFunctionOption* FunctionOptions::getResolvedFunctionOptions(
     const FunctionOptions& opts, int32_t& len) {
+    U_ASSERT(!opts.bogus);
+
     len = opts.functionOptionsLen;
     U_ASSERT(len == 0 || opts.options != nullptr);
     return opts.options;
@@ -52,14 +49,49 @@ FunctionOptions::FunctionOptions(UVector&& optionsVector, UErrorCode& status) {
     options = moveVectorToArray<ResolvedFunctionOption>(optionsVector, status);
 }
 
-const FormattedPlaceholder* FunctionOptions::getFunctionOption(const UnicodeString& key,
-                                                               UErrorCode& status) const {
+FunctionOptions::FunctionOptions(ResolvedFunctionOption* opts, int32_t len) {
+    options = opts;
+    functionOptionsLen = len;
+}
+
+FunctionOptions::FunctionOptions(const FunctionOptions& other) {
+    U_ASSERT(!other.bogus);
+
+    functionOptionsLen = other.functionOptionsLen;
+    options = nullptr;
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    if (functionOptionsLen > 0) {
+        options = copyArray<ResolvedFunctionOption>(other.options, functionOptionsLen, localErrorCode);
+    }
+    if (U_FAILURE(localErrorCode)) {
+        bogus = true;
+    }
+}
+
+bool FunctionOptions::has(const UnicodeString& name) const {
+    U_ASSERT(!bogus);
+    if (options != nullptr) {
+        for (int32_t i = 0; i < functionOptionsLen; i++) {
+            if (options[i].getName() == name) {
+                return true;
+            }
+        }
+    } else {
+        U_ASSERT(functionOptionsLen == 0);
+    }
+    return false;
+
+}
+
+const FormattableWithOptions* FunctionOptions::getFunctionOption(const UnicodeString& key,
+                                                                 UErrorCode& status) const {
     NULL_ON_ERROR(status);
+    U_ASSERT(!bogus);
     if (options != nullptr) {
         for (int32_t i = 0; i < functionOptionsLen; i++) {
             const ResolvedFunctionOption& opt = options[i];
             if (opt.getName() == key) {
-                return opt.getValue();
+                return &(opt.value);
             }
         }
     }
@@ -72,9 +104,11 @@ const FormattedPlaceholder* FunctionOptions::getFunctionOption(const UnicodeStri
 
 UnicodeString FunctionOptions::getStringFunctionOption(const UnicodeString& key) const {
     UErrorCode localErrorCode = U_ZERO_ERROR;
-    const FormattedPlaceholder* option = getFunctionOption(key, localErrorCode);
+    U_ASSERT(!bogus);
+
+    const FormattableWithOptions* option = getFunctionOption(key, localErrorCode);
     if (U_SUCCESS(localErrorCode)) {
-        Formattable opt = option->asFormattable();
+        Formattable opt = option->getValue();
         if (opt.getType() == UFMT_STRING) {
             UnicodeString val = opt.getString(localErrorCode);
             U_ASSERT(U_SUCCESS(localErrorCode));
@@ -124,9 +158,11 @@ static int64_t getInt64Value(const Locale& locale, const Formattable& value, UEr
 
 int32_t FunctionOptions::getIntFunctionOption(const UnicodeString& key, UErrorCode& errorCode) const {
     UErrorCode localErrorCode = U_ZERO_ERROR;
-    const FormattedPlaceholder* option = getFunctionOption(key, localErrorCode);
+    U_ASSERT(!bogus);
+
+    const FormattableWithOptions* option = getFunctionOption(key, localErrorCode);
     if (U_SUCCESS(localErrorCode)) {
-        Formattable opt = option->asFormattable();
+        Formattable opt = option->getValue();
         switch (opt.getType()) {
             case UFMT_STRING: {
                 int64_t result = tryStringAsNumber(Locale("en"), opt, localErrorCode);
@@ -155,16 +191,57 @@ int32_t FunctionOptions::getIntFunctionOption(const UnicodeString& key, UErrorCo
     return -1; // Caller must check for this case
 }
 
-FunctionOptions& FunctionOptions::operator=(FunctionOptions&& other) noexcept {
-    functionOptionsLen = other.functionOptionsLen;
-    options = other.options;
-    other.functionOptionsLen = 0;
-    other.options = nullptr;
-    return *this;
+/* static */ int32_t FunctionOptions::countUniqueOptions(const FunctionOptions& one,
+                                                         const FunctionOptions& other) {
+    U_ASSERT(!one.bogus);
+    U_ASSERT(!other.bogus);
+
+    int32_t optionsCount = one.optionsCount();
+    for (int32_t i = 0; i < other.optionsCount(); i++) {
+        if (!one.has(other.options[i].name)) {
+            optionsCount++;
+        }
+    }
+    return optionsCount;
 }
 
-FunctionOptions::FunctionOptions(FunctionOptions&& other) {
-    *this = std::move(other);
+FunctionOptions FunctionOptions::mergeOptions(const FunctionOptions& other, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return {};
+    }
+    U_ASSERT(!bogus);
+    U_ASSERT(!other.bogus);
+    int32_t totalLen = optionsCount() + other.optionsCount();
+    int32_t newLen = countUniqueOptions(*this, other);
+    LocalArray<ResolvedFunctionOption> newOptions(new ResolvedFunctionOption[newLen]);
+    if (!newOptions.isValid()) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return {};
+    }
+    for (int32_t i = 0; i < functionOptionsLen; i++) {
+        newOptions[i] = options[i];
+    }
+    int oldIndex = 0;
+    int newIndex = functionOptionsLen;
+    for (int32_t i = functionOptionsLen; i < totalLen; i++) {
+        const ResolvedFunctionOption& oldOption = other.options[oldIndex];
+        if (!has(oldOption.name)) {
+            newOptions[newIndex++] = oldOption;
+        }
+        oldIndex++;
+    }
+    U_ASSERT(newLen >= other.optionsCount());
+    for (int32_t i = 0; i < newLen; i++) {
+        U_ASSERT(newOptions[i].name.length() > 0);
+    }
+    return FunctionOptions(newOptions.orphan(), newLen);
+}
+
+FunctionOptions& FunctionOptions::operator=(FunctionOptions other) noexcept {
+    U_ASSERT(!bogus);
+    U_ASSERT(!other.bogus);
+    swap(*this, other);
+    return *this;
 }
 
 FunctionOptions::~FunctionOptions() {

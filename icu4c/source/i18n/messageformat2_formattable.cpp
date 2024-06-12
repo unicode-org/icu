@@ -152,6 +152,34 @@ namespace message2 {
         }
     }
 
+    const FunctionOptions& FormattableWithOptions::getOptions() const {
+        U_ASSERT(!bogus);
+        U_ASSERT(options.isValid());
+        return *options;
+    }
+
+    FormattableWithOptions FormattableWithOptions::withOptions(FunctionOptions&& opts, UErrorCode& status) const {
+        return FormattableWithOptions(value, std::move(opts), status);
+    }
+
+    FormattableWithOptions::FormattableWithOptions(const Formattable& f, FunctionOptions&& o, UErrorCode& status) {
+        value = f;
+        options.adoptInstead(create<FunctionOptions>(std::move(o), status));
+        if (U_FAILURE(status)) {
+            bogus = true;
+        }
+    }
+
+    FormattableWithOptions& FormattableWithOptions::operator=(FormattableWithOptions other) noexcept {
+        swap(*this, other);
+        return *this;
+    }
+
+    ResolvedFunctionOption& ResolvedFunctionOption::operator=(ResolvedFunctionOption other) noexcept {
+        swap(*this, other);
+        return *this;
+    }
+
     Formattable::~Formattable() {}
 
     FormattableObject::~FormattableObject() {}
@@ -182,18 +210,36 @@ namespace message2 {
 
     FormattedPlaceholder& FormattedPlaceholder::operator=(FormattedPlaceholder&& other) noexcept {
         type = other.type;
-        source = other.source;
+        if (type != kNull && type != kFallback) {
+            source = other.source;
+        }
         if (type == kEvaluated) {
             formatted = std::move(other.formatted);
         }
-        previousOptions = other.previousOptions;
-        other.previousOptions = nullptr;
         fallback = other.fallback;
         return *this;
     }
 
-    const Formattable& FormattedPlaceholder::asFormattable() const {
+    const FormattableWithOptions& FormattedPlaceholder::asFormattable() const {
         return source;
+    }
+
+    FormattableWithOptions::FormattableWithOptions(const FormattableWithOptions& other) {
+        U_ASSERT(!other.bogus);
+        U_ASSERT(other.options.isValid());
+        value = other.value;
+        options.adoptInstead(new FunctionOptions(*other.options));
+        if (!options.isValid()) {
+            bogus = true;
+        }
+    }
+
+    FormattableWithOptions::FormattableWithOptions(const Formattable& f, UErrorCode& status) {
+        value = f;
+        options.adoptInstead(create<FunctionOptions>(FunctionOptions(), status));
+        if (!options.isValid()) {
+            bogus = true;
+        }
     }
 
     FormattedPlaceholder FormattedPlaceholder::withOutput(FormattedValue&& output,
@@ -204,21 +250,23 @@ namespace message2 {
 
         return FormattedPlaceholder(source,
                                     fallback,
-                                    create<FunctionOptions>(FunctionOptions(), status),
                                     std::move(output));
     }
 
-    FormattedPlaceholder FormattedPlaceholder::withOutputAndOptions(FunctionOptions&& options,
+    FormattedPlaceholder FormattedPlaceholder::withOutputAndOptions(FunctionOptions&& opts,
                                                                     FormattedValue&& output,
                                                                     UErrorCode& status) const {
-        if (U_FAILURE(status)) {
-            return {};
-        }
-
-        return FormattedPlaceholder(source,
+        return FormattedPlaceholder(source.withOptions(std::move(opts), status),
                                     fallback,
-                                    create<FunctionOptions>(std::move(options), status),
                                     std::move(output));
+
+    }
+
+    FormattedPlaceholder FormattedPlaceholder::fromFormattableWithOptions(const FormattableWithOptions& input,
+                                                                          const UnicodeString& fb) {
+        return FormattedPlaceholder(input,
+                                    fb,
+                                    kUnevaluated);
     }
 
     FormattedPlaceholder FormattedPlaceholder::fromFormattable(const Formattable& input,
@@ -228,55 +276,42 @@ namespace message2 {
             return {};
         }
 
-        return FormattedPlaceholder(input,
+        return FormattedPlaceholder(FormattableWithOptions(input, status),
                                     fb,
-                                    create<FunctionOptions>(FunctionOptions(), status),
                                     kUnevaluated);
     }
 
-    /* static */ FormattedPlaceholder FormattedPlaceholder::fallbackPlaceholder(
-        const UnicodeString& fb, UErrorCode& status) {
-        if (U_FAILURE(status)) {
-            return {};
-        }
-
-        return FormattedPlaceholder(Formattable(),
+    /* static */ FormattedPlaceholder FormattedPlaceholder::fallbackPlaceholder(const UnicodeString& fb) {
+        return FormattedPlaceholder(FormattableWithOptions(),
                                     fb,
-                                    create<FunctionOptions>(FunctionOptions(), status),
                                     kFallback);
     }
 
-    FormattedPlaceholder::FormattedPlaceholder(const Formattable& input,
+    FormattedPlaceholder::FormattedPlaceholder(const FormattableWithOptions& input,
                                                const UnicodeString& fb,
-                                               FunctionOptions* opts,
                                                FormattedValue&& output) {
         fallback = fb;
         source = input;
         formatted = std::move(output);
-        previousOptions = opts;
         type = kEvaluated;
     }
 
-    FormattedPlaceholder::FormattedPlaceholder(const Formattable& input,
+    FormattedPlaceholder::FormattedPlaceholder(const FormattableWithOptions& input,
                                                const UnicodeString& fb,
-                                               FunctionOptions* opts,
                                                Type t) {
         fallback = fb;
-        source = input;
-        previousOptions = opts;
+        if (t != kNull && t != kFallback) {
+            source = input;
+        }
         type = t;
     }
 
 
     const FunctionOptions& FormattedPlaceholder::options() const {
-        U_ASSERT(previousOptions != nullptr);
-        return *previousOptions;
+        return source.getOptions();
     }
 
-    FormattedPlaceholder::~FormattedPlaceholder() {
-        delete previousOptions;
-        previousOptions = nullptr;
-    }
+    FormattedPlaceholder::~FormattedPlaceholder() {}
 
     // Default formatters
     // ------------------
@@ -323,7 +358,7 @@ namespace message2 {
             return {};
         }
 
-        const Formattable& toFormat = input.asFormattable();
+        const Formattable& toFormat = input.asFormattable().getValue();
         // Try as decimal number first
         if (toFormat.isNumeric()) {
             // Note: the ICU Formattable has to be created here since the StringPiece
@@ -381,7 +416,7 @@ namespace message2 {
             // Note: it would be better to set an internal formatting error so that a string
             // (e.g. the type tag) can be provided. However, this  method is called by the
             // public method formatToString() and thus can't take a MessageContext
-            return FormattedPlaceholder::fallbackPlaceholder(input.getFallback(), status);
+            return FormattedPlaceholder::fallbackPlaceholder(input.getFallback());
         }
         }
     }
