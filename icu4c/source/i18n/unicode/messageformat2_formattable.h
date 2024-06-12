@@ -435,7 +435,6 @@ namespace message2 {
         }
     }; // class Formattable
 
-    class FormattedPlaceholder;
     class FunctionOptions;
 
 /**
@@ -920,7 +919,6 @@ class U_I18N_API FunctionOptions : public UObject {
      * @internal ICU 76 technology preview
      * @deprecated This API is for technology preview only.
      */
-
     FunctionOptions mergeOptions(const FunctionOptions& other, UErrorCode& status) const;
     /**
      * Default constructor.
