@@ -437,7 +437,7 @@ MessagePattern::parseMessage(int32_t index, int32_t msgStartLength,
     if(U_FAILURE(errorCode)) {
         return 0;
     }
-    if(nestingLevel>Part::MAX_VALUE) {
+    if(nestingLevel>Part::MAX_NESTED_LEVELS) {
         errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
