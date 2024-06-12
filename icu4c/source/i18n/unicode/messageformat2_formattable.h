@@ -872,6 +872,8 @@ using FunctionOptionsMap = std::map<UnicodeString, message2::FormattableWithOpti
 /**
  * Structure encapsulating named options passed to a custom selector or formatter.
  *
+ * Immutable, movable and copyable.
+ *
  * @internal ICU 75 technology preview
  * @deprecated This API is for technology preview only.
  */
@@ -883,8 +885,6 @@ class U_I18N_API FunctionOptions : public UObject {
      * be preserved.
      * The values are shallowly copied, so it's only safe to use the resulting map
      * within the scope of `opts`.
-     *
-     * This class is immutable and movable but not copyable.
      *
      * @param  opts      A FunctionOptions object.
      * @return           A map from strings to `message2::Formattable` pointers representing
@@ -908,7 +908,20 @@ class U_I18N_API FunctionOptions : public UObject {
         }
         return result;
     }
-// TODO - `this`'s options take precedence if the same option is defined in both
+    /**
+     * Returns the result of combining two FunctionOptions maps,
+     * this and `other`. If any option names appear in both maps, the value
+     * from this takes precedence.
+     *
+     *
+     * @param  other  A FunctionOptions object.
+     * @param  status Input/output error code.
+     * @return        A map with all the options that are in either `this` or `other`,
+     *
+     * @internal ICU 76 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+
     FunctionOptions mergeOptions(const FunctionOptions& other, UErrorCode& status) const;
     /**
      * Default constructor.
