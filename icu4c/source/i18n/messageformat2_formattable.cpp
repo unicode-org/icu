@@ -306,11 +306,6 @@ namespace message2 {
         type = t;
     }
 
-
-    const FunctionOptions& FormattedPlaceholder::options() const {
-        return source.getOptions();
-    }
-
     FormattedPlaceholder::~FormattedPlaceholder() {}
 
     // Default formatters

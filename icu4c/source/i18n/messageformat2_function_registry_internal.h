@@ -70,23 +70,6 @@ namespace message2 {
             friend class DateTimeFactory;
             DateTime(const Locale& l, DateTimeFactory::DateTimeType t) : locale(l), type(t) {}
             const LocalPointer<icu::DateFormat> icuFormatter;
-
-            /*
-              Looks up an option by name, first checking `opts`, then the cached options
-              in `toFormat` if applicable, and finally using a default
-
-              Ignores any options with non-string values
-             */
-            UnicodeString getFunctionOption(const FormattedPlaceholder& toFormat,
-                                            const FunctionOptions& opts,
-                                            const UnicodeString& optionName) const;
-            // Version for options that don't have defaults; sets the error
-            // code instead of returning a default value
-            UnicodeString getFunctionOption(const FormattedPlaceholder& toFormat,
-                                            const FunctionOptions& opts,
-                                            const UnicodeString& optionName,
-                                            UErrorCode& errorCode) const;
-
         };
 
         // Note: IntegerFactory doesn't implement SelectorFactory;

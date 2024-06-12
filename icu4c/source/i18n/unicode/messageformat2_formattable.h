@@ -656,12 +656,12 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
     class FunctionOptions;
 
     /**
-     * A `FormattablePlaceholder` encapsulates an input value (a `message2::Formattable`)
+     * A `FormattablePlaceholder` encapsulates an input value (a `message2::FormattableWithOptions`)
      * together with an optional output value (a `message2::FormattedValue`).
      *  More information, such as source line/column numbers, could be added to the class
      * in the future.
      *
-     * `FormattablePlaceholder` is immutable (not deeply immutable) and movable.
+     * `FormattablePlaceholder` is immutable and movable.
      * It is not copyable.
      *
      * @internal ICU 75 technology preview
@@ -683,7 +683,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * Creates a new FormattedPlaceholder with this placeholder's
          * source and fallback string; the given output; and no options.
          *
-         * @param output A `FormattedValue` representing the formatted output of `input`.
+         * @param output A `FormattedValue` representing formatted output.
          *        Passed by move.
          * @param status Input/output error code
          *
@@ -718,7 +718,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
         static FormattedPlaceholder fromFormattableWithOptions(const FormattableWithOptions& input,
                                                                const UnicodeString& fb);
         /**
-         * Factory method for unformatted placeholders.
+         * Factory method for unformatted placeholders with no options.
          *
          * @param input A `Formattable` object.
          * @param fb Fallback string to use if an error occurs while formatting the input.
@@ -738,12 +738,11 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @deprecated This API is for technology preview only.
          */
         FormattedPlaceholder() : type(kNull) {}
-// TODO: Rename to getSource() or getValue()?
         /**
-         * Returns the source `Formattable` value for this placeholder.
+         * Returns the source `FormattableWithOptions` value for this placeholder.
          * The result is undefined if this is a null operand.
          *
-         * @return A message2::Formattable value.
+         * @return A message2::FormattableWithOptions value.
          *
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
@@ -796,15 +795,6 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @deprecated This API is for technology preview only.
          */
         const UnicodeString& getFallback() const { return fallback; }
-        /**
-         * Returns the options of this placeholder. The result is the empty map if !isEvaluated().
-         * @return A reference to an option map, capturing the options that were used
-         *         in producing the output of this `FormattedPlaceholder`
-         *         (or empty if there is no output)
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        const FunctionOptions& options() const; // { return *previousOptions; }
         /**
          * Returns the formatted output of this placeholder. The result is undefined if !isEvaluated().
          * @return          A fully formatted `FormattedPlaceholder`.

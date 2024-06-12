@@ -709,69 +709,6 @@ StandardFunctions::PluralFactory::~PluralFactory() {}
     return {};
 }
 
-// Date/time options only
-static UnicodeString defaultForOption(const UnicodeString& optionName) {
-    if (optionName == UnicodeString("dateStyle")
-        || optionName == UnicodeString("timeStyle")
-        || optionName == UnicodeString("style")) {
-        return UnicodeString("short");
-    }
-    return {}; // Empty string is default
-}
-
-// TODO
-// Only DateTime currently uses the function options stored in the placeholder.
-// It also doesn't use them very consistently (it looks at the previous set of options,
-// and others aren't preserved). This needs to be generalized,
-// but that depends on https://github.com/unicode-org/message-format-wg/issues/515
-// Finally, the option value is assumed to be a string,
-// which works for datetime options but not necessarily in general.
-UnicodeString StandardFunctions::DateTime::getFunctionOption(const FormattedPlaceholder& toFormat,
-                                                             const FunctionOptions& opts,
-                                                             const UnicodeString& optionName) const {
-    // Options passed to the current function invocation take priority
-    Formattable opt;
-    UnicodeString s;
-    UErrorCode localErrorCode = U_ZERO_ERROR;
-    s = getStringOption(opts, optionName, localErrorCode);
-    if (U_SUCCESS(localErrorCode)) {
-        return s;
-    }
-    // Next try the set of options used to construct `toFormat`
-    localErrorCode = U_ZERO_ERROR;
-    s = getStringOption(toFormat.options(), optionName, localErrorCode);
-    if (U_SUCCESS(localErrorCode)) {
-        return s;
-    }
-    // Finally, use default
-    return defaultForOption(optionName);
-}
-
-// Used for options that don't have defaults
-UnicodeString StandardFunctions::DateTime::getFunctionOption(const FormattedPlaceholder& toFormat,
-                                                             const FunctionOptions& opts,
-                                                             const UnicodeString& optionName,
-                                                             UErrorCode& errorCode) const {
-    if (U_SUCCESS(errorCode)) {
-        // Options passed to the current function invocation take priority
-        Formattable opt;
-        UnicodeString s;
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        s = getStringOption(opts, optionName, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return s;
-        }
-        // Next try the set of options used to construct `toFormat`
-        localErrorCode = U_ZERO_ERROR;
-        s = getStringOption(toFormat.options(), optionName, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return s;
-        }
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-    }
-    return {};
-}
-
 static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorCode) {
     if (U_SUCCESS(errorCode)) {
         UnicodeString upper = option.toUpper();
@@ -858,7 +795,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     UnicodeString timeStyleName("timeStyle");
     UnicodeString styleName("style");
 
-    FunctionOptions opts = optsIn.mergeOptions(toFormat.options(), errorCode);
+    FunctionOptions opts = optsIn.mergeOptions(toFormat.asFormattable().getOptions(), errorCode);
     if (U_FAILURE(errorCode)) {
         return {};
     }
@@ -928,10 +865,8 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
         #define ADD_PATTERN(s) skeleton += UnicodeString(s)
         if (U_SUCCESS(errorCode)) {
             // Year
-            UnicodeString year = getFunctionOption(toFormat, opts, UnicodeString("year"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
+            UnicodeString year = opts.getStringFunctionOption(UnicodeString("year"));
+            if (year.length() > 0) {
                 useDate = true;
                 if (year == UnicodeString("2-digit")) {
                     ADD_PATTERN("YY");
@@ -940,10 +875,8 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 }
             }
             // Month
-            UnicodeString month = getFunctionOption(toFormat, opts, UnicodeString("month"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
+            UnicodeString month = opts.getStringFunctionOption(UnicodeString("month"));
+            if (month.length() > 0) {
                 useDate = true;
                 /* numeric, 2-digit, long, short, narrow */
                 if (month == UnicodeString("long")) {
@@ -959,10 +892,8 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 }
             }
             // Weekday
-            UnicodeString weekday = getFunctionOption(toFormat, opts, UnicodeString("weekday"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
+            UnicodeString weekday = opts.getStringFunctionOption(UnicodeString("weekday"));
+            if (weekday.length() > 0) {
                 useDate = true;
                 if (weekday == UnicodeString("long")) {
                     ADD_PATTERN("EEEE");
@@ -973,10 +904,8 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 }
             }
             // Day
-            UnicodeString day = getFunctionOption(toFormat, opts, UnicodeString("day"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
+            UnicodeString day = opts.getStringFunctionOption(UnicodeString("day"));
+            if (day.length() > 0) {
                 useDate = true;
                 if (day == UnicodeString("numeric")) {
                     ADD_PATTERN("d");
@@ -985,10 +914,8 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 }
             }
             // Hour
-            UnicodeString hour = getFunctionOption(toFormat, opts, UnicodeString("hour"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
+            UnicodeString hour = opts.getStringFunctionOption(UnicodeString("hour"));
+            if (hour.length() > 0) {
                 useTime = true;
                 if (hour == UnicodeString("numeric")) {
                     ADD_PATTERN("h");
@@ -997,10 +924,8 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 }
             }
             // Minute
-            UnicodeString minute = getFunctionOption(toFormat, opts, UnicodeString("minute"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
+            UnicodeString minute = opts.getStringFunctionOption(UnicodeString("minute"));
+            if (minute.length() > 0) {
                 useTime = true;
                 if (minute == UnicodeString("numeric")) {
                     ADD_PATTERN("m");
@@ -1009,10 +934,8 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 }
             }
             // Second
-            UnicodeString second = getFunctionOption(toFormat, opts, UnicodeString("second"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
+            UnicodeString second = opts.getStringFunctionOption(UnicodeString("second"));
+            if (second.length() > 0) {
                 useTime = true;
                 if (second == UnicodeString("numeric")) {
                     ADD_PATTERN("s");
