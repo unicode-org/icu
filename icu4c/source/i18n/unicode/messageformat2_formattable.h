@@ -449,8 +449,7 @@ class U_I18N_API FormattableWithOptions : public UObject {
     Formattable value;
     // Has to be a pointer in order to break the loop between FormattableWithOptions
     // and FunctionOptions
-        // Options from previous evaluation. Non-null (map is empty if
-        // type != kEvaluated)
+    // Options from previous evaluation. bogus || options.isValid()
     LocalPointer<FunctionOptions> options;
 
     public:
@@ -468,6 +467,7 @@ class U_I18N_API FormattableWithOptions : public UObject {
     friend inline void swap(FormattableWithOptions& f1, FormattableWithOptions& f2) noexcept {
         using std::swap;
 
+        swap(f1.bogus, f2.bogus);
         swap(f1.value, f2.value);
         swap(f1.options, f2.options);
     }
@@ -485,7 +485,7 @@ class U_I18N_API FormattableWithOptions : public UObject {
      * @deprecated This API is for technology preview only.
      */
     FormattableWithOptions& operator=(FormattableWithOptions) noexcept;
-    FormattableWithOptions() {}
+    FormattableWithOptions();
     FormattableWithOptions(const Formattable&, UErrorCode&);
     FormattableWithOptions(const Formattable& f, FunctionOptions&& o, UErrorCode& status);
     FormattableWithOptions withOptions(FunctionOptions&&, UErrorCode& status) const;
@@ -685,12 +685,11 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          *
          * @param output A `FormattedValue` representing formatted output.
          *        Passed by move.
-         * @param status Input/output error code
          *
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        FormattedPlaceholder withOutput(FormattedValue&& output, UErrorCode& status) const;
+        FormattedPlaceholder withOutput(FormattedValue&& output) const;
         /**
          * Constructor for fully formatted placeholders with options. Uses the source
          * and fallback string from `this`.

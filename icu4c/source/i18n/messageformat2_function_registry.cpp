@@ -377,8 +377,8 @@ Formatter* StandardFunctions::IntegerFactory::createFormatter(const Locale& loca
 
 StandardFunctions::IntegerFactory::~IntegerFactory() {}
 
-static FormattedPlaceholder notANumber(const FormattedPlaceholder& input, UErrorCode& status) {
-    return input.withOutput(FormattedValue(UnicodeString("NaN")), status);
+static FormattedPlaceholder notANumber(const FormattedPlaceholder& input) {
+    return input.withOutput(FormattedValue(UnicodeString("NaN")));
 }
 
 static number::FormattedNumber stringAsNumber(const number::LocalizedNumberFormatter& nf,
@@ -476,7 +476,7 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
     // No argument => return "NaN"
     if (!arg.canFormat()) {
         errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-        return notANumber(arg, errorCode);
+        return notANumber(arg);
     }
 
     // Already checked that contents can be formatted
@@ -488,6 +488,8 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
     realFormatter = formatterForOptions(*this, opts, errorCode);
 
     number::FormattedNumber numberResult;
+    bool badOperand = false;
+
     if (U_SUCCESS(errorCode)) {
         switch (toFormat.getType()) {
         case UFMT_DOUBLE: {
@@ -511,18 +513,20 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
         case UFMT_STRING: {
             // Try to parse the string as a number
             numberResult = stringAsNumber(realFormatter, arg, errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-                return notANumber(arg, errorCode);
-            }
+            badOperand = U_FAILURE(errorCode);
             break;
         }
         default: {
             // Other types can't be parsed as a number
-            errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-            return notANumber(arg, errorCode);
+            badOperand = true;
+            break;
         }
         }
+    }
+
+    if (badOperand) {
+        errorCode = U_MF_OPERAND_MISMATCH_ERROR;
+        return notANumber(arg);
     }
 
     // The result's options are the merged options

@@ -163,6 +163,9 @@ namespace message2 {
     }
 
     FormattableWithOptions::FormattableWithOptions(const Formattable& f, FunctionOptions&& o, UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return;
+        }
         value = f;
         options.adoptInstead(create<FunctionOptions>(std::move(o), status));
         if (U_FAILURE(status)) {
@@ -224,6 +227,13 @@ namespace message2 {
         return source;
     }
 
+    FormattableWithOptions::FormattableWithOptions() {
+        options.adoptInstead(new FunctionOptions());
+        if (!options.isValid()) {
+            bogus = true;
+        }
+    }
+
     FormattableWithOptions::FormattableWithOptions(const FormattableWithOptions& other) {
         U_ASSERT(!other.bogus);
         U_ASSERT(other.options.isValid());
@@ -242,12 +252,7 @@ namespace message2 {
         }
     }
 
-    FormattedPlaceholder FormattedPlaceholder::withOutput(FormattedValue&& output,
-                                                          UErrorCode& status) const {
-        if (U_FAILURE(status)) {
-            return {};
-        }
-
+    FormattedPlaceholder FormattedPlaceholder::withOutput(FormattedValue&& output) const {
         return FormattedPlaceholder(source,
                                     fallback,
                                     std::move(output));
@@ -300,9 +305,7 @@ namespace message2 {
                                                const UnicodeString& fb,
                                                Type t) {
         fallback = fb;
-        if (t != kNull && t != kFallback) {
-            source = input;
-        }
+        source = input;
         type = t;
     }
 
@@ -367,8 +370,7 @@ namespace message2 {
             if (asDecimal != nullptr) {
                 return input.withOutput(FormattedValue(formatNumberWithDefaults(locale,
                                                                                 asDecimal,
-                                                                                status)),
-                                        status);
+                                                                                status)));
             }
         }
 
@@ -379,31 +381,27 @@ namespace message2 {
             UDate d = toFormat.getDate(status);
             U_ASSERT(U_SUCCESS(status));
             formatDateWithDefaults(locale, d, result, status);
-            return input.withOutput(FormattedValue(std::move(result)), status);
+            return input.withOutput(FormattedValue(std::move(result)));
         }
         case UFMT_DOUBLE: {
             double d = toFormat.getDouble(status);
             U_ASSERT(U_SUCCESS(status));
-            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, d, status)),
-                                    status);
+            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, d, status)));
         }
         case UFMT_LONG: {
             int32_t l = toFormat.getLong(status);
             U_ASSERT(U_SUCCESS(status));
-            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, l, status)),
-                                    status);
+            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, l, status)));
         }
         case UFMT_INT64: {
             int64_t i = toFormat.getInt64Value(status);
             U_ASSERT(U_SUCCESS(status));
-            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, i, status)),
-                                    status);
+            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, i, status)));
         }
         case UFMT_STRING: {
             const UnicodeString& s = toFormat.getString(status);
             U_ASSERT(U_SUCCESS(status));
-            return input.withOutput(FormattedValue(UnicodeString(s)),
-                                    status);
+            return input.withOutput(FormattedValue(UnicodeString(s)));
         }
         default: {
             // No default formatters for other types; use fallback
