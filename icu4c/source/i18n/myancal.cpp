@@ -8,8 +8,7 @@
  * Modification History:
  *
  *   Date        Name        Description
- *   12/28/2017  mapmeld     copied from persncal.cpp
- *   4/9/2019    mapmeld     continuing project
+ *   4/9/2019    mapmeld     adapted from mmcal project
  *****************************************************************************
  */
 
@@ -131,7 +130,7 @@ int32_t MyanmarCalendar::monthStart(int32_t year, int32_t month, UErrorCode& sta
 /**
  * Return the length (in days) of the given month.
  *
- * @param year  The Myanmar year
+ * @param extendedYear  The Myanmar year
  * @param month The Myanmar month, 0-based
  */
 int32_t MyanmarCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month,
@@ -141,8 +140,9 @@ int32_t MyanmarCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mont
     cal_watat(extendedYear, watat_type, waso_type);
 
     mm_length = 30 - month % 2;
-    if (watat_type == 3) {
-      mm_length += long(floor(watat_type / 2));
+    // long leap year, Nayon is longer by 1 day
+    if (watat_type == 3 && month == 3) {
+      mm_length += 1;
     }
     return mm_length;
 }
@@ -192,18 +192,47 @@ void MyanmarCalendar::cal_my(int32_t myan_year, int32_t& myan_year_type, long& s
 
 // Return JD of start of given month/year
 int64_t MyanmarCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /*useMonth*/, UErrorCode& status) const {
-    int32_t myan_day = 1; // first of month
+    int32_t myan_day_offset = -1;
     int32_t myan_year_type;
     long b, c, dayOfYear, year_length, monthType;
     long startOfTagu, full_moon_waso_2, addedOffset;
+
     cal_my(long(eyear), myan_year_type, startOfTagu, full_moon_waso_2, addedOffset);//check year
+
+    /* month order correction */
+    if (month == 3) {
+      month = 0;
+    } else if (month < 3) {
+      month++;
+    }
+
+    /* 2015-2018 CE correction */
+    if (
+      (eyear > 1377 && eyear < 1380) ||
+      (eyear == 1377 && month >= 4) ||
+      (eyear == 1380 && month % 13 <= 3)
+    ) {
+      myan_day_offset = 0;
+    }
+    if (eyear == 1377 && month <= 0) {
+      myan_day_offset = 0;
+    }
+    if (eyear == 1380 && month == 0) {
+      myan_day_offset = -1;
+    }
+
+    /* 2nd waso correction for non-leap years */
+    if (myan_year_type == 0 && month == 4) {
+      return dayOfYear;
+    }
+
     monthType = long(floor(month / 13));
     month = month % 13 + monthType; // to 1-12 with month type
     b = long(floor(myan_year_type / 2));
     c = 1 - long(floor((myan_year_type + 1) / 2)); //if big watat and common year
     month += 4 - long(floor((month + 15) / 16)) * 4
             + long(floor((month + 12) / 16)); //adjust month
-	  dayOfYear = myan_day + long(floor(29.544 * month - 29.26))
+	  dayOfYear = myan_day_offset + long(floor(29.544 * month - 29.26))
             - c * long(floor((month + 11) / 16)) * 30
             + b * long(floor((month + 12) / 16));
 	  year_length = 354 + (1 - c) * 30 + b;
@@ -243,7 +272,12 @@ void MyanmarCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*statu
     int32_t dayOfYear, year_length, monthType;
     long startOfTagu, full_moon_waso_2, addedOffset, a, b, c, e, f;
     int32_t myan_year_type;
+    int32_t og_julian = julianDay;
     long myan_year = long(floor((julianDay - 0.5 - MYANMAR_EPOCH) / SOLAR_YEAR)); //Myanmar year
+    /* long watat correction from 2015-2018 CE */
+    if (julianDay > 2457190 && julianDay < 2458287) {
+      julianDay--;
+    }
     cal_my(myan_year, myan_year_type, startOfTagu, full_moon_waso_2, addedOffset); //check year
     dayOfYear = julianDay - startOfTagu + 1;//day count
     b = long(floor(myan_year_type / 2));
@@ -258,6 +292,22 @@ void MyanmarCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*statu
     int32_t myan_day = dayOfYear - long(floor(29.544 * myan_month - 29.26))
           - b * e + c * f * 30; //day
     myan_month += f * 3 - e * 4 + 12 * monthType;
+
+    /* month order correction */
+    if (myan_month == 0) {
+      myan_month = 3;
+    } else if (myan_month <= 3) {
+      myan_month--;
+    }
+    /* 2nd waso correction for non-leap years */
+    if (myan_year_type == 0 && myan_month == 4) {
+      myan_month = 3;
+    }
+    /* big watat extra day correction */
+    if (og_julian == 2457190) {
+      myan_month = 2;
+      myan_day = 30;
+    }
 
     internalSet(UCAL_ERA, 0);
     internalSet(UCAL_YEAR, myan_year);

@@ -799,9 +799,31 @@ void IntlCalendarTest::TestMyanmar() {
 
     // Test various dates to be sure of validity
     int32_t data[] = {
-        2016, 4, 17, 1378, 1, 10, // first day of 1378
+        2024, 6, 12, 1386, 3, 6, // 2024
+        2019, 4, 17, 1381, 1, 13, // start of 1381
+        2019, 1,  1, 1380, 10, 25,
+        2018, 8,  1, 1380, 5, 20, // second waso after 2015 2018 correction
+        2018, 7, 13, 1380, 5, 1, // start of second waso
+        2018, 7, 12, 1380, 4, 30, // end of first waso
+        2018, 6, 14, 1380, 4, 2,
+        2018, 6, 13, 1380, 4, 1, // start of first waso
+        2018, 6, 12, 1380, 3, 29, // nayon / first waso
+        2018, 6, 11, 1380, 3, 28, 
+        2018, 5,  1, 1380, 2, 17,
+        2018, 4, 17, 1380, 2,  3, // start year in kason
+        2018, 4, 16, 1379, 15, 2, // late kason
+        2018, 4,  1, 1379, 14, 16, // late tagu
+        2017, 7, 24, 1379, 6, 1, // no month 5 / 2nd waso
+        2017, 7, 23, 1379, 4, 30, // no month 5 / 2nd waso
+        2017, 4, 26, 1379, 2, 1,
+        2017, 4, 17, 1379, 1, 21, // start year in tagu
+        2017, 4, 16, 1378, 14, 20, // late tagu
+        2017, 1,  1, 1378, 11, 4,
+        2016, 4, 17, 1378, 1, 10, // first day of 1378, tagu
+        2016, 4, 16, 1377, 14, 9, // last day of 1377, late tagu
         2015, 8, 16, 1377, 6, 1, // Wagaung, big watat
         2015, 7, 17, 1377, 5, 1, // 2nd waso, big watat
+        2015, 6, 18, 1377, 4, 2, // 1st waso, big watat
         2015, 6, 17, 1377, 4, 1, // 1st waso, big watat
         2015, 6, 16, 1377, 3, 30, //  nayon , big watat
         2015, 6, 15, 1377, 3, 29, //  nayon , big watat
@@ -809,13 +831,15 @@ void IntlCalendarTest::TestMyanmar() {
         2015, 4, 3, 1376, 14, 15, //  dagu
         2015, 3, 20, 1376, 14, 1, //  dagu
         2015, 3, 19, 1376, 13, 30, //  tabaung
+
+/* examples of 2nd waso boundaries? */
+
         1989, 4, 15, 1350, 14, 10, // late dagu
-        1989, 4, 9, 1350, 14, 4,
-        1989, 4, 6, 1350, 14, 1,
+        1989, 4, 6, 1350, 14, 1, // start of late dagu
         1875, 7, 17, 1237, 4, 15,
         1838, 7, 17, 1200, 4, 26,
-        // historic dates via https://github.com/yan9a/mcal/blob/master/javascript/ceMmDateTime.js
-        1609, 2, 17,  970, 13,16,
+        1609, 2, 17,  970, 13, 26,
+
         -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
     };
 
@@ -867,7 +891,7 @@ void IntlCalendarTest::TestMyanmarFormat() {
     UErrorCode status = U_ZERO_ERROR;
 
     // Test simple parse/format with adopt
-    UDate aDate = 608621000000.0;
+    UDate aDate = 608626800000.0;
     SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=myanmar"), status);
     CHECK(status, "creating myanmar date format instance");
     SimpleDateFormat *fmt2 = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=gregorian"), status);
