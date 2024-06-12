@@ -381,7 +381,9 @@ static FormattedPlaceholder notANumber(const FormattedPlaceholder& input, UError
     return input.withOutput(FormattedValue(UnicodeString("NaN")), status);
 }
 
-static FormattedPlaceholder stringAsNumber(const number::LocalizedNumberFormatter& nf, const FormattedPlaceholder& input, UErrorCode& errorCode) {
+static number::FormattedNumber stringAsNumber(const number::LocalizedNumberFormatter& nf,
+                                              const FormattedPlaceholder& input,
+                                              UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return {};
     }
@@ -398,7 +400,7 @@ static FormattedPlaceholder stringAsNumber(const number::LocalizedNumberFormatte
     strToDouble(inputStr, numberValue, localErrorCode);
     if (U_FAILURE(localErrorCode)) {
         errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-        return notANumber(input, errorCode);
+        return {};
     }
     UErrorCode savedStatus = errorCode;
     number::FormattedNumber result = nf.formatDouble(numberValue, errorCode);
@@ -406,7 +408,7 @@ static FormattedPlaceholder stringAsNumber(const number::LocalizedNumberFormatte
     if (errorCode == U_USING_DEFAULT_WARNING) {
         errorCode = savedStatus;
     }
-    return input.withOutput(FormattedValue(std::move(result)), errorCode);
+    return result;
 }
 
 // Returns -1 if option is not present
@@ -466,7 +468,7 @@ bool StandardFunctions::Number::usePercent(const FunctionOptions& opts) const {
     return StandardFunctions::Number(loc, true);
 }
 
-FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& arg, FunctionOptions&& opts, UErrorCode& errorCode) const {
+FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& arg, FunctionOptions&& optsIn, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return {};
     }
@@ -477,14 +479,13 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
         return notANumber(arg, errorCode);
     }
 
-// TODO: merge options
-
-    number::LocalizedNumberFormatter realFormatter;
-    realFormatter = formatterForOptions(*this, opts, errorCode);
-
     // Already checked that contents can be formatted
     const FormattableWithOptions& toFormatWithOptions = arg.asFormattable();
     const Formattable& toFormat = toFormatWithOptions.getValue();
+    FunctionOptions opts = optsIn.mergeOptions(toFormatWithOptions.getOptions(), errorCode);
+
+    number::LocalizedNumberFormatter realFormatter;
+    realFormatter = formatterForOptions(*this, opts, errorCode);
 
     number::FormattedNumber numberResult;
     if (U_SUCCESS(errorCode)) {
@@ -509,7 +510,12 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
         }
         case UFMT_STRING: {
             // Try to parse the string as a number
-            return stringAsNumber(realFormatter, arg, errorCode);
+            numberResult = stringAsNumber(realFormatter, arg, errorCode);
+            if (U_FAILURE(errorCode)) {
+                errorCode = U_MF_OPERAND_MISMATCH_ERROR;
+                return notANumber(arg, errorCode);
+            }
+            break;
         }
         default: {
             // Other types can't be parsed as a number
@@ -519,7 +525,11 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
         }
     }
 
-    return arg.withOutput(FormattedValue(std::move(numberResult)), errorCode);
+    // The result's options are the merged options
+    FormattedPlaceholder result = arg.withOutputAndOptions(std::move(opts),
+                                                           FormattedValue(std::move(numberResult)),
+                                                           errorCode);
+    return result;
 }
 
 StandardFunctions::Number::~Number() {}
@@ -848,15 +858,6 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     UnicodeString timeStyleName("timeStyle");
     UnicodeString styleName("style");
 
-// Problem: now we get sharing of option values (FormattedPlaceholder*)
-// Solution: make a resolved option a (Formattable + Options)?
-// Then, options can be copyable
-// The right-hand side of an option *must* be a copyable type,
-// or else it's just too hard to merge different option maps together
-
-// Wait, what am I talking about? We own toFormat, and thus its
-// options map; we also own optsIn, so why can't we define mergeOptions
-// so both maps are passed by move?
     FunctionOptions opts = optsIn.mergeOptions(toFormat.options(), errorCode);
     if (U_FAILURE(errorCode)) {
         return {};

@@ -106,6 +106,21 @@
       "exp": "Default number: 1.234.567.890.123.456.789,987654!",
       "locale": "ro",
       "params": {"val": {"decimal": "1234567890123456789.987654321"}}
+    },
+    {
+      "src": ".local $x = {42 :number minimumFractionDigits=2} .local $y = {$x :number minimumFractionDigits=5} {{{$x} {$y}}}",
+      "exp": "42.00 42.00000",
+      "locale": "en"
+    },
+    {
+      "src": ".local $x = {42 :number minimumFractionDigits=5} .local $y = {$x :number minimumFractionDigits=2} {{{$x} {$y}}}",
+      "exp": "42.00000 42.00",
+      "locale": "en"
+    },
+    {
+      "src": ".local $x = {42 :number minimumFractionDigits=5} .local $y = {$x :number minimumIntegerDigits=3} {{{$x} {$y}}}",
+      "exp": "42.00000 042.00000",
+      "locale": "en"
     }
   ]
 }

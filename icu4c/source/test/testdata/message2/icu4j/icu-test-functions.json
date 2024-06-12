@@ -128,8 +128,7 @@
         "{{Hello John, you want '{$exp}', '{$longExp}', or '{$zooExp}' or even '{$exp :datetime dateStyle=full}'?}}"
       ],
       "exp": "Hello John, you want '9:43 PM', 'August 3, 2024 at 9:43 PM', or '8/3/24, 9:43:57 PM Pacific Daylight Time' or even 'Saturday, August 3, 2024 at 9:43 PM'?",
-      "params": {"exp": { "date": 1722746637000 }, "user": "John", "tsOver" : "long" },
-      "ignoreTest": "ICU-22754 ICU4C doesn't implement this kind of function composition yet. See https://github.com/unicode-org/message-format-wg/issues/515"
+      "params": {"exp": { "date": 1722746637000 }, "user": "John", "tsOver" : "long" }
     },
     {
       "srcs": [
