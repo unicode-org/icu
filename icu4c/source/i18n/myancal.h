@@ -105,13 +105,13 @@ class MyanmarCalendar : public Calendar {
   /**
    * Determine whether a year is either a little watat or big watat year in the Myanmar calendar
    */
-  static bool isLeapYear(int32_t year);
+  bool isLeapYear(int32_t year);
 
   /**
    * Return the day # on which the given year starts.  Days are counted
    * from the Myanmar Era epoch, origin 0.
    */
-  int32_t yearStart(int32_t year);
+  int32_t yearStart(int32_t year, UErrorCode& success);
 
   /**
    * Return the day # on which the given month starts.  Days are counted
@@ -120,7 +120,7 @@ class MyanmarCalendar : public Calendar {
    * @param year  The Myanmar year
    * @param year  The Myanmar month, 1-based
    */
-  int32_t monthStart(int32_t year, int32_t month) const;
+  int32_t monthStart(int32_t year, int32_t month, UErrorCode& success) const;
   long bSearch2(int32_t k, long (*A)[2], long u) const;
   long bSearch1(int32_t k,long* A, long u) const;
   void GetMyConst(int32_t my, double& EI, double& WO, double& NM, long& EW) const;
@@ -140,10 +140,11 @@ class MyanmarCalendar : public Calendar {
    * Return the length (in days) of the given month.
    *
    * @param year  The Myanmar year
-   * @param year  The Myanmar month, 1-based
+   * @param year  The Myanmar month, 0-based
    * @internal
    */
-  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month) const;
+  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month,
+                                                UErrorCode& status) const override;
 
   /**
    * Return the number of days in the given Myanmar year
@@ -159,7 +160,7 @@ class MyanmarCalendar : public Calendar {
   /**
    * @internal
    */
-  virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const;
+  virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth, UErrorCode& status) const override;
 
   //-------------------------------------------------------------------------
   // Functions for converting from milliseconds to field values
@@ -168,7 +169,7 @@ class MyanmarCalendar : public Calendar {
   /**
    * @internal
    */
-  virtual int32_t handleGetExtendedYear();
+  virtual int32_t handleGetExtendedYear(UErrorCode& status) override;
 
   /**
    * Override Calendar to compute several fields specific to the Myanmar

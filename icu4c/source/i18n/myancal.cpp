@@ -27,7 +27,7 @@ static const int32_t kMyanmarCalendarLimits[UCAL_FIELD_COUNT][4] = {
     //           Minimum   Maximum
     {        0,        0,        2,        2}, // ERA
     { -5000000, -5000000,  5000000,  5000000}, // YEAR
-    {        1,        1,       12,       14}, // MONTH
+    {        1,        1,       12,       15}, // MONTH
     {        1,        1,       51,       56}, // WEEK_OF_YEAR
     {        1,        1,        5,        5}, // WEEK_OF_MONTH
     {        1,       1,        29,       30}, // DAY_OF_MONTH
@@ -49,13 +49,6 @@ static const int32_t kMyanmarCalendarLimits[UCAL_FIELD_COUNT][4] = {
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
 };
-
-static const int8_t kMyanmarMonthLength[]
-= {29,30,29,30,0,29,30,29,30,29,30,29,30}; // 0-based
-static const int8_t kMyanmarSmallLeapMonthLength[]
-= {29,30,29,30,30,29,30,29,30,29,30,29,30}; // 0-based
-static const int8_t kMyanmarLargeLeapMonthLength[]
-= {29,30,30,30,30,29,30,29,30,29,30,29,30}; // 0-based
 
 static const double SOLAR_YEAR = 1577917828.0 / 4320000.0; //solar year (365.2587565)
 static const double LUNAR_MONTH = 1577917828.0 / 53433336.0; //lunar month (29.53058795)
@@ -106,19 +99,18 @@ int32_t MyanmarCalendar::handleGetLimit(UCalendarDateFields field, ELimitType li
 /**
  * Determine whether a Myanmar year is a leap year (either big or little watat)
  */
-bool MyanmarCalendar::isLeapYear(int32_t year)
-{
-    // long watat_type, waso_type;
-    // cal_watat(year, watat_type, waso_type);
-    return false; // watat_type > 0;
+bool MyanmarCalendar::isLeapYear(int32_t year) {
+    long watat_type, waso_type;
+    cal_watat(year, watat_type, waso_type);
+    return watat_type > 0;
 }
 
 /**
  * Return the day # on which the given year starts.  Days are counted
  * from the Myanmar epoch, origin 0.
  */
-int32_t MyanmarCalendar::yearStart(int32_t year) {
-    return handleComputeMonthStart(year, 1, false);
+int32_t MyanmarCalendar::yearStart(int32_t year, UErrorCode& status) {
+    return handleComputeMonthStart(year, 1, false, status);
 }
 
 /**
@@ -128,8 +120,8 @@ int32_t MyanmarCalendar::yearStart(int32_t year) {
  * @param year  The Myanmar year
  * @param month The Myanmar month, 0-based
  */
-int32_t MyanmarCalendar::monthStart(int32_t year, int32_t month) const {
-    return handleComputeMonthStart(year, month, true);
+int32_t MyanmarCalendar::monthStart(int32_t year, int32_t month, UErrorCode& status) const {
+    return handleComputeMonthStart(year, month, true, status);
 }
 
 //----------------------------------------------------------------------
@@ -142,22 +134,17 @@ int32_t MyanmarCalendar::monthStart(int32_t year, int32_t month) const {
  * @param year  The Myanmar year
  * @param month The Myanmar month, 0-based
  */
-int32_t MyanmarCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month) const {
-    // If the month is out of range, adjust it into range, and
-    // modify the extended year value accordingly.
-    // if (month < 0 || month > 12) {
-        // extendedYear += fmod(month, 13);
-    // }
+int32_t MyanmarCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month,
+  UErrorCode& /*status*/) const {
 
-    long watat_type, waso_type;
+    long watat_type, waso_type, mm_length;
     cal_watat(extendedYear, watat_type, waso_type);
-    if (watat_type == 0) {
-      return kMyanmarMonthLength[month];
-    } else if (watat_type == 1) {
-      return kMyanmarSmallLeapMonthLength[month];
-    } else {
-      return kMyanmarLargeLeapMonthLength[month];
+
+    mm_length = 30 - month % 2;
+    if (watat_type == 3) {
+      mm_length += long(floor(watat_type / 2));
     }
+    return mm_length;
 }
 
 /**
@@ -188,7 +175,7 @@ void MyanmarCalendar::cal_my(int32_t myan_year, int32_t& myan_year_type, long& s
   } while (prev_year_little_watat == 0 && prevYears < 3);
 	if (myan_year_type) {
 		year_length_diff = (subject_year_full_moon_waso_2 - prev_year_full_moon_waso_2) % 354;
-    myan_year_type = long(ClockMath::floorDivide(year_length_diff, 31) + 1);
+    myan_year_type = long(floor(year_length_diff / 31) + 1);
 		full_moon_waso_2 = subject_year_full_moon_waso_2;
     if (year_length_diff != 30 && year_length_diff != 31) {
       addedOffset = 1;
@@ -204,44 +191,31 @@ void MyanmarCalendar::cal_my(int32_t myan_year, int32_t& myan_year_type, long& s
 //-------------------------------------------------------------------------
 
 // Return JD of start of given month/year
-int32_t MyanmarCalendar::handleComputeMonthStart(int32_t eyear, int32_t monthOrder, UBool /*useMonth*/) const {
-    // If the month is out of range, adjust it into range, and
-    // modify the extended year value accordingly.
-    // if (month < 0 || month > 12) {
-    //     eyear += ClockMath::floorDivide(month, 13, month);
-    // }
-
-    // convert to mcal month order
-    int32_t month = monthOrder;
-    if (month == 4) {
-      month = 0;
-    } else if (month > 4) {
-      month--;
-    }
+int64_t MyanmarCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /*useMonth*/, UErrorCode& status) const {
     int32_t myan_day = 1; // first of month
     int32_t myan_year_type;
     long b, c, dayOfYear, year_length, monthType;
     long startOfTagu, full_moon_waso_2, addedOffset;
     cal_my(long(eyear), myan_year_type, startOfTagu, full_moon_waso_2, addedOffset);//check year
-    monthType = ClockMath::floorDivide(month, 13);
+    monthType = long(floor(month / 13));
     month = month % 13 + monthType; // to 1-12 with month type
-    b = ClockMath::floorDivide(myan_year_type, 2);
-    c = 1 - ClockMath::floorDivide(myan_year_type + 1, 2); //if big watat and common year
-    month += 4 - long(ClockMath::floorDivide(month + 15, 16)) * 4
-            + long(ClockMath::floorDivide(month + 12, 16)); //adjust month
-	  dayOfYear = myan_day + ClockMath::floorDivide(int32_t(29.544 * month - 29.26), 1)
-            - c * ClockMath::floorDivide(month + 11, 16) * 30
-            + b * ClockMath::floorDivide(month + 12, 16);
+    b = long(floor(myan_year_type / 2));
+    c = 1 - long(floor((myan_year_type + 1) / 2)); //if big watat and common year
+    month += 4 - long(floor((month + 15) / 16)) * 4
+            + long(floor((month + 12) / 16)); //adjust month
+	  dayOfYear = myan_day + long(floor(29.544 * month - 29.26))
+            - c * long(floor((month + 11) / 16)) * 30
+            + b * long(floor((month + 12) / 16));
 	  year_length = 354 + (1 - c) * 30 + b;
     dayOfYear += monthType * year_length;//adjust day count with year length
-	  return (dayOfYear + startOfTagu);
+	  return dayOfYear + startOfTagu;
 }
 
 //-------------------------------------------------------------------------
 // Functions for converting from milliseconds to field values
 //-------------------------------------------------------------------------
 
-int32_t MyanmarCalendar::handleGetExtendedYear() {
+int32_t MyanmarCalendar::handleGetExtendedYear(UErrorCode& /* status */) {
     int32_t year;
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
         year = internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
@@ -269,30 +243,21 @@ void MyanmarCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*statu
     int32_t dayOfYear, year_length, monthType;
     long startOfTagu, full_moon_waso_2, addedOffset, a, b, c, e, f;
     int32_t myan_year_type;
-    long myan_year = ClockMath::floorDivide(julianDay - 0.5 - MYANMAR_EPOCH, SOLAR_YEAR); //Myanmar year
+    long myan_year = long(floor((julianDay - 0.5 - MYANMAR_EPOCH) / SOLAR_YEAR)); //Myanmar year
     cal_my(myan_year, myan_year_type, startOfTagu, full_moon_waso_2, addedOffset); //check year
     dayOfYear = julianDay - startOfTagu + 1;//day count
-    b = ClockMath::floorDivide(myan_year_type, 2);
-    c = ClockMath::floorDivide(1, (myan_year_type + 1)); //big wa and common yr
+    b = long(floor(myan_year_type / 2));
+    c = long(floor(1 / (myan_year_type + 1))); //big wa and common yr
     year_length = 354 + (1 - c) * 30 + b;//year length
-    monthType = ClockMath::floorDivide(dayOfYear - 1, year_length); //month type: late =1 or early = 0
+    monthType = long(floor((dayOfYear - 1) / year_length)); //month type: late =1 or early = 0
     dayOfYear -= monthType * year_length;
-    a = ClockMath::floorDivide(dayOfYear + 423, 512); //adjust day count and threshold
-    int32_t myan_month = ClockMath::floorDivide(dayOfYear - b * a + c * a * 30 + 29.26, 29.544); //month
-    e = ClockMath::floorDivide(myan_month + 12, 16);
-    f = ClockMath::floorDivide(myan_month + 11, 16);
-    int32_t myan_day = dayOfYear - long(ClockMath::floorDivide(int32_t(29.544 * myan_month - 29.26), 1))
+    a = long(floor((dayOfYear + 423) / 512)); //adjust day count and threshold
+    int32_t myan_month = long(floor((dayOfYear - b * a + c * a * 30 + 29.26) / 29.544)); //month
+    e = long(floor((myan_month + 12) / 16));
+    f = long(floor((myan_month + 11) / 16));
+    int32_t myan_day = dayOfYear - long(floor(29.544 * myan_month - 29.26))
           - b * e + c * f * 30; //day
     myan_month += f * 3 - e * 4 + 12 * monthType;
-
-    // adjust myan_month from mcal's order
-    if (myan_month == 0) {
-      myan_month = 4;
-    } else if (myan_month >= 4) {
-      myan_month++;
-    }
-    //myan_month--;
-    //myan_day++;
 
     internalSet(UCAL_ERA, 0);
     internalSet(UCAL_YEAR, myan_year);
@@ -310,7 +275,7 @@ long MyanmarCalendar::bSearch2(int32_t k, long (*A)[2], long u) const {
   long l = 0;
   u--;
 	while(u >= l) {
-		i = ClockMath::floorDivide(l + u, 2);
+		i = long(floor((l + u) / 2));
 		if (A[i][0] > k) u = i - 1;
 		else if (A[i][0] < k) l = i + 1;
 		else return i;
@@ -325,7 +290,7 @@ long MyanmarCalendar::bSearch1(int32_t k,long* A, long u) const {
   long l=0;
   u--;
 	while (u >= l) {
-		i = ClockMath::floorDivide(l + u, 2);
+		i = long(floor((l + u) / 2));
 		if (A[i] > k)  u = i - 1;
 		else if (A[i] < k) l = i + 1;
 		else return i;
@@ -413,15 +378,11 @@ void MyanmarCalendar::cal_watat(int32_t myan_year, long& watat, long& full_moon_
   long EW;
 	GetMyConst(myan_year, era, WO, NM, EW); // get constants for the corresponding calendar era
 	double TA = (SOLAR_YEAR / 12 - LUNAR_MONTH) * (12 - NM); //threshold to adjust
-  // printf("calculate remainder of solar_year * (%d + 3739) / lunar_month", myan_year);
-	// ClockMath::floorDivide(double(SOLAR_YEAR * (long(myan_year) + 3739)), LUNAR_MONTH, excess_days); // excess days
-  // printf("got excess_days %s instead of %s", excess_days, fmod(SOLAR_YEAR*(long(myan_year)+3739),LUNAR_MONTH));
-  excess_days = fmod(SOLAR_YEAR*(long(myan_year)+3739),LUNAR_MONTH);
+  excess_days = fmod(SOLAR_YEAR*(myan_year+3739),LUNAR_MONTH);
 	if (excess_days < TA) {
     excess_days += LUNAR_MONTH; //adjust excess days
   }
-	full_moon_waso_2 = long(round(SOLAR_YEAR * long(myan_year) + MYANMAR_EPOCH - excess_days + 4.5 * LUNAR_MONTH + WO));
-  //full moon day of 2nd Waso
+	full_moon_waso_2 = long(round(SOLAR_YEAR * myan_year + MYANMAR_EPOCH - excess_days + 4.5 * LUNAR_MONTH + WO));
 	double TW = 0;
   watat = 0;//find watat
 	if (era >= 2) {//if 2nd era or later find watat based on excess days
@@ -434,11 +395,11 @@ void MyanmarCalendar::cal_watat(int32_t myan_year, long& watat, long& full_moon_
 	//Myanmar year is divided by 19 and there is intercalary month
 	//if the remainder is 2,5,7,10,13,15,18
 	//https://github.com/kanasimi/CeJS/blob/master/data/date/calendar.js#L2330
-		watat = (long(myan_year) * 7 + 2) % 19;
+		watat = (myan_year * 7 + 2) % 19;
     if (watat < 0) {
       watat += 19;
     }
-		watat = long(ClockMath::floorDivide(watat, 12));
+		watat = long(floor(watat / 12));
 	}
 	watat^=EW;//correct watat exceptions
 }

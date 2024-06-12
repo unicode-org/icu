@@ -799,23 +799,25 @@ void IntlCalendarTest::TestMyanmar() {
 
     // Test various dates to be sure of validity
     int32_t data[] = {
-        2015, 6, 16, 1377, 3, 30, // extra nayon day, big watat
+        2016, 4, 17, 1378, 1, 10, // first day of 1378
+        2015, 8, 16, 1377, 6, 1, // Wagaung, big watat
         2015, 7, 17, 1377, 5, 1, // 2nd waso, big watat
-        1989, 4, 15, 1350, 1, 10,
+        2015, 6, 17, 1377, 4, 1, // 1st waso, big watat
+        2015, 6, 16, 1377, 3, 30, //  nayon , big watat
+        2015, 6, 15, 1377, 3, 29, //  nayon , big watat
+        2015, 4, 18, 1377, 2, 1, //  kason
+        2015, 4, 3, 1376, 14, 15, //  dagu
+        2015, 3, 20, 1376, 14, 1, //  dagu
+        2015, 3, 19, 1376, 13, 30, //  tabaung
+        1989, 4, 15, 1350, 14, 10, // late dagu
+        1989, 4, 9, 1350, 14, 4,
+        1989, 4, 6, 1350, 14, 1,
         1875, 7, 17, 1237, 4, 15,
         1838, 7, 17, 1200, 4, 26,
         // historic dates via https://github.com/yan9a/mcal/blob/master/javascript/ceMmDateTime.js
         1609, 2, 17,  970, 13,16,
         -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
     };
-
-    // off by 29 days in Unix time
-    // 1377/3/30 <-> 1377/1/2
-    // 1377/5/1 but got 1377/5/3
-    // 1350/1/10 but got 1350/1/11
-    // 1237/4/15 but got 1237/5/17
-    // 1200/4/26 but got 1200/5/28
-    // 970/13/16 but got 970/13/17
 
     Calendar *grego = Calendar::createInstance("en_US@calendar=gregorian", status);
     for (int32_t i=0; data[i]!=-1; ) {
@@ -865,7 +867,7 @@ void IntlCalendarTest::TestMyanmarFormat() {
     UErrorCode status = U_ZERO_ERROR;
 
     // Test simple parse/format with adopt
-    UDate aDate = 608603000000.0;
+    UDate aDate = 608621000000.0;
     SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=myanmar"), status);
     CHECK(status, "creating myanmar date format instance");
     SimpleDateFormat *fmt2 = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=gregorian"), status);
@@ -879,7 +881,7 @@ void IntlCalendarTest::TestMyanmarFormat() {
         str.remove();
         fmt->format(aDate, str);
         logln(UnicodeString() + "as Myanmar Calendar: " + escape(str));
-        UnicodeString expected("Tagu 10, 1350 ME");
+        UnicodeString expected("Late Tagu 10, 1350 ME");
         if(str != expected) {
             errln("Expected " + escape(expected) + " but got " + escape(str));
         }

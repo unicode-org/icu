@@ -3158,6 +3158,34 @@ root{
             monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
+        myanmar{
+            eras{
+                abbreviated{
+                    "ME",
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "Tagu",
+                        "Kason",
+                        "Nayon",
+                        "Waso",
+                        "Second Waso",
+                        "Wagaung",
+                        "Tawthalin",
+                        "Thadingyut",
+                        "Tazaungmon",
+                        "Nadaw",
+                        "Pyatho",
+                        "Tabodwe",
+                        "Tabaung",
+                        "Late Tagu",
+                        "Late Kason",
+                    }
+                }
+            }
+        }
         persian{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
