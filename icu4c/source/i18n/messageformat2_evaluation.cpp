@@ -38,19 +38,20 @@ ResolvedFunctionOption::~ResolvedFunctionOption() {}
     U_ASSERT(!opts.bogus);
 
     len = opts.functionOptionsLen;
-    U_ASSERT(len == 0 || opts.options != nullptr);
-    return opts.options;
+    U_ASSERT(len == 0 || opts.options.isValid());
+    return opts.options.getAlias();
 }
 
 FunctionOptions::FunctionOptions(UVector&& optionsVector, UErrorCode& status) {
     CHECK_ERROR(status);
 
     functionOptionsLen = optionsVector.size();
-    options = moveVectorToArray<ResolvedFunctionOption>(optionsVector, status);
+    options.adoptInstead(moveVectorToArray<ResolvedFunctionOption>(optionsVector, status));
 }
 
 FunctionOptions::FunctionOptions(ResolvedFunctionOption* opts, int32_t len) {
-    options = opts;
+    U_ASSERT(opts != nullptr);
+    options.adoptInstead(opts);
     functionOptionsLen = len;
 }
 
@@ -61,7 +62,9 @@ FunctionOptions::FunctionOptions(const FunctionOptions& other) {
     options = nullptr;
     UErrorCode localErrorCode = U_ZERO_ERROR;
     if (functionOptionsLen > 0) {
-        options = copyArray<ResolvedFunctionOption>(other.options, functionOptionsLen, localErrorCode);
+        options.adoptInstead(copyArray<ResolvedFunctionOption>(other.options.getAlias(),
+                                                               functionOptionsLen,
+                                                               localErrorCode));
     }
     if (U_FAILURE(localErrorCode)) {
         bogus = true;
@@ -244,13 +247,8 @@ FunctionOptions& FunctionOptions::operator=(FunctionOptions other) noexcept {
     return *this;
 }
 
-FunctionOptions::~FunctionOptions() {
-    if (options != nullptr) {
-        delete[] options;
-        options = nullptr;
-        functionOptionsLen = 0;
-    }
-}
+FunctionOptions::~FunctionOptions() {}
+
 // ResolvedSelector
 // ----------------
 

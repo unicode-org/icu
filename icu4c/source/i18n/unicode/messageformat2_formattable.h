@@ -977,7 +977,7 @@ class U_I18N_API FunctionOptions : public UObject {
     // This is not a Hashtable in order to make it possible for code in a public header file
     // to construct a std::map from it, on-the-fly. Otherwise, it would be impossible to put
     // that code in the header because it would have to call internal Hashtable methods.
-    ResolvedFunctionOption* options;
+    LocalArray<ResolvedFunctionOption> options;
     int32_t functionOptionsLen = 0;
 
     static int32_t countUniqueOptions(const FunctionOptions&, const FunctionOptions&);
