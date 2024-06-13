@@ -18,7 +18,6 @@
 
 #include "umutex.h"
 #include "gregoimp.h" // Math
-#include <math.h>
 #include <float.h>
 
 static const int32_t kMyanmarCalendarLimits[UCAL_FIELD_COUNT][4] = {
@@ -26,13 +25,13 @@ static const int32_t kMyanmarCalendarLimits[UCAL_FIELD_COUNT][4] = {
     //           Minimum   Maximum
     {        0,        0,        2,        2}, // ERA
     { -5000000, -5000000,  5000000,  5000000}, // YEAR
-    {        1,        1,       12,       15}, // MONTH
+    {        1,        2,       13,       15}, // MONTH
     {        1,        1,       51,       56}, // WEEK_OF_YEAR
-    {        1,        1,        5,        5}, // WEEK_OF_MONTH
-    {        1,       1,        29,       30}, // DAY_OF_MONTH
+    {        1,        1,        1,        5}, // WEEK_OF_MONTH
+    {        1,       1,         1,       30}, // DAY_OF_MONTH
     {        1,       1,       354,      385}, // DAY_OF_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
-    {        1,       1,         5,        5}, // DAY_OF_WEEK_IN_MONTH
+    {        1,       1,         1,        5}, // DAY_OF_WEEK_IN_MONTH
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // AM_PM
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR_OF_DAY
