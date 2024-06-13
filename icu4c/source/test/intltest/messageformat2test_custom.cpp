@@ -277,13 +277,12 @@ message2::FormattedPlaceholder PersonNameFormatter::format(FormattedPlaceholder&
         return {};
     }
 
-    message2::FormattedPlaceholder errorVal =
-        message2::FormattedPlaceholder::fallbackPlaceholder("not a person");
+    message2::FormattedPlaceholder errorVal("not a person");
 
-    if (!arg.canFormat() || arg.asFormattable().getValue().getType() != UFMT_OBJECT) {
+    const Formattable* toFormat = arg.getSource(errorCode);
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
         return errorVal;
     }
-    const Formattable& toFormat = arg.asFormattable().getValue();
 
     FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
 
@@ -293,8 +292,11 @@ message2::FormattedPlaceholder PersonNameFormatter::format(FormattedPlaceholder&
         length = "short";
     }
 
-    const FormattableObject* fp = toFormat.getObject(errorCode);
-    U_ASSERT(U_SUCCESS(errorCode));
+    const FormattableObject* fp = toFormat->getObject(errorCode);
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
+        errorCode = U_MF_FORMATTING_ERROR;
+        return errorVal;
+    }
 
     if (fp == nullptr || fp->tag() != u"person") {
         return errorVal;
@@ -331,7 +333,7 @@ message2::FormattedPlaceholder PersonNameFormatter::format(FormattedPlaceholder&
         result += firstName;
     }
 
-    return arg.withOutput(FormattedValue(std::move(result)));
+    return arg.withOutput(FormattedValue(std::move(result)), errorCode);
 }
 
 FormattableProperties::~FormattableProperties() {}
@@ -385,20 +387,18 @@ message2::FormattedPlaceholder GrammarCasesFormatter::format(FormattedPlaceholde
         return {};
     }
 
-    // Argument must be present
-    if (!arg.canFormat()) {
+    const Formattable* toFormat = arg.getSource(errorCode);
+    // Check for null or fallback
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
         errorCode = U_MF_FORMATTING_ERROR;
-        return message2::FormattedPlaceholder::fallbackPlaceholder("grammarBB");
+        return message2::FormattedPlaceholder("grammarBB");
     }
 
-    // Assumes the argument is not-yet-formatted
-    const Formattable& toFormat = arg.asFormattable().getValue();
     UnicodeString result;
-
     const FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
-    switch (toFormat.getType()) {
+    switch (toFormat->getType()) {
         case UFMT_STRING: {
-            const UnicodeString& in = toFormat.getString(errorCode);
+            const UnicodeString& in = toFormat->getString(errorCode);
             bool hasCase = opt.count("case") > 0;
             bool caseIsString = opt.at("case").getValue().getType() == UFMT_STRING;
             if (hasCase && caseIsString) {
@@ -414,12 +414,12 @@ message2::FormattedPlaceholder GrammarCasesFormatter::format(FormattedPlaceholde
             break;
         }
         default: {
-            result += toFormat.getString(errorCode);
+            result += toFormat->getString(errorCode);
             break;
         }
     }
 
-    return arg.withOutput(FormattedValue(std::move(result)));
+    return arg.withOutput(FormattedValue(std::move(result)), errorCode);
 }
 
 void TestMessageFormat2::testGrammarCasesFormatter(IcuTestErrorCode& errorCode) {
@@ -498,16 +498,14 @@ message2::FormattedPlaceholder message2::ListFormatter::format(FormattedPlacehol
         return {};
     }
 
-    message2::FormattedPlaceholder errorVal =
-        FormattedPlaceholder::fallbackPlaceholder("listformat");
+    message2::FormattedPlaceholder errorVal("listformat");
 
-    // Argument must be present
-    if (!arg.canFormat()) {
+    const Formattable* toFormat = arg.getSource(errorCode);
+    // Check for null or fallback
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
         errorCode = U_MF_FORMATTING_ERROR;
         return errorVal;
     }
-    // Assumes arg is not-yet-formatted
-    const Formattable& toFormat = arg.asFormattable().getValue();
 
     FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
     UListFormatterType type = UListFormatterType::ULISTFMT_TYPE_AND;
@@ -529,10 +527,10 @@ message2::FormattedPlaceholder message2::ListFormatter::format(FormattedPlacehol
 
     UnicodeString result;
 
-    switch (toFormat.getType()) {
+    switch (toFormat->getType()) {
         case UFMT_ARRAY: {
             int32_t n_items;
-            const Formattable* objs = toFormat.getArray(n_items, errorCode);
+            const Formattable* objs = toFormat->getArray(n_items, errorCode);
             if (U_FAILURE(errorCode)) {
                 errorCode = U_MF_FORMATTING_ERROR;
                 return errorVal;
@@ -551,13 +549,13 @@ message2::FormattedPlaceholder message2::ListFormatter::format(FormattedPlacehol
             break;
         }
         default: {
-            result += toFormat.getString(errorCode);
+            result += toFormat->getString(errorCode);
             U_ASSERT(U_SUCCESS(errorCode));
             break;
         }
     }
 
-    return arg.withOutput(FormattedValue(std::move(result)));
+    return arg.withOutput(FormattedValue(std::move(result)), errorCode);
 }
 
 void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
@@ -664,19 +662,18 @@ message2::FormattedPlaceholder ResourceManager::format(FormattedPlaceholder&& ar
         return {};
     }
 
-    message2::FormattedPlaceholder errorVal = message2::FormattedPlaceholder::fallbackPlaceholder("msgref");
+    message2::FormattedPlaceholder errorVal = message2::FormattedPlaceholder("msgref");
 
-    // Argument must be present
-    if (!arg.canFormat()) {
+    const Formattable* toFormat = arg.getSource(errorCode);
+    // Check for null or fallback
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
         errorCode = U_MF_FORMATTING_ERROR;
         return errorVal;
     }
-
-    const Formattable& toFormat = arg.asFormattable().getValue();
     UnicodeString in;
-    switch (toFormat.getType()) {
+    switch (toFormat->getType()) {
         case UFMT_STRING: {
-            in = toFormat.getString(errorCode);
+            in = toFormat->getString(errorCode);
             break;
         }
         default: {
@@ -715,7 +712,7 @@ message2::FormattedPlaceholder ResourceManager::format(FormattedPlaceholder&& ar
         if (U_FAILURE(errorCode)) {
             errorCode = savedStatus;
         }
-        return arg.withOutput(FormattedValue(std::move(result)));
+        return arg.withOutput(FormattedValue(std::move(result)), errorCode);
     } else {
         // Properties must be provided
         errorCode = U_MF_FORMATTING_ERROR;
@@ -831,21 +828,23 @@ message2::FormattedPlaceholder NounFormatter::format(FormattedPlaceholder&& arg,
         return {};
     }
 
-    message2::FormattedPlaceholder errorVal =
-        message2::FormattedPlaceholder::fallbackPlaceholder("noun: not a string");
+    message2::FormattedPlaceholder errorVal("noun: not a string");
 
-    if (!arg.canFormat() || arg.asFormattable().getValue().getType() != UFMT_STRING) {
+    const Formattable* toFormat = arg.getSource(errorCode);
+    // Check for null or fallback
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
         return errorVal;
     }
 
-    const Formattable& toFormat = arg.asFormattable().getValue();
     FunctionOptionsMap opt = FunctionOptions::getOptions(options);
 
     // very simplified example
     bool useAccusative = hasStringOption(opt, "case", "accusative");
     bool useSingular = hasStringOption(opt, "count", "1");
-    const UnicodeString& noun = toFormat.getString(errorCode);
-    U_ASSERT(U_SUCCESS(errorCode));
+    const UnicodeString& noun = toFormat->getString(errorCode);
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
+        return errorVal;
+    }
 
     UnicodeString result;
     if (useAccusative) {
@@ -870,14 +869,14 @@ message2::FormattedPlaceholder AdjectiveFormatter::format(FormattedPlaceholder&&
         return {};
     }
 
-    message2::FormattedPlaceholder errorVal =
-        message2::FormattedPlaceholder::fallbackPlaceholder("adjective: not a string");
+    message2::FormattedPlaceholder errorVal("adjective: not a string");
 
-    if (!arg.canFormat() || arg.asFormattable().getValue().getType() != UFMT_STRING) {
+    const Formattable* toFormat = arg.getSource(errorCode);
+    // Check for null or fallback
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
         return errorVal;
     }
 
-    const Formattable& toFormat = arg.asFormattable().getValue();
     const FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
     // Return empty string if no accord is provided
     if (opt.count("accord") <= 0) {
@@ -887,9 +886,9 @@ message2::FormattedPlaceholder AdjectiveFormatter::format(FormattedPlaceholder&&
     const FormattableWithOptions& accordOpt = opt.at("accord");
     // Fail if no accord is provided, as this is a simplified example
     UnicodeString accord = accordOpt.getValue().getString(errorCode);
-    const UnicodeString& adjective = toFormat.getString(errorCode);
-    if (U_FAILURE(errorCode)) {
-        return {};
+    const UnicodeString& adjective = toFormat->getString(errorCode);
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
+        return errorVal;
     }
 
     UnicodeString result = adjective + " " + accord;

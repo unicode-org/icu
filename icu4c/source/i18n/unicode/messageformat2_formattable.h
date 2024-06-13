@@ -19,6 +19,7 @@
 #ifndef U_HIDE_DEPRECATED_API
 
 #include <map>
+#include <optional>
 #include <variant>
 
 U_NAMESPACE_BEGIN
@@ -444,6 +445,8 @@ Immutable, copyable and movable
 */
 class U_I18N_API FormattableWithOptions : public UObject {
     private:
+    friend class FormattedPlaceholder;
+
     bool bogus = false; // Set if a copy fails
     Formattable value;
     // Has to be a pointer in order to break the loop between FormattableWithOptions
@@ -669,7 +672,14 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
     class U_I18N_API FormattedPlaceholder : public UObject {
     public:
         /**
-         * Fallback factory method. Constructs a value that represents a formatting error.
+         * Default constructor. Creates a null placeholder.
+         *
+         * @internal ICU 75 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        FormattedPlaceholder() {}
+        /**
+         * Fallback constructor. Constructs a value that represents a formatting error.
          *
          * @param s An error string. (See the MessageFormat specification for details
          *        on fallback strings.)
@@ -677,18 +687,32 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        static FormattedPlaceholder fallbackPlaceholder(const UnicodeString& s);
+        explicit FormattedPlaceholder(const UnicodeString& fb) : fallback(fb) {}
+        /**
+         * Factory method for unformatted placeholders with no options.
+         *
+         * @param input A `Formattable` object.
+         * @param fb Fallback string to use if an error occurs while formatting the input.
+         *
+         * @internal ICU 75 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        static FormattedPlaceholder fromFormattable(const Formattable& input,
+                                                    const UnicodeString& fb,
+                                                    UErrorCode& status);
         /**
          * Creates a new FormattedPlaceholder with this placeholder's
          * source and fallback string; the given output; and no options.
          *
          * @param output A `FormattedValue` representing formatted output.
          *        Passed by move.
+         * @param status Input/output error code. Set to U_ILLEGAL_ARGUMENT_ERROR
+         *               if this is a null or fallback placeholder.
          *
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        FormattedPlaceholder withOutput(FormattedValue&& output) const;
+        FormattedPlaceholder withOutput(FormattedValue&& output, UErrorCode& status) const;
         /**
          * Constructor for fully formatted placeholders with options. Uses the source
          * and fallback string from `this`.
@@ -705,47 +729,39 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
                                                   FormattedValue&& output,
                                                   UErrorCode& status) const;
         /**
-         * Factory method for unformatted placeholders.
-         *
-         * @param input A `FormattableWithOptions` object.
-         * @param fb Fallback string to use if an error occurs while formatting the input.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        static FormattedPlaceholder fromFormattableWithOptions(const FormattableWithOptions& input,
-                                                               const UnicodeString& fb);
-        /**
-         * Factory method for unformatted placeholders with no options.
-         *
-         * @param input A `Formattable` object.
-         * @param fb Fallback string to use if an error occurs while formatting the input.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        static FormattedPlaceholder fromFormattable(const Formattable& input,
-                                                    const UnicodeString& fb,
-                                                    UErrorCode& status);
-
-        /**
-         * Default constructor. Leaves the FormattedPlaceholder in a
-         * valid but undefined state.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        FormattedPlaceholder() : type(kNull) {}
-        /**
          * Returns the source `FormattableWithOptions` value for this placeholder.
-         * The result is undefined if this is a null operand.
+         * Sets status to U_ILLEGAL_ARGUMENT_ERROR if this is a fallback or null placeholder.
          *
-         * @return A message2::FormattableWithOptions value.
+         * @param status Input/output error code
+         * @return A pointer to a message2::FormattableWithOptions
          *
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        const message2::FormattableWithOptions& asFormattable() const;
+        const message2::FormattableWithOptions* getSourceAndOptions(UErrorCode& status) const;
+        /**
+         * Returns the source `Formattable` value for this placeholder.
+         * Sets status to U_ILLEGAL_ARGUMENT_ERROR if this is a fallback or null placeholder.
+         *
+         * @param status Input/output error code
+         * @return A pointer to a message2::FormattableWithOptions
+         *
+         * @internal ICU 75 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        const message2::Formattable* getSource(UErrorCode& status) const;
+        /**
+         * Returns the options of the source `FormattableWithOptions
+         * value for this placeholder.
+         * Sets status to U_ILLEGAL_ARGUMENT_ERROR if this is a fallback or null placeholder.
+         *
+         * @param status Input/output error code
+         * @return A pointer to a message2::FunctionOptions
+         *
+         * @internal ICU 75 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        const message2::FunctionOptions* getOptions(UErrorCode& status) const;
         /**
          * Returns true iff this is a fallback placeholder.
          *
@@ -755,7 +771,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        bool isFallback() const { return type == kFallback; }
+        bool isFallback() const { return fallback && !source; }
         /**
          * Returns true iff this is a null placeholder.
          *
@@ -765,7 +781,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        bool isNullOperand() const { return type == kNull; }
+        bool isNullOperand() const { return !fallback; }
         /**
          * Returns true iff this has formatting output.
          *
@@ -775,31 +791,30 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        bool isEvaluated() const { return (type == kEvaluated); }
-        /**
-         * Returns true iff this represents a valid argument to the formatter.
-         *
-         * @return True if and only if this is neither the null argument nor a fallback placeholder.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        bool canFormat() const { return !(isFallback() || isNullOperand()); }
+        bool hasOutput() const { return formatted.has_value(); }
         /**
          * Gets the fallback value of this placeholder, to be used in its place if an error occurs while
          * formatting it.
-         * @return          A reference to this placeholder's fallback string.
+         *
+         * @param  defaultFallback String to use if this is a null placeholder
+         * @return        A reference to this placeholder's fallback string.
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        const UnicodeString& getFallback() const { return fallback; }
+        const UnicodeString& getFallback(const UnicodeString& defaultFallback) const {
+            return !fallback ? defaultFallback : *fallback;
+        }
         /**
          * Returns the formatted output of this placeholder. The result is undefined if !isEvaluated().
-         * @return          A fully formatted `FormattedPlaceholder`.
+         *
+         * @param  status Input/output error code. Set to U_ILLEGAL_ARGUMENT if this has
+         *                no output.
+         * @return        A `FormattedValue`.
+         *
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        const FormattedValue& output() const { return formatted; }
+        const FormattedValue* output(UErrorCode& status) const; // { return formatted; }
         /**
          * Move assignment operator:
          * The source FormattedPlaceholder will be left in a valid but undefined state.
@@ -836,22 +851,15 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
 // TODO
         ~FormattedPlaceholder();
     private:
-        friend class MessageFormatter;
 
-        enum Type {
-            kFallback,    // Represents the result of formatting that encountered an error
-            kNull,        // Represents the absence of both an output and an input (not necessarily an error)
-            kUnevaluated, // `source` should be valid, but there's no result yet
-            kEvaluated,   // `formatted` exists
-        };
-        UnicodeString fallback;
-        FormattableWithOptions source;
-        FormattedValue formatted;
-        Type type;
+        // All absent => null placeholder
+        // Source and formatted both absent => fallback placeholder
+        std::optional<UnicodeString> fallback;
+        std::optional<FormattableWithOptions> source;
+        std::optional<FormattedValue> formatted;
 
         FormattedPlaceholder(const FormattableWithOptions&, const UnicodeString&, FormattedValue&&);
-        FormattedPlaceholder(const FormattableWithOptions&, const UnicodeString&, Type);
-
+        FormattedPlaceholder(const FormattableWithOptions&, const UnicodeString&);
 
     }; // class FormattedPlaceholder
 

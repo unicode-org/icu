@@ -212,19 +212,38 @@ namespace message2 {
     FormattedValue::~FormattedValue() {}
 
     FormattedPlaceholder& FormattedPlaceholder::operator=(FormattedPlaceholder&& other) noexcept {
-        type = other.type;
-        if (type != kNull && type != kFallback) {
-            source = other.source;
-        }
-        if (type == kEvaluated) {
-            formatted = std::move(other.formatted);
-        }
+        source = other.source;
+        formatted = std::move(other.formatted);
         fallback = other.fallback;
         return *this;
     }
 
-    const FormattableWithOptions& FormattedPlaceholder::asFormattable() const {
-        return source;
+    const FormattableWithOptions* FormattedPlaceholder::getSourceAndOptions(UErrorCode& status)
+        const {
+        NULL_ON_ERROR(status);
+        if (!source) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return nullptr;
+        }
+        return &*source;
+    }
+
+    const Formattable* FormattedPlaceholder::getSource(UErrorCode& status) const {
+        NULL_ON_ERROR(status);
+        const FormattableWithOptions* src = getSourceAndOptions(status);
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
+        return &src->value;
+    }
+
+    const FormattedValue* FormattedPlaceholder::output(UErrorCode& status) const {
+        NULL_ON_ERROR(status);
+        if (!formatted) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return nullptr;
+        }
+        return &*formatted;
     }
 
     FormattableWithOptions::FormattableWithOptions() {
@@ -252,26 +271,36 @@ namespace message2 {
         }
     }
 
-    FormattedPlaceholder FormattedPlaceholder::withOutput(FormattedValue&& output) const {
-        return FormattedPlaceholder(source,
-                                    fallback,
+    FormattedPlaceholder FormattedPlaceholder::withOutput(FormattedValue&& output,
+                                                          UErrorCode& status) const {
+        if (U_FAILURE(status)) {
+            return {};
+        }
+        // Check for null or fallback
+        if (!source) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return {};
+        }
+        return FormattedPlaceholder(*source,
+                                    *fallback,
                                     std::move(output));
     }
 
     FormattedPlaceholder FormattedPlaceholder::withOutputAndOptions(FunctionOptions&& opts,
                                                                     FormattedValue&& output,
                                                                     UErrorCode& status) const {
-        return FormattedPlaceholder(source.withOptions(std::move(opts), status),
-                                    fallback,
+        if (U_FAILURE(status)) {
+            return {};
+        }
+        // Check for null or fallback
+        if (!source) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return {};
+        }
+        return FormattedPlaceholder(source->withOptions(std::move(opts), status),
+                                    *fallback,
                                     std::move(output));
 
-    }
-
-    FormattedPlaceholder FormattedPlaceholder::fromFormattableWithOptions(const FormattableWithOptions& input,
-                                                                          const UnicodeString& fb) {
-        return FormattedPlaceholder(input,
-                                    fb,
-                                    kUnevaluated);
     }
 
     FormattedPlaceholder FormattedPlaceholder::fromFormattable(const Formattable& input,
@@ -281,33 +310,17 @@ namespace message2 {
             return {};
         }
 
-        return FormattedPlaceholder(FormattableWithOptions(input, status),
-                                    fb,
-                                    kUnevaluated);
-    }
-
-    /* static */ FormattedPlaceholder FormattedPlaceholder::fallbackPlaceholder(const UnicodeString& fb) {
-        return FormattedPlaceholder(FormattableWithOptions(),
-                                    fb,
-                                    kFallback);
+        return FormattedPlaceholder(FormattableWithOptions(input, status), fb);
     }
 
     FormattedPlaceholder::FormattedPlaceholder(const FormattableWithOptions& input,
                                                const UnicodeString& fb,
-                                               FormattedValue&& output) {
-        fallback = fb;
-        source = input;
-        formatted = std::move(output);
-        type = kEvaluated;
-    }
+                                               FormattedValue&& output)
+        : fallback(fb), source(input), formatted(std::move(output)) {}
 
     FormattedPlaceholder::FormattedPlaceholder(const FormattableWithOptions& input,
-                                               const UnicodeString& fb,
-                                               Type t) {
-        fallback = fb;
-        source = input;
-        type = t;
-    }
+                                               const UnicodeString& fb)
+        : fallback(fb), source(input) {}
 
     FormattedPlaceholder::~FormattedPlaceholder() {}
 
@@ -356,13 +369,18 @@ namespace message2 {
             return {};
         }
 
-        const Formattable& toFormat = input.asFormattable().getValue();
+        const Formattable* toFormat = input.getSource(status);
+        // Check for null/fallback
+        if (U_FAILURE(status)) {
+            return {};
+        }
+
         // Try as decimal number first
-        if (toFormat.isNumeric()) {
+        if (toFormat->isNumeric()) {
             // Note: the ICU Formattable has to be created here since the StringPiece
             // refers to state inside the Formattable; so otherwise we'll have a reference
             // to a temporary object
-            icu::Formattable icuFormattable = toFormat.asICUFormattable(status);
+            icu::Formattable icuFormattable = toFormat->asICUFormattable(status);
             StringPiece asDecimal = icuFormattable.getDecimalNumber(status);
             if (U_FAILURE(status)) {
                 return {};
@@ -370,38 +388,39 @@ namespace message2 {
             if (asDecimal != nullptr) {
                 return input.withOutput(FormattedValue(formatNumberWithDefaults(locale,
                                                                                 asDecimal,
-                                                                                status)));
+                                                                                status)),
+                                        status);
             }
         }
 
-        UFormattableType type = toFormat.getType();
+        UFormattableType type = toFormat->getType();
         switch (type) {
         case UFMT_DATE: {
             UnicodeString result;
-            UDate d = toFormat.getDate(status);
+            UDate d = toFormat->getDate(status);
             U_ASSERT(U_SUCCESS(status));
             formatDateWithDefaults(locale, d, result, status);
-            return input.withOutput(FormattedValue(std::move(result)));
+            return input.withOutput(FormattedValue(std::move(result)), status);
         }
         case UFMT_DOUBLE: {
-            double d = toFormat.getDouble(status);
+            double d = toFormat->getDouble(status);
             U_ASSERT(U_SUCCESS(status));
-            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, d, status)));
+            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, d, status)), status);
         }
         case UFMT_LONG: {
-            int32_t l = toFormat.getLong(status);
+            int32_t l = toFormat->getLong(status);
             U_ASSERT(U_SUCCESS(status));
-            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, l, status)));
+            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, l, status)), status);
         }
         case UFMT_INT64: {
-            int64_t i = toFormat.getInt64Value(status);
+            int64_t i = toFormat->getInt64Value(status);
             U_ASSERT(U_SUCCESS(status));
-            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, i, status)));
+            return input.withOutput(FormattedValue(formatNumberWithDefaults(locale, i, status)), status);
         }
         case UFMT_STRING: {
-            const UnicodeString& s = toFormat.getString(status);
+            const UnicodeString& s = toFormat->getString(status);
             U_ASSERT(U_SUCCESS(status));
-            return input.withOutput(FormattedValue(UnicodeString(s)));
+            return input.withOutput(FormattedValue(UnicodeString(s)), status);
         }
         default: {
             // No default formatters for other types; use fallback
@@ -409,7 +428,7 @@ namespace message2 {
             // Note: it would be better to set an internal formatting error so that a string
             // (e.g. the type tag) can be provided. However, this  method is called by the
             // public method formatToString() and thus can't take a MessageContext
-            return FormattedPlaceholder::fallbackPlaceholder(input.getFallback());
+            return FormattedPlaceholder(input.getFallback({}));
         }
         }
     }
@@ -421,25 +440,29 @@ namespace message2 {
         if (U_FAILURE(status)) {
             return {};
         }
-        if (isFallback() || isNullOperand()) {
-            return fallbackToString(fallback);
+        if (isNullOperand()) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return {};
+        }
+        if (isFallback()) {
+            return fallbackToString(*fallback);
         }
 
-        // Evaluated value: either just return the string, or format the number
+        // If there is output, either just return the string, or format the number
         // as a string and return it
-        if (isEvaluated()) {
-            if (formatted.isString()) {
-                return formatted.getString();
+        if (formatted) {
+            if (formatted->isString()) {
+                return formatted->getString();
             } else {
-                return formatted.getNumber().toString(status);
+                return formatted->getNumber().toString(status);
             }
         }
-        // Unevaluated value: first evaluate it fully, then format
+        // No output => format the input
         UErrorCode savedStatus = status;
         FormattedPlaceholder evaluated = formatWithDefaults(locale, *this, status);
         if (status == U_MF_FORMATTING_ERROR) {
             U_ASSERT(evaluated.isFallback());
-            return evaluated.getFallback();
+            return evaluated.getFallback({});
         }
         // Ignore U_USING_DEFAULT_WARNING
         if (status == U_USING_DEFAULT_WARNING) {
