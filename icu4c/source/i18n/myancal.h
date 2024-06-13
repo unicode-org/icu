@@ -32,8 +32,6 @@ U_NAMESPACE_BEGIN
  * supported to accommodate older eras.
  * Adapted from a C++ implementation by Yan Naing Aye https://github.com/yan9a/mmcal/tree/master/cpp
  *
- * @see GregorianCalendar
- *
  * @author Nick Doiron
  * @internal
  */
@@ -99,7 +97,7 @@ class MyanmarCalendar : public Calendar {
   virtual ~MyanmarCalendar();
 
   // clone
-  virtual Calendar* clone() const;
+  virtual Calendar* clone() const override;
 
  private:
   /**
@@ -134,7 +132,7 @@ class MyanmarCalendar : public Calendar {
   /**
    * @internal
    */
-  virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const;
+  virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const override;
 
   /**
    * Return the length (in days) of the given month.
@@ -150,7 +148,7 @@ class MyanmarCalendar : public Calendar {
    * Return the number of days in the given Myanmar year
    * @internal
    */
-  virtual int32_t handleGetYearLength(int32_t extendedYear) const;
+  virtual int32_t handleGetYearLength(int32_t extendedYear) const override;
 
   //-------------------------------------------------------------------------
   // Functions for converting from field values to milliseconds....
@@ -187,7 +185,7 @@ class MyanmarCalendar : public Calendar {
    * calendar equivalents for the given Julian day.
    * @internal
    */
-  virtual void handleComputeFields(int32_t julianDay, UErrorCode &status);
+  virtual void handleComputeFields(int32_t julianDay, UErrorCode &status) override;
 
   // UObject stuff
  public:
@@ -196,7 +194,7 @@ class MyanmarCalendar : public Calendar {
    *           same class ID. Objects of other classes have different class IDs.
    * @internal
    */
-  virtual UClassID getDynamicClassID(void) const;
+  virtual UClassID getDynamicClassID(void) const override;
 
   /**
    * Return the class ID for this class. This is useful only for comparing to a return
@@ -217,7 +215,7 @@ class MyanmarCalendar : public Calendar {
    * @return calendar type
    * @internal
    */
-  virtual const char * getType() const;
+  virtual const char * getType() const override;
 
  private:
   MyanmarCalendar(); // default constructor not implemented
@@ -228,20 +226,20 @@ class MyanmarCalendar : public Calendar {
    * Returns TRUE because the Myanmar Calendar does have a default century
    * @internal
    */
-  virtual UBool haveDefaultCentury() const;
+  virtual UBool haveDefaultCentury() const override;
 
   /**
    * Returns the date of the start of the default century
    * @return start of century - in milliseconds since epoch, 1970
    * @internal
    */
-  virtual UDate defaultCenturyStart() const;
+  virtual UDate defaultCenturyStart() const override;
 
   /**
    * Returns the year in which the default century begins
    * @internal
    */
-  virtual int32_t defaultCenturyStartYear() const;
+  virtual int32_t defaultCenturyStartYear() const override;
 };
 
 U_NAMESPACE_END

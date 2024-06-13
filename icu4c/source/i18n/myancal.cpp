@@ -151,7 +151,6 @@ int32_t MyanmarCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mont
  * Return the number of days in the given Myanmar year
  */
 int32_t MyanmarCalendar::handleGetYearLength(int32_t extendedYear) const {
-    int32_t leapStatus;
     long watat_type, waso_type;
 
     cal_watat(extendedYear, watat_type, waso_type);
@@ -191,7 +190,7 @@ void MyanmarCalendar::cal_my(int32_t myan_year, int32_t& myan_year_type, long& s
 //-------------------------------------------------------------------------
 
 // Return JD of start of given month/year
-int64_t MyanmarCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /*useMonth*/, UErrorCode& status) const {
+int64_t MyanmarCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /*useMonth*/, UErrorCode& /*status*/) const {
     int32_t myan_day_offset = -1;
     int32_t myan_year_type;
     long b, c, dayOfYear, year_length, monthType;
@@ -223,7 +222,7 @@ int64_t MyanmarCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
 
     /* 2nd waso correction for non-leap years */
     if (myan_year_type == 0 && month == 4) {
-      return dayOfYear;
+      return startOfTagu;
     }
 
     monthType = long(floor(month / 13));
