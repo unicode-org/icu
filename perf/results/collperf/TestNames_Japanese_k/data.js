@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1718287014763,
+  "lastUpdate": 1718299513619,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -45682,6 +45682,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5955122.2652,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "09dce103f2bd6e621a153da3f399d2c52a9f668e",
+          "message": "ICU-22797 Move the loop limit before ignore continue\n\nFix an infinity loop issue inside collation builder",
+          "timestamp": "2024-06-13T09:58:15-07:00",
+          "tree_id": "1b2b3707e6605125b59e986f2aa9325062367ec9",
+          "url": "https://github.com/unicode-org/icu/commit/09dce103f2bd6e621a153da3f399d2c52a9f668e"
+        },
+        "date": 1718299385980,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 233.0803,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21000648.8526,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5371481.7488,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19769939.883,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5922052.3977,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
