@@ -54,6 +54,7 @@ MessageFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const ch
     TESTCASE_AUTO(TestChoicePatternQuote);
     TESTCASE_AUTO(Test4112104);
     TESTCASE_AUTO(TestICU12584);
+    TESTCASE_AUTO(TestICU22798);
     TESTCASE_AUTO(TestAPI);
     TESTCASE_AUTO_END;
 }
@@ -1012,6 +1013,23 @@ void MessageFormatRegressionTest::TestICU12584() {
     count = 0;
     inner_msg.getFormats(count);
     assertEquals("Inner placeholder match", 3, count);
+}
+void MessageFormatRegressionTest::TestICU22798() {
+    // Test deep nested choice will not cause stack overflow but return error
+    // instead.
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString pattern;
+    constexpr static int testNestedLevel = 30000;
+    for (int i = 0; i < testNestedLevel; i++) {
+      pattern += u"A{0,choice,0#";
+    }
+    pattern += u"text";
+    for (int i = 0; i < testNestedLevel; i++) {
+      pattern += u"}a";
+    }
+    MessageFormat msg(pattern, status);
+    assertEquals("Deep nested choice should cause error but not crash",
+                 U_INDEX_OUTOFBOUNDS_ERROR, status);
 }
 
 void MessageFormatRegressionTest::TestAPI() {

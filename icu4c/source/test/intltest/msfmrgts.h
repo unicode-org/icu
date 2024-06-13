@@ -46,6 +46,7 @@ public:
     void TestChoicePatternQuote();
     void Test4112104();
     void TestICU12584();
+    void TestICU22798();
     void TestAPI();
 
 protected:
