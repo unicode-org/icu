@@ -162,25 +162,25 @@ int32_t MyanmarCalendar::handleGetYearLength(int32_t extendedYear) const {
     }
 }
 
-void MyanmarCalendar::cal_my(int32_t myan_year, int32_t& myan_year_type, long& startOfTagu, long& full_moon_waso_2, long& addedOffset) const {
+void MyanmarCalendar::cal_my(int32_t myan_year, int32_t& myan_year_type, long& startOfTagu, long& full_moon_waso_2) const {
 	long prevYears = 0, year_length_diff = 0, prev_year_little_watat, prev_year_full_moon_waso_2, subject_year_little_watat, subject_year_full_moon_waso_2;
-  addedOffset = 0;
 	cal_watat(myan_year, subject_year_little_watat, subject_year_full_moon_waso_2);
   myan_year_type = subject_year_little_watat;
 	do {
     prevYears++;
     cal_watat(myan_year - prevYears, prev_year_little_watat, prev_year_full_moon_waso_2);
   } while (prev_year_little_watat == 0 && prevYears < 3);
-	if (myan_year_type) {
-		year_length_diff = (subject_year_full_moon_waso_2 - prev_year_full_moon_waso_2) % 354;
-    myan_year_type = long(floor(year_length_diff / 31) + 1);
+
+
+  if (myan_year_type != 0) {
 		full_moon_waso_2 = subject_year_full_moon_waso_2;
-    if (year_length_diff != 30 && year_length_diff != 31) {
-      addedOffset = 1;
-    }
 	} else {
     full_moon_waso_2 = prev_year_full_moon_waso_2 + 354 * prevYears;
   }
+  if (prev_year_little_watat == 2) {
+    prev_year_full_moon_waso_2 += 1;
+  }
+
 	startOfTagu = prev_year_full_moon_waso_2 + 354 * prevYears - 102;
 }
 
@@ -193,30 +193,15 @@ int64_t MyanmarCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
     int32_t myan_day_offset = -1;
     int32_t myan_year_type;
     long b, c, dayOfYear, year_length, monthType;
-    long startOfTagu, full_moon_waso_2, addedOffset;
+    long startOfTagu, full_moon_waso_2;
 
-    cal_my(long(eyear), myan_year_type, startOfTagu, full_moon_waso_2, addedOffset);//check year
+    cal_my(long(eyear), myan_year_type, startOfTagu, full_moon_waso_2);
 
     /* month order correction */
     if (month == 3) {
       month = 0;
     } else if (month < 3) {
       month++;
-    }
-
-    /* 2015-2018 CE correction */
-    if (
-      (eyear > 1377 && eyear < 1380) ||
-      (eyear == 1377 && month >= 4) ||
-      (eyear == 1380 && month % 13 <= 3)
-    ) {
-      myan_day_offset = 0;
-    }
-    if (eyear == 1377 && month <= 0) {
-      myan_day_offset = 0;
-    }
-    if (eyear == 1380 && month == 0) {
-      myan_day_offset = -1;
     }
 
     /* 2nd waso correction for non-leap years */
@@ -268,18 +253,15 @@ int32_t MyanmarCalendar::handleGetExtendedYear(UErrorCode& /* status */) {
  */
 void MyanmarCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*status*/) {
     int32_t dayOfYear, year_length, monthType;
-    long startOfTagu, full_moon_waso_2, addedOffset, a, b, c, e, f;
+    long startOfTagu, full_moon_waso_2, a, b, c, e, f;
     int32_t myan_year_type;
-    int32_t og_julian = julianDay;
     long myan_year = long(floor((julianDay - 0.5 - MYANMAR_EPOCH) / SOLAR_YEAR)); //Myanmar year
-    /* long watat correction from 2015-2018 CE */
-    if (julianDay > 2457190 && julianDay < 2458283) {
-      julianDay--;
-    }
-    cal_my(myan_year, myan_year_type, startOfTagu, full_moon_waso_2, addedOffset); //check year
+
+    cal_my(myan_year, myan_year_type, startOfTagu, full_moon_waso_2);
     dayOfYear = julianDay - startOfTagu + 1;//day count
     b = long(floor(myan_year_type / 2));
     c = long(floor(1 / (myan_year_type + 1))); //big wa and common yr
+
     year_length = 354 + (1 - c) * 30 + b;//year length
     monthType = long(floor((dayOfYear - 1) / year_length)); //month type: late =1 or early = 0
     dayOfYear -= monthType * year_length;
@@ -300,11 +282,6 @@ void MyanmarCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*statu
     /* 2nd waso correction for non-leap years */
     if (myan_year_type == 0 && myan_month == 4) {
       myan_month = 3;
-    }
-    /* big watat extra day correction */
-    if (og_julian == 2457190) {
-      myan_month = 2;
-      myan_day = 30;
     }
 
     internalSet(UCAL_ERA, 0);
@@ -421,22 +398,25 @@ void MyanmarCalendar::GetMyConst(int32_t myan_year, double& era, double& WO, dou
   if (i >= 0) EW = 1; //correct watat exceptions
 }
 
-void MyanmarCalendar::cal_watat(int32_t myan_year, long& watat, long& full_moon_waso_2) const {//get data for respective era
+void MyanmarCalendar::cal_watat(int32_t myan_year, long& watat, long& full_moon_waso_2) const {
 	double era, WO, NM, excess_days;
   long EW;
 	GetMyConst(myan_year, era, WO, NM, EW); // get constants for the corresponding calendar era
-	double TA = (SOLAR_YEAR / 12 - LUNAR_MONTH) * (12 - NM); //threshold to adjust
+	double TA = (SOLAR_YEAR / 12 - LUNAR_MONTH) * (12 - NM);
   excess_days = fmod(SOLAR_YEAR*(myan_year+3739),LUNAR_MONTH);
 	if (excess_days < TA) {
     excess_days += LUNAR_MONTH; //adjust excess days
   }
 	full_moon_waso_2 = long(round(SOLAR_YEAR * myan_year + MYANMAR_EPOCH - excess_days + 4.5 * LUNAR_MONTH + WO));
 	double TW = 0;
-  watat = 0;//find watat
-	if (era >= 2) {//if 2nd era or later find watat based on excess days
+  watat = 0;
+	if (era >= 2) {
 		TW = LUNAR_MONTH - (SOLAR_YEAR / 12 - LUNAR_MONTH) * NM;
 		if (excess_days >= TW) {
       watat = 1;
+    }
+    if (myan_year == 1377) {
+      watat = 2;
     }
 	}
 	else {//if 1st era,find watat by 19 years metonic cycle

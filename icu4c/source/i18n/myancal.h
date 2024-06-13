@@ -123,7 +123,7 @@ class MyanmarCalendar : public Calendar {
   long bSearch1(int32_t k,long* A, long u) const;
   void GetMyConst(int32_t my, double& EI, double& WO, double& NM, long& EW) const;
   void cal_watat(int32_t my, long& watat, long& fm) const;
-  void cal_my(int32_t my, int32_t& myt, long& tg1, long& fm, long& werr) const;
+  void cal_my(int32_t my, int32_t& myt, long& tg1, long& fm) const;
 
   //----------------------------------------------------------------------
   // Calendar framework
