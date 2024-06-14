@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1718314938675,
+  "lastUpdate": 1718351454405,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23068,6 +23068,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 4.450226799412113,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "697cb14f08df83f94e2ec9d1046035cdace56783",
+          "message": "ICU-22798 Avoid stack overflow by return error.\n\nSee #3035",
+          "timestamp": "2024-06-14T13:09:30+05:30",
+          "tree_id": "91a2b5fd6deaeb33ec000a1f2178686e59e6a209",
+          "url": "https://github.com/unicode-org/icu/commit/697cb14f08df83f94e2ec9d1046035cdace56783"
+        },
+        "date": 1718351328463,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 4.374858387818892,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
