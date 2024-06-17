@@ -938,6 +938,9 @@ toUpperCase(const char16_t* source, int32_t len, const char* locale) {
 
     ec = U_ZERO_ERROR;
     dest = (char16_t*)uprv_malloc(sizeof(char16_t) * MAX(destLen, len));
+    if (dest == nullptr) {
+        return nullptr;
+    }
     u_strToUpper(dest, destLen, source, len, locale, &ec);
     if (U_FAILURE(ec)) {
         u_memcpy(dest, source, len);
@@ -946,6 +949,7 @@ toUpperCase(const char16_t* source, int32_t len, const char* locale) {
 }
 
 
+static void deleteCurrencyNames(CurrencyNameStruct* currencyNames, int32_t count);
 // Collect all available currency names associated with the given locale
 // (enable fallback chain).
 // Read currenc names defined in resource bundle "Currencies" and
@@ -959,6 +963,11 @@ collectCurrencyNames(const char* locale,
                      CurrencyNameStruct** currencySymbols, 
                      int32_t* total_currency_symbol_count, 
                      UErrorCode& ec) {
+    if (U_FAILURE(ec)) {
+        *currencyNames = *currencySymbols = nullptr;
+        *total_currency_name_count = *total_currency_symbol_count = 0;
+        return;
+    }
     U_NAMESPACE_USE
     const icu::Hashtable *currencySymbolsEquiv = getCurrSymbolsEquiv();
     // Look up the Currencies resource for the given locale.
@@ -967,6 +976,9 @@ collectCurrencyNames(const char* locale,
     CharString loc = ulocimp_getName(locale, ec2);
     if (U_FAILURE(ec2)) {
         ec = U_ILLEGAL_ARGUMENT_ERROR;
+        *currencyNames = *currencySymbols = nullptr;
+        *total_currency_name_count = *total_currency_symbol_count = 0;
+        return;
     }
 
     // Get maximum currency name count first.
@@ -974,14 +986,22 @@ collectCurrencyNames(const char* locale,
 
     *currencyNames = (CurrencyNameStruct*)uprv_malloc
         (sizeof(CurrencyNameStruct) * (*total_currency_name_count));
+    if(*currencyNames == nullptr) {
+        *currencySymbols = nullptr;
+        *total_currency_name_count = *total_currency_symbol_count = 0;
+        ec = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     *currencySymbols = (CurrencyNameStruct*)uprv_malloc
         (sizeof(CurrencyNameStruct) * (*total_currency_symbol_count));
 
-    if(currencyNames == nullptr || currencySymbols == nullptr) {
-      ec = U_MEMORY_ALLOCATION_ERROR;
+    if(*currencySymbols == nullptr) {
+        uprv_free(*currencyNames);
+        *currencyNames = nullptr;
+        *total_currency_name_count = *total_currency_symbol_count = 0;
+        ec = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
-
-    if (U_FAILURE(ec)) return;
 
     const char16_t* s = nullptr;  // currency name
     char* iso = nullptr;  // currency ISO code
@@ -1028,12 +1048,19 @@ collectCurrencyNames(const char* locale,
             // Add currency long name.
             s = ures_getStringByIndex(names.getAlias(), UCURR_LONG_NAME, &len, &ec2);
             char16_t* upperName = toUpperCase(s, len, locale);
-
+            if (upperName == nullptr) {
+                ec = U_MEMORY_ALLOCATION_ERROR;
+                goto error;
+            }
             (*currencyNames)[(*total_currency_name_count)++] = {iso, upperName, len, NEED_TO_BE_DELETED};
 
             // put (iso, 3, and iso) in to array
             // Add currency ISO code.
             char16_t* isoCode = (char16_t*)uprv_malloc(sizeof(char16_t)*3);
+            if (isoCode == nullptr) {
+                ec = U_MEMORY_ALLOCATION_ERROR;
+                goto error;
+            }
             // Must convert iso[] into Unicode
             u_charsToUChars(iso, isoCode, 3);
             (*currencySymbols)[(*total_currency_symbol_count)++] = {iso, isoCode, 3, NEED_TO_BE_DELETED};
@@ -1058,6 +1085,10 @@ collectCurrencyNames(const char* locale,
                 // currency long name?
                 s = ures_getStringByIndex(names.getAlias(), j, &len, &ec5);
                 char16_t* upperName = toUpperCase(s, len, locale);
+                if (upperName == nullptr) {
+                    ec = U_MEMORY_ALLOCATION_ERROR;
+                    goto error;
+                }
                 (*currencyNames)[(*total_currency_name_count)++] = {iso, upperName, len, NEED_TO_BE_DELETED};
             }
         }
@@ -1100,6 +1131,15 @@ collectCurrencyNames(const char* locale,
       ec = ec3;
     } else if (U_FAILURE(ec4)) {
       ec = ec4;
+    }
+
+  error:
+    // clean up if we got error
+    if (U_FAILURE(ec)) {
+        deleteCurrencyNames(*currencyNames, *total_currency_name_count);
+        deleteCurrencyNames(*currencySymbols, *total_currency_symbol_count);
+        *currencyNames = *currencySymbols = nullptr;
+        *total_currency_name_count = *total_currency_symbol_count = 0;
     }
 }
 
@@ -1434,6 +1474,12 @@ getCacheEntry(const char* locale, UErrorCode& ec) {
                 }
             }
             cacheEntry = (CurrencyNameCacheEntry*)uprv_malloc(sizeof(CurrencyNameCacheEntry));
+            if (cacheEntry == nullptr) {
+                deleteCurrencyNames(currencyNames, total_currency_name_count);
+                deleteCurrencyNames(currencySymbols, total_currency_symbol_count);
+                ec = U_MEMORY_ALLOCATION_ERROR;
+                return nullptr;
+            }
             currCache[currentCacheEntryIndex] = cacheEntry;
             uprv_strcpy(cacheEntry->locale, locale);
             cacheEntry->currencyNames = currencyNames;
@@ -2584,6 +2630,10 @@ U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, 
             while ((value = (char *)ulist_getNext(otherValues)) != nullptr) {
                 if (!ulist_containsString(values, value, (int32_t)uprv_strlen(value))) {
                     char *tmpValue = (char *)uprv_malloc(sizeof(char) * ULOC_KEYWORDS_CAPACITY);
+                    if (tmpValue == nullptr) {
+                        *status = U_MEMORY_ALLOCATION_ERROR;
+                        break;
+                    }
                     uprv_memcpy(tmpValue, value, uprv_strlen(value) + 1);
                     ulist_addItemEndList(values, tmpValue, true, status);
                     if (U_FAILURE(*status)) {
