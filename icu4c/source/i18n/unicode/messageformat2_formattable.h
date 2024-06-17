@@ -805,7 +805,8 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
             return !fallback ? defaultFallback : *fallback;
         }
         /**
-         * Returns the formatted output of this placeholder. The result is undefined if !isEvaluated().
+         * Returns the formatted output of this placeholder. The result is nullptr if
+         * the output does not exist.
          *
          * @param  status Input/output error code. Set to U_ILLEGAL_ARGUMENT if this has
          *                no output.
@@ -814,7 +815,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        const FormattedValue* output(UErrorCode& status) const; // { return formatted; }
+        const FormattedValue* output(UErrorCode& status) const;
         /**
          * Move assignment operator:
          * The source FormattedPlaceholder will be left in a valid but undefined state.
