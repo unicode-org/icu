@@ -173,6 +173,21 @@ jobs:
         env:
           CPPFLAGS: -fsanitize=address
           LDFLAGS: -fsanitize=address
+  # Clang Linux with leak sanitizer.
+  clang-lsan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: ICU4C with clang and lsan
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug --disable-release Linux/clang --disable-renaming --enable-tracing;
+          make -j -l4.5 check;
+        env:
+          CPPFLAGS: -fsanitize=leak
+          LDFLAGS: -fsanitize=leak
+          ASAN_OPTIONS: detect_leaks=1
   # Clang Linux with undefined-behavior sanitizer.
   clang-ubsan:
     runs-on: ubuntu-latest
