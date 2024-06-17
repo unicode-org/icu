@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1718656035992,
+  "lastUpdate": 1718656190874,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -45687,6 +45687,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 11.757608192317234,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dayeung@chromium.org",
+            "name": "David Yeung"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "6e9e120520b73b78961dd957cb3ce762ed560199",
+          "message": "ICU-22796 Bugfix: Memory access after uprv_free().",
+          "timestamp": "2024-06-17T13:09:27-07:00",
+          "tree_id": "7fe2279e96a42dd6488d07caa448a1c393217870",
+          "url": "https://github.com/unicode-org/icu/commit/6e9e120520b73b78961dd957cb3ce762ed560199"
+        },
+        "date": 1718656062274,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 11.566655250672271,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
