@@ -61,6 +61,7 @@ FUZZER_TARGETS = \
 		 unicode_string_codepage_create_fuzzer \
 		 uprop_fuzzer \
 		 uregex_open_fuzzer \
+		 uregex_match_fuzzer \
 
 
 OBJECTS = $(FUZZER_TARGETS:%=%.o)
