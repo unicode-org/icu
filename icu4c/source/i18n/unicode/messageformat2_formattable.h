@@ -437,7 +437,24 @@ namespace message2 {
     }; // class Formattable
 
     class FunctionOptions;
+} // namespace message2
 
+/// @cond DOXYGEN_IGNORE
+// Export an explicit template instantiation of the LocalPointer that is used as a
+// data member of various MFDataModel classes.
+// (When building DLLs for Windows this is required.)
+// (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
+// for similar examples.)
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API LocalPointerBase<icu::message2::FunctionOptions>;
+template class U_I18N_API LocalArray<icu::message2::FunctionOptions>;
+#endif
+#if defined(U_REAL_MSVC)
+#pragma warning(pop)
+#endif
+/// @endcond
+
+namespace message2 {
     /**
      * The `FormattableWithOptions` class represents a typed value that has a map
      * of resolved options attached to it. If the map is non-empty, then this value
@@ -719,7 +736,27 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
     }; // class FormattedValue
 
     class FunctionOptions;
+} // namespace message2
 
+/// @cond DOXYGEN_IGNORE
+// Export an explicit template instantiation of the LocalPointer that is used as a
+// data member of various MFDataModel classes.
+// (When building DLLs for Windows this is required.)
+// (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
+// for similar examples.)
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API std::optional<icu::UnicodeString>;
+template class U_I18N_API std::optional<icu::message2::FormattableWithOptions>;
+template class U_I18N_API std::optional<icu::message2::FormattedValue>;
+template class U_I18N_API LocalPointerBase<icu::message2::ResolvedFunctionOption>;
+template class U_I18N_API LocalArray<icu::message2::ResolvedFunctionOption>;
+#endif
+#if defined(U_REAL_MSVC)
+#pragma warning(pop)
+#endif
+/// @endcond
+
+namespace message2 {
     /**
      * A `FormattablePlaceholder` encapsulates an input value (a `message2::FormattableWithOptions`)
      * together with an optional output value (a `message2::FormattedValue`).
