@@ -13,7 +13,6 @@
 IcuEnvironment* env = new IcuEnvironment();
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
-  UParseError pe = { 0 };
   UErrorCode status = U_ZERO_ERROR;
 
   size_t unistr_size = size/2;
