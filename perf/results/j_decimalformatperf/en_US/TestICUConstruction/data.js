@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1718680647222,
+  "lastUpdate": 1718730646941,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22797,6 +22797,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 486.2978527816068,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "8f6ba2a7a520ad6bad4fe9b7366e988f590d0ec0",
+          "message": "ICU-22721 Correct format specifier for type int32_t (-Wformat).",
+          "timestamp": "2024-06-18T09:57:56-07:00",
+          "tree_id": "8eeb267458e926187461844dad0dfe311366fd79",
+          "url": "https://github.com/unicode-org/icu/commit/8f6ba2a7a520ad6bad4fe9b7366e988f590d0ec0"
+        },
+        "date": 1718730520295,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 484.9381486534021,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
