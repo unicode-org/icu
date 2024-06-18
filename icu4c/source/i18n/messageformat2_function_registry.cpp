@@ -1067,7 +1067,10 @@ SimpleTimeZone* createTimeZonePart(const UnicodeString& offsetStr, UErrorCode& e
         return nullptr;
     }
     int32_t offset = sign * (static_cast<int32_t>(tzHour) * 60 + static_cast<int32_t>(tzMin)) * 60 * 1000;
-    LocalPointer<SimpleTimeZone> tz(new SimpleTimeZone(offset, UnicodeString("offset")));
+    LocalPointer<SimpleTimeZone> tz(new SimpleTimeZone(offset, UnicodeString("GMT") + offsetStr));
+/*
+Use tz.getIanaID() to get the time zone name
+*/
     if (!tz.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -1084,6 +1087,8 @@ static bool hasTzOffset(const UnicodeString& sourceStr) {
             && sourceStr[len - 3] == COLON);
 }
 
+// Note: `calendar` option to :datetime not implemented yet;
+// Gregorian calendar is assumed
 static GregorianCalendar* createCalendarFromDateString(const UnicodeString& sourceStr, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
@@ -1327,7 +1332,6 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
         U_ASSERT(U_SUCCESS(errorCode));
 
         LocalPointer<GregorianCalendar> cal(createCalendarFromDateString(sourceStr, errorCode));
-
         if (U_FAILURE(errorCode)) {
             errorCode = U_MF_OPERAND_MISMATCH_ERROR;
             return {};
@@ -1337,20 +1341,32 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
         // in the returned FormattedPlaceholder; this is necessary
         // so the date can be re-formatted
         df->format(*cal, result, 0, errorCode);
-        toFormat = FormattedPlaceholder(message2::Formattable(std::move(*cal)),
+
+        // Construct DateInfo from Date
+        UDate absoluteDate = cal->getTime(errorCode);
+        const TimeZone& tz = cal->getTimeZone();
+        UnicodeString timeZoneId;
+        tz.getID(timeZoneId);
+        UnicodeString timeZoneName;
+        // This doesn't work for offsets -- TODO
+        //        tz.getIanaID(timeZoneId, timeZoneName, errorCode);
+        // Empty string for Gregorian calendar (default);
+        // `:datetime` `calendar` option not implemented yet,
+        // so other calendars aren't implemented
+        DateInfo dateInfo = {absoluteDate, timeZoneId, {}}; // Should be timeZoneName, but getIanaID() doesn't work for strings like GMT+03:30
+        toFormat = FormattedPlaceholder(message2::Formattable(std::move(dateInfo)),
                                         toFormat.getFallback());
         break;
     }
     case UFMT_DATE: {
-        const GregorianCalendar* cal = source.getDate(errorCode);
+        const DateInfo* dateInfo = source.getDate(errorCode);
         U_ASSERT(U_SUCCESS(errorCode));
-        U_ASSERT(cal != nullptr);
-        LocalPointer<GregorianCalendar> copied(new GregorianCalendar(*cal));
-        if (!copied.isValid()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
+
+        LocalPointer<GregorianCalendar> cal(dateInfo->createGregorianCalendar(errorCode));
+        if (U_FAILURE(errorCode)) {
             return {};
         }
-        df->format(*copied, result, 0, errorCode);
+        df->format(*cal, result, 0, errorCode);
         if (U_FAILURE(errorCode)) {
             if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
                 errorCode = U_MF_OPERAND_MISMATCH_ERROR;

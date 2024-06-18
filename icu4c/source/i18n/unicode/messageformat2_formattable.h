@@ -68,6 +68,7 @@ namespace message2 {
         virtual ~FormattableObject();
     }; // class FormattableObject
 
+    struct DateInfo;
     class Formattable;
 } // namespace message2
 
@@ -86,7 +87,7 @@ template class U_I18N_API std::_Variant_storage_<false,
   int64_t,
   icu::UnicodeString,
   icu::Formattable,
-  icu::GregorianCalendar,
+  icu::message2::DateInfo;
   const icu::message2::FormattableObject *,
   std::pair<const icu::message2::Formattable *,int32_t>>;
 #endif
@@ -95,7 +96,7 @@ template class U_I18N_API std::variant<double,
 				       int64_t,
 				       icu::UnicodeString,
 				       icu::Formattable,
-                                       icu::GregorianCalendar,
+                                       icu::message2::DateInfo,
 				       const icu::message2::FormattableObject*,
                                        P>;
 #endif
@@ -104,6 +105,19 @@ template class U_I18N_API std::variant<double,
 U_NAMESPACE_BEGIN
 
 namespace message2 {
+
+// TODO: doc comments
+    struct U_I18N_API DateInfo {
+        // Milliseconds since Unix epoch
+        UDate date;
+        // IANA time zone name; "UTC" if UTC; empty string if value is floating
+        UnicodeString zoneName;
+        // Empty if not specified; proleptic Gregorian (8601) calendar is default
+        UnicodeString calendarName;
+
+        GregorianCalendar* createGregorianCalendar(UErrorCode&) const;
+    };
+
     /**
      * The `Formattable` class represents a typed value that can be formatted,
      * originating either from a message argument or a literal in the code.
@@ -232,20 +246,20 @@ namespace message2 {
         }
 
         /**
-         * Gets the calendar representing the date value of this object.
+         * Gets the struct representing the date value of this object.
          * If this object is not of type kDate then the result is
          * undefined and the error code is set.
          *
          * @param status Input/output error code.
-         * @return   A non-owned pointer to a GregorianCalendar object
+         * @return   A non-owned pointer to a DateInfo object
          *           representing the underlying date of this object.
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        const GregorianCalendar* getDate(UErrorCode& status) const {
+        const DateInfo* getDate(UErrorCode& status) const {
             if (U_SUCCESS(status)) {
                 if (isDate()) {
-                    return std::get_if<GregorianCalendar>(&contents);
+                    return std::get_if<DateInfo>(&contents);
                 }
                 status = U_ILLEGAL_ARGUMENT_ERROR;
             }
@@ -360,13 +374,13 @@ namespace message2 {
         /**
          * Date constructor.
          *
-         * @param c A GregorianCalendar value representing a date,
+         * @param d A DateInfo struct representing a date,
          *          to wrap as a Formattable.
          *          Passed by move
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        Formattable(GregorianCalendar&& c) : contents(std::move(c)) {}
+        Formattable(DateInfo&& d) : contents(std::move(d)) {}
         /**
          * Creates a Formattable object of an appropriate numeric type from a
          * a decimal number in string form.  The Formattable will retain the
@@ -426,7 +440,7 @@ namespace message2 {
                      int64_t,
                      UnicodeString,
                      icu::Formattable, // represents a Decimal
-                     GregorianCalendar,
+                     DateInfo,
                      const FormattableObject*,
                      std::pair<const Formattable*, int32_t>> contents;
         UnicodeString bogusString; // :((((
@@ -435,7 +449,7 @@ namespace message2 {
             return std::holds_alternative<icu::Formattable>(contents);
         }
         UBool isDate() const {
-            return std::holds_alternative<GregorianCalendar>(contents);
+            return std::holds_alternative<DateInfo>(contents);
         }
     }; // class Formattable
 

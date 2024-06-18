@@ -11,6 +11,7 @@
 
 #include "unicode/messageformat2_formattable.h"
 #include "unicode/smpdtfmt.h"
+#include "messageformat2_allocation.h"
 #include "messageformat2_macros.h"
 
 #include "limits.h"
@@ -227,19 +228,50 @@ namespace message2 {
         return df.orphan();
     }
 
-    void formatDateWithDefaults(const Locale& locale, const GregorianCalendar& cal, UnicodeString& result, UErrorCode& errorCode) {
+    GregorianCalendar* DateInfo::createGregorianCalendar(UErrorCode& errorCode) const {
+        NULL_ON_ERROR(errorCode);
+
+        LocalPointer<GregorianCalendar> cal(new GregorianCalendar(errorCode));
+        if (!cal.isValid()) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        // Copy info from this
+        // Non-Gregorian calendars not implemented yet
+        U_ASSERT(calendarName.length() == 0);
+        cal->setTime(date, errorCode);
+        // If time zone is present...
+        if (zoneName.length() > 0) {
+            if (zoneName == UnicodeString("UTC")) {
+                cal->setTimeZone(*TimeZone::getGMT());
+            } else {
+                LocalPointer<TimeZone> tz(TimeZone::createTimeZone(zoneName));
+                if (!tz.isValid()) {
+                    errorCode = U_MEMORY_ALLOCATION_ERROR;
+                    return nullptr;
+                }
+                cal->setTimeZone(*tz);
+            }
+        }
+        return cal.orphan();
+    }
+
+    void formatDateWithDefaults(const Locale& locale,
+                                const DateInfo& dateInfo,
+                                UnicodeString& result,
+                                UErrorCode& errorCode) {
         CHECK_ERROR(errorCode);
 
         LocalPointer<DateFormat> df(defaultDateTimeInstance(locale, errorCode));
         CHECK_ERROR(errorCode);
         // We have to copy the `const` reference that was passed in,
         // because DateFormat::format() takes a non-const reference.
-        LocalPointer<GregorianCalendar> copied(new GregorianCalendar(cal));
-        if (!copied.isValid()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        df->format(*copied, result, nullptr, errorCode);
+
+        // Non-Gregorian calendars not supported yet
+        U_ASSERT(dateInfo.calendarName.length() == 0);
+        LocalPointer<GregorianCalendar> cal(dateInfo.createGregorianCalendar(errorCode));
+        CHECK_ERROR(errorCode);
+        df->format(*cal, result, nullptr, errorCode);
     }
 
     // Called when output is required and the contents are an unevaluated `Formattable`;
@@ -270,9 +302,9 @@ namespace message2 {
         switch (type) {
         case UFMT_DATE: {
             UnicodeString result;
-            const GregorianCalendar* cal = toFormat.getDate(status);
+            const DateInfo* dateInfo = toFormat.getDate(status);
             U_ASSERT(U_SUCCESS(status));
-            formatDateWithDefaults(locale, *cal, result, status);
+            formatDateWithDefaults(locale, *dateInfo, result, status);
             return FormattedPlaceholder(input, FormattedValue(std::move(result)));
         }
         case UFMT_DOUBLE: {
