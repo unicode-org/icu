@@ -1869,11 +1869,11 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
         if(err == U_BUFFER_OVERFLOW_ERROR || length >= (int32_t)sizeof(fullNameBuffer)) {
             U_ASSERT(baseName == nullptr);
             /*Go to heap for the fullName if necessary*/
-            fullName = (char *)uprv_malloc(sizeof(char)*(length + 1));
-            if (fullName == nullptr) {
-                fullName = fullNameBuffer;
+            char* newFullName = (char *)uprv_malloc(sizeof(char)*(length + 1));
+            if (newFullName == nullptr) {
                 break; // error: out of memory
             }
+            fullName = newFullName;
             err = U_ZERO_ERROR;
             length = canonicalize ?
                 uloc_canonicalize(localeID, fullName, length+1, &err) :
@@ -1992,11 +1992,12 @@ Locale::initBaseName(UErrorCode &status) {
     if (atPtr && eqPtr && atPtr < eqPtr) {
         // Key words exist.
         int32_t baseNameLength = (int32_t)(atPtr - fullName);
-        baseName = (char *)uprv_malloc(baseNameLength + 1);
-        if (baseName == nullptr) {
+        char* newBaseName = (char *)uprv_malloc(baseNameLength + 1);
+        if (newBaseName == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
+        baseName = newBaseName;
         uprv_strncpy(baseName, fullName, baseNameLength);
         baseName[baseNameLength] = 0;
 
