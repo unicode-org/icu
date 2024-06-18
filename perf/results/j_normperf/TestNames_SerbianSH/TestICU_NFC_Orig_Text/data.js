@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1718664621403,
+  "lastUpdate": 1718680673602,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22827,6 +22827,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 1.92162078429971,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "e5b8660a463821f2c4880cabdfd96f1c0395f24f",
+          "message": "ICU-22716 Add uregex_match_fuzzer\n\nBased on https://chromium-review.googlesource.com/c/chromium/deps/icu/+/5465572",
+          "timestamp": "2024-06-17T20:06:41-07:00",
+          "tree_id": "77e78ba7b9415034087fff7c866e6dae1f1ea96a",
+          "url": "https://github.com/unicode-org/icu/commit/e5b8660a463821f2c4880cabdfd96f1c0395f24f"
+        },
+        "date": 1718680547007,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 1.967194436391116,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
