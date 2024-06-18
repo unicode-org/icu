@@ -146,7 +146,7 @@ namespace message2 {
          * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
          */
-        TimeZone* createTimeZone(UErrorCode&) const;
+        TimeZone* createTimeZone(UErrorCode& status) const;
     };
 
     /**
