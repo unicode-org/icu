@@ -632,7 +632,7 @@ public:
         case Formattable::kInt64:
             {
                 char buf[256];
-                sprintf(buf, "%ldL", f.getLong());
+                sprintf(buf, "%dL", f.getLong());
                 return UnicodeString(buf, "");
             }
         case Formattable::kString:
