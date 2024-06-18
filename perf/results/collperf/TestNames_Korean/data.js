@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1718745773342,
+  "lastUpdate": 1718747894332,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -46059,6 +46059,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12688217.645,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "garywade@desisoftsystems.com",
+            "name": "Gary L. Wade",
+            "username": "garywade"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "b29eb331e1b101117c00e57868eaae147d6677f2",
+          "message": "ICU-22720 Update ICU4J to be comparable for relative date formatting as ICU4C for days of the week and quarters\nAdded enums for the days of week to RelativeUnit of RelativeDateTimeFormatter and changed QUARTERS to be included in this change rather than deprecated.  Removed short-circuiting of unit tests for the comparable formatting in ICU4C.  Added changes in formatNumericImpl and RelDateTimeDataSink to use the enums.  Added unit tests to RelativeDateTimeFormatter.java to test the enums proposed and removed the short-circuiting of days-of-week tests.",
+          "timestamp": "2024-06-18T13:56:07-07:00",
+          "tree_id": "25c1466d9e050ebe54671266ef5d93840deb6cfd",
+          "url": "https://github.com/unicode-org/icu/commit/b29eb331e1b101117c00e57868eaae147d6677f2"
+        },
+        "date": 1718747766602,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 217.3184,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 54659223.5565,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 11919462.5011,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 51965695.3604,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12604145.1884,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
