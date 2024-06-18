@@ -440,13 +440,14 @@ namespace message2 {
 } // namespace message2
 
 /// @cond DOXYGEN_IGNORE
-// Export an explicit template instantiation of the LocalPointer that is used as a
-// data member of various MFDataModel classes.
+// Export an explicit template instantiation of the LocalPointer that is used
+// to represent the `FormattableWithOptions` class.
 // (When building DLLs for Windows this is required.)
 // (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
 // for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
 template class U_I18N_API LocalPointerBase<icu::message2::FunctionOptions>;
+template class U_I18N_API LocalPointer<icu::message2::FunctionOptions>;
 template class U_I18N_API LocalArray<icu::message2::FunctionOptions>;
 #endif
 #if defined(U_REAL_MSVC)
@@ -739,12 +740,15 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
 } // namespace message2
 
 /// @cond DOXYGEN_IGNORE
-// Export an explicit template instantiation of the LocalPointer that is used as a
-// data member of various MFDataModel classes.
+// Export an explicit template instantiation of the LocalPointers and instances of
+// `std::optional` that are used in the definition of `FormattedPlaceholder`.
 // (When building DLLs for Windows this is required.)
 // (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
 // for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+#if defined(U_REAL_MSVC) && defined(_MSVC_STL_VERSION)
+struct U_I18N_API std::_Nontrivial_dummy_type;
+#endif
 template class U_I18N_API std::optional<icu::UnicodeString>;
 template class U_I18N_API std::optional<icu::message2::FormattableWithOptions>;
 template class U_I18N_API std::optional<icu::message2::FormattedValue>;
