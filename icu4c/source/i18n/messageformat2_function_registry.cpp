@@ -1040,6 +1040,7 @@ static UDate tryTimeZonePatterns(const UnicodeString& sourceStr, UErrorCode& err
     return d;
 }
 
+// Parse a string like [+-]nn:nn to a time zone
 SimpleTimeZone* createTimeZonePart(const UnicodeString& offsetStr, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
@@ -1057,6 +1058,7 @@ SimpleTimeZone* createTimeZonePart(const UnicodeString& offsetStr, UErrorCode& e
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
+    // Split string into hour and minute parts and parse each part as a double
     UnicodeString tzPart1 = offsetStr.tempSubString(1, indexOfColon);
     UnicodeString tzPart2 = offsetStr.tempSubString(indexOfColon + 1, len);
     double tzHour, tzMin;
@@ -1066,6 +1068,7 @@ SimpleTimeZone* createTimeZonePart(const UnicodeString& offsetStr, UErrorCode& e
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
+    // Create integer offset from parsed parts
     int32_t offset = sign * (static_cast<int32_t>(tzHour) * 60 + static_cast<int32_t>(tzMin)) * 60 * 1000;
     LocalPointer<SimpleTimeZone> tz(new SimpleTimeZone(offset, UnicodeString("GMT") + offsetStr));
     if (!tz.isValid()) {
@@ -1093,7 +1096,7 @@ static DateInfo createDateInfoFromString(const UnicodeString& sourceStr, UErrorC
 
     UDate absoluteDate;
 
-    // Try time zone part
+    // Check if the string has a time zone part
     int32_t indexOfZ = sourceStr.indexOf('Z');
     int32_t indexOfPlus = sourceStr.lastIndexOf('+');
     int32_t indexOfMinus = sourceStr.lastIndexOf('-');
@@ -1102,33 +1105,37 @@ static DateInfo createDateInfoFromString(const UnicodeString& sourceStr, UErrorC
     bool isGMT = indexOfZ > 0;
     UnicodeString offsetPart;
     bool hasTimeZone = isTzOffset || isGMT;
+
     if (!hasTimeZone) {
-        // No time zone
+        // No time zone; parse the date and time
         absoluteDate = tryPatterns(sourceStr, errorCode);
     } else {
         // Try to split into time zone and non-time-zone parts
-        UnicodeString noTimeZone;
+        UnicodeString dateTimePart;
         if (isGMT) {
-            noTimeZone = sourceStr.tempSubString(0, indexOfZ);
+            dateTimePart = sourceStr.tempSubString(0, indexOfZ);
         } else {
-            noTimeZone = sourceStr.tempSubString(0, indexOfSign);
+            dateTimePart = sourceStr.tempSubString(0, indexOfSign);
         }
-        tryPatterns(noTimeZone, errorCode);
+        // Parse the date from the date/time part
+        tryPatterns(dateTimePart, errorCode);
         // Failure -- can't parse this string
         if (U_FAILURE(errorCode)) {
             return {};
         }
-        // Success -- now handle the time zone part
+        // Success -- now parse the time zone part
         if (isGMT) {
-            noTimeZone += UnicodeString("GMT");
-            absoluteDate = tryTimeZonePatterns(noTimeZone, errorCode);
+            dateTimePart += UnicodeString("GMT");
+            absoluteDate = tryTimeZonePatterns(dateTimePart, errorCode);
         } else {
-            // Finally, try [+-]nn:nn
+            // Try to parse time zone in offset format: [+-]nn:nn
             absoluteDate = tryTimeZonePatterns(sourceStr, errorCode);
             offsetPart = sourceStr.tempSubString(indexOfSign, sourceStr.length());
         }
     }
 
+    // Create a TimeZone from the parsed time zone, in order to get a canonical
+    // ID for the time zone
     const TimeZone* tz;
     if (hasTimeZone) {
         if (isGMT) {
