@@ -105,15 +105,47 @@ U_NAMESPACE_BEGIN
 
 namespace message2 {
 
-// TODO: doc comments
+    /**
+     * The `DateInfo` struct represents all the information needed to
+     * format a date with a time zone. It includes an absolute date and a time zone name,
+     * as well as a calendar name. The calendar name is not currently used.
+     *
+     * @internal ICU 76 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     struct U_I18N_API DateInfo {
-        // Milliseconds since Unix epoch
+        /**
+         * Milliseconds since Unix epoch
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         UDate date;
-        // IANA time zone name; "UTC" if UTC; empty string if value is floating
+        /**
+         * IANA time zone name; "UTC" if UTC; empty string if value is floating
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         UnicodeString zoneName;
-        // Empty if not specified; proleptic Gregorian (8601) calendar is default
+        /**
+         * Calendar name. Note: non-Gregorian calendars not yet implemented.
+         * String is empty if calendar not specified. Proleptic Gregorian calendar
+         * is default.
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         UnicodeString calendarName;
-
+        /**
+         * Creates a `TimeZone` from this `DateInfo`'s time zone name.
+         *
+         * @param status Input/output error code.
+         * @return A TimeZone object, which the caller adopts.
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         TimeZone* createTimeZone(UErrorCode&) const;
     };
 
