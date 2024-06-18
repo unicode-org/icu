@@ -12,7 +12,7 @@
 IcuEnvironment* env = new IcuEnvironment();
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
-  UParseError pe = { 0 };
+  UParseError pe = { 0, 0, {0}, {0} };
   UErrorCode status = U_ZERO_ERROR;
 
   URegularExpression* re = uregex_open(reinterpret_cast<const char16_t*>(data),
