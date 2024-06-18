@@ -1089,8 +1089,10 @@ static bool hasTzOffset(const UnicodeString& sourceStr) {
 
 // Note: `calendar` option to :datetime not implemented yet;
 // Gregorian calendar is assumed
-static GregorianCalendar* createCalendarFromDateString(const UnicodeString& sourceStr, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
+static DateInfo createDateInfoFromString(const UnicodeString& sourceStr, UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return {};
+    }
 
     UDate absoluteDate;
 
@@ -1116,7 +1118,9 @@ static GregorianCalendar* createCalendarFromDateString(const UnicodeString& sour
         }
         tryPatterns(noTimeZone, errorCode);
         // Failure -- can't parse this string
-        NULL_ON_ERROR(errorCode);
+        if (U_FAILURE(errorCode)) {
+            return {};
+        }
         // Success -- now handle the time zone part
         if (isGMT) {
             noTimeZone += UnicodeString("GMT");
@@ -1127,19 +1131,31 @@ static GregorianCalendar* createCalendarFromDateString(const UnicodeString& sour
             offsetPart = sourceStr.tempSubString(indexOfSign, sourceStr.length());
         }
     }
-    LocalPointer<GregorianCalendar> cal(new GregorianCalendar(errorCode));
-    NULL_ON_ERROR(errorCode);
-    cal->setTime(absoluteDate, errorCode);
+    const TimeZone* tz;
     if (hasTimeZone) {
         if (isGMT) {
-            cal->setTimeZone(*TimeZone::getGMT());
+            tz = TimeZone::getGMT();
         } else {
-            LocalPointer<SimpleTimeZone> tz(createTimeZonePart(offsetPart, errorCode));
-            NULL_ON_ERROR(errorCode);
-            cal->adoptTimeZone(tz.orphan());
+            tz = createTimeZonePart(offsetPart, errorCode);
         }
+    } else {
+        tz = TimeZone::createDefault();
     }
-    return cal.orphan();
+    if (tz == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    if (U_FAILURE(errorCode)) {
+        return {};
+    }
+    UnicodeString tzID;
+    // This doesn't work for offsets -- TODO
+    //        tz.getIanaID(timeZoneId, timeZoneName, errorCode);
+    tz->getID(tzID);
+    // Empty string for Gregorian calendar (default);
+    // `:datetime` `calendar` option not implemented yet,
+    // so other calendars aren't implemented
+
+    return { absoluteDate, tzID, {} };
 }
 
 FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& toFormat,
@@ -1331,29 +1347,17 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
         const UnicodeString& sourceStr = source.getString(errorCode);
         U_ASSERT(U_SUCCESS(errorCode));
 
-        LocalPointer<GregorianCalendar> cal(createCalendarFromDateString(sourceStr, errorCode));
+        DateInfo dateInfo = createDateInfoFromString(sourceStr, errorCode);
         if (U_FAILURE(errorCode)) {
             errorCode = U_MF_OPERAND_MISMATCH_ERROR;
             return {};
         }
+        df->adoptTimeZone(dateInfo.createTimeZone(errorCode));
 
         // Use the parsed date as the source value
         // in the returned FormattedPlaceholder; this is necessary
         // so the date can be re-formatted
-        df->format(*cal, result, 0, errorCode);
-
-        // Construct DateInfo from Date
-        UDate absoluteDate = cal->getTime(errorCode);
-        const TimeZone& tz = cal->getTimeZone();
-        UnicodeString timeZoneId;
-        tz.getID(timeZoneId);
-        UnicodeString timeZoneName;
-        // This doesn't work for offsets -- TODO
-        //        tz.getIanaID(timeZoneId, timeZoneName, errorCode);
-        // Empty string for Gregorian calendar (default);
-        // `:datetime` `calendar` option not implemented yet,
-        // so other calendars aren't implemented
-        DateInfo dateInfo = {absoluteDate, timeZoneId, {}}; // Should be timeZoneName, but getIanaID() doesn't work for strings like GMT+03:30
+        df->format(dateInfo.date, result, 0, errorCode);
         toFormat = FormattedPlaceholder(message2::Formattable(std::move(dateInfo)),
                                         toFormat.getFallback());
         break;
@@ -1362,11 +1366,8 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
         const DateInfo* dateInfo = source.getDate(errorCode);
         U_ASSERT(U_SUCCESS(errorCode));
 
-        LocalPointer<GregorianCalendar> cal(dateInfo->createGregorianCalendar(errorCode));
-        if (U_FAILURE(errorCode)) {
-            return {};
-        }
-        df->format(*cal, result, 0, errorCode);
+        df->adoptTimeZone(dateInfo->createTimeZone(errorCode));
+        df->format(dateInfo->date, result, 0, errorCode);
         if (U_FAILURE(errorCode)) {
             if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
                 errorCode = U_MF_OPERAND_MISMATCH_ERROR;

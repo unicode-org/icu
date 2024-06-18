@@ -15,7 +15,6 @@
 #if !UCONFIG_NO_MF2
 
 #include "unicode/chariter.h"
-#include "unicode/gregocal.h"
 #include "unicode/numberformatter.h"
 #include "unicode/messageformat2_data_model_names.h"
 #include "unicode/smpdtfmt.h"
@@ -115,7 +114,7 @@ namespace message2 {
         // Empty if not specified; proleptic Gregorian (8601) calendar is default
         UnicodeString calendarName;
 
-        GregorianCalendar* createGregorianCalendar(UErrorCode&) const;
+        TimeZone* createTimeZone(UErrorCode&) const;
     };
 
     /**

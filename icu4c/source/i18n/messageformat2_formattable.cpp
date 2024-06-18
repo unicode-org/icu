@@ -218,6 +218,22 @@ namespace message2 {
         return number::NumberFormatter::withLocale(locale).formatDecimal(toFormat, errorCode);
     }
 
+    TimeZone* DateInfo::createTimeZone(UErrorCode& errorCode) const {
+        NULL_ON_ERROR(errorCode);
+
+        TimeZone* tz;
+        if (zoneName.length() == 0) {
+            tz = TimeZone::createDefault();
+        } else {
+            tz = TimeZone::createTimeZone(zoneName);
+        }
+        if (tz == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return tz;
+    }
+
+
     DateFormat* defaultDateTimeInstance(const Locale& locale, UErrorCode& errorCode) {
         NULL_ON_ERROR(errorCode);
         LocalPointer<DateFormat> df(DateFormat::createDateTimeInstance(DateFormat::SHORT, DateFormat::SHORT, locale));
@@ -226,34 +242,6 @@ namespace message2 {
             return nullptr;
         }
         return df.orphan();
-    }
-
-    GregorianCalendar* DateInfo::createGregorianCalendar(UErrorCode& errorCode) const {
-        NULL_ON_ERROR(errorCode);
-
-        LocalPointer<GregorianCalendar> cal(new GregorianCalendar(errorCode));
-        if (!cal.isValid()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        // Copy info from this
-        // Non-Gregorian calendars not implemented yet
-        U_ASSERT(calendarName.length() == 0);
-        cal->setTime(date, errorCode);
-        // If time zone is present...
-        if (zoneName.length() > 0) {
-            if (zoneName == UnicodeString("UTC")) {
-                cal->setTimeZone(*TimeZone::getGMT());
-            } else {
-                LocalPointer<TimeZone> tz(TimeZone::createTimeZone(zoneName));
-                if (!tz.isValid()) {
-                    errorCode = U_MEMORY_ALLOCATION_ERROR;
-                    return nullptr;
-                }
-                cal->setTimeZone(*tz);
-            }
-        }
-        return cal.orphan();
     }
 
     void formatDateWithDefaults(const Locale& locale,
@@ -269,9 +257,9 @@ namespace message2 {
 
         // Non-Gregorian calendars not supported yet
         U_ASSERT(dateInfo.calendarName.length() == 0);
-        LocalPointer<GregorianCalendar> cal(dateInfo.createGregorianCalendar(errorCode));
+        df->adoptTimeZone(dateInfo.createTimeZone(errorCode));
         CHECK_ERROR(errorCode);
-        df->format(*cal, result, nullptr, errorCode);
+        df->format(dateInfo.date, result, nullptr, errorCode);
     }
 
     // Called when output is required and the contents are an unevaluated `Formattable`;
