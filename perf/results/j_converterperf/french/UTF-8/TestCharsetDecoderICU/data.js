@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1718680895465,
+  "lastUpdate": 1718730918181,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22857,6 +22857,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.5609168824875373,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "8f6ba2a7a520ad6bad4fe9b7366e988f590d0ec0",
+          "message": "ICU-22721 Correct format specifier for type int32_t (-Wformat).",
+          "timestamp": "2024-06-18T09:57:56-07:00",
+          "tree_id": "8eeb267458e926187461844dad0dfe311366fd79",
+          "url": "https://github.com/unicode-org/icu/commit/8f6ba2a7a520ad6bad4fe9b7366e988f590d0ec0"
+        },
+        "date": 1718730794043,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5631532889934028,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
