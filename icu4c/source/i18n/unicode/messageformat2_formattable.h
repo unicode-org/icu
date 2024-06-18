@@ -67,44 +67,6 @@ namespace message2 {
         virtual ~FormattableObject();
     }; // class FormattableObject
 
-    struct DateInfo;
-    class Formattable;
-} // namespace message2
-
-U_NAMESPACE_END
-
-/// @cond DOXYGEN_IGNORE
-// Export an explicit template instantiation of the std::variant that is used
-// to represent the message2::Formattable class.
-// (When building DLLs for Windows this is required.)
-// (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
-// for similar examples.)
-#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#if defined(U_REAL_MSVC) && defined(_MSVC_STL_VERSION)
-template class U_I18N_API std::_Variant_storage_<false,
-  double,
-  int64_t,
-  icu::UnicodeString,
-  icu::Formattable,
-  icu::message2::DateInfo;
-  const icu::message2::FormattableObject *,
-  std::pair<const icu::message2::Formattable *,int32_t>>;
-#endif
-typedef std::pair<const icu::message2::Formattable*, int32_t> P;
-template class U_I18N_API std::variant<double,
-				       int64_t,
-				       icu::UnicodeString,
-				       icu::Formattable,
-                                       icu::message2::DateInfo,
-				       const icu::message2::FormattableObject*,
-                                       P>;
-#endif
-/// @endcond
-
-U_NAMESPACE_BEGIN
-
-namespace message2 {
-
     /**
      * The `DateInfo` struct represents all the information needed to
      * format a date with a time zone. It includes an absolute date and a time zone name,
@@ -148,6 +110,43 @@ namespace message2 {
          */
         TimeZone* createTimeZone(UErrorCode& status) const;
     };
+
+    class Formattable;
+} // namespace message2
+
+U_NAMESPACE_END
+
+/// @cond DOXYGEN_IGNORE
+// Export an explicit template instantiation of the std::variant that is used
+// to represent the message2::Formattable class.
+// (When building DLLs for Windows this is required.)
+// (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
+// for similar examples.)
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+#if defined(U_REAL_MSVC) && defined(_MSVC_STL_VERSION)
+template class U_I18N_API std::_Variant_storage_<false,
+  double,
+  int64_t,
+  icu::UnicodeString,
+  icu::Formattable,
+  icu::message2::DateInfo,
+  const icu::message2::FormattableObject *,
+  std::pair<const icu::message2::Formattable *,int32_t>>;
+#endif
+typedef std::pair<const icu::message2::Formattable*, int32_t> P;
+template class U_I18N_API std::variant<double,
+				       int64_t,
+				       icu::UnicodeString,
+				       icu::Formattable,
+                                       icu::message2::DateInfo,
+				       const icu::message2::FormattableObject*,
+                                       P>;
+#endif
+/// @endcond
+
+U_NAMESPACE_BEGIN
+
+namespace message2 {
 
     /**
      * The `Formattable` class represents a typed value that can be formatted,

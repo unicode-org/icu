@@ -234,7 +234,6 @@ namespace message2 {
         return tz;
     }
 
-
     DateFormat* defaultDateTimeInstance(const Locale& locale, UErrorCode& errorCode) {
         NULL_ON_ERROR(errorCode);
         LocalPointer<DateFormat> df(DateFormat::createDateTimeInstance(DateFormat::SHORT, DateFormat::SHORT, locale));
