@@ -1134,36 +1134,21 @@ static DateInfo createDateInfoFromString(const UnicodeString& sourceStr, UErrorC
         }
     }
 
-    // Create a TimeZone from the parsed time zone, in order to get a canonical
-    // ID for the time zone
-    const TimeZone* tz;
+    // If the time zone was provided, get its canonical ID,
+    // in order to return it in the DateInfo
+    UnicodeString canonicalID;
     if (hasTimeZone) {
-        if (isGMT) {
-            tz = TimeZone::getGMT();
-        } else {
-            tz = createTimeZonePart(offsetPart, errorCode);
+        UnicodeString tzID("GMT");
+        if (!isGMT) {
+            tzID += offsetPart;
         }
-    } else {
-        tz = TimeZone::createDefault();
+        TimeZone::getCanonicalID(tzID, canonicalID, errorCode);
     }
-    if (tz == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    if (U_FAILURE(errorCode)) {
-        return {};
-    }
-    UnicodeString tzID;
-
-    // TODO:
-    // Here, tz.getIanaID() should be called to normalize the time zone name.
-    // But it doesn't seem to work for strings with offsets, like GMT+03:30
-    //        tz.getIanaID(timeZoneId, timeZoneName, errorCode);
-    tz->getID(tzID);
 
     // Empty string for Gregorian calendar (default);
     // `:datetime` `calendar` option not implemented yet,
     // so other calendars aren't implemented
-    return { absoluteDate, tzID, {} };
+    return { absoluteDate, canonicalID, {} };
 }
 
 FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& toFormat,
