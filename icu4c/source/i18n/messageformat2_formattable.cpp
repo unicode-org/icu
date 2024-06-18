@@ -223,6 +223,7 @@ namespace message2 {
 
         TimeZone* tz;
         if (zoneName.length() == 0) {
+            // Floating time value -- use default time zone
             tz = TimeZone::createDefault();
         } else {
             tz = TimeZone::createTimeZone(zoneName);
@@ -252,8 +253,6 @@ namespace message2 {
 
         LocalPointer<DateFormat> df(defaultDateTimeInstance(locale, errorCode));
         CHECK_ERROR(errorCode);
-        // We have to copy the `const` reference that was passed in,
-        // because DateFormat::format() takes a non-const reference.
 
         // Non-Gregorian calendars not supported yet
         U_ASSERT(dateInfo.calendarName.length() == 0);
