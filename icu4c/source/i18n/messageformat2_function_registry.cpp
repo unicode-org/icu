@@ -1068,9 +1068,6 @@ SimpleTimeZone* createTimeZonePart(const UnicodeString& offsetStr, UErrorCode& e
     }
     int32_t offset = sign * (static_cast<int32_t>(tzHour) * 60 + static_cast<int32_t>(tzMin)) * 60 * 1000;
     LocalPointer<SimpleTimeZone> tz(new SimpleTimeZone(offset, UnicodeString("GMT") + offsetStr));
-/*
-Use tz.getIanaID() to get the time zone name
-*/
     if (!tz.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -1131,6 +1128,7 @@ static DateInfo createDateInfoFromString(const UnicodeString& sourceStr, UErrorC
             offsetPart = sourceStr.tempSubString(indexOfSign, sourceStr.length());
         }
     }
+
     const TimeZone* tz;
     if (hasTimeZone) {
         if (isGMT) {
@@ -1148,13 +1146,16 @@ static DateInfo createDateInfoFromString(const UnicodeString& sourceStr, UErrorC
         return {};
     }
     UnicodeString tzID;
-    // This doesn't work for offsets -- TODO
+
+    // TODO:
+    // Here, tz.getIanaID() should be called to normalize the time zone name.
+    // But it doesn't seem to work for strings with offsets, like GMT+03:30
     //        tz.getIanaID(timeZoneId, timeZoneName, errorCode);
     tz->getID(tzID);
+
     // Empty string for Gregorian calendar (default);
     // `:datetime` `calendar` option not implemented yet,
     // so other calendars aren't implemented
-
     return { absoluteDate, tzID, {} };
 }
 
