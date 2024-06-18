@@ -438,60 +438,123 @@ namespace message2 {
 
     class FunctionOptions;
 
-/**
-TODO
-
-Immutable, copyable and movable
-*/
-class U_I18N_API FormattableWithOptions : public UObject {
+    /**
+     * The `FormattableWithOptions` class represents a typed value that has a map
+     * of resolved options attached to it. If the map is non-empty, then this value
+     * was originally returned by the implementation of an MF2 function.
+     * A `FormattableWithOptions` can appear inside a `FormattedPlaceholder` as its
+     * source value, or in a `FunctionOptions` map (`FormattableWithOptions` and
+     * `FunctionOptions` are defined in terms of each other.)
+     *
+     * `FormattableWithOptions` is immutable (not deeply immutable) and
+     * is movable and copyable. (It's not deeply immutable for the same reason as
+     * `Formattable`.)
+     *
+     * @internal ICU 76 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    class U_I18N_API FormattableWithOptions : public UObject {
     private:
-    friend class FormattedPlaceholder;
+        friend class FormattedPlaceholder;
 
-    bool bogus = false; // Set if a copy fails
-    Formattable value;
-    // Has to be a pointer in order to break the loop between FormattableWithOptions
-    // and FunctionOptions
-    // Options from previous evaluation. bogus || options.isValid()
-    LocalPointer<FunctionOptions> options;
+        bool bogus = false; // Set if a copy fails
+        Formattable value;
+        // Has to be a pointer in order to break the loop between FormattableWithOptions
+        // and FunctionOptions
+        // Options from previous evaluation. bogus || options.isValid()
+        LocalPointer<FunctionOptions> options;
 
     public:
-// TODO
-    const Formattable& getValue() const { return value; }
-    const FunctionOptions& getOptions() const;
-    /**
-     * Non-member swap function.
-     * @param f1 will get f2's contents
-     * @param f2 will get f1's contents
-     *
-     * @internal ICU 75 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    friend inline void swap(FormattableWithOptions& f1, FormattableWithOptions& f2) noexcept {
-        using std::swap;
+        /**
+         * Returns a reference to the underlying `Formattable` of this
+         * `FormattableWithOptions`.
+         *
+         * @return A reference to a the wrapped `Formattable` object.
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        const Formattable& getValue() const { return value; }
+        /**
+         * Returns a reference to the option map of this
+         * `FormattableWithOptions`.
+         *
+         * @return A reference to a `FunctionOptions` map.
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        const FunctionOptions& getOptions() const;
+        /**
+         * Non-member swap function.
+         * @param f1 will get f2's contents
+         * @param f2 will get f1's contents
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        friend inline void swap(FormattableWithOptions& f1, FormattableWithOptions& f2) noexcept {
+            using std::swap;
 
-        swap(f1.bogus, f2.bogus);
-        swap(f1.value, f2.value);
-        swap(f1.options, f2.options);
-    }
-    /**
-     * Copy constructor.
-     *
-     * @internal ICU 75 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    FormattableWithOptions(const FormattableWithOptions&);
-    /**
-     * Assignment operator
-     *
-     * @internal ICU 75 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    FormattableWithOptions& operator=(FormattableWithOptions) noexcept;
-    FormattableWithOptions();
-    FormattableWithOptions(const Formattable&, UErrorCode&);
-    FormattableWithOptions(const Formattable& f, FunctionOptions&& o, UErrorCode& status);
-    FormattableWithOptions withOptions(FunctionOptions&&, UErrorCode& status) const;
-}; // class FormattableWithOptions
+            swap(f1.bogus, f2.bogus);
+            swap(f1.value, f2.value);
+            swap(f1.options, f2.options);
+        }
+        /**
+         * Copy constructor.
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        FormattableWithOptions(const FormattableWithOptions&);
+        /**
+         * Assignment operator
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        FormattableWithOptions& operator=(FormattableWithOptions) noexcept;
+        /**
+         * Default constructor. Leaves the FormattableWithOptions in
+         * a valid but undefined state.
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        FormattableWithOptions();
+        /**
+         * Constructor. Pairs `f` with an empty `FunctionOptions`.
+         *
+         * @param f A `Formattable` object.
+         * @param status Input/output error code
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        FormattableWithOptions(const Formattable& f, UErrorCode& status);
+        /**
+         * Constructor.
+         *
+         * @param f A `Formattable` object.
+         * @param o A `FunctionOptions` map. Passed by move.
+         * @param status Input/output error code
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        FormattableWithOptions(const Formattable& f, FunctionOptions&& o, UErrorCode& status);
+        /**
+         * Factory method to create a new `FormattableWithOptions` with the
+         * same underlying `Formattable` but a different options map.
+         *
+         * @param o A `FunctionOptions` map.
+         * @param status Input/output error code
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        FormattableWithOptions withOptions(FunctionOptions&& o, UErrorCode& status) const;
+    }; // class FormattableWithOptions
 
 /**
  * Internal use only, but has to be included here as part of the implementation
@@ -681,7 +744,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
         /**
          * Fallback constructor. Constructs a value that represents a formatting error.
          *
-         * @param s An error string. (See the MessageFormat specification for details
+         * @param fb An error string. (See the MessageFormat specification for details
          *        on fallback strings.)
          *
          * @internal ICU 75 technology preview
@@ -693,8 +756,9 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          *
          * @param input A `Formattable` object.
          * @param fb Fallback string to use if an error occurs while formatting the input.
+         * @param status Input/output error code.
          *
-         * @internal ICU 75 technology preview
+         * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
          */
         static FormattedPlaceholder fromFormattable(const Formattable& input,
@@ -709,7 +773,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @param status Input/output error code. Set to U_ILLEGAL_ARGUMENT_ERROR
          *               if this is a null or fallback placeholder.
          *
-         * @internal ICU 75 technology preview
+         * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
          */
         FormattedPlaceholder withOutput(FormattedValue&& output, UErrorCode& status) const;
@@ -722,7 +786,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          *        Passed by move.
          * @param status Input/output error code
          *
-         * @internal ICU 75 technology preview
+         * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
          */
         FormattedPlaceholder withOutputAndOptions(FunctionOptions&& opts,
@@ -735,7 +799,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @param status Input/output error code
          * @return A pointer to a message2::FormattableWithOptions
          *
-         * @internal ICU 75 technology preview
+         * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
          */
         const message2::FormattableWithOptions* getSourceAndOptions(UErrorCode& status) const;
@@ -746,7 +810,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @param status Input/output error code
          * @return A pointer to a message2::FormattableWithOptions
          *
-         * @internal ICU 75 technology preview
+         * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
          */
         const message2::Formattable* getSource(UErrorCode& status) const;
@@ -758,7 +822,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @param status Input/output error code
          * @return A pointer to a message2::FunctionOptions
          *
-         * @internal ICU 75 technology preview
+         * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
          */
         const message2::FunctionOptions* getOptions(UErrorCode& status) const;
@@ -788,7 +852,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @return True if and only if this was constructed from both an input `Formattable` and
          *         output `FormattedValue`.
          *
-         * @internal ICU 75 technology preview
+         * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
          */
         bool hasOutput() const { return formatted.has_value(); }
@@ -849,7 +913,12 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          */
         UnicodeString formatToString(const Locale& locale,
                                      UErrorCode& status) const;
-// TODO
+        /**
+         * Destructor.
+         *
+         * @internal ICU 75 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         ~FormattedPlaceholder();
     private:
 
