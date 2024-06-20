@@ -15,7 +15,7 @@ class Unit {
     final String locale;
     final Map<String, Object> params;
     final String exp;
-    final String ignore;
+    final String ignoreJava;
     final List<Error> errors;
 
     Unit(
@@ -24,14 +24,14 @@ class Unit {
             String locale,
             Map<String, Object> params,
             String exp,
-            String ignore,
+            String ignoreJava,
             List<Error> errors) {
         this.src = src;
         this.srcs = srcs;
         this.locale = locale;
         this.params = params;
         this.exp = exp;
-        this.ignore = ignore;
+        this.ignoreJava = ignoreJava;
         this.errors = errors;
     }
 
@@ -80,7 +80,7 @@ class Unit {
         String newLocale = other.locale != null ? other.locale : this.locale;
         Map<String, Object> newParams = other.params != null ? other.params : this.params;
         String newExp = other.exp != null ? other.exp : this.exp;
-        String newIgnore = other.ignore != null ? other.ignore : this.ignore;
+        String newIgnore = other.ignoreJava != null ? other.ignoreJava : this.ignoreJava;
         List<Error> newErrors = other.errors != null ? other.errors : this.errors;
         return new Unit(newSrc, newSrcs, newLocale, newParams, newExp, newIgnore, newErrors);
     }

@@ -280,6 +280,7 @@
                     <directory>${rootlocation}/..</directory>
                     <includes>
                       <include>LICENSE</include>
+                      <include>testdata/</include>
                     </includes>
                   </resource>
                 </resources>

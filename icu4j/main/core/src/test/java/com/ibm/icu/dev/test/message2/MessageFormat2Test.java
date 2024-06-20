@@ -131,7 +131,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         String message = ""
                 + ".match {$count :number}\n"
                 + " 1 {{You have one notification.}}\n"
-                + " * {{You have {$count} notifications.}}\n";
+                + " * {{You have {$count} notifications.}}";
 
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setPattern(message)
@@ -154,7 +154,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 + " one {{You got in the {$place}st place}}\n"
                 + " two {{You got in the {$place}nd place}}\n"
                 + " few {{You got in the {$place}rd place}}\n"
-                + "  *  {{You got in the {$place}th place}}\n"
+                + "  *  {{You got in the {$place}th place}}"
                 ;
 
         MessageFormatter mf2 = MessageFormatter.builder()
@@ -336,7 +336,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 + " 1   {{Anna}}\n"
                 + " 2   {{Anna and Bob}}\n"
                 + " one {{Anna, Bob, and {$count :number icu:offset=2} other guest}}\n"
-                + " *   {{Anna, Bob, and {$count :number icu:offset=2} other guests}}\n";
+                + " *   {{Anna, Bob, and {$count :number icu:offset=2} other guests}}";
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setPattern(message)
                 .build();
@@ -365,7 +365,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 + " 1   {{Anna}}\n"
                 + " 2   {{Anna and Bob}}\n"
                 + " one {{Anna, Bob, and {$foo} other guest}}\n"
-                + " *   {{Anna, Bob, and {$foo} other guests}}\n";
+                + " *   {{Anna, Bob, and {$foo} other guests}}";
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setPattern(message)
                 .build();
@@ -393,7 +393,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 + ".match {$foo :number}\n" // should "inherit" the offset
                 + " 1   {{Last dollar}}\n"
                 + " one {{{$foo} dollar}}\n"
-                + " *   {{{$foo} dollars}}\n";
+                + " *   {{{$foo} dollars}}";
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setPattern(message)
                 .build();
@@ -415,7 +415,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 + ".match {$foo :number}\n" // should "inherit" the offset
                 + " 1   {{Last dollar}}\n"
                 + " one {{{$foo} dollar}}\n"
-                + " *   {{{$foo} dollars}}\n";
+                + " *   {{{$foo} dollars}}";
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setPattern(message)
                 .build();
@@ -436,7 +436,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 + ".local $foo = {$baz :number}\n"
                 + ".local $bar = {$foo}\n"
                 + ".local $baz = {$bar}\n"
-                + "{{The message uses {$baz} and works}}\n";
+                + "{{The message uses {$baz} and works}}";
         // Circular references on variables is now detected.
         // So we check that this throws (see expected in the @Test above)
         MessageFormatter.builder()
@@ -451,7 +451,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 + " 1   {{A}}\n"
                 + " 2   {{A and B}}\n"
                 + " one {{A, B, and {$count :number icu:offset=$delta} more character}}\n"
-                + " *   {{A, B, and {$count :number icu:offset=$delta} more characters}}\n";
+                + " *   {{A, B, and {$count :number icu:offset=$delta} more characters}}";
         MessageFormatter mfVar = MessageFormatter.builder()
                 .setPattern(messageVar)
                 .build();
@@ -468,7 +468,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 + ".match {$count :number icu:offset=$delta}\n"
                 + " 1 {{Exactly 1}}\n"
                 + " 2 {{Exactly 2}}\n"
-                + " * {{Count = {$count :number icu:offset=$delta} and delta={$delta}.}}\n";
+                + " * {{Count = {$count :number icu:offset=$delta} and delta={$delta}.}}";
         MessageFormatter mfVar2 = MessageFormatter.builder()
                 .setPattern(messageVar2)
                 .build();
@@ -509,7 +509,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 + " 1   {{A}}\n"
                 + " 2   {{A and B}}\n"
                 + " one {{A, B, and {$offCount} more character}}\n"
-                + " *   {{A, B, and {$offCount} more characters}}\n";
+                + " *   {{A, B, and {$offCount} more characters}}";
         MessageFormatter mfFix = MessageFormatter.builder()
                 .setPattern(messageFix)
                 .build();
@@ -524,7 +524,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 + " 1   {{A}}\n"
                 + " 2   {{A and B}}\n"
                 + " one {{A, B, and {$offCount} more character}}\n"
-                + " *   {{A, B, and {$offCount} more characters}}\n";
+                + " *   {{A, B, and {$offCount} more characters}}";
         MessageFormatter mfVar = MessageFormatter.builder()
                 .setPattern(messageVar)
                 .build();
@@ -542,7 +542,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 + ".match {$offCount :number}\n"
                 + " 1 {{Exactly 1}}\n"
                 + " 2 {{Exactly 2}}\n"
-                + " * {{Count = {$count}, OffCount = {$offCount}, and delta={$delta}.}}\n";
+                + " * {{Count = {$count}, OffCount = {$offCount}, and delta={$delta}.}}";
         MessageFormatter mfVar2 = MessageFormatter.builder()
                 .setPattern(messageVar2)
                 .build();

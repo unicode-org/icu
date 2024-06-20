@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
@@ -71,6 +72,42 @@ public class TestUtils {
 
     // ======= Same functionality with Unit, usable with JSON ========
 
+    static void rewriteDates(Map<String, Object> params) {
+        // For each value in `params` that's a map with the single key
+        // `date` and a double value d,
+        // return a map with that value changed to Date(d)
+        // In JSON this looks like:
+        //    "params": {"exp": { "date": 1722746637000 } }
+        for (Map.Entry<String, Object> pair : params.entrySet()) {
+            if (pair.getValue() instanceof Map) {
+                Map innerMap = (Map) pair.getValue();
+                if (innerMap.size() == 1 && innerMap.containsKey("date") && innerMap.get("date") instanceof Double) {
+                    Long dateValue = Double.valueOf((Double) innerMap.get("date")).longValue();
+                    params.put(pair.getKey(), new Date(dateValue));
+                }
+            }
+        }
+    }
+
+    static void rewriteDecimals(Map<String, Object> params) {
+        // For each value in `params` that's a map with the single key
+        // `decimal` and a string value s
+        // return a map with that value changed to Decimal(s)
+        // In JSON this looks like:
+        //    "params": {"val": {"decimal": "1234567890123456789.987654321"}},
+        for (Map.Entry<String, Object> pair : params.entrySet()) {
+            if (pair.getValue() instanceof Map) {
+                Map innerMap = (Map) pair.getValue();
+                if (innerMap.size() == 1 && innerMap.containsKey("decimal")
+                    && innerMap.get("decimal") instanceof String) {
+                    String decimalValue = (String) innerMap.get("decimal");
+                    params.put(pair.getKey(), new com.ibm.icu.math.BigDecimal(decimalValue));
+                }
+            }
+        }
+    }
+
+
     static boolean expectsErrors(Unit unit) {
         return unit.errors != null && !unit.errors.isEmpty();
     }
@@ -80,7 +117,7 @@ public class TestUtils {
     }
 
     static void runTestCase(Unit unit, Map<String, Object> params) {
-        if (unit.ignore != null) {
+        if (unit.ignoreJava != null) {
             return;
         }
 
@@ -107,6 +144,8 @@ public class TestUtils {
             MessageFormatter mf = mfBuilder.build();
             if (unit.params != null) {
                 params = unit.params;
+                rewriteDates(params);
+                rewriteDecimals(params);
             }
             String result = mf.formatToString(params);
             if (expectsErrors(unit)) {
@@ -134,10 +173,25 @@ public class TestUtils {
         return Files.newBufferedReader(json, StandardCharsets.UTF_8);
     }
 
-    private static Path getTestFile(Class<?> cls, String fileName) throws URISyntaxException {
+    private static Path getTestFile(Class<?> cls, String fileName) throws URISyntaxException, IOException {
         String packageName = cls.getPackage().getName().replace('.', '/');
         URI getPath = cls.getClassLoader().getResource(packageName).toURI();
         Path filePath = Paths.get(getPath);
         Path json = Paths.get(fileName);
-        return filePath.resolve(json);
+        // First, check the top level of the source directory,
+        // in case we're in a source tarball
+        Path icuTestdataInSourceDir = filePath.resolve("../../../../../../../../../../../testdata/message2/").normalize();
+        Path icuTestdataDir = icuTestdataInSourceDir;
+        if (!Files.isDirectory(icuTestdataInSourceDir)) {
+            // If that doesn't exist, check one directory higher, in case we're
+            // in a checked-out repo
+            Path icuTestdataInRepo = Paths.get("../").resolve(icuTestdataInSourceDir).normalize();
+            if (!Files.isDirectory(icuTestdataInRepo)) {
+                throw new java.io.FileNotFoundException("Test data directory does not exist: tried "
+                                                        + icuTestdataInSourceDir + " and "
+                                                        + icuTestdataInRepo);
+            }
+            icuTestdataDir = icuTestdataInSourceDir;
+        }
+        return icuTestdataDir.resolve(json);
     }}

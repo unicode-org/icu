@@ -68,6 +68,8 @@ $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP) $(DISTY_DATA_ZIP):  $(DISTY_DAT) $(DISTY_TMP
 	( cd $(ICU4CTOP)/.. && git archive --format=tar --prefix=icu/ HEAD:icu4c/ ) | ( cd "$(DISTY_TMP)" && tar xf - )
     # special handling for LICENSE file. The symlinks will be included as files by tar and zip.
 	cp -fv $(ICU4CTOP)/LICENSE "$(DISTY_TMP)/LICENSE"
+    # Copy top-level testdata directory so it's a sibling of the source/ directory
+	cp -R $(ICU4CTOP)/../testdata $(DISTY_TMP)/icu
 	( cd $(DISTY_TMP)/icu/source ; zip -rlq $(DISTY_DATA_ZIP) data )
 	$(MKINSTALLDIRS) $(DISTY_IN)
 	echo DISTY_DAT=$(DISTY_DAT)

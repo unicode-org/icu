@@ -39,7 +39,13 @@ static UErrorCode getExpectedErrorFromString(const std::string& errorName) {
 }
 
 static UErrorCode getExpectedRuntimeErrorFromString(const std::string& errorName) {
-    if (errorName == "unresolved-var") {
+    if (errorName == "parse-error" || errorName == "empty-token" || errorName == "extra-content") {
+        return U_MF_SYNTAX_ERROR;
+    }
+    if (errorName == "key-mismatch") {
+        return U_MF_VARIANT_KEY_MISMATCH_ERROR;
+    }
+    if (errorName == "missing-var" || errorName == "unresolved-var") {
         return U_MF_UNRESOLVED_VARIABLE_ERROR;
     }
     if (errorName == "unsupported-annotation") {
@@ -137,7 +143,8 @@ static void runValidTest(TestMessageFormat2& icuTest,
 
     // Certain ICU4J tests don't work yet in ICU4C.
     // See ICU-22754
-    if (!j_object["ignoreTest"].is_null()) {
+    // ignoreCpp => only works in Java
+    if (!j_object["ignoreCpp"].is_null()) {
         return;
     }
 
@@ -210,7 +217,7 @@ static void runSyntaxErrorTest(TestMessageFormat2& icuTest,
 static void runICU4JSyntaxTestsFromJsonFile(TestMessageFormat2& t,
                                             const std::string& fileName,
                                             IcuTestErrorCode& errorCode) {
-    const char* testDataDirectory = IntlTest::getSourceTestData(errorCode);
+    const char* testDataDirectory = IntlTest::getSharedTestData(errorCode);
     CHECK_ERROR(errorCode);
 
     std::string testFileName(testDataDirectory);
@@ -252,7 +259,7 @@ static void runICU4JSyntaxTestsFromJsonFile(TestMessageFormat2& t,
 static void runICU4JSelectionTestsFromJsonFile(TestMessageFormat2& t,
                                             const std::string& fileName,
                                             IcuTestErrorCode& errorCode) {
-    const char* testDataDirectory = IntlTest::getSourceTestData(errorCode);
+    const char* testDataDirectory = IntlTest::getSharedTestData(errorCode);
     CHECK_ERROR(errorCode);
 
     std::string testFileName(testDataDirectory);
@@ -270,7 +277,7 @@ static void runICU4JSelectionTestsFromJsonFile(TestMessageFormat2& t,
         auto variations = j_object["variations"];
 
         // Skip ignored tests
-        if (!j_object["ignoreTest"].is_null()) {
+        if (!j_object["ignoreCpp"].is_null()) {
             return;
         }
 
@@ -281,7 +288,7 @@ static void runICU4JSelectionTestsFromJsonFile(TestMessageFormat2& t,
             messageText += piece;
         }
 
-        t.logln("ICU4J selectors tests:");
+        t.logln(u_str("ICU4J selectors tests: " + fileName));
         t.logln(u_str(iter->dump()));
 
         TestCase::Builder test;
@@ -315,7 +322,7 @@ static void runICU4JSelectionTestsFromJsonFile(TestMessageFormat2& t,
 static void runValidTestsFromJsonFile(TestMessageFormat2& t,
                                       const std::string& fileName,
                                       IcuTestErrorCode& errorCode) {
-    const char* testDataDirectory = IntlTest::getSourceTestData(errorCode);
+    const char* testDataDirectory = IntlTest::getSharedTestData(errorCode);
     CHECK_ERROR(errorCode);
 
     std::string testFileName(testDataDirectory);
@@ -341,7 +348,7 @@ static void runValidTestsFromJsonFile(TestMessageFormat2& t,
 static void runDataModelErrorTestsFromJsonFile(TestMessageFormat2& t,
                                                const std::string& fileName,
                                                IcuTestErrorCode& errorCode) {
-    const char* testDataDirectory = IntlTest::getSourceTestData(errorCode);
+    const char* testDataDirectory = IntlTest::getSharedTestData(errorCode);
     CHECK_ERROR(errorCode);
 
     std::string dataModelErrorsFileName(testDataDirectory);
@@ -368,7 +375,7 @@ static void runDataModelErrorTestsFromJsonFile(TestMessageFormat2& t,
         for (auto messagesIter = messages.begin(); messagesIter != messages.end(); ++messagesIter) {
             makeTestName(testName, sizeof(testName), errorName, testNum);
             testBuilder.setName(testName);
-            t.logln(testName);
+            t.logln(u_str(fileName + ": " + testName));
             testNum++;
             UnicodeString messageText = u_str(*messagesIter);
             t.logln(messageText);
@@ -386,7 +393,7 @@ static void runDataModelErrorTestsFromJsonFile(TestMessageFormat2& t,
 static void runSyntaxErrorTestsFromJsonFile(TestMessageFormat2& t,
                                             const std::string& fileName,
                                             IcuTestErrorCode& errorCode) {
-    const char* testDataDirectory = IntlTest::getSourceTestData(errorCode);
+    const char* testDataDirectory = IntlTest::getSharedTestData(errorCode);
     CHECK_ERROR(errorCode);
 
     std::string syntaxErrorsFileName(testDataDirectory);
@@ -420,7 +427,7 @@ static void runSyntaxErrorTestsFromJsonFile(TestMessageFormat2& t,
 static void runSyntaxTestsWithDiagnosticsFromJsonFile(TestMessageFormat2& t,
                                                       const std::string& fileName,
                                                       IcuTestErrorCode& errorCode) {
-    const char* testDataDirectory = IntlTest::getSourceTestData(errorCode);
+    const char* testDataDirectory = IntlTest::getSharedTestData(errorCode);
     CHECK_ERROR(errorCode);
 
     std::string testFileName(testDataDirectory);
@@ -446,7 +453,7 @@ static void runFunctionTestsFromJsonFile(TestMessageFormat2& t,
                                          const std::string& fileName,
                                          IcuTestErrorCode& errorCode) {
     // Get the test data directory
-    const char* testDataDirectory = IntlTest::getSourceTestData(errorCode);
+    const char* testDataDirectory = IntlTest::getSharedTestData(errorCode);
     CHECK_ERROR(errorCode);
 
     std::string functionTestsFileName(testDataDirectory);
@@ -460,7 +467,7 @@ static void runFunctionTestsFromJsonFile(TestMessageFormat2& t,
     for (auto iter = tests.begin(); iter != tests.end(); ++iter) {
         int32_t testNum = 0;
         auto functionName = iter->first;
-        t.logln("Function tests:");
+        t.logln(u_str("Function tests: " + fileName));
         t.logln(u_str(iter->second.dump()));
 
         // Array of tests
@@ -487,6 +494,7 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
 
     // Do spec tests for syntax errors
     runSyntaxErrorTestsFromJsonFile(*this, "spec/syntax-errors.json", errorCode);
+    runSyntaxErrorTestsFromJsonFile(*this, "more-syntax-errors.json", errorCode);
 
     // Do tests for data model errors
     runDataModelErrorTestsFromJsonFile(*this, "spec/data-model-errors.json", errorCode);
@@ -540,13 +548,10 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     runSyntaxTestsWithDiagnosticsFromJsonFile(*this, "syntax-errors-diagnostics-multiline.json", errorCode);
 
     // ICU4J tests
-    runFunctionTestsFromJsonFile(*this, "icu4j/icu-test-functions.json", errorCode);
-    // Changes made to get these tests to work:
-    // * removed double backslashes from  "Hello \\t \\n \\r \\{ world!"
-    // * added empty {{}} pattern at the end of the tests under "Simple messages, with declarations"
-    //   and the first one under "Multiple declarations in one message"
-    runICU4JSyntaxTestsFromJsonFile(*this, "icu4j/icu-parser-tests.json", errorCode);
-    runICU4JSelectionTestsFromJsonFile(*this, "icu4j/icu-test-selectors.json", errorCode);
+    runFunctionTestsFromJsonFile(*this, "icu-test-functions.json", errorCode);
+    runICU4JSyntaxTestsFromJsonFile(*this, "icu-parser-tests.json", errorCode);
+    runICU4JSelectionTestsFromJsonFile(*this, "icu-test-selectors.json", errorCode);
+    runValidTestsFromJsonFile(*this, "icu-test-previous-release.json", errorCode);
 }
 
 #endif /* #if !UCONFIG_NO_MF2 */

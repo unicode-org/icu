@@ -1,0 +1,14 @@
+[
+    { "src": "{$oops}", "exp": "{$oops}", "errors": [{ "type": "unresolved-var" }], "ignoreJava": "ICU4J doesn't signal unresolved variable errors?"},
+    { "src": ".input {$x :number} {{{$x}}}", "exp": "{$x}", "errors": [{ "type": "unresolved-var" }], "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"},
+    { "src": ".local $foo = {$bar} .match {$foo :number}  one {{one}}  * {{other}}", "exp": "other", "errors": [{ "type": "unresolved-var" }], "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"},
+    { "src": ".local $bar = {$none :number} .match {$foo :string}  one {{one}}  * {{{$bar}}}", "exp": "{$none}", "errors": [{ "type": "unresolved-var" }], "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"},
+    { "src": "The value is {horse :func}.", "exp": "The value is {|horse|}.", "errors": [{ "type": "missing-func" }], "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"},
+    { "src": ".matc {-1} {{hello}}", 
+      "errors": [{ "type": "unsupported-statement" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    { "src": ".m {-1} {{hello}}", 
+      "errors": [{ "type": "unsupported-statement" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" }
+]

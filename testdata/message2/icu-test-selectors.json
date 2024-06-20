@@ -48,7 +48,7 @@
         "1   {{You got the gold medal}}\n",
         "2   {{You got the silver medal}}\n",
         "3   {{You got the bronze medal}}\n",
-        "few {{You finished in the {$place}rd place}}\n"
+        "few {{You finished in the {$place}rd place}}"
       ]
     },
     "variations" : [
@@ -70,7 +70,7 @@
         "  *   *   {{You found {$fileCount} files in {$folderCount} folders}}\n",
         "  one one {{You found {$fileCount} file in {$folderCount} folder}}\n",
         "  one *   {{You found {$fileCount} file in {$folderCount} folders}}\n",
-        "  *   one {{You found {$fileCount} files in {$folderCount} folder}}\n"
+        "  *   one {{You found {$fileCount} files in {$folderCount} folder}}"
       ]
     },
     "variations" : [

@@ -18,16 +18,19 @@ import com.ibm.icu.dev.test.CoreTestFmwk;
 @SuppressWarnings({"static-method", "javadoc"})
 @RunWith(JUnit4.class)
 public class FunctionsTest extends CoreTestFmwk {
-    private static final String JSON_FILE = "test-functions.json";
+    private static final String[] JSON_FILES = {"spec/test-functions.json",
+                                                "more-functions.json"};
 
     @Test
     public void test() throws Exception {
-        try (Reader reader = TestUtils.jsonReader(JSON_FILE)) {
-            Type mapType = new TypeToken<Map<String, Unit[]>>(){/* not code */}.getType();
-            Map<String, Unit[]> unitList = TestUtils.GSON.fromJson(reader, mapType);
-            for (Entry<String, Unit[]> testGroup : unitList.entrySet()) {
-                for (Unit unit : testGroup.getValue()) {
-                    TestUtils.runTestCase(unit);
+        for (String jsonFile : JSON_FILES) {
+            try (Reader reader = TestUtils.jsonReader(jsonFile)) {
+                Type mapType = new TypeToken<Map<String, Unit[]>>(){/* not code */}.getType();
+                Map<String, Unit[]> unitList = TestUtils.GSON.fromJson(reader, mapType);
+                for (Entry<String, Unit[]> testGroup : unitList.entrySet()) {
+                    for (Unit unit : testGroup.getValue()) {
+                        TestUtils.runTestCase(unit);
+                    }
                 }
             }
         }
