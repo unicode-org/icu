@@ -19,20 +19,23 @@ import com.ibm.icu.message2.MessageFormatter;
 @SuppressWarnings({"static-method", "javadoc"})
 @RunWith(JUnit4.class)
 public class DataModelErrorsTest extends CoreTestFmwk {
-    private static final String JSON_FILE = "data-model-errors.json";
+    private static final String[] JSON_FILES = {"spec/data-model-errors.json",
+                                                "more-data-model-errors.json"};
 
     @Test
     public void test() throws Exception {
-        try (Reader reader = TestUtils.jsonReader(JSON_FILE)) {
-            Type mapType = new TypeToken<Map<String, String[]>>(){/* not code */}.getType();
-            Map<String, String[]> unitList = TestUtils.GSON.fromJson(reader, mapType);
-            for (Entry<String, String[]> tests : unitList.entrySet()) {
-                for (String pattern : tests.getValue()) {
-                    try {
-                        MessageFormatter.builder().setPattern(pattern).build().formatToString(null);
-                        fail("Undetected errors in '" + tests.getKey() + "': '" + pattern + "'");
-                    } catch (Exception e) {
-                        // We expected an error, so it's all good
+        for (String jsonFile : JSON_FILES) {
+            try (Reader reader = TestUtils.jsonReader(jsonFile)) {
+                Type mapType = new TypeToken<Map<String, String[]>>(){/* not code */}.getType();
+                Map<String, String[]> unitList = TestUtils.GSON.fromJson(reader, mapType);
+                for (Entry<String, String[]> tests : unitList.entrySet()) {
+                    for (String pattern : tests.getValue()) {
+                        try {
+                            MessageFormatter.builder().setPattern(pattern).build().formatToString(null);
+                            fail("Undetected errors in '" + tests.getKey() + "': '" + pattern + "'");
+                        } catch (Exception e) {
+                            // We expected an error, so it's all good
+                        }
                     }
                 }
             }

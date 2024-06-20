@@ -26,7 +26,8 @@
   {
     "src": "hello {$place}",
     "errors": [{ "type": "unresolved-var" }],
-    "exp": "hello {$place}"
+    "exp": "hello {$place}",
+    "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
   },
   {
     "src": "{$one} and {$two}",
@@ -169,7 +170,8 @@
       { "type": "literal", "value": "foo " },
       { "type": "fallback", "source": "+" }
     ],
-    "errors": [{ "type": "unsupported-annotation" }]
+    "errors": [{ "type": "unsupported-annotation" }],
+    "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
   },
   {
     "src": "foo {&private}",
@@ -178,7 +180,8 @@
       { "type": "literal", "value": "foo " },
       { "type": "fallback", "source": "&" }
     ],
-    "errors": [{ "type": "unsupported-annotation" }]
+    "errors": [{ "type": "unsupported-annotation" }],
+    "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
   },
   {
     "src": "foo {?reserved @a @b=$c}",
@@ -187,26 +190,30 @@
       { "type": "literal", "value": "foo " },
       { "type": "fallback", "source": "?" }
     ],
-    "errors": [{ "type": "unsupported-annotation" }]
+    "errors": [{ "type": "unsupported-annotation" }],
+    "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
   },
   {
     "src": ".foo {42} {{bar}}",
     "exp": "bar",
     "parts": [{ "type": "literal", "value": "bar" }],
-    "errors": [{ "type": "unsupported-statement" }]
+    "errors": [{ "type": "unsupported-statement" }],
+    "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
   },
   {
     "src": ".foo{42}{{bar}}",
     "cleanSrc": ".foo {42} {{bar}}",
     "exp": "bar",
     "parts": [{ "type": "literal", "value": "bar" }],
-    "errors": [{ "type": "unsupported-statement" }]
+    "errors": [{ "type": "unsupported-statement" }],
+    "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
   },
   {
     "src": ".foo |}lit{| {42}{{bar}}",
     "cleanSrc": ".foo |}lit{| {42} {{bar}}",
     "exp": "bar",
     "parts": [{ "type": "literal", "value": "bar" }],
-    "errors": [{ "type": "unsupported-statement" }]
+    "errors": [{ "type": "unsupported-statement" }],
+    "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
   }
 ]

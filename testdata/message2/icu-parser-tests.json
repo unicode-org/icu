@@ -3,7 +3,7 @@
     "",
     "Hello",
     "Hello world!",
-    "Hello \\t \\n \\r \\{ world!",
+    "Hello \t \n \r \\{ world!",
     "Hello world {:datetime}",
     "Hello world {foo}",
     "Hello {0} world",
@@ -46,16 +46,16 @@
     "{{Some string pattern, with {$foo} and {$exp :date style=long}!}}"
   ],
   "Simple messages, with declarations": [
-    ".input {$pi :number}",
-    ".input {$exp :date}",
-    ".local $foo = {$exp}",
-    ".local $foo = {$exp :date}",
-    ".local $foo = {$exp :date year=numeric month=long day=numeric}",
-    ".local $bar = {$foo :date month=medium}",
-    ".something |reserved=| {$foo :date}"
+    ".input {$pi :number} {{}}",
+    ".input {$exp :date} {{}}",
+    ".local $foo = {$exp} {{}}",
+    ".local $foo = {$exp :date} {{}}",
+    ".local $foo = {$exp :date year=numeric month=long day=numeric} {{}}",
+    ".local $bar = {$foo :date month=medium} {{}}",
+    ".something |reserved=| {$foo :date} {{}}"
   ],
   "Multiple declarations in one message": [
-    ".input {$a :date} .local $b = {$a :date year=numeric month=long day=numeric} .local $c = {$b :date month=medium} .someting |reserved = \\| and more| {$x :date} {$y :date} {$z :number}",
-    ".input {$a :date} .local $exp = {$a :date style=full} {{Your card expires on {$exp}!}}"
+    ".input {$a :date} .local $exp = {$a :date style=full} {{Your card expires on {$exp}!}}",
+    ".input {$a :date} .local $b = {$a :date year=numeric month=long day=numeric} .local $c = {$b :date month=medium} .someting |reserved = \\| and more| {$x :date} {$y :date} {$z :number} {{}}"
   ]
 }
