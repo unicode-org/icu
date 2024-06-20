@@ -16,6 +16,9 @@
 #   define NOMCX
 #include <windows.h>
 #include <time.h>
+#   if defined(__clang__)
+#       include <exception>
+#   endif
 #   ifdef __GNUC__
 #       define WINDOWS_WITH_GNUC
 #   endif
@@ -292,6 +295,11 @@ checkAssemblyHeaderName(const char* optAssembly) {
     }
 
     return false;
+}
+
+U_CAPI UBool U_EXPORT2
+checkCpuArchitecture(const char* optCpuArch) {
+    return strcmp(optCpuArch, "x64") == 0 || strcmp(optCpuArch, "x86") == 0 || strcmp(optCpuArch, "arm64") == 0;
 }
 
 
@@ -858,7 +866,7 @@ getArchitecture(
         // this would potentially be problematic when cross-compiling as this code
         // would most likely be ran on host machine to generate the .obj file for
         // the target architecture.
-#       ifdef U_CLANG_CL
+#       if defined(__clang__)
             if (strcmp(optCpuArch, "x64") == 0) {
                 *pCPU = IMAGE_FILE_MACHINE_AMD64;
             } else if (strcmp(optCpuArch, "x86") == 0) {
@@ -866,9 +874,7 @@ getArchitecture(
             } else if (strcmp(optCpuArch, "arm64") == 0) {
                 *pCPU = IMAGE_FILE_MACHINE_ARM64;
             } else {
-                // This should never happen.
-                fprintf(stderr, "genccode: unable to process %s CPU architecture\n", optCpuArch);
-                exit(U_ILLEGAL_ARGUMENT_ERROR);
+                std::terminate(); // Unreachable.
             }
 #       else
             *pCPU = IMAGE_FILE_MACHINE_UNKNOWN;

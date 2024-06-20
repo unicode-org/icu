@@ -218,16 +218,6 @@
 #endif
 
 /**
- * \def U_CLANG_CL
- * Defined if the compiler is Clang compatible with MSVC (Clang on Windows).
- * Otherwise undefined.
- * @internal
- */
-#if (defined(_MSC_VER) && defined(__clang__) && __clang__)
-#   define U_CLANG_CL
-#endif
-
-/**
  * \def CYGWINMSVC
  * Defined if this is Windows with Cygwin, but using MSVC rather than gcc.
  * Otherwise undefined.
