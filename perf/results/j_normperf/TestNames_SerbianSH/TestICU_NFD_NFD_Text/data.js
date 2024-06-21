@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1718916704309,
+  "lastUpdate": 1718996902554,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23157,6 +23157,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 2.9263480553374355,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "42d0bab7c3ce6716472a8642c79788ed0ffd38b9",
+          "message": "ICU-22800 Avoid inconsistent state inside Locale\n\nThere are some memory leak in Locale which is hard to figure out why.\nUse different variable to track memory allocation to avoid inconsistent\nstate while malloc fail",
+          "timestamp": "2024-06-21T11:49:11-07:00",
+          "tree_id": "68bc936973d9bf27d7d1a8f3e5d09b8b44998adf",
+          "url": "https://github.com/unicode-org/icu/commit/42d0bab7c3ce6716472a8642c79788ed0ffd38b9"
+        },
+        "date": 1718996773486,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 2.970389154560653,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
