@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1719263836198,
+  "lastUpdate": 1719263853313,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -46226,6 +46226,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 4.392189536934717,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "cf7ff1b0a508c216c57b61badfa44681cf0978fc",
+          "message": "ICU-22716 Set smaller timeout limit for uregex_match_fuzzer\n\n3000 is still too large and cause https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=69869\nset to 300 per andy's earlier suggestion",
+          "timestamp": "2024-06-24T14:06:08-07:00",
+          "tree_id": "f25ae28a45e208226a2b81cc7eb8484813077a79",
+          "url": "https://github.com/unicode-org/icu/commit/cf7ff1b0a508c216c57b61badfa44681cf0978fc"
+        },
+        "date": 1719263723936,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 4.395469150399768,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
