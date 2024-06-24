@@ -99,16 +99,6 @@ namespace message2 {
          * @deprecated This API is for technology preview only.
          */
         UnicodeString calendarName;
-        /**
-         * Creates a `TimeZone` from this `DateInfo`'s time zone name.
-         *
-         * @param status Input/output error code.
-         * @return A TimeZone object, which the caller adopts.
-         *
-         * @internal ICU 76 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        TimeZone* createTimeZone(UErrorCode& status) const;
     };
 
     class Formattable;

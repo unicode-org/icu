@@ -1040,6 +1040,22 @@ static UDate tryTimeZonePatterns(const UnicodeString& sourceStr, UErrorCode& err
     return d;
 }
 
+static TimeZone* createTimeZone(const DateInfo& dateInfo, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    TimeZone* tz;
+    if (dateInfo.zoneName.length() == 0) {
+        // Floating time value -- use default time zone
+        tz = TimeZone::createDefault();
+    } else {
+        tz = TimeZone::createTimeZone(dateInfo.zoneName);
+    }
+    if (tz == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return tz;
+}
+
 // Parse a string like [+-]nn:nn to a time zone
 SimpleTimeZone* createTimeZonePart(const UnicodeString& offsetStr, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
@@ -1149,6 +1165,22 @@ static DateInfo createDateInfoFromString(const UnicodeString& sourceStr, UErrorC
     // `:datetime` `calendar` option not implemented yet,
     // so other calendars aren't implemented
     return { absoluteDate, canonicalID, {} };
+}
+
+void formatDateWithDefaults(const Locale& locale,
+                            const DateInfo& dateInfo,
+                            UnicodeString& result,
+                            UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<DateFormat> df(defaultDateTimeInstance(locale, errorCode));
+    CHECK_ERROR(errorCode);
+
+    // Non-Gregorian calendars not supported yet
+    U_ASSERT(dateInfo.calendarName.length() == 0);
+    df->adoptTimeZone(createTimeZone(dateInfo, errorCode));
+    CHECK_ERROR(errorCode);
+    df->format(dateInfo.date, result, nullptr, errorCode);
 }
 
 FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& toFormat,
@@ -1345,7 +1377,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
             errorCode = U_MF_OPERAND_MISMATCH_ERROR;
             return {};
         }
-        df->adoptTimeZone(dateInfo.createTimeZone(errorCode));
+        df->adoptTimeZone(createTimeZone(dateInfo, errorCode));
 
         // Use the parsed date as the source value
         // in the returned FormattedPlaceholder; this is necessary
@@ -1359,7 +1391,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
         const DateInfo* dateInfo = source.getDate(errorCode);
         U_ASSERT(U_SUCCESS(errorCode));
 
-        df->adoptTimeZone(dateInfo->createTimeZone(errorCode));
+        df->adoptTimeZone(createTimeZone(*dateInfo, errorCode));
         df->format(dateInfo->date, result, 0, errorCode);
         if (U_FAILURE(errorCode)) {
             if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {

@@ -12,6 +12,7 @@
 #include "unicode/messageformat2_formattable.h"
 #include "unicode/smpdtfmt.h"
 #include "messageformat2_allocation.h"
+#include "messageformat2_function_registry_internal.h"
 #include "messageformat2_macros.h"
 
 #include "limits.h"
@@ -218,22 +219,6 @@ namespace message2 {
         return number::NumberFormatter::withLocale(locale).formatDecimal(toFormat, errorCode);
     }
 
-    TimeZone* DateInfo::createTimeZone(UErrorCode& errorCode) const {
-        NULL_ON_ERROR(errorCode);
-
-        TimeZone* tz;
-        if (zoneName.length() == 0) {
-            // Floating time value -- use default time zone
-            tz = TimeZone::createDefault();
-        } else {
-            tz = TimeZone::createTimeZone(zoneName);
-        }
-        if (tz == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return tz;
-    }
-
     DateFormat* defaultDateTimeInstance(const Locale& locale, UErrorCode& errorCode) {
         NULL_ON_ERROR(errorCode);
         LocalPointer<DateFormat> df(DateFormat::createDateTimeInstance(DateFormat::SHORT, DateFormat::SHORT, locale));
@@ -242,22 +227,6 @@ namespace message2 {
             return nullptr;
         }
         return df.orphan();
-    }
-
-    void formatDateWithDefaults(const Locale& locale,
-                                const DateInfo& dateInfo,
-                                UnicodeString& result,
-                                UErrorCode& errorCode) {
-        CHECK_ERROR(errorCode);
-
-        LocalPointer<DateFormat> df(defaultDateTimeInstance(locale, errorCode));
-        CHECK_ERROR(errorCode);
-
-        // Non-Gregorian calendars not supported yet
-        U_ASSERT(dateInfo.calendarName.length() == 0);
-        df->adoptTimeZone(dateInfo.createTimeZone(errorCode));
-        CHECK_ERROR(errorCode);
-        df->format(dateInfo.date, result, nullptr, errorCode);
     }
 
     // Called when output is required and the contents are an unevaluated `Formattable`;
