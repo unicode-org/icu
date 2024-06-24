@@ -19,6 +19,9 @@
 #include "number_types.h"
 #include "uvector.h" // U_ASSERT
 
+#ifndef __STDC_FORMAT_MACROS
+#define __STDC_FORMAT_MACROS
+#endif
 #include <inttypes.h>
 #include <math.h>
 
