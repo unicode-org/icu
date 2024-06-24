@@ -29,7 +29,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   }
   std::unique_ptr<icu::RegexMatcher> regex_matcher(re->matcher(haystack, status));
   if (U_SUCCESS(status)) {
-    regex_matcher->setTimeLimit(3000, status);
+    regex_matcher->setTimeLimit(300, status);
     regex_matcher->find(0, status);
   }
   return 0;
