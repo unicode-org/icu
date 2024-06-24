@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1718998516664,
+  "lastUpdate": 1719264537020,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -51537,6 +51537,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 8.3721,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "cf7ff1b0a508c216c57b61badfa44681cf0978fc",
+          "message": "ICU-22716 Set smaller timeout limit for uregex_match_fuzzer\n\n3000 is still too large and cause https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=69869\nset to 300 per andy's earlier suggestion",
+          "timestamp": "2024-06-24T14:06:08-07:00",
+          "tree_id": "f25ae28a45e208226a2b81cc7eb8484813077a79",
+          "url": "https://github.com/unicode-org/icu/commit/cf7ff1b0a508c216c57b61badfa44681cf0978fc"
+        },
+        "date": 1719264407116,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 7.1129,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 7.1096,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 7.1216,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 8.3164,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 8.3324,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 8.3389,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
