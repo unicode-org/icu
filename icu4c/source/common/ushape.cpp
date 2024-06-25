@@ -461,11 +461,9 @@ getLink(char16_t ch) {
  */
 static void
 countSpaces(char16_t *dest, int32_t size, uint32_t /*options*/, int32_t *spacesCountl, int32_t *spacesCountr) {
-    int32_t i = 0;
     int32_t countl = 0,countr = 0;
-    while((dest[i] == SPACE_CHAR) && (countl < size)) {
+    while(countl < size && dest[countl] == SPACE_CHAR) {
        countl++;
-       i++;
     }
     if (countl < size) {  /* the entire buffer is not all space */
         while(dest[size-1] == SPACE_CHAR) {
