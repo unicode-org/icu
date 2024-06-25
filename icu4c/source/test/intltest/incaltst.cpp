@@ -88,6 +88,8 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     TESTCASE_AUTO(TestPersian);
     TESTCASE_AUTO(TestPersianFormat);
     TESTCASE_AUTO(TestTaiwan);
+    TESTCASE_AUTO(TestMyanmar);
+    TESTCASE_AUTO(TestMyanmarFormat);
     TESTCASE_AUTO(TestConsistencyGregorian);
     TESTCASE_AUTO(TestConsistencyCoptic);
     TESTCASE_AUTO(TestConsistencyEthiopic);
@@ -773,6 +775,175 @@ void IntlCalendarTest::TestForceGannenNumbering()
             }
         }
     }
+}
+
+/**
+ * Verify the Myanmar Calendar.
+ */
+void IntlCalendarTest::TestMyanmar() {
+    UDate timeA = Calendar::getNow();
+
+    Calendar *cal;
+    UErrorCode status = U_ZERO_ERROR;
+    cal = Calendar::createInstance("en_US@calendar=myanmar", status);
+    CHECK(status, UnicodeString("Creating en_US@calendar=myanmar calendar"));
+    // Sanity check the calendar
+    UDate timeB = Calendar::getNow();
+    UDate timeCal = cal->getTime(status);
+
+    if(!(timeA <= timeCal) || !(timeCal <= timeB)) {
+      errln((UnicodeString)"Error: Calendar time " + timeCal +
+            " is not within sampled times [" + timeA + " to " + timeB + "]!");
+    }
+    // end sanity check
+
+    // Test various dates to be sure of validity
+    int32_t data[] = {
+        2024, 6, 12, 1386, 3, 6, // 2024
+        2019, 4, 17, 1381, 1, 13, // start of 1381
+        2019, 1,  1, 1380, 10, 25,
+
+        2018, 8,  1, 1380, 5, 20, // second waso after 2015 2018 correction
+        2018, 7, 13, 1380, 5, 1, // start of second waso
+        2018, 7, 12, 1380, 4, 30, // end of first waso
+        2018, 6, 14, 1380, 4, 2,
+        2018, 6, 13, 1380, 4, 1, // start of first waso
+        2018, 6, 12, 1380, 3, 29, // nayon / first waso
+        2018, 6, 11, 1380, 3, 28,
+        2018, 5,  1, 1380, 2, 17,
+        2018, 4, 17, 1380, 2,  3, // start year in kason
+        2018, 4, 16, 1379, 15, 2, // late kason
+        2018, 4,  1, 1379, 14, 16, // late tagu
+
+        2017, 7, 24, 1379, 6, 1, // no month 5 / 2nd waso
+        2017, 7, 23, 1379, 4, 30, // no month 5 / 2nd waso
+        2017, 4, 26, 1379, 2, 1,
+        2017, 4, 17, 1379, 1, 21, // start year in tagu
+        2017, 4, 16, 1378, 14, 20, // late tagu
+        2017, 1,  1, 1378, 11, 4,
+
+        2016, 4, 17, 1378, 1, 10, // first day of 1378, tagu
+        2016, 4, 16, 1377, 14, 9, // last day of 1377, late tagu
+
+        2015, 8, 16, 1377, 6, 1, // start of wagaung, big watat
+        2015, 8, 15, 1377, 5, 30, // end of 2nd waso, big watat
+        2015, 7, 17, 1377, 5, 1, // start of 2nd waso, big watat
+        2015, 7, 16, 1377, 4, 30, // end of first waso, big watat
+        2015, 6, 17, 1377, 4, 1, // start of 1st waso, big watat
+        2015, 6, 16, 1377, 3, 30, // nayon, big watat
+        2015, 6, 15, 1377, 3, 29, // nayon, big watat
+
+        2015, 4, 18, 1377, 2, 1, // kason
+        2015, 4, 17, 1377, 1, 29, // first day of year is single-day tagu
+        2015, 4, 3, 1376, 14, 15, //  late dagu
+        2015, 3, 20, 1376, 14, 1, //  late dagu
+        2015, 3, 19, 1376, 13, 30, //  tabaung
+
+        2014, 7, 27, 1376, 6, 1, // start of waguang, skipping second waso
+        2014, 7, 26, 1376, 4, 30, // end of first waso
+        2014, 6, 27, 1376, 4, 1, // start of first waso
+        2014, 6, 26, 1376, 3, 29, // end of nayon
+
+        2012, 8, 18, 1374, 6, 1, // start of wagaung, little watat
+        2012, 8, 17, 1374, 5, 30, // end of 2nd waso, little watat
+        2012, 7, 19, 1374, 5, 1, // start of 2nd waso, little watat
+        2012, 7, 18, 1374, 4, 30, // end of first waso, little watat
+        2012, 6, 19, 1374, 4, 1, // start of 1st waso, little watat
+        2012, 6, 18, 1374, 3, 29, // nayon, little watat
+        2012, 6, 17, 1374, 3, 28, // nayon, little watat
+
+        1989, 4, 15, 1350, 14, 10, // late dagu
+        1989, 4, 6, 1350, 14, 1, // start of late dagu
+
+        // history
+        1875, 7, 17, 1237, 4, 15,
+        1838, 7, 17, 1200, 4, 26,
+        1609, 2, 17,  970, 13, 26,
+
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+    };
+
+    Calendar *grego = Calendar::createInstance("en_US@calendar=gregorian", status);
+    for (int32_t i=0; data[i]!=-1; ) {
+        int32_t gregYear = data[i++];
+        int32_t gregMonth = data[i++]-1;
+        int32_t gregDay = data[i++];
+        int32_t myYear = data[i++];
+        int32_t myMonth = data[i++]-1;
+        int32_t myDay = data[i++];
+
+        // Test conversion from Myanmar dates
+        grego->clear();
+        grego->set(gregYear, gregMonth, gregDay);
+
+        cal->clear();
+        cal->set(myYear, myMonth, myDay);
+
+        UDate myTime = cal->getTime(status);
+        UDate gregTime = grego->getTime(status);
+
+        if (myTime != gregTime) {
+          errln(UnicodeString("Expected ") + gregTime + " but got " + myTime);
+        }
+
+        // Test conversion to Myanmar dates
+        cal->clear();
+        cal->setTime(gregTime, status);
+
+        int32_t computedYear = cal->get(UCAL_YEAR, status);
+        int32_t computedMonth = cal->get(UCAL_MONTH, status);
+        int32_t computedDay = cal->get(UCAL_DATE, status);
+
+        if ((myYear != computedYear) ||
+            (myMonth != computedMonth) ||
+            (myDay != computedDay)) {
+          errln(UnicodeString("Expected ") + myYear + "/" + (myMonth+1) + "/" + myDay +
+                " but got " +  computedYear + "/" + (computedMonth+1) + "/" + computedDay);
+        }
+
+    }
+
+    delete cal;
+    delete grego;
+}
+
+void IntlCalendarTest::TestMyanmarFormat() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    // Test simple parse/format with adopt
+    UDate aDate = 608626800000.0;
+    SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=myanmar"), status);
+    CHECK(status, "creating myanmar date format instance");
+    SimpleDateFormat *fmt2 = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=gregorian"), status);
+    CHECK(status, "creating gregorian date format instance");
+    if(!fmt) {
+        errln("Couldn't create en_US instance");
+    } else {
+        UnicodeString str;
+        fmt2->format(aDate, str);
+        logln(UnicodeString() + "Test Date:" + str);
+        str.remove();
+        fmt->format(aDate, str);
+        logln(UnicodeString() + "as Myanmar Calendar: " + escape(str));
+        UnicodeString expected("Late Tagu 10, 1350 ME");
+        if(str != expected) {
+            errln("Expected " + escape(expected) + " but got " + escape(str));
+        }
+        UDate otherDate = fmt->parse(expected, status);
+        if(otherDate != aDate) {
+            UnicodeString str3;
+            fmt->format(otherDate, str3);
+            errln("Parse incorrect of " + escape(expected) + " - wanted " + aDate + " but got " +  otherDate + ", " + escape(str3));
+        } else {
+            logln("Parsed OK: " + expected);
+        }
+        delete fmt;
+    }
+    delete fmt2;
+
+    CHECK(status, "Error occurred testing Myanmar Calendar in English ");
+
+    // other languages follow
 }
 
 /**
