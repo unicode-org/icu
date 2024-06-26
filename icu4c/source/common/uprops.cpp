@@ -728,6 +728,7 @@ static const IntProperty intProps[UCHAR_INT_LIMIT-UCHAR_INT_START]={
     { UPROPS_SRC_INSC,  0, 0,                               getInSC, layoutGetMaxValue },
     { UPROPS_SRC_VO,    0, 0,                               getVo, layoutGetMaxValue },
     { UPROPS_SRC_PROPSVEC, 0, static_cast<int32_t>(U_ID_STATUS_ALLOWED), getIDStatusValue, getMaxValueFromShift },
+    { 0,                UPROPS_INCB_MASK, UPROPS_INCB_SHIFT,defaultGetValue, defaultGetMaxValue },
 };
 
 U_CAPI int32_t U_EXPORT2
