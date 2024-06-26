@@ -2114,20 +2114,26 @@ void UnicodeSetTest::copyWithIterator(UnicodeSet& t, const UnicodeSet& s, UBool 
 }
     
 UBool UnicodeSetTest::checkEqual(const UnicodeSet& s, const UnicodeSet& t, const char* message) {
-  assertEquals(UnicodeString("RangeCount: ","") + message, s.getRangeCount(), t.getRangeCount());
-  assertEquals(UnicodeString("size: ","") + message, s.size(), t.size());
+    return checkEqual(*this, s, t, message);
+}
+
+UBool UnicodeSetTest::checkEqual(
+        IntlTest& intlTest,
+        const UnicodeSet& s, const UnicodeSet& t, const char* message) {
+    intlTest.assertEquals(UnicodeString("RangeCount: ","") + message, s.getRangeCount(), t.getRangeCount());
+    intlTest.assertEquals(UnicodeString("size: ","") + message, s.size(), t.size());
     UnicodeString source; s.toPattern(source, true);
     UnicodeString result; t.toPattern(result, true);
     if (s != t) {
-        errln(UnicodeString("FAIL: ") + message
-              + "; source = " + source
-              + "; result = " + result
+        intlTest.errln((UnicodeString)"FAIL: " + message
+              + "\nsource = " + source
+              + "\nresult = " + result
               );
         return false;
     } else {
-        logln(UnicodeString("Ok: ") + message
-              + "; source = " + source
-              + "; result = " + result
+        intlTest.logln((UnicodeString)"Ok: " + message
+              + "\nsource = " + source
+              + "\nresult = " + result
               );
     }
     return true;

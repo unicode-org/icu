@@ -4125,6 +4125,24 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
+     * Indic Conjunct Break constants.
+     * See https://unicode.org/reports/tr44/#Indic_Conjunct_Break
+     *
+     * @see UProperty#INDIC_CONJUNCT_BREAK
+     * @draft ICU 76
+     */
+    public enum IndicConjunctBreak {
+        /** @draft ICU 76 */
+        NONE,
+        /** @draft ICU 76 */
+        CONSONANT,
+        /** @draft ICU 76 */
+        EXTEND,
+        /** @draft ICU 76 */
+        LINKER,
+    }
+
+    /**
      * Vertical Orientation constants.
      *
      * @see UProperty#VERTICAL_ORIENTATION

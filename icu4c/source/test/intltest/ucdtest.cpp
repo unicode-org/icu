@@ -21,6 +21,9 @@
 #include "testutil.h"
 #include "uparse.h"
 #include "ucdtest.h"
+#include "usettest.h"
+
+#include <iostream>
 
 static const char *ignorePropNames[]={
     "FC_NFKC",
@@ -1092,6 +1095,10 @@ void UnicodeTest::TestPropertiesUsingPpucd() {
         { UCHAR_NFC_QUICK_CHECK, UNORM_MAYBE },
         { UCHAR_NFKC_QUICK_CHECK, UNORM_MAYBE },
 #endif  // !UCONFIG_NO_NORMALIZATION
+        { UCHAR_INDIC_CONJUNCT_BREAK, U_INCB_NONE },
+        { UCHAR_INDIC_CONJUNCT_BREAK, U_INCB_CONSONANT },
+        { UCHAR_INDIC_CONJUNCT_BREAK, U_INCB_EXTEND },
+        { UCHAR_INDIC_CONJUNCT_BREAK, U_INCB_LINKER },
     };
 
     // Iterate through PPUCD file, accumulating each line's data into each UnicodeSet per property
@@ -1133,7 +1140,7 @@ void UnicodeTest::TestPropertiesUsingPpucd() {
         if (!tp.isBinary()) {
             msg = msg + "=" + u_getPropertyValueName(tp.prop, tp.value, U_LONG_PROPERTY_NAME);
         }
-        assertTrue(msg.c_str(), tp.set == icuPropSet);
+        UnicodeSetTest::checkEqual(*this, tp.set, icuPropSet, msg.c_str());
     }
 }
 

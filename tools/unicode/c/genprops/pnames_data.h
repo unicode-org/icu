@@ -1186,6 +1186,13 @@ static const Value VALUES_ID_Status[2] = {
     Value(U_ID_STATUS_ALLOWED, "Allowed Allowed"),
 };
 
+static const Value VALUES_InCB[4] = {
+    Value(U_INCB_NONE, "None None"),
+    Value(U_INCB_CONSONANT, "Consonant Consonant"),
+    Value(U_INCB_EXTEND, "Extend Extend"),
+    Value(U_INCB_LINKER, "Linker Linker"),
+};
+
 static const Value VALUES_gcm[38] = {
     Value((int32_t)U_GC_C_MASK, "C Other"),
     Value((int32_t)U_GC_CC_MASK, "Cc Control cntrl"),
@@ -1242,7 +1249,7 @@ static const Value VALUES_ID_Type[12] = {
     Value(U_ID_TYPE_RECOMMENDED, "Recommended Recommended"),
 };
 
-static const Property PROPERTIES[119] = {
+static const Property PROPERTIES[120] = {
     Property(UCHAR_ALPHABETIC, "Alpha Alphabetic"),
     Property(UCHAR_ASCII_HEX_DIGIT, "AHex ASCII_Hex_Digit"),
     Property(UCHAR_BIDI_CONTROL, "Bidi_C Bidi_Control"),
@@ -1344,6 +1351,7 @@ static const Property PROPERTIES[119] = {
     Property(UCHAR_INDIC_SYLLABIC_CATEGORY, "InSC Indic_Syllabic_Category", VALUES_InSC, 37),
     Property(UCHAR_VERTICAL_ORIENTATION, "vo Vertical_Orientation", VALUES_vo, 4),
     Property(UCHAR_IDENTIFIER_STATUS, "ID_Status Identifier_Status", VALUES_ID_Status, 2),
+    Property(UCHAR_INDIC_CONJUNCT_BREAK, "InCB Indic_Conjunct_Break", VALUES_InCB, 4),
     Property(UCHAR_GENERAL_CATEGORY_MASK, "gcm General_Category_Mask", VALUES_gcm, 38),
     Property(UCHAR_NUMERIC_VALUE, "nv Numeric_Value"),
     Property(UCHAR_AGE, "age Age"),

@@ -904,6 +904,7 @@ public final class UCharacterProperty
                 return IdentifierStatus.ALLOWED.ordinal();
             }
         },
+        new IntProperty(0, INCB_MASK, INCB_SHIFT),  // INDIC_CONJUNCT_BREAK
     };
 
     public int getIntPropertyValue(int c, int which) {
@@ -1378,7 +1379,8 @@ public final class UCharacterProperty
     // Bits
     // 31..26   Age major version (major=0..63)
     // 25..24   Age minor version (minor=0..3)
-    // 23..15   reserved
+    // 23..17   reserved
+    // 16..15   Indic Conjunct Break
     // 14..12   East Asian Width
     // 11..10   3..1: Bits 9..0 = Script_Extensions index
     //             3: Script value from Script_Extensions
@@ -1389,6 +1391,9 @@ public final class UCharacterProperty
 
     private static final int EAST_ASIAN_MASK_ = 0x00007000;
     private static final int EAST_ASIAN_SHIFT_ = 12;
+
+    private static final int INCB_MASK = 0x00018000;
+    private static final int INCB_SHIFT = 15;
 
     /** Script_Extensions: mask includes Script */
     public static final int SCRIPT_X_MASK = 0x00000fff;

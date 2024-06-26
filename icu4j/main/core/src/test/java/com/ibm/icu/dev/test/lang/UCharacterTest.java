@@ -2212,6 +2212,14 @@ public final class UCharacterTest extends CoreTestFmwk
             { 0x0606, UProperty.PREPENDED_CONCATENATION_MARK, FALSE },
             { 0x110BD, UProperty.PREPENDED_CONCATENATION_MARK, TRUE },
 
+            /* Indic_Conjunct_Break values */
+            { 0x094D, UProperty.INDIC_CONJUNCT_BREAK, UCharacter.IndicConjunctBreak.LINKER.ordinal() },
+            { 0x09B9, UProperty.INDIC_CONJUNCT_BREAK, UCharacter.IndicConjunctBreak.CONSONANT.ordinal() },
+            { 0x05BE, UProperty.INDIC_CONJUNCT_BREAK, UCharacter.IndicConjunctBreak.NONE.ordinal() },
+            { 0x05BF, UProperty.INDIC_CONJUNCT_BREAK, UCharacter.IndicConjunctBreak.EXTEND.ordinal() },
+            { 0x05C0, UProperty.INDIC_CONJUNCT_BREAK, UCharacter.IndicConjunctBreak.NONE.ordinal() },
+            { 0xD800, UProperty.INDIC_CONJUNCT_BREAK, UCharacter.IndicConjunctBreak.NONE.ordinal() },
+
             /* undefined UProperty values */
             { 0x61, 0x4a7, 0 },
             { 0x234bc, 0x15ed, 0 }

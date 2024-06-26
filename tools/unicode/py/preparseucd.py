@@ -2012,7 +2012,7 @@ _ublock_re = re.compile(" *(UBLOCK_[0-9A-Z_]+) *= *[0-9]+,")
 # Sample line to match:
 #    U_EA_AMBIGUOUS,
 _prop_and_value_re = re.compile(
-    " *(U_(BPT|DT|EA|GCB|HST|ID_STATUS|ID_TYPE|INPC|INSC|LB|JG|JT|NT|SB|VO|WB)_([0-9A-Z_]+))")
+    " *(U_(BPT|DT|EA|GCB|HST|ID_STATUS|ID_TYPE|INCB|INPC|INSC|LB|JG|JT|NT|SB|VO|WB)_([0-9A-Z_]+))")
 
 # Sample line to match if it has matched _prop_and_value_re
 # (we want to exclude aliases):
