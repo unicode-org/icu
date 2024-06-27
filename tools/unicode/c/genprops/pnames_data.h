@@ -1249,7 +1249,7 @@ static const Value VALUES_ID_Type[12] = {
     Value(U_ID_TYPE_RECOMMENDED, "Recommended Recommended"),
 };
 
-static const Property PROPERTIES[120] = {
+static const Property PROPERTIES[121] = {
     Property(UCHAR_ALPHABETIC, "Alpha Alphabetic"),
     Property(UCHAR_ASCII_HEX_DIGIT, "AHex ASCII_Hex_Digit"),
     Property(UCHAR_BIDI_CONTROL, "Bidi_C Bidi_Control"),
@@ -1325,6 +1325,7 @@ static const Property PROPERTIES[120] = {
     Property(UCHAR_IDS_UNARY_OPERATOR, "IDSU IDS_Unary_Operator"),
     Property(UCHAR_ID_COMPAT_MATH_START, "ID_Compat_Math_Start ID_Compat_Math_Start"),
     Property(UCHAR_ID_COMPAT_MATH_CONTINUE, "ID_Compat_Math_Continue ID_Compat_Math_Continue"),
+    Property(UCHAR_MODIFIER_COMBINING_MARK, "MCM Modifier_Combining_Mark"),
     Property(UCHAR_BIDI_CLASS, "bc Bidi_Class", VALUES_bc, 23),
     Property(UCHAR_BLOCK, "blk Block", VALUES_blk, 339),
     Property(UCHAR_CANONICAL_COMBINING_CLASS, "ccc Canonical_Combining_Class", VALUES_ccc, 58),

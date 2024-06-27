@@ -359,6 +359,19 @@ static constexpr UChar32 ID_COMPAT_MATH_START[] = {
     0x1D7C3
 };
 
+/** Ranges (start/limit pairs) of Modifier_Combining_mark (only), from UCD PropList.txt. */
+static constexpr UChar32 MODIFIER_COMBINING_MARK[] = {
+    0x0654, 0x0655 + 1,
+    0x0658, 0x0658 + 1, // U+0658
+    0x06DC, 0x06DC + 1, // U+06DC
+    0x06E3, 0x06E3 + 1, // U+06E3
+    0x06E7, 0x06E8 + 1,
+    0x08CA, 0x08CB + 1,
+    0x08CD, 0x08CF + 1,
+    0x08D3, 0x08D3 + 1, // U+08D3
+    0x08F3, 0x08F3 + 1  // U+08F3
+};
+
 static UBool isIDCompatMathStart(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
     if (c < ID_COMPAT_MATH_START[0]) { return false; }  // fastpath for common scripts
     for (UChar32 startChar : ID_COMPAT_MATH_START) {
@@ -373,6 +386,14 @@ static UBool isIDCompatMathContinue(const BinaryProperty &prop, UChar32 c, UProp
         if (c < ID_COMPAT_MATH_CONTINUE[i + 1]) { return true; }  // below range limit
     }
     return isIDCompatMathStart(prop, c, UCHAR_ID_COMPAT_MATH_START);
+}
+
+static UBool isModifierCombiningMark(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(MODIFIER_COMBINING_MARK); i += 2) {
+        if (c < MODIFIER_COMBINING_MARK[i]) { return false; }  // below range start
+        if (c < MODIFIER_COMBINING_MARK[i + 1]) { return true; }  // below range limit
+    }
+    return false;
 }
 
 static const BinaryProperty binProps[UCHAR_BINARY_LIMIT]={
@@ -459,6 +480,7 @@ static const BinaryProperty binProps[UCHAR_BINARY_LIMIT]={
     { UPROPS_SRC_IDSU, 0, isIDSUnaryOperator }, // UCHAR_IDS_UNARY_OPERATOR
     { UPROPS_SRC_ID_COMPAT_MATH, 0, isIDCompatMathStart }, // UCHAR_ID_COMPAT_MATH_START
     { UPROPS_SRC_ID_COMPAT_MATH, 0, isIDCompatMathContinue }, // UCHAR_ID_COMPAT_MATH_CONTINUE
+    { UPROPS_SRC_MCM, 0 , isModifierCombiningMark }, // UCHAR_MODIFIER_COMBINING_MARK
 };
 
 U_CAPI UBool U_EXPORT2
@@ -843,6 +865,13 @@ uprops_addPropertyStarts(UPropertySource src, const USetAdder *sa, UErrorCode *p
         for (UChar32 c : ID_COMPAT_MATH_START) {
             sa->add(sa->set, c);
             sa->add(sa->set, c + 1);
+        }
+        return;
+    }
+    if (src == UPROPS_SRC_MCM) {
+        // range limits
+        for (UChar32 c : MODIFIER_COMBINING_MARK) {
+            sa->add(sa->set, c);
         }
         return;
     }

@@ -449,6 +449,7 @@ enum UPropertySource {
     UPROPS_SRC_IDSU,
     UPROPS_SRC_ID_COMPAT_MATH,
     UPROPS_SRC_BLOCK,
+    UPROPS_SRC_MCM,
     /** One more than the highest UPropertySource (UPROPS_SRC_) constant. */
     UPROPS_SRC_COUNT
 };

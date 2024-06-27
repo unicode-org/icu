@@ -1099,6 +1099,7 @@ void UnicodeTest::TestPropertiesUsingPpucd() {
         { UCHAR_INDIC_CONJUNCT_BREAK, U_INCB_CONSONANT },
         { UCHAR_INDIC_CONJUNCT_BREAK, U_INCB_EXTEND },
         { UCHAR_INDIC_CONJUNCT_BREAK, U_INCB_LINKER },
+        { UCHAR_MODIFIER_COMBINING_MARK },
     };
 
     // Iterate through PPUCD file, accumulating each line's data into each UnicodeSet per property

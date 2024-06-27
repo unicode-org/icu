@@ -82,6 +82,9 @@ public final class CharacterPropertiesImpl {
             case UCharacterProperty.SRC_ID_COMPAT_MATH:
                 UCharacterProperty.mathCompat_addPropertyStarts(incl);
                 break;
+            case UCharacterProperty.SRC_MCM:
+                UCharacterProperty.mcm_addPropertyStarts(incl);
+                break;
             case UCharacterProperty.SRC_BLOCK:
                 UCharacterProperty.INSTANCE.ublock_addPropertyStarts(incl);
                 break;
