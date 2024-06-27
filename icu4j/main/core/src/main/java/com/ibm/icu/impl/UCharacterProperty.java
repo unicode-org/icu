@@ -115,8 +115,9 @@ public final class UCharacterProperty
     public static final int SRC_IDSU=16;
     public static final int SRC_ID_COMPAT_MATH=17;
     public static final int SRC_BLOCK=18;
+    public static final int SRC_MCM=19;
     /** One more than the highest UPropertySource (SRC_) constant. */
-    public static final int SRC_COUNT=19;
+    public static final int SRC_COUNT=20;
 
     private static final class LayoutProps {
         private static final class IsAcceptable implements ICUBinary.Authenticate {
@@ -407,6 +408,19 @@ public final class UCharacterProperty
         0x1D7C3
     };
 
+    /** Ranges (start/limit pairs) of Modifier_Combining_mark (only), from UCD PropList.txt. */
+    private static final int[] MODIFIER_COMBINING_MARK = {
+        0x0654, 0x0655 + 1,
+        0x0658, 0x0658 + 1, // U+0658
+        0x06DC, 0x06DC + 1, // U+06DC
+        0x06E3, 0x06E3 + 1, // U+06E3
+        0x06E7, 0x06E8 + 1,
+        0x08CA, 0x08CB + 1,
+        0x08CD, 0x08CF + 1,
+        0x08D3, 0x08D3 + 1, // U+08D3
+        0x08F3, 0x08F3 + 1  // U+08F3
+};
+
     private class MathCompatBinaryProperty extends BinaryProperty {
         int which;
         MathCompatBinaryProperty(int which) {
@@ -424,6 +438,20 @@ public final class UCharacterProperty
             if (c < ID_COMPAT_MATH_START[0]) { return false; }  // fastpath for common scripts
             for (int startChar : ID_COMPAT_MATH_START) {
                 if (c == startChar) { return true; }
+            }
+            return false;
+        }
+    }
+
+    private class MCMBinaryProperty extends BinaryProperty {
+        MCMBinaryProperty() {
+            super(SRC_MCM);
+        }
+        @Override
+        boolean contains(int c) {
+            for (int i = 0; i < MODIFIER_COMBINING_MARK.length; i += 2) {
+                if (c < MODIFIER_COMBINING_MARK[i]) { return false; }  // below range start
+                if (c < MODIFIER_COMBINING_MARK[i + 1]) { return true; }  // below range limit
             }
             return false;
         }
@@ -629,6 +657,7 @@ public final class UCharacterProperty
         },
         new MathCompatBinaryProperty(UProperty.ID_COMPAT_MATH_START),
         new MathCompatBinaryProperty(UProperty.ID_COMPAT_MATH_CONTINUE),
+        new MCMBinaryProperty(),
     };
 
     public boolean hasBinaryProperty(int c, int which) {
@@ -1800,6 +1829,13 @@ public final class UCharacterProperty
         for (int c : ID_COMPAT_MATH_START) {
             set.add(c);
             set.add(c + 1);
+        }
+    }
+
+    static void mcm_addPropertyStarts(UnicodeSet set) {
+        // range limits
+        for (int c : MODIFIER_COMBINING_MARK) {
+            set.add(c);
         }
     }
 

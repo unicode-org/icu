@@ -2220,6 +2220,13 @@ public final class UCharacterTest extends CoreTestFmwk
             { 0x05C0, UProperty.INDIC_CONJUNCT_BREAK, UCharacter.IndicConjunctBreak.NONE.ordinal() },
             { 0xD800, UProperty.INDIC_CONJUNCT_BREAK, UCharacter.IndicConjunctBreak.NONE.ordinal() },
 
+            /* Modifier_Combining_Mark values */
+            { 0xD800, UProperty.MODIFIER_COMBINING_MARK, FALSE },
+            { 0x0653, UProperty.MODIFIER_COMBINING_MARK, FALSE },
+            { 0x0654, UProperty.MODIFIER_COMBINING_MARK, TRUE },
+            { 0x0655, UProperty.MODIFIER_COMBINING_MARK, TRUE },
+            { 0x0656, UProperty.MODIFIER_COMBINING_MARK, FALSE },
+
             /* undefined UProperty values */
             { 0x61, 0x4a7, 0 },
             { 0x234bc, 0x15ed, 0 }
