@@ -7,6 +7,10 @@
 # also batch up any pending changes so that we will only have at most
 # one build running at a given time (since they take a long time).
 trigger:
+  # batch=true to reduce number of concurrent runs on the same branch:
+  # https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/trigger?view=azure-pipelines#properties
+  # potential future feature to supersede batch=true:
+  # https://learn.microsoft.com/en-us/azure/devops/pipelines/process/stages?view=azure-devops&tabs=yaml#specify-queuing-policies
   batch: true
   branches:
     include:
