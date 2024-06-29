@@ -1,0 +1,54 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Actions workflow to ensure all required checks pass when they are attempted.
+# In other words, many checks are conditionally run, so use this workflow as a workaround
+# to a limitation in Github Actions in how required checks are enforced. Instead of 
+# Github's naive behavior currently, this workflow only asserts that status=passing on
+# checks when they are run.
+
+name: Wait for Required Checks
+
+on:
+  push:
+    branches:
+      - main
+      - 'maint/maint*'
+  pull_request:
+    branches: '**'
+
+jobs:
+  enforce-all-checks:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: read
+    steps:
+    - name: Wait for Triggered Required GH Checks
+      uses: poseidon/wait-for-status-checks@6988432d64ad3f9c2608db4ca16fded1b7d36ead # v0.5.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        # This is one large regex. The YAML `>-` concatenates while removing
+        # whitespace between lines and prevents an extra new line from being
+        # added at the end.
+        # The regex syntax uses `|` to indicate "alternation" (multiple possible options)
+        # so don't end the last line/option with a `|` symbol.
+        match_pattern: >-
+          Test build of User Guide docs|
+          copyright-scan|
+          valid-UTF-8-and-no-BOM-check|
+          icu4j-.*|
+          icu4c-.*|
+          gcc-.*|
+          clang-.*|
+          run-with-stubdata|
+          u-.*|
+          lstm-test|
+          adaboost-test|
+          testmap|
+          internal-header-compilation|
+          valid-UTF-8-and-no-BOM-check|
+          uconfig-unit-tests.*|
+          unicode-update-tools|
+          lstm-icu4j.*|
+          adaboost-icu4j.*|
+          env-test.*
