@@ -52,7 +52,19 @@ Individual tests can be configured in the ICU Github repository:
 4. Choose one of the rule sets and click "Edit".  ***Note: all rule sets should be changed in the same way***
 5. Ensure that "Require status checks to pass before merging" is enabled
 6. Underneath that enabled checkbox, the table "Status checks that are required." lists the currently enabled tests ("checks") that must pass before a Pull Request can be merged to the branch
-7. If a new test (check) needs to be added, use the search box above the table and type the display name of the check, then click on it in the drop down list to add it to the table of required checks.
+7. Set the only required check to be `enforce-all-checks`.
+    - The [`wait-for-checks` Github Action](https://github.com/marketplace/actions/wait-for-checks)
+    correctly enforces that all of checks of interest are passing,
+    while only inspecting activated checks
+    (ignoring checks that are inactive or skipped due to conditional triggering).
+    - See the `enforce-all-checks` job of the `.github/workflows/wait-for-checks.yml` workflow for usage details.
+    - For background info, see [this discussion](https://github.com/orgs/community/discussions/13690) for an explanation of the shortcoming in Github Actions currently that prompts the need for this solution.
+8. If a new test (check) needs to be added, then update the regular expression in the `enforce-all-checks` job of the `.github/workflows/wait-for-checks.yml` workflow so that it will match on the name of the new check.
+    - For checks defined in Github Actions,
+    the name of the check is the name of the job.
+    In GHA workflows, if the job name is not explicitly overridden,
+    then the name falls back to the job identifier as written in the workflow file.
+
 
 
 ## Github Actions
