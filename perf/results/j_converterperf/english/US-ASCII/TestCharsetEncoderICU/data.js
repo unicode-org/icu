@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1719264228983,
+  "lastUpdate": 1719783758488,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23067,6 +23067,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.4723081735983868,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "2e00f3866013eba7cd6532aa508db58e5cabc533",
+          "message": "ICU-22721 Prevent redundant concurrent CI runs on the same PR branch",
+          "timestamp": "2024-06-30T14:13:33-07:00",
+          "tree_id": "d9e9c13395c6a79d5d18de9e803024dcd8565eaa",
+          "url": "https://github.com/unicode-org/icu/commit/2e00f3866013eba7cd6532aa508db58e5cabc533"
+        },
+        "date": 1719783627387,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.47255960519694556,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
