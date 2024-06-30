@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1719264521925,
+  "lastUpdate": 1719784122249,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -67077,6 +67077,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1412.6486,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "2e00f3866013eba7cd6532aa508db58e5cabc533",
+          "message": "ICU-22721 Prevent redundant concurrent CI runs on the same PR branch",
+          "timestamp": "2024-06-30T14:13:33-07:00",
+          "tree_id": "d9e9c13395c6a79d5d18de9e803024dcd8565eaa",
+          "url": "https://github.com/unicode-org/icu/commit/2e00f3866013eba7cd6532aa508db58e5cabc533"
+        },
+        "date": 1719783993426,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77853.8305,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177780.022,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.539,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.2014,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.7249,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8363.6367,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 30549.5565,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1434.2377,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
