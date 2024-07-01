@@ -3,7 +3,7 @@
 
 <!-- This build file is intended to become the single mechanism for working with CLDR
      code and data when building ICU data.
-     
+
      Eventually it will encompass:
      * Building ICU data form CLDR data via cldr-to-icu.
      * Building the CLDR libraries needed to support ICU data conversion.
@@ -32,6 +32,7 @@
              message="Set the CLDR_DIR environment variable (or cldrDir property) to the top level CLDR source directory (containing 'common')."/>
         <property name="testDataDir4C" value="${basedir}/../../icu4c/source/test/testdata/cldr"/>
         <property name="testDataDir4J" value="${basedir}/../../icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/cldr"/>
+        <property name="testDataDirBoth" value="${basedir}/../../testdata"/>
     </target>
 
     <!-- Copies CLDR test data directories, after deleting previous
@@ -45,11 +46,20 @@
             <include name="units/**"/> <!-- Used in UnitsTest tests -->
        </fileset>
 
+        <fileset id="cldrSharedTestData" dir="${cldrDir}/common/testData">
+            <!-- Test data shared between both C and J. -->
+            <include name="messageFormat/**" />
+        </fileset>
+
         <copy todir="${testDataDir4C}">
             <fileset refid="cldrTestData"/>
         </copy>
         <copy todir="${testDataDir4J}">
             <fileset refid="cldrTestData"/>
+        </copy>
+
+        <copy todir="${testDataDirBoth}">
+            <fileset refid="cldrSharedTestData"/>
         </copy>
 
         <!-- create a catalog file for the cldr/personNameTest directory -->
@@ -68,6 +78,7 @@
     <target name="clean-cldr-testdata" depends="init-args">
         <delete dir="${testDataDir4C}"/>
         <delete dir="${testDataDir4J}"/>
+        <delete dir="${testDataDirBoth}"/>
     </target>
 
     <!-- Builds the ICU data, using the Ant build file in the cldr-to-icu directory and passing.
