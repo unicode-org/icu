@@ -27,9 +27,8 @@ jobs:
       uses: poseidon/wait-for-status-checks@6988432d64ad3f9c2608db4ca16fded1b7d36ead # v0.5.0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        # This is one large regex. The GHA parser for the YAML `>-` operator doesn't work as advertised,
-        # so instead, this next best thing is to write out the regex pattern string directly
-        match_pattern: "license.*|jira-ticket|single-commit|CI-ICU4J|CI-ICU4C|Test build of User Guide docs|copyright-scan|valid-UTF-8-and-no-BOM-check|icu4j-.*|icu4c-.*|gcc-.*|clang-.*|run-with-stubdata|u-.*|lstm-test|adaboost-test|testmap|internal-header-compilation|valid-UTF-8-and-no-BOM-check|uconfig-unit-tests.*|unicode-update-tools|lstm-icu4j.*|adaboost-icu4j.*|env-test.*"
+        # This regex matches everything since almost all (if not all) CI checks are required.
+        match_pattern: ".*"
         # For Azure Pipelines, each pipeline displays a check that represents the complete success of the pipeline.
         # It won't pass until all of the pipeline's checks pass.
         # For the ICU4J and ICU4C pipelines, this is called `CI-ICU4J` and `CI-ICU4C`.
