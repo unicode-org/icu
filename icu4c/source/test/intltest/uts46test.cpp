@@ -1135,6 +1135,10 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
 
 // http://www.unicode.org/Public/idna/latest/IdnaTest.txt
 void UTS46Test::IdnaTest() {
+    if (logKnownIssue("ICU-22707",
+                      "The UTS #46 spec is changing for Unicode 16; need to adjust ICU impl")) {
+        return;
+    }
     IcuTestErrorCode errorCode(*this, "IdnaTest");
     const char *sourceTestDataPath = getSourceTestData(errorCode);
     if (errorCode.errIfFailureAndReset("unable to find the source/test/testdata "

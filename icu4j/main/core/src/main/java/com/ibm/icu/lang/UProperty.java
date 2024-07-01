@@ -642,11 +642,19 @@ public interface UProperty
     public static final int ID_COMPAT_MATH_CONTINUE = 74;
 
     /**
+     * Binary property Modifier_Combining_Mark.
+     * <p>Used by the AMTRA algorithm in UAX #53.
+     *
+     * @draft ICU 76
+     */
+    public static final int MODIFIER_COMBINING_MARK = 75;
+
+    /**
      * One more than the last constant for binary Unicode properties.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int BINARY_LIMIT = 75;
+    public static final int BINARY_LIMIT = 76;
 
     /**
      * Enumerated property Bidi_Class.
@@ -860,11 +868,18 @@ public interface UProperty
     public static final int IDENTIFIER_STATUS = 0x1019;
 
     /**
+     * Enumerated property Indic_Conjunct_Break.
+     * Used in the grapheme cluster break algorithm in UAX #29.
+     * @draft ICU 76
+     */
+    public static final int UCHAR_INDIC_CONJUNCT_BREAK = 0x101A;
+
+    /**
      * One more than the last constant for enumerated/integer Unicode properties.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int INT_LIMIT = 0x101A;
+    public static final int INT_LIMIT = 0x101B;
 
     /**
      * Bitmask property General_Category_Mask.

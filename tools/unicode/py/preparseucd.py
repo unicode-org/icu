@@ -417,14 +417,18 @@ def ReadUCDLines(in_file, want_ranges=True, want_other=False,
       raise SyntaxError("unable to parse line\n  %s\n" % line)
 
 
-def AddBinaryProperty(short_name, long_name):
-  _null_values[short_name] = False
-  bin_prop = _properties["Math"]
-  prop = ("Binary", [short_name, long_name], bin_prop[2], bin_prop[3])
+def AddProperty(short_name, long_name, null_value, prop):
+  _null_values[short_name] = null_value
   _properties[short_name] = prop
   _properties[long_name] = prop
   _properties[NormPropName(short_name)] = prop
   _properties[NormPropName(long_name)] = prop
+
+
+def AddBinaryProperty(short_name, long_name):
+  bin_prop = _properties["Math"]
+  prop = ("Binary", [short_name, long_name], bin_prop[2], bin_prop[3])
+  AddProperty(short_name, long_name, False, prop)
 
 
 def AddSingleNameBinaryProperty(name):
@@ -590,22 +594,24 @@ def ParsePropertyAliases(in_file):
   # https://www.unicode.org/reports/tr39/#Identifier_Status_and_Type
   # Property definition:
   # https://www.unicode.org/Public/security/latest/IdentifierStatus.txt
-  name = "Identifier_Status"
-  _null_values[name] = "??"  # Must be specified in an @missing line.
-  prop = ("Enumerated", [name, name], set(), {})
-  _properties[name] = prop
-  _properties[NormPropName(name)] = prop
+  short_name = "ID_Status"
+  long_name = "Identifier_Status"
+  prop = ("Enumerated", [short_name, long_name], set(), {})
+  AddProperty(short_name, long_name,
+              "??",  # Must be specified in an @missing line.
+              prop)
   AddEnumeratedValue(prop, "Allowed")
   AddEnumeratedValue(prop, "Restricted")
   # Property definition:
   # https://www.unicode.org/Public/security/latest/IdentifierType.txt
   # "Miscellaneous" like Script_Extensions:
   # Each code point maps to a *set* of one or more of the listed values.
-  name = "Identifier_Type"
-  _null_values[name] = "??"  # Must be specified in an @missing line.
-  prop = ("Miscellaneous", [name, name], set(), {})
-  _properties[name] = prop
-  _properties[NormPropName(name)] = prop
+  short_name = "ID_Type"
+  long_name = "Identifier_Type"
+  prop = ("Miscellaneous", [short_name, long_name], set(), {})
+  AddProperty(short_name, long_name,
+              "??",  # Must be specified in an @missing line.
+              prop)
   AddEnumeratedValue(prop, "Not_Character")
   AddEnumeratedValue(prop, "Deprecated")
   AddEnumeratedValue(prop, "Default_Ignorable")
@@ -618,6 +624,20 @@ def ParsePropertyAliases(in_file):
   AddEnumeratedValue(prop, "Limited_Use")
   AddEnumeratedValue(prop, "Inclusion")
   AddEnumeratedValue(prop, "Recommended")
+  # Indic_Conjunct Break. See UAX #29 and
+  # https://www.unicode.org/reports/tr44/tr44-33.html#Indic_Conjunct_Break
+  name = "InCB"
+  prop = ("Enumerated", ["InCB", "Indic_Conjunct_Break"], set(), {})
+  _properties[name] = prop
+  _properties[NormPropName(name)] = prop
+  SetDefaultValue(name, "None")
+  AddEnumeratedValue(prop, "None")
+  AddEnumeratedValue(prop, "Consonant")
+  AddEnumeratedValue(prop, "Extend")
+  AddEnumeratedValue(prop, "Linker")
+  # Modifier Combining Mark. See UAX #29 and
+  # https://www.unicode.org/reports/tr44/tr44-33.html#Modifier_Combining_Mark
+  AddBinaryProperty("MCM", "Modifier_Combining_Mark")
 
 
 def ParsePropertyValueAliases(in_file):
@@ -2006,7 +2026,7 @@ _ublock_re = re.compile(" *(UBLOCK_[0-9A-Z_]+) *= *[0-9]+,")
 # Sample line to match:
 #    U_EA_AMBIGUOUS,
 _prop_and_value_re = re.compile(
-    " *(U_(BPT|DT|EA|GCB|HST|ID_STATUS|ID_TYPE|INPC|INSC|LB|JG|JT|NT|SB|VO|WB)_([0-9A-Z_]+))")
+    " *(U_(BPT|DT|EA|GCB|HST|ID_STATUS|ID_TYPE|INCB|INPC|INSC|LB|JG|JT|NT|SB|VO|WB)_([0-9A-Z_]+))")
 
 # Sample line to match if it has matched _prop_and_value_re
 # (we want to exclude aliases):

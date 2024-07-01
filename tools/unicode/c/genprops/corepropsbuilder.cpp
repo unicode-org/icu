@@ -312,6 +312,10 @@ although the trie can hold 16-bit values.
 
 Props vector 0 bits shuffled so that script and script extensions bits are contiguous.
 
+Used 2 bits from props vector 0 to add Indic_Conjunct_Break. The bits used were freed up
+by the preceding move of the Block property out of props vector 0 and the bit shuffling
+("defragmentation") of Script and Script_Extensions.
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
@@ -712,6 +716,7 @@ struct PropToEnum {
 const PropToEnum
 propToEnums[]={
     { UCHAR_EAST_ASIAN_WIDTH,           0, UPROPS_EA_SHIFT, UPROPS_EA_MASK },
+    { UCHAR_INDIC_CONJUNCT_BREAK,       0, UPROPS_INCB_SHIFT, UPROPS_INCB_MASK },
     { UCHAR_DECOMPOSITION_TYPE,         2, 0, UPROPS_DT_MASK },
     { UCHAR_GRAPHEME_CLUSTER_BREAK,     2, UPROPS_GCB_SHIFT, UPROPS_GCB_MASK },
     { UCHAR_WORD_BREAK,                 2, UPROPS_WB_SHIFT, UPROPS_WB_MASK },
