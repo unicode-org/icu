@@ -294,7 +294,7 @@ namespace message2 {
         void resolvePreferences(MessageContext&, UVector&, UVector&, UErrorCode&) const;
 
         // Formatting methods
-        [[nodiscard]] FormattedPlaceholder formatLiteral(const data_model::Literal&) const;
+        [[nodiscard]] FormattedPlaceholder formatLiteral(const data_model::Literal&, UErrorCode&) const;
         void formatPattern(MessageContext&, const Environment&, const data_model::Pattern&, UErrorCode&, UnicodeString&) const;
         // Formats a call to a formatting function
         // Dispatches on argument type
