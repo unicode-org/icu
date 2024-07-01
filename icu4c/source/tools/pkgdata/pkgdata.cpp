@@ -1140,7 +1140,7 @@ normal_symlink_mode:
 
 static int32_t pkg_installLibrary(const char *installDir, const char *targetDir, UBool noVersion) {
     int32_t result = 0;
-    char cmd[SMALL_BUFFER_MAX_SIZE * 2];
+    char cmd[LARGE_BUFFER_MAX_SIZE];
 
     auto ret = snprintf(cmd,
             sizeof(cmd),
@@ -1211,7 +1211,7 @@ static int32_t pkg_installLibrary(const char *installDir, const char *targetDir,
 
 static int32_t pkg_installCommonMode(const char *installDir, const char *fileName) {
     int32_t result = 0;
-    char cmd[SMALL_BUFFER_MAX_SIZE] = "";
+    char cmd[LARGE_BUFFER_MAX_SIZE] = "";
 
     if (!T_FileStream_file_exists(installDir)) {
         UErrorCode status = U_ZERO_ERROR;
@@ -1243,7 +1243,7 @@ static int32_t pkg_installCommonMode(const char *installDir, const char *fileNam
 #endif
 static int32_t pkg_installFileMode(const char *installDir, const char *srcDir, const char *fileListName) {
     int32_t result = 0;
-    char cmd[SMALL_BUFFER_MAX_SIZE] = "";
+    char cmd[LARGE_BUFFER_MAX_SIZE] = "";
 
     if (!T_FileStream_file_exists(installDir)) {
         UErrorCode status = U_ZERO_ERROR;
