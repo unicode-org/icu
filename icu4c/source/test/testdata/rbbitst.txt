@@ -2222,3 +2222,17 @@ Bangkok)•</data>
 <data>•Anmerkung: •„White“ •bzw. •‚白•人‘ •– •in •der •Amtlichen •Statistik•</data>
 <data>•« Complex »« chaining » •</data>
 <data>•« .618 »•</data>  # Interaction with the ICU tailoring to break before such numbers.
+
+# Non-breaking lb=SP (from LB14 and LB15a) followed by a lb=CM-as-AL that is
+# ea=W, in a position that would match initial context for LB19a if it were not
+# ea=W.
+# See https://github.com/unicode-org/icu/pull/3028#issuecomment-2200259320.
+<data>•︷ \U00016FF1•⸠ᅛᆅ•</data>
+<data>•︷ « \U00016FF1•⸠ᅛᆅ•</data>
+<data>•A »« \U00016FF1•⸠ᅛᆅ•</data>
+<data>•︷ \U00016FF1\u302B•⸠ᅛᆅ•</data>
+<data>•︷ « \U00016FF1\u302B•⸠ᅛᆅ•</data>
+<data>•A »« \U00016FF1\u302B•⸠ᅛᆅ•</data>
+<data>•❲ \u3035⸍•굼•</data>
+<data>•❲ « \u3035⸍•굼•</data>
+<data>•A »« \u3035⸍•굼•</data>
