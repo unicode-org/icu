@@ -127,7 +127,8 @@ namespace {
 // Bits
 // 31..26   Age major version (major=0..63)
 // 25..24   Age minor version (minor=0..3)
-// 23..15   reserved
+// 23..17   reserved
+// 16..15   Indic Conjunct Break
 // 14..12   East Asian Width
 // 11..10   3..1: Bits 9..0 = Script_Extensions index
 //             3: Script value from Script_Extensions
@@ -157,6 +158,9 @@ inline constexpr uint8_t UPROPS_AGE_MINOR_MAX = 3;
 
 inline constexpr uint32_t UPROPS_EA_MASK = 0x00007000;
 inline constexpr int32_t UPROPS_EA_SHIFT = 12;
+
+inline constexpr uint32_t UPROPS_INCB_MASK = 0x00018000;
+inline constexpr int32_t UPROPS_INCB_SHIFT = 15;
 
 /** Script_Extensions: mask includes Script */
 inline constexpr uint32_t UPROPS_SCRIPT_X_MASK = 0x00000fff;

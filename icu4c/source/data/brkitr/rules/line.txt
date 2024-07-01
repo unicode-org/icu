@@ -35,7 +35,7 @@ $BK = [:LineBreak =  Mandatory_Break:];
 $B2 = [:LineBreak =  Break_Both:];
 $CB = [:LineBreak =  Contingent_Break:];
 $CJ = [:LineBreak =  Conditional_Japanese_Starter:];
-$CL = [:LineBreak =  Close_Punctuation:];
+$CL = [[:LineBreak =  Close_Punctuation:]];
 # $CM = [:LineBreak =  Combining_Mark:];
 $CP = [:LineBreak =  Close_Parenthesis:];
 $CR = [:LineBreak =  Carriage_Return:];
@@ -251,6 +251,7 @@ $SP $IS $CM* $CMX / [^ $CanFollowIS $NU $CM];
 
 #
 # LB 15d Do not break before numeric separators (IS), even after spaces.
+# SP IS QU is handled below as part of LB 19.
 
 [$LB8NonBreaks - $SP] $IS;
 $SP $IS $CM* [$CanFollowIS {eof}];
@@ -274,12 +275,22 @@ $LB18Breaks    = [$LB8Breaks $SP];
 
 
 # LB 19
-#         x QU
 $LB18NonBreaks $CM* $QU;
 ^$CM+               $QU;
 
-#         QU  x
+[$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}] - [$OP $GL $BA]]           / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+[$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}] - [$OP $GL $BA]] $CM* $CMX / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+^[$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]]                    / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+^[$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* $CMX          / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+
 $QU $CM* .;
+[$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU]           / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
+[$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU] $CM* $CMX / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
+^[$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU]           / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
+^[$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU] $CM* $CMX / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
+
+^$CM*           [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]]           / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+^$CM*           [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* $CMX / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
 
 # LB 20
 #        <break>  $CB
@@ -287,11 +298,26 @@ $QU $CM* .;
 #
 $LB20NonBreaks = [$LB18NonBreaks - $CB];
 
+[$LB20NonBreaks - $HL] $CM* [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]]           / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+[$LB20NonBreaks - $HL] $CM* [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* $CMX / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+
 # LB 20.09    Don't break between Hyphens and Letters when there is a break preceding the hyphen.
 #             Originally added as a Finnish tailoring, now promoted to default ICU behavior.
 #             Note: this is not default UAX-14 behaviour. See issue ICU-8151.
 #
 ^($HY | $HH) $CM* $ALPlus;
+$GL ($HY | $HH) $CM* $ALPlus; 
+# Non-breaking CB from LB8a:
+$CB $CM* $ZWJ ($HY | $HH) $CM* $ALPlus;
+# Non-breaking SP from LB14:
+$OP $CM* $SP+ ($HY | $HH) $CM* $ALPlus; 
+# Non-breaking SP from LB15a:
+($OP $CM* $SP+ | [$OP $QU $GL] $CM*) ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($HY | $HH) $CM* $ALPlus;
+^([\p{Pi} & $QU] $CM* $SP*)+ $SP ($HY | $HH) $CM* $ALPlus;
+# Non-breaking SP from LB15a following LB15b:
+$LB8NonBreaks [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($HY | $HH) $CM* $ALPlus;
+$CAN_CM $CM*  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($HY | $HH) $CM* $ALPlus;
+^$CM+  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($HY | $HH) $CM* $ALPlus;
 
 # LB 21        x   (BA | HY | NS)
 #           BB x
@@ -305,9 +331,9 @@ $BB $CM* [^$CB];                                  #  $BB  x
 $BB $CM* $LB20NonBreaks;
 
 # LB 21a Don't break after Hebrew + Hyphen
-#   HL (HY | BA) x
+#   HL (HY | BA) x [^HL]
 #
-$HL $CM* ($HY | $BA) $CM* [^$CB]?;
+$HL $CM* ($HY | $BA) $CM* [^$CB $HL]?;
 
 # LB 21b (forward) Don't break between SY and HL
 # (break between HL and SY already disallowed by LB 13 above)

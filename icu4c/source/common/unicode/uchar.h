@@ -677,13 +677,19 @@ typedef enum UProperty {
      * @draft ICU 75
      */
     UCHAR_IDENTIFIER_STATUS=0x1019,
+    /**
+     * Enumerated property Indic_Conjunct_Break.
+     * Used in the grapheme cluster break algorithm in UAX #29.
+     * @draft ICU 76
+     */
+    UCHAR_INDIC_CONJUNCT_BREAK=0x101A,
 #endif  // U_HIDE_DRAFT_API
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the last constant for enumerated/integer Unicode properties.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UCHAR_INT_LIMIT=0x101A,
+    UCHAR_INT_LIMIT=0x101B,
 #endif  // U_HIDE_DEPRECATED_API
 
     /** Bitmask property General_Category_Mask.
@@ -2728,6 +2734,31 @@ typedef enum UIndicSyllabicCategory {
     /** @stable ICU 76 */
     U_INSC_REORDERING_KILLER,
 } UIndicSyllabicCategory;
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Indic Conjunct Break constants.
+ *
+ * @see UCHAR_INDIC_CONJUNCT_BREAK
+ * @draft ICU 76
+ */
+typedef enum UIndicConjunctBreak {
+    /*
+    * Note: UIndicConjunctBreak constants are parsed by preparseucd.py.
+    * It matches lines like
+    *     U_INCB_<Unicode Indic_Conjunct_Break value name>
+    */
+
+    /** @draft ICU 76 */
+    U_INCB_NONE,
+    /** @draft ICU 76 */
+    U_INCB_CONSONANT,
+    /** @draft ICU 76 */
+    U_INCB_EXTEND,
+    /** @draft ICU 76 */
+    U_INCB_LINKER,
+} UIndicConjunctBreak;
+#endif  // U_HIDE_DRAFT_API
 
 /**
  * Vertical Orientation constants.
