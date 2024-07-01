@@ -54,7 +54,7 @@ Individual tests can be configured in the ICU Github repository:
 6. Underneath that enabled checkbox, the table "Status checks that are required." lists the currently enabled tests ("checks") that must pass before a Pull Request can be merged to the branch
 7. Set the only required check to be `enforce-all-checks`.
     - The [`wait-for-checks` Github Action](https://github.com/marketplace/actions/wait-for-checks)
-    correctly enforces that all of checks of interest are passing,
+    correctly enforces that all checks of interest are passing,
     while only inspecting activated checks
     (ignoring checks that are inactive or skipped due to conditional triggering).
     - See the `enforce-all-checks` job of the `.github/workflows/wait-for-checks.yml` workflow for usage details.
