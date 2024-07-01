@@ -108,13 +108,11 @@
     },
     {
       "src": "Expires at {|2024-07-02T19:23:45Z| :datetime timeStyle=long}",
-      "exp": "Expires at 7:23:45 PM GMT",
-      "ignoreTest": "ICU-22754 Time zones not working yet (bug)"
+      "exp": "Expires at 7:23:45 PM GMT"
     },
     {
       "src": "Expires at {|2024-07-02T19:23:45+03:30| :datetime timeStyle=full}",
-      "exp": "Expires at 7:23:45 PM GMT+03:30",
-      "ignoreTest": "ICU-22754 Time zones not working yet (bug)"
+      "exp": "Expires at 7:23:45 PM GMT+03:30"
     }
   ],
   "Chaining" : [

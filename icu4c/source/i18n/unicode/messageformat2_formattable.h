@@ -15,6 +15,7 @@
 #include "unicode/chariter.h"
 #include "unicode/numberformatter.h"
 #include "unicode/messageformat2_data_model_names.h"
+#include "unicode/smpdtfmt.h"
 
 #ifndef U_HIDE_DEPRECATED_API
 
@@ -64,6 +65,40 @@ namespace message2 {
         virtual ~FormattableObject();
     }; // class FormattableObject
 
+    /**
+     * The `DateInfo` struct represents all the information needed to
+     * format a date with a time zone. It includes an absolute date and a time zone name,
+     * as well as a calendar name. The calendar name is not currently used.
+     *
+     * @internal ICU 76 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    struct U_I18N_API DateInfo {
+        /**
+         * Milliseconds since Unix epoch
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        UDate date;
+        /**
+         * IANA time zone name; "UTC" if UTC; empty string if value is floating
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        UnicodeString zoneName;
+        /**
+         * Calendar name. Note: non-Gregorian calendars not yet implemented.
+         * String is empty if calendar not specified. Proleptic Gregorian calendar
+         * is default.
+         *
+         * @internal ICU 76 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        UnicodeString calendarName;
+    };
+
     class Formattable;
 } // namespace message2
 
@@ -82,6 +117,7 @@ template class U_I18N_API std::_Variant_storage_<false,
   int64_t,
   icu::UnicodeString,
   icu::Formattable,
+  icu::message2::DateInfo,
   const icu::message2::FormattableObject *,
   std::pair<const icu::message2::Formattable *,int32_t>>;
 #endif
@@ -90,6 +126,7 @@ template class U_I18N_API std::variant<double,
 				       int64_t,
 				       icu::UnicodeString,
 				       icu::Formattable,
+                                       icu::message2::DateInfo,
 				       const icu::message2::FormattableObject*,
                                        P>;
 #endif
@@ -98,6 +135,7 @@ template class U_I18N_API std::variant<double,
 U_NAMESPACE_BEGIN
 
 namespace message2 {
+
     /**
      * The `Formattable` class represents a typed value that can be formatted,
      * originating either from a message argument or a literal in the code.
@@ -226,22 +264,24 @@ namespace message2 {
         }
 
         /**
-         * Gets the Date value of this object. If this object is not of type
-         * kDate then the result is undefined and the error code is set.
+         * Gets the struct representing the date value of this object.
+         * If this object is not of type kDate then the result is
+         * undefined and the error code is set.
          *
          * @param status Input/output error code.
-         * @return    the Date value of this object.
+         * @return   A non-owned pointer to a DateInfo object
+         *           representing the underlying date of this object.
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        UDate getDate(UErrorCode& status) const {
+        const DateInfo* getDate(UErrorCode& status) const {
             if (U_SUCCESS(status)) {
                 if (isDate()) {
-                    return *std::get_if<double>(&contents);
+                    return std::get_if<DateInfo>(&contents);
                 }
                 status = U_ILLEGAL_ARGUMENT_ERROR;
             }
-            return 0;
+            return nullptr;
         }
 
         /**
@@ -299,7 +339,6 @@ namespace message2 {
             using std::swap;
 
             swap(f1.contents, f2.contents);
-            swap(f1.holdsDate, f2.holdsDate);
         }
         /**
          * Copy constructor.
@@ -351,18 +390,15 @@ namespace message2 {
          */
         Formattable(int64_t i) : contents(i) {}
         /**
-         * Date factory method.
+         * Date constructor.
          *
-         * @param d A UDate value to wrap as a Formattable.
+         * @param d A DateInfo struct representing a date,
+         *          to wrap as a Formattable.
+         *          Passed by move
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        static Formattable forDate(UDate d) {
-            Formattable f;
-            f.contents = d;
-            f.holdsDate = true;
-            return f;
-        }
+        Formattable(DateInfo&& d) : contents(std::move(d)) {}
         /**
          * Creates a Formattable object of an appropriate numeric type from a
          * a decimal number in string form.  The Formattable will retain the
@@ -422,16 +458,16 @@ namespace message2 {
                      int64_t,
                      UnicodeString,
                      icu::Formattable, // represents a Decimal
+                     DateInfo,
                      const FormattableObject*,
                      std::pair<const Formattable*, int32_t>> contents;
-        bool holdsDate = false; // otherwise, we get type errors about UDate being a duplicate type
         UnicodeString bogusString; // :((((
 
         UBool isDecimal() const {
             return std::holds_alternative<icu::Formattable>(contents);
         }
         UBool isDate() const {
-            return std::holds_alternative<double>(contents) && holdsDate;
+            return std::holds_alternative<DateInfo>(contents);
         }
     }; // class Formattable
 

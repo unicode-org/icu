@@ -1,5 +1,5 @@
 {
-  "number": [
+  "number_extra": [
     {
       "src": "Format {123456789.9876 :number} number",
       "locale": "en-IN",
@@ -106,6 +106,20 @@
       "exp": "Default number: 1.234.567.890.123.456.789,987654!",
       "locale": "ro",
       "params": {"val": {"decimal": "1234567890123456789.987654321"}}
+    }
+  ],
+  "datetime_extra": [
+    {
+      "srcs": [".local $d = {|2024-07-02T19:23:45+03:30| :datetime timeStyle=long}\n",
+               "{{Expires at {$d} or {$d :datetime timeStyle=full}}}"],
+      "exp": "Expires at 7:23:45\u202FPM GMT+3:30 or 7:23:45\u202FPM GMT+03:30",
+      "comment": "This checks that the return value of :datetime preserves the time zone if specified"
+    },
+    {
+      "src": "{$d :datetime timeStyle=full}",
+      "exp": "7:23:45\u202FPM GMT+03:30",
+      "params": {"d": "2024-07-02T19:23:45+03:30"},
+      "comment": "This checks that an argument can be a date literal string."
     }
   ]
 }
