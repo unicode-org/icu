@@ -30,9 +30,5 @@
         "{:foo a=1 a=1}",
         "{:foo a=1 a=2}",
         "{|x| :foo a=1 a=2}"
-    ],
-    "Unsupported Statement": [
-        ".matc {-1} {{hello}}",
-        ".m {-1} {{hello}}"
     ]
 }

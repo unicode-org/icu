@@ -1,8 +1,0 @@
-[
-    { "src": "{$oops}", "exp": "{$oops}", "errors": [{ "type": "unresolved-var" }]},
-    { "src": ".input {$x :number} {{{$x}}}", "exp": "{$x}", "errors": [{ "type": "unresolved-var" }]},
-    { "src": ".local $foo = {$bar} .match {$foo :number}  one {{one}}  * {{other}}", "exp": "other", "errors": [{ "type": "unresolved-var" }]},
-    { "src": ".local $foo = {$bar} .match {$foo :number}  one {{one}}  * {{other}}", "exp": "other", "errors": [{ "type": "unresolved-var" }]},
-    { "src": ".local $bar = {$none :number} .match {$foo :string}  one {{one}}  * {{{$bar}}}", "exp": "{$none}", "errors": [{ "type": "unresolved-var" }]},
-    { "src": "The value is {horse :func}.", "exp": "The value is {|horse|}.", "errors": [{ "type": "missing-func" }]}
-]

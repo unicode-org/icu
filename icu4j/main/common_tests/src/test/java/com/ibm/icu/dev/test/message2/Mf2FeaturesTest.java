@@ -330,7 +330,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
         message = ".local $amount = {$count :number}\n"
                 + ".match {$amount :number}\n"
                 + "  1 {{I have {$amount} dollar.}}\n"
-                + "  * {{I have {$amount} dollars.}}\n";
+                + "  * {{I have {$amount} dollars.}}";
         TestUtils.runTestCase(new TestCase.Builder()
                 .pattern(message)
                 .locale("en-US")
@@ -340,7 +340,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
         message = ".local $amount = {$count :number minimumFractionDigits=2}\n"
                 + ".match {$amount :number minimumFractionDigits=2}\n"
                 + "  one {{I have {$amount} dollar.}}\n"
-                + "  *   {{I have {$amount} dollars.}}\n";
+                + "  *   {{I have {$amount} dollars.}}";
         TestUtils.runTestCase(new TestCase.Builder()
                 .pattern(message)
                 .locale("en-US")
@@ -369,7 +369,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
     public void testSimpleSelection() {
         String message = ".match {$count :number}\n"
                 + " 1 {{You have one notification.}}\n"
-                + " * {{You have {$count} notifications.}}\n";
+                + " * {{You have {$count} notifications.}}";
 
         TestUtils.runTestCase(new TestCase.Builder()
                 .pattern(message)
@@ -440,7 +440,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 + ".local $exp = {$expDate :date year=numeric month=short day=numeric weekday=short}\n"
                 + ".match {$count :number}\n"
                 + " 1 {{Your ticket expires on {$exp}.}}\n"
-                + " * {{Your {$count} tickets expire on {$exp}.}}\n";
+                + " * {{Your {$count} tickets expire on {$exp}.}}";
 
         TestUtils.runTestCase(new TestCase.Builder()
                 .pattern(message)

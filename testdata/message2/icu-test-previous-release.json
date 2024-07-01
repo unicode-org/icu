@@ -19,7 +19,8 @@
     {
       "src": "hello {$place}",
       "exp": "hello {$place}",
-      "errorsJs": [{ "type": "missing-var" }]
+      "errors": [{ "type": "unresolved-var" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "{$one} and {$two}",
@@ -43,13 +44,15 @@
     },
     {
       "src": "hello {|foo| :number}",
-      "exp": "hello {|foo|}"
+      "exp": "hello {|foo|}",
+      "errors": [{ "type": "bad-input" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "hello {:number}",
-      "exp": "hello {|foo|}",
+      "exp": "hello {:number}",
       "comment": "This is different from JS, should be an error.",
-      "errors": [{ "type": "ICU4J: exception" }]
+      "errors": [{ "type": "bad-input" }]
     },
     {
       "src": "hello {|4.2| :number minimumFractionDigits=2}",
@@ -61,7 +64,7 @@
     },
     {
       "src": "hello {|4.2| :number minimumFractionDigits=$foo}",
-      "params": { "foo": 2f },
+      "params": { "foo": 2.0 },
       "exp": "hello 4.20"
     },
     {
@@ -97,16 +100,18 @@
       "exp": "bar 4.20"
     },
     {
-      "ignore": "Maybe. Because `minimumFractionDigits=foo`",
+      "ignoreJava": "Maybe. Because `minimumFractionDigits=foo`",
       "src": ".local $foo = {$bar :number minimumFractionDigits=foo} {{bar {$foo}}}",
       "params": { "bar": 4.2 },
       "exp": "bar 4.2",
-      "errors": [{ "type": "invalid-type" }]
+      "errors": [{ "type": "bad-option" }]
     },
     {
       "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
       "params": { "bar": "foo" },
-      "exp": "bar {|foo|}"
+      "exp": "bar {$bar}",
+      "errors": [{ "type": "bad-input" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": ".local $bar = {$baz} .local $foo = {$bar} {{bar {$foo}}}",
@@ -122,9 +127,8 @@
     {
       "src": ".match {$foo :number} 1 {{one}} * {{other}}",
       "params": { "foo": "1" },
-      "comment": "Should this be error? Plural on string?",
-      "expectedJs": "one",
-      "exp": "other"
+      "exp": "one",
+      "ignoreJava": "See ICU-22809"
     },
     {
       "src": ".match {$foo :string} 1 {{one}} * {{other}}",
@@ -143,7 +147,7 @@
       "exp": "one"
     },
     {
-      "ignore": "Can't pass null in a map",
+      "ignoreJava": "Can't pass null in a map",
       "src": ".match {$foo} 1 {{one}} * {{other}}",
       "params": { "foo": null },
       "exp": "other"
@@ -210,25 +214,11 @@
     },
     {
       "srcJs": ".local $bar = {$none} .match {$foo} one {{one}} * {{{$bar}}}",
-      "src": ".local $bar = {$none :number} .match {$foo} one {{one}} * {{{$bar}}}",
+      "src": ".local $bar = {$none :number} .match {$foo :string} one {{one}} * {{{$bar}}}",
       "params": { "foo": 2 },
-      "exp": "{$bar}",
-      "errors": [{ "type": "missing-var" }]
-    },
-    {
-      "src": ".local bar = {|foo|} {{$bar}}",
-      "exp": "{$bar}",
-      "errors": [{ "type": "missing-char" }, { "type": "missing-var" }]
-    },
-    {
-      "src": ".local $bar {|foo|} {{$bar}}",
-      "exp": "foo",
-      "errors": [{ "type": "missing-char" }]
-    },
-    {
-      "src": ".local $bar = |foo| {{$bar}}",
-      "exp": "{$bar}",
-      "errors": [{ "type": "missing-char" }, { "type": "junk-element" }]
+      "exp": "{$none}",
+      "errors": [{ "type": "unresolved-var" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "{{#tag}}",
@@ -282,24 +272,10 @@
       "errorsJs": [{ "type":  "parse-error" }, { "type": "junk-element" }]
     },
     {
-      "src": "{missing end brace",
-      "exp": "missing end brace",
-      "errors": [{ "type": "missing-char" }]
-    },
-    {
-      "src": "{missing end {$brace",
-      "exp": "missing end {$brace}",
-      "errors": [{ "type": "missing-char" }, { "type": "missing-char" }, { "type": "missing-var" }]
-    },
-    {
-      "src": "{{extra}} content",
-      "exp": "extra",
-      "errors": [{ "type": "extra-content" }]
-    },
-    {
       "src": "empty { }",
       "exp": "empty ",
-      "errors": [{ "type": "parse-error" }, { "type": "junk-element" }]
+      "errors": [{ "type": "parse-error" }, { "type": "junk-element" }],
+      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/703"
     },
     {
       "src": "bad {:}",
@@ -312,79 +288,26 @@
       "errorsJs": [{ "type": "parse-error" }, { "type": "extra-content" }, { "type": "junk-element" }]
     },
     {
-      "src": "no-equal {|42| :number minimumFractionDigits 2}",
-      "exp": "no-equal 42.00",
-      "errors": [{ "type": "missing-char" }]
-    },
-    {
-      "src": "bad {:placeholder option=}",
-      "exp": "bad {:placeholder}",
-      "errors": [{ "type": "empty-token" }, { "type": "missing-func" }]
-    },
-    {
-      "src": "bad {:placeholder option value}",
-      "exp": "bad {:placeholder}",
-      "errors": [{ "type": "missing-char" }, { "type": "missing-func" }]
-    },
-    {
-      "src": "{bad {:placeholder option}}",
-      "exp": "bad {:placeholder}",
-      "errors": [{ "type": "missing-char" }, { "type": "empty-token" }, { "type": "missing-func" }]
-    },
-    {
       "src": "{bad {$placeholder option}}",
       "exp": "bad {$placeholder}",
-      "errors": [{ "type": "extra-content" }, { "type": "extra-content" }, { "type": "missing-var" }]
+      "errors": [{ "type": "extra-content" }, { "type": "extra-content" }, { "type": "missing-var" }],
+      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/703"
     },
     {
-      "src": "{no {$placeholder end}",
-      "exp": "no {$placeholder}",
-      "errors": [{ "type": "extra-content" }, { "type": "missing-var" }]
+      "src": ".match {|foo| :string} *{{foo}}",
+      "exp": "foo"
     },
     {
-      "src": ".match {} * {{foo}}",
+      "src": ".match {$foo :string} * * {{foo}}",
       "exp": "foo",
-      "errors": [{ "type": "parse-error" }, { "type": "bad-selector" }, { "type": "junk-element" }]
+      "errors": [{ "type": "key-mismatch" }, { "type": "missing-var" }],
+      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/735"
     },
     {
-      "src": ".match {#foo} * {{foo}}",
+      "src": ".match {$foo :string} {$bar :string} * {{foo}}",
       "exp": "foo",
-      "errors": [{ "type": "bad-selector" }]
-    },
-    {
-      "src": ".match {|foo|} *{{foo}}",
-      "exp": "foo",
-      "errors": [{ "type": "missing-char" }]
-    },
-    {
-      "src": ".match * {{foo}}",
-      "exp": "foo",
-      "errors": [{ "type": "empty-token" }]
-    },
-    {
-      "src": ".match {|x|} * foo",
-      "exp": "",
-      "errors": [{ "type": "key-mismatch" }, { "type": "missing-char" }]
-    },
-    {
-      "src": ".match {|x|} * {{foo}} extra",
-      "exp": "foo",
-      "errors": [{ "type": "extra-content" }]
-    },
-    {
-      "src": ".match |x| * {{foo}}",
-      "exp": "",
-      "errors": [{ "type": "empty-token" }, { "type": "extra-content" }]
-    },
-    {
-      "src": ".match {$foo} * * {{foo}}",
-      "exp": "foo",
-      "errors": [{ "type": "key-mismatch" }, { "type": "missing-var" }]
-    },
-    {
-      "src": ".match {$foo} {$bar} * {{foo}}",
-      "exp": "foo",
-      "errors": [{ "type": "key-mismatch" }, { "type": "missing-var" }, { "type": "missing-var" }]
+      "errors": [{ "type": "key-mismatch" }, { "type": "missing-var" }, { "type": "missing-var" }],
+      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/735"
     }
 ]
 

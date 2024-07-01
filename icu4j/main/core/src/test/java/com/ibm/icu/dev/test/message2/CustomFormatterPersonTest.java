@@ -165,7 +165,7 @@ public class CustomFormatterPersonTest extends CoreTestFmwk {
                 + " * 0 {{{$hostName} does not give a party.}}\n"
                 + " * 1 {{{$hostName} invites {$guestName} to their party.}}\n"
                 + " * 2 {{{$hostName} invites {$guestName} and one other person to their party.}}\n"
-                + " * * {{{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}}\n";
+                + " * * {{{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}}";
 
         TestUtils.runTestCase(CUSTOM_FUNCTION_REGISTRY, new TestCase.Builder()
                 .pattern(message)

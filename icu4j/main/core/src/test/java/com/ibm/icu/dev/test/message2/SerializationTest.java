@@ -43,12 +43,12 @@ public class SerializationTest extends CoreTestFmwk {
                     + "1   {{You got the gold medal}}\n"
                     + "2   {{You got the silver medal}}\n"
                     + "3   {{You got the bronze medal}}\n"
-                    + "few {{You fininshed in the {$place}rd place}}\n",
+                    + "few {{You fininshed in the {$place}rd place}}",
             ".match {$fileCount :number} {$folderCount :number}\n"
                     + "*   *   {{You deleted {$fileCount} files in {$folderCount} folders}}\n"
                     + "one one {{You deleted {$fileCount} file in {$folderCount} folder}}\n"
                     + "one *   {{You deleted {$fileCount} file in {$folderCount} folders}}\n"
-                    + "*   one {{You deleted {$fileCount} files in {$folderCount} folder}}\n",
+                    + "*   one {{You deleted {$fileCount} files in {$folderCount} folder}}",
             "{$count :number minimumFractionDigits=2} dollars",
             "{$count :number minimumFractionDigits=3} dollars",
             "{|3.1415| :number minimumFractionDigits=5} dollars",
@@ -57,7 +57,7 @@ public class SerializationTest extends CoreTestFmwk {
                     + ".match {$c}\n"
                     + "one {{{$c} dollar}}\n"
                     + "*   {{{$c} dollars}}",
-            ".local $c = {$count} .foobar |asd asd asd asd| {$bar1} {$bar2} {$bar3} .local $b = {$bar} {{Foo bar}}\n",
+            ".local $c = {$count} .foobar |asd asd asd asd| {$bar1} {$bar2} {$bar3} .local $b = {$bar} {{Foo bar}}",
             ".local $c = {1 :number minimumFractionDigits=2}\n"
                     + ".match {$c}\n"
                     + "one {{{$c} dollar}}\n"

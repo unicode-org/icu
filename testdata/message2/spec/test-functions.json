@@ -1,10 +1,16 @@
 {
   "date": [
-    { "src": "{:date}", "exp": "{:date}", "errors": [{ "type": "bad-input" }] },
+    { "src": "{:date}",
+      "exp": "{:date}",
+      "errors": [{ "type": "bad-input" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
     {
       "src": "{horse :date}",
       "exp": "{|horse|}",
-      "errors": [{ "type": "bad-input" }]
+      "errors": [{ "type": "bad-input" }],
+      "errorsJs": [{ "name": "RangeError" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     { "src": "{|2006-01-02| :date}", "exp": "1/2/06" },
     { "src": "{|2006-01-02T15:04:06| :date}", "exp": "1/2/06" },
@@ -14,36 +20,44 @@
       "exp": "January 2, 2006"
     },
     {
+      "ignoreJava": "Can't chain :time and :date, they are different types",
       "src": ".local $t = {|2006-01-02T15:04:06| :time} {{{$t :date}}}",
       "exp": "1/2/06"
     }
   ],
   "time": [
-    { "src": "{:time}", "exp": "{:time}", "errors": [{ "type": "bad-input" }] },
+    { "src": "{:time}", "exp": "{:time}", "errors": [{ "type": "bad-input" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
     {
       "src": "{horse :time}",
       "exp": "{|horse|}",
-      "errors": [{ "type": "bad-input" }]
+      "errors": [{ "type": "bad-input" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
-    { "src": "{|2006-01-02T15:04:06| :time}", "exp": "3:04\u202FPM" },
+    { "src": "{|2006-01-02T15:04:06| :time}", "expJs": "3:04 PM", "exp": "3:04 PM" },
     {
       "src": "{|2006-01-02T15:04:06| :time style=medium}",
-      "exp": "3:04:06\u202FPM"
+      "expJs": "3:04:06 PM",
+      "exp": "3:04:06 PM"
     },
     {
       "src": ".local $t = {|2006-01-02T15:04:06| :time style=medium} {{{$t :time}}}",
-      "exp": "3:04:06\u202FPM"
+      "expJs": "3:04:06 PM",
+      "exp": "3:04:06 PM"
     },
     {
+      "ignoreJava": "Can't chain :time and :date, they are different types",
       "src": ".local $d = {|2006-01-02T15:04:06| :date} {{{$d :time}}}",
-      "exp": "3:04\u202FPM"
+      "exp": "3:04 PM"
     }
   ],
   "datetime": [
     {
       "src": "{:datetime}",
       "exp": "{:datetime}",
-      "errors": [{ "type": "bad-input" }]
+      "errors": [{ "type": "bad-input" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "{$x :datetime}",
@@ -54,9 +68,10 @@
     {
       "src": "{horse :datetime}",
       "exp": "{|horse|}",
-      "errors": [{ "name": "RangeError" }]
+      "errors": [{ "type": "bad-input" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
-    { "src": "{|2006-01-02T15:04:06| :datetime}", "exp": "1/2/06, 3:04\u202FPM" },
+    { "src": "{|2006-01-02T15:04:06| :datetime}", "expJs": "1/2/06, 3:04 PM", "exp": "1/2/06, 3:04 PM" },
     {
       "src": "{|2006-01-02T15:04:06| :datetime year=numeric month=|2-digit|}",
       "exp": "01/2006"
@@ -67,12 +82,21 @@
     },
     {
       "src": "{|2006-01-02T15:04:06| :datetime timeStyle=medium}",
-      "exp": "3:04:06\u202FPM"
+      "expJs": "3:04:06 PM",
+      "exp": "3:04:06 PM"
     },
     {
       "src": "{$dt :datetime}",
       "params": { "dt": "2006-01-02T15:04:06" },
-      "exp": "1/2/06, 3:04\u202FPM"
+      "expJs": "1/2/06, 3:04 PM",
+      "exp": "1/2/06, 3:04 PM"
+    },
+    {
+      "ignoreJava": "Can't chain :time and :date, they are different types",
+      "ignoreCpp": "Same reason as Java",
+      "src": ".input {$dt :time style=medium} {{{$dt :datetime dateStyle=long}}}",
+      "params": { "dt": "2006-01-02T15:04:06" },
+      "exp": "January 2, 2006 at 3:04:06 PM"
     }
   ],
   "integer": [
@@ -92,7 +116,8 @@
     {
       "src": "hello {foo :number}",
       "exp": "hello {|foo|}",
-      "errors": [{ "type": "bad-input" }]
+      "errors": [{ "type": "bad-input" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "hello {:number}",
@@ -130,14 +155,17 @@
     {
       "src": ".local $foo = {$bar :number minimumFractionDigits=foo} {{bar {$foo}}}",
       "params": { "bar": 4.2 },
-      "exp": "bar {$bar}",
-      "errors": [{ "type": "bad-option" }]
+      "comment": "I think it is fine to ignore invalid options",
+      "expJs": "bar {$bar}",
+      "exp": "bar 4.2",
+      "errorsJs": [{ "type": "bad-option" }]
     },
     {
       "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
       "params": { "bar": "foo" },
       "exp": "bar {$bar}",
-      "errors": [{ "type": "bad-input" }]
+      "errors": [{ "type": "bad-input" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": ".input {$foo :number} {{bar {$foo}}}",
@@ -152,14 +180,17 @@
     {
       "src": ".input {$foo :number minimumFractionDigits=foo} {{bar {$foo}}}",
       "params": { "foo": 4.2 },
-      "exp": "bar {$foo}",
-      "errors": [{ "type": "bad-option" }]
+      "comment": "I think it is fine to ignore invalid options",
+      "exp": "bar 4.2",
+      "expJs": "bar {$foo}",
+      "errorsJs": [{ "type": "bad-option" }]
     },
     {
       "src": ".input {$foo :number} {{bar {$foo}}}",
       "params": { "foo": "foo" },
       "exp": "bar {$foo}",
-      "errors": [{ "type": "bad-input" }]
+      "errors": [{ "type": "bad-input" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": ".match {$foo :number} one {{one}} * {{other}}",
@@ -260,12 +291,14 @@
       "src": ".match {$foo :ordinal} one {{st}} two {{nd}} few {{rd}} * {{th}}",
       "params": { "foo": 1 },
       "exp": "th",
-      "errors": [{ "type": "missing-func" }, { "type": "not-selectable" }]
+      "errors": [{ "type": "missing-func" }, { "type": "not-selectable" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "hello {42 :ordinal}",
       "exp": "hello {|42|}",
-      "errors": [{ "type": "missing-func" }]
+      "errors": [{ "type": "missing-func" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     }
   ],
   "plural": [
@@ -273,12 +306,14 @@
       "src": ".match {$foo :plural} one {{one}} * {{other}}",
       "params": { "foo": 1 },
       "exp": "other",
-      "errors": [{ "type": "missing-func" }, { "type": "not-selectable" }]
+      "errors": [{ "type": "missing-func" }, { "type": "not-selectable" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "hello {42 :plural}",
       "exp": "hello {|42|}",
-      "errors": [{ "type": "missing-func" }]
+      "errors": [{ "type": "missing-func" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     }
   ],
   "string": [
@@ -290,7 +325,8 @@
     {
       "src": ".match {$foo :string} 1 {{one}} * {{other}}",
       "params": { "foo": 1 },
-      "exp": "one"
+      "exp": "one",
+      "ignoreJava": "See https://unicode-org.atlassian.net/browse/ICU-22754?focusedCommentId=175933"
     },
     {
       "src": ".match {$foo :string} 1 {{one}} * {{other}}",
@@ -300,7 +336,8 @@
     {
       "src": ".match {$foo :string} 1 {{one}} * {{other}}",
       "exp": "other",
-      "errors": [{ "type": "unresolved-var" }]
+      "errors": [{ "type": "unresolved-var" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     }
   ]
 }

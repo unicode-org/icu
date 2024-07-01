@@ -1679,6 +1679,32 @@ const char *IntlTest::getSourceTestData(UErrorCode& /*err*/) {
     return srcDataDir;
 }
 
+/**
+ * Returns the path to icu/testdata/
+ */
+const char *IntlTest::getRootTestData(UErrorCode& /*err*/) {
+    const char *srcDataDir = nullptr;
+#ifdef U_TOPSRCDIR
+    // This assumes that U_TOPSRCDIR/../../testdata exists
+    srcDataDir = U_TOPSRCDIR U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
+#else
+    srcDataDir = ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
+    FILE *f = fopen(".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "test" U_FILE_SEP_STRING
+                      "testdata" U_FILE_SEP_STRING "rbbitst.txt",
+                      "r");
+    if (f) {
+        /* We're in icu/source/test/intltest/ */
+        fclose(f);
+    }
+    else {
+        /* We're in icu/source/test/intltest/Platform/(Debug|Release) */
+        srcDataDir = ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING
+                     ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
+    }
+#endif
+    return srcDataDir;
+}
+
 char *IntlTest::getUnidataPath(char path[]) {
     const int kUnicodeDataTxtLength = 15;  // strlen("UnicodeData.txt")
 
