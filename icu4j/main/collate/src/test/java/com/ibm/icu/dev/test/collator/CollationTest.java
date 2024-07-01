@@ -1774,5 +1774,18 @@ public class CollationTest extends TestFmwk {
             } catch (IllegalStateException e) {
             }
         }
+
+        String str3 = "\u0355\u01d8\ud804\u036c\u0355\u01d8\ud804\udf6c\u0335\u4d34\u0300\ud800\ud855";
+        String str4 = "\u0355\u01d8\ud804\u036c\u0355\u01da\ud804\udf6c\u0335\u2753\u55d8\u2253\uff0c";
+
+        for (Locale l : Collator.getAvailableLocales()) {
+            Collator col = Collator.getInstance(l);
+            col.setStrength(Collator.IDENTICAL);
+            try {
+                col.compare(str3, str4);
+            } catch (IllegalStateException e) {
+            }
+        }
+
     }
 }

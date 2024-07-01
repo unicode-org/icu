@@ -1888,7 +1888,6 @@ void CollationTest::TestWoHang22511() {
     char16_t str1[] = {
       0x0000, 0x0100, 0x032a, 0x01e0, 0xd804, 0xdd00, 0x031c,
     };
-
     int32_t num_locales = 0;
     const icu::Locale* locales = icu::Locale::getAvailableLocales(num_locales);
     for (int32_t i = 0; i < num_locales; i++) {
@@ -1901,12 +1900,33 @@ void CollationTest::TestWoHang22511() {
         }
         coll->setStrength(icu::Collator::IDENTICAL);
 
-        coll->compare(str1,
-                      sizeof(str1)/sizeof(char16_t),
-                      str1+1,
-                      (sizeof(str1)/sizeof(char16_t))-1,
+        coll->compare(str1, sizeof(str1)/sizeof(char16_t),
+                      str1+1, (sizeof(str1)/sizeof(char16_t))-1,
                       errorCode);
     }
+
+    char16_t str2[] = {
+        0x0355, 0x01d8, 0xd804, 0x036c, 0x0355, 0x01d8, 0xd804, 0xdf6c, 0x0335, 0x4d34, 0x0300, 0xd800, 0xd855,
+    };
+    char16_t str3[] = {
+        0x0355, 0x01d8, 0xd804, 0x036c, 0x0355, 0x01da, 0xd804, 0xdf6c, 0x0335, 0x2753, 0x55d8, 0x2253, 0xff0c,
+    };
+
+    for (int32_t i = 0; i < num_locales; i++) {
+        errorCode.reset();
+        icu::Locale l = locales[i];
+        LocalPointer<Collator> coll(Collator::createInstance(l, errorCode));
+        if(errorCode.isFailure()) {
+            logln("cannot built the Collator");
+            continue;
+        }
+        coll->setStrength(icu::Collator::IDENTICAL);
+        coll->compare(str2, sizeof(str2)/sizeof(char16_t),
+                      str3, sizeof(str3)/sizeof(char16_t),
+                      errorCode);
+    }
+
+
 }
 void CollationTest::TestHang22414() {
     IcuTestErrorCode errorCode(*this, "TestHang22414");
