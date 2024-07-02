@@ -15,6 +15,7 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 
 #include <algorithm>
+#include <array>
 #include <set>
 #include <sstream>
 #include <stdio.h>
@@ -22,6 +23,7 @@
 #include <string.h>
 #include <utility>
 #include <vector>
+#include <string_view>
 
 #include "unicode/brkiter.h"
 #include "unicode/localpointer.h"
@@ -2704,6 +2706,7 @@ private:
     UnicodeSet  *fVI;
     UnicodeSet  *fPi;
     UnicodeSet  *fPf;
+    UnicodeSet  *feaFWH;
 
     BreakIterator        *fCharBI;
     const UnicodeString  *fText;
@@ -2782,6 +2785,8 @@ RBBILineMonkey::RBBILineMonkey() :
 
     fPi = new UnicodeSet(uR"([\p{Pi}])", status);
     fPf = new UnicodeSet(uR"([\p{Pf}])", status);
+
+    feaFWH = new UnicodeSet(uR"([\p{ea=F}\p{ea=W}\p{ea=H}])", status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2914,9 +2919,23 @@ void RBBILineMonkey::rule9Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPos
     // LB 9 Treat X CM* as if it were x.
     //       No explicit action required.
 
-    // LB 10  Treat any remaining combining mark as AL
+    // LB 10  Treat any remaining combining mark as AL, but preserve its East
+    // Asian Width.
     if (fCM->contains(*posChar)) {
-        *posChar = u'A';
+        switch (u_getIntPropertyValue(*posChar, UCHAR_EAST_ASIAN_WIDTH)) {
+        case U_EA_WIDE:
+            *posChar = u'♈';
+            break;
+        case U_EA_NEUTRAL:
+            *posChar = u'ᴬ';
+            break;
+        case U_EA_AMBIGUOUS:
+            *posChar = u'Ⓐ';
+            break;
+        default:
+            puts("Unexpected ea value for lb=CM");
+            std::terminate();
+        }
     }
 
     // Push the updated nextPos and nextChar back to our caller.
@@ -3050,34 +3069,6 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         if (fZW->contains(fText->char32At(tPos))) {
             setAppliedRule(pos, "LB 8  Break after zero width space");
             break;
-        }
-
-
-        //          Move this test up, before LB8a, because numbers can match a longer sequence that would
-        //          also match 8a.  e.g. NU ZWJ IS PO     (ZWJ acts like CM)
-        if (fNumberMatcher->lookingAt(prevPos, status)) {
-            if (U_FAILURE(status)) {
-                setAppliedRule(pos, "LB 25 Numbers");
-                break;
-            }
-            // Matched a number.  But could have been just a single digit, which would
-            //    not represent a "no break here" between prevChar and thisChar
-            int32_t numEndIdx = fNumberMatcher->end(status);  // idx of first char following num
-            if (numEndIdx > pos) {
-                // Number match includes at least our two chars being checked
-                if (numEndIdx > nextPos) {
-                    // Number match includes additional chars.  Update pos and nextPos
-                    //   so that next loop iteration will continue at the end of the number,
-                    //   checking for breaks between last char in number & whatever follows.
-                    pos = nextPos = numEndIdx;
-                    do {
-                        pos = fText->moveIndex32(pos, -1);
-                        thisChar = fText->char32At(pos);
-                    } while (fCM->contains(thisChar));
-                }
-                setAppliedRule(pos, "LB 25 Numbers");
-                continue;
-            }
         }
 
 
@@ -3257,11 +3248,71 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             break;
         }
 
-        //    x   QU
-        //    QU  x
-        if (fQU->contains(thisChar) || fQU->contains(prevChar)) {
-            setAppliedRule(pos, "LB 19");
+        // LB 19
+        // × [QU-\p{Pi}]
+        if (fQU->contains(thisChar) && !fPi->contains(thisChar)) {
+            setAppliedRule(pos, "LB 19 × [QU-\\p{Pi}]");
             continue;
+        }
+
+        // [QU-\p{Pf}] ×
+        if (fQU->contains(prevChar) && !fPf->contains(prevChar)) {
+            setAppliedRule(pos, "LB 19 [QU-\\p{Pf}] ×");
+            continue;
+        }
+
+        // LB 19a
+        // [^\p{ea=F}\p{ea=W}\p{ea=H}] × QU
+        if (!feaFWH->contains(prevChar) && fQU->contains(thisChar)) {
+            setAppliedRule(pos, "LB 19a [^\\p{ea=F}\\p{ea=W}\\p{ea=H}] × QU");
+            continue;
+        }
+        // × QU ( [^\p{ea=F}\p{ea=W}\p{ea=H}] | eot )
+        if (fQU->contains(thisChar)) {
+            if (nextPos < fText->length()) {
+                UChar32 nextChar = fText->char32At(nextPos);
+                if (!feaFWH->contains(nextChar)) {
+                    setAppliedRule(pos, "LB 19a × QU [^\\p{ea=F}\\p{ea=W}\\p{ea=H}]");
+                    continue;
+                }
+            } else {
+                setAppliedRule(pos, "LB 19 × QU eot");
+                continue;
+            }
+        }
+        // QU × [^\p{ea=F}\p{ea=W}\p{ea=H}]
+        if (fQU->contains(prevChar) && !feaFWH->contains(thisChar)) {
+            setAppliedRule(pos, "LB 19a QU × [^\\p{ea=F}\\p{ea=W}\\p{ea=H}]");
+            continue;
+        }
+        // ( sot | [^\p{ea=F}\p{ea=W}\p{ea=H}] ) QU ×
+        if (fQU->contains(prevChar)) {
+            if (prevPos == 0) {
+                setAppliedRule(pos, "LB 19a sot QU ×");
+                continue;
+            }
+            // prevPosX2 is -1 if there was a break, and prevCharX2 is 0; but the UAX #14 rules can
+            // look through breaks.
+            int breakObliviousPrevPosX2 = fText->moveIndex32(prevPos, -1);
+            while (fCM->contains(fText->char32At(breakObliviousPrevPosX2))) {
+                if (breakObliviousPrevPosX2 == 0) {
+                    break;
+                }
+                int beforeCM = fText->moveIndex32(breakObliviousPrevPosX2, -1);
+                if (fBK->contains(fText->char32At(beforeCM)) ||
+                    fCR->contains(fText->char32At(beforeCM)) ||
+                    fLF->contains(fText->char32At(beforeCM)) ||
+                    fNL->contains(fText->char32At(beforeCM)) ||
+                    fSP->contains(fText->char32At(beforeCM)) ||
+                    fZW->contains(fText->char32At(beforeCM))) {
+                    break;
+                }
+                breakObliviousPrevPosX2 = beforeCM;
+            }
+            if (!feaFWH->contains(fText->char32At(breakObliviousPrevPosX2))) {
+                setAppliedRule(pos, "LB 19a [^\\p{ea=F}\\p{ea=W}\\p{ea=H}] QU ×");
+                continue;
+            }
         }
 
         if (fCB->contains(thisChar) || fCB->contains(prevChar)) {
@@ -3269,14 +3320,36 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             break;
         }
 
-        //           Don't break between Hyphens and letters if a break precedes the hyphen.
-        //           Formerly this was a Finnish tailoring.
-        //           Moved to root in ICU 63. This is an ICU customization, not in UAX-14.
-        //           ^($HY | $HH) $AL;
-        if (fAL->contains(thisChar) && (fHY->contains(prevChar) || fHH->contains(prevChar)) &&
-                prevPosX2 == -1) {
-            setAppliedRule(pos, "LB 20.09");
-            continue;
+        // Don't break between Hyphens and letters if a break or a space precedes the hyphen.
+        // Formerly this was a Finnish tailoring.
+        // (sot | BK | CR | LF | NL | SP | ZW | CB | GL) ( HY | [\u2010] ) × AL
+        if (fAL->contains(thisChar) && (fHY->contains(prevChar) || fHH->contains(prevChar))) {
+            // sot ( HY | [\u2010] ) × AL.
+            if (prevPos == 0) {
+                setAppliedRule(pos, "LB 20a");
+                continue;
+            }
+            // prevPosX2 is -1 if there was a break; but the UAX #14 rules can
+            // look through breaks.
+            int breakObliviousPrevPosX2 = fText->moveIndex32(prevPos, -1);
+            if (fBK->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fCR->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fLF->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fNL->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fSP->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fGL->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fZW->contains(fText->char32At(breakObliviousPrevPosX2))) {
+                setAppliedRule(pos, "LB 20a");
+                continue;
+            }
+            while (breakObliviousPrevPosX2 > 0 &&
+                    fCM->contains(fText->char32At(breakObliviousPrevPosX2))) {
+                breakObliviousPrevPosX2 = fText->moveIndex32(breakObliviousPrevPosX2, -1);
+            }
+            if (fCB->contains(fText->char32At(breakObliviousPrevPosX2))) {
+                setAppliedRule(pos, "LB 20a");
+                continue;
+            }
         }
 
         if (fBA->contains(thisChar) ||
@@ -3287,9 +3360,9 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
-        if (fHL->contains(prevCharX2) &&
-                (fHY->contains(prevChar) || fBA->contains(prevChar))) {
-            setAppliedRule(pos, "LB 21a   HL (HY | BA) x");
+        if (fHL->contains(prevCharX2) && (fHY->contains(prevChar) || fBA->contains(prevChar)) &&
+            !fHL->contains(thisChar)) {
+            setAppliedRule(pos, "LB 21a   HL (HY | BA) x [^HL]");
             continue;
         }
 
@@ -3343,7 +3416,124 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
-        // appliedRule: "LB 25 numbers match"; // moved up, before LB 8a,
+        bool continueToNextPosition = false;
+        // LB 25.
+        for (const auto [left, right] : {
+                 std::pair{fCL, fPO}, // 1. NU (SY | IS)* CL × PO
+                 std::pair{fCP, fPO}, // 2. NU (SY | IS)* CP × PO
+                 std::pair{fCL, fPR}, // 3. NU (SY | IS)* CL × PR
+                 std::pair{fCP, fPR}, // 4. NU (SY | IS)* CP × PR
+             }) {
+            if (left->contains(prevChar) && right->contains(thisChar)) {
+                // Check for the NU (SY | IS)* part.
+                bool leftHandSideMatches = false;
+                tPos = fText->moveIndex32(prevPos, -1);
+                for (;;) {
+                    while (tPos > 0 && fCM->contains(fText->char32At(tPos))) {
+                        tPos = fText->moveIndex32(tPos, -1);
+                    }
+                    const UChar32 tChar = fText->char32At(tPos);
+                    if (fSY->contains(tChar) || fIS->contains(tChar)) {
+                        if (tPos == 0) {
+                            leftHandSideMatches = false;
+                            break;
+                        }
+                        tPos = fText->moveIndex32(tPos, -1);
+                    } else if (fNU->contains(tChar)) {
+                        leftHandSideMatches = true;
+                        break;
+                    } else {
+                        leftHandSideMatches = false;
+                        break;
+                    }
+                }
+                if (leftHandSideMatches) {
+                    setAppliedRule(pos, "LB 25/1..4");
+                    continueToNextPosition = true;
+                    break;
+                }
+            }
+        }
+        if (continueToNextPosition) {
+            continue;
+        }
+        // 5. NU (SY | IS)* × PO
+        // 6. NU (SY | IS)* × PR
+        // 13. NU (SY | IS)* × NU
+        bool leftHandSideMatches;
+        tPos = prevPos;
+        for (;;) {
+            while (tPos > 0 && fCM->contains(fText->char32At(tPos))) {
+                tPos = fText->moveIndex32(tPos, -1);
+            }
+            const UChar32 tChar = fText->char32At(tPos);
+            if (fSY->contains(tChar) || fIS->contains(tChar)) {
+                if (tPos == 0) {
+                    leftHandSideMatches = false;
+                    break;
+                }
+                tPos = fText->moveIndex32(tPos, -1);
+            } else if (fNU->contains(tChar)) {
+                leftHandSideMatches = true;
+                break;
+            } else {
+                leftHandSideMatches = false;
+                break;
+            }
+        }
+        if (leftHandSideMatches &&
+            (fPO->contains(thisChar) || fPR->contains(thisChar) || fNU->contains(thisChar))) {
+            setAppliedRule(pos, "LB 25/5,6,13,14");
+            continue;
+        }
+        if (nextPos < fText->length()) {
+            const UChar32 nextChar = fText->char32At(nextPos);
+            // 7. PO × OP NU
+            if (fPO->contains(prevChar) && fOP->contains(thisChar) && fNU->contains(nextChar)) {
+                setAppliedRule(pos, "LB 25/7");
+                continue;
+            }
+            // 9. PR × OP NU
+            if (fPR->contains(prevChar) && fOP->contains(thisChar) && fNU->contains(nextChar)) {
+                setAppliedRule(pos, "LB 25/9");
+                continue;
+            }
+            int nextPosX2 = fText->moveIndex32(nextPos, 1);
+            while (nextPosX2 < fText->length() && fCM->contains(fText->char32At(nextPosX2))) {
+                nextPosX2 = fText->moveIndex32(nextPosX2, 1);
+            }
+
+            if (nextPosX2 < fText->length()) {
+                const UChar32 nextCharX2 = fText->char32At(nextPosX2);
+                // 7bis. PO × OP IS NU
+                if (fPO->contains(prevChar) && fOP->contains(thisChar) && fIS->contains(nextChar) &&
+                    fNU->contains(nextCharX2)) {
+                    setAppliedRule(pos, "LB 25/7bis");
+                    continue;
+                }
+                // 9bis. PR × OP IS NU
+                if (fPR->contains(prevChar) && fOP->contains(thisChar) && fIS->contains(nextChar) &&
+                    fNU->contains(nextCharX2)) {
+                    setAppliedRule(pos, "LB 25/9bis");
+                    continue;
+                }
+            }
+        }
+        for (const auto [left, right] : {
+                 std::pair{fPO, fNU}, // 8. PO × NU
+                 std::pair{fPR, fNU}, // 10. PR × NU
+                 std::pair{fHY, fNU}, // 11. HY × NU
+                 std::pair{fIS, fNU}, // 12. IS × NU
+             }) {
+            if (left->contains(prevChar) && right->contains(thisChar)) {
+                continueToNextPosition = true;
+                break;
+            }
+        }
+        if (continueToNextPosition) {
+          continue;
+        }
+
 
         if (fJL->contains(prevChar) && (fJL->contains(thisChar) ||
                                         fJV->contains(thisChar) ||
@@ -3524,6 +3714,7 @@ RBBILineMonkey::~RBBILineMonkey() {
     delete fVI;
     delete fPi;
     delete fPf;
+    delete feaFWH;
 
     delete fCharBI;
     delete fNumberMatcher;
@@ -4178,7 +4369,12 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
         if (numIterations == -1 && loopCount % 10 == 0) {
             // If test is running in an infinite loop, display a periodic tic so
             //   we can tell that it is making progress.
-            fprintf(stderr, ".");
+            constexpr std::array<std::string_view, 5> monkeys{"🙈", "🙉", "🙊", "🐵", "🐒"};
+            fprintf(stderr, monkeys[m_seed % monkeys.size()].data());
+            if (loopCount % 1'000'000 == 0) {
+                fprintf(stderr, "\nTested %d million random strings with %d errors…\n",
+                        loopCount / 1'000'000, getErrors());
+            }
         }
         // Save current random number seed, so that we can recreate the random numbers
         //   for this loop iteration in event of an error.

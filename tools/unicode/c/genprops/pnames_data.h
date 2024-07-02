@@ -1181,7 +1181,7 @@ static const Value VALUES_vo[4] = {
     Value(U_VO_UPRIGHT, "U Upright"),
 };
 
-static const Value VALUES_Identifier_Status[2] = {
+static const Value VALUES_ID_Status[2] = {
     Value(U_ID_STATUS_RESTRICTED, "Restricted Restricted"),
     Value(U_ID_STATUS_ALLOWED, "Allowed Allowed"),
 };
@@ -1227,7 +1227,7 @@ static const Value VALUES_gcm[38] = {
     Value((int32_t)U_GC_ZS_MASK, "Zs Space_Separator"),
 };
 
-static const Value VALUES_Identifier_Type[12] = {
+static const Value VALUES_ID_Type[12] = {
     Value(U_ID_TYPE_NOT_CHARACTER, "Not_Character Not_Character"),
     Value(U_ID_TYPE_DEPRECATED, "Deprecated Deprecated"),
     Value(U_ID_TYPE_DEFAULT_IGNORABLE, "Default_Ignorable Default_Ignorable"),
@@ -1343,7 +1343,7 @@ static const Property PROPERTIES[119] = {
     Property(UCHAR_INDIC_POSITIONAL_CATEGORY, "InPC Indic_Positional_Category", VALUES_InPC, 16),
     Property(UCHAR_INDIC_SYLLABIC_CATEGORY, "InSC Indic_Syllabic_Category", VALUES_InSC, 37),
     Property(UCHAR_VERTICAL_ORIENTATION, "vo Vertical_Orientation", VALUES_vo, 4),
-    Property(UCHAR_IDENTIFIER_STATUS, "Identifier_Status Identifier_Status", VALUES_Identifier_Status, 2),
+    Property(UCHAR_IDENTIFIER_STATUS, "ID_Status Identifier_Status", VALUES_ID_Status, 2),
     Property(UCHAR_GENERAL_CATEGORY_MASK, "gcm General_Category_Mask", VALUES_gcm, 38),
     Property(UCHAR_NUMERIC_VALUE, "nv Numeric_Value"),
     Property(UCHAR_AGE, "age Age"),
@@ -1361,7 +1361,7 @@ static const Property PROPERTIES[119] = {
     Property(UCHAR_UPPERCASE_MAPPING, "uc Uppercase_Mapping"),
     Property(UCHAR_BIDI_PAIRED_BRACKET, "bpb Bidi_Paired_Bracket"),
     Property(UCHAR_SCRIPT_EXTENSIONS, "scx Script_Extensions"),
-    Property(UCHAR_IDENTIFIER_TYPE, "Identifier_Type Identifier_Type", VALUES_Identifier_Type, 12),
+    Property(UCHAR_IDENTIFIER_TYPE, "ID_Type Identifier_Type", VALUES_ID_Type, 12),
 };
 
 const int32_t MAX_ALIASES = 4;
