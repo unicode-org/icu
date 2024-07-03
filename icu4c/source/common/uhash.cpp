@@ -224,8 +224,8 @@ _uhash_allocate(UHashtable *hash,
     hash->primeIndex = static_cast<int8_t>(primeIndex);
     hash->length = PRIMES[primeIndex];
 
-    p = hash->elements = (UHashElement*)
-        uprv_malloc(sizeof(UHashElement) * hash->length);
+    p = hash->elements = static_cast<UHashElement*>(
+        uprv_malloc(sizeof(UHashElement) * hash->length));
 
     if (hash->elements == nullptr) {
         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -244,8 +244,8 @@ _uhash_allocate(UHashtable *hash,
     }
 
     hash->count = 0;
-    hash->lowWaterMark = (int32_t)(hash->length * hash->lowWaterRatio);
-    hash->highWaterMark = (int32_t)(hash->length * hash->highWaterRatio);
+    hash->lowWaterMark = static_cast<int32_t>(hash->length * hash->lowWaterRatio);
+    hash->highWaterMark = static_cast<int32_t>(hash->length * hash->highWaterRatio);
 }
 
 static UHashtable*
@@ -287,7 +287,7 @@ _uhash_create(UHashFunction *keyHash,
 
     if (U_FAILURE(*status)) return nullptr;
 
-    result = (UHashtable*) uprv_malloc(sizeof(UHashtable));
+    result = static_cast<UHashtable*>(uprv_malloc(sizeof(UHashtable)));
     if (result == nullptr) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;

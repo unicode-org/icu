@@ -490,7 +490,7 @@ NFRuleSet::findNormalRule(int64_t number) const
     // to find the rule (we should only go into this clause if the
     // value is 0)
     if (fIsFractionRuleSet) {
-        return findFractionRuleSetRule((double)number);
+        return findFractionRuleSetRule(static_cast<double>(number));
     }
 
     // if the number is negative, return the negative-number rule
@@ -590,7 +590,7 @@ NFRuleSet::findFractionRuleSetRule(double number) const
         for (uint32_t i = 1; i < rules.size(); ++i) {
             leastCommonMultiple = util_lcm(leastCommonMultiple, rules[i]->getBaseValue());
         }
-        numerator = util64_fromDouble(number * (double)leastCommonMultiple + 0.5);
+        numerator = util64_fromDouble(number * static_cast<double>(leastCommonMultiple) + 0.5);
     }
     // for each rule, do the following...
     int64_t tempDifference;
@@ -632,9 +632,9 @@ NFRuleSet::findFractionRuleSetRule(double number) const
     // the numerator of the fraction is anything else (this lets us
     // do things like "one third"/"two thirds" without having to define
     // a whole bunch of extra rule sets)
-    if ((unsigned)(winner + 1) < rules.size() &&
+    if (static_cast<unsigned>(winner + 1) < rules.size() &&
         rules[winner + 1]->getBaseValue() == rules[winner]->getBaseValue()) {
-        double n = ((double)rules[winner]->getBaseValue()) * number;
+        double n = static_cast<double>(rules[winner]->getBaseValue()) * number;
         if (n < 0.5 || n >= 2) {
             ++winner;
         }
@@ -825,7 +825,7 @@ int64_t util64_fromDouble(double d) {
         if (neg) {
             d = -d;
         }
-        result = (int64_t)uprv_floor(d);
+        result = static_cast<int64_t>(uprv_floor(d));
         if (neg) {
             result = -result;
         }
@@ -860,7 +860,7 @@ static const uint8_t asciiDigits[] = {
     0x77u, 0x78u, 0x79u, 0x7au,  
 };
 
-static const char16_t kUMinus = (char16_t)0x002d;
+static const char16_t kUMinus = static_cast<char16_t>(0x002d);
 
 #ifdef RBNF_DEBUG
 static const char kMinus = '-';
@@ -998,15 +998,15 @@ uint32_t util64_tou(int64_t w, char16_t* buf, uint32_t len, uint32_t radix, UBoo
         *p++ = kUMinus;
         --len;
     } else if (len && (w == 0)) {
-        *p++ = (char16_t)raw ? 0 : asciiDigits[0];
+        *p++ = static_cast<char16_t>(raw) ? 0 : asciiDigits[0];
         --len;
     }
 
     while (len && (w != 0)) {
         int64_t n = w / base;
         int64_t m = n * base;
-        int32_t d = (int32_t)(w-m);
-        *p++ = (char16_t)(raw ? d : asciiDigits[d]);
+        int32_t d = static_cast<int32_t>(w - m);
+        *p++ = static_cast<char16_t>(raw ? d : asciiDigits[d]);
         w = n;
         --len;
     }
@@ -1014,7 +1014,7 @@ uint32_t util64_tou(int64_t w, char16_t* buf, uint32_t len, uint32_t radix, UBoo
         *p = 0; // null terminate if room for caller convenience
     }
 
-    len = (uint32_t)(p - buf);
+    len = static_cast<uint32_t>(p - buf);
     if (*buf == kUMinus) {
         ++buf;
     }

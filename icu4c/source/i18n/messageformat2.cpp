@@ -467,7 +467,7 @@ void MessageFormatter::resolvePreferences(MessageContext& context, UVector& res,
     int32_t numVariants = dataModel.numVariants();
     const Variant* variants = dataModel.getVariantsInternal();
     // 2. For each index i in res
-    for (int32_t i = 0; i < (int32_t) res.size(); i++) {
+    for (int32_t i = 0; i < res.size(); i++) {
         // 2i. Let keys be a new empty list of strings.
         LocalPointer<UVector> keys(createUVector(status));
         CHECK_ERROR(status);
@@ -535,7 +535,7 @@ void MessageFormatter::filterVariants(const UVector& pref, UVector& vars, UError
         const Key* var = selectorKeys.getKeysInternal();
         // 2i. For each index `i` in `pref`:
         bool noMatch = false;
-        for (int32_t i = 0; i < (int32_t) pref.size(); i++) {
+        for (int32_t i = 0; i < pref.size(); i++) {
             // 2i(a). Let `key` be the `var` key at position `i`.
             U_ASSERT(i < selectorKeys.len);
             const Key& key = var[i];

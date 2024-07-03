@@ -1731,7 +1731,7 @@ inline bool UnicodeSet::operator!=(const UnicodeSet& o) const {
 }
 
 inline UBool UnicodeSet::isFrozen() const {
-    return (UBool)(bmpSet!=nullptr || stringSpan!=nullptr);
+    return static_cast<UBool>(bmpSet != nullptr || stringSpan != nullptr);
 }
 
 inline UBool UnicodeSet::containsSome(UChar32 start, UChar32 end) const {
@@ -1747,7 +1747,7 @@ inline UBool UnicodeSet::containsSome(const UnicodeString& s) const {
 }
 
 inline UBool UnicodeSet::isBogus() const {
-    return (UBool)(fFlags & kIsBogus);
+    return static_cast<UBool>(fFlags & kIsBogus);
 }
 
 inline UnicodeSet *UnicodeSet::fromUSet(USet *uset) {

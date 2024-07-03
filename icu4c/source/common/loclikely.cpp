@@ -170,7 +170,7 @@ _uloc_addLikelySubtags(const char* localeID,
         return;
     }
 
-    int32_t trailingLength = (int32_t)uprv_strlen(trailing);
+    int32_t trailingLength = static_cast<int32_t>(uprv_strlen(trailing));
 
     const icu::LikelySubtags* likelySubtags = icu::LikelySubtags::getSingleton(err);
     if (U_FAILURE(err)) {
@@ -193,11 +193,11 @@ _uloc_addLikelySubtags(const char* localeID,
     }
     createTagStringWithAlternates(
         language,
-        (int32_t)uprv_strlen(language),
+        static_cast<int32_t>(uprv_strlen(language)),
         lsr.script,
-        (int32_t)uprv_strlen(lsr.script),
+        static_cast<int32_t>(uprv_strlen(lsr.script)),
         lsr.region,
-        (int32_t)uprv_strlen(lsr.region),
+        static_cast<int32_t>(uprv_strlen(lsr.region)),
         variant.data(),
         variant.length(),
         trailing,
@@ -235,7 +235,7 @@ _uloc_minimizeSubtags(const char* localeID,
         return;
     }
 
-    int32_t trailingLength = (int32_t)uprv_strlen(trailing);
+    int32_t trailingLength = static_cast<int32_t>(uprv_strlen(trailing));
 
     const icu::LikelySubtags* likelySubtags = icu::LikelySubtags::getSingleton(err);
     if (U_FAILURE(err)) {
@@ -256,11 +256,11 @@ _uloc_minimizeSubtags(const char* localeID,
     }
     createTagStringWithAlternates(
         language,
-        (int32_t)uprv_strlen(language),
+        static_cast<int32_t>(uprv_strlen(language)),
         lsr.script,
-        (int32_t)uprv_strlen(lsr.script),
+        static_cast<int32_t>(uprv_strlen(lsr.script)),
         lsr.region,
-        (int32_t)uprv_strlen(lsr.region),
+        static_cast<int32_t>(uprv_strlen(lsr.region)),
         variant.data(),
         variant.length(),
         trailing,

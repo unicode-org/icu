@@ -74,35 +74,35 @@ IntlTestDateFormat::testLocale(/*char* par, */const Locale& locale, const Unicod
     // is determined.  For other patterns, 2 iterations should suffice.
     fLimit = 3;
 
-    for(timeStyle = (DateFormat::EStyle)0; 
-        timeStyle < (DateFormat::EStyle)4; 
-        timeStyle = (DateFormat::EStyle) (timeStyle+1))
+    for (timeStyle = static_cast<DateFormat::EStyle>(0);
+         timeStyle < static_cast<DateFormat::EStyle>(4);
+         timeStyle = static_cast<DateFormat::EStyle>(timeStyle + 1))
     {
-        fTestName = (UnicodeString) "Time test " + (int32_t) timeStyle + " (" + localeName + ")";
+        fTestName = UnicodeString("Time test ") + static_cast<int32_t>(timeStyle) + " (" + localeName + ")";
         fFormat = DateFormat::createTimeInstance(timeStyle, locale);
         testFormat(/* par */);
     }
 
     fLimit = 2;
 
-    for(dateStyle = (DateFormat::EStyle)0; 
-        dateStyle < (DateFormat::EStyle)4; 
-        dateStyle = (DateFormat::EStyle) (dateStyle+1))
+    for (dateStyle = static_cast<DateFormat::EStyle>(0);
+         dateStyle < static_cast<DateFormat::EStyle>(4);
+         dateStyle = static_cast<DateFormat::EStyle>(dateStyle + 1))
     {
-        fTestName = (UnicodeString) "Date test " + (int32_t) dateStyle + " (" + localeName + ")";
+        fTestName = UnicodeString("Date test ") + static_cast<int32_t>(dateStyle) + " (" + localeName + ")";
         fFormat = DateFormat::createDateInstance(dateStyle, locale);
         testFormat(/* par */);
     }
 
-    for(dateStyle = (DateFormat::EStyle)0; 
-        dateStyle < (DateFormat::EStyle)4; 
-        dateStyle = (DateFormat::EStyle) (dateStyle+1))
+    for (dateStyle = static_cast<DateFormat::EStyle>(0);
+         dateStyle < static_cast<DateFormat::EStyle>(4);
+         dateStyle = static_cast<DateFormat::EStyle>(dateStyle + 1))
     {
-        for(timeStyle = (DateFormat::EStyle)0; 
-            timeStyle < (DateFormat::EStyle)4; 
-            timeStyle = (DateFormat::EStyle) (timeStyle+1))
+        for (timeStyle = static_cast<DateFormat::EStyle>(0);
+             timeStyle < static_cast<DateFormat::EStyle>(4);
+             timeStyle = static_cast<DateFormat::EStyle>(timeStyle + 1))
         {
-            fTestName = (UnicodeString) "DateTime test " + (int32_t) dateStyle + "/" + (int32_t) timeStyle + " (" + localeName + ")";
+            fTestName = UnicodeString("DateTime test ") + static_cast<int32_t>(dateStyle) + "/" + static_cast<int32_t>(timeStyle) + " (" + localeName + ")";
             fFormat = DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale);
             testFormat(/* par */);
         }
@@ -211,7 +211,7 @@ void IntlTestDateFormat::tryDate(UDate theDate)
     if (stringMatch > fLimit || dateMatch > fLimit)
     {
         describeTest();
-        errln((UnicodeString)"**** FAIL: No string and/or date match within " + fLimit
+        errln(UnicodeString("**** FAIL: No string and/or date match within ") + fLimit
             + " iterations for the Date " + string[0] + "\t(" + theDate + ").");
         dump = true;
     }
@@ -220,7 +220,7 @@ void IntlTestDateFormat::tryDate(UDate theDate)
     {
         for (int32_t k=0; k<=i; ++k)
         {
-            logln((UnicodeString)"" + k + ": " + date[k] + " F> " +
+            logln(UnicodeString("") + k + ": " + date[k] + " F> " +
                   string[k] + " P> ");
         }
     }
@@ -233,12 +233,12 @@ double IntlTestDateFormat::randDouble()
     // that the system rand() function is very poor, which it always is.
     double d=0.0;
     uint32_t i;
-    char* poke = (char*)&d;
+    char* poke = reinterpret_cast<char*>(&d);
     do {
         do {
             for (i=0; i < sizeof(double); ++i)
             {
-                poke[i] = (char)(rand() & 0xFF);
+                poke[i] = static_cast<char>(rand() & 0xFF);
             }
         } while (uprv_isNaN(d) || uprv_isInfinite(d));
 
@@ -248,9 +248,9 @@ double IntlTestDateFormat::randDouble()
         {
             double e = uprv_floor(log10(d));
             if (e < -2.0)
-                d *= uprv_pow10((int32_t)(-e-2));
+                d *= uprv_pow10(static_cast<int32_t>(-e - 2));
             else if (e > -1.0)
-                d /= uprv_pow10((int32_t)(e+1));
+                d /= uprv_pow10(static_cast<int32_t>(e + 1));
         }
     // While this is not a real normalized number make another one.
     } while (uprv_isNaN(d) || uprv_isInfinite(d)
@@ -262,7 +262,7 @@ void IntlTestDateFormat::testAvailableLocales(/* char* par */)
 {
     int32_t count = 0;
     const Locale* locales = DateFormat::getAvailableLocales(count);
-    logln((UnicodeString)"" + count + " available locales");
+    logln(UnicodeString("") + count + " available locales");
     if (locales && count)
     {
         UnicodeString name;
@@ -274,7 +274,7 @@ void IntlTestDateFormat::testAvailableLocales(/* char* par */)
         }
         logln(all);
     }
-    else dataerrln((UnicodeString)"**** FAIL: Zero available locales or null array pointer");
+    else dataerrln(UnicodeString("**** FAIL: Zero available locales or null array pointer"));
 }
 
 void IntlTestDateFormat::monsterTest(/*char *par*/)
@@ -290,7 +290,7 @@ void IntlTestDateFormat::monsterTest(/*char *par*/)
         for (int32_t i=0; i<count; ++i)
         {
             UnicodeString name = UnicodeString(locales[i].getName(), "");
-            logln((UnicodeString)"Testing " + name + "...");
+            logln(UnicodeString("Testing ") + name + "...");
             testLocale(/*par, */locales[i], name);
         }
     }

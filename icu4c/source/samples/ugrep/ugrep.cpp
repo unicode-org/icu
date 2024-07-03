@@ -289,7 +289,7 @@ void readFile(const char *name) {
     //
     //   Read in the file
     //
-    charBuf    = (char *)realloc(charBuf, rawFileLen+1);   // Need error checking...
+    charBuf = static_cast<char*>(realloc(charBuf, rawFileLen + 1)); // Need error checking...
     int t = static_cast<int>(fread(charBuf, 1, rawFileLen, file));
     if (t != rawFileLen)  {
         fprintf(stderr, "Error reading file \"%s\"\n", fileName);
@@ -343,7 +343,7 @@ void readFile(const char *name) {
     };
     
     status = U_ZERO_ERROR;
-    ucharBuf = (char16_t *)realloc(ucharBuf, (destCap+1) * sizeof(char16_t));
+    ucharBuf = static_cast<char16_t*>(realloc(ucharBuf, (destCap + 1) * sizeof(char16_t)));
     ucnv_toUChars(conv,
         ucharBuf,           //  dest,
         destCap+1,

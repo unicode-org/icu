@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
     }
     std::ostringstream ostrm;
     ostrm << file.rdbuf();
-    LLVMFuzzerTestOneInput((const uint8_t *) ostrm.str().c_str(), ostrm.str().size());
+    LLVMFuzzerTestOneInput(reinterpret_cast<const uint8_t*>(ostrm.str().c_str()), ostrm.str().size());
 
     return 0;
 }

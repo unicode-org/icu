@@ -2556,7 +2556,7 @@ public:
    * @stable ICU 2.0
    */
   inline UnicodeString& remove(int32_t start,
-                               int32_t length = (int32_t)INT32_MAX);
+                               int32_t length = static_cast<int32_t>(INT32_MAX));
 
   /**
    * Remove the characters in the range
@@ -2567,7 +2567,7 @@ public:
    * @stable ICU 2.0
    */
   inline UnicodeString& removeBetween(int32_t start,
-                                      int32_t limit = (int32_t)INT32_MAX);
+                                      int32_t limit = static_cast<int32_t>(INT32_MAX));
 
   /**
    * Retain only the characters in the range
@@ -3711,7 +3711,7 @@ private:
      * Must be at least U16_MAX_LENGTH for the single-code point constructor to work.
      * @see UNISTR_OBJECT_SIZE
      */
-    US_STACKBUF_SIZE=(int32_t)(UNISTR_OBJECT_SIZE-sizeof(void *)-2)/U_SIZEOF_UCHAR,
+    US_STACKBUF_SIZE = static_cast<int32_t>(UNISTR_OBJECT_SIZE - sizeof(void*) - 2) / U_SIZEOF_UCHAR,
     kInvalidUChar=0xffff, // U+FFFF returned by charAt(invalid index)
     kInvalidHashCode=0, // invalid hash code
     kEmptyHashCode=1, // hash code for empty string
@@ -3914,16 +3914,16 @@ UnicodeString::hashCode() const
 
 inline UBool
 UnicodeString::isBogus() const
-{ return (UBool)(fUnion.fFields.fLengthAndFlags & kIsBogus); }
+{ return static_cast<UBool>(fUnion.fFields.fLengthAndFlags & kIsBogus); }
 
 inline UBool
 UnicodeString::isWritable() const
-{ return (UBool)!(fUnion.fFields.fLengthAndFlags&(kOpenGetBuffer|kIsBogus)); }
+{ return static_cast<UBool>(!(fUnion.fFields.fLengthAndFlags & (kOpenGetBuffer | kIsBogus))); }
 
 inline UBool
 UnicodeString::isBufferWritable() const
 {
-  return (UBool)(
+  return static_cast<UBool>(
       !(fUnion.fFields.fLengthAndFlags&(kOpenGetBuffer|kIsBogus|kBufferIsReadonly)) &&
       (!(fUnion.fFields.fLengthAndFlags&kRefCounted) || refCount()==1));
 }
@@ -3950,7 +3950,7 @@ UnicodeString::doCompare(int32_t start,
               int32_t srcLength) const
 {
   if(srcText.isBogus()) {
-    return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
+    return static_cast<int8_t>(!isBogus()); // 0 if both are bogus, 1 otherwise
   } else {
     srcText.pinIndices(srcStart, srcLength);
     return doCompare(start, thisLength, srcText.getArrayStart(), srcStart, srcLength);
@@ -4057,7 +4057,7 @@ UnicodeString::doCompareCodePointOrder(int32_t start,
                                        int32_t srcLength) const
 {
   if(srcText.isBogus()) {
-    return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
+    return static_cast<int8_t>(!isBogus()); // 0 if both are bogus, 1 otherwise
   } else {
     srcText.pinIndices(srcStart, srcLength);
     return doCompareCodePointOrder(start, thisLength, srcText.getArrayStart(), srcStart, srcLength);
@@ -4119,7 +4119,7 @@ UnicodeString::doCaseCompare(int32_t start,
                              uint32_t options) const
 {
   if(srcText.isBogus()) {
-    return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
+    return static_cast<int8_t>(!isBogus()); // 0 if both are bogus, 1 otherwise
   } else {
     srcText.pinIndices(srcStart, srcLength);
     return doCaseCompare(start, thisLength, srcText.getArrayStart(), srcStart, srcLength, options);
@@ -4531,7 +4531,7 @@ UnicodeString::tempSubStringBetween(int32_t start, int32_t limit) const {
 inline char16_t
 UnicodeString::doCharAt(int32_t offset) const
 {
-  if((uint32_t)offset < (uint32_t)length()) {
+  if (static_cast<uint32_t>(offset) < static_cast<uint32_t>(length())) {
     return getArrayStart()[offset];
   } else {
     return kInvalidUChar;
@@ -4564,7 +4564,7 @@ inline void
 UnicodeString::setShortLength(int32_t len) {
   // requires 0 <= len <= kMaxShortLength
   fUnion.fFields.fLengthAndFlags =
-    (int16_t)((fUnion.fFields.fLengthAndFlags & kAllStorageFlags) | (len << kLengthShift));
+    static_cast<int16_t>((fUnion.fFields.fLengthAndFlags & kAllStorageFlags) | (len << kLengthShift));
 }
 
 inline void
@@ -4758,7 +4758,7 @@ UnicodeString::truncate(int32_t targetLength)
     // truncate(0) of a bogus string makes the string empty and non-bogus
     unBogus();
     return false;
-  } else if((uint32_t)targetLength < (uint32_t)length()) {
+  } else if (static_cast<uint32_t>(targetLength) < static_cast<uint32_t>(length())) {
     setLength(targetLength);
     return true;
   } else {

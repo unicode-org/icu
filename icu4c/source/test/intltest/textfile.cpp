@@ -44,15 +44,15 @@ TextFile::TextFile(const char* _name, const char* _encoding, UErrorCode& ec) :
     uprv_strcpy(name, _name);
     uprv_strcpy(encoding, _encoding);
 #else
-    name = (char*) _name;
-    encoding = (char*) _encoding;
+    name = const_cast<char*>(_name);
+    encoding = const_cast<char*>(_encoding);
 #endif
 
     const char* testDir = IntlTest::getSourceTestData(ec);
     if (U_FAILURE(ec)) {
         return;
     }
-    if (!ensureCapacity((int32_t)(uprv_strlen(testDir) + uprv_strlen(name) + 1))) {
+    if (!ensureCapacity(static_cast<int32_t>(uprv_strlen(testDir) + uprv_strlen(name) + 1))) {
         ec = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -167,7 +167,7 @@ UBool TextFile::ensureCapacity(int32_t mincapacity) {
 
     // Simple realloc() no good; contents not preserved
     // Note: 'buffer' may be 0
-    char* newbuffer = (char*) uprv_malloc(mincapacity);
+    char* newbuffer = static_cast<char*>(uprv_malloc(mincapacity));
     if (newbuffer == nullptr) {
         return false;
     }

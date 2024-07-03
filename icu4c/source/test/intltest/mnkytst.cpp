@@ -54,7 +54,7 @@ CollationMonkeyTest::report(UnicodeString& s, UnicodeString& t, int32_t result, 
         msg += " and ";
         msg += t;
         msg += " round trip comparison failed";
-        msg += (UnicodeString) " (result " + result + ", reverse Result " + revResult + ")"; 
+        msg += UnicodeString(" (result ") + result + ", reverse Result " + revResult + ")";
 
         errln(msg);
     }
@@ -78,7 +78,7 @@ void CollationMonkeyTest::TestCollationKey(/* char* par */)
         return;
     }
 
-    srand( (unsigned)time( nullptr ) );
+    srand(static_cast<unsigned>(time(nullptr)));
     int32_t s = checkValue(rand() % source.length());
     int32_t t = checkValue(rand() % source.length());
     int32_t slen = checkValue((rand() - source.length()) % source.length());
@@ -114,7 +114,7 @@ void CollationMonkeyTest::TestCollationKey(/* char* par */)
 
     UnicodeString msg;
     UnicodeString addOne(subs);
-    addOne += (UChar32)0xE000;
+    addOne += static_cast<UChar32>(0xE000);
 
     myCollator->getCollationKey(subs, collationKey1, status1);
     myCollator->getCollationKey(addOne, collationKey2, status2);
@@ -153,7 +153,7 @@ CollationMonkeyTest::TestCompare(/* char* par */)
     /* Seed the random-number generator with current time so that
      * the numbers will be different every time we run.
      */
-    srand( (unsigned)time( nullptr ) );
+    srand(static_cast<unsigned>(time(nullptr)));
     int32_t s = checkValue(rand() % source.length());
     int32_t t = checkValue(rand() % source.length());
     int32_t slen = checkValue((rand() - source.length()) % source.length());
@@ -180,7 +180,7 @@ CollationMonkeyTest::TestCompare(/* char* par */)
 
     UnicodeString msg;
     UnicodeString addOne(subs);
-    addOne += (UChar32)0xE000;
+    addOne += static_cast<UChar32>(0xE000);
 
     result = myCollator->compare(subs, addOne);
     if (result != -1)
@@ -222,7 +222,7 @@ void CollationMonkeyTest::TestRules(/* char* par */){
     Collator *col = Collator::createInstance("en_US", status);
     const UnicodeString baseRules = (dynamic_cast<RuleBasedCollator*>(col))->getRules();
     UnicodeString newRules(" & z < ");
-    newRules.append((char16_t)0x00e4);
+    newRules.append(static_cast<char16_t>(0x00e4));
     newRules.insert(0, baseRules);
     RuleBasedCollator *myCollation = new RuleBasedCollator(newRules, status);
     if (U_FAILURE(status)) {
@@ -237,7 +237,7 @@ void CollationMonkeyTest::TestRules(/* char* par */){
     logln("Demo Test 2 : Create a new table collation with rules \"& z < a 0x0308\"");
     newRules.remove();
     newRules.append(" & z < a");
-    newRules.append((char16_t)0x0308);
+    newRules.append(static_cast<char16_t>(0x0308));
     newRules.insert(0, baseRules);
     myCollation = new RuleBasedCollator(newRules, status);
     if (U_FAILURE(status)) {

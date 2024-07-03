@@ -216,7 +216,7 @@ void CalendarLimitTest::TestLimitsThread(int32_t threadNum) {
             continue;
         }
         if (uprv_strcmp(cal->getType(), testCase.type) != 0) {
-            errln((UnicodeString)"FAIL: Wrong calendar type: " + cal->getType()
+            errln(UnicodeString("FAIL: Wrong calendar type: ") + cal->getType()
                 + " Requested: " + testCase.type);
             continue;
         }
@@ -251,12 +251,12 @@ CalendarLimitTest::doTheoreticalLimitsTest(Calendar& cal, UBool leapMonth) {
     if (!leapMonth) {
         expected = maxM*maxDOM;
         if (maxDOY > expected) {
-            errln((UnicodeString)"FAIL: [" + calType + "] Maximum value of DAY_OF_YEAR is too big: "
+            errln(UnicodeString("FAIL: [") + calType + "] Maximum value of DAY_OF_YEAR is too big: "
                 + maxDOY + "/expected: <=" + expected);
         }
         expected = lmaxM*lmaxDOM;
         if (lmaxDOW < expected) {
-            errln((UnicodeString)"FAIL: [" + calType + "] Least maximum value of DAY_OF_YEAR is too small: "
+            errln(UnicodeString("FAIL: [") + calType + "] Least maximum value of DAY_OF_YEAR is too small: "
                 + lmaxDOW + "/expected: >=" + expected);
         }
     }
@@ -264,36 +264,36 @@ CalendarLimitTest::doTheoreticalLimitsTest(Calendar& cal, UBool leapMonth) {
     // Week of year
     expected = maxDOY/nDOW + 1;
     if (maxWOY > expected) {
-        errln((UnicodeString)"FAIL: [" + calType + "] Maximum value of WEEK_OF_YEAR is too big: "
+        errln(UnicodeString("FAIL: [") + calType + "] Maximum value of WEEK_OF_YEAR is too big: "
             + maxWOY + "/expected: <=" + expected);
     }
     expected = lmaxDOW/nDOW;
     if (lmaxWOY < expected) {
-        errln((UnicodeString)"FAIL: [" + calType + "] Least maximum value of WEEK_OF_YEAR is too small: "
+        errln(UnicodeString("FAIL: [") + calType + "] Least maximum value of WEEK_OF_YEAR is too small: "
             + lmaxWOY + "/expected >=" + expected);
     }
 
     // Day of week in month
     expected = (maxDOM + nDOW - 1)/nDOW;
     if (maxDOWIM != expected) {
-        errln((UnicodeString)"FAIL: [" + calType + "] Maximum value of DAY_OF_WEEK_IN_MONTH is incorrect: "
+        errln(UnicodeString("FAIL: [") + calType + "] Maximum value of DAY_OF_WEEK_IN_MONTH is incorrect: "
             + maxDOWIM + "/expected: " + expected);
     }
     expected = (lmaxDOM + nDOW - 1)/nDOW;
     if (lmaxDOWIM != expected) {
-        errln((UnicodeString)"FAIL: [" + calType + "] Least maximum value of DAY_OF_WEEK_IN_MONTH is incorrect: "
+        errln(UnicodeString("FAIL: [") + calType + "] Least maximum value of DAY_OF_WEEK_IN_MONTH is incorrect: "
             + lmaxDOWIM + "/expected: " + expected);
     }
 
     // Week of month
     expected = (maxDOM + (nDOW - 1) + (nDOW - minDaysInFirstWeek)) / nDOW;
     if (maxWOM != expected) {
-        errln((UnicodeString)"FAIL: [" + calType + "] Maximum value of WEEK_OF_MONTH is incorrect: "
+        errln(UnicodeString("FAIL: [") + calType + "] Maximum value of WEEK_OF_MONTH is incorrect: "
             + maxWOM + "/expected: " + expected);
     }
     expected = (lmaxDOM + (nDOW - minDaysInFirstWeek)) / nDOW;
     if (lmaxWOM != expected) {
-        errln((UnicodeString)"FAIL: [" + calType + "] Least maximum value of WEEK_OF_MONTH is incorrect: "
+        errln(UnicodeString("FAIL: [") + calType + "] Least maximum value of WEEK_OF_MONTH is incorrect: "
             + lmaxWOM + "/expected: " + expected);
     }
 }
@@ -345,7 +345,7 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
     if (failure(status, "GregorianCalendar::setTime")) {
         return;
     }
-    logln((UnicodeString)"Start: " + startDate);
+    logln(UnicodeString("Start: ") + startDate);
 
     if (fieldsToTest == nullptr) {
         fieldsToTest = FIELDS;
@@ -372,7 +372,7 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
                         : ucal_getNow() < millis;
          ++i) {
         if (ucal_getNow() >= mark) {
-            logln((UnicodeString)"(" + i + " days)");
+            logln(UnicodeString("(") + i + " days)");
             mark += 5000; // 5 sec
         }
         UDate testMillis = greg.getTime(status);
@@ -382,7 +382,7 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
             return;
         }
         for (j = 0; fieldsToTest[j] >= 0; ++j) {
-            UCalendarDateFields f = (UCalendarDateFields)fieldsToTest[j];
+            UCalendarDateFields f = static_cast<UCalendarDateFields>(fieldsToTest[j]);
             int32_t v = cal.get(f, status);
             int32_t minActual = cal.getActualMinimum(f, status);
             int32_t maxActual = cal.getActualMaximum(f, status);
@@ -409,21 +409,21 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
             }
 
             if (minActual < minLow || minActual > minHigh) {
-                errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
+                errln(UnicodeString("Fail: [") + cal.getType() + "] " +
                       ymdToString(cal, ymd) +
                       " Range for min of " + FIELD_NAME[f] + "(" + f +
                       ")=" + minLow + ".." + minHigh +
                       ", actual_min=" + minActual);
             }
             if (maxActual < maxLow || maxActual > maxHigh) {
-                errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
+                errln(UnicodeString("Fail: [") + cal.getType() + "] " +
                       ymdToString(cal, ymd) +
                       " Range for max of " + FIELD_NAME[f] + "(" + f +
                       ")=" + maxLow + ".." + maxHigh +
                       ", actual_max=" + maxActual);
             }
             if (v < minActual || v > maxActual) {
-                errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
+                errln(UnicodeString("Fail: [") + cal.getType() + "] " +
                       ymdToString(cal, ymd) +
                       " " + FIELD_NAME[f] + "(" + f + ")=" + v +
                       ", actual=" + minActual + ".." + maxActual +
@@ -443,10 +443,10 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
     for (j = 0; fieldsToTest[j] >= 0; ++j) {
         int32_t rangeLow, rangeHigh;
         UBool fullRangeSeen = true;
-        UCalendarDateFields f = (UCalendarDateFields)fieldsToTest[j];
+        UCalendarDateFields f = static_cast<UCalendarDateFields>(fieldsToTest[j]);
 
         buf.remove();
-        buf.append((UnicodeString)"[" + cal.getType() + "] " + FIELD_NAME[f]);
+        buf.append(UnicodeString("[") + cal.getType() + "] " + FIELD_NAME[f]);
 
         // Minimum
         rangeLow = cal.getMinimum(f);
@@ -454,8 +454,8 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
         if (limits[j][0] != rangeLow || limits[j][1] != rangeHigh) {
             fullRangeSeen = false;
         }
-        buf.append((UnicodeString)" minima range=" + rangeLow + ".." + rangeHigh);
-        buf.append((UnicodeString)" minima actual=" + limits[j][0] + ".." + limits[j][1]);
+        buf.append(UnicodeString(" minima range=") + rangeLow + ".." + rangeHigh);
+        buf.append(UnicodeString(" minima actual=") + limits[j][0] + ".." + limits[j][1]);
 
         // Maximum
         rangeLow = cal.getLeastMaximum(f);
@@ -463,27 +463,27 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
         if (limits[j][2] != rangeLow || limits[j][3] != rangeHigh) {
             fullRangeSeen = false;
         }
-        buf.append((UnicodeString)" maxima range=" + rangeLow + ".." + rangeHigh);
-        buf.append((UnicodeString)" maxima actual=" + limits[j][2] + ".." + limits[j][3]);
+        buf.append(UnicodeString(" maxima range=") + rangeLow + ".." + rangeHigh);
+        buf.append(UnicodeString(" maxima actual=") + limits[j][2] + ".." + limits[j][3]);
 
         if (fullRangeSeen) {
-            logln((UnicodeString)"OK: " + buf);
+            logln(UnicodeString("OK: ") + buf);
         } else {
             // This may or may not be an error -- if the range of dates
             // we scan over doesn't happen to contain a minimum or
             // maximum, it doesn't mean some other range won't.
-            logln((UnicodeString)"Warning: " + buf);
+            logln(UnicodeString("Warning: ") + buf);
         }
     }
 
-    logln((UnicodeString)"End: " + greg.getTime(status));
+    logln(UnicodeString("End: ") + greg.getTime(status));
 }
 
 UnicodeString&
 CalendarLimitTest::ymdToString(const Calendar& cal, UnicodeString& str) {
     UErrorCode status = U_ZERO_ERROR;
     str.remove();
-    str.append((UnicodeString)"" + cal.get(UCAL_EXTENDED_YEAR, status)
+    str.append(UnicodeString("") + cal.get(UCAL_EXTENDED_YEAR, status)
         + "/" + (cal.get(UCAL_MONTH, status) + 1)
         + (cal.get(UCAL_IS_LEAP_MONTH, status) == 1 ? "(leap)" : "")
         + "/" + cal.get(UCAL_DATE, status)

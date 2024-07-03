@@ -57,7 +57,7 @@ StringSearchPerformanceTest::StringSearchPerformanceTest(int32_t argc, const cha
     }
 
     pttrnLen = end - start;
-    char16_t* temp = (char16_t*)malloc(sizeof(char16_t)*(pttrnLen));
+    char16_t* temp = static_cast<char16_t*>(malloc(sizeof(char16_t) * (pttrnLen)));
     for (int i = 0; i < pttrnLen; i++) {
         temp[i] = src[start++];
     }

@@ -38,7 +38,7 @@
 static UBool U_CALLCONV
 _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 /*end*/, uint32_t /*value*/) {
     /* add the start code point to the USet */
-    const USetAdder *sa=(const USetAdder *)context;
+    const USetAdder* sa = static_cast<const USetAdder*>(context);
     sa->add(sa->set, start);
     return true;
 }

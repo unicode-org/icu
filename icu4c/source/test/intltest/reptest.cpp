@@ -64,7 +64,7 @@ public:
                 if (text.charAt(i) == NO_STYLE_MARK) {
                     s.append(NO_STYLE);
                 } else {
-                    s.append((char16_t)(i + 0x0031));
+                    s.append(static_cast<char16_t>(i + 0x0031));
                 }
             }
         }

@@ -120,7 +120,7 @@ void TimeUnitTest::testBasic() {
              ++style) {
           for (TimeUnit::UTimeUnitFields j = TimeUnit::UTIMEUNIT_YEAR; 
              j < TimeUnit::UTIMEUNIT_FIELD_COUNT; 
-             j = (TimeUnit::UTimeUnitFields)(j+1)) {
+             j = static_cast<TimeUnit::UTimeUnitFields>(j + 1)) {
 #ifdef TUFMTTS_DEBUG
             std::cout << "time unit: " << j << "\n";
 #endif
@@ -198,7 +198,7 @@ void TimeUnitTest::testAPI() {
 
     for (TimeUnit::UTimeUnitFields j = TimeUnit::UTIMEUNIT_YEAR; 
             j < TimeUnit::UTIMEUNIT_FIELD_COUNT; 
-            j = (TimeUnit::UTimeUnitFields)(j+1)) {
+            j = static_cast<TimeUnit::UTimeUnitFields>(j + 1)) {
         MeasureUnit *ptr = TimeUnit::createInstance(j, status);
         if (!assertSuccess("TimeUnit::createInstance", status)) return;
         // We have to convert *ptr to a MeasureUnit or else == will fail over
@@ -219,7 +219,7 @@ void TimeUnitTest::testAPI() {
     //
     //================= TimeUnitAmount =================
 
-    Formattable formattable((int32_t)2);
+    Formattable formattable(static_cast<int32_t>(2));
     TimeUnitAmount tma_long(formattable, TimeUnit::UTIMEUNIT_DAY, status);
     if (!assertSuccess("TimeUnitAmount(formattable...)", status)) return;
 
@@ -426,7 +426,7 @@ void TimeUnitTest::testGreekWithFallback() {
                     u_strToUTF8(tmp1, 128, &len, expected[counter].unescape().getTerminatedBuffer(), expected[counter].unescape().length(), &status);
                     std::cout <<  "Formatted string : " << tmp << " expected : " << tmp1 << "\n";
 #endif
-                    if (!assertEquals("formatted time string is not expected, locale: " + UnicodeString(locales[locIndex]) + " style: " + (int)styles[styleIndex] + " units: " + (int)tunits[unitIndex], expected[counter], str)) {
+                    if (!assertEquals("formatted time string is not expected, locale: " + UnicodeString(locales[locIndex]) + " style: " + static_cast<int>(styles[styleIndex]) + " units: " + static_cast<int>(tunits[unitIndex]), expected[counter], str)) {
                         str.remove();
                         return;
                     }

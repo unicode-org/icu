@@ -68,9 +68,9 @@ _enumTypeValue(const void *context, uint32_t value) {
 static UBool U_CALLCONV
 _enumTypeRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {
     /* just cast the value to UCharCategory */
-    return ((struct _EnumTypeCallback *)context)->
-        enumRange(((struct _EnumTypeCallback *)context)->context,
-                  start, end+1, (UCharCategory)value);
+    return static_cast<const _EnumTypeCallback*>(context)->
+        enumRange(static_cast<const _EnumTypeCallback*>(context)->context,
+                  start, end + 1, static_cast<UCharCategory>(value));
 }
 
 U_CAPI void U_EXPORT2
@@ -637,7 +637,7 @@ ublock_getCode(UChar32 c) {
 static UBool U_CALLCONV
 _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {
     /* add the start code point to the USet */
-    const USetAdder *sa=(const USetAdder *)context;
+    const USetAdder* sa = static_cast<const USetAdder*>(context);
     sa->add(sa->set, start);
     (void)end;
     (void)value;

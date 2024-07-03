@@ -175,8 +175,8 @@ typedef union {
     int64_t i64; /* This must be defined first in order to allow the initialization to work. This is a C89 feature. */
     double d64;
 } BitPatternConversion;
-static const BitPatternConversion gNan = { (int64_t) INT64_C(0x7FF8000000000000) };
-static const BitPatternConversion gInf = { (int64_t) INT64_C(0x7FF0000000000000) };
+static const BitPatternConversion gNan = {static_cast<int64_t>(INT64_C(0x7FF8000000000000))};
+static const BitPatternConversion gInf = {static_cast<int64_t>(INT64_C(0x7FF0000000000000))};
 
 /*---------------------------------------------------------------------------
   Platform utilities
@@ -225,7 +225,7 @@ u_signBit(double d) {
 #if U_IS_BIG_ENDIAN
     hiByte = *(uint8_t *)&d;
 #else
-    hiByte = *(((uint8_t *)&d) + sizeof(double) - 1);
+    hiByte = *(reinterpret_cast<uint8_t*>(&d) + sizeof(double) - 1);
 #endif
     return (hiByte & 0x80) != 0;
 }
@@ -744,7 +744,7 @@ static UBool isValidOlsonID(const char *id) {
     The timezone is sometimes set to "CST-7CDT", "CST6CDT5,J129,J131/19:30",
     "GRNLNDST3GRNLNDDT" or similar, so we cannot use it.
     The rest of the time it could be an Olson ID. George */
-    return (UBool)(id[idx] == 0
+    return static_cast<UBool>(id[idx] == 0
         || uprv_strcmp(id, "PST8PDT") == 0
         || uprv_strcmp(id, "MST7MDT") == 0
         || uprv_strcmp(id, "CST6CDT") == 0
@@ -927,7 +927,7 @@ static UBool compareBinaryFiles(const char* defaultTZFileName, const char* TZFil
              */
             if (tzInfo->defaultTZBuffer == nullptr) {
                 rewind(tzInfo->defaultTZFilePtr);
-                tzInfo->defaultTZBuffer = (char*)uprv_malloc(sizeof(char) * tzInfo->defaultTZFileSize);
+                tzInfo->defaultTZBuffer = static_cast<char*>(uprv_malloc(sizeof(char) * tzInfo->defaultTZFileSize));
                 sizeFileRead = fread(tzInfo->defaultTZBuffer, 1, tzInfo->defaultTZFileSize, tzInfo->defaultTZFilePtr);
             }
             rewind(file);

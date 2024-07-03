@@ -226,7 +226,7 @@ char * StringSearchTest::toCharString(const UnicodeString &text)
     for (; count < length; count ++) {
         char16_t ch = text[count];
         if (ch >= 0x20 && ch <= 0x7e) {
-            result[index ++] = (char)ch;
+            result[index++] = static_cast<char>(ch);
         }
         else {
             snprintf(result+index, sizeof(result)-index, "\\u%04x", ch);
@@ -2210,7 +2210,7 @@ void StringSearchTest::TestContractionCanonical()
 
 void StringSearchTest::TestUClassID()
 {
-    char id = *((char *)StringSearch::getStaticClassID());
+    char id = *static_cast<char*>(StringSearch::getStaticClassID());
     if (id != 0) {
         errln("Static class id for StringSearch should be 0");
     }
@@ -2219,7 +2219,7 @@ void StringSearchTest::TestUClassID()
     UnicodeString  pattern("pattern");
     StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, nullptr, 
                                               status);
-    id = *((char *)strsrch->getDynamicClassID());
+    id = *static_cast<char*>(strsrch->getDynamicClassID());
     if (id != 0) {
         errln("Dynamic class id for StringSearch should be 0");
     }

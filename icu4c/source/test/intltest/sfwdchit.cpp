@@ -96,7 +96,7 @@ int32_t SimpleFwdCharIterator::hashCode() const {
     {
         UHashTok key;
         key.pointer = fStart;
-        ((SimpleFwdCharIterator *)this)->fHashCode = uhash_hashUChars(key);
+        const_cast<SimpleFwdCharIterator*>(this)->fHashCode = uhash_hashUChars(key);
     }
     return fHashCode;
 }

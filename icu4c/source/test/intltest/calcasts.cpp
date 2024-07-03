@@ -95,14 +95,14 @@ UBool CalendarCaseTest::checkField(Calendar *cal, UCalendarDateFields field, int
   if(U_FAILURE(status)) return false;
   int32_t res = cal->get(field, status);
   if(U_FAILURE(status)) {
-    errln((UnicodeString)"Checking field " + fieldName(field) + " and got " + u_errorName(status));
+    errln(UnicodeString("Checking field ") + fieldName(field) + " and got " + u_errorName(status));
     return false;
   }
   if(res != value) {
-    errln((UnicodeString)"FAIL: Checking field " + fieldName(field) + " expected " + value + " and got " + res + UnicodeString("\n"));
+    errln(UnicodeString("FAIL: Checking field ") + fieldName(field) + " expected " + value + " and got " + res + UnicodeString("\n"));
     return false;
   } else {
-    logln((UnicodeString)"Checking field " + fieldName(field) + " == " + value + UnicodeString("\n"));
+    logln(UnicodeString("Checking field ") + fieldName(field) + " == " + value + UnicodeString("\n"));
   }
   return true;
 }
@@ -183,9 +183,9 @@ void CalendarCaseTest::IslamicCivil()
     }
 
     fmt->setTimeZone(*TimeZone::getGMT());
-    fmt->format((UDate)2486076.5, result);
+    fmt->format(static_cast<UDate>(2486076.5), result);
     if (result != expectedUChars) {
-        errln((UnicodeString)"FAIL: DateFormatting failed. Got " + result + " and expected " + UnicodeString(expectedUChars) + UnicodeString("\n"));
+        errln(UnicodeString("FAIL: DateFormatting failed. Got ") + result + " and expected " + UnicodeString(expectedUChars) + UnicodeString("\n"));
         errln("Maybe the resource aliasing isn't working");
     }
     delete fmt;

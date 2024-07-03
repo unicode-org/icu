@@ -90,14 +90,14 @@ void CollationRegressionTest::Test4051866(/* char* par */)
 
     rules += "&n < o ";
     rules += "& oe ,o";
-    rules += (char16_t)0x3080;
+    rules += static_cast<char16_t>(0x3080);
     rules += "& oe ,";
-    rules += (char16_t)0x1530;
+    rules += static_cast<char16_t>(0x1530);
     rules += " ,O";
     rules += "& OE ,O";
-    rules += (char16_t)0x3080;
+    rules += static_cast<char16_t>(0x3080);
     rules += "& OE ,";
-    rules += (char16_t)0x1520;
+    rules += static_cast<char16_t>(0x1520);
     rules += "< p ,P";
 
     // Build a collator containing expanding characters
@@ -300,9 +300,9 @@ void CollationRegressionTest::Test4060154(/* char* par */)
 
     rules += "&f < g, G < h, H < i, I < j, J";
     rules +=  " & H < ";
-    rules += (char16_t)0x0131;
+    rules += static_cast<char16_t>(0x0131);
     rules += ", ";
-    rules += (char16_t)0x0130;
+    rules += static_cast<char16_t>(0x0130);
     rules += ", i, I";
 
     RuleBasedCollator *c = nullptr;
@@ -554,8 +554,8 @@ void CollationRegressionTest::Test4078588(/* char *par */)
 
     if (result != Collator::LESS)
     {
-        errln((UnicodeString)"Compare(a,bb) returned " + (int)result
-            + (UnicodeString)"; expected -1");
+        errln(UnicodeString("Compare(a,bb) returned ") + static_cast<int>(result)
+            + UnicodeString("; expected -1"));
     }
 
     delete rbc;
@@ -1199,10 +1199,10 @@ void CollationRegressionTest::caseFirstCompressionSub(Collator *col, UnicodeStri
     for (int32_t len = 1; len <= maxLength; len++) {
         int32_t i = 0;
         for (; i < len - 1; i++) {
-            str1[i] = str2[i] = (char16_t)0x61; // 'a'
+            str1[i] = str2[i] = static_cast<char16_t>(0x61); // 'a'
         }
-        str1[i] = (char16_t)0x41; // 'A'
-        str2[i] = (char16_t)0x61; // 'a'
+        str1[i] = static_cast<char16_t>(0x41); // 'A'
+        str2[i] = static_cast<char16_t>(0x61); // 'a'
 
         UErrorCode status = U_ZERO_ERROR;
         col->getCollationKey(str1, len, key1, status);
@@ -1214,7 +1214,7 @@ void CollationRegressionTest::caseFirstCompressionSub(Collator *col, UnicodeStri
         if (U_FAILURE(status)) {
             errln("Error in caseFirstCompressionSub");
         } else if (cmpKey != cmpCol) {
-            errln((UnicodeString)"Inconsistent comparison(" + opt
+            errln(UnicodeString("Inconsistent comparison(") + opt
                 + "): str1=" + UnicodeString(str1, len) + ", str2=" + UnicodeString(str2, len)
                 + ", cmpKey=" + cmpKey + ", cmpCol=" + cmpCol);
         }
@@ -1226,7 +1226,7 @@ void CollationRegressionTest::TestTrailingComment() {
     // Check that the rule parser handles a comment without terminating end-of-line.
     IcuTestErrorCode errorCode(*this, "TestTrailingComment");
     RuleBasedCollator coll(UNICODE_STRING_SIMPLE("&c<b#comment1\n<a#comment2"), errorCode);
-    UnicodeString a((char16_t)0x61), b((char16_t)0x62), c((char16_t)0x63);
+    UnicodeString a(static_cast<char16_t>(0x61)), b(static_cast<char16_t>(0x62)), c(static_cast<char16_t>(0x63));
     assertTrue("c<b", coll.compare(c, b) < 0);
     assertTrue("b<a", coll.compare(b, a) < 0);
 }

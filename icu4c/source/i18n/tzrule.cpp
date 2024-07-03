@@ -591,7 +591,7 @@ TimeArrayTimeZoneRule::initStartTimes(const UDate source[], int32_t size, UError
     }
     // Allocate new one if needed
     if (size > TIMEARRAY_STACK_BUFFER_SIZE) {
-        fStartTimes = (UDate*)uprv_malloc(sizeof(UDate)*size);
+        fStartTimes = static_cast<UDate*>(uprv_malloc(sizeof(UDate) * size));
         if (fStartTimes == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             fNumStartTimes = 0;
@@ -603,7 +603,7 @@ TimeArrayTimeZoneRule::initStartTimes(const UDate source[], int32_t size, UError
     uprv_memcpy(fStartTimes, source, sizeof(UDate)*size);
     fNumStartTimes = size;
     // Sort dates
-    uprv_sortArray(fStartTimes, fNumStartTimes, (int32_t)sizeof(UDate), compareDates, nullptr, true, &status);
+    uprv_sortArray(fStartTimes, fNumStartTimes, static_cast<int32_t>(sizeof(UDate)), compareDates, nullptr, true, &status);
     if (U_FAILURE(status)) {
         if (fStartTimes != nullptr && fStartTimes != fLocalStartTimes) {
             uprv_free(fStartTimes);

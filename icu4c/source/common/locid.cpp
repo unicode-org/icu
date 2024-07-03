@@ -109,7 +109,7 @@ namespace {
 //
 void U_CALLCONV
 deleteLocale(void *obj) {
-    delete (icu::Locale *) obj;
+    delete static_cast<icu::Locale*>(obj);
 }
 
 UBool U_CALLCONV locale_cleanup()
@@ -132,7 +132,7 @@ void U_CALLCONV locale_init(UErrorCode &status) {
     U_NAMESPACE_USE
 
     U_ASSERT(gLocaleCache == nullptr);
-    gLocaleCache = new Locale[(int)eMAX_LOCALES];
+    gLocaleCache = new Locale[static_cast<int>(eMAX_LOCALES)];
     if (gLocaleCache == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -194,7 +194,7 @@ Locale *locale_set_default_internal(const char *id, UErrorCode& status) {
         ucln_common_registerCleanup(UCLN_COMMON_LOCALE, locale_cleanup);
     }
 
-    Locale *newDefault = (Locale *)uhash_get(gDefaultLocalesHashT, localeNameBuf.data());
+    Locale* newDefault = static_cast<Locale*>(uhash_get(gDefaultLocalesHashT, localeNameBuf.data()));
     if (newDefault == nullptr) {
         newDefault = new Locale(Locale::eBOGUS);
         if (newDefault == nullptr) {
@@ -202,7 +202,7 @@ Locale *locale_set_default_internal(const char *id, UErrorCode& status) {
             return gDefaultLocale;
         }
         newDefault->init(localeNameBuf.data(), false);
-        uhash_put(gDefaultLocalesHashT, (char*) newDefault->getName(), newDefault, &status);
+        uhash_put(gDefaultLocalesHashT, const_cast<char*>(newDefault->getName()), newDefault, &status);
         if (U_FAILURE(status)) {
             return gDefaultLocale;
         }
@@ -296,7 +296,7 @@ Locale::Locale( const   char * newLanguage,
         // Language
         if ( newLanguage != nullptr )
         {
-            lsize = (int32_t)uprv_strlen(newLanguage);
+            lsize = static_cast<int32_t>(uprv_strlen(newLanguage));
             if ( lsize < 0 || lsize > ULOC_STRING_LIMIT ) { // int32 wrap
                 setToBogus();
                 return;
@@ -308,7 +308,7 @@ Locale::Locale( const   char * newLanguage,
         // _Country
         if ( newCountry != nullptr )
         {
-            csize = (int32_t)uprv_strlen(newCountry);
+            csize = static_cast<int32_t>(uprv_strlen(newCountry));
             if ( csize < 0 || csize > ULOC_STRING_LIMIT ) { // int32 wrap
                 setToBogus();
                 return;
@@ -325,7 +325,7 @@ Locale::Locale( const   char * newLanguage,
             }
 
             // remove trailing _'s
-            vsize = (int32_t)uprv_strlen(newVariant);
+            vsize = static_cast<int32_t>(uprv_strlen(newVariant));
             if ( vsize < 0 || vsize > ULOC_STRING_LIMIT ) { // int32 wrap
                 setToBogus();
                 return;
@@ -338,7 +338,7 @@ Locale::Locale( const   char * newLanguage,
 
         if ( newKeywords != nullptr)
         {
-            ksize = (int32_t)uprv_strlen(newKeywords);
+            ksize = static_cast<int32_t>(uprv_strlen(newKeywords));
             if ( ksize < 0 || ksize > ULOC_STRING_LIMIT ) {
               setToBogus();
               return;
@@ -1200,8 +1200,8 @@ AliasReplacer::parseLanguageReplacement(
         return;
     }
     // We have multiple field so we have to allocate and parse
-    CharString* str = new CharString(
-        replacement, (int32_t)uprv_strlen(replacement), status);
+    CharString* str =
+        new CharString(replacement, static_cast<int32_t>(uprv_strlen(replacement)), status);
     LocalPointer<CharString> lpStr(str, status);
     toBeFreed.adoptElement(lpStr.orphan(), status);
     if (U_FAILURE(status)) {
@@ -1213,7 +1213,7 @@ AliasReplacer::parseLanguageReplacement(
     *endOfField = '\0'; // null terminiate it.
     endOfField++;
     const char* start = endOfField;
-    endOfField = (char*) uprv_strchr(start, '_');
+    endOfField = const_cast<char*>(uprv_strchr(start, '_'));
     size_t len = 0;
     if (endOfField == nullptr) {
         len = uprv_strlen(start);
@@ -1228,7 +1228,7 @@ AliasReplacer::parseLanguageReplacement(
             return;
         }
         start = endOfField++;
-        endOfField = (char*)uprv_strchr(start, '_');
+        endOfField = const_cast<char*>(uprv_strchr(start, '_'));
         if (endOfField == nullptr) {
             len = uprv_strlen(start);
         } else {
@@ -1243,7 +1243,7 @@ AliasReplacer::parseLanguageReplacement(
             return;
         }
         start = endOfField++;
-        endOfField = (char*)uprv_strchr(start, '_');
+        endOfField = const_cast<char*>(uprv_strchr(start, '_'));
         if (endOfField == nullptr) {
             len = uprv_strlen(start);
         } else {
@@ -1285,7 +1285,7 @@ AliasReplacer::replaceLanguage(
             variant_index++) {
         if (checkVariants) {
             U_ASSERT(variant_index < variant_size);
-            searchVariant = (const char*)(variants.elementAt(variant_index));
+            searchVariant = static_cast<const char*>(variants.elementAt(variant_index));
         }
 
         if (searchVariant != nullptr && uprv_strlen(searchVariant) < 4) {
@@ -1406,13 +1406,13 @@ AliasReplacer::replaceTerritory(UVector& toBeFreed, UErrorCode& status)
                 U_ASSERT(foundInReplacement[len] == ' ' ||
                          foundInReplacement[len] == '\0');
                 item.adoptInsteadAndCheckErrorCode(
-                    new CharString(foundInReplacement, (int32_t)len, status), status);
+                    new CharString(foundInReplacement, static_cast<int32_t>(len), status), status);
             }
         }
         if (item.isNull() && U_SUCCESS(status)) {
             item.adoptInsteadAndCheckErrorCode(
                 new CharString(replacement,
-                               (int32_t)(firstSpace - replacement), status), status);
+                               static_cast<int32_t>(firstSpace - replacement), status), status);
         }
         if (U_FAILURE(status)) { return false; }
         replacedRegion = item->data();
@@ -1454,7 +1454,7 @@ AliasReplacer::replaceVariant(UErrorCode& status)
     }
     // Since we may have more than one variant, we need to loop through them.
     for (int32_t i = 0; i < variants.size(); i++) {
-        const char *variant = (const char*)(variants.elementAt(i));
+        const char* variant = static_cast<const char*>(variants.elementAt(i));
         const char *replacement = data->variantMap().get(variant);
         if (replacement == nullptr) {
             // Found no replacement data for this variant.
@@ -1496,7 +1496,7 @@ AliasReplacer::replaceSubdivision(
         size_t len = (firstSpace != nullptr) ?
             (firstSpace - replacement) : uprv_strlen(replacement);
         if (2 <= len && len <= 8) {
-            output.append(replacement, (int32_t)len, status);
+            output.append(replacement, static_cast<int32_t>(len), status);
             if (2 == len) {
                 // Add 'zzzz' based on changes to UTS #35 for CLDR-14312.
                 output.append("zzzz", 4, status);
@@ -1546,7 +1546,7 @@ AliasReplacer::replaceTransformedExtensions(
             }
             const char* nextTKey = ultag_getTKeyStart(tvalue);
             if (nextTKey != nullptr) {
-                *((char*)(nextTKey-1)) = '\0';  // NUL terminate tvalue
+                *const_cast<char*>(nextTKey - 1) = '\0'; // NUL terminate tvalue
             }
             tfields.insertElementAt((void*)tkey, tfields.size(), status);
             if (U_FAILURE(status)) {
@@ -1561,14 +1561,14 @@ AliasReplacer::replaceTransformedExtensions(
              if (output.length() > 0) {
                  output.append('-', status);
              }
-             const char* tfield = (const char*) tfields.elementAt(i);
+             const char* tfield = static_cast<const char*>(tfields.elementAt(i));
              const char* tvalue = uprv_strchr(tfield, '-');
              if (tvalue == nullptr) {
                  status = U_ILLEGAL_ARGUMENT_ERROR;
                  return false;
              }
              // Split the "tkey-tvalue" pair string so that we can canonicalize the tvalue.
-             *((char*)tvalue++) = '\0'; // NUL terminate tkey
+             *const_cast<char*>(tvalue++) = '\0'; // NUL terminate tkey
              output.append(tfield, status).append('-', status);
              const char* bcpTValue = ulocimp_toBcpType(tfield, tvalue, nullptr, nullptr);
              output.append((bcpTValue == nullptr) ? tvalue : bcpTValue, status);
@@ -1604,7 +1604,7 @@ AliasReplacer::outputToString(
         int32_t variantsStart = out.length();
         for (int32_t i = 0; i < variants.size(); i++) {
              out.append(SEP_CHAR, status)
-                 .append((const char*)(variants.elementAt(i)),
+                 .append(static_cast<const char*>(variants.elementAt(i)),
                          status);
         }
         T_CString_toUpperCase(out.data() + variantsStart);
@@ -1673,7 +1673,7 @@ AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode& status
     int changed = 0;
     // A UVector to to hold CharString allocated by the replace* method
     // and freed when out of scope from his function.
-    UVector stringsToBeFreed([](void *obj){ delete ((CharString*) obj); },
+    UVector stringsToBeFreed([](void *obj) { delete static_cast<CharString*>(obj); },
                              nullptr, 10, status);
     while (U_SUCCESS(status)) {
         // Something wrong with the data cause looping here more than 10 times
@@ -1866,10 +1866,10 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
             uloc_canonicalize(localeID, fullName, sizeof(fullNameBuffer), &err) :
             uloc_getName(localeID, fullName, sizeof(fullNameBuffer), &err);
 
-        if(err == U_BUFFER_OVERFLOW_ERROR || length >= (int32_t)sizeof(fullNameBuffer)) {
+        if (err == U_BUFFER_OVERFLOW_ERROR || length >= static_cast<int32_t>(sizeof(fullNameBuffer))) {
             U_ASSERT(baseName == nullptr);
             /*Go to heap for the fullName if necessary*/
-            char* newFullName = (char *)uprv_malloc(sizeof(char)*(length + 1));
+            char* newFullName = static_cast<char*>(uprv_malloc(sizeof(char) * (length + 1)));
             if (newFullName == nullptr) {
                 break; // error: out of memory
             }
@@ -1895,7 +1895,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
                fieldIdx < UPRV_LENGTHOF(field)-1 &&
                (at == nullptr || separator < at)) {
             field[fieldIdx] = separator + 1;
-            fieldLen[fieldIdx-1] = (int32_t)(separator - field[fieldIdx-1]);
+            fieldLen[fieldIdx - 1] = static_cast<int32_t>(separator - field[fieldIdx - 1]);
             fieldIdx++;
         }
         // variant may contain @foo or .foo POSIX cruft; remove it
@@ -1905,12 +1905,12 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
             if (separator==nullptr || (sep2!=nullptr && separator > sep2)) {
                 separator = sep2;
             }
-            fieldLen[fieldIdx-1] = (int32_t)(separator - field[fieldIdx-1]);
+            fieldLen[fieldIdx - 1] = static_cast<int32_t>(separator - field[fieldIdx - 1]);
         } else {
-            fieldLen[fieldIdx-1] = length - (int32_t)(field[fieldIdx-1] - fullName);
+            fieldLen[fieldIdx - 1] = length - static_cast<int32_t>(field[fieldIdx - 1] - fullName);
         }
 
-        if (fieldLen[0] >= (int32_t)(sizeof(language)))
+        if (fieldLen[0] >= static_cast<int32_t>(sizeof(language)))
         {
             break; // error: the language field is too long
         }
@@ -1941,7 +1941,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
 
         if (fieldLen[variantField] > 0) {
             /* We have a variant */
-            variantBegin = (int32_t)(field[variantField] - fullName);
+            variantBegin = static_cast<int32_t>(field[variantField] - fullName);
         }
 
         err = U_ZERO_ERROR;
@@ -1991,8 +1991,8 @@ Locale::initBaseName(UErrorCode &status) {
     const char *eqPtr = uprv_strchr(fullName, '=');
     if (atPtr && eqPtr && atPtr < eqPtr) {
         // Key words exist.
-        int32_t baseNameLength = (int32_t)(atPtr - fullName);
-        char* newBaseName = (char *)uprv_malloc(baseNameLength + 1);
+        int32_t baseNameLength = static_cast<int32_t>(atPtr - fullName);
+        char* newBaseName = static_cast<char*>(uprv_malloc(baseNameLength + 1));
         if (newBaseName == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -2435,7 +2435,7 @@ public:
         UErrorCode status = U_ZERO_ERROR;
         return new KeywordEnumeration(
                 keywords.data(), keywords.length(),
-                (int32_t)(current - keywords.data()), status);
+                static_cast<int32_t>(current - keywords.data()), status);
     }
 
     virtual int32_t count(UErrorCode& status) const override {
@@ -2454,7 +2454,7 @@ public:
         int32_t len;
         if(U_SUCCESS(status) && *current != 0) {
             result = current;
-            len = (int32_t)uprv_strlen(current);
+            len = static_cast<int32_t>(uprv_strlen(current));
             current += len+1;
             if(resultLength != nullptr) {
                 *resultLength = len;
@@ -2652,14 +2652,15 @@ Locale::setKeywordValue(const char* keywordName, const char* keywordValue, UErro
     if (status == U_STRING_NOT_TERMINATED_WARNING) {
         status = U_ZERO_ERROR;
     }
-    int32_t bufferLength = uprv_max((int32_t)(uprv_strlen(fullName) + 1), ULOC_FULLNAME_CAPACITY);
+    int32_t bufferLength =
+        uprv_max(static_cast<int32_t>(uprv_strlen(fullName) + 1), ULOC_FULLNAME_CAPACITY);
     int32_t newLength = uloc_setKeywordValue(keywordName, keywordValue, fullName,
                                              bufferLength, &status) + 1;
     U_ASSERT(status != U_STRING_NOT_TERMINATED_WARNING);
     /* Handle the case the current buffer is not enough to hold the new id */
     if (status == U_BUFFER_OVERFLOW_ERROR) {
         U_ASSERT(newLength > bufferLength);
-        char* newFullName = (char *)uprv_malloc(newLength);
+        char* newFullName = static_cast<char*>(uprv_malloc(newLength));
         if (newFullName == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;

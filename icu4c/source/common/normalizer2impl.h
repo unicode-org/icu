@@ -81,10 +81,10 @@ public:
         return 0<=c && c<HANGUL_COUNT && c%JAMO_T_COUNT==0;
     }
     static inline UBool isJamoL(UChar32 c) {
-        return (uint32_t)(c-JAMO_L_BASE)<JAMO_L_COUNT;
+        return static_cast<uint32_t>(c - JAMO_L_BASE) < JAMO_L_COUNT;
     }
     static inline UBool isJamoV(UChar32 c) {
-        return (uint32_t)(c-JAMO_V_BASE)<JAMO_V_COUNT;
+        return static_cast<uint32_t>(c - JAMO_V_BASE) < JAMO_V_COUNT;
     }
     static inline UBool isJamoT(UChar32 c) {
         int32_t t=c-JAMO_T_BASE;
@@ -103,12 +103,12 @@ public:
         c-=HANGUL_BASE;
         UChar32 c2=c%JAMO_T_COUNT;
         c/=JAMO_T_COUNT;
-        buffer[0]=(char16_t)(JAMO_L_BASE+c/JAMO_V_COUNT);
-        buffer[1]=(char16_t)(JAMO_V_BASE+c%JAMO_V_COUNT);
+        buffer[0] = static_cast<char16_t>(JAMO_L_BASE + c / JAMO_V_COUNT);
+        buffer[1] = static_cast<char16_t>(JAMO_V_BASE + c % JAMO_V_COUNT);
         if(c2==0) {
             return 2;
         } else {
-            buffer[2]=(char16_t)(JAMO_T_BASE+c2);
+            buffer[2] = static_cast<char16_t>(JAMO_T_BASE + c2);
             return 3;
         }
     }
@@ -123,11 +123,11 @@ public:
         UChar32 c2=c%JAMO_T_COUNT;
         if(c2==0) {
             c/=JAMO_T_COUNT;
-            buffer[0]=(char16_t)(JAMO_L_BASE+c/JAMO_V_COUNT);
-            buffer[1]=(char16_t)(JAMO_V_BASE+c%JAMO_V_COUNT);
+            buffer[0] = static_cast<char16_t>(JAMO_L_BASE + c / JAMO_V_COUNT);
+            buffer[1] = static_cast<char16_t>(JAMO_V_BASE + c % JAMO_V_COUNT);
         } else {
-            buffer[0]=(char16_t)(orig-c2);  // LV syllable
-            buffer[1]=(char16_t)(JAMO_T_BASE+c2);
+            buffer[0] = static_cast<char16_t>(orig - c2); // LV syllable
+            buffer[1] = static_cast<char16_t>(JAMO_T_BASE + c2);
         }
     }
 private:
@@ -147,13 +147,13 @@ public:
     ReorderingBuffer(const Normalizer2Impl &ni, UnicodeString &dest, UErrorCode &errorCode);
     ~ReorderingBuffer() {
         if (start != nullptr) {
-            str.releaseBuffer((int32_t)(limit-start));
+            str.releaseBuffer(static_cast<int32_t>(limit - start));
         }
     }
     UBool init(int32_t destCapacity, UErrorCode &errorCode);
 
     UBool isEmpty() const { return start==limit; }
-    int32_t length() const { return (int32_t)(limit-start); }
+    int32_t length() const { return static_cast<int32_t>(limit - start); }
     char16_t *getStart() { return start; }
     char16_t *getLimit() { return limit; }
     uint8_t getLastCC() const { return lastCC; }
@@ -163,7 +163,7 @@ public:
 
     UBool append(UChar32 c, uint8_t cc, UErrorCode &errorCode) {
         return (c<=0xffff) ?
-            appendBMP((char16_t)c, cc, errorCode) :
+            appendBMP(static_cast<char16_t>(c), cc, errorCode) :
             appendSupplementary(c, cc, errorCode);
     }
     UBool append(const char16_t *s, int32_t length, UBool isNFD,
@@ -190,12 +190,12 @@ public:
     void remove();
     void removeSuffix(int32_t suffixLength);
     void setReorderingLimit(char16_t *newLimit) {
-        remainingCapacity+=(int32_t)(limit-newLimit);
+        remainingCapacity += static_cast<int32_t>(limit - newLimit);
         reorderStart=limit=newLimit;
         lastCC=0;
     }
     void copyReorderableSuffixTo(UnicodeString &s) const {
-        s.setTo(ConstChar16Ptr(reorderStart), (int32_t)(limit-reorderStart));
+        s.setTo(ConstChar16Ptr(reorderStart), static_cast<int32_t>(limit - reorderStart));
     }
 private:
     /*
@@ -215,7 +215,7 @@ private:
     void insert(UChar32 c, uint8_t cc);
     static void writeCodePoint(char16_t *p, UChar32 c) {
         if(c<=0xffff) {
-            *p=(char16_t)c;
+            *p = static_cast<char16_t>(c);
         } else {
             p[0]=U16_LEAD(c);
             p[1]=U16_TRAIL(c);
@@ -291,7 +291,7 @@ public:
         return getCCFromNoNo(norm16);
     }
     static uint8_t getCCFromNormalYesOrMaybe(uint16_t norm16) {
-        return (uint8_t)(norm16 >> OFFSET_SHIFT);
+        return static_cast<uint8_t>(norm16 >> OFFSET_SHIFT);
     }
     static uint8_t getCCFromYesOrMaybeYes(uint16_t norm16) {
         return norm16>=MIN_NORMAL_MAYBE_YES ? getCCFromNormalYesOrMaybe(norm16) : 0;
@@ -364,7 +364,7 @@ public:
         // 0<=lead<=0xffff
         uint8_t bits=smallFCD[lead>>8];
         if(bits==0) { return false; }
-        return (UBool)((bits>>((lead>>5)&7))&1);
+        return static_cast<UBool>((bits >> ((lead >> 5) & 7)) & 1);
     }
     /** Returns the FCD value from the regular normalization data. */
     uint16_t getFCD16FromNormData(UChar32 c) const;
@@ -603,7 +603,7 @@ private:
     uint8_t getCCFromNoNo(uint16_t norm16) const {
         const uint16_t *mapping=getDataForYesOrNo(norm16);
         if(*mapping&MAPPING_HAS_CCC_LCCC_WORD) {
-            return (uint8_t)*(mapping-1);
+            return static_cast<uint8_t>(*(mapping - 1));
         } else {
             return 0;
         }
@@ -614,7 +614,7 @@ private:
             return 0;  // yesYes and Hangul LV have ccc=tccc=0
         } else {
             // For Hangul LVT we harmlessly fetch a firstUnit with tccc=0 here.
-            return (uint8_t)(*getDataForYesOrNo(norm16)>>8);  // tccc from yesNo
+            return static_cast<uint8_t>(*getDataForYesOrNo(norm16) >> 8); // tccc from yesNo
         }
     }
     uint8_t getPreviousTrailCC(const char16_t *start, const char16_t *p) const;

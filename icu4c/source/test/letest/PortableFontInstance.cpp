@@ -110,7 +110,7 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
 //  const NAMETable *nameTable = nullptr;
     le_uint16 numTables = 0;
 
-    fDirectory = (const SFNTDirectory *) LE_NEW_ARRAY(char, dirSize);
+    fDirectory = reinterpret_cast<const SFNTDirectory*>(LE_NEW_ARRAY(char, dirSize));
 
     if (fDirectory == nullptr) {
         printf("%s:%d: %s: malloc err\n", __FILE__, __LINE__, fileName);
@@ -130,7 +130,7 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
     fDirExtra = numTables - fDirPower;
 
     // read unitsPerEm from 'head' table
-    headTable = (const HEADTable *) readFontTable(headTag);
+    headTable = static_cast<const HEADTable*>(readFontTable(headTag));
 
     if (headTable == nullptr) {
         status = LE_MISSING_FONT_TABLE_ERROR;
@@ -166,9 +166,9 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
         goto error_exit;
     }
 
-    fAscent  = (le_int32) yUnitsToPoints((float) SWAPW(hheaTable->ascent));
-    fDescent = (le_int32) yUnitsToPoints((float) SWAPW(hheaTable->descent));
-    fLeading = (le_int32) yUnitsToPoints((float) SWAPW(hheaTable->lineGap));
+    fAscent = static_cast<le_int32>(yUnitsToPoints(static_cast<float>(SWAPW(hheaTable->ascent))));
+    fDescent = static_cast<le_int32>(yUnitsToPoints(static_cast<float>(SWAPW(hheaTable->descent))));
+    fLeading = static_cast<le_int32>(yUnitsToPoints(static_cast<float>(SWAPW(hheaTable->lineGap))));
 
     fNumLongHorMetrics = SWAPW(hheaTable->numOfLongHorMetrics);
 
@@ -283,9 +283,9 @@ const char *PortableFontInstance::getNameString(le_uint16 nameID, le_uint16 plat
 {
     if (fNAMETable == nullptr) {
         LETag nameTag = LE_NAME_TABLE_TAG;
-        PortableFontInstance *realThis = (PortableFontInstance *) this;
+        PortableFontInstance* realThis = const_cast<PortableFontInstance*>(this);
 
-        realThis->fNAMETable = (const NAMETable *) readFontTable(nameTag);
+        realThis->fNAMETable = static_cast<const NAMETable*>(readFontTable(nameTag));
 
         if (realThis->fNAMETable != nullptr) {
             realThis->fNameCount        = SWAPW(realThis->fNAMETable->count);
@@ -316,9 +316,9 @@ const LEUnicode16 *PortableFontInstance::getUnicodeNameString(le_uint16 nameID, 
 {
     if (fNAMETable == nullptr) {
         LETag nameTag = LE_NAME_TABLE_TAG;
-        PortableFontInstance *realThis = (PortableFontInstance *) this;
+        PortableFontInstance* realThis = const_cast<PortableFontInstance*>(this);
 
-        realThis->fNAMETable = (const NAMETable *) readFontTable(nameTag);
+        realThis->fNAMETable = static_cast<const NAMETable*>(readFontTable(nameTag));
 
         if (realThis->fNAMETable != nullptr) {
             realThis->fNameCount        = SWAPW(realThis->fNAMETable->count);
@@ -331,7 +331,7 @@ const LEUnicode16 *PortableFontInstance::getUnicodeNameString(le_uint16 nameID, 
         
         if (SWAPW(nameRecord->platformID) == platformID && SWAPW(nameRecord->encodingID) == encodingID &&
             SWAPW(nameRecord->languageID) == languageID && SWAPW(nameRecord->nameID) == nameID) {
-            LEUnicode16 *name = (LEUnicode16 *) (((char *) fNAMETable) + fNameStringOffset + SWAPW(nameRecord->offset));
+            const LEUnicode16* name = reinterpret_cast<const LEUnicode16*>(reinterpret_cast<const char*>(fNAMETable) + fNameStringOffset + SWAPW(nameRecord->offset));
             le_uint16 length = SWAPW(nameRecord->length) / 2;
             LEUnicode16 *result = LE_NEW_ARRAY(LEUnicode16, length + 2);
 
@@ -360,20 +360,20 @@ void PortableFontInstance::deleteNameString(const LEUnicode16 *name) const
 
 void PortableFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const
 {
-    TTGlyphID ttGlyph = (TTGlyphID) LE_GET_GLYPH(glyph);
+    TTGlyphID ttGlyph = static_cast<TTGlyphID>(LE_GET_GLYPH(glyph));
 
     if (fHMTXTable == nullptr) {
         LETag maxpTag = LE_MAXP_TABLE_TAG;
         LETag hmtxTag = LE_HMTX_TABLE_TAG;
         const MAXPTable *maxpTable = (MAXPTable *) readFontTable(maxpTag);
-        PortableFontInstance *realThis = (PortableFontInstance *) this;
+        PortableFontInstance* realThis = const_cast<PortableFontInstance*>(this);
 
         if (maxpTable != nullptr) {
             realThis->fNumGlyphs = SWAPW(maxpTable->numGlyphs);
             freeFontTable(maxpTable);
         }
 
-        realThis->fHMTXTable = (const HMTXTable *) readFontTable(hmtxTag);
+        realThis->fHMTXTable = static_cast<const HMTXTable*>(readFontTable(hmtxTag));
     }
 
     le_uint16 index = ttGlyph;
@@ -418,7 +418,7 @@ le_uint32 PortableFontInstance::getRawChecksum() const
   while((r = fgetc(fFile)) != EOF) {
     chksum += r;
   }
-  return (le_uint32) chksum; // cast to signed
+  return static_cast<le_uint32>(chksum); // cast to signed
 }
 
 le_int32 PortableFontInstance::getAscent() const

@@ -57,7 +57,7 @@ int32_t MlBreakEngine::divideUpRange(UText *inText, int32_t rangeStart, int32_t 
     // moving forward, finally the last six values in the indexList are
     // [length-4, length-3, length-2, length-1, -1, -1]. The "+4" here means four extra "-1".
     int32_t indexSize = codePointLength + 4;
-    int32_t *indexList = (int32_t *)uprv_malloc(indexSize * sizeof(int32_t));
+    int32_t* indexList = static_cast<int32_t*>(uprv_malloc(indexSize * sizeof(int32_t)));
     if (indexList == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return 0;

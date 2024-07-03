@@ -296,7 +296,7 @@ struct CmdQsort : public UPerfFunction{
 
     static int icu_cmpkey (const void *a, const void *b){ 
         QCAST(); 
-        return strcmp((char *) da->icu_key, (char *) db->icu_key); 
+        return strcmp(reinterpret_cast<char*>(da->icu_key), reinterpret_cast<char*>(db->icu_key));
     }
 
 #if U_PLATFORM_HAS_WIN32_API
@@ -451,7 +451,8 @@ public:
         }
 
         int icu_cmpkey(int32_t i, int32_t j) {
-            return strcmp( (char *) rnd[i].icu_key, (char *) ord[j].icu_key );
+            return strcmp(reinterpret_cast<char*>(rnd[i].icu_key),
+                          reinterpret_cast<char*>(ord[j].icu_key));
         }
 
 #if U_PLATFORM_HAS_WIN32_API
@@ -580,7 +581,7 @@ public:
         int32_t opt_len = UPRV_LENGTHOF(options);
         enum {i, r,f,a,c,l,n,s};   // The buffer between the option items' order and their references
 
-        _remainingArgc = u_parseArgs(_remainingArgc, (char**)argv, opt_len, options);
+        _remainingArgc = u_parseArgs(_remainingArgc, const_cast<char**>(argv), opt_len, options);
 
         if (_remainingArgc < 0){
             status = U_ILLEGAL_ARGUMENT_ERROR;

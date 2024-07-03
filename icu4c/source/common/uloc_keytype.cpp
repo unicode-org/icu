@@ -428,7 +428,7 @@ ulocimp_toBcpKey(const char* key) {
         return nullptr;
     }
 
-    LocExtKeyData* keyData = (LocExtKeyData*)uhash_get(gLocExtKeyMap, key);
+    LocExtKeyData* keyData = static_cast<LocExtKeyData*>(uhash_get(gLocExtKeyMap, key));
     if (keyData != nullptr) {
         return keyData->bcpId;
     }
@@ -441,7 +441,7 @@ ulocimp_toLegacyKey(const char* key) {
         return nullptr;
     }
 
-    LocExtKeyData* keyData = (LocExtKeyData*)uhash_get(gLocExtKeyMap, key);
+    LocExtKeyData* keyData = static_cast<LocExtKeyData*>(uhash_get(gLocExtKeyMap, key));
     if (keyData != nullptr) {
         return keyData->legacyId;
     }
@@ -461,12 +461,12 @@ ulocimp_toBcpType(const char* key, const char* type, bool* isKnownKey, bool* isS
         return nullptr;
     }
 
-    LocExtKeyData* keyData = (LocExtKeyData*)uhash_get(gLocExtKeyMap, key);
+    LocExtKeyData* keyData = static_cast<LocExtKeyData*>(uhash_get(gLocExtKeyMap, key));
     if (keyData != nullptr) {
         if (isKnownKey != nullptr) {
             *isKnownKey = true;
         }
-        LocExtType* t = (LocExtType*)uhash_get(keyData->typeMap.getAlias(), type);
+        LocExtType* t = static_cast<LocExtType*>(uhash_get(keyData->typeMap.getAlias(), type));
         if (t != nullptr) {
             return t->bcpId;
         }
@@ -506,12 +506,12 @@ ulocimp_toLegacyType(const char* key, const char* type, bool* isKnownKey, bool* 
         return nullptr;
     }
 
-    LocExtKeyData* keyData = (LocExtKeyData*)uhash_get(gLocExtKeyMap, key);
+    LocExtKeyData* keyData = static_cast<LocExtKeyData*>(uhash_get(gLocExtKeyMap, key));
     if (keyData != nullptr) {
         if (isKnownKey != nullptr) {
             *isKnownKey = true;
         }
-        LocExtType* t = (LocExtType*)uhash_get(keyData->typeMap.getAlias(), type);
+        LocExtType* t = static_cast<LocExtType*>(uhash_get(keyData->typeMap.getAlias(), type));
         if (t != nullptr) {
             return t->legacyId;
         }

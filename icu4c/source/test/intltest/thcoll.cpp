@@ -104,7 +104,7 @@ void CollationThaiTest::TestNamesList() {
         ++wordCount;
         if (wordCount <= 8) {
             UnicodeString str;
-            logln((UnicodeString)"Word " + wordCount + ": " + IntlTest::prettify(word, str));
+            logln(UnicodeString("Word ") + wordCount + ": " + IntlTest::prettify(word, str));
         }
 
         if (lastWord.length() > 0) {
@@ -116,7 +116,7 @@ void CollationThaiTest::TestNamesList() {
 
     assertSuccess("readLine", ec);
 
-    logln((UnicodeString)"Words checked: " + wordCount);
+    logln(UnicodeString("Words checked: ") + wordCount);
 }
 
 /**
@@ -151,7 +151,7 @@ void CollationThaiTest::TestDictionary() {
         ++wordCount;
         if (wordCount <= 8) {
             UnicodeString str;
-            logln((UnicodeString)"Word " + wordCount + ": " + IntlTest::prettify(word, str));
+            logln(UnicodeString("Word ") + wordCount + ": " + IntlTest::prettify(word, str));
         }
 
         if (lastWord.length() > 0) {
@@ -173,7 +173,7 @@ void CollationThaiTest::TestDictionary() {
                     coll->getCollationKey(lastWord, k1, status);
                     coll->getCollationKey(word, k2, status);
                     if (U_FAILURE(status)) {
-                        errln((UnicodeString)"Fail: getCollationKey returned " + u_errorName(status));
+                        errln(UnicodeString("Fail: getCollationKey returned ") + u_errorName(status));
                         return;
                     }
                     msg.append("key1: ").append(prettify(k1, str)).append("\n");
@@ -189,14 +189,14 @@ void CollationThaiTest::TestDictionary() {
 
     if (failed != 0) {
         if (failed > MAX_FAILURES_TO_SHOW) {
-            errln((UnicodeString)"Too many failures; only the first " +
+            errln(UnicodeString("Too many failures; only the first ") +
                   MAX_FAILURES_TO_SHOW + " failures were shown");
         }
-        errln((UnicodeString)"Summary: " + failed + " of " + (riwords.getLineNumber() - 1) +
+        errln(UnicodeString("Summary: ") + failed + " of " + (riwords.getLineNumber() - 1) +
               " comparisons failed");
     }
 
-    logln((UnicodeString)"Words checked: " + wordCount);
+    logln(UnicodeString("Words checked: ") + wordCount);
 }
 
 /**
@@ -268,7 +268,7 @@ void CollationThaiTest::compareArray(Collator& c, const char* tests[],
           expect = Collator::EQUAL;
         } else {
             // expect = Integer.decode(tests[i+1]).intValue();
-            errln((UnicodeString)"Error: unknown operator " + tests[i+1]);
+            errln(UnicodeString("Error: unknown operator ") + tests[i + 1]);
             return;
         }
 

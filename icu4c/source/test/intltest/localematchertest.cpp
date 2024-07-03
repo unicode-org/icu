@@ -578,7 +578,7 @@ UBool LocaleMatcherTest::dataDriven(const TestCase &test, IcuTestErrorCode &erro
     }
     if (!test.threshold.isEmpty()) {
         infoln("skipping test case on line %d with non-default threshold: not exposed via API",
-               (int)test.lineNr);
+               static_cast<int>(test.lineNr));
         return true;
         // int32_t threshold = Integer.valueOf(test.threshold);
         // builder.internalSetThresholdDistance(threshold);
@@ -660,20 +660,20 @@ void LocaleMatcherTest::testDataDriven() {
         line.setTo(false, p, lineLength);
         if (!readTestCase(line, test, errorCode)) {
             if (errorCode.errIfFailureAndReset(
-                    "test data syntax error on line %d", (int)test.lineNr)) {
+                    "test data syntax error on line %d", static_cast<int>(test.lineNr))) {
                 infoln(line);
             }
             continue;
         }
         UBool ok = dataDriven(test, errorCode);
-        if (errorCode.errIfFailureAndReset("test error on line %d", (int)test.lineNr)) {
+        if (errorCode.errIfFailureAndReset("test error on line %d", static_cast<int>(test.lineNr))) {
             infoln(line);
         } else if (!ok) {
-            infoln("test failure on line %d", (int)test.lineNr);
+            infoln("test failure on line %d", static_cast<int>(test.lineNr));
             infoln(line);
         } else {
             ++numPassed;
         }
     }
-    infoln("number of passing test cases: %d", (int)numPassed);
+    infoln("number of passing test cases: %d", static_cast<int>(numPassed));
 }

@@ -121,7 +121,7 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
 
     if (found)
     {
-      subtable = (const CMAPEncodingSubtable *) ((const char *) cmap + foundOffset);
+      subtable = reinterpret_cast<const CMAPEncodingSubtable*>(reinterpret_cast<const char*>(cmap) + foundOffset);
       //printf("%s:%d: using subtable #%d/%d type %d:%d\n", __FILE__, __LINE__, foundTable, nSubtables, foundPlatformID, foundPlatformSpecificID);
       (void)foundPlatformID;   // Suppress unused variable compiler warnings.
       (void)foundTable;
@@ -140,7 +140,7 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
 
     case 12:
     {
-        const CMAPFormat12Encoding *encoding = (const CMAPFormat12Encoding *) subtable;
+        const CMAPFormat12Encoding* encoding = reinterpret_cast<const CMAPFormat12Encoding*>(subtable);
 
         return new CMAPGroupMapper(cmap, encoding->groups, SWAPL(encoding->nGroups));
     }
@@ -172,7 +172,7 @@ LEGlyphID CMAPFormat4Mapper::unicodeToGlyph(LEUnicode32 unicode32) const
         return 0;
     }
 
-    LEUnicode16 unicode = (LEUnicode16) unicode32;
+    LEUnicode16 unicode = static_cast<LEUnicode16>(unicode32);
     le_uint16 index = 0;
     le_uint16 probe = 1 << fEntrySelector;
     TTGlyphID result = 0;
@@ -191,11 +191,11 @@ LEGlyphID CMAPFormat4Mapper::unicodeToGlyph(LEUnicode32 unicode32) const
 
     if (unicode >= SWAPU16(fStartCodes[index]) && unicode <= SWAPU16(fEndCodes[index])) {
         if (fIdRangeOffset[index] == 0) {
-            result = (TTGlyphID) unicode;
+            result = static_cast<TTGlyphID>(unicode);
         } else {
             le_uint16 offset = unicode - SWAPU16(fStartCodes[index]);
             le_uint16 rangeOffset = SWAPW(fIdRangeOffset[index]);
-            le_uint16 *glyphIndexTable = (le_uint16 *) ((char *) &fIdRangeOffset[index] + rangeOffset);
+            const le_uint16* glyphIndexTable = reinterpret_cast<const le_uint16*>(reinterpret_cast<const char*>(&fIdRangeOffset[index]) + rangeOffset);
 
             result = SWAPW(glyphIndexTable[offset]);
         }
@@ -239,7 +239,7 @@ LEGlyphID CMAPGroupMapper::unicodeToGlyph(LEUnicode32 unicode32) const
     }
 
     if (SWAPU32(fGroups[range].startCharCode) <= unicode32 && SWAPU32(fGroups[range].endCharCode) >= unicode32) {
-        return (LEGlyphID) (SWAPU32(fGroups[range].startGlyphCode) + unicode32 - SWAPU32(fGroups[range].startCharCode));
+        return static_cast<LEGlyphID>(SWAPU32(fGroups[range].startGlyphCode) + unicode32 - SWAPU32(fGroups[range].startCharCode));
     }
 
     return 0;

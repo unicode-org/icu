@@ -623,7 +623,7 @@ protected:
     DecimalFormat *d = new DecimalFormat(setupStatus);
     UParseError pe;
     d->applyPattern(fPat, pe, setupStatus);
-    return (UNumberFormat*) d;
+    return reinterpret_cast<UNumberFormat*>(d);
   }
   virtual const char *getClassName() {
     return "NumFmtStringPieceTest";
@@ -649,7 +649,7 @@ public:
     UnicodeString buf;
     if(U_SUCCESS(setupStatus)) {
       buf.remove();
-      ((const DecimalFormat*)fFmt)->format(fExpect, buf, nullptr, setupStatus);
+      reinterpret_cast<const DecimalFormat*>(fFmt)->format(fExpect, buf, nullptr, setupStatus);
       if(!U_SUCCESS(setupStatus)
          || fString!=buf
          ) {
@@ -671,7 +671,7 @@ public:
     if(U_SUCCESS(setupStatus)) {
       for(i=0;i<U_LOTS_OF_TIMES;i++){
         buf.remove();
-        ((const DecimalFormat*)fFmt)->format(fExpect, buf, nullptr, setupStatus);
+        reinterpret_cast<const DecimalFormat*>(fFmt)->format(fExpect, buf, nullptr, setupStatus);
       }
     }
     return i;

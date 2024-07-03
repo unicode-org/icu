@@ -343,7 +343,7 @@ int64_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return 0;
         }
-        month = (int32_t)m;
+        month = static_cast<int32_t>(m);
     }
 
     const Setting setting = getSetting(status);
@@ -422,7 +422,7 @@ void ChineseCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode&
  * @stable ICU 2.8
  */
 void ChineseCalendar::add(EDateFields field, int32_t amount, UErrorCode& status) {
-    add((UCalendarDateFields)field, amount, status);
+    add(static_cast<UCalendarDateFields>(field), amount, status);
 }
 
 namespace {
@@ -461,7 +461,7 @@ struct RollMonthInfo rollMonth(const TimeZone* timeZone, int32_t amount, int32_t
             // no leap month between month 0 and month m;
             // otherwise it will be the start of month 1.
             int prevMoon = output.thisMoon -
-                (int) (CalendarAstronomer::SYNODIC_MONTH * (month - 0.5));
+                static_cast<int>(CalendarAstronomer::SYNODIC_MONTH * (month - 0.5));
             prevMoon = newMoonNear(timeZone, prevMoon, true, status);
             if (U_FAILURE(status)) {
                return output;
@@ -522,7 +522,7 @@ void ChineseCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode
 }
 
 void ChineseCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status) {
-    roll((UCalendarDateFields)field, amount, status);
+    roll(static_cast<UCalendarDateFields>(field), amount, status);
 }
 
 
@@ -548,16 +548,16 @@ double daysToMillis(const TimeZone* timeZone, double days, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return 0;
     }
-    double millis = days * (double)kOneDay;
+    double millis = days * kOneDay;
     if (timeZone != nullptr) {
         int32_t rawOffset, dstOffset;
         timeZone->getOffset(millis, false, rawOffset, dstOffset, status);
         if (U_FAILURE(status)) {
             return 0;
         }
-        return millis - (double)(rawOffset + dstOffset);
+        return millis - static_cast<double>(rawOffset + dstOffset);
     }
-    return millis - (double)CHINA_OFFSET;
+    return millis - static_cast<double>(CHINA_OFFSET);
 }
 
 /**
@@ -576,9 +576,9 @@ double millisToDays(const TimeZone* timeZone, double millis, UErrorCode& status)
         if (U_FAILURE(status)) {
             return 0;
         }
-        return ClockMath::floorDivide(millis + (double)(rawOffset + dstOffset), kOneDay);
+        return ClockMath::floorDivide(millis + static_cast<double>(rawOffset + dstOffset), kOneDay);
     }
-    return ClockMath::floorDivide(millis + (double)CHINA_OFFSET, kOneDay);
+    return ClockMath::floorDivide(millis + static_cast<double>(CHINA_OFFSET), kOneDay);
 }
 
 //------------------------------------------------------------------
@@ -629,7 +629,7 @@ int32_t winterSolstice(const icu::ChineseCalendar::Setting& setting,
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return 0;
         }
-        cacheValue = (int32_t) days;
+        cacheValue = static_cast<int32_t>(days);
         CalendarCache::put(setting.winterSolsticeCache, gyear, cacheValue, status);
     }
     if(U_FAILURE(status)) {
@@ -657,11 +657,11 @@ int32_t newMoonNear(const TimeZone* timeZone, double days, UBool after, UErrorCo
     if (U_FAILURE(status)) {
         return 0;
     }
-    return (int32_t) millisToDays(
+    return static_cast<int32_t>(millisToDays(
         timeZone,
         CalendarAstronomer(ms)
               .getMoonTime(CalendarAstronomer::NEW_MOON(), after),
-              status);
+              status));
 }
 
 /**
@@ -673,7 +673,7 @@ int32_t newMoonNear(const TimeZone* timeZone, double days, UBool after, UErrorCo
  */
 int32_t synodicMonthsBetween(int32_t day1, int32_t day2) {
     double roundme = ((day2 - day1) / CalendarAstronomer::SYNODIC_MONTH);
-    return (int32_t) (roundme + (roundme >= 0 ? .5 : -.5));
+    return static_cast<int32_t>(roundme + (roundme >= 0 ? .5 : -.5));
 }
 
 /**
@@ -692,7 +692,7 @@ int32_t majorSolarTerm(const TimeZone* timeZone, int32_t days, UErrorCode& statu
     if (U_FAILURE(status)) {
         return 0;
     }
-    int32_t term = ( ((int32_t)(6 * CalendarAstronomer(ms)
+    int32_t term = ((static_cast<int32_t>(6 * CalendarAstronomer(ms)
                                 .getSunLongitude() / CalendarAstronomer::PI)) + 2 ) % 12;
     if (U_FAILURE(status)) {
         return 0;
@@ -1153,7 +1153,7 @@ int32_t ChineseCalendar::internalGetMonth(UErrorCode& status) const {
         return 0;
     }
 
-    ChineseCalendar *nonConstThis = (ChineseCalendar*)this; // cast away const
+    ChineseCalendar* nonConstThis = const_cast<ChineseCalendar*>(this); // cast away const
     nonConstThis->internalSet(UCAL_IS_LEAP_MONTH, temp->get(UCAL_IS_LEAP_MONTH, status));
     int32_t month = temp->get(UCAL_MONTH, status);
     if (U_FAILURE(status)) {

@@ -738,7 +738,7 @@ pinIndex(int64_t &index, int64_t limit) {
     } else if (index > limit) {
         index = limit;
     }
-    return (int32_t)index;
+    return static_cast<int32_t>(index);
 }
 
 

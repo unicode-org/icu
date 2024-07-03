@@ -67,9 +67,9 @@ void RBBIAPITest::TestCloneEquals()
 
     bi3->setText("hello");
 
-    logln((UnicodeString)"Testing equals()");
+    logln(UnicodeString("Testing equals()"));
 
-    logln((UnicodeString)"Testing == and !=");
+    logln(UnicodeString("Testing == and !="));
     bool b = (*bi1 != *biequal);
     b |= *bi1 == *bi2;
     b |= *bi1 == *bi3;
@@ -131,7 +131,7 @@ void RBBIAPITest::TestCloneEquals()
 
 
 
-    logln((UnicodeString)"Testing clone()");
+    logln(UnicodeString("Testing clone()"));
     RuleBasedBreakIterator* bi1clone = bi1->clone();
     RuleBasedBreakIterator* bi2clone = bi2->clone();
 
@@ -198,7 +198,7 @@ void RBBIAPITest::TestgetRules()
         return;
     }
 
-    logln((UnicodeString)"Testing getRules()");
+    logln(UnicodeString("Testing getRules()"));
 
     UnicodeString text(u"Hello there");
     bi1->setText(text);
@@ -232,22 +232,22 @@ void RBBIAPITest::TestHashCode()
     }
 
 
-    logln((UnicodeString)"Testing hashCode()");
+    logln(UnicodeString("Testing hashCode()"));
 
-    bi1->setText((UnicodeString)"Hash code");
-    bi2->setText((UnicodeString)"Hash code");
-    bi3->setText((UnicodeString)"Hash code");
+    bi1->setText(UnicodeString("Hash code"));
+    bi2->setText(UnicodeString("Hash code"));
+    bi3->setText(UnicodeString("Hash code"));
 
     RuleBasedBreakIterator* bi1clone= bi1->clone();
     RuleBasedBreakIterator* bi2clone= bi2->clone();
 
     if(bi1->hashCode() != bi1clone->hashCode() ||  bi1->hashCode() != bi3->hashCode() ||
         bi1clone->hashCode() != bi3->hashCode() || bi2->hashCode() != bi2clone->hashCode())
-        errln((UnicodeString)"ERROR: identical objects have different hashcodes");
+        errln(UnicodeString("ERROR: identical objects have different hashcodes"));
 
     if(bi1->hashCode() == bi2->hashCode() ||  bi2->hashCode() == bi3->hashCode() ||
         bi1clone->hashCode() == bi2clone->hashCode() || bi1clone->hashCode() == bi2->hashCode())
-        errln((UnicodeString)"ERROR: different objects have same hashcodes");
+        errln(UnicodeString("ERROR: different objects have same hashcodes"));
 
     delete bi1clone;
     delete bi2clone;
@@ -258,7 +258,7 @@ void RBBIAPITest::TestHashCode()
 }
 void RBBIAPITest::TestGetSetAdoptText()
 {
-    logln((UnicodeString)"Testing getText setText ");
+    logln(UnicodeString("Testing getText setText "));
     IcuTestErrorCode status(*this, "TestGetSetAdoptText");
     UnicodeString str1="first string.";
     UnicodeString str2="Second string.";
@@ -281,13 +281,13 @@ void RBBIAPITest::TestGetSetAdoptText()
     tci->getText(tstr);
     TEST_ASSERT(tstr == str1);
     if(wordIter1->current() != 0)
-        errln((UnicodeString)"ERROR:1 setText did not set the iteration position to the beginning of the text, it is" + wordIter1->current() + (UnicodeString)"\n");
+        errln(UnicodeString("ERROR:1 setText did not set the iteration position to the beginning of the text, it is") + wordIter1->current() + UnicodeString("\n"));
 
     wordIter1->next(2);
 
     wordIter1->setText(str2);
     if(wordIter1->current() != 0)
-        errln((UnicodeString)"ERROR:2 setText did not reset the iteration position to the beginning of the text, it is" + wordIter1->current() + (UnicodeString)"\n");
+        errln(UnicodeString("ERROR:2 setText did not reset the iteration position to the beginning of the text, it is") + wordIter1->current() + UnicodeString("\n"));
 
 
     charIter1->adoptText(text1Clone);
@@ -303,10 +303,10 @@ void RBBIAPITest::TestGetSetAdoptText()
     LocalPointer<RuleBasedBreakIterator> rb(wordIter1->clone());
     rb->adoptText(text1);
     if(rb->getText() != *text1)
-        errln((UnicodeString)"ERROR:1 error in adoptText ");
+        errln(UnicodeString("ERROR:1 error in adoptText "));
     rb->adoptText(text2);
     if(rb->getText() != *text2)
-        errln((UnicodeString)"ERROR:2 error in adoptText ");
+        errln(UnicodeString("ERROR:2 error in adoptText "));
 
     // Adopt where iterator range is less than the entire original source string.
     //   (With the change of the break engine to working with UText internally,
@@ -1068,9 +1068,9 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
         return;
     }
 
-    builtRules = (const uint8_t *)udata_getMemory(data.getAlias());
+    builtRules = static_cast<const uint8_t*>(udata_getMemory(data.getAlias()));
     builtSource = UnicodeString::fromUTF8(
-        (const char *)(builtRules + ((RBBIDataHeader *)builtRules)->fRuleSource));
+        reinterpret_cast<const char*>(builtRules + reinterpret_cast<const RBBIDataHeader*>(builtRules)->fRuleSource));
     LocalPointer<RuleBasedBreakIterator> brkItr (new RuleBasedBreakIterator(builtSource, parseError, status));
     if (U_FAILURE(status)) {
         errln("%s:%d createRuleBasedBreakIterator: ICU Error \"%s\"  at line %d, column %d\n",
@@ -1080,7 +1080,7 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
     }
     rbbiRules = brkItr->getBinaryRules(length);
     logln("Comparing \"%s\" len=%d", dataFile, length);
-    if (memcmp(builtRules, rbbiRules, (int32_t)length) != 0) {
+    if (memcmp(builtRules, rbbiRules, static_cast<int32_t>(length)) != 0) {
         errln("%s:%d Built rules and rebuilt rules are different %s", __FILE__, __LINE__, dataFile);
         return;
     }
@@ -1214,16 +1214,16 @@ static void prtbrks(BreakIterator* brk, const UnicodeString &ustr, IntlTest &it)
     }
   }
   UnicodeString out;
-  out.append((char16_t)CHSTR);
+  out.append(CHSTR);
   int32_t prev = 0;
   for(int32_t i=0;i<posCount;i++) {
     int32_t n=pos[i];
     out.append(ustr.tempSubString(prev,n-prev));
-    out.append((char16_t)PILCROW);
+    out.append(PILCROW);
     prev=n;
   }
   out.append(ustr.tempSubString(prev,ustr.length()-prev));
-  out.append((char16_t)CHEND);
+  out.append(CHEND);
   it.logln(out);
 
   out.remove();
@@ -1444,7 +1444,7 @@ void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
 
 void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
-    if (exec) logln((UnicodeString)"TestSuite RuleBasedBreakIterator API ");
+    if (exec) logln(UnicodeString("TestSuite RuleBasedBreakIterator API "));
     TESTCASE_AUTO_BEGIN;
 #if !UCONFIG_NO_FILE_IO
     TESTCASE_AUTO(TestCloneEquals);
@@ -1478,21 +1478,21 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 //---------------------------------------------
 
 void RBBIAPITest::doBoundaryTest(BreakIterator& bi, UnicodeString& text, int32_t *boundaries){
-     logln((UnicodeString)"testIsBoundary():");
+     logln(UnicodeString("testIsBoundary():"));
         int32_t p = 0;
         UBool isB;
         for (int32_t i = 0; i < text.length(); i++) {
             isB = bi.isBoundary(i);
-            logln((UnicodeString)"bi.isBoundary(" + i + ") -> " + isB);
+            logln(UnicodeString("bi.isBoundary(") + i + ") -> " + isB);
 
             if (i == boundaries[p]) {
                 if (!isB)
-                    errln((UnicodeString)"Wrong result from isBoundary() for " + i + (UnicodeString)": expected true, got false");
+                    errln(UnicodeString("Wrong result from isBoundary() for ") + i + UnicodeString(": expected true, got false"));
                 p++;
             }
             else {
                 if (isB)
-                    errln((UnicodeString)"Wrong result from isBoundary() for " + i + (UnicodeString)": expected false, got true");
+                    errln(UnicodeString("Wrong result from isBoundary() for ") + i + UnicodeString(": expected false, got true"));
             }
         }
 }
@@ -1501,7 +1501,7 @@ void RBBIAPITest::doTest(UnicodeString& testString, int32_t start, int32_t gotof
     UnicodeString expected=CharsToUnicodeString(expectedString);
 
     if(gotoffset != expectedOffset)
-         errln((UnicodeString)"ERROR:****returned #" + gotoffset + (UnicodeString)" instead of #" + expectedOffset);
+         errln(UnicodeString("ERROR:****returned #") + gotoffset + UnicodeString(" instead of #") + expectedOffset);
     if(start <= gotoffset){
         testString.extractBetween(start, gotoffset, selected);
     }
@@ -1509,7 +1509,7 @@ void RBBIAPITest::doTest(UnicodeString& testString, int32_t start, int32_t gotof
         testString.extractBetween(gotoffset, start, selected);
     }
     if(selected.compare(expected) != 0)
-         errln(prettify((UnicodeString)"ERROR:****selected \"" + selected + "\" instead of \"" + expected + "\""));
+         errln(prettify(UnicodeString("ERROR:****selected \"") + selected + "\" instead of \"" + expected + "\""));
     else
         logln(prettify("****selected \"" + selected + "\""));
 }

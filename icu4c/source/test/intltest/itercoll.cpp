@@ -94,7 +94,7 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
     UnicodeString source;
     RuleBasedCollator *c1 = nullptr;
     c1 = new RuleBasedCollator(
-        (UnicodeString)"&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH", status);
+        UnicodeString("&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH"), status);
 
     if (c1 == nullptr || U_FAILURE(status))
     {
@@ -111,7 +111,7 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
 
     // Test with an expanding character sequence
     RuleBasedCollator *c2 = nullptr;
-    c2 = new RuleBasedCollator((UnicodeString)"&a < b < c/abd < d", status);
+    c2 = new RuleBasedCollator(UnicodeString("&a < b < c/abd < d"), status);
 
     if (c2 == nullptr || U_FAILURE(status))
     {
@@ -128,7 +128,7 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
 
     // Now try both
     RuleBasedCollator *c3 = nullptr;
-    c3 = new RuleBasedCollator((UnicodeString)"&a < b < c/aba < d < z < ch", status);
+    c3 = new RuleBasedCollator(UnicodeString("&a < b < c/aba < d < z < ch"), status);
 
     if (c3 == nullptr || U_FAILURE(status))
     {
@@ -329,13 +329,13 @@ void CollationIteratorTest::TestSetText(/* char* par */)
     UnicodeString empty("");
     iter1->setText(empty, status);
     if (U_FAILURE(status) 
-        || iter1->next(status) != (int32_t)CollationElementIterator::NULLORDER) {
+        || iter1->next(status) != static_cast<int32_t>(CollationElementIterator::NULLORDER)) {
         errln("Empty string should have no CEs.");
     }
     (dynamic_cast<StringCharacterIterator*>(chariter))->setText(empty);
     iter1->setText(*chariter, status);
     if (U_FAILURE(status) 
-        || iter1->next(status) != (int32_t)CollationElementIterator::NULLORDER) {
+        || iter1->next(status) != static_cast<int32_t>(CollationElementIterator::NULLORDER)) {
         errln("Empty string should have no CEs.");
     }
     delete chariter;
@@ -369,7 +369,7 @@ void CollationIteratorTest::TestMaxExpansion(/* char* par */)
             order = iter->previous(status);
 
         while (U_SUCCESS(status)
-            && iter->previous(status) != (int32_t)CollationElementIterator::NULLORDER)
+            && iter->previous(status) != static_cast<int32_t>(CollationElementIterator::NULLORDER))
         {
             count ++; 
         }
@@ -390,7 +390,7 @@ void CollationIteratorTest::TestMaxExpansion(/* char* par */)
 void CollationIteratorTest::TestClearBuffers(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedCollator *c = new RuleBasedCollator((UnicodeString)"&a < b < c & ab = d", status);
+    RuleBasedCollator* c = new RuleBasedCollator(UnicodeString("&a < b < c & ab = d"), status);
 
     if (c == nullptr || U_FAILURE(status))
     {
@@ -580,10 +580,10 @@ void CollationIteratorTest::TestConstructors()
         || *iter2 != *iter1) {
         errln("CollationElementIterators constructed with the same string data should be the same at the start");
     } 
-    if (iter1->next(status) != (int32_t)CollationElementIterator::NULLORDER) {
+    if (iter1->next(status) != static_cast<int32_t>(CollationElementIterator::NULLORDER)) {
         errln("Empty string should have no CEs.");
     }
-    if (iter2->next(status) != (int32_t)CollationElementIterator::NULLORDER) {
+    if (iter2->next(status) != static_cast<int32_t>(CollationElementIterator::NULLORDER)) {
         errln("Empty string should have no CEs.");
     }
     delete iter1;

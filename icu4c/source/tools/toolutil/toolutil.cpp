@@ -143,7 +143,7 @@ int32_t getCPTrieSize(UMutableCPTrie *mt, UCPTrieType type, UCPTrieValueWidth va
     if (U_FAILURE(errorCode) && errorCode != U_BUFFER_OVERFLOW_ERROR) {
         fprintf(stderr,
                 "toolutil/getCPTrieSize error: ucptrie_toBinary() failed: %s (length %ld)\n",
-                u_errorName(errorCode), (long)size);
+                u_errorName(errorCode), static_cast<long>(size));
         return -1;
     }
     U_ASSERT((size & 3) == 0);  // multiple of 4 bytes
@@ -392,7 +392,7 @@ utm_hasCapacity(UToolMemory *mem, int32_t capacity) {
 
         if(mem->maxCapacity<capacity) {
             fprintf(stderr, "error: %s - trying to use more than maxCapacity=%ld units\n",
-                    mem->name, (long)mem->maxCapacity);
+                    mem->name, static_cast<long>(mem->maxCapacity));
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
 

@@ -609,9 +609,9 @@ LSR LikelySubtags::maximize(const char *language, const char *script, const char
                              bool returnInputIfUnmatch,
                              UErrorCode &errorCode) const {
     if (U_FAILURE(errorCode)) { return {}; }
-    return maximize({language, (int32_t)uprv_strlen(language)},
-                    {script, (int32_t)uprv_strlen(script)},
-                    {region, (int32_t)uprv_strlen(region)},
+    return maximize({language, static_cast<int32_t>(uprv_strlen(language))},
+                    {script, static_cast<int32_t>(uprv_strlen(script))},
+                    {region, static_cast<int32_t>(uprv_strlen(region))},
                     returnInputIfUnmatch,
                     errorCode);
 }

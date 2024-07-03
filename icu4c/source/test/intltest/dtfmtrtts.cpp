@@ -225,7 +225,7 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     // If we have some sparseness, implement it here.  Sparseness decreases
     // test time by eliminating some tests, up to 23.
     for(i = 0; i < SPARSENESS; ) {
-        int random = (int)(randFraction() * 24);
+        int random = static_cast<int>(randFraction() * 24);
         if (random >= 0 && random < 24 && TEST_TABLE[i]) {
             TEST_TABLE[i] = false;
             ++i;
@@ -236,10 +236,10 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     int32_t style = 0;
     for(style = DateFormat::FULL; style <= DateFormat::SHORT; ++style) {
         if(TEST_TABLE[itable++]) {
-            logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
-            DateFormat *df = DateFormat::createDateInstance((DateFormat::EStyle)style, loc);
+            logln("Testing style " + UnicodeString(styleName(static_cast<DateFormat::EStyle>(style))));
+            DateFormat* df = DateFormat::createDateInstance(static_cast<DateFormat::EStyle>(style), loc);
             if(df == nullptr) {
-              errln(UnicodeString("Could not DF::createDateInstance ") + UnicodeString(styleName((DateFormat::EStyle)style)) +      " Locale: " + loc.getDisplayName(temp));
+              errln(UnicodeString("Could not DF::createDateInstance ") + UnicodeString(styleName(static_cast<DateFormat::EStyle>(style))) + " Locale: " + loc.getDisplayName(temp));
             } else {
               test(df, loc);
               delete df;
@@ -249,10 +249,10 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     
     for(style = DateFormat::FULL; style <= DateFormat::SHORT; ++style) {
         if (TEST_TABLE[itable++]) {
-            logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
-            DateFormat *df = DateFormat::createTimeInstance((DateFormat::EStyle)style, loc);
+            logln("Testing style " + UnicodeString(styleName(static_cast<DateFormat::EStyle>(style))));
+            DateFormat* df = DateFormat::createTimeInstance(static_cast<DateFormat::EStyle>(style), loc);
             if(df == nullptr) {
-              errln(UnicodeString("Could not DF::createTimeInstance ") + UnicodeString(styleName((DateFormat::EStyle)style)) + " Locale: " + loc.getDisplayName(temp));
+              errln(UnicodeString("Could not DF::createTimeInstance ") + UnicodeString(styleName(static_cast<DateFormat::EStyle>(style))) + " Locale: " + loc.getDisplayName(temp));
             } else {
               test(df, loc, true);
               delete df;
@@ -263,10 +263,10 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     for(int32_t dstyle = DateFormat::FULL; dstyle <= DateFormat::SHORT; ++dstyle) {
         for(int32_t tstyle = DateFormat::FULL; tstyle <= DateFormat::SHORT; ++tstyle) {
             if(TEST_TABLE[itable++]) {
-                logln("Testing dstyle" + UnicodeString(styleName((DateFormat::EStyle)dstyle)) + ", tstyle" + UnicodeString(styleName((DateFormat::EStyle)tstyle)) );
-                DateFormat *df = DateFormat::createDateTimeInstance((DateFormat::EStyle)dstyle, (DateFormat::EStyle)tstyle, loc);
+                logln("Testing dstyle" + UnicodeString(styleName(static_cast<DateFormat::EStyle>(dstyle))) + ", tstyle" + UnicodeString(styleName(static_cast<DateFormat::EStyle>(tstyle))));
+                DateFormat* df = DateFormat::createDateTimeInstance(static_cast<DateFormat::EStyle>(dstyle), static_cast<DateFormat::EStyle>(tstyle), loc);
                 if(df == nullptr) {
-                    dataerrln(UnicodeString("Could not DF::createDateTimeInstance ") + UnicodeString(styleName((DateFormat::EStyle)dstyle)) + ", tstyle" + UnicodeString(styleName((DateFormat::EStyle)tstyle))    + "Locale: " + loc.getDisplayName(temp));
+                    dataerrln(UnicodeString("Could not DF::createDateTimeInstance ") + UnicodeString(styleName(static_cast<DateFormat::EStyle>(dstyle))) + ", tstyle" + UnicodeString(styleName(static_cast<DateFormat::EStyle>(tstyle))) + "Locale: " + loc.getDisplayName(temp));
                 } else {
                     test(df, loc);
                     delete df;
@@ -287,12 +287,12 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
     UBool isGregorian = false;
     UErrorCode minStatus = U_ZERO_ERROR;
     if(fmt->getCalendar() == nullptr) {
-      errln((UnicodeString)"DateFormatRoundTripTest::test, DateFormat getCalendar() returns null for " + origLocale.getName());
+      errln(UnicodeString("DateFormatRoundTripTest::test, DateFormat getCalendar() returns null for ") + origLocale.getName());
       return;
     } 
     UDate minDate = CalendarTest::minDateOfCalendar(*fmt->getCalendar(), isGregorian, minStatus);
     if(U_FAILURE(minStatus)) {
-      errln((UnicodeString)"Failure getting min date for " + origLocale.getName());
+      errln(UnicodeString("Failure getting min date for ") + origLocale.getName());
       return;
     } 
     //logln(UnicodeString("Min date is ") + fullFormat(minDate)  + " for " + origLocale.getName());
@@ -518,7 +518,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
 const UnicodeString& DateFormatRoundTripTest::fullFormat(UDate d) {
     UErrorCode ec = U_ZERO_ERROR;
     if (dateFormat == nullptr) {
-        dateFormat = new SimpleDateFormat((UnicodeString)"EEE MMM dd HH:mm:ss.SSS zzz yyyy G", ec);
+        dateFormat = new SimpleDateFormat(UnicodeString("EEE MMM dd HH:mm:ss.SSS zzz yyyy G"), ec);
         if (U_FAILURE(ec) || dateFormat == nullptr) {
             fgStr = "[FAIL: SimpleDateFormat constructor]";
             delete dateFormat;
@@ -539,7 +539,7 @@ int32_t DateFormatRoundTripTest::getField(UDate d, int32_t f) {
     UErrorCode status = U_ZERO_ERROR;
     getFieldCal->setTime(d, status);
     failure(status, "getfieldCal->setTime");
-    int32_t ret = getFieldCal->get((UCalendarDateFields)f, status);
+    int32_t ret = getFieldCal->get(static_cast<UCalendarDateFields>(f), status);
     failure(status, "getfieldCal->get");
     return ret;
 }

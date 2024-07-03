@@ -36,7 +36,7 @@ UnicodeString joinLabelsAndAppend(AlphabeticIndex::ImmutableIndex &index, Unicod
     const AlphabeticIndex::Bucket *bucket;
     for (int32_t i = 0; (bucket = index.getBucket(i)) != nullptr; ++i) {
         if (dest.length() > oldLength) {
-            dest.append((char16_t)0x3A);  // ':'
+            dest.append(static_cast<char16_t>(0x3A)); // ':'
         }
         dest.append(bucket->getLabel());
     }
@@ -127,7 +127,7 @@ void AlphabeticIndexTest::APITest() {
     index.adoptInstead(new AlphabeticIndex(Locale::getEnglish(), status));
     TEST_CHECK_STATUS;
     UnicodeSet additions;
-    additions.add((UChar32)0x410).add((UChar32)0x415);   // A couple of Cyrillic letters
+    additions.add(static_cast<UChar32>(0x410)).add(static_cast<UChar32>(0x415)); // A couple of Cyrillic letters
     index->addLabels(additions, status);
     TEST_CHECK_STATUS;
     lc = index->getBucketCount(status);
@@ -161,7 +161,7 @@ void AlphabeticIndexTest::APITest() {
     const RuleBasedCollator &indexCol = index->getCollator();
     TEST_ASSERT(*germanCol == indexCol);
 
-    UnicodeString ELLIPSIS;  ELLIPSIS.append((UChar32)0x2026);
+    UnicodeString ELLIPSIS;  ELLIPSIS.append(static_cast<UChar32>(0x2026));
     UnicodeString s = index->getUnderflowLabel();
     TEST_ASSERT(ELLIPSIS == s);
     s = index->getOverflowLabel();
@@ -284,7 +284,7 @@ void AlphabeticIndexTest::APITest() {
         } else if (i <= 26) {
             // Labels A - Z for English locale
             TEST_ASSERT(type == U_ALPHAINDEX_NORMAL);
-            UnicodeString expectedLabel((char16_t)(0x40 + i));
+            UnicodeString expectedLabel(static_cast<char16_t>(0x40 + i));
             TEST_ASSERT(expectedLabel == label);
         } else if (i == 27) {
             TEST_ASSERT(type == U_ALPHAINDEX_OVERFLOW);
@@ -571,16 +571,16 @@ void AlphabeticIndexTest::TestHaniFirst() {
     assertEquals("getBucketCount()", 1, index.getBucketCount(status));   // ... (underflow only)
     index.addLabels(Locale::getEnglish(), status);
     assertEquals("getBucketCount()", 28, index.getBucketCount(status));  // ... A-Z ...
-    int32_t bucketIndex = index.getBucketIndex(UnicodeString((char16_t)0x897f), status);
+    int32_t bucketIndex = index.getBucketIndex(UnicodeString(static_cast<char16_t>(0x897f)), status);
     assertEquals("getBucketIndex(U+897F)", 0, bucketIndex);  // underflow bucket
     bucketIndex = index.getBucketIndex("i", status);
     assertEquals("getBucketIndex(i)", 9, bucketIndex);
-    bucketIndex = index.getBucketIndex(UnicodeString((char16_t)0x03B1), status);
+    bucketIndex = index.getBucketIndex(UnicodeString(static_cast<char16_t>(0x03B1)), status);
     assertEquals("getBucketIndex(Greek alpha)", 27, bucketIndex);
     // U+50005 is an unassigned code point which sorts at the end, independent of the Hani group.
-    bucketIndex = index.getBucketIndex(UnicodeString((UChar32)0x50005), status);
+    bucketIndex = index.getBucketIndex(UnicodeString(static_cast<UChar32>(0x50005)), status);
     assertEquals("getBucketIndex(U+50005)", 27, bucketIndex);
-    bucketIndex = index.getBucketIndex(UnicodeString((char16_t)0xFFFF), status);
+    bucketIndex = index.getBucketIndex(UnicodeString(static_cast<char16_t>(0xFFFF)), status);
     assertEquals("getBucketIndex(U+FFFF)", 27, bucketIndex);
 }
 
@@ -600,16 +600,16 @@ void AlphabeticIndexTest::TestPinyinFirst() {
     assertEquals("getBucketCount()", 28, index.getBucketCount(status));   // ... A-Z ...
     index.addLabels(Locale::getChinese(), status);
     assertEquals("getBucketCount()", 28, index.getBucketCount(status));  // ... A-Z ...
-    int32_t bucketIndex = index.getBucketIndex(UnicodeString((char16_t)0x897f), status);
-    assertEquals("getBucketIndex(U+897F)", (int32_t)((char16_t)0x0058/*X*/ - (char16_t)0x0041/*A*/ + 1), bucketIndex);
+    int32_t bucketIndex = index.getBucketIndex(UnicodeString(static_cast<char16_t>(0x897f)), status);
+    assertEquals("getBucketIndex(U+897F)", static_cast<int32_t>(static_cast<char16_t>(0x0058) /*X*/ - static_cast<char16_t>(0x0041) /*A*/ + 1), bucketIndex);
     bucketIndex = index.getBucketIndex("i", status);
     assertEquals("getBucketIndex(i)", 9, bucketIndex);
-    bucketIndex = index.getBucketIndex(UnicodeString((char16_t)0x03B1), status);
-    assertEquals("getBucketIndex(Greek alpha)", (int32_t)27, bucketIndex);
+    bucketIndex = index.getBucketIndex(UnicodeString(static_cast<char16_t>(0x03B1)), status);
+    assertEquals("getBucketIndex(Greek alpha)", static_cast<int32_t>(27), bucketIndex);
     // U+50005 is an unassigned code point which sorts at the end, independent of the Hani group.
-    bucketIndex = index.getBucketIndex(UnicodeString((UChar32)0x50005), status);
+    bucketIndex = index.getBucketIndex(UnicodeString(static_cast<UChar32>(0x50005)), status);
     assertEquals("getBucketIndex(U+50005)", 27, bucketIndex);
-    bucketIndex = index.getBucketIndex(UnicodeString((char16_t)0xFFFF), status);
+    bucketIndex = index.getBucketIndex(UnicodeString(static_cast<char16_t>(0xFFFF)), status);
     assertEquals("getBucketIndex(U+FFFF)", 27, bucketIndex);
 }
 
@@ -663,13 +663,13 @@ void AlphabeticIndexTest::TestNoLabels() {
     TEST_CHECK_STATUS;
     AlphabeticIndex index(coll.orphan(), status);
     TEST_CHECK_STATUS;
-    index.addRecord(UnicodeString((char16_t)0x897f), nullptr, status);
+    index.addRecord(UnicodeString(static_cast<char16_t>(0x897f)), nullptr, status);
     index.addRecord("i", nullptr, status);
-    index.addRecord(UnicodeString((char16_t)0x03B1), nullptr, status);
+    index.addRecord(UnicodeString(static_cast<char16_t>(0x03B1)), nullptr, status);
     assertEquals("getBucketCount()", 1, index.getBucketCount(status));  // ...
     TEST_ASSERT(index.nextBucket(status));
-    assertEquals("underflow label type", (int32_t)U_ALPHAINDEX_UNDERFLOW, index.getBucketLabelType());
-    assertEquals("all records in the underflow bucket", (int32_t)3, index.getBucketRecordCount());
+    assertEquals("underflow label type", static_cast<int32_t>(U_ALPHAINDEX_UNDERFLOW), index.getBucketLabelType());
+    assertEquals("all records in the underflow bucket", static_cast<int32_t>(3), index.getBucketRecordCount());
 }
 
 void AlphabeticIndexTest::TestChineseZhuyin() {
@@ -680,11 +680,11 @@ void AlphabeticIndexTest::TestChineseZhuyin() {
     LocalPointer<AlphabeticIndex::ImmutableIndex> immIndex(index.buildImmutableIndex(status));
     TEST_CHECK_STATUS; 
     assertEquals("getBucketCount()", 38, immIndex->getBucketCount());
-    assertEquals("label 1", UnicodeString((char16_t)0x3105), immIndex->getBucket(1)->getLabel());
-    assertEquals("label 2", UnicodeString((char16_t)0x3106), immIndex->getBucket(2)->getLabel());
-    assertEquals("label 3", UnicodeString((char16_t)0x3107), immIndex->getBucket(3)->getLabel());
-    assertEquals("label 4", UnicodeString((char16_t)0x3108), immIndex->getBucket(4)->getLabel());
-    assertEquals("label 5", UnicodeString((char16_t)0x3109), immIndex->getBucket(5)->getLabel());
+    assertEquals("label 1", UnicodeString(static_cast<char16_t>(0x3105)), immIndex->getBucket(1)->getLabel());
+    assertEquals("label 2", UnicodeString(static_cast<char16_t>(0x3106)), immIndex->getBucket(2)->getLabel());
+    assertEquals("label 3", UnicodeString(static_cast<char16_t>(0x3107)), immIndex->getBucket(3)->getLabel());
+    assertEquals("label 4", UnicodeString(static_cast<char16_t>(0x3108)), immIndex->getBucket(4)->getLabel());
+    assertEquals("label 5", UnicodeString(static_cast<char16_t>(0x3109)), immIndex->getBucket(5)->getLabel());
 }
 
 void AlphabeticIndexTest::TestJapaneseKanji() {
@@ -698,7 +698,7 @@ void AlphabeticIndexTest::TestJapaneseKanji() {
     int32_t overflowIndex = immIndex->getBucketCount() - 1;
     for(int32_t i = 0; i < UPRV_LENGTHOF(kanji); ++i) {
         char msg[40];
-        snprintf(msg, sizeof(msg), "kanji[%d]=U+%04lX in overflow bucket", (int)i, (long)kanji[i]);
+        snprintf(msg, sizeof(msg), "kanji[%d]=U+%04lX in overflow bucket", static_cast<int>(i), static_cast<long>(kanji[i]));
         assertEquals(msg, overflowIndex, immIndex->getBucketIndex(UnicodeString(kanji[i]), status));
         TEST_CHECK_STATUS;
     }
@@ -726,10 +726,10 @@ void AlphabeticIndexTest::TestChineseUnihan() {
         logln("Chinese/unihan has %d buckets/labels", bucketCount);
     }
     // bucketIndex = radical number, adjusted for simplified radicals in lower buckets.
-    int32_t bucketIndex = index.getBucketIndex(UnicodeString((char16_t)0x4e5d), status);
+    int32_t bucketIndex = index.getBucketIndex(UnicodeString(static_cast<char16_t>(0x4e5d)), status);
     assertEquals("getBucketIndex(U+4E5D)", 5, bucketIndex);
     // radical 100, and there is a 90' since Unicode 8
-    bucketIndex = index.getBucketIndex(UnicodeString((char16_t)0x7527), status);
+    bucketIndex = index.getBucketIndex(UnicodeString(static_cast<char16_t>(0x7527)), status);
     assertEquals("getBucketIndex(U+7527)", 101, bucketIndex);
 }
 

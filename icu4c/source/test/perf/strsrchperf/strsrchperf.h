@@ -33,7 +33,7 @@ public:
     }
     
     long getOperationsPerIteration() override {
-        return (long) srcLen;
+        return static_cast<long>(srcLen);
     }
     
     StringSearchPerfFunction(StrSrchFn func, UStringSearch* search, const char16_t* source,int32_t sourceLen, const char16_t* pattern, int32_t patternLen) {

@@ -126,7 +126,7 @@ void IntlTestRBNF::TestHebrewFraction() {
         UnicodeString expected(text1);
         formatter->format(123.45, result);
         if (result != expected) {
-            errln((UnicodeString)"expected '" + TestUtility::hex(expected) + "'\nbut got: '" + TestUtility::hex(result) + "'");
+            errln(UnicodeString("expected '") + TestUtility::hex(expected) + "'\nbut got: '" + TestUtility::hex(result) + "'");
         } else {
 //            formatter->parse(result, parseResult, pp);
 //            if (parseResult.getDouble() != 123.45) {
@@ -139,7 +139,7 @@ void IntlTestRBNF::TestHebrewFraction() {
         result.remove();
         formatter->format(123.0045, result);
         if (result != expected) {
-            errln((UnicodeString)"expected '" + TestUtility::hex(expected) + "'\nbut got: '" + TestUtility::hex(result) + "'");
+            errln(UnicodeString("expected '") + TestUtility::hex(expected) + "'\nbut got: '" + TestUtility::hex(result) + "'");
         } else {
             pp.setIndex(0);
 //            formatter->parse(result, parseResult, pp);
@@ -220,7 +220,7 @@ IntlTestRBNF::TestAPI() {
         }
         
         // Jitterbug 4452, for coverage
-        RuleBasedNumberFormat nf(spelloutRules, (UnicodeString)"", Locale::getUS(), perror, status);
+        RuleBasedNumberFormat nf(spelloutRules, UnicodeString(""), Locale::getUS(), perror, status);
         if(!(nf == *formatter)) {
           errln("Formatter constructed from the original rules should be semantically equivalent to the original!");
         }
@@ -324,7 +324,7 @@ IntlTestRBNF::TestAPI() {
   }
   result.remove();
   expected = "four";
-  formatter->format((int32_t)4,result);
+  formatter->format(static_cast<int32_t>(4), result);
   if(result != expected) {
       errln("Formatted 4, expected " + expected + " got " + result);
   } else {
@@ -333,7 +333,7 @@ IntlTestRBNF::TestAPI() {
 
   result.remove();
   FieldPosition pos;
-  formatter->format((int64_t)4, result, pos, status = U_ZERO_ERROR);
+  formatter->format(static_cast<int64_t>(4), result, pos, status = U_ZERO_ERROR);
   if(result != expected) {
       errln("Formatted 4 int64_t, expected " + expected + " got " + result);
   } else {
@@ -343,7 +343,7 @@ IntlTestRBNF::TestAPI() {
   //Jitterbug 4452, for coverage
   result.remove();
   FieldPosition pos2;
-  formatter->format((int64_t)4, formatter->getRuleSetName(0), result, pos2, status = U_ZERO_ERROR);
+  formatter->format(static_cast<int64_t>(4), formatter->getRuleSetName(0), result, pos2, status = U_ZERO_ERROR);
   if(result != expected) {
       errln("Formatted 4 int64_t, expected " + expected + " got " + result);
   } else {
@@ -465,7 +465,7 @@ void IntlTestRBNF::TestFractionalRuleSet()
             change = 1; // change, but once we hit a non-space char, don't change
         } else if (ch == ' ') {
             if (change != 0) {
-                fracRules.setCharAt(i, (char16_t)0x200e);
+                fracRules.setCharAt(i, static_cast<char16_t>(0x200e));
             }
         } else {
             if (change == 1) {
@@ -2021,7 +2021,7 @@ IntlTestRBNF::TestAllLocales()
 
         for (int j = 0; j < 2; ++j) {
             UErrorCode status = U_ZERO_ERROR;
-            RuleBasedNumberFormat* f = new RuleBasedNumberFormat((URBNFRuleSetTag)j, *loc, status);
+            RuleBasedNumberFormat* f = new RuleBasedNumberFormat(static_cast<URBNFRuleSetTag>(j), *loc, status);
 
             if (U_FAILURE(status)) {
                 errln(UnicodeString(loc->getName()) + names[j]
@@ -2066,7 +2066,7 @@ IntlTestRBNF::TestAllLocales()
                             + UnicodeString("ERROR could not roundtrip ") + n
                             + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getLong());
                     }
-                    else if (num.getType() == Formattable::kDouble && (int64_t)(num.getDouble() * 1000) != (int64_t)(n*1000)) {
+                    else if (num.getType() == Formattable::kDouble && static_cast<int64_t>(num.getDouble() * 1000) != static_cast<int64_t>(n * 1000)) {
                         // The epsilon difference is too high.
                         errln(UnicodeString(loc->getName()) + names[j]
                             + UnicodeString("ERROR could not roundtrip ") + n
@@ -2088,7 +2088,7 @@ IntlTestRBNF::TestAllLocales()
                             + UnicodeString("ERROR could not roundtrip ") + n
                             + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getLong());
                     }
-                    else if (num.getType() == Formattable::kDouble && (int64_t)(num.getDouble() * 1000) != (int64_t)(n*1000)) {
+                    else if (num.getType() == Formattable::kDouble && static_cast<int64_t>(num.getDouble() * 1000) != static_cast<int64_t>(n * 1000)) {
                         // The epsilon difference is too high.
                         errln(UnicodeString(loc->getName()) + names[j]
                             + UnicodeString("ERROR could not roundtrip ") + n
@@ -2263,7 +2263,7 @@ void IntlTestRBNF::TestPluralRules() {
 
     // Make sure there are no divide by 0 errors.
     UnicodeString result;
-    RuleBasedNumberFormat(ruRules, Locale("ru"), parseError, status).format((int32_t)21000, result);
+    RuleBasedNumberFormat(ruRules, Locale("ru"), parseError, status).format(static_cast<int32_t>(21000), result);
     if (result.compare(UNICODE_STRING_SIMPLE("twenty-one thousand")) != 0) {
         errln("Got " + result + " for 21000");
     }

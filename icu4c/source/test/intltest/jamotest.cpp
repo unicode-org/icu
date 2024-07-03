@@ -154,7 +154,7 @@ JamoTest::TestJamo() {
  * latin and back.
  */
 void JamoTest::TestPiecemeal() {
-    UnicodeString hangul; hangul.append((char16_t)0xBC0F);
+    UnicodeString hangul; hangul.append(static_cast<char16_t>(0xBC0F));
     UnicodeString jamo = nameToJamo("(Mi)(I)(Cf)");
     UnicodeString latin("mic");
     UnicodeString latin2("mich");
@@ -417,7 +417,7 @@ JamoTest::TestRealText() {
             buf.remove(0);
             buf.append("FAIL: ");
             if (hangul2 != hangulX) {
-                buf.append((UnicodeString)"(Weird: " + hangulX + " != " + hangul2 + ")");
+                buf.append(UnicodeString("(Weird: ") + hangulX + " != " + hangul2 + ")");
             }
             // The Hangul-Jamo conversion is not usually the
             // bug here, so we hide it from display.
@@ -431,9 +431,9 @@ JamoTest::TestRealText() {
         }
     }
     if (errors != 0) {
-        errln((UnicodeString)"Test word failures: " + errors + " out of " + total);
+        errln(UnicodeString("Test word failures: ") + errors + " out of " + total);
     } else {
-        logln((UnicodeString)"All " + total + " test words passed");
+        logln(UnicodeString("All ") + total + " test words passed");
     }
 
     delete latinJamo;

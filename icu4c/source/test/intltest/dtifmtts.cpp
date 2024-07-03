@@ -1251,7 +1251,7 @@ void DateIntervalFormatTest::expect(const char** data, int32_t data_length) {
         FieldPosition pos(FieldPosition::DONT_CARE);
         dtitvfmt->format(&dtitv, str.remove(), pos, ec);
         if (!assertSuccess("format in expect", ec)) return;
-        assertEquals((UnicodeString)"\"" + locName + "\\" + oneSkeleton + "\\" + ctou(datestr) + "\\" + ctou(datestr_2) + "\"", ctou(data[i++]), str);
+        assertEquals(UnicodeString("\"") + locName + "\\" + oneSkeleton + "\\" + ctou(datestr) + "\\" + ctou(datestr_2) + "\"", ctou(data[i++]), str);
 
         logln("interval date:" + str + "\"" + locName + "\", "
                  + "\"" + datestr + "\", "
@@ -1368,15 +1368,15 @@ void DateIntervalFormatTest::testContext() {
         fmt->setContext(testItemPtr->context, status);
         if (U_FAILURE(status)) {
             errln("setContext failed for locale %s skeleton %s context %04X: %s",
-                    testItemPtr->locale, testItemPtr->skeleton, (unsigned)testItemPtr->context, u_errorName(status));
+                    testItemPtr->locale, testItemPtr->skeleton, static_cast<unsigned>(testItemPtr->context), u_errorName(status));
         } else {
             UDisplayContext getContext = fmt->getContext(UDISPCTX_TYPE_CAPITALIZATION, status);
             if (U_FAILURE(status)) {
                 errln("getContext failed for locale %s skeleton %s context %04X: %s",
-                        testItemPtr->locale, testItemPtr->skeleton, (unsigned)testItemPtr->context, u_errorName(status));
+                        testItemPtr->locale, testItemPtr->skeleton, static_cast<unsigned>(testItemPtr->context), u_errorName(status));
             } else if (getContext != testItemPtr->context) {
                 errln("getContext failed for locale %s skeleton %s context %04X: got context %04X",
-                        testItemPtr->locale, testItemPtr->skeleton, (unsigned)testItemPtr->context, (unsigned)getContext);
+                        testItemPtr->locale, testItemPtr->skeleton, static_cast<unsigned>(testItemPtr->context), static_cast<unsigned>(getContext));
             }
         }
 
@@ -1387,7 +1387,7 @@ void DateIntervalFormatTest::testContext() {
         fmt->format(&interval, getResult, pos, status);
         if (U_FAILURE(status)) {
             errln("format failed for locale %s skeleton %s context %04X: %s",
-                    testItemPtr->locale, testItemPtr->skeleton, (unsigned)testItemPtr->context, u_errorName(status));
+                    testItemPtr->locale, testItemPtr->skeleton, static_cast<unsigned>(testItemPtr->context), u_errorName(status));
             continue;
         }
         UnicodeString expectResult(true, testItemPtr->expectResult, -1);
@@ -1535,7 +1535,7 @@ void DateIntervalFormatTest::expectUserDII(const char** data,
         FieldPosition pos(FieldPosition::DONT_CARE);
         dtitvfmt->format(&dtitv, str.remove(), pos, ec);
         if (!assertSuccess("format in expectUserDII", ec)) return;
-        assertEquals((UnicodeString)"\"" + locName + "\\" + datestr + "\\" + datestr_2 + "\"", ctou(data[i++]), str);
+        assertEquals(UnicodeString("\"") + locName + "\\" + datestr + "\\" + datestr_2 + "\"", ctou(data[i++]), str);
 #ifdef DTIFMTTS_DEBUG
         char result[1000];
         char mesg[1000];
@@ -1755,7 +1755,7 @@ void DateIntervalFormatTest::testTicket11583_2() {
     if (!assertSuccess("Error create format object", status)) {
         return;
     }
-    DateInterval interval((UDate) 1232364615000.0, (UDate) 1328787015000.0);
+    DateInterval interval(static_cast<UDate>(1232364615000.0), static_cast<UDate>(1328787015000.0));
     UnicodeString appendTo;
     FieldPosition fpos(FieldPosition::DONT_CARE);
     UnicodeString expected("ene de 2009\\u2009\\u2013\\u2009feb de 2012");
@@ -1857,7 +1857,7 @@ void DateIntervalFormatTest::testTicket12065() {
         errln("%s:%d DateIntervalFormat and clone are not equal.", __FILE__, __LINE__);
         return;
     }
-    DateInterval interval((UDate) 1232364615000.0, (UDate) 1328787015000.0);
+    DateInterval interval(static_cast<UDate>(1232364615000.0), static_cast<UDate>(1328787015000.0));
     UnicodeString appendTo;
     FieldPosition fpos(FieldPosition::DONT_CARE);
     formatter->format(&interval, appendTo, fpos, status);
@@ -2158,7 +2158,7 @@ void DateIntervalFormatTest::testTicket20707() {
             FieldPosition fposition;
             UnicodeString result;
             LocalPointer<Calendar> calendar(Calendar::createInstance(TimeZone::createTimeZone(timeZone), status));
-            calendar->setTime(UDate(1563235200000), status);
+            calendar->setTime(static_cast<UDate>(1563235200000), status);
             dtifmt->format(*calendar, *calendar, result, fposition, status);
 
             const char* localeID = locale.getName();
@@ -2408,9 +2408,9 @@ void DateIntervalFormatTest::testTicket20710_FieldIdentity() {
     IcuTestErrorCode status(*this, "testTicket20710_FieldIdentity");
     LocalPointer<DateIntervalFormat> dtifmt(DateIntervalFormat::createInstance("eeeeMMMddyyhhmma", "de-CH", status));
     LocalPointer<Calendar> calendar1(Calendar::createInstance(TimeZone::createTimeZone(u"CET"), status));
-    calendar1->setTime(UDate(1563235200000), status);
+    calendar1->setTime(static_cast<UDate>(1563235200000), status);
     LocalPointer<Calendar> calendar2(Calendar::createInstance(TimeZone::createTimeZone(u"CET"), status));
-    calendar2->setTime(UDate(1564235200000), status);
+    calendar2->setTime(static_cast<UDate>(1564235200000), status);
 
     {
         auto fv = dtifmt->formatToValue(*calendar1, *calendar2, status);
@@ -2458,7 +2458,7 @@ void DateIntervalFormatTest::testTicket20710_IntervalIdentity() {
         const Locale locale = locales[i];
         LocalPointer<DateTimePatternGenerator> gen(DateTimePatternGenerator::createInstance(locale, status));
         LocalPointer<Calendar> calendar(Calendar::createInstance(TimeZone::createTimeZone(timeZone), status));
-        calendar->setTime(UDate(1563235200000), status);
+        calendar->setTime(static_cast<UDate>(1563235200000), status);
         for (auto skeleton : skeletons) {
             LocalPointer<DateIntervalFormat> dtifmt(DateIntervalFormat::createInstance(skeleton, locale, status));
 

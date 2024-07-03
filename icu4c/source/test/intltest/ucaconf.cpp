@@ -115,7 +115,7 @@ void UCAConformanceTest::openTestFile(const char *type)
     char buffer[1024];
     uprv_strcpy(buffer, testDataPath);
     uprv_strcat(buffer, type);
-    int32_t bufLen = (int32_t)uprv_strlen(buffer);
+    int32_t bufLen = static_cast<int32_t>(uprv_strlen(buffer));
 
     // we try to open 3 files:
     // path/CollationTest_type.txt
@@ -212,7 +212,7 @@ void UCAConformanceTest::testConformance(const Collator *coll)
         int32_t buflen = u_parseString(lineB, buffer, 1024, &first, &status);
         if(U_FAILURE(status)) {
             errln("Error parsing line %ld (%s): %s\n",
-                  (long)line, u_errorName(status), lineB);
+                  static_cast<long>(line), u_errorName(status), lineB);
             status = U_ZERO_ERROR;
         }
         buffer[buflen] = 0;
@@ -226,7 +226,7 @@ void UCAConformanceTest::testConformance(const Collator *coll)
 
         if(oldSk != nullptr) {
             UBool ok=true;
-            int32_t skres = withSortKeys ? strcmp((char *)oldSk, (char *)newSk) : 0;
+            int32_t skres = withSortKeys ? strcmp(reinterpret_cast<char*>(oldSk), reinterpret_cast<char*>(newSk)) : 0;
             int32_t cmpres = coll->compare(oldB, oldBlen, buffer, buflen, status);
             int32_t cmpres2 = coll->compare(buffer, buflen, oldB, oldBlen, status);
 

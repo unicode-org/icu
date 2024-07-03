@@ -147,14 +147,14 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
     FieldPosition pos1(FieldPosition::DONT_CARE), pos2(FieldPosition::DONT_CARE);
     
     res1 = def.format(d, res1, pos1);
-    logln( (UnicodeString) "" + d + " formatted to " + res1);
+    logln(UnicodeString("") + d + " formatted to " + res1);
 
     status = U_ZERO_ERROR;
     res2 = cust1.format(fD, res2, pos2, status);
     if(U_FAILURE(status)) {
         errln("ERROR: format(Formattable [Date]) failed");
     }
-    logln((UnicodeString) "" + fD.getDate() + " formatted to " + res2);
+    logln(UnicodeString("") + fD.getDate() + " formatted to " + res2);
 
 // ======= Test parse()
 
@@ -268,7 +268,7 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
     object.setLenient(false);
     ParsePosition pp(0);
     UDate udDate = object.parse("2007W014", pp);
-    if ((double)udDate == 0.0) {
+    if (static_cast<double>(udDate) == 0.0) {
         errln("ERROR: Parsing failed using 'Y' and 'e'");
     }
 

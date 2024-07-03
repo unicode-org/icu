@@ -226,7 +226,7 @@ void benchmark(const char *name, Operation &op) {
     for (int32_t i = 0; i < UPRV_LENGTHOF(kLengths); ++i) {
         int32_t pieceLength = kLengths[i];
         double secPerCp = measure(op, pieceLength);
-        printf("%s  %6d  %12f ns/cp\n", name, (int)pieceLength, secPerCp * 1000000000);
+        printf("%s  %6d  %12f ns/cp\n", name, static_cast<int>(pieceLength), secPerCp * 1000000000);
     }
     puts("");
 }

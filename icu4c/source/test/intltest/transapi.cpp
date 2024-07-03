@@ -86,7 +86,7 @@ void TransliteratorAPITest::TestgetID() {
     int i;
     for (i=0; i<Transliterator::countAvailableIDs(); i++){
         status = U_ZERO_ERROR;
-        ID = (UnicodeString) Transliterator::getAvailableID(i);
+        ID = UnicodeString(Transliterator::getAvailableID(i));
         if(ID.indexOf("Thai")>-1){
             continue;
         }   
@@ -99,8 +99,8 @@ void TransliteratorAPITest::TestgetID() {
             errln("FAIL: getID() returned " + t->getID() + " instead of " + ID);
         delete t;
     }
-    ID=(UnicodeString)Transliterator::getAvailableID(i);
-    if(ID != (UnicodeString)Transliterator::getAvailableID(0)){
+    ID = UnicodeString(Transliterator::getAvailableID(i));
+    if (ID != UnicodeString(Transliterator::getAvailableID(0))) {
         errln("FAIL: calling getAvailableID(index > coundAvailableIDs) should make index=0\n");
     }
 
@@ -421,13 +421,13 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
         UnicodeString context;
 
         if (parseError.preContext[0]) {
-            context += (UnicodeString)" at " + parseError.preContext;
+            context += UnicodeString(" at ") + parseError.preContext;
         }
         if (parseError.postContext[0]) {
-            context += (UnicodeString)" | " + parseError.postContext;
+            context += UnicodeString(" | ") + parseError.postContext;
         }
-        errln((UnicodeString)"FAIL: can't create Any-Hex, " +
-              (UnicodeString)u_errorName(status) + context);
+        errln(UnicodeString("FAIL: can't create Any-Hex, ") +
+              UnicodeString(u_errorName(status)) + context);
         return;
     }
     UTransPosition index={19,20,20,20};
@@ -436,7 +436,7 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
     UnicodeString expected=UnicodeString("Transliterate this-'\\u0061\\u0062\\u0063'", "");
     t->transliterate(rs, index, insertion, status);
     if(U_FAILURE(status))
-        errln("FAIL: " + t->getID()+ ".translitere(Replaceable, int[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
+        errln("FAIL: " + t->getID() + ".translitere(Replaceable, int[], UnicodeString, UErrorCode)-->" + UnicodeString(u_errorName(status)));
     t->finishTransliteration(rs, index);
     UnicodeString message="transliterate";
     doTest(message, rs, expected);
@@ -455,7 +455,7 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
         if(status == U_ILLEGAL_ARGUMENT_ERROR)
             logln("OK: invalid index values handled correctly");
         else
-            errln("FAIL: invalid index values didn't throw U_ILLEGAL_ARGUMENT_ERROR throw" + (UnicodeString)u_errorName(status));
+            errln("FAIL: invalid index values didn't throw U_ILLEGAL_ARGUMENT_ERROR throw" + UnicodeString(u_errorName(status)));
     }
 
     delete t;
@@ -494,7 +494,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
            log = s + " + " + Data[i+0] + " -> ";
            t->transliterate(s, index, Data[i+0], status);
            if(U_FAILURE(status)){
-               errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
+               errln("FAIL: " + t->getID() + ".transliterate(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + UnicodeString(u_errorName(status)));
            continue;
            }
        }else {
@@ -517,7 +517,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
             char16_t c=Data[i+0].charAt(0);
             t->transliterate(s, index, c, status);
             if(U_FAILURE(status)) {
-               errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], char16_t, UErrorCode)-->" + (UnicodeString)u_errorName(status));
+               errln("FAIL: " + t->getID() + ".transliterate(Replaceable, int32_t[], char16_t, UErrorCode)-->" + UnicodeString(u_errorName(status)));
                continue;
             }
         } else {
@@ -605,7 +605,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
         index.start=getInt(Data[i+2]);
         t->transliterate(s, index, status);
         if(U_FAILURE(status)){
-           errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UErrorCode)-->" + (UnicodeString)u_errorName(status));
+           errln("FAIL: " + t->getID() + ".transliterate(Replaceable, int32_t[], UErrorCode)-->" + UnicodeString(u_errorName(status)));
            continue;
         }
         t->finishTransliteration(s, index);
@@ -631,7 +631,7 @@ void TransliteratorAPITest::TestNullTransliterator(){
     if(transLimit != limit){
         errln("ERROR: NullTransliterator->transliterate() failed");
     }
-    doTest((UnicodeString)"nulTrans->transliterate", replaceable, s);
+    doTest(UnicodeString("nulTrans->transliterate"), replaceable, s);
     replaceable.remove();
     replaceable.append(s);
     UTransPosition index;
@@ -643,7 +643,7 @@ void TransliteratorAPITest::TestNullTransliterator(){
     if(index.start != limit){
         errln("ERROR: NullTransliterator->handleTransliterate() failed");
     }
-    doTest((UnicodeString)"NullTransliterator->handleTransliterate", replaceable, s);
+    doTest(UnicodeString("NullTransliterator->handleTransliterate"), replaceable, s);
     callEverything(nullTrans, __LINE__);
     delete nullTrans;
 
@@ -868,7 +868,7 @@ void TransliteratorAPITest::keyboardAux(Transliterator *t, UnicodeString DATA[],
              index.start=getInt(DATA[i+4]);
              t->transliterate(s, index, DATA[i+0], status);
              if(U_FAILURE(status)){
-                 errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
+                 errln("FAIL: " + t->getID() + ".transliterate(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + UnicodeString(u_errorName(status)));
              continue;
              }
            log = s + " => ";
@@ -889,13 +889,13 @@ void TransliteratorAPITest::displayOutput(const UnicodeString& got, const Unicod
     got.extractBetween(index.limit, index.contextLimit, d);
     got.extractBetween(index.contextLimit, got.length(), e);
     log.append(a).
-        append((char16_t)0x7b/*{*/).
+        append(static_cast<char16_t>(0x7b) /*{*/).
         append(b).
-        append((char16_t)0x7c/*|*/).
+        append(static_cast<char16_t>(0x7c) /*|*/).
         append(c).
-        append((char16_t)0x7c).
+        append(static_cast<char16_t>(0x7c)).
         append(d).
-        append((char16_t)0x7d/*}*/).
+        append(static_cast<char16_t>(0x7d) /*}*/).
         append(e);
     if (got == expected) 
         logln("OK:" + prettify(log));
@@ -907,9 +907,9 @@ void TransliteratorAPITest::displayOutput(const UnicodeString& got, const Unicod
 /*Internal Functions used*/
 void TransliteratorAPITest::doTest(const UnicodeString& message, const UnicodeString& result, const UnicodeString& expected){
     if (prettify(result) == prettify(expected)) 
-        logln((UnicodeString)"Ok: " + prettify(message) + " passed \"" + prettify(expected) + "\"");
+        logln(UnicodeString("Ok: ") + prettify(message) + " passed \"" + prettify(expected) + "\"");
     else 
-        dataerrln((UnicodeString)"FAIL:" + message + " failed  Got-->" + prettify(result)+ ", Expected--> " + prettify(expected) );
+        dataerrln(UnicodeString("FAIL:") + message + " failed  Got-->" + prettify(result) + ", Expected--> " + prettify(expected));
 }
 
 

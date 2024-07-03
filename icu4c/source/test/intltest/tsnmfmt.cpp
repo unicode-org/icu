@@ -39,7 +39,7 @@ static const char * formattableTypeName(Formattable::Type t)
 void IntlTestNumberFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
 
-    if (exec) logln((UnicodeString)"TestSuite NumberFormat");
+    if (exec) logln(UnicodeString("TestSuite NumberFormat"));
     switch (index) {
         case 0: name = "createInstance"; 
             if (exec)
@@ -80,26 +80,26 @@ IntlTestNumberFormat::testLocale(/* char* par, */const Locale& locale, const Uni
     
     fLocale = locale;
     name = "Number test";
-    logln((UnicodeString)name + " (" + localeName + ")");
+    logln(UnicodeString(name) + " (" + localeName + ")");
     fStatus = U_ZERO_ERROR;
     fFormat = NumberFormat::createInstance(locale, fStatus);
     testFormat(/* par */);
 
     name = "Currency test";
-    logln((UnicodeString)name + " (" + localeName + ")");
+    logln(UnicodeString(name) + " (" + localeName + ")");
     fStatus = U_ZERO_ERROR;
     fFormat = NumberFormat::createCurrencyInstance(locale, fStatus);
     testFormat(/* par */);
 
     name = "Percent test";
-    logln((UnicodeString)name + " (" + localeName + ")");
+    logln(UnicodeString(name) + " (" + localeName + ")");
     fStatus = U_ZERO_ERROR;
     fFormat = NumberFormat::createPercentInstance(locale, fStatus);
     testFormat(/* par */);
 	
     if (uprv_strcmp(locale.getName(), "en_US_POSIX") != 0) {
         name = "Scientific test";
-        logln((UnicodeString)name + " (" + localeName + ")");
+        logln(UnicodeString(name) + " (" + localeName + ")");
         fStatus = U_ZERO_ERROR;
         fFormat = NumberFormat::createScientificInstance(locale, fStatus);
         testFormat(/* par */);
@@ -113,11 +113,11 @@ double IntlTestNumberFormat::randDouble()
     // Call srand(currentTime) in intltest to make it truly random.
     double d;
     uint32_t i;
-    char* poke = (char*)&d;
+    char* poke = reinterpret_cast<char*>(&d);
     do {
         for (i=0; i < sizeof(double); ++i)
         {
-            poke[i] = (char)(rand() & 0xFF);
+            poke[i] = static_cast<char>(rand() & 0xFF);
         }
     } while (uprv_isNaN(d) || uprv_isInfinite(d)
         || !((-DBL_MAX < d && d < DBL_MAX) || (d < -DBL_MIN && DBL_MIN < d)));
@@ -135,10 +135,10 @@ uint32_t IntlTestNumberFormat::randLong()
     // Call srand(currentTime) in intltest to make it truly random.
     uint32_t d;
     uint32_t i;
-    char* poke = (char*)&d;
+    char* poke = reinterpret_cast<char*>(&d);
     for (i=0; i < sizeof(uint32_t); ++i)
     {
-        poke[i] = (char)(rand() & 0xFF);
+        poke[i] = static_cast<char>(rand() & 0xFF);
     }
     return d;
 }
@@ -161,7 +161,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
 {
     if (U_FAILURE(fStatus))
     { 
-        dataerrln((UnicodeString)"**** FAIL: createXxxInstance failed. - " + u_errorName(fStatus));
+        dataerrln(UnicodeString("**** FAIL: createXxxInstance failed. - ") + u_errorName(fStatus));
         if (fFormat != nullptr)
             errln("**** FAIL: Non-null format returned by createXxxInstance upon failure.");
         delete fFormat;
@@ -171,7 +171,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
 
     if (fFormat == nullptr)
     {
-        errln((UnicodeString)"**** FAIL: Null format returned by createXxxInstance.");
+        errln(UnicodeString("**** FAIL: Null format returned by createXxxInstance."));
         return;
     }
 
@@ -179,7 +179,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
 
     // Assume it's a DecimalFormat and get some info
     DecimalFormat *s = dynamic_cast<DecimalFormat*>(fFormat);
-    logln((UnicodeString)"  Pattern " + s->toPattern(str));
+    logln(UnicodeString("  Pattern ") + s->toPattern(str));
 
 #if U_PF_OS390 <= U_PLATFORM && U_PLATFORM <= U_PF_OS400
     tryIt(-2.02147304840132e-68);
@@ -215,7 +215,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     tryIt(-uprv_getInfinity());
 #endif
 
-    tryIt((int32_t)251887531);
+    tryIt(static_cast<int32_t>(251887531));
     tryIt(5e-20 / 9);
     tryIt(5e20 / 9);
     tryIt(1.234e-50);
@@ -224,12 +224,12 @@ IntlTestNumberFormat::testFormat(/* char* par */)
 	
 	tryIt(5.06e-27);
 
-    tryIt((int32_t)INT32_MIN);
-    tryIt((int32_t)INT32_MAX);
-    tryIt((double)INT32_MIN);
-    tryIt((double)INT32_MAX);
-    tryIt((double)INT32_MIN - 1.0);
-    tryIt((double)INT32_MAX + 1.0);
+    tryIt(static_cast<int32_t>(INT32_MIN));
+    tryIt(static_cast<int32_t>(INT32_MAX));
+    tryIt(static_cast<double>(INT32_MIN));
+    tryIt(static_cast<double>(INT32_MAX));
+    tryIt(static_cast<double>(INT32_MIN) - 1.0);
+    tryIt(static_cast<double>(INT32_MAX) + 1.0);
 
     tryIt(5.0 / 9.0 * 1e-20);
     tryIt(4.0 / 9.0 * 1e-20);
@@ -237,15 +237,15 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     tryIt(4.0 / 9.0 * 1e+20);
 
     tryIt(2147483647.);
-    tryIt((int32_t)0);
+    tryIt(static_cast<int32_t>(0));
     tryIt(0.0);
-    tryIt((int32_t)1);
-    tryIt((int32_t)10);
-    tryIt((int32_t)100);
-    tryIt((int32_t)-1);
-    tryIt((int32_t)-10);
-    tryIt((int32_t)-100);
-    tryIt((int32_t)-1913860352);
+    tryIt(static_cast<int32_t>(1));
+    tryIt(static_cast<int32_t>(10));
+    tryIt(static_cast<int32_t>(100));
+    tryIt(static_cast<int32_t>(-1));
+    tryIt(static_cast<int32_t>(-10));
+    tryIt(static_cast<int32_t>(-100));
+    tryIt(static_cast<int32_t>(-1913860352));
 
     for (int32_t z=0; z<10; ++z)
     {
@@ -257,15 +257,15 @@ IntlTestNumberFormat::testFormat(/* char* par */)
 
     tryIt(0.0);
     tryIt(it);
-    tryIt((int32_t)0);
+    tryIt(static_cast<int32_t>(0));
     tryIt(uprv_floor(it));
-    tryIt((int32_t)randLong());
+    tryIt(static_cast<int32_t>(randLong()));
 
     // try again
     it = getSafeDouble(100.0);
     tryIt(it);
     tryIt(uprv_floor(it));
-    tryIt((int32_t)randLong());
+    tryIt(static_cast<int32_t>(randLong()));
 
     // try again with very large numbers
     it = getSafeDouble(100000000000.0);
@@ -275,7 +275,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     // and without going outside of the int32_t range
     it = randFraction() * INT32_MAX;
     tryIt(it);
-    tryIt((int32_t)uprv_floor(it));
+    tryIt(static_cast<int32_t>(uprv_floor(it)));
 
     delete fFormat;
 }
@@ -311,7 +311,7 @@ IntlTestNumberFormat::tryIt(double aNumber)
         if (number[i].getType() == Formattable::kLong)
             number[i].setDouble(number[i].getLong());
         else if (number[i].getType() == Formattable::kInt64)
-            number[i].setDouble((double)number[i].getInt64());
+            number[i].setDouble(static_cast<double>(number[i].getInt64()));
         else if (number[i].getType() != Formattable::kDouble)
         {
             errMsg = ("**** FAIL: Parse of " + prettify(string[i-1])
@@ -354,7 +354,7 @@ IntlTestNumberFormat::tryIt(double aNumber)
     {
         for (int32_t k=0; k<=i; ++k)
         {
-            logln((UnicodeString)"" + k + ": " + number[k].getDouble() + " F> " +
+            logln(UnicodeString("") + k + ": " + number[k].getDouble() + " F> " +
                   prettify(string[k]) + " P> ");
         }
         errln(errMsg);
@@ -400,7 +400,7 @@ void IntlTestNumberFormat::testAvailableLocales(/* char* par */)
 {
     int32_t count = 0;
     const Locale* locales = NumberFormat::getAvailableLocales(count);
-    logln((UnicodeString)"" + count + " available locales");
+    logln(UnicodeString("") + count + " available locales");
     if (locales && count)
     {
         UnicodeString name;
@@ -414,7 +414,7 @@ void IntlTestNumberFormat::testAvailableLocales(/* char* par */)
         logln(all);
     }
     else
-        dataerrln((UnicodeString)"**** FAIL: Zero available locales or null array pointer");
+        dataerrln(UnicodeString("**** FAIL: Zero available locales or null array pointer"));
 }
 
 void IntlTestNumberFormat::monsterTest(/* char* par */)

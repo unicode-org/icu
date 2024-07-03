@@ -62,7 +62,7 @@ public:
                 // Preflight the UTF-8 length and allocate utf8.
                 u_strToUTF8(nullptr, 0, &utf8Length, buffer, bufferLen, &status);
                 if(status==U_BUFFER_OVERFLOW_ERROR) {
-                    utf8=(char *)malloc(utf8Length);
+                    utf8 = static_cast<char*>(malloc(utf8Length));
                     if(utf8!=nullptr) {
                         status=U_ZERO_ERROR;
                         u_strToUTF8(utf8, utf8Length, nullptr, buffer, bufferLen, &status);
@@ -74,8 +74,8 @@ public:
                 if(verbose) {
                     printf("code points:%ld  len16:%ld  len8:%ld  "
                            "B/cp:%.3g\n",
-                           (long)countInputCodePoints, (long)bufferLen, (long)utf8Length,
-                           (double)utf8Length/countInputCodePoints);
+                           static_cast<long>(countInputCodePoints), static_cast<long>(bufferLen), static_cast<long>(utf8Length),
+                           static_cast<double>(utf8Length) / countInputCodePoints);
                 }
             }
         }
@@ -221,7 +221,7 @@ public:
         uint32_t bitSet=0;
         for(i=0; i<length;) {
             U16_NEXT(buffer, i, length, c);
-            bitSet|=(uint32_t)1<<u_charDirection(c);
+            bitSet |= static_cast<uint32_t>(1) << u_charDirection(c);
         }
         if(length>0 && bitSet==0) {
             fprintf(stderr, "error: GetBiDiClass() did not collect bits\n");

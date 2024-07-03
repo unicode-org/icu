@@ -760,7 +760,7 @@ void RegionTest::TestGroupingChildren() {
                     if (expectedChildEnd == nullptr) {
                         expectedChildEnd = expectedChildStart + uprv_strlen(expectedChildStart);
                     }
-                    if (uprv_strlen(actualChild) != size_t(expectedChildEnd - expectedChildStart) || uprv_strncmp(actualChild, expectedChildStart, expectedChildEnd - expectedChildStart) != 0) {
+                    if (uprv_strlen(actualChild) != static_cast<size_t>(expectedChildEnd - expectedChildStart) || uprv_strncmp(actualChild, expectedChildStart, expectedChildEnd - expectedChildStart) != 0) {
                         errln("Mismatch in child list for %s at position %d: expected %s, got %s\n", groupingCode, numExpectedChildren, expectedChildStart, actualChild);
                     }
                     expectedChildStart = (*expectedChildEnd != '\0') ? expectedChildEnd + 1 : expectedChildEnd;

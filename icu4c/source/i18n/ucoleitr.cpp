@@ -350,7 +350,7 @@ UCollationPCE::nextProcessed(
              break;
         }
 
-        result = processCE((uint32_t)ce);
+        result = processCE(static_cast<uint32_t>(ce));
     } while (result == UCOL_IGNORABLE);
 
     if (ixLow != nullptr) {
@@ -412,7 +412,7 @@ UCollationPCE::previousProcessed(
                 goto finish;
             }
 
-            rceb.put((uint32_t)ce, low, high, *status);
+            rceb.put(static_cast<uint32_t>(ce), low, high, *status);
         } while (U_SUCCESS(*status) && ((ce & UCOL_PRIMARYORDERMASK) == 0 || isContinuation(ce)));
 
         // process the raw CEs

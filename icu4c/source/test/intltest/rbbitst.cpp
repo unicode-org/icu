@@ -200,7 +200,7 @@ static void printStringBreaks(UText *tstr, int expected[], int expectedCount) {
 
         UChar32 c = utext_next32(tstr);
         u_charName(c, U_UNICODE_CHAR_NAME, name, 100, &status);
-        printf("%7x %5d %6d %8d %4s %4s %4s %4s %s\n", (int)c,
+        printf("%7x %5d %6d %8d %4s %4s %4s %4s %s\n", static_cast<int>(c),
                            u_isUAlphabetic(c),
                            u_hasBinaryProperty(c, UCHAR_GRAPHEME_EXTEND),
                            u_isalnum(c),
@@ -351,7 +351,7 @@ void RBBITest::TestBug4153072() {
     for (index = -1; index < begin + 1; ++index) {
         onBoundary = iter->isBoundary(index);
         if (index == 0?  !onBoundary : onBoundary) {
-            errln((UnicodeString)"Didn't handle isBoundary correctly with offset = " + index +
+            errln(UnicodeString("Didn't handle isBoundary correctly with offset = ") + index +
                             " and begin index = " + begin);
         }
     }
@@ -1394,7 +1394,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
             if (length<=8) {
                 char buf[10];
                 hexNumber.extract (0, length, buf, sizeof(buf), US_INV);
-                UChar32 c = (UChar32)strtol(buf, nullptr, 16);
+                UChar32 c = static_cast<UChar32>(strtol(buf, nullptr, 16));
                 if (c<=0x10ffff) {
                     testString.append(c);
                 } else {
@@ -1423,7 +1423,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
             // Scanner catchall.  Something unrecognized appeared on the line.
             char token[16];
             UnicodeString uToken = tokenMatcher.group(0, status);
-            uToken.extract(0, uToken.length(), token, (uint32_t)sizeof(token));
+            uToken.extract(0, uToken.length(), token, static_cast<uint32_t>(sizeof(token)));
             token[sizeof(token)-1] = 0;
             errln("Syntax error in test data file \'%s\', line %d.  Scanning \"%s\"\n", fileName, lineNumber, token);
 
@@ -1636,7 +1636,7 @@ static uint32_t m_seed = 1;
 static uint32_t m_rand()
 {
     m_seed = m_seed * 1103515245 + 12345;
-    return (uint32_t)(m_seed/65536) % 32768;
+    return (m_seed / 65536) % 32768;
 }
 
 
@@ -3560,8 +3560,8 @@ static int32_t  getIntParam(UnicodeString name, UnicodeString &params, int32_t d
         // The param exists.  Convert the string to an int.
         char valString[100];
         int32_t paramLength = m.end(1, status) - m.start(1, status);
-        if (paramLength >= (int32_t)(sizeof(valString)-1)) {
-            paramLength = (int32_t)(sizeof(valString)-2);
+        if (paramLength >= static_cast<int32_t>(sizeof(valString) - 1)) {
+            paramLength = static_cast<int32_t>(sizeof(valString) - 2);
         }
         params.extract(m.start(1, status), paramLength, valString, sizeof(valString));
         val = strtol(valString, nullptr, 10);
@@ -4188,7 +4188,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
         testText.truncate(0);
         for (i=0; i<TESTSTRINGLEN; i++) {
             int32_t  aClassNum = m_rand() % numCharClasses;
-            UnicodeSet *classSet = (UnicodeSet *)chClasses->elementAt(aClassNum);
+            UnicodeSet* classSet = static_cast<UnicodeSet*>(chClasses->elementAt(aClassNum));
             int32_t   charIdx = m_rand() % classSet->size();
             UChar32   c = classSet->charAt(charIdx);
             if (c < 0) {   // TODO:  deal with sets containing strings.
@@ -4304,7 +4304,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                     "Out of range value returned by BreakIterator::preceding().\n"
                     "index=%d;  prev returned %d; lastBreak=%d" ,
                     name,  i, breakPos, lastBreakPos);
-                if (breakPos >= 0 && breakPos < (int32_t)sizeof(precedingBreaks)) {
+                if (breakPos >= 0 && breakPos < static_cast<int32_t>(sizeof(precedingBreaks))) {
                     precedingBreaks[i] = 2;   // Forces an error.
                 }
             } else {
@@ -4468,7 +4468,7 @@ void RBBITest::TestBug5532()  {
 
     UErrorCode status = U_ZERO_ERROR;
     UText utext=UTEXT_INITIALIZER;
-    utext_openUTF8(&utext, (const char *)utf8Data, -1, &status);
+    utext_openUTF8(&utext, reinterpret_cast<const char*>(utf8Data), -1, &status);
     TEST_ASSERT_SUCCESS(status);
 
     BreakIterator *bi = BreakIterator::createWordInstance(Locale("th"), status);
@@ -4664,7 +4664,7 @@ void RBBITest::TestEmoji() {
             }
             CharString hex8;
             hex8.appendInvariantChars(hex, status);
-            UChar32 c = (UChar32)strtol(hex8.data(), nullptr, 16);
+            UChar32 c = static_cast<UChar32>(strtol(hex8.data(), nullptr, 16));
             if (c<=0x10ffff) {
                 testString.append(c);
             } else {
@@ -4770,7 +4770,7 @@ void RBBITest::TestTableRedundancies() {
     std::vector<UnicodeString> columns;
     for (int32_t column = 0; column < numCharClasses; column++) {
         UnicodeString s;
-        for (int32_t r = 1; r < (int32_t)fwtbl->fNumStates; r++) {
+        for (int32_t r = 1; r < static_cast<int32_t>(fwtbl->fNumStates); r++) {
             char *rowBytes = const_cast<char*>(fwtbl->fTableData + (fwtbl->fRowLen * r));
             if (in8Bits) {
                 RBBIStateTableRow8 *row = reinterpret_cast<RBBIStateTableRow8 *>(rowBytes);
@@ -4784,7 +4784,7 @@ void RBBITest::TestTableRedundancies() {
     }
     // Ignore column (char class) 0 while checking; it's special, and may have duplicates.
     for (int c1=1; c1<numCharClasses; c1++) {
-        int limit = c1 < (int)fwtbl->fDictCategoriesStart ? fwtbl->fDictCategoriesStart : numCharClasses;
+        int limit = c1 < static_cast<int>(fwtbl->fDictCategoriesStart) ? fwtbl->fDictCategoriesStart : numCharClasses;
         for (int c2 = c1+1; c2 < limit; c2++) {
             if (columns.at(c1) == columns.at(c2)) {
                 errln("%s:%d Duplicate columns (%d, %d)\n", __FILE__, __LINE__, c1, c2);
@@ -4796,7 +4796,7 @@ void RBBITest::TestTableRedundancies() {
 
     // Check for duplicate states
     std::vector<UnicodeString> rows;
-    for (int32_t r=0; r < (int32_t)fwtbl->fNumStates; r++) {
+    for (int32_t r = 0; r < static_cast<int32_t>(fwtbl->fNumStates); r++) {
         UnicodeString s;
         char *rowBytes = const_cast<char*>(fwtbl->fTableData + (fwtbl->fRowLen * r));
         if (in8Bits) {
@@ -4818,8 +4818,8 @@ void RBBITest::TestTableRedundancies() {
         }
         rows.push_back(s);
     }
-    for (int r1=0; r1 < (int32_t)fwtbl->fNumStates; r1++) {
-        for (int r2 = r1+1; r2 < (int32_t)fwtbl->fNumStates; r2++) {
+    for (int r1 = 0; r1 < static_cast<int32_t>(fwtbl->fNumStates); r1++) {
+        for (int r2 = r1 + 1; r2 < static_cast<int32_t>(fwtbl->fNumStates); r2++) {
             if (rows.at(r1) == rows.at(r2)) {
                 errln("%s:%d Duplicate rows (%d, %d)\n", __FILE__, __LINE__, r1, r2);
                 return;
@@ -4942,7 +4942,7 @@ void RBBITest::TestBug13692() {
         return;
     }
     constexpr int32_t LENGTH = 1000000;
-    UnicodeString longNumber(LENGTH, (UChar32)u'3', LENGTH);
+    UnicodeString longNumber(LENGTH, static_cast<UChar32>(u'3'), LENGTH);
     for (int i=0; i<20; i+=2) {
         longNumber.setCharAt(i, u' ');
     }
@@ -5763,7 +5763,7 @@ class FakeTaiLeBreakEngine : public ExternalBreakEngine {
            utext_setNativeIndex(text, start);
        }
        int32_t current;
-       while((current = (int32_t)utext_getNativeIndex(text)) < end) {
+       while ((current = static_cast<int32_t>(utext_getNativeIndex(text))) < end) {
          UChar32 c = utext_current32(text);
          // Break after tone marks as a fake break point.
          if (tones.contains(c)) {
@@ -5942,7 +5942,7 @@ void RBBITest::TestBug22585() {
 
 // Test a long string with a ; in the end will not cause stack overflow.
 void RBBITest::TestBug22602() {
-    UnicodeString rule(25000, (UChar32)'A', 25000-1);
+    UnicodeString rule(25000, static_cast<UChar32>('A'), 25000 - 1);
     rule.append(u";");
     UParseError pe {};
     UErrorCode ec {U_ZERO_ERROR};
@@ -5969,7 +5969,7 @@ void RBBITest::TestBug22584() {
 
     // Failure of this test showed as a crash during the break iterator construction.
 
-    UnicodeString ruleStr(100000, (UChar32)0, 100000);
+    UnicodeString ruleStr(100000, static_cast<UChar32>(0), 100000);
     UParseError pe {};
     UErrorCode ec {U_ZERO_ERROR};
 

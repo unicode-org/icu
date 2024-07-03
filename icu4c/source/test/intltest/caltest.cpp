@@ -68,7 +68,7 @@ UnicodeString CalendarTest::calToStr(const Calendar & cal)
   int i;
   UDate d;
   for(i = 0;i<UCAL_FIELD_COUNT;i++) {
-    out += (UnicodeString("") + fieldName((UCalendarDateFields)i) + "=" +  cal.get((UCalendarDateFields)i, status) + UnicodeString(" "));
+    out += (UnicodeString("") + fieldName(static_cast<UCalendarDateFields>(i)) + "=" + cal.get(static_cast<UCalendarDateFields>(i), status) + UnicodeString(" "));
   }
   out += "[" + UnicodeString(cal.getType()) + "]";
 
@@ -245,7 +245,7 @@ UnicodeString CalendarTest::fieldName(UCalendarDateFields f) {
       FIELD_NAME_STR( UCAL_MILLISECONDS_IN_DAY );
 #undef FIELD_NAME_STR
     default:
-        return UnicodeString("") + ((int32_t)f);
+        return UnicodeString("") + static_cast<int32_t>(f);
     }
 }
 
@@ -284,11 +284,11 @@ CalendarTest::TestGenericAPI()
         cal->after(*cal2, status) ||
         U_FAILURE(status)) errln("FAIL: equals/before/after failed");
 
-    logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
-    logln(UnicodeString("cal2=")  +cal2->getTime(status)  + UnicodeString(calToStr(*cal2)));
+    logln(UnicodeString("cal=") + cal->getTime(status) + (calToStr(*cal)));
+    logln(UnicodeString("cal2=") + cal2->getTime(status) + (calToStr(*cal2)));
     logln("cal2->setTime(when+1000)");
     cal2->setTime(when + 1000, status);
-    logln(UnicodeString("cal2=")  +cal2->getTime(status)  + UnicodeString(calToStr(*cal2)));
+    logln(UnicodeString("cal2=") + cal2->getTime(status) + (calToStr(*cal2)));
 
     if (failure(status, "Calendar::setTime")) return;
     if (cal->equals(*cal2, status) ||
@@ -297,10 +297,10 @@ CalendarTest::TestGenericAPI()
         U_FAILURE(status)) errln("FAIL: equals/before/after failed after setTime(+1000)");
 
     logln("cal->roll(UCAL_SECOND)");
-    cal->roll(UCAL_SECOND, (UBool) true, status);
-    logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
-    cal->roll(UCAL_SECOND, (int32_t)0, status);
-    logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
+    cal->roll(UCAL_SECOND, static_cast<UBool>(true), status);
+    logln(UnicodeString("cal=") + cal->getTime(status) + (calToStr(*cal)));
+    cal->roll(UCAL_SECOND, static_cast<int32_t>(0), status);
+    logln(UnicodeString("cal=") + cal->getTime(status) + (calToStr(*cal)));
     if (failure(status, "Calendar::roll")) return;
 
     if (!(eq=cal->equals(*cal2, status)) ||
@@ -311,12 +311,12 @@ CalendarTest::TestGenericAPI()
             eq?'T':'F',
             b4?'T':'F',
             af?'T':'F');
-      logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
-      logln(UnicodeString("cal2=")  +cal2->getTime(status)  + UnicodeString(calToStr(*cal2)));
+      logln(UnicodeString("cal=") + cal->getTime(status) + (calToStr(*cal)));
+      logln(UnicodeString("cal2=") + cal2->getTime(status) + (calToStr(*cal2)));
     }
 
     // Roll back to January
-    cal->roll(UCAL_MONTH, (int32_t)(1 + UCAL_DECEMBER - cal->get(UCAL_MONTH, status)), status);
+    cal->roll(UCAL_MONTH, static_cast<int32_t>(1 + UCAL_DECEMBER - cal->get(UCAL_MONTH, status)), status);
     if (failure(status, "Calendar::roll")) return;
     if (cal->equals(*cal2, status) ||
         cal2->before(*cal, status) ||
@@ -339,7 +339,7 @@ CalendarTest::TestGenericAPI()
 
     for (i=UCAL_SUNDAY; i<=UCAL_SATURDAY; ++i)
     {
-        cal->setFirstDayOfWeek((UCalendarDaysOfWeek)i);
+        cal->setFirstDayOfWeek(static_cast<UCalendarDaysOfWeek>(i));
         if (cal->getFirstDayOfWeek() != i) errln("FAIL: set/getFirstDayOfWeek failed");
         UErrorCode aStatus = U_ZERO_ERROR;
         if (cal->getFirstDayOfWeek(aStatus) != i || U_FAILURE(aStatus)) errln("FAIL: getFirstDayOfWeek(status) failed");
@@ -347,17 +347,17 @@ CalendarTest::TestGenericAPI()
 
     for (i=1; i<=7; ++i)
     {
-        cal->setMinimalDaysInFirstWeek((uint8_t)i);
+        cal->setMinimalDaysInFirstWeek(static_cast<uint8_t>(i));
         if (cal->getMinimalDaysInFirstWeek() != i) errln("FAIL: set/getFirstDayOfWeek failed");
     }
 
     for (i=0; i<UCAL_FIELD_COUNT; ++i)
     {
-        if (cal->getMinimum((UCalendarDateFields)i) > cal->getGreatestMinimum((UCalendarDateFields)i))
+        if (cal->getMinimum(static_cast<UCalendarDateFields>(i)) > cal->getGreatestMinimum(static_cast<UCalendarDateFields>(i)))
             errln(UnicodeString("FAIL: getMinimum larger than getGreatestMinimum for field ") + i);
-        if (cal->getLeastMaximum((UCalendarDateFields)i) > cal->getMaximum((UCalendarDateFields)i))
+        if (cal->getLeastMaximum(static_cast<UCalendarDateFields>(i)) > cal->getMaximum(static_cast<UCalendarDateFields>(i)))
             errln(UnicodeString("FAIL: getLeastMaximum larger than getMaximum for field ") + i);
-        if (cal->getMinimum((UCalendarDateFields)i) >= cal->getMaximum((UCalendarDateFields)i))
+        if (cal->getMinimum(static_cast<UCalendarDateFields>(i)) >= cal->getMaximum(static_cast<UCalendarDateFields>(i)))
             errln(UnicodeString("FAIL: getMinimum not less than getMaximum for field ") + i);
     }
 
@@ -385,13 +385,13 @@ CalendarTest::TestGenericAPI()
             case UCAL_YEAR: case UCAL_MONTH: case UCAL_DATE:
             case UCAL_HOUR_OF_DAY: case UCAL_MINUTE: case UCAL_SECOND:
             case UCAL_EXTENDED_YEAR:
-              if (!cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::isSet F, should be T " + fieldName((UCalendarDateFields)i));
+              if (!cal->isSet(static_cast<UCalendarDateFields>(i))) errln("FAIL: Calendar::isSet F, should be T " + fieldName(static_cast<UCalendarDateFields>(i)));
                 break;
             default:
-              if (cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::isSet = T, should be F  " + fieldName((UCalendarDateFields)i));
+              if (cal->isSet(static_cast<UCalendarDateFields>(i))) errln("FAIL: Calendar::isSet = T, should be F  " + fieldName(static_cast<UCalendarDateFields>(i)));
         }
-        cal->clear((UCalendarDateFields)i);
-        if (cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::clear/isSet failed " + fieldName((UCalendarDateFields)i));
+        cal->clear(static_cast<UCalendarDateFields>(i));
+        if (cal->isSet(static_cast<UCalendarDateFields>(i))) errln("FAIL: Calendar::clear/isSet failed " + fieldName(static_cast<UCalendarDateFields>(i)));
     }
 
     if(cal->getActualMinimum(Calendar::SECOND, status) != 0){
@@ -399,7 +399,7 @@ CalendarTest::TestGenericAPI()
     }
 
     Calendar *cal3 = Calendar::createInstance(status);
-    cal3->roll(Calendar::SECOND, (int32_t)0, status);
+    cal3->roll(Calendar::SECOND, static_cast<int32_t>(0), status);
     if (failure(status, "Calendar::roll(EDateFields, int32_t, UErrorCode)")) return;
 
     delete cal;
@@ -454,9 +454,9 @@ CalendarTest::TestGenericAPI()
 
     gc = new GregorianCalendar(1998, 10, 14, 21, 43, status);
     if (gc->getTime(status) != (d =date(98, 10, 14, 21, 43) )|| U_FAILURE(status))
-      errln("FAIL: new GregorianCalendar(ymdhm) failed with " + UnicodeString(u_errorName(status)) + ",  cal="  + gc->getTime(status)  + UnicodeString(calToStr(*gc)) + ", d=" + d);
+      errln("FAIL: new GregorianCalendar(ymdhm) failed with " + UnicodeString(u_errorName(status)) + ",  cal=" + gc->getTime(status) + (calToStr(*gc)) + ", d=" + d);
     else
-      logln(UnicodeString("GOOD: cal=")  +gc->getTime(status)  + UnicodeString(calToStr(*gc)) + ", d=" + d);
+      logln(UnicodeString("GOOD: cal=") + gc->getTime(status) + calToStr(*gc) + ", d=" + d);
     delete gc;
 
     gc = new GregorianCalendar(1998, 10, 14, 21, 43, 55, status);
@@ -475,7 +475,7 @@ CalendarTest::TestGenericAPI()
     if (failure(status, "Calendar::createInstance #6")) {
         return;
     }else {
-        cal->roll(UCAL_HOUR, (int32_t)100, status);
+        cal->roll(UCAL_HOUR, static_cast<int32_t>(100), status);
         cal->clear(UCAL_HOUR);
 #if !UCONFIG_NO_SERVICE
         URegistryKey key = cal->registerFactory(nullptr, status);
@@ -489,7 +489,7 @@ CalendarTest::TestGenericAPI()
     if (failure(status, "Calendar::createInstance #7")) {
         return;
     } else {
-        cal->roll(Calendar::MONTH, (int32_t)100, status);
+        cal->roll(Calendar::MONTH, static_cast<int32_t>(100), status);
     }
 
     LocalPointer<StringEnumeration> values(
@@ -588,17 +588,17 @@ void CalendarTest::dowTest(UBool lenient)
     cal->set(1997, UCAL_AUGUST, 12);
     cal->getTime(status);
     if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
-    logln((lenient?UnicodeString("LENIENT0: "):UnicodeString("nonlenient0: ")) + UnicodeString(calToStr(*cal)));
+    logln((lenient ? UnicodeString("LENIENT0: ") : UnicodeString("nonlenient0: ")) + (calToStr(*cal)));
     cal->setLenient(lenient);
     logln("cal - Dec 1, 1996\n");
     cal->set(1996, UCAL_DECEMBER, 1);
-    logln((lenient?UnicodeString("LENIENT: "):UnicodeString("nonlenient: ")) + UnicodeString(calToStr(*cal)));
+    logln((lenient ? UnicodeString("LENIENT: ") : UnicodeString("nonlenient: ")) + (calToStr(*cal)));
     int32_t dow = cal->get(UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Calendar::get failed [%s]", u_errorName(status)); return; }
     int32_t min = cal->getMinimum(UCAL_DAY_OF_WEEK);
     int32_t max = cal->getMaximum(UCAL_DAY_OF_WEEK);
     if (dow < min ||
-        dow > max) errln(UnicodeString("FAIL: Day of week ") + (int32_t)dow + " out of range");
+        dow > max) errln(UnicodeString("FAIL: Day of week ") + dow + " out of range");
     if (dow != UCAL_SUNDAY) errln("FAIL: Day of week should be SUNDAY[%d] not %d", UCAL_SUNDAY, dow);
     if (min != UCAL_SUNDAY ||
         max != UCAL_SATURDAY) errln("FAIL: Min/max bad");
@@ -780,8 +780,8 @@ CalendarTest::verify765(const UnicodeString& msg, Calendar* c, int32_t year, int
         if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
     }
     else {
-        errln("FAIL: " + msg + dateToString(c->getTime(status), str) + "; expected " + (int32_t)year + "/" + (int32_t)(month + 1) + "/" + (int32_t)day +
-            "; got " + (int32_t)y + "/" + (int32_t)(m + 1) + "/" + (int32_t)d + " for Locale: " + c->getLocaleID(ULOC_ACTUAL_LOCALE,status));
+        errln("FAIL: " + msg + dateToString(c->getTime(status), str) + "; expected " + year + "/" + static_cast<int32_t>(month + 1) + "/" + day +
+            "; got " + y + "/" + static_cast<int32_t>(m + 1) + "/" + d + " for Locale: " + c->getLocaleID(ULOC_ACTUAL_LOCALE, status));
         if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
     }
 }
@@ -827,11 +827,11 @@ CalendarTest::test4064654(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_
     if (U_FAILURE(status)) { errln("Calendar::createInstance failed"); return; }
     cal->setTime(date, status);
     if (U_FAILURE(status)) { errln("Calendar::setTime failed"); return; }
-    int32_t offset = cal->getTimeZone().getOffset((uint8_t)cal->get(UCAL_ERA, status),
+    int32_t offset = cal->getTimeZone().getOffset(static_cast<uint8_t>(cal->get(UCAL_ERA, status)),
                                                   cal->get(UCAL_YEAR, status),
                                                   cal->get(UCAL_MONTH, status),
                                                   cal->get(UCAL_DATE, status),
-                                                  (uint8_t)cal->get(UCAL_DAY_OF_WEEK, status),
+                                                  static_cast<uint8_t>(cal->get(UCAL_DAY_OF_WEEK, status)),
                                                   cal->get(UCAL_MILLISECOND, status), status);
     if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
     logln("offset for " + dateToString(date, str) + "= " + (offset / 1000 / 60 / 60.0) + "hr");
@@ -998,7 +998,7 @@ CalendarTest::TestAddRollExtensive()
         }
         check520(temp, y, m, d, hr, min, sec, ms, e);
 
-        e = (UCalendarDateFields) ((int32_t) e + 1);
+        e = static_cast<UCalendarDateFields>(static_cast<int32_t>(e) + 1);
     }
 
     logln("Testing GregorianCalendar roll...");
@@ -1011,20 +1011,20 @@ CalendarTest::TestAddRollExtensive()
             logln(calToStr(*temp) + UnicodeString("  " ) + fieldName(e) + UnicodeString("++") );
             temp->roll(e, 1, status);
             if (U_FAILURE(status)) {
-              logln("caltest.cpp:%d e=%d, i=%d - roll(+) err %s\n",  __LINE__, (int) e, (int) i, u_errorName(status));
+              logln("caltest.cpp:%d e=%d, i=%d - roll(+) err %s\n", __LINE__, static_cast<int>(e), static_cast<int>(i), u_errorName(status));
               logln(calToStr(*temp));
               limit = i; status = U_ZERO_ERROR;
             }
         }
         for (i = 0; i < limit; i++) {
-            logln("caltest.cpp:%d e=%d, i=%d\n",  __LINE__, (int) e, (int) i);
+            logln("caltest.cpp:%d e=%d, i=%d\n", __LINE__, static_cast<int>(e), static_cast<int>(i));
             logln(calToStr(*temp) + UnicodeString("  " ) + fieldName(e) + UnicodeString("--") );
             temp->roll(e, -1, status);
             if (U_FAILURE(status)) { errln(UnicodeString("GregorianCalendar::roll ") + CalendarTest::fieldName(e) + " count=" + UnicodeString('@'+i) + " by -1 failed with " + u_errorName(status) ); return; }
         }
         check520(temp, y, m, d, hr, min, sec, ms, e);
 
-        e = (UCalendarDateFields) ((int32_t) e + 1);
+        e = static_cast<UCalendarDateFields>(static_cast<int32_t>(e) + 1);
     }
 
     delete temp;
@@ -1046,7 +1046,7 @@ CalendarTest::check520(Calendar* c,
         c->get(UCAL_MINUTE, status) != min ||
         c->get(UCAL_SECOND, status) != sec ||
         c->get(UCAL_MILLISECOND, status) != ms) {
-        errln(UnicodeString("U_FAILURE for field ") + (int32_t)field +
+        errln(UnicodeString("U_FAILURE for field ") + static_cast<int32_t>(field) +
                 ": Expected y/m/d h:m:s:ms of " +
                 y + "/" + (m + 1) + "/" + d + " " +
               hr + ":" + min + ":" + sec + ":" + ms +
@@ -1252,9 +1252,9 @@ UnicodeString
 CalendarTest::value(Calendar* calendar)
 {
     UErrorCode status = U_ZERO_ERROR;
-    return UnicodeString("") + (int32_t)calendar->get(UCAL_YEAR, status) +
-        "/" + (int32_t)calendar->get(UCAL_MONTH, status) +
-        "/" + (int32_t)calendar->get(UCAL_DATE, status) +
+    return UnicodeString("") + calendar->get(UCAL_YEAR, status) +
+        "/" + calendar->get(UCAL_MONTH, status) +
+        "/" + calendar->get(UCAL_DATE, status) +
         (U_FAILURE(status) ? " FAIL: Calendar::get failed" : "");
 }
 
@@ -1275,11 +1275,11 @@ CalendarTest::TestFields060()
     calendar = new GregorianCalendar(year, month, dDate, status);
     if (failure(status, "new GregorianCalendar", true)) return;
     for (int32_t i = 0; i < EXPECTED_FIELDS_length;) {
-        UCalendarDateFields field = (UCalendarDateFields)EXPECTED_FIELDS[i++];
+        UCalendarDateFields field = static_cast<UCalendarDateFields>(EXPECTED_FIELDS[i++]);
         int32_t expected = EXPECTED_FIELDS[i++];
         if (calendar->get(field, status) != expected) {
-            errln(UnicodeString("Expected field ") + (int32_t)field + " to have value " + (int32_t)expected +
-                  "; received " + (int32_t)calendar->get(field, status) + " instead");
+            errln(UnicodeString("Expected field ") + static_cast<int32_t>(field) + " to have value " + expected +
+                  "; received " + calendar->get(field, status) + " instead");
             if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
         }
     }
@@ -1295,7 +1295,7 @@ int32_t CalendarTest::EXPECTED_FIELDS[] = {
     UCAL_DAY_OF_YEAR, 295
 };
 
-const int32_t CalendarTest::EXPECTED_FIELDS_length = (int32_t)(sizeof(CalendarTest::EXPECTED_FIELDS) /
+const int32_t CalendarTest::EXPECTED_FIELDS_length = static_cast<int32_t>(sizeof(CalendarTest::EXPECTED_FIELDS) /
     sizeof(CalendarTest::EXPECTED_FIELDS[0]));
 
 // -------------------------------------
@@ -1327,9 +1327,9 @@ CalendarTest::TestEpochStartFields()
         c->setTime(d, status);
         if (U_FAILURE(status)) { errln("Calendar::setTime failed"); return; }
         for (int32_t i = 0; i < UCAL_ZONE_OFFSET;++i) {
-            if (c->get((UCalendarDateFields)i, status) != EPOCH_FIELDS[i])
+            if (c->get(static_cast<UCalendarDateFields>(i), status) != EPOCH_FIELDS[i])
                 dataerrln(UnicodeString("Expected field ") + i + " to have value " + EPOCH_FIELDS[i] +
-                      "; saw " + c->get((UCalendarDateFields)i, status) + " instead");
+                      "; saw " + c->get(static_cast<UCalendarDateFields>(i), status) + " instead");
             if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
         }
         if (c->get(UCAL_ZONE_OFFSET, status) != z->getRawOffset())
@@ -1463,9 +1463,9 @@ void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
     int32_t day2 = cal.get(UCAL_DATE, status);
     fmt.format(cal.getTime(status), str);
     if (y2 != (y+1) || mon2 != mon || day2 != day) {
-        str += (UnicodeString)", expected year " +
+        str += UnicodeString(", expected year ") +
             (y+1) + ", month " + (mon+1) + ", day " + day;
-        errln((UnicodeString)"FAIL: " + str);
+        errln(UnicodeString("FAIL: ") + str);
         logln( UnicodeString(" -> ") + CalendarTest::calToStr(cal) );
     } else {
         logln(str);
@@ -1481,9 +1481,9 @@ void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
     int32_t dow2 = cal.get(UCAL_DOW_LOCAL, status);
     fmt.format(cal.getTime(status), str);
     if (ywy2 != (ywy+1) || woy2 != woy || dow2 != dow) {
-        str += (UnicodeString)", expected yearWOY " +
+        str += UnicodeString(", expected yearWOY ") +
             (ywy+1) + ", woy " + woy + ", dowLocal " + dow;
-        errln((UnicodeString)"FAIL: " + str);
+        errln(UnicodeString("FAIL: ") + str);
         logln( UnicodeString(" -> ") + CalendarTest::calToStr(cal) );
     } else {
         logln(str);
@@ -1521,9 +1521,9 @@ void CalendarTest::loop_addroll(Calendar *cal, /*SimpleDateFormat *sdf,*/ int ti
 
     for(i = 0; i<times; i++) {
         calclone = cal->clone();
-        cal->roll(field,(int32_t)1,errorCode);
+        cal->roll(field, static_cast<int32_t>(1), errorCode);
         if (U_FAILURE(errorCode)) { errln("Error in roll"); delete calclone; return; }
-        calclone->roll(field2,(int32_t)1,errorCode);
+        calclone->roll(field2, static_cast<int32_t>(1), errorCode);
         if (U_FAILURE(errorCode)) { errln("Error in roll"); delete calclone; return; }
         if(cal->getTime(errorCode) != calclone->getTime(errorCode)) {
             delete calclone;
@@ -1573,14 +1573,14 @@ CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf,
         tstres->set(UCAL_DOW_LOCAL, cal->get(UCAL_DOW_LOCAL, errorCode));
         if(cal->get(UCAL_YEAR, errorCode) != tstres->get(UCAL_YEAR, errorCode)) {
             errln("FAIL: Different Year!");
-            logln((UnicodeString)"Expected "+cal->get(UCAL_YEAR, errorCode));
-            logln((UnicodeString)"Got "+tstres->get(UCAL_YEAR, errorCode));
+            logln(UnicodeString("Expected ") + cal->get(UCAL_YEAR, errorCode));
+            logln(UnicodeString("Got ") + tstres->get(UCAL_YEAR, errorCode));
             return;
         }
         if(cal->get(UCAL_DAY_OF_YEAR, errorCode) != tstres->get(UCAL_DAY_OF_YEAR, errorCode)) {
             errln("FAIL: Different Day Of Year!");
-            logln((UnicodeString)"Expected "+cal->get(UCAL_DAY_OF_YEAR, errorCode));
-            logln((UnicodeString)"Got "+tstres->get(UCAL_DAY_OF_YEAR, errorCode));
+            logln(UnicodeString("Expected ") + cal->get(UCAL_DAY_OF_YEAR, errorCode));
+            logln(UnicodeString("Got ") + tstres->get(UCAL_DAY_OF_YEAR, errorCode));
             return;
         }
         //logln(calToStr(*cal));
@@ -1675,7 +1675,7 @@ void CalendarTest::TestWOY() {
     SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy', WOY' w"), status);
     if (failure(status, "Cannot construct calendar/format", true)) return;
 
-    UCalendarDaysOfWeek fdw = (UCalendarDaysOfWeek) 0;
+    UCalendarDaysOfWeek fdw = static_cast<UCalendarDaysOfWeek>(0);
 
     //for (int8_t pass=2; pass<=2; ++pass) {
     for (int8_t pass=1; pass<=2; ++pass) {
@@ -1982,20 +1982,20 @@ void CalendarTest::TestJD()
 void CalendarTest::TestDebug()
 {
     for(int32_t  t=0;t<=UDBG_ENUM_COUNT;t++) {
-        int32_t count = udbg_enumCount((UDebugEnumType)t);
+        int32_t count = udbg_enumCount(static_cast<UDebugEnumType>(t));
         if(count == -1) {
             logln("enumCount(%d) returned -1", count);
             continue;
         }
         for(int32_t i=0;i<=count;i++) {
             if(t<=UDBG_HIGHEST_CONTIGUOUS_ENUM && i<count) {
-                if( i!=udbg_enumArrayValue((UDebugEnumType)t, i)) {
-                    errln("FAIL: udbg_enumArrayValue(%d,%d) returned %d, expected %d", t, i, udbg_enumArrayValue((UDebugEnumType)t,i), i);
+                if (i != udbg_enumArrayValue(static_cast<UDebugEnumType>(t), i)) {
+                    errln("FAIL: udbg_enumArrayValue(%d,%d) returned %d, expected %d", t, i, udbg_enumArrayValue(static_cast<UDebugEnumType>(t), i), i);
                 }
             } else {
                 logln("Testing count+1:");
             }
-                  const char *name = udbg_enumName((UDebugEnumType)t,i);
+                  const char* name = udbg_enumName(static_cast<UDebugEnumType>(t), i);
                   if(name==nullptr) {
                           if(i==count || t>UDBG_HIGHEST_CONTIGUOUS_ENUM  ) {
                                 logln(" null name - expected.\n");
@@ -2005,13 +2005,13 @@ void CalendarTest::TestDebug()
                           name = "(null)";
                   }
           logln("udbg_enumArrayValue(%d,%d) = %s, returned %d", t, i,
-                      name, udbg_enumArrayValue((UDebugEnumType)t,i));
-            logln("udbg_enumString = " + udbg_enumString((UDebugEnumType)t,i));
+                      name, udbg_enumArrayValue(static_cast<UDebugEnumType>(t), i));
+            logln("udbg_enumString = " + udbg_enumString(static_cast<UDebugEnumType>(t), i));
         }
-        if(udbg_enumExpectedCount((UDebugEnumType)t) != count && t<=UDBG_HIGHEST_CONTIGUOUS_ENUM) {
-            errln("FAIL: udbg_enumExpectedCount(%d): %d, != UCAL_FIELD_COUNT=%d ", t, udbg_enumExpectedCount((UDebugEnumType)t), count);
+        if (udbg_enumExpectedCount(static_cast<UDebugEnumType>(t)) != count && t <= UDBG_HIGHEST_CONTIGUOUS_ENUM) {
+            errln("FAIL: udbg_enumExpectedCount(%d): %d, != UCAL_FIELD_COUNT=%d ", t, udbg_enumExpectedCount(static_cast<UDebugEnumType>(t)), count);
         } else {
-            logln("udbg_ucal_fieldCount: %d, UCAL_FIELD_COUNT=udbg_enumCount %d ", udbg_enumExpectedCount((UDebugEnumType)t), count);
+            logln("udbg_ucal_fieldCount: %d, UCAL_FIELD_COUNT=udbg_enumCount %d ", udbg_enumExpectedCount(static_cast<UDebugEnumType>(t)), count);
         }
     }
 }
@@ -3483,7 +3483,7 @@ void CalendarTest::TestIslamicUmAlQura() {
         month = tstCal->get(UCAL_MONTH,status);
         year = tstCal->get(UCAL_YEAR,status);
         TEST_CHECK_STATUS;
-        tstCal->roll(UCAL_DAY_OF_MONTH, (UBool)true, status);
+        tstCal->roll(UCAL_DAY_OF_MONTH, static_cast<UBool>(true), status);
         TEST_CHECK_STATUS;
     }
 
@@ -3650,8 +3650,8 @@ void CalendarTest::TestWeekData() {
         // Weekdays and Weekends
         for (int32_t d = UCAL_SUNDAY; d <= UCAL_SATURDAY; d++) {
             status = U_ZERO_ERROR;
-            UCalendarWeekdayType wdt1 = cal1->getDayOfWeekType((UCalendarDaysOfWeek)d, status);
-            UCalendarWeekdayType wdt2 = cal2->getDayOfWeekType((UCalendarDaysOfWeek)d, status);
+            UCalendarWeekdayType wdt1 = cal1->getDayOfWeekType(static_cast<UCalendarDaysOfWeek>(d), status);
+            UCalendarWeekdayType wdt2 = cal2->getDayOfWeekType(static_cast<UCalendarDaysOfWeek>(d), status);
             TEST_CHECK_STATUS;
             TEST_ASSERT(wdt1 == wdt2);
         }

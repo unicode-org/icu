@@ -81,7 +81,7 @@ public:
      **/
     static double randFraction()
     {
-        return (double)randLong() / (double)0xFFFFFFFF;
+        return static_cast<double>(randLong()) / static_cast<double>(0xFFFFFFFF);
     }
 
 };

@@ -217,7 +217,7 @@ int  main(int argc, char **argv) {
     fseek(file, 0, SEEK_SET);
     ruleBufferC = new char[ruleFileSize+10];
 
-    result = (long)fread(ruleBufferC, 1, ruleFileSize, file);
+    result = static_cast<long>(fread(ruleBufferC, 1, ruleFileSize, file));
     if (result != ruleFileSize)  {
         fprintf(stderr, "Error reading file \"%s\"\n", ruleFileName);
         exit (-1);
@@ -298,7 +298,7 @@ int  main(int argc, char **argv) {
     RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(ruleSourceS, parseError, status);
     if (U_FAILURE(status)) {
         fprintf(stderr, "createRuleBasedBreakIterator: ICU Error \"%s\"  at line %d, column %d\n",
-                u_errorName(status), (int)parseError.line, (int)parseError.offset);
+                u_errorName(status), static_cast<int>(parseError.line), static_cast<int>(parseError.offset));
         exit(status);
     }
 

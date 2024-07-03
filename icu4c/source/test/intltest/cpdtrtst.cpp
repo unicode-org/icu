@@ -277,8 +277,8 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
 
     ct1->setTransliterators(transarray, count);
     if(ct1->getCount() != count || ct1->getID() != ID2){
-        errln((UnicodeString)"Error: setTransliterators() failed.\n\t Count:- expected->" + count + (UnicodeString)".  got->" + ct1->getCount() +
-                                                   (UnicodeString)"\n\tID   :- expected->" + ID2 + (UnicodeString)".  got->" + ct1->getID());
+        errln(UnicodeString("Error: setTransliterators() failed.\n\t Count:- expected->") + count + UnicodeString(".  got->") + ct1->getCount() +
+                                                   UnicodeString("\n\tID   :- expected->") + ID2 + UnicodeString(".  got->") + ct1->getID());
     }
     else{
         logln("OK: setTransliterators() passed"); 
@@ -303,8 +303,8 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
         ct1->adoptTransliterators(transarray2, 1);
     }
     if(ct1->getCount() != 1 || ct1->getID() != ID3){
-        errln((UnicodeString)"Error: adoptTransliterators() failed.\n\t Count:- expected->1" + (UnicodeString)".  got->" + ct1->getCount() +
-                                                   (UnicodeString)"\n\tID   :- expected->" + ID3 + (UnicodeString)".  got->" + ct1->getID());
+        errln(UnicodeString("Error: adoptTransliterators() failed.\n\t Count:- expected->1") + UnicodeString(".  got->") + ct1->getCount() +
+                                                   UnicodeString("\n\tID   :- expected->") + ID3 + UnicodeString(".  got->") + ct1->getID());
     }
     else{
         logln("OK: adoptTranslterator() passed");

@@ -1007,8 +1007,8 @@ void CalendarRegressionTest::test4103271()
     UBool fail = false;
     for (int32_t firstDay=1; firstDay<=2; firstDay++) {
         for (int32_t minDays=1; minDays<=7; minDays++) {
-            testCal->setMinimalDaysInFirstWeek((uint8_t)minDays);
-            testCal->setFirstDayOfWeek((UCalendarDaysOfWeek)firstDay);
+            testCal->setMinimalDaysInFirstWeek(static_cast<uint8_t>(minDays));
+            testCal->setFirstDayOfWeek(static_cast<UCalendarDaysOfWeek>(firstDay));
             testDesc = (UnicodeString("Test") + firstDay + minDays);
             logln(testDesc + " => 1st day of week=" +
                                firstDay +
@@ -1047,7 +1047,7 @@ void CalendarRegressionTest::test4103271()
     for (int32_t j=0; j<44; j+=22) {
         logln(UnicodeString("Minimal days in first week = ") + DATA[j] +
                            "  Week starts on Sunday");
-        testCal->setMinimalDaysInFirstWeek((uint8_t)DATA[j]);
+        testCal->setMinimalDaysInFirstWeek(static_cast<uint8_t>(DATA[j]));
         testCal->set(1997, UCAL_DECEMBER, 21);
         for (int32_t i=0; i<21; ++i) {
             int32_t woy = testCal->get(UCAL_WEEK_OF_YEAR,status);
@@ -1352,13 +1352,13 @@ void CalendarRegressionTest::test4114578()
 
     for (int32_t i=0; i<32; i+=4) {
         UDate date = DATA[i];
-        int32_t amt = (int32_t) DATA[i+2];
+        int32_t amt = static_cast<int32_t>(DATA[i + 2]);
         double expectedChange = DATA[i+3];
 
         log(UnicodeString("") + date);
         cal->setTime(date,status);
 
-        switch ((int32_t) DATA[i+1]) {
+        switch (static_cast<int32_t>(DATA[i + 1])) {
         case ADD:
             log(UnicodeString(" add (HOUR,") + (amt<0?"":"+")+amt + ")= ");
             cal->add(UCAL_HOUR, amt,status);
@@ -1556,20 +1556,20 @@ void CalendarRegressionTest::Test13745()
     }
 
     // this line would overflow before fix 13745
-    cal->setGregorianChange(((double)INT32_MAX+1.0) * MILLIS_IN_DAY, status);
+    cal->setGregorianChange((static_cast<double>(INT32_MAX) + 1.0) * MILLIS_IN_DAY, status);
     if(U_FAILURE(status)) {
         errln("%s:%d Failure setting INT32_MAX+1 change on calendar: %s\n", __FILE__, __LINE__, u_errorName(status));
         return;
     }
-    assertEquals("getGregorianChange()", (double)INT32_MAX * MILLIS_IN_DAY, cal->getGregorianChange());
+    assertEquals("getGregorianChange()", static_cast<double>(INT32_MAX) * MILLIS_IN_DAY, cal->getGregorianChange());
 
     // test underflow
-    cal->setGregorianChange(((double)INT32_MIN-1.0) * MILLIS_IN_DAY, status);
+    cal->setGregorianChange((static_cast<double>(INT32_MIN) - 1.0) * MILLIS_IN_DAY, status);
     if(U_FAILURE(status)) {
         errln("%s:%d Failure setting INT32_MAX-1 change on calendar: %s\n", __FILE__, __LINE__, u_errorName(status));
         return;
     }
-    assertEquals("getGregorianChange()", (double)INT32_MIN * MILLIS_IN_DAY, cal->getGregorianChange());
+    assertEquals("getGregorianChange()", static_cast<double>(INT32_MIN) * MILLIS_IN_DAY, cal->getGregorianChange());
 
     delete cal;
 }
@@ -1590,7 +1590,7 @@ void CalendarRegressionTest::test4142933()
       return;
     }
     //try {
-    calendar->roll((UCalendarDateFields)-1, true, status);
+    calendar->roll(static_cast<UCalendarDateFields>(-1), true, status);
         if(U_SUCCESS(status))
             errln("Test failed, no exception thrown");
     //}
@@ -1700,9 +1700,9 @@ void CalendarRegressionTest::test4147269()
         // Note: In the bug report, getActualMaximum() was called instead
         // of getMaximum() -- this was an error.  The validation code doesn't
         // use getActualMaximum(), since that's too costly.
-        int32_t max = calendar->getMaximum((UCalendarDateFields)field);
+        int32_t max = calendar->getMaximum(static_cast<UCalendarDateFields>(field));
         int32_t value = max+1;
-        calendar->set((UCalendarDateFields)field, value);
+        calendar->set(static_cast<UCalendarDateFields>(field), value);
         //try {
             calendar->getTime(status); // Force time computation
             // We expect an exception to be thrown. If we fall through
@@ -1914,7 +1914,7 @@ CalendarRegressionTest::Test4166109()
         errln("get(D_O_M) failed");
 
     for(int32_t firstInWeek = UCAL_SUNDAY; firstInWeek <= UCAL_SATURDAY; firstInWeek++) {
-        calendar->setFirstDayOfWeek((UCalendarDaysOfWeek)firstInWeek);
+        calendar->setFirstDayOfWeek(static_cast<UCalendarDaysOfWeek>(firstInWeek));
         int32_t returned = calendar->getActualMaximum(field, status);
         int32_t expected = (31 + ((firstInMonth - firstInWeek + 7)% 7) + 6) / 7;
 
@@ -1998,7 +1998,7 @@ CalendarRegressionTest::Test4167060()
                     errln("getTime() failed");
                 int32_t newYear = calendar->get(field, status);
                 if(U_FAILURE(status))
-                    errln(UnicodeString("get(") + (int32_t)field + ") failed");
+                    errln(UnicodeString("get(") + static_cast<int32_t>(field) + ") failed");
                 calendar->setTime(dateBefore, status); // restore calendar for next use
                 if(U_FAILURE(status))
                     errln("setTime() failed");
@@ -2102,7 +2102,7 @@ void CalendarRegressionTest::TestJ81() {
     UDate days = ONE_DAY;
     days = cutover/days;
     logln(UnicodeString("Cutover: {") +
-          fmt.format(cutover, temp) + "}(epoch days-" + (int)days + ", jd" + (2440588 + days) +")");
+          fmt.format(cutover, temp) + "}(epoch days-" + static_cast<int>(days) + ", jd" + (2440588 + days) + ")");
 
     // Check woy and doy handling.  Reference data:
     /* w40 d274 Mon 1 Oct 1582
@@ -2155,14 +2155,14 @@ void CalendarRegressionTest::TestJ81() {
             break;
         }
         if (woy != DOY_DATA[i+1] || doy != DOY_DATA[i+2] || dow != DOY_DATA[i+3]) {
-            errln((UnicodeString)"Fail: expect woy=" + DOY_DATA[i+1] +
+            errln(UnicodeString("Fail: expect woy=") + DOY_DATA[i+1] +
                   ", doy=" + DOY_DATA[i+2] + ", dow=" + DOY_DATA[i+3] + " on " +
                   fmt.format(cal.getTime(status), temp.remove()) +
                   " set(1582,OCTOBER, " + DOY_DATA[i] + ")");
             logln(CalendarTest::calToStr(cal));
             status = U_ZERO_ERROR;
         }  else {
-          logln((UnicodeString)"PASS: expect woy=" + DOY_DATA[i+1] +
+          logln(UnicodeString("PASS: expect woy=") + DOY_DATA[i+1] +
                 ", doy=" + DOY_DATA[i+2] + ", dow=" + DOY_DATA[i+3] + " on " +
                 fmt.format(cal.getTime(status), temp.remove()));
           logln(CalendarTest::calToStr(cal));
@@ -2179,7 +2179,7 @@ void CalendarRegressionTest::TestJ81() {
             break;
         }
         if (dom != DOY_DATA[i]) {
-            errln((UnicodeString)"Fail: set woy=" + DOY_DATA[i+1] +
+            errln(UnicodeString("Fail: set woy=") + DOY_DATA[i+1] +
                   " dow=" + DOY_DATA[i+3] + " => " +
                   fmt.format(cal.getTime(status), temp.remove()) +
                   ", expected 1582 Oct " + DOY_DATA[i]);
@@ -2197,7 +2197,7 @@ void CalendarRegressionTest::TestJ81() {
             break;
         }
         if (dom != DOY_DATA[i]) {
-            errln((UnicodeString)"Fail: set doy=" + DOY_DATA[i+2] +
+            errln(UnicodeString("Fail: set doy=") + DOY_DATA[i+2] +
                   " => " +
                   fmt.format(cal.getTime(status), temp.remove()) +
                   ", expected 1582 Oct " + DOY_DATA[i]);
@@ -2236,11 +2236,11 @@ void CalendarRegressionTest::TestJ81() {
 
     // Now run the tests
     for (i=0; i<DATA_length; ++i) {
-        for (Action action=ADD; action<=ROLL; action=(Action)(action+1)) {
+        for (Action action = ADD; action <= ROLL; action = static_cast<Action>(action + 1)) {
             if (!(DATA[i].actionMask & action)) {
                 continue;
             }
-            for (Sign sign=PLUS; sign<=MINUS; sign=(Sign)(sign+1)) {
+            for (Sign sign = PLUS; sign <= MINUS; sign = static_cast<Sign>(sign + 1)) {
                 if (!(DATA[i].signMask & sign)) {
                     continue;
                 }
@@ -2252,7 +2252,7 @@ void CalendarRegressionTest::TestJ81() {
                     (sign==PLUS ? DATA[i].after : DATA[i].before);
                 cal.setTime(date, status);
                 if (U_FAILURE(status)) {
-                    errln((UnicodeString)"FAIL: setTime returned error code " + u_errorName(status));
+                    errln(UnicodeString("FAIL: setTime returned error code ") + u_errorName(status));
                     continue;
                 }
                 if (action == ADD) {
@@ -2261,18 +2261,18 @@ void CalendarRegressionTest::TestJ81() {
                     cal.roll(DATA[i].field, amount, status);
                 }
                 if (U_FAILURE(status)) {
-                    errln((UnicodeString)"FAIL: " +
+                    errln(UnicodeString("FAIL: ") +
                           (action==ADD?"add ":"roll ") + FIELD_NAME[DATA[i].field] +
                           " returned error code " + u_errorName(status));
                     continue;
                 }
                 UDate result = cal.getTime(status);
                 if (U_FAILURE(status)) {
-                    errln((UnicodeString)"FAIL: getTime returned error code " + u_errorName(status));
+                    errln(UnicodeString("FAIL: getTime returned error code ") + u_errorName(status));
                     continue;
                 }
                 if (result == expected) {
-                    logln((UnicodeString)"Ok: {" +
+                    logln(UnicodeString("Ok: {") +
                           fmt.format(date, temp.remove()) +
                           "}(" + date/ONE_DAY +
                           (action==ADD?") add ":") roll ") +
@@ -2280,7 +2280,7 @@ void CalendarRegressionTest::TestJ81() {
                           fmt.format(result, temp2.remove()) +
                           "}(" + result/ONE_DAY + ")");
                 } else {
-                    errln((UnicodeString)"FAIL: {" +
+                    errln(UnicodeString("FAIL: {") +
                           fmt.format(date, temp.remove()) +
                           "}(" + date/ONE_DAY +
                           (action==ADD?") add ":") roll ") +
@@ -2463,7 +2463,7 @@ static const CoptEthCalTestItem coptEthCalTestItems[] = {
     { 1724, 12, 1, UCAL_DATE,  +8, 1725,  0, 4 },
     { 1723, 12, 1, UCAL_DATE,  +8, 1724,  0, 3 }, // 1723 is a leap year
     { 1724,  0, 1, UCAL_DATE,  -1, 1723, 12, 6 }, // 1723 is a leap year
-    { 0, 0, 0, (UCalendarDateFields)0, 0, 0, 0, 0 } // terminator
+    { 0, 0, 0, static_cast<UCalendarDateFields>(0), 0, 0, 0, 0 } // terminator
 };
 
 typedef struct {
@@ -2484,7 +2484,7 @@ void CalendarRegressionTest::TestT6745()
         UErrorCode status = U_ZERO_ERROR;
         Calendar *cal = Calendar::createInstance(Locale(testLocalePtr->locale), status);
         if ( U_FAILURE(status) ) {
-            dataerrln((UnicodeString)"FAIL: Calendar::createInstance, locale " + testLocalePtr->locale + ", status " + u_errorName(status));
+            dataerrln(UnicodeString("FAIL: Calendar::createInstance, locale ") + testLocalePtr->locale + ", status " + u_errorName(status));
             continue;
         }
         const CoptEthCalTestItem * testItemPtr;
@@ -2493,7 +2493,7 @@ void CalendarRegressionTest::TestT6745()
             cal->set( testItemPtr->startYear + testLocalePtr->yearOffset, testItemPtr->startMonth, testItemPtr->startDay, 9, 0 );
             cal->add( testItemPtr->fieldToChange, testItemPtr->fieldDelta, status );
             if ( U_FAILURE(status) ) {
-                errln((UnicodeString)"FAIL: Calendar::add, locale " + testLocalePtr->locale + ", field/delta " +
+                errln(UnicodeString("FAIL: Calendar::add, locale ") + testLocalePtr->locale + ", field/delta " +
                         testItemPtr->fieldToChange + "/" + testItemPtr->fieldDelta + ", status " + u_errorName(status));
                 continue;
             }
@@ -2502,7 +2502,7 @@ void CalendarRegressionTest::TestT6745()
             int32_t month = cal->get(UCAL_MONTH, status);
             int32_t day   = cal->get(UCAL_DATE, status);
             if ( U_FAILURE(status) || year != endYear || month != testItemPtr->endMonth || day != testItemPtr->endDay ) {
-                errln((UnicodeString)"ERROR: Calendar::add, locale " + testLocalePtr->locale + ", field/delta " +
+                errln(UnicodeString("ERROR: Calendar::add, locale ") + testLocalePtr->locale + ", field/delta " +
                         testItemPtr->fieldToChange + "/" + testItemPtr->fieldDelta + ", status " + u_errorName(status) +
                         ", expected " + endYear + "/" + testItemPtr->endMonth + "/" + testItemPtr->endDay +
                         ", got " + year + "/" + month + "/" + day );
@@ -2541,9 +2541,9 @@ void CalendarRegressionTest::TestLeapFieldDifference() {
         return;
     }
     if (d == 0) {
-        logln((UnicodeString)"Ok: 2004/Feb/29 - 2000/Feb/29 = " + y + " years, " + d + " days");
+        logln(UnicodeString("Ok: 2004/Feb/29 - 2000/Feb/29 = ") + y + " years, " + d + " days");
     } else {
-        errln((UnicodeString)"FAIL: 2004/Feb/29 - 2000/Feb/29 = " + y + " years, " + d + " days");
+        errln(UnicodeString("FAIL: 2004/Feb/29 - 2000/Feb/29 = ") + y + " years, " + d + " days");
     }
     cal->setTime(date2004, ec);
     y = cal->fieldDifference(date2000, UCAL_YEAR, ec);
@@ -2554,9 +2554,9 @@ void CalendarRegressionTest::TestLeapFieldDifference() {
         return;
     }
     if (d == 0) {
-        logln((UnicodeString)"Ok: 2000/Feb/29 - 2004/Feb/29 = " + y + " years, " + d + " days");
+        logln(UnicodeString("Ok: 2000/Feb/29 - 2004/Feb/29 = ") + y + " years, " + d + " days");
     } else {
-        errln((UnicodeString)"FAIL: 2000/Feb/29 - 2004/Feb/29 = " + y + " years, " + d + " days");
+        errln(UnicodeString("FAIL: 2000/Feb/29 - 2004/Feb/29 = ") + y + " years, " + d + " days");
     }
     // Test large difference
     cal->set(2001, UCAL_APRIL, 5); // 2452005
@@ -2577,9 +2577,9 @@ void CalendarRegressionTest::TestLeapFieldDifference() {
         return;
     }
     if (d == -d2 && d == 13359) {
-        logln((UnicodeString)"Ok: large field difference symmetrical " + d);
+        logln(UnicodeString("Ok: large field difference symmetrical ") + d);
     } else {
-        logln((UnicodeString)"FAIL: large field difference incorrect " + d + ", " + d2 +
+        logln(UnicodeString("FAIL: large field difference incorrect ") + d + ", " + d2 +
               ", expect +/- 13359");
     }
     delete cal;
@@ -2611,7 +2611,7 @@ void CalendarRegressionTest::TestWeekShift() {
         dataerrln("Fail GregorianCalendar: %s", u_errorName(ec));
         return;
     }
-    cal.setTime(UDate(997257600000.0), ec); // Wed Aug 08 01:00:00 PDT 2001
+    cal.setTime(static_cast<UDate>(997257600000.0), ec); // Wed Aug 08 01:00:00 PDT 2001
     // In pass one, change the first day of week so that the weeks
     // shift in August 2001.  In pass two, change the minimal days
     // in the first week so that the weeks shift in August 2001.
@@ -2666,10 +2666,10 @@ void CalendarRegressionTest::TestWeekShift() {
             // logln(time1);
         }
         if (woy1 == woy2 && wom1 == wom2) {
-            logln((UnicodeString)"Ok: WEEK_OF_YEAR: " + woy1 +
+            logln(UnicodeString("Ok: WEEK_OF_YEAR: ") + woy1 +
                   ", WEEK_OF_MONTH: " + wom1);
         } else {
-            errln((UnicodeString)"FAIL: WEEK_OF_YEAR: " + woy1 + " => " + woy2 +
+            errln(UnicodeString("FAIL: WEEK_OF_YEAR: ") + woy1 + " => " + woy2 +
                   ", WEEK_OF_MONTH: " + wom1 + " => " + wom2 +
                   " after week shift");
         }
@@ -2787,8 +2787,8 @@ void CalendarRegressionTest::TestDeprecates()
     c1->setTime(c2->getTime(status),status);
     // *c1 = *c2;
 
-    c1->roll(Calendar::HOUR,(int32_t)3,status);
-    c2->roll(UCAL_HOUR,(int32_t)3,status);
+    c1->roll(Calendar::HOUR, static_cast<int32_t>(3), status);
+    c2->roll(UCAL_HOUR, static_cast<int32_t>(3), status);
 
     if(U_FAILURE(status)) {
         errln("Error code when trying to roll");
@@ -2797,8 +2797,8 @@ void CalendarRegressionTest::TestDeprecates()
     }
 
     c1->setTime(c2->getTime(status),status);
-    c1->roll(Calendar::HOUR,(UBool)false,status);
-    c2->roll(UCAL_HOUR,(UBool)false,status);
+    c1->roll(Calendar::HOUR, static_cast<UBool>(false), status);
+    c2->roll(UCAL_HOUR, static_cast<UBool>(false), status);
 
     if(U_FAILURE(status)) {
         errln("Error code when trying to roll(UBool)");
@@ -2823,13 +2823,13 @@ void CalendarRegressionTest::TestDeprecates()
     c1->setTime(c2->getTime(status),status);
     //*c1 = *c2;
 
-    c1->add(Calendar::HOUR,(int32_t)1,status);
+    c1->add(Calendar::HOUR, static_cast<int32_t>(1), status);
 
     if(U_FAILURE(status)) {
         errln("Error code when trying to add Calendar::HOUR - %s", u_errorName(status));
     }
 
-    c2->add(UCAL_HOUR,(int32_t)1,status);
+    c2->add(UCAL_HOUR, static_cast<int32_t>(1), status);
 
     if(U_FAILURE(status)) {
         errln("Error code when trying to add - UCAL_HOUR %s", u_errorName(status));
@@ -2854,8 +2854,8 @@ void CalendarRegressionTest::TestDeprecates()
     c1->setTime(c2->getTime(status),status);
     //*c1 = *c2;
 
-    c1->add(Calendar::YEAR,(int32_t)9,status);
-    c2->add(UCAL_YEAR,(int32_t)9,status);
+    c1->add(Calendar::YEAR, static_cast<int32_t>(9), status);
+    c2->add(UCAL_YEAR, static_cast<int32_t>(9), status);
 
     if(U_FAILURE(status)) {
         errln("Error code when trying to add YEARs");
@@ -2895,7 +2895,7 @@ void CalendarRegressionTest::TestT8057() {
     t = cal->getTime(status);
     if (U_SUCCESS(status)) {
         if (t != expected) {
-            dataerrln((UnicodeString)"FAIL: wrong date after add: expected=" + expected + " returned=" + t);
+            dataerrln(UnicodeString("FAIL: wrong date after add: expected=") + expected + " returned=" + t);
         }
     } else {
         errln("FAIL: error while adding one year");
@@ -2941,7 +2941,7 @@ void CalendarRegressionTest::TestT8596() {
     }
 
     if (maxWeeks != 53) {
-        errln((UnicodeString)"FAIL: Max week in 2009 in ISO calendar is 53, but got " + maxWeeks);
+        errln(UnicodeString("FAIL: Max week in 2009 in ISO calendar is 53, but got ") + maxWeeks);
     }
 
     delete gc;
@@ -3237,7 +3237,7 @@ void CalendarRegressionTest::TestWeekOfYear13548() {
     int32_t resultYear = cal->get(UCAL_YEAR, status);
     failure(status, "get(UCAL_YEAR, status)");
     if (year != resultYear) {
-        errln((UnicodeString)"Fail: Expected year=" + year + ", actual=" + resultYear);
+        errln(UnicodeString("Fail: Expected year=") + year + ", actual=" + resultYear);
     }
 }
 
@@ -3273,7 +3273,7 @@ void CalendarRegressionTest::TestRespectUExtensionFw() { // ICU-22226
         UCalendarDaysOfWeek actual = cal->getFirstDayOfWeek(status);
         failure(status, "Calendar::getFirstDayOfWeek(status)");
 
-        assertEquals((UnicodeString)"Calendar.getFirstDayOfWeek() ignores the 'fw' extension u in '"
+        assertEquals(UnicodeString("Calendar.getFirstDayOfWeek() ignores the 'fw' extension u in '")
             + localeId + "' locale", expected, actual);
     }
 }

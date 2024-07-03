@@ -451,10 +451,10 @@ UTS46::processUTF8(StringPiece src,
                 return;
             }
             char c=srcArray[i];
-            if((int8_t)c<0) {  // (uint8_t)c>0x7f
+            if (static_cast<int8_t>(c) < 0) { // (uint8_t)c>0x7f
                 break;
             }
-            int cData=asciiData[(int)c];  // Cast: gcc warns about indexing with a char.
+            int cData = asciiData[static_cast<int>(c)]; // Cast: gcc warns about indexing with a char.
             if(cData>0) {
                 destArray[i]=c+0x20;  // Lowercase an uppercase ASCII letter.
             } else if(cData<0 && disallowNonLDHDot) {
@@ -796,7 +796,7 @@ UTS46::processLabel(UnicodeString &dest,
     // in a non-Punycode label or U+FFFD itself in a Punycode label.
     // We also check for dots which can come from the input to a single-label function.
     // Ok to cast away const because we own the UnicodeString.
-    char16_t *s=(char16_t *)label;
+    char16_t* s = const_cast<char16_t*>(label);
     const char16_t *limit=label+labelLength;
     char16_t oredChars=0;
     // If we enforce STD3 rules, then ASCII characters other than LDH and dot are disallowed.
@@ -827,7 +827,7 @@ UTS46::processLabel(UnicodeString &dest,
     U16_NEXT_UNSAFE(label, cpLength, c);
     if((U_GET_GC_MASK(c)&U_GC_M_MASK)!=0) {
         info.labelErrors|=UIDNA_ERROR_LEADING_COMBINING_MARK;
-        labelString->replace(labelStart, cpLength, (char16_t)0xfffd);
+        labelString->replace(labelStart, cpLength, static_cast<char16_t>(0xfffd));
         label=labelString->getBuffer()+labelStart;
         labelLength+=1-cpLength;
         if(labelString==&dest) {
@@ -947,7 +947,7 @@ UTS46::markBadACELabel(UnicodeString &dest,
         }
     }
     if(onlyLDH) {
-        dest.insert(labelStart+labelLength, (char16_t)0xfffd);
+        dest.insert(labelStart + labelLength, static_cast<char16_t>(0xfffd));
         if(dest.isBogus()) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return 0;

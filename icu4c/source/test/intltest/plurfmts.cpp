@@ -147,7 +147,7 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
     PluralFormat *pf = new PluralFormat(stat);
     Formattable *f = new Formattable();
     ParsePosition *pp = new ParsePosition();
-    pf->parseObject((UnicodeString)"",*f,*pp);
+    pf->parseObject(UnicodeString(""), *f, *pp);
     if(U_FAILURE(stat)) {
         dataerrln("ERROR: PluralFormat::parseObject: %s", u_errorName(stat));
     }
@@ -268,7 +268,7 @@ void PluralFormatTest::pluralFormatUnitTest(/*char *par*/)
     }
     numberFormatTest(&pluralFmt, numFmt.getAlias(), 5, 5, nullptr, nullptr, false, &message);
     pluralFmt.applyPattern(UNICODE_STRING_SIMPLE("odd__{odd} other{even}"), status);
-    if (pluralFmt.format((int32_t)1, status) != UNICODE_STRING_SIMPLE("even")) {
+    if (pluralFmt.format(static_cast<int32_t>(1), status) != UNICODE_STRING_SIMPLE("even")) {
         errln("SetLocale should reset rules but did not.");
     }
     status = U_ZERO_ERROR;
@@ -558,7 +558,7 @@ PluralFormatTest::pluralFormatExtendedTest() {
   UErrorCode status = U_ZERO_ERROR;
   UnicodeString fmtString(fmt, -1, US_INV);
   PluralFormat pf(Locale::getEnglish(), fmtString, status);
-  MessageFormat mf(UNICODE_STRING_SIMPLE("{0,plural,").append(fmtString).append((char16_t)0x7d /* '}' */),
+  MessageFormat mf(UNICODE_STRING_SIMPLE("{0,plural,").append(fmtString).append(static_cast<char16_t>(0x7d) /* '}' */),
                    Locale::getEnglish(), status);
   Formattable args;
   FieldPosition ignore;
@@ -627,17 +627,17 @@ PluralFormatTest::ordinalFormatTest() {
     if (errorCode.errDataIfFailureAndReset("PluralFormat(en, UPLURAL_TYPE_ORDINAL, pattern) failed")) {
       return;
     }
-    UnicodeString result = pf.format((int32_t)321, errorCode);
+    UnicodeString result = pf.format(static_cast<int32_t>(321), errorCode);
     if (!errorCode.errIfFailureAndReset("PluralFormat.format(321) failed") &&
         result != UNICODE_STRING_SIMPLE("321st file")) {
       errln(UnicodeString("PluralFormat.format(321) wrong result string: ") + result);
     }
-    result = pf.format((int32_t)22, errorCode);
+    result = pf.format(static_cast<int32_t>(22), errorCode);
     if (!errorCode.errIfFailureAndReset("PluralFormat.format(22) failed") &&
         result != UNICODE_STRING_SIMPLE("22nd file")) {
       errln(UnicodeString("PluralFormat.format(22) wrong result string: ") + result);
     }
-    result = pf.format((int32_t)3, errorCode);
+    result = pf.format(static_cast<int32_t>(3), errorCode);
     if (!errorCode.errIfFailureAndReset("PluralFormat.format(3) failed") &&
         result != UNICODE_STRING_SIMPLE("3rd file")) {
       errln(UnicodeString("PluralFormat.format(3) wrong result string: ") + result);
@@ -649,12 +649,12 @@ PluralFormatTest::ordinalFormatTest() {
     if (errorCode.errIfFailureAndReset("PluralFormat(en, UPLURAL_TYPE_ORDINAL, pattern) failed")) {
       return;
     }
-    result = pf2.format((int32_t)456, errorCode);
+    result = pf2.format(static_cast<int32_t>(456), errorCode);
     if (!errorCode.errIfFailureAndReset("PluralFormat.format(456) failed") &&
         result != UNICODE_STRING_SIMPLE("456th file")) {
       errln(UnicodeString("PluralFormat.format(456) wrong result string: ") + result);
     }
-    result = pf2.format((int32_t)111, errorCode);
+    result = pf2.format(static_cast<int32_t>(111), errorCode);
     if (!errorCode.errIfFailureAndReset("PluralFormat.format(111) failed") &&
         result != UNICODE_STRING_SIMPLE("111th file")) {
       errln(UnicodeString("PluralFormat.format(111) wrong result string: ") + result);
@@ -666,14 +666,14 @@ PluralFormatTest::TestDecimals() {
     IcuTestErrorCode errorCode(*this, "TestDecimals");
     // Simple number replacement.
     PluralFormat pf(Locale::getEnglish(), "one{one meter}other{# meters}", errorCode);
-    assertEquals("simple format(1)", "one meter", pf.format((int32_t)1, errorCode), true);
+    assertEquals("simple format(1)", "one meter", pf.format(static_cast<int32_t>(1), errorCode), true);
     assertEquals("simple format(1.5)", "1.5 meters", pf.format(1.5, errorCode), true);
     PluralFormat pf2(Locale::getEnglish(),
             "offset:1 one{another meter}other{another # meters}", errorCode);
     DecimalFormat df("0.0", new DecimalFormatSymbols(Locale::getEnglish(), errorCode), errorCode);
     pf2.setNumberFormat(&df, errorCode);
-    assertEquals("offset-decimals format(1)", "another 0.0 meters", pf2.format((int32_t)1, errorCode), true);
-    assertEquals("offset-decimals format(2)", "another 1.0 meters", pf2.format((int32_t)2, errorCode), true);
+    assertEquals("offset-decimals format(1)", "another 0.0 meters", pf2.format(static_cast<int32_t>(1), errorCode), true);
+    assertEquals("offset-decimals format(2)", "another 1.0 meters", pf2.format(static_cast<int32_t>(2), errorCode), true);
     assertEquals("offset-decimals format(2.5)", "another 1.5 meters", pf2.format(2.5, errorCode), true);
     errorCode.reset();
 }
@@ -750,7 +750,7 @@ PluralFormatTest::helperTestResults(const char** localeArray,
     
     for (int32_t i=0; i<capacityOfArray; ++i) {
         const char *locale = localeArray[i];
-        Locale ulocale((const char *)locale);
+        Locale ulocale(locale);
         status = U_ZERO_ERROR;
         PluralFormat plFmt(ulocale, testPattern, status);
         if (U_FAILURE(status)) {

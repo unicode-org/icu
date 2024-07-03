@@ -345,7 +345,7 @@ TimeZoneRuleTest::TestSimpleRuleBasedTimeZone() {
         errln("FAIL: getOffset(7 args) failed.");
     }
     if (offset != -3600000) {
-        errln((UnicodeString)"FAIL: Invalid time zone offset: " + offset + " /expected: -3600000");
+        errln(UnicodeString("FAIL: Invalid time zone offset: ") + offset + " /expected: -3600000");
     }
     dst = rbtz1->inDaylightTime(time, status);
     if (U_FAILURE(status)) {
@@ -359,16 +359,16 @@ TimeZoneRuleTest::TestSimpleRuleBasedTimeZone() {
         errln("FAIL: getOffset(5 args) failed.");
     }
     if (offset != -3600000) {
-        errln((UnicodeString)"FAIL: Invalid time zone raw offset: " + offset + " /expected: -3600000");
+        errln(UnicodeString("FAIL: Invalid time zone raw offset: ") + offset + " /expected: -3600000");
     }
     if (dstSavings != 0) {            
-        errln((UnicodeString)"FAIL: Invalid DST amount: " + dstSavings + " /expected: 0");
+        errln(UnicodeString("FAIL: Invalid DST amount: ") + dstSavings + " /expected: 0");
     }
 
     // getRawOffset
     offset = rbtz1->getRawOffset();
     if (offset != -1*HOUR) {
-        errln((UnicodeString)"FAIL: Invalid time zone raw offset returned by getRawOffset: "
+        errln(UnicodeString("FAIL: Invalid time zone raw offset returned by getRawOffset: ")
             + offset + " /expected: -3600000");
     }
 
@@ -657,21 +657,21 @@ TimeZoneRuleTest::TestRBTZTransition() {
         const TimeZoneRule **trsrules = new const TimeZoneRule*[ruleCount];
         tz->getTimeZoneRules(initial, trsrules, ruleCount, status);
         if (U_FAILURE(status)) {
-            errln((UnicodeString)"FAIL: failed to get the TimeZoneRules from time zone " + *tzid);
+            errln(UnicodeString("FAIL: failed to get the TimeZoneRules from time zone ") + *tzid);
         }
         RuleBasedTimeZone *rbtz = new RuleBasedTimeZone(*tzid, initial->clone());
         if (U_FAILURE(status)) {
-            errln((UnicodeString)"FAIL: failed to get the transition rule count from time zone " + *tzid);
+            errln(UnicodeString("FAIL: failed to get the transition rule count from time zone ") + *tzid);
         }
         for (int32_t i = 0; i < ruleCount; i++) {
             rbtz->addTransitionRule(trsrules[i]->clone(), status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"FAIL: failed to add a transition rule at index " + i + " to the RBTZ for " + *tzid);
+                errln(UnicodeString("FAIL: failed to add a transition rule at index ") + i + " to the RBTZ for " + *tzid);
             }
         }
         rbtz->complete(status);
         if (U_FAILURE(status)) {
-            errln((UnicodeString)"FAIL: complete() failed for the RBTZ for " + *tzid);
+            errln(UnicodeString("FAIL: complete() failed for the RBTZ for ") + *tzid);
         }
 
         for (int32_t idx = 0; STARTYEARS[idx] != 0; idx++) {
@@ -796,24 +796,24 @@ TimeZoneRuleTest::TestVTimeZoneRoundTrip() {
         // Write out VTIMEZONE data
         vtz_org->write(vtzdata, status);
         if (U_FAILURE(status)) {
-            errln((UnicodeString)"FAIL: error returned while writing time zone rules for " +
+            errln(UnicodeString("FAIL: error returned while writing time zone rules for ") +
                 *tzid + " into VTIMEZONE format.");
         } else {
             // Read VTIMEZONE data
             vtz_new = VTimeZone::createVTimeZone(vtzdata, status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"FAIL: error returned while reading VTIMEZONE data for " + *tzid);
+                errln(UnicodeString("FAIL: error returned while reading VTIMEZONE data for ") + *tzid);
             } else {
                 // Write out VTIMEZONE one more time
                 UnicodeString vtzdata1;
                 vtz_new->write(vtzdata1, status);
                 if (U_FAILURE(status)) {
-                    errln((UnicodeString)"FAIL: error returned while writing time zone rules for " +
+                    errln(UnicodeString("FAIL: error returned while writing time zone rules for ") +
                         *tzid + "(vtz_new) into VTIMEZONE format.");
                 } else {
                     // Make sure VTIMEZONE data is exactly same with the first one
                     if (vtzdata != vtzdata1) {
-                        errln((UnicodeString)"FAIL: different VTIMEZONE data after round trip for " + *tzid);
+                        errln(UnicodeString("FAIL: different VTIMEZONE data after round trip for ") + *tzid);
                     }
                 }
                 // Check equivalency after the first transition.
@@ -897,13 +897,13 @@ TimeZoneRuleTest::TestVTimeZoneRoundTripPartial() {
             UDate startTime = getUTCMillis(STARTYEARS[i], UCAL_JANUARY, 1);
             vtz_org->write(startTime, vtzdata, status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"FAIL: error returned while writing time zone rules for " +
+                errln(UnicodeString("FAIL: error returned while writing time zone rules for ") +
                     *tzid + " into VTIMEZONE format since " + dateToString(startTime));
             } else {
                 // Read VTIMEZONE data
                 vtz_new = VTimeZone::createVTimeZone(vtzdata, status);
                 if (U_FAILURE(status)) {
-                    errln((UnicodeString)"FAIL: error returned while reading VTIMEZONE data for " + *tzid
+                    errln(UnicodeString("FAIL: error returned while reading VTIMEZONE data for ") + *tzid
                         + " since " + dateToString(startTime));
                 } else {
                     // Check equivalency after the first transition.
@@ -992,13 +992,13 @@ TimeZoneRuleTest::TestVTimeZoneSimpleWrite() {
             UDate time = getUTCMillis(TESTDATES[i][0], TESTDATES[i][1], TESTDATES[i][2]);
             vtz_org->writeSimple(time, vtzdata, status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"FAIL: error returned while writing simple time zone rules for " +
+                errln(UnicodeString("FAIL: error returned while writing simple time zone rules for ") +
                     *tzid + " into VTIMEZONE format at " + dateToString(time));
             } else {
                 // Read VTIMEZONE data
                 vtz_new = VTimeZone::createVTimeZone(vtzdata, status);
                 if (U_FAILURE(status)) {
-                    errln((UnicodeString)"FAIL: error returned while reading simple VTIMEZONE data for " + *tzid
+                    errln(UnicodeString("FAIL: error returned while reading simple VTIMEZONE data for ") + *tzid
                         + " at " + dateToString(time));
                 } else {
                     // Check equivalency
@@ -1269,17 +1269,17 @@ TimeZoneRuleTest::TestTimeZoneRuleCoverage() {
     // AnnualTimeZoneRule::getStartYear
     int32_t startYear = a1->getStartYear();
     if (startYear != 2000) {
-        errln((UnicodeString)"FAIL: The start year of AnnualTimeZoneRule a1 must be 2000 - returned: " + startYear);
+        errln(UnicodeString("FAIL: The start year of AnnualTimeZoneRule a1 must be 2000 - returned: ") + startYear);
     }
 
     // AnnualTimeZoneRule::getEndYear
     int32_t endYear = a1->getEndYear();
     if (endYear != AnnualTimeZoneRule::MAX_YEAR) {
-        errln((UnicodeString)"FAIL: The start year of AnnualTimeZoneRule a1 must be MAX_YEAR - returned: " + endYear);
+        errln(UnicodeString("FAIL: The start year of AnnualTimeZoneRule a1 must be MAX_YEAR - returned: ") + endYear);
     }
     endYear = a3->getEndYear();
     if (endYear != 2010) {
-        errln((UnicodeString)"FAIL: The start year of AnnualTimeZoneRule a3 must be 2010 - returned: " + endYear);
+        errln(UnicodeString("FAIL: The start year of AnnualTimeZoneRule a3 must be 2010 - returned: ") + endYear);
     }
 
     // AnnualTimeZone::getStartInYear
@@ -1536,7 +1536,7 @@ TimeZoneRuleTest::TestSimpleTimeZoneCoverage() {
         errln("FAIL: countTransitionRules failed");
     }
     if (numTzRules != 0) {
-        errln((UnicodeString)"FAIL: countTransitionRules returned " + numTzRules);
+        errln(UnicodeString("FAIL: countTransitionRules returned ") + numTzRules);
     }
     numTzRules = 2;
     stz1->getTimeZoneRules(ir, trrules, numTzRules, status);
@@ -1571,7 +1571,7 @@ TimeZoneRuleTest::TestSimpleTimeZoneCoverage() {
         errln("FAIL: countTransitionRules failed");
     }
     if (numTzRules != 2) {
-        errln((UnicodeString)"FAIL: countTransitionRules returned " + numTzRules);
+        errln(UnicodeString("FAIL: countTransitionRules returned ") + numTzRules);
     }
 
     numTzRules = 2;
@@ -1697,7 +1697,7 @@ TimeZoneRuleTest::TestVTimeZoneCoverage() {
 
     // hasSameRules
     UBool bSame = otz->hasSameRules(*vtz);
-    logln((UnicodeString)"OlsonTimeZone::hasSameRules(VTimeZone) should return false always for now - actual: " + bSame);
+    logln(UnicodeString("OlsonTimeZone::hasSameRules(VTimeZone) should return false always for now - actual: ") + bSame);
 
     // getTZURL/setTZURL
     UnicodeString TZURL("http://icu-project.org/timezone");
@@ -1867,7 +1867,7 @@ TimeZoneRuleTest::TestVTimeZoneParse() {
         UnicodeString tzid;
         tokyo->getID(tzid);
         if (tzid != asiaTokyoID) {
-            errln((UnicodeString)"FAIL: Invalid TZID: " + tzid);
+            errln(UnicodeString("FAIL: Invalid TZID: ") + tzid);
         }
         // Make sure offsets are correct
         int32_t rawOffset, dstSavings;
@@ -2134,11 +2134,11 @@ TimeZoneRuleTest::TestT6216() {
             status = U_ZERO_ERROR;
             vtz->getOffset(times[j], false, raw, dst, status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"FAIL: getOffset failed for time zone " + i + " at " + times[j]);
+                errln(UnicodeString("FAIL: getOffset failed for time zone ") + i + " at " + times[j]);
             }
             int32_t offset = raw + dst;
             if (offset != Expected[i][j]) {
-                errln((UnicodeString)"FAIL: Invalid offset at time(" + times[j] + "):" + offset + " Expected:" + Expected[i][j]);
+                errln(UnicodeString("FAIL: Invalid offset at time(") + times[j] + "):" + offset + " Expected:" + Expected[i][j]);
             }
         }
         delete vtz;
@@ -2163,7 +2163,7 @@ TimeZoneRuleTest::TestT6669() {
     if (!avail) {
         errln("FAIL: No transition returned by getNextTransition.");
     } else if (tzt.getTime() != expectedNext) {
-        errln((UnicodeString)"FAIL: Wrong transition time returned by getNextTransition - "
+        errln(UnicodeString("FAIL: Wrong transition time returned by getNextTransition - ")
             + tzt.getTime() + " Expected: " + expectedNext);
     }
 
@@ -2171,7 +2171,7 @@ TimeZoneRuleTest::TestT6669() {
     if (!avail) {
         errln("FAIL: No transition returned by getPreviousTransition.");
     } else if (tzt.getTime() != expectedPrev) {
-        errln((UnicodeString)"FAIL: Wrong transition time returned by getPreviousTransition - "
+        errln(UnicodeString("FAIL: Wrong transition time returned by getPreviousTransition - ")
             + tzt.getTime() + " Expected: " + expectedPrev);
     }
 }
@@ -2352,13 +2352,13 @@ TimeZoneRuleTest::verifyTransitions(BasicTimeZone& icutz, UDate start, UDate end
         }
 
         if (raw == raw0 && dst == dst0) {
-            errln((UnicodeString)"FAIL: False transition returned by getNextTransition for "
+            errln(UnicodeString("FAIL: False transition returned by getNextTransition for ")
                 + icutz.getID(tzid) + " at " + dateToString(time));
         }
         if (!first &&
                 (tzt0.getTo()->getRawOffset() != tzt.getFrom()->getRawOffset()
                 || tzt0.getTo()->getDSTSavings() != tzt.getFrom()->getDSTSavings())) {
-            errln((UnicodeString)"FAIL: TO rule of the previous transition does not match FROM rule of this transition at "
+            errln(UnicodeString("FAIL: TO rule of the previous transition does not match FROM rule of this transition at ")
                     + dateToString(time) + " for " + icutz.getID(tzid));                
         }
         tzt0 = tzt;
@@ -2385,14 +2385,14 @@ TimeZoneRuleTest::verifyTransitions(BasicTimeZone& icutz, UDate start, UDate end
         }
 
         if (raw == raw0 && dst == dst0) {
-            errln((UnicodeString)"FAIL: False transition returned by getPreviousTransition for "
+            errln(UnicodeString("FAIL: False transition returned by getPreviousTransition for ")
                 + icutz.getID(tzid) + " at " + dateToString(time));
         }
 
         if (!first &&
                 (tzt0.getFrom()->getRawOffset() != tzt.getTo()->getRawOffset()
                 || tzt0.getFrom()->getDSTSavings() != tzt.getTo()->getDSTSavings())) {
-            errln((UnicodeString)"FAIL: TO rule of the next transition does not match FROM rule in this transition at "
+            errln(UnicodeString("FAIL: TO rule of the next transition does not match FROM rule in this transition at ")
                     + dateToString(time) + " for " + icutz.getID(tzid));                
         }
         tzt0 = tzt;
@@ -2435,17 +2435,17 @@ TimeZoneRuleTest::compareTransitionsAscending(BasicTimeZone& z1, BasicTimeZone& 
             break;
         }
         if (!inRange1) {
-            errln((UnicodeString)"FAIL: " + zid1 + " does not have any transitions after "
+            errln(UnicodeString("FAIL: ") + zid1 + " does not have any transitions after "
                 + dateToString(time) + " before " + dateToString(end));
             break;
         }
         if (!inRange2) {
-            errln((UnicodeString)"FAIL: " + zid2 + " does not have any transitions after "
+            errln(UnicodeString("FAIL: ") + zid2 + " does not have any transitions after "
                 + dateToString(time) + " before " + dateToString(end));
             break;
         }
         if (tzt1.getTime() != tzt2.getTime()) {
-            errln((UnicodeString)"FAIL: First transition after " + dateToString(time) + " "
+            errln(UnicodeString("FAIL: First transition after ") + dateToString(time) + " "
                     + zid1 + "[" + dateToString(tzt1.getTime()) + "] "
                     + zid2 + "[" + dateToString(tzt2.getTime()) + "]");
             break;
@@ -2492,17 +2492,17 @@ TimeZoneRuleTest::compareTransitionsDescending(BasicTimeZone& z1, BasicTimeZone&
             break;
         }
         if (!inRange1) {
-            errln((UnicodeString)"FAIL: " + zid1 + " does not have any transitions before "
+            errln(UnicodeString("FAIL: ") + zid1 + " does not have any transitions before "
                 + dateToString(time) + " after " + dateToString(start));
             break;
         }
         if (!inRange2) {
-            errln((UnicodeString)"FAIL: " + zid2 + " does not have any transitions before "
+            errln(UnicodeString("FAIL: ") + zid2 + " does not have any transitions before "
                 + dateToString(time) + " after " + dateToString(start));
             break;
         }
         if (tzt1.getTime() != tzt2.getTime()) {
-            errln((UnicodeString)"FAIL: Last transition before " + dateToString(time) + " "
+            errln(UnicodeString("FAIL: Last transition before ") + dateToString(time) + " "
                     + zid1 + "[" + dateToString(tzt1.getTime()) + "] "
                     + zid2 + "[" + dateToString(tzt2.getTime()) + "]");
             break;
@@ -2591,7 +2591,7 @@ static UBool hasEquivalentTransitions(/*const*/ BasicTimeZone& tz1, /*const*/Bas
             return false;
         }
         double delta = tr1.getTime() >= tr2.getTime() ? tr1.getTime() - tr2.getTime() : tr2.getTime() - tr1.getTime();
-        if (delta > (double)maxTransitionTimeDelta) {
+        if (delta > static_cast<double>(maxTransitionTimeDelta)) {
             return false;
         }
         if (ignoreDstAmount) {

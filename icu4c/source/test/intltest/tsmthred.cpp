@@ -303,7 +303,7 @@ static void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& patt
     inCountry2.getDisplayCountry(theLocale,countryName2);
 
     Formattable myArgs[] = {
-        Formattable((int32_t)inStatus0),   // inStatus0      {0}
+        Formattable(static_cast<int32_t>(inStatus0)), // inStatus0      {0}
         Formattable(errString1), // statusString1 {1}
         Formattable(countryName2),  // inCountry2 {2}
         Formattable(currency3)// currency3  {3,number,currency}
@@ -505,7 +505,7 @@ public:
         // Keep this data here to avoid static initialization.
         FormatThreadTestData kNumberFormatTestData[] =
         {
-            FormatThreadTestData((double)5.0, UnicodeString(u"5")),
+            FormatThreadTestData(5.0, UnicodeString(u"5")),
                 FormatThreadTestData( 6.0, UnicodeString(u"6")),
                 FormatThreadTestData( 20.0, UnicodeString(u"20")),
                 FormatThreadTestData( 8.0, UnicodeString(u"8")),
@@ -518,7 +518,7 @@ public:
         // Keep this data here to avoid static initialization.
         FormatThreadTestData kPercentFormatTestData[] =
         {
-            FormatThreadTestData((double)5.0, CharsToUnicodeString("500\\u00a0%")),
+            FormatThreadTestData(5.0, CharsToUnicodeString("500\\u00a0%")),
                 FormatThreadTestData( 1.0, CharsToUnicodeString("100\\u00a0%")),
                 FormatThreadTestData( 0.26, CharsToUnicodeString("26\\u00a0%")),
                 FormatThreadTestData(
@@ -751,7 +751,7 @@ public:
             int32_t resLen = coll->getSortKey(lines[i].buff, lines[i].buflen, newSk, 1024);
 
             if(oldSk != nullptr) {
-                int32_t skres = strcmp((char *)oldSk, (char *)newSk);
+                int32_t skres = strcmp(reinterpret_cast<char*>(oldSk), reinterpret_cast<char*>(newSk));
                 int32_t cmpres = coll->compare(lines[prev].buff, lines[prev].buflen, lines[i].buff, lines[i].buflen);
                 int32_t cmpres2 = coll->compare(lines[i].buff, lines[i].buflen, lines[prev].buff, lines[prev].buflen);
 

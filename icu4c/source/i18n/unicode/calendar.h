@@ -2539,14 +2539,14 @@ Calendar::createInstance(TimeZone* zone, UErrorCode& errorCode)
 inline void
 Calendar::roll(UCalendarDateFields field, UBool up, UErrorCode& status)
 {
-    roll(field, (int32_t)(up ? +1 : -1), status);
+    roll(field, static_cast<int32_t>(up ? +1 : -1), status);
 }
 
 #ifndef U_HIDE_DEPRECATED_API
 inline void
 Calendar::roll(EDateFields field, UBool up, UErrorCode& status)
 {
-    roll((UCalendarDateFields) field, up, status);
+    roll(static_cast<UCalendarDateFields>(field), up, status);
 }
 #endif  /* U_HIDE_DEPRECATED_API */
 
