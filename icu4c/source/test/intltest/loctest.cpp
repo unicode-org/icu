@@ -310,7 +310,7 @@ void LocaleTest::TestBasicGetters() {
         else {
             testLocale = Locale(rawData[LANG][i], rawData[CTRY][i], rawData[VAR][i]);
         }
-        logln("Testing " + (UnicodeString)testLocale.getName() + "...");
+        logln("Testing " + UnicodeString(testLocale.getName()) + "...");
 
         if ( (temp=testLocale.getLanguage()) != (dataTable[LANG][i]))
             errln("  Language code mismatch: " + temp + " versus "
@@ -557,14 +557,14 @@ void LocaleTest::TestSimpleResourceInfo() {
             errln("  ISO-3 country code mismatch: " + temp
                 + " versus " + dataTable[CTRY3][i]);
 
-        snprintf(temp2, sizeof(temp2), "%x", (int)testLocale.getLCID());
+        snprintf(temp2, sizeof(temp2), "%x", static_cast<int>(testLocale.getLCID()));
         if (UnicodeString(temp2) != dataTable[LCID][i])
-            errln((UnicodeString)"  LCID mismatch: " + temp2 + " versus "
+            errln(UnicodeString("  LCID mismatch: ") + temp2 + " versus "
                 + dataTable[LCID][i]);
 
         if(U_FAILURE(err))
         {
-            errln((UnicodeString)"Some error on number " + i + u_errorName(err));
+            errln(UnicodeString("Some error on number ") + i + u_errorName(err));
         }
         err = U_ZERO_ERROR;
     }
@@ -1003,7 +1003,7 @@ LocaleTest::TestGetLangsAndCountries()
               if (uprv_strcmp(test[j],spotCheck1[i])== 0)
                     break;
             if (j == testCount || (uprv_strcmp(test[j],spotCheck1[i])!=0))
-                errln("Couldn't find " + (UnicodeString)spotCheck1[i] + " in language list.");
+                errln("Couldn't find " + UnicodeString(spotCheck1[i]) + " in language list.");
         }
     }
     for (i = 0; i < testCount; i++) {
@@ -1354,7 +1354,7 @@ LocaleTest::TestEuroSupport()
         delete nf;
     }
 
-    UnicodeString dollarStr("USD", ""), euroStr("EUR", ""), genericStr((char16_t)0x00a4), resultStr;
+    UnicodeString dollarStr("USD", ""), euroStr("EUR", ""), genericStr(static_cast<char16_t>(0x00a4)), resultStr;
     char16_t tmp[4];
     status = U_ZERO_ERROR;
 
@@ -1714,7 +1714,7 @@ LocaleTest::Test4105828()
         }
         UnicodeString result;
         FieldPosition pos(FieldPosition::DONT_CARE);
-        fmt->format((int32_t)1, result, pos);
+        fmt->format(static_cast<int32_t>(1), result, pos);
         UnicodeString temp;
         if(result != "100%") {
             errln(UnicodeString("Percent for ") + LOC[i].getDisplayName(temp) + " should be 100%, got " + result);
@@ -4649,8 +4649,8 @@ LocaleTest::TestGetBaseName() {
  * prefix + '_' + x, then return 1.  Otherwise return a value < 0.
  */
 static UBool _loccmp(const char* string, const char* prefix) {
-    int32_t slen = (int32_t)strlen(string),
-            plen = (int32_t)strlen(prefix);
+    int32_t slen = static_cast<int32_t>(strlen(string)),
+            plen = static_cast<int32_t>(strlen(prefix));
     int32_t c = uprv_strncmp(string, prefix, plen);
     /* 'root' is "less than" everything */
     if (prefix[0] == '\0') {
@@ -5383,7 +5383,7 @@ void LocaleTest::TestCurrencyByDate()
     UnicodeString tempStr, resultStr;
 
 	// Cycle through historical currencies
-    date = (UDate)-630720000000.0; // pre 1961 - no currency defined
+    date = static_cast<UDate>(-630720000000.0); // pre 1961 - no currency defined
     index = ucurr_countCurrencies("eo_AM", date, &status);
     if (index != 0)
 	{
@@ -5395,7 +5395,7 @@ void LocaleTest::TestCurrencyByDate()
     }
     status = U_ZERO_ERROR;
 
-    date = (UDate)0.0; // 1970 - one currency defined
+    date = static_cast<UDate>(0.0); // 1970 - one currency defined
     index = ucurr_countCurrencies("eo_AM", date, &status);
     if (index != 1)
 	{
@@ -5408,7 +5408,7 @@ void LocaleTest::TestCurrencyByDate()
         errcheckln(status, "FAIL: didn't return SUR for eo_AM - %s", u_errorName(status));
     }
 
-    date = (UDate)693792000000.0; // 1992 - one currency defined
+    date = static_cast<UDate>(693792000000.0); // 1992 - one currency defined
 	index = ucurr_countCurrencies("eo_AM", date, &status);
     if (index != 1)
 	{
@@ -5421,7 +5421,7 @@ void LocaleTest::TestCurrencyByDate()
         errcheckln(status, "FAIL: didn't return RUR for eo_AM - %s", u_errorName(status));
     }
 
-	date = (UDate)977616000000.0; // post 1993 - one currency defined
+	date = static_cast<UDate>(977616000000.0); // post 1993 - one currency defined
 	index = ucurr_countCurrencies("eo_AM", date, &status);
     if (index != 1)
 	{
@@ -5435,7 +5435,7 @@ void LocaleTest::TestCurrencyByDate()
     }
 
     // Locale AD has multiple currencies at once
-	date = (UDate)977616000000.0; // year 2001
+	date = static_cast<UDate>(977616000000.0); // year 2001
 	index = ucurr_countCurrencies("eo_AD", date, &status);
     if (index != 4)
 	{
@@ -5466,7 +5466,7 @@ void LocaleTest::TestCurrencyByDate()
         errcheckln(status, "FAIL: didn't return ADP for eo_AD - %s", u_errorName(status));
     }
 
-	date = (UDate)0.0; // year 1970
+	date = static_cast<UDate>(0.0); // year 1970
 	index = ucurr_countCurrencies("eo_AD", date, &status);
     if (index != 3)
 	{
@@ -5491,7 +5491,7 @@ void LocaleTest::TestCurrencyByDate()
         errcheckln(status, "FAIL: didn't return ADP for eo_AD - %s", u_errorName(status));
     }
 
-	date = (UDate)-630720000000.0; // year 1950
+	date = static_cast<UDate>(-630720000000.0); // year 1950
 	index = ucurr_countCurrencies("eo_AD", date, &status);
     if (index != 2)
 	{
@@ -5510,7 +5510,7 @@ void LocaleTest::TestCurrencyByDate()
         errcheckln(status, "FAIL: didn't return ADP for eo_AD - %s", u_errorName(status));
     }
 
-	date = (UDate)-2207520000000.0; // year 1900
+	date = static_cast<UDate>(-2207520000000.0); // year 1900
 	index = ucurr_countCurrencies("eo_AD", date, &status);
     if (index != 1)
 	{
@@ -5524,7 +5524,7 @@ void LocaleTest::TestCurrencyByDate()
     }
 
 	// Locale UA has gap between years 1994 - 1996
-	date = (UDate)788400000000.0;
+	date = static_cast<UDate>(788400000000.0);
 	index = ucurr_countCurrencies("eo_UA", date, &status);
     if (index != 0)
 	{
@@ -5568,7 +5568,7 @@ void LocaleTest::TestCurrencyByDate()
     status = U_ZERO_ERROR;
 
     // Cycle through histrocial currencies
-	date = (UDate)977616000000.0; // 2001 - one currency
+	date = static_cast<UDate>(977616000000.0); // 2001 - one currency
 	index = ucurr_countCurrencies("eo_AO", date, &status);
     if (index != 1)
 	{
@@ -5581,7 +5581,7 @@ void LocaleTest::TestCurrencyByDate()
         errcheckln(status, "FAIL: didn't return AOA for eo_AO - %s", u_errorName(status));
     }
 
-	date = (UDate)819936000000.0; // 1996 - 2 currencies
+	date = static_cast<UDate>(819936000000.0); // 1996 - 2 currencies
 	index = ucurr_countCurrencies("eo_AO", date, &status);
     if (index != 2)
 	{
@@ -5600,7 +5600,7 @@ void LocaleTest::TestCurrencyByDate()
         errcheckln(status, "FAIL: didn't return AON for eo_AO - %s", u_errorName(status));
     }
 
-	date = (UDate)662256000000.0; // 1991 - 2 currencies
+	date = static_cast<UDate>(662256000000.0); // 1991 - 2 currencies
 	index = ucurr_countCurrencies("eo_AO", date, &status);
     if (index != 2)
 	{
@@ -5619,7 +5619,7 @@ void LocaleTest::TestCurrencyByDate()
         errcheckln(status, "FAIL: didn't return AOK for eo_AO - %s", u_errorName(status));
     }
 
-	date = (UDate)315360000000.0; // 1980 - one currency
+	date = static_cast<UDate>(315360000000.0); // 1980 - one currency
 	index = ucurr_countCurrencies("eo_AO", date, &status);
     if (index != 1)
 	{
@@ -5632,7 +5632,7 @@ void LocaleTest::TestCurrencyByDate()
         errcheckln(status, "FAIL: didn't return AOK for eo_AO - %s", u_errorName(status));
     }
 
-	date = (UDate)0.0; // 1970 - no currencies
+	date = static_cast<UDate>(0.0); // 1970 - no currencies
 	index = ucurr_countCurrencies("eo_AO", date, &status);
     if (index != 0)
 	{
@@ -5645,7 +5645,7 @@ void LocaleTest::TestCurrencyByDate()
     status = U_ZERO_ERROR;
 
     // Test with currency keyword override
-	date = (UDate)977616000000.0; // 2001 - two currencies
+	date = static_cast<UDate>(977616000000.0); // 2001 - two currencies
 	index = ucurr_countCurrencies("eo_DE@currency=DEM", date, &status);
     if (index != 2)
 	{
@@ -5829,7 +5829,7 @@ void LocaleTest::TestLocaleCanonicalizationFromFile()
     }
     // Format:
     // <source locale identifier>	;	<expected canonicalized locale identifier>
-    while (fgets(line, (int)sizeof(line), testFile.getAlias())!=nullptr) {
+    while (fgets(line, static_cast<int>(sizeof(line)), testFile.getAlias()) != nullptr) {
         if (line[0] == '#') {
             // ignore any lines start with #
             continue;
@@ -5841,9 +5841,9 @@ void LocaleTest::TestLocaleCanonicalizationFromFile()
         }
         *semi = '\0'; // null terminiate on the spot of semi
         const char* from = u_skipWhitespace((const char*)line);
-        u_rtrim((char*)from);
+        u_rtrim(const_cast<char*>(from));
         const char* to = u_skipWhitespace((const char*)semi + 1);
-        u_rtrim((char*)to);
+        u_rtrim(const_cast<char*>(to));
         std::string expect(to);
         // Change the _ to -
         std::transform(expect.begin(), expect.end(), expect.begin(),
@@ -5894,7 +5894,7 @@ testLikelySubtagsLineFn(void *context,
         return;
     }
     (void)fieldCount;
-    LocaleTest* THIS = (LocaleTest*)context;
+    LocaleTest* THIS = static_cast<LocaleTest*>(context);
     std::string source(trim(std::string(fields[0][0], fields[0][1]-fields[0][0])));
     std::string addLikely(trim(std::string(fields[1][0], fields[1][1]-fields[1][0])));
     std::string removeFavorScript(trim(std::string(fields[2][0], fields[2][1]-fields[2][0])));

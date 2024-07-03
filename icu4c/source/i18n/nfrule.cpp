@@ -35,7 +35,7 @@
 U_NAMESPACE_BEGIN
 
 NFRule::NFRule(const RuleBasedNumberFormat* _rbnf, const UnicodeString &_ruleText, UErrorCode &status)
-  : baseValue((int32_t)0)
+  : baseValue(static_cast<int32_t>(0))
   , radix(10)
   , exponent(0)
   , decimalPoint(0)
@@ -289,7 +289,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
             while (p < descriptorLength) {
                 c = descriptor.charAt(p);
                 if (c >= gZero && c <= gNine) {
-                    val = val * ll_10 + (int32_t)(c - gZero);
+                    val = val * ll_10 + static_cast<int32_t>(c - gZero);
                 }
                 else if (c == gSlash || c == gGreaterThan) {
                     break;
@@ -318,7 +318,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
                 while (p < descriptorLength) {
                     c = descriptor.charAt(p);
                     if (c >= gZero && c <= gNine) {
-                        val = val * ll_10 + (int32_t)(c - gZero);
+                        val = val * ll_10 + static_cast<int32_t>(c - gZero);
                     }
                     else if (c == gGreaterThan) {
                         break;
@@ -335,7 +335,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
 
                 // tempValue now contain's the rule's radix.  Set it
                 // accordingly, and recalculate the rule's exponent
-                radix = (int32_t)val;
+                radix = static_cast<int32_t>(val);
                 if (radix == 0) {
                     // throw new IllegalArgumentException("Rule can't have radix of 0");
                     status = U_PARSE_ERROR;
@@ -581,7 +581,8 @@ NFRule::expectedExponent() const
     // we get rounding error in some cases-- for example, log 1000 / log 10
     // gives us 1.9999999996 instead of 2.  The extra logic here is to take
     // that into account
-    int16_t tempResult = (int16_t)(uprv_log((double)baseValue) / uprv_log((double)radix));
+    int16_t tempResult = static_cast<int16_t>(uprv_log(static_cast<double>(baseValue)) /
+                                              uprv_log(static_cast<double>(radix)));
     int64_t temp = util64_pow(radix, tempResult + 1);
     if (temp <= baseValue) {
         tempResult += 1;
@@ -764,7 +765,7 @@ NFRule::doFormat(int64_t number, UnicodeString& toInsertInto, int32_t pos, int32
             toInsertInto.insert(pos, fRuleText.tempSubString(pluralRuleEnd + 2));
         }
         toInsertInto.insert(pos,
-            rulePatternFormat->format((int32_t)(number/util64_pow(radix, exponent)), status));
+            rulePatternFormat->format(static_cast<int32_t>(number / util64_pow(radix, exponent)), status));
         if (pluralRuleStart > 0) {
             toInsertInto.insert(pos, fRuleText.tempSubString(0, pluralRuleStart));
         }
@@ -818,7 +819,7 @@ NFRule::doFormat(double number, UnicodeString& toInsertInto, int32_t pos, int32_
         else {
             pluralVal = pluralVal / util64_pow(radix, exponent);
         }
-        toInsertInto.insert(pos, rulePatternFormat->format((int32_t)(pluralVal), status));
+        toInsertInto.insert(pos, rulePatternFormat->format(static_cast<int32_t>(pluralVal), status));
         if (pluralRuleStart > 0) {
             toInsertInto.insert(pos, fRuleText.tempSubString(0, pluralRuleStart));
         }
@@ -998,7 +999,7 @@ NFRule::doParse(const UnicodeString& text,
     int highWaterMark = 0;
     double result = 0;
     int start = 0;
-    double tempBaseValue = (double)(baseValue <= 0 ? 0 : baseValue);
+    double tempBaseValue = static_cast<double>(baseValue <= 0 ? 0 : baseValue);
 
     UnicodeString temp;
     do {

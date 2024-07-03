@@ -56,7 +56,7 @@ public:
         bs.clearAll();
         for (UChar32 cp=0; cp<0x110000; ++cp) {
             if (u_charType(cp) == prop) {
-                bs.set((int32_t) cp);
+                bs.set(static_cast<int32_t>(cp));
                 ++total;
             }
         }
@@ -71,7 +71,7 @@ public:
     void add(){
         us.clear();
         for (UChar32 cp=0; cp<0x110000; ++cp) {
-            if (bs.get((int32_t) cp)) {
+            if (bs.get(static_cast<int32_t>(cp))) {
                 us.add(cp);
             }
         }

@@ -324,13 +324,13 @@ int main(int argc, char *argv[])
             engine->getGlyphPositions(positions, leStatus);
 
             if(LE_FAILURE(leStatus)) {
-              fprintf(stderr,"ERROR: LO returned error: %s\n", u_errorName((UErrorCode)leStatus));
+              fprintf(stderr, "ERROR: LO returned error: %s\n", u_errorName(static_cast<UErrorCode>(leStatus)));
               overallStatus = leStatus;
               fprintf(outputFile, "<!-- ERROR: %d -->\n", leStatus);
               fflush(outputFile);
               leStatus = LE_NO_ERROR;
             } else {
-              dumpLongs(outputFile, "result-glyphs", (le_int32 *) glyphs, glyphCount);
+              dumpLongs(outputFile, "result-glyphs", reinterpret_cast<le_int32*>(glyphs), glyphCount);
               
               dumpLongs(outputFile, "result-indices", indices, glyphCount);
               

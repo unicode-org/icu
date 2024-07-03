@@ -40,7 +40,7 @@ equal_uint32(const uint32_t *s, const uint32_t *t, int32_t length) {
         ++t;
         --length;
     }
-    return (UBool)(length==0);
+    return static_cast<UBool>(length == 0);
 }
 
 /* Building a trie ----------------------------------------------------------*/
@@ -730,7 +730,7 @@ defaultGetFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset) {
         if(inBlockZero) {
             start+=UTRIE_DATA_BLOCK_LENGTH;
         } else if(value!=initialValue) {
-            return (uint32_t)offset;
+            return static_cast<uint32_t>(offset);
         } else {
             ++start;
         }

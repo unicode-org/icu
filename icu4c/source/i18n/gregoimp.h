@@ -317,11 +317,11 @@ inline double Grego::julianDayToMillis(int32_t julian)
 }
 
 inline int32_t Grego::millisToJulianDay(double millis) {
-  return (int32_t) (kEpochStartAsJulianDay + ClockMath::floorDivide(millis, (double)kOneDay));
+  return static_cast<int32_t>(kEpochStartAsJulianDay + ClockMath::floorDivide(millis, kOneDay));
 }
 
 inline int32_t Grego::gregorianShift(int32_t eyear) {
-  int64_t y = (int64_t)eyear-1;
+  int64_t y = static_cast<int64_t>(eyear) - 1;
   int64_t gregShift = ClockMath::floorDivideInt64(y, 400LL) - ClockMath::floorDivideInt64(y, 100LL) + 2;
   return static_cast<int32_t>(gregShift);
 }

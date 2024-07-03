@@ -69,7 +69,7 @@ public:
                 // Preflight the UTF-8 length and allocate utf8.
                 u_strToUTF8(nullptr, 0, &utf8Length, buffer, bufferLen, &status);
                 if(status==U_BUFFER_OVERFLOW_ERROR) {
-                    utf8=(char *)malloc(utf8Length);
+                    utf8 = static_cast<char*>(malloc(utf8Length));
                     if(utf8!=nullptr) {
                         status=U_ZERO_ERROR;
                         u_strToUTF8(utf8, utf8Length, nullptr, buffer, bufferLen, &status);
@@ -81,9 +81,9 @@ public:
                 if(verbose) {
                     printf("code points:%ld  len16:%ld  len8:%ld  spans:%ld  "
                            "cp/span:%.3g  char16_t/span:%.3g  B/span:%.3g  B/cp:%.3g\n",
-                           (long)countInputCodePoints, (long)bufferLen, (long)utf8Length, (long)spanCount,
-                           (double)countInputCodePoints/spanCount, (double)bufferLen/spanCount, (double)utf8Length/spanCount,
-                           (double)utf8Length/countInputCodePoints);
+                           static_cast<long>(countInputCodePoints), static_cast<long>(bufferLen), static_cast<long>(utf8Length), static_cast<long>(spanCount),
+                           static_cast<double>(countInputCodePoints) / spanCount, static_cast<double>(bufferLen) / spanCount, static_cast<double>(utf8Length) / spanCount,
+                           static_cast<double>(utf8Length) / countInputCodePoints);
                 }
             }
         }
@@ -102,7 +102,7 @@ public:
         UBool tf=false;
         while(i<length) {
             i=span(s, length, i, tf);
-            tf=(UBool)(!tf);
+            tf = static_cast<UBool>(!tf);
             ++spanCount;
         }
     }
@@ -184,12 +184,12 @@ public:
         UBool tf=false;
         while(i<length) {
             i+=span(set, s+i, length-i, tf);
-            tf=(UBool)(!tf);
+            tf = static_cast<UBool>(!tf);
             ++count;
         }
         if(count!=testcase.spanCount) {
             fprintf(stderr, "error: Contains() count=%ld != %ld=UnicodeSetPerformanceTest.spanCount\n",
-                    (long)count, (long)testcase.spanCount);
+                    static_cast<long>(count), static_cast<long>(testcase.spanCount));
         }
     }
     static int32_t span(const UnicodeSet &set, const char16_t *s, int32_t length, UBool tf) {
@@ -214,15 +214,15 @@ protected:
         UChar32 c, c2;
 
         for(c=0; c<=0xffff; ++c) {
-            utf16[0]=(char16_t)c;
+            utf16[0] = static_cast<char16_t>(c);
             if(testcase.set.span(utf16, 1, USET_SPAN_CONTAINED)>0) {
                 set.add(c);
             }
         }
         for(c=0xd800; c<=0xdbff; ++c) {
-            utf16[0]=(char16_t)c;
+            utf16[0] = static_cast<char16_t>(c);
             for(c2=0xdc00; c2<=0xdfff; ++c2) {
-                utf16[1]=(char16_t)c2;
+                utf16[1] = static_cast<char16_t>(c2);
                 if(testcase.set.span(utf16, 2, USET_SPAN_CONTAINED)>0) {
                     set.add(U16_GET_SUPPLEMENTARY(c, c2));
                 }
@@ -245,13 +245,13 @@ public:
         int32_t i=0;
         UBool tf=false;
         while(i<length) {
-            i+=set.span(s+i, length-i, (USetSpanCondition)tf);
-            tf=(UBool)(!tf);
+            i += set.span(s + i, length - i, static_cast<USetSpanCondition>(tf));
+            tf = static_cast<UBool>(!tf);
             ++count;
         }
         if(count!=testcase.spanCount) {
             fprintf(stderr, "error: SpanUTF16() count=%ld != %ld=UnicodeSetPerformanceTest.spanCount\n",
-                    (long)count, (long)testcase.spanCount);
+                    static_cast<long>(count), static_cast<long>(testcase.spanCount));
         }
     }
 };
@@ -265,15 +265,15 @@ protected:
         UChar32 c, c2;
 
         for(c=0; c<=0xffff; ++c) {
-            utf16[0]=(char16_t)c;
+            utf16[0] = static_cast<char16_t>(c);
             if(testcase.set.spanBack(utf16, 1, USET_SPAN_CONTAINED)==0) {
                 set.add(c);
             }
         }
         for(c=0xd800; c<=0xdbff; ++c) {
-            utf16[0]=(char16_t)c;
+            utf16[0] = static_cast<char16_t>(c);
             for(c2=0xdc00; c2<=0xdfff; ++c2) {
-                utf16[1]=(char16_t)c2;
+                utf16[1] = static_cast<char16_t>(c2);
                 if(testcase.set.spanBack(utf16, 2, USET_SPAN_CONTAINED)==0) {
                     set.add(U16_GET_SUPPLEMENTARY(c, c2));
                 }
@@ -298,15 +298,15 @@ public:
          * If testcase.spanCount is an odd number, then the last span() was not-contained.
          * The last spanBack() must be not-contained to match the first span().
          */
-        UBool tf=(UBool)((testcase.spanCount&1)==0);
+        UBool tf = static_cast<UBool>((testcase.spanCount & 1) == 0);
         while(length>0 || !tf) {
-            length=set.spanBack(s, length, (USetSpanCondition)tf);
-            tf=(UBool)(!tf);
+            length = set.spanBack(s, length, static_cast<USetSpanCondition>(tf));
+            tf = static_cast<UBool>(!tf);
             ++count;
         }
         if(count!=testcase.spanCount) {
             fprintf(stderr, "error: SpanBackUTF16() count=%ld != %ld=UnicodeSetPerformanceTest.spanCount\n",
-                    (long)count, (long)testcase.spanCount);
+                    static_cast<long>(count), static_cast<long>(testcase.spanCount));
         }
     }
 };
@@ -346,13 +346,13 @@ public:
         int32_t i=0;
         UBool tf=false;
         while(i<length) {
-            i+=set.spanUTF8(s+i, length-i, (USetSpanCondition)tf);
-            tf=(UBool)(!tf);
+            i += set.spanUTF8(s + i, length - i, static_cast<USetSpanCondition>(tf));
+            tf = static_cast<UBool>(!tf);
             ++count;
         }
         if(count!=testcase.spanCount) {
             fprintf(stderr, "error: SpanUTF8() count=%ld != %ld=UnicodeSetPerformanceTest.spanCount\n",
-                    (long)count, (long)testcase.spanCount);
+                    static_cast<long>(count), static_cast<long>(testcase.spanCount));
         }
     }
 };
@@ -394,15 +394,15 @@ public:
          * If testcase.spanCount is an odd number, then the last span() was not-contained.
          * The last spanBack() must be not-contained to match the first span().
          */
-        UBool tf=(UBool)((testcase.spanCount&1)==0);
+        UBool tf = static_cast<UBool>((testcase.spanCount & 1) == 0);
         while(length>0 || !tf) {
-            length=set.spanBackUTF8(s, length, (USetSpanCondition)tf);
-            tf=(UBool)(!tf);
+            length = set.spanBackUTF8(s, length, static_cast<USetSpanCondition>(tf));
+            tf = static_cast<UBool>(!tf);
             ++count;
         }
         if(count!=testcase.spanCount) {
             fprintf(stderr, "error: SpanBackUTF8() count=%ld != %ld=UnicodeSetPerformanceTest.spanCount\n",
-                    (long)count, (long)testcase.spanCount);
+                    static_cast<long>(count), static_cast<long>(testcase.spanCount));
         }
     }
 };

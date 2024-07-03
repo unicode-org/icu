@@ -385,7 +385,7 @@ MFFunctionRegistry::~MFFunctionRegistry() {
             }
         }
     }
-    return LocalizedNumberFormatter(nf.locale(number.locale));
+    return nf.locale(number.locale);
 }
 
 Formatter* StandardFunctions::NumberFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {

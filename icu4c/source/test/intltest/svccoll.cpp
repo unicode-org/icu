@@ -275,7 +275,7 @@ public:
   {
     CollatorInfo** p;
     for (p = info; *p; ++p) {}
-    count = (int32_t)(p - info);
+    count = static_cast<int32_t>(p - info);
   }
 
   ~TestFactory() {
@@ -505,7 +505,7 @@ int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
                 UnicodeString exp(expected[j], (char*)nullptr);
                 if (*s == exp) {
                     seenMask |= bit;
-                    logln((UnicodeString)"Ok: \"" + exp + "\" seen");
+                    logln(UnicodeString("Ok: \"") + exp + "\" seen");
                 }
             }
         }
@@ -532,7 +532,7 @@ int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
     if (((1<<expectedCount)-1) != seenMask) {
         for (int32_t j=0, bit=1; j<expectedCount; ++j, bit<<=1) {
             if ((seenMask&bit)==0) {
-                errln((UnicodeString)"FAIL: \"" + expected[j] + "\" not seen");
+                errln(UnicodeString("FAIL: \"") + expected[j] + "\" not seen");
             }
         }
     }

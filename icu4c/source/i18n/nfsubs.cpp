@@ -62,7 +62,7 @@ public:
     virtual double transformNumber(double number) const override { return number; }
     virtual double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const override { return newRuleValue; }
     virtual double calcUpperBound(double oldUpperBound) const override { return oldUpperBound; }
-    virtual char16_t tokenChar() const override { return (char16_t)0x003d; } // '='
+    virtual char16_t tokenChar() const override { return static_cast<char16_t>(0x003d); } // '='
 
 public:
     static UClassID getStaticClassID();
@@ -132,7 +132,7 @@ public:
 
     virtual double calcUpperBound(double /*oldUpperBound*/) const override { return static_cast<double>(divisor); }
 
-    virtual char16_t tokenChar() const override { return (char16_t)0x003c; } // '<'
+    virtual char16_t tokenChar() const override { return static_cast<char16_t>(0x003c); } // '<'
 
 public:
     static UClassID getStaticClassID();
@@ -185,7 +185,7 @@ public:
 
     virtual UBool isModulusSubstitution() const override { return true; }
 
-    virtual char16_t tokenChar() const override { return (char16_t)0x003e; } // '>'
+    virtual char16_t tokenChar() const override { return static_cast<char16_t>(0x003e); } // '>'
 
     virtual void toString(UnicodeString& result) const override;
 
@@ -209,7 +209,7 @@ public:
     virtual double transformNumber(double number) const override { return uprv_floor(number); }
     virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const override { return newRuleValue + oldRuleValue; }
     virtual double calcUpperBound(double /*oldUpperBound*/) const override { return DBL_MAX; }
-    virtual char16_t tokenChar() const override { return (char16_t)0x003c; } // '<'
+    virtual char16_t tokenChar() const override { return static_cast<char16_t>(0x003c); } // '<'
 
 public:
     static UClassID getStaticClassID();
@@ -246,7 +246,7 @@ public:
 
     virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const override { return newRuleValue + oldRuleValue; }
     virtual double calcUpperBound(double /*oldUpperBound*/) const override { return 0.0; }
-    virtual char16_t tokenChar() const override { return (char16_t)0x003e; } // '>'
+    virtual char16_t tokenChar() const override { return static_cast<char16_t>(0x003e); } // '>'
 
 public:
     static UClassID getStaticClassID();
@@ -268,7 +268,7 @@ public:
     virtual double transformNumber(double number) const override { return uprv_fabs(number); }
     virtual double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const override { return -newRuleValue; }
     virtual double calcUpperBound(double /*oldUpperBound*/) const override { return DBL_MAX; }
-    virtual char16_t tokenChar() const override { return (char16_t)0x003e; } // '>'
+    virtual char16_t tokenChar() const override { return static_cast<char16_t>(0x003e); } // '>'
 
 public:
     static UClassID getStaticClassID();
@@ -318,7 +318,7 @@ public:
 
     virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const override { return newRuleValue / oldRuleValue; }
     virtual double calcUpperBound(double /*oldUpperBound*/) const override { return denominator; }
-    virtual char16_t tokenChar() const override { return (char16_t)0x003c; } // '<'
+    virtual char16_t tokenChar() const override { return static_cast<char16_t>(0x003c); } // '<'
 private:
     static const char16_t LTLT[2];
 
@@ -365,7 +365,7 @@ NFSubstitution::makeSubstitution(int32_t pos,
         // if the rule set containing the rule is a fraction
         // rule set, return a NumeratorSubstitution
         else if (ruleSet->isFractionRuleSet()) {
-            return new NumeratorSubstitution(pos, (double)rule->getBaseValue(),
+            return new NumeratorSubstitution(pos, static_cast<double>(rule->getBaseValue()),
                 formatter->getDefaultRuleSet(), description, status);
         }
 
@@ -600,7 +600,7 @@ NFSubstitution::doSubstitution(int64_t number, UnicodeString& toInsertInto, int3
             // then use that formatter's format() method
             // to format the result
             UnicodeString temp;
-            numberFormat->format(transformNumber((double)number), temp, status);
+            numberFormat->format(transformNumber(static_cast<double>(number)), temp, status);
             toInsertInto.insert(_pos + this->pos, temp);
         } 
         else { 
@@ -1031,7 +1031,7 @@ FractionalPartSubstitution::FractionalPartSubstitution(int32_t _pos,
         }
     } else {
         // cast away const
-        ((NFRuleSet*)getRuleSet())->makeIntoFractionRuleSet();
+        const_cast<NFRuleSet*>(getRuleSet())->makeIntoFractionRuleSet();
     }
 }
 
@@ -1103,7 +1103,7 @@ FractionalPartSubstitution::doSubstitution(double number, UnicodeString& toInser
     if (!pad) {
       // hack around lack of precision in digitlist. if we would end up with
       // "foo point" make sure we add a " zero" to the end.
-      getRuleSet()->format((int64_t)0, toInsertInto, _pos + getPos(), recursionCount, status);
+      getRuleSet()->format(static_cast<int64_t>(0), toInsertInto, _pos + getPos(), recursionCount, status);
     }
   }
 }
@@ -1240,7 +1240,7 @@ NumeratorSubstitution::doSubstitution(double number, UnicodeString& toInsertInto
         int32_t len = toInsertInto.length();
         while ((nf *= 10) < denominator) {
             toInsertInto.insert(apos + getPos(), gSpace);
-            aruleSet->format((int64_t)0, toInsertInto, apos + getPos(), recursionCount, status);
+            aruleSet->format(static_cast<int64_t>(0), toInsertInto, apos + getPos(), recursionCount, status);
         }
         apos += toInsertInto.length() - len;
     }
@@ -1306,7 +1306,7 @@ NumeratorSubstitution::doParse(const UnicodeString& text,
         }
 
         workText = text;
-        workText.remove(0, (int32_t)parsePosition.getIndex());
+        workText.remove(0, parsePosition.getIndex());
         parsePosition.setIndex(0);
     }
 
@@ -1329,7 +1329,7 @@ NumeratorSubstitution::doParse(const UnicodeString& text,
             --zeroCount;
         }
         // d is now our true denominator
-        result.setDouble((double)n/(double)d);
+        result.setDouble(static_cast<double>(n) / static_cast<double>(d));
     }
 
     return true;

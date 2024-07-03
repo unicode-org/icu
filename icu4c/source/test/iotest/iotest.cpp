@@ -143,7 +143,7 @@ public:
             directory = pathToDataDirectory();
 #endif
 
-            tdpath = (char*) malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 100));
+            tdpath = static_cast<char*>(malloc(sizeof(char) * ((strlen(directory) * strlen(tdrelativepath)) + 100)));
 
 
             /* u_getDataDirectory shoul return \source\data ... set the
@@ -184,12 +184,12 @@ uto64(const char16_t  *buffer)
         /* read the next digit */
         result *= 16u;
         if (!u_isxdigit(*buffer)) {
-            log_err("\\u%04X is not a valid hex digit for this test\n", (char16_t)*buffer);
+            log_err("\\u%04X is not a valid hex digit for this test\n", *buffer);
         }
         result += *buffer - 0x0030 - (*buffer >= 0x0041 ? (*buffer >= 0x0061 ? 39 : 7) : 0);
         buffer++;
     }
-    return (int64_t)result;
+    return static_cast<int64_t>(result);
 }
 #endif
 
@@ -916,12 +916,12 @@ int main(int argc, char* argv[])
     u_cleanup();
 
     endTime = uprv_getRawUTCtime();
-    diffTime = (int32_t)(endTime - startTime);
+    diffTime = static_cast<int32_t>(endTime - startTime);
     printf("Elapsed Time: %02d:%02d:%02d.%03d\n",
-        (int)((diffTime%U_MILLIS_PER_DAY)/U_MILLIS_PER_HOUR),
-        (int)((diffTime%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE),
-        (int)((diffTime%U_MILLIS_PER_MINUTE)/U_MILLIS_PER_SECOND),
-        (int)(diffTime%U_MILLIS_PER_SECOND));
+        (diffTime % U_MILLIS_PER_DAY) / U_MILLIS_PER_HOUR,
+        (diffTime % U_MILLIS_PER_HOUR) / U_MILLIS_PER_MINUTE,
+        (diffTime % U_MILLIS_PER_MINUTE) / U_MILLIS_PER_SECOND,
+        diffTime % U_MILLIS_PER_SECOND);
 
     return nerrors;
 }

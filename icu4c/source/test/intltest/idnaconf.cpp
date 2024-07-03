@@ -116,7 +116,7 @@ UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
  * and, of course, will shift tail elements.
  */
 void IdnaConfTest::ExplainCodePointTag(UnicodeString& buf){
-    buf.append((char16_t)0);    // add a terminal NUL
+    buf.append(static_cast<char16_t>(0)); // add a terminal NUL
     char16_t* bufBase = buf.getBuffer(buf.length());
     char16_t* p = bufBase;
     while (*p != 0){
@@ -238,7 +238,7 @@ void IdnaConfTest::Test(){
             Call();
        } else {
             // explain      key:value
-            int p = s.indexOf((char16_t)0x3A);    // :
+            int p = s.indexOf(static_cast<char16_t>(0x3A)); // :
             key.setTo(s,0,p).trim();
             value.setTo(s,p+1).trim();
             if (key.compare(C_TYPE, -1) == 0){
@@ -259,7 +259,7 @@ void IdnaConfTest::Test(){
                 } else {
                     option = 0;
                 }
-                id.setTo(value, 0, value.indexOf((char16_t)0x20));    // space
+                id.setTo(value, 0, value.indexOf(static_cast<char16_t>(0x20))); // space
             } else if (key.compare(C_NAMEZONE, -1) == 0){
                 ExplainCodePointTag(value);
                 namezone.setTo(value);

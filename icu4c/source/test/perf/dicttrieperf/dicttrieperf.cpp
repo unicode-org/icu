@@ -151,9 +151,9 @@ public:
             itemNames.append("icudt46l/", errorCode);
             itemNames.append(name, strlen(name)+1, errorCode);
         }
-        printf("size of item names: %6ld\n", (long)itemNames.length());
-        printf("size of TOC:        %6ld\n", (long)(count*8));
-        printf("total index size:   %6ld\n", (long)(itemNames.length()+count*8));
+        printf("size of item names: %6ld\n", static_cast<long>(itemNames.length()));
+        printf("size of TOC:        %6ld\n", static_cast<long>(count * 8));
+        printf("total index size:   %6ld\n", static_cast<long>(itemNames.length() + count * 8));
     }
     virtual ~BinarySearchPackageLookup() {
         delete[] toc;
@@ -192,8 +192,8 @@ static int32_t strcmpAfterPrefix(const char *s1, const char *s2, int32_t &prefix
     s2+=pl;
     int32_t cmp=0;
     for(;;) {
-        int32_t c1=(uint8_t)*s1++;
-        int32_t c2=(uint8_t)*s2++;
+        int32_t c1 = static_cast<uint8_t>(*s1++);
+        int32_t c2 = static_cast<uint8_t>(*s2++);
         cmp=c1-c2;
         if(cmp!=0 || c1==0) {  // different or done
             break;
@@ -297,10 +297,10 @@ public:
             itemNames.append(0, errorCode);
         }
         int32_t length=builder->buildStringPiece(USTRINGTRIE_BUILD_SMALL, errorCode).length();
-        printf("size of BytesTrie:   %6ld\n", (long)length);
+        printf("size of BytesTrie:   %6ld\n", static_cast<long>(length));
         // count+1: +1 for the last-item limit offset which we should have always had
-        printf("size of dataOffsets:%6ld\n", (long)((count+1)*4));
-        printf("total index size:   %6ld\n", (long)(length+(count+1)*4));
+        printf("size of dataOffsets:%6ld\n", static_cast<long>((count + 1) * 4));
+        printf("total index size:   %6ld\n", static_cast<long>(length + (count + 1) * 4));
     }
     virtual ~BytesTriePackageLookup() {
         delete builder;
@@ -420,7 +420,7 @@ public:
         }
         UnicodeString trieUChars;
         int32_t length=builder->buildUnicodeString(USTRINGTRIE_BUILD_SMALL, trieUChars, errorCode).length();
-        printf("size of UCharsTrie:          %6ld bytes\n", (long)length*2);
+        printf("size of UCharsTrie:          %6ld bytes\n", static_cast<long>(length) * 2);
         trie=builder->build(USTRINGTRIE_BUILD_SMALL, errorCode);
     }
 
@@ -454,7 +454,7 @@ public:
             ucharsTrieMatches(*trie, &text, lines[i].len,
                               lengths, count, UPRV_LENGTHOF(lengths));
             if(count==0 || lengths[count-1]!=lines[i].len) {
-                fprintf(stderr, "word %ld (0-based) not found\n", (long)i);
+                fprintf(stderr, "word %ld (0-based) not found\n", static_cast<long>(i));
             }
         }
     }
@@ -474,7 +474,7 @@ public:
                 continue;
             }
             if(!USTRINGTRIE_HAS_VALUE(trie->reset().next(lines[i].name, lines[i].len))) {
-                fprintf(stderr, "word %ld (0-based) not found\n", (long)i);
+                fprintf(stderr, "word %ld (0-based) not found\n", static_cast<long>(i));
             }
         }
     }
@@ -496,7 +496,7 @@ static UBool thaiWordToBytes(const char16_t *s, int32_t length,
         char16_t c=s[i];
         int32_t b=thaiCharToByte(c);
         if(b>=0) {
-            str.append((char)b, errorCode);
+            str.append(static_cast<char>(b), errorCode);
         } else {
             fprintf(stderr, "thaiWordToBytes(): unable to encode U+%04X as a byte\n", c);
             return false;
@@ -520,7 +520,7 @@ public:
                 continue;
             }
             if(!thaiWordToBytes(lines[i].name, lines[i].len, str.clear(), errorCode)) {
-                fprintf(stderr, "thaiWordToBytes(): failed for word %ld (0-based)\n", (long)i);
+                fprintf(stderr, "thaiWordToBytes(): failed for word %ld (0-based)\n", static_cast<long>(i));
                 noDict=true;
                 break;
             }
@@ -528,7 +528,7 @@ public:
         }
         if(!noDict) {
             int32_t length=builder->buildStringPiece(USTRINGTRIE_BUILD_SMALL, errorCode).length();
-            printf("size of BytesTrie:           %6ld bytes\n", (long)length);
+            printf("size of BytesTrie:           %6ld bytes\n", static_cast<long>(length));
             trie=builder->build(USTRINGTRIE_BUILD_SMALL, errorCode);
         }
     }
@@ -603,7 +603,7 @@ public:
             bytesTrieMatches(*trie, &text, lines[i].len,
                              lengths, count, UPRV_LENGTHOF(lengths));
             if(count==0 || lengths[count-1]!=lines[i].len) {
-                fprintf(stderr, "word %ld (0-based) not found\n", (long)i);
+                fprintf(stderr, "word %ld (0-based) not found\n", static_cast<long>(i));
             }
         }
     }
@@ -630,13 +630,13 @@ public:
             int32_t lineLength=lines[i].len;
             for(int32_t j=1; j<lineLength; ++j) {
                 if(!USTRINGTRIE_HAS_NEXT(result)) {
-                    fprintf(stderr, "word %ld (0-based) not found\n", (long)i);
+                    fprintf(stderr, "word %ld (0-based) not found\n", static_cast<long>(i));
                     break;
                 }
                 result=trie->next(thaiCharToByte(line[j]));
             }
             if(!USTRINGTRIE_HAS_VALUE(result)) {
-                fprintf(stderr, "word %ld (0-based) not found\n", (long)i);
+                fprintf(stderr, "word %ld (0-based) not found\n", static_cast<long>(i));
             }
         }
     }

@@ -363,7 +363,7 @@ static const LocNameDispContextItem ctxtItems[] = {
     { "es", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_STANDALONE,            UDISPCTX_LENGTH_FULL,   en_GB, esFor_en_GB_DT },
     { "ru", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_STANDALONE,            UDISPCTX_LENGTH_FULL,   uz_Latn, ruFor_uz_Latn_T },
  #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
-    { nullptr, (UDisplayContext)0,      (UDisplayContext)0,                                (UDisplayContext)0,     nullptr,  nullptr }
+    { nullptr, static_cast<UDisplayContext>(0), static_cast<UDisplayContext>(0), static_cast<UDisplayContext>(0), nullptr, nullptr }
 };
 
 void LocaleDisplayNamesTest::TestUldnDisplayContext() {
@@ -382,7 +382,7 @@ void LocaleDisplayNamesTest::TestUldnDisplayContext() {
             UDisplayContext capitalization = uldn_getContext(uldn, UDISPCTX_TYPE_CAPITALIZATION, &status);
             UDisplayContext displayLength = uldn_getContext(uldn, UDISPCTX_TYPE_DISPLAY_LENGTH, &status);
             if (U_FAILURE(status)) {
-                errln(UnicodeString("FAIL: uldn_getContext status ") + (int)status);
+                errln(UnicodeString("FAIL: uldn_getContext status ") + static_cast<int>(status));
             } else if (dialectHandling != ctxtItemPtr->dialectHandling ||
                        capitalization != ctxtItemPtr->capitalization ||
                        displayLength != ctxtItemPtr->displayLength) {

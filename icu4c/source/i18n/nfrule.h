@@ -57,8 +57,8 @@ public:
     bool operator==(const NFRule& rhs) const;
     bool operator!=(const NFRule& rhs) const { return !operator==(rhs); }
 
-    ERuleType getType() const { return (ERuleType)(baseValue <= kNoBase ? (ERuleType)baseValue : kOtherRule); }
-    void setType(ERuleType ruleType) { baseValue = (int32_t)ruleType; }
+    ERuleType getType() const { return (baseValue <= kNoBase ? static_cast<ERuleType>(baseValue) : kOtherRule); }
+    void setType(ERuleType ruleType) { baseValue = static_cast<int32_t>(ruleType); }
 
     int64_t getBaseValue() const { return baseValue; }
     void setBaseValue(int64_t value, UErrorCode& status);

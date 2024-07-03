@@ -71,7 +71,7 @@ finit_owner(FILE         *f,
     if(f == nullptr) {
         return nullptr;
     }
-    result = (UFILE*) uprv_malloc(sizeof(UFILE));
+    result = static_cast<UFILE*>(uprv_malloc(sizeof(UFILE)));
     if(result == nullptr) {
         return nullptr;
     }

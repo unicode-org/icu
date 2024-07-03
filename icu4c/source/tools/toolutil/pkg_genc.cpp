@@ -598,7 +598,7 @@ write32(FileStream *out, uint32_t bitField, uint32_t column) {
     int32_t i;
     char bitFieldStr[64]; /* This is more bits than needed for a 32-bit number */
     char *s = bitFieldStr;
-    uint8_t *ptrIdx = (uint8_t *)&bitField;
+    uint8_t* ptrIdx = reinterpret_cast<uint8_t*>(&bitField);
     static const char hexToStr[16] = {
         '0','1','2','3',
         '4','5','6','7',
@@ -665,14 +665,14 @@ write8(FileStream *out, uint8_t byte, uint32_t column) {
 
     /* convert the byte value to a string */
     if(byte>=100) {
-        s[i++]=(char)('0'+byte/100);
+        s[i++] = static_cast<char>('0' + byte / 100);
         byte%=100;
     }
     if(i>0 || byte>=10) {
-        s[i++]=(char)('0'+byte/10);
+        s[i++] = static_cast<char>('0' + byte / 10);
         byte%=10;
     }
-    s[i++]=(char)('0'+byte);
+    s[i++] = static_cast<char>('0' + byte);
     s[i]=0;
 
     /* write the value, possibly with comma and newline */
@@ -830,7 +830,7 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
         /* set EM_386 because elf.h does not provide better defaults */
         *pCPU=EM_386;
         *pBits=32;
-        *pIsBigEndian=(UBool)(U_IS_BIG_ENDIAN ? ELFDATA2MSB : ELFDATA2LSB);
+        *pIsBigEndian = static_cast<UBool>(U_IS_BIG_ENDIAN ? ELFDATA2MSB : ELFDATA2LSB);
 #elif U_PLATFORM_HAS_WIN32_API
         // Windows always runs in little-endian mode.
         *pIsBigEndian = false;
@@ -870,7 +870,7 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
     length=T_FileStream_read(in, buffer.bytes, sizeof(buffer.bytes));
 
 #ifdef U_ELF
-    if(length<(int32_t)sizeof(Elf32_Ehdr)) {
+    if (length < static_cast<int32_t>(sizeof(Elf32_Ehdr))) {
         fprintf(stderr, "genccode: match-arch file %s is too short\n", filename);
         exit(U_UNSUPPORTED_ERROR);
     }
@@ -898,7 +898,7 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
     }
 #endif
 
-    *pIsBigEndian=(UBool)(buffer.header32.e_ident[EI_DATA]==ELFDATA2MSB);
+    *pIsBigEndian = static_cast<UBool>(buffer.header32.e_ident[EI_DATA] == ELFDATA2MSB);
     if(*pIsBigEndian!=U_IS_BIG_ENDIAN) {
         fprintf(stderr, "genccode: currently only same-endianness ELF formats are supported\n");
         exit(U_UNSUPPORTED_ERROR);
@@ -1371,7 +1371,7 @@ writeObjectCode(
         if(length==0) {
             break;
         }
-        T_FileStream_write(out, buffer, (int32_t)length);
+        T_FileStream_write(out, buffer, length);
     }
 
 #if U_PLATFORM_HAS_WIN32_API

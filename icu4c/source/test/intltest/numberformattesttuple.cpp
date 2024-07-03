@@ -156,7 +156,7 @@ static void strToInt(
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
-        value = value * 10 - 0x30 + (int32_t) ch;
+        value = value * 10 - 0x30 + static_cast<int32_t>(ch);
     }
     int32_t signedValue = neg ? static_cast<int32_t>(-value) : static_cast<int32_t>(value);
     *static_cast<int32_t *>(intPtr) = signedValue;
@@ -169,7 +169,7 @@ static void intToStr(
     int64_t xSigned = *static_cast<const int32_t *>(intPtr);
     uint32_t x;
     if (xSigned < 0) {
-        appendTo.append((char16_t)0x2D);
+        appendTo.append(static_cast<char16_t>(0x2D));
         x = static_cast<uint32_t>(-xSigned);
     } else {
         x = static_cast<uint32_t>(xSigned);
@@ -203,7 +203,7 @@ static void strToERounding(
         const UnicodeString &str, void *roundPtr, UErrorCode &status) {
     int32_t val = toEnum(
             gRoundingEnum, UPRV_LENGTHOF(gRoundingEnum), str, status);
-    *static_cast<DecimalFormat::ERoundingMode *>(roundPtr) = (DecimalFormat::ERoundingMode) val;
+    *static_cast<DecimalFormat::ERoundingMode*>(roundPtr) = static_cast<DecimalFormat::ERoundingMode>(val);
 }
 
 static void eRoundingToStr(
@@ -221,7 +221,7 @@ static void strToCurrencyUsage(
         const UnicodeString &str, void *currencyUsagePtr, UErrorCode &status) {
     int32_t val = toEnum(
             gCurrencyUsageEnum, UPRV_LENGTHOF(gCurrencyUsageEnum), str, status);
-    *static_cast<UCurrencyUsage *>(currencyUsagePtr) = (UCurrencyUsage) val;
+    *static_cast<UCurrencyUsage*>(currencyUsagePtr) = static_cast<UCurrencyUsage>(val);
 }
 
 static void currencyUsageToStr(
@@ -240,7 +240,7 @@ static void strToEPadPosition(
     int32_t val = toEnum(
             gPadPositionEnum, UPRV_LENGTHOF(gPadPositionEnum), str, status);
     *static_cast<DecimalFormat::EPadPosition *>(padPositionPtr) =
-            (DecimalFormat::EPadPosition) val;
+            static_cast<DecimalFormat::EPadPosition>(val);
 }
 
 static void ePadPositionToStr(
@@ -258,7 +258,7 @@ static void strToFormatStyle(
         const UnicodeString &str, void *formatStylePtr, UErrorCode &status) {
     int32_t val = toEnum(
             gFormatStyleEnum, UPRV_LENGTHOF(gFormatStyleEnum), str, status);
-    *static_cast<UNumberFormatStyle *>(formatStylePtr) = (UNumberFormatStyle) val;
+    *static_cast<UNumberFormatStyle*>(formatStylePtr) = static_cast<UNumberFormatStyle>(val);
 }
 
 static void formatStyleToStr(
@@ -426,7 +426,7 @@ NumberFormatTestTuple::getFieldByName(
     if (result == -1) {
         return kNumberFormatTestTupleFieldCount;
     }
-    return (ENumberFormatTestTupleField) result;
+    return static_cast<ENumberFormatTestTupleField>(result);
 }
 
 const void *

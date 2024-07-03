@@ -182,10 +182,10 @@ void UCharsTrieTest::TestBranches() {
         { "t", 0x400000 },
         { "uu", 0x800000 },
         { "vv", 0x7fffffff },
-        { "zz", (int32_t)0x80000000 }
+        { "zz", static_cast<int32_t>(0x80000000) }
     };
     for(int32_t length=2; length<=UPRV_LENGTHOF(data); ++length) {
-        logln("TestBranches length=%d", (int)length);
+        logln("TestBranches length=%d", static_cast<int>(length));
         checkData(data, length);
     }
 }
@@ -229,7 +229,7 @@ void UCharsTrieTest::TestLongBranch() {
         { "r", 0x333333 },
         { "s2345", 0x4444444 },
         { "t234567890", 0x77777777 },
-        { "z", (int32_t)0x80000001 }
+        { "z", static_cast<int32_t>(0x80000001) }
     };
     checkData(data, UPRV_LENGTHOF(data));
 }
@@ -345,10 +345,10 @@ public:
     void next() {
         char16_t c;
         s.truncate(0);
-        s.append(c=(char16_t)(value>>16));
-        s.append((char16_t)(value>>4));
+        s.append(c = static_cast<char16_t>(value >> 16));
+        s.append(static_cast<char16_t>(value >> 4));
         if(value&1) {
-            s.append((char16_t)value);
+            s.append(static_cast<char16_t>(value));
         }
         set.add(c);
         value+=((value>>5)&0x7ff)*3+1;
@@ -376,10 +376,10 @@ UCharsTrie *UCharsTrieTest::buildLargeTrie(int32_t numUniqueFirst) {
         builder_->add(gen.getString(), gen.getValue(), errorCode);
         gen.next();
     }
-    logln("buildLargeTrie(%ld) added %ld strings", (long)numUniqueFirst, (long)gen.getIndex());
+    logln("buildLargeTrie(%ld) added %ld strings", static_cast<long>(numUniqueFirst), static_cast<long>(gen.getIndex()));
     UnicodeString trieUChars;
     builder_->buildUnicodeString(USTRINGTRIE_BUILD_FAST, trieUChars, errorCode);
-    logln("serialized trie size: %ld UChars\n", (long)trieUChars.length());
+    logln("serialized trie size: %ld UChars\n", static_cast<long>(trieUChars.length()));
     return new UCharsTrie(trieUChars.getBuffer());
 }
 
@@ -396,7 +396,7 @@ void UCharsTrieTest::TestLargeTrie() {
         if(!x.isEmpty()) {
             if(trie->first(x[0])==USTRINGTRIE_NO_MATCH) {
                 errln("first(first char U+%04X)=USTRINGTRIE_NO_MATCH for string %ld\n",
-                      x[0], (long)gen.getIndex());
+                      x[0], static_cast<long>(gen.getIndex()));
                 break;
             }
             x.remove(0, 1);
@@ -405,7 +405,7 @@ void UCharsTrieTest::TestLargeTrie() {
         if(!USTRINGTRIE_HAS_VALUE(result) || result!=trie->current() || value!=trie->getValue()) {
             errln("next(%d chars U+%04X U+%04X)!=hasValue or "
                   "next()!=current() or getValue() wrong "
-                  "for string %ld\n", (int)x.length(), x[0], x[1], (long)gen.getIndex());
+                  "for string %ld\n", static_cast<int>(x.length()), x[0], x[1], static_cast<long>(gen.getIndex()));
             break;
         }
         gen.next();
@@ -749,9 +749,9 @@ void UCharsTrieTest::TestIteratorFromUChars() {
 }
 
 void UCharsTrieTest::checkData(const StringAndValue data[], int32_t dataLength) {
-    logln("checkData(dataLength=%d, fast)", (int)dataLength);
+    logln("checkData(dataLength=%d, fast)", static_cast<int>(dataLength));
     checkData(data, dataLength, USTRINGTRIE_BUILD_FAST);
-    logln("checkData(dataLength=%d, small)", (int)dataLength);
+    logln("checkData(dataLength=%d, small)", static_cast<int>(dataLength));
     checkData(data, dataLength, USTRINGTRIE_BUILD_SMALL);
 }
 
@@ -800,7 +800,7 @@ UCharsTrie *UCharsTrieTest::buildTrie(const StringAndValue data[], int32_t dataL
             errln("builder.build().add(zzz) did not set U_NO_WRITE_PERMISSION");
         }
     }
-    logln("serialized trie size: %ld UChars\n", (long)trieUChars.length());
+    logln("serialized trie size: %ld UChars\n", static_cast<long>(trieUChars.length()));
     UnicodeString trieUChars2;
     builder_->buildUnicodeString(buildOption, trieUChars2, errorCode);
     if(trieUChars.getBuffer()==trieUChars2.getBuffer()) {
@@ -872,8 +872,8 @@ void UCharsTrieTest::checkNext(UCharsTrie &trie,
         } else if(trie.getValue()!=data[i].value) {
             errln("trie value for %s is %ld=0x%lx instead of expected %ld=0x%lx",
                   data[i].s,
-                  (long)trie.getValue(), (long)trie.getValue(),
-                  (long)data[i].value, (long)data[i].value);
+                  static_cast<long>(trie.getValue()), static_cast<long>(trie.getValue()),
+                  static_cast<long>(data[i].value), static_cast<long>(data[i].value));
         } else if(result!=trie.current() || trie.getValue()!=data[i].value) {
             errln("trie value for %s changes when repeating current()/getValue()", data[i].s);
         }
@@ -982,8 +982,8 @@ void UCharsTrieTest::checkNextWithState(UCharsTrie &trie,
         } else if(trie.getValue()!=data[i].value) {
             errln("trie value for %s is %ld=0x%lx instead of expected %ld=0x%lx",
                   data[i].s,
-                  (long)trie.getValue(), (long)trie.getValue(),
-                  (long)data[i].value, (long)data[i].value);
+                  static_cast<long>(trie.getValue()), static_cast<long>(trie.getValue()),
+                  static_cast<long>(data[i].value), static_cast<long>(data[i].value));
         }
         trie.reset();
     }
@@ -1037,8 +1037,8 @@ void UCharsTrieTest::checkNextWithState64(UCharsTrie &trie,
         } else if(trie.getValue()!=data[i].value) {
             errln("trie value for %s is %ld=0x%lx instead of expected %ld=0x%lx",
                   data[i].s,
-                  (long)trie.getValue(), (long)trie.getValue(),
-                  (long)data[i].value, (long)data[i].value);
+                  static_cast<long>(trie.getValue()), static_cast<long>(trie.getValue()),
+                  static_cast<long>(data[i].value), static_cast<long>(data[i].value));
         }
         trie.reset();
     }
@@ -1079,15 +1079,15 @@ void UCharsTrieTest::checkIterator(UCharsTrie::Iterator &iter,
     IcuTestErrorCode errorCode(*this, "checkIterator()");
     for(int32_t i=0; i<dataLength; ++i) {
         if(!iter.hasNext()) {
-            errln("trie iterator hasNext()=false for item %d: %s", (int)i, data[i].s);
+            errln("trie iterator hasNext()=false for item %d: %s", static_cast<int>(i), data[i].s);
             break;
         }
         UBool hasNext=iter.next(errorCode);
-        if(errorCode.errIfFailureAndReset("trie iterator next() for item %d: %s", (int)i, data[i].s)) {
+        if (errorCode.errIfFailureAndReset("trie iterator next() for item %d: %s", static_cast<int>(i), data[i].s)) {
             break;
         }
         if(!hasNext) {
-            errln("trie iterator next()=false for item %d: %s", (int)i, data[i].s);
+            errln("trie iterator next()=false for item %d: %s", static_cast<int>(i), data[i].s);
             break;
         }
         UnicodeString expectedString=UnicodeString(data[i].s, -1, US_INV).unescape();
@@ -1096,13 +1096,13 @@ void UCharsTrieTest::checkIterator(UCharsTrie::Iterator &iter,
             UnicodeString invString(prettify(iter.getString()));
             invString.extract(0, invString.length(), buffer, UPRV_LENGTHOF(buffer), US_INV);
             errln("trie iterator next().getString()=%s but expected %s for item %d",
-                  buffer, data[i].s, (int)i);
+                  buffer, data[i].s, static_cast<int>(i));
         }
         if(iter.getValue()!=data[i].value) {
             errln("trie iterator next().getValue()=%ld=0x%lx but expected %ld=0x%lx for item %d: %s",
-                  (long)iter.getValue(), (long)iter.getValue(),
-                  (long)data[i].value, (long)data[i].value,
-                  (int)i, data[i].s);
+                  static_cast<long>(iter.getValue()), static_cast<long>(iter.getValue()),
+                  static_cast<long>(data[i].value), static_cast<long>(data[i].value),
+                  static_cast<int>(i), data[i].s);
         }
     }
     if(iter.hasNext()) {

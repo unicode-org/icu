@@ -126,7 +126,7 @@ itoa(int32_t i, char* buf)
     char* p = buf;
     do
     {
-        *p++ = (char)('0' + (i % 10));
+        *p++ = static_cast<char>('0' + (i % 10));
         i /= 10;
     }
     while (i);
@@ -186,13 +186,13 @@ randul()
     static UBool initialized = false;
     if (!initialized)
     {
-        srand((unsigned)time(nullptr));
+        srand(static_cast<unsigned>(time(nullptr)));
         initialized = true;
     }
     // Assume rand has at least 12 bits of precision
     uint32_t l = 0;
     for (uint32_t i=0; i<sizeof(l); ++i)
-        ((char*)&l)[i] = (char)((rand() & 0x0FF0) >> 4);
+        reinterpret_cast<char*>(&l)[i] = static_cast<char>((rand() & 0x0FF0) >> 4);
     return l;
 }
 
@@ -202,7 +202,7 @@ randul()
 static double
 randd()
 {
-    return (double)(randul() / ULONG_MAX);
+    return static_cast<double>(randul() / ULONG_MAX);
 }
 
 /**
@@ -210,7 +210,7 @@ randd()
  */
 static int32_t randi(int32_t n)
 {
-    return (int32_t)(randd() * n);
+    return static_cast<int32_t>(randd() * n);
 }
 
 //***************************************************************************************
@@ -296,7 +296,7 @@ NewResourceBundleTest::TestConstruction()
         Locale::setDefault(Locale("en_US"), err);
     }
 
-    ResourceBundle  test1((UnicodeString)testdatapath, err);
+    ResourceBundle test1(UnicodeString(testdatapath), err);
     ResourceBundle  test2(testdatapath, locale, err);
     
     UnicodeString   result1;
@@ -548,7 +548,7 @@ NewResourceBundleTest::TestOtherAPI(){
     // defaultresource is for a locale like en_US with an empty resource bundle.
     // (Before ICU-21028 such a bundle would have contained at least a Version string.)
     if(defaultresource.getSize() != 0) {
-        ResourceBundle defaultSub = defaultresource.get((int32_t)0, err);
+        ResourceBundle defaultSub = defaultresource.get(static_cast<int32_t>(0), err);
         ResourceBundle defSubCopy(defaultSub);
         if(strcmp(defSubCopy.getName(), defaultSub.getName()) != 0 ||
                 strcmp(defSubCopy.getLocale().getName(), defaultSub.getLocale().getName() ) != 0) {
@@ -1051,7 +1051,7 @@ NewResourceBundleTest::testTag(const char* frag,
         CONFIRM_EQ(count, tag_count);
 
     }
-    return (UBool)(failOrig == fail);
+    return static_cast<UBool>(failOrig == fail);
 }
 
 void
@@ -1124,7 +1124,7 @@ NewResourceBundleTest::TestNewTypes() {
     res = theBundle.get("binarytest", status);
     CONFIRM_UErrorCode(status, U_ZERO_ERROR);
     CONFIRM_EQ(res.getType(), URES_BINARY);
-    binResult=(uint8_t*)res.getBinary(len, status);
+    binResult = const_cast<uint8_t*>(res.getBinary(len, status));
     if(U_SUCCESS(status)){
         CONFIRM_UErrorCode(status, U_ZERO_ERROR);
         CONFIRM_EQ(len, 15);
@@ -1137,7 +1137,7 @@ NewResourceBundleTest::TestNewTypes() {
     res = theBundle.get("importtest",status);
     CONFIRM_UErrorCode(status, U_ZERO_ERROR);
     CONFIRM_EQ(res.getType(), URES_BINARY);
-    binResult=(uint8_t*)res.getBinary(len, status);
+    binResult = const_cast<uint8_t*>(res.getBinary(len, status));
     if(U_SUCCESS(status)){
         CONFIRM_UErrorCode(status, U_ZERO_ERROR);
         CONFIRM_EQ(len, 15);
@@ -1197,7 +1197,7 @@ NewResourceBundleTest::TestNewTypes() {
         UnicodeString str = theBundle.getStringEx("testescape",status);
         CONFIRM_UErrorCode(status, U_ZERO_ERROR);
         if(U_SUCCESS(status)){
-            u_charsToUChars(expect,uExpect,(int32_t)uprv_strlen(expect)+1);
+            u_charsToUChars(expect, uExpect, static_cast<int32_t>(uprv_strlen(expect)) + 1);
             if(str.compare(uExpect)!=0){
                 errln("Did not get the expected string for testescape expected. Expected : " 
                     +UnicodeString(uExpect )+ " Got: " + str);
@@ -1209,7 +1209,7 @@ NewResourceBundleTest::TestNewTypes() {
         UnicodeString str = theBundle.getStringEx("test_underscores",status);
         expect ="test message ....";
         CONFIRM_UErrorCode(status, U_ZERO_ERROR);
-        u_charsToUChars(expect,uExpect,(int32_t)uprv_strlen(expect)+1);
+        u_charsToUChars(expect, uExpect, static_cast<int32_t>(uprv_strlen(expect)) + 1);
         if(str.compare(uExpect)!=0){
             errln("Did not get the expected string for test_underscores.\n");
         }

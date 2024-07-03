@@ -89,7 +89,7 @@ compareCaseInsensitiveASCII(const char16_t* s1, int32_t s1Len,
 
         /* Case-insensitive comparison */
         if(c1!=c2) {
-            rc=(int32_t)toASCIILower(c1)-(int32_t)toASCIILower(c2);
+            rc = static_cast<int32_t>(toASCIILower(c1)) - static_cast<int32_t>(toASCIILower(c2));
             if(rc!=0) {
                 return rc;
             }
@@ -123,7 +123,7 @@ static inline int32_t convertASCIIToUChars(const char* src,char16_t* dest, int32
 static inline int32_t convertUCharsToASCII(const char16_t* src,char* dest, int32_t length){
     int i;
     for(i=0;i<length;i++){
-        dest[i] = (char)src[i];
+        dest[i] = static_cast<char>(src[i]);
     }
     return i;
 }
@@ -140,11 +140,11 @@ static int32_t convertToPuny(const char16_t* src, int32_t srcLength,
     punycode_status error;
     unsigned char* caseFlags = nullptr;
 
-    u_strToUTF32((UChar32*)b1,b1Capacity,&b1Len,src,srcLength,&status);
+    u_strToUTF32(reinterpret_cast<UChar32*>(b1), b1Capacity, &b1Len, src, srcLength, &status);
     if(status == U_BUFFER_OVERFLOW_ERROR){
         // redo processing of string
         /* we do not have enough room so grow the buffer*/
-        b1 =  (uint32_t*) uprv_malloc(b1Len * sizeof(uint32_t));
+        b1 = static_cast<uint32_t*>(uprv_malloc(b1Len * sizeof(uint32_t)));
         if(b1==nullptr){
             status = U_MEMORY_ALLOCATION_ERROR;
             goto CLEANUP;
@@ -152,7 +152,7 @@ static int32_t convertToPuny(const char16_t* src, int32_t srcLength,
 
         status = U_ZERO_ERROR; // reset error
 
-        u_strToUTF32((UChar32*)b1,b1Len,&b1Len,src,srcLength,&status);
+        u_strToUTF32(reinterpret_cast<UChar32*>(b1), b1Len, &b1Len, src, srcLength, &status);
     }
     if(U_FAILURE(status)){
         goto CLEANUP;
@@ -160,12 +160,12 @@ static int32_t convertToPuny(const char16_t* src, int32_t srcLength,
 
     //caseFlags = (unsigned char*) uprv_malloc(b1Len *sizeof(unsigned char));
 
-    error = punycode_encode(b1Len,b1,caseFlags, (uint32_t*)&b2Len, b2);
+    error = punycode_encode(b1Len, b1, caseFlags, reinterpret_cast<uint32_t*>(&b2Len), b2);
     status = getError(error);
 
     if(status == U_BUFFER_OVERFLOW_ERROR){
         /* we do not have enough room so grow the buffer*/
-        b2 = (char*) uprv_malloc( b2Len * sizeof(char));
+        b2 = static_cast<char*>(uprv_malloc(b2Len * sizeof(char)));
         if(b2==nullptr){
             status = U_MEMORY_ALLOCATION_ERROR;
             goto CLEANUP;
@@ -173,7 +173,7 @@ static int32_t convertToPuny(const char16_t* src, int32_t srcLength,
 
         status = U_ZERO_ERROR; // reset error
 
-        punycode_status error = punycode_encode(b1Len,b1,caseFlags, (uint32_t*)&b2Len, b2);
+        punycode_status error = punycode_encode(b1Len, b1, caseFlags, reinterpret_cast<uint32_t*>(&b2Len), b2);
         status = getError(error);
     }
     if(U_FAILURE(status)){
@@ -222,15 +222,15 @@ static int32_t convertFromPuny(  const char16_t* src, int32_t srcLength,
     uint32_t* b2 = b2Stack;
     int32_t b2Len =MAX_LABEL_BUFFER_SIZE;
     unsigned char* caseFlags = nullptr; //(unsigned char*) uprv_malloc(srcLength * sizeof(unsigned char*));
-    punycode_status error = punycode_decode(srcLength,b1,(uint32_t*)&b2Len,b2,caseFlags);
+    punycode_status error = punycode_decode(srcLength, b1, reinterpret_cast<uint32_t*>(&b2Len), b2, caseFlags);
     status = getError(error);
     if(status == U_BUFFER_OVERFLOW_ERROR){
-        b2 =  (uint32_t*) uprv_malloc(b2Len * sizeof(uint32_t));
+        b2 = static_cast<uint32_t*>(uprv_malloc(b2Len * sizeof(uint32_t)));
         if(b2 == nullptr){
             status = U_MEMORY_ALLOCATION_ERROR;
             goto CLEANUP;
         }
-        error = punycode_decode(srcLength,b1,(uint32_t*)&b2Len,b2,caseFlags);
+        error = punycode_decode(srcLength, b1, reinterpret_cast<uint32_t*>(&b2Len), b2, caseFlags);
         status = getError(error);
     }
 
@@ -238,7 +238,7 @@ static int32_t convertFromPuny(  const char16_t* src, int32_t srcLength,
         goto CLEANUP;
     }
 
-    u_strFromUTF32(dest,destCapacity,&destLen,(UChar32*)b2,b2Len,&status);
+    u_strFromUTF32(dest, destCapacity, &destLen, reinterpret_cast<UChar32*>(b2), b2Len, &status);
 
 CLEANUP:
     if(b1Stack != b1){

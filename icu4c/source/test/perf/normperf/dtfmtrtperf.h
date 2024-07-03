@@ -70,7 +70,7 @@ public:
 	{
         *status = U_ZERO_ERROR;
 
-        SimpleTimeZone unknownZone(-31415, (UnicodeString)"Etc/Unknown");
+        SimpleTimeZone unknownZone(-31415, UnicodeString("Etc/Unknown"));
         int32_t badDstOffset = -1234;
         int32_t badZoneOffset = -2345;
 
@@ -151,7 +151,7 @@ public:
         // Run the roundtrip test
         for (int32_t locidx = 0; locidx < nLocales; locidx++) {
             for (int32_t patidx = 0; patidx < NUM_PATTERNS; patidx++) {
-                SimpleDateFormat *sdf = new SimpleDateFormat((UnicodeString)PATTERNS[patidx], LOCALES[locidx], *status);
+                SimpleDateFormat* sdf = new SimpleDateFormat(UnicodeString(PATTERNS[patidx]), LOCALES[locidx], *status);
                 if (U_FAILURE(*status)) {
                     //errcheckln(*status, (UnicodeString)"new SimpleDateFormat failed for pattern " +
                     //    PATTERNS[patidx] + " for locale " + LOCALES[locidx].getName() + " - " + u_errorName(*status));

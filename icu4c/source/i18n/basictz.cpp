@@ -370,7 +370,7 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
 
     // Mark rules which does not need to be processed
     for (i = 0; i < ruleCount; i++) {
-        r = (TimeZoneRule*)orgRules->elementAt(i);
+        r = static_cast<TimeZoneRule*>(orgRules->elementAt(i));
         avail = r->getNextStart(start, res_initial->getRawOffset(), res_initial->getDSTSavings(), false, time);
         done[i] = !avail;
     }
@@ -393,7 +393,7 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
  
         const TimeZoneRule *toRule = tzt.getTo();
         for (i = 0; i < ruleCount; i++) {
-            r = (TimeZoneRule*)orgRules->elementAt(i);
+            r = static_cast<TimeZoneRule*>(orgRules->elementAt(i));
             if (*r == *toRule) {
                 break;
             }
@@ -533,8 +533,8 @@ BasicTimeZone::getOffsetFromLocal(UDate /*date*/, UTimeZoneLocalOption /*nonExis
 void BasicTimeZone::getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
                                        int32_t& rawOffset, int32_t& dstOffset,
                                        UErrorCode& status) const {
-    getOffsetFromLocal(date, (UTimeZoneLocalOption)nonExistingTimeOpt,
-                       (UTimeZoneLocalOption)duplicatedTimeOpt, rawOffset, dstOffset, status);
+    getOffsetFromLocal(date, static_cast<UTimeZoneLocalOption>(nonExistingTimeOpt),
+                       static_cast<UTimeZoneLocalOption>(duplicatedTimeOpt), rawOffset, dstOffset, status);
 }
 
 U_NAMESPACE_END

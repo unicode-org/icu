@@ -103,7 +103,7 @@ void TestMessageFormat2::testAPISimple() {
     assertEquals("testAPI", "Today is Sunday, October 28, 2136.", result);
 
     argsBuilder.clear();
-    argsBuilder["photoCount"] = message2::Formattable((int64_t) 12);
+    argsBuilder["photoCount"] = message2::Formattable(static_cast<int64_t>(12));
     argsBuilder["userGender"] = message2::Formattable("feminine");
     argsBuilder["userName"] = message2::Formattable("Maria");
     args = MessageArguments(argsBuilder, errorCode);

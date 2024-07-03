@@ -138,7 +138,7 @@ void dumpPropertyAliases(UProperty uproperty, FILE* f) {
     while(true) {
         // The API works by having extra names after U_LONG_PROPERTY_NAME, sequentially,
         // and returning null after that
-        const char* alias = u_getPropertyName(uproperty, (UPropertyNameChoice) i);
+        const char* alias = u_getPropertyName(uproperty, static_cast<UPropertyNameChoice>(i));
         if (!alias) {
             break;
         }
@@ -190,7 +190,7 @@ void dumpValueEntry(UProperty uproperty, int v, bool is_mask, FILE* f) {
     while(true) {
         // The API works by having extra names after U_LONG_PROPERTY_NAME, sequentially,
         // and returning null after that
-        const char* alias = u_getPropertyValueName(uproperty, v, (UPropertyNameChoice) i);
+        const char* alias = u_getPropertyValueName(uproperty, v, static_cast<UPropertyNameChoice>(i));
         if (!alias) {
             break;
         }
@@ -540,7 +540,7 @@ void writeCanonicalCompositions(USet* backwardCombiningStarters) {
         UnicodeString backward;
         backward.append(second);
         backward.append(starter);
-        backwardBuilder->add(backward, int32_t(composite), status);
+        backwardBuilder->add(backward, static_cast<int32_t>(composite), status);
     }
     UnicodeString canonicalCompositionTrie;
     backwardBuilder->buildUnicodeString(USTRINGTRIE_BUILD_SMALL, canonicalCompositionTrie, status);
@@ -733,7 +733,7 @@ size_t findOrAppend(std::vector<T>& storage, const UChar32* needle, size_t needl
             if (j == needleLen) {
                 return i;  // found a match
             }
-            if (storage[i + j] != uint32_t(needle[j])) {
+            if (storage[i + j] != static_cast<uint32_t>(needle[j])) {
                 break;
             }
         }
@@ -741,7 +741,7 @@ size_t findOrAppend(std::vector<T>& storage, const UChar32* needle, size_t needl
     // We didn't find anything. Append, keeping the append index in mind.
     size_t index = storage.size();
     for(size_t i = 0; i < needleLen; i++) {
-        storage.push_back(T(needle[i]));
+        storage.push_back(static_cast<T>(needle[i]));
     }
 
     return index;
@@ -839,23 +839,23 @@ void computeDecompositions(const char* basename,
             switch (c) {
                 case 0x2F868:
                     dst.truncate(0);
-                    dst.append(UChar32(0x36FC));
+                    dst.append(static_cast<UChar32>(0x36FC));
                     break;
                 case 0x2F874:
                     dst.truncate(0);
-                    dst.append(UChar32(0x5F53));
+                    dst.append(static_cast<UChar32>(0x5F53));
                     break;
                 case 0x2F91F:
                     dst.truncate(0);
-                    dst.append(UChar32(0x243AB));
+                    dst.append(static_cast<UChar32>(0x243AB));
                     break;
                 case 0x2F95F:
                     dst.truncate(0);
-                    dst.append(UChar32(0x7AEE));
+                    dst.append(static_cast<UChar32>(0x7AEE));
                     break;
                 case 0x2F9BF:
                     dst.truncate(0);
-                    dst.append(UChar32(0x45D7));
+                    dst.append(static_cast<UChar32>(0x45D7));
                     break;
             }
         }
@@ -919,7 +919,7 @@ void computeDecompositions(const char* basename,
                 utf32[0] = SPECIAL_NON_STARTER_DECOMPOSITION_MARKER; // magic value
             } else {
                 // Use the surrogate range to store the canonical combining class
-                utf32[0] = 0xD800 | UChar32(firstCombiningClass);
+                utf32[0] = 0xD800 | static_cast<UChar32>(firstCombiningClass);
             }
         } else {
             if (src == dst) {
@@ -954,21 +954,21 @@ void computeDecompositions(const char* basename,
                             status.set(U_INTERNAL_PROGRAM_ERROR);
                             handleError(status, __LINE__, basename);
                         }
-                        umutablecptrie_set(nonRecursiveBuilder.getAlias(), c, uint32_t(rawUtf32[0]), status);
+                        umutablecptrie_set(nonRecursiveBuilder.getAlias(), c, static_cast<uint32_t>(rawUtf32[0]), status);
                     } else if (rawUtf32[0] <= 0xFFFF && rawUtf32[1] <= 0xFFFF) {
                         if (!rawUtf32[0] || !rawUtf32[1]) {
                             status.set(U_INTERNAL_PROGRAM_ERROR);
                             handleError(status, __LINE__, basename);
                         }
                         // Swapped for consistency with the primary trie
-                        uint32_t bmpPair = uint32_t(rawUtf32[1]) << 16 | uint32_t(rawUtf32[0]);
+                        uint32_t bmpPair = static_cast<uint32_t>(rawUtf32[1]) << 16 | static_cast<uint32_t>(rawUtf32[0]);
                         umutablecptrie_set(nonRecursiveBuilder.getAlias(), c, bmpPair, status);
                     } else {
                         // Let's add 1 to index to make it always non-zero to distinguish
                         // it from the default zero.
                         uint32_t index = nonRecursive32.size() + 1;
-                        nonRecursive32.push_back(uint32_t(rawUtf32[0]));
-                        nonRecursive32.push_back(uint32_t(rawUtf32[1]));
+                        nonRecursive32.push_back(static_cast<uint32_t>(rawUtf32[0]));
+                        nonRecursive32.push_back(static_cast<uint32_t>(rawUtf32[1]));
                         if (index > 0xFFFF) {
                             status.set(U_INTERNAL_PROGRAM_ERROR);
                             handleError(status, __LINE__, basename);
@@ -994,9 +994,9 @@ void computeDecompositions(const char* basename,
                 status.set(U_INTERNAL_PROGRAM_ERROR);
                 handleError(status, __LINE__, basename);
             }
-            pendingTrieInsertions.push_back({c, uint32_t(utf32[0]) << 16, false});
+            pendingTrieInsertions.push_back({c, static_cast<uint32_t>(utf32[0]) << 16, false});
         } else if (!startsWithBackwardCombiningStarter && len == 1 && utf32[0] <= 0xFFFF) {
-            pendingTrieInsertions.push_back({c, uint32_t(utf32[0]) << 16, false});
+            pendingTrieInsertions.push_back({c, static_cast<uint32_t>(utf32[0]) << 16, false});
         } else if (!startsWithBackwardCombiningStarter &&
                    len == 2 &&
                    utf32[0] <= 0xFFFF &&
@@ -1012,7 +1012,7 @@ void computeDecompositions(const char* basename,
                     handleError(status, __LINE__, basename);
                 }
             }
-            pendingTrieInsertions.push_back({c, (uint32_t(utf32[0]) << 16) | uint32_t(utf32[1]), false});
+            pendingTrieInsertions.push_back({c, (static_cast<uint32_t>(utf32[0]) << 16) | static_cast<uint32_t>(utf32[1]), false});
         } else {
             UBool supplementary = false;
             UBool nonInitialStarter = false;
@@ -1074,11 +1074,11 @@ void computeDecompositions(const char* basename,
             //  11..0: Start offset in storage. The offset is to the logical
             //         sequence of scalars16, scalars32, supplementary_scalars16,
             //         supplementary_scalars32.
-            uint32_t descriptor = uint32_t(!nonInitialStarter) << 12;
+            uint32_t descriptor = static_cast<uint32_t>(!nonInitialStarter) << 12;
             if (!supplementary) {
-                descriptor |= (uint32_t(len) - 2) << 13;
+                descriptor |= (static_cast<uint32_t>(len) - 2) << 13;
             } else {
-                descriptor |= (uint32_t(len) - 1) << 13;
+                descriptor |= (static_cast<uint32_t>(len) - 1) << 13;
             }
             if (descriptor & 0xFFF) {
                 status.set(U_INTERNAL_PROGRAM_ERROR);
@@ -1094,7 +1094,7 @@ void computeDecompositions(const char* basename,
                 status.set(U_INTERNAL_PROGRAM_ERROR);
                 handleError(status, __LINE__, basename);
             }
-            descriptor |= uint32_t(index);
+            descriptor |= static_cast<uint32_t>(index);
             if (!descriptor || descriptor > 0xFFFF) {
                 // > 0xFFFF should never happen if the code above is correct.
                 // == 0 should not happen due to the nature of the data.
@@ -1325,7 +1325,7 @@ struct AddRangeHelper {
 static UBool U_CALLCONV
 addRangeToUCPTrie(const void* context, UChar32 start, UChar32 end, uint32_t value) {
     IcuToolErrorCode status("addRangeToUCPTrie");
-    UMutableCPTrie* ucptrie = ((const AddRangeHelper*) context)->ucptrie;
+    UMutableCPTrie* ucptrie = static_cast<const AddRangeHelper*>(context)->ucptrie;
     umutablecptrie_setRange(ucptrie, start, end, value, status);
     handleError(status, __LINE__, "setRange");
 
@@ -1489,9 +1489,9 @@ int exportNorm() {
     uint32_t supplementSize16 = storage16.size() - baseSize16;
     uint32_t supplementSize32 = storage32.size() - baseSize32;
 
-    writeDecompositionData("nfd", baseSize16, baseSize32, supplementSize16, nfdDecompositionStartsWithNonStarter, nullptr, nfdPendingTrieInsertions, char16_t(nfcBound));
-    writeDecompositionData("nfkd", baseSize16, baseSize32, supplementSize16, nfkdDecompositionStartsWithNonStarter, nfdDecompositionStartsWithNonStarter, nfkdPendingTrieInsertions, char16_t(nfkcBound));
-    writeDecompositionData("uts46d", baseSize16, baseSize32, supplementSize16, uts46DecompositionStartsWithNonStarter, nfdDecompositionStartsWithNonStarter, uts46PendingTrieInsertions, char16_t(uts46Bound));
+    writeDecompositionData("nfd", baseSize16, baseSize32, supplementSize16, nfdDecompositionStartsWithNonStarter, nullptr, nfdPendingTrieInsertions, static_cast<char16_t>(nfcBound));
+    writeDecompositionData("nfkd", baseSize16, baseSize32, supplementSize16, nfkdDecompositionStartsWithNonStarter, nfdDecompositionStartsWithNonStarter, nfkdPendingTrieInsertions, static_cast<char16_t>(nfkcBound));
+    writeDecompositionData("uts46d", baseSize16, baseSize32, supplementSize16, uts46DecompositionStartsWithNonStarter, nfdDecompositionStartsWithNonStarter, uts46PendingTrieInsertions, static_cast<char16_t>(uts46Bound));
 
     writeDecompositionTables("nfdex", storage16.data(), baseSize16, storage32.data(), baseSize32);
     writeDecompositionTables("nfkdex", storage16.data() + baseSize16, supplementSize16, storage32.data() + baseSize32, supplementSize32);

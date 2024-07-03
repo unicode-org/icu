@@ -130,7 +130,7 @@ private:
 
 const icu::UnicodeString *
 EquivIterator::next() {
-    const icu::UnicodeString* _next = (const icu::UnicodeString*) _hash.get(*_current);
+    const icu::UnicodeString* _next = static_cast<const icu::UnicodeString*>(_hash.get(*_current));
     if (_next == nullptr) {
         U_ASSERT(_current == _start);
         return nullptr;
@@ -260,7 +260,7 @@ currSymbolsEquiv_cleanup()
  */
 static void U_CALLCONV
 deleteIsoCodeEntry(void *obj) {
-    IsoCodeEntry *entry = (IsoCodeEntry*)obj;
+    IsoCodeEntry* entry = static_cast<IsoCodeEntry*>(obj);
     uprv_free(entry);
 }
 
@@ -269,7 +269,7 @@ deleteIsoCodeEntry(void *obj) {
  */
 static void U_CALLCONV
 deleteUnicode(void *obj) {
-    icu::UnicodeString *entry = (icu::UnicodeString*)obj;
+    icu::UnicodeString* entry = static_cast<icu::UnicodeString*>(obj);
     delete entry;
 }
 
@@ -372,8 +372,8 @@ struct CReg : public icu::UMemory {
     CReg(const char16_t* _iso, const char* _id)
         : next(nullptr)
     {
-        int32_t len = (int32_t)uprv_strlen(_id);
-        if (len > (int32_t)(sizeof(id)-1)) {
+        int32_t len = static_cast<int32_t>(uprv_strlen(_id));
+        if (len > static_cast<int32_t>(sizeof(id) - 1)) {
             len = (sizeof(id)-1);
         }
         uprv_strncpy(id, _id, len);
@@ -855,8 +855,8 @@ typedef struct {
 
 // Comparison function used in quick sort.
 static int U_CALLCONV currencyNameComparator(const void* a, const void* b) {
-    const CurrencyNameStruct* currName_1 = (const CurrencyNameStruct*)a;
-    const CurrencyNameStruct* currName_2 = (const CurrencyNameStruct*)b;
+    const CurrencyNameStruct* currName_1 = static_cast<const CurrencyNameStruct*>(a);
+    const CurrencyNameStruct* currName_2 = static_cast<const CurrencyNameStruct*>(b);
     for (int32_t i = 0; 
          i < MIN(currName_1->currencyNameLen, currName_2->currencyNameLen);
          ++i) {
@@ -937,7 +937,7 @@ toUpperCase(const char16_t* source, int32_t len, const char* locale) {
     int32_t destLen = u_strToUpper(dest, 0, source, len, locale, &ec);
 
     ec = U_ZERO_ERROR;
-    dest = (char16_t*)uprv_malloc(sizeof(char16_t) * MAX(destLen, len));
+    dest = static_cast<char16_t*>(uprv_malloc(sizeof(char16_t) * MAX(destLen, len)));
     if (dest == nullptr) {
         return nullptr;
     }
@@ -984,16 +984,16 @@ collectCurrencyNames(const char* locale,
     // Get maximum currency name count first.
     getCurrencyNameCount(loc.data(), total_currency_name_count, total_currency_symbol_count);
 
-    *currencyNames = (CurrencyNameStruct*)uprv_malloc
-        (sizeof(CurrencyNameStruct) * (*total_currency_name_count));
+    *currencyNames = static_cast<CurrencyNameStruct*>(
+        uprv_malloc(sizeof(CurrencyNameStruct) * (*total_currency_name_count)));
     if(*currencyNames == nullptr) {
         *currencySymbols = nullptr;
         *total_currency_name_count = *total_currency_symbol_count = 0;
         ec = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    *currencySymbols = (CurrencyNameStruct*)uprv_malloc
-        (sizeof(CurrencyNameStruct) * (*total_currency_symbol_count));
+    *currencySymbols = static_cast<CurrencyNameStruct*>(
+        uprv_malloc(sizeof(CurrencyNameStruct) * (*total_currency_symbol_count)));
 
     if(*currencySymbols == nullptr) {
         uprv_free(*currencyNames);
@@ -1026,13 +1026,13 @@ collectCurrencyNames(const char* locale,
             int32_t len;
             s = ures_getStringByIndex(names.getAlias(), UCURR_SYMBOL_NAME, &len, &ec2);
             // TODO: uhash_put wont change key/value?
-            iso = (char*)ures_getKey(names.getAlias());
+            iso = const_cast<char*>(ures_getKey(names.getAlias()));
             if (localeLevel != 0 && uhash_get(currencyIsoCodes.getAlias(), iso) != nullptr) {
                 continue;
             }
             uhash_put(currencyIsoCodes.getAlias(), iso, iso, &ec3); 
             // Add currency symbol.
-            (*currencySymbols)[(*total_currency_symbol_count)++] = {iso, (char16_t*)s, len, 0};
+            (*currencySymbols)[(*total_currency_symbol_count)++] = {iso, const_cast<char16_t*>(s), len, 0};
 
             // Add equivalent symbols
             if (currencySymbolsEquiv != nullptr) {
@@ -1056,7 +1056,7 @@ collectCurrencyNames(const char* locale,
 
             // put (iso, 3, and iso) in to array
             // Add currency ISO code.
-            char16_t* isoCode = (char16_t*)uprv_malloc(sizeof(char16_t)*3);
+            char16_t* isoCode = static_cast<char16_t*>(uprv_malloc(sizeof(char16_t) * 3));
             if (isoCode == nullptr) {
                 ec = U_MEMORY_ALLOCATION_ERROR;
                 goto error;
@@ -1072,7 +1072,7 @@ collectCurrencyNames(const char* locale,
         n = ures_getSize(curr_p.getAlias());
         for (int32_t i=0; i<n; ++i) {
             LocalUResourceBundlePointer names(ures_getByIndex(curr_p.getAlias(), i, nullptr, &ec5));
-            iso = (char*)ures_getKey(names.getAlias());
+            iso = const_cast<char*>(ures_getKey(names.getAlias()));
             // Using hash to remove duplicated ISO codes in fallback chain.
             if (localeLevel != 0 && uhash_get(currencyPluralIsoCodes.getAlias(), iso) != nullptr) {
                 continue;
@@ -1473,7 +1473,7 @@ getCacheEntry(const char* locale, UErrorCode& ec) {
                     deleteCacheEntry(cacheEntry);
                 }
             }
-            cacheEntry = (CurrencyNameCacheEntry*)uprv_malloc(sizeof(CurrencyNameCacheEntry));
+            cacheEntry = static_cast<CurrencyNameCacheEntry*>(uprv_malloc(sizeof(CurrencyNameCacheEntry)));
             if (cacheEntry == nullptr) {
                 deleteCurrencyNames(currencyNames, total_currency_name_count);
                 deleteCurrencyNames(currencySymbols, total_currency_symbol_count);

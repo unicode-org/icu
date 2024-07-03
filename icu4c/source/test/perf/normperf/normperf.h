@@ -164,7 +164,7 @@ public:
         numLines = 0;
         uselen = _uselen;
         destLen = sourceLen*3;
-        pDest = (char16_t*) malloc(destLen * U_SIZEOF_UCHAR);
+        pDest = static_cast<char16_t*>(malloc(destLen * U_SIZEOF_UCHAR));
         src = source;
         srcLen = sourceLen;
         line_mode = false;

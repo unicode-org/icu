@@ -47,7 +47,7 @@ void Serializer::emit(const Literal& l) {
     if (l.isQuoted()) {
       emit(PIPE);
       const UnicodeString& contents = l.unquoted();
-      for (int32_t i = 0; ((int32_t) i) < contents.length(); i++) {
+      for (int32_t i = 0; i < contents.length(); i++) {
         // Re-escape any PIPE or BACKSLASH characters
         switch(contents[i]) {
         case BACKSLASH:
@@ -144,7 +144,7 @@ void Serializer::emit(const Reserved& reserved) {
             emit(l);
         } else {
             const UnicodeString& s = l.unquoted();
-            for (int32_t j = 0; ((int32_t) j) < s.length(); j++) {
+            for (int32_t j = 0; j < s.length(); j++) {
                 switch(s[j]) {
                 case LEFT_CURLY_BRACE:
                 case PIPE:
@@ -199,7 +199,7 @@ void Serializer::emit(const PatternPart& part) {
         // Raw text
         const UnicodeString& text = part.asText();
         // Re-escape '{'/'}'/'\'
-        for (int32_t i = 0; ((int32_t) i) < text.length(); i++) {
+        for (int32_t i = 0; i < text.length(); i++) {
           switch(text[i]) {
           case BACKSLASH:
           case LEFT_CURLY_BRACE:

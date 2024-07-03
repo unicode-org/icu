@@ -424,7 +424,7 @@ StringPiece trimField(char *(&field)[2]) {
     while ((start < end) && U_IS_INV_WHITESPACE(*(end - 1))) {
         end--;
     }
-    int32_t length = (int32_t)(end - start);
+    int32_t length = static_cast<int32_t>(end - start);
     return StringPiece(start, length);
 }
 

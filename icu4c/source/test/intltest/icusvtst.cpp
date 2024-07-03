@@ -168,7 +168,7 @@ UnicodeString append(UnicodeString& result, const UObject* obj)
         } else if ((loc = dynamic_cast<const Locale*>(obj)) != nullptr) {
             result.append(loc->getName());
         } else if ((i = dynamic_cast<const Integer*>(obj)) != nullptr) {
-            snprintf(buffer, sizeof(buffer), "%d", (int)i->_val);
+            snprintf(buffer, sizeof(buffer), "%d", static_cast<int>(i->_val));
             result.append(buffer);
         } else {
             snprintf(buffer, sizeof(buffer), "%p", (const void*)obj);
@@ -1048,7 +1048,7 @@ void ICUServiceTest::testLocale() {
     service.registerInstance(root, "", status);
     service.registerInstance(german, "de", status);
     service.registerInstance(germany, Locale::getGermany(), status);
-    service.registerInstance(japanese, (UnicodeString)"ja", true, status);
+    service.registerInstance(japanese, UnicodeString("ja"), true, status);
     service.registerInstance(japan, Locale::getJapan(), status);
 
     {

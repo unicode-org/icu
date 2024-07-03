@@ -301,7 +301,7 @@ void HebrewCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& 
 */
 void HebrewCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
 {
-    add((UCalendarDateFields)field, amount, status);
+    add(static_cast<UCalendarDateFields>(field), amount, status);
 }
 
 namespace {
@@ -378,7 +378,7 @@ void HebrewCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode&
 }
 
 void HebrewCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status) {
-    roll((UCalendarDateFields)field, amount, status);
+    roll(static_cast<UCalendarDateFields>(field), amount, status);
 }
 
 //-------------------------------------------------------------------------
@@ -435,7 +435,7 @@ int32_t startOfYear(int32_t year, UErrorCode &status)
     if (day == 0) {
         // # of months before year
         int64_t months = ClockMath::floorDivideInt64(
-            (235LL * (int64_t)year - 234LL), 19LL);
+            (235LL * static_cast<int64_t>(year) - 234LL), 19LL);
 
         int64_t frac = months * MONTH_FRACT + BAHARAD;  // Fractional part of day #
         day  = months * 29LL + frac / DAY_PARTS;        // Whole # part of calculation
@@ -641,8 +641,8 @@ void HebrewCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) 
         return;
     }
     int32_t d = julianDay - 347997;
-    double m = ClockMath::floorDivide((d * (double)DAY_PARTS), (double) MONTH_PARTS);  // Months (approx)
-    int32_t year = (int32_t)(ClockMath::floorDivide((19. * m + 234.), 235.) + 1.);     // Years (approx)
+    double m = ClockMath::floorDivide((d * static_cast<double>(DAY_PARTS)), static_cast<double>(MONTH_PARTS)); // Months (approx)
+    int32_t year = static_cast<int32_t>(ClockMath::floorDivide((19. * m + 234.), 235.) + 1.); // Years (approx)
     int32_t ys  = startOfYear(year, status);                   // 1st day of year
     if (U_FAILURE(status)) {
         return;
@@ -863,7 +863,7 @@ int32_t HebrewCalendar::internalGetMonth(UErrorCode& status) const {
     }
     if (resolveFields(kMonthPrecedence) == UCAL_ORDINAL_MONTH) {
         int32_t ordinalMonth = internalGet(UCAL_ORDINAL_MONTH);
-        HebrewCalendar *nonConstThis = (HebrewCalendar*)this; // cast away const
+        HebrewCalendar* nonConstThis = const_cast<HebrewCalendar*>(this); // cast away const
 
         int32_t year = nonConstThis->handleGetExtendedYear(status);
         if (U_FAILURE(status)) {

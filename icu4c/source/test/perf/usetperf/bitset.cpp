@@ -23,7 +23,7 @@ const int32_t BYTES_PER_WORD = sizeof(int32_t);
 
 BitSet::BitSet() {
     len = SLOP;
-    data = (int32_t*) uprv_malloc(len * BYTES_PER_WORD);
+    data = static_cast<int32_t*>(uprv_malloc(len * BYTES_PER_WORD));
     clearAll();
 }
 
@@ -54,7 +54,7 @@ void BitSet::clearAll() {
 void BitSet::ensureCapacity(uint32_t minLen) {
     uint32_t newLen = len;
     while (newLen < minLen) newLen <<= 1; // grow exponentially
-    int32_t* newData = (int32_t*) uprv_malloc(newLen * BYTES_PER_WORD);
+    int32_t* newData = static_cast<int32_t*>(uprv_malloc(newLen * BYTES_PER_WORD));
     uprv_memcpy(newData, data, len * BYTES_PER_WORD);
     uprv_free(data);
     data = newData;

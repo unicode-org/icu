@@ -43,7 +43,7 @@ FontObject::FontObject(char *fileName)
 
     int dirSize = sizeof tempDir + ((numTables - ANY_NUMBER) * sizeof(DirectoryEntry));
 
-    directory = (SFNTDirectory *) new char[dirSize];
+    directory = reinterpret_cast<SFNTDirectory*>(new char[dirSize]);
 
     fseek(file, 0L, SEEK_SET);
     fread(directory, sizeof(char), dirSize, file);
@@ -62,7 +62,7 @@ FontObject::~FontObject()
 
 void FontObject::deleteTable(void *table)
 {
-    delete[] (char *) table;
+    delete[] static_cast<char*>(table);
 }
 
 DirectoryEntry *FontObject::findTable(LETag tag)
@@ -115,7 +115,7 @@ CMAPEncodingSubtable *FontObject::findCMAP(le_uint16 platformID, le_uint16 platf
     if (cmapTable == nullptr) {
         le_uint32 length;
 
-        cmapTable = (CMAPTable *) readTable(cmapTag, &length);
+        cmapTable = static_cast<CMAPTable*>(readTable(cmapTag, &length));
     }
 
     if (cmapTable != nullptr) {
@@ -128,7 +128,7 @@ CMAPEncodingSubtable *FontObject::findCMAP(le_uint16 platformID, le_uint16 platf
 
             if (SWAPW(esh->platformID) == platformID &&
                 SWAPW(esh->platformSpecificID) == platformSpecificID) {
-                return (CMAPEncodingSubtable *) ((char *) cmapTable + SWAPL(esh->encodingOffset));
+                return reinterpret_cast<CMAPEncodingSubtable*>(reinterpret_cast<char*>(cmapTable) + SWAPL(esh->encodingOffset));
             }
         }
     }
@@ -164,7 +164,7 @@ LEGlyphID FontObject::unicodeToGlyph(LEUnicode32 unicode32)
         return 0;
     }
 
-    LEUnicode16 unicode = (LEUnicode16) unicode32;
+    LEUnicode16 unicode = static_cast<LEUnicode16>(unicode32);
     le_uint16 index = 0;
     le_uint16 probe = 1 << cmEntrySelector;
     LEGlyphID result = 0;
@@ -183,11 +183,11 @@ LEGlyphID FontObject::unicodeToGlyph(LEUnicode32 unicode32)
 
     if (unicode >= SWAPW(cmStartCodes[index]) && unicode <= SWAPW(cmEndCodes[index])) {
         if (cmIdRangeOffset[index] == 0) {
-            result = (LEGlyphID) unicode;
+            result = static_cast<LEGlyphID>(unicode);
         } else {
             le_uint16 offset = unicode - SWAPW(cmStartCodes[index]);
             le_uint16 rangeOffset = SWAPW(cmIdRangeOffset[index]);
-            le_uint16 *glyphIndexTable = (le_uint16 *) ((char *) &cmIdRangeOffset[index] + rangeOffset);
+            le_uint16* glyphIndexTable = reinterpret_cast<le_uint16*>(reinterpret_cast<char*>(&cmIdRangeOffset[index]) + rangeOffset);
 
             result = SWAPW(glyphIndexTable[offset]);
         }
@@ -206,7 +206,7 @@ le_uint16 FontObject::getUnitsPerEM()
         LETag headTag = 0x68656164; // 'head'
         le_uint32 length;
 
-        headTable = (HEADTable *) readTable(headTag, &length);
+        headTable = static_cast<HEADTable*>(readTable(headTag, &length));
     }
 
     return SWAPW(headTable->unitsPerEm);
@@ -220,16 +220,16 @@ le_uint16 FontObject::getGlyphAdvance(LEGlyphID glyph)
         LETag hmtxTag = 0x686D7478; // 'hmtx'
         le_uint32 length;
         HHEATable *hheaTable;
-        MAXPTable *maxpTable = (MAXPTable *) readTable(maxpTag, &length);
+        MAXPTable* maxpTable = static_cast<MAXPTable*>(readTable(maxpTag, &length));
 
         numGlyphs = SWAPW(maxpTable->numGlyphs);
         deleteTable(maxpTable);
 
-        hheaTable = (HHEATable *) readTable(hheaTag, &length);
+        hheaTable = static_cast<HHEATable*>(readTable(hheaTag, &length));
         numOfLongHorMetrics = SWAPW(hheaTable->numOfLongHorMetrics);
         deleteTable(hheaTable);
 
-        hmtxTable = (HMTXTable *) readTable(hmtxTag, &length);
+        hmtxTable = static_cast<HMTXTable*>(readTable(hmtxTag, &length));
     }
 
     le_uint16 index = glyph;

@@ -100,8 +100,8 @@ void U_CALLCONV ulayout_load(UErrorCode &errorCode) {
         ulayout_isAcceptable, nullptr, &errorCode);
     if (U_FAILURE(errorCode)) { return; }
 
-    const uint8_t *inBytes = (const uint8_t *)udata_getMemory(gLayoutMemory);
-    const int32_t *inIndexes = (const int32_t *)inBytes;
+    const uint8_t* inBytes = static_cast<const uint8_t*>(udata_getMemory(gLayoutMemory));
+    const int32_t* inIndexes = reinterpret_cast<const int32_t*>(inBytes);
     int32_t indexesLength = inIndexes[ULAYOUT_IX_INDEXES_LENGTH];
     if (indexesLength < 12) {
         errorCode = U_INVALID_FORMAT_ERROR;  // Not enough indexes.
@@ -208,7 +208,7 @@ static UBool isNormInert(const BinaryProperty &, UChar32, UProperty) {
 static UBool isNormInert(const BinaryProperty &/*prop*/, UChar32 c, UProperty which) {
     UErrorCode errorCode=U_ZERO_ERROR;
     const Normalizer2 *norm2=Normalizer2Factory::getInstance(
-        (UNormalizationMode)(which-UCHAR_NFD_INERT+UNORM_NFD), errorCode);
+        static_cast<UNormalizationMode>(which - UCHAR_NFD_INERT + UNORM_NFD), errorCode);
     return U_SUCCESS(errorCode) && norm2->isInert(c);
 }
 #endif
@@ -242,7 +242,7 @@ static UBool changesWhenCasefolded(const BinaryProperty &/*prop*/, UChar32 c, UP
     if(c>=0) {
         /* single code point */
         const char16_t *resultString;
-        return (UBool)(ucase_toFullFolding(c, &resultString, U_FOLD_CASE_DEFAULT)>=0);
+        return static_cast<UBool>(ucase_toFullFolding(c, &resultString, U_FOLD_CASE_DEFAULT) >= 0);
     } else {
         /* guess some large but stack-friendly capacity */
         char16_t dest[2*UCASE_MAX_STRING_LENGTH];
@@ -250,7 +250,7 @@ static UBool changesWhenCasefolded(const BinaryProperty &/*prop*/, UChar32 c, UP
         destLength=u_strFoldCase(dest, UPRV_LENGTHOF(dest),
                                   nfd.getBuffer(), nfd.length(),
                                   U_FOLD_CASE_DEFAULT, &errorCode);
-        return (UBool)(U_SUCCESS(errorCode) &&
+        return static_cast<UBool>(U_SUCCESS(errorCode) &&
                        0!=u_strCompare(nfd.getBuffer(), nfd.length(),
                                        dest, destLength, false));
     }
@@ -521,7 +521,7 @@ struct IntProperty {
 
 static int32_t defaultGetValue(const IntProperty &prop, UChar32 c, UProperty /*which*/) {
     /* systematic, directly stored properties */
-    return (int32_t)(u_getUnicodeProperties(c, prop.column)&prop.mask)>>prop.shift;
+    return static_cast<int32_t>(u_getUnicodeProperties(c, prop.column) & prop.mask) >> prop.shift;
 }
 
 static int32_t defaultGetMaxValue(const IntProperty &prop, UProperty /*which*/) {
@@ -533,11 +533,11 @@ static int32_t getMaxValueFromShift(const IntProperty &prop, UProperty /*which*/
 }
 
 static int32_t getBiDiClass(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
-    return (int32_t)u_charDirection(c);
+    return static_cast<int32_t>(u_charDirection(c));
 }
 
 static int32_t getBiDiPairedBracketType(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
-    return (int32_t)ubidi_getPairedBracketType(c);
+    return static_cast<int32_t>(ubidi_getPairedBracketType(c));
 }
 
 static int32_t biDiGetMaxValue(const IntProperty &/*prop*/, UProperty which) {
@@ -545,7 +545,7 @@ static int32_t biDiGetMaxValue(const IntProperty &/*prop*/, UProperty which) {
 }
 
 static int32_t getBlock(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
-    return (int32_t)ublock_getCode(c);
+    return static_cast<int32_t>(ublock_getCode(c));
 }
 
 static int32_t blockGetMaxValue(const IntProperty &/*prop*/, UProperty /*which*/) {
@@ -563,7 +563,7 @@ static int32_t getCombiningClass(const IntProperty &/*prop*/, UChar32 c, UProper
 #endif
 
 static int32_t getGeneralCategory(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
-    return (int32_t)u_charType(c);
+    return static_cast<int32_t>(u_charType(c));
 }
 
 static int32_t getJoiningGroup(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
@@ -575,13 +575,13 @@ static int32_t getJoiningType(const IntProperty &/*prop*/, UChar32 c, UProperty 
 }
 
 static int32_t getNumericType(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
-    int32_t ntv=(int32_t)GET_NUMERIC_TYPE_VALUE(u_getMainProperties(c));
+    int32_t ntv = static_cast<int32_t>(GET_NUMERIC_TYPE_VALUE(u_getMainProperties(c)));
     return UPROPS_NTV_GET_TYPE(ntv);
 }
 
 static int32_t getScript(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
     UErrorCode errorCode=U_ZERO_ERROR;
-    return (int32_t)uscript_getScript(c, &errorCode);
+    return static_cast<int32_t>(uscript_getScript(c, &errorCode));
 }
 
 static int32_t scriptGetMaxValue(const IntProperty &/*prop*/, UProperty /*which*/) {
@@ -620,7 +620,7 @@ static int32_t getHangulSyllableType(const IntProperty &/*prop*/, UChar32 c, UPr
         return U_HST_NOT_APPLICABLE;
     }
     /* see comments on gcbToHst[] above */
-    int32_t gcb=(int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_GCB_MASK)>>UPROPS_GCB_SHIFT;
+    int32_t gcb = static_cast<int32_t>(u_getUnicodeProperties(c, 2) & UPROPS_GCB_MASK) >> UPROPS_GCB_SHIFT;
     if(gcb<UPRV_LENGTHOF(gcbToHst)) {
         return gcbToHst[gcb];
     } else {
@@ -634,7 +634,7 @@ static int32_t getNormQuickCheck(const IntProperty &, UChar32, UProperty) {
 }
 #else
 static int32_t getNormQuickCheck(const IntProperty &/*prop*/, UChar32 c, UProperty which) {
-    return (int32_t)unorm_getQuickCheck(c, (UNormalizationMode)(which-UCHAR_NFD_QUICK_CHECK+UNORM_NFD));
+    return static_cast<int32_t>(unorm_getQuickCheck(c, static_cast<UNormalizationMode>(which - UCHAR_NFD_QUICK_CHECK + UNORM_NFD)));
 }
 #endif
 
@@ -703,21 +703,21 @@ static const IntProperty intProps[UCHAR_INT_LIMIT-UCHAR_INT_START]={
     { UPROPS_SRC_NFC,   0, 0xff,                            getCombiningClass, getMaxValueFromShift },
     { 2,                UPROPS_DT_MASK, 0,                  defaultGetValue, defaultGetMaxValue },
     { 0,                UPROPS_EA_MASK, UPROPS_EA_SHIFT,    defaultGetValue, defaultGetMaxValue },
-    { UPROPS_SRC_CHAR,  0, (int32_t)U_CHAR_CATEGORY_COUNT-1,getGeneralCategory, getMaxValueFromShift },
+    { UPROPS_SRC_CHAR, 0, static_cast<int32_t>(U_CHAR_CATEGORY_COUNT) - 1, getGeneralCategory, getMaxValueFromShift },
     { UPROPS_SRC_BIDI,  0, 0,                               getJoiningGroup, biDiGetMaxValue },
     { UPROPS_SRC_BIDI,  0, 0,                               getJoiningType, biDiGetMaxValue },
     { 2,                UPROPS_LB_MASK, UPROPS_LB_SHIFT,    defaultGetValue, defaultGetMaxValue },
-    { UPROPS_SRC_CHAR,  0, (int32_t)U_NT_COUNT-1,           getNumericType, getMaxValueFromShift },
+    { UPROPS_SRC_CHAR, 0, static_cast<int32_t>(U_NT_COUNT) - 1, getNumericType, getMaxValueFromShift },
     { UPROPS_SRC_PROPSVEC, 0, 0,                            getScript, scriptGetMaxValue },
-    { UPROPS_SRC_PROPSVEC, 0, (int32_t)U_HST_COUNT-1,       getHangulSyllableType, getMaxValueFromShift },
+    { UPROPS_SRC_PROPSVEC, 0, static_cast<int32_t>(U_HST_COUNT) - 1, getHangulSyllableType, getMaxValueFromShift },
     // UCHAR_NFD_QUICK_CHECK: max=1=YES -- never "maybe", only "no" or "yes"
-    { UPROPS_SRC_NFC,   0, (int32_t)UNORM_YES,              getNormQuickCheck, getMaxValueFromShift },
+    { UPROPS_SRC_NFC, 0, static_cast<int32_t>(UNORM_YES), getNormQuickCheck, getMaxValueFromShift },
     // UCHAR_NFKD_QUICK_CHECK: max=1=YES -- never "maybe", only "no" or "yes"
-    { UPROPS_SRC_NFKC,  0, (int32_t)UNORM_YES,              getNormQuickCheck, getMaxValueFromShift },
+    { UPROPS_SRC_NFKC, 0, static_cast<int32_t>(UNORM_YES), getNormQuickCheck, getMaxValueFromShift },
     // UCHAR_NFC_QUICK_CHECK: max=2=MAYBE
-    { UPROPS_SRC_NFC,   0, (int32_t)UNORM_MAYBE,            getNormQuickCheck, getMaxValueFromShift },
+    { UPROPS_SRC_NFC, 0, static_cast<int32_t>(UNORM_MAYBE), getNormQuickCheck, getMaxValueFromShift },
     // UCHAR_NFKC_QUICK_CHECK: max=2=MAYBE
-    { UPROPS_SRC_NFKC,  0, (int32_t)UNORM_MAYBE,            getNormQuickCheck, getMaxValueFromShift },
+    { UPROPS_SRC_NFKC, 0, static_cast<int32_t>(UNORM_MAYBE), getNormQuickCheck, getMaxValueFromShift },
     { UPROPS_SRC_NFC,   0, 0xff,                            getLeadCombiningClass, getMaxValueFromShift },
     { UPROPS_SRC_NFC,   0, 0xff,                            getTrailCombiningClass, getMaxValueFromShift },
     { 2,                UPROPS_GCB_MASK, UPROPS_GCB_SHIFT,  defaultGetValue, defaultGetMaxValue },
@@ -727,7 +727,7 @@ static const IntProperty intProps[UCHAR_INT_LIMIT-UCHAR_INT_START]={
     { UPROPS_SRC_INPC,  0, 0,                               getInPC, layoutGetMaxValue },
     { UPROPS_SRC_INSC,  0, 0,                               getInSC, layoutGetMaxValue },
     { UPROPS_SRC_VO,    0, 0,                               getVo, layoutGetMaxValue },
-    { UPROPS_SRC_PROPSVEC, 0, (int32_t)U_ID_STATUS_ALLOWED, getIDStatusValue, getMaxValueFromShift },
+    { UPROPS_SRC_PROPSVEC, 0, static_cast<int32_t>(U_ID_STATUS_ALLOWED), getIDStatusValue, getMaxValueFromShift },
 };
 
 U_CAPI int32_t U_EXPORT2

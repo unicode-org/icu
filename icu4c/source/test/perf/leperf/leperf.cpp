@@ -35,7 +35,7 @@ LEUnicode     ArabChars[] = {
     };
 
 void iterate(void * p) {
-  Params* params = (Params*) p;
+  Params* params = static_cast<Params*>(p);
 
     LEErrorCode status = LE_NO_ERROR;
     LEFontInstance *font = params->font;
@@ -112,8 +112,8 @@ int main(int argc, const char *argv[]) {
     u_printf("leperf: testing %s\n", fontPath);
     u_printf("leperf: Running ...\r");
   timeTaken = utimer_loopUntilDone(len, &loopCount, iterate, &p);
-  timeNs = 1000000000.0*(timeTaken/(double)loopCount);
-  u_printf("leperf: PFI .. took %.fs %.2fns/ea\nleperf: .. iter= %d\n", timeTaken, timeNs, (int32_t)loopCount);
+  timeNs = 1000000000.0 * (timeTaken / static_cast<double>(loopCount));
+  u_printf("leperf: PFI .. took %.fs %.2fns/ea\nleperf: .. iter= %d\n", timeTaken, timeNs, loopCount);
   u_printf("leperf: DATA|\"%s\"|%.2f|\n", U_ICU_VERSION, timeNs);
   u_printf("leperf: glyphs=%d\n", p.glyphCount);
   return 0;

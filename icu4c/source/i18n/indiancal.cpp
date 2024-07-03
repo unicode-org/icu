@@ -273,7 +273,7 @@ void IndianCalendar::handleComputeFields(int32_t julianDay, UErrorCode&  status)
     if (U_FAILURE(status)) return;
     IndianYear = gregorianYear - INDIAN_ERA_START;            // Year in Saka era
     jdAtStartOfGregYear = gregorianToJD(gregorianYear, 0, 1); // JD at start of Gregorian year
-    yday = (int32_t)(julianDay - jdAtStartOfGregYear);        // Day number in Gregorian year (starting from 0)
+    yday = static_cast<int32_t>(julianDay - jdAtStartOfGregYear); // Day number in Gregorian year (starting from 0)
 
     if (yday < INDIAN_YEAR_START) {
         // Day is at the end of the preceding Saka year
@@ -291,11 +291,11 @@ void IndianCalendar::handleComputeFields(int32_t julianDay, UErrorCode&  status)
     } else {
         mday = yday - leapMonth;
         if (mday < (31 * 5)) {
-            IndianMonth = (int32_t)uprv_floor(mday / 31) + 1;
+            IndianMonth = static_cast<int32_t>(uprv_floor(mday / 31)) + 1;
             IndianDayOfMonth = (mday % 31) + 1;
         } else {
             mday -= 31 * 5;
-            IndianMonth = (int32_t)uprv_floor(mday / 30) + 6;
+            IndianMonth = static_cast<int32_t>(uprv_floor(mday / 30)) + 6;
             IndianDayOfMonth = (mday % 30) + 1;
         }
    }

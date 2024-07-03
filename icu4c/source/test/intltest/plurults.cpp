@@ -82,8 +82,8 @@ class US {
     char *buf;
   public:
     US(const UnicodeString &us) {
-       int32_t bufLen = us.extract((int32_t)0, us.length(), (char *)nullptr, (uint32_t)0) + 1;
-       buf = (char *)uprv_malloc(bufLen);
+       int32_t bufLen = us.extract(static_cast<int32_t>(0), us.length(), (char*)nullptr, static_cast<uint32_t>(0)) + 1;
+       buf = static_cast<char*>(uprv_malloc(bufLen));
        us.extract(0, us.length(), buf, bufLen); }
     const char *cstr() {return buf;}
     ~US() { uprv_free(buf);}
@@ -746,7 +746,7 @@ void PluralRulesTest::testWithin() {
         return;
     }
 
-    UnicodeString keyword = rules->select((int32_t)26);
+    UnicodeString keyword = rules->select(static_cast<int32_t>(26));
     if (keyword != "a") {
         errln("expected 'a' for 26 but didn't get it.");
     }

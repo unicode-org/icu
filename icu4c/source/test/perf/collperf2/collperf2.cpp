@@ -366,7 +366,7 @@ void NextSortKeyPart::call(UErrorCode* status)
 {
     if (U_FAILURE(*status)) return;
 
-    uint8_t *part = (uint8_t *)malloc(bufSize);
+    uint8_t* part = static_cast<uint8_t*>(malloc(bufSize));
     uint32_t state[2];
     UCharIterator iter;
 
@@ -433,7 +433,7 @@ void NextSortKeyPartUTF8::call(UErrorCode* status)
 {
     if (U_FAILURE(*status)) return;
 
-    uint8_t *part = (uint8_t *)malloc(bufSize);
+    uint8_t* part = static_cast<uint8_t*>(malloc(bufSize));
     uint32_t state[2];
     UCharIterator iter;
 
@@ -756,8 +756,8 @@ struct CollatorAndCounter {
 int32_t U_CALLCONV
 UniStrCollatorComparator(const void* context, const void* left, const void* right) {
     CollatorAndCounter& cc = *(CollatorAndCounter*)context;
-    const UnicodeString& leftString = **(const UnicodeString**)left;
-    const UnicodeString& rightString = **(const UnicodeString**)right;
+    const UnicodeString& leftString = **static_cast<const UnicodeString* const*>(left);
+    const UnicodeString& rightString = **static_cast<const UnicodeString* const*>(right);
     UErrorCode errorCode = U_ZERO_ERROR;
     ++cc.counter;
     return cc.coll.compare(leftString, rightString, errorCode);
@@ -835,7 +835,7 @@ void UniStrSort::call(UErrorCode* status) {
     CollatorAndCounter cc(coll);
     int32_t count = d16->count;
     memcpy(dest, source, count * sizeof(UnicodeString *));
-    uprv_sortArray(dest, count, (int32_t)sizeof(UnicodeString *),
+    uprv_sortArray(dest, count, static_cast<int32_t>(sizeof(UnicodeString*)),
                    UniStrCollatorComparator, &cc, true, status);
     ops = cc.counter;
 }
@@ -845,8 +845,8 @@ namespace {
 int32_t U_CALLCONV
 StringPieceCollatorComparator(const void* context, const void* left, const void* right) {
     CollatorAndCounter& cc = *(CollatorAndCounter*)context;
-    const StringPiece& leftString = *(const StringPiece*)left;
-    const StringPiece& rightString = *(const StringPiece*)right;
+    const StringPiece& leftString = *static_cast<const StringPiece*>(left);
+    const StringPiece& rightString = *static_cast<const StringPiece*>(right);
     UErrorCode errorCode = U_ZERO_ERROR;
     ++cc.counter;
     return cc.coll.compareUTF8(leftString, rightString, errorCode);
@@ -855,8 +855,8 @@ StringPieceCollatorComparator(const void* context, const void* left, const void*
 int32_t U_CALLCONV
 StringPieceUCollatorComparator(const void* context, const void* left, const void* right) {
     CollatorAndCounter& cc = *(CollatorAndCounter*)context;
-    const StringPiece& leftString = *(const StringPiece*)left;
-    const StringPiece& rightString = *(const StringPiece*)right;
+    const StringPiece& leftString = *static_cast<const StringPiece*>(left);
+    const StringPiece& rightString = *static_cast<const StringPiece*>(right);
     UErrorCode errorCode = U_ZERO_ERROR;
     ++cc.counter;
     return ucol_strcollUTF8(cc.ucoll,
@@ -920,7 +920,7 @@ void StringPieceSortCpp::call(UErrorCode* status) {
     CollatorAndCounter cc(coll);
     int32_t count = d8->count;
     memcpy(dest, source, count * sizeof(StringPiece));
-    uprv_sortArray(dest, count, (int32_t)sizeof(StringPiece),
+    uprv_sortArray(dest, count, static_cast<int32_t>(sizeof(StringPiece)),
                    StringPieceCollatorComparator, &cc, true, status);
     ops = cc.counter;
 }
@@ -944,7 +944,7 @@ void StringPieceSortC::call(UErrorCode* status) {
     CollatorAndCounter cc(coll, ucoll);
     int32_t count = d8->count;
     memcpy(dest, source, count * sizeof(StringPiece));
-    uprv_sortArray(dest, count, (int32_t)sizeof(StringPiece),
+    uprv_sortArray(dest, count, static_cast<int32_t>(sizeof(StringPiece)),
                    StringPieceUCollatorComparator, &cc, true, status);
     ops = cc.counter;
 }
@@ -968,8 +968,8 @@ void UniStrBinSearch::call(UErrorCode* status) {
     CollatorAndCounter cc(coll);
     int32_t count = d16->count;
     for (int32_t i = 0; i < count; ++i) {
-        (void)uprv_stableBinarySearch((char *)source, count,
-                                      source + i, (int32_t)sizeof(UnicodeString *),
+        (void)uprv_stableBinarySearch(reinterpret_cast<char*>(source), count,
+                                      source + i, static_cast<int32_t>(sizeof(UnicodeString*)),
                                       UniStrCollatorComparator, &cc);
     }
     ops = cc.counter;
@@ -1004,8 +1004,8 @@ void StringPieceBinSearchCpp::call(UErrorCode* status) {
     CollatorAndCounter cc(coll);
     int32_t count = d8->count;
     for (int32_t i = 0; i < count; ++i) {
-        (void)uprv_stableBinarySearch((char *)source, count,
-                                      source + i, (int32_t)sizeof(StringPiece),
+        (void)uprv_stableBinarySearch(reinterpret_cast<char*>(source), count,
+                                      source + i, static_cast<int32_t>(sizeof(StringPiece)),
                                       StringPieceCollatorComparator, &cc);
     }
     ops = cc.counter;
@@ -1031,8 +1031,8 @@ void StringPieceBinSearchC::call(UErrorCode* status) {
     CollatorAndCounter cc(coll, ucoll);
     int32_t count = d8->count;
     for (int32_t i = 0; i < count; ++i) {
-        (void)uprv_stableBinarySearch((char *)source, count,
-                                      source + i, (int32_t)sizeof(StringPiece),
+        (void)uprv_stableBinarySearch(reinterpret_cast<char*>(source), count,
+                                      source + i, static_cast<int32_t>(sizeof(StringPiece)),
                                       StringPieceUCollatorComparator, &cc);
     }
     ops = cc.counter;
@@ -1272,10 +1272,10 @@ struct ArrayAndColl {
 
 int32_t U_CALLCONV
 U16CollatorComparator(const void* context, const void* left, const void* right) {
-    const ArrayAndColl& ac = *(const ArrayAndColl*)context;
+    const ArrayAndColl& ac = *static_cast<const ArrayAndColl*>(context);
     const CA_uchar* d16 = ac.d16;
-    int32_t leftIndex = *(const int32_t*)left;
-    int32_t rightIndex = *(const int32_t*)right;
+    int32_t leftIndex = *static_cast<const int32_t*>(left);
+    int32_t rightIndex = *static_cast<const int32_t*>(right);
     UErrorCode errorCode = U_ZERO_ERROR;
     return ac.coll.compare(d16->dataOf(leftIndex), d16->lengthOf(leftIndex),
                            d16->dataOf(rightIndex), d16->lengthOf(rightIndex),
@@ -1284,9 +1284,9 @@ U16CollatorComparator(const void* context, const void* left, const void* right) 
 
 int32_t U_CALLCONV
 U16HashComparator(const void* context, const void* left, const void* right) {
-    const CA_uchar* d16 = (const CA_uchar*)context;
-    int32_t leftIndex = *(const int32_t*)left;
-    int32_t rightIndex = *(const int32_t*)right;
+    const CA_uchar* d16 = static_cast<const CA_uchar*>(context);
+    int32_t leftIndex = *static_cast<const int32_t*>(left);
+    int32_t rightIndex = *static_cast<const int32_t*>(right);
     int32_t leftHash = ustr_hashUCharsN(d16->dataOf(leftIndex), d16->lengthOf(leftIndex));
     int32_t rightHash = ustr_hashUCharsN(d16->dataOf(rightIndex), d16->lengthOf(rightIndex));
     return leftHash < rightHash ? -1 : leftHash == rightHash ? 0 : 1;

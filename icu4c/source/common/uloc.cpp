@@ -580,8 +580,8 @@ typedef struct {
 
 int32_t U_CALLCONV
 compareKeywordStructs(const void * /*context*/, const void *left, const void *right) {
-    const char* leftString = ((const KeywordStruct *)left)->keyword;
-    const char* rightString = ((const KeywordStruct *)right)->keyword;
+    const char* leftString = static_cast<const KeywordStruct*>(left)->keyword;
+    const char* rightString = static_cast<const KeywordStruct*>(right)->keyword;
     return uprv_strcmp(leftString, rightString);
 }
 
@@ -686,10 +686,10 @@ ulocimp_getKeywords(const char* localeID,
                 while(*(pos - i - 1) == ' ') {
                     i++;
                 }
-                keywordList[numKeywords].valueLen = (int32_t)(pos - equalSign - i);
+                keywordList[numKeywords].valueLen = static_cast<int32_t>(pos - equalSign - i);
                 pos++;
             } else {
-                i = (int32_t)uprv_strlen(equalSign);
+                i = static_cast<int32_t>(uprv_strlen(equalSign));
                 while(i && equalSign[i-1] == ' ') {
                     i--;
                 }
@@ -1091,7 +1091,7 @@ ulocimp_setKeywordValue(const char* keywords,
         /* if input key/value specified removal of a keyword not present in locale, or
          * there was an error in CharString.append, leave original locale alone. */
         U_ASSERT(status != U_STRING_NOT_TERMINATED_WARNING);
-        return (int32_t)uprv_strlen(keywords);
+        return static_cast<int32_t>(uprv_strlen(keywords));
     }
 
     needLen = updatedKeysAndValues.length();
@@ -1155,7 +1155,7 @@ std::optional<int16_t> _findIndex(const char* const* list, const char* key)
     while (pass++ < 2) {
         while (*list) {
             if (uprv_strcmp(key, *list) == 0) {
-                return (int16_t)(list - anchor);
+                return static_cast<int16_t>(list - anchor);
             }
             list++;
         }
@@ -1241,7 +1241,7 @@ _getLanguage(const char* localeID,
         std::optional<int16_t> offset = _findIndex(LANGUAGES_3, buffer);
         if (offset.has_value()) {
             const char* const alias = LANGUAGES[*offset];
-            sink->Append(alias, (int32_t)uprv_strlen(alias));
+            sink->Append(alias, static_cast<int32_t>(uprv_strlen(alias)));
             return;
         }
     }
@@ -1322,7 +1322,7 @@ _getRegion(const char* localeID,
         std::optional<int16_t> offset = _findIndex(COUNTRIES_3, buffer);
         if (offset.has_value()) {
             const char* const alias = COUNTRIES[*offset];
-            sink->Append(alias, (int32_t)uprv_strlen(alias));
+            sink->Append(alias, static_cast<int32_t>(uprv_strlen(alias)));
             return;
         }
     }
@@ -1370,7 +1370,7 @@ _getVariant(const char* localeID,
                 needSeparator = false;
             }
             if (sink != nullptr) {
-                char c = (char)uprv_toupper(localeID[index]);
+                char c = uprv_toupper(localeID[index]);
                 if (c == '-') c = '_';
                 sink->Append(&c, 1);
             }
@@ -1399,7 +1399,7 @@ _getVariant(const char* localeID,
                 needSeparator = false;
             }
             if (sink != nullptr) {
-                char c = (char)uprv_toupper(localeID[index]);
+                char c = uprv_toupper(localeID[index]);
                 if (c == '-' || c == ',') c = '_';
                 sink->Append(&c, 1);
             }
@@ -1955,7 +1955,7 @@ ulocimp_getParent(const char* localeID,
 
     lastUnderscore=uprv_strrchr(localeID, '_');
     if(lastUnderscore!=nullptr) {
-        i=(int32_t)(lastUnderscore-localeID);
+        i = static_cast<int32_t>(lastUnderscore - localeID);
     } else {
         i=0;
     }

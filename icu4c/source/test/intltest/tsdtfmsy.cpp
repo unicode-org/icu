@@ -47,7 +47,7 @@ void IntlTestDateFormatSymbols::TestGetMonths()
 
     month=symbol->getMonths(cnt);
 
-    logln((UnicodeString)"size = " + cnt);
+    logln(UnicodeString("size = ") + cnt);
 
     for (int32_t i=0; i<cnt; ++i)
     {
@@ -72,7 +72,7 @@ void IntlTestDateFormatSymbols::TestGetMonths2()
             int32_t cnt;
             const UnicodeString * month = symbol->getMonths(cnt,context[i],width[j]);
 
-            logln((UnicodeString)"size = " + cnt);
+            logln(UnicodeString("size = ") + cnt);
 
             for (int32_t k = 0; k < cnt; k++) {
                 logln(month[k]);
@@ -97,7 +97,7 @@ void IntlTestDateFormatSymbols::TestGetWeekdays2()
             int32_t cnt;
             const UnicodeString * wd = symbol->getWeekdays(cnt,context[i],width[j]);
 
-            logln((UnicodeString)"size = " + cnt);
+            logln(UnicodeString("size = ") + cnt);
 
             for (int32_t k = 0; k < cnt; k++) {
                 logln(wd[k]);
@@ -119,7 +119,7 @@ void IntlTestDateFormatSymbols::TestGetEraNames()
 
     name=symbol->getEraNames(cnt);
 
-    logln((UnicodeString)"size = " + cnt);
+    logln(UnicodeString("size = ") + cnt);
 
     for (int32_t i=0; i<cnt; ++i)
     {
@@ -146,7 +146,7 @@ void IntlTestDateFormatSymbols::TestGetSetSpecificItems()
     UErrorCode  status = U_ZERO_ERROR;
     DateFormatSymbols *symbol=new DateFormatSymbols(Locale::getEnglish(), status);
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Couldn't create English DateFormatSymbols " + (UnicodeString)u_errorName(status));
+        dataerrln("ERROR: Couldn't create English DateFormatSymbols " + UnicodeString(u_errorName(status)));
         return;
     }
     symbol->operator=(*symbol);  // self-assignment should be a no-op
@@ -174,21 +174,21 @@ void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
 
     DateFormatSymbols fr(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Couldn't create French DateFormatSymbols " + (UnicodeString)u_errorName(status));
+        dataerrln("ERROR: Couldn't create French DateFormatSymbols " + UnicodeString(u_errorName(status)));
         return;
     }
 
     status = U_ZERO_ERROR;
     DateFormatSymbols fr2(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
-        errcheckln(status, "ERROR: Couldn't create French DateFormatSymbols " + (UnicodeString)u_errorName(status));
+        errcheckln(status, "ERROR: Couldn't create French DateFormatSymbols " + UnicodeString(u_errorName(status)));
         return;
     }
 
     status = U_ZERO_ERROR;
     DateFormatSymbols en(Locale::getEnglish(), status);
     if(U_FAILURE(status)) {
-        errcheckln(status, "ERROR: Couldn't create English DateFormatSymbols " + (UnicodeString)u_errorName(status));
+        errcheckln(status, "ERROR: Couldn't create English DateFormatSymbols " + UnicodeString(u_errorName(status)));
         return;
     }
 

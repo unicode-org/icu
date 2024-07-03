@@ -76,20 +76,20 @@ public:
 
             chunkLength = atoi(options[CHUNK_LENGTH].value);
             if (chunkLength < 1 || OUTPUT_CAPACITY < chunkLength) {
-                fprintf(stderr, "error: chunk length must be 1..%ld\n", (long)OUTPUT_CAPACITY);
+                fprintf(stderr, "error: chunk length must be 1..%ld\n", static_cast<long>(OUTPUT_CAPACITY));
                 status = U_ILLEGAL_ARGUMENT_ERROR;
             }
 
             pivotLength = atoi(options[PIVOT_LENGTH].value);
             if (pivotLength < 1 || PIVOT_CAPACITY < pivotLength) {
-                fprintf(stderr, "error: pivot length must be 1..%ld\n", (long)PIVOT_CAPACITY);
+                fprintf(stderr, "error: pivot length must be 1..%ld\n", static_cast<long>(PIVOT_CAPACITY));
                 status = U_ILLEGAL_ARGUMENT_ERROR;
             }
 
             int32_t inputLength;
             UPerfTest::getBuffer(inputLength, status);
             countInputCodePoints = u_countChar32(buffer, bufferLen);
-            u_strToUTF8(utf8, (int32_t)sizeof(utf8), &utf8Length, buffer, bufferLen, &status);
+            u_strToUTF8(utf8, static_cast<int32_t>(sizeof(utf8)), &utf8Length, buffer, bufferLen, &status);
         }
     }
 
@@ -189,7 +189,7 @@ public:
             /* convert a block of [pIn..pInLimit[ to the encoding in intermediate[] */
             pInter=intermediate;
             ucnv_fromUnicode(cnv, &pInter, pInterLimit, &pIn, pInLimit, nullptr, true, pErrorCode);
-            encodedLength+=(int32_t)(pInter-intermediate);
+            encodedLength += static_cast<int32_t>(pInter - intermediate);
 
             if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
                 /* make sure that we convert once more to really flush */
@@ -248,7 +248,7 @@ public:
         for(;;) {
             pInter=intermediate;
             ucnv_fromUnicode(cnv, &pInter, pInterLimit, &pIn, pInLimit, nullptr, true, pErrorCode);
-            encodedLength+=(int32_t)(pInter-intermediate);
+            encodedLength += static_cast<int32_t>(pInter - intermediate);
 
             if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
                 /* make sure that we convert once more to really flush */
@@ -310,7 +310,7 @@ public:
                            &pIn, pInLimit,
                            pivot, &pivotSource, &pivotTarget, pivotLimit,
                            false, true, pErrorCode);
-            encodedLength+=(int32_t)(pInter-intermediate);
+            encodedLength += static_cast<int32_t>(pInter - intermediate);
 
             if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
                 /* make sure that we convert once more to really flush */
@@ -361,7 +361,7 @@ int main(int argc, const char *argv[])
     }
 
     if (fromUCallbackCount > 0) {
-        printf("Number of fromUnicode callback calls in the last iteration: %ld\n", (long)fromUCallbackCount);
+        printf("Number of fromUnicode callback calls in the last iteration: %ld\n", static_cast<long>(fromUCallbackCount));
     }
 
     return 0;

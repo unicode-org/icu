@@ -1115,12 +1115,12 @@ int main(int argc, char* argv[])
     u_cleanup();
 
     endTime = uprv_getUTCtime();
-    diffTime = (int32_t)(endTime - startTime);
+    diffTime = static_cast<int32_t>(endTime - startTime);
     printf("Elapsed Time: %02d:%02d:%02d.%03d\n",
-        (int)((diffTime%U_MILLIS_PER_DAY)/U_MILLIS_PER_HOUR),
-        (int)((diffTime%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE),
-        (int)((diffTime%U_MILLIS_PER_MINUTE)/U_MILLIS_PER_SECOND),
-        (int)(diffTime%U_MILLIS_PER_SECOND));
+        (diffTime % U_MILLIS_PER_DAY) / U_MILLIS_PER_HOUR,
+        (diffTime % U_MILLIS_PER_HOUR) / U_MILLIS_PER_MINUTE,
+        (diffTime % U_MILLIS_PER_MINUTE) / U_MILLIS_PER_SECOND,
+        diffTime % U_MILLIS_PER_SECOND);
 
     return nerrors;
 }

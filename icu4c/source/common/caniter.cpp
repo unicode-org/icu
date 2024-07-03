@@ -183,10 +183,10 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
 
     // catch degenerate case
     if (newSource.length() == 0) {
-        pieces = (UnicodeString **)uprv_malloc(sizeof(UnicodeString *));
-        pieces_lengths = (int32_t*)uprv_malloc(1 * sizeof(int32_t));
+        pieces = static_cast<UnicodeString**>(uprv_malloc(sizeof(UnicodeString*)));
+        pieces_lengths = static_cast<int32_t*>(uprv_malloc(1 * sizeof(int32_t)));
         pieces_length = 1;
-        current = (int32_t*)uprv_malloc(1 * sizeof(int32_t));
+        current = static_cast<int32_t*>(uprv_malloc(1 * sizeof(int32_t)));
         current_length = 1;
         if (pieces == nullptr || pieces_lengths == nullptr || current == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
@@ -229,10 +229,10 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
 
 
     // allocate the arrays, and find the strings that are CE to each segment
-    pieces = (UnicodeString **)uprv_malloc(list_length * sizeof(UnicodeString *));
+    pieces = static_cast<UnicodeString**>(uprv_malloc(list_length * sizeof(UnicodeString*)));
     pieces_length = list_length;
-    pieces_lengths = (int32_t*)uprv_malloc(list_length * sizeof(int32_t));
-    current = (int32_t*)uprv_malloc(list_length * sizeof(int32_t));
+    pieces_lengths = static_cast<int32_t*>(uprv_malloc(list_length * sizeof(int32_t)));
+    current = static_cast<int32_t*>(uprv_malloc(list_length * sizeof(int32_t)));
     current_length = list_length;
     if (pieces == nullptr || pieces_lengths == nullptr || current == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -330,7 +330,7 @@ void U_EXPORT2 CanonicalIterator::permute(UnicodeString &source, UBool skipZeros
         // prefix this character to all of them
         ne = subpermute.nextElement(el);
         while (ne != nullptr) {
-            UnicodeString *permRes = (UnicodeString *)(ne->value.pointer);
+            UnicodeString* permRes = static_cast<UnicodeString*>(ne->value.pointer);
             UnicodeString *chStr = new UnicodeString(cp);
             //test for nullptr
             if (chStr == nullptr) {
@@ -378,7 +378,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     //while (it.hasNext())
     while (ne != nullptr) {
         //String item = (String) it.next();
-        UnicodeString item = *((UnicodeString *)(ne->value.pointer));
+        UnicodeString item = *static_cast<UnicodeString*>(ne->value.pointer);
 
         permutations.removeAll();
         permute(item, CANITER_SKIP_ZEROES, &permutations, status);
@@ -390,7 +390,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
         while (ne2 != nullptr) {
             //String possible = (String) it2.next();
             //UnicodeString *possible = new UnicodeString(*((UnicodeString *)(ne2->value.pointer)));
-            UnicodeString possible(*((UnicodeString *)(ne2->value.pointer)));
+            UnicodeString possible(*static_cast<UnicodeString*>(ne2->value.pointer));
             UnicodeString attempt;
             nfd->normalize(possible, attempt, status);
 
@@ -432,7 +432,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     el = UHASH_FIRST;
     ne = result.nextElement(el);
     while(ne != nullptr) {
-        finalResult[result_len++] = *((UnicodeString *)(ne->value.pointer));
+        finalResult[result_len++] = *static_cast<UnicodeString*>(ne->value.pointer);
         ne = result.nextElement(el);
     }
 
@@ -482,7 +482,7 @@ Hashtable *CanonicalIterator::getEquivalents2(Hashtable *fillinResult, const cha
             int32_t el = UHASH_FIRST;
             const UHashElement *ne = remainder.nextElement(el);
             while (ne != nullptr) {
-                UnicodeString item = *((UnicodeString *)(ne->value.pointer));
+                UnicodeString item = *static_cast<UnicodeString*>(ne->value.pointer);
                 UnicodeString *toAdd = new UnicodeString(prefix);
                 /* test for nullptr */
                 if (toAdd == nullptr) {

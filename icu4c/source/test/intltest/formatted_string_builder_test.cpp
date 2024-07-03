@@ -165,7 +165,7 @@ void FormattedStringBuilderTest::testInsertAppendCodePoint() {
         assertEquals("Code point count of sb3", 1, sb3.codePointCount());
         assertEquals(
                 "First code unit in sb3",
-                !U_IS_SUPPLEMENTARY(cas) ? (char16_t) cas : U16_LEAD(cas),
+                !U_IS_SUPPLEMENTARY(cas) ? static_cast<char16_t>(cas) : U16_LEAD(cas),
                 sb3.charAt(0));
 
         UnicodeString sb4;

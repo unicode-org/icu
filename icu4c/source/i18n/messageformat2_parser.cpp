@@ -32,7 +32,7 @@ using namespace data_model;
 
 // Returns true iff `index` is a valid index for the string `source`
 static bool inBounds(const UnicodeString &source, uint32_t index) {
-    return (((int32_t)index) < source.length());
+    return static_cast<int32_t>(index) < source.length();
 }
 
 // Increments the line number and updates the "characters seen before
@@ -815,7 +815,7 @@ Literal Parser::parseUnquotedLiteral(UErrorCode& errorCode) {
     }
 
     // Parse the integer part
-    if (source[index] == ((UChar32)0x0030) /* 0 */) {
+    if (source[index] == static_cast<UChar32>(0x0030) /* 0 */) {
         contents += source[index];
         normalizedInput += source[index];
         index++;
@@ -2237,7 +2237,7 @@ void Parser::parse(UParseError &parseErrorResult, UErrorCode& status) {
     // if we know it's non-empty
     if (inBounds(source, index)) {
         if (source[index] == PERIOD
-            || (index < ((uint32_t) source.length() + 1)
+            || (index < static_cast<uint32_t>(source.length()) + 1
                 && source[index] == LEFT_CURLY_BRACE
                 && source[index + 1] == LEFT_CURLY_BRACE)) {
             // A complex message begins with a '.' or '{'
@@ -2259,7 +2259,7 @@ void Parser::parse(UParseError &parseErrorResult, UErrorCode& status) {
     CHECK_ERROR(status);
 
     // There are no errors; finally, check that the entire input was consumed
-    if (((int32_t)index) != source.length()) {
+    if (static_cast<int32_t>(index) != source.length()) {
       ERROR(parseError, status, index);
     }
 

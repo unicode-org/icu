@@ -404,7 +404,7 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   actual.remove();
   pos.setBeginIndex(0);
   pos.setEndIndex(0);
-  cdf->format((double)123456.0, actual, pos);
+  cdf->format(123456.0, actual, pos);
   if (actual != expected || pos.getEndIndex() != 3) {
     errln(UnicodeString("Fail format(double,UnicodeString&,FieldPosition&): Expected: \"") + expected + "\", pos 3; " +
                                                                            "Got: \"" + actual + "\", pos " + pos.getEndIndex());
@@ -414,7 +414,7 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   pos.setBeginIndex(0);
   pos.setEndIndex(0);
   status = U_ZERO_ERROR;
-  cdf->format((double)123456.0, actual, pos, status);
+  cdf->format(123456.0, actual, pos, status);
   if (actual != expected || pos.getEndIndex() != 3 || status != U_ZERO_ERROR) {
     errln(UnicodeString("Fail format(double,UnicodeString&,FieldPosition&,UErrorCode&): Expected: \"") + expected + "\", pos 3, status U_ZERO_ERROR; " +
                                                               "Got: \"" + actual + "\", pos " + pos.getEndIndex() + ", status " + u_errorName(status));
@@ -424,7 +424,7 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   pos.setBeginIndex(0);
   pos.setEndIndex(0);
   status = U_ZERO_ERROR;
-  cdf->format((double)123456.0, actual, &posIter, status);
+  cdf->format(123456.0, actual, &posIter, status);
   posIter.next(pos);
   if (actual != expected || pos.getEndIndex() != 3 || status != U_ZERO_ERROR) {
     errln(UnicodeString("Fail format(int32_t,UnicodeString&,FieldPosition&,UErrorCode&): Expected: \"") + expected + "\", first pos 3, status U_ZERO_ERROR; " +
@@ -434,7 +434,7 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   actual.remove();
   pos.setBeginIndex(0);
   pos.setEndIndex(0);
-  cdf->format((int32_t)123456, actual, pos);
+  cdf->format(static_cast<int32_t>(123456), actual, pos);
   if (actual != expected || pos.getEndIndex() != 3) {
     errln(UnicodeString("Fail format(int32_t,UnicodeString&,FieldPosition&): Expected: \"") + expected + "\", pos 3; " +
                                                                            "Got: \"" + actual + "\", pos " + pos.getEndIndex());
@@ -444,7 +444,7 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   pos.setBeginIndex(0);
   pos.setEndIndex(0);
   status = U_ZERO_ERROR;
-  cdf->format((int32_t)123456, actual, pos, status);
+  cdf->format(static_cast<int32_t>(123456), actual, pos, status);
   if (actual != expected || pos.getEndIndex() != 3 || status != U_ZERO_ERROR) {
     errln(UnicodeString("Fail format(int32_t,UnicodeString&,FieldPosition&,UErrorCode&): Expected: \"") + expected + "\", pos 3, status U_ZERO_ERROR; " +
                                                               "Got: \"" + actual + "\", pos " + pos.getEndIndex() + ", status " + u_errorName(status));
@@ -454,7 +454,7 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   pos.setBeginIndex(0);
   pos.setEndIndex(0);
   status = U_ZERO_ERROR;
-  cdf->format((int32_t)123456, actual, &posIter, status);
+  cdf->format(static_cast<int32_t>(123456), actual, &posIter, status);
   posIter.next(pos);
   if (actual != expected || pos.getEndIndex() != 3 || status != U_ZERO_ERROR) {
     errln(UnicodeString("Fail format(int32_t,UnicodeString&,FieldPosition&,UErrorCode&): Expected: \"") + expected + "\", first pos 3, status U_ZERO_ERROR; " +
@@ -464,7 +464,7 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   actual.remove();
   pos.setBeginIndex(0);
   pos.setEndIndex(0);
-  cdf->format((int64_t)123456, actual, pos);
+  cdf->format(static_cast<int64_t>(123456), actual, pos);
   if (actual != expected || pos.getEndIndex() != 3) {
     errln(UnicodeString("Fail format(int64_t,UnicodeString&,FieldPosition&): Expected: \"") + expected + "\", pos 3; " +
                                                                            "Got: \"" + actual + "\", pos " + pos.getEndIndex());
@@ -474,7 +474,7 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   pos.setBeginIndex(0);
   pos.setEndIndex(0);
   status = U_ZERO_ERROR;
-  cdf->format((int64_t)123456, actual, pos, status);
+  cdf->format(static_cast<int64_t>(123456), actual, pos, status);
   if (actual != expected || pos.getEndIndex() != 3 || status != U_ZERO_ERROR) {
     errln(UnicodeString("Fail format(int64_t,UnicodeString&,FieldPosition&,UErrorCode&): Expected: \"") + expected + "\", pos 3, status U_ZERO_ERROR; " +
                                                               "Got: \"" + actual + "\", pos " + pos.getEndIndex() + ", status " + u_errorName(status));
@@ -484,7 +484,7 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   pos.setBeginIndex(0);
   pos.setEndIndex(0);
   status = U_ZERO_ERROR;
-  cdf->format((int64_t)123456, actual, &posIter, status);
+  cdf->format(static_cast<int64_t>(123456), actual, &posIter, status);
   posIter.next(pos);
   if (actual != expected || pos.getEndIndex() != 3 || status != U_ZERO_ERROR) {
     errln(UnicodeString("Fail format(int32_t,UnicodeString&,FieldPosition&,UErrorCode&): Expected: \"") + expected + "\", first pos 3, status U_ZERO_ERROR; " +

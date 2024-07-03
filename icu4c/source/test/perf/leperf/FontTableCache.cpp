@@ -72,7 +72,7 @@ const void *FontTableCache::find(LETag tableTag, size_t &length) const
 
     const void *table = readFontTable(tableTag, length);
 
-    ((FontTableCache *) this)->add(tableTag, table, length);
+    const_cast<FontTableCache*>(this)->add(tableTag, table, length);
 
     return table;
 }
@@ -82,7 +82,7 @@ void FontTableCache::add(LETag tableTag, const void *table, size_t length)
     if (fTableCacheCurr >= fTableCacheSize) {
         le_int32 newSize = fTableCacheSize + TABLE_CACHE_GROW;
 
-        fTableCache = (FontTableCacheEntry *) LE_GROW_ARRAY(fTableCache, newSize);
+        fTableCache = static_cast<FontTableCacheEntry*>(LE_GROW_ARRAY(fTableCache, newSize));
 
         for (le_int32 i = fTableCacheSize; i < newSize; i += 1) {
             fTableCache[i].tag   = 0;

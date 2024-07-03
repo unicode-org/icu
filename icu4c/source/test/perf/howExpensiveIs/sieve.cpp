@@ -76,8 +76,8 @@ U_CAPI double uprv_calcSieveTime() {
 }
 static int comdoub(const void *aa, const void *bb) 
 {
-  const double *a = (const double*)aa;
-  const double *b = (const double*)bb;
+  const double* a = static_cast<const double*>(aa);
+  const double* b = static_cast<const double*>(bb);
   
   return (*a==*b)?0:((*a<*b)?-1:1);
 }
@@ -87,9 +87,9 @@ double midpoint(double *times, double i, int n) {
   double ce = ceil(i);
   if(ce>=n) ce=n;
   if(fl==ce) {
-    return times[(int)fl];
+    return times[static_cast<int>(fl)];
   } else {
-    return (times[(int)fl]+times[(int)ce])/2;
+    return (times[static_cast<int>(fl)] + times[static_cast<int>(ce)]) / 2;
   }
 }
 

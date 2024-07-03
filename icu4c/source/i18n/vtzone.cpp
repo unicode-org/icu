@@ -139,7 +139,7 @@ static UnicodeString& appendAsciiDigits(int32_t number, uint8_t length, UnicodeS
         str.append(MINUS);
     }
     for (i = length - 1; i >= 0; i--) {
-        str.append((char16_t)(digits[i] + 0x0030));
+        str.append(static_cast<char16_t>(digits[i] + 0x0030));
     }
     return str;
 }
@@ -151,11 +151,11 @@ static UnicodeString& appendMillis(UDate date, UnicodeString& str) {
     int64_t number;
 
     if (date < MIN_MILLIS) {
-        number = (int64_t)MIN_MILLIS;
+        number = static_cast<int64_t>(MIN_MILLIS);
     } else if (date > MAX_MILLIS) {
-        number = (int64_t)MAX_MILLIS;
+        number = static_cast<int64_t>(MAX_MILLIS);
     } else {
-        number = (int64_t)date;
+        number = static_cast<int64_t>(date);
     }
     if (number < 0) {
         negative = true;
@@ -163,7 +163,7 @@ static UnicodeString& appendMillis(UDate date, UnicodeString& str) {
     }
     i = 0;
     do {
-        digits[i++] = (int32_t)(number % 10);
+        digits[i++] = static_cast<int32_t>(number % 10);
         number /= 10;
     } while (number != 0);
 
@@ -172,7 +172,7 @@ static UnicodeString& appendMillis(UDate date, UnicodeString& str) {
     }
     i--;
     while (i >= 0) {
-        str.append((char16_t)(digits[i--] + 0x0030));
+        str.append(static_cast<char16_t>(digits[i--] + 0x0030));
     }
     return str;
 }
@@ -190,7 +190,7 @@ static UnicodeString& getDateTimeString(UDate time, UnicodeString& str, UErrorCo
     appendAsciiDigits(year, 4, str);
     appendAsciiDigits(month + 1, 2, str);
     appendAsciiDigits(dom, 2, str);
-    str.append((char16_t)0x0054 /*'T'*/);
+    str.append(static_cast<char16_t>(0x0054) /*'T'*/);
 
     int32_t t = mid;
     int32_t hour = t / U_MILLIS_PER_HOUR;
@@ -210,7 +210,7 @@ static UnicodeString& getDateTimeString(UDate time, UnicodeString& str, UErrorCo
  */
 static UnicodeString& getUTCDateTimeString(UDate time, UnicodeString& str, UErrorCode& status) {
     getDateTimeString(time, str, status);
-    str.append((char16_t)0x005A /*'Z'*/);
+    str.append(static_cast<char16_t>(0x005A) /*'Z'*/);
     return str;
 }
 
@@ -531,7 +531,7 @@ static TimeZoneRule* createRuleByRRULE(const UnicodeString& zonename, int rawOff
     DateTimeRule *adtr = nullptr;
 
     // Parse the first rule
-    UnicodeString rrule = *((UnicodeString*)dates->elementAt(0));
+    UnicodeString rrule = *static_cast<UnicodeString*>(dates->elementAt(0));
     int32_t month, dayOfWeek, nthDayOfWeek, dayOfMonth = 0;
     int32_t days[7];
     int32_t daysCount = UPRV_LENGTHOF(days);
@@ -607,7 +607,7 @@ static TimeZoneRule* createRuleByRRULE(const UnicodeString& zonename, int rawOff
 
         int32_t anotherMonth = -1;
         for (i = 1; i < dates->size(); i++) {
-            rrule = *((UnicodeString*)dates->elementAt(i));
+            rrule = *static_cast<UnicodeString*>(dates->elementAt(i));
             UDate tmp_until;
             int32_t tmp_month, tmp_dayOfWeek, tmp_nthDayOfWeek;
             int32_t tmp_days[7];
@@ -737,13 +737,13 @@ static TimeZoneRule* createRuleByRDATE(const UnicodeString& zonename, int32_t ra
     } else {
         // Create an array of transition times
         int32_t size = dates->size();
-        UDate* times = (UDate*)uprv_malloc(sizeof(UDate) * size);
+        UDate* times = static_cast<UDate*>(uprv_malloc(sizeof(UDate) * size));
         if (times == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return nullptr;
         }
         for (int32_t i = 0; i < size; i++) {
-            UnicodeString *datestr = (UnicodeString*)dates->elementAt(i);
+            UnicodeString* datestr = static_cast<UnicodeString*>(dates->elementAt(i));
             times[i] = parseDateTimeString(*datestr, fromOffset, status);
             if (U_FAILURE(status)) {
                 uprv_free(times);
@@ -980,7 +980,7 @@ VTimeZone::VTimeZone(const VTimeZone& source)
             return;
         }
         for (int32_t i = 0; i < size; i++) {
-            UnicodeString *line = ((UnicodeString*)source.vtzlines->elementAt(i))->clone();
+            UnicodeString* line = static_cast<UnicodeString*>(source.vtzlines->elementAt(i))->clone();
             lpVtzLines->adoptElement(line, status);
             if (U_FAILURE(status) || line == nullptr) {
                 return;
@@ -1021,7 +1021,7 @@ VTimeZone::operator=(const VTimeZone& right) {
             if (U_SUCCESS(status)) {
                 for (int32_t i = 0; i < size; i++) {
                     LocalPointer<UnicodeString> line(
-                        ((UnicodeString*)right.vtzlines->elementAt(i))->clone(), status);
+                        static_cast<UnicodeString*>(right.vtzlines->elementAt(i))->clone(), status);
                     lpVtzLines->adoptElement(line.orphan(), status);
                     if (U_FAILURE(status)) {
                         break;
@@ -1401,7 +1401,7 @@ VTimeZone::parse(UErrorCode& status) {
     }
     
     for (n = 0; n < vtzlines->size(); n++) {
-        UnicodeString *line = (UnicodeString*)vtzlines->elementAt(n);
+        UnicodeString* line = static_cast<UnicodeString*>(vtzlines->elementAt(n));
         int32_t valueSep = line->indexOf(COLON);
         if (valueSep < 0) {
             continue;
@@ -1612,7 +1612,7 @@ VTimeZone::parse(UErrorCode& status) {
     }
 
     for (n = 0; n < rules.size(); n++) {
-        TimeZoneRule *r = (TimeZoneRule*)rules.elementAt(n);
+        TimeZoneRule* r = static_cast<TimeZoneRule*>(rules.elementAt(n));
         AnnualTimeZoneRule *atzrule = dynamic_cast<AnnualTimeZoneRule *>(r);
         if (atzrule != nullptr) {
             if (atzrule->getEndYear() == AnnualTimeZoneRule::MAX_YEAR) {
@@ -1635,7 +1635,7 @@ VTimeZone::parse(UErrorCode& status) {
             rules.removeAllElements();
         } else {
             // Normalize the final rule
-            AnnualTimeZoneRule *finalRule = (AnnualTimeZoneRule*)rules.elementAt(finalRuleIdx);
+            AnnualTimeZoneRule* finalRule = static_cast<AnnualTimeZoneRule*>(rules.elementAt(finalRuleIdx));
             int32_t tmpRaw = finalRule->getRawOffset();
             int32_t tmpDST = finalRule->getDSTSavings();
 
@@ -1647,7 +1647,7 @@ VTimeZone::parse(UErrorCode& status) {
                 if (finalRuleIdx == n) {
                     continue;
                 }
-                TimeZoneRule *r = (TimeZoneRule*)rules.elementAt(n);
+                TimeZoneRule* r = static_cast<TimeZoneRule*>(rules.elementAt(n));
                 UDate lastStart;
                 r->getFinalStart(tmpRaw, tmpDST, lastStart);
                 if (lastStart > start) {
@@ -1699,7 +1699,7 @@ VTimeZone::parse(UErrorCode& status) {
     }
 
     while (!rules.isEmpty()) {
-        TimeZoneRule *tzr = (TimeZoneRule*)rules.orphanElementAt(0);
+        TimeZoneRule* tzr = static_cast<TimeZoneRule*>(rules.orphanElementAt(0));
         rbtz->addTransitionRule(tzr, status);
         if (U_FAILURE(status)) {
             return;
@@ -1719,7 +1719,7 @@ VTimeZone::write(VTZWriter& writer, UErrorCode& status) const {
     if (U_FAILURE(status)) return;
     if (vtzlines != nullptr) {
         for (int32_t i = 0; i < vtzlines->size(); i++) {
-            UnicodeString *line = (UnicodeString*)vtzlines->elementAt(i);
+            UnicodeString* line = static_cast<UnicodeString*>(vtzlines->elementAt(i));
             if (line->startsWith(ICAL_TZURL, -1)
                 && line->charAt(u_strlen(ICAL_TZURL)) == COLON) {
                 writer.write(ICAL_TZURL);
@@ -1777,7 +1777,7 @@ VTimeZone::write(UDate start, VTZWriter& writer, UErrorCode& status) const {
     if (lpTransitionRules.isValid()) {
         U_ASSERT(transitionRules->hasDeleter());  // Assumed for U_FAILURE early return, below.
         while (!lpTransitionRules->isEmpty()) {
-            TimeZoneRule *tr = (TimeZoneRule*)lpTransitionRules->orphanElementAt(0);
+            TimeZoneRule* tr = static_cast<TimeZoneRule*>(lpTransitionRules->orphanElementAt(0));
             rbtz.addTransitionRule(tr, status);
             if (U_FAILURE(status)) {
                 return;
@@ -1796,11 +1796,11 @@ VTimeZone::write(UDate start, VTZWriter& writer, UErrorCode& status) const {
             return;
         }
         icutzprop->append(olsonzid);
-        icutzprop->append((char16_t)0x005B/*'['*/);
+        icutzprop->append(static_cast<char16_t>(0x005B)/*'['*/);
         icutzprop->append(icutzver);
         icutzprop->append(ICU_TZINFO_PARTIAL, -1);
         appendMillis(start, *icutzprop);
-        icutzprop->append((char16_t)0x005D/*']'*/);
+        icutzprop->append(static_cast<char16_t>(0x005D)/*']'*/);
         customProps.adoptElement(icutzprop, status);
         if (U_FAILURE(status)) {
             return;
@@ -1843,11 +1843,11 @@ VTimeZone::writeSimple(UDate time, VTZWriter& writer, UErrorCode& status) const 
                return;
             }
             icutzprop->append(olsonzid);
-            icutzprop->append((char16_t)0x005B/*'['*/);
+            icutzprop->append(static_cast<char16_t>(0x005B)/*'['*/);
             icutzprop->append(icutzver);
             icutzprop->append(ICU_TZINFO_SIMPLE, -1);
             appendMillis(time, *icutzprop);
-            icutzprop->append((char16_t)0x005D/*']'*/);
+            icutzprop->append(static_cast<char16_t>(0x005D)/*']'*/);
             customProps.adoptElement(icutzprop.orphan(), status);
         }
         writeZone(writer, rbtz, &customProps, status);
@@ -1867,7 +1867,7 @@ VTimeZone::writeZone(VTZWriter& w, BasicTimeZone& basictz,
 
     if (customProps != nullptr) {
         for (int32_t i = 0; i < customProps->size(); i++) {
-            UnicodeString *custprop = (UnicodeString*)customProps->elementAt(i);
+            UnicodeString* custprop = static_cast<UnicodeString*>(customProps->elementAt(i));
             w.write(*custprop);
             w.write(ICAL_NEWLINE);
         }

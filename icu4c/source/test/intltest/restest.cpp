@@ -95,7 +95,7 @@ itoa(int32_t i, char* buf)
     char* p = buf;
     do
     {
-        *p++ = (char)('0' + (i % 10));
+        *p++ = static_cast<char>('0' + (i % 10));
         i /= 10;
     }
     while (i);
@@ -155,13 +155,13 @@ randul()
     static UBool initialized = false;
     if (!initialized)
     {
-        srand((unsigned)time(nullptr));
+        srand(static_cast<unsigned>(time(nullptr)));
         initialized = true;
     }
     // Assume rand has at least 12 bits of precision
     uint32_t l = 0;
     for (uint32_t i=0; i<sizeof(l); ++i)
-        ((char*)&l)[i] = (char)((rand() & 0x0FF0) >> 4);
+        reinterpret_cast<char*>(&l)[i] = static_cast<char>((rand() & 0x0FF0) >> 4);
     return l;
 }
 
@@ -171,7 +171,7 @@ randul()
 double
 randd()
 {
-    return (double)(randul() / ULONG_MAX);
+    return static_cast<double>(randul() / ULONG_MAX);
 }
 
 /**
@@ -179,7 +179,7 @@ randd()
  */
 int32_t randi(int32_t n)
 {
-    return (int32_t)(randd() * n);
+    return static_cast<int32_t>(randd() * n);
 }
 
 //***************************************************************************************
@@ -285,7 +285,7 @@ ResourceBundleTest::TestConstruction()
         Locale::setDefault(Locale("en_US"), err);
     }
 
-    ResourceBundle  test1((UnicodeString)testdatapath, err);
+    ResourceBundle test1(UnicodeString(testdatapath), err);
     ResourceBundle  test2(testdatapath, locale, err);
     //ResourceBundle  test1("c:\\icu\\icu\\source\\test\\testdata\\testdata", err);
     //ResourceBundle  test2("c:\\icu\\icu\\source\\test\\testdata\\testdata", locale, err);
@@ -498,13 +498,13 @@ ResourceBundleTest::testTag(const char* frag,
         }
         else if (status != expected_resource_status)
         {
-            record_fail("Error getting " + (UnicodeString)tag);
-            return (UBool)(failOrig != fail);
+            record_fail("Error getting " + UnicodeString(tag));
+            return static_cast<UBool>(failOrig != fail);
         }
 
     }
 
-    return (UBool)(failOrig != fail);
+    return static_cast<UBool>(failOrig != fail);
 }
 
 void

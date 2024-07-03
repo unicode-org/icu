@@ -33,8 +33,8 @@ SimpleFontInstance::SimpleFontInstance(float pointSize, LEErrorCode &status)
         return;
     }
 
-    fAscent  = (le_int32) yUnitsToPoints(2000.0);
-    fDescent = (le_int32) yUnitsToPoints(600.0);
+    fAscent = static_cast<le_int32>(yUnitsToPoints(2000.0));
+    fDescent = static_cast<le_int32>(yUnitsToPoints(600.0));
 }
 
 SimpleFontInstance::~SimpleFontInstance()
@@ -106,7 +106,7 @@ LEGlyphID SimpleFontInstance::mapCharToGlyph(LEUnicode32 ch, const LECharMapper 
 
 LEGlyphID SimpleFontInstance::mapCharToGlyph(LEUnicode32 ch) const
 {
-    return (LEGlyphID) ch;
+    return static_cast<LEGlyphID>(ch);
 }
 
 float SimpleFontInstance::getXPixelsPerEm() const

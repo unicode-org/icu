@@ -75,7 +75,7 @@ CEList::CEList(UCollator *coll, const UnicodeString &string, UErrorCode &status)
 
         order &= strengthMask;
 
-        if (toShift && variableTop > (uint32_t)order && (order & UCOL_PRIMARYORDERMASK) != 0) {
+        if (toShift && variableTop > static_cast<uint32_t>(order) && (order & UCOL_PRIMARYORDERMASK) != 0) {
             if (strength >= UCOL_QUATERNARY) {
                 order &= UCOL_PRIMARYORDERMASK;
             } else {
@@ -138,7 +138,7 @@ uint32_t CEList::get(int32_t index) const
         return ces[index];
     }
 
-    return (uint32_t)UCOL_NULLORDER;
+    return static_cast<uint32_t>(UCOL_NULLORDER);
 }
 
 uint32_t &CEList::operator[](int32_t index) const
@@ -451,7 +451,7 @@ bail:
      maxHan = 0;
 
      for(int32_t h = 0; h < hanList.size(); h += 2) {
-         uint32_t han = (uint32_t) hanList[h];
+         uint32_t han = hanList[h];
 
          if (han < minHan) {
              minHan = han;

@@ -387,7 +387,7 @@ int32_t trueMonthStart(int32_t month, UErrorCode& status) {
             } while (age < 0);
         }
         start = ClockMath::floorDivideInt64(
-            (int64_t)((int64_t)origin - HIJRA_MILLIS), (int64_t)kOneDay) + 1;
+            static_cast<int64_t>(static_cast<int64_t>(origin) - HIJRA_MILLIS), static_cast<int64_t>(kOneDay)) + 1;
         CalendarCache::put(&gMonthCache, month, start, status);
     }
     if(U_FAILURE(status)) {
@@ -530,9 +530,9 @@ void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
     int32_t days = julianDay - getEpoc();
 
     // Guess at the number of elapsed full months since the epoch
-    int32_t month = (int32_t)uprv_floor((double)days / CalendarAstronomer::SYNODIC_MONTH);
+    int32_t month = static_cast<int32_t>(uprv_floor(static_cast<double>(days) / CalendarAstronomer::SYNODIC_MONTH));
 
-    int32_t startDate = (int32_t)uprv_floor(month * CalendarAstronomer::SYNODIC_MONTH);
+    int32_t startDate = static_cast<int32_t>(uprv_floor(month * CalendarAstronomer::SYNODIC_MONTH));
 
     double age = moonAge(internalGetTime());
     if ( days - startDate >= 25 && age > 0) {
@@ -825,7 +825,7 @@ int64_t IslamicUmalquraCalendar::yearStart(int32_t year, UErrorCode& status) con
     year -= UMALQURA_YEAR_START;
     // rounded least-squares fit of the dates previously calculated from UMALQURA_MONTHLENGTH iteration
     int64_t yrStartLinearEstimate = static_cast<int64_t>(
-        (354.36720 * (double)year) + 460322.05 + 0.5);
+        (354.36720 * static_cast<double>(year)) + 460322.05 + 0.5);
     // need a slight correction to some
     return yrStartLinearEstimate + umAlQuraYrStartEstimateFix[year];
 }
@@ -863,7 +863,7 @@ int32_t IslamicUmalquraCalendar::handleGetMonthLength(int32_t extendedYear, int3
         return IslamicCivilCalendar::handleGetMonthLength(extendedYear, month, status);
     }
     int32_t length = 29;
-    int32_t mask = (int32_t) (0x01 << (11 - month));    // set mask for bit corresponding to month
+    int32_t mask = static_cast<int32_t>(0x01 << (11 - month)); // set mask for bit corresponding to month
     int32_t index = extendedYear - UMALQURA_YEAR_START;
     if ((UMALQURA_MONTHLENGTH[index] & mask) != 0) {
         length++;
@@ -935,7 +935,7 @@ void IslamicUmalquraCalendar::handleComputeFields(int32_t julianDay, UErrorCode 
     // Estimate a value y which is closer to but not greater than the year.
     // It is the inverse function of the logic inside
     // IslamicUmalquraCalendar::yearStart().
-    year = ((double(days) - (460322.05 + 0.5)) / 354.36720) + UMALQURA_YEAR_START - 1;
+    year = ((static_cast<double>(days) - (460322.05 + 0.5)) / 354.36720) + UMALQURA_YEAR_START - 1;
     month = 0;
     int32_t d = 1;
     // need a slight correction to some

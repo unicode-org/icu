@@ -305,7 +305,7 @@ getVersion(const void *data, int32_t length, UBool anyEndianOk) {
     if(length<16 || data==nullptr || (U_POINTER_MASK_LSB(data, 3)!=0)) {
         return 0;
     }
-    signature=*(const uint32_t *)data;
+    signature = *static_cast<const uint32_t*>(data);
     if(signature==UCPTRIE_SIG) {
         return 3;
     }

@@ -553,7 +553,7 @@ inline int32_t pinCapacity(T *dest, int32_t capacity) {
     if (maxInt < destInt) {
         // Less than 2GB to the end of the address space.
         // Pin to that to prevent address overflow.
-        maxInt = (uintptr_t)-1;
+        maxInt = static_cast<uintptr_t>(-1);
     }
 #  endif
 

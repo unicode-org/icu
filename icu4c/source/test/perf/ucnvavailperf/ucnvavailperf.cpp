@@ -114,7 +114,7 @@ int main(int argc, const char *argv[]) {
         return errorCode;
     }
 
-    printf("memory usage after ucnv_open(ibm-1208): %lu\n", (long)icuMemUsage);
+    printf("memory usage after ucnv_open(ibm-1208): %lu\n", static_cast<long>(icuMemUsage));
 
     UTimer start_time;
     utimer_getTime(&start_time);
@@ -123,13 +123,13 @@ int main(int argc, const char *argv[]) {
     double elapsed = utimer_getElapsedSeconds(&start_time);
     printf("ucnv_countAvailable() reports that %d converters are available.\n", count);
     printf("ucnv_countAvailable() took %g seconds to figure this out.\n", elapsed);
-    printf("memory usage after ucnv_countAvailable(): %lu\n", (long)icuMemUsage);
+    printf("memory usage after ucnv_countAvailable(): %lu\n", static_cast<long>(icuMemUsage));
 
     ucnv_flushCache();
-    printf("memory usage after ucnv_flushCache(): %lu\n", (long)icuMemUsage);
+    printf("memory usage after ucnv_flushCache(): %lu\n", static_cast<long>(icuMemUsage));
 
     u_cleanup();
-    printf("memory usage after u_cleanup(): %lu\n", (long)icuMemUsage);
+    printf("memory usage after u_cleanup(): %lu\n", static_cast<long>(icuMemUsage));
 
     return 0;
 }

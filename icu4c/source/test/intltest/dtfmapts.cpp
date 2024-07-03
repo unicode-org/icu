@@ -171,13 +171,13 @@ if (fr != nullptr && it != nullptr && de != nullptr)
     if(U_FAILURE(status)) {
         errln("ERROR: format() failed (French)");
     }
-    logln( (UnicodeString) "" + d + " formatted to " + res1);
+    logln(UnicodeString("") + d + " formatted to " + res1);
 
     res2 = it->format(d, res2, pos2);
-    logln( (UnicodeString) "" + d + " formatted to " + res2);
+    logln(UnicodeString("") + d + " formatted to " + res2);
 
     res3 = de->format(d, res3);
-    logln( (UnicodeString) "" + d + " formatted to " + res3);
+    logln(UnicodeString("") + d + " formatted to " + res3);
 }
 
 // ======= Test parse()
@@ -214,7 +214,7 @@ if (fr != nullptr && it != nullptr && de != nullptr)
 
     int32_t count = 0;
     const Locale *locales = DateFormat::getAvailableLocales(count);
-    logln((UnicodeString) "Got " + count + " locales" );
+    logln(UnicodeString("Got ") + count + " locales");
     for(int32_t i = 0; i < count; i++) {
         UnicodeString name;
         name = locales[i].getName();
@@ -313,8 +313,8 @@ IntlTestDateFormatAPI::TestNameHiding() {
             sdf.format(dateObj, str, status);
             sdf.format(dateObj, str, fpos, status);
             // DateFormat API
-            sdf.format((UDate)0, str, fpos);
-            sdf.format((UDate)0, str);
+            sdf.format(static_cast<UDate>(0), str, fpos);
+            sdf.format(static_cast<UDate>(0), str);
             sdf.parse(str, status);
             sdf.parse(str, ppos);
             sdf.getNumberFormat();
@@ -348,9 +348,9 @@ IntlTestDateFormatAPI::TestNameHiding() {
           fmt.format(numObj, str, fpos, status);
           // NumberFormat API
           fmt.format(2.71828, str);
-          fmt.format((int32_t)1234567, str);
+          fmt.format(static_cast<int32_t>(1234567), str);
           fmt.format(1.41421, str, fpos);
-          fmt.format((int32_t)9876543, str, fpos);
+          fmt.format(static_cast<int32_t>(9876543), str, fpos);
           fmt.parse(str, obj, ppos);
           fmt.parse(str, obj, status);
         } else {
@@ -368,9 +368,9 @@ IntlTestDateFormatAPI::TestNameHiding() {
         fmt.format(numObj, str, fpos, status);
         // NumberFormat API
         fmt.format(2.71828, str);
-        fmt.format((int32_t)1234567, str);
+        fmt.format(static_cast<int32_t>(1234567), str);
         fmt.format(1.41421, str, fpos);
-        fmt.format((int32_t)9876543, str, fpos);
+        fmt.format(static_cast<int32_t>(9876543), str, fpos);
         fmt.parse(str, obj, ppos);
         fmt.parse(str, obj, status);
     }

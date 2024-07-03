@@ -114,7 +114,7 @@ DateFormatMiscTests::test4097450()
 
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<SimpleDateFormat> formatter;
-    SimpleDateFormat resultFormatter((UnicodeString)u"yyyy", status);
+    SimpleDateFormat resultFormatter(UnicodeString(u"yyyy"), status);
     if (U_FAILURE(status)) {
         dataerrln("Fail new SimpleDateFormat: %s", u_errorName(status));
         return;

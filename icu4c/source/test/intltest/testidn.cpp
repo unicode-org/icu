@@ -88,7 +88,7 @@ testData(TestIDNA& test) {
         return errorCode;
     }
     
-    char* filename = (char*) malloc(strlen(IntlTest::pathToDataDirectory())*1024);
+    char* filename = static_cast<char*>(malloc(strlen(IntlTest::pathToDataDirectory()) * 1024));
     //TODO get the srcDir dynamically 
     const char *srcDir=IntlTest::pathToDataDirectory();
 
@@ -233,7 +233,7 @@ getValues(uint32_t result, int32_t& value, UBool& isIndex){
         isIndex =false;
         value = 0;
     }else if(result >= _SPREP_TYPE_THRESHOLD){
-        type = (UStringPrepType) (result - _SPREP_TYPE_THRESHOLD);
+        type = static_cast<UStringPrepType>(result - _SPREP_TYPE_THRESHOLD);
         isIndex =false;
         value = 0;
     }else{
@@ -246,7 +246,7 @@ getValues(uint32_t result, int32_t& value, UBool& isIndex){
 
         }else{
             isIndex = false;
-            value = (int16_t)result;
+            value = static_cast<int16_t>(result);
             value =  (value >> 2);
 
         }
@@ -381,7 +381,7 @@ compareMapping(uint32_t codepoint, uint32_t* mapping,int32_t mapLength,
     if(isIndex){
         for(int8_t i =0; i< mapLength; i++){
             if(mapping[i] <= 0xFFFF){
-                if(mappingData[index+i] != (uint16_t)mapping[i]){
+                if (mappingData[index + i] != static_cast<uint16_t>(mapping[i])) {
                     pTestIDNA->errln("Did not get the expected result. Expected: 0x%04X Got: 0x%04X \n", mapping[i], mappingData[index+i]);
                 }
             }else{
@@ -394,7 +394,7 @@ compareMapping(uint32_t codepoint, uint32_t* mapping,int32_t mapLength,
             }
         }
     }else{
-        if(retType!=USPREP_DELETE && (codepoint-delta) != (uint16_t)mapping[0]){
+        if (retType != USPREP_DELETE && (codepoint - delta) != static_cast<uint16_t>(mapping[0])) {
             pTestIDNA->errln("Did not get the expected result. Expected: 0x%04X Got: 0x%04X \n", mapping[0],(codepoint-delta));
         }
     }

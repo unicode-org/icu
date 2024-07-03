@@ -198,7 +198,7 @@ m_file_(nullptr),
 m_fileLen_(0)
 {
 
-    _remainingArgc = u_parseArgs(_remainingArgc, (char**)argv, UPRV_LENGTHOF(options), options);
+    _remainingArgc = u_parseArgs(_remainingArgc, const_cast<char**>(argv), UPRV_LENGTHOF(options), options);
 
 
     if(options[0].doesOccur) {

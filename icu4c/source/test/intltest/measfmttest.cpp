@@ -4340,17 +4340,17 @@ void MeasureFormatTest::TestExamplesInDocs() {
     if (!assertSuccess("Error creating formatters", status)) {
         return;
     }
-    Measure measureC((double)23, MeasureUnit::createCelsius(status), status);
-    Measure measureF((double)70, MeasureUnit::createFahrenheit(status), status);
+    Measure measureC(static_cast<double>(23), MeasureUnit::createCelsius(status), status);
+    Measure measureF(static_cast<double>(70), MeasureUnit::createFahrenheit(status), status);
     Measure feetAndInches[] = {
-            Measure((double)70, MeasureUnit::createFoot(status), status),
-            Measure((double)5.3, MeasureUnit::createInch(status), status)};
+            Measure(static_cast<double>(70), MeasureUnit::createFoot(status), status),
+            Measure(5.3, MeasureUnit::createInch(status), status)};
     Measure footAndInch[] = {
-            Measure((double)1, MeasureUnit::createFoot(status), status),
-            Measure((double)1, MeasureUnit::createInch(status), status)};
+            Measure(static_cast<double>(1), MeasureUnit::createFoot(status), status),
+            Measure(static_cast<double>(1), MeasureUnit::createInch(status), status)};
     Measure inchAndFeet[] = {
-            Measure((double)1, MeasureUnit::createInch(status), status),
-            Measure((double)2, MeasureUnit::createFoot(status), status)};
+            Measure(static_cast<double>(1), MeasureUnit::createInch(status), status),
+            Measure(static_cast<double>(2), MeasureUnit::createFoot(status), status)};
     if (!assertSuccess("Error creating measurements.", status)) {
         return;
     }
@@ -4408,32 +4408,32 @@ void MeasureFormatTest::TestExamplesInDocs() {
 
 void MeasureFormatTest::TestFormatPeriodEn() {
     UErrorCode status = U_ZERO_ERROR;
-    Measure t_1y[] = {Measure((double)1, MeasureUnit::createYear(status), status)};
-    Measure t_5M[] = {Measure((double)5, MeasureUnit::createMonth(status), status)};
-    Measure t_4d[] = {Measure((double)4, MeasureUnit::createDay(status), status)};
-    Measure t_2h[] = {Measure((double)2, MeasureUnit::createHour(status), status)};
-    Measure t_19m[] = {Measure((double)19, MeasureUnit::createMinute(status), status)};
+    Measure t_1y[] = {Measure(static_cast<double>(1), MeasureUnit::createYear(status), status)};
+    Measure t_5M[] = {Measure(static_cast<double>(5), MeasureUnit::createMonth(status), status)};
+    Measure t_4d[] = {Measure(static_cast<double>(4), MeasureUnit::createDay(status), status)};
+    Measure t_2h[] = {Measure(static_cast<double>(2), MeasureUnit::createHour(status), status)};
+    Measure t_19m[] = {Measure(static_cast<double>(19), MeasureUnit::createMinute(status), status)};
     Measure t_1h_23_5s[] = {
-            Measure((double)1.0, MeasureUnit::createHour(status), status),
-            Measure((double)23.5, MeasureUnit::createSecond(status), status)
+            Measure(1.0, MeasureUnit::createHour(status), status),
+            Measure(23.5, MeasureUnit::createSecond(status), status)
     };
     Measure t_1h_23_5m[] = {
-            Measure((double)1.0, MeasureUnit::createHour(status), status),
-            Measure((double)23.5, MeasureUnit::createMinute(status), status)
+            Measure(1.0, MeasureUnit::createHour(status), status),
+            Measure(23.5, MeasureUnit::createMinute(status), status)
     };
     Measure t_1h_0m_23s[] = {
             Measure(
-                    (double)1.0,
+                    1.0,
                     TimeUnit::createInstance(
                             TimeUnit::UTIMEUNIT_HOUR, status),
                     status),
             Measure(
-                    (double)0.0,
+                    0.0,
                     TimeUnit::createInstance(
                             TimeUnit::UTIMEUNIT_MINUTE, status),
                      status),
             Measure(
-                    (double)23.0,
+                    23.0,
                     TimeUnit::createInstance(
                             TimeUnit::UTIMEUNIT_SECOND, status),
                     status)
@@ -5110,14 +5110,14 @@ void MeasureFormatTest::helperTestManyLocaleDurations( const char *localeID,
     UErrorCode status = U_ZERO_ERROR;
     MeasureFormat fmt(Locale(localeID), width, status);
     if (U_FAILURE(status)) {
-        errln("Could not create MeasureFormat for locale %s, width %d, status: %s", localeID, (int)width, u_errorName(status));
+        errln("Could not create MeasureFormat for locale %s, width %d, status: %s", localeID, static_cast<int>(width), u_errorName(status));
         return;
     }
     UnicodeString buffer;
     FieldPosition pos(FieldPosition::DONT_CARE);
     fmt.formatMeasures(measures, measureCount, buffer, pos, status);
     if (U_FAILURE(status)) {
-        errln("MeasureFormat::formatMeasures failed for locale %s, width %d, status: %s", localeID, (int)width, u_errorName(status));
+        errln("MeasureFormat::formatMeasures failed for locale %s, width %d, status: %s", localeID, static_cast<int>(width), u_errorName(status));
         return;
     }
     UnicodeString expStr(UnicodeString(expected).unescape());
@@ -5132,8 +5132,8 @@ void MeasureFormatTest::TestGram() {
     if (!assertSuccess("Error creating format object", status)) {
         return;
     }
-    Measure gram((double)1, MeasureUnit::createGram(status), status);
-    Measure gforce((double)1, MeasureUnit::createGForce(status), status);
+    Measure gram(static_cast<double>(1), MeasureUnit::createGram(status), status);
+    Measure gforce(static_cast<double>(1), MeasureUnit::createGForce(status), status);
     if (!assertSuccess("Error creating measures", status)) {
         return;
     }
@@ -5222,21 +5222,21 @@ void MeasureFormatTest::helperTestDisplayName(const MeasureUnit *unit,
     MeasureFormat fmt(Locale(localeID), width, status);
     if (U_FAILURE(status)) {
         errln("Could not create MeasureFormat for locale %s, width %d, status: %s",
-            localeID, (int)width, u_errorName(status));
+            localeID, static_cast<int>(width), u_errorName(status));
         return;
     }
 
     UnicodeString dnam = fmt.getUnitDisplayName(*unit, status);
     if (U_FAILURE(status)) {
         errln("MeasureFormat::getUnitDisplayName failed for unit %s-%s, locale %s, width %d, status: %s",
-            unit->getType(), unit->getSubtype(), localeID, (int)width, u_errorName(status));
+            unit->getType(), unit->getSubtype(), localeID, static_cast<int>(width), u_errorName(status));
         return;
     }
 
     UnicodeString expStr(UnicodeString(expected).unescape());
     if (dnam != expStr) {
         errln("MeasureFormat::getUnitDisplayName for unit %s-%s, locale %s, width %d: expected \"%s\", got \"%s\"",
-            unit->getType(), unit->getSubtype(), localeID, (int)width, CStr(expStr)(), CStr(dnam)());
+            unit->getType(), unit->getSubtype(), localeID, static_cast<int>(width), CStr(expStr)(), CStr(dnam)());
     }
 
     // Delete the measure unit
@@ -5285,16 +5285,16 @@ void MeasureFormatTest::TestFieldPositionMultiple() {
         return;
     }
     Measure first[] = {
-      Measure((double)354, MeasureUnit::createMeter(status), status),
-      Measure((double)23, MeasureUnit::createCentimeter(status), status)};
+      Measure(static_cast<double>(354), MeasureUnit::createMeter(status), status),
+      Measure(static_cast<double>(23), MeasureUnit::createCentimeter(status), status)};
     Measure second[] = {
-      Measure((double)354, MeasureUnit::createMeter(status), status),
-      Measure((double)23, MeasureUnit::createCentimeter(status), status),
-      Measure((double)5.4, MeasureUnit::createMillimeter(status), status)};
+      Measure(static_cast<double>(354), MeasureUnit::createMeter(status), status),
+      Measure(static_cast<double>(23), MeasureUnit::createCentimeter(status), status),
+      Measure(5.4, MeasureUnit::createMillimeter(status), status)};
     Measure third[] = {
-      Measure((double)3, MeasureUnit::createMeter(status), status),
-      Measure((double)23, MeasureUnit::createCentimeter(status), status),
-      Measure((double)5, MeasureUnit::createMillimeter(status), status)};
+      Measure(static_cast<double>(3), MeasureUnit::createMeter(status), status),
+      Measure(static_cast<double>(23), MeasureUnit::createCentimeter(status), status),
+      Measure(static_cast<double>(5), MeasureUnit::createMillimeter(status), status)};
     if (!assertSuccess("Error creating measure objects", status)) {
         return;
     }
@@ -5377,8 +5377,8 @@ void MeasureFormatTest::TestGroupingSeparator() {
         return;
     }
     Measure ms[] = {
-            Measure((int32_t)INT32_MAX, MeasureUnit::createYear(status), status),
-            Measure((int32_t)INT32_MIN, MeasureUnit::createMonth(status), status),
+            Measure(static_cast<int32_t>(INT32_MAX), MeasureUnit::createYear(status), status),
+            Measure(static_cast<int32_t>(INT32_MIN), MeasureUnit::createMonth(status), status),
             Measure(-987.0, MeasureUnit::createDay(status), status),
             Measure(1362.0, MeasureUnit::createHour(status), status),
             Measure(987.0, MeasureUnit::createMinute(status), status)};
@@ -5726,7 +5726,7 @@ void MeasureFormatTest::TestIdentifierDetails() {
 
     static_assert(UMEASURE_PREFIX_INTERNAL_MAX_SI < 99, "Tests assume there is no prefix 99.");
     static_assert(UMEASURE_PREFIX_INTERNAL_MAX_BIN < 99, "Tests assume there is no prefix 99.");
-    MeasureUnit unit = joule.withPrefix((UMeasurePrefix)99, status);
+    MeasureUnit unit = joule.withPrefix(static_cast<UMeasurePrefix>(99), status);
     if (!status.expectErrorAndReset(U_UNSUPPORTED_ERROR)) {
         errln("Invalid prefix should result in an error.");
     }

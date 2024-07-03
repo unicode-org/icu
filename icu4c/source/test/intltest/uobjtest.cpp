@@ -512,7 +512,7 @@ void UObjectTest::testUMemory() {
     UnicodeString *p;
     enum { len=20 };
 
-    p=new(bytes) UnicodeString(len, (UChar32)U'€', len);
+    p = new (bytes) UnicodeString(len, static_cast<UChar32>(U'€'), len);
     if((void *)p!=(void *)bytes) {
         errln("placement new did not place the object at the expected address");
     }

@@ -60,8 +60,8 @@ string TZ_RESOURCE_NAME = ICU_TZ_RESOURCE;
 
 const int64_t SECS_PER_YEAR      = 31536000; // 365 days
 const int64_t SECS_PER_LEAP_YEAR = 31622400; // 366 days
-const int64_t LOWEST_TIME32    = (int64_t)((int32_t)0x80000000);
-const int64_t HIGHEST_TIME32    = (int64_t)((int32_t)0x7fffffff);
+const int64_t LOWEST_TIME32 = static_cast<int64_t>(static_cast<int32_t>(0x80000000));
+const int64_t HIGHEST_TIME32 = static_cast<int64_t>(static_cast<int32_t>(0x7fffffff));
 
 bool isLeap(int32_t y) {
     return (y%4 == 0) && ((y%100 != 0) || (y%400 == 0)); // Gregorian
@@ -242,7 +242,7 @@ int64_t readcoded(ifstream& file, int64_t minv=numeric_limits<int64_t>::min(),
                                int64_t maxv=numeric_limits<int64_t>::max()) {
     unsigned char buf[4]; // must be UNSIGNED
     int64_t val=0;
-    file.read((char*)buf, 4);
+    file.read(reinterpret_cast<char*>(buf), 4);
     for(int32_t i=0,shift=24;i<4;++i,shift-=8) {
         val |= buf[i] << shift;
     }
@@ -260,9 +260,9 @@ int64_t readcoded64(ifstream& file, int64_t minv=numeric_limits<int64_t>::min(),
                                int64_t maxv=numeric_limits<int64_t>::max()) {
     unsigned char buf[8]; // must be UNSIGNED
     int64_t val=0;
-    file.read((char*)buf, 8);
+    file.read(reinterpret_cast<char*>(buf), 8);
     for(int32_t i=0,shift=56;i<8;++i,shift-=8) {
-        val |= (int64_t)buf[i] << shift;
+        val |= static_cast<int64_t>(buf[i]) << shift;
     }
     if (val < minv || val > maxv) {
         ostringstream os;
@@ -279,7 +279,7 @@ bool readbool(ifstream& file) {
     file.read(&c, 1);
     if (c!=0 && c!=1) {
         ostringstream os;
-        os << "boolean value out-of-range: " << (int32_t)c;
+        os << "boolean value out-of-range: " << static_cast<int32_t>(c);
         throw out_of_range(os.str());
     }
     return (c!=0);
@@ -313,7 +313,7 @@ void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData) {
 
     // Read reserved bytes.  The first of these will be a version byte.
     file.read(buf, 15);
-    if (*(ICUZoneinfoVersion*)&buf != TZ_ICU_VERSION) {
+    if (*reinterpret_cast<ICUZoneinfoVersion*>(&buf) != TZ_ICU_VERSION) {
         throw invalid_argument("File version mismatch");
     }
 
@@ -350,8 +350,8 @@ void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData) {
     // Read transition types
     for (i=0; i<timecnt; ++i) {
         unsigned char c;
-        file.read((char*) &c, 1);
-        int32_t t = (int32_t) c;
+        file.read(reinterpret_cast<char*>(&c), 1);
+        int32_t t = static_cast<int32_t>(c);
         if (t < 0 || t >= typecnt) {
             ostringstream os;
             os << "illegal type: " << t << ", expected [0, " << (typecnt-1) << "]";
@@ -406,8 +406,8 @@ void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData) {
         type.isdst = readbool(file);
 
         unsigned char c;
-        file.read((char*) &c, 1);
-        type.abbr = (int32_t) c;
+        file.read(reinterpret_cast<char*>(&c), 1);
+        type.abbr = static_cast<int32_t>(c);
 
         if (type.isdst != (type.dstoffset != 0)) {
             throw invalid_argument("isdst does not reflect dstoffset");
@@ -430,7 +430,7 @@ void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData) {
             // first transition, but no DST is observed.
             int64_t rawoffset0 = (info.types.at(info.transitions.at(0).type)).rawoffset;    
             // Look for matching type
-            for (i=0; i<(int32_t)info.types.size(); ++i) {
+            for (i = 0; i < static_cast<int32_t>(info.types.size()); ++i) {
                 if (info.types.at(i).rawoffset == rawoffset0
                         && info.types.at(i).dstoffset == 0) {
                     initialTypeIdx = i;
@@ -504,7 +504,7 @@ void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData) {
             }
         }
 
-        for (int32_t ii=0;ii<(int32_t) abbrseen.size();++ii) {
+        for (int32_t ii = 0; ii < static_cast<int32_t>(abbrseen.size()); ++ii) {
             if (!abbrseen[ii]) {
                 cerr << "Warning: unused abbreviation: " << ii << endl;
             }
@@ -685,7 +685,7 @@ void scandir(string dir, string prefix="") {
     closedir(dp);
     chdir(pwd);
 
-    for(int32_t i=0;i<(int32_t)subfiles.size();i+=2) {
+    for (int32_t i = 0; i < static_cast<int32_t>(subfiles.size()); i += 2) {
         try {
             handleFile(subfiles[i], subfiles[i+1]);
         } catch (const exception& e) {
@@ -694,7 +694,7 @@ void scandir(string dir, string prefix="") {
             exit(1);
         }
     }
-    for(int32_t i=0;i<(int32_t)subdirs.size();i+=2) {
+    for (int32_t i = 0; i < static_cast<int32_t>(subdirs.size()); i += 2) {
         scandir(subdirs[i], subdirs[i+1]);
     }
 }
@@ -1042,7 +1042,7 @@ void ZoneInfo::print(ostream& os, const string& id) const {
                     os<< ", ";
                 }
                 first = false;
-                os << (int32_t)(trn->time >> 32) << ", " << (int32_t)(trn->time & 0x00000000ffffffff);
+                os << static_cast<int32_t>(trn->time >> 32) << ", " << static_cast<int32_t>(trn->time & 0x00000000ffffffff);
             }
             os << " }" << endl;
         }
@@ -1068,7 +1068,7 @@ void ZoneInfo::print(ostream& os, const string& id) const {
                     os<< ", ";
                 }
                 first = false;
-                os << (int32_t)(trn->time >> 32) << ", " << (int32_t)(trn->time & 0x00000000ffffffff);
+                os << static_cast<int32_t>(trn->time >> 32) << ", " << static_cast<int32_t>(trn->time & 0x00000000ffffffff);
             }
             os << " }" << endl;
         }

@@ -392,10 +392,10 @@ static void appendHexUChar(UnicodeString &dest, UChar32 c) {
         int hexDigit = (c>>bitNum) & 0x0f;
         if (hexDigit != 0 || doZeroes) {
             doZeroes = true;
-            dest.append((char16_t)(hexDigit<=9? hexDigit + 0x30: hexDigit -10 + 0x41));
+            dest.append(static_cast<char16_t>(hexDigit <= 9 ? hexDigit + 0x30 : hexDigit - 10 + 0x41));
         }
     }
-    dest.append((char16_t)0x20);
+    dest.append(static_cast<char16_t>(0x20));
 }
 
 U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
@@ -517,7 +517,7 @@ void IntlTestSpoof::testScriptSet() {
     s1.reset(USCRIPT_ARABIC, status);
     TEST_ASSERT(s1 == s2);
 
-    static constexpr UScriptCode LAST_SCRIPT_CODE = (UScriptCode)(USCRIPT_CODE_LIMIT - 1);
+    static constexpr UScriptCode LAST_SCRIPT_CODE = static_cast<UScriptCode>(USCRIPT_CODE_LIMIT - 1);
     status = U_ZERO_ERROR;
     s1.setAll();
     TEST_ASSERT(s1.test(USCRIPT_COMMON, status));

@@ -46,7 +46,7 @@ printMapping(UCMapping *m, UChar32 *codePoints, uint8_t *bytes, FILE *f) {
     int32_t j;
 
     for(j=0; j<m->uLen; ++j) {
-        fprintf(f, "<U%04lX>", (long)codePoints[j]);
+        fprintf(f, "<U%04lX>", static_cast<long>(codePoints[j]));
     }
 
     fputc(' ', f);
@@ -432,7 +432,7 @@ checkBaseExtBytes(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
 
     result=0;
 
-    isSISO=(UBool)(baseStates->outputType==MBCS_OUTPUT_2_SISO);
+    isSISO = static_cast<UBool>(baseStates->outputType == MBCS_OUTPUT_2_SISO);
 
     for(;;) {
         /* skip irrelevant mappings on both sides */

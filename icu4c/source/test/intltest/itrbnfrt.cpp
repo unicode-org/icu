@@ -306,7 +306,7 @@ RbnfRoundTripTest::doTest(const RuleBasedNumberFormat* formatter,
     } else {
       double rt = (parseResult.getType() == Formattable::kDouble) ? 
         parseResult.getDouble() : 
-        (double)parseResult.getLong();
+        static_cast<double>(parseResult.getLong());
 
       if (rt != i) {
         snprintf(buf, sizeof(buf), "Round-trip failed: %.12g -> %.12g", i, rt);
@@ -333,7 +333,7 @@ RbnfRoundTripTest::doTest(const RuleBasedNumberFormat* formatter,
       } else {
         double rt = (parseResult.getType() == Formattable::kDouble) ? 
           parseResult.getDouble() : 
-          (double)parseResult.getLong();
+          static_cast<double>(parseResult.getLong());
 
         if (rt != d) {
           UnicodeString msg;

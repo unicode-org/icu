@@ -211,9 +211,9 @@ TimeZoneBoundaryTest::verifyDST(UDate d, TimeZone* time_zone, UBool expUseDaylig
     GregorianCalendar *gc = new GregorianCalendar(time_zone->clone(), status);
     gc->setTime(d, status);
     if (failure(status, "GregorianCalendar::setTime")) return;
-    int32_t offset = time_zone->getOffset((uint8_t)gc->get(UCAL_ERA, status),
+    int32_t offset = time_zone->getOffset(static_cast<uint8_t>(gc->get(UCAL_ERA, status)),
         gc->get(UCAL_YEAR, status), gc->get(UCAL_MONTH, status),
-        gc->get(UCAL_DATE, status), (uint8_t)gc->get(UCAL_DAY_OF_WEEK, status),
+        gc->get(UCAL_DATE, status), static_cast<uint8_t>(gc->get(UCAL_DAY_OF_WEEK, status)),
         ((gc->get(UCAL_HOUR_OF_DAY, status) * 60 + gc->get(UCAL_MINUTE, status)) * 60 + gc->get(UCAL_SECOND, status)) * 1000 + gc->get(UCAL_MILLISECOND, status),
         status);
     if (failure(status, "GregorianCalendar::get")) return;
@@ -427,7 +427,7 @@ TimeZoneBoundaryTest::TestNewRules()
         SimpleTimeZone *tz;
         logln("-----------------------------------------------------------------");
         logln("Aug 2ndTues .. Mar 15");
-        tz = new SimpleTimeZone(- 8 * (int32_t)ONE_HOUR, "Test_1", UCAL_AUGUST, 2, UCAL_TUESDAY, 2 * (int32_t)ONE_HOUR, UCAL_MARCH, 15, 0, 2 * (int32_t)ONE_HOUR, status);
+        tz = new SimpleTimeZone(-8 * static_cast<int32_t>(ONE_HOUR), "Test_1", UCAL_AUGUST, 2, UCAL_TUESDAY, 2 * static_cast<int32_t>(ONE_HOUR), UCAL_MARCH, 15, 0, 2 * static_cast<int32_t>(ONE_HOUR), status);
         logln("========================================");
         testUsingBinarySearch(tz, date(97, 0, 1), 858416400000.0);
         logln("========================================");
@@ -435,7 +435,7 @@ TimeZoneBoundaryTest::TestNewRules()
         delete tz;
         logln("-----------------------------------------------------------------");
         logln("Apr Wed>=14 .. Sep Sun<=20");
-        tz = new SimpleTimeZone(- 8 * (int32_t)ONE_HOUR, "Test_2", UCAL_APRIL, 14, - UCAL_WEDNESDAY, 2 *(int32_t)ONE_HOUR, UCAL_SEPTEMBER, - 20, - UCAL_SUNDAY, 2 * (int32_t)ONE_HOUR, status);
+        tz = new SimpleTimeZone(-8 * static_cast<int32_t>(ONE_HOUR), "Test_2", UCAL_APRIL, 14, -UCAL_WEDNESDAY, 2 * static_cast<int32_t>(ONE_HOUR), UCAL_SEPTEMBER, -20, -UCAL_SUNDAY, 2 * static_cast<int32_t>(ONE_HOUR), status);
         logln("========================================");
         testUsingBinarySearch(tz, date(97, 0, 1), 861184800000.0);
         logln("========================================");

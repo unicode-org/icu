@@ -351,7 +351,7 @@ _getStringOrCopyKey(const char *path, const char *locale,
         }
     } else {
         /* no string from a resource bundle: convert the substitute */
-        length=(int32_t)uprv_strlen(substitute);
+        length = static_cast<int32_t>(uprv_strlen(substitute));
         u_charsToUChars(substitute, dest, uprv_min(length, destCapacity));
         errorCode = U_USING_DEFAULT_WARNING;
     }

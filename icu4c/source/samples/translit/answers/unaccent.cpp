@@ -35,13 +35,13 @@ UnaccentTransliterator::~UnaccentTransliterator() {
 char16_t UnaccentTransliterator::unaccent(char16_t c) const {
     UnicodeString str(c);
     UErrorCode status = U_ZERO_ERROR;
-    UnaccentTransliterator* t = (UnaccentTransliterator*)this;
+    UnaccentTransliterator* t = const_cast<UnaccentTransliterator*>(this);
 
     t->normalizer.setText(str, status);
     if (U_FAILURE(status)) {
         return c;
     }
-    return (char16_t) t->normalizer.next();
+    return static_cast<char16_t>(t->normalizer.next());
 }
 
 /**

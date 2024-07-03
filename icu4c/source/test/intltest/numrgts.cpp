@@ -69,7 +69,7 @@ public:
             Formattable&            result, 
             ParsePosition&          /* parsePosition */) const override
     {
-        result.setLong((int32_t)0);
+        result.setLong(static_cast<int32_t>(0));
     }
   
     virtual void parse(    const UnicodeString&    text, 
@@ -334,7 +334,7 @@ void NumberFormatRegressionTest::Test4087245()
     FieldPosition pos(FieldPosition::DONT_CARE);
     logln(UnicodeString("format(") + n + ") = " + 
         df->format(n, buf1, pos));
-    symbols->setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, UnicodeString((char16_t)0x70)); // change value of field
+    symbols->setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, UnicodeString(static_cast<char16_t>(0x70))); // change value of field
     logln(UnicodeString("format(") + n + ") = " +
         df->format(n, buf2, pos));
     if(buf1 != buf2)
@@ -387,7 +387,7 @@ void NumberFormatRegressionTest::Test4088503()
     UnicodeString sBuf;
     FieldPosition fp(FieldPosition::DONT_CARE);
     //try {
-        logln(df->format((int32_t)123, sBuf, fp));
+        logln(df->format(static_cast<int32_t>(123), sBuf, fp));
         //if(fp == FieldPosition(FieldPosition::DONT_CARE))
         //    errln("Test for bug 4088503 failed.");
     /*} catch (Exception foo) {
@@ -425,7 +425,7 @@ NumberFormatRegressionTest::assignFloatValue(float returnfloat)
     Formattable result;
     nfcommon->parse(stringValue, result, status);
     failure(status, "nfcommon->parse", Locale::getUS());
-    float floatResult = (float) (result.getType() == Formattable::kDouble 
+    float floatResult = static_cast<float>(result.getType() == Formattable::kDouble
                                         ? result.getDouble() : result.getLong());
     if( uprv_fabs(floatResult - returnfloat) > 0.0001)
     //String stringValue = nfcommon.format(returnfloat).substring(1);
@@ -540,8 +540,8 @@ void NumberFormatRegressionTest::Test4086575()
     logln("nf toLocPattern2: " + nf->toLocalizedPattern(temp));
 
     FieldPosition pos(FieldPosition::DONT_CARE);
-    logln("nf: " + nf->format((int32_t)1234, temp, pos)); // 1234,00
-    logln("nf: " + nf->format((int32_t)-1234, temp, pos)); // (1234,00)
+    logln("nf: " + nf->format(static_cast<int32_t>(1234), temp, pos));  // 1234,00
+    logln("nf: " + nf->format(static_cast<int32_t>(-1234), temp, pos)); // (1234,00)
 
     // Space as group separator
 
@@ -558,7 +558,7 @@ void NumberFormatRegressionTest::Test4086575()
     logln("nf toPattern2: " + nf->toPattern(temp));
     logln("nf toLocPattern2: " + nf->toLocalizedPattern(temp));
     UnicodeString buffer;
-    buffer = nf->format((int32_t)1234, buffer, pos);
+    buffer = nf->format(static_cast<int32_t>(1234), buffer, pos);
     //if (buffer != UnicodeString("1\u00a0234,00"))
     char16_t c[] = {
         0x31, 0x202f, 0x32, 0x33, 0x34, 0x2c, 0x30, 0x30
@@ -568,7 +568,7 @@ void NumberFormatRegressionTest::Test4086575()
         errln("nf : " + buffer); // Expect 1 234,00
     
     buffer.remove();
-    buffer = nf->format((int32_t)-1234, buffer, pos);
+    buffer = nf->format(static_cast<int32_t>(-1234), buffer, pos);
     char16_t c1[] = {
         0x28, 0x31, 0x202f, 0x32, 0x33, 0x34, 0x2c, 0x30, 0x30, 0x29
     };
@@ -811,28 +811,28 @@ void NumberFormatRegressionTest::Test4092480()
         if (dfFoo->toPattern(temp) != UnicodeString("0000"))
             errln("ERROR: dfFoo.toPattern : " + dfFoo->toPattern(temp));
         FieldPosition pos(FieldPosition::DONT_CARE);
-        logln(dfFoo->format((int32_t)42, temp, pos));
-        logln(dfFoo->format((int32_t)-42, temp, pos));
+        logln(dfFoo->format(static_cast<int32_t>(42), temp, pos));
+        logln(dfFoo->format(static_cast<int32_t>(-42), temp, pos));
         dfFoo->applyPattern("000;-000", status);
         failure(status, "dfFoo->applyPattern");
         if (dfFoo->toPattern(temp) != UnicodeString("000"))
             errln("ERROR: dfFoo.toPattern : " + dfFoo->toPattern(temp));
-        logln(dfFoo->format((int32_t)42,temp, pos));
-        logln(dfFoo->format((int32_t)-42, temp, pos));
+        logln(dfFoo->format(static_cast<int32_t>(42), temp, pos));
+        logln(dfFoo->format(static_cast<int32_t>(-42), temp, pos));
 
         dfFoo->applyPattern("000;-0000", status);
         failure(status, "dfFoo->applyPattern");
         if (dfFoo->toPattern(temp) != UnicodeString("000"))
             errln("ERROR: dfFoo.toPattern : " + dfFoo->toPattern(temp));
-        logln(dfFoo->format((int32_t)42, temp, pos));
-        logln(dfFoo->format((int32_t)-42, temp, pos));
+        logln(dfFoo->format(static_cast<int32_t>(42), temp, pos));
+        logln(dfFoo->format(static_cast<int32_t>(-42), temp, pos));
 
         dfFoo->applyPattern("0000;-000", status);
         failure(status, "dfFoo->applyPattern");
         if (dfFoo->toPattern(temp) != UnicodeString("0000"))
             errln("ERROR: dfFoo.toPattern : " + dfFoo->toPattern(temp));
-        logln(dfFoo->format((int32_t)42, temp, pos));
-        logln(dfFoo->format((int32_t)-42, temp, pos));
+        logln(dfFoo->format(static_cast<int32_t>(42), temp, pos));
+        logln(dfFoo->format(static_cast<int32_t>(-42), temp, pos));
     /*} catch (Exception foo) {
         errln("Message " + foo.getMessage());
     }*/
@@ -876,9 +876,9 @@ void NumberFormatRegressionTest::Test4087244() {
     FieldPosition pos;
     df->format(1.23, str, pos);
     UnicodeString monStr("1x23");
-    monStr.replace((int32_t)1, 1, monSep);
+    monStr.replace(static_cast<int32_t>(1), 1, monSep);
     UnicodeString decStr("1x23");
-    decStr.replace((int32_t)1, 1, decSep);
+    decStr.replace(static_cast<int32_t>(1), 1, decSep);
     if (str.indexOf(monStr) >= 0 && str.indexOf(decStr) < 0) {
         logln(UnicodeString("OK: 1.23 -> \"") + str + "\" contains \"" +
               monStr + "\" and not \"" + decStr + '"');
@@ -1367,16 +1367,16 @@ void NumberFormatRegressionTest::Test4061302()
     }
     UnicodeString monDecSeparatorStr;
     monDecSeparatorStr.append(monDecSeparator);
-    logln((UnicodeString)"Before set ==> Currency : " + currency +(UnicodeString)" Intl Currency : " + intlCurrency + (UnicodeString)" Monetary Decimal Separator : " + monDecSeparatorStr);
+    logln(UnicodeString("Before set ==> Currency : ") + currency + UnicodeString(" Intl Currency : ") + intlCurrency + UnicodeString(" Monetary Decimal Separator : ") + monDecSeparatorStr);
     fmt->setSymbol(DecimalFormatSymbols::kCurrencySymbol, UnicodeString("XYZ"));
     fmt->setSymbol(DecimalFormatSymbols::kIntlCurrencySymbol, UnicodeString("ABC"));
-    fmt->setSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol, UnicodeString((char16_t)0x002A/*'*'*/));
+    fmt->setSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol, UnicodeString(static_cast<char16_t>(0x002A)/*'*'*/));
     currency = fmt->getSymbol(DecimalFormatSymbols::kCurrencySymbol);
     intlCurrency = fmt->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol);
     monDecSeparator = fmt->getSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol);
     if (currency != UnicodeString("XYZ") ||
         intlCurrency != UnicodeString("ABC") ||
-        monDecSeparator != UnicodeString((char16_t)0x002A/*'*'*/)) {
+        monDecSeparator != UnicodeString(static_cast<char16_t>(0x002A)/*'*'*/)) {
         errln("setCurrencySymbols failed.");
     }
     monDecSeparatorStr.remove();
@@ -1754,7 +1754,7 @@ void NumberFormatRegressionTest::Test4122840()
             fmt2->format(1.111, result2, pos);
             
             if (result1 != result2) {
-                errln("Results for " + (UnicodeString)(locales[i].getName()) + " differ: " +
+                errln("Results for " + UnicodeString(locales[i].getName()) + " differ: " +
                         result1 + " vs " + result2);
             }
         
@@ -1819,7 +1819,7 @@ void NumberFormatRegressionTest::Test4134034()
             errln("9.02 -> " + f + "; want 9.02");
 
         f.remove();
-        f = nf->format((int32_t)0, f, pos);
+        f = nf->format(static_cast<int32_t>(0), f, pos);
         if (f == UnicodeString(".00")) 
             logln(f + " ok"); 
         else 
@@ -1948,7 +1948,7 @@ void NumberFormatRegressionTest::Test4145457() {
     }
 
     DecimalFormatSymbols *sym = const_cast<DecimalFormatSymbols*>(nf->getDecimalFormatSymbols());
-    sym->setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, (char16_t)/*'\''*/0x0027);
+    sym->setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, static_cast<char16_t>(0x0027));
     nf->setDecimalFormatSymbols(*sym);
     double pi = 3.14159;
     
@@ -2335,23 +2335,23 @@ void NumberFormatRegressionTest::Test4212072() {
     UnicodeString s;
     FieldPosition pos;
 
-    sym.setSymbol(DecimalFormatSymbols::kMinusSignSymbol, (char16_t)0x5e);
+    sym.setSymbol(DecimalFormatSymbols::kMinusSignSymbol, static_cast<char16_t>(0x5e));
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
-    if (fmt.format((int32_t)-1, s, pos) != UNICODE_STRING("^1", 2)) {
+    if (fmt.format(static_cast<int32_t>(-1), s, pos) != UNICODE_STRING("^1", 2)) {
         errln(UnicodeString("FAIL: -1 x (minus=^) -> ") + s +
               ", exp ^1");
     }
     s.remove();
-    if (fmt.getNegativePrefix(s) != UnicodeString((char16_t)0x5e)) {
+    if (fmt.getNegativePrefix(s) != UnicodeString(static_cast<char16_t>(0x5e))) {
         errln(UnicodeString("FAIL: (minus=^).getNegativePrefix -> ") +
               s + ", exp ^");
     }
-    sym.setSymbol(DecimalFormatSymbols::kMinusSignSymbol, (char16_t)0x2d);
+    sym.setSymbol(DecimalFormatSymbols::kMinusSignSymbol, static_cast<char16_t>(0x2d));
 
     fmt.applyPattern(UnicodeString("#%"), status);
     failure(status, "applyPattern percent");
-    sym.setSymbol(DecimalFormatSymbols::kPercentSymbol, (char16_t)0x5e);
+    sym.setSymbol(DecimalFormatSymbols::kPercentSymbol, static_cast<char16_t>(0x5e));
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
     if (fmt.format(0.25, s, pos) != UNICODE_STRING("25^", 3)) {
@@ -2359,15 +2359,15 @@ void NumberFormatRegressionTest::Test4212072() {
               ", exp 25^");
     }
     s.remove();
-    if (fmt.getPositiveSuffix(s) != UnicodeString((char16_t)0x5e)) {
+    if (fmt.getPositiveSuffix(s) != UnicodeString(static_cast<char16_t>(0x5e))) {
         errln(UnicodeString("FAIL: (percent=^).getPositiveSuffix -> ") +
               s + ", exp ^");
     }
-    sym.setSymbol(DecimalFormatSymbols::kPercentSymbol, (char16_t)0x25);
+    sym.setSymbol(DecimalFormatSymbols::kPercentSymbol, static_cast<char16_t>(0x25));
 
     fmt.applyPattern(str("#\\u2030"), status);
     failure(status, "applyPattern permill");
-    sym.setSymbol(DecimalFormatSymbols::kPerMillSymbol, (char16_t)0x5e);
+    sym.setSymbol(DecimalFormatSymbols::kPerMillSymbol, static_cast<char16_t>(0x5e));
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
     if (fmt.format(0.25, s, pos) != UNICODE_STRING("250^", 4)) {
@@ -2375,11 +2375,11 @@ void NumberFormatRegressionTest::Test4212072() {
               ", exp 250^");
     }
     s.remove();
-    if (fmt.getPositiveSuffix(s) != UnicodeString((char16_t)0x5e)) {
+    if (fmt.getPositiveSuffix(s) != UnicodeString(static_cast<char16_t>(0x5e))) {
         errln(UnicodeString("FAIL: (permill=^).getPositiveSuffix -> ") +
               s + ", exp ^");
     }
-    sym.setSymbol(DecimalFormatSymbols::kPerMillSymbol, (char16_t)0x2030);
+    sym.setSymbol(DecimalFormatSymbols::kPerMillSymbol, static_cast<char16_t>(0x2030));
 
     fmt.applyPattern(str("\\u00A4#.00"), status);
     failure(status, "applyPattern currency");
@@ -2519,7 +2519,7 @@ void NumberFormatRegressionTest::Test4216742() {
     int32_t DATA[] = { INT32_MIN, INT32_MAX, -100000000, 100000000 };
     int DATA_length = UPRV_LENGTHOF(DATA);
     for (int i=0; i<DATA_length; ++i) {
-        UnicodeString str((UnicodeString)"" + DATA[i]);
+        UnicodeString str(UnicodeString("") + DATA[i]);
         for (int m = 1; m <= 100; m++) {
             fmt->setMultiplier(m);
             Formattable num;
@@ -2531,7 +2531,7 @@ void NumberFormatRegressionTest::Test4216742() {
                       toString(num));
             } else {
                 double d = num.getType() == Formattable::kDouble ?
-                    num.getDouble() : (double) num.getLong();
+                    num.getDouble() : static_cast<double>(num.getLong());
                 if ((d > 0) != (DATA[i] > 0)) {
                     errln(UnicodeString("\"") + str + "\" parse(x " +
                           fmt->getMultiplier() +
@@ -2687,14 +2687,14 @@ void NumberFormatRegressionTest::TestJ691() {
     // create a Calendar for this locale
     LocalPointer<Calendar> cal(Calendar::createInstance(loc, status));
     if (U_FAILURE(status)) {
-        dataerrln("FAIL: Calendar::createInstance() returned " + (UnicodeString)u_errorName(status));
+        dataerrln("FAIL: Calendar::createInstance() returned " + UnicodeString(u_errorName(status)));
         return;
     }
 
     // create a NumberFormat for this locale
     LocalPointer<NumberFormat> nf(NumberFormat::createInstance(loc, status));
     if (U_FAILURE(status)) {
-        dataerrln("FAIL: NumberFormat::createInstance() returned " + (UnicodeString)u_errorName(status));
+        dataerrln("FAIL: NumberFormat::createInstance() returned " + UnicodeString(u_errorName(status)));
         return;
     }
 
@@ -2707,7 +2707,7 @@ void NumberFormatRegressionTest::TestJ691() {
     // create the DateFormat
     LocalPointer<DateFormat> df(DateFormat::createDateInstance(DateFormat::kShort, loc));
     if (U_FAILURE(status)) {
-        errln("FAIL: DateFormat::createInstance() returned " + (UnicodeString)u_errorName(status));
+        errln("FAIL: DateFormat::createInstance() returned " + UnicodeString(u_errorName(status)));
         return;
     }
 

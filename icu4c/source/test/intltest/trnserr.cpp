@@ -117,7 +117,7 @@ void TransliteratorErrorTest::TestTransliteratorErrors() {
     pos.contextLimit = testString.length();
     pos.limit = testString.length() -1;
     pos.start = 5;
-    t->transliterate(testString, pos, (UChar32)0x0061, status);
+    t->transliterate(testString, pos, static_cast<UChar32>(0x0061), status);
     if (len == pos.limit) {
         errln("FAIL: Test insertion with character: the transliteration position limit didn't change as expected.");
         if (U_SUCCESS(status)) {

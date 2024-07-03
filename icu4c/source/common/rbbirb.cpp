@@ -103,7 +103,7 @@ RBBIRuleBuilder::~RBBIRuleBuilder() {
 
     int        i;
     for (i=0; ; i++) {
-        RBBINode *n = (RBBINode *)fUSetNodes->elementAt(i);
+        RBBINode* n = static_cast<RBBINode*>(fUSetNodes->elementAt(i));
         if (n==nullptr) {
             break;
         }
@@ -182,7 +182,7 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
     }
 #endif
 
-    RBBIDataHeader  *data     = (RBBIDataHeader *)uprv_malloc(totalSize);
+    RBBIDataHeader* data = static_cast<RBBIDataHeader*>(uprv_malloc(totalSize));
     if (data == nullptr) {
         *fStatus = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
@@ -213,16 +213,16 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
 
     uprv_memset(data->fReserved, 0, sizeof(data->fReserved));
 
-    fForwardTable->exportTable((uint8_t *)data + data->fFTable);
-    fForwardTable->exportSafeTable((uint8_t *)data + data->fRTable);
-    fSetBuilder->serializeTrie ((uint8_t *)data + data->fTrie);
+    fForwardTable->exportTable(reinterpret_cast<uint8_t*>(data) + data->fFTable);
+    fForwardTable->exportSafeTable(reinterpret_cast<uint8_t*>(data) + data->fRTable);
+    fSetBuilder->serializeTrie(reinterpret_cast<uint8_t*>(data) + data->fTrie);
 
-    int32_t *ruleStatusTable = (int32_t *)((uint8_t *)data + data->fStatusTable);
+    int32_t* ruleStatusTable = reinterpret_cast<int32_t*>(reinterpret_cast<uint8_t*>(data) + data->fStatusTable);
     for (i=0; i<fRuleStatusVals->size(); i++) {
         ruleStatusTable[i] = fRuleStatusVals->elementAti(i);
     }
 
-    u_strToUTF8WithSub((char *)data+data->fRuleSource, rulesSize, &rulesLengthInUTF8,
+    u_strToUTF8WithSub(reinterpret_cast<char*>(data) + data->fRuleSource, rulesSize, &rulesLengthInUTF8,
                        fStrippedRules.getBuffer(), fStrippedRules.length(),
                        0xfffd, nullptr, fStatus);
     if (U_FAILURE(*fStatus)) {

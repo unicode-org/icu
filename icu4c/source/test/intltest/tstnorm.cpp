@@ -369,9 +369,9 @@ void BasicNormalizerTest::TestZeroIndex() {
             UnicodeString exp(DATA[i+1], "");
             exp = exp.unescape();
             if (b == exp) {
-                logln((UnicodeString)"Ok: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b));
+                logln(UnicodeString("Ok: ") + hex(a) + " x COMPOSE_COMPAT => " + hex(b));
             } else {
-                errln((UnicodeString)"FAIL: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b) +
+                errln(UnicodeString("FAIL: ") + hex(a) + " x COMPOSE_COMPAT => " + hex(b) +
                       ", expect " + hex(exp));
             }
         }
@@ -381,9 +381,9 @@ void BasicNormalizerTest::TestZeroIndex() {
         } else {
             UnicodeString exp = UnicodeString(DATA[i+2], "").unescape();
             if (a == exp) {
-                logln((UnicodeString)"Ok: " + hex(b) + " x DECOMP => " + hex(a));
+                logln(UnicodeString("Ok: ") + hex(b) + " x DECOMP => " + hex(a));
             } else {
-                errln((UnicodeString)"FAIL: " + hex(b) + " x DECOMP => " + hex(a) +
+                errln(UnicodeString("FAIL: ") + hex(b) + " x DECOMP => " + hex(a) +
                       ", expect " + hex(exp));
             }
         }
@@ -496,7 +496,7 @@ UnicodeString BasicNormalizerTest::hex(char16_t ch) {
 UnicodeString BasicNormalizerTest::hex(const UnicodeString& s) {
     UnicodeString result;
     for (int i = 0; i < s.length(); ++i) {
-        if (i != 0) result += (char16_t)0x2c/*,*/;
+        if (i != 0) result += static_cast<char16_t>(0x2c)/*,*/;
         appendHex(s[i], 4, result);
     }
     return result;
@@ -881,7 +881,7 @@ void BasicNormalizerTest::TestConcatenate() {
 static int32_t
 ref_norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t options, UErrorCode &errorCode) {
     UnicodeString r1, r2, t1, t2;
-    int32_t normOptions=(int32_t)(options>>UNORM_COMPARE_NORM_OPTIONS_SHIFT);
+    int32_t normOptions = static_cast<int32_t>(options >> UNORM_COMPARE_NORM_OPTIONS_SHIFT);
 
     if(options&U_COMPARE_IGNORE_CASE) {
         Normalizer::decompose(s1, false, normOptions, r1, errorCode);
@@ -907,7 +907,7 @@ ref_norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t opti
 // test wrapper for Normalizer::compare, sets UNORM_INPUT_IS_FCD appropriately
 static int32_t
 _norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t options, UErrorCode &errorCode) {
-    int32_t normOptions=(int32_t)(options>>UNORM_COMPARE_NORM_OPTIONS_SHIFT);
+    int32_t normOptions = static_cast<int32_t>(options >> UNORM_COMPARE_NORM_OPTIONS_SHIFT);
 
     if( UNORM_YES==Normalizer::quickCheck(s1, UNORM_FCD, normOptions, errorCode) &&
         UNORM_YES==Normalizer::quickCheck(s2, UNORM_FCD, normOptions, errorCode)) {
@@ -1160,7 +1160,7 @@ BasicNormalizerTest::TestCompare() {
     while(it.next() && !it.isString()) {
         UChar32 c=it.getCodepoint();
         if(!nfcNorm2->getDecomposition(c, s2)) {
-            dataerrln("NFC.getDecomposition(i-composite U+%04lx) failed", (long)c);
+            dataerrln("NFC.getDecomposition(i-composite U+%04lx) failed", static_cast<long>(c));
             return;
         }
 
@@ -1801,15 +1801,15 @@ BasicNormalizerTest::TestNormalizeIllFormedText() {
     // ICU currently treats ill-formed sequences as normalization-inert
     // and copies them unchanged.
     UnicodeString src(u"  A");
-    src.append((char16_t)0xD800).append(u"ÄA\u0308").append((char16_t)0xD900).
-        append(u"A\u0308\u00ad\u0323").append((char16_t)0xDBFF).
-        append(u"Ä\u0323,\u00ad").append((char16_t)0xDC00).
-        append(u"\u1100\u1161가\u11A8가\u3133  ").append((char16_t)0xDFFF);
+    src.append(static_cast<char16_t>(0xD800)).append(u"ÄA\u0308").append(static_cast<char16_t>(0xD900)).
+        append(u"A\u0308\u00ad\u0323").append(static_cast<char16_t>(0xDBFF)).
+        append(u"Ä\u0323,\u00ad").append(static_cast<char16_t>(0xDC00)).
+        append(u"\u1100\u1161가\u11A8가\u3133  ").append(static_cast<char16_t>(0xDFFF));
     UnicodeString expected(u"  a");
-    expected.append((char16_t)0xD800).append(u"ää").append((char16_t)0xD900).
-        append(u"ạ\u0308").append((char16_t)0xDBFF).
-        append(u"ạ\u0308,").append((char16_t)0xDC00).
-        append(u"가각갃  ").append((char16_t)0xDFFF);
+    expected.append(static_cast<char16_t>(0xD800)).append(u"ää").append(static_cast<char16_t>(0xD900)).
+        append(u"ạ\u0308").append(static_cast<char16_t>(0xDBFF)).
+        append(u"ạ\u0308,").append(static_cast<char16_t>(0xDC00)).
+        append(u"가각갃  ").append(static_cast<char16_t>(0xDFFF));
     UnicodeString result = nfkc_cf->normalize(src, errorCode);
     assertSuccess("normalize", errorCode.get());
     assertEquals("normalize", expected, result);

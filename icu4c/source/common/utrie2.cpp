@@ -552,7 +552,7 @@ enumEitherTrie(const UTrie2 *trie,
             }
             for(; i2<i2Limit; ++i2) {
                 if(idx!=nullptr) {
-                    block=(int32_t)idx[i2Block+i2]<<UTRIE2_INDEX_SHIFT;
+                    block = static_cast<int32_t>(idx[i2Block + i2]) << UTRIE2_INDEX_SHIFT;
                 } else {
                     block=trie->newTrie->index2[i2Block+i2];
                 }

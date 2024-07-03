@@ -113,11 +113,15 @@ void AstroTest::TestLunarPosition() {
 
   for (int32_t i = 0; i < UPRV_LENGTHOF(tests); i++) {
     gc->clear();
-    gc->set((int32_t)tests[i][0], (int32_t)tests[i][1]-1, (int32_t)tests[i][2], (int32_t)tests[i][3], (int32_t)tests[i][4]);
+    gc->set(static_cast<int32_t>(tests[i][0]),
+            static_cast<int32_t>(tests[i][1]) - 1,
+            static_cast<int32_t>(tests[i][2]),
+            static_cast<int32_t>(tests[i][3]),
+            static_cast<int32_t>(tests[i][4]));
     CalendarAstronomer astro(gc->getTime(status));
 
     const CalendarAstronomer::Equatorial& result = astro.getMoonPosition();
-    logln((UnicodeString)"Moon position is " + result.toString() + (UnicodeString)";  " /* + result->toHmsString()*/);
+    logln(UnicodeString("Moon position is ") + result.toString() + UnicodeString(";  ") /* + result->toHmsString()*/);
   }
 
   close(status);
@@ -134,7 +138,7 @@ void AstroTest::TestCoordinates() {
   CalendarAstronomer::Equatorial result;
   CalendarAstronomer astro;
   astro.eclipticToEquatorial(result, 139.686111 * CalendarAstronomer::PI / 180.0, 4.875278* CalendarAstronomer::PI / 180.0);
-  logln((UnicodeString)"result is " + result.toString() + (UnicodeString)";  " /* + result.toHmsString()*/ );
+  logln(UnicodeString("result is ") + result.toString() + UnicodeString(";  ") /* + result.toHmsString()*/);
   close(status);
   ASSERT_OK(status);
 }
@@ -167,8 +171,8 @@ void AstroTest::TestCoverage() {
     CalendarAstronomer *anAstro = astronomers[i];
 
     //logln("astro: " + astro);
-    logln((UnicodeString)"   date: " + anAstro->getTime());
-    logln((UnicodeString)"   equ ecl: " + (anAstro->eclipticToEquatorial(eq,eclLat,eclLong)).toString());
+    logln(UnicodeString("   date: ") + anAstro->getTime());
+    logln(UnicodeString("   equ ecl: ") + (anAstro->eclipticToEquatorial(eq, eclLat, eclLong)).toString());
   }
 
   delete myastro;
@@ -265,21 +269,28 @@ void AstroTest::TestMoonAge(){
 	static const double precision = CalendarAstronomer::PI/32;
 	for (int32_t i = 0; i < UPRV_LENGTHOF(testcase); i++) {
 		gc->clear();
-		logln((UnicodeString)"CASE["+i+"]: Year "+(int32_t)testcase[i][0]+" Month "+(int32_t)testcase[i][1]+" Day "+
-		                                    (int32_t)testcase[i][2]+" Hour "+(int32_t)testcase[i][3]+" Minutes "+(int32_t)testcase[i][4]+
-		                                    " Seconds "+(int32_t)testcase[i][5]);
-		gc->set((int32_t)testcase[i][0], (int32_t)testcase[i][1]-1, (int32_t)testcase[i][2], (int32_t)testcase[i][3], (int32_t)testcase[i][4], (int32_t)testcase[i][5]);
+                logln(UnicodeString("CASE[") + i +
+                      "]: Year " + static_cast<int32_t>(testcase[i][0]) +
+                      " Month " + static_cast<int32_t>(testcase[i][1]) +
+                      " Day " + static_cast<int32_t>(testcase[i][2]) +
+                      " Hour " + static_cast<int32_t>(testcase[i][3]) +
+                      " Minutes " + static_cast<int32_t>(testcase[i][4]) +
+                      " Seconds " + static_cast<int32_t>(testcase[i][5]));
+                gc->set(static_cast<int32_t>(testcase[i][0]),
+                        static_cast<int32_t>(testcase[i][1]) - 1,
+                        static_cast<int32_t>(testcase[i][2]),
+                        static_cast<int32_t>(testcase[i][3]),
+                        static_cast<int32_t>(testcase[i][4]),
+                        static_cast<int32_t>(testcase[i][5]));
                 CalendarAstronomer astro(gc->getTime(status));
 		double expectedAge = (angle[i]*CalendarAstronomer::PI)/180;
 		double got = astro.getMoonAge();
 		//logln(testString);
 		if(!(got>expectedAge-precision && got<expectedAge+precision)){
-			errln((UnicodeString)"FAIL: expected " + expectedAge +
-					" got " + got);
-		}else{
-			logln((UnicodeString)"PASS: expected " + expectedAge +
-					" got " + got);
-		}
+                    errln(UnicodeString("FAIL: expected ") + expectedAge + " got " + got);
+                } else {
+                    logln(UnicodeString("PASS: expected ") + expectedAge + " got " + got);
+                }
 	}
 	close(status);
 	ASSERT_OK(status);

@@ -288,7 +288,7 @@ private:
 
             if(err == U_BUFFER_OVERFLOW_ERROR){
                 err=U_ZERO_ERROR;
-                wDest =(wchar_t*) malloc(sizeof(wchar_t) * (reqLen));
+                wDest = static_cast<wchar_t*>(malloc(sizeof(wchar_t) * (reqLen)));
                 wDestLen = reqLen;
                 u_strToWCS(wDest,wDestLen,&reqLen,uSrc,uSrcLen,&err);
             }
@@ -305,7 +305,7 @@ private:
 
             if(err == U_BUFFER_OVERFLOW_ERROR){
                 err=U_ZERO_ERROR;
-                wDest =(wchar_t*) malloc(sizeof(wchar_t) * (reqLen+1));
+                wDest = static_cast<wchar_t*>(malloc(sizeof(wchar_t) * (reqLen + 1)));
                 wDestLen = reqLen+1;
                 u_strToWCS(wDest,wDestLen,&reqLen,uSrc,uSrcLen-1,&err);
             }
@@ -537,17 +537,17 @@ inline void StdLibCatenate(const wchar_t* src,int32_t srcLen, stlstring s0)
 
 inline void StdLibScan(const wchar_t* src,int32_t srcLen, stlstring s0)
 {
-    scan_idx = (int) sScan_STRING.find('.');	
+    scan_idx = static_cast<int>(sScan_STRING.find('.'));
 }
 
 inline void StdLibScan1(const wchar_t* src,int32_t srcLen, stlstring s0)
 {
-    scan_idx = (int) sScan_STRING.find(L"123");
+    scan_idx = static_cast<int>(sScan_STRING.find(L"123"));
 }
 
 inline void StdLibScan2(const wchar_t* src,int32_t srcLen, stlstring s0)
 {	
-    scan_idx = (int) sScan_STRING.find_first_of(L"sm");
+    scan_idx = static_cast<int>(sScan_STRING.find_first_of(L"sm"));
 }
 
 #endif // STRINGPERF_H

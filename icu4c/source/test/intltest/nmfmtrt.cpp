@@ -67,10 +67,10 @@ NumberFormatRoundTripTest::randLong()
     // that the system rand() function is very poor, which it always is.
     uint32_t d;
     uint32_t i;
-    char* poke = (char*)&d;
+    char* poke = reinterpret_cast<char*>(&d);
     for (i=0; i < sizeof(uint32_t); ++i)
     {
-        poke[i] = (char)(rand() & 0xFF);
+        poke[i] = static_cast<char>(rand() & 0xFF);
     }
     return d;
 }
@@ -155,9 +155,9 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
     test(fmt, -uprv_getInfinity());
 #endif
 
-    test(fmt, (int32_t)500);
-    test(fmt, (int32_t)0);
-    test(fmt, (int32_t)-0);
+    test(fmt, static_cast<int32_t>(500));
+    test(fmt, static_cast<int32_t>(0));
+    test(fmt, static_cast<int32_t>(-0));
     test(fmt, 0.0);
     double negZero = 0.0; negZero /= -1.0;
     test(fmt, negZero);
@@ -297,7 +297,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
 
     if (show) {
         errln(/*value.getString(temp) +*/ typeOf(value, temp) + " F> " +
-            escape(s) + " P> " + (n.getType() == Formattable::kDouble ? n.getDouble() : (double)n.getLong())
+            escape(s) + " P> " + (n.getType() == Formattable::kDouble ? n.getDouble() : static_cast<double>(n.getLong()))
             /*n.getString(temp) */ + typeOf(n, temp) + " F> " +
             escape(s2));
     }

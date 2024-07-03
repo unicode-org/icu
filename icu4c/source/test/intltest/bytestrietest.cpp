@@ -176,10 +176,10 @@ void BytesTrieTest::TestBranches() {
         { "t", 0x400000 },
         { "uu", 0x800000 },
         { "vv", 0x7fffffff },
-        { "zz", (int32_t)0x80000000 }
+        { "zz", static_cast<int32_t>(0x80000000) }
     };
     for(int32_t length=2; length<=UPRV_LENGTHOF(data); ++length) {
-        logln("TestBranches length=%d", (int)length);
+        logln("TestBranches length=%d", static_cast<int>(length));
         checkData(data, length);
     }
 }
@@ -223,7 +223,7 @@ void BytesTrieTest::TestLongBranch() {
         { "r", 0x333333 },
         { "s2345", 0x4444444 },
         { "t234567890", 0x77777777 },
-        { "z", (int32_t)0x80000001 }
+        { "z", static_cast<int32_t>(0x80000001) }
     };
     checkData(data, UPRV_LENGTHOF(data));
 }
@@ -633,17 +633,17 @@ void BytesTrieTest::TestDelta() {
             assertEquals(UnicodeString(u"differently encoded delta ") + delta +
                             u" at byte index " + i, b0, b1);
         }
-        const uint8_t *start = (const uint8_t *)intBytes0;
+        const uint8_t* start = reinterpret_cast<const uint8_t*>(intBytes0);
         const uint8_t *pos = BytesTrie::jumpByDelta(start);
         assertEquals(UnicodeString(u"roundtrip for delta ") + delta,
-                     delta, (size_t)(pos - start) - length0);
+                     delta, static_cast<size_t>(pos - start) - length0);
     }
 }
 
 void BytesTrieTest::checkData(const StringAndValue data[], int32_t dataLength) {
-    logln("checkData(dataLength=%d, fast)", (int)dataLength);
+    logln("checkData(dataLength=%d, fast)", static_cast<int>(dataLength));
     checkData(data, dataLength, USTRINGTRIE_BUILD_FAST);
-    logln("checkData(dataLength=%d, small)", (int)dataLength);
+    logln("checkData(dataLength=%d, small)", static_cast<int>(dataLength));
     checkData(data, dataLength, USTRINGTRIE_BUILD_SMALL);
 }
 
@@ -690,7 +690,7 @@ BytesTrie *BytesTrieTest::buildTrie(const StringAndValue data[], int32_t dataLen
             errln("builder.build().add(zzz) did not set U_NO_WRITE_PERMISSION");
         }
     }
-    logln("serialized trie size: %ld bytes\n", (long)sp.length());
+    logln("serialized trie size: %ld bytes\n", static_cast<long>(sp.length()));
     StringPiece sp2=builder_->buildStringPiece(buildOption, errorCode);
     if(sp.data()==sp2.data()) {
         errln("builder.buildStringPiece() before & after build() returned same array");
@@ -743,8 +743,8 @@ void BytesTrieTest::checkNext(BytesTrie &trie,
         } else if(trie.getValue()!=data[i].value) {
             errln("trie value for %s is %ld=0x%lx instead of expected %ld=0x%lx",
                   data[i].s,
-                  (long)trie.getValue(), (long)trie.getValue(),
-                  (long)data[i].value, (long)data[i].value);
+                  static_cast<long>(trie.getValue()), static_cast<long>(trie.getValue()),
+                  static_cast<long>(data[i].value), static_cast<long>(data[i].value));
         } else if(result!=trie.current() || trie.getValue()!=data[i].value) {
             errln("trie value for %s changes when repeating current()/getValue()", data[i].s);
         }
@@ -861,8 +861,8 @@ void BytesTrieTest::checkNextWithState(BytesTrie &trie,
         } else if(trie.getValue()!=data[i].value) {
             errln("trie value for %s is %ld=0x%lx instead of expected %ld=0x%lx",
                   data[i].s,
-                  (long)trie.getValue(), (long)trie.getValue(),
-                  (long)data[i].value, (long)data[i].value);
+                  static_cast<long>(trie.getValue()), static_cast<long>(trie.getValue()),
+                  static_cast<long>(data[i].value), static_cast<long>(data[i].value));
         }
         trie.reset();
     }
@@ -916,8 +916,8 @@ void BytesTrieTest::checkNextWithState64(BytesTrie &trie,
         } else if(trie.getValue()!=data[i].value) {
             errln("trie value for %s is %ld=0x%lx instead of expected %ld=0x%lx",
                   data[i].s,
-                  (long)trie.getValue(), (long)trie.getValue(),
-                  (long)data[i].value, (long)data[i].value);
+                  static_cast<long>(trie.getValue()), static_cast<long>(trie.getValue()),
+                  static_cast<long>(data[i].value), static_cast<long>(data[i].value));
         }
         trie.reset();
     }
@@ -957,26 +957,26 @@ void BytesTrieTest::checkIterator(BytesTrie::Iterator &iter,
     IcuTestErrorCode errorCode(*this, "checkIterator()");
     for(int32_t i=0; i<dataLength; ++i) {
         if(!iter.hasNext()) {
-            errln("trie iterator hasNext()=false for item %d: %s", (int)i, data[i].s);
+            errln("trie iterator hasNext()=false for item %d: %s", static_cast<int>(i), data[i].s);
             break;
         }
         UBool hasNext=iter.next(errorCode);
-        if(errorCode.errIfFailureAndReset("trie iterator next() for item %d: %s", (int)i, data[i].s)) {
+        if (errorCode.errIfFailureAndReset("trie iterator next() for item %d: %s", static_cast<int>(i), data[i].s)) {
             break;
         }
         if(!hasNext) {
-            errln("trie iterator next()=false for item %d: %s", (int)i, data[i].s);
+            errln("trie iterator next()=false for item %d: %s", static_cast<int>(i), data[i].s);
             break;
         }
         if(iter.getString()!=StringPiece(data[i].s)) {
             errln("trie iterator next().getString()=%s but expected %s for item %d",
-                  iter.getString().data(), data[i].s, (int)i);
+                  iter.getString().data(), data[i].s, static_cast<int>(i));
         }
         if(iter.getValue()!=data[i].value) {
             errln("trie iterator next().getValue()=%ld=0x%lx but expected %ld=0x%lx for item %d: %s",
-                  (long)iter.getValue(), (long)iter.getValue(),
-                  (long)data[i].value, (long)data[i].value,
-                  (int)i, data[i].s);
+                  static_cast<long>(iter.getValue()), static_cast<long>(iter.getValue()),
+                  static_cast<long>(data[i].value), static_cast<long>(data[i].value),
+                  static_cast<int>(i), data[i].s);
         }
     }
     if(iter.hasNext()) {

@@ -636,19 +636,19 @@ public:
                 return UnicodeString(buf, "");
             }
         case Formattable::kString:
-            return UnicodeString((char16_t)U_DQUOTE).append(f.getString()).append((char16_t)U_DQUOTE);
+            return UnicodeString(static_cast<char16_t>(U_DQUOTE)).append(f.getString()).append(static_cast<char16_t>(U_DQUOTE));
         case Formattable::kArray:
             {
                 int32_t i, count;
                 const Formattable* array = f.getArray(count);
-                UnicodeString result((char16_t)U_LEFT_SQUARE_BRACKET);
+                UnicodeString result(static_cast<char16_t>(U_LEFT_SQUARE_BRACKET));
                 for (i=0; i<count; ++i) {
                     if (i > 0) {
-                        (result += (char16_t)U_COMMA) += (char16_t)U_SPACE;
+                        (result += static_cast<char16_t>(U_COMMA)) += static_cast<char16_t>(U_SPACE);
                     }
                     result += formattableToString(array[i]);
                 }
-                result += (char16_t)U_RIGHT_SQUARE_BRACKET;
+                result += static_cast<char16_t>(U_RIGHT_SQUARE_BRACKET);
                 return result;
             }
         default:
@@ -759,7 +759,7 @@ private:
 		for(uint32_t k=0;k<listSize;k++) {
 			collation_strings[k] = collation_strings_escaped[k].unescape();
 		}
-		UnicodeString shorty((UChar32)0x12345);
+		UnicodeString shorty(static_cast<UChar32>(0x12345));
 	}
 public:
 	

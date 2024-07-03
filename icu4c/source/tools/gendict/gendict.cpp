@@ -44,7 +44,7 @@
 UDate startTime;
 
 static int elapsedTime() {
-  return (int)uprv_floor((uprv_getRawUTCtime()-startTime)/1000.0);
+  return static_cast<int>(uprv_floor((uprv_getRawUTCtime() - startTime) / 1000.0));
 }
 
 U_NAMESPACE_USE
@@ -148,18 +148,18 @@ public:
 private:
     char transform(UChar32 c, UErrorCode &status) {
         if (transformType == DictionaryData::TRANSFORM_TYPE_OFFSET) {
-            if (c == 0x200D) { return (char)0xFF; }
-            else if (c == 0x200C) { return (char)0xFE; }
+            if (c == 0x200D) { return static_cast<char>(0xFF); }
+            else if (c == 0x200C) { return static_cast<char>(0xFE); }
             int32_t delta = c - transformConstant;
             if (delta < 0 || 0xFD < delta) {
                 fprintf(stderr, "Codepoint U+%04lx out of range for --transform offset-%04lx!\n",
-                        (long)c, (long)transformConstant);
+                        static_cast<long>(c), static_cast<long>(transformConstant));
                 exit(U_ILLEGAL_ARGUMENT_ERROR); // TODO: should return and print the line number
             }
-            return (char)delta;
+            return static_cast<char>(delta);
         } else { // no such transform type 
             status = U_INTERNAL_PROGRAM_ERROR;
-            return (char)c; // it should be noted this transform type will not generally work
+            return static_cast<char>(c); // it should be noted this transform type will not generally work
         }
     }
 
@@ -187,7 +187,7 @@ public:
                 usageAndDie(U_ILLEGAL_ARGUMENT_ERROR);
             }
             transformType = DictionaryData::TRANSFORM_TYPE_OFFSET;
-            transformConstant = (UChar32)base;
+            transformConstant = static_cast<UChar32>(base);
         }
         else {
             fprintf(stderr, "Invalid transform specified: %s\n", t);
@@ -216,7 +216,7 @@ public:
     }
 
     int32_t getTransform() {
-        return (int32_t)(transformType | transformConstant); 
+        return (transformType | transformConstant);
     }
 };
 #endif
@@ -231,7 +231,7 @@ static UBool readLine(UCHARBUF *f, UnicodeString &fileLine, IcuToolErrorCode &er
     // Strip trailing CR/LF, comments, and spaces.
     const char16_t *comment = u_memchr(line, 0x23, lineLength);  // '#'
     if(comment != nullptr) {
-        lineLength = (int32_t)(comment - line);
+        lineLength = static_cast<int32_t>(comment - line);
     } else {
         while(lineLength > 0 && (line[lineLength - 1] == CARRIAGE_RETURN_CHARACTER || line[lineLength - 1] == LINEFEED_CHARACTER)) { --lineLength; }
     }
@@ -372,12 +372,12 @@ int  main(int argc, char **argv) {
             fileLine.extract(valueStart, valueLength, s, 16, US_INV);
             char *end;
             unsigned long value = uprv_strtoul(s, &end, 0);
-            if (end == s || *end != 0 || (int32_t)uprv_strlen(s) != valueLength || value > 0xffffffff) {
+            if (end == s || *end != 0 || static_cast<int32_t>(uprv_strlen(s)) != valueLength || value > 0xffffffff) {
                 fprintf(stderr, "Error: value syntax error or value too large on line %i!\n", lineCount);
                 isOk = false;
                 continue;
             }
-            dict.addWord(fileLine.tempSubString(0, keyLen), (int32_t)value, status);
+            dict.addWord(fileLine.tempSubString(0, keyLen), static_cast<int32_t>(value), status);
             hasValues = true;
             wordCount++;
             if (keyLen < minlen) minlen = keyLen;
@@ -474,7 +474,7 @@ int  main(int argc, char **argv) {
             exit(status.reset());
         }
 
-        if (bytesWritten != (size_t)size) {
+        if (bytesWritten != static_cast<size_t>(size)) {
             fprintf(stderr, "Error writing to output file \"%s\"\n", outFileName);
             exit(U_INTERNAL_PROGRAM_ERROR);
         }

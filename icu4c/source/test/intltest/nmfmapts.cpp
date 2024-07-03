@@ -125,30 +125,30 @@ if (cur_fr != nullptr)
     FieldPosition pos1(FieldPosition::DONT_CARE), pos2(FieldPosition::DONT_CARE), pos3(FieldPosition::DONT_CARE), pos4(FieldPosition::DONT_CARE);
     
     res1 = cur_fr->format(d, res1);
-    logln( (UnicodeString) "" + (int32_t) d + " formatted to " + res1);
+    logln(UnicodeString("") + static_cast<int32_t>(d) + " formatted to " + res1);
 
     res2 = cur_fr->format(l, res2);
-    logln((UnicodeString) "" + (int32_t) l + " formatted to " + res2);
+    logln(UnicodeString("") + l + " formatted to " + res2);
 
     res3 = cur_fr->format(d, res3, pos1);
-    logln( (UnicodeString) "" + (int32_t) d + " formatted to " + res3);
+    logln(UnicodeString("") + static_cast<int32_t>(d) + " formatted to " + res3);
 
     res4 = cur_fr->format(l, res4, pos2);
-    logln((UnicodeString) "" + (int32_t) l + " formatted to " + res4);
+    logln(UnicodeString("") + l + " formatted to " + res4);
 
     status = U_ZERO_ERROR;
     res5 = cur_fr->format(fD, res5, pos3, status);
     if(U_FAILURE(status)) {
         errln("ERROR: format(Formattable [double]) failed");
     }
-    logln((UnicodeString) "" + (int32_t) fD.getDouble() + " formatted to " + res5);
+    logln(UnicodeString("") + static_cast<int32_t>(fD.getDouble()) + " formatted to " + res5);
 
     status = U_ZERO_ERROR;
     res6 = cur_fr->format(fL, res6, pos4, status);
     if(U_FAILURE(status)) {
         errln("ERROR: format(Formattable [long]) failed");
     }
-    logln((UnicodeString) "" + fL.getLong() + " formatted to " + res6);
+    logln(UnicodeString("") + fL.getLong() + " formatted to " + res6);
 }
 
 // ======= Test parse()
@@ -164,13 +164,13 @@ if (fr != nullptr)
     if(result1.getType() != Formattable::kDouble && result1.getDouble() != d) {
         errln("ERROR: Roundtrip failed (via parse()) for " + text);
     }
-    logln(text + " parsed into " + (int32_t) result1.getDouble());
+    logln(text + " parsed into " + static_cast<int32_t>(result1.getDouble()));
 
     fr->parse(text, result2, pos01);
     if(result2.getType() != Formattable::kDouble && result2.getDouble() != d) {
         errln("ERROR: Roundtrip failed (via parse()) for " + text);
     }
-    logln(text + " parsed into " + (int32_t) result2.getDouble());
+    logln(text + " parsed into " + static_cast<int32_t>(result2.getDouble()));
 
     status = U_ZERO_ERROR;
     fr->parse(text, result3, status);
@@ -180,7 +180,7 @@ if (fr != nullptr)
     if(result3.getType() != Formattable::kDouble && result3.getDouble() != d) {
         errln("ERROR: Roundtrip failed (via parse()) for " + text);
     }
-    logln(text + " parsed into " + (int32_t) result3.getDouble());
+    logln(text + " parsed into " + static_cast<int32_t>(result3.getDouble()));
 }
 
 // ======= Test getters and setters
@@ -190,7 +190,7 @@ if (fr != nullptr && def != nullptr)
 
     int32_t count = 0;
     const Locale *locales = NumberFormat::getAvailableLocales(count);
-    logln((UnicodeString) "Got " + count + " locales" );
+    logln(UnicodeString("Got ") + count + " locales");
     for(int32_t i = 0; i < count; i++) {
         UnicodeString name(locales[i].getName(),"");
         logln(name);
@@ -345,12 +345,12 @@ IntlTestNumberFormatAPI::testRegistration()
         unum_formatDouble(uf4.getAlias(), n, ures4, 50, nullptr, &status);
         unum_formatDouble(uf5.getAlias(), n, ures5, 50, nullptr, &status);
 
-        logln((UnicodeString)"f0 swap int: " + res0);
-        logln((UnicodeString)"f1 src int: " + res1);
-        logln((UnicodeString)"f2 src cur: " + res2);
-        logln((UnicodeString)"f3 reg cur: " + res3);
-        logln((UnicodeString)"f4 reg int: " + res4);
-        logln((UnicodeString)"f5 unreg cur: " + res5);
+        logln(UnicodeString("f0 swap int: ") + res0);
+        logln(UnicodeString("f1 src int: ") + res1);
+        logln(UnicodeString("f2 src cur: ") + res2);
+        logln(UnicodeString("f3 reg cur: ") + res3);
+        logln(UnicodeString("f4 reg int: ") + res4);
+        logln(UnicodeString("f5 unreg cur: ") + res5);
         log("uf3 reg cur: ");
         logln(ures3);
         log("uf4 reg int: ");

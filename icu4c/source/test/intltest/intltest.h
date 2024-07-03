@@ -407,7 +407,7 @@ protected:
     static UnicodeString &appendHex(uint32_t number, int32_t digits, UnicodeString &target);
     static UnicodeString toHex(uint32_t number, int32_t digits=-1);
     static inline UnicodeString toHex(int32_t number, int32_t digits=-1) {
-        return toHex((uint32_t)number, digits);
+        return toHex(static_cast<uint32_t>(number), digits);
     }
 
 public:

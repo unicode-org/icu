@@ -97,7 +97,7 @@ UBool processOptions(int argc, const char **argv, OptSpec opts[])
             if (strcmp(pOpt->name, pArgName) == 0) {
                 switch (pOpt->type) {
                 case OptSpec::FLAG:
-                    *(UBool *)(pOpt->pVar) = true;
+                    *static_cast<UBool*>(pOpt->pVar) = true;
                     break;
                 case OptSpec::STRING:
                     argNum ++;
@@ -106,7 +106,7 @@ UBool processOptions(int argc, const char **argv, OptSpec opts[])
 							    pOpt->name);
                         return false;
                     }
-                    *(const char **)(pOpt->pVar) = argv[argNum];
+                    *static_cast<const char**>(pOpt->pVar) = argv[argNum];
                     break;
                 case OptSpec::NUM:
                     argNum ++;
@@ -123,7 +123,7 @@ UBool processOptions(int argc, const char **argv, OptSpec opts[])
 								pOpt->name);
                         return false;
                     }
-                    *(int *)(pOpt->pVar) = i;
+                    *static_cast<int*>(pOpt->pVar) = i;
                 }
                 break;
             }

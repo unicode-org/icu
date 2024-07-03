@@ -139,7 +139,7 @@ void TestMessageFormat2::testCustomFunctionsComplexMessage(IcuTestErrorCode& err
     TestCase test = testBuilder.setArgument(host, jane.getAlias())
         .setArgument(hostGender, "female")
         .setArgument(guest, john.getAlias())
-        .setArgument(guestCount, (int64_t) 3)
+        .setArgument(guestCount, static_cast<int64_t>(3))
         .setExpected("Ms. Jane Doe invites 3 people, including Mr. John Doe, to her party.")
         .setExpectSuccess()
         .build();
@@ -148,7 +148,7 @@ void TestMessageFormat2::testCustomFunctionsComplexMessage(IcuTestErrorCode& err
     test = testBuilder.setArgument(host, jane.getAlias())
                                 .setArgument(hostGender, "female")
                                 .setArgument(guest, john.getAlias())
-                                .setArgument(guestCount, (int64_t) 2)
+                                .setArgument(guestCount, static_cast<int64_t>(2))
                                 .setExpected("Ms. Jane Doe invites Mr. John Doe and one other person to her party.")
                                 .setExpectSuccess()
                                 .build();
@@ -157,7 +157,7 @@ void TestMessageFormat2::testCustomFunctionsComplexMessage(IcuTestErrorCode& err
     test = testBuilder.setArgument(host, jane.getAlias())
                                 .setArgument(hostGender, "female")
                                 .setArgument(guest, john.getAlias())
-                                .setArgument(guestCount, (int64_t) 1)
+                                .setArgument(guestCount, static_cast<int64_t>(1))
                                 .setExpected("Ms. Jane Doe invites Mr. John Doe to her party.")
                                 .setExpectSuccess()
                                 .build();
@@ -166,7 +166,7 @@ void TestMessageFormat2::testCustomFunctionsComplexMessage(IcuTestErrorCode& err
     test = testBuilder.setArgument(host, john.getAlias())
                                 .setArgument(hostGender, "male")
                                 .setArgument(guest, jane.getAlias())
-                                .setArgument(guestCount, (int64_t) 3)
+                                .setArgument(guestCount, static_cast<int64_t>(3))
                                 .setExpected("Mr. John Doe invites 3 people, including Ms. Jane Doe, to his party.")
                                 .setExpectSuccess()
                                 .build();
@@ -175,7 +175,7 @@ void TestMessageFormat2::testCustomFunctionsComplexMessage(IcuTestErrorCode& err
     test = testBuilder.setArgument(host, anonymous.getAlias())
                                 .setArgument(hostGender, "unknown")
                                 .setArgument(guest, jane.getAlias())
-                                .setArgument(guestCount, (int64_t) 2)
+                                .setArgument(guestCount, static_cast<int64_t>(2))
                                 .setExpected("Mx. Anonymous Doe invites Ms. Jane Doe and one other person to their party.")
                                 .setExpectSuccess()
                                 .build();
@@ -673,7 +673,7 @@ void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
     TestCase::Builder testBuilder;
     testBuilder.setLocale(Locale("ro"));
     testBuilder.setFunctionRegistry(&reg);
-    testBuilder.setPattern(*((UnicodeString*) properties->get("firefox")));
+    testBuilder.setPattern(*static_cast<UnicodeString*>(properties->get("firefox")));
     testBuilder.setName("message-ref");
 
     TestCase test = testBuilder.setArgument("gcase", "whatever")
@@ -685,7 +685,7 @@ void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
                                 .build();
     TestUtils::runTestCase(*this, test, errorCode);
 
-    testBuilder.setPattern(*((UnicodeString*) properties->get("chrome")));
+    testBuilder.setPattern(*static_cast<UnicodeString*>(properties->get("chrome")));
 
     test = testBuilder.setArgument("gcase", "whatever")
                                 .setExpected("Chrome")

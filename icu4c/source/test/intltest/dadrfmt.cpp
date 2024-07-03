@@ -174,7 +174,9 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
                 errln("case %d: could not parse spec as style fields: %s", n, u_errorName(status));
                 continue;
             }
-            format = DateFormat::createDateTimeInstance((DateFormat::EStyle)styleSet.getDateStyle(), (DateFormat::EStyle)styleSet.getTimeStyle(), loc);
+            format = DateFormat::createDateTimeInstance(
+                static_cast<DateFormat::EStyle>(styleSet.getDateStyle()),
+                static_cast<DateFormat::EStyle>(styleSet.getTimeStyle()), loc);
             if(format == nullptr ) {
                 errln("case %d: could not create SimpleDateFormat from styles.", n);
                 continue;
@@ -212,14 +214,14 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
             cal->clear();
             cal->setTime(now, status);
             for (int q=0; q<UCAL_FIELD_COUNT; q++) {
-                if (fromSet.isSet((UCalendarDateFields)q)) {
+                if (fromSet.isSet(static_cast<UCalendarDateFields>(q))) {
                     //int32_t oldv = cal->get((UCalendarDateFields)q, status);
                     if (q == UCAL_DATE) {
-                        cal->add((UCalendarDateFields)q,
-                                    fromSet.get((UCalendarDateFields)q), status);
+                        cal->add(static_cast<UCalendarDateFields>(q),
+                                 fromSet.get(static_cast<UCalendarDateFields>(q)), status);
                     } else {
-                        cal->set((UCalendarDateFields)q,
-                                    fromSet.get((UCalendarDateFields)q));
+                        cal->set(static_cast<UCalendarDateFields>(q),
+                                 fromSet.get(static_cast<UCalendarDateFields>(q)));
                     }
                     //int32_t newv = cal->get((UCalendarDateFields)q, status);
                 }
@@ -305,7 +307,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
 //                diffSet.clear();
                 if (!fromSet.matches(cal, diffSet, status)) {
                     UnicodeString diffs = diffSet.diffFrom(fromSet, status);
-                    errln((UnicodeString)"FAIL: "+caseString
+                    errln(UnicodeString("FAIL: ") + caseString
                             +", Differences: '"+ diffs
                             +"', status: "+ u_errorName(status));
                 } else if (U_FAILURE(status)) {
