@@ -16,6 +16,7 @@
 
 #include <algorithm>
 #include <array>
+#include <list>
 #include <set>
 #include <sstream>
 #include <stdio.h>
@@ -1542,7 +1543,7 @@ class RBBIMonkeyKind {
 public:
     // Return a UVector of UnicodeSets, representing the character classes used
     //   for this type of iterator.
-    virtual  UVector  *charClasses() = 0;
+    virtual const std::vector<UnicodeSet>& charClasses() = 0;
 
     // Set the test text on which subsequent calls to next() will operate
     virtual  void      setText(const UnicodeString &s) = 0;
@@ -1604,9 +1605,9 @@ std::string RBBIMonkeyKind::getAppliedRule(int32_t position){
 
 std::string RBBIMonkeyKind::classNameFromCodepoint(const UChar32 c) {
     // Simply iterate through charClasses to find character's class
-    for (int aClassNum = 0; aClassNum < charClasses()->size(); aClassNum++) {
-        UnicodeSet *classSet = static_cast<UnicodeSet *>(charClasses()->elementAt(aClassNum));
-        if (classSet->contains(c)) {
+    for (std::size_t aClassNum = 0; aClassNum < charClasses().size(); aClassNum++) {
+        const UnicodeSet& classSet = charClasses()[aClassNum];
+        if (classSet.contains(c)) {
             return classNames[aClassNum];
         }
     }
@@ -1616,7 +1617,7 @@ std::string RBBIMonkeyKind::classNameFromCodepoint(const UChar32 c) {
 
 unsigned int RBBIMonkeyKind::maxClassNameSize() {
     unsigned int maxSize = 0;
-    for (int aClassNum = 0; aClassNum < charClasses()->size(); aClassNum++) {
+    for (std::size_t aClassNum = 0; aClassNum < charClasses().size(); aClassNum++) {
         auto aClassNumSize = static_cast<unsigned int>(classNames[aClassNum].size());
         if (aClassNumSize > maxSize) {
             maxSize = aClassNumSize;
@@ -1652,11 +1653,11 @@ class RBBICharMonkey: public RBBIMonkeyKind {
 public:
     RBBICharMonkey();
     virtual          ~RBBICharMonkey();
-    virtual  UVector *charClasses() override;
+    virtual const std::vector<UnicodeSet>& charClasses() override;
     virtual  void     setText(const UnicodeString &s) override;
     virtual  int32_t  next(int32_t i) override;
 private:
-    UVector   *fSets;
+    std::vector<UnicodeSet> sets;
 
     UnicodeSet  *fCRLFSet;
     UnicodeSet  *fControlSet;
@@ -1716,24 +1717,24 @@ RBBICharMonkey::RBBICharMonkey() {
 
     // Create sets of characters, and add the names of the above character sets.
     // In each new ICU release, add new names corresponding to the sets above.
-    fSets             = new UVector(status);
 
     // Important: Keep class names the same as the class contents.
-    fSets->addElement(fCRLFSet, status); classNames.emplace_back("CRLF");
-    fSets->addElement(fControlSet, status); classNames.emplace_back("Control");
-    fSets->addElement(fExtendSet, status); classNames.emplace_back("Extended");
-    fSets->addElement(fRegionalIndicatorSet, status); classNames.emplace_back("RegionalIndicator");
+    // TODO(egg): Use logic similar to line breaking.
+    sets.emplace_back(*fCRLFSet); classNames.emplace_back("CRLF");
+    sets.emplace_back(*fControlSet); classNames.emplace_back("Control");
+    sets.emplace_back(*fExtendSet); classNames.emplace_back("Extended");
+    sets.emplace_back(*fRegionalIndicatorSet); classNames.emplace_back("RegionalIndicator");
     if (!fPrependSet->isEmpty()) {
-        fSets->addElement(fPrependSet, status); classNames.emplace_back("Prepend");
+        sets.emplace_back(*fPrependSet); classNames.emplace_back("Prepend");
     }
-    fSets->addElement(fSpacingSet, status); classNames.emplace_back("Spacing");
-    fSets->addElement(fHangulSet, status); classNames.emplace_back("Hangul");
-    fSets->addElement(fZWJSet, status); classNames.emplace_back("ZWJ");
-    fSets->addElement(fExtendedPictSet, status); classNames.emplace_back("ExtendedPict");
-    fSets->addElement(fViramaSet, status); classNames.emplace_back("Virama");
-    fSets->addElement(fLinkingConsonantSet, status); classNames.emplace_back("LinkingConsonant");
-    fSets->addElement(fExtCccZwjSet, status); classNames.emplace_back("ExtCcccZwj");
-    fSets->addElement(fAnySet, status); classNames.emplace_back("Any");
+    sets.emplace_back(*fSpacingSet); classNames.emplace_back("Spacing");
+    sets.emplace_back(*fHangulSet); classNames.emplace_back("Hangul");
+    sets.emplace_back(*fZWJSet); classNames.emplace_back("ZWJ");
+    sets.emplace_back(*fExtendedPictSet); classNames.emplace_back("ExtendedPict");
+    sets.emplace_back(*fViramaSet); classNames.emplace_back("Virama");
+    sets.emplace_back(*fLinkingConsonantSet); classNames.emplace_back("LinkingConsonant");
+    sets.emplace_back(*fExtCccZwjSet); classNames.emplace_back("ExtCcccZwj");
+    sets.emplace_back(*fAnySet); classNames.emplace_back("Any");
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -1900,12 +1901,11 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
 
 
 
-UVector  *RBBICharMonkey::charClasses() {
-    return fSets;
+const std::vector<UnicodeSet>& RBBICharMonkey::charClasses() {
+    return sets;
 }
 
 RBBICharMonkey::~RBBICharMonkey() {
-    delete fSets;
     delete fCRLFSet;
     delete fControlSet;
     delete fExtendSet;
@@ -1936,11 +1936,11 @@ class RBBIWordMonkey: public RBBIMonkeyKind {
 public:
     RBBIWordMonkey();
     virtual          ~RBBIWordMonkey();
-    virtual  UVector *charClasses() override;
+    virtual const std::vector<UnicodeSet>& charClasses() override;
     virtual  void     setText(const UnicodeString &s) override;
     virtual int32_t   next(int32_t i) override;
 private:
-    UVector      *fSets;
+    std::vector<UnicodeSet> sets;
 
     UnicodeSet  *fCRSet;
     UnicodeSet  *fLFSet;
@@ -1971,8 +1971,6 @@ private:
 RBBIWordMonkey::RBBIWordMonkey()
 {
     UErrorCode  status = U_ZERO_ERROR;
-
-    fSets            = new UVector(status);
 
     fCRSet            = new UnicodeSet(u"[\\p{Word_Break = CR}]",           status);
     fLFSet            = new UnicodeSet(u"[\\p{Word_Break = LF}]",           status);
@@ -2042,31 +2040,31 @@ RBBIWordMonkey::RBBIWordMonkey()
     fOtherSet->removeAll(*fDictionarySet);
 
     // Add classes and their names
-    fSets->addElement(fCRSet, status); classNames.emplace_back("CR");
-    fSets->addElement(fLFSet, status); classNames.emplace_back("LF");
-    fSets->addElement(fNewlineSet, status); classNames.emplace_back("Newline");
-    fSets->addElement(fRegionalIndicatorSet, status); classNames.emplace_back("RegionalIndicator");
-    fSets->addElement(fHebrew_LetterSet, status); classNames.emplace_back("Hebrew");
-    fSets->addElement(fALetterSet, status); classNames.emplace_back("ALetter");
-    fSets->addElement(fSingle_QuoteSet, status); classNames.emplace_back("Single Quote");
-    fSets->addElement(fDouble_QuoteSet, status); classNames.emplace_back("Double Quote");
+    sets.emplace_back(*fCRSet); classNames.emplace_back("CR");
+    sets.emplace_back(*fLFSet); classNames.emplace_back("LF");
+    sets.emplace_back(*fNewlineSet); classNames.emplace_back("Newline");
+    sets.emplace_back(*fRegionalIndicatorSet); classNames.emplace_back("RegionalIndicator");
+    sets.emplace_back(*fHebrew_LetterSet); classNames.emplace_back("Hebrew");
+    sets.emplace_back(*fALetterSet); classNames.emplace_back("ALetter");
+    sets.emplace_back(*fSingle_QuoteSet); classNames.emplace_back("Single Quote");
+    sets.emplace_back(*fDouble_QuoteSet); classNames.emplace_back("Double Quote");
     // Omit Katakana from fSets, which omits Katakana characters
     // from the test data. They are all in the dictionary set,
     // which this (old, to be retired) monkey test cannot handle.
-    //fSets->addElement(fKatakanaSet, status);
+    //sets.emplace_back(*fKatakanaSet);
 
-    fSets->addElement(fMidLetterSet, status); classNames.emplace_back("MidLetter");
-    fSets->addElement(fMidNumLetSet, status); classNames.emplace_back("MidNumLet");
-    fSets->addElement(fMidNumSet, status); classNames.emplace_back("MidNum");
-    fSets->addElement(fNumericSet, status); classNames.emplace_back("Numeric");
-    fSets->addElement(fFormatSet, status); classNames.emplace_back("Format");
-    fSets->addElement(fExtendSet, status); classNames.emplace_back("Extend");
-    fSets->addElement(fOtherSet, status); classNames.emplace_back("Other");
-    fSets->addElement(fExtendNumLetSet, status); classNames.emplace_back("ExtendNumLet");
-    fSets->addElement(fWSegSpaceSet, status); classNames.emplace_back("WSegSpace");
+    sets.emplace_back(*fMidLetterSet); classNames.emplace_back("MidLetter");
+    sets.emplace_back(*fMidNumLetSet); classNames.emplace_back("MidNumLet");
+    sets.emplace_back(*fMidNumSet); classNames.emplace_back("MidNum");
+    sets.emplace_back(*fNumericSet); classNames.emplace_back("Numeric");
+    sets.emplace_back(*fFormatSet); classNames.emplace_back("Format");
+    sets.emplace_back(*fExtendSet); classNames.emplace_back("Extend");
+    sets.emplace_back(*fOtherSet); classNames.emplace_back("Other");
+    sets.emplace_back(*fExtendNumLetSet); classNames.emplace_back("ExtendNumLet");
+    sets.emplace_back(*fWSegSpaceSet); classNames.emplace_back("WSegSpace");
 
-    fSets->addElement(fZWJSet, status); classNames.emplace_back("ZWJ");
-    fSets->addElement(fExtendedPictSet, status); classNames.emplace_back("ExtendedPict");
+    sets.emplace_back(*fZWJSet); classNames.emplace_back("ZWJ");
+    sets.emplace_back(*fExtendedPictSet); classNames.emplace_back("ExtendedPict");
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2271,12 +2269,11 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
 }
 
 
-UVector  *RBBIWordMonkey::charClasses() {
-    return fSets;
+const std::vector<UnicodeSet>& RBBIWordMonkey::charClasses() {
+    return sets;
 }
 
 RBBIWordMonkey::~RBBIWordMonkey() {
-    delete fSets;
     delete fCRSet;
     delete fLFSet;
     delete fNewlineSet;
@@ -2313,7 +2310,7 @@ class RBBISentMonkey: public RBBIMonkeyKind {
 public:
     RBBISentMonkey();
     virtual          ~RBBISentMonkey();
-    virtual  UVector *charClasses() override;
+    virtual const std::vector<UnicodeSet>& charClasses() override;
     virtual  void     setText(const UnicodeString &s) override;
     virtual int32_t   next(int32_t i) override;
 private:
@@ -2321,7 +2318,7 @@ private:
     int               moveForward(int posFrom);
     UChar32           cAt(int pos);
 
-    UVector      *fSets;
+    std::vector<UnicodeSet> sets;
 
     UnicodeSet  *fSepSet;
     UnicodeSet  *fFormatSet;
@@ -2343,8 +2340,6 @@ private:
 RBBISentMonkey::RBBISentMonkey()
 {
     UErrorCode  status = U_ZERO_ERROR;
-
-    fSets            = new UVector(status);
 
     //  Separator Set Note:  Beginning with Unicode 5.1, CR and LF were removed from the separator
     //                       set and made into character classes of their own.  For the monkey impl,
@@ -2382,19 +2377,19 @@ RBBISentMonkey::RBBISentMonkey()
     fOtherSet->removeAll(*fCloseSet);
     fOtherSet->removeAll(*fExtendSet);
 
-    fSets->addElement(fSepSet, status); classNames.emplace_back("Sep");
-    fSets->addElement(fFormatSet, status); classNames.emplace_back("Format");
-    fSets->addElement(fSpSet, status); classNames.emplace_back("Sp");
-    fSets->addElement(fLowerSet, status); classNames.emplace_back("Lower");
-    fSets->addElement(fUpperSet, status); classNames.emplace_back("Upper");
-    fSets->addElement(fOLetterSet, status); classNames.emplace_back("OLetter");
-    fSets->addElement(fNumericSet, status); classNames.emplace_back("Numeric");
-    fSets->addElement(fATermSet, status); classNames.emplace_back("ATerm");
-    fSets->addElement(fSContinueSet, status); classNames.emplace_back("SContinue");
-    fSets->addElement(fSTermSet, status); classNames.emplace_back("STerm");
-    fSets->addElement(fCloseSet, status); classNames.emplace_back("Close");
-    fSets->addElement(fOtherSet, status); classNames.emplace_back("Other");
-    fSets->addElement(fExtendSet, status); classNames.emplace_back("Extend");
+    sets.emplace_back(*fSepSet); classNames.emplace_back("Sep");
+    sets.emplace_back(*fFormatSet); classNames.emplace_back("Format");
+    sets.emplace_back(*fSpSet); classNames.emplace_back("Sp");
+    sets.emplace_back(*fLowerSet); classNames.emplace_back("Lower");
+    sets.emplace_back(*fUpperSet); classNames.emplace_back("Upper");
+    sets.emplace_back(*fOLetterSet); classNames.emplace_back("OLetter");
+    sets.emplace_back(*fNumericSet); classNames.emplace_back("Numeric");
+    sets.emplace_back(*fATermSet); classNames.emplace_back("ATerm");
+    sets.emplace_back(*fSContinueSet); classNames.emplace_back("SContinue");
+    sets.emplace_back(*fSTermSet); classNames.emplace_back("STerm");
+    sets.emplace_back(*fCloseSet); classNames.emplace_back("Close");
+    sets.emplace_back(*fOtherSet); classNames.emplace_back("Other");
+    sets.emplace_back(*fExtendSet); classNames.emplace_back("Extend");
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2408,8 +2403,8 @@ void RBBISentMonkey::setText(const UnicodeString &s) {
     prepareAppliedRules(s.length());
 }
 
-UVector  *RBBISentMonkey::charClasses() {
-    return fSets;
+const std::vector<UnicodeSet>& RBBISentMonkey::charClasses() {
+    return sets;
 }
 
 //  moveBack()   Find the "significant" code point preceding the index i.
@@ -2618,7 +2613,6 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
 }
 
 RBBISentMonkey::~RBBISentMonkey() {
-    delete fSets;
     delete fSepSet;
     delete fFormatSet;
     delete fSpSet;
@@ -2646,12 +2640,12 @@ class RBBILineMonkey: public RBBIMonkeyKind {
 public:
     RBBILineMonkey();
     virtual          ~RBBILineMonkey();
-    virtual  UVector *charClasses() override;
+    virtual const std::vector<UnicodeSet>& charClasses() override;
     virtual  void     setText(const UnicodeString &s) override;
     virtual  int32_t  next(int32_t i) override;
     virtual  void     rule9Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPos, UChar32 *nextChar);
 private:
-    UVector      *fSets;
+    std::vector<UnicodeSet> sets;
 
     UnicodeSet  *fBK;
     UnicodeSet  *fCR;
@@ -2714,7 +2708,6 @@ private:
 
 RBBILineMonkey::RBBILineMonkey() :
     RBBIMonkeyKind(),
-    fSets(nullptr),
 
     fCharBI(nullptr),
     fText(nullptr)
@@ -2725,8 +2718,6 @@ RBBILineMonkey::RBBILineMonkey() :
     }
 
     UErrorCode  status = U_ZERO_ERROR;
-
-    fSets  = new UVector(status);
 
     fBK    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_Break=BK}]"), status);
     fCR    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=CR}]"), status);
@@ -2800,56 +2791,41 @@ RBBILineMonkey::RBBILineMonkey() :
 
     fHH->add(u'\u2010');   // Hyphen, '‐'
 
-    // Sets and names.
-    fSets->addElement(fBK, status); classNames.emplace_back("fBK");
-    fSets->addElement(fCR, status); classNames.emplace_back("fCR");
-    fSets->addElement(fLF, status); classNames.emplace_back("fLF");
-    fSets->addElement(fCM, status); classNames.emplace_back("fCM");
-    fSets->addElement(fNL, status); classNames.emplace_back("fNL");
-    fSets->addElement(fWJ, status); classNames.emplace_back("fWJ");
-    fSets->addElement(fZW, status); classNames.emplace_back("fZW");
-    fSets->addElement(fGL, status); classNames.emplace_back("fGL");
-    fSets->addElement(fCB, status); classNames.emplace_back("fCB");
-    fSets->addElement(fSP, status); classNames.emplace_back("fSP");
-    fSets->addElement(fB2, status); classNames.emplace_back("fB2");
-    fSets->addElement(fBA, status); classNames.emplace_back("fBA");
-    fSets->addElement(fBB, status); classNames.emplace_back("fBB");
-    fSets->addElement(fHY, status); classNames.emplace_back("fHY");
-    fSets->addElement(fH2, status); classNames.emplace_back("fH2");
-    fSets->addElement(fH3, status); classNames.emplace_back("fH3");
-    fSets->addElement(fCL, status); classNames.emplace_back("fCL");
-    fSets->addElement(fCP, status); classNames.emplace_back("fCP");
-    fSets->addElement(fEX, status); classNames.emplace_back("fEX");
-    fSets->addElement(fIN, status); classNames.emplace_back("fIN");
-    fSets->addElement(fJL, status); classNames.emplace_back("fJL");
-    fSets->addElement(fJT, status); classNames.emplace_back("fJT");
-    fSets->addElement(fJV, status); classNames.emplace_back("fJV");
-    fSets->addElement(fNS, status); classNames.emplace_back("fNS");
-    fSets->addElement(fOP, status); classNames.emplace_back("fOP");
-    fSets->addElement(fQU, status); classNames.emplace_back("fQU");
-    fSets->addElement(fIS, status); classNames.emplace_back("fIS");
-    fSets->addElement(fNU, status); classNames.emplace_back("fNU");
-    fSets->addElement(fPO, status); classNames.emplace_back("fPO");
-    fSets->addElement(fPR, status); classNames.emplace_back("fPR");
-    fSets->addElement(fSY, status); classNames.emplace_back("fSY");
-    fSets->addElement(fAI, status); classNames.emplace_back("fAI");
-    fSets->addElement(fAL, status); classNames.emplace_back("fAL");
-    fSets->addElement(fHL, status); classNames.emplace_back("fHL");
-    fSets->addElement(fID, status); classNames.emplace_back("fID");
-    fSets->addElement(fRI, status); classNames.emplace_back("fRI");
-    fSets->addElement(fSG, status); classNames.emplace_back("fSG");
-    fSets->addElement(fEB, status); classNames.emplace_back("fEB");
-    fSets->addElement(fEM, status); classNames.emplace_back("fEM");
-    fSets->addElement(fZWJ, status); classNames.emplace_back("fZWJ");
-    // TODO: fOP30 & fCP30 overlap with plain fOP. Probably OK, but fOP/CP chars will be over-represented.
-    fSets->addElement(fOP30, status); classNames.emplace_back("fOP30");
-    fSets->addElement(fCP30, status); classNames.emplace_back("fCP30");
-    fSets->addElement(fExtPictUnassigned, status); classNames.emplace_back("fExtPictUnassigned");
-    fSets->addElement(fAK, status); classNames.emplace_back("fAK");
-    fSets->addElement(fAP, status); classNames.emplace_back("fAP");
-    fSets->addElement(fAS, status); classNames.emplace_back("fAS");
-    fSets->addElement(fVF, status); classNames.emplace_back("fVF");
-    fSets->addElement(fVI, status); classNames.emplace_back("fVI");
+    const std::vector<std::pair<std::string, UnicodeSet>> interestingSets{
+        {"eastAsian", {uR"([\p{ea=F}\p{ea=W}\p{ea=H}])", status}},
+        {"Pi", {uR"(\p{Pi})", status}},
+        {"Pf", {uR"(\p{Pf})", status}},
+        {"DOTTEDC.", {uR"([◌])", status}},
+        {"HYPHEN", {uR"([\u2010])", status}},
+        {"ExtPictCn", {uR"([\p{Extended_Pictographic}&\p{Cn}])", status}},
+    };
+    std::list<std::pair<std::string, UnicodeSet>> partition;
+    for (int lb = 0; lb < U_LB_COUNT; ++lb) {
+        const std::string lbValueShortName = u_getPropertyValueName(UCHAR_LINE_BREAK, lb, U_SHORT_PROPERTY_NAME);
+        if (lbValueShortName == "SA") {
+          continue;
+        }
+        partition.emplace_back(lbValueShortName, UnicodeSet((R"(\p{lb=)" + lbValueShortName + "}").c_str(), status));
+    }
+
+    for (const auto &[name, refinementSet] : interestingSets) {
+        for (auto it = partition.begin(); it != partition.end();) {
+          const UnicodeSet& set = it->second;
+          const UnicodeSet intersection = UnicodeSet(set).retainAll(refinementSet);
+          const UnicodeSet complement = UnicodeSet(set).removeAll(refinementSet);
+          if (!intersection.isEmpty() && !complement.isEmpty()) {
+                partition.emplace(it, it->first, complement);
+                partition.emplace(it, it->first + "&" + name, intersection);
+                it = partition.erase(it);
+          } else {
+            ++it;
+          }
+        }
+    };
+    for (const auto &[name, set] : partition) {
+        sets.push_back(set);
+        classNames.push_back(name);
+    }
 
     fCharBI = BreakIterator::createCharacterInstance(Locale::getEnglish(), status);
 
@@ -3636,14 +3612,12 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
 }
 
 
-UVector  *RBBILineMonkey::charClasses() {
-    return fSets;
+const std::vector<UnicodeSet>& RBBILineMonkey::charClasses() {
+    return sets;
 }
 
 
 RBBILineMonkey::~RBBILineMonkey() {
-    delete fSets;
-
     delete fBK;
     delete fCR;
     delete fLF;
@@ -4310,7 +4284,6 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
     const int32_t    TESTSTRINGLEN = 500;
     UnicodeString    testText;
     int32_t          numCharClasses;
-    UVector          *chClasses;
     int              expectedCount = 0;
     char             expectedBreaks[TESTSTRINGLEN*2 + 1];
     char             forwardBreaks[TESTSTRINGLEN*2 + 1];
@@ -4324,8 +4297,8 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
 
     m_seed = seed;
 
-    numCharClasses = mk.charClasses()->size();
-    chClasses      = mk.charClasses();
+    numCharClasses = mk.charClasses().size();
+    const std::vector<UnicodeSet>& chClasses = mk.charClasses();
 
     // Check for errors that occurred during the construction of the MonkeyKind object.
     //  Can't report them where they occurred because errln() is a method coming from intlTest,
@@ -4337,8 +4310,8 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
 
     // Verify that the character classes all have at least one member.
     for (i=0; i<numCharClasses; i++) {
-        UnicodeSet *s = static_cast<UnicodeSet *>(chClasses->elementAt(i));
-        if (s == nullptr || s->size() == 0) {
+        const UnicodeSet& s = chClasses[i];
+        if (s.size() == 0) {
             errln("Character Class #%d is null or of zero size.", i);
             return;
         }
@@ -4366,9 +4339,9 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
         testText.truncate(0);
         for (i=0; i<TESTSTRINGLEN; i++) {
             int32_t  aClassNum = m_rand() % numCharClasses;
-            UnicodeSet* classSet = static_cast<UnicodeSet*>(chClasses->elementAt(aClassNum));
-            int32_t   charIdx = m_rand() % classSet->size();
-            UChar32   c = classSet->charAt(charIdx);
+            const UnicodeSet& classSet = chClasses[aClassNum];
+            int32_t   charIdx = m_rand() % classSet.size();
+            UChar32   c = classSet.charAt(charIdx);
             if (c < 0) {   // TODO:  deal with sets containing strings.
                 errln("%s:%d c < 0", __FILE__, __LINE__);
                 break;
