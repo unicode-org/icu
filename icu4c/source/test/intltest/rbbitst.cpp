@@ -2892,23 +2892,9 @@ void RBBILineMonkey::rule9Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPos
     // LB 9 Treat X CM* as if it were x.
     //       No explicit action required.
 
-    // LB 10  Treat any remaining combining mark as AL, but preserve its East
-    // Asian Width.
+    // LB 10  Treat any remaining combining mark as lb=AL, ea=Na.
     if (fCM->contains(*posChar)) {
-        switch (u_getIntPropertyValue(*posChar, UCHAR_EAST_ASIAN_WIDTH)) {
-        case U_EA_WIDE:
-            *posChar = u'♈';
-            break;
-        case U_EA_NEUTRAL:
-            *posChar = u'ᴬ';
-            break;
-        case U_EA_AMBIGUOUS:
-            *posChar = u'Ⓐ';
-            break;
-        default:
-            puts("Unexpected ea value for lb=CM");
-            std::terminate();
-        }
+        *posChar = u'A';
     }
 
     // Push the updated nextPos and nextChar back to our caller.
@@ -3281,7 +3267,8 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
                 }
                 breakObliviousPrevPosX2 = beforeCM;
             }
-            if (!feaFWH->contains(fText->char32At(breakObliviousPrevPosX2))) {
+            if (!feaFWH->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fCM->contains(fText->char32At(breakObliviousPrevPosX2))) {
                 setAppliedRule(pos, "LB 19a [^\\p{ea=F}\\p{ea=W}\\p{ea=H}] QU ×");
                 continue;
             }
@@ -3332,7 +3319,8 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
-        if (fHL->contains(prevCharX2) && (fHY->contains(prevChar) || fBA->contains(prevChar)) &&
+        if (fHL->contains(prevCharX2) &&
+            (fHY->contains(prevChar) || (fBA->contains(prevChar) && !feaFWH->contains(prevChar))) &&
             !fHL->contains(thisChar)) {
             setAppliedRule(pos, "LB 21a   HL (HY | BA) x [^HL]");
             continue;
