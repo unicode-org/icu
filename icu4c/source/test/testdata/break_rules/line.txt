@@ -77,13 +77,10 @@ OP30 = [OP - [\p{ea=F}\p{ea=W}\p{ea=H}]];
 CP30 = [CP - [\p{ea=F}\p{ea=W}\p{ea=H}]];
 
 eaFWH            = [\p{ea=F}\p{ea=W}\p{ea=H}];
-eaFWHminusOPGL   = [ eaFWH - [OP GL] ];
-eaFWHandCM       = [ CMS & eaFWH ];
+eaFWHminusCMOPGL   = [ eaFWH - [CMS OP GL] ];
 eaFWHminusCM     = [ eaFWH - CMS ];
 eaFWHBreakableAtLB19 = [ eaFWH - [NS BA EX CL IN IS GL CMS] ];
-
-# An annoying special case, \p{lb=BA} & [\p{ea=F}\p{ea=W}\p{ea=H}].
-ideographicSpace = [\u3000];
+BAminuseaFWH = [BA - eaFWH ];
 
 PiQU = [\p{Pi}&QU];
 PfQU = [\p{Pf}&QU];
@@ -127,14 +124,10 @@ LB15a.1:       ( OP CM* SP* | QU CM* | GL CM* ) (PiQU CM* SP*)+ .;
 # Moved before LB14.  These are really the cases where LB19a does not apply, but
 # the old LB19 would.  This is to avoid many instances of chaining over two code
 # points.
-LB19a.1: eaFWHminusOPGL         ÷ PiQU CM* eaFWHminusCM;
-LB19a.2: eaFWHminusOPGL CM* CMS ÷ PiQU CM* eaFWHminusCM;
-LB19a.3: ^eaFWHandCM              ÷ PiQU CM* eaFWHminusCM;
-LB19a.4: ^eaFWHandCM CM* CMS      ÷ PiQU CM* eaFWHminusCM;
-LB19a.5: eaFWH CM* PfQU               ÷ eaFWHBreakableAtLB19;
-LB19a.6: eaFWH CM* PfQU CM* CMS       ÷ eaFWHBreakableAtLB19;
-LB19a.7: ^eaFWHandCM CM* PfQU         ÷ eaFWHBreakableAtLB19;
-LB19a.8: ^eaFWHandCM CM* PfQU CM* CMS ÷ eaFWHBreakableAtLB19;
+LB19a.1: eaFWHminusCMOPGL         ÷ PiQU CM* eaFWHminusCM;
+LB19a.2: eaFWHminusCMOPGL CM* CMS ÷ PiQU CM* eaFWHminusCM;
+LB19a.5: eaFWHminusCM CM* PfQU         ÷ eaFWHBreakableAtLB19;
+LB19a.6: eaFWHminusCM CM* PfQU CM* CMS ÷ eaFWHBreakableAtLB19;
 
 # Moved up, before LB7, because they can match a longer sequence that would also match LB7.
 # For example, the sequence "OP CM SP AL" matches LB14
@@ -215,9 +208,7 @@ LB20a.1:     ^(HY | HH) CM* AL;
 
 # Note: Rule 21a must come before 21 to prevent 21.1 from matching HL BA, then
 #       not picking up the continuing match after the BA from 21a.
-# Chains over two characters with the LB19a break rule.
-LB21a.1:     HL CM* ideographicSpace CM* PfQU (CM* CMS)? ÷ eaFWHBreakableAtLB19;
-LB21a:       HL CM* (HY | BA) CM* [^CM CB HL];
+LB21a:       HL CM* (HY | BAminuseaFWH) CM* [^CM CB HL];
 
 LB21.1:      . CM* [BA HY NS];
 LB21.2:      BB CM* [^CM CB];

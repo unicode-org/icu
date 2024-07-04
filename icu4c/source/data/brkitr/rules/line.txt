@@ -284,58 +284,18 @@ $LB18Breaks    = [$LB8Breaks $SP];
 $LB18NonBreaks $CM* $QU;
 ^$CM+               $QU;
 
-# OP and GL are subtracted because of LB14 and LB12 (there is no break after them).
-# BA is subtracted because of LB21a:
-# We must not poke a hole into HL U+3000 × [\p{Pi} & QU] [\p{ea=F}\p{ea=W}\p{ea=H}],
-# where U+3000 is lb=BA and ea=W.
-[$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}] - [$OP $GL $BA]]           / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-[$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}] - [$OP $GL $BA]] $CM* $CMX / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-^[$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]]                    / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-^[$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* $CMX          / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-
-$OP $CM* $SP+ [$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)?                                                        / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-($OP $CM* $SP+ | [$OP [$QU-\p{Pi}] $GL] $CM*) ([\p{Pi} & $QU] $CM* $SP*)+ $SP [$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)? / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-^([\p{Pi} & $QU] $CM* $SP*)+ $SP [$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)?                                     / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-$LB8NonBreaks [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP [$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)?    / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-$CAN_CM $CM*  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP [$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)?    / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-^$CM+  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP [$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)?           / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+[$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}] - [$OP $GL]]           / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+[$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}] - [$OP $GL]] $CM* $CMX / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
 
 $QU $CM* .;
 [$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU]           / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
 [$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU] $CM* $CMX / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
-^[$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU]           / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
-^[$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU] $CM* $CMX / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
-
-$OP $CM* $SP+ [$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU] ($CM* $CMX)?                                                        / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
-($OP $CM* $SP+ | [$OP [$QU-\p{Pi}] $GL] $CM*) ([\p{Pi} & $QU] $CM* $SP*)+ $SP [$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU] ($CM* $CMX)? / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
-^([\p{Pi} & $QU] $CM* $SP*)+ $SP [$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU] ($CM* $CMX)?                                     / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
-$LB8NonBreaks [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP [$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU] ($CM* $CMX)?    / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
-$CAN_CM $CM*  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP [$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU] ($CM* $CMX)?    / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
-^$CM+  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP [$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU] ($CM* $CMX)?           / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
-
-
-^$CM*           [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]]           / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-^$CM*           [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* $CMX / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-
-$OP $CM* $SP+ [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)? / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-($OP $CM* $SP+ | [$OP [$QU-\p{Pi}] $GL] $CM*) ([\p{Pi} & $QU] $CM* $SP*)+ $SP [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)? / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-^([\p{Pi} & $QU] $CM* $SP*)+ $SP [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)? / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-$LB8NonBreaks [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)? / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-$CAN_CM $CM*  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)? / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-^$CM+  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)? / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-
-$SP? $IS $CM* [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)? / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
 
 # LB 20
 #        <break>  $CB
 #        $CB   <break>
 #
 $LB20NonBreaks = [$LB18NonBreaks - $CB];
-
-[$LB20NonBreaks - [$HL $IS $RI]] $CM* [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]]           / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-[$LB20NonBreaks - [$HL $IS $RI]] $CM* [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* $CMX / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-$CB $CM* $ZWJ [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)? / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
-($RI $CM*)? $RI $CM* [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] ($CM* $CMX)? / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
 
 # LB 20a      Don't break between Hyphens and Letters when there is a break preceding the hyphen.
 #             Originally added as a Finnish tailoring, promoted to default ICU behavior (ICU-8151),
@@ -369,7 +329,7 @@ $BB $CM* $LB20NonBreaks;
 # LB 21a Do not break after the hyphen in Hebrew + Hyphen + non-Hebrew
 #   HL (HY | BA) x [^HL]
 #
-$HL $CM* ($HY | $BA) $CM* [^$CB $HL]?;
+$HL $CM* ($HY | [ $BA - [\p{ea=F}\p{ea=W}\p{ea=H}] ] ) $CM* [^$CB $HL]?;
 
 # LB 21b (forward) Don't break between SY and HL
 # (break between HL and SY already disallowed by LB 13 above)
