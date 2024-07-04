@@ -16,7 +16,9 @@
 
 #include <algorithm>
 #include <array>
+#include <cinttypes>
 #include <list>
+#include <random>
 #include <set>
 #include <sstream>
 #include <stdio.h>
@@ -72,9 +74,9 @@
     } \
 } UPRV_BLOCK_MACRO_END
 
-#define MONKEY_ERROR(msg, fRuleFileName, index, seed) { \
-    IntlTest::gTest->errln("\n%s:%d %s at index %d. Parameters to reproduce: @\"type=%s seed=%u loop=1\"", \
-                    __FILE__, __LINE__, msg, index, fRuleFileName, seed); \
+#define MONKEY_ERROR(msg, fRuleFileName, index, engineState) { \
+    IntlTest::gTest->errln("\n%s:%d %s at index %d. Parameters to reproduce: @\"type=%s engineState=[%s] loop=1\"", \
+                    __FILE__, __LINE__, msg, index, fRuleFileName, engineState.c_str()); \
 }
 
 //---------------------------------------------
@@ -1628,20 +1630,31 @@ unsigned int RBBIMonkeyKind::maxClassNameSize() {
 
 //----------------------------------------------------------------------------------------
 //
-//   Random Numbers.  Similar to standard lib rand() and srand()
-//                    Not using library to
-//                      1.  Get same results on all platforms.
-//                      2.  Get access to current seed, to more easily reproduce failures.
+//   Random Numbers.  We need a long cycle length since we run overnight tests over
+//                    millions of strings involving 1000 random generations per string
+//                    (a 32-bit LCG will not do!), we want and a reasonably small state
+//                    so that we can output it to reproduce failures.
 //
 //---------------------------------------------------------------------------------------
-static uint32_t m_seed = 1;
+namespace {
 
-static uint32_t m_rand()
-{
-    m_seed = m_seed * 1103515245 + 12345;
-    return (m_seed / 65536) % 32768;
+using RandomNumberGenerator = std::ranlux48;
+constexpr RandomNumberGenerator::result_type defaultSeed = std::ranlux48_base::default_seed;
+static RandomNumberGenerator randomNumberGenerator;
+
+RandomNumberGenerator deserialize(const std::string& state) {
+    RandomNumberGenerator result;
+    std::stringstream(state) >> result;
+    return result;
 }
 
+std::string serialize(const RandomNumberGenerator& generator) {
+    std::stringstream result;
+    result << generator;
+    return result.str();
+}
+
+}  // namespace
 
 //------------------------------------------------------------------------------------------
 //
@@ -3698,8 +3711,8 @@ RBBILineMonkey::~RBBILineMonkey() {
 //
 //-------------------------------------------------------------------------------------------
 
-static int32_t  getIntParam(UnicodeString name, UnicodeString &params, int32_t defaultVal) {
-    int32_t val = defaultVal;
+static int64_t  getIntParam(UnicodeString name, UnicodeString &params, int64_t defaultVal) {
+    int64_t val = defaultVal;
     name.append(" *= *(-?\\d+)");
     UErrorCode status = U_ZERO_ERROR;
     RegexMatcher m(name, params, 0, status);
@@ -3711,7 +3724,7 @@ static int32_t  getIntParam(UnicodeString name, UnicodeString &params, int32_t d
             paramLength = static_cast<int32_t>(sizeof(valString) - 2);
         }
         params.extract(m.start(1, status), paramLength, valString, sizeof(valString));
-        val = strtol(valString, nullptr, 10);
+        val = strtoll(valString, nullptr, 10);
 
         // Delete this parameter from the params string.
         m.reset();
@@ -4124,13 +4137,14 @@ void RBBITest::TestMonkey() {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
     UErrorCode     status    = U_ZERO_ERROR;
-    int32_t        loopCount = 500;
-    int32_t        seed      = 1;
+    int64_t        loopCount = 500;
+    uint64_t       seed = defaultSeed;
     UnicodeString  breakType = "all";
     Locale         locale("en");
     UBool          useUText  = false;
     UBool          scalarsOnly = false;
     std::string    exportPath;
+    std::string    engineState;
 
     if (quick == false) {
         loopCount = 10000;
@@ -4139,7 +4153,14 @@ void RBBITest::TestMonkey() {
     if (fTestParams) {
         UnicodeString p(fTestParams);
         loopCount = getIntParam("loop", p, loopCount);
-        seed      = getIntParam("seed", p, seed);
+        seed = getIntParam("seed", p, defaultSeed);
+
+        RegexMatcher engineStateMatcher(R"( *engineState *=\[*([0-9 ]+)\] *)", p, 0, status);
+        if (engineStateMatcher.find()) {
+            engineStateMatcher.group(1, status).toUTF8String(engineState);
+            engineStateMatcher.reset();
+            p = engineStateMatcher.replaceFirst("", status);
+        }
 
         RegexMatcher m(" *type *= *(char|word|line|sent|title) *", p, 0, status);
         if (m.find()) {
@@ -4181,16 +4202,23 @@ void RBBITest::TestMonkey() {
         }
 
     }
+    if (seed != defaultSeed && !engineState.empty()) {
+        errln("seed and engineState parameters are mutually exclusive\n");
+        return;
+    }
+    if (engineState.empty()) {
+        engineState = serialize(RandomNumberGenerator(seed));
+    }
 
     if (breakType == "char" || breakType == "all") {
         FILE *file = exportPath.empty() ? nullptr : fopen((exportPath + "_char.txt").c_str(), "w");
         RBBICharMonkey  m;
         BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
         if (U_SUCCESS(status)) {
-            RunMonkey(bi, m, "char", seed, loopCount, useUText, file, scalarsOnly);
+            RunMonkey(bi, m, "char", engineState, loopCount, useUText, file, scalarsOnly);
             if (breakType == "all" && useUText==false) {
                 // Also run a quick test with UText when "all" is specified
-                RunMonkey(bi, m, "char", seed, loopCount, true, nullptr, scalarsOnly);
+                RunMonkey(bi, m, "char", engineState, loopCount, true, nullptr, scalarsOnly);
             }
         }
         else {
@@ -4208,7 +4236,7 @@ void RBBITest::TestMonkey() {
         RBBIWordMonkey  m;
         BreakIterator  *bi = BreakIterator::createWordInstance(locale, status);
         if (U_SUCCESS(status)) {
-            RunMonkey(bi, m, "word", seed, loopCount, useUText, file, scalarsOnly);
+            RunMonkey(bi, m, "word", engineState, loopCount, useUText, file, scalarsOnly);
         }
         else {
             errcheckln(status, "Creation of word break iterator failed %s", u_errorName(status));
@@ -4228,7 +4256,7 @@ void RBBITest::TestMonkey() {
             loopCount = loopCount / 5;   // Line break runs slower than the others.
         }
         if (U_SUCCESS(status)) {
-            RunMonkey(bi, m, "line", seed, loopCount, useUText, file, scalarsOnly);
+            RunMonkey(bi, m, "line", engineState, loopCount, useUText, file, scalarsOnly);
         }
         else {
             errcheckln(status, "Creation of line break iterator failed %s", u_errorName(status));
@@ -4248,7 +4276,7 @@ void RBBITest::TestMonkey() {
             loopCount = loopCount / 10;   // Sentence runs slower than the other break types
         }
         if (U_SUCCESS(status)) {
-            RunMonkey(bi, m, "sent", seed, loopCount, useUText, file, scalarsOnly);
+            RunMonkey(bi, m, "sent", engineState, loopCount, useUText, file, scalarsOnly);
         }
         else {
             errcheckln(status, "Creation of line break iterator failed %s", u_errorName(status));
@@ -4268,7 +4296,7 @@ void RBBITest::TestMonkey() {
 //       bi          - the break iterator to use
 //       mk          - MonkeyKind, abstraction for obtaining expected results
 //       name        - Name of test (char, word, etc.) for use in error messages
-//       seed        - Seed for starting random number generator (parameter from user)
+//       engineState - State for starting random number generator (parameter from user)
 //       numIterations
 //       exportFile  - Pointer to a file to which the test cases will be written in
 //                     UCD format.  May be null.
@@ -4276,8 +4304,8 @@ void RBBITest::TestMonkey() {
 //                     arbitrary sequences of code points (including unpaired surrogates)
 //                     are tested.
 //
-void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name, uint32_t  seed,
-                         int32_t numIterations, UBool useUText, FILE *exportFile, UBool scalarsOnly) {
+void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name, std::string engineState,
+                         int64_t numIterations, UBool useUText, FILE *exportFile, UBool scalarsOnly) {
 
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
@@ -4292,10 +4320,13 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
     char             followingBreaks[TESTSTRINGLEN*2+1];
     char             precedingBreaks[TESTSTRINGLEN*2+1];
     int              i;
-    int              loopCount = 0;
+    int64_t          loopCount = 0;
 
-
-    m_seed = seed;
+    if (engineState.empty()) {
+        randomNumberGenerator = {};
+    } else {
+      randomNumberGenerator = deserialize(engineState);
+    }
 
     numCharClasses = mk.charClasses().size();
     const std::vector<UnicodeSet>& chClasses = mk.charClasses();
@@ -4325,22 +4356,23 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
             // If test is running in an infinite loop, display a periodic tic so
             //   we can tell that it is making progress.
             constexpr std::array<std::string_view, 5> monkeys{"🙈", "🙉", "🙊", "🐵", "🐒"};
-            fprintf(stderr, "%s", monkeys[m_seed % monkeys.size()].data());
+            fprintf(stderr, "%s",
+                    monkeys[RandomNumberGenerator(randomNumberGenerator)() % monkeys.size()].data());
             if (loopCount % 1'000'000 == 0) {
-                fprintf(stderr, "\nTested %d million random strings with %d errors…\n",
+                fprintf(stderr, "\nTested %" PRId64 " million random strings with %d errors…\n",
                         loopCount / 1'000'000, getErrors());
             }
         }
-        // Save current random number seed, so that we can recreate the random numbers
+        // Save current RNG state, so that we can recreate the random numbers
         //   for this loop iteration in event of an error.
-        seed = m_seed;
+        engineState = serialize(randomNumberGenerator);
 
         // Populate a test string with data.
         testText.truncate(0);
         for (i=0; i<TESTSTRINGLEN; i++) {
-            int32_t  aClassNum = m_rand() % numCharClasses;
+            const int32_t aClassNum = std::uniform_int_distribution<>(0, numCharClasses - 1)(randomNumberGenerator);
             const UnicodeSet& classSet = chClasses[aClassNum];
-            int32_t   charIdx = m_rand() % classSet.size();
+            const int32_t charIdx = std::uniform_int_distribution<>(0, classSet.size() - 1)(randomNumberGenerator);
             UChar32   c = classSet.charAt(charIdx);
             if (c < 0) {   // TODO:  deal with sets containing strings.
                 errln("%s:%d c < 0", __FILE__, __LINE__);
@@ -4433,8 +4465,8 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                 (breakPos > lastBreakPos && lastBreakPos > i)) {
                 errln("%s break monkey test: "
                     "Out of range value returned by BreakIterator::following().\n"
-                        "Random seed=%d  index=%d; following returned %d;  lastbreak=%d",
-                         name, seed, i, breakPos, lastBreakPos);
+                        "Random engineState=[%s]  index=%d; following returned %d;  lastbreak=%d",
+                        name, engineState.c_str(), i, breakPos, lastBreakPos);
                 break;
             }
             followingBreaks[breakPos] = 1;
@@ -4540,7 +4572,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                 MONKEY_ERROR(
                     (expectedBreaks[i] ? "Break expected but not found" :
                        "Break found but not expected"),
-                    name, i, seed);
+                    name, i, engineState);
 
                 for (ci = startContext;; (ci = testText.moveIndex32(ci, 1))) {
                     UChar32  c;

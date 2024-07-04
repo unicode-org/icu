@@ -129,8 +129,8 @@ private:
      * internal methods to prepare test data
      **/
 
-    void RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name, uint32_t  seed,
-        int32_t loopCount, UBool useUText, FILE *exportFile, UBool scalarsOnly);
+    void RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name, std::string engineState,
+        int64_t loopCount, UBool useUText, FILE *exportFile, UBool scalarsOnly);
 
     // Run one of the Unicode Consortium boundary test data files.
     void runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *bi);
