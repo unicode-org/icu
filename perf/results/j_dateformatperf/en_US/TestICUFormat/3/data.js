@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1719808396772,
+  "lastUpdate": 1720125851236,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22947,6 +22947,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 251.54852825319125,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "0178a07a26fa7dd827a49048104b4089aa7e2b84",
+          "message": "ICU-22793 Clang-Tidy: google-readability-casting\n\nhttps://releases.llvm.org/17.0.1/tools/clang/tools/extra/docs/clang-tidy/checks/google/readability-casting.html",
+          "timestamp": "2024-07-04T22:32:12+02:00",
+          "tree_id": "1e145b3ae6d00ed1429738eb486b01d34d03f7ae",
+          "url": "https://github.com/unicode-org/icu/commit/0178a07a26fa7dd827a49048104b4089aa7e2b84"
+        },
+        "date": 1720125722455,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 247.6431551081452,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
