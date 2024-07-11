@@ -538,9 +538,9 @@ StringTest::TestStringPieceU8() {
 
     StringPiece abc3(u8"abcdef", 3);
     assertEquals("abc3.length", 3, abc3.length());
-    assertEquals("abc3[0]", 0x61, abc3.data()[0]);
-    assertEquals("abc3[1]", 0x62, abc3.data()[1]);
-    assertEquals("abc3[2]", 0x63, abc3.data()[2]);
+    assertEquals("abc3[0]", (char)0x61, abc3.data()[0]);
+    assertEquals("abc3[1]", (char)0x62, abc3.data()[1]);
+    assertEquals("abc3[2]", (char)0x63, abc3.data()[2]);
 
     StringPiece uvw("q");
     uvw.set(u8"uvw");
@@ -550,9 +550,9 @@ StringTest::TestStringPieceU8() {
     StringPiece xyz("r");
     xyz.set(u8"xyzXYZ", 3);
     assertEquals("xyz.length", 3, xyz.length());
-    assertEquals("xyz[0]", 0x78, xyz.data()[0]);
-    assertEquals("xyz[1]", 0x79, xyz.data()[1]);
-    assertEquals("xyz[2]", 0x7a, xyz.data()[2]);
+    assertEquals("xyz[0]", (char)0x78, xyz.data()[0]);
+    assertEquals("xyz[1]", (char)0x79, xyz.data()[1]);
+    assertEquals("xyz[2]", (char)0x7a, xyz.data()[2]);
 
     StringPiece null(nullptr);
     assertTrue("null is empty", null.empty());
