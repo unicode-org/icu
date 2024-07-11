@@ -122,16 +122,10 @@ U_COMMON_API Key chooseFrom(UnicodeString str, Key key1, Key key2);
 // Unused in C++:
 // Key chooseCurrency(UnicodeString str);
 // Used instead:
-static const struct {
+extern struct CurrencySymbols {
     Key key;
     UChar32 exemplar;
-} kCurrencyEntries[] = {
-    {DOLLAR_SIGN, u'$'},
-    {POUND_SIGN, u'£'},
-    {RUPEE_SIGN, u'₹'},
-    {YEN_SIGN, u'¥'},
-    {WON_SIGN, u'₩'},
-};
+} kCurrencyEntries[5];
 
 } // namespace unisets
 U_NAMESPACE_END
