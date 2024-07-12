@@ -4177,6 +4177,8 @@ void UnicodeSetTest::TestSkipToStrings() {
     assertFalse("no next", iter.next());
 }
 
+#include <assert.h>
+
 void UnicodeSetTest::TestPatternCodePointComplement() {
     IcuTestErrorCode errorCode(*this, "TestPatternCodePointComplement");
     // ICU-21524 changes pattern ^ and equivalent functions to perform a "code point complement".
@@ -4195,14 +4197,14 @@ void UnicodeSetTest::TestPatternCodePointComplement() {
         }
         assertTrue("[:^Basic_Emoji:] --> lots of elements", notBasic.size() > 1000);
         assertFalse("[:^Basic_Emoji:] --> no strings", notBasic.hasStrings());
-        assertFalse("[:^Basic_Emoji:] --> no bicycle", notBasic.contains(U'🚲'));
+        assertFalse("[:^Basic_Emoji:] --> no bicycle", notBasic.contains(U'\U0001F6B2'));
     }
 
     {
         UnicodeSet notBasic(u"[:Basic_Emoji=No:]", errorCode);
         assertTrue("[:Basic_Emoji=No:] --> lots of elements", notBasic.size() > 1000);
         assertFalse("[:Basic_Emoji=No:] --> no strings", notBasic.hasStrings());
-        assertFalse("[:Basic_Emoji=No:] --> no bicycle", notBasic.contains(U'🚲'));
+        assertFalse("[:Basic_Emoji=No:] --> no bicycle", notBasic.contains(U'\U0001F6B2'));
     }
 
     {
@@ -4213,7 +4215,7 @@ void UnicodeSetTest::TestPatternCodePointComplement() {
         assertFalse("[].applyIntPropertyValue(Basic_Emoji, 0) --> no strings",
                 notBasic.hasStrings());
         assertFalse("[].applyIntPropertyValue(Basic_Emoji, 0) --> no bicycle",
-                notBasic.contains(U'🚲'));
+                notBasic.contains(U'\U0001F6B2'));
     }
 
     {
@@ -4224,7 +4226,7 @@ void UnicodeSetTest::TestPatternCodePointComplement() {
         assertFalse("[].applyPropertyAlias(Basic_Emoji, No) --> no strings",
                 notBasic.hasStrings());
         assertFalse("[].applyPropertyAlias(Basic_Emoji, No) --> no bicycle",
-                notBasic.contains(U'🚲'));
+                notBasic.contains(U'\U0001F6B2'));
     }
 
     // When there are strings, we must not use the complement for a more compact toPattern().
@@ -4253,6 +4255,6 @@ void UnicodeSetTest::TestPatternCodePointComplement() {
         assertTrue("[:Basic_Emoji:].complement() --> has strings", notBasic.hasStrings());
         assertTrue("[:Basic_Emoji:].complement().contains(chipmunk+emoji)",
                 notBasic.contains(u"🐿\uFE0F"));
-        assertFalse("[:Basic_Emoji:].complement() --> no bicycle", notBasic.contains(U'🚲'));
+        assertFalse("[:Basic_Emoji:].complement() --> no bicycle", notBasic.contains(U'\U0001F6B2'));
     }
 }
