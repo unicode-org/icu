@@ -94,6 +94,10 @@ namespace message2 {
          * Calendar name. Note: non-Gregorian calendars not yet implemented.
          * String is empty if calendar not specified. Proleptic Gregorian calendar
          * is default.
+         * In the future, the calendar name will map to one of the options defined
+         * in https://cldr-smoke.unicode.org/spec/main/ldml/tr35.html#UnicodeCalendarIdentifier
+         * or will be consistent with the calendar names supported by JavaScript Temporal
+         * ( https://tc39.es/proposal-temporal/docs/calendar.html )
          *
          * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
