@@ -398,10 +398,10 @@ U_EXPORT const char*
 ulocimp_toLegacyKey(const char* key);
 
 U_EXPORT const char*
-ulocimp_toBcpType(const char* key, const char* type, bool* isKnownKey, bool* isSpecialType);
+ulocimp_toBcpType(const char* key, const char* type);
 
 U_EXPORT const char*
-ulocimp_toLegacyType(const char* key, const char* type, bool* isKnownKey, bool* isSpecialType);
+ulocimp_toLegacyType(const char* key, const char* type);
 
 /* Function for testing purpose */
 U_EXPORT const char* const*
