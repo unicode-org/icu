@@ -1570,7 +1570,7 @@ AliasReplacer::replaceTransformedExtensions(
              // Split the "tkey-tvalue" pair string so that we can canonicalize the tvalue.
              *const_cast<char*>(tvalue++) = '\0'; // NUL terminate tkey
              output.append(tfield, status).append('-', status);
-             const char* bcpTValue = ulocimp_toBcpType(tfield, tvalue, nullptr, nullptr);
+             const char* bcpTValue = ulocimp_toBcpType(tfield, tvalue);
              output.append((bcpTValue == nullptr) ? tvalue : bcpTValue, status);
         }
     }

@@ -2296,7 +2296,7 @@ uloc_toUnicodeLocaleKey(const char* keyword)
 U_CAPI const char* U_EXPORT2
 uloc_toUnicodeLocaleType(const char* keyword, const char* value)
 {
-    const char* bcpType = ulocimp_toBcpType(keyword, value, nullptr, nullptr);
+    const char* bcpType = ulocimp_toBcpType(keyword, value);
     if (bcpType == nullptr && ultag_isUnicodeLocaleType(value, -1)) {
         // unknown keyword, but syntax is fine..
         return value;
@@ -2364,7 +2364,7 @@ uloc_toLegacyKey(const char* keyword)
 U_CAPI const char* U_EXPORT2
 uloc_toLegacyType(const char* keyword, const char* value)
 {
-    const char* legacyType = ulocimp_toLegacyType(keyword, value, nullptr, nullptr);
+    const char* legacyType = ulocimp_toLegacyType(keyword, value);
     if (legacyType == nullptr) {
         // Checks if the specified locale type is well-formed with the legacy locale syntax.
         //

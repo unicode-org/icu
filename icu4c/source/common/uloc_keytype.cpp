@@ -449,23 +449,13 @@ ulocimp_toLegacyKey(const char* key) {
 }
 
 U_EXPORT const char*
-ulocimp_toBcpType(const char* key, const char* type, bool* isKnownKey, bool* isSpecialType) {
-    if (isKnownKey != nullptr) {
-        *isKnownKey = false;
-    }
-    if (isSpecialType != nullptr) {
-        *isSpecialType = false;
-    }
-
+ulocimp_toBcpType(const char* key, const char* type) {
     if (!init()) {
         return nullptr;
     }
 
     LocExtKeyData* keyData = static_cast<LocExtKeyData*>(uhash_get(gLocExtKeyMap, key));
     if (keyData != nullptr) {
-        if (isKnownKey != nullptr) {
-            *isKnownKey = true;
-        }
         LocExtType* t = static_cast<LocExtType*>(uhash_get(keyData->typeMap.getAlias(), type));
         if (t != nullptr) {
             return t->bcpId;
@@ -482,9 +472,6 @@ ulocimp_toBcpType(const char* key, const char* type, bool* isKnownKey, bool* isS
                 matched = isSpecialTypeRgKeyValue(type);
             }
             if (matched) {
-                if (isSpecialType != nullptr) {
-                    *isSpecialType = true;
-                }
                 return type;
             }
         }
@@ -494,23 +481,13 @@ ulocimp_toBcpType(const char* key, const char* type, bool* isKnownKey, bool* isS
 
 
 U_EXPORT const char*
-ulocimp_toLegacyType(const char* key, const char* type, bool* isKnownKey, bool* isSpecialType) {
-    if (isKnownKey != nullptr) {
-        *isKnownKey = false;
-    }
-    if (isSpecialType != nullptr) {
-        *isSpecialType = false;
-    }
-
+ulocimp_toLegacyType(const char* key, const char* type) {
     if (!init()) {
         return nullptr;
     }
 
     LocExtKeyData* keyData = static_cast<LocExtKeyData*>(uhash_get(gLocExtKeyMap, key));
     if (keyData != nullptr) {
-        if (isKnownKey != nullptr) {
-            *isKnownKey = true;
-        }
         LocExtType* t = static_cast<LocExtType*>(uhash_get(keyData->typeMap.getAlias(), type));
         if (t != nullptr) {
             return t->legacyId;
@@ -527,9 +504,6 @@ ulocimp_toLegacyType(const char* key, const char* type, bool* isKnownKey, bool* 
                 matched = isSpecialTypeRgKeyValue(type);
             }
             if (matched) {
-                if (isSpecialType != nullptr) {
-                    *isSpecialType = true;
-                }
                 return type;
             }
         }
