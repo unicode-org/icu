@@ -977,7 +977,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
                 // LB 9 Treat X CM* as if it were X
                 //        No explicit action required.
 
-                // LB 10     Treat any remaining combining mark as AL
+                // LB 10     Treat any remaining combining mark as lb=AL, ea=Na
                 if (fCM.contains(thisChar)) {
                     thisChar = 'A';
                 }
@@ -1033,32 +1033,6 @@ public class RBBITestMonkey extends CoreTestFmwk {
                 if (fZW.contains(UTF16.charAt(fText, tPos))) {
                     setAppliedRule(pos, "LB 8   Break after zero width space");
                     break;
-                }
-
-                //          Move this test up, before LB8a, because numbers can match a longer sequence that would
-                //          also match 8a.  e.g. NU ZWJ IS PO     (ZWJ acts like CM)
-                matchVals = LBNumberCheck(fText, prevPos, matchVals);
-                if (matchVals[0] != -1) {
-                    // Matched a number.  But could have been just a single digit, which would
-                    //    not represent a "no break here" between prevChar and thisChar
-                    int numEndIdx = matchVals[1];  // idx of first char following num
-                    if (numEndIdx > pos) {
-                        // Number match includes at least the two chars being checked
-                        if (numEndIdx > nextPos) {
-                            // Number match includes additional chars.  Update pos and nextPos
-                            //   so that next loop iteration will continue at the end of the number,
-                            //   checking for breaks between last char in number & whatever follows.
-                            nextPos = numEndIdx;
-                            pos     = numEndIdx;
-                            do {
-                                pos = moveIndex32(fText, pos, -1);
-                                thisChar = UTF16.charAt(fText, pos);
-                            }
-                            while (fCM.contains(thisChar));
-                        }
-                        setAppliedRule(pos, "LB 25  Numbers");
-                        continue;
-                    }
                 }
 
                 //       The monkey test's way of ignoring combining characters doesn't work
@@ -1217,11 +1191,71 @@ public class RBBITestMonkey extends CoreTestFmwk {
                     break;
                 }
 
-                //    x   QU
-                //    QU  x
-                if (fQU.contains(thisChar) || fQU.contains(prevChar)) {
-                        setAppliedRule(pos, "LB 19");
+                // LB 19
+                // × [QU-\p{Pi}]
+                if (fQU.contains(thisChar) && !fPi.contains(thisChar)) {
+                        setAppliedRule(pos, "LB 19 × [QU-\\p{Pi}]");
                     continue;
+                }
+                // [QU-\p{Pf}] ×
+                if (fQU.contains(prevChar) && !fPf.contains(prevChar)) {
+                    setAppliedRule(pos, "LB 19 [QU-\\p{Pf}] ×");
+                    continue;
+                }
+
+                // LB 19a
+                // [^\p{ea=F}\p{ea=W}\p{ea=H}] × QU
+                if (!feaFWH.contains(prevChar) && fQU.contains(thisChar)) {
+                    setAppliedRule(pos, "LB 19a [^\\p{ea=F}\\p{ea=W}\\p{ea=H}] × QU");
+                    continue;
+                }
+                // × QU ( [^\p{ea=F}\p{ea=W}\p{ea=H}] | eot )
+                if (fQU.contains(thisChar)) {
+                    if (nextPos < fText.length()) {
+                        int nextChar = fText.codePointAt(nextPos);
+                        if (!feaFWH.contains(nextChar)) {
+                            setAppliedRule(pos, "LB 19a × QU [^\\p{ea=F}\\p{ea=W}\\p{ea=H}]");
+                            continue;
+                        }
+                    } else {
+                        setAppliedRule(pos, "LB 19 × QU eot");
+                        continue;
+                    }
+                }
+                // QU × [^\p{ea=F}\p{ea=W}\p{ea=H}]
+                if (fQU.contains(prevChar) && !feaFWH.contains(thisChar)) {
+                    setAppliedRule(pos, "LB 19a QU × [^\\p{ea=F}\\p{ea=W}\\p{ea=H}]");
+                    continue;
+                }
+                // ( sot | [^\p{ea=F}\p{ea=W}\p{ea=H}] ) QU ×
+                if (fQU.contains(prevChar)) {
+                    if (prevPos == 0) {
+                        setAppliedRule(pos, "LB 19a sot QU ×");
+                        continue;
+                    }
+                    // prevPosX2 is -1 if there was a break, and prevCharX2 is 0; but the UAX #14 rules can
+                    // look through breaks.
+                    int breakObliviousPrevPosX2 = moveIndex32(fText, prevPos, -1);
+                    while (fCM.contains(fText.codePointAt(breakObliviousPrevPosX2))) {
+                        if (breakObliviousPrevPosX2 == 0) {
+                            break;
+                        }
+                        int beforeCM = moveIndex32(fText, breakObliviousPrevPosX2, -1);
+                        if (fBK.contains(fText.codePointAt(beforeCM)) ||
+                            fCR.contains(fText.codePointAt(beforeCM)) ||
+                            fLF.contains(fText.codePointAt(beforeCM)) ||
+                            fNL.contains(fText.codePointAt(beforeCM)) ||
+                            fSP.contains(fText.codePointAt(beforeCM)) ||
+                            fZW.contains(fText.codePointAt(beforeCM))) {
+                            break;
+                        }
+                        breakObliviousPrevPosX2 = beforeCM;
+                    }
+                    if (!feaFWH.contains(fText.codePointAt(breakObliviousPrevPosX2)) ||
+                        fCM.contains(fText.codePointAt(breakObliviousPrevPosX2))) {
+                        setAppliedRule(pos, "LB 19a [^\\p{ea=F}\\p{ea=W}\\p{ea=H}] QU ×");
+                        continue;
+                    }
                 }
 
                 if (fCB.contains(thisChar) || fCB.contains(prevChar)) {
@@ -1229,14 +1263,36 @@ public class RBBITestMonkey extends CoreTestFmwk {
                     break;
                 }
 
-                //           Don't break between Hyphens and letters if a break precedes the hyphen.
-                //           Formerly this was a Finnish tailoring.
-                //           Moved to root in ICU 63. This is an ICU customization, not in UAX-14.
-                //    ^($HY | $HH) $AL;
-                if (fAL.contains(thisChar) && (fHY.contains(prevChar) || fHH.contains(prevChar)) &&
-                        prevPosX2 == -1) {
-                    setAppliedRule(pos, "LB 20.09");
-                    continue;
+                // Don't break between Hyphens and letters if a break or a space precedes the hyphen.
+                // Formerly this was a Finnish tailoring.
+                // (sot | BK | CR | LF | NL | SP | ZW | CB | GL) ( HY | [\u2010] ) × AL
+                if (fAL.contains(thisChar) && (fHY.contains(prevChar) || fHH.contains(prevChar))) {
+                    // sot ( HY | [\u2010] ) × AL.
+                    if (prevPos == 0) {
+                        setAppliedRule(pos, "LB 20a");
+                        continue;
+                    }
+                    // prevPosX2 is -1 if there was a break; but the UAX #14 rules can
+                    // look through breaks.
+                    int breakObliviousPrevPosX2 = moveIndex32(fText, prevPos, -1);
+                    if (fBK.contains(fText.codePointAt(breakObliviousPrevPosX2)) ||
+                        fCR.contains(fText.codePointAt(breakObliviousPrevPosX2)) ||
+                        fLF.contains(fText.codePointAt(breakObliviousPrevPosX2)) ||
+                        fNL.contains(fText.codePointAt(breakObliviousPrevPosX2)) ||
+                        fSP.contains(fText.codePointAt(breakObliviousPrevPosX2)) ||
+                        fGL.contains(fText.codePointAt(breakObliviousPrevPosX2)) ||
+                        fZW.contains(fText.codePointAt(breakObliviousPrevPosX2))) {
+                        setAppliedRule(pos, "LB 20a");
+                        continue;
+                    }
+                    while (breakObliviousPrevPosX2 > 0 &&
+                            fCM.contains(fText.codePointAt(breakObliviousPrevPosX2))) {
+                        breakObliviousPrevPosX2 = moveIndex32(fText, breakObliviousPrevPosX2, -1);
+                    }
+                    if (fCB.contains(fText.codePointAt(breakObliviousPrevPosX2))) {
+                        setAppliedRule(pos, "LB 20a");
+                        continue;
+                    }
                 }
 
                 if (fBA.contains(thisChar) ||
@@ -1247,8 +1303,11 @@ public class RBBITestMonkey extends CoreTestFmwk {
                     continue;
                 }
 
-                if (fHL.contains(prevCharX2) && (fHY.contains(prevChar) || fBA.contains(prevChar))) {
-                    setAppliedRule(pos, "LB 21a HL (HY | BA) x");
+                if (fHL.contains(prevCharX2) &&
+                    (fHY.contains(prevChar) ||
+                     (fBA.contains(prevChar) && !feaFWH.contains(prevChar))) &&
+                    !fHL.contains(thisChar)) {
+                    setAppliedRule(pos, "LB 21a HL (HY | BA) x [^HL]");
                     continue;
                 }
 
@@ -1301,7 +1360,127 @@ public class RBBITestMonkey extends CoreTestFmwk {
                     continue;
                 }
 
-                // appliedRule: "LB 25 numbers match"; // moved up, before LB 8a,
+                boolean continueToNextPosition = false;
+                // LB 25.
+                for (XUnicodeSet[] pair : new XUnicodeSet[][]{
+                         new XUnicodeSet[]{fCL, fPO}, // 1. NU (SY | IS)* CL × PO
+                         new XUnicodeSet[]{fCP, fPO}, // 2. NU (SY | IS)* CP × PO
+                         new XUnicodeSet[]{fCL, fPR}, // 3. NU (SY | IS)* CL × PR
+                         new XUnicodeSet[]{fCP, fPR}, // 4. NU (SY | IS)* CP × PR
+                     }) {
+                    XUnicodeSet left = pair[0];
+                    XUnicodeSet right = pair[1];
+                    if (left.contains(prevChar) && right.contains(thisChar)) {
+                        // Check for the NU (SY | IS)* part.
+                        boolean leftHandSideMatches = false;
+                        tPos = moveIndex32(fText, prevPos, -1);
+                        for (;;) {
+                            while (tPos > 0 && fCM.contains(fText.codePointAt(tPos))) {
+                                tPos = moveIndex32(fText, tPos, -1);
+                            }
+                            final int tChar = fText.codePointAt(tPos);
+                            if (fSY.contains(tChar) || fIS.contains(tChar)) {
+                                if (tPos == 0) {
+                                    leftHandSideMatches = false;
+                                    break;
+                                }
+                                tPos = moveIndex32(fText, tPos, -1);
+                            } else if (fNU.contains(tChar)) {
+                                leftHandSideMatches = true;
+                                break;
+                            } else {
+                                leftHandSideMatches = false;
+                                break;
+                            }
+                        }
+                        if (leftHandSideMatches) {
+                            setAppliedRule(pos, "LB 25/1..4");
+                            continueToNextPosition = true;
+                            break;
+                        }
+                    }
+                }
+                if (continueToNextPosition) {
+                    continue;
+                }
+                // 5. NU (SY | IS)* × PO
+                // 6. NU (SY | IS)* × PR
+                // 13. NU (SY | IS)* × NU
+                boolean leftHandSideMatches;
+                tPos = prevPos;
+                for (;;) {
+                    while (tPos > 0 && fCM.contains(fText.codePointAt(tPos))) {
+                        tPos = moveIndex32(fText, tPos, -1);
+                    }
+                    final int tChar = fText.codePointAt(tPos);
+                    if (fSY.contains(tChar) || fIS.contains(tChar)) {
+                        if (tPos == 0) {
+                            leftHandSideMatches = false;
+                            break;
+                        }
+                        tPos = moveIndex32(fText, tPos, -1);
+                    } else if (fNU.contains(tChar)) {
+                        leftHandSideMatches = true;
+                        break;
+                    } else {
+                        leftHandSideMatches = false;
+                        break;
+                    }
+                }
+                if (leftHandSideMatches &&
+                    (fPO.contains(thisChar) || fPR.contains(thisChar) || fNU.contains(thisChar))) {
+                    setAppliedRule(pos, "LB 25/5,6,13,14");
+                    continue;
+                }
+                if (nextPos < fText.length()) {
+                    final int nextChar = fText.codePointAt(nextPos);
+                    // 7. PO × OP NU
+                    if (fPO.contains(prevChar) && fOP.contains(thisChar) && fNU.contains(nextChar)) {
+                        setAppliedRule(pos, "LB 25/7");
+                        continue;
+                    }
+                    // 9. PR × OP NU
+                    if (fPR.contains(prevChar) && fOP.contains(thisChar) && fNU.contains(nextChar)) {
+                        setAppliedRule(pos, "LB 25/9");
+                        continue;
+                    }
+                    int nextPosX2 = moveIndex32(fText, nextPos, 1);
+                    while (nextPosX2 < fText.length() && fCM.contains(fText.codePointAt(nextPosX2))) {
+                        nextPosX2 = moveIndex32(fText, nextPosX2, 1);
+                    }
+        
+                    if (nextPosX2 < fText.length()) {
+                        final int nextCharX2 = fText.codePointAt(nextPosX2);
+                        // 7bis. PO × OP IS NU
+                        if (fPO.contains(prevChar) && fOP.contains(thisChar) && fIS.contains(nextChar) &&
+                            fNU.contains(nextCharX2)) {
+                            setAppliedRule(pos, "LB 25/7bis");
+                            continue;
+                        }
+                        // 9bis. PR × OP IS NU
+                        if (fPR.contains(prevChar) && fOP.contains(thisChar) && fIS.contains(nextChar) &&
+                            fNU.contains(nextCharX2)) {
+                            setAppliedRule(pos, "LB 25/9bis");
+                            continue;
+                        }
+                    }
+                }
+                for (XUnicodeSet[] pair : new XUnicodeSet[][]{
+                         new XUnicodeSet[]{fPO, fNU}, // 8. PO × NU
+                         new XUnicodeSet[]{fPR, fNU}, // 10. PR × NU
+                         new XUnicodeSet[]{fHY, fNU}, // 11. HY × NU
+                         new XUnicodeSet[]{fIS, fNU}, // 12. IS × NU
+                     }) {
+                    XUnicodeSet left = pair[0];
+                    XUnicodeSet right = pair[1];
+                    if (left.contains(prevChar) && right.contains(thisChar)) {
+                        continueToNextPosition = true;
+                        break;
+                    }
+                }
+                if (continueToNextPosition) {
+                  continue;
+                }        
 
                 if (fJL.contains(prevChar) && (fJL.contains(thisChar) ||
                         fJV.contains(thisChar) ||
@@ -1966,6 +2145,8 @@ public class RBBITestMonkey extends CoreTestFmwk {
      *    1.  Using this code allows obtaining the same sequences as those from the ICU4C monkey test.
      *    2.  We need to get and restore the seed from values occurring in the middle
      *        of a long sequence, to more easily reproduce failing cases.
+     * TODO(egg): We need a better random number generator; ideally the same as in C++, but that may
+     *            be tricky.
      */
     private static int m_seed = 1;
     private static int  m_rand()
