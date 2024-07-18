@@ -2093,8 +2093,8 @@ public class RBBITestMonkey extends CoreTestFmwk {
                 }
                 pos--;
                 c = s.charAt(pos);
-                if (UTF16.isTrailSurrogate(c) && pos >= 0) {
-                    c = s.charAt(pos);
+                if (UTF16.isTrailSurrogate(c) && pos > 0) {
+                    c = s.charAt(pos - 1);
                     if (UTF16.isLeadSurrogate(c)) {
                         pos--;
                     }
