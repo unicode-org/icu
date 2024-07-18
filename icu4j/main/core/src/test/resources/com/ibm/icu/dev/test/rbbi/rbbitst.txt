@@ -2045,7 +2045,7 @@ Bangkok)•</data>
 #"님의 침묵"을 읽고
 <data>•"님•의 •침•묵"을 •읽•고•</data>
 #“님의 침묵”을 읽고
-<data>•“님•의 •침•묵”을 •읽•고•</data>
+<data>•“님•의 •침•묵”•을 •읽•고•</data>
 #『님의 침묵』을 읽고
 <data>•『님•의 •침•묵』•을 •읽•고•</data>
 #『foo bar』load
@@ -2214,5 +2214,12 @@ Bangkok)•</data>
 <data>•Some •»German« •quoting•</data>
 <data>•( « bracketed » ) •quoting•</data>
 <data>•« « Nesting » »•</data>
+<data>•子•曰：•“学•而•时•习•之，•不•亦•说•乎？•有•朋•自•远•方•来，•不•亦•乐•乎？•人•不•知•而•不•愠，•不•亦•君•子•乎？”•</data>
+<data>•子•贡•曰：•“贫•而•无•谄，•富•而•无•骄，•何•如？”•子•曰：•“可•也。•未•若•贫•而•乐，•富•而•好•礼•者•也”。•子•贡•曰：•“《诗》•云：•‘如•切•如•磋，•如•琢•如•磨。’•其•斯•之•谓•与？”•子•曰：•“赐•也，•始•可•与•言•《诗》•已•矣！•吿•诸•往•而•知•来•者。”•</data>
+<data>•哪•一•所•中•国•学•校•乃•“为•各•省•派•往•日•本•游•学•之•首•倡”？•</data>
+<data>•哪•个•商•标•以•人•名•为•名，•因•特•色•小•吃•“五•台•杂•烩•汤”•而•入•选•“新•疆•老•字•号”？•</data>
+<data>•毕•士•悌•（1901•年•—•1936•年）•又•名•“杨•林”，•朝•鲜•籍•红•军•将•领•</data>
+<data>•Anmerkung: •„White“ •bzw. •‚白•人‘ •– •in •der •Amtlichen •Statistik•</data>
 <data>•« Complex »« chaining » •</data>
 <data>•« .618 »•</data>  # Interaction with the ICU tailoring to break before such numbers.
+
