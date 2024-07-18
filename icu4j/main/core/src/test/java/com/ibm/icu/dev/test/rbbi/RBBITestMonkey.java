@@ -9,10 +9,13 @@
 package com.ibm.icu.dev.test.rbbi;
 
 
+import java.lang.Character.UnicodeScript;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -121,7 +124,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
         //    near any test failure.
         int   fCharProperty;
 
-        List fSets;
+        List<UnicodeSet> fSets;
         ArrayList<String> fClassNames;
         ArrayList<String> fAppliedRules;
     }
@@ -755,6 +758,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
         XUnicodeSet fVI;
         XUnicodeSet fPi;
         XUnicodeSet fPf;
+        XUnicodeSet feaFWH;
 
         StringBuffer  fText;
         int           fOrigPositions;
@@ -818,6 +822,8 @@ public class RBBITestMonkey extends CoreTestFmwk {
             fPi = new XUnicodeSet("[\\p{Pi}]");
             fPf = new XUnicodeSet("[\\p{Pf}]");
 
+            feaFWH = new XUnicodeSet("[\\p{ea=F}\\p{ea=W}\\p{ea=H}]");
+
             // Remove dictionary characters.
             // The monkey test reference implementation of line break does not replicate the dictionary behavior,
             // so dictionary characters are omitted from the monkey test data.
@@ -834,55 +840,54 @@ public class RBBITestMonkey extends CoreTestFmwk {
 
             fHH.add('\u2010');   // Hyphen, '‐'
 
-            fSets.add(fBK);     fClassNames.add("BK");
-            fSets.add(fCR);     fClassNames.add("CR");
-            fSets.add(fLF);     fClassNames.add("LF");
-            fSets.add(fCM);     fClassNames.add("CM");
-            fSets.add(fNL);     fClassNames.add("NL");
-            fSets.add(fWJ);     fClassNames.add("WJ");
-            fSets.add(fZW);     fClassNames.add("ZW");
-            fSets.add(fGL);     fClassNames.add("GL");
-            fSets.add(fSP);     fClassNames.add("SP");
-            fSets.add(fB2);     fClassNames.add("B2");
-            fSets.add(fBA);     fClassNames.add("BA");
-            fSets.add(fBB);     fClassNames.add("BB");
-            fSets.add(fHY);     fClassNames.add("HY");
-            fSets.add(fCB);     fClassNames.add("CB");
-            fSets.add(fCL);     fClassNames.add("CL");
-            fSets.add(fCP);     fClassNames.add("CP");
-            fSets.add(fEX);     fClassNames.add("EX");
-            fSets.add(fIN);     fClassNames.add("IN");
-            fSets.add(fJL);     fClassNames.add("JL");
-            fSets.add(fJT);     fClassNames.add("JT");
-            fSets.add(fJV);     fClassNames.add("JV");
-            fSets.add(fNS);     fClassNames.add("NV");
-            fSets.add(fOP);     fClassNames.add("OP");
-            fSets.add(fQU);     fClassNames.add("QU");
-            fSets.add(fIS);     fClassNames.add("IS");
-            fSets.add(fNU);     fClassNames.add("NU");
-            fSets.add(fPO);     fClassNames.add("PO");
-            fSets.add(fPR);     fClassNames.add("PR");
-            fSets.add(fSY);     fClassNames.add("SY");
-            fSets.add(fAI);     fClassNames.add("AI");
-            fSets.add(fAL);     fClassNames.add("AL");
-            fSets.add(fH2);     fClassNames.add("H2");
-            fSets.add(fH3);     fClassNames.add("H3");
-            fSets.add(fHL);     fClassNames.add("HL");
-            fSets.add(fID);     fClassNames.add("ID");
-            fSets.add(fRI);     fClassNames.add("RI");
-            fSets.add(fSG);     fClassNames.add("SG");
-            fSets.add(fEB);     fClassNames.add("EB");
-            fSets.add(fEM);     fClassNames.add("EM");
-            fSets.add(fZWJ);    fClassNames.add("ZWJ");
-            // TODO: fOP30 & fCP30 overlap with plain fOP. Probably OK, but fOP/CP chars will be over-represented.
-            fSets.add(fOP30);   fClassNames.add("OP30");
-            fSets.add(fCP30);   fClassNames.add("CP30");
-            fSets.add(fExtPictUnassigned); fClassNames.add("fExtPictUnassigned");
-            fSets.add(fAK); fClassNames.add("AK");
-            fSets.add(fAP); fClassNames.add("AP");
-            fSets.add(fAS); fClassNames.add("AS");
-            fSets.add(fVF); fClassNames.add("VF");
-            fSets.add(fVI); fClassNames.add("VI");
+            class NamedSet {
+                String name;
+                UnicodeSet set;
+                NamedSet(String name, UnicodeSet set) {
+                    this.name = name;
+                    this.set = set;
+                }
+                NamedSet(String name, String pattern) {
+                    this(name, new UnicodeSet(pattern));
+                }
+            };
+
+            final List<NamedSet> interestingSets = new ArrayList<>();
+            interestingSets.add(new NamedSet("eastAsian", "[\\p{ea=F}\\p{ea=W}\\p{ea=H}]"));
+            interestingSets.add(new NamedSet("Pi", "\\p{Pi}"));
+            interestingSets.add(new NamedSet("Pf",  "\\p{Pf}"));
+            interestingSets.add(new NamedSet("DOTTEDC.",  "[◌]"));
+            interestingSets.add(new NamedSet("HYPHEN",  "[\\u2010]"));
+            interestingSets.add(new NamedSet("ExtPictCn",  "[\\p{Extended_Pictographic}&\\p{Cn}]"));
+            final List<NamedSet> partition = new ArrayList<>();
+            for (int lb = 0; lb < UCharacter.LineBreak.COUNT; ++lb) {
+                final String lbValueShortName =
+                    UCharacter.getPropertyValueName(UProperty.LINE_BREAK, lb, UProperty.NameChoice.SHORT);
+                if (lbValueShortName.equals("SA")) {
+                    continue;
+                }
+                partition.add(new NamedSet(lbValueShortName, "\\p{lb=" + lbValueShortName + "}"));
+            }
+            for (final NamedSet refinement : interestingSets) {
+                for (int i = 0; i < partition.size();) {
+                    final String name = partition.get(i).name;
+                    final UnicodeSet set = partition.get(i).set;
+                    final UnicodeSet intersection = new UnicodeSet(set).retainAll(refinement.set);
+                    final UnicodeSet complement = new UnicodeSet(set).removeAll(refinement.set);
+                    if (!intersection.isEmpty() && !complement.isEmpty()) {
+                        partition.add(i, new NamedSet(name, complement));
+                        partition.add(i + 1, new NamedSet(name + "&" + refinement.name, intersection));
+                        partition.remove(i + 2);
+                        i += 2;
+                    } else {
+                        ++i;
+                    }
+                }
+            }
+            for (final NamedSet part : partition) {
+                fSets.add(part.set);
+                fClassNames.add(part.name);
+            }
         }
 
         @Override
