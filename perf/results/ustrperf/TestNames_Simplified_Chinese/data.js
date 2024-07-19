@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720702283184,
+  "lastUpdate": 1721414275678,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -82845,6 +82845,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 38.6047,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "clopez@igalia.com",
+            "name": "Carlos Alberto Lopez Perez",
+            "username": "clopez"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "8ca6bc754599a01689751e8f1c68f482ff5997e8",
+          "message": "ICU-22813 Rise the size of the buffers used for the command strings at pkgdata\n\nThe tool pkgdata uses snprintf() to build the strings of the commands that\nwill execute later during the install process. But the maximum size of this\nbuffers is not enough when there is a long path.\n\nThis has caused issues on some CI systems that use very long paths, causing\nthe install process to produce a wrong result.\n\nThe maximum path on Linux is 4096 (defined as PATH_MAX at <linux/limits.h>)\nSo the size of SMALL_BUFFER_MAX_SIZE should be 4096 to avoid errors related\nto truncated paths.",
+          "timestamp": "2024-07-19T18:02:53Z",
+          "tree_id": "b4bdc4589ecebdb32d0f5d81693eea5b8e4eccad",
+          "url": "https://github.com/unicode-org/icu/commit/8ca6bc754599a01689751e8f1c68f482ff5997e8"
+        },
+        "date": 1721414150475,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.5111,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.3404,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.0457,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 26.205,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 37.1005,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.4224,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 28.3479,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.3133,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 88.9445,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.0682,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.6912,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 38.8741,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
