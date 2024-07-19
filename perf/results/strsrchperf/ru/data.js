@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1721413459556,
+  "lastUpdate": 1721430745069,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28545,6 +28545,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 51.987,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "40b2ec3c3727bca975824fdb9d1f084207d535ff",
+          "message": "ICU-22814 Add CIFuzz to ICU\n\nSee #3059",
+          "timestamp": "2024-07-19T15:53:12-07:00",
+          "tree_id": "76b92bb15a0c311473fccc11f330217b4baef378",
+          "url": "https://github.com/unicode-org/icu/commit/40b2ec3c3727bca975824fdb9d1f084207d535ff"
+        },
+        "date": 1721430612344,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.0247,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 51.9944,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
