@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720701827933,
+  "lastUpdate": 1721413797462,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -67389,6 +67389,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1428.0176,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "clopez@igalia.com",
+            "name": "Carlos Alberto Lopez Perez",
+            "username": "clopez"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "8ca6bc754599a01689751e8f1c68f482ff5997e8",
+          "message": "ICU-22813 Rise the size of the buffers used for the command strings at pkgdata\n\nThe tool pkgdata uses snprintf() to build the strings of the commands that\nwill execute later during the install process. But the maximum size of this\nbuffers is not enough when there is a long path.\n\nThis has caused issues on some CI systems that use very long paths, causing\nthe install process to produce a wrong result.\n\nThe maximum path on Linux is 4096 (defined as PATH_MAX at <linux/limits.h>)\nSo the size of SMALL_BUFFER_MAX_SIZE should be 4096 to avoid errors related\nto truncated paths.",
+          "timestamp": "2024-07-19T18:02:53Z",
+          "tree_id": "b4bdc4589ecebdb32d0f5d81693eea5b8e4eccad",
+          "url": "https://github.com/unicode-org/icu/commit/8ca6bc754599a01689751e8f1c68f482ff5997e8"
+        },
+        "date": 1721413666531,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77855.7949,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177773.4043,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5492,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.0944,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.7258,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8496.9318,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 31011.1406,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1413.289,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
