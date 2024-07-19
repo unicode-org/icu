@@ -22,7 +22,8 @@
         {
           "type": "bad-operand"
         }
-      ]
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "{|2006-01-02| :date}"
