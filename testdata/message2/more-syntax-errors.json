@@ -1,5 +1,0 @@
-[
-  ".input {$x :number}",
-  ".local $foo = {|1|}",
-  ".unsupported |statement| {$x :number}"
-]
