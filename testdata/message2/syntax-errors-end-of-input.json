@@ -1,4 +1,15 @@
-[
+{
+  "scenario": "Syntax errors for unexpected end-of-input",
+  "description": "Syntax errors; for ICU4C, the character offset is expected to be the last character",
+  "defaultTestProperties": {
+    "locale": "en-US",
+    "expErrors": [
+      {
+        "type": "syntax-error"
+      }
+    ]
+  },
+  "tests": [
     { "src": ".local   ", "char": 9 },
     { "src": ".lo", "char": 3 },
     { "src": ".local $foo", "char": 11 },
@@ -13,4 +24,6 @@
     { "src": "{{missing end {$brace}", "char": 22 },
     { "src": "{{missing end {$brace}}", "char": 23 },
     { "src": "{{%xyz", "char": 6 }
-]
+  ]
+}
+

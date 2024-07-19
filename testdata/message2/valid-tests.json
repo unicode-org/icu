@@ -1,5 +1,10 @@
-[
-    { "src": "hello {|4.2| :number}", "exp": "hello 4.2"},
+{
+  "scenario": "Valid tests",
+  "description": "Additional valid tests",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
     { "src": "hello {|4.2| :number minimumFractionDigits=2}", "exp": "hello 4.20"},
     { "src": "hello {|4.2| :number minimumFractionDigits = 2}", "exp": "hello 4.20" },
     { "src": "hello {|4.2| :number minimumFractionDigits= 2}", "exp": "hello 4.20" },
@@ -63,63 +68,61 @@
     { "src": "{42e369}", "exp": "42e369",
       "ignoreJava": "See ICU-22810"},
     { "src": "hello {|3| :number   }", "exp": "hello 3" },
-    { "src": "{:foo}", "errors": [{ "type": "missing-func" }],
+    { "src": "{:foo}", "expErrors": [{ "type": "unknown-function" }],
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" },
-    { "src": "{:foo }", "errors": [{ "type": "missing-func" }],
+    { "src": "{:foo }", "expErrors": [{ "type": "unknown-function" }],
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" },
-    { "src": "{:foo   }", "errors": [{ "type": "missing-func" }],
+    { "src": "{:foo   }", "expErrors": [{ "type": "unknown-function" }],
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" },
-    { "src": "{:foo k=v}", "errors": [{ "type": "missing-func" }],
+    { "src": "{:foo k=v}", "expErrors": [{ "type": "unknown-function" }],
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" },
-    { "src": "{:foo k=v   }", "errors": [{ "type": "missing-func" }],
+    { "src": "{:foo k=v   }", "expErrors": [{ "type": "unknown-function" }],
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" },
-    { "src": "{:foo k1=v1   k2=v2}", "errors": [{ "type": "missing-func" }],
+    { "src": "{:foo k1=v1   k2=v2}", "expErrors": [{ "type": "unknown-function" }],
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" },
-    { "src": "{:foo k1=v1   k2=v2   }", "errors": [{ "type": "missing-func" }],
+    { "src": "{:foo k1=v1   k2=v2   }", "expErrors": [{ "type": "unknown-function" }],
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" },
     { "src": "{|3.14| }", "exp": "3.14" },
     { "src": "{|3.14|    }", "exp": "3.14" },
     { "src": "{|3.14|    :number}", "exp": "3.14" },
     { "src": "{|3.14|    :number   }", "exp": "3.14" },
-    { "src": "{$bar }", "errors": [{ "type": "unresolved-var" }],
+    { "src": "{$bar }", "expErrors": [{ "type": "unresolved-variable" }],
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" },
-    { "src": "{$bar    }", "errors": [{ "type": "unresolved-var" }],
+    { "src": "{$bar    }", "expErrors": [{ "type": "unresolved-variable" }],
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" },
-    { "src": "{$bar    :foo}", "errors": [{ "type": "unresolved-var" }],
+    { "src": "{$bar    :foo}", "expErrors": [{ "type": "unresolved-variable" }],
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" },
-    { "src": "{$bar    :foo   }", "errors": [{ "type": "unresolved-var" }],
+    { "src": "{$bar    :foo   }", "expErrors": [{ "type": "unresolved-variable" }],
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" },
-    { "src": "{$bar-foo}", "errors": [{ "type": "unresolved-var" }],
+    { "src": "{$bar-foo}", "expErrors": [{ "type": "unresolved-variable" }],
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782" },
     { "src": ".local $foo = {|hello|} .local $foo = {$foo} {{{$foo}}}",
-      "errors": [{ "type": "duplicate-declaration" }] },
+      "expErrors": [{ "type": "duplicate-declaration" }] },
     { "src": "good {placeholder}", "exp": "good placeholder" },
     {
         "src": "a\\\\qbc",
         "exp": "a\\qbc",
         "comment": "pattern -> escaped-char -> backslash backslash"
     },
-
     {
-        "src": "{$one} and {$two}",
-        "params": { "one": "1.3", "two": "4.2" },
-        "exp": "1.3 and 4.2"
+      "comment": "message -> simple-message -> simple-start pattern -> escaped-char",
+      "src": "\\\\",
+      "exp": "\\"
     },
     {
-        "src": ".local $foo = {$baz} .local $bar = {$foo} {{bar {$bar}}}",
-        "params": { "baz": "foo" },
-        "exp": "bar foo"
+      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" s \"#\" identifier \"}\"", 
+      "src": "{ #a}",
+      "exp": ""
     },
     {
-        "src": ".local $foo = {$foo} {{bar {$foo}}}",
-        "params": { "foo": "foo" },
-        "exp": "bar foo",
-        "errors": [{ "type": "duplicate-declaration" }]
+      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" s \"/\" identifier \"}\"",
+      "src": "{ /a}",
+      "exp": ""
     },
     {
-        "src": ".local $foo = {$bar} .local $bar = {$baz} {{bar {$foo}}}",
-        "params": { "baz": "foo" },
-        "exp": "bar {$bar}",
-        "errors": [{ "type": "duplicate-declaration" }]
+      "comment": "message -> complex-message -> *(declaration [s]) complex-body -> declaration complex-body -> input-declaration complex-body -> input variable-expression complex-body",
+      "src": ".input{$x}{{}}",
+      "exp": ""
     }
-]
+  ]
+}

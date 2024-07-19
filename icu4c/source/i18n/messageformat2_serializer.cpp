@@ -35,12 +35,8 @@ void Serializer::emit(const UnicodeString& s) {
     result += s;
 }
 
-template <int32_t N>
-void Serializer::emit(const UChar32 (&token)[N]) {
-    // Don't emit the terminator
-    for (int32_t i = 0; i < N - 1; i++) {
-        emit(token[i]);
-    }
+void Serializer::emit(const std::u16string_view& token) {
+    result.append(token);
 }
 
 void Serializer::emit(const Literal& l) {

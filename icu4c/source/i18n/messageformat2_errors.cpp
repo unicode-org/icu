@@ -135,6 +135,10 @@ namespace message2 {
                 status = U_MF_VARIANT_KEY_MISMATCH_ERROR;
                 break;
             }
+            case StaticErrorType::DuplicateVariant: {
+                status = U_MF_DUPLICATE_VARIANT_ERROR;
+                break;
+            }
             case StaticErrorType::NonexhaustivePattern: {
                 status = U_MF_NONEXHAUSTIVE_PATTERN_ERROR;
                 break;
@@ -208,6 +212,10 @@ namespace message2 {
             break;
         }
         case StaticErrorType::VariantKeyMismatchError: {
+            dataModelError = true;
+            break;
+        }
+        case StaticErrorType::DuplicateVariant: {
             dataModelError = true;
             break;
         }

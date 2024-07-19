@@ -22,6 +22,7 @@ Checks data model errors
 
 The following are checked here:
 Variant Key Mismatch
+Duplicate Variant
 Missing Fallback Variant (called NonexhaustivePattern here)
 Missing Selector Annotation
 Duplicate Declaration
@@ -162,6 +163,7 @@ void Checker::checkVariants(UErrorCode& status) {
 
     // Check that one variant includes only wildcards
     bool defaultExists = false;
+    bool duplicatesExist = false;
 
     for (int32_t i = 0; i < dataModel.numVariants(); i++) {
         const SelectorKeys& k = variants[i].getKeys();
@@ -173,10 +175,35 @@ void Checker::checkVariants(UErrorCode& status) {
             return;
         }
         defaultExists |= areDefaultKeys(keys, len);
+
+        // Check if this variant's keys are duplicated by any other variant's keys
+        if (!duplicatesExist) {
+            // This check takes quadratic time, but it can be optimized if checking
+            // this property turns out to be a bottleneck.
+            for (int32_t j = 0; j < i; j++) {
+                const SelectorKeys& k1 = variants[j].getKeys();
+                const Key* keys1 = k1.getKeysInternal();
+                bool allEqual = true;
+                // This variant was already checked,
+                // so we know keys1.len == len
+                for (int32_t kk = 0; kk < len; kk++) {
+                    if (!(keys[kk] == keys1[kk])) {
+                        allEqual = false;
+                        break;
+                    }
+                }
+                if (allEqual) {
+                    duplicatesExist = true;
+                }
+            }
+        }
+    }
+
+    if (duplicatesExist) {
+        errors.addError(StaticErrorType::DuplicateVariant, status);
     }
     if (!defaultExists) {
         errors.addError(StaticErrorType::NonexhaustivePattern, status);
-        return;
     }
 }
 
