@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720701003335,
+  "lastUpdate": 1721413117016,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23067,6 +23067,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1948.587855820019,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "clopez@igalia.com",
+            "name": "Carlos Alberto Lopez Perez",
+            "username": "clopez"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "8ca6bc754599a01689751e8f1c68f482ff5997e8",
+          "message": "ICU-22813 Rise the size of the buffers used for the command strings at pkgdata\n\nThe tool pkgdata uses snprintf() to build the strings of the commands that\nwill execute later during the install process. But the maximum size of this\nbuffers is not enough when there is a long path.\n\nThis has caused issues on some CI systems that use very long paths, causing\nthe install process to produce a wrong result.\n\nThe maximum path on Linux is 4096 (defined as PATH_MAX at <linux/limits.h>)\nSo the size of SMALL_BUFFER_MAX_SIZE should be 4096 to avoid errors related\nto truncated paths.",
+          "timestamp": "2024-07-19T18:02:53Z",
+          "tree_id": "b4bdc4589ecebdb32d0f5d81693eea5b8e4eccad",
+          "url": "https://github.com/unicode-org/icu/commit/8ca6bc754599a01689751e8f1c68f482ff5997e8"
+        },
+        "date": 1721412982608,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1910.6736773483583,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
