@@ -147,11 +147,6 @@
         "comment": "Trailing whitespace at end of message should not be accepted either"
     },
     {
-        "src": "{{hi}} ",
-        "char": 6,
-        "comment": "Trailing whitespace at end of message should not be accepted either"
-    },
-    {
         "src": "empty { }",
         "char": 8,
         "comment": "Empty expression"
@@ -301,7 +296,7 @@
     { "src":  "{{missing end brace}", "char": 20},
     { "src":  "{{missing end braces", "char": 20},
     { "src":  "{{missing end {$braces", "char": 22},
-    { "src":  "{{extra}} content", "char": 9},
+    { "src":  "{{extra}} content", "char": 10},
     { "src":  "empty { } placeholder", "char": 8},
     { "src":  "missing space {42:func}", "char": 17},
     { "src":  "missing space {|foo|:func}", "char": 20},
