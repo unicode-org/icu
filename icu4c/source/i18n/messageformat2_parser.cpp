@@ -456,12 +456,11 @@ void Parser::parseToken(UChar32 c, UErrorCode& errorCode) {
    the string beginning at `source[index]`
    No postcondition -- a message can end with a '}' token
 */
-template <int32_t N>
-void Parser::parseToken(const UChar32 (&token)[N], UErrorCode& errorCode) {
+void Parser::parseToken(const std::u16string_view& token, UErrorCode& errorCode) {
     U_ASSERT(inBounds(source, index));
 
     int32_t tokenPos = 0;
-    while (tokenPos < N - 1) {
+    while (tokenPos < (int32_t) token.length()) {
         if (source[index] != token[tokenPos]) {
             ERROR(parseError, errorCode, index);
             return;
@@ -478,13 +477,12 @@ void Parser::parseToken(const UChar32 (&token)[N], UErrorCode& errorCode) {
    the string beginning at `source[index']`),
    then consumes optional whitespace again
 */
-template <int32_t N>
-void Parser::parseTokenWithWhitespace(const UChar32 (&token)[N], UErrorCode& errorCode) {
+void Parser::parseTokenWithWhitespace(const std::u16string_view& token, UErrorCode& errorCode) {
     // No need for error check or bounds check before parseOptionalWhitespace
     parseOptionalWhitespace(errorCode);
     // Establish precondition
     CHECK_BOUNDS(source, index, parseError, errorCode);
-    parseToken(token);
+    parseToken(token, errorCode);
     parseOptionalWhitespace(errorCode);
     // Guarantee postcondition
     CHECK_BOUNDS(source, index, parseError, errorCode);
@@ -641,80 +639,40 @@ FunctionName Parser::parseFunction(UErrorCode& errorCode) {
   Precondition: source[index] == BACKSLASH
 
   Consume an escaped character.
+  Corresponds to `escaped-char` in the grammar.
 
-  Generalized to handle `reserved-escape`, `text-escape`,
-  or `literal-escape`, depending on the `kind` argument.
-
-  Appends result to `str`
+  No postcondition (a message can end with an escaped char)
 */
-void Parser::parseEscapeSequence(EscapeKind kind,
-                                 UnicodeString &str,
-                                 UErrorCode& errorCode) {
+UnicodeString Parser::parseEscapeSequence(UErrorCode& errorCode) {
     U_ASSERT(inBounds(source, index));
     U_ASSERT(source[index] == BACKSLASH);
     normalizedInput += BACKSLASH;
     index++; // Skip the initial backslash
-    CHECK_BOUNDS(source, index, parseError, errorCode);
-
-    #define SUCCEED \
-       /* Append to the output string */                    \
-       str += source[index];                                \
-       /* Update normalizedInput */                         \
-       normalizedInput += source[index];                    \
-       /* Consume the character */                          \
-       index++;                                             \
-       /* Guarantee postcondition */                        \
-       CHECK_BOUNDS(source, index, parseError, errorCode);  \
-       return;
-
-    // Expect a '{', '|' or '}'
-    switch (source[index]) {
-    case LEFT_CURLY_BRACE:
-    case RIGHT_CURLY_BRACE: {
-        // Allowed in a `text-escape` or `reserved-escape`
-        switch (kind) {
-        case TEXT:
-        case RESERVED: {
-            SUCCEED;
+    UnicodeString str;
+    if (inBounds(source, index)) {
+        // Expect a '{', '|' or '}'
+        switch (source[index]) {
+        case LEFT_CURLY_BRACE:
+        case RIGHT_CURLY_BRACE:
+        case PIPE:
+        case BACKSLASH: {
+            /* Append to the output string */
+            str += source[index];
+            /* Update normalizedInput */
+            normalizedInput += source[index];
+            /* Consume the character */
+            index++;
+            return str;
         }
         default: {
+            // No other characters are allowed here
             break;
         }
         }
-        break;
     }
-    case PIPE: {
-        // Allowed in a `literal-escape` or `reserved-escape`
-        switch (kind) {
-           case LITERAL:
-           case RESERVED: {
-               SUCCEED;
-           }
-           default: {
-               break;
-           }
-        }
-        break;
-    }
-   case BACKSLASH: {
-       // Allowed in any escape sequence
-       SUCCEED;
-   }
-   default: {
-        // No other characters are allowed here
-        break;
-    }
-   }
    // If control reaches here, there was an error
    ERROR(parseError, errorCode, index);
-}
-
-/*
-  Consume an escaped pipe or backslash, matching the `literal-escape`
-  nonterminal in the grammar
-*/
-void Parser::parseLiteralEscape(UnicodeString &str, UErrorCode& errorCode) {
-    parseEscapeSequence(LITERAL, str, errorCode);
+   return str;
 }
 
 
@@ -736,7 +694,7 @@ Literal Parser::parseQuotedLiteral(UErrorCode& errorCode) {
             bool done = false;
             while (!done) {
                 if (source[index] == BACKSLASH) {
-                    parseLiteralEscape(contents, errorCode);
+                    contents += parseEscapeSequence(errorCode);
                 } else if (isQuotedChar(source[index])) {
                     contents += source[index];
                     normalizedInput += source[index];
@@ -1142,10 +1100,6 @@ Arbitrary lookahead is required to parse attribute lists, similarly to option li
     }
 }
 
-void Parser::parseReservedEscape(UnicodeString &str, UErrorCode& errorCode) {
-    parseEscapeSequence(RESERVED, str, errorCode);
-}
-
 /*
   Consumes a non-empty sequence of reserved-chars, reserved-escapes, and
   literals (as in 1*(reserved-char / reserved-escape / literal) in the `reserved-body` rule)
@@ -1177,8 +1131,7 @@ void Parser::parseReservedChunk(Reserved::Builder& result, UErrorCode& status) {
 
         if (source[index] == BACKSLASH) {
             // reserved-escape
-            parseReservedEscape(chunk, status);
-            result.add(Literal(false, chunk), status);
+            result.add(Literal(false, parseEscapeSequence(status)), status);
             chunk.setTo(u"", 0);
         } else if (source[index] == PIPE || isUnquotedStart(source[index])) {
             result.add(parseLiteral(status), status);
@@ -1718,15 +1671,17 @@ void Parser::parseUnsupportedStatement(UErrorCode& status) {
     dataModel.addUnsupportedStatement(builder.build(status), status);
 }
 
-// Terrible hack to get around the ambiguity between `matcher` and `reserved-statement`
-bool Parser::nextIsMatch() const {
-    for(int32_t i = 0; i < 6; i++) {
-        if (!inBounds(source, index + i) || source[index + i] != ID_MATCH[i]) {
+// Terrible hack to get around the ambiguity between unsupported keywords
+// and supported keywords
+bool Parser::nextIs(const std::u16string_view &keyword) const {
+    for(int32_t i = 0; i < (int32_t) keyword.length(); i++) {
+        if (!inBounds(source, index + i) || source[index + i] != keyword[i]) {
             return false;
         }
     }
     return true;
 }
+
 /*
   Consume a possibly-empty sequence of declarations separated by whitespace;
   each declaration matches the `declaration` nonterminal in the grammar
@@ -1740,19 +1695,17 @@ void Parser::parseDeclarations(UErrorCode& status) {
 
     while (source[index] == PERIOD) {
         CHECK_BOUNDS(source, index + 1, parseError, status);
-        if (source[index + 1] == ID_LOCAL[1]) {
+        // Check for unsupported statements first
+        // Lookahead is needed to disambiguate keyword from known keywords
+        if (!nextIs(ID_MATCH) && !nextIs(ID_LOCAL) && !nextIs(ID_INPUT)) {
+            parseUnsupportedStatement(status);
+        } else if (source[index + 1] == ID_LOCAL[1]) {
             parseLocalDeclaration(status);
         } else if (source[index + 1] == ID_INPUT[1]) {
             parseInputDeclaration(status);
         } else {
-            // Unsupported statement
-            // Lookahead is needed to disambiguate this from a `match`
-            if (!nextIsMatch()) {
-                parseUnsupportedStatement(status);
-            } else {
-                // Done parsing declarations
-                break;
-            }
+            // Done parsing declarations
+            break;
         }
 
         // Avoid looping infinitely
@@ -1765,49 +1718,22 @@ void Parser::parseDeclarations(UErrorCode& status) {
 }
 
 /*
-  Consume an escaped curly brace, or backslash, matching the `text-escape`
-  nonterminal in the grammar
-*/
-void Parser::parseTextEscape(UnicodeString &str, UErrorCode& status) {
-    parseEscapeSequence(TEXT, str, status);
-}
+  Consume a text character
+  matching the `text-char` nonterminal in the grammar
 
-/*
-  Consume a non-empty sequence of text characters and escaped text characters,
-  matching the `text` nonterminal in the grammar
-
-  No postcondition (a message can end with a text)
+  No postcondition (a message can end with a text-char)
 */
-UnicodeString Parser::parseText(UErrorCode& status) {
+UnicodeString Parser::parseTextChar(UErrorCode& status) {
     UnicodeString str;
-    if (!inBounds(source, index)) {
-        // Text can be empty
-        return str;
-    }
-
-    if (!(isTextChar(source[index] || source[index] == BACKSLASH))) {
-        // Error -- text is expected here
+    if (!inBounds(source, index) || !(isTextChar(source[index]))) {
+        // Error -- text-char is expected here
         ERROR(parseError, status, index);
-        return str;
+    } else {
+        normalizedInput += source[index];
+        str += source[index];
+        index++;
+        maybeAdvanceLine();
     }
-
-    while (true) {
-        if (source[index] == BACKSLASH) {
-            parseTextEscape(str, status);
-        } else if (isTextChar(source[index])) {
-            normalizedInput += source[index];
-            str += source[index];
-            index++;
-            maybeAdvanceLine();
-        } else {
-            break;
-        }
-        if (!inBounds(source, index)) {
-            // OK for text to end a message
-            break;
-        }
-    }
-
     return str;
 }
 
@@ -2026,9 +1952,22 @@ std::variant<Expression, Markup> Parser::parsePlaceholder(UErrorCode& status) {
         return exprFallback(status);
     }
 
-    // Check if it's markup or an expression
-    if (source[index + 1] == NUMBER_SIGN || source[index + 1] == SLASH) {
-        // Markup
+    // Need to look ahead arbitrarily since can appear before the '{' and '#'
+    // in markup
+    int32_t tempIndex = index + 1;
+    bool isMarkup = false;
+    while (inBounds(source, tempIndex)) {
+        if (source[tempIndex] == NUMBER_SIGN || source[tempIndex] == SLASH) {
+            isMarkup = true;
+            break;
+        }
+        if (!isWhitespace(source[tempIndex])){
+            break;
+        }
+        tempIndex++;
+    }
+
+    if (isMarkup) {
         return parseMarkup(status);
     }
     return parseExpression(status);
@@ -2058,9 +1997,18 @@ Pattern Parser::parseSimpleMessage(UErrorCode& status) {
                 }
                 break;
             }
+            case BACKSLASH: {
+                // Must be escaped-char
+                result.add(parseEscapeSequence(status), status);
+                break;
+            }
+            case RIGHT_CURLY_BRACE: {
+                // Distinguish unescaped '}' from end of quoted pattern
+                break;
+            }
             default: {
-                // Must be text
-                result.add(parseText(status), status);
+                // Must be text-char
+                result.add(parseTextChar(status), status);
                 break;
             }
             }
@@ -2232,21 +2180,31 @@ void Parser::parseBody(UErrorCode& status) {
 void Parser::parse(UParseError &parseErrorResult, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    bool simple = true;
-    // Message can be empty, so we need to only look ahead
-    // if we know it's non-empty
+    bool complex = false;
+    // First, "look ahead" to determine if this is a simple or complex
+    // message. To do that, check the first non-whitespace character.
+    while (inBounds(source, index) && isWhitespace(source[index])) {
+        index++;
+    }
     if (inBounds(source, index)) {
         if (source[index] == PERIOD
             || (index < static_cast<uint32_t>(source.length()) + 1
                 && source[index] == LEFT_CURLY_BRACE
                 && source[index + 1] == LEFT_CURLY_BRACE)) {
-            // A complex message begins with a '.' or '{'
-            parseDeclarations(status);
-            parseBody(status);
-            simple = false;
+            complex = true;
         }
     }
-    if (simple) {
+    // Reset index
+    index = 0;
+
+    // Message can be empty, so we need to only look ahead
+    // if we know it's non-empty
+    if (complex) {
+        parseOptionalWhitespace(status);
+        parseDeclarations(status);
+        parseBody(status);
+        parseOptionalWhitespace(status);
+    } else {
         // Simple message
         // For normalization, quote the pattern
         normalizedInput += LEFT_CURLY_BRACE;

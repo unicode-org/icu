@@ -54,6 +54,7 @@ namespace message2 {
     enum StaticErrorType {
         DuplicateDeclarationError,
         DuplicateOptionName,
+        DuplicateVariant,
         MissingSelectorAnnotation,
         NonexhaustivePattern,
         SyntaxError,

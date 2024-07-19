@@ -2599,7 +2599,7 @@ namespace message2 {
             // If non-null, the referent is a member of `expr` so
             // its lifetime is the same as the lifetime of the enclosing Binding
             // (as long as there's no mutation)
-            const Callable* annotation = nullptr;
+            const std::variant<Reserved, Callable>* annotation = nullptr;
 
             const OptionMap& getOptionsInternal() const;
 

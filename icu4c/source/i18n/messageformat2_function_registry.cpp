@@ -7,11 +7,14 @@
 
 #if !UCONFIG_NO_MF2
 
+#include <math.h>
+
 #include "unicode/dtptngen.h"
 #include "unicode/messageformat2_data_model_names.h"
 #include "unicode/messageformat2_function_registry.h"
 #include "unicode/smpdtfmt.h"
 #include "charstr.h"
+#include "double-conversion.h"
 #include "messageformat2_allocation.h"
 #include "messageformat2_function_registry_internal.h"
 #include "messageformat2_macros.h"
@@ -421,12 +424,11 @@ static FormattedPlaceholder notANumber(const FormattedPlaceholder& input) {
     return FormattedPlaceholder(input, FormattedValue(UnicodeString("NaN")));
 }
 
-static FormattedPlaceholder stringAsNumber(const number::LocalizedNumberFormatter& nf, const FormattedPlaceholder& input, UErrorCode& errorCode) {
+static double parseNumberLiteral(const FormattedPlaceholder& input, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return {};
     }
 
-    double numberValue;
     // Copying string to avoid GCC dangling-reference warning
     // (although the reference is safe)
     UnicodeString inputStr = input.asFormattable().getString(errorCode);
@@ -434,12 +436,39 @@ static FormattedPlaceholder stringAsNumber(const number::LocalizedNumberFormatte
     if (U_FAILURE(errorCode)) {
         return {};
     }
-    UErrorCode localErrorCode = U_ZERO_ERROR;
-    strToDouble(inputStr, numberValue, localErrorCode);
-    if (U_FAILURE(localErrorCode)) {
+
+    // Hack: Check for cases that are forbidden by the MF2 grammar
+    // but allowed by StringToDouble
+    int32_t len = inputStr.length();
+
+    if (len > 0 && ((inputStr[0] == '+')
+                    || (inputStr[0] == '0' && len > 1 && inputStr[1] != '.')
+                    || (inputStr[len - 1] == '.')
+                    || (inputStr[0] == '.'))) {
         errorCode = U_MF_OPERAND_MISMATCH_ERROR;
+        return 0;
+    }
+
+    // Otherwise, convert to double using double_conversion::StringToDoubleConverter
+    using namespace double_conversion;
+    int processedCharactersCount = 0;
+    StringToDoubleConverter converter(0, 0, 0, "", "");
+    double result =
+        converter.StringToDouble(reinterpret_cast<const uint16_t*>(inputStr.getBuffer()),
+                                 len,
+                                 &processedCharactersCount);
+    if (processedCharactersCount != len) {
+        errorCode = U_MF_OPERAND_MISMATCH_ERROR;
+    }
+    return result;
+}
+
+static FormattedPlaceholder tryParsingNumberLiteral(const number::LocalizedNumberFormatter& nf, const FormattedPlaceholder& input, UErrorCode& errorCode) {
+    double numberValue = parseNumberLiteral(input, errorCode);
+    if (U_FAILURE(errorCode)) {
         return notANumber(input);
     }
+
     UErrorCode savedStatus = errorCode;
     number::FormattedNumber result = nf.formatDouble(numberValue, errorCode);
     // Ignore U_USING_DEFAULT_WARNING
@@ -590,7 +619,7 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
         }
         case UFMT_STRING: {
             // Try to parse the string as a number
-            return stringAsNumber(realFormatter, arg, errorCode);
+            return tryParsingNumberLiteral(realFormatter, arg, errorCode);
         }
         default: {
             // Other types can't be parsed as a number

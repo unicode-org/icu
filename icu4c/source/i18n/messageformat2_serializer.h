@@ -38,8 +38,7 @@ namespace message2 {
 
         void whitespace();
         void emit(UChar32);
-        template <int32_t N>
-        void emit(const UChar32 (&)[N]);
+        void emit(const std::u16string_view&);
         void emit(const UnicodeString&);
         void emit(const Literal&);
         void emit(const Key&);

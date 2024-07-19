@@ -436,10 +436,8 @@ class MFDataModelFormatter {
             Map<String, Object> arguments) {
         if (value instanceof Literal) {
             String val = ((Literal) value).value;
-            Number nr = OptUtils.asNumber(val);
-            if (nr != null) {
-                return nr;
-            }
+            // "The resolution of a text or literal MUST resolve to a string."
+            // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#literal-resolution
             return val;
         } else if (value instanceof VariableRef) {
             String varName = ((VariableRef) value).name;
