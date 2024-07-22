@@ -23,7 +23,8 @@
           "value": 1
         }
       ],
-      "exp": "one"
+      "exp": "one",
+      "ignoreJava": ":string doesn't stringify numbers?"
     },
     {
       "src": ".match {$foo :string} 1 {{one}} * {{other}}",
@@ -43,7 +44,8 @@
         {
           "type": "unresolved-variable"
         }
-      ]
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     }
   ]
 }

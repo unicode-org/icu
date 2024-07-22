@@ -58,7 +58,8 @@
           "type": "unresolved-variable"
         }
       ],
-      "exp": "hello {$place}"
+     "exp": "hello {$place}",
+     "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "{$one} and {$two}",
@@ -325,7 +326,8 @@
         {
           "type": "unsupported-expression"
         }
-      ]
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "foo {&private}",
@@ -344,7 +346,8 @@
         {
           "type": "unsupported-expression"
         }
-      ]
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "foo {?reserved @a @b=$c}",
@@ -363,7 +366,8 @@
         {
           "type": "unsupported-expression"
         }
-      ]
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": ".foo {42} {{bar}}",
@@ -378,7 +382,8 @@
         {
           "type": "unsupported-statement"
         }
-      ]
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": ".foo{42}{{bar}}",
@@ -394,7 +399,8 @@
         {
           "type": "unsupported-statement"
         }
-      ]
+      ],
+       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": ".foo |}lit{| {42}{{bar}}",
@@ -410,7 +416,8 @@
         {
           "type": "unsupported-statement"
         }
-      ]
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "{{trailing whitespace}} \n",

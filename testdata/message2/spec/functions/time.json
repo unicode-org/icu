@@ -3,7 +3,7 @@
   "description": "The built-in formatter for times.",
   "defaultTestProperties": {
     "locale": "en-US",
-    "expErrors": false
+    "expErrors": []
   },
   "tests": [
     {
@@ -13,7 +13,8 @@
         {
           "type": "bad-operand"
         }
-      ]
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "{horse :time}",
@@ -22,7 +23,8 @@
         {
           "type": "bad-operand"
         }
-      ]
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "{|2006-01-02T15:04:06| :time}"
@@ -34,7 +36,8 @@
       "src": ".local $t = {|2006-01-02T15:04:06| :time style=medium} {{{$t :time}}}"
     },
     {
-      "src": ".local $d = {|2006-01-02T15:04:06| :date} {{{$d :time}}}"
+      "src": ".local $d = {|2006-01-02T15:04:06| :date} {{{$d :time}}}",
+      "ignoreJava": "ICU4J doesn't support this kind of composition"
     }
   ]
 }

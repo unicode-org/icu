@@ -3,7 +3,7 @@
   "description": "The built-in formatter for datetimes.",
   "defaultTestProperties": {
     "locale": "en-US",
-    "expErrors": false
+    "expErrors": []
   },
   "tests": [
     {
@@ -13,7 +13,8 @@
         {
           "type": "bad-operand"
         }
-      ]
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "{$x :datetime}",
@@ -28,7 +29,8 @@
         {
           "type": "bad-operand"
         }
-      ]
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "{horse :datetime}",
@@ -37,7 +39,8 @@
         {
           "type": "bad-operand"
         }
-      ]
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
     {
       "src": "{|2006-01-02T15:04:06| :datetime}"
