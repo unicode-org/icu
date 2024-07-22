@@ -225,8 +225,7 @@ static_assert(
 
 constexpr FormattedStringBuilder::Field::Field(uint8_t category, uint8_t field)
     : bits((
-        U_ASSERT(category <= 0xf),
-        U_ASSERT(field <= 0xf),
+        U_ASSERT(category <= 0xf && field <= 0xf),
         static_cast<uint8_t>((category << 4) | field)
     )) {}
 

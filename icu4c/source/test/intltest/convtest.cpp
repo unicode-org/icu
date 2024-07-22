@@ -744,7 +744,7 @@ ConversionTest::TestUTF8ToUTF8Overflow() {
     assertEquals("overflow", U_BUFFER_OVERFLOW_ERROR, errorCode.reset());
     length = (int32_t)(target - result);
     assertEquals("number of bytes written", 2, length);
-    assertEquals("next byte not clobbered", 5, result[2]);
+    assertEquals("next byte not clobbered", (char)5, result[2]);
 
     // Convert the rest and flush.
     ucnv_convertEx(cnv2.getAlias(), cnv1.getAlias(),
@@ -777,7 +777,7 @@ ConversionTest::TestUTF8ToUTF8Overflow() {
     assertEquals("text2 overflow", U_BUFFER_OVERFLOW_ERROR, errorCode.reset());
     length = (int32_t)(target - result);
     assertEquals("text2 number of bytes written", 3, length);
-    assertEquals("text2 next byte not clobbered", 5, result[3]);
+    assertEquals("text2 next byte not clobbered", (char)5, result[3]);
 
     // Convert the rest and flush.
     ucnv_convertEx(cnv2.getAlias(), cnv1.getAlias(),

@@ -91,13 +91,15 @@ void U_CALLCONV createUni32Set(UErrorCode &errorCode) {
     }
     ucln_common_registerCleanup(UCLN_COMMON_USET, uset_cleanup);
 }
-
+}
 
 U_CFUNC UnicodeSet *
 uniset_getUnicode32Instance(UErrorCode &errorCode) {
     umtx_initOnce(uni32InitOnce, &createUni32Set, errorCode);
     return uni32Singleton;
 }
+
+namespace {
 
 // helper functions for matching of pattern syntax pieces ------------------ ***
 // these functions are parallel to the PERL_OPEN etc. strings above

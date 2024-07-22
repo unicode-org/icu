@@ -1346,11 +1346,11 @@ compareKeyOldpos(const void * /*context*/, const void *l, const void *r) {
     return compareInt32(((const KeyMapEntry *)l)->oldpos, ((const KeyMapEntry *)r)->oldpos);
 }
 
-void SResource::collectKeys(std::function<void(int32_t)> collector) const {
+U_CFUNC void SResource::collectKeys(std::function<void(int32_t)> collector) const {
     collector(fKey);
 }
 
-void ContainerResource::collectKeys(std::function<void(int32_t)> collector) const {
+U_CFUNC void ContainerResource::collectKeys(std::function<void(int32_t)> collector) const {
     collector(fKey);
     for (SResource* curr = fFirst; curr != nullptr; curr = curr->fNext) {
         curr->collectKeys(collector);

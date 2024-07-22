@@ -3763,10 +3763,6 @@ void NumberFormatterApiTest::roundingOther() {
             DBL_MIN,
             u"2.225074E-308");
 
-#ifndef DBL_TRUE_MIN
-#define DBL_TRUE_MIN 4.9E-324
-#endif
-
     // Note: this behavior is intentionally different from Java; see
     // https://github.com/google/double-conversion/issues/126
     assertFormatSingle(
@@ -3775,7 +3771,7 @@ void NumberFormatterApiTest::roundingOther() {
             u"E0",
             NumberFormatter::with().notation(Notation::scientific()),
             Locale::getEnglish(),
-            DBL_TRUE_MIN,
+            4.9E-324,
             u"5E-324");
 }
 

@@ -3379,20 +3379,20 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         if (fAP->contains(prevChar) &&
-            (fAK->contains(thisChar) || thisChar == U'◌' || fAS->contains(thisChar))) {
+            (fAK->contains(thisChar) || thisChar == (UChar32)u'◌' || fAS->contains(thisChar))) {
             setAppliedRule(pos, "LB 28a.1  AP x (AK | ◌ | AS)");
             continue;
         }
 
-        if ((fAK->contains(prevChar) || prevChar == U'◌' || fAS->contains(prevChar)) &&
+        if ((fAK->contains(prevChar) || prevChar == (UChar32)u'◌' || fAS->contains(prevChar)) &&
             (fVF->contains(thisChar) || fVI->contains(thisChar))) {
             setAppliedRule(pos, "LB 28a.2  (AK | ◌ | AS) x (VF | VI)");
             continue;
         }
 
-        if ((fAK->contains(prevCharX2) || prevCharX2 == U'◌' || fAS->contains(prevCharX2)) &&
+        if ((fAK->contains(prevCharX2) || prevCharX2 == (UChar32)u'◌' || fAS->contains(prevCharX2)) &&
             fVI->contains(prevChar) &&
-            (fAK->contains(thisChar) || thisChar == U'◌')) {
+            (fAK->contains(thisChar) || thisChar == (UChar32)u'◌')) {
             setAppliedRule(pos, "LB 28a.3  (AK | ◌ | AS) VI x (AK | ◌)");
             continue;
         }
@@ -3401,8 +3401,8 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             // note: UnicodeString::char32At(length) returns ffff, not distinguishable
             //       from a legit ffff noncharacter. So test length separately.
             UChar32 nextChar = fText->char32At(nextPos);
-            if ((fAK->contains(prevChar) || prevChar == U'◌' || fAS->contains(prevChar)) &&
-                (fAK->contains(thisChar) || thisChar == U'◌' || fAS->contains(thisChar)) &&
+            if ((fAK->contains(prevChar) || prevChar == (UChar32)u'◌' || fAS->contains(prevChar)) &&
+                (fAK->contains(thisChar) || thisChar == (UChar32)u'◌' || fAS->contains(thisChar)) &&
                 fVF->contains(nextChar)) {
                 setAppliedRule(pos, "LB 28a.4  (AK | ◌ | AS) x (AK | ◌ | AS) VF");
                 continue;

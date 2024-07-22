@@ -808,12 +808,14 @@ void LocalPointerTest::TestLocalXyzPointerNull() {
 
 }
 
+extern "C" typedef void(*fun_ptr)(UConstrainedFieldPosition*);
+
 void LocalPointerTest::TestLocalXyzStdUniquePtr() {
     IcuTestErrorCode status(*this, "TestLocalXyzStdUniquePtr");
 #if !UCONFIG_NO_FORMATTING
     auto* ptr = ucfpos_open(status);
     // Implicit conversion operator
-    std::unique_ptr<UConstrainedFieldPosition, void(*)(UConstrainedFieldPosition*)> a =
+    std::unique_ptr<UConstrainedFieldPosition, fun_ptr> a =
         LocalUConstrainedFieldPositionPointer(ptr);
     // Explicit move constructor
     LocalUConstrainedFieldPositionPointer a2(std::move(a));

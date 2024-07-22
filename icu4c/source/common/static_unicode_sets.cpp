@@ -227,6 +227,14 @@ Key unisets::chooseFrom(UnicodeString str, Key key1, Key key2) {
     return get(key1)->contains(str) ? key1 : chooseFrom(str, key2);
 }
 
+CurrencySymbols unisets::kCurrencyEntries[5] = {
+    {DOLLAR_SIGN, u'$'},
+    {POUND_SIGN, u'£'},
+    {RUPEE_SIGN, u'₹'},
+    {YEN_SIGN, u'¥'},
+    {WON_SIGN, u'₩'},
+};
+
 //Key unisets::chooseCurrency(UnicodeString str) {
 //    if (get(DOLLAR_SIGN)->contains(str)) {
 //        return DOLLAR_SIGN;
