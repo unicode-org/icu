@@ -55,6 +55,7 @@ public class MFParser {
             if (cp == '{') { // `{{`, complex body without declarations
                 input.backup(1); // let complexBody deal with the wrapping {{ and }}
                 MFDataModel.Pattern pattern = getQuotedPattern();
+                skipOptionalWhitespaces();
                 result = new MFDataModel.PatternMessage(new ArrayList<>(), pattern);
             } else { // placeholder
                 input.backup(1); // We want the '{' present, to detect the part as placeholder.
@@ -589,6 +590,7 @@ public class MFParser {
             // complex-message   = *(declaration [s]) complex-body
             checkCondition(cp != EOF, "Expected a quoted pattern or .match; got end-of-input");
             MFDataModel.Pattern pattern = getQuotedPattern();
+            skipOptionalWhitespaces(); // Trailing whitespace is allowed
             checkCondition(input.atEnd(), "Content detected after the end of the message.");
             return new MFDataModel.PatternMessage(declarations, pattern);
         }
@@ -648,9 +650,7 @@ public class MFParser {
             }
             keys.add(key);
         }
-        // Only want to skip whitespace if we parsed at least one key --
-        // otherwise, we might fail to catch trailing whitespace at the end of
-        // the message, which is a parse error
+        // Only want to skip whitespace if we parsed at least one key
         if (!keys.isEmpty()) {
             skipOptionalWhitespaces();
         }
