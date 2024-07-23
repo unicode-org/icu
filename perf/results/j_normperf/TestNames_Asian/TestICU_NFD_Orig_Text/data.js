@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1721430479594,
+  "lastUpdate": 1721753239697,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23307,6 +23307,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 11.580245117913814,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "23d9628f88a2d0127c564ad98297061c36d3ce77",
+          "message": "ICU-22801 Try to add LEAKSANITIZER\n\nSee #3041",
+          "timestamp": "2024-07-23T09:34:04-07:00",
+          "tree_id": "4dc5d46af928caf6b5c27c6f62acf6e37b528643",
+          "url": "https://github.com/unicode-org/icu/commit/23d9628f88a2d0127c564ad98297061c36d3ce77"
+        },
+        "date": 1721753106463,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 11.549621046342114,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
