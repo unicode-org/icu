@@ -285,6 +285,24 @@ Paste the following block after the dictionaries block and before the final clos
     }
 ```
 
+5f. Update hard-coded lists in ICU
+
+ICU4 has some hard-coded lists of locale-related codes that may need updating. Ideally these should
+be replaced by data converted from CLDR ([ICU-22839](https://unicode-org.atlassian.net/browse/ICU-22839)). In the
+meantime these need to be updated manually.
+
+| code type                                                                                    | icu4c/source library file(s)                | icu4c/source test file(s)                   |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
+| language<BR>(at least all language codes in ICU locales or CLDR attributeValueValidity.xml)  | common/uloc.cpp: LANGUAGES[], LANGUAGES_3[] | test/testdata/structLocale.txt: Languages   |
+| region<BR>(at least all region codes in ICU locales or CLDR attributeValueValidity.xml)      | common/uloc.cpp: COUNTRIES[], COUNTRIES_3[] | test/testdata/structLocale.txt: Countries   |
+| currency (see note below)<BR>(at least everything in CLDR supplementalData.xml currencyData) | common/ucurr.cpp: gCurrencyList[]]          | test/testdata/structLocale.txt: Currencies,CurrencyPlurals<BR>test/cintltst/currtest.c:TestEnumList() |
+| timezone                                                                                     | (not currently aware of hard-coded list)    | test/testdata/structLocale.txt: zoneStrings |
+
+Note: currency code lists are also in other code lists along with measurement units,
+but these are re-generated using the procedure in
+[Updating MeasureUnit with new CLDR data](https://unicode-org.github.io/icu/processes/release/tasks/updating-measure-unit.html)
+(also mentioned in step 14 below).
+
 ## 6 Check the results
 
 Check which data files have modifications, which have been added or removed
