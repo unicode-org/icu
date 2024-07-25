@@ -541,6 +541,50 @@ jobs:
         set PATH=C:\tools\msys64\mingw64\bin;%PATH%
         .\icuinfo.exe
 
+  # WebAssembly build using the WASI SDK.
+  wasm-wasi-sdk:
+    runs-on: ubuntu-22.04  # Updated in BRS
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Install WASI SDK
+        env:
+          WASI_SDK_DOWNLOAD_URL: https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-27/wasi-sdk-27.0-x86_64-linux.deb
+          WASI_SDK_DOWNLOAD_SHA256: 3ed68fc89e3299c0e2333360efac89ec60fbc01870732a486ab386267355cc80
+        run: |
+          wget -O /tmp/wasi-sdk.deb "${WASI_SDK_DOWNLOAD_URL}"
+          echo "${WASI_SDK_DOWNLOAD_SHA256}  /tmp/wasi-sdk.deb" | sha256sum -c -
+          sudo apt-get install /tmp/wasi-sdk.deb
+          echo "WASI_SDK_PATH=/opt/wasi-sdk" >> $GITHUB_ENV
+
+      - name: Build tools for host system
+        run: |
+          TOOLS_BUILD_DIR="$PWD/build/tools";
+          mkdir -p "$TOOLS_BUILD_DIR";
+          pushd "$TOOLS_BUILD_DIR";
+          ../../icu4c/source/configure
+          make -j$(nproc)
+          echo "TOOLS_BUILD_DIR=$TOOLS_BUILD_DIR" >> $GITHUB_ENV
+
+      - name: Cross-build for WebAssembly with WASI SDK
+        run: |
+          CROSS_BUILD_DIR="$PWD/build/cross";
+          mkdir -p "$CROSS_BUILD_DIR";
+          pushd "$CROSS_BUILD_DIR";
+          ../../icu4c/source/configure --host=wasm32-unknown-wasip1 \
+            --with-cross-build="$TOOLS_BUILD_DIR" \
+            --enable-static --disable-shared \
+            --disable-tools --disable-tests \
+            --disable-samples --disable-extras \
+            --with-data-packaging=static \
+            --prefix / \
+            CC="$WASI_SDK_PATH/bin/clang" CXX="$WASI_SDK_PATH/bin/clang++" \
+            AR="$WASI_SDK_PATH/bin/llvm-ar" RANLIB="$WASI_SDK_PATH/bin/llvm-ranlib" \
+            CFLAGS="-D_WASI_EMULATED_SIGNAL" \
+            CXXFLAGS="-fno-exceptions -D_WASI_EMULATED_SIGNAL"
+          make -j$(nproc) PKGDATA_OPTS="--without-assembly -O $CROSS_BUILD_DIR/data/icupkg.inc"
+          make install DESTDIR="$CROSS_BUILD_DIR/install"
+
   # Run ICU4C tests with stubdata.
   run-with-stubdata:
     runs-on: ubuntu-22.04  # Updated in BRS
