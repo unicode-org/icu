@@ -85,6 +85,7 @@ powerpc*-apple-darwin*)	icu_cv_host_frag=mh-darwin-ppc ;;
 *-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
 *-*-nto*)	icu_cv_host_frag=mh-qnx ;;
 *-ncr-*)	icu_cv_host_frag=mh-mpras ;;
+*-wasi*)	icu_cv_host_frag=mh-wasi ;;
 *) 		icu_cv_host_frag=mh-unknown ;;
 esac
 		]
