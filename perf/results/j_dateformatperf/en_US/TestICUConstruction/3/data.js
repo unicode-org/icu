@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1721753070840,
+  "lastUpdate": 1722021834198,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23127,6 +23127,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1937.1638240795833,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "2cbfd134ef3ad3050a4dbc3e6648373bacdc40e4",
+          "message": "ICU-22741 Update CLDR-ICU instructions to mention some hardcoded lists that may need updating\nCo-authored-by: Steven R. Loomis <srl295@gmail.com>",
+          "timestamp": "2024-07-26T12:17:00-07:00",
+          "tree_id": "fb593549972d9701feb5b0c493826d7d6172182e",
+          "url": "https://github.com/unicode-org/icu/commit/2cbfd134ef3ad3050a4dbc3e6648373bacdc40e4"
+        },
+        "date": 1722021700742,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1962.8174102118758,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
