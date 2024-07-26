@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1721754200927,
+  "lastUpdate": 1722022376120,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -46707,6 +46707,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12465376.2837,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "2cbfd134ef3ad3050a4dbc3e6648373bacdc40e4",
+          "message": "ICU-22741 Update CLDR-ICU instructions to mention some hardcoded lists that may need updating\nCo-authored-by: Steven R. Loomis <srl295@gmail.com>",
+          "timestamp": "2024-07-26T12:17:00-07:00",
+          "tree_id": "fb593549972d9701feb5b0c493826d7d6172182e",
+          "url": "https://github.com/unicode-org/icu/commit/2cbfd134ef3ad3050a4dbc3e6648373bacdc40e4"
+        },
+        "date": 1722022244961,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 219.9998,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 54460195.3947,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12063172.2987,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 50775947.7781,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12644107.0012,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
