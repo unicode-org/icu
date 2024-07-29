@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1722281539386,
+  "lastUpdate": 1722283946242,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23337,6 +23337,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 256.8224352270745,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "5d7cbdbc025160a51d96118450c7d1ea1a34e4d8",
+          "message": "ICU-22696 Delete unused code.\n\nThese optional output parameters weren't used when these function were\noriginally added so they were most likely included just in case someone\nwould want to use them in the future, but that was 10 years ago now and\nthey still haven't been used yet, so it's unlikely that they'll be used\nin the foreseeable future and call sites as well as the implementation\ncan instead be simplified by removing them.",
+          "timestamp": "2024-07-29T22:03:10+02:00",
+          "tree_id": "b70d9bbc36861f096d2fa39898e1b263fb8f64ad",
+          "url": "https://github.com/unicode-org/icu/commit/5d7cbdbc025160a51d96118450c7d1ea1a34e4d8"
+        },
+        "date": 1722283806149,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 266.39311924657324,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
