@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1722282168183,
+  "lastUpdate": 1722284804503,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -67857,6 +67857,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1427.6083,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "5d7cbdbc025160a51d96118450c7d1ea1a34e4d8",
+          "message": "ICU-22696 Delete unused code.\n\nThese optional output parameters weren't used when these function were\noriginally added so they were most likely included just in case someone\nwould want to use them in the future, but that was 10 years ago now and\nthey still haven't been used yet, so it's unlikely that they'll be used\nin the foreseeable future and call sites as well as the implementation\ncan instead be simplified by removing them.",
+          "timestamp": "2024-07-29T22:03:10+02:00",
+          "tree_id": "b70d9bbc36861f096d2fa39898e1b263fb8f64ad",
+          "url": "https://github.com/unicode-org/icu/commit/5d7cbdbc025160a51d96118450c7d1ea1a34e4d8"
+        },
+        "date": 1722284677031,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77829.0209,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177847.4983,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5492,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.6872,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.7243,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8637.1727,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 31288.6048,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1467.2596,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
