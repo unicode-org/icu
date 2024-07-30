@@ -109,6 +109,15 @@
       "src": "\\\\",
       "exp": "\\"
     },
+    {
+      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" s \"#\" identifier \"}\"", 
+      "src": "{ #a}",
+      "exp": ""
+    },
+    {
+      "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" s \"/\" identifier \"}\"",
+      "src": "{ /a}",
+      "exp": ""
     }
   ]
 }

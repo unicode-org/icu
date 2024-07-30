@@ -1954,9 +1954,22 @@ std::variant<Expression, Markup> Parser::parsePlaceholder(UErrorCode& status) {
         return exprFallback(status);
     }
 
-    // Check if it's markup or an expression
-    if (source[index + 1] == NUMBER_SIGN || source[index + 1] == SLASH) {
-        // Markup
+    // Need to look ahead arbitrarily since can appear before the '{' and '#'
+    // in markup
+    int32_t tempIndex = index + 1;
+    bool isMarkup = false;
+    while (inBounds(source, tempIndex)) {
+        if (source[tempIndex] == NUMBER_SIGN || source[tempIndex] == SLASH) {
+            isMarkup = true;
+            break;
+        }
+        if (!isWhitespace(source[tempIndex])){
+            break;
+        }
+        tempIndex++;
+    }
+
+    if (isMarkup) {
         return parseMarkup(status);
     }
     return parseExpression(status);
