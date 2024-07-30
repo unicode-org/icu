@@ -46,7 +46,8 @@
     { "src": "hello {|4.2|    +num xx \\\\ b |3.14| r  }", "ignoreJava": "ICU4J doesn't error out on reserved annotations"  },
     { "src": "hello {$foo    +num x \\\\ abcde |3.14| r  }", "ignoreJava": "ICU4J doesn't error out on reserved annotations"  },
     { "src": "hello {$foo    >num x \\\\ abcde |aaa||3.14||42| r  }", "ignoreJava": "ICU4J doesn't error out on reserved annotations"  },
-    { "src": "hello {$foo    >num x \\\\ abcde |aaa||3.14| |42| r  }", "ignoreJava": "ICU4J doesn't error out on reserved annotations"  }
+    { "src": "hello {$foo    >num x \\\\ abcde |aaa||3.14| |42| r  }", "ignoreJava": "ICU4J doesn't error out on reserved annotations"  },
+    { "src" : ".input{ $n ~ }{{{$n}}}", "ignoreJava": "ICU4J doesn't error out on reserved annotations" }
   ]
 }
 
