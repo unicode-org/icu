@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1722316013335,
+  "lastUpdate": 1722350294824,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -46796,6 +46796,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 9.206945399175837,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "8891c070bddedb626569cb9b432bf2e11d9ab1bd",
+          "message": "ICU-22696 Add implicit conversion from StringPiece to std::string_view.\n\nThis will allow ICU4C to seamlessly use std::string_view internally\nwhile continuing to use StringPiece in the public API.",
+          "timestamp": "2024-07-30T06:45:33+02:00",
+          "tree_id": "7a057687ea2e526e10d924ffcb3c65ddadc2a86d",
+          "url": "https://github.com/unicode-org/icu/commit/8891c070bddedb626569cb9b432bf2e11d9ab1bd"
+        },
+        "date": 1722350159399,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 9.037428062621176,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
