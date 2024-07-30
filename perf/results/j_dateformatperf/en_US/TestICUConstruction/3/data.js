@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1722353360006,
+  "lastUpdate": 1722380079314,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23337,6 +23337,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1939.2750187548052,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "3663cc1e0f0226652450fe6af32b7161534707ad",
+          "message": "ICU-22707 Add support for property Modifier_Combining_Mark",
+          "timestamp": "2024-07-30T15:44:32-07:00",
+          "tree_id": "8f6491d0e7858aff68bfe1b77b17dd89565c174d",
+          "url": "https://github.com/unicode-org/icu/commit/3663cc1e0f0226652450fe6af32b7161534707ad"
+        },
+        "date": 1722379943566,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1997.9069546189705,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
