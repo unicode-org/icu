@@ -712,7 +712,7 @@ public class MFParser {
         MFDataModel.Expression expression;
         switch (declName) {
             case "input":
-                skipMandatoryWhitespaces();
+                skipOptionalWhitespaces();
                 expression = getPlaceholder();
                 String inputVarName = null;
                 checkCondition(expression instanceof MFDataModel.VariableExpression,

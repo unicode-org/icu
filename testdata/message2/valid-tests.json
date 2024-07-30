@@ -118,6 +118,11 @@
       "comment": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" s \"/\" identifier \"}\"",
       "src": "{ /a}",
       "exp": ""
+    },
+    {
+      "comment": "message -> complex-message -> *(declaration [s]) complex-body -> declaration complex-body -> input-declaration complex-body -> input variable-expression complex-body",
+      "src": ".input{$x}{{}}",
+      "exp": ""
     }
   ]
 }
