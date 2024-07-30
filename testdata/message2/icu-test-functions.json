@@ -151,8 +151,8 @@
     {
       "src": "Format {123456789.9876} number",
       "locale": "en-IN",
-      "exp": "Format 12,34,56,789.9876 number",
-      "ignoreCpp": "ICU-22754 No default formatting for numbers, so it's formatted as a literal string. Is this in the spec?"
+      "exp": "Format 123456789.9876 number",
+      "comment": "Number literals are not formatted as numbers by default"
     },
     {
       "src": "Format {|3.1416|} number",
@@ -162,8 +162,8 @@
     {
       "src": "Format {|3.1416|} number",
       "locale": "ar-AR-u-nu-arab",
-      "exp": "Format ٣٫١٤١٦ number",
-      "ignoreCpp": "ICU-22754 No default formatting for numbers, so it's formatted as a literal string. Is this in the spec?"
+      "exp": "Format 3.1416 number",
+      "comment": "Number literals are not formatted as numbers by default"
     },
     {
       "src": "Format {3.1415926 :number}",
