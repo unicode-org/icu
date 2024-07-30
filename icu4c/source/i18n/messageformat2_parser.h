@@ -91,10 +91,6 @@ namespace message2 {
 	  parseError.postContext[0] = '\0';
 	}
 
-	// Used so `parseEscapeSequence()` can handle all types of escape sequences
-	// (literal, text, and reserved)
-	typedef enum { LITERAL, TEXT, RESERVED } EscapeKind;
-
 	static void translateParseError(const MessageParseError&, UParseError&);
 	static void setParseError(MessageParseError&, uint32_t);
 	void maybeAdvanceLine();
@@ -121,9 +117,8 @@ namespace message2 {
         UnicodeString parseDigits(UErrorCode&);
 	VariableName parseVariableName(UErrorCode&);
 	FunctionName parseFunction(UErrorCode&);
-	void parseEscapeSequence(EscapeKind, UnicodeString&, UErrorCode&);
-	void parseLiteralEscape(UnicodeString&, UErrorCode&);
-        Literal parseUnquotedLiteral(UErrorCode&);
+	UnicodeString parseEscapeSequence(UErrorCode&);
+	Literal parseUnquotedLiteral(UErrorCode&);
         Literal parseQuotedLiteral(UErrorCode&);
 	Literal parseLiteral(UErrorCode&);
         template<class T>
@@ -134,7 +129,6 @@ namespace message2 {
         void parseOption(OptionAdder<T>&, UErrorCode&);
         template<class T>
         void parseOptions(OptionAdder<T>&, UErrorCode&);
-	void parseReservedEscape(UnicodeString&, UErrorCode&);
 	void parseReservedChunk(Reserved::Builder&, UErrorCode&);
 	Reserved parseReserved(UErrorCode&);
         Reserved parseReservedBody(Reserved::Builder&, UErrorCode&);
@@ -143,8 +137,7 @@ namespace message2 {
         Markup parseMarkup(UErrorCode&);
 	Expression parseExpression(UErrorCode&);
         std::variant<Expression, Markup> parsePlaceholder(UErrorCode&);
-	void parseTextEscape(UnicodeString&, UErrorCode&);
-	UnicodeString parseText(UErrorCode&);
+	UnicodeString parseTextChar(UErrorCode&);
 	Key parseKey(UErrorCode&);
 	SelectorKeys parseNonEmptyKeys(UErrorCode&);
 	void errorPattern(UErrorCode& status);

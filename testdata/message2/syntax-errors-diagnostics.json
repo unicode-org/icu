@@ -44,8 +44,8 @@
     },
     {
         "src": "hello {|4.2| %num}be\\|r}}",
-        "char": 21,
-        "comment": "Unescaped '}' -- will be interpreted as the end of the reserved string, and the error will be reported at the index of '|', which is when the parser determines that the escaped '|' isn't a valid text-escape"    },
+        "char": 23,
+        "comment": "Unescaped '}' -- will be interpreted as the end of the reserved string, and the error will be reported at the index of the next '}'"    },
     {
         "src": "hello {|4.2| %num\\{be|r}}",
         "char": 25,

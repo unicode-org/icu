@@ -641,80 +641,40 @@ FunctionName Parser::parseFunction(UErrorCode& errorCode) {
   Precondition: source[index] == BACKSLASH
 
   Consume an escaped character.
+  Corresponds to `escaped-char` in the grammar.
 
-  Generalized to handle `reserved-escape`, `text-escape`,
-  or `literal-escape`, depending on the `kind` argument.
-
-  Appends result to `str`
+  No postcondition (a message can end with an escaped char)
 */
-void Parser::parseEscapeSequence(EscapeKind kind,
-                                 UnicodeString &str,
-                                 UErrorCode& errorCode) {
+UnicodeString Parser::parseEscapeSequence(UErrorCode& errorCode) {
     U_ASSERT(inBounds(source, index));
     U_ASSERT(source[index] == BACKSLASH);
     normalizedInput += BACKSLASH;
     index++; // Skip the initial backslash
-    CHECK_BOUNDS(source, index, parseError, errorCode);
-
-    #define SUCCEED \
-       /* Append to the output string */                    \
-       str += source[index];                                \
-       /* Update normalizedInput */                         \
-       normalizedInput += source[index];                    \
-       /* Consume the character */                          \
-       index++;                                             \
-       /* Guarantee postcondition */                        \
-       CHECK_BOUNDS(source, index, parseError, errorCode);  \
-       return;
-
-    // Expect a '{', '|' or '}'
-    switch (source[index]) {
-    case LEFT_CURLY_BRACE:
-    case RIGHT_CURLY_BRACE: {
-        // Allowed in a `text-escape` or `reserved-escape`
-        switch (kind) {
-        case TEXT:
-        case RESERVED: {
-            SUCCEED;
+    UnicodeString str;
+    if (inBounds(source, index)) {
+        // Expect a '{', '|' or '}'
+        switch (source[index]) {
+        case LEFT_CURLY_BRACE:
+        case RIGHT_CURLY_BRACE:
+        case PIPE:
+        case BACKSLASH: {
+            /* Append to the output string */
+            str += source[index];
+            /* Update normalizedInput */
+            normalizedInput += source[index];
+            /* Consume the character */
+            index++;
+            return str;
         }
         default: {
+            // No other characters are allowed here
             break;
         }
         }
-        break;
     }
-    case PIPE: {
-        // Allowed in a `literal-escape` or `reserved-escape`
-        switch (kind) {
-           case LITERAL:
-           case RESERVED: {
-               SUCCEED;
-           }
-           default: {
-               break;
-           }
-        }
-        break;
-    }
-   case BACKSLASH: {
-       // Allowed in any escape sequence
-       SUCCEED;
-   }
-   default: {
-        // No other characters are allowed here
-        break;
-    }
-   }
    // If control reaches here, there was an error
    ERROR(parseError, errorCode, index);
-}
-
-/*
-  Consume an escaped pipe or backslash, matching the `literal-escape`
-  nonterminal in the grammar
-*/
-void Parser::parseLiteralEscape(UnicodeString &str, UErrorCode& errorCode) {
-    parseEscapeSequence(LITERAL, str, errorCode);
+   return str;
 }
 
 
@@ -736,7 +696,7 @@ Literal Parser::parseQuotedLiteral(UErrorCode& errorCode) {
             bool done = false;
             while (!done) {
                 if (source[index] == BACKSLASH) {
-                    parseLiteralEscape(contents, errorCode);
+                    contents += parseEscapeSequence(errorCode);
                 } else if (isQuotedChar(source[index])) {
                     contents += source[index];
                     normalizedInput += source[index];
@@ -1142,10 +1102,6 @@ Arbitrary lookahead is required to parse attribute lists, similarly to option li
     }
 }
 
-void Parser::parseReservedEscape(UnicodeString &str, UErrorCode& errorCode) {
-    parseEscapeSequence(RESERVED, str, errorCode);
-}
-
 /*
   Consumes a non-empty sequence of reserved-chars, reserved-escapes, and
   literals (as in 1*(reserved-char / reserved-escape / literal) in the `reserved-body` rule)
@@ -1177,8 +1133,7 @@ void Parser::parseReservedChunk(Reserved::Builder& result, UErrorCode& status) {
 
         if (source[index] == BACKSLASH) {
             // reserved-escape
-            parseReservedEscape(chunk, status);
-            result.add(Literal(false, chunk), status);
+            result.add(Literal(false, parseEscapeSequence(status)), status);
             chunk.setTo(u"", 0);
         } else if (source[index] == PIPE || isUnquotedStart(source[index])) {
             result.add(parseLiteral(status), status);
@@ -1765,49 +1720,22 @@ void Parser::parseDeclarations(UErrorCode& status) {
 }
 
 /*
-  Consume an escaped curly brace, or backslash, matching the `text-escape`
-  nonterminal in the grammar
-*/
-void Parser::parseTextEscape(UnicodeString &str, UErrorCode& status) {
-    parseEscapeSequence(TEXT, str, status);
-}
+  Consume a text character
+  matching the `text-char` nonterminal in the grammar
 
-/*
-  Consume a non-empty sequence of text characters and escaped text characters,
-  matching the `text` nonterminal in the grammar
-
-  No postcondition (a message can end with a text)
+  No postcondition (a message can end with a text-char)
 */
-UnicodeString Parser::parseText(UErrorCode& status) {
+UnicodeString Parser::parseTextChar(UErrorCode& status) {
     UnicodeString str;
-    if (!inBounds(source, index)) {
-        // Text can be empty
-        return str;
-    }
-
-    if (!(isTextChar(source[index] || source[index] == BACKSLASH))) {
-        // Error -- text is expected here
+    if (!inBounds(source, index) || !(isTextChar(source[index]))) {
+        // Error -- text-char is expected here
         ERROR(parseError, status, index);
-        return str;
+    } else {
+        normalizedInput += source[index];
+        str += source[index];
+        index++;
+        maybeAdvanceLine();
     }
-
-    while (true) {
-        if (source[index] == BACKSLASH) {
-            parseTextEscape(str, status);
-        } else if (isTextChar(source[index])) {
-            normalizedInput += source[index];
-            str += source[index];
-            index++;
-            maybeAdvanceLine();
-        } else {
-            break;
-        }
-        if (!inBounds(source, index)) {
-            // OK for text to end a message
-            break;
-        }
-    }
-
     return str;
 }
 
@@ -2058,9 +1986,18 @@ Pattern Parser::parseSimpleMessage(UErrorCode& status) {
                 }
                 break;
             }
+            case BACKSLASH: {
+                // Must be escaped-char
+                result.add(parseEscapeSequence(status), status);
+                break;
+            }
+            case RIGHT_CURLY_BRACE: {
+                // Distinguish unescaped '}' from end of quoted pattern
+                break;
+            }
             default: {
-                // Must be text
-                result.add(parseText(status), status);
+                // Must be text-char
+                result.add(parseTextChar(status), status);
                 break;
             }
             }

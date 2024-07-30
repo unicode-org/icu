@@ -103,6 +103,12 @@
         "src": "a\\\\qbc",
         "exp": "a\\qbc",
         "comment": "pattern -> escaped-char -> backslash backslash"
+    },
+    {
+      "comment": "message -> simple-message -> simple-start pattern -> escaped-char",
+      "src": "\\\\",
+      "exp": "\\"
+    },
     }
   ]
 }
