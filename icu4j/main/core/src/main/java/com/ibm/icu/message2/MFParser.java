@@ -613,10 +613,8 @@ public class MFParser {
             }
             keys.add(key);
         }
-        // Only want to skip whitespace if we parsed at least one key
-        if (!keys.isEmpty()) {
-            skipOptionalWhitespaces();
-        }
+        // Trailing whitespace is allowed after the message
+        skipOptionalWhitespaces();
         if (input.atEnd()) {
             checkCondition(
                     keys.isEmpty(), "After selector keys it is mandatory to have a pattern.");

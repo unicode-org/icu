@@ -123,6 +123,34 @@
       "comment": "message -> complex-message -> *(declaration [s]) complex-body -> declaration complex-body -> input-declaration complex-body -> input variable-expression complex-body",
       "src": ".input{$x}{{}}",
       "exp": ""
+    },
+    {
+      "comment": "Test that escaped characters are re-escaped properly when serializing literals",
+      "src": "{|\\}|}",
+      "exp": "}"
+    },
+    {
+      "comment": "Test that escaped characters are re-escaped properly when serializing patterns",
+      "src": "\\|",
+      "exp": "|"
+    },
+    {
+      "comment": "Test that parser and serializer treat optionally-escaped characters consistently",
+      "src" : "{{{1}|}}",
+      "exp": "1|"
+    },
+    {
+      "comment": "Trailing whitespace after match is valid",
+      "src": ".match {1 :string} * {{}} ",
+      "exp": ""
+    },
+    {
+      "src" : "𴢸",
+      "exp" : "𴢸"
+    },
+    {
+      "src" : "{{􍅲}}",
+      "exp" : "􍅲"
     }
   ]
 }

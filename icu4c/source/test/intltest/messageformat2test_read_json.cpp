@@ -303,6 +303,8 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     // Do tests for reserved statements/expressions
     runTestsFromJsonFile(*this, "spec/unsupported-expressions.json", errorCode);
     runTestsFromJsonFile(*this, "spec/unsupported-statements.json", errorCode);
+    // Uncomment when reserved syntax is removed
+    // runTestsFromJsonFile(*this, "syntax-errors-reserved.json", errorCode);
 
     // Do valid spec tests
     runTestsFromJsonFile(*this, "spec/syntax.json", errorCode);
