@@ -1688,15 +1688,18 @@ void Parser::parseUnsupportedStatement(UErrorCode& status) {
     dataModel.addUnsupportedStatement(builder.build(status), status);
 }
 
-// Terrible hack to get around the ambiguity between `matcher` and `reserved-statement`
-bool Parser::nextIsMatch() const {
+// Terrible hack to get around the ambiguity between unsupported keywords
+// and supported keywords
+// (It's convenient that all supported keywords have the same length)
+bool Parser::nextIs(const UChar32 (&keyword)[7]) const {
     for(int32_t i = 0; i < 6; i++) {
-        if (!inBounds(source, index + i) || source[index + i] != ID_MATCH[i]) {
+        if (!inBounds(source, index + i) || source[index + i] != keyword[i]) {
             return false;
         }
     }
     return true;
 }
+
 /*
   Consume a possibly-empty sequence of declarations separated by whitespace;
   each declaration matches the `declaration` nonterminal in the grammar
@@ -1710,19 +1713,17 @@ void Parser::parseDeclarations(UErrorCode& status) {
 
     while (source[index] == PERIOD) {
         CHECK_BOUNDS(source, index + 1, parseError, status);
-        if (source[index + 1] == ID_LOCAL[1]) {
+        // Check for unsupported statements first
+        // Lookahead is needed to disambiguate keyword from known keywords
+        if (!nextIs(ID_MATCH) && !nextIs(ID_LOCAL) && !nextIs(ID_INPUT)) {
+            parseUnsupportedStatement(status);
+        } else if (source[index + 1] == ID_LOCAL[1]) {
             parseLocalDeclaration(status);
         } else if (source[index + 1] == ID_INPUT[1]) {
             parseInputDeclaration(status);
         } else {
-            // Unsupported statement
-            // Lookahead is needed to disambiguate this from a `match`
-            if (!nextIsMatch()) {
-                parseUnsupportedStatement(status);
-            } else {
-                // Done parsing declarations
-                break;
-            }
+            // Done parsing declarations
+            break;
         }
 
         // Avoid looping infinitely

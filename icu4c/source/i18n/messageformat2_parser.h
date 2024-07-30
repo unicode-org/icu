@@ -111,7 +111,7 @@ namespace message2 {
 	void parseToken(const UChar32 (&)[N], UErrorCode&);
 	template <int32_t N>
 	void parseTokenWithWhitespace(const UChar32 (&)[N], UErrorCode&);
-        bool nextIsMatch() const;
+        bool nextIs(const UChar32 (&)[7]) const;
 	UnicodeString parseName(UErrorCode&);
         UnicodeString parseIdentifier(UErrorCode&);
         UnicodeString parseDigits(UErrorCode&);
