@@ -46,26 +46,26 @@ void Serializer::emit(const UChar32 (&token)[N]) {
 void Serializer::emit(const Literal& l) {
     if (l.isQuoted()) {
       emit(PIPE);
-      const UnicodeString& contents = l.unquoted();
-      for (int32_t i = 0; ((int32_t) i) < contents.length(); i++) {
+    }
+    const UnicodeString& contents = l.unquoted();
+    for (int32_t i = 0; ((int32_t) i) < contents.length(); i++) {
         // Re-escape any escaped-char characters
         switch(contents[i]) {
         case BACKSLASH:
         case PIPE:
         case LEFT_CURLY_BRACE:
         case RIGHT_CURLY_BRACE: {
-          emit(BACKSLASH);
-          break;
+            emit(BACKSLASH);
+            break;
         }
         default: {
-          break;
+            break;
         }
         }
         emit(contents[i]);
-      }
-      emit(PIPE);
-    } else {
-      emit(l.unquoted());
+    }
+    if (l.isQuoted()) {
+        emit(PIPE);
     }
 }
 
@@ -200,9 +200,10 @@ void Serializer::emit(const PatternPart& part) {
     if (part.isText()) {
         // Raw text
         const UnicodeString& text = part.asText();
-        // Re-escape '{'/'}'/'\'
-        for (int32_t i = 0; i < text.length(); i++) {
+        // Re-escape '{'/'}'/'\''|'
+        for (int32_t i = 0; ((int32_t) i) < text.length(); i++) {
           switch(text[i]) {
+          case PIPE:
           case BACKSLASH:
           case LEFT_CURLY_BRACE:
           case RIGHT_CURLY_BRACE: {

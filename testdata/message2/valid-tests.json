@@ -125,9 +125,15 @@
       "exp": ""
     },
     {
-      "comment": "Test that escaped characters are re-escaped properly when serializing",
+      "comment": "Test that escaped characters are re-escaped properly when serializing literals",
       "src": "{|\\}|}",
       "exp": "}"
+    },
+    {
+      "comment": "Test that escaped characters are re-escaped properly when serializing patterns",
+      "src": "\\|",
+      "exp": "|"
     }
+
   ]
 }
