@@ -40,6 +40,7 @@ public class CoreTest extends CoreTestFmwk {
                                                 "syntax-errors-diagnostics.json",
                                                 "syntax-errors-diagnostics-multiline.json",
                                                 "syntax-errors-end-of-input.json",
+                                                "syntax-errors-reserved.json",
                                                 "tricky-declarations.json",
                                                 "valid-tests.json"};
 

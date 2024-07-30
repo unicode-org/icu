@@ -140,10 +140,21 @@ namespace message2 {
 	SelectorKeys parseNonEmptyKeys(UErrorCode&);
 	void errorPattern(UErrorCode& status);
 	Pattern parseQuotedPattern(UErrorCode&);
+        bool isDeclarationStart();
+
+        UChar32 peek() const { return source.char32At(index) ; }
+        UChar32 peek(uint32_t i) const {
+            return source.char32At(source.moveIndex32(index, i));
+        }
+        void next() { index = source.moveIndex32(index, 1); }
+
+        bool inBounds() const { return (int32_t) index < source.length(); }
+        bool inBounds(uint32_t i) const { return source.moveIndex32(index, i) < source.length(); }
+        bool allConsumed() const { return (int32_t) index == source.length(); }
 
 	// The input string
 	const UnicodeString &source;
-	// The current position within the input string
+	// The current position within the input string -- counting in UChar32
 	uint32_t index;
 	// Represents the current line (and when an error is indicated),
 	// character offset within the line of the parse error

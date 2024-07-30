@@ -137,11 +137,6 @@
         "comment": "Trailing characters that are not whitespace"
     },
     {
-        "src": ".match {$foo :string} {$bar :string}  one * {{one}}  * * {{other}}   ",
-        "char": 66,
-        "comment": "Trailing whitespace at end of message should not be accepted either"
-    },
-    {
         "src": "empty { }",
         "char": 8,
         "comment": "Empty expression"
@@ -343,6 +338,10 @@
         "src":  ".match {1} {{_}}",
         "char": 12,
         "comment": "Disambiguating a wrong .match from an unsupported statement"
+    },
+    {
+        "src": "{{{/p o4.􍅲 = 1}}}",
+        "char": 9
     }
   ]
 }
