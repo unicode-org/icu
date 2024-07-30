@@ -123,6 +123,11 @@
       "comment": "message -> complex-message -> *(declaration [s]) complex-body -> declaration complex-body -> input-declaration complex-body -> input variable-expression complex-body",
       "src": ".input{$x}{{}}",
       "exp": ""
+    },
+    {
+      "comment": "Test that escaped characters are re-escaped properly when serializing",
+      "src": "{|\\}|}",
+      "exp": "}"
     }
   ]
 }

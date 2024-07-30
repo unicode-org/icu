@@ -203,6 +203,13 @@ static bool isQuotedChar(UChar32 c) {
         || c == RIGHT_CURLY_BRACE;
 }
 
+static bool isEscapableChar(UChar32 c) {
+    return c == PIPE
+        || c == BACKSLASH
+        || c == LEFT_CURLY_BRACE
+        || c == RIGHT_CURLY_BRACE;
+}
+
 // Returns true iff `c` can begin a `function` nonterminal
 static bool isFunctionStart(UChar32 c) {
     switch (c) {
@@ -699,6 +706,14 @@ Literal Parser::parseQuotedLiteral(UErrorCode& errorCode) {
                     contents += parseEscapeSequence(errorCode);
                 } else if (isQuotedChar(source[index])) {
                     contents += source[index];
+                    // Handle cases like:
+                    // |}{| -- we want to escape everywhere that
+                    // can be escaped, to make round-trip checking
+                    // easier -- so this case normalizes to
+                    // |\}\{|
+                    if (isEscapableChar(source[index])) {
+                        normalizedInput += BACKSLASH;
+                    }
                     normalizedInput += source[index];
                     index++; // Consume this character
                     maybeAdvanceLine();
