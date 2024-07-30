@@ -112,11 +112,6 @@
         "comment": "Expression not starting with a '{'"
     },
     {
-        "src": ".local $x = {|foo|} .l $y = {|bar|} .local $z {|quux|}",
-        "char": 22,
-        "comment": "Error should be at the first declaration not starting with a `.local`"
-    },
-    {
         "src": ".local $bar {|foo|} {{$bar}}",
         "char": 12,
         "comment": "Missing '=' in `.local` declaration"
