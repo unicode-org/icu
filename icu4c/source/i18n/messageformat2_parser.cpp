@@ -1747,6 +1747,10 @@ UnicodeString Parser::parseTextChar(UErrorCode& status) {
         // Error -- text-char is expected here
         ERROR(parseError, status, index);
     } else {
+        // See comment in parseQuotedLiteral()
+        if (isEscapableChar(source[index])) {
+            normalizedInput += BACKSLASH;
+        }
         normalizedInput += source[index];
         str += source[index];
         index++;

@@ -133,7 +133,11 @@
       "comment": "Test that escaped characters are re-escaped properly when serializing patterns",
       "src": "\\|",
       "exp": "|"
+    },
+    {
+      "comment": "Test that parser and serializer treat optionally-escaped characters consistently",
+      "src" : "{{{1}|}}",
+      "exp": "1|"
     }
-
   ]
 }
