@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1722380814747,
+  "lastUpdate": 1722434501285,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -47139,6 +47139,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12510754.3413,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "dd65ee3f0b3995ba1b7efcfa0b3bcfe944c0b1fa",
+          "message": "ICU-22696 Update ulocimp_getKeywordValue() to use std::string_view.",
+          "timestamp": "2024-07-31T15:39:15+02:00",
+          "tree_id": "693596c1f99419afc983dbae4c68df2a50046beb",
+          "url": "https://github.com/unicode-org/icu/commit/dd65ee3f0b3995ba1b7efcfa0b3bcfe944c0b1fa"
+        },
+        "date": 1722434365746,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 217.9141,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 54286744.8595,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12042502.5622,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 50629325.535,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12638966.4473,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
