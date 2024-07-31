@@ -2098,18 +2098,10 @@ void Parser::parseSelectors(UErrorCode& status) {
 
     // Parse variants
     while (isWhitespace(source[index]) || isKeyStart(source[index])) {
-        if (isWhitespace(source[index])) {
-            int32_t whitespaceStart = index;
-            parseOptionalWhitespace(status);
-            // Restore the precondition.
-            // Error out if we reached the end of input. The message
-            // cannot end with trailing whitespace if there are variants.
-            if (!inBounds(source, index)) {
-                // Use index of first whitespace for error message
-                index = whitespaceStart;
-                ERROR(parseError, status, index);
-                return;
-            }
+        // Trailing whitespace is allowed
+        parseOptionalWhitespace(status);
+        if (!inBounds(source, index)) {
+            return;
         }
 
         // At least one key is required

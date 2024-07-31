@@ -138,6 +138,11 @@
       "comment": "Test that parser and serializer treat optionally-escaped characters consistently",
       "src" : "{{{1}|}}",
       "exp": "1|"
+    },
+    {
+      "comment": "Trailing whitespace after match is valid",
+      "src": ".match {1 :string} * {{}} ",
+      "exp": ""
     }
   ]
 }

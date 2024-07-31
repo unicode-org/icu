@@ -137,11 +137,6 @@
         "comment": "Trailing characters that are not whitespace"
     },
     {
-        "src": ".match {$foo :string} {$bar :string}  one * {{one}}  * * {{other}}   ",
-        "char": 66,
-        "comment": "Trailing whitespace at end of message should not be accepted either"
-    },
-    {
         "src": "empty { }",
         "char": 8,
         "comment": "Empty expression"
