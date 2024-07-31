@@ -1193,6 +1193,7 @@ TimeZoneGenericNames::createInstance(const Locale& locale, UErrorCode& status) {
             }
         }
         if (U_FAILURE(status)) {
+            delete instance;
             return nullptr;
         }
 
