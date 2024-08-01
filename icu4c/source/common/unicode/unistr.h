@@ -3309,6 +3309,9 @@ public:
    * std::u16string_view constructor.
    * The string is bogus if the string view is too long.
    *
+   * If you need a UnicodeString but need not copy the string view contents,
+   * then you can call the UnicodeString::readOnlyAlias() function instead of this constructor.
+   *
    * @param text UTF-16 string
    * @draft ICU 76
    */
@@ -3322,6 +3325,9 @@ public:
    * std::wstring_view constructor.
    * (Only defined if U_SIZEOF_WCHAR_T==2.)
    * The string is bogus if the string view is too long.
+   *
+   * If you need a UnicodeString but need not copy the string view contents,
+   * then you can call the UnicodeString::readOnlyAlias() function instead of this constructor.
    *
    * @param text UTF-16 string
    * @draft ICU 76

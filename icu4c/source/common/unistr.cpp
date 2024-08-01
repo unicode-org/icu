@@ -124,7 +124,8 @@ operator+ (const UnicodeString &s1, const UnicodeString &s2) {
 U_COMMON_API UnicodeString U_EXPORT2
 operator+(const UnicodeString &s1, std::u16string_view s2) {
   int32_t sumLengths;
-  if (s2.length() > INT32_MAX || uprv_add32_overflow(s1.length(), s2.length(), &sumLengths)) {
+  if (s2.length() > INT32_MAX ||
+      uprv_add32_overflow(s1.length(), (int32_t)s2.length(), &sumLengths)) {
     UnicodeString bogus;
     bogus.setToBogus();
     return bogus;
@@ -144,7 +145,8 @@ operator+(const UnicodeString &s1, const char16_t *s2) {
 U_COMMON_API UnicodeString U_EXPORT2
 operator+(const UnicodeString &s1, std::wstring_view s2) {
   int32_t sumLengths;
-  if (s2.length() > INT32_MAX || uprv_add32_overflow(s1.length(), s2.length(), &sumLengths)) {
+  if (s2.length() > INT32_MAX ||
+      uprv_add32_overflow(s1.length(), (int32_t)s2.length(), &sumLengths)) {
     UnicodeString bogus;
     bogus.setToBogus();
     return bogus;
