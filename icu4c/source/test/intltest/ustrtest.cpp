@@ -6,6 +6,8 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <string>
+#include <string_view>
 #include <utility>
 
 #include "ustrtest.h"
@@ -21,6 +23,13 @@
 #include "unicode/utf16.h"
 #include "cmemory.h"
 #include "charstr.h"
+
+// Makes u"literal"sv std::u16string_view literals possible.
+// https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv
+using namespace std::string_view_literals;
+
+// Same for u"literal"s std::u16string literals.
+using namespace std::string_literals;
 
 #if 0
 #include "unicode/ustream.h"
@@ -68,6 +77,8 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
     TESTCASE_AUTO(TestNullPointers);
     TESTCASE_AUTO(TestUnicodeStringInsertAppendToSelf);
     TESTCASE_AUTO(TestLargeAppend);
+    TESTCASE_AUTO(TestU16StringView);
+    TESTCASE_AUTO(TestWStringView);
     TESTCASE_AUTO_END;
 }
 
@@ -2399,4 +2410,178 @@ void UnicodeStringTest::TestLargeAppend() {
             assertTrue("dest should be bogus", dest.isBogus());
         }
     }
+}
+
+void UnicodeStringTest::TestU16StringView() {
+    IcuTestErrorCode status(*this, "TestU16StringView");
+    // ICU-22843 Test ICU 76 new UnicodeString APIs that take or return a std::u16string_view
+    // or something convertible to it.
+    // NOTE: Keep this function very parallel with TestWStringView()!
+    const char16_t *p16 = u"p16";
+    std::u16string_view sv16 = u"sv16";
+    std::u16string str16 = u"str16";
+
+    // These copy the string contents.
+    UnicodeString fromPtr(p16);  // pointer is convertible to std::u16string_view
+    UnicodeString fromSV(sv16);  // std::u16string_view itself
+    UnicodeString fromSV2(u"sv16_2"sv);  // std::u16string_view literal
+    UnicodeString fromStr(str16);  // std::u16string is convertible to std::u16string_view
+    assertEquals("UnicodeString(const char16_t *pointer)", UnicodeString(u"p16", 3), fromPtr);
+    assertEquals("UnicodeString(std::u16string_view)", UnicodeString(u"sv16", 4), fromSV);
+    assertEquals("UnicodeString(std::u16string_view literal)", UnicodeString(u"sv16_2", 6), fromSV2);
+    assertEquals("UnicodeString(std::u16string)", UnicodeString(u"str16", 5), fromStr);
+
+    // Read-only aliases
+    UnicodeString aliasFromPtr = UnicodeString::readOnlyAlias(p16);
+    assertTrue("aliasFromPtr pointer alias", aliasFromPtr.getBuffer() == p16);
+    assertEquals("aliasFromPtr length", 3, aliasFromPtr.length());
+
+    UnicodeString aliasFromSV = UnicodeString::readOnlyAlias(sv16);
+    assertTrue("aliasFromSV pointer alias", aliasFromSV.getBuffer() == sv16.data());
+    assertEquals("aliasFromSV length", (int32_t)sv16.length(), aliasFromSV.length());
+
+    UnicodeString aliasFromStr = UnicodeString::readOnlyAlias(str16);
+    assertTrue("aliasFromStr pointer alias", aliasFromStr.getBuffer() == str16.data());
+    assertEquals("aliasFromStr length", (int32_t)str16.length(), aliasFromStr.length());
+
+    // operator==
+    UnicodeString any(true, u"any", 3);
+    assertFalse("any == pointer-p16", any == p16);
+    assertTrue("any == pointer-any", any == u"any");
+    assertFalse("any == string_view-sv16", any == sv16);
+    assertTrue("any == string_view-any", any == u"any"sv);
+    assertFalse("any == string-str16", any == str16);
+    assertTrue("any == string-any", any == u"any"s);
+
+    // Assignment copies the string contents.
+    UnicodeString x;
+    x = p16;
+    assertEquals("x = p16", UnicodeString(true, u"p16", 3), x);
+    x = sv16;
+    assertEquals("x = sv16", UnicodeString(true, u"sv16", 4), x);
+    x = str16;
+    assertEquals("x = str16", UnicodeString(true, u"str16", 5), x);
+
+    // Append
+    x += p16;
+    assertEquals("+= p16", UnicodeString(true, u"str16p16", 8), x);
+    x += sv16;
+    assertEquals("+= sv16", UnicodeString(true, u"str16p16sv16", 12), x);
+    x += str16;
+    assertEquals("+= str16", UnicodeString(true, u"str16p16sv16str16", 17), x);
+
+    x = u"x"sv;
+    x.append(p16);
+    assertEquals("append(p16)", UnicodeString(true, u"xp16", 4), x);
+    x.append(sv16);
+    assertEquals("append(sv16)", UnicodeString(true, u"xp16sv16", 8), x);
+    x.append(str16);
+    assertEquals("append(str16)", UnicodeString(true, u"xp16sv16str16", 13), x);
+
+    // Convert UnicodeString to string view.
+    std::u16string_view sv16FromUniStr(any);
+    assertTrue("sv16FromUniStr buffer alias", sv16FromUniStr.data() == any.getBuffer());
+    assertEquals("sv16FromUniStr length", any.length(), (int32_t)sv16FromUniStr.length());
+
+    // Just to show convenience: Convert UnicodeString to string view, then to std string.
+    std::u16string str16FromUniStr(any);
+    assertTrue("str16FromUniStr contents", str16FromUniStr == u"any"s);
+
+    // operator+
+    x = any + p16;
+    assertEquals("any + p16", UnicodeString(true, u"anyp16", 6), x);
+    x = any + sv16;
+    assertEquals("any + sv16", UnicodeString(true, u"anysv16", 7), x);
+    x = any + str16;
+    assertEquals("any + str16", UnicodeString(true, u"anystr16", 8), x);
+}
+
+void UnicodeStringTest::TestWStringView() {
+#if U_SIZEOF_WCHAR_T==2
+    IcuTestErrorCode status(*this, "TestU16StringView");
+    // ICU-22843 Test ICU 76 new UnicodeString APIs that take or return a std::wstring_view
+    // or something convertible to it.
+    // NOTE: Keep this function very parallel with TestU16StringView()!
+    const wchar_t *p16 = L"p16";
+    std::wstring_view sv16 = L"sv16";
+    std::wstring str16 = L"str16";
+
+    // These copy the string contents.
+    UnicodeString fromPtr(p16);  // pointer is convertible to std::wstring_view
+    UnicodeString fromSV(sv16);  // std::wstring_view itself
+    UnicodeString fromSV2(L"sv16_2"sv);  // std::wstring_view literal
+    UnicodeString fromStr(str16);  // std::wstring is convertible to std::wstring_view
+    assertEquals("UnicodeString(const wchar_t *pointer)", UnicodeString(L"p16", 3), fromPtr);
+    assertEquals("UnicodeString(std::wstring_view)", UnicodeString(L"sv16", 4), fromSV);
+    assertEquals("UnicodeString(std::wstring_view literal)", UnicodeString(L"sv16_2", 6), fromSV2);
+    assertEquals("UnicodeString(std::wstring)", UnicodeString(L"str16", 5), fromStr);
+
+    // Read-only aliases
+    UnicodeString aliasFromPtr = UnicodeString::readOnlyAlias(p16);
+    assertTrue("aliasFromPtr pointer alias",
+               aliasFromPtr.getBuffer() == reinterpret_cast<const char16_t *>(p16));
+    assertEquals("aliasFromPtr length", 3, aliasFromPtr.length());
+
+    UnicodeString aliasFromSV = UnicodeString::readOnlyAlias(sv16);
+    assertTrue("aliasFromSV pointer alias",
+               aliasFromSV.getBuffer() == reinterpret_cast<const char16_t *>(sv16.data()));
+    assertEquals("aliasFromSV length", (int32_t)sv16.length(), aliasFromSV.length());
+
+    UnicodeString aliasFromStr = UnicodeString::readOnlyAlias(str16);
+    assertTrue("aliasFromStr pointer alias",
+               aliasFromStr.getBuffer() == reinterpret_cast<const char16_t *>(str16.data()));
+    assertEquals("aliasFromStr length", (int32_t)str16.length(), aliasFromStr.length());
+
+    // operator==
+    UnicodeString any(true, L"any", 3);
+    assertFalse("any == pointer-p16", any == p16);
+    assertTrue("any == pointer-any", any == L"any");
+    assertFalse("any == string_view-sv16", any == sv16);
+    assertTrue("any == string_view-any", any == L"any"sv);
+    assertFalse("any == string-str16", any == str16);
+    assertTrue("any == string-any", any == L"any"s);
+
+    // Assignment copies the string contents.
+    UnicodeString x;
+    x = p16;
+    assertEquals("x = p16", UnicodeString(true, L"p16", 3), x);
+    x = sv16;
+    assertEquals("x = sv16", UnicodeString(true, L"sv16", 4), x);
+    x = str16;
+    assertEquals("x = str16", UnicodeString(true, L"str16", 5), x);
+
+    // Append
+    x += p16;
+    assertEquals("+= p16", UnicodeString(true, L"str16p16", 8), x);
+    x += sv16;
+    assertEquals("+= sv16", UnicodeString(true, L"str16p16sv16", 12), x);
+    x += str16;
+    assertEquals("+= str16", UnicodeString(true, L"str16p16sv16str16", 17), x);
+
+    x = L"x"sv;
+    x.append(p16);
+    assertEquals("append(p16)", UnicodeString(true, L"xp16", 4), x);
+    x.append(sv16);
+    assertEquals("append(sv16)", UnicodeString(true, L"xp16sv16", 8), x);
+    x.append(str16);
+    assertEquals("append(str16)", UnicodeString(true, L"xp16sv16str16", 13), x);
+
+    // Convert UnicodeString to string view.
+    std::wstring_view sv16FromUniStr(any);
+    assertTrue("sv16FromUniStr buffer alias",
+               reinterpret_cast<const char16_t *>(sv16FromUniStr.data()) == any.getBuffer());
+    assertEquals("sv16FromUniStr length", any.length(), (int32_t)sv16FromUniStr.length());
+
+    // Just to show convenience: Convert UnicodeString to string view, then to std string.
+    std::wstring str16FromUniStr(any);
+    assertTrue("str16FromUniStr contents", str16FromUniStr == L"any"s);
+
+    // operator+
+    x = any + p16;
+    assertEquals("any + p16", UnicodeString(true, L"anyp16", 6), x);
+    x = any + sv16;
+    assertEquals("any + sv16", UnicodeString(true, L"anysv16", 7), x);
+    x = any + str16;
+    assertEquals("any + str16", UnicodeString(true, L"anystr16", 8), x);
+#endif
 }
