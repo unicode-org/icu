@@ -33,6 +33,7 @@
 #if U_SHOW_CPLUSPLUS_API
 
 #include <cstddef>
+#include <string_view>
 #include "unicode/char16ptr.h"
 #include "unicode/rep.h"
 #include "unicode/std_string.h"
@@ -326,6 +327,57 @@ public:
    * @stable ICU 2.0
    */
   inline bool operator== (const UnicodeString& text) const;
+
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Equality operator. Performs only bitwise comparison.
+   *
+   * @param text The string view to compare to this string.
+   * @return true if `text` contains the same characters as this one, false otherwise.
+   * @draft ICU 76
+   */
+  inline bool operator==(std::u16string_view text) const {
+    uint32_t len;  // unsigned to avoid a compiler warning
+    return !isBogus() && (len = length()) == text.length() && doEquals(text.data(), len);
+  }
+
+  /**
+   * Equality operator. Performs only bitwise comparison.
+   *
+   * @param text The NUL-terminated string to compare to this string.
+   * @return true if `text` contains the same characters as this one, false otherwise.
+   * @draft ICU 76
+   */
+  inline bool operator==(const char16_t *text) const {
+    return !isBogus() && doEquals(text);
+  }
+
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+  /**
+   * Equality operator. Performs only bitwise comparison.
+   *
+   * @param text The string view to compare to this string.
+   * @return true if `text` contains the same characters as this one, false otherwise.
+   * @draft ICU 76
+   */
+  inline bool operator==(std::wstring_view text) const {
+    uint32_t len;  // unsigned to avoid a compiler warning
+    return !isBogus() && (len = length()) == text.length() &&
+        doEquals(ConstChar16Ptr(text.data()), len);
+  }
+
+  /**
+   * Equality operator. Performs only bitwise comparison.
+   *
+   * @param text The NUL-terminated string to compare to this string.
+   * @return true if `text` contains the same characters as this one, false otherwise.
+   * @draft ICU 76
+   */
+  inline bool operator==(const wchar_t *text) const {
+    return !isBogus() && doEquals(ConstChar16Ptr(text));
+  }
+#endif
+#endif  // U_HIDE_DRAFT_API
 
   /**
    * Inequality operator. Performs only bitwise comparison.
@@ -1897,6 +1949,66 @@ public:
    */
   UnicodeString &fastCopyFrom(const UnicodeString &src);
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Assignment operator. Replaces the characters in this UnicodeString
+   * with a copy of the characters from `src`.
+   *
+   * @param src The string view containing the characters to copy.
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  inline UnicodeString &operator=(std::u16string_view src) {
+    if (src.length() <= INT32_MAX) {
+      unBogus();
+      return doReplace(0, length(), src.data(), 0, (int32_t)src.length());
+    } else {
+      setToBogus();
+      return *this;
+    }
+  }
+
+  /**
+   * Assignment operator. Replaces the characters in this UnicodeString
+   * with a copy of the characters from `src`.
+   *
+   * @param src The NUL-terminated characters to copy.
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  inline UnicodeString &operator=(const char16_t *src) {
+    unBogus();
+    return doReplace(0, length(), src, 0, -1);
+  }
+
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+  /**
+   * Assignment operator. Replaces the characters in this UnicodeString
+   * with a copy of the characters from `src`.
+   *
+   * @param src The string view containing the characters to copy.
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  inline UnicodeString &operator=(std::wstring_view src) {
+    return operator=(std::u16string_view(ConstChar16Ptr(src.data()), src.length()));
+  }
+
+  /**
+   * Assignment operator. Replaces the characters in this UnicodeString
+   * with a copy of the characters from `src`.
+   *
+   * @param src The NUL-terminated characters to copy.
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  inline UnicodeString &operator=(const wchar_t *src) {
+    unBogus();
+    return doReplace(0, length(), ConstChar16Ptr(src), 0, -1);
+  }
+#endif
+#endif  // U_HIDE_DRAFT_API
+
   /**
    * Move assignment operator; might leave src in bogus state.
    * This string will have the same contents and state that the source string had.
@@ -2146,6 +2258,54 @@ public:
    */
   inline UnicodeString& operator+= (const UnicodeString& srcText);
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Append operator. Appends the characters in `src` to the UnicodeString object.
+   *
+   * @param src the source for the new characters
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  inline UnicodeString& operator+=(std::u16string_view src) {
+    return doAppend(src);
+  }
+
+  /**
+   * Append operator. Appends the NUL-terminated `src` characters to the UnicodeString object.
+   *
+   * @param src the NUL-terminated string to append
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  inline UnicodeString& operator+=(const char16_t *src) {
+    return doAppend(src, 0, -1);
+  }
+
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+  /**
+   * Append operator. Appends the characters in `src` to the UnicodeString object.
+   *
+   * @param src the source for the new characters
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  inline UnicodeString& operator+=(std::wstring_view src) {
+    return doAppend(std::u16string_view(ConstChar16Ptr(src.data()), src.length()));
+  }
+
+  /**
+   * Append operator. Appends the NUL-terminated `src` characters to the UnicodeString object.
+   *
+   * @param src the NUL-terminated string to append
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  inline UnicodeString& operator+=(const wchar_t *src) {
+    return doAppend(ConstChar16Ptr(src), 0, -1);
+  }
+#endif
+#endif  // U_HIDE_DRAFT_API
+
   /**
    * Append the characters
    * in `srcText` in the range
@@ -2191,8 +2351,8 @@ public:
             int32_t srcLength);
 
   /**
-   * Append the characters in `srcChars` to the UnicodeString object
-   * at offset `start`. `srcChars` is not modified.
+   * Append the characters in `srcChars` to the UnicodeString object.
+   * `srcChars` is not modified.
    * @param srcChars the source for the new characters
    * @param srcLength the number of Unicode characters in `srcChars`;
    *                  can be -1 if `srcChars` is NUL-terminated
@@ -2201,6 +2361,54 @@ public:
    */
   inline UnicodeString& append(ConstChar16Ptr srcChars,
             int32_t srcLength);
+
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Appends the characters in `src` to the UnicodeString object.
+   *
+   * @param src the source for the new characters
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  inline UnicodeString& append(std::u16string_view src) {
+    return doAppend(src);
+  }
+
+  /**
+   * Appends the NUL-terminated `src` characters to the UnicodeString object.
+   *
+   * @param src the NUL-terminated string to append
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  inline UnicodeString& append(const char16_t *src) {
+    return doAppend(src, 0, -1);
+  }
+
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+  /**
+   * Appends the characters in `src` to the UnicodeString object.
+   *
+   * @param src the source for the new characters
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  inline UnicodeString& append(std::wstring_view src) {
+    return doAppend(std::u16string_view(ConstChar16Ptr(src.data()), src.length()));
+  }
+
+  /**
+   * Appends the NUL-terminated `src` characters to the UnicodeString object.
+   *
+   * @param src the NUL-terminated string to append
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  inline UnicodeString& append(const wchar_t *src) {
+    return doAppend(ConstChar16Ptr(src), 0, -1);
+  }
+#endif
+#endif  // U_HIDE_DRAFT_API
 
   /**
    * Append the code unit `srcChar` to the UnicodeString object.
@@ -2925,6 +3133,34 @@ public:
    */
   const char16_t *getTerminatedBuffer();
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Converts to a std::u16string_view.
+   *
+   * @return a string view of the contents of this string
+   * @draft ICU 76
+   */
+  inline operator std::u16string_view() const {
+    return { getBuffer(), (std::u16string_view::size_type)length() };
+  }
+
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+  /**
+   * Converts to a std::wstring_view.
+   *
+   * @return a string view of the contents of this string
+   * @draft ICU 76
+   */
+  inline operator std::wstring_view() const {
+    const char16_t *p = getBuffer();
+#ifdef U_ALIASING_BARRIER
+    U_ALIASING_BARRIER(p);
+#endif
+    return { reinterpret_cast<const wchar_t *>(p), (std::wstring_view::size_type)length() };
+  }
+#endif  // U_SIZEOF_WCHAR_T
+#endif  // U_HIDE_DRAFT_API
+
   //========================================
   // Constructors
   //========================================
@@ -3051,7 +3287,7 @@ public:
    * wchar_t * constructor.
    * (Only defined if U_SIZEOF_WCHAR_T==2.)
    * Delegates to UnicodeString(const char16_t *, int32_t).
-   * @param text NUL-terminated UTF-16 string
+   * @param text UTF-16 string
    * @param textLength string length
    * @stable ICU 59
    */
@@ -3067,6 +3303,33 @@ public:
    * @stable ICU 59
    */
   inline UnicodeString(const std::nullptr_t text, int32_t textLength);
+
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * std::u16string_view constructor.
+   * The string is bogus if the string view is too long.
+   *
+   * @param text UTF-16 string
+   * @draft ICU 76
+   */
+  explicit inline UnicodeString(std::u16string_view text) {
+    fUnion.fFields.fLengthAndFlags = kShortString;
+    doAppend(text);
+  }
+
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+  /**
+   * std::wstring_view constructor.
+   * (Only defined if U_SIZEOF_WCHAR_T==2.)
+   * The string is bogus if the string view is too long.
+   *
+   * @param text UTF-16 string
+   * @draft ICU 76
+   */
+  explicit inline UnicodeString(std::wstring_view text) :
+      UnicodeString(std::u16string_view(ConstChar16Ptr(text.data()), text.length())) {}
+#endif
+#endif  // U_HIDE_DRAFT_API
 
   /**
    * Readonly-aliasing char16_t* constructor.
@@ -3343,6 +3606,62 @@ public:
    */
   virtual ~UnicodeString();
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Readonly-aliasing factory method.
+   * The string is bogus if the string view is too long.
+   *
+   * The text will be used for the UnicodeString object, but
+   * it will not be released when the UnicodeString is destroyed.
+   * This has copy-on-write semantics:
+   * When the string is modified, then the buffer is first copied into
+   * newly allocated memory.
+   * The aliased buffer is never modified.
+   *
+   * In an assignment to another UnicodeString, when using the copy constructor
+   * or the assignment operator, the text will be copied.
+   * When using fastCopyFrom(), the text will be aliased again,
+   * so that both strings then alias the same readonly-text.
+   *
+   * @param text The string view to alias for the UnicodeString.
+   * @draft ICU 76
+   */
+  static inline UnicodeString readOnlyAlias(std::u16string_view text) {
+    UnicodeString result;
+    if (text.length() <= INT32_MAX) {
+      result.setTo(false, text.data(), (int32_t)text.length());
+    } else {
+      result.setToBogus();
+    }
+    return result;
+  }
+
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+  /**
+   * Readonly-aliasing factory method.
+   * The string is bogus if the string view is too long.
+   *
+   * The text will be used for the UnicodeString object, but
+   * it will not be released when the UnicodeString is destroyed.
+   * This has copy-on-write semantics:
+   * When the string is modified, then the buffer is first copied into
+   * newly allocated memory.
+   * The aliased buffer is never modified.
+   *
+   * In an assignment to another UnicodeString, when using the copy constructor
+   * or the assignment operator, the text will be copied.
+   * When using fastCopyFrom(), the text will be aliased again,
+   * so that both strings then alias the same readonly-text.
+   *
+   * @param text The string view to alias for the UnicodeString.
+   * @draft ICU 76
+   */
+  static inline UnicodeString readOnlyAlias(std::wstring_view text) {
+    return readOnlyAlias(std::u16string_view(ConstChar16Ptr(text.data()), text.length()));
+  }
+#endif  // U_SIZEOF_WCHAR_T
+#endif  // U_HIDE_DRAFT_API
+
   /**
    * Create a UnicodeString from a UTF-8 string.
    * Illegal input is replaced with U+FFFD. Otherwise, errors result in a bogus string.
@@ -3486,6 +3805,8 @@ private:
    * Requires: this & text not bogus and have same lengths.
    */
   UBool doEquals(const UnicodeString &text, int32_t len) const;
+  UBool doEquals(const char16_t *text, int32_t len) const;
+  UBool doEquals(const char16_t *text) const;
 
   inline UBool
   doEqualsSubstring(int32_t start,
@@ -3583,6 +3904,7 @@ private:
 
   UnicodeString& doAppend(const UnicodeString& src, int32_t srcStart, int32_t srcLength);
   UnicodeString& doAppend(const char16_t *srcChars, int32_t srcStart, int32_t srcLength);
+  UnicodeString& doAppend(std::u16string_view src);
 
   UnicodeString& doReverse(int32_t start,
                int32_t length);
@@ -3802,7 +4124,7 @@ private:
 };
 
 /**
- * Create a new UnicodeString with the concatenation of two others.
+ * Creates a new UnicodeString from the concatenation of two others.
  *
  * @param s1 The first string to be copied to the new one.
  * @param s2 The second string to be copied to the new one, after s1.
@@ -3811,6 +4133,56 @@ private:
  */
 U_COMMON_API UnicodeString U_EXPORT2
 operator+ (const UnicodeString &s1, const UnicodeString &s2);
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Creates a new UnicodeString from the concatenation of a UnicodeString and a string view.
+ *
+ * @param s1 The string to be copied to the new one.
+ * @param s2 The string view to be copied to the new string, after s1.
+ * @return UnicodeString(s1).append(s2)
+ * @draft ICU 76
+ */
+U_COMMON_API UnicodeString U_EXPORT2
+operator+(const UnicodeString &s1, std::u16string_view s2);
+
+/**
+ * Creates a new UnicodeString from the concatenation of
+ * a UnicodeString and a NUL-terminated string.
+ *
+ * @param s1 The string to be copied to the new string.
+ * @param s2 The NUL-terminated string to be copied to the new string, after s1.
+ * @return UnicodeString(s1).append(s2)
+ * @draft ICU 76
+ */
+U_COMMON_API UnicodeString U_EXPORT2
+operator+(const UnicodeString &s1, const char16_t *s2);
+
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+/**
+ * Creates a new UnicodeString from the concatenation of a UnicodeString and a string view.
+ *
+ * @param s1 The string to be copied to the new string.
+ * @param s2 The string view to be copied to the new string, after s1.
+ * @return UnicodeString(s1).append(s2)
+ * @draft ICU 76
+ */
+U_COMMON_API UnicodeString U_EXPORT2
+operator+(const UnicodeString &s1, std::wstring_view s2);
+
+/**
+ * Creates a new UnicodeString from the concatenation of
+ * a UnicodeString and a NUL-terminated string.
+ *
+ * @param s1 The string to be copied to the new string.
+ * @param s2 The NUL-terminated string to be copied to the new string, after s1.
+ * @return UnicodeString(s1).append(s2)
+ * @draft ICU 76
+ */
+U_COMMON_API UnicodeString U_EXPORT2
+operator+(const UnicodeString &s1, const wchar_t *s2);
+#endif  // U_SIZEOF_WCHAR_T
+#endif  // U_HIDE_DRAFT_API
 
 //========================================
 // Inline members

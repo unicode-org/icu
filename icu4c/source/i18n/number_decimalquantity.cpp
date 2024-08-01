@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <limits>
+#include <string_view>
 #include <stdlib.h>
 
 #include "unicode/plurrule.h"
@@ -1082,7 +1083,7 @@ UnicodeString DecimalQuantity::toScientificString() const {
     result.append(u'E');
     int32_t _scale = upperPos + scale + exponent;
     if (_scale == INT32_MIN) {
-        result.append({u"-2147483648", -1});
+        result.append(std::u16string_view(u"-2147483648"));
         return result;
     } else if (_scale < 0) {
         _scale *= -1;
