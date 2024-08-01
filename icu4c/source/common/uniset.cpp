@@ -981,6 +981,7 @@ void UnicodeSet::_add(const UnicodeString& s) {
     }
     strings->sortedInsert(t, compareUnicodeString, ec);
     if (U_FAILURE(ec)) {
+        delete t;
         setToBogus();
     }
 }
