@@ -20,6 +20,8 @@
 ******************************************************************************
 */
 
+#include <string_view>
+
 #include "unicode/utypes.h"
 #include "unicode/appendable.h"
 #include "unicode/putil.h"
@@ -107,11 +109,33 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeString)
 
 UnicodeString U_EXPORT2
 operator+ (const UnicodeString &s1, const UnicodeString &s2) {
-    return
-        UnicodeString(s1.length() + s2.length() + 1, static_cast<UChar32>(0), 0).
-            append(s1).
-                append(s2);
+  int32_t sumLengths;
+  if (uprv_add32_overflow(s1.length(), s2.length(), &sumLengths)) {
+    UnicodeString bogus;
+    bogus.setToBogus();
+    return bogus;
+  }
+  if (sumLengths != INT32_MAX) {
+    ++sumLengths;  // space for a terminating NUL if we need one
+  }
+  return UnicodeString(sumLengths, static_cast<UChar32>(0), 0).append(s1).append(s2);
 }
+
+U_COMMON_API UnicodeString U_EXPORT2
+unistr_internalConcat(const UnicodeString &s1, std::u16string_view s2) {
+  int32_t sumLengths;
+  if (s2.length() > INT32_MAX ||
+      uprv_add32_overflow(s1.length(), (int32_t)s2.length(), &sumLengths)) {
+    UnicodeString bogus;
+    bogus.setToBogus();
+    return bogus;
+  }
+  if (sumLengths != INT32_MAX) {
+    ++sumLengths;  // space for a terminating NUL if we need one
+  }
+  return UnicodeString(sumLengths, static_cast<UChar32>(0), 0).append(s1).append(s2);
+}
+
 
 //========================================
 // Reference Counting functions, put at top of file so that optimizing compilers
@@ -277,6 +301,16 @@ UnicodeString::UnicodeString(const char *src, int32_t length, EInvariant) {
       setToBogus();
     }
   }
+}
+
+UnicodeString UnicodeString::readOnlyAliasFromU16StringView(std::u16string_view text) {
+  UnicodeString result;
+  if (text.length() <= INT32_MAX) {
+    result.setTo(false, text.data(), (int32_t)text.length());
+  } else {
+    result.setToBogus();
+  }
+  return result;
 }
 
 #if U_CHARSET_IS_UTF8
@@ -656,10 +690,10 @@ UChar32 UnicodeString::unescapeAt(int32_t &offset) const {
 // Read-only implementation
 //========================================
 UBool
-UnicodeString::doEquals(const UnicodeString &text, int32_t len) const {
-  // Requires: this & text not bogus and have same lengths.
+UnicodeString::doEquals(const char16_t *text, int32_t len) const {
+  // Requires: this not bogus and have same lengths.
   // Byte-wise comparison works for equality regardless of endianness.
-  return uprv_memcmp(getArrayStart(), text.getArrayStart(), len * U_SIZEOF_UCHAR) == 0;
+  return uprv_memcmp(getArrayStart(), text, len * U_SIZEOF_UCHAR) == 0;
 }
 
 UBool
@@ -1574,6 +1608,18 @@ UnicodeString::doReplace(int32_t start,
   return *this;
 }
 
+UnicodeString&
+UnicodeString::doReplace(int32_t start, int32_t length, std::u16string_view src) {
+  if (!isWritable()) {
+    return *this;
+  }
+  if (src.length() > INT32_MAX) {
+    setToBogus();
+    return *this;
+  }
+  return doReplace(start, length, src.data(), 0, (int32_t)src.length());
+}
+
 // Versions of doReplace() only for append() variants.
 // doReplace() and doAppend() optimize for different cases.
 
@@ -1660,6 +1706,18 @@ UnicodeString::doAppend(const char16_t *srcChars, int32_t srcStart, int32_t srcL
   setLength(newLength);
 
   return *this;
+}
+
+UnicodeString&
+UnicodeString::doAppend(std::u16string_view src) {
+  if (!isWritable() || src.empty()) {
+    return *this;
+  }
+  if (src.length() > INT32_MAX) {
+    setToBogus();
+    return *this;
+  }
+  return doAppend(src.data(), 0, (int32_t)src.length());
 }
 
 /**
