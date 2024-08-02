@@ -122,7 +122,9 @@ operator+ (const UnicodeString &s1, const UnicodeString &s2) {
 }
 
 U_COMMON_API UnicodeString U_EXPORT2
-operator+(const UnicodeString &s1, std::u16string_view s2) {
+unistr_internalConcat(const UnicodeString &s1, std::u16string_view s2) {
+  // TODO: version of uprv_add32_overflow() that takes a size_t for the second arg
+  // TODO: consider returning a std::optional<int32_t>
   int32_t sumLengths;
   if (s2.length() > INT32_MAX ||
       uprv_add32_overflow(s1.length(), (int32_t)s2.length(), &sumLengths)) {
@@ -136,32 +138,6 @@ operator+(const UnicodeString &s1, std::u16string_view s2) {
   return UnicodeString(sumLengths, static_cast<UChar32>(0), 0).append(s1).append(s2);
 }
 
-U_COMMON_API UnicodeString U_EXPORT2
-operator+(const UnicodeString &s1, const char16_t *s2) {
-  return UnicodeString(s1).append(s2);
-}
-
-#if U_SIZEOF_WCHAR_T==2
-U_COMMON_API UnicodeString U_EXPORT2
-operator+(const UnicodeString &s1, std::wstring_view s2) {
-  int32_t sumLengths;
-  if (s2.length() > INT32_MAX ||
-      uprv_add32_overflow(s1.length(), (int32_t)s2.length(), &sumLengths)) {
-    UnicodeString bogus;
-    bogus.setToBogus();
-    return bogus;
-  }
-  if (sumLengths != INT32_MAX) {
-    ++sumLengths;  // space for a terminating NUL if we need one
-  }
-  return UnicodeString(sumLengths, static_cast<UChar32>(0), 0).append(s1).append(s2);
-}
-
-U_COMMON_API UnicodeString U_EXPORT2
-operator+(const UnicodeString &s1, const wchar_t *s2) {
-  return UnicodeString(s1).append(s2);
-}
-#endif
 
 //========================================
 // Reference Counting functions, put at top of file so that optimizing compilers
@@ -327,6 +303,16 @@ UnicodeString::UnicodeString(const char *src, int32_t length, EInvariant) {
       setToBogus();
     }
   }
+}
+
+UnicodeString UnicodeString::readOnlyAliasFromU16StringView(std::u16string_view text) {
+  UnicodeString result;
+  if (text.length() <= INT32_MAX) {
+    result.setTo(false, text.data(), (int32_t)text.length());
+  } else {
+    result.setToBogus();
+  }
+  return result;
 }
 
 #if U_CHARSET_IS_UTF8
@@ -706,19 +692,13 @@ UChar32 UnicodeString::unescapeAt(int32_t &offset) const {
 // Read-only implementation
 //========================================
 UBool
-UnicodeString::doEquals(const UnicodeString &text, int32_t len) const {
-  // Requires: this & text not bogus and have same lengths.
-  // Byte-wise comparison works for equality regardless of endianness.
-  return uprv_memcmp(getArrayStart(), text.getArrayStart(), len * U_SIZEOF_UCHAR) == 0;
-}
-
-UBool
 UnicodeString::doEquals(const char16_t *text, int32_t len) const {
   // Requires: this not bogus and have same lengths.
   // Byte-wise comparison works for equality regardless of endianness.
   return uprv_memcmp(getArrayStart(), text, len * U_SIZEOF_UCHAR) == 0;
 }
 
+#ifdef MAYBE_EQUALS_PTR
 UBool
 UnicodeString::doEquals(const char16_t *text) const {
   // Requires: this not bogus.
@@ -732,6 +712,7 @@ UnicodeString::doEquals(const char16_t *text) const {
   }
   return *text == 0;
 }
+#endif  // MAYBE_EQUALS_PTR
 
 UBool
 UnicodeString::doEqualsSubstring( int32_t start,
@@ -1643,6 +1624,18 @@ UnicodeString::doReplace(int32_t start,
   }
 
   return *this;
+}
+
+UnicodeString&
+UnicodeString::doReplace(int32_t start, int32_t length, std::u16string_view src) {
+  if (!isWritable()) {
+    return *this;
+  }
+  if (src.length() > INT32_MAX) {
+    setToBogus();
+    return *this;
+  }
+  return doReplace(start, length, src.data(), 0, (int32_t)src.length());
 }
 
 // Versions of doReplace() only for append() variants.

@@ -22,6 +22,42 @@
 #include "cmemory.h"
 #include "charstr.h"
 
+
+extern void tempCompileTest() {
+    const char16_t *p16 = u"p16";
+    std::u16string_view sv16 = u"sv16";
+    std::u16string str16 = u"str16";
+
+    UnicodeString any(true, u"any", 3);
+    UnicodeString fromPtr(p16);
+    UnicodeString fromSV(sv16);
+    UnicodeString fromStr(str16);
+    UnicodeString aliasFromSV = UnicodeString::readOnlyAlias(sv16);
+    UnicodeString aliasFromStr = UnicodeString::readOnlyAlias(str16);
+    bool eqPtr = any == p16;
+    bool eqSV = any == sv16;
+    bool eqStr = any == str16;
+    (void)eqPtr;
+    (void)eqSV;
+    (void)eqStr;
+    UnicodeString x;
+    x = p16;
+    x = sv16;
+    x = str16;
+    x += p16;
+    x += sv16;
+    x += str16;
+    x.append(p16);
+    x.append(sv16);
+    x.append(str16);
+    std::u16string_view sv16FromUniStr(any);
+    (void)sv16FromUniStr;
+    std::u16string str16FromUniStr(any);
+    x = any + p16;
+    x = any + sv16;
+    x = any + str16;
+}
+
 #if 0
 #include "unicode/ustream.h"
 
