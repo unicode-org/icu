@@ -235,24 +235,18 @@ TextTrieMap::put(const char16_t *key, void *value, UErrorCode &status) {
         LocalPointer<UVector> lpLazyContents(new UVector(status), status);
         fLazyContents = lpLazyContents.orphan();
     }
-    if (U_FAILURE(status)) {
-        if (fValueDeleter) {
-            fValueDeleter((void*) key);
+    if (U_SUCCESS(status)) {
+        U_ASSERT(fLazyContents != nullptr);
+        char16_t *s = const_cast<char16_t *>(key);
+        fLazyContents->addElement(s, status);
+        if (U_SUCCESS(status)) {
+            fLazyContents->addElement(value, status);
+            return;
         }
-        return;
     }
-    U_ASSERT(fLazyContents != nullptr);
-
-    char16_t *s = const_cast<char16_t *>(key);
-    fLazyContents->addElement(s, status);
-    if (U_FAILURE(status)) {
-        if (fValueDeleter) {
-            fValueDeleter((void*) key);
-        }
-        return;
+    if (fValueDeleter) {
+        fValueDeleter(value);
     }
-
-    fLazyContents->addElement(value, status);
 }
 
 void
