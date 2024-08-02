@@ -30,6 +30,7 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(testAPI);
     TESTCASE_AUTO(testAPISimple);
     TESTCASE_AUTO(testDataModelAPI);
+    TESTCASE_AUTO(testFormatterAPI);
     TESTCASE_AUTO(dataDrivenTests);
     TESTCASE_AUTO_END;
 }
@@ -62,6 +63,77 @@ void TestMessageFormat2::testDataModelAPI() {
         i++;
     }
     assertEquals("testDataModelAPI", i, 3);
+}
+
+// Needs more tests
+void TestMessageFormat2::testFormatterAPI() {
+    IcuTestErrorCode errorCode(*this, "testFormatterAPI");
+    UnicodeString result;
+    UParseError parseError;
+
+    // Check that constructing the formatter fails
+    // if there's a syntax error
+    UnicodeString pattern = "{{}";
+    MessageFormatter::Builder mfBuilder(errorCode);
+    mfBuilder.setErrorHandlingBehavior(MessageFormatter::U_MF_BEST_EFFORT); // This shouldn't matter, since there's a syntax error
+    mfBuilder.setPattern(pattern, parseError, errorCode);
+    MessageFormatter mf = mfBuilder.build(errorCode);
+    errorCode.expectErrorAndReset(U_MF_SYNTAX_ERROR,
+                                  "testFormatterAPI: expected syntax error, best-effort error handling");
+
+    // Parsing is done when setPattern() is called,
+    // so setErrorHandlingBehavior(MessageFormatter::U_MF_STRICT) or setSuppressErrors must be called
+    // _before_ setPattern() to get the right behavior,
+    // and if either method is called after setting a pattern,
+    // setPattern() has to be called again.
+
+    // Should get the same behavior with strict errors
+    mfBuilder.setErrorHandlingBehavior(MessageFormatter::U_MF_STRICT);
+    // Force re-parsing, as above comment
+    mfBuilder.setPattern(pattern, parseError, errorCode);
+    mf = mfBuilder.build(errorCode);
+    errorCode.expectErrorAndReset(U_MF_SYNTAX_ERROR,
+                                  "testFormatterAPI: expected syntax error, strict error handling");
+
+    // Try the same thing for a pattern with a resolution error
+    pattern = "{{{$x}}}";
+    // Check that a pattern with a resolution error gives fallback output
+    mfBuilder.setErrorHandlingBehavior(MessageFormatter::U_MF_BEST_EFFORT);
+    mfBuilder.setPattern(pattern, parseError, errorCode);
+    mf = mfBuilder.build(errorCode);
+    errorCode.errIfFailureAndReset("testFormatterAPI: expected success from builder, best-effort error handling");
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testFormatterAPI: expected success from formatter, best-effort error handling");
+    assertEquals("testFormatterAPI: fallback for message with unresolved variable",
+                 result, "{$x}");
+
+    // Check that we do get an error with strict errors
+    mfBuilder.setErrorHandlingBehavior(MessageFormatter::U_MF_STRICT);
+    mf = mfBuilder.build(errorCode);
+    errorCode.errIfFailureAndReset("testFormatterAPI: builder should succeed with resolution error");
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.expectErrorAndReset(U_MF_UNRESOLVED_VARIABLE_ERROR,
+                                  "testFormatterAPI: formatting should fail with resolution error and strict error handling");
+
+    // Finally, check a valid pattern
+    pattern = "hello";
+    mfBuilder.setPattern(pattern, parseError, errorCode);
+    mfBuilder.setErrorHandlingBehavior(MessageFormatter::U_MF_BEST_EFFORT);
+    mf = mfBuilder.build(errorCode);
+    errorCode.errIfFailureAndReset("testFormatterAPI: expected success from builder with valid pattern, best-effort error handling");
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testFormatterAPI: expected success from formatter with valid pattern, best-effort error handling");
+    assertEquals("testFormatterAPI: wrong output with valid pattern, best-effort error handling",
+                 result, "hello");
+
+    // Check that behavior is the same with strict errors
+    mfBuilder.setErrorHandlingBehavior(MessageFormatter::U_MF_STRICT);
+    mf = mfBuilder.build(errorCode);
+    errorCode.errIfFailureAndReset("testFormatterAPI: expected success from builder with valid pattern, strict error handling");
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testFormatterAPI: expected success from formatter with valid pattern, strict error handling");
+    assertEquals("testFormatterAPI: wrong output with valid pattern, strict error handling",
+                 result, "hello");
 }
 
 // Example for design doc -- version without null and error checks
@@ -216,9 +288,11 @@ void TestMessageFormat2::testAPICustomFunctions() {
     MessageFormatter::Builder mfBuilder(errorCode);
     UnicodeString result;
     // This fails, because we did not provide a function registry:
-    MessageFormatter mf = mfBuilder.setPattern("Hello {$name :person formality=informal}", parseError, errorCode)
-                                    .setLocale(locale)
-                                    .build(errorCode);
+    MessageFormatter mf = mfBuilder.setErrorHandlingBehavior(MessageFormatter::U_MF_STRICT)
+                                   .setPattern("Hello {$name :person formality=informal}",
+                                               parseError, errorCode)
+                                   .setLocale(locale)
+                                   .build(errorCode);
     result = mf.formatToString(arguments, errorCode);
     assertEquals("testAPICustomFunctions", U_MF_UNKNOWN_FUNCTION_ERROR, errorCode);
 

@@ -121,41 +121,10 @@ namespace message2 {
         if (count() == 0) {
             return;
         }
-        if (staticErrors.syntaxAndDataModelErrors->size() > 0) {
-            switch (staticErrors.first().type) {
-            case StaticErrorType::DuplicateDeclarationError: {
-                status = U_MF_DUPLICATE_DECLARATION_ERROR;
-                break;
-            }
-            case StaticErrorType::DuplicateOptionName: {
-                status = U_MF_DUPLICATE_OPTION_NAME_ERROR;
-                break;
-            }
-            case StaticErrorType::VariantKeyMismatchError: {
-                status = U_MF_VARIANT_KEY_MISMATCH_ERROR;
-                break;
-            }
-            case StaticErrorType::DuplicateVariant: {
-                status = U_MF_DUPLICATE_VARIANT_ERROR;
-                break;
-            }
-            case StaticErrorType::NonexhaustivePattern: {
-                status = U_MF_NONEXHAUSTIVE_PATTERN_ERROR;
-                break;
-            }
-            case StaticErrorType::MissingSelectorAnnotation: {
-                status = U_MF_MISSING_SELECTOR_ANNOTATION_ERROR;
-                break;
-            }
-            case StaticErrorType::SyntaxError: {
-                status = U_MF_SYNTAX_ERROR;
-                break;
-            }
-            case StaticErrorType::UnsupportedStatementError: {
-                status = U_MF_UNSUPPORTED_STATEMENT_ERROR;
-            }
-            }
-        } else {
+        staticErrors.checkErrors(status);
+        if (U_FAILURE(status)) {
+            return;
+        }
             U_ASSERT(resolutionAndFormattingErrors->size() > 0);
             switch (first().type) {
             case DynamicErrorType::UnknownFunction: {
@@ -183,7 +152,6 @@ namespace message2 {
                 break;
             }
             }
-        }
     }
 
     void StaticErrors::addSyntaxError(UErrorCode& status) {
@@ -274,6 +242,47 @@ namespace message2 {
             resolutionAndFormattingErrors->adoptElement(errorP, status);
             break;
         }
+        }
+    }
+
+    void StaticErrors::checkErrors(UErrorCode& status) const {
+        if (U_FAILURE(status)) {
+            return;
+        }
+        if (syntaxAndDataModelErrors->size() > 0) {
+            switch (first().type) {
+            case StaticErrorType::DuplicateDeclarationError: {
+                status = U_MF_DUPLICATE_DECLARATION_ERROR;
+                break;
+            }
+            case StaticErrorType::DuplicateOptionName: {
+                status = U_MF_DUPLICATE_OPTION_NAME_ERROR;
+                break;
+            }
+            case StaticErrorType::VariantKeyMismatchError: {
+                status = U_MF_VARIANT_KEY_MISMATCH_ERROR;
+                break;
+            }
+            case StaticErrorType::DuplicateVariant: {
+                status = U_MF_DUPLICATE_VARIANT_ERROR;
+                break;
+            }
+            case StaticErrorType::NonexhaustivePattern: {
+                status = U_MF_NONEXHAUSTIVE_PATTERN_ERROR;
+                break;
+            }
+            case StaticErrorType::MissingSelectorAnnotation: {
+                status = U_MF_MISSING_SELECTOR_ANNOTATION_ERROR;
+                break;
+            }
+            case StaticErrorType::SyntaxError: {
+                status = U_MF_SYNTAX_ERROR;
+                break;
+            }
+            case StaticErrorType::UnsupportedStatementError: {
+                status = U_MF_UNSUPPORTED_STATEMENT_ERROR;
+            }
+            }
         }
     }
 
