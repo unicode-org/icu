@@ -930,9 +930,10 @@ const Pattern& MFDataModel::getPattern() const {
     return *(std::get_if<Pattern>(&body));
 }
 
+// Returns nullptr if no bindings
 const Binding* MFDataModel::getLocalVariablesInternal() const {
     U_ASSERT(!bogus);
-    U_ASSERT(bindings.isValid());
+    U_ASSERT(bindingsLen == 0 || bindings.isValid());
     return bindings.getAlias();
 }
 
@@ -948,9 +949,10 @@ const Variant* MFDataModel::getVariantsInternal() const {
     return std::get_if<Matcher>(&body)->variants.getAlias();
 }
 
+// Returns nullptr if no unsupported statements
 const UnsupportedStatement* MFDataModel::getUnsupportedStatementsInternal() const {
     U_ASSERT(!bogus);
-    U_ASSERT(unsupportedStatements.isValid());
+    U_ASSERT(unsupportedStatementsLen == 0 || unsupportedStatements != nullptr);
     return unsupportedStatements.getAlias();
 }
 
@@ -1056,7 +1058,6 @@ MFDataModel::MFDataModel(const MFDataModel& other) : body(Pattern()) {
     UErrorCode localErrorCode = U_ZERO_ERROR;
 
     if (other.hasPattern()) {
-        //        body.emplace<Pattern>(Pattern(*std::get_if<Pattern>(&other.body)));
         body = *std::get_if<Pattern>(&other.body);
     } else {
         const Expression* otherSelectors = other.getSelectorsInternal();
@@ -1069,17 +1070,17 @@ MFDataModel::MFDataModel(const MFDataModel& other) : body(Pattern()) {
             bogus = true;
             return;
         }
-        //        body.emplace<Matcher>(Matcher(copiedSelectors, numSelectors, copiedVariants, numVariants));
         body = Matcher(copiedSelectors, numSelectors, copiedVariants, numVariants);
     }
 
     bindingsLen = other.bindingsLen;
-    bindings.adoptInstead(copyArray(other.bindings.getAlias(), bindingsLen, localErrorCode));
-    if (U_FAILURE(localErrorCode)) {
-        bogus = true;
+    if (bindingsLen > 0) {
+        bindings.adoptInstead(copyArray(other.bindings.getAlias(), bindingsLen, localErrorCode));
     }
     unsupportedStatementsLen = other.unsupportedStatementsLen;
-    unsupportedStatements.adoptInstead(copyArray(other.unsupportedStatements.getAlias(), unsupportedStatementsLen, localErrorCode));
+    if (unsupportedStatementsLen > 0) {
+        unsupportedStatements.adoptInstead(copyArray(other.unsupportedStatements.getAlias(), unsupportedStatementsLen, localErrorCode));
+    }
     if (U_FAILURE(localErrorCode)) {
         bogus = true;
     }
@@ -1106,9 +1107,14 @@ MFDataModel::MFDataModel(const MFDataModel::Builder& builder, UErrorCode& errorC
 
     U_ASSERT(builder.bindings != nullptr);
     bindingsLen = builder.bindings->size();
-    bindings.adoptInstead(copyVectorToArray<Binding>(*builder.bindings, errorCode));
+    if (bindingsLen > 0) {
+        bindings.adoptInstead(copyVectorToArray<Binding>(*builder.bindings, errorCode));
+    }
     unsupportedStatementsLen = builder.unsupportedStatements->size();
-    unsupportedStatements.adoptInstead(copyVectorToArray<UnsupportedStatement>(*builder.unsupportedStatements, errorCode));
+    if (unsupportedStatementsLen > 0) {
+        unsupportedStatements.adoptInstead(copyVectorToArray<UnsupportedStatement>(*builder.unsupportedStatements,
+                                                                                   errorCode));
+    }
     if (U_FAILURE(errorCode)) {
         bogus = true;
     }

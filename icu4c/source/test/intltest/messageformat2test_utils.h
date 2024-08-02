@@ -228,22 +228,32 @@ class TestUtils {
         if (testCase.hasCustomRegistry()) {
             mfBuilder.setFunctionRegistry(*testCase.getCustomRegistry());
         }
+        // Initially, set error behavior to strict.
+        // We'll re-run to check for errors.
+        mfBuilder.setErrorHandlingBehavior(MessageFormatter::U_MF_STRICT);
 	MessageFormatter mf = mfBuilder.build(errorCode);
         UnicodeString result;
+
+        // Builder should fail if a syntax error was expected
+        if (!testCase.expectSuccess() && testCase.expectedErrorCode() == U_MF_SYNTAX_ERROR) {
+            if (errorCode != testCase.expectedErrorCode()) {
+                failExpectedFailure(tmsg, testCase, errorCode);
+            }
+            errorCode.reset();
+            return;
+        }
 
         if (U_SUCCESS(errorCode)) {
             result = mf.formatToString(MessageArguments(testCase.getArguments(), errorCode), errorCode);
         }
 
-        if (testCase.expectSuccess() || (testCase.expectedErrorCode() != U_MF_SYNTAX_ERROR
-                                         // For now, don't round-trip messages with these errors,
-                                         // since duplicate options are dropped
-                                         && testCase.expectedErrorCode() != U_MF_DUPLICATE_OPTION_NAME_ERROR)) {
-            const UnicodeString& in = mf.getNormalizedPattern();
-            UnicodeString out;
-            if (!roundTrip(in, mf.getDataModel(), out)) {
-                failRoundTrip(tmsg, testCase, in, out);
-            }
+        const UnicodeString& in = mf.getNormalizedPattern();
+        UnicodeString out;
+        if (!roundTrip(in, mf.getDataModel(), out)
+            // For now, don't round-trip messages with these errors,
+            // since duplicate options are dropped
+            && testCase.expectedErrorCode() != U_MF_DUPLICATE_OPTION_NAME_ERROR) {
+            failRoundTrip(tmsg, testCase, in, out);
         }
 
         if (testCase.expectNoSyntaxError()) {
@@ -264,9 +274,27 @@ class TestUtils {
         if (!testCase.lineNumberAndOffsetMatch(parseError.line, parseError.offset)) {
             failWrongOffset(tmsg, testCase, parseError.line, parseError.offset);
         }
-        if (!testCase.outputMatches(result)) {
-            failWrongOutput(tmsg, testCase, result);
-            return;
+        if (U_FAILURE(errorCode) && !testCase.expectSuccess()
+            && testCase.expectedErrorCode() != U_MF_SYNTAX_ERROR) {
+            // Re-run the formatter if there was an error,
+            // in order to get best-effort output
+            errorCode.reset();
+            mfBuilder.setErrorHandlingBehavior(MessageFormatter::U_MF_BEST_EFFORT);
+            mf = mfBuilder.build(errorCode);
+            if (U_SUCCESS(errorCode)) {
+                result = mf.formatToString(MessageArguments(testCase.getArguments(), errorCode), errorCode);
+            }
+            if (U_FAILURE(errorCode)) {
+                // Must be a non-MF2 error code
+                U_ASSERT(!(errorCode >= U_MF_UNRESOLVED_VARIABLE_ERROR
+                           && errorCode <= U_FMT_PARSE_ERROR_LIMIT));
+            }
+            // Re-run the formatter
+            result = mf.formatToString(MessageArguments(testCase.getArguments(), errorCode), errorCode);
+            if (!testCase.outputMatches(result)) {
+                failWrongOutput(tmsg, testCase, result);
+                return;
+            }
         }
         errorCode.reset();
     }
@@ -278,7 +306,7 @@ class TestUtils {
 
     static void failSyntaxError(IntlTest& tmsg, const TestCase& testCase) {
         tmsg.dataerrln(testCase.getTestName());
-        tmsg.logln(testCase.getTestName() + " failed test with pattern: " + testCase.getPattern() + " and error code U_MF_SYNTAX_WARNING; expected no syntax error");
+        tmsg.logln(testCase.getTestName() + " failed test with pattern: " + testCase.getPattern() + " and error code U_MF_SYNTAX_ERROR; expected no syntax error");
     }
 
     static void failExpectedSuccess(IntlTest& tmsg, const TestCase& testCase, IcuTestErrorCode& errorCode, int32_t line, int32_t offset) {

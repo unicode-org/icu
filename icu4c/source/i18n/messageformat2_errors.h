@@ -100,8 +100,9 @@ namespace message2 {
         bool hasSyntaxError() const { return syntaxError; }
         bool hasMissingSelectorAnnotationError() const { return missingSelectorAnnotationError; }
         void addError(StaticError&&, UErrorCode&);
-        void checkErrors(UErrorCode&);
+        void checkErrors(UErrorCode&) const;
 
+        void clear();
         const StaticError& first() const;
         StaticErrors(const StaticErrors&, UErrorCode&);
         StaticErrors(StaticErrors&&) noexcept;

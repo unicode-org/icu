@@ -45,6 +45,8 @@ public:
     void testCustomFunctions(void);
     // Test the data model API
     void testDataModelAPI(void);
+    // Test the formatting API
+    void testFormatterAPI(void);
     void testAPI(void);
     void testAPISimple(void);
 

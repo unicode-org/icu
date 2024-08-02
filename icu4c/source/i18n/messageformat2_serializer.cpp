@@ -248,7 +248,7 @@ void Serializer::emit(const Pattern& pat) {
 
 void Serializer::serializeDeclarations() {
     const Binding* bindings = dataModel.getLocalVariablesInternal();
-    U_ASSERT(bindings != nullptr);
+    U_ASSERT(dataModel.bindingsLen == 0 || bindings != nullptr);
 
     for (int32_t i = 0; i < dataModel.bindingsLen; i++) {
         const Binding& b = bindings[i];
@@ -272,7 +272,7 @@ void Serializer::serializeDeclarations() {
 
 void Serializer::serializeUnsupported() {
     const UnsupportedStatement* statements = dataModel.getUnsupportedStatementsInternal();
-    U_ASSERT(statements != nullptr);
+    U_ASSERT(dataModel.unsupportedStatementsLen == 0 || statements != nullptr);
 
     for (int32_t i = 0; i < dataModel.unsupportedStatementsLen; i++) {
         const UnsupportedStatement& s = statements[i];
