@@ -869,7 +869,7 @@ void MessageFormatter::checkDeclarations(MessageContext& context, Environment*& 
     CHECK_ERROR(status);
 
     const Binding* decls = getDataModel().getLocalVariablesInternal();
-    U_ASSERT(env != nullptr && decls != nullptr);
+    U_ASSERT(env != nullptr && (decls != nullptr || getDataModel().bindingsLen == 0));
 
     for (int32_t i = 0; i < getDataModel().bindingsLen; i++) {
         const Binding& decl = decls[i];

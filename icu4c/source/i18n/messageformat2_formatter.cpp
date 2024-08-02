@@ -86,6 +86,7 @@ namespace message2 {
     MessageFormatter::Builder::~Builder() {
         if (errors != nullptr) {
             delete errors;
+            errors = nullptr;
         }
     }
 
@@ -150,6 +151,7 @@ namespace message2 {
     void MessageFormatter::cleanup() noexcept {
         if (errors != nullptr) {
             delete errors;
+            errors = nullptr;
         }
     }
 
