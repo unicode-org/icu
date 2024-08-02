@@ -1607,8 +1607,11 @@ TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode
         return winid;
     }
 
-    UResourceBundle *mapTimezones = ures_openDirect(nullptr, "windowsZones", &status);
-    ures_getByKey(mapTimezones, "mapTimezones", mapTimezones, &status);
+    LocalUResourceBundlePointer mapTimezones(ures_openDirect(nullptr, "windowsZones", &status));
+    if (U_FAILURE(status)) {
+        return winid;
+    }
+    ures_getByKey(mapTimezones.getAlias(), "mapTimezones", mapTimezones.getAlias(), &status);
 
     if (U_FAILURE(status)) {
         return winid;
@@ -1616,8 +1619,8 @@ TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode
 
     UResourceBundle *winzone = nullptr;
     UBool found = false;
-    while (ures_hasNext(mapTimezones) && !found) {
-        winzone = ures_getNextResource(mapTimezones, winzone, &status);
+    while (ures_hasNext(mapTimezones.getAlias()) && !found) {
+        winzone = ures_getNextResource(mapTimezones.getAlias(), winzone, &status);
         if (U_FAILURE(status)) {
             break;
         }
@@ -1658,7 +1661,6 @@ TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode
         ures_close(regionalData);
     }
     ures_close(winzone);
-    ures_close(mapTimezones);
 
     return winid;
 }
