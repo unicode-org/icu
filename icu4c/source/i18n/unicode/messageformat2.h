@@ -166,6 +166,8 @@ namespace message2 {
             Locale locale;
             // Not owned
             const MFFunctionRegistry* customMFFunctionRegistry;
+            // Error behavior; see comment in `MessageFormatter` class
+            bool signalErrors = false;
 
         public:
             /**
@@ -218,6 +220,36 @@ namespace message2 {
              * @deprecated This API is for technology preview only.
              */
             Builder& setDataModel(MFDataModel&& dataModel);
+            /**
+             * Set this formatter to handle errors "strictly",
+             * meaning that formatting methods will set their
+             * UErrorCode arguments to signal MessageFormat data model,
+             * resolution, and runtime errors. Syntax errors are
+             * always signaled.
+             *
+             * The default is to suppress all MessageFormat errors
+             * and return best-effort output.
+             *
+             * @return       A reference to the builder.
+             *
+             * @internal ICU 75 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            Builder& setStrictErrors() { signalErrors = true; return *this; }
+            /**
+             * Set this formatter to suppress errors
+             * meaning that formatting methods will _not_ set their
+             * UErrorCode arguments to signal MessageFormat data model,
+             * resolution, or runtime errors. Best-effort output
+             * will be returned. Syntax errors are always signaled.
+             * This is the default behavior.
+             *
+             * @return       A reference to the builder.
+             *
+             * @internal ICU 75 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            Builder& setSuppressErrors() { signalErrors = false; return *this; }
             /**
              * Constructs a new immutable MessageFormatter using the pattern or data model
              * that was previously set, and the locale (if it was previously set)
@@ -378,8 +410,15 @@ namespace message2 {
         // Must be a raw pointer to avoid including the internal header file
         // defining StaticErrors
         // Owned by `this`
-        StaticErrors* errors;
+        StaticErrors* errors = nullptr;
 
+        // Error handling behavior.
+        // If true, then formatting methods set their UErrorCode arguments
+        // to signal MessageFormat errors, and no useful output is returned.
+        // If false, then MessageFormat errors are not signaled and the
+        // formatting methods return best-effort output.
+        // The default is false.
+        bool signalErrors = false;
     }; // class MessageFormatter
 
 } // namespace message2

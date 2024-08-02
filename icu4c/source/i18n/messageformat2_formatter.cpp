@@ -27,11 +27,19 @@ namespace message2 {
     // -------------------------------------
     // Creates a MessageFormat instance based on the pattern.
 
-    MessageFormatter::Builder& MessageFormatter::Builder::setPattern(const UnicodeString& pat, UParseError& parseError, UErrorCode& errorCode) {
+    MessageFormatter::Builder& MessageFormatter::Builder::setPattern(const UnicodeString& pat,
+                                                                     UParseError& parseError,
+                                                                     UErrorCode& errorCode) {
         normalizedInput.remove();
         // Parse the pattern
         MFDataModel::Builder tree(errorCode);
         Parser(pat, tree, *errors, normalizedInput).parse(parseError, errorCode);
+
+        // Fail on syntax errors
+        if (errors->hasSyntaxError()) {
+            errors->checkErrors(errorCode);
+            U_ASSERT(U_FAILURE(errorCode));
+        }
 
         // Build the data model based on what was parsed
         dataModel = tree.build(errorCode);
@@ -117,6 +125,7 @@ namespace message2 {
         standardMFFunctionRegistry.checkStandard();
 
         normalizedInput = builder.normalizedInput;
+        signalErrors = builder.signalErrors;
 
         // Build data model
         // First, check that there is a data model
@@ -163,6 +172,7 @@ namespace message2 {
         customMFFunctionRegistry = other.customMFFunctionRegistry;
         dataModel = std::move(other.dataModel);
         normalizedInput = std::move(other.normalizedInput);
+        signalErrors = other.signalErrors;
         errors = other.errors;
         other.errors = nullptr;
         return *this;

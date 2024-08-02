@@ -814,7 +814,12 @@ UnicodeString MessageFormatter::formatToString(const MessageArguments& arguments
         }
     }
     // Update status according to all errors seen while formatting
-    context.checkErrors(status);
+    if (signalErrors) {
+        context.checkErrors(status);
+    }
+    if (U_FAILURE(status)) {
+        result.remove();
+    }
     return result;
 }
 

@@ -216,9 +216,11 @@ void TestMessageFormat2::testAPICustomFunctions() {
     MessageFormatter::Builder mfBuilder(errorCode);
     UnicodeString result;
     // This fails, because we did not provide a function registry:
-    MessageFormatter mf = mfBuilder.setPattern("Hello {$name :person formality=informal}", parseError, errorCode)
-                                    .setLocale(locale)
-                                    .build(errorCode);
+    MessageFormatter mf = mfBuilder.setStrictErrors()
+                                   .setPattern("Hello {$name :person formality=informal}",
+                                               parseError, errorCode)
+                                   .setLocale(locale)
+                                   .build(errorCode);
     result = mf.formatToString(arguments, errorCode);
     assertEquals("testAPICustomFunctions", U_MF_UNKNOWN_FUNCTION_ERROR, errorCode);
 
