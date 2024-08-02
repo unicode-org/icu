@@ -585,6 +585,9 @@ CLEANUP:
     if(b2 != b2Stack){
         uprv_free(b2);
     }
+    if(b3 != b3Stack){
+        uprv_free(b3);
+    }
     uprv_free(caseFlags);
 
     // The RFC states that 
