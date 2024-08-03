@@ -49,7 +49,8 @@
     { "src": "hello {$foo    >num x \\\\ abcde |aaa||3.14| |42| r  }", "ignoreJava": "ICU4J doesn't error out on reserved annotations"  },
     { "src" : ".input{ $n ~ }{{{$n}}}", "ignoreJava": "ICU4J doesn't error out on reserved annotations" },
     { "src" : ".i {1} {{}}", "ignoreJava": "ICU4J doesn't error out on reserved annotations", "expErrors": [{ "type": "unsupported-statement" }] },
-    { "src" : ".l $y = {|bar|} {{}}", "ignoreJava": "ICU4J doesn't error out on reserved annotations", "expErrors": [{ "type": "unsupported-statement" }] }
+    { "src" : ".l $y = {|bar|} {{}}", "ignoreJava": "ICU4J doesn't error out on reserved annotations", "expErrors": [{ "type": "unsupported-statement" }] },
+    { "src" : ".򱋿󠆿 . |@| {$󛒁񓝖 & \\{ . @𯼼򋼡= $򵀀񓞈}{{\\\\}}", "ignoreJava": "ICU4J doesn't error out on reserved annotations", "expErrors": [{ "type": "unsupported-statement" }] }
   ]
 }
 

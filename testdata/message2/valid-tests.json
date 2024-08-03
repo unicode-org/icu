@@ -143,6 +143,14 @@
       "comment": "Trailing whitespace after match is valid",
       "src": ".match {1 :string} * {{}} ",
       "exp": ""
+    },
+    {
+      "src" : "𴢸",
+      "exp" : "𴢸"
+    },
+    {
+      "src" : "{{􍅲}}",
+      "exp" : "􍅲"
     }
   ]
 }

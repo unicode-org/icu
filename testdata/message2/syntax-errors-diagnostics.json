@@ -338,6 +338,10 @@
         "src":  ".match {1} {{_}}",
         "char": 12,
         "comment": "Disambiguating a wrong .match from an unsupported statement"
+    },
+    {
+        "src": "{{{/p o4.􍅲 = 1}}}",
+        "char": 9
     }
   ]
 }
