@@ -698,22 +698,6 @@ UnicodeString::doEquals(const char16_t *text, int32_t len) const {
   return uprv_memcmp(getArrayStart(), text, len * U_SIZEOF_UCHAR) == 0;
 }
 
-#ifdef MAYBE_EQUALS_PTR
-UBool
-UnicodeString::doEquals(const char16_t *text) const {
-  // Requires: this not bogus.
-  // Simple loop. Avoid u_strlen() because that would look at the text characters twice,
-  // and may look beyond the length of this string or beyond the first different character.
-  const char16_t *p = getArrayStart();
-  const char16_t *limit = p + length();
-  for (; p < limit; ++p, ++text) {
-    char16_t c = *text;
-    if (c == 0 /* text shorter than this */ || c != *p) { return false; }
-  }
-  return *text == 0;
-}
-#endif  // MAYBE_EQUALS_PTR
-
 UBool
 UnicodeString::doEqualsSubstring( int32_t start,
               int32_t length,

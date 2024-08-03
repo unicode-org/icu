@@ -6,6 +6,7 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <string_view>
 #include <utility>
 
 #include "ustrtest.h"
@@ -22,6 +23,9 @@
 #include "cmemory.h"
 #include "charstr.h"
 
+// Makes u"literal"sv std::u16string_view literals possible.
+// https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv
+using namespace std::string_view_literals;
 
 extern void tempCompileTest() {
     const char16_t *p16 = u"p16";
@@ -31,6 +35,7 @@ extern void tempCompileTest() {
     UnicodeString any(true, u"any", 3);
     UnicodeString fromPtr(p16);
     UnicodeString fromSV(sv16);
+    UnicodeString fromSV2(u"sv16_2"sv);  // u16string_view literal
     UnicodeString fromStr(str16);
     UnicodeString aliasFromSV = UnicodeString::readOnlyAlias(sv16);
     UnicodeString aliasFromStr = UnicodeString::readOnlyAlias(str16);
@@ -40,6 +45,9 @@ extern void tempCompileTest() {
     (void)eqPtr;
     (void)eqSV;
     (void)eqStr;
+    if (any == u"literal"sv) {
+        // do something
+    }
     UnicodeString x;
     x = p16;
     x = sv16;
