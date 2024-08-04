@@ -123,8 +123,6 @@ operator+ (const UnicodeString &s1, const UnicodeString &s2) {
 
 U_COMMON_API UnicodeString U_EXPORT2
 unistr_internalConcat(const UnicodeString &s1, std::u16string_view s2) {
-  // TODO: version of uprv_add32_overflow() that takes a size_t for the second arg
-  // TODO: consider returning a std::optional<int32_t>
   int32_t sumLengths;
   if (s2.length() > INT32_MAX ||
       uprv_add32_overflow(s1.length(), (int32_t)s2.length(), &sumLengths)) {
