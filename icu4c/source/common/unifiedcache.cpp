@@ -13,15 +13,42 @@
 #include "unifiedcache.h"
 
 #include <algorithm>      // For std::max()
+#if U_HAVE_ATOMICS
 #include <mutex>
+#endif
 
 #include "uassert.h"
 #include "uhash.h"
 #include "ucln_cmn.h"
 
 static icu::UnifiedCache *gCache = nullptr;
+#if U_HAVE_ATOMICS
 static std::mutex *gCacheMutex = nullptr;
 static std::condition_variable *gInProgressValueAddedCond;
+
+static void unifiedcache_init_mutex() {
+    gCacheMutex = STATIC_NEW(std::mutex);
+    gInProgressValueAddedCond = STATIC_NEW(std::condition_variable);
+}
+
+static void unifiedcache_cleanup_mutex() {
+    gCacheMutex->~mutex();
+    gCacheMutex = nullptr;
+    gInProgressValueAddedCond->~condition_variable();
+    gInProgressValueAddedCond = nullptr;
+}
+
+#define UNIFIED_CACHE_LOCK_GUARD std::lock_guard<std::mutex> lock(*gCacheMutex)
+
+#else
+// No atomics, no mutexes.
+static void unifiedcache_init_mutex() {}
+static void unifiedcache_cleanup_mutex() {}
+
+#define UNIFIED_CACHE_LOCK_GUARD do {} while (0)
+
+#endif
+
 static icu::UInitOnce gCacheInitOnce {};
 
 static const int32_t MAX_EVICT_ITERATIONS = 10;
@@ -34,10 +61,7 @@ static UBool U_CALLCONV unifiedcache_cleanup() {
     gCacheInitOnce.reset();
     delete gCache;
     gCache = nullptr;
-    gCacheMutex->~mutex();
-    gCacheMutex = nullptr;
-    gInProgressValueAddedCond->~condition_variable();
-    gInProgressValueAddedCond = nullptr;
+    unifiedcache_cleanup_mutex();
     return true;
 }
 U_CDECL_END
@@ -72,8 +96,7 @@ static void U_CALLCONV cacheInit(UErrorCode &status) {
     ucln_common_registerCleanup(
             UCLN_COMMON_UNIFIED_CACHE, unifiedcache_cleanup);
 
-    gCacheMutex = STATIC_NEW(std::mutex);
-    gInProgressValueAddedCond = STATIC_NEW(std::condition_variable);
+    unifiedcache_init_mutex();
     gCache = new UnifiedCache(status);
     if (gCache == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -135,28 +158,28 @@ void UnifiedCache::setEvictionPolicy(
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    std::lock_guard<std::mutex> lock(*gCacheMutex);
+    UNIFIED_CACHE_LOCK_GUARD;
     fMaxUnused = count;
     fMaxPercentageOfInUse = percentageOfInUseItems;
 }
 
 int32_t UnifiedCache::unusedCount() const {
-    std::lock_guard<std::mutex> lock(*gCacheMutex);
+    UNIFIED_CACHE_LOCK_GUARD;
     return uhash_count(fHashtable) - fNumValuesInUse;
 }
 
 int64_t UnifiedCache::autoEvictedCount() const {
-    std::lock_guard<std::mutex> lock(*gCacheMutex);
+    UNIFIED_CACHE_LOCK_GUARD;
     return fAutoEvictedCount;
 }
 
 int32_t UnifiedCache::keyCount() const {
-    std::lock_guard<std::mutex> lock(*gCacheMutex);
+    UNIFIED_CACHE_LOCK_GUARD;
     return uhash_count(fHashtable);
 }
 
 void UnifiedCache::flush() const {
-    std::lock_guard<std::mutex> lock(*gCacheMutex);
+    UNIFIED_CACHE_LOCK_GUARD;
 
     // Use a loop in case cache items that are flushed held hard references to
     // other cache items making those additional cache items eligible for
@@ -165,7 +188,7 @@ void UnifiedCache::flush() const {
 }
 
 void UnifiedCache::handleUnreferencedObject() const {
-    std::lock_guard<std::mutex> lock(*gCacheMutex);
+    UNIFIED_CACHE_LOCK_GUARD;
     --fNumValuesInUse;
     _runEvictionSlice();
 }
@@ -184,7 +207,7 @@ void UnifiedCache::dump() {
 }
 
 void UnifiedCache::dumpContents() const {
-    std::lock_guard<std::mutex> lock(*gCacheMutex);
+    UNIFIED_CACHE_LOCK_GUARD;
     _dumpContents();
 }
 
@@ -224,7 +247,7 @@ UnifiedCache::~UnifiedCache() {
         // Now all that should be left in the cache are entries that refer to
         // each other and entries with hard references from outside the cache.
         // Nothing we can do about these so proceed to wipe out the cache.
-        std::lock_guard<std::mutex> lock(*gCacheMutex);
+        UNIFIED_CACHE_LOCK_GUARD;
         _flush(true);
     }
     uhash_close(fHashtable);
@@ -325,7 +348,7 @@ void UnifiedCache::_putIfAbsentAndGet(
         const CacheKeyBase &key,
         const SharedObject *&value,
         UErrorCode &status) const {
-    std::lock_guard<std::mutex> lock(*gCacheMutex);
+    UNIFIED_CACHE_LOCK_GUARD;
     const UHashElement *element = uhash_find(fHashtable, &key);
     if (element != nullptr && !_inProgress(element)) {
         _fetch(element, value, status);
@@ -350,14 +373,18 @@ UBool UnifiedCache::_poll(
         UErrorCode &status) const {
     U_ASSERT(value == nullptr);
     U_ASSERT(status == U_ZERO_ERROR);
+#if U_HAVE_ATOMICS
     std::unique_lock<std::mutex> lock(*gCacheMutex);
+#endif
     const UHashElement *element = uhash_find(fHashtable, &key);
 
     // If the hash table contains an inProgress placeholder entry for this key,
     // this means that another thread is currently constructing the value object.
     // Loop, waiting for that construction to complete.
      while (element != nullptr && _inProgress(element)) {
+#if U_HAVE_ATOMICS
          gInProgressValueAddedCond->wait(lock);
+#endif
          element = uhash_find(fHashtable, &key);
     }
 
@@ -428,9 +455,11 @@ void UnifiedCache::_put(
     U_ASSERT(oldValue == fNoValue);
     removeSoftRef(oldValue);
 
+#if U_HAVE_ATOMICS
     // Tell waiting threads that we replace in-progress status with
     // an error.
     gInProgressValueAddedCond->notify_all();
+#endif
 }
 
 void UnifiedCache::_fetch(
