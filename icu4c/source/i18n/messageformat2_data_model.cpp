@@ -1091,13 +1091,13 @@ MFDataModel::MFDataModel(const MFDataModel::Builder& builder, UErrorCode& errorC
         U_ASSERT(builder.selectors != nullptr);
         int32_t numVariants = builder.variants->size();
         int32_t numSelectors = builder.selectors->size();
-        Variant* variants = copyVectorToArray<Variant>(*builder.variants, errorCode);
-        Expression* selectors = copyVectorToArray<Expression>(*builder.selectors, errorCode);
+        LocalArray<Variant> variants(copyVectorToArray<Variant>(*builder.variants, errorCode), errorCode);
+        LocalArray<Expression> selectors(copyVectorToArray<Expression>(*builder.selectors, errorCode), errorCode);
         if (U_FAILURE(errorCode)) {
             bogus = true;
             return;
         }
-        body.emplace<Matcher>(Matcher(selectors, numSelectors, variants, numVariants));
+        body.emplace<Matcher>(Matcher(selectors.orphan(), numSelectors, variants.orphan(), numVariants));
     }
 
     U_ASSERT(builder.bindings != nullptr);
