@@ -1481,9 +1481,8 @@ LongNameHandler* LongNameHandler::forCurrencyLongNames(const Locale &loc, const 
                                                       const PluralRules *rules,
                                                       const MicroPropsGenerator *parent,
                                                       UErrorCode &status) {
-    auto* result = new LongNameHandler(rules, parent);
-    if (result == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    LocalPointer<LongNameHandler> result(new LongNameHandler(rules, parent), status);
+    if (U_FAILURE(status)) {
         return nullptr;
     }
     UnicodeString simpleFormats[ARRAY_LENGTH];
@@ -1491,7 +1490,7 @@ LongNameHandler* LongNameHandler::forCurrencyLongNames(const Locale &loc, const 
     if (U_FAILURE(status)) { return nullptr; }
     result->simpleFormatsToModifiers(simpleFormats, {UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_FIELD}, status);
     // TODO(icu-units#28): currency gender?
-    return result;
+    return result.orphan();
 }
 
 void LongNameHandler::simpleFormatsToModifiers(const UnicodeString *simpleFormats, Field field,
