@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1722546009969,
+  "lastUpdate": 1722884419376,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23637,6 +23637,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 5.444780771719115,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "2f5a46ffd5013a9d2566c6649d753ebc0cae3540",
+          "message": "ICU-22819 Fix memory leak during error",
+          "timestamp": "2024-08-05T11:41:06-07:00",
+          "tree_id": "1319cdb27414b2ef5f08cb041c1090d8c6c0f106",
+          "url": "https://github.com/unicode-org/icu/commit/2f5a46ffd5013a9d2566c6649d753ebc0cae3540"
+        },
+        "date": 1722884281765,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 4.8801028147781835,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
