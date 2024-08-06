@@ -639,6 +639,8 @@ string_write_xml(StringResource *res, const char* id, const char* /*language*/, 
     buf = convertAndEscape(&buf, 0, &bufLen, res->getBuffer(), res->length(), status);
 
     if (U_FAILURE(*status)) {
+        uprv_free(buf);
+        uprv_free(sid);
         return;
     }
 
@@ -671,6 +673,8 @@ alias_write_xml(AliasResource *res, const char* id, const char* /*language*/, UE
     buf = convertAndEscape(&buf, 0, &bufLen, res->getBuffer(), res->length(), status);
 
     if(U_FAILURE(*status)){
+        uprv_free(buf);
+        uprv_free(sid);
         return;
     }
     write_utf8_file(out, UnicodeString(buf, bufLen, "UTF-8"));
@@ -711,6 +715,7 @@ array_write_xml(ArrayResource *res, const char* id, const char* language, UError
         subId = nullptr;
 
         if(U_FAILURE(*status)){
+            uprv_free(sid);
             return;
         }
 
@@ -943,6 +948,7 @@ table_write_xml(TableResource *res, const char* id, const char* language, UBool 
         res_write_xml(current, sid, language, false, status);
 
         if(U_FAILURE(*status)){
+            uprv_free(sid);
             return;
         }
 
