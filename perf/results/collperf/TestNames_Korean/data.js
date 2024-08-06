@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1722961427570,
+  "lastUpdate": 1722965530718,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -47571,6 +47571,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12703083.4556,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "a22dc93e3aab556f0b672735622a33fd3853c844",
+          "message": "ICU-22825 Fix memLeak during error in tznames_impl.cpp\n\nRewrite the TextTrieMap::put() which should delete the value\nduring error instead of deleting key.\nRewrite to simplified the error handling.",
+          "timestamp": "2024-08-06T09:58:15-07:00",
+          "tree_id": "368b615ef2089c268c02700ce272b9a35d6bf9a6",
+          "url": "https://github.com/unicode-org/icu/commit/a22dc93e3aab556f0b672735622a33fd3853c844"
+        },
+        "date": 1722965391986,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 227.7172,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 55775851.3461,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12199411.9473,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 55708095.0848,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12971501.0483,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
