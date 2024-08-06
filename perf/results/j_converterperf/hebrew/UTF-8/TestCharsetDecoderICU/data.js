@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1722965274525,
+  "lastUpdate": 1722984958755,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23967,6 +23967,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.0496064194581414,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "1eb0ed2fad659a23b837ea7ccbed661cf1b31aff",
+          "message": "ICU-22818 Fix memory leak during error in messageformat2_data_model.cpp\n\nSee #3077",
+          "timestamp": "2024-08-06T15:39:20-07:00",
+          "tree_id": "7a28c74300437f051b52057e32a65fa7eaba73ff",
+          "url": "https://github.com/unicode-org/icu/commit/1eb0ed2fad659a23b837ea7ccbed661cf1b31aff"
+        },
+        "date": 1722984818705,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.07827652742964,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
