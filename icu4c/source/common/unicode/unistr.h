@@ -348,7 +348,7 @@ public:
    * @draft ICU 76
    */
   template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
-  inline bool operator==(S text) const {
+  inline bool operator==(const S &text) const {
     std::u16string_view sv(internal::toU16StringView(text));
     uint32_t len;  // unsigned to avoid a compiler warning
     return !isBogus() && (len = length()) == sv.length() && doEquals(sv.data(), len);
@@ -1937,7 +1937,7 @@ public:
    * @draft ICU 76
    */
   template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
-  inline UnicodeString &operator=(S src) {
+  inline UnicodeString &operator=(const S &src) {
     unBogus();
     return doReplace(0, length(), internal::toU16StringView(src));
   }
@@ -2204,7 +2204,7 @@ public:
    * @draft ICU 76
    */
   template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
-  inline UnicodeString& operator+=(S src) {
+  inline UnicodeString& operator+=(const S &src) {
     return doAppend(internal::toU16StringView(src));
   }
 #endif  // U_HIDE_DRAFT_API
@@ -2277,7 +2277,7 @@ public:
    * @draft ICU 76
    */
   template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
-  inline UnicodeString& append(S src) {
+  inline UnicodeString& append(const S &src) {
     return doAppend(internal::toU16StringView(src));
   }
 #endif  // U_HIDE_DRAFT_API
@@ -3259,7 +3259,7 @@ public:
    * @draft ICU 76
    */
   template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
-  explicit inline UnicodeString(S text) {
+  explicit inline UnicodeString(const S &text) {
     fUnion.fFields.fLengthAndFlags = kShortString;
     doAppend(internal::toU16StringView(text));
   }
@@ -3591,7 +3591,7 @@ public:
    * @draft ICU 76
    */
   template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
-  static inline UnicodeString readOnlyAlias(S text) {
+  static inline UnicodeString readOnlyAlias(const S &text) {
     return readOnlyAliasFromU16StringView(internal::toU16StringView(text));
   }
 #endif  // U_HIDE_DRAFT_API
@@ -4084,7 +4084,7 @@ operator+ (const UnicodeString &s1, const UnicodeString &s2);
  * @draft ICU 76
  */
 template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
-inline UnicodeString operator+(const UnicodeString &s1, S s2) {
+inline UnicodeString operator+(const UnicodeString &s1, const S &s2) {
   return unistr_internalConcat(s1, internal::toU16StringView(s2));
 }
 #endif  // U_HIDE_DRAFT_API

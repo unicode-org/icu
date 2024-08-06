@@ -6,6 +6,7 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <string>
 #include <string_view>
 #include <utility>
 
@@ -26,45 +27,6 @@
 // Makes u"literal"sv std::u16string_view literals possible.
 // https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv
 using namespace std::string_view_literals;
-
-extern void tempCompileTest() {
-    const char16_t *p16 = u"p16";
-    std::u16string_view sv16 = u"sv16";
-    std::u16string str16 = u"str16";
-
-    UnicodeString any(true, u"any", 3);
-    UnicodeString fromPtr(p16);
-    UnicodeString fromSV(sv16);
-    UnicodeString fromSV2(u"sv16_2"sv);  // u16string_view literal
-    UnicodeString fromStr(str16);
-    UnicodeString aliasFromSV = UnicodeString::readOnlyAlias(sv16);
-    UnicodeString aliasFromStr = UnicodeString::readOnlyAlias(str16);
-    bool eqPtr = any == p16;
-    bool eqSV = any == sv16;
-    bool eqStr = any == str16;
-    (void)eqPtr;
-    (void)eqSV;
-    (void)eqStr;
-    if (any == u"literal"sv) {
-        // do something
-    }
-    UnicodeString x;
-    x = p16;
-    x = sv16;
-    x = str16;
-    x += p16;
-    x += sv16;
-    x += str16;
-    x.append(p16);
-    x.append(sv16);
-    x.append(str16);
-    std::u16string_view sv16FromUniStr(any);
-    (void)sv16FromUniStr;
-    std::u16string str16FromUniStr(any);
-    x = any + p16;
-    x = any + sv16;
-    x = any + str16;
-}
 
 #if 0
 #include "unicode/ustream.h"
@@ -112,6 +74,7 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
     TESTCASE_AUTO(TestNullPointers);
     TESTCASE_AUTO(TestUnicodeStringInsertAppendToSelf);
     TESTCASE_AUTO(TestLargeAppend);
+    TESTCASE_AUTO(TestU16StringView);
     TESTCASE_AUTO_END;
 }
 
@@ -2443,4 +2406,50 @@ void UnicodeStringTest::TestLargeAppend() {
             assertTrue("dest should be bogus", dest.isBogus());
         }
     }
+}
+
+// TODO: copy as 'w' version
+void UnicodeStringTest::TestU16StringView() {
+    IcuTestErrorCode status(*this, "TestU16StringView");
+    // TODO: real testing...
+    const char16_t *p16 = u"p16";
+    std::u16string_view sv16 = u"sv16";
+    std::u16string str16 = u"str16";
+
+    UnicodeString any(true, u"any", 3);
+    UnicodeString fromPtr(p16);
+    UnicodeString fromSV(sv16);
+    UnicodeString fromSV2(u"sv16_2"sv);  // u16string_view literal
+    UnicodeString fromStr(str16);
+    UnicodeString aliasFromSV = UnicodeString::readOnlyAlias(sv16);
+    assertTrue("aliasFromSV pointer alias", aliasFromSV.getBuffer() == sv16.data());
+    assertTrue("aliasFromSV length", aliasFromSV.length() == (int32_t)sv16.length());
+    UnicodeString aliasFromStr = UnicodeString::readOnlyAlias(str16);
+    assertTrue("aliasFromStr pointer alias", aliasFromStr.getBuffer() == str16.data());
+    assertTrue("aliasFromStr length", aliasFromStr.length() == (int32_t)str16.length());
+    bool eqPtr = any == p16;
+    bool eqSV = any == sv16;
+    bool eqStr = any == str16;
+    (void)eqPtr;
+    (void)eqSV;
+    (void)eqStr;
+    if (any == u"literal"sv) {
+        // do something
+    }
+    UnicodeString x;
+    x = p16;
+    x = sv16;
+    x = str16;
+    x += p16;
+    x += sv16;
+    x += str16;
+    x.append(p16);
+    x.append(sv16);
+    x.append(str16);
+    std::u16string_view sv16FromUniStr(any);
+    (void)sv16FromUniStr;
+    std::u16string str16FromUniStr(any);
+    x = any + p16;
+    x = any + sv16;
+    x = any + str16;
 }
