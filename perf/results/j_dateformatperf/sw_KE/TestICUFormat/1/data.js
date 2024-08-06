@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1722955451338,
+  "lastUpdate": 1722960747183,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23547,6 +23547,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 226.71178205450624,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "6de4472db045c59b1b847a5e1a69f6cd29f65926",
+          "message": "ICU-22820 Fix memLeak during error in genrb\n\nFix also ICU-22821 ICU-22822",
+          "timestamp": "2024-08-06T18:00:27+02:00",
+          "tree_id": "c63010d480171f9c6d4e8a89566fd04bc4687b9f",
+          "url": "https://github.com/unicode-org/icu/commit/6de4472db045c59b1b847a5e1a69f6cd29f65926"
+        },
+        "date": 1722960610626,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 235.33786589751165,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
