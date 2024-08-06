@@ -89,7 +89,9 @@ void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
                                 .setExpected("Hello Mr. Doe")
                                 .setExpectSuccess()
                                 .build();
+
     TestUtils::runTestCase(*this, test, errorCode);
+
 }
 
 void TestMessageFormat2::testCustomFunctionsComplexMessage(IcuTestErrorCode& errorCode) {
@@ -182,6 +184,47 @@ void TestMessageFormat2::testCustomFunctionsComplexMessage(IcuTestErrorCode& err
     TestUtils::runTestCase(*this, test, errorCode);
 }
 
+void TestMessageFormat2::testComplexOptions(IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    MFFunctionRegistry customRegistry(MFFunctionRegistry::Builder(errorCode)
+                                      .adoptFormatter(FunctionName("noun"), new NounFormatterFactory(), errorCode)
+                                      .adoptFormatter(FunctionName("adjective"), new AdjectiveFormatterFactory(), errorCode)
+                                      .build());
+    UnicodeString name = "name";
+    TestCase::Builder testBuilder;
+    testBuilder.setName("testComplexOptions");
+    testBuilder.setLocale(Locale("en"));
+    testBuilder.setFunctionRegistry(&customRegistry);
+
+    // Test that options can be values with their own resolved
+    // options attached
+    TestCase test = testBuilder.setPattern(".input {$item :noun case=accusative count=1} \
+                                            .local $colorMatchingGrammaticalNumberGenderCase = {$color :adjective accord=$item} \
+                                            {{{$colorMatchingGrammaticalNumberGenderCase}}}")
+
+        .setArgument(UnicodeString("color"), UnicodeString("red"))
+        .setArgument(UnicodeString("item"), UnicodeString("balloon"))
+        .setExpected("red balloon (accusative, singular adjective)")
+        .build();
+    TestUtils::runTestCase(*this, test, errorCode);
+
+    // Test that the same noun can be used multiple times
+    test = testBuilder.setPattern(".input {$item :noun case=accusative count=1} \
+                                            .local $colorMatchingGrammaticalNumberGenderCase = {$color :adjective accord=$item} \
+                                            .local $sizeMatchingGrammaticalNumberGenderCase = {$size :adjective accord=$item} \
+                                            {{{$colorMatchingGrammaticalNumberGenderCase}, {$sizeMatchingGrammaticalNumberGenderCase}}}")
+
+        .setArgument(UnicodeString("color"), UnicodeString("red"))
+        .setArgument(UnicodeString("item"), UnicodeString("balloon"))
+        .setArgument(UnicodeString("size"), UnicodeString("huge"))
+        .setExpected("red balloon (accusative, singular adjective), \
+huge balloon (accusative, singular adjective)")
+        .build();
+    TestUtils::runTestCase(*this, test, errorCode);
+
+}
+
 void TestMessageFormat2::testCustomFunctions() {
   IcuTestErrorCode errorCode(*this, "testCustomFunctions");
 
@@ -190,6 +233,7 @@ void TestMessageFormat2::testCustomFunctions() {
   testGrammarCasesFormatter(errorCode);
   testListFormatter(errorCode);
   testMessageRefFormatter(errorCode);
+  testComplexOptions(errorCode);
 }
 
 
@@ -210,27 +254,49 @@ Formatter* PersonNameFormatterFactory::createFormatter(const Locale& locale, UEr
     return result;
 }
 
+static UnicodeString getStringOption(const FunctionOptionsMap& opt,
+                                     const UnicodeString& k) {
+    if (opt.count(k) == 0) {
+        return {};
+    }
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    UnicodeString optVal = opt.at(k).getValue().getString(localErrorCode);
+    if (U_SUCCESS(localErrorCode)) {
+        return optVal;
+    }
+    return {};
+}
+
+static bool hasStringOption(const FunctionOptionsMap& opt,
+                            const UnicodeString& k, const UnicodeString& v) {
+    return getStringOption(opt, k) == v;
+}
+
 message2::FormattedPlaceholder PersonNameFormatter::format(FormattedPlaceholder&& arg, FunctionOptions&& options, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return {};
     }
 
-    message2::FormattedPlaceholder errorVal = message2::FormattedPlaceholder("not a person");
+    message2::FormattedPlaceholder errorVal("not a person");
 
-    if (!arg.canFormat() || arg.asFormattable().getType() != UFMT_OBJECT) {
+    const Formattable* toFormat = arg.getSource(errorCode);
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
         return errorVal;
     }
-    const Formattable& toFormat = arg.asFormattable();
 
-    FunctionOptionsMap opt = options.getOptions();
-    bool hasFormality = opt.count("formality") > 0 && opt["formality"].getType() == UFMT_STRING;
-    bool hasLength = opt.count("length") > 0 && opt["length"].getType() == UFMT_STRING;
+    FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
 
-    bool useFormal = hasFormality && opt["formality"].getString(errorCode) == "formal";
-    UnicodeString length = hasLength ? opt["length"].getString(errorCode) : "short";
+    bool useFormal = hasStringOption(opt, "formality", "formal");
+    UnicodeString length = getStringOption(opt, "length");
+    if (length.length() == 0) {
+        length = "short";
+    }
 
-    const FormattableObject* fp = toFormat.getObject(errorCode);
-    U_ASSERT(U_SUCCESS(errorCode));
+    const FormattableObject* fp = toFormat->getObject(errorCode);
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
+        errorCode = U_MF_FORMATTING_ERROR;
+        return errorVal;
+    }
 
     if (fp == nullptr || fp->tag() != u"person") {
         return errorVal;
@@ -267,7 +333,7 @@ message2::FormattedPlaceholder PersonNameFormatter::format(FormattedPlaceholder&
         result += firstName;
     }
 
-    return FormattedPlaceholder(arg, FormattedValue(std::move(result)));
+    return arg.withOutput(FormattedValue(std::move(result)), errorCode);
 }
 
 FormattableProperties::~FormattableProperties() {}
@@ -321,37 +387,39 @@ message2::FormattedPlaceholder GrammarCasesFormatter::format(FormattedPlaceholde
         return {};
     }
 
-    // Argument must be present
-    if (!arg.canFormat()) {
+    const Formattable* toFormat = arg.getSource(errorCode);
+    // Check for null or fallback
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
         errorCode = U_MF_FORMATTING_ERROR;
         return message2::FormattedPlaceholder("grammarBB");
     }
 
-    // Assumes the argument is not-yet-formatted
-    const Formattable& toFormat = arg.asFormattable();
     UnicodeString result;
-
-    FunctionOptionsMap opt = options.getOptions();
-    switch (toFormat.getType()) {
+    const FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
+    switch (toFormat->getType()) {
         case UFMT_STRING: {
-            const UnicodeString& in = toFormat.getString(errorCode);
+            const UnicodeString& in = toFormat->getString(errorCode);
             bool hasCase = opt.count("case") > 0;
-            bool caseIsString = opt["case"].getType() == UFMT_STRING;
-            if (hasCase && caseIsString && (opt["case"].getString(errorCode) == "dative" || opt["case"].getString(errorCode) == "genitive")) {
-                getDativeAndGenitive(in, result);
-            } else {
-                result += in;
+            bool caseIsString = opt.at("case").getValue().getType() == UFMT_STRING;
+            if (hasCase && caseIsString) {
+                const UnicodeString& caseOpt = opt.at("case").getValue().getString(errorCode);
+                if (caseOpt == "dative" || caseOpt == "genitive") {
+                    getDativeAndGenitive(in, result);
+                }
+                else {
+                    result += in;
+                }
             }
             U_ASSERT(U_SUCCESS(errorCode));
             break;
         }
         default: {
-            result += toFormat.getString(errorCode);
+            result += toFormat->getString(errorCode);
             break;
         }
     }
 
-    return message2::FormattedPlaceholder(arg, FormattedValue(std::move(result)));
+    return arg.withOutput(FormattedValue(std::move(result)), errorCode);
 }
 
 void TestMessageFormat2::testGrammarCasesFormatter(IcuTestErrorCode& errorCode) {
@@ -430,36 +498,28 @@ message2::FormattedPlaceholder message2::ListFormatter::format(FormattedPlacehol
         return {};
     }
 
-    message2::FormattedPlaceholder errorVal = FormattedPlaceholder("listformat");
+    message2::FormattedPlaceholder errorVal("listformat");
 
-    // Argument must be present
-    if (!arg.canFormat()) {
+    const Formattable* toFormat = arg.getSource(errorCode);
+    // Check for null or fallback
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
         errorCode = U_MF_FORMATTING_ERROR;
         return errorVal;
     }
-    // Assumes arg is not-yet-formatted
-    const Formattable& toFormat = arg.asFormattable();
 
-    FunctionOptionsMap opt = options.getOptions();
-    bool hasType = opt.count("type") > 0 && opt["type"].getType() == UFMT_STRING;
+    FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
     UListFormatterType type = UListFormatterType::ULISTFMT_TYPE_AND;
-    if (hasType) {
-        if (opt["type"].getString(errorCode) == "OR") {
-            type = UListFormatterType::ULISTFMT_TYPE_OR;
-        } else if (opt["type"].getString(errorCode) == "UNITS") {
-            type = UListFormatterType::ULISTFMT_TYPE_UNITS;
-        }
+    if (hasStringOption(opt, "type", "OR")) {
+        type = UListFormatterType::ULISTFMT_TYPE_OR;
+    } else if (hasStringOption(opt, "type", "UNITS")) {
+        type = UListFormatterType::ULISTFMT_TYPE_UNITS;
     }
-    bool hasWidth = opt.count("width") > 0 && opt["width"].getType() == UFMT_STRING;
     UListFormatterWidth width = UListFormatterWidth::ULISTFMT_WIDTH_WIDE;
-    if (hasWidth) {
-        if (opt["width"].getString(errorCode) == "SHORT") {
-            width = UListFormatterWidth::ULISTFMT_WIDTH_SHORT;
-        } else if (opt["width"].getString(errorCode) == "NARROW") {
-            width = UListFormatterWidth::ULISTFMT_WIDTH_NARROW;
-        }
+    if (hasStringOption(opt, "width", "SHORT")) {
+        width = UListFormatterWidth::ULISTFMT_WIDTH_SHORT;
+    } else if (hasStringOption(opt, "width", "NARROW")) {
+        width = UListFormatterWidth::ULISTFMT_WIDTH_NARROW;
     }
-    U_ASSERT(U_SUCCESS(errorCode));
     LocalPointer<icu::ListFormatter> lf(icu::ListFormatter::createInstance(locale, type, width, errorCode));
     if (U_FAILURE(errorCode)) {
         return {};
@@ -467,10 +527,10 @@ message2::FormattedPlaceholder message2::ListFormatter::format(FormattedPlacehol
 
     UnicodeString result;
 
-    switch (toFormat.getType()) {
+    switch (toFormat->getType()) {
         case UFMT_ARRAY: {
             int32_t n_items;
-            const Formattable* objs = toFormat.getArray(n_items, errorCode);
+            const Formattable* objs = toFormat->getArray(n_items, errorCode);
             if (U_FAILURE(errorCode)) {
                 errorCode = U_MF_FORMATTING_ERROR;
                 return errorVal;
@@ -489,13 +549,13 @@ message2::FormattedPlaceholder message2::ListFormatter::format(FormattedPlacehol
             break;
         }
         default: {
-            result += toFormat.getString(errorCode);
+            result += toFormat->getString(errorCode);
             U_ASSERT(U_SUCCESS(errorCode));
             break;
         }
     }
 
-    return FormattedPlaceholder(arg, FormattedValue(std::move(result)));
+    return arg.withOutput(FormattedValue(std::move(result)), errorCode);
 }
 
 void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
@@ -582,11 +642,19 @@ Formatter* ResourceManagerFactory::createFormatter(const Locale& locale, UErrorC
 
 using Arguments = MessageArguments;
 
+// TODO: The next test is commented out because we need to write code
+// to convert an options map to a MessageArguments (mapping FormattedPlaceholder
+// back to Formattable)
+
 static Arguments localToGlobal(const FunctionOptionsMap& opts, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return {};
     }
-    return MessageArguments(opts, status);
+    std::map<UnicodeString, message2::Formattable> result;
+    for (auto iter = opts.cbegin(); iter != opts.cend(); ++iter) {
+        result[iter->first] = iter->second.getValue();
+    }
+    return MessageArguments(result, status);
 }
 
 message2::FormattedPlaceholder ResourceManager::format(FormattedPlaceholder&& arg, FunctionOptions&& options, UErrorCode& errorCode) const {
@@ -596,18 +664,16 @@ message2::FormattedPlaceholder ResourceManager::format(FormattedPlaceholder&& ar
 
     message2::FormattedPlaceholder errorVal = message2::FormattedPlaceholder("msgref");
 
-    // Argument must be present
-    if (!arg.canFormat()) {
+    const Formattable* toFormat = arg.getSource(errorCode);
+    // Check for null or fallback
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
         errorCode = U_MF_FORMATTING_ERROR;
         return errorVal;
     }
-
-    // Assumes arg is not-yet-formatted
-    const Formattable& toFormat = arg.asFormattable();
     UnicodeString in;
-    switch (toFormat.getType()) {
+    switch (toFormat->getType()) {
         case UFMT_STRING: {
-            in = toFormat.getString(errorCode);
+            in = toFormat->getString(errorCode);
             break;
         }
         default: {
@@ -615,13 +681,13 @@ message2::FormattedPlaceholder ResourceManager::format(FormattedPlaceholder&& ar
             return errorVal;
         }
     }
-    FunctionOptionsMap opt = options.getOptions();
-    bool hasProperties = opt.count("resbundle") > 0 && opt["resbundle"].getType() == UFMT_OBJECT && opt["resbundle"].getObject(errorCode)->tag() == u"properties";
+    FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
+    bool hasProperties = opt.count("resbundle") > 0 && opt["resbundle"].getValue().getType() == UFMT_OBJECT && opt["resbundle"].getValue().getObject(errorCode)->tag() == u"properties";
 
     // If properties were provided, look up the given string in the properties,
     // yielding a message
     if (hasProperties) {
-        const FormattableProperties* properties = reinterpret_cast<const FormattableProperties*>(opt["resbundle"].getObject(errorCode));
+        const FormattableProperties* properties = reinterpret_cast<const FormattableProperties*>(opt["resbundle"].getValue().getObject(errorCode));
         U_ASSERT(U_SUCCESS(errorCode));
         UnicodeString* msg = static_cast<UnicodeString*>(properties->properties->get(in));
         if (msg == nullptr) {
@@ -646,7 +712,7 @@ message2::FormattedPlaceholder ResourceManager::format(FormattedPlaceholder&& ar
         if (U_FAILURE(errorCode)) {
             errorCode = savedStatus;
         }
-        return FormattedPlaceholder(arg, FormattedValue(std::move(result)));
+        return arg.withOutput(FormattedValue(std::move(result)), errorCode);
     } else {
         // Properties must be provided
         errorCode = U_MF_FORMATTING_ERROR;
@@ -726,6 +792,129 @@ void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
                                 .build();
     TestUtils::runTestCase(*this, test, errorCode);
 }
+
+Formatter* NounFormatterFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+
+    // Locale not used
+    (void) locale;
+
+    Formatter* result = new NounFormatter();
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+Formatter* AdjectiveFormatterFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+
+    // Locale not used
+    (void) locale;
+
+    Formatter* result = new AdjectiveFormatter();
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+message2::FormattedPlaceholder NounFormatter::format(FormattedPlaceholder&& arg, FunctionOptions&& options, UErrorCode& errorCode) const {
+    if (U_FAILURE(errorCode)) {
+        return {};
+    }
+
+    message2::FormattedPlaceholder errorVal("noun: not a string");
+
+    const Formattable* toFormat = arg.getSource(errorCode);
+    // Check for null or fallback
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
+        return errorVal;
+    }
+
+    FunctionOptionsMap opt = FunctionOptions::getOptions(options);
+
+    // very simplified example
+    bool useAccusative = hasStringOption(opt, "case", "accusative");
+    bool useSingular = hasStringOption(opt, "count", "1");
+    const UnicodeString& noun = toFormat->getString(errorCode);
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
+        return errorVal;
+    }
+
+    UnicodeString result;
+    if (useAccusative) {
+        if (useSingular) {
+            result = noun + " accusative, singular noun";
+        } else {
+            result = noun + " accusative, plural noun";
+        }
+    } else {
+        if (useSingular) {
+            result = noun + " dative, singular noun";
+        } else {
+            result = noun + " dative, plural noun";
+        }
+    }
+
+    return arg.withOutputAndOptions(std::move(options), FormattedValue(result), errorCode);
+}
+
+message2::FormattedPlaceholder AdjectiveFormatter::format(FormattedPlaceholder&& arg, FunctionOptions&& options, UErrorCode& errorCode) const {
+    if (U_FAILURE(errorCode)) {
+        return {};
+    }
+
+    message2::FormattedPlaceholder errorVal("adjective: not a string");
+
+    const Formattable* toFormat = arg.getSource(errorCode);
+    // Check for null or fallback
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
+        return errorVal;
+    }
+
+    const FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
+    // Return empty string if no accord is provided
+    if (opt.count("accord") <= 0) {
+        return {};
+    }
+
+    const FormattableWithOptions& accordOpt = opt.at("accord");
+    // Fail if no accord is provided, as this is a simplified example
+    UnicodeString accord = accordOpt.getValue().getString(errorCode);
+    const UnicodeString& adjective = toFormat->getString(errorCode);
+    if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
+        return errorVal;
+    }
+
+    UnicodeString result = adjective + " " + accord;
+    // very simplified example
+    const FunctionOptions& accordOptions = accordOpt.getOptions();
+    const FunctionOptionsMap accordOptionsMap = FunctionOptions::getOptions(accordOptions);
+    bool accordIsAccusative = hasStringOption(accordOptionsMap, "case", "accusative");
+    bool accordIsSingular = hasStringOption(accordOptionsMap, "count", "1");
+    if (accordIsAccusative) {
+        if (accordIsSingular) {
+            result += " (accusative, singular adjective)";
+        } else {
+            result += " (accusative, plural adjective)";
+        }
+    } else {
+        if (accordIsSingular) {
+            result += " (dative, singular adjective)";
+        } else {
+            result += " (dative, plural adjective)";
+        }
+    }
+
+    return arg.withOutputAndOptions(std::move(options),
+                                    FormattedValue(std::move(result)), errorCode);
+}
+
 
 #endif /* #if !UCONFIG_NO_MF2 */
 

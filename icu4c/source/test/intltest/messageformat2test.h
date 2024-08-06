@@ -60,6 +60,7 @@ private:
     void testGrammarCasesFormatter(IcuTestErrorCode&);
     void testListFormatter(IcuTestErrorCode&);
     void testMessageRefFormatter(IcuTestErrorCode&);
+    void testComplexOptions(IcuTestErrorCode&);
 
     // Feature tests
     void testEmptyMessage(message2::TestCase::Builder&, IcuTestErrorCode&);
@@ -174,6 +175,34 @@ class ResourceManager : public Formatter {
     friend class ResourceManagerFactory;
     ResourceManager(const Locale& loc) : locale(loc) {}
     const Locale& locale;
+};
+
+class NounFormatterFactory : public FormatterFactory {
+
+    public:
+    Formatter* createFormatter(const Locale&, UErrorCode&) override;
+};
+
+class AdjectiveFormatterFactory : public FormatterFactory {
+
+    public:
+    Formatter* createFormatter(const Locale&, UErrorCode&) override;
+};
+
+class NounFormatter : public Formatter {
+    public:
+    FormattedPlaceholder format(FormattedPlaceholder&&, FunctionOptions&& opts, UErrorCode& errorCode) const override;
+    private:
+    friend class NounFormatterFactory;
+    NounFormatter() { }
+};
+
+class AdjectiveFormatter : public Formatter {
+    public:
+    FormattedPlaceholder format(FormattedPlaceholder&&, FunctionOptions&& opts, UErrorCode& errorCode) const override;
+    private:
+    friend class AdjectiveFormatterFactory;
+    AdjectiveFormatter() { }
 };
 
 } // namespace message2
