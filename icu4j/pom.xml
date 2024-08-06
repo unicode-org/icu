@@ -113,7 +113,7 @@
 
   <developers>
     <developer>
-      <id>markusicu</id>
+      <id>markusicu</id> <!-- GitHub ID -->
       <name>Markus Scherer</name>
       <organization>Google</organization>
       <roles>
@@ -121,9 +121,8 @@
       </roles>
     </developer>
     <developer>
-      <id>yumaoka</id>
-      <name>Yoshito Umaoka</name>
-      <organization>IBM</organization>
+      <id>richgillam</id> <!-- GitHub ID -->
+      <name>Richard Gillam</name>
       <roles>
         <role>Vice chair</role>
       </roles>
