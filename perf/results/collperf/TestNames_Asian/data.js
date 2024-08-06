@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1722965498869,
+  "lastUpdate": 1722985248789,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -47625,6 +47625,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2030187.3202,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "1eb0ed2fad659a23b837ea7ccbed661cf1b31aff",
+          "message": "ICU-22818 Fix memory leak during error in messageformat2_data_model.cpp\n\nSee #3077",
+          "timestamp": "2024-08-06T15:39:20-07:00",
+          "tree_id": "7a28c74300437f051b52057e32a65fa7eaba73ff",
+          "url": "https://github.com/unicode-org/icu/commit/1eb0ed2fad659a23b837ea7ccbed661cf1b31aff"
+        },
+        "date": 1722985110473,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 210.1124,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8766987.9406,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1974702.5561,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 8053576.5047,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2029019.9591,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
