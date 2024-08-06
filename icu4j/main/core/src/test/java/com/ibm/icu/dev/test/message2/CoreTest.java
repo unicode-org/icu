@@ -30,6 +30,7 @@ public class CoreTest extends CoreTestFmwk {
                                                 "more-data-model-errors.json",
                                                 "more-functions.json",
                                                 "reserved-syntax.json",
+                                                "reserved-syntax-2.json",
                                                 "resolution-errors.json",
                                                 "runtime-errors.json",
                                                 "spec/data-model-errors.json",

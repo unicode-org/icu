@@ -53,12 +53,12 @@ public class MFParser {
             cp = input.readCodePoint();
             cp = input.peekChar();
             if (cp == '{') { // `{{`, complex body without declarations
-                input.backup(1); // let complexBody deal with the wrapping {{ and }}
+                input.backupOneCodePoint(); // let complexBody deal with the wrapping {{ and }}
                 MFDataModel.Pattern pattern = getQuotedPattern();
                 skipOptionalWhitespaces();
                 result = new MFDataModel.PatternMessage(new ArrayList<>(), pattern);
             } else { // placeholder
-                input.backup(1); // We want the '{' present, to detect the part as placeholder.
+                input.backupOneCodePoint(); // We want the '{' present, to detect the part as placeholder.
                 MFDataModel.Pattern pattern = getPattern();
                 result = new MFDataModel.PatternMessage(new ArrayList<>(), pattern);
             }
@@ -129,7 +129,7 @@ public class MFParser {
                     if (StringUtils.isContentChar(cp) || StringUtils.isWhitespace(cp)) {
                         result.appendCodePoint(cp);
                     } else {
-                        input.backup(1);
+                        input.backupOneCodePoint();
                         return result.toString();
                     }
             }
@@ -361,37 +361,47 @@ public class MFParser {
         return null;
     }
 
-    // abnf: reserved-body = *([s] 1*(reserved-char / reserved-escape / quoted))
-    // abnf: reserved-escape = backslash ( backslash / "{" / "|" / "}" )
+    // abnf: reserved-body = reserved-body-part *([s] reserved-body-part)
     private String getReservedBody() throws MFParseException {
         int spaceCount = skipWhitespaces();
         StringBuilder result = new StringBuilder();
+        String firstPart = getReservedBodyPart();
+        result.append(firstPart);
         while (true) {
-            int cp = input.readCodePoint();
-            if (StringUtils.isReservedChar(cp)) {
-                result.appendCodePoint(cp);
-            } else if (cp == '\\') {
-                cp = input.readCodePoint();
-                checkCondition(
-                        cp == '{' || cp == '|' || cp == '}',
-                        "Invalid escape sequence. Only \\{, \\| and \\} are valid here.");
-                result.append(cp);
-            } else if (cp == '|') {
-                input.backup(1);
-                MFDataModel.Literal quoted = getQuotedLiteral();
-                result.append(quoted.value);
-            } else if (cp == EOF) {
-                return result.toString();
-            } else {
-                if (result.length() == 0) {
-                    input.backup(spaceCount + 1);
-                    return "";
-                } else {
-                    input.backup(1);
-                    return result.toString();
-                }
+            spaceCount = skipWhitespaces();
+            String nextPart = getReservedBodyPart();
+            if (nextPart.length() == 0) {
+                input.backup(spaceCount);
+                break;
             }
+            result.append(nextPart);
         }
+        if (result.length() == 0) {
+            input.backup(spaceCount);
+        }
+        return result.toString();
+    }
+
+    // abnf: reserved-body-part = reserved-char / escaped-char / quoted-literal
+    private String getReservedBodyPart() throws MFParseException {
+        StringBuilder result = new StringBuilder();
+        int cp = input.readCodePoint();
+        if (StringUtils.isReservedChar(cp)) {
+            result.appendCodePoint(cp);
+        } else if (cp == '\\') {
+            cp = input.readCodePoint();
+            checkCondition(
+                           cp == '{' || cp == '|' || cp == '}',
+                           "Invalid escape sequence. Only \\{, \\| and \\} are valid here.");
+            result.append(cp);
+        } else if (cp == '|') {
+            input.backup(1);
+            MFDataModel.Literal quoted = getQuotedLiteral();
+            result.append(quoted.value);
+        } else {
+            input.backup(1);
+        }
+        return result.toString();
     }
 
     // abnf: identifier = [namespace ":"] name
@@ -408,7 +418,7 @@ public class MFParser {
             checkCondition(name != null, "Expected name after namespace '" + namespace + "'");
             return namespace + ":" + name;
         } else {
-            input.backup(1);
+            input.backupOneCodePoint();
         }
         return namespace;
     }
@@ -479,7 +489,7 @@ public class MFParser {
                 MFDataModel.Literal ql = getQuotedLiteral();
                 return ql;
             default: // unquoted
-                input.backup(1);
+                input.backupOneCodePoint();
                 MFDataModel.Literal unql = getUnQuotedLiteral();
                 return unql;
         }
@@ -561,7 +571,7 @@ public class MFParser {
                 return skipCount;
             }
             if (!StringUtils.isWhitespace(cp)) {
-                input.backup(1);
+                input.backupOneCodePoint();
                 return skipCount;
             }
             skipCount++;

@@ -50,7 +50,8 @@
     { "src" : ".input{ $n ~ }{{{$n}}}", "ignoreJava": "ICU4J doesn't error out on reserved annotations" },
     { "src" : ".i {1} {{}}", "ignoreJava": "ICU4J doesn't error out on reserved annotations", "expErrors": [{ "type": "unsupported-statement" }] },
     { "src" : ".l $y = {|bar|} {{}}", "ignoreJava": "ICU4J doesn't error out on reserved annotations", "expErrors": [{ "type": "unsupported-statement" }] },
-    { "src" : ".򱋿󠆿 . |@| {$󛒁񓝖 & \\{ . @𯼼򋼡= $򵀀񓞈}{{\\\\}}", "ignoreJava": "ICU4J doesn't error out on reserved annotations", "expErrors": [{ "type": "unsupported-statement" }] }
+    { "src" : ".򱋿󠆿 . |@| {$󛒁񓝖 & \\{ . @𯼼򋼡= $򵀀񓞈}{{\\\\}}", "ignoreJava": "ICU4J doesn't error out on reserved annotations", "expErrors": [{ "type": "unsupported-statement" }] },
+    { "src" : "\\\\{   ?   󗟋   𫓜|@}   |}", "ignoreJava": "ICU4J doesn't error out on reserved annotations" }
   ]
 }
 

@@ -62,10 +62,22 @@ class InputSource {
         return c;
     }
 
-    // Backup a number of characters.
+    // Backup a number of code points.
     void backup(int amount) {
+        int amountBackedUp = 0;
         // TODO: validate
-        cursor -= amount;
+        while (amountBackedUp < amount) {
+            backupOneCodePoint();
+            amountBackedUp++;
+        }
+    }
+
+    void backupOneCodePoint() {
+        if (Character.isLowSurrogate(buffer.charAt(cursor - 1))) {
+            cursor -= 2;
+        } else {
+            cursor--;
+        }
     }
 
     int getPosition() {
