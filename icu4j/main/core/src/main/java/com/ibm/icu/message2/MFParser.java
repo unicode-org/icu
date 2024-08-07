@@ -113,7 +113,7 @@ public class MFParser {
                     return result.toString();
                 case '\\':
                     cp = input.readCodePoint();
-                    if (cp == '\\' || cp == '{' || cp == '|' | cp == '}') {
+                    if (StringUtils.isEscapedChar(cp)) {
                         result.appendCodePoint(cp);
                     } else { // TODO: Error, treat invalid escape?
                         result.appendCodePoint('\\');
@@ -390,9 +390,8 @@ public class MFParser {
             result.appendCodePoint(cp);
         } else if (cp == '\\') {
             cp = input.readCodePoint();
-            checkCondition(
-                           cp == '{' || cp == '|' || cp == '}',
-                           "Invalid escape sequence. Only \\{, \\| and \\} are valid here.");
+            checkCondition(StringUtils.isEscapedChar(cp),
+                           "Invalid escape sequence. Only \\, \\{, \\| and \\} are valid here.");
             result.append(cp);
         } else if (cp == '|') {
             input.backup(1);
@@ -519,7 +518,7 @@ public class MFParser {
                 result.appendCodePoint(cp);
             } else if (cp == '\\') {
                 cp = input.readCodePoint();
-                boolean isValidEscape = cp == '|' || cp == '\\' || cp == '{' || cp == '}';
+                boolean isValidEscape = StringUtils.isEscapedChar(cp);
                 checkCondition(isValidEscape, "Invalid escape sequence inside quoted literal");
                 result.appendCodePoint(cp);
             } else {
