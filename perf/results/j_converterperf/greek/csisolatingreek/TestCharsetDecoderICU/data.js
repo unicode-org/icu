@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1722984881950,
+  "lastUpdate": 1723033927371,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23817,6 +23817,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.048643467646563916,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "8a6d59ec80b5229ac2bfa1c3c4202106e2b821f1",
+          "message": "ICU-22696 Update ulocimp_to*{Key,Type}() to use std::string_view.",
+          "timestamp": "2024-08-07T14:14:23+02:00",
+          "tree_id": "a286a67e3bebd9c09c4da85fd2f7a14c7003b3b4",
+          "url": "https://github.com/unicode-org/icu/commit/8a6d59ec80b5229ac2bfa1c3c4202106e2b821f1"
+        },
+        "date": 1723033785478,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.04865997863779066,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
