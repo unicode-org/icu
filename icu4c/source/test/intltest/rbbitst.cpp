@@ -155,6 +155,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug22585);
     TESTCASE_AUTO(TestBug22602);
     TESTCASE_AUTO(TestBug22636);
+    TESTCASE_AUTO(TestBug22848);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -6131,6 +6132,13 @@ void RBBITest::TestBug22636() {
     ec = U_ZERO_ERROR;
     RuleBasedBreakIterator bi3(u"A{2147483647};", pe, ec);
     assertEquals(WHERE, ec, U_ZERO_ERROR);
+}
+
+void RBBITest::TestBug22848() {
+    if (quick || logKnownIssue("ICU-22848", "Very slow case")) { return; }
+    UParseError pe {};
+    UErrorCode ec {U_ZERO_ERROR};
+    RuleBasedBreakIterator bi(u".*X..................;", pe, ec);
 }
 
 void RBBITest::TestBug22584() {
