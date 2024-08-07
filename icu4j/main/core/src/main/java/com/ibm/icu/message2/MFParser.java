@@ -363,12 +363,12 @@ public class MFParser {
 
     // abnf: reserved-body = reserved-body-part *([s] reserved-body-part)
     private String getReservedBody() throws MFParseException {
-        int spaceCount = skipWhitespaces();
+        int spaceCountAfterSigil = skipWhitespaces();
         StringBuilder result = new StringBuilder();
         String firstPart = getReservedBodyPart();
         result.append(firstPart);
         while (true) {
-            spaceCount = skipWhitespaces();
+            int spaceCount = skipWhitespaces();
             String nextPart = getReservedBodyPart();
             if (nextPart.length() == 0) {
                 input.backup(spaceCount);
@@ -377,7 +377,7 @@ public class MFParser {
             result.append(nextPart);
         }
         if (result.length() == 0) {
-            input.backup(spaceCount);
+            input.backup(spaceCountAfterSigil);
         }
         return result.toString();
     }
