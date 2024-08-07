@@ -763,8 +763,7 @@ public class MFParser {
                         input.backup(2);
                     }
                     expression = getPlaceholder();
-                    // This also covers != null
-                    if (expression instanceof MFDataModel.VariableExpression) {
+                    if (expression != null) {
                         expressions.add(expression);
                     } else {
                         break;
