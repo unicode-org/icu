@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723033758004,
+  "lastUpdate": 1723041838681,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23697,6 +23697,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1987.9404877146665,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "366bb463b10401776499fc7c6f5eeb0a43252bdd",
+          "message": "ICU-22722 Update the ICU Vice-Chair for Maven publishing",
+          "timestamp": "2024-08-07T07:36:23-07:00",
+          "tree_id": "0600fa1e2651c87527176ed495ef7cce090dc148",
+          "url": "https://github.com/unicode-org/icu/commit/366bb463b10401776499fc7c6f5eeb0a43252bdd"
+        },
+        "date": 1723041695539,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1959.7638002711542,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
