@@ -369,8 +369,10 @@ public class MFParser {
         result.append(firstPart);
         while (true) {
             int spaceCount = skipWhitespaces();
+            int beforeNextPart = input.getPosition();
             String nextPart = getReservedBodyPart();
-            if (nextPart.length() == 0) {
+            // If we didn't parse anything, restore the whitespace
+            if (input.getPosition() <= beforeNextPart) {
                 input.backup(spaceCount);
                 break;
             }
