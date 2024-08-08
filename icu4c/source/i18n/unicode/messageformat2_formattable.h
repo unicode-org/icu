@@ -77,7 +77,7 @@ namespace message2 {
      */
     struct U_I18N_API DateInfo {
         /**
-         * Milliseconds since Unix epoch
+         * Date in UTC
          *
          * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
@@ -85,11 +85,14 @@ namespace message2 {
         UDate date;
         /**
          * IANA time zone name; "UTC" if UTC; empty string if value is floating
+         * The time zone is required in order to format the date/time value
+         * (its offset is added to/subtracted from the datestamp in order to
+         * produce the formatted date).
          *
          * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
          */
-        UnicodeString zoneName;
+        UnicodeString zoneId;
         /**
          * Calendar name. Note: non-Gregorian calendars not yet implemented.
          * String is empty if calendar not specified. Proleptic Gregorian calendar

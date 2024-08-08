@@ -1049,11 +1049,11 @@ static TimeZone* createTimeZone(const DateInfo& dateInfo, UErrorCode& errorCode)
     NULL_ON_ERROR(errorCode);
 
     TimeZone* tz;
-    if (dateInfo.zoneName.isEmpty()) {
+    if (dateInfo.zoneId.isEmpty()) {
         // Floating time value -- use default time zone
         tz = TimeZone::createDefault();
     } else {
-        tz = TimeZone::createTimeZone(dateInfo.zoneName);
+        tz = TimeZone::createTimeZone(dateInfo.zoneId);
     }
     if (tz == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
