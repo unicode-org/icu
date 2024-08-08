@@ -164,8 +164,7 @@ void TestMessageFormat2::testAPISimple() {
 
     argsBuilder.clear();
     DateInfo dateInfo = { cal.getTime(errorCode),
-                          "Pacific Standard Time",
-                          "" };
+                          "Pacific Standard Time" };
     argsBuilder["today"] = message2::Formattable(std::move(dateInfo));
     args = MessageArguments(argsBuilder, errorCode);
     result = mf.formatToString(args, errorCode);

@@ -117,7 +117,7 @@ class TestCase : public UMemory {
             // as a datestamp, so this code suffices to handle those.
             // Date/time literal strings would be handled using `setArgument()` with a string
             // argument.
-            DateInfo dateInfo = { date, {}, {} }; // No time zone or calendar name
+            DateInfo dateInfo = { date, {} }; // No time zone or calendar name
             arguments[k] = Formattable(std::move(dateInfo));
             return *this;
         }
