@@ -1037,12 +1037,13 @@ static UDate tryTimeZonePatterns(const UnicodeString& sourceStr, UErrorCode& err
     if (U_FAILURE(errorCode)) {
         return 0;
     }
-    // 'zzzz' to handle the case where the timezone offset follows the ISO 8601 datetime
-    if (sourceStr.length() > 25) {
-        return tryPattern("YYYY-MM-dd'T'HH:mm:sszzzz", sourceStr, errorCode);
+    int32_t len = sourceStr.length();
+    if (len > 0 && sourceStr[len] == 'Z') {
+        // 'Z' to handle the literal 'Z'
+        return tryPattern("YYYY-MM-dd'T'HH:mm:ssZ", sourceStr, errorCode);
     }
-    // 'Z' to handle the literal 'Z'
-    return tryPattern("YYYY-MM-dd'T'HH:mm:ssZ", sourceStr, errorCode);
+    // 'zzzz' to handle the case where the timezone offset follows the ISO 8601 datetime
+    return tryPattern("YYYY-MM-dd'T'HH:mm:sszzzz", sourceStr, errorCode);
 }
 
 static TimeZone* createTimeZone(const DateInfo& dateInfo, UErrorCode& errorCode) {
