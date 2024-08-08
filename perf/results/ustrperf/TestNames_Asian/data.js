@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723042896500,
+  "lastUpdate": 1723136014170,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -85149,6 +85149,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 38.4851,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "57ed0a2a53cc1ed5ed61bec6d0cbbc139e1b4542",
+          "message": "ICU-22794 MF2: Move .json files for tests into top-level testdata/ directory\n\nModify ICU4C and ICU4J test readers to handle all tests\n\nAdd `ignoreJava` and `ignoreCpp` properties to tests where needed\n\nIncludes parser bug fixes:\n\nICU4J: require a complex-body after declarations\n\nICU4J: Correctly parse the complex body after an unsupported statement\n\nICU4J: Handle date params in tests and remove default params for tests\n\nICU4J: Handle decimal params in tests\n\nICU4J: Require whitespace before variable/literal in reserved annotation\n\nICU4J: Require whitespace between options\n\nICU4J: Require a variable-expression in an .input declaration\n\nICU4J: don't require space between last key and pattern in variant\n\nICU4J: don't require space between selectors\n\nICU4J: allow whitespace after '=' in option\n\nICU4J: parse escape sequences in quoted literals according to grammar\n\nICU4J: allow whitespace within markup after attributes list",
+          "timestamp": "2024-08-08T09:14:44-07:00",
+          "tree_id": "d637c2ed55a8260a46ac605f14e8a1f49d8cf48a",
+          "url": "https://github.com/unicode-org/icu/commit/57ed0a2a53cc1ed5ed61bec6d0cbbc139e1b4542"
+        },
+        "date": 1723135871190,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.1279,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.2283,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 23.6252,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 28.019,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 39.2429,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 35.0103,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 28.4961,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.9668,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 97.0425,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 20.8228,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.4046,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 38.4554,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
