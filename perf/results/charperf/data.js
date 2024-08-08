@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723042570998,
+  "lastUpdate": 1723135912330,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -79647,6 +79647,96 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIsWhiteSpace",
             "value": 5.1891,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "57ed0a2a53cc1ed5ed61bec6d0cbbc139e1b4542",
+          "message": "ICU-22794 MF2: Move .json files for tests into top-level testdata/ directory\n\nModify ICU4C and ICU4J test readers to handle all tests\n\nAdd `ignoreJava` and `ignoreCpp` properties to tests where needed\n\nIncludes parser bug fixes:\n\nICU4J: require a complex-body after declarations\n\nICU4J: Correctly parse the complex body after an unsupported statement\n\nICU4J: Handle date params in tests and remove default params for tests\n\nICU4J: Handle decimal params in tests\n\nICU4J: Require whitespace before variable/literal in reserved annotation\n\nICU4J: Require whitespace between options\n\nICU4J: Require a variable-expression in an .input declaration\n\nICU4J: don't require space between last key and pattern in variant\n\nICU4J: don't require space between selectors\n\nICU4J: allow whitespace after '=' in option\n\nICU4J: parse escape sequences in quoted literals according to grammar\n\nICU4J: allow whitespace within markup after attributes list",
+          "timestamp": "2024-08-08T09:14:44-07:00",
+          "tree_id": "d637c2ed55a8260a46ac605f14e8a1f49d8cf48a",
+          "url": "https://github.com/unicode-org/icu/commit/57ed0a2a53cc1ed5ed61bec6d0cbbc139e1b4542"
+        },
+        "date": 1723135497436,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIsAlpha",
+            "value": 4.2647,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsUpper",
+            "value": 4.2815,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsLower",
+            "value": 4.574,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsDigit",
+            "value": 4.2815,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsSpace",
+            "value": 5.1935,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsAlphaNumeric",
+            "value": 4.2812,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsPrint",
+            "value": 4.2823,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsControl",
+            "value": 4.2623,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToLower",
+            "value": 5.4494,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToUpper",
+            "value": 5.1949,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsWhiteSpace",
+            "value": 5.189,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
