@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.StringJoiner;
@@ -60,6 +61,16 @@ import com.ibm.icu.util.OutputInt;
 public class UnicodeSetTest extends CoreTestFmwk {
 
     static final String NOT = "%%%%";
+
+    // Used to test iterators and streams
+    final static UnicodeSet[] UNICODE_SETS_TO_ITERATE = {
+            UnicodeSet.EMPTY,
+            new UnicodeSet(0, 0), // one code point, zero
+            new UnicodeSet(0x0000, 0x0010), // from zero
+            new UnicodeSet(0x10FFFF, 0x10FFFF), // one code point, max
+            new UnicodeSet(0x10FF00, 0x10FFFF), // end in max
+            populateUnicodeSet()
+    };
 
     private static final boolean isCccValue(int ccc) {
         switch (ccc) {
@@ -841,7 +852,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             }
         }
     }
-    
+
     @Test
     public void TestSetRelation() {
 
@@ -3197,5 +3208,157 @@ public class UnicodeSetTest extends CoreTestFmwk {
                     notBasic.contains("🐿\uFE0F"));
             assertFalse("[:Basic_Emoji:].complement() --> no bicycle", notBasic.contains("🚲"));
         }
+    }
+
+    private static UnicodeSet populateUnicodeSet() {
+        // Trying to cover the most interesting combinations:
+        final UnicodeSet unicodeSet = new UnicodeSet();
+        // Patterns
+        unicodeSet.applyPattern("\\p{sc=Ethi}");
+        unicodeSet.applyPattern("\\p{Number}");
+        // Single code point
+        unicodeSet.add('X'); // adds a code point in the ASCII range
+        unicodeSet.add('Σ'); // adds a code point in the Greek block
+        unicodeSet.add(0x1F600); // adds a code point above BMP (😀)
+        // Code point ranges and from CharSequence
+        unicodeSet.add('A', 'F'); // adds a code point range in the ASCII range
+        unicodeSet.add('α', 'ζ'); // adds a code point range in the Greek block
+        unicodeSet.add(0x1F347, 0x1F353); // adds a code point range above BMP (🍇-🍓)
+        // Strings
+        unicodeSet.add("world"); // adds string
+        unicodeSet.addAll("one", "two", "three"); // adds strings
+        return (UnicodeSet) unicodeSet.freeze();
+    }
+
+    @Test
+    public void testIterationMethodsCodepoints() {
+        for (UnicodeSet us : UNICODE_SETS_TO_ITERATE) {
+            // Build the reference test result
+            UnicodeSetIterator usi = new UnicodeSetIterator(us);
+            StringJoiner joiner = newResult();
+            while (usi.next() && usi.codepoint != UnicodeSetIterator.IS_STRING) {
+                joiner.add(codePointToString(usi.codepoint));
+            }
+            String expected = joiner.toString();
+
+            StringJoiner fromIterable = newResult();
+            for (Integer cp : us.codePoints()) {
+                fromIterable.add(codePointToString(cp));
+            }
+            assertEquals("code points :: codePoints", expected, fromIterable.toString());
+
+            StringJoiner fromStream = newResult();
+            us.codePointStream().forEach(cp -> fromStream.add(codePointToString(cp)));
+            assertEquals("code points :: codePointStream", expected, fromStream.toString());
+        }
+    }
+
+    @Test
+    public void testIterationMethodsRanges() {
+        for (UnicodeSet us : UNICODE_SETS_TO_ITERATE) {
+            // Build the reference test result
+            StringJoiner expected = newResult();
+            for (EntryRange r : us.ranges()) {
+                expected.add(rangeToString(r));
+            }
+
+            StringJoiner actual = newResult();
+            us.rangeStream().forEach(r -> actual.add(rangeToString(r)));
+            assertEquals("ranges :: rangeStream", expected.toString(), actual.toString());
+        }
+    }
+
+    @Test
+    public void testIterationMethodsStrings() {
+        for (UnicodeSet us : UNICODE_SETS_TO_ITERATE) {
+            // Build the reference test result
+            StringJoiner expected = newResult();
+            for (String str : us.strings()) {
+                expected.add(stringToString(str));
+            }
+
+            StringJoiner actual = newResult();
+            us.stringStream().map(UnicodeSetTest::stringToString).forEach(actual::add);
+            assertEquals("strings :: stringStream", expected.toString(), actual.toString());
+        }
+    }
+
+    @Test
+    // Iterates on strings AND on code points (converted to strings)
+    public void testIterationMethodsCodepointsAndStrings() {
+        for (UnicodeSet us : UNICODE_SETS_TO_ITERATE) {
+            // Build the reference test result
+            StringJoiner expected = newResult();
+            for (String str : us) {
+                expected.add(stringToString(str));
+            }
+
+            StringJoiner fromStream = newResult();
+            us.stream().map(UnicodeSetTest::stringToString).forEach(fromStream::add);
+
+            assertEquals("code points + strings :: stream", expected.toString(), fromStream.toString());
+        }
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testMisuseIterator() {
+        UnicodeSet us = new UnicodeSet(0x10FFFE, 0x10FFFF);
+        assertEquals("Even length, last range ends at HIGH", 2, us.size());
+        Iterator<Integer> cpIter = us.codePoints().iterator();
+        assertEquals("", (Integer) 0x10FFFE, cpIter.next());
+        assertEquals("", (Integer) 0x10FFFF, cpIter.next());
+        cpIter.next(); // NoSuchElementException
+    }
+
+    /*
+     * Helper methods for testing various iterations.
+     * The main goal is to make the results of any possible failures more readable
+     * by formatting code points to something like U+03A3(Σ) and wrapping strings in double quotes.
+     */
+
+    private static String codePointToString(int cp) {
+        String fromCodePoint = UTF16.valueOf(cp);
+        return String.format("U+%04X(%s)", cp, fromCodePoint);
+    }
+
+    private static String rangeToString(EntryRange range) {
+        return rangeToString(range.codepoint, range.codepointEnd);
+    }
+
+    private static String rangeToString(int cpStart, int cpEnd) {
+        return String.format("%s-%s", codePointToString(cpStart), codePointToString(cpEnd));
+    }
+
+    private static String stringToString(String str) {
+        return String.format("\"%s\"", str);
+    }
+
+    private static StringJoiner newResult() {
+        return new StringJoiner(", ");
+    }
+
+    @Test
+    public void testParallelStreams() {
+        if (!isVerbose()) {
+            return;
+        }
+        UnicodeSet us = UnicodeSet.ALL_CODE_POINTS;
+
+        long start = System.nanoTime();
+        int sumNormal = us.codePointStream().sum();
+        long timeNormal = System.nanoTime() - start;
+        System.out.println("codePointStream.normal   : " + timeNormal);
+
+        start = System.nanoTime();
+        int sumParallel = us.codePointStream().parallel().sum();
+        long timeParallel = System.nanoTime() - start;
+        System.out.println("codePointStream.parallel : " + timeParallel);
+
+        // On my machines this is about 1.4-1.5, so it is a bit faster.
+        // Unlikely to have any practical benefit, this is more to test that the
+        // parallel stream works the same as the normal one, by comparing the sums.
+        System.out.println("Speed (normal/parallel)  : " + (double) timeNormal / timeParallel);
+
+        assertEquals("normal and parallel give different sum", sumNormal, sumParallel);
     }
 }

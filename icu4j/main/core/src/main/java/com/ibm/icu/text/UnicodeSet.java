@@ -17,7 +17,12 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.SortedSet;
+import java.util.Spliterator;
 import java.util.TreeSet;
+import java.util.function.IntConsumer;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import com.ibm.icu.impl.BMPSet;
 import com.ibm.icu.impl.CharacterPropertiesImpl;
@@ -278,14 +283,22 @@ import com.ibm.icu.util.VersionInfo;
  *     </tr>
  *   </table>
  * </blockquote>
- * <p>To iterate over contents of UnicodeSet, the following are available:
- * <ul><li>{@link #ranges()} to iterate through the ranges</li>
- * <li>{@link #strings()} to iterate through the strings</li>
- * <li>{@link #iterator()} to iterate through the entire contents in a single loop.
- * That method is, however, not particularly efficient, since it "boxes" each code point into a String.
+ *
+ * <p>To iterate over contents of {@code UnicodeSet}, the following are available:
+ * <ul>
+ *   <li>to iterate over the ranges: {@link #ranges()}, {@link #rangeStream()}</li>
+ *   <li>to iterate over the strings: {@link #strings()}, {@link #stringStream()}</li>
+ *   <li>to iterate over the code points: {@link #codePoints()}, {@link #codePointStream()}</li>
+ *   <li>to iterate over the entire contents in a single loop: this class itself is {@link Iterable},
+ *       or use {@link #stream()}.<br>
+ *       All of these method are, however, not particularly efficient,
+ *       since they convert each individual code point to a {@code String}.
  * </ul>
- * All of the above can be used in <b>for</b> loops.
- * The {@link com.ibm.icu.text.UnicodeSetIterator UnicodeSetIterator} can also be used, but not in <b>for</b> loops.
+ *
+ * <p>The iterators and streams methods work as expected in idiomatic Java usage.<br>
+ * The {@link UnicodeSetIterator} cannot be used in <b>for</b> loops, and it is not very Java-idiomatic, because it is old.
+ * But it might be faster in certain use cases. We recommend that you measure in performance sensitive code.<br>
+ *
  * <p>To replace, count elements, or delete spans, see {@link com.ibm.icu.text.UnicodeSetSpanner UnicodeSetSpanner}.
  *
  * @author Alan Liu
@@ -5126,6 +5139,222 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         // TODO: Check if the Unicode Tools or Unicode Utilities really need this.
         CharacterPropertiesImpl.clear();
         XSYMBOL_TABLE = xSymbolTable;
+    }
+
+    /**
+     * Returns a {@link Stream} of {@link EntryRange} values from this {@code UnicodeSet}.
+     *
+     * <p><b>Warnings:</b>
+     * <ul>
+     *   <li>The {@link EntryRange} instance is the same each time; the contents are just reset.
+     *   <li>To iterate over the full contents, you have to also iterate over the strings.
+     *   <li>For speed, {@code UnicodeSet} iteration does not check for concurrent modification.<br>
+     *       Do not alter the {@code UnicodeSet} while iterating.
+     * </ul>
+     *
+     * @return a {@link Stream} of {@link EntryRange}
+     *
+     * @draft ICU 76
+     */
+    public Stream<EntryRange> rangeStream() {
+        // Must use false to never make this parallel because the iterator always returns the same EntryRange object.
+        return StreamSupport.stream(ranges().spliterator(), false);
+    }
+
+    /**
+     * Returns a {@link Stream} of {@code String} values from this {@code UnicodeSet}.
+     *
+     * <p><b>Warnings:</b>
+     * <ul>
+     *   <li>To iterate over the full contents, you have to also iterate over the ranges or code points.
+     *   <li>For speed, {@code UnicodeSet} iteration does not check for concurrent modification.<br>
+     *       Do not alter the {@code UnicodeSet} while iterating.
+     * </ul>
+     *
+     * @return a {@link Stream} of {@code String}
+     *
+     * @draft ICU 76
+     */
+    public Stream<String> stringStream() {
+        return strings().stream();
+    }
+
+    /**
+     * Returns an {@link IntStream} of Unicode code point values from this {@code UnicodeSet}.
+     *
+     * <p><b>Warnings:</b>
+     * <ul>
+     *   <li>To iterate over the full contents, you have to also iterate over the strings.
+     *   <li>For speed, {@code UnicodeSet} iteration does not check for concurrent modification.<br>
+     *       Do not alter the {@code UnicodeSet} while iterating.
+     * </ul>
+     *
+     * @return an {@link IntStream} of Unicode code point values
+     *
+     * @draft ICU 76
+     */
+    public IntStream codePointStream() {
+        return StreamSupport.intStream(new CodePointSpliterator(this), false);
+    }
+
+    /**
+     * Returns a stream of {@code String} values from this {@code UnicodeSet}.
+     *
+     * <p><b>Warnings:</b>
+     * <ul>
+     *   <li>To iterate over the full contents, you have to also iterate over the strings.
+     *   <li>For speed, {@code UnicodeSet} iteration does not check for concurrent modification.<br>
+     *       Do not alter the {@code UnicodeSet} while iterating.
+     * </ul>
+     *
+     * @return a {@link Stream} of {@code String}
+     *
+     * @draft ICU 76
+     */
+    public Stream<String> stream() {
+        return StreamSupport.stream(spliterator(), false);
+    }
+
+    /**
+     * Returns an {@link Iterable} for iteration over all the code points in this set.
+     *
+     * <p><b>Warnings:</b>
+     * <ul>
+     *   <li>This is a convenience method, but comes with a performance penalty
+     *       because it boxes {@code int} into {@code Integer}.<br>
+     *       For an efficient but old alternative use {@link UnicodeSetIterator#next()}.
+     *   <li>To iterate over the full contents, you have to also iterate over the strings.
+     *   <li>For speed, {@code UnicodeSet} iteration does not check for concurrent modification.<br>
+     *       Do not alter the {@code UnicodeSet} while iterating.
+     * </ul>
+     *
+     * @return an {@link Iterable} over all the code points
+     *
+     * @draft ICU 76
+     */
+    public Iterable<Integer> codePoints() {
+        return new CodePointIterable(this);
+    }
+
+    private class CodePointIterable implements Iterable<Integer> {
+        private final UnicodeSet unicodeSet;
+
+        CodePointIterable(UnicodeSet unicodeSet) {
+            this.unicodeSet = unicodeSet;
+        }
+
+        @Override
+        public Iterator<Integer> iterator() {
+            return new CodePointIterator(unicodeSet);
+        }
+    }
+
+    private class CodePointIterator implements Iterator<Integer> {
+        private final CodePointIteratorInt cpi;
+
+        CodePointIterator(UnicodeSet unicodeSet) {
+            cpi = new CodePointIteratorInt(unicodeSet);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cpi.hasNext();
+        }
+
+        @Override
+        public Integer next() {
+            return cpi.next();
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private static class CodePointSpliterator implements Spliterator.OfInt {
+        private final static int CHARACTERISTICS = Spliterator.SIZED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.NONNULL;
+
+        private final UnicodeSet unicodeSet;
+        private final CodePointIteratorInt cpi;
+
+        CodePointSpliterator(UnicodeSet unicodeSet) {
+            this.unicodeSet = unicodeSet;
+            cpi = new CodePointIteratorInt(unicodeSet);
+        }
+
+        @Override
+        public long estimateSize() {
+            return unicodeSet.size() - unicodeSet.strings.size();
+        }
+
+        @Override
+        public int characteristics() {
+            return unicodeSet.isFrozen() ? Spliterator.IMMUTABLE | CHARACTERISTICS : CHARACTERISTICS;
+        }
+
+        @Override
+        public Spliterator.OfInt trySplit() {
+            /* From the doc:
+             *   > This method may return null for any reason, including emptiness, inability to split after
+             *   > traversal has commenced, data structure constraints, and efficiency considerations.
+             */
+            return null;
+        }
+
+        @Override
+        public boolean tryAdvance(IntConsumer action) {
+            if (action == null) {
+                throw new NullPointerException();
+            }
+
+            if (cpi.hasNext()) {
+                action.accept(cpi.next());
+                return true;
+            }
+            return false;
+        }
+    }
+
+    /**
+     * This class is optimized to iterate on code points and will be used to implement both
+     * the Iterator<Integer> (Integer, boxed value) and the Spliterator.OfInt (int primitive).
+     * It looks exactly like an Iterator<Integer>, but works on the primitive int,
+     * so it can't implement Iterator.
+     */
+    static private class CodePointIteratorInt {
+        private final int[] list;
+        private final int lastRange; 
+        private int currentRange = 0;
+        private int rangeStart;
+        private int rangeLimit;
+
+        public CodePointIteratorInt(UnicodeSet unicodeSet) {
+            this.list = unicodeSet.list;
+            lastRange = unicodeSet.len - 1;
+            currentRange = 0;
+            rangeStart = list[currentRange++];
+            if (lastRange > 0) { // not an empty list
+                rangeLimit = list[currentRange++];
+            } else {
+                rangeLimit = rangeStart; // should be HIGH, the guard value
+            }
+        }
+
+        public boolean hasNext() {
+            return rangeStart < rangeLimit || currentRange < lastRange;
+        }
+
+        public int next() {
+            if (rangeStart >= rangeLimit) {
+                if (currentRange >= lastRange) {
+                  throw new NoSuchElementException();
+                }
+                rangeStart = list[currentRange++];
+                rangeLimit = list[currentRange++];
+            }
+            return rangeStart++;
+        }
     }
 }
 //eof
