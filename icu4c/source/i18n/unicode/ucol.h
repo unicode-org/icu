@@ -418,7 +418,7 @@ ucol_open(const char *loc, UErrorCode *status);
  * Produce a UCollator instance according to the rules supplied.
  * The rules are used to change the default ordering, defined in the
  * UCA in a process called tailoring. The resulting UCollator pointer
- * can be used in the same way as the one obtained by {@link #ucol_strcoll }.
+ * can be used in the same way as the one obtained by {@link #ucol_open }.
  * @param rules A string describing the collation rules. For the syntax
  *              of the rules please see users guide.
  * @param rulesLength The length of rules, or -1 if null-terminated.
