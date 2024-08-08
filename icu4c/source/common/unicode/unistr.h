@@ -33,6 +33,7 @@
 #if U_SHOW_CPLUSPLUS_API
 
 #include <cstddef>
+#include <string_view>
 #include "unicode/char16ptr.h"
 #include "unicode/rep.h"
 #include "unicode/std_string.h"
@@ -97,16 +98,21 @@ class UnicodeStringAppendable;  // unicode/appendable.h
 #define US_INV icu::UnicodeString::kInvariant
 
 /**
- * Unicode String literals in C++.
+ * \def UNICODE_STRING
+ * Obsolete macro approximating UnicodeString literals.
  *
- * Note: these macros are not recommended for new code.
- * Prior to the availability of C++11 and u"unicode string literals",
- * these macros were provided for portability and efficiency when
+ * Prior to the availability of C++11 and u"UTF-16 string literals",
+ * this macro was provided for portability and efficiency when
  * initializing UnicodeStrings from literals.
  *
- * They work only for strings that contain "invariant characters", i.e.,
- * only latin letters, digits, and some punctuation.
- * See utypes.h for details.
+ * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+ * length determination:
+ * \code
+ * #include &lt;string_view&gt;
+ * using namespace std::string_view_literals;
+ * UnicodeString str(u"literal"sv);
+ * if (str == u"other literal"sv) { ... }
+ * \endcode
  *
  * The string parameter must be a C string literal.
  * The length of the string, not including the terminating
@@ -121,16 +127,12 @@ class UnicodeStringAppendable;  // unicode/appendable.h
 
 /**
  * Unicode String literals in C++.
- * Dependent on the platform properties, different UnicodeString
- * constructors should be used to create a UnicodeString object from
- * a string literal.
- * The macros are defined for improved performance.
- * They work only for strings that contain "invariant characters", i.e.,
- * only latin letters, digits, and some punctuation.
- * See utypes.h for details.
+ * Obsolete macro approximating UnicodeString literals.
+ * See UNICODE_STRING.
  *
  * The string parameter must be a C string literal.
  * @stable ICU 2.0
+ * @see UNICODE_STRING
  */
 #define UNICODE_STRING_SIMPLE(cs) UNICODE_STRING(cs, -1)
 
@@ -326,6 +328,32 @@ public:
    * @stable ICU 2.0
    */
   inline bool operator== (const UnicodeString& text) const;
+
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Equality operator. Performs only bitwise comparison with `text`
+   * which is, or which is implicitly convertible to,
+   * a std::u16string_view or (if U_SIZEOF_WCHAR_T==2) std::wstring_view.
+   *
+   * For performance, you can use std::u16string_view literals with compile-time
+   * length determination:
+   * \code
+   * #include &lt;string_view&gt;
+   * using namespace std::string_view_literals;
+   * UnicodeString str = ...;
+   * if (str == u"literal"sv) { ... }
+   * \endcode
+   * @param text The string view to compare to this string.
+   * @return true if `text` contains the same characters as this one, false otherwise.
+   * @draft ICU 76
+   */
+  template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
+  inline bool operator==(const S &text) const {
+    std::u16string_view sv(internal::toU16StringView(text));
+    uint32_t len;  // unsigned to avoid a compiler warning
+    return !isBogus() && (len = length()) == sv.length() && doEquals(sv.data(), len);
+  }
+#endif  // U_HIDE_DRAFT_API
 
   /**
    * Inequality operator. Performs only bitwise comparison.
@@ -1897,6 +1925,24 @@ public:
    */
   UnicodeString &fastCopyFrom(const UnicodeString &src);
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Assignment operator. Replaces the characters in this UnicodeString
+   * with a copy of the characters from the `src`
+   * which is, or which is implicitly convertible to,
+   * a std::u16string_view or (if U_SIZEOF_WCHAR_T==2) std::wstring_view.
+   *
+   * @param src The string view containing the characters to copy.
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
+  inline UnicodeString &operator=(const S &src) {
+    unBogus();
+    return doReplace(0, length(), internal::toU16StringView(src));
+  }
+#endif  // U_HIDE_DRAFT_API
+
   /**
    * Move assignment operator; might leave src in bogus state.
    * This string will have the same contents and state that the source string had.
@@ -2146,6 +2192,23 @@ public:
    */
   inline UnicodeString& operator+= (const UnicodeString& srcText);
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Append operator. Appends the characters in `src`
+   * which is, or which is implicitly convertible to,
+   * a std::u16string_view or (if U_SIZEOF_WCHAR_T==2) std::wstring_view,
+   * to the UnicodeString object.
+   *
+   * @param src the source for the new characters
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
+  inline UnicodeString& operator+=(const S &src) {
+    return doAppend(internal::toU16StringView(src));
+  }
+#endif  // U_HIDE_DRAFT_API
+
   /**
    * Append the characters
    * in `srcText` in the range
@@ -2191,8 +2254,8 @@ public:
             int32_t srcLength);
 
   /**
-   * Append the characters in `srcChars` to the UnicodeString object
-   * at offset `start`. `srcChars` is not modified.
+   * Append the characters in `srcChars` to the UnicodeString object.
+   * `srcChars` is not modified.
    * @param srcChars the source for the new characters
    * @param srcLength the number of Unicode characters in `srcChars`;
    *                  can be -1 if `srcChars` is NUL-terminated
@@ -2201,6 +2264,23 @@ public:
    */
   inline UnicodeString& append(ConstChar16Ptr srcChars,
             int32_t srcLength);
+
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Appends the characters in `src`
+   * which is, or which is implicitly convertible to,
+   * a std::u16string_view or (if U_SIZEOF_WCHAR_T==2) std::wstring_view,
+   * to the UnicodeString object.
+   *
+   * @param src the source for the new characters
+   * @return a reference to this
+   * @draft ICU 76
+   */
+  template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
+  inline UnicodeString& append(const S &src) {
+    return doAppend(internal::toU16StringView(src));
+  }
+#endif  // U_HIDE_DRAFT_API
 
   /**
    * Append the code unit `srcChar` to the UnicodeString object.
@@ -2925,6 +3005,37 @@ public:
    */
   const char16_t *getTerminatedBuffer();
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Converts to a std::u16string_view.
+   *
+   * @return a string view of the contents of this string
+   * @draft ICU 76
+   */
+  inline operator std::u16string_view() const {
+    return { getBuffer(), (std::u16string_view::size_type)length() };
+  }
+
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+  /**
+   * Converts to a std::wstring_view.
+   *
+   * Note: This should remain draft until C++ standard plans
+   * about char16_t vs. wchar_t become clearer.
+   *
+   * @return a string view of the contents of this string
+   * @draft ICU 76
+   */
+  inline operator std::wstring_view() const {
+    const char16_t *p = getBuffer();
+#ifdef U_ALIASING_BARRIER
+    U_ALIASING_BARRIER(p);
+#endif
+    return { reinterpret_cast<const wchar_t *>(p), (std::wstring_view::size_type)length() };
+  }
+#endif  // U_SIZEOF_WCHAR_T
+#endif  // U_HIDE_DRAFT_API
+
   //========================================
   // Constructors
   //========================================
@@ -2975,6 +3086,17 @@ public:
    * It is recommended to mark this constructor "explicit" by
    * `-DUNISTR_FROM_STRING_EXPLICIT=explicit`
    * on the compiler command line or similar.
+   *
+   * Note, for string literals:
+   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * length determination:
+   * \code
+   * #include &lt;string_view&gt;
+   * using namespace std::string_view_literals;
+   * UnicodeString str(u"literal"sv);
+   * if (str == u"other literal"sv) { ... }
+   * \endcode
+   *
    * @param text The characters to place in the UnicodeString.  `text`
    * must be NUL (U+0000) terminated.
    * @stable ICU 2.0
@@ -2989,6 +3111,17 @@ public:
    * It is recommended to mark this constructor "explicit" by
    * `-DUNISTR_FROM_STRING_EXPLICIT=explicit`
    * on the compiler command line or similar.
+   *
+   * Note, for string literals:
+   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * length determination:
+   * \code
+   * #include &lt;string_view&gt;
+   * using namespace std::string_view_literals;
+   * UnicodeString str(u"literal"sv);
+   * if (str == u"other literal"sv) { ... }
+   * \endcode
+   *
    * @param text NUL-terminated UTF-16 string
    * @stable ICU 59
    */
@@ -3005,6 +3138,17 @@ public:
    * It is recommended to mark this constructor "explicit" by
    * `-DUNISTR_FROM_STRING_EXPLICIT=explicit`
    * on the compiler command line or similar.
+   *
+   * Note, for string literals:
+   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * length determination:
+   * \code
+   * #include &lt;string_view&gt;
+   * using namespace std::string_view_literals;
+   * UnicodeString str(u"literal"sv);
+   * if (str == u"other literal"sv) { ... }
+   * \endcode
+   *
    * @param text NUL-terminated UTF-16 string
    * @stable ICU 59
    */
@@ -3026,6 +3170,17 @@ public:
 
   /**
    * char16_t* constructor.
+   *
+   * Note, for string literals:
+   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * length determination:
+   * \code
+   * #include &lt;string_view&gt;
+   * using namespace std::string_view_literals;
+   * UnicodeString str(u"literal"sv);
+   * if (str == u"other literal"sv) { ... }
+   * \endcode
+   *
    * @param text The characters to place in the UnicodeString.
    * @param textLength The number of Unicode characters in `text`
    * to copy.
@@ -3038,6 +3193,17 @@ public:
   /**
    * uint16_t * constructor.
    * Delegates to UnicodeString(const char16_t *, int32_t).
+   *
+   * Note, for string literals:
+   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * length determination:
+   * \code
+   * #include &lt;string_view&gt;
+   * using namespace std::string_view_literals;
+   * UnicodeString str(u"literal"sv);
+   * if (str == u"other literal"sv) { ... }
+   * \endcode
+   *
    * @param text UTF-16 string
    * @param textLength string length
    * @stable ICU 59
@@ -3051,7 +3217,18 @@ public:
    * wchar_t * constructor.
    * (Only defined if U_SIZEOF_WCHAR_T==2.)
    * Delegates to UnicodeString(const char16_t *, int32_t).
-   * @param text NUL-terminated UTF-16 string
+   *
+   * Note, for string literals:
+   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * length determination:
+   * \code
+   * #include &lt;string_view&gt;
+   * using namespace std::string_view_literals;
+   * UnicodeString str(u"literal"sv);
+   * if (str == u"other literal"sv) { ... }
+   * \endcode
+   *
+   * @param text UTF-16 string
    * @param textLength string length
    * @stable ICU 59
    */
@@ -3068,6 +3245,26 @@ public:
    */
   inline UnicodeString(const std::nullptr_t text, int32_t textLength);
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Constructor from `text`
+   * which is, or which is implicitly convertible to,
+   * a std::u16string_view or (if U_SIZEOF_WCHAR_T==2) std::wstring_view.
+   * The string is bogus if the string view is too long.
+   *
+   * If you need a UnicodeString but need not copy the string view contents,
+   * then you can call the UnicodeString::readOnlyAlias() function instead of this constructor.
+   *
+   * @param text UTF-16 string
+   * @draft ICU 76
+   */
+  template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
+  explicit inline UnicodeString(const S &text) {
+    fUnion.fFields.fLengthAndFlags = kShortString;
+    doAppend(internal::toU16StringView(text));
+  }
+#endif  // U_HIDE_DRAFT_API
+
   /**
    * Readonly-aliasing char16_t* constructor.
    * The text will be used for the UnicodeString object, but
@@ -3081,6 +3278,16 @@ public:
    * or the assignment operator, the text will be copied.
    * When using fastCopyFrom(), the text will be aliased again,
    * so that both strings then alias the same readonly-text.
+   *
+   * Note, for string literals:
+   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * length determination:
+   * \code
+   * #include &lt;string_view&gt;
+   * using namespace std::string_view_literals;
+   * UnicodeString alias = UnicodeString::readOnlyAlias(u"literal"sv);
+   * if (str == u"other literal"sv) { ... }
+   * \endcode
    *
    * @param isTerminated specifies if `text` is `NUL`-terminated.
    *                     This must be true if `textLength==-1`.
@@ -3160,8 +3367,16 @@ public:
    *
    * For ASCII (really "invariant character") strings it is more efficient to use
    * the constructor that takes a US_INV (for its enum EInvariant).
-   * For ASCII (invariant-character) string literals, see UNICODE_STRING and
-   * UNICODE_STRING_SIMPLE.
+   *
+   * Note, for string literals:
+   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * length determination:
+   * \code
+   * #include &lt;string_view&gt;
+   * using namespace std::string_view_literals;
+   * UnicodeString str(u"literal"sv);
+   * if (str == u"other literal"sv) { ... }
+   * \endcode
    *
    * It is recommended to mark this constructor "explicit" by
    * `-DUNISTR_FROM_STRING_EXPLICIT=explicit`
@@ -3169,8 +3384,6 @@ public:
    * @param codepageData an array of bytes, null-terminated,
    *                     in the platform's default codepage.
    * @stable ICU 2.0
-   * @see UNICODE_STRING
-   * @see UNICODE_STRING_SIMPLE
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const char *codepageData);
 
@@ -3270,6 +3483,17 @@ public:
    *       // use ustr ...
    *     }
    * \endcode
+   *
+   * Note, for string literals:
+   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * length determination:
+   * \code
+   * #include &lt;string_view&gt;
+   * using namespace std::string_view_literals;
+   * UnicodeString str(u"literal"sv);
+   * if (str == u"other literal"sv) { ... }
+   * \endcode
+   *
    * @param src String using only invariant characters.
    * @param textLength Length of src, or -1 if NUL-terminated.
    * @param inv Signature-distinguishing parameter, use US_INV.
@@ -3342,6 +3566,35 @@ public:
    * @stable ICU 2.0
    */
   virtual ~UnicodeString();
+
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Readonly-aliasing factory method.
+   * Aliases the same buffer as the input `text`
+   * which is, or which is implicitly convertible to,
+   * a std::u16string_view or (if U_SIZEOF_WCHAR_T==2) std::wstring_view.
+   * The string is bogus if the string view is too long.
+   *
+   * The text will be used for the UnicodeString object, but
+   * it will not be released when the UnicodeString is destroyed.
+   * This has copy-on-write semantics:
+   * When the string is modified, then the buffer is first copied into
+   * newly allocated memory.
+   * The aliased buffer is never modified.
+   *
+   * In an assignment to another UnicodeString, when using the copy constructor
+   * or the assignment operator, the text will be copied.
+   * When using fastCopyFrom(), the text will be aliased again,
+   * so that both strings then alias the same readonly-text.
+   *
+   * @param text The string view to alias for the UnicodeString.
+   * @draft ICU 76
+   */
+  template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
+  static inline UnicodeString readOnlyAlias(const S &text) {
+    return readOnlyAliasFromU16StringView(internal::toU16StringView(text));
+  }
+#endif  // U_HIDE_DRAFT_API
 
   /**
    * Create a UnicodeString from a UTF-8 string.
@@ -3470,6 +3723,8 @@ protected:
   virtual UChar32 getChar32At(int32_t offset) const override;
 
 private:
+  static UnicodeString readOnlyAliasFromU16StringView(std::u16string_view text);
+
   // For char* constructors. Could be made public.
   UnicodeString &setToUTF8(StringPiece utf8);
   // For extract(char*).
@@ -3485,7 +3740,10 @@ private:
    * Internal string contents comparison, called by operator==.
    * Requires: this & text not bogus and have same lengths.
    */
-  UBool doEquals(const UnicodeString &text, int32_t len) const;
+  inline UBool doEquals(const UnicodeString &text, int32_t len) const {
+    return doEquals(text.getArrayStart(), len);
+  }
+  UBool doEquals(const char16_t *text, int32_t len) const;
 
   inline UBool
   doEqualsSubstring(int32_t start,
@@ -3580,9 +3838,11 @@ private:
                const char16_t *srcChars,
                int32_t srcStart,
                int32_t srcLength);
+  UnicodeString& doReplace(int32_t start, int32_t length, std::u16string_view src);
 
   UnicodeString& doAppend(const UnicodeString& src, int32_t srcStart, int32_t srcLength);
   UnicodeString& doAppend(const char16_t *srcChars, int32_t srcStart, int32_t srcLength);
+  UnicodeString& doAppend(std::u16string_view src);
 
   UnicodeString& doReverse(int32_t start,
                int32_t length);
@@ -3802,7 +4062,7 @@ private:
 };
 
 /**
- * Create a new UnicodeString with the concatenation of two others.
+ * Creates a new UnicodeString from the concatenation of two others.
  *
  * @param s1 The first string to be copied to the new one.
  * @param s2 The second string to be copied to the new one, after s1.
@@ -3811,6 +4071,29 @@ private:
  */
 U_COMMON_API UnicodeString U_EXPORT2
 operator+ (const UnicodeString &s1, const UnicodeString &s2);
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Creates a new UnicodeString from the concatenation of a UnicodeString and `s2`
+ * which is, or which is implicitly convertible to,
+ * a std::u16string_view or (if U_SIZEOF_WCHAR_T==2) std::wstring_view.
+ *
+ * @param s1 The string to be copied to the new one.
+ * @param s2 The string view to be copied to the new string, after s1.
+ * @return UnicodeString(s1).append(s2)
+ * @draft ICU 76
+ */
+template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
+inline UnicodeString operator+(const UnicodeString &s1, const S &s2) {
+  return unistr_internalConcat(s1, internal::toU16StringView(s2));
+}
+#endif  // U_HIDE_DRAFT_API
+
+#ifndef U_FORCE_HIDE_INTERNAL_API
+/** @internal */
+U_COMMON_API UnicodeString U_EXPORT2
+unistr_internalConcat(const UnicodeString &s1, std::u16string_view s2);
+#endif
 
 //========================================
 // Inline members

@@ -18,6 +18,8 @@
 *   Character property dependent functions moved here from uniset.cpp
 */
 
+#include <string_view>
+
 #include "unicode/utypes.h"
 #include "unicode/uniset.h"
 #include "unicode/parsepos.h"
@@ -45,16 +47,23 @@
 #include "uassert.h"
 #include "hash.h"
 
+// Makes u"literal"sv std::u16string_view literals possible.
+// https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv
+using namespace std::string_view_literals;
+
 U_NAMESPACE_USE
 
+namespace {
+
 // Special property set IDs
-static const char ANY[]   = "ANY";   // [\u0000-\U0010FFFF]
-static const char ASCII[] = "ASCII"; // [\u0000-\u007F]
-static const char ASSIGNED[] = "Assigned"; // [:^Cn:]
+constexpr char ANY[]   = "ANY";   // [\u0000-\U0010FFFF]
+constexpr char ASCII[] = "ASCII"; // [\u0000-\u007F]
+constexpr char ASSIGNED[] = "Assigned"; // [:^Cn:]
 
 // Unicode name property alias
-#define NAME_PROP "na"
-#define NAME_PROP_LENGTH 2
+constexpr std::u16string_view NAME_PROP(u"na"sv);
+
+}  // namespace
 
 // Cached sets ------------------------------------------------------------- ***
 
@@ -83,7 +92,7 @@ namespace {
 // Cache some sets for other services -------------------------------------- ***
 void U_CALLCONV createUni32Set(UErrorCode &errorCode) {
     U_ASSERT(uni32Singleton == nullptr);
-    uni32Singleton = new UnicodeSet(UNICODE_STRING_SIMPLE("[:age=3.2:]"), errorCode);
+    uni32Singleton = new UnicodeSet(UnicodeString(u"[:age=3.2:]"sv), errorCode);
     if(uni32Singleton==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     } else {
@@ -1105,7 +1114,7 @@ UnicodeSet& UnicodeSet::applyPropertyPattern(const UnicodeString& pattern,
             // support args of (UProperty, char*) then we can remove
             // NAME_PROP and make this a little more efficient.
             valueName = propName;
-            propName = UnicodeString(NAME_PROP, NAME_PROP_LENGTH, US_INV);
+            propName = NAME_PROP;
         }
     }
 

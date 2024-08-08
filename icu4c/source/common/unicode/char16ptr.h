@@ -12,6 +12,7 @@
 #if U_SHOW_CPLUSPLUS_API
 
 #include <cstddef>
+#include <string_view>
 
 /**
  * \file
@@ -305,6 +306,36 @@ inline OldUChar *toOldUCharPtr(char16_t *p) {
 #endif
     return reinterpret_cast<OldUChar *>(p);
 }
+
+#ifndef U_FORCE_HIDE_INTERNAL_API
+/**
+ * Is T convertible to a std::u16string_view or to a 16-bit std::wstring_view?
+ * @internal
+ */
+template<typename T>
+constexpr bool ConvertibleToU16StringView =
+    std::is_convertible_v<T, std::u16string_view> ||
+    (U_SIZEOF_WCHAR_T==2 && std::is_convertible_v<T, std::wstring_view>);
+
+namespace internal {
+/**
+ * Pass-through overload.
+ * @internal
+ */
+inline std::u16string_view toU16StringView(std::u16string_view sv) { return sv; }
+
+#if U_SIZEOF_WCHAR_T==2
+/**
+ * Basically undefined behavior but sometimes necessary conversion
+ * from std::wstring_view to std::u16string_view.
+ * @internal
+ */
+inline std::u16string_view toU16StringView(std::wstring_view sv) {
+    return { ConstChar16Ptr(sv.data()), sv.length() };
+}
+#endif
+}  // internal
+#endif  // U_FORCE_HIDE_INTERNAL_API
 
 U_NAMESPACE_END
 
