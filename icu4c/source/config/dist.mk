@@ -8,7 +8,7 @@
 # This is to be called from ../Makefile.in
 #
 # This will only work if subversion is installed.
-# You must checkout ICU4C at the `/icu`  or `/icu/icu4c` level - not just `…/source`
+# You must checkout ICU4C at the `/icu`  or `/icu/icu4c` level - not just `.../source`
 # also note that `make dist` does NOT reflect any local modifications, but pulls from HEAD.
 
 top_builddir = .

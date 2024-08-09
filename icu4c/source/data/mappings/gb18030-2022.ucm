@@ -68,8 +68,8 @@ CHARMAP
 # U+3000 = IDEOGRAPHIC SPACE (normally \xA1\xA1)
 #
 # PUA U+E5E5 used to round-trip to \xA3\xA0, as specified in GB18030.
-# Now that \xA3\xA0 maps to U+3000 (“reverse fallback” mapping),
-# we use a “good one-way” mapping from U+E5E5 to \xA3\xA0
+# Now that \xA3\xA0 maps to U+3000 ("reverse fallback" mapping),
+# we use a "good one-way" mapping from U+E5E5 to \xA3\xA0
 # for maximum compatibility with previous behavior.
 <U20AC> \x80 |3
 <U3000> \xA3\xA0 |3

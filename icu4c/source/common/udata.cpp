@@ -777,17 +777,6 @@ openCommonData(const char *path,          /*  Path from OpenChoice?          */
         return nullptr;
     }
 
-#if defined(OS390_STUBDATA) && defined(OS390BATCH)
-    if (!UDataMemory_isLoaded(&tData)) {
-        char ourPathBuffer[1024];
-        /* One more chance, for extendCommonData() */
-        uprv_strncpy(ourPathBuffer, path, 1019);
-        ourPathBuffer[1019]=0;
-        uprv_strcat(ourPathBuffer, ".dat");
-        uprv_mapFile(&tData, ourPathBuffer, pErrorCode);
-    }
-#endif
-
     if (U_FAILURE(*pErrorCode)) {
         return nullptr;
     }

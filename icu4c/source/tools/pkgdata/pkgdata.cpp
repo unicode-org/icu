@@ -1483,63 +1483,12 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
         result = runCommand(cmd);
 
 #if U_PLATFORM == U_PF_OS390
-        char *env_tmp;
-        char PDS_LibName[512];
-        char PDS_Name[512];
+        sprintf(cmd, "%s %s -o %s%s %s %s%s %s %s", pkgDataFlags[GENLIB], pkgDataFlags[LDICUDTFLAGS],
+                targetDir, BATCH_STUB_TARGET, objectFile, pkgDataFlags[LD_SONAME],
+                pkgDataFlags[LD_SONAME][0] == 0 ? "" : libFileNames[LIB_FILE_VERSION_MAJOR],
+                pkgDataFlags[RPATH_FLAGS], pkgDataFlags[BIR_FLAGS]);
 
-        PDS_Name[0] = 0;
-        PDS_LibName[0] = 0;
-        if (specialHandling && uprv_strcmp(libFileNames[LIB_FILE],"libicudata") == 0) {
-            if (env_tmp = getenv("ICU_PDS_NAME")) {
-                sprintf(PDS_Name, "%s%s",
-                        env_tmp,
-                        "DA");
-                strcat(PDS_Name, getenv("ICU_PDS_NAME_SUFFIX"));
-            } else if (env_tmp = getenv("PDS_NAME_PREFIX")) {
-                sprintf(PDS_Name, "%s%s",
-                        env_tmp,
-                        U_ICU_VERSION_SHORT "DA");
-            } else {
-                sprintf(PDS_Name, "%s%s",
-                        "IXMI",
-                        U_ICU_VERSION_SHORT "DA");
-            }
-        } else if (!specialHandling && uprv_strcmp(libFileNames[LIB_FILE],"libicudata_stub") == 0) {
-            if (env_tmp = getenv("ICU_PDS_NAME")) {
-                sprintf(PDS_Name, "%s%s",
-                        env_tmp,
-                        "D1");
-                strcat(PDS_Name, getenv("ICU_PDS_NAME_SUFFIX"));
-            } else if (env_tmp = getenv("PDS_NAME_PREFIX")) {
-                sprintf(PDS_Name, "%s%s",
-                        env_tmp,
-                        U_ICU_VERSION_SHORT "D1");
-            } else {
-                sprintf(PDS_Name, "%s%s",
-                        "IXMI",
-                        U_ICU_VERSION_SHORT "D1");
-            }
-        }
-
-        if (PDS_Name[0]) {
-            sprintf(PDS_LibName,"%s%s%s%s%s",
-                    "\"//'",
-                    getenv("LOADMOD"),
-                    "(",
-                    PDS_Name,
-                    ")'\"");
-            sprintf(cmd, "%s %s -o %s %s %s%s %s %s",
-                   pkgDataFlags[GENLIB],
-                   pkgDataFlags[LDICUDTFLAGS],
-                   PDS_LibName,
-                   objectFile,
-                   pkgDataFlags[LD_SONAME],
-                   pkgDataFlags[LD_SONAME][0] == 0 ? "" : libFileNames[LIB_FILE_VERSION_MAJOR],
-                   pkgDataFlags[RPATH_FLAGS],
-                   pkgDataFlags[BIR_FLAGS]);
-
-            result = runCommand(cmd);
-        }
+        result = runCommand(cmd);
 #endif
     }
 

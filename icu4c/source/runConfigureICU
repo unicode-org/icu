@@ -61,8 +61,7 @@ The following names can be supplied as the argument for platform:
     Solaris/GCC         Use the GNU gcc/g++ compilers on Solaris
     SolarisX86          Use the Sun cc/CC compilers on Solaris x86
     TRU64V5.1/CXX       Use the Compaq cxx compiler on Tru64 (OSF)
-    zOS                 Use the IBM cxx compiler on z/OS (os/390)
-    zOSV1R2             Use the IBM cxx compiler for z/OS 1.2
+    zOS                 Use the IBM Open XL C/C++ 2.1 for z/OS compiler on z/OS (OS/390)
 EOE
     fi
 
@@ -374,24 +373,21 @@ case $platform in
         ;;
     zOS)
         THE_OS="z/OS (OS/390)"
-        THE_COMP="z/OS C/C++"
-        CC=xlc; export CC
-        CXX=xlC; export CXX
-        RELEASE_CFLAGS="-O2 -Wc,'inline(AUTO,NOREPORT,1000,8000)'"
-        RELEASE_CXXFLAGS="-O2 -Wc,'inline(AUTO,NOREPORT,1000,8000)'"
-        ;;
-    zOSV1R2)
-        THE_OS="z/OS 1.2"
-        THE_COMP="z/OS 1.2 C/C++"
-        CC=cc; export CC
-        CXX=cxx; export CXX
-        export COMPILE_LINK_ENVVAR='_CXX_CICC_VER}=0x41020000 _C89_CVERSION=0x41020000 _CC_CVERSION=0x41020000 _CXX_PVERSION=0x41020000 _C89_PVERSION=0x41020000 _CC_PVERSION=0x41020000'
-        export _CXX_CVERSION=0x41020000 _C89_CVERSION=0x41020000 _CC_CVERSION=0x41020000 _CXX_PVERSION=0x41020000 _C89_PVERSION=0x41020000 _CC_PVERSION=0x41020000
-        export LDFLAGS="-Wl,'compat=pm3'"
-        export CFLAGS="-Wc,'target(zOSV1R2)'"
-        export CXXFLAGS="-Wc,'target(zOSV1R2)'"
-        RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
-        RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
+        THE_COMP="IBM OpenXL C/C++"
+        CC=`which ibm-clang`; export CC
+        if [ ! -x $CC ]; then
+           echo "ERROR: ibm-clang was not found, please check the PATH to make sure it is correct."; exit 1
+        fi
+        CXX=`which ibm-clang++`; export CXX
+        if [ ! -x $CXX ]; then
+           echo "ERROR: ibm-clang++ was not found, please check the PATH to make sure it is correct."; exit 1
+        fi
+        RELEASE_CFLAGS='-O2 -m32 -D_UNIX03_SOURCE -D_UNIX03_THREADS -D_POSIX_SOURCE -D_POSIX_THREADS -D_OPEN_SYS_SOCK_IPV6=1 -D_XOPEN_SOURCE_EXTENDED=1 -DOE_SOCKETS -D_OPEN_SYS_IF_EXT=1'
+        RELEASE_CXXFLAGS='-O2 -m32 -D_UNIX03_SOURCE -D_UNIX03_THREADS -D_POSIX_SOURCE -D_POSIX_THREADS -D_OPEN_SYS_SOCK_IPV6=1 -D_XOPEN_SOURCE_EXTENDED=1 -DOE_SOCKETS -D_OPEN_SYS_IF_EXT=1'
+        RELEASE_LDFLAGS='-m32'
+        DEBUG_CFLAGS='-g -O0 -m32 -D_UNIX03_SOURCE -D_UNIX03_THREADS -D_POSIX_SOURCE -D_POSIX_THREADS -D_OPEN_SYS_SOCK_IPV6=1 -D_XOPEN_SOURCE_EXTENDED=1 -DOE_SOCKETS -D_OPEN_SYS_IF_EXT=1'
+        DEBUG_CXXFLAGS='-g -O0 -m32 -D_UNIX03_SOURCE -D_UNIX03_THREADS -D_POSIX_SOURCE -D_POSIX_THREADS -D_OPEN_SYS_SOCK_IPV6=1 -D_XOPEN_SOURCE_EXTENDED=1 -DOE_SOCKETS -D_OPEN_SYS_IF_EXT=1'
+        DEBUG_LDFLAGS='-m32'
         ;;
     *)
         >&2 echo "$me: unrecognized platform \"$platform\" (use --help for help)"
