@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723219441145,
+  "lastUpdate": 1723246477360,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23787,6 +23787,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 220.516560105744,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "0bd2b4d10c81527fdbdddc04c6b0c61325f72cc2",
+          "message": "ICU-22849 Fix memLeak in RBBIRuleBuilder by using LocalMemory",
+          "timestamp": "2024-08-09T16:19:06-07:00",
+          "tree_id": "d9b9b126ec1780010f5227a794cada015cbdf9ba",
+          "url": "https://github.com/unicode-org/icu/commit/0bd2b4d10c81527fdbdddc04c6b0c61325f72cc2"
+        },
+        "date": 1723246333713,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 230.37248647396993,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
