@@ -272,7 +272,7 @@ int32_t toLower(int32_t caseLocale, uint32_t options,
         } else {
             c = lead;
         }
-        const char16_t *s;
+        const char16_t *s = nullptr;
         if (caseLocale >= 0) {
             csc->cpStart = cpStart;
             csc->cpLimit = srcIndex;
@@ -369,7 +369,7 @@ int32_t toUpper(int32_t caseLocale, uint32_t options,
             c = lead;
         }
         csc->cpLimit = srcIndex;
-        const char16_t *s;
+        const char16_t *s = nullptr;
         c = ucase_toFullUpper(c, utf16_caseContextIterator, csc, &s, caseLocale);
         if (c >= 0) {
             destIndex = appendUnchanged(dest, destIndex, destCapacity,
@@ -579,8 +579,8 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
                     }
 
                     if (c == u'I' || c == u'Í') {
-                        titleLimit = maybeTitleDutchIJ(src, c, titleStart + 1, index, 
-                                                       dest, destIndex, destCapacity, options, 
+                        titleLimit = maybeTitleDutchIJ(src, c, titleStart + 1, index,
+                                                       dest, destIndex, destCapacity, options,
                                                        edits);
                     }
                 }
