@@ -814,7 +814,12 @@ UnicodeString MessageFormatter::formatToString(const MessageArguments& arguments
         }
     }
     // Update status according to all errors seen while formatting
-    context.checkErrors(status);
+    if (signalErrors) {
+        context.checkErrors(status);
+    }
+    if (U_FAILURE(status)) {
+        result.remove();
+    }
     return result;
 }
 
@@ -869,7 +874,7 @@ void MessageFormatter::checkDeclarations(MessageContext& context, Environment*& 
     CHECK_ERROR(status);
 
     const Binding* decls = getDataModel().getLocalVariablesInternal();
-    U_ASSERT(env != nullptr && decls != nullptr);
+    U_ASSERT(env != nullptr && (decls != nullptr || getDataModel().bindingsLen == 0));
 
     for (int32_t i = 0; i < getDataModel().bindingsLen; i++) {
         const Binding& decl = decls[i];

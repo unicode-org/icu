@@ -30,6 +30,7 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(testAPI);
     TESTCASE_AUTO(testAPISimple);
     TESTCASE_AUTO(testDataModelAPI);
+    TESTCASE_AUTO(testFormatterAPI);
     TESTCASE_AUTO(dataDrivenTests);
     TESTCASE_AUTO_END;
 }
@@ -62,6 +63,75 @@ void TestMessageFormat2::testDataModelAPI() {
         i++;
     }
     assertEquals("testDataModelAPI", i, 3);
+}
+
+// Needs more tests
+void TestMessageFormat2::testFormatterAPI() {
+    IcuTestErrorCode errorCode(*this, "testFormatterAPI");
+    UnicodeString result;
+    UParseError parseError;
+
+    // Check that constructing the formatter fails
+    // if there's a syntax error
+    UnicodeString pattern = "{{}";
+    MessageFormatter::Builder mfBuilder(errorCode);
+    mfBuilder.setSuppressErrors(); // This shouldn't matter, since there's a syntax error
+    mfBuilder.setPattern(pattern, parseError, errorCode);
+    MessageFormatter mf = mfBuilder.build(errorCode);
+    U_ASSERT(errorCode == U_MF_SYNTAX_ERROR);
+
+/*
+  Parsing is done when setPattern() is called,
+  so setStrictErrors() or setSuppressErrors must be called
+  _before_ setPattern() to get the right behavior,
+  and if either method is called after setting a pattern,
+  setPattern() has to be called again.
+*/
+    // Should get the same behavior with strict errors
+    errorCode.reset();
+    mfBuilder.setStrictErrors();
+    // Force re-parsing, as above comment
+    mfBuilder.setPattern(pattern, parseError, errorCode);
+    mf = mfBuilder.build(errorCode);
+    U_ASSERT(errorCode == U_MF_SYNTAX_ERROR);
+
+    // Try the same thing for a pattern with a resolution error
+    pattern = "{{{$x}}}";
+    errorCode.reset();
+    // Check that a pattern with a resolution error gives fallback output
+    mfBuilder.setSuppressErrors();
+    mfBuilder.setPattern(pattern, parseError, errorCode);
+    mf = mfBuilder.build(errorCode);
+    U_ASSERT(U_SUCCESS(errorCode));
+    result = mf.formatToString(MessageArguments(), errorCode);
+    U_ASSERT(U_SUCCESS(errorCode));
+    U_ASSERT(result == "{$x}");
+
+    // Check that we do get an error with strict errors
+    mfBuilder.setStrictErrors();
+    mf = mfBuilder.build(errorCode);
+    U_ASSERT(U_SUCCESS(errorCode));
+    result = mf.formatToString(MessageArguments(), errorCode);
+    U_ASSERT(errorCode == U_MF_UNRESOLVED_VARIABLE_ERROR);
+
+    // Finally, check a valid pattern
+    errorCode.reset();
+    pattern = "hello";
+    mfBuilder.setPattern(pattern, parseError, errorCode);
+    mfBuilder.setSuppressErrors();
+    mf = mfBuilder.build(errorCode);
+    U_ASSERT(U_SUCCESS(errorCode));
+    result = mf.formatToString(MessageArguments(), errorCode);
+    U_ASSERT(U_SUCCESS(errorCode));
+    U_ASSERT(result == "hello");
+
+    // Check that behavior is the same with strict errors
+    mfBuilder.setStrictErrors();
+    mf = mfBuilder.build(errorCode);
+    U_ASSERT(U_SUCCESS(errorCode));
+    result = mf.formatToString(MessageArguments(), errorCode);
+    U_ASSERT(U_SUCCESS(errorCode));
+    U_ASSERT(result == "hello");
 }
 
 // Example for design doc -- version without null and error checks
@@ -216,9 +286,11 @@ void TestMessageFormat2::testAPICustomFunctions() {
     MessageFormatter::Builder mfBuilder(errorCode);
     UnicodeString result;
     // This fails, because we did not provide a function registry:
-    MessageFormatter mf = mfBuilder.setPattern("Hello {$name :person formality=informal}", parseError, errorCode)
-                                    .setLocale(locale)
-                                    .build(errorCode);
+    MessageFormatter mf = mfBuilder.setStrictErrors()
+                                   .setPattern("Hello {$name :person formality=informal}",
+                                               parseError, errorCode)
+                                   .setLocale(locale)
+                                   .build(errorCode);
     result = mf.formatToString(arguments, errorCode);
     assertEquals("testAPICustomFunctions", U_MF_UNKNOWN_FUNCTION_ERROR, errorCode);
 
