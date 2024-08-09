@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723135676536,
+  "lastUpdate": 1723182479645,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -53277,6 +53277,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 22.1607,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "stefan.stojanovic@janeasystems.com",
+            "name": "StefanStojanovic",
+            "username": "StefanStojanovic"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "66ba09973a4231711b6de0de042f4e532b1873e5",
+          "message": "ICU-22787 Fix ClangCL compilation on Windows",
+          "timestamp": "2024-08-09T10:54:21+05:30",
+          "tree_id": "eaa81518f2faa325769cc8e03e74d3f3ddffccfd",
+          "url": "https://github.com/unicode-org/icu/commit/66ba09973a4231711b6de0de042f4e532b1873e5"
+        },
+        "date": 1723182337046,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 17.1966,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 17.1848,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 18.4571,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 17.6508,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 17.6316,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 22.3607,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
