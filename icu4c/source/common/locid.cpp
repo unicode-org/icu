@@ -2633,57 +2633,64 @@ Locale::getUnicodeKeywordValue(StringPiece keywordName,
 }
 
 void
-Locale::setKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode &status)
-{
-    if (U_FAILURE(status)) {
+Locale::setKeywordValue(StringPiece keywordName,
+                        StringPiece keywordValue,
+                        UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+    if (keywordName.empty()) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
     if (status == U_STRING_NOT_TERMINATED_WARNING) {
         status = U_ZERO_ERROR;
     }
-    int32_t bufferLength =
-        uprv_max(static_cast<int32_t>(uprv_strlen(fullName) + 1), ULOC_FULLNAME_CAPACITY);
-    int32_t newLength = uloc_setKeywordValue(keywordName, keywordValue, fullName,
-                                             bufferLength, &status) + 1;
-    U_ASSERT(status != U_STRING_NOT_TERMINATED_WARNING);
-    /* Handle the case the current buffer is not enough to hold the new id */
-    if (status == U_BUFFER_OVERFLOW_ERROR) {
-        U_ASSERT(newLength > bufferLength);
-        char* newFullName = static_cast<char*>(uprv_malloc(newLength));
-        if (newFullName == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        uprv_strcpy(newFullName, fullName);
-        if (fullName != fullNameBuffer) {
-            if (baseName == fullName) {
-                baseName = newFullName; // baseName should not point to freed memory.
+
+    int32_t length = static_cast<int32_t>(uprv_strlen(fullName));
+    int32_t capacity = fullName == fullNameBuffer ? ULOC_FULLNAME_CAPACITY : length + 1;
+
+    const char* start = locale_getKeywordsStart(fullName);
+    int32_t offset = start == nullptr ? length : start - fullName;
+
+    for (;;) {
+        // Remove -1 from the capacity so that this function can guarantee NUL termination.
+        CheckedArrayByteSink sink(fullName + offset, capacity - offset - 1);
+
+        int32_t reslen = ulocimp_setKeywordValue(
+            {fullName + offset, static_cast<std::string_view::size_type>(length - offset)},
+            keywordName,
+            keywordValue,
+            sink,
+            status);
+
+        if (status == U_BUFFER_OVERFLOW_ERROR) {
+            capacity = reslen + offset + 1;
+            char* newFullName = static_cast<char*>(uprv_malloc(capacity));
+            if (newFullName == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
             }
-            // if full Name is already on the heap, need to free it.
-            uprv_free(fullName);
+            uprv_memcpy(newFullName, fullName, length + 1);
+            if (fullName != fullNameBuffer) {
+                if (baseName == fullName) {
+                    baseName = newFullName; // baseName should not point to freed memory.
+                }
+                // if fullName is already on the heap, need to free it.
+                uprv_free(fullName);
+            }
+            fullName = newFullName;
+            status = U_ZERO_ERROR;
+            continue;
         }
-        fullName = newFullName;
-        status = U_ZERO_ERROR;
-        uloc_setKeywordValue(keywordName, keywordValue, fullName, newLength, &status);
-        U_ASSERT(status != U_STRING_NOT_TERMINATED_WARNING);
-    } else {
-        U_ASSERT(newLength <= bufferLength);
+
+        if (U_FAILURE(status)) { return; }
+        u_terminateChars(fullName, capacity, reslen + offset, &status);
+        break;
     }
-    if (U_SUCCESS(status) && baseName == fullName) {
+
+    if (baseName == fullName) {
         // May have added the first keyword, meaning that the fullName is no longer also the baseName.
         initBaseName(status);
     }
-}
-
-void
-Locale::setKeywordValue(StringPiece keywordName,
-                        StringPiece keywordValue,
-                        UErrorCode& status) {
-    if (U_FAILURE(status)) { return; }
-    // TODO: Remove the need for a const char* to a NUL terminated buffer.
-    const CharString keywordName_nul(keywordName, status);
-    const CharString keywordValue_nul(keywordValue, status);
-    setKeywordValue(keywordName_nul.data(), keywordValue_nul.data(), status);
 }
 
 void
