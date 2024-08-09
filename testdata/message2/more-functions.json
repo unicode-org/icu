@@ -1,5 +1,10 @@
 {
-  "number": [
+  "scenario": "Function tests 2",
+  "description": "More tests for ICU-specific formatting behavior.",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
     {
       "src": "Format {123456789.9876 :number} number",
       "locale": "en-IN",
@@ -19,54 +24,54 @@
       "comment": "From ICU4J tests, with explicit formatter added"
     },
     {
-      "srcs": [".local $dateStr = {$date :datetime}\n",
+      "src": [".local $dateStr = {$date :datetime}\n",
                "{{Testing date formatting: {$dateStr :datetime}.}}"],
       "exp": "Testing date formatting: 23.11.2022, 19:42.",
       "locale": "ro",
-      "params": {"date": {"date": 1669261357000}}
+      "params": [{ "name": "date", "value": { "date": 1669261357000 }}]
     },
     {
       "src": "Testing date formatting: {$date :date style=long}.",
       "exp": "Testing date formatting: November 23, 2022.",
-      "params": {"date": {"date": 1669261357000}}
+      "params": [{ "name": "date", "value": { "date": 1669261357000 } }]
     },
     {
       "src": "Testing date formatting: {$date :date style=medium}.",
       "exp": "Testing date formatting: Nov 23, 2022.",
-      "params": {"date": {"date": 1669261357000}}
+      "params": [{ "name": "date", "value": { "date": 1669261357000 } }]
     },
     {
       "src": "Testing date formatting: {$date :date style=short}.",
       "exp": "Testing date formatting: 11/23/22.",
-      "params": {"date": {"date": 1669261357000}}
+      "params": [{ "name": "date", "value": { "date": 1669261357000 } }]
     },
     {
       "src": "Testing date formatting: {$date :time style=long}.",
       "exp": "Testing date formatting: 7:42:37\u202FPM PST.",
-      "params": {"date": {"date": 1669261357000}}
+      "params": [{ "name": "date", "value": { "date": 1669261357000 } }]
     },
     {
       "src": "Testing date formatting: {$date :time style=medium}.",
       "exp": "Testing date formatting: 7:42:37\u202FPM.",
-      "params": {"date": {"date": 1669261357000}}
+      "params": [{ "name": "date", "value": { "date": 1669261357000 } }]
     },
     {
       "src": "Testing date formatting: {$date :time style=short}.",
       "exp": "Testing date formatting: 7:42\u202FPM.",
-      "params": {"date": {"date": 1669261357000}}
+      "params": [{ "name": "date", "value": { "date": 1669261357000 } }]
     },
     {
-      "srcs": [".local $num = {|42| :number}\n",
+      "src": [".local $num = {|42| :number}\n",
                "{{Testing date formatting: {$num :datetime}}}"],
       "exp": "Testing date formatting: {|42|}",
-      "errors": [{"type": "bad-input"}]
+      "expErrors": [{"type": "bad-operand"}]
     },
     {
       "src": "From literal: {|123456789,531| :number}!",
       "exp": "From literal: {|123456789,531|}!",
       "locale": "en-IN",
-      "params": {"val": 1234567890.97531},
-      "errors": [{"type": "bad-input"}],
+      "params": [{ "name": "val", "value": 1234567890.97531 }],
+      "expErrors": [{"type": "bad-operand"}],
       "comment": "Should fail because number literals are not treated as localized numbers",
       "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
     },
@@ -74,32 +79,32 @@
       "src": "From literal: {|123456789.531| :number}!",
       "exp": "From literal: \u1041\u1042\u1043,\u1044\u1045\u1046,\u1047\u1048\u1049.\u1045\u1043\u1041!",
       "locale": "my",
-      "params": {"val": 1234567890.97531}
+      "params": [{ "name": "val", "value": 1234567890.97531 }]
     },
     {
       "src": "Default double: {$val}!",
       "exp": "Default double: 1,23,45,67,890.97531!",
       "locale": "en-IN",
-      "params": {"val": 1234567890.97531},
+      "params": [{ "name": "val", "value": 1234567890.97531 }],
       "comment": "The next few tests check that numeric variables are formatted without specifying :number"
     },
     {
       "src": "Default double: {$val}!",
       "exp": "Default double: 1.234.567.890,97531!",
       "locale": "ro",
-      "params": {"val": 1234567890.97531}
+      "params": [{ "name": "val", "value": 1234567890.97531 }]
     },
     {
       "src": "Default float: {$val}!",
       "exp": "Default float: 3,141593!",
       "locale": "ro",
-      "params": {"val": 3.1415926535}
+      "params": [{"name": "val", "value": 3.1415926535}]
     },
     {
       "src": "Default int64: {$val}!",
       "exp": "Default int64: 1.234.567.890.123.456.800!",
       "locale": "ro",
-      "params": {"val": 1234567890123456789},
+      "params": [{ "name": "val", "value": 1234567890123456789 }],
       "comment": "Rounded due to JSON not supporting full 64-bit ints",
       "ignoreJava": "See https://unicode-org.atlassian.net/browse/ICU-22754?focusedCommentId=175932"
     },
@@ -107,7 +112,7 @@
       "src": "Default int64: {$val}!",
       "exp": "Default int64: 1.234.567.890.123.456.770!",
       "locale": "ro",
-      "params": {"val": 1234567890123456789},
+      "params": [{ "name": "val", "value": 1234567890123456789 }],
       "comment": "Rounded due to JSON not supporting full 64-bit ints",
       "ignoreCpp": "See https://unicode-org.atlassian.net/browse/ICU-22754?focusedCommentId=175932"
     },
@@ -115,7 +120,7 @@
       "src": "Default number: {$val}!",
       "exp": "Default number: 1.234.567.890.123.456.789,987654!",
       "locale": "ro",
-      "params": {"val": {"decimal": "1234567890123456789.987654321"}}
+      "params": [{ "name": "val", "value": {"decimal": "1234567890123456789.987654321"} }]
     }
   ]
 }

@@ -1,0 +1,31 @@
+{
+  "scenario": "Integer function",
+  "description": "The built-in formatter for integers.",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": "hello {4.2 :integer}",
+      "exp": "hello 4"
+    },
+    {
+      "src": "hello {-4.20 :integer}",
+      "exp": "hello -4"
+    },
+    {
+      "src": "hello {0.42e+1 :integer}",
+      "exp": "hello 4"
+    },
+    {
+      "src": ".match {$foo :integer} one {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1.2
+        }
+      ],
+      "exp": "one"
+    }
+  ]
+}

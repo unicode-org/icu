@@ -1,4 +1,10 @@
-[
+{
+  "scenario": "Matches with whitespace",
+  "description": "Tests for valid match constructs with whitespace in various places",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
     { "src": ".match {one :string} {bar :string} one * {{one}} * * {{other}}",
       "exp": "one" },
     { "src": ".match {foo :string} {bar :string}one * {{one}} * * {{other}}",
@@ -23,4 +29,6 @@
     },
     { "src": ".match {foo :string} {bar :string} one *  {{one}} * * {{foo}}",
       "exp": "foo" }
-]
+  ]
+}
+

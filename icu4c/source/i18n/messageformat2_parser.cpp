@@ -2243,6 +2243,7 @@ void Parser::parse(UParseError &parseErrorResult, UErrorCode& status) {
             // A complex message begins with a '.' or '{'
             parseDeclarations(status);
             parseBody(status);
+            parseOptionalWhitespace(status);
             simple = false;
         }
     }

@@ -1,14 +1,15 @@
-[
-    { "src": "{#tag}", "exp": "" },
+{
+  "scenario": "Markup",
+  "description": "Tests for valid markup strings",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
     { "src": "{#tag/}", "exp": "" },
     { "src": "{/tag}", "exp": "" },
-    { "src": "{#tag}content", "exp": "content" },
     { "src": "{#tag}content{/tag}", "exp": "content" },
-    { "src": "{/tag}content", "exp": "content" },
-    { "src": "{#tag foo=bar}", "exp": "" },
-    { "src": "{/tag foo=bar}", "exp": "" },
-    { "src": "{#tag foo=bar/}", "exp": "" },
     { "src": "{#tag foo=|foo| bar=$bar}",
-      "params": { "bar": "b a r" },
+      "params": [{ "name": "bar", "value": "b a r" }],
       "exp": "" }
-]
+  ]
+}

@@ -1,0 +1,407 @@
+{
+  "scenario": "Number function",
+  "description": "The built-in formatter for numbers.",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": "hello {4.2 :number}",
+      "exp": "hello 4.2"
+    },
+    {
+      "src": "hello {-4.20 :number}",
+      "exp": "hello -4.2"
+    },
+    {
+      "src": "hello {0.42e+1 :number}",
+      "exp": "hello 4.2"
+    },
+    {
+      "src": "hello {foo :number}",
+      "exp": "hello {|foo|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "invalid number literal {|.1| :number}",
+      "exp": "invalid number literal {|.1|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "invalid number literal {|1.| :number}",
+      "exp": "invalid number literal {|1.|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "invalid number literal {|01| :number}",
+      "exp": "invalid number literal {|01|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "invalid number literal {|+1| :number}",
+      "exp": "invalid number literal {|+1|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "invalid number literal {|0x1| :number}",
+      "exp": "invalid number literal {|0x1|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "hello {:number}",
+      "exp": "hello {:number}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "hello {4.2 :number minimumFractionDigits=2}",
+      "exp": "hello 4.20"
+    },
+    {
+      "src": "hello {|4.2| :number minimumFractionDigits=|2|}",
+      "exp": "hello 4.20"
+    },
+    {
+      "src": "hello {4.2 :number minimumFractionDigits=$foo}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 2
+        }
+      ],
+      "exp": "hello 4.20"
+    },
+    {
+      "src": "hello {|4.2| :number minimumFractionDigits=$foo}",
+      "params": [
+        {
+          "name": "foo",
+          "value": "2"
+        }
+      ],
+      "exp": "hello 4.20"
+    },
+    {
+      "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
+      "params": [
+        {
+          "name": "bar",
+          "value": 4.2
+        }
+      ],
+      "exp": "bar 4.2"
+    },
+    {
+      "src": ".local $foo = {$bar :number minimumFractionDigits=2} {{bar {$foo}}}",
+      "params": [
+        {
+          "name": "bar",
+          "value": 4.2
+        }
+      ],
+      "exp": "bar 4.20"
+    },
+    {
+      "src": ".local $foo = {$bar :number minimumFractionDigits=foo} {{bar {$foo}}}",
+      "params": [
+        {
+          "name": "bar",
+          "value": 4.2
+        }
+      ],
+      "exp": "bar {$bar}",
+      "expErrors": [
+        {
+          "type": "bad-option"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
+      "params": [
+        {
+          "name": "bar",
+          "value": "foo"
+        }
+      ],
+      "exp": "bar {$bar}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": ".input {$foo :number} {{bar {$foo}}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 4.2
+        }
+      ],
+      "exp": "bar 4.2"
+    },
+    {
+      "src": ".input {$foo :number minimumFractionDigits=2} {{bar {$foo}}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 4.2
+        }
+      ],
+      "exp": "bar 4.20"
+    },
+    {
+      "src": ".input {$foo :number minimumFractionDigits=foo} {{bar {$foo}}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 4.2
+        }
+      ],
+      "exp": "bar {$foo}",
+      "expErrors": [
+        {
+          "type": "bad-option"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": ".input {$foo :number} {{bar {$foo}}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": "foo"
+        }
+      ],
+      "exp": "bar {$foo}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": ".match {$foo :number} one {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".match {$foo :number} 1 {{=1}} one {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        }
+      ],
+      "exp": "=1"
+    },
+    {
+      "src": ".match {$foo :number} one {{one}} 1 {{=1}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        }
+      ],
+      "exp": "=1"
+    },
+    {
+      "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        },
+        {
+          "name": "bar",
+          "value": 1
+        }
+      ],
+      "exp": "one one"
+    },
+    {
+      "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        },
+        {
+          "name": "bar",
+          "value": 2
+        }
+      ],
+      "exp": "one other"
+    },
+    {
+      "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 2
+        },
+        {
+          "name": "bar",
+          "value": 2
+        }
+      ],
+      "exp": "other"
+    },
+    {
+      "src": ".input {$foo :number} .match {$foo} one {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".local $foo = {$bar :number} .match {$foo} one {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "bar",
+          "value": 1
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".input {$foo :number} .local $bar = {$foo} .match {$bar} one {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".input {$bar :number} .match {$bar} one {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "bar",
+          "value": 2
+        }
+      ],
+      "exp": "other"
+    },
+    {
+      "src": ".input {$bar} .match {$bar :number} one {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "bar",
+          "value": 1
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".input {$bar} .match {$bar :number} one {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "bar",
+          "value": 2
+        }
+      ],
+      "exp": "other"
+    },
+    {
+      "src": ".input {$none} .match {$foo :number} one {{one}} * {{{$none}}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".local $bar = {$none} .match {$foo :number} one {{one}} * {{{$bar}}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".local $bar = {$none} .match {$foo :number} one {{one}} * {{{$bar}}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 2
+        }
+      ],
+      "exp": "{$none}",
+      "expErrors": [
+        {
+          "type": "unresolved-variable"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "{42 :number @foo @bar=13}",
+      "exp": "42",
+      "expParts": [
+        {
+          "type": "number",
+          "source": "|42|",
+          "parts": [
+            {
+              "type": "integer",
+              "value": "42"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -46,6 +46,17 @@ using namespace pluralimpl;
 #define LOWERCASE_E ((UChar32)0x0065)
 #define UPPERCASE_E ((UChar32)0x0045)
 
+#define DIGIT_ZERO ((UChar32)0x0030)
+#define DIGIT_ONE ((UChar32)0x0031)
+#define DIGIT_TWO ((UChar32)0x0032)
+#define THREE ((UChar32)0x0033)
+#define FOUR ((UChar32)0x0034)
+#define FIVE ((UChar32)0x0035)
+#define SIX ((UChar32)0x0036)
+#define SEVEN ((UChar32)0x0037)
+#define EIGHT ((UChar32)0x0038)
+#define NINE ((UChar32)0x0039)
+
 // Reserved sigils
 #define BANG ((UChar32)0x0021)
 #define AT ((UChar32)0x0040)
