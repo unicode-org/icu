@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723182007749,
+  "lastUpdate": 1723219636427,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24087,6 +24087,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.4882394750472076,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "b5b3e16afac61f9aa9b775aaf497f8cc88ce9481",
+          "message": "ICU-22845 Better iterations for the ICU4J UnicodeSet",
+          "timestamp": "2024-08-09T08:56:25-07:00",
+          "tree_id": "c1e3517413d5486216c70caa2effaeb466f344f4",
+          "url": "https://github.com/unicode-org/icu/commit/b5b3e16afac61f9aa9b775aaf497f8cc88ce9481"
+        },
+        "date": 1723219500197,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.43607880941318355,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
