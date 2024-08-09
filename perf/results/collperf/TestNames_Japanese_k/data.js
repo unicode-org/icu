@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723135555421,
+  "lastUpdate": 1723182354903,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -47895,6 +47895,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5856940.0993,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "stefan.stojanovic@janeasystems.com",
+            "name": "StefanStojanovic",
+            "username": "StefanStojanovic"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "66ba09973a4231711b6de0de042f4e532b1873e5",
+          "message": "ICU-22787 Fix ClangCL compilation on Windows",
+          "timestamp": "2024-08-09T10:54:21+05:30",
+          "tree_id": "eaa81518f2faa325769cc8e03e74d3f3ddffccfd",
+          "url": "https://github.com/unicode-org/icu/commit/66ba09973a4231711b6de0de042f4e532b1873e5"
+        },
+        "date": 1723182213008,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 230.9244,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20792406.8484,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5387754.8909,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19593239.8672,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5866113.3704,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
