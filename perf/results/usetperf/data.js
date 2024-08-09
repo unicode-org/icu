@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723135531881,
+  "lastUpdate": 1723182491038,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -69261,6 +69261,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1521.377,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "stefan.stojanovic@janeasystems.com",
+            "name": "StefanStojanovic",
+            "username": "StefanStojanovic"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "66ba09973a4231711b6de0de042f4e532b1873e5",
+          "message": "ICU-22787 Fix ClangCL compilation on Windows",
+          "timestamp": "2024-08-09T10:54:21+05:30",
+          "tree_id": "eaa81518f2faa325769cc8e03e74d3f3ddffccfd",
+          "url": "https://github.com/unicode-org/icu/commit/66ba09973a4231711b6de0de042f4e532b1873e5"
+        },
+        "date": 1723182345744,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77867.9751,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177897.2154,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5392,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.0808,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.7263,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8765.0567,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 32004.9034,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1526.1775,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
