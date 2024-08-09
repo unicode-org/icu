@@ -154,6 +154,8 @@
 #   define U_PLATFORM U_PF_MINGW
 #elif defined(__CYGWIN__)
 #   define U_PLATFORM U_PF_CYGWIN
+    /* Cygwin uchar.h doesn't exist until Cygwin 3.5. */
+#   include <cygwin/version.h>
 #elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #   define U_PLATFORM U_PF_WINDOWS
 #elif defined(__ANDROID__)
@@ -722,9 +724,10 @@
     /*
      * Notes:
      * C++11 and C11 require support for UTF-16 literals
-     * Doesn't work on Mac C11 (see workaround in ptypes.h).
+     * Doesn't work on Mac C11 (see workaround in ptypes.h)
+     * or Cygwin less than 3.5.
      */
-#   if defined(__cplusplus) || !U_PLATFORM_IS_DARWIN_BASED
+#   if defined(__cplusplus) || !(U_PLATFORM_IS_DARWIN_BASED || (U_PLATFORM == U_PF_CYGWIN && CYGWIN_VERSION_DLL_MAJOR < 3005))
 #       define U_HAVE_CHAR16_T 1
 #   else
 #       define U_HAVE_CHAR16_T 0
