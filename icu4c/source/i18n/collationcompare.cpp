@@ -41,6 +41,8 @@ CollationCompare::compareUpToQuaternary(CollationIterator &left, CollationIterat
     }
     UBool anyVariable = false;
 
+    uint32_t lastPrimary = 0;
+    uint32_t samePrimaryCount = 0;
     // Fetch CEs, compare primaries, store secondary & tertiary weights.
     for(;;) {
         // We fetch CEs until we get a non-ignorable primary or reach the end.
@@ -103,6 +105,21 @@ CollationCompare::compareUpToQuaternary(CollationIterator &left, CollationIterat
             return (leftPrimary < rightPrimary) ? UCOL_LESS : UCOL_GREATER;
         }
         if(leftPrimary == Collation::NO_CE_PRIMARY) { break; }
+
+        // leftPrimary and rightPrimary is surely the same now.
+        // ICU-22511 To avoid infinity loop, terminate and return error if the
+        // leftPrimary stay the same for too many times..
+        constexpr uint32_t kSamePrimaryLoopLimit = 3;
+        if (lastPrimary == leftPrimary) {
+            if (++samePrimaryCount > kSamePrimaryLoopLimit) {
+                errorCode = U_INTERNAL_PROGRAM_ERROR;
+                return UCOL_EQUAL;
+            }
+        } else {
+            // reset samePrimaryCount
+            samePrimaryCount = 0;
+        }
+        lastPrimary = leftPrimary;
     }
     if(U_FAILURE(errorCode)) { return UCOL_EQUAL; }
 
