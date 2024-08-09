@@ -1,0 +1,16 @@
+{
+  "scenario": "Reserved and private annotations",
+  "description": "Tests for unsupported expressions (reserved/private) - ICU4J only. Remove this file when error handling is reconciled",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+      { "src" : "\\\\{   ?   󗟋   𫓜|@}   |}", "ignoreCpp": "This would be an error in ICU4C" },
+      { "src" : "\\\\{   ?   󗟋   𫓜|@}   |   \\}   @𠟅򑚎𥪙𽧫=||   @򒘒򳷦㥞򉊷=$򸚶񽱆񅗽񤕞   @𰺱:񎫛񢶛򶈎񄮒}", "ignoreCpp": "This would be an error in ICU4C" },
+      { "src" : "{  $iFN  ^  @USh  =$u  @l}", "ignoreCpp": "This would be an error in ICU4C" },
+      { "src" : ".local $dS ={ $p4 ^ |.| \\\\ @g:FV = $kd}{{@}}", "ignoreCpp": "This would be an error in ICU4C" },
+      { "src" : ".D. \\\\ ||{1}{{}} ", "ignoreCpp": "This would be an error in ICU4C" },
+      { "src" : ".cIT  ||{|@|  %  \\}  }  {  *󔜫񥘃󸇀  }{{}}", "ignoreCpp": "This would be an error in ICU4C" }
+  ]
+}
+

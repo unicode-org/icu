@@ -10,29 +10,27 @@ import java.util.StringJoiner;
 // Class corresponding to the json test files.
 // Since this is serialized by Gson, the field names should match the keys in the .json files.
 class Unit {
-    final String src;
-    final List<String> srcs;
+    // For why this is not an ArrayList<String>, see StringToListAdapter.java
+    final Sources src;
     final String locale;
-    final Map<String, Object> params;
+    final Param[] params;
     final String exp;
     final String ignoreJava;
-    final List<Error> errors;
+    final List<Error> expErrors;
 
     Unit(
-            String src,
-            List<String> srcs,
+            Sources src,
             String locale,
-            Map<String, Object> params,
+            Param[] params,
             String exp,
             String ignoreJava,
-            List<Error> errors) {
+            List<Error> expErrors) {
         this.src = src;
-        this.srcs = srcs;
         this.locale = locale;
         this.params = params;
         this.exp = exp;
         this.ignoreJava = ignoreJava;
-        this.errors = errors;
+        this.expErrors = expErrors;
     }
 
     class Error {
@@ -56,7 +54,9 @@ class Unit {
     @Override
     public String toString() {
         StringJoiner result = new StringJoiner(", ", "UnitTest {", "}");
-        result.add("src=" + escapeString(src));
+        if (src != null) {
+            result.add("src=" + src.sources.toString());
+        }
         if (params != null) {
             result.add("params=" + params);
         }
@@ -75,14 +75,13 @@ class Unit {
      * @return a new unit created by merging `this` unit and `other`
      */
     public Unit merge(Unit other) {
-        String newSrc = other.src != null ? other.src : this.src;
-        List<String> newSrcs = other.srcs != null ? other.srcs : this.srcs;
+        Sources newSrc = other.src != null ? other.src : this.src;
         String newLocale = other.locale != null ? other.locale : this.locale;
-        Map<String, Object> newParams = other.params != null ? other.params : this.params;
+        Param[] newParams = other.params != null ? other.params : this.params;
         String newExp = other.exp != null ? other.exp : this.exp;
         String newIgnore = other.ignoreJava != null ? other.ignoreJava : this.ignoreJava;
-        List<Error> newErrors = other.errors != null ? other.errors : this.errors;
-        return new Unit(newSrc, newSrcs, newLocale, newParams, newExp, newIgnore, newErrors);
+        List<Error> newExpErrors = other.expErrors != null ? other.expErrors : this.expErrors;
+        return new Unit(newSrc, newLocale, newParams, newExp, newIgnore, newExpErrors);
     }
 
     private static String escapeString(String str) {

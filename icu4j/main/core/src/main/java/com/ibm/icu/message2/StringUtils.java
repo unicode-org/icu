@@ -104,6 +104,11 @@ class StringUtils {
         return isContentChar(cp) || cp == '.';
     }
 
+    // abnf: escaped-char = backslash ( backslash / "{" / "|" / "}" )
+    static boolean isEscapedChar(int cp) {
+        return cp == '\\' || cp == '{' || cp == '|' || cp == '}';
+    }
+
     static boolean isSimpleStartChar(int cp) {
         return StringUtils.isContentChar(cp)
                 || StringUtils.isWhitespace(cp)

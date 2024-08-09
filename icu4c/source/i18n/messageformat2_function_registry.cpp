@@ -7,6 +7,8 @@
 
 #if !UCONFIG_NO_MF2
 
+#include <math.h>
+
 #include "unicode/dtptngen.h"
 #include "unicode/messageformat2_data_model_names.h"
 #include "unicode/messageformat2_function_registry.h"
@@ -414,12 +416,90 @@ static FormattedPlaceholder notANumber(const FormattedPlaceholder& input) {
     return FormattedPlaceholder(input, FormattedValue(UnicodeString("NaN")));
 }
 
-static FormattedPlaceholder stringAsNumber(const number::LocalizedNumberFormatter& nf, const FormattedPlaceholder& input, UErrorCode& errorCode) {
+// Returns true if `c` is in the interval [`first`, `last`]
+static bool inRange(UChar32 c, UChar32 first, UChar32 last) {
+    U_ASSERT(first < last);
+    return c >= first && c <= last;
+}
+
+static bool isDigit(UChar32 c) { return inRange(c, 0x0030, 0x0039); }
+
+static int32_t parseDigit(UChar32 c) {
+    switch(c) {
+    case DIGIT_ZERO: {
+        return 0;
+    }
+    case DIGIT_ONE: {
+        return 1;
+    }
+    case DIGIT_TWO: {
+        return 2;
+    }
+    case THREE: {
+        return 3;
+    }
+    case FOUR: {
+        return 4;
+    }
+    case FIVE: {
+        return 5;
+    }
+    case SIX: {
+        return 6;
+    }
+    case SEVEN: {
+        return 7;
+    }
+    case EIGHT: {
+        return 8;
+    }
+    case NINE: {
+        return 9;
+    }
+    default: {
+        // Should be unreachable
+        return 0;
+    }
+    }
+}
+
+static int32_t parseDigits(const UnicodeString& s, int32_t& i) {
+    int32_t firstDigit = i;
+    // Assumes that i < s.length() and s[i] is a digit
+    while (isDigit(s[i])) {
+        i++;
+    }
+    int32_t numDigits = i - firstDigit;
+    int32_t placeValue = 1;
+    int32_t result = 0;
+    for (int32_t j = firstDigit + numDigits - 1; j >= firstDigit; j--) {
+        result += placeValue * parseDigit(s[j]);
+        placeValue *= 10;
+    }
+    return result;
+}
+
+static double parseDecimalPart(const UnicodeString& s, int32_t& i) {
+    int32_t firstDigit = i;
+    // Assumes that i < s.length() and s[i] is a digit
+    while (isDigit(s[i])) {
+        i++;
+    }
+    int32_t numDigits = i - firstDigit;
+    double placeValue = 10;
+    double result = 0;
+    for (int32_t j = firstDigit; j < firstDigit + numDigits; j++) {
+        result += ((double) parseDigit(s[j])) / placeValue;
+        placeValue *= 10;
+    }
+    return result;
+}
+
+static double parseNumberLiteral(const FormattedPlaceholder& input, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return {};
     }
 
-    double numberValue;
     // Copying string to avoid GCC dangling-reference warning
     // (although the reference is safe)
     UnicodeString inputStr = input.asFormattable().getString(errorCode);
@@ -427,12 +507,94 @@ static FormattedPlaceholder stringAsNumber(const number::LocalizedNumberFormatte
     if (U_FAILURE(errorCode)) {
         return {};
     }
-    UErrorCode localErrorCode = U_ZERO_ERROR;
-    strToDouble(inputStr, numberValue, localErrorCode);
-    if (U_FAILURE(localErrorCode)) {
-        errorCode = U_MF_OPERAND_MISMATCH_ERROR;
+
+    int32_t index = 0;
+
+#define ERROR() errorCode = U_MF_OPERAND_MISMATCH_ERROR; return 0;
+#define IN_BOUNDS(inputStr, index) (index < inputStr.length())
+#define CHECK_BOUNDS(inputStr, index) if (!IN_BOUNDS(inputStr, index)) { ERROR(); }
+
+    CHECK_BOUNDS(inputStr, index);
+
+    // Parse the sign if present
+    double sign = 1;
+    if (inputStr[index] == HYPHEN) {
+        sign = -1;
+        index++;
+    }
+
+    CHECK_BOUNDS(inputStr, index);
+
+    // Parse the integer part
+    if (!isDigit(inputStr[index])) {
+        // Non-numeric first character after sign -- not valid
+        ERROR();
+    }
+
+    // First, check for leading zero with no decimal point
+    if (inputStr[index] == DIGIT_ZERO) {
+        bool isZero = inputStr.length() == index + 1;
+        bool hasDecimalPart = inputStr.length() > index && inputStr[index + 1] == PERIOD;
+        if (!(isZero || hasDecimalPart)) {
+            ERROR();
+        }
+    }
+
+    double result = parseDigits(inputStr, index);
+
+    if (IN_BOUNDS(inputStr, index) && inputStr[index] == PERIOD) {
+        index++;
+        CHECK_BOUNDS(inputStr, index);
+        if (isDigit(inputStr[index])) {
+            result += parseDecimalPart(inputStr, index);
+        } else {
+            // '.' not followed by a digit is an error
+            ERROR();
+        }
+    }
+
+    result *= sign;
+
+    if (IN_BOUNDS(inputStr, index) &&
+        (inputStr[index] == UPPERCASE_E || inputStr[index] == LOWERCASE_E)) {
+        double exponent;
+        bool positive = true;
+        index++;
+        CHECK_BOUNDS(inputStr, index);
+        // Parse sign if present
+        if (inputStr[index] == PLUS) {
+            index++;
+        } else if (inputStr[index] == HYPHEN) {
+            positive = false;
+            index++;
+        }
+        // Parse exponent digits
+        CHECK_BOUNDS(inputStr, index);
+        if (!isDigit(inputStr[index])) {
+            ERROR();
+        }
+        exponent = parseDigits(inputStr, index);
+        if (positive) {
+            result *= (exponent * 10);
+        } else {
+            result *= (exponent * -10);
+        }
+    }
+
+    // Make sure entire input is consumed
+    if (index != inputStr.length()) {
+        ERROR();
+    }
+
+    return result;
+}
+
+static FormattedPlaceholder tryParsingNumberLiteral(const number::LocalizedNumberFormatter& nf, const FormattedPlaceholder& input, UErrorCode& errorCode) {
+    double numberValue = parseNumberLiteral(input, errorCode);
+    if (U_FAILURE(errorCode)) {
         return notANumber(input);
     }
+
     UErrorCode savedStatus = errorCode;
     number::FormattedNumber result = nf.formatDouble(numberValue, errorCode);
     // Ignore U_USING_DEFAULT_WARNING
@@ -583,7 +745,7 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
         }
         case UFMT_STRING: {
             // Try to parse the string as a number
-            return stringAsNumber(realFormatter, arg, errorCode);
+            return tryParsingNumberLiteral(realFormatter, arg, errorCode);
         }
         default: {
             // Other types can't be parsed as a number

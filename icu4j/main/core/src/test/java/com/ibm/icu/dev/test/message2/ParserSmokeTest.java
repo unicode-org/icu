@@ -29,16 +29,5 @@ public class ParserSmokeTest extends CoreTestFmwk {
         MFParser.parse(null);
     }
 
-    @Test
-    public void test() throws Exception {
-        try (Reader reader = TestUtils.jsonReader(JSON_FILE)) {
-            Type mapType = new TypeToken<Map<String, String[]>>(){/* not code */}.getType();
-            Map<String, String[]> unitList = TestUtils.GSON.fromJson(reader, mapType);
-            for (Entry<String, String[]> testGroup : unitList.entrySet()) {
-                for (String unit : testGroup.getValue()) {
-                    MFParser.parse(unit);
-                }
-            }
-        }
-    }
+    // Other tests in CoreTest.java
 }
