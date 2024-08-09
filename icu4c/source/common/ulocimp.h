@@ -131,15 +131,15 @@ U_EXPORT icu::CharString
 ulocimp_getVariant(const char* localeID, UErrorCode& status);
 
 U_EXPORT void
-ulocimp_setKeywordValue(const char* keywordName,
-                        const char* keywordValue,
+ulocimp_setKeywordValue(std::string_view keywordName,
+                        std::string_view keywordValue,
                         icu::CharString& localeID,
                         UErrorCode& status);
 
 U_EXPORT int32_t
-ulocimp_setKeywordValue(const char* keywords,
-                        const char* keywordName,
-                        const char* keywordValue,
+ulocimp_setKeywordValue(std::string_view keywords,
+                        std::string_view keywordName,
+                        std::string_view keywordValue,
                         icu::ByteSink& sink,
                         UErrorCode& status);
 
