@@ -155,6 +155,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug22585);
     TESTCASE_AUTO(TestBug22602);
     TESTCASE_AUTO(TestBug22636);
+    TESTCASE_AUTO(TestBug22849);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -6133,6 +6134,12 @@ void RBBITest::TestBug22636() {
     assertEquals(WHERE, ec, U_ZERO_ERROR);
 }
 
+void RBBITest::TestBug22849() {
+    if (quick) return;
+    UParseError pe {};
+    UErrorCode ec {U_ZERO_ERROR};
+    RuleBasedBreakIterator bi(u".*X..............;", pe, ec);
+}
 void RBBITest::TestBug22584() {
     // Creating a break iterator from a rule consisting of a very long
     // literal input string caused a stack overflow when deleting the
