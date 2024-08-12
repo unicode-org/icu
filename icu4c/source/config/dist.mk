@@ -65,9 +65,7 @@ $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP) $(DISTY_DATA_ZIP):  $(DISTY_DAT) $(DISTY_TMP
 	@echo Export icu4c@$(GITVER) to "$(DISTY_TMP)/icu"
 	-$(RMV) $(DISTY_FILE) $(DISTY_TMP)
 	$(MKINSTALLDIRS) $(DISTY_TMP)
-	( cd $(ICU4CTOP)/.. && git archive --format=tar --prefix=icu/ HEAD -- icu4c/ icu4j/ testdata/ ) | ( cd "$(DISTY_TMP)" && tar xf - )
-    # special handling for LICENSE file. The symlinks will be included as files by tar and zip.
-	cp -fv $(ICU4CTOP)/LICENSE "$(DISTY_ICU)/LICENSE"
+	( cd $(ICU4CTOP)/.. && git archive --format=tar --prefix=icu/ HEAD -- LICENSE* README* icu4c/ icu4j/ testdata/ ) | ( cd "$(DISTY_TMP)" && tar xf - )
     # Copy top-level testdata directory
 	cp -R $(ICU4CTOP)/../testdata $(DISTY_TMP)/icu
 	( cd $(DISTY_TMP)/icu/icu4c/source ; zip -rlq $(DISTY_DATA_ZIP) data )
