@@ -6018,8 +6018,10 @@ void RBBITest::TestExternalBreakEngineWithFakeYue() {
         } while(bi1->next() != BreakIterator::DONE);
     }
 
-    std::vector<int32_t> expected1({{ 0, 1, 2, 4, 5, 8, 10, 12, 13, 14, 15,
-      16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 30}});
+    std::vector<int32_t> expected1{
+        0,  1,  2,  4,  5,  8,  10, 12, 13, 14, 15, 16,
+        17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 30,
+    };
     assertTrue("root break Yue as Chinese", expected1 == actual1);
 
     status = U_ZERO_ERROR;
@@ -6040,8 +6042,10 @@ void RBBITest::TestExternalBreakEngineWithFakeYue() {
             actual2.push_back(bi2->current());
         } while(bi2->next() != BreakIterator::DONE);
     }
-    std::vector<int32_t> expected2({{ 0, 1, 2, 4, 5, 8, 10, 12, 14, 16, 18, 20,
-      22, 23, 24, 26, 27, 30}});
+
+    std::vector<int32_t> expected2{
+        0, 1, 2, 4, 5, 8, 10, 12, 14, 16, 18, 20, 22, 23, 24, 26, 27, 30,
+    };
     assertTrue(WHERE "break Yue by Fake external breaker",
                expected2 == actual2);
 }
@@ -6066,8 +6070,9 @@ void RBBITest::TestExternalBreakEngineWithFakeTaiLe() {
         } while(bi1->next() != BreakIterator::DONE);
     }
 
-    std::vector<int32_t> expected1({{
-      0, 2, 5, 86, 89, 92 }});
+    std::vector<int32_t> expected1{
+        0, 2, 5, 86, 89, 92,
+    };
     assertTrue(WHERE "root break Tai Le", expected1 == actual1);
 
     RuleBasedBreakIterator::registerExternalBreakEngine(
@@ -6087,9 +6092,11 @@ void RBBITest::TestExternalBreakEngineWithFakeTaiLe() {
             actual2.push_back(bi2->current());
         } while(bi2->next() != BreakIterator::DONE);
     }
-    std::vector<int32_t> expected2({{
-         0, 2, 5, 11, 14, 17, 24, 28, 32, 38, 42, 45, 48, 54, 57, 60, 64, 67,
-         70, 73, 76, 80, 86, 89, 92}});
+
+    std::vector<int32_t> expected2{
+        0,  2,  5,  11, 14, 17, 24, 28, 32, 38, 42, 45, 48,
+        54, 57, 60, 64, 67, 70, 73, 76, 80, 86, 89, 92,
+    };
     assertTrue("break Tai Le by Fake external breaker",
                expected2 == actual2);
 }
