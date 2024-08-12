@@ -18,7 +18,7 @@ include $(top_builddir)/icudefs.mk
 DISTY_DIR=dist
 DISTY_TMP=dist/tmp
 DISTY_ICU=$(DISTY_TMP)/icu
-DISTY_DATA=$(DISTY_ICU)/source/data
+DISTY_DATA=$(DISTY_ICU)/icu4c/source/data
 # The following line controls what is removed in the data/ subdirectory for the source tarball.
 DISTY_RMV=brkitr coll curr lang locales mappings rbnf region translit xml zone misc/*.txt misc/*.mk unit
 DISTY_RMDIR=$(DISTY_RMV:%=$(DISTY_DATA)/%)
@@ -65,25 +65,25 @@ $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP) $(DISTY_DATA_ZIP):  $(DISTY_DAT) $(DISTY_TMP
 	@echo Export icu4c@$(GITVER) to "$(DISTY_TMP)/icu"
 	-$(RMV) $(DISTY_FILE) $(DISTY_TMP)
 	$(MKINSTALLDIRS) $(DISTY_TMP)
-	( cd $(ICU4CTOP)/.. && git archive --format=tar --prefix=icu/ HEAD:icu4c/ ) | ( cd "$(DISTY_TMP)" && tar xf - )
+	( cd $(ICU4CTOP)/.. && git archive --format=tar --prefix=icu/ HEAD -- icu4c/ icu4j/ testdata/ ) | ( cd "$(DISTY_TMP)" && tar xf - )
     # special handling for LICENSE file. The symlinks will be included as files by tar and zip.
-	cp -fv $(ICU4CTOP)/LICENSE "$(DISTY_TMP)/LICENSE"
-    # Copy top-level testdata directory so it's a sibling of the source/ directory
+	cp -fv $(ICU4CTOP)/LICENSE "$(DISTY_ICU)/LICENSE"
+    # Copy top-level testdata directory
 	cp -R $(ICU4CTOP)/../testdata $(DISTY_TMP)/icu
-	( cd $(DISTY_TMP)/icu/source ; zip -rlq $(DISTY_DATA_ZIP) data )
+	( cd $(DISTY_TMP)/icu/icu4c/source ; zip -rlq $(DISTY_DATA_ZIP) data )
 	$(MKINSTALLDIRS) $(DISTY_IN)
 	echo DISTY_DAT=$(DISTY_DAT)
 	cp $(DISTY_DAT) $(DISTY_IN)
 	$(RMV) $(DISTY_RMDIR)
-	( cd $(DISTY_TMP)/icu ; python as_is/bomlist.py > as_is/bomlist.txt || rm -f as_is/bomlist.txt )
+	( cd $(DISTY_TMP)/icu/icu4c ; python as_is/bomlist.py > as_is/bomlist.txt || rm -f as_is/bomlist.txt )
 	( cd $(DISTY_TMP) ; tar cfpzh $(DISTY_FILE_TGZ) icu )
 	( cd $(DISTY_TMP) ; zip -rlq $(DISTY_FILE_ZIP) icu )
 	$(RMV) $(DISTY_TMP)
-	ln -sf $(shell basename $(DISTY_FILE_ZIP)) $(DISTY_FILE_DIR)/icu4c-src.zip
-	ln -sf $(shell basename $(DISTY_FILE_TGZ)) $(DISTY_FILE_DIR)/icu4c-src.tgz
+	ln -sf $(shell basename $(DISTY_FILE_ZIP)) $(DISTY_FILE_DIR)/icu-combined-src.zip
+	ln -sf $(shell basename $(DISTY_FILE_TGZ)) $(DISTY_FILE_DIR)/icu-combined-src.tgz
 	ln -sf $(shell basename $(DISTY_DATA_ZIP)) $(DISTY_FILE_DIR)/icu4c-data.zip
-	ln -f $(DISTY_FILE_ZIP) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-src.zip
-	ln -f $(DISTY_FILE_TGZ) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-src.tgz
+	ln -f $(DISTY_FILE_ZIP) $(DISTY_FILE_DIR)/icu-combined-$(DISTY_VER)-src.zip
+	ln -f $(DISTY_FILE_TGZ) $(DISTY_FILE_DIR)/icu-combined-$(DISTY_VER)-src.tgz
 	ln -f $(DISTY_DATA_ZIP) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-data.zip
 	ls -l $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP) $(DISTY_DATA_ZIP)
 
@@ -98,4 +98,4 @@ distcheck-tgz: $(DISTY_FILE_TGZ)
 	@echo Checking $(DISTY_FILE_TGZ)
 	@-$(RMV) $(DISTY_CHECK)
 	@$(MKINSTALLDIRS) $(DISTY_CHECK)
-	@(cd $(DISTY_CHECK) && tar xfpz $(DISTY_FILE_TGZ) && cd icu/source && $(SHELL) ./configure $(DISTCHECK_CONFIG_OPTIONS) && $(MAKE) check $(DISTCHECK_MAKE_OPTIONS) ) && (echo "!!! PASS: $(DISTY_FILE_TGZ)" )
+	@(cd $(DISTY_CHECK) && tar xfpz $(DISTY_FILE_TGZ) && cd icu/icu4c/source && $(SHELL) ./configure $(DISTCHECK_CONFIG_OPTIONS) && $(MAKE) check $(DISTCHECK_MAKE_OPTIONS) ) && (echo "!!! PASS: $(DISTY_FILE_TGZ)" )

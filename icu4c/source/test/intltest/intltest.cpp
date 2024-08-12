@@ -1694,26 +1694,19 @@ static bool fileExists(const char* fileName) {
  * Returns the path to icu/testdata/
  */
 const char *IntlTest::getSharedTestData(UErrorCode& err) {
-#define SOURCE_TARBALL_TOP U_TOPSRCDIR U_FILE_SEP_STRING ".." U_FILE_SEP_STRING
-#define REPO_TOP SOURCE_TARBALL_TOP ".." U_FILE_SEP_STRING
+#define REPO_TOP U_TOPSRCDIR U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING
 #define FILE_NAME U_FILE_SEP_STRING "message2" U_FILE_SEP_STRING "valid-tests.json"
     const char *srcDataDir = nullptr;
     const char *testFile = nullptr;
     if (U_SUCCESS(err)) {
 #ifdef U_TOPSRCDIR
-        // Try U_TOPSRCDIR/../testdata (source tarball)
-        srcDataDir = SOURCE_TARBALL_TOP "testdata" U_FILE_SEP_STRING;
-        testFile = SOURCE_TARBALL_TOP "testdata" FILE_NAME;
-        if (!fileExists(testFile)) {
-            // If that doesn't exist, try U_TOPSRCDIR/../../testdata (in-repo)
-            srcDataDir = REPO_TOP "testdata" U_FILE_SEP_STRING;
-            testFile = REPO_TOP "testdata" FILE_NAME;
-            if (!fileExists(testFile)) {
-                // If neither exists, return null
-                err = U_FILE_ACCESS_ERROR;
-                srcDataDir = nullptr;
-            }
-        }
+       srcDataDir = REPO_TOP "testdata" U_FILE_SEP_STRING;
+       testFile = REPO_TOP "testdata" FILE_NAME;
+       if (!fileExists(testFile)) {
+           // If neither exists, return null
+           err = U_FILE_ACCESS_ERROR;
+           srcDataDir = nullptr;
+       }
 #else
         // Try ../../../../testdata (if we're in icu/source/test/intltest)
         // and ../../../../../../testdata (if we're in icu/source/test/intltest/Platform/(Debug|Release)
