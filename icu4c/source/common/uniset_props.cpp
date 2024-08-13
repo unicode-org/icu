@@ -18,8 +18,6 @@
 *   Character property dependent functions moved here from uniset.cpp
 */
 
-#include <string_view>
-
 #include "unicode/utypes.h"
 #include "unicode/uniset.h"
 #include "unicode/parsepos.h"
@@ -47,10 +45,6 @@
 #include "uassert.h"
 #include "hash.h"
 
-// Makes u"literal"sv std::u16string_view literals possible.
-// https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv
-using namespace std::string_view_literals;
-
 U_NAMESPACE_USE
 
 namespace {
@@ -61,7 +55,7 @@ constexpr char ASCII[] = "ASCII"; // [\u0000-\u007F]
 constexpr char ASSIGNED[] = "Assigned"; // [:^Cn:]
 
 // Unicode name property alias
-constexpr std::u16string_view NAME_PROP(u"na"sv);
+constexpr char16_t NAME_PROP[] = u"na";
 
 }  // namespace
 
@@ -92,7 +86,7 @@ namespace {
 // Cache some sets for other services -------------------------------------- ***
 void U_CALLCONV createUni32Set(UErrorCode &errorCode) {
     U_ASSERT(uni32Singleton == nullptr);
-    uni32Singleton = new UnicodeSet(UnicodeString(u"[:age=3.2:]"sv), errorCode);
+    uni32Singleton = new UnicodeSet(UnicodeString(u"[:age=3.2:]"), errorCode);
     if(uni32Singleton==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     } else {
