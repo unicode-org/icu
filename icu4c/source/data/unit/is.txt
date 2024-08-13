@@ -8,21 +8,21 @@ is{
                 case{
                     accusative{
                         one{"{0} þyngdarhröðun"}
-                        other{"{0} þyngdarhröðun"}
+                        other{"{0} þyngdarhraðanir"}
                     }
                     dative{
                         one{"{0} þyngdarhröðun"}
-                        other{"{0} þyngdarhröðun"}
+                        other{"{0} þyngdarhröðunum"}
                     }
                     genitive{
                         one{"{0} þyngdarhröðunar"}
-                        other{"{0} þyngdarhröðunar"}
+                        other{"{0} þyngdarhraðana"}
                     }
                 }
                 dnam{"þyngdarhröðun"}
                 gender{"feminine"}
                 one{"{0} þyngdarhröðun"}
-                other{"{0} þyngdarhröðun"}
+                other{"{0} þyngdarhraðanir"}
             }
             meter-per-square-second{
                 case{
@@ -405,7 +405,22 @@ is{
                 other{"{0} karöt"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    accusative{
+                        one{"{0} milligramm á desílítra"}
+                        other{"{0} milligrömm á desílítra"}
+                    }
+                    dative{
+                        one{"{0} milligrammi á desílítra"}
+                        other{"{0} milligrömmum á desílítra"}
+                    }
+                    genitive{
+                        one{"{0} milligramms á desílítra"}
+                        other{"{0} milligramma á desílítra"}
+                    }
+                }
                 dnam{"milligrömm á desílítra"}
+                gender{"neuter"}
                 one{"{0} milligramm á desílítra"}
                 other{"{0} milligrömm á desílítra"}
             }
@@ -512,17 +527,37 @@ is{
                         other{"{0} permyriad"}
                     }
                     dative{
-                        one{"{0} permyriad"}
-                        other{"{0} permyriad"}
+                        one{"{0} permyriadi"}
+                        other{"{0} permyriadum"}
                     }
                     genitive{
-                        one{"{0} permyriad"}
-                        other{"{0} permyriad"}
+                        one{"{0} permyriads"}
+                        other{"{0} permyriada"}
                     }
                 }
                 gender{"neuter"}
                 one{"{0} permyriad"}
                 other{"{0} permyriad"}
+            }
+            portion-per-1e9{
+                case{
+                    accusative{
+                        one{"{0} hluta á milljarð"}
+                        other{"{0} hluta á milljarð"}
+                    }
+                    dative{
+                        one{"{0} hluta á milljarð"}
+                        other{"{0} hlutum á milljarð"}
+                    }
+                    genitive{
+                        one{"{0} hluta á milljarð"}
+                        other{"{0} hluta á milljarð"}
+                    }
+                }
+                dnam{"hlutar á milljarð"}
+                gender{"masculine"}
+                one{"{0} hluti á milljarð"}
+                other{"{0} hlutar á milljarð"}
             }
         }
         consumption{
@@ -1006,6 +1041,27 @@ is{
                 one{"{0} nanósekúnda"}
                 other{"{0} nanósekúndur"}
             }
+            night{
+                case{
+                    accusative{
+                        one{"{0} nótt"}
+                        other{"{0} nætur"}
+                    }
+                    dative{
+                        one{"{0} nótt"}
+                        other{"{0} nóttum"}
+                    }
+                    genitive{
+                        one{"{0} nætur"}
+                        other{"{0} nótta"}
+                    }
+                }
+                dnam{"nætur"}
+                gender{"feminine"}
+                one{"{0} nótt"}
+                other{"{0} nætur"}
+                per{"{0}/nótt"}
+            }
             quarter{
                 case{
                     accusative{
@@ -1224,7 +1280,22 @@ is{
                 other{"{0} júl"}
             }
             kilocalorie{
+                case{
+                    accusative{
+                        one{"{0} kílókaloríu"}
+                        other{"{0} kílókaloríur"}
+                    }
+                    dative{
+                        one{"{0} kílókaloríu"}
+                        other{"{0} kílókaloríum"}
+                    }
+                    genitive{
+                        one{"{0} kílókaloríu"}
+                        other{"{0} kílókaloría"}
+                    }
+                }
                 dnam{"kílókaloríur"}
+                gender{"feminine"}
                 one{"{0} kílókaloría"}
                 other{"{0} kílókaloríur"}
             }
@@ -1326,12 +1397,12 @@ is{
                         other{"{0} gígahertz"}
                     }
                     dative{
-                        one{"{0} gígahertz"}
-                        other{"{0} gígahertz"}
+                        one{"{0} gígahertzi"}
+                        other{"{0} gígahertzum"}
                     }
                     genitive{
                         one{"{0} gígahertz"}
-                        other{"{0} gígahertz"}
+                        other{"{0} gígahertza"}
                     }
                 }
                 dnam{"gígahertz"}
@@ -1366,12 +1437,12 @@ is{
                         other{"{0} kílóhertz"}
                     }
                     dative{
-                        one{"{0} kílóhertz"}
-                        other{"{0} kílóhertz"}
+                        one{"{0} kílóhertzi"}
+                        other{"{0} kílóhertzum"}
                     }
                     genitive{
                         one{"{0} kílóhertz"}
-                        other{"{0} kílóhertz"}
+                        other{"{0} kílóhertza"}
                     }
                 }
                 dnam{"kílóhertz"}
@@ -1386,12 +1457,12 @@ is{
                         other{"{0} megahertz"}
                     }
                     dative{
-                        one{"{0} megahertz"}
-                        other{"{0} megahertz"}
+                        one{"{0} megahertzi"}
+                        other{"{0} megahertzum"}
                     }
                     genitive{
                         one{"{0} megahertz"}
-                        other{"{0} megahertz"}
+                        other{"{0} megahertza"}
                     }
                 }
                 dnam{"megahertz"}
@@ -1402,7 +1473,6 @@ is{
         }
         graphics{
             dot{
-                dnam{"pixlar"}
                 one{"{0} pixill"}
                 other{"{0} pixlar"}
             }
@@ -1706,6 +1776,25 @@ is{
                 one{"{0} píkómetri"}
                 other{"{0} píkómetrar"}
             }
+            point{
+                case{
+                    accusative{
+                        one{"{0} stig"}
+                        other{"{0} stig"}
+                    }
+                    dative{
+                        one{"{0} stigi"}
+                        other{"{0} stigum"}
+                    }
+                    genitive{
+                        one{"{0} stigs"}
+                        other{"{0} stiga"}
+                    }
+                }
+                gender{"neuter"}
+                one{"{0} stig"}
+                other{"{0} stig"}
+            }
             solar-radius{
                 one{"{0} sólarradíus"}
                 other{"{0} sólarradíusar"}
@@ -1971,7 +2060,7 @@ is{
                         other{"{0} kílóvött"}
                     }
                     dative{
-                        one{"{0} kílóvatt"}
+                        one{"{0} kílóvatti"}
                         other{"{0} kílóvöttum"}
                     }
                     genitive{
@@ -2157,7 +2246,7 @@ is{
                         other{"{0} millibör"}
                     }
                     dative{
-                        one{"{0} millibar"}
+                        one{"{0} millibari"}
                         other{"{0} millibörum"}
                     }
                     genitive{
@@ -2171,8 +2260,23 @@ is{
                 other{"{0} millibör"}
             }
             millimeter-ofhg{
+                case{
+                    accusative{
+                        one{"{0} millimetra af kvikasilfri"}
+                        other{"{0} millimetra af kvikasilfri"}
+                    }
+                    dative{
+                        one{"{0} millimetra af kvikasilfri"}
+                        other{"{0} millimetrum af kvikasilfri"}
+                    }
+                    genitive{
+                        one{"{0} millimetra af kvikasilfri"}
+                        other{"{0} millimetra af kvikasilfri"}
+                    }
+                }
                 dnam{"millimetrar af kvikasilfri"}
-                one{"{0} millimetrar af kvikasilfri"}
+                gender{"masculine"}
+                one{"{0} millimetri af kvikasilfri"}
                 other{"{0} millimetrar af kvikasilfri"}
             }
             pascal{
@@ -2230,6 +2334,26 @@ is{
                 dnam{"hnútar"}
                 one{"{0} hnútur"}
                 other{"{0} hnútar"}
+            }
+            light-speed{
+                case{
+                    accusative{
+                        one{"{0} ljóshraða"}
+                        other{"{0} ljóshraða"}
+                    }
+                    dative{
+                        one{"{0} ljóshraða"}
+                        other{"{0} ljóshröðum"}
+                    }
+                    genitive{
+                        one{"{0} ljóshraða"}
+                        other{"{0} ljóshraða"}
+                    }
+                }
+                dnam{"ljóshraði"}
+                gender{"masculine"}
+                one{"{0} ljóshraði"}
+                other{"{0} ljóshraðar"}
             }
             meter-per-second{
                 case{
@@ -2759,6 +2883,12 @@ is{
             month{
                 dnam{"mánuður"}
             }
+            night{
+                dnam{"n."}
+                one{"{0} n."}
+                other{"{0} n."}
+                per{"{0}/n."}
+            }
             week{
                 dnam{"vika"}
                 one{"{0} v."}
@@ -2875,6 +3005,11 @@ is{
             }
             kilometer-per-hour{
                 dnam{"km/klst."}
+            }
+            light-speed{
+                dnam{"ljóshr."}
+                one{"{0} ljóshr."}
+                other{"{0} ljóshr."}
             }
             meter-per-second{
                 dnam{"m/sek."}
@@ -3124,6 +3259,12 @@ is{
             nanosecond{
                 dnam{"nanósek."}
             }
+            night{
+                dnam{"næt."}
+                one{"{0} nótt"}
+                other{"{0} næt."}
+                per{"{0}/nótt"}
+            }
             quarter{
                 dnam{"ársfj."}
                 one{"{0} ársfj."}
@@ -3371,6 +3512,11 @@ is{
                 dnam{"kílómetrar á klukkustund"}
                 one{"{0} km/klst."}
                 other{"{0} km/klst."}
+            }
+            light-speed{
+                dnam{"ljóshr."}
+                one{"{0} ljóshr."}
+                other{"{0} ljóshr."}
             }
             meter-per-second{
                 dnam{"metrar/sek."}

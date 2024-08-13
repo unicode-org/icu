@@ -241,6 +241,11 @@ kok{
             nanosecond{
                 other{"{0} नॅनोसेकंदांनी"}
             }
+            night{
+                dnam{"राती"}
+                other{"{0} राती"}
+                per{"दर रात {0}"}
+            }
             quarter{
                 dnam{"क्वार्टर्स"}
             }
@@ -579,6 +584,10 @@ kok{
             knot{
                 other{"{0} नॉट"}
             }
+            light-speed{
+                dnam{"प्रकाश"}
+                other{"{0} प्रकाश"}
+            }
             meter-per-second{
                 dnam{"मीटर प्रती सेकंद"}
             }
@@ -788,7 +797,9 @@ kok{
             }
         }
         compound{
+            10p-12{"पि{0}"}
             10p-3{"मि {0}"}
+            10p-9{"नॅ{0}"}
         }
         concentr{
             item{
@@ -909,6 +920,11 @@ kok{
             nanosecond{
                 dnam{"नॅसे"}
                 other{"{0}नॅसे"}
+            }
+            night{
+                dnam{"राती"}
+                other{"{0}राती"}
+                per{"{0}/रात"}
             }
             second{
                 dnam{"सेकंद"}
@@ -1203,6 +1219,10 @@ kok{
             }
         }
         speed{
+            light-speed{
+                dnam{"प्रकाश"}
+                other{"{0} प्रकाश"}
+            }
             meter-per-second{
                 other{"{0}मी/से"}
             }
@@ -1411,7 +1431,9 @@ kok{
             }
         }
         compound{
+            10p-12{"पि{0}"}
             10p-3{"मि{0}"}
+            10p-9{"नॅ{0}"}
             10p15{"peta{0}"}
         }
         concentr{
@@ -1523,6 +1545,11 @@ kok{
             nanosecond{
                 dnam{"नॅनोसेकंदांनी"}
                 other{"{0} नॅसे"}
+            }
+            night{
+                dnam{"राती"}
+                other{"{0} राती"}
+                per{"{0}/रात"}
             }
             second{
                 dnam{"सेकंदांनी"}
@@ -1749,6 +1776,10 @@ kok{
             }
             knot{
                 dnam{"नॉट"}
+            }
+            light-speed{
+                dnam{"प्रकाश"}
+                other{"{0} प्रकाश"}
             }
             meter-per-second{
                 dnam{"मी/से"}

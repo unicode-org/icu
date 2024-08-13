@@ -217,7 +217,14 @@ pa{
                 gender{"masculine"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    oblique{
+                        one{"{0} ਮਿਲੀਗ੍ਰਾਮ ਪ੍ਰਤੀ ਡੈਸੀਲਿਟਰ"}
+                        other{"{0} ਮਿਲੀਗ੍ਰਾਮ ਪ੍ਰਤੀ ਡੈਸੀਲਿਟਰ"}
+                    }
+                }
                 dnam{"ਮਿਲੀਗ੍ਰਾਮ ਪ੍ਰਤੀ ਡੈਸੀਲਿਟਰ"}
+                gender{"masculine"}
                 one{"{0} ਮਿਲੀਗ੍ਰਾਮ ਪ੍ਰਤੀ ਡੈਸੀਲਿਟਰ"}
                 other{"{0} ਮਿਲੀਗ੍ਰਾਮ ਪ੍ਰਤੀ ਡੈਸੀਲਿਟਰ"}
             }
@@ -280,6 +287,18 @@ pa{
                 gender{"masculine"}
                 one{"{0} ਪ੍ਰਤੀ ਦਸ ਹਜ਼ਾਰ"}
                 other{"{0} ਪ੍ਰਤੀ ਦਸ ਹਜ਼ਾਰ"}
+            }
+            portion-per-1e9{
+                case{
+                    oblique{
+                        one{"{0} ਹਿੱਸਾ ਪ੍ਰਤੀ ਅਰਬ"}
+                        other{"{0} ਹਿੱਸਾ ਪ੍ਰਤੀ ਅਰਬ"}
+                    }
+                }
+                dnam{"ਹਿੱਸਾ ਪ੍ਰਤੀ ਅਰਬ"}
+                gender{"masculine"}
+                one{"{0} ਹਿੱਸਾ ਪ੍ਰਤੀ ਅਰਬ"}
+                other{"{0} ਹਿੱਸਾ ਪ੍ਰਤੀ ਅਰਬ"}
             }
         }
         consumption{
@@ -523,6 +542,19 @@ pa{
                 one{"{0} ਨੈਨੋਸਕਿੰਟ"}
                 other{"{0} ਨੈਨੋਸਕਿੰਟ"}
             }
+            night{
+                case{
+                    oblique{
+                        one{"{0} ਰਾਤ"}
+                        other{"{0} ਰਾਤਾਂ"}
+                    }
+                }
+                dnam{"ਰਾਤਾਂ"}
+                gender{"feminine"}
+                one{"{0} ਰਾਤ"}
+                other{"{0} ਰਾਤਾਂ"}
+                per{"{0} ਪ੍ਰਤੀ ਰਾਤ"}
+            }
             quarter{
                 dnam{"ਤਿਮਾਹੀਆਂ"}
                 gender{"feminine"}
@@ -639,7 +671,14 @@ pa{
                 other{"{0} ਜੂਲ"}
             }
             kilocalorie{
+                case{
+                    oblique{
+                        one{"{0} ਕਿਲੋਕੈਲੋਰੀ"}
+                        other{"{0} ਕਿਲੋਕੈਲੋਰੀਆਂ"}
+                    }
+                }
                 dnam{"ਕਿਲੋਕੈਲੋਰੀਆਂ"}
+                gender{"feminine"}
                 one{"{0} ਕਿਲੋਕੈਲੋਰੀ"}
                 other{"{0} ਕਿਲੋਕੈਲੋਰੀਆਂ"}
             }
@@ -943,6 +982,13 @@ pa{
                 gender{"masculine"}
             }
             point{
+                case{
+                    oblique{
+                        one{"{0} ਪੁਆਇੰਟ"}
+                        other{"{0} ਪੁਆਇੰਟ"}
+                    }
+                }
+                gender{"masculine"}
                 one{"{0} ਪੁਆਇੰਟ"}
                 other{"{0} ਪੁਆਇੰਟ"}
             }
@@ -1176,7 +1222,14 @@ pa{
                 gender{"masculine"}
             }
             millimeter-ofhg{
+                case{
+                    oblique{
+                        one{"{0} ਮਿਲੀਮੀਟਰ ਪਾਰਾ"}
+                        other{"{0} ਮਿਲੀਮੀਟਰ ਪਾਰਾ"}
+                    }
+                }
                 dnam{"ਮਿਲੀਮੀਟਰ ਪਾਰਾ"}
+                gender{"masculine"}
                 one{"{0} ਮਿਲੀਮੀਟਰ ਪਾਰਾ"}
                 other{"{0} ਮਿਲੀਮੀਟਰ ਪਾਰਾ"}
             }
@@ -1220,6 +1273,18 @@ pa{
                 dnam{"ਨੌਟ"}
                 one{"{0} ਨੌਟ"}
                 other{"{0} ਨੌਟ"}
+            }
+            light-speed{
+                case{
+                    oblique{
+                        one{"{0} ਪ੍ਰਕਾਸ਼"}
+                        other{"{0} ਪ੍ਰਕਾਸ਼"}
+                    }
+                }
+                dnam{"ਪ੍ਰਕਾਸ਼"}
+                gender{"masculine"}
+                one{"{0} ਪ੍ਰਕਾਸ਼"}
+                other{"{0} ਪ੍ਰਕਾਸ਼"}
             }
             meter-per-second{
                 case{
@@ -1592,6 +1657,12 @@ pa{
                 dnam{"ਮਹੀਨਾ"}
                 per{"{0}/ਮ"}
             }
+            night{
+                dnam{"ਰਾਤਾਂ"}
+                one{"{0} ਰਾਤ"}
+                other{"{0} ਰਾਤਾਂ"}
+                per{"{0}/ਰਾਤ"}
+            }
             second{
                 per{"{0}/ਸਕਿੰ"}
             }
@@ -1738,9 +1809,22 @@ pa{
             }
         }
         speed{
+            kilometer-per-hour{
+                one{"{0} ਕਿ.ਮੀ./ਘੰ."}
+                other{"{0} ਕਿ.ਮੀ./ਘੰ."}
+            }
+            light-speed{
+                dnam{"ਪ੍ਰਕਾਸ਼"}
+                one{"{0} ਪ੍ਰਕਾਸ਼"}
+                other{"{0} ਪ੍ਰਕਾਸ਼"}
+            }
             meter-per-second{
                 one{"{0}ਮੀ/ਸ"}
                 other{"{0}ਮੀ/ਸ"}
+            }
+            mile-per-hour{
+                one{"{0} ਮੀਲ/ਘੰ."}
+                other{"{0} ਮੀਲ/ਘੰ."}
             }
         }
         temperature{
@@ -1998,6 +2082,9 @@ pa{
             permyriad{
                 dnam{"ਪ੍ਰਤੀ ਦਸ ਹਜ਼ਾਰ"}
             }
+            portion-per-1e9{
+                dnam{"ਹਿੱਸਾ/ਅਰਬ"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -2112,6 +2199,12 @@ pa{
             }
             nanosecond{
                 dnam{"ਨੈਨੋਸਕਿੰਟ"}
+            }
+            night{
+                dnam{"ਰਾਤਾਂ"}
+                one{"{0} ਰਾਤ"}
+                other{"{0} ਰਾਤਾਂ"}
+                per{"{0}/ਰਾਤ"}
             }
             quarter{
                 dnam{"ਤਿਮਾਹੀ"}
@@ -2488,8 +2581,13 @@ pa{
         speed{
             kilometer-per-hour{
                 dnam{"ਕਿ.ਮੀ./ਘੰਟਾ"}
-                one{"{0} ਕਿ.ਪ੍ਰ.ਘੰ."}
-                other{"{0} ਕਿ.ਪ੍ਰ.ਘੰ."}
+                one{"{0} ਕਿ.ਮੀ./ਘੰ."}
+                other{"{0} ਕਿ.ਮੀ./ਘੰ."}
+            }
+            light-speed{
+                dnam{"ਪ੍ਰਕਾਸ਼"}
+                one{"{0} ਪ੍ਰਕਾਸ਼"}
+                other{"{0} ਪ੍ਰਕਾਸ਼"}
             }
             meter-per-second{
                 dnam{"ਮੀਟਰ/ਸਕਿੰਟ"}
@@ -2498,8 +2596,8 @@ pa{
             }
             mile-per-hour{
                 dnam{"ਮੀਲ/ਘੰਟਾ"}
-                one{"{0} ਮੀ.ਪ੍ਰ.ਘੰ."}
-                other{"{0} ਮੀ.ਪ੍ਰ.ਘੰ."}
+                one{"{0} ਮੀਲ/ਘੰ."}
+                other{"{0} ਮੀਲ/ਘੰ."}
             }
         }
         temperature{

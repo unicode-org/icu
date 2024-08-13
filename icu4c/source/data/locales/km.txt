@@ -983,9 +983,6 @@ km{
         }
         sun-narrow{
             relativeTime{
-                future{
-                    other{"ក្នុងពេល {0} ថ្ងៃអាទិត្យទៀត"}
-                }
                 past{
                     other{"កាលពី {0} ថ្ងៃអាទិត្យមុន"}
                 }

@@ -28,7 +28,7 @@ mi{
         ann{"Ōporo"}
         anp{"Anahika"}
         ar{"Ārapi"}
-        ar_001{"Ārapi Moroko"}
+        ar_001{"Ārapi Moroki"}
         arn{"Mapūte"}
         arp{"Arapaho"}
         ars{"Arapika Nahāri"}
@@ -453,6 +453,7 @@ mi{
     }
     Languages%variant{
         ckb{"Kūrihi, Hōrani"}
+        hi_Latn{"Hīngarihi"}
     }
     Scripts{
         Adlm{"Atarama"}

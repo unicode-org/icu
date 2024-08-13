@@ -6,14 +6,8 @@ cy{
         "Africa:Algiers"{
             ec{"Alger"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "America:Argentina:Tucuman"{
             ec{"Tucumán"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Bahia_Banderas"{
             ec{"Bae Banderas"}
@@ -29,9 +23,6 @@ cy{
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Eirunepe"{
             ec{"Eirunepé"}
@@ -56,9 +47,6 @@ cy{
         }
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Gogledd Dakota"}
-        }
-        "America:St_Barthelemy"{
-            ec{"St. Barthélemy"}
         }
         "Asia:Gaza"{
             ec{"Gasa"}
@@ -142,9 +130,6 @@ cy{
         }
         "Indian:Christmas"{
             ec{"Ynys y Nadolig"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Easter"{
             ec{"Ynys y Pasg"}
@@ -476,6 +461,9 @@ cy{
             ld{"Amser Haf Japan"}
             lg{"Amser Japan"}
             ls{"Amser Safonol Japan"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Amser Kazakhstan"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Amser Dwyrain Kazakhstan"}

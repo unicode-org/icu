@@ -46,8 +46,4 @@ doi{
             other{"(अनजांती करंसी)"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

@@ -1555,34 +1555,6 @@ et{
         US{"USA mõõdustik"}
         metric{"meetermõõdustik"}
     }
-    parse{
-        date{
-            lenient{
-                "[\\- ‑ . /]",
-                "[\\: ∶]",
-            }
-        }
-        general{
-            lenient{
-                "[.．․﹒ 。｡︒]",
-                "['＇’ ՚ ᾽᾿ ʼ]",
-                "[%％﹪ ٪]",
-                "[‰ ؉]",
-                "[\$＄﹩]",
-                "[£ ₤]",
-                "[¥￥]",
-                "[₩￦]",
-                "[₹ ₨ {Rp} {Rs}]",
-            }
-        }
-        number{
-            lenient{
-                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
-                "[,，﹐︐ ⹁ ، ٫ 、﹑､︑]",
-                "[+＋﬩﹢⁺₊ ➕]",
-            }
-        }
-    }
     personNames{
         nameOrderLocales{
             givenFirst{

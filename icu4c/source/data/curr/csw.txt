@@ -2,4 +2,16 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 csw{
+    Currencies{
+        CAD{
+            "CA$",
+            "ᑲᓀᑎᔭᐣ ᐯᔭᐠᐚᐱᐢᐠ",
+        }
+    }
+    CurrencyPlurals{
+        CAD{
+            one{"ᑲᓀᑎᔭᐣ ᐯᔭᐠᐚᐱᐢᐠ"}
+            other{"ᑲᓀᑎᔭᐣ ᐯᔭᐠᐚᐱᐢᐠᐘᐠ"}
+        }
+    }
 }

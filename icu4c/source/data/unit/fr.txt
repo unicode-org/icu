@@ -199,6 +199,7 @@ fr{
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"milligrammes par décilitre"}
+                gender{"masculine"}
                 one{"{0} milligramme par décilitre"}
                 other{"{0} milligrammes par décilitre"}
             }
@@ -237,6 +238,12 @@ fr{
                 gender{"masculine"}
                 one{"{0} pour dix mille"}
                 other{"{0} pour dix mille"}
+            }
+            portion-per-1e9{
+                dnam{"parts par milliard"}
+                gender{"feminine"}
+                one{"{0} part par milliard"}
+                other{"{0} parts par milliard"}
             }
         }
         consumption{
@@ -399,6 +406,13 @@ fr{
                 gender{"feminine"}
                 one{"{0} nanoseconde"}
                 other{"{0} nanosecondes"}
+            }
+            night{
+                dnam{"nuits"}
+                gender{"feminine"}
+                one{"{0} nuit"}
+                other{"{0} nuits"}
+                per{"{0} par nuit"}
             }
             quarter{
                 dnam{"trimestres"}
@@ -711,6 +725,7 @@ fr{
                 other{"{0} picomètres"}
             }
             point{
+                gender{"masculine"}
                 one{"{0} point typographique"}
                 other{"{0} points typographiques"}
             }
@@ -925,6 +940,7 @@ fr{
             }
             millimeter-ofhg{
                 dnam{"millimètres de mercure"}
+                gender{"masculine"}
                 one{"{0} millimètre de mercure"}
                 other{"{0} millimètres de mercure"}
             }
@@ -956,6 +972,12 @@ fr{
                 dnam{"nœuds"}
                 one{"{0} nœud"}
                 other{"{0} nœuds"}
+            }
+            light-speed{
+                dnam{"lumière"}
+                gender{"feminine"}
+                one{"{0} lumière"}
+                other{"{0} lumière"}
             }
             meter-per-second{
                 dnam{"mètres par seconde"}
@@ -1304,6 +1326,10 @@ fr{
                 one{"{0}‱"}
                 other{"{0}‱"}
             }
+            portion-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1414,6 +1440,12 @@ fr{
             nanosecond{
                 one{"{0}ns"}
                 other{"{0}ns"}
+            }
+            night{
+                dnam{"nuits"}
+                one{"{0}nuit"}
+                other{"{0}nuits"}
+                per{"{0}/nuit"}
             }
             quarter{
                 dnam{"T"}
@@ -1758,6 +1790,11 @@ fr{
             knot{
                 one{"{0} nd"}
                 other{"{0} nd"}
+            }
+            light-speed{
+                dnam{"lumière"}
+                one{"{0} lumière"}
+                other{"{0} lumière"}
             }
             meter-per-second{
                 one{"{0} m/s"}
@@ -2179,6 +2216,12 @@ fr{
                 one{"{0} ns"}
                 other{"{0} ns"}
             }
+            night{
+                dnam{"nuits"}
+                one{"{0} nuit"}
+                other{"{0} nuits"}
+                per{"{0}/nuit"}
+            }
             quarter{
                 dnam{"trim."}
                 one{"{0} trim."}
@@ -2584,6 +2627,11 @@ fr{
                 dnam{"nd"}
                 one{"{0} nd"}
                 other{"{0} nd"}
+            }
+            light-speed{
+                dnam{"lumière"}
+                one{"{0} lumière"}
+                other{"{0} lumière"}
             }
             meter-per-second{
                 one{"{0} m/s"}

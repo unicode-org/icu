@@ -24,9 +24,6 @@ sv{
         "Africa:Ndjamena"{
             ec{"N’Djamena"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "America:Araguaina"{
             ec{"Araguaína"}
         }
@@ -35,9 +32,6 @@ sv{
         }
         "America:Argentina:Tucuman"{
             ec{"Tucumán"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Belem"{
             ec{"Belém"}
@@ -54,9 +48,6 @@ sv{
         "America:Cuiaba"{
             ec{"Cuiabá"}
         }
-        "America:Curacao"{
-            ec{"Curaçao"}
-        }
         "America:Eirunepe"{
             ec{"Eirunepé"}
         }
@@ -71,9 +62,6 @@ sv{
         }
         "America:Mazatlan"{
             ec{"Mazatlán"}
-        }
-        "America:Mexico_City"{
-            ec{"Mexiko City"}
         }
         "America:Noronha"{
             ec{"Fernando de Noronha"}
@@ -287,9 +275,6 @@ sv{
         }
         "Indian:Maldives"{
             ec{"Maldiverna"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Easter"{
             ec{"Påskön"}
@@ -681,6 +666,9 @@ sv{
             ld{"Kamtjatkasommartid"}
             lg{"Kamtjatkatid"}
             ls{"Kamtjatkanormaltid"}
+        }
+        "meta:Kazakhstan"{
+            ls{"kazakstansk tid"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"östkazakstansk tid"}

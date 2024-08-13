@@ -1577,6 +1577,9 @@ ps{
             lg{"جاپان وخت"}
             ls{"جاپان معياري وخت"}
         }
+        "meta:Kazakhstan"{
+            ls{"قزاقستان وخت"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"ختيځ قازقستان وخت"}
         }

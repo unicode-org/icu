@@ -299,7 +299,7 @@ eu{
         ZZ{"Eskualde ezezaguna"}
     }
     Countries%chagos{
-        IO{"Chagos uhartedia"}
+        IO{"Txagos uhartedia"}
     }
     Countries%short{
         GB{"EB"}

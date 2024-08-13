@@ -1186,15 +1186,52 @@ ko{
                         afternoon1{"오후"}
                         evening1{"저녁"}
                         midnight{"자정"}
-                        morning1{"새벽"}
+                        morning1{"아침"}
+                        morning2{"오전"}
+                        night1{"밤"}
+                        noon{"정오"}
+                    }
+                    narrow{
+                        afternoon1{"오후"}
+                        evening1{"저녁"}
+                        midnight{"자정"}
+                        morning1{"아침"}
+                        morning2{"오전"}
+                        night1{"밤"}
+                        noon{"정오"}
+                    }
+                    wide{
+                        afternoon1{"오후"}
+                        evening1{"저녁"}
+                        midnight{"자정"}
+                        morning1{"아침"}
                         morning2{"오전"}
                         night1{"밤"}
                         noon{"정오"}
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        afternoon1{"오후"}
+                        evening1{"저녁"}
+                        morning1{"아침"}
+                        morning2{"오전"}
+                        night1{"밤"}
+                    }
+                    narrow{
+                        afternoon1{"오후"}
+                        evening1{"저녁"}
+                        morning1{"아침"}
+                        morning2{"오전"}
+                        night1{"밤"}
+                    }
                     wide{
+                        afternoon1{"오후"}
                         am{"오전"}
+                        evening1{"저녁"}
+                        morning1{"아침"}
+                        morning2{"오전"}
+                        night1{"밤"}
                         pm{"오후"}
                     }
                 }
@@ -1301,8 +1338,8 @@ ko{
                     d{"MMM d일~d일"}
                 }
                 Md{
-                    M{"M. d ~ M. d"}
-                    d{"M. d ~ M. d"}
+                    M{"M/d ~ M/d"}
+                    d{"M/d ~ M/d"}
                 }
                 d{
                     d{"d일~d일"}
@@ -1880,7 +1917,7 @@ ko{
         rightwards_arrows{"오른쪽 방향 화살표"}
         sign_standard_symbols{"상징/표준 기호"}
         small_form_variant{"작은 부호 변형"}
-        smiley{"스마일"}
+        smiley{"스마일리"}
         smileys_people{"스마일리 및 사람"}
         south_asian_scripts{"남아시아 문자"}
         southeast_asian_scripts{"동남아시아 문자"}
@@ -2186,7 +2223,7 @@ ko{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

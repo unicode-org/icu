@@ -321,72 +321,68 @@ name ; title; mnr.
 name ; given; Bertus Wilbers
 name ; given-informal; Bertie
 name ; given2; Henri Retief
-name ; surname-core; Wyk
+name ; surname-core; Willemse
 name ; generation; jnr.
 name ; credentials; LP
 name ; locale; af_AQ
 
-expectedResult; mnr. Bertus Wilbers Henri Retief Wyk jnr., LP
+expectedResult; mnr. Bertus Wilbers Henri Retief Willemse jnr., LP
 
 parameters; givenFirst; long; referring; formal
 
-expectedResult; Wyk Bertus Wilbers Henri Retief LP
+expectedResult; Willemse Bertus Wilbers Henri Retief LP
 
 parameters; surnameFirst; long; referring; formal
 
-expectedResult; Wyk, Bertus Wilbers Henri Retief
+expectedResult; Willemse, Bertus Wilbers Henri Retief
 
 parameters; sorting; long; referring; formal
 
-expectedResult; Bertus Wilbers H. R. Wyk LP
+expectedResult; Bertus Wilbers H. R. Willemse LP
 
 parameters; givenFirst; medium; referring; formal
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; Wyk Bertus Wilbers H. R. LP
+expectedResult; Willemse Bertus Wilbers H. R. LP
 
 parameters; surnameFirst; medium; referring; formal
 
-expectedResult; Wyk, Bertus Wilbers H. R.
+expectedResult; Willemse, Bertus Wilbers H. R.
 
 parameters; sorting; medium; referring; formal
 
-expectedResult; Wyk, B. W. H. R.
+expectedResult; Willemse, B. W. H. R.
 
 parameters; sorting; short; referring; formal
 
-expectedResult; B. W. H. R. Wyk
+expectedResult; B. W. H. R. Willemse
 
 parameters; givenFirst; short; referring; formal
 
-expectedResult; Wyk B. W. H. R.
+expectedResult; Willemse B. W. H. R.
 
 parameters; surnameFirst; short; referring; formal
 
-expectedResult; Wyk, Bertie
+expectedResult; Willemse, Bertie
 
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; Bertie Wyk
+expectedResult; Bertie Willemse
 
 parameters; givenFirst; long; referring; informal
 
-expectedResult; Wyk Bertie
+expectedResult; Willemse Bertie
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
 
-expectedResult; Bertie W.
-
-parameters; givenFirst; short; referring; informal
-
-expectedResult; Wyk B. W.
+expectedResult; Willemse B. W.
 
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; mnr. Wyk
+expectedResult; mnr. Willemse
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
@@ -394,6 +390,10 @@ parameters; givenFirst; short; addressing; formal
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; short; addressing; formal
+
+expectedResult; Bertie W.
+
+parameters; givenFirst; short; referring; informal
 
 expectedResult; Bertie
 

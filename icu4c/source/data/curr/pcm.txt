@@ -1045,8 +1045,4 @@ pcm{
             other{"Zámbiá kwáchas"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

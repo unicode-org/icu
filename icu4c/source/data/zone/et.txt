@@ -12,14 +12,20 @@ et{
         "Africa:Cairo"{
             ec{"Kairo"}
         }
+        "Africa:El_Aaiun"{
+            ec{"El Aaiún"}
+        }
         "Africa:Khartoum"{
             ec{"Hartum"}
         }
+        "Africa:Lome"{
+            ec{"Lomé"}
+        }
+        "Africa:Mogadishu"{
+            ec{"Muqdisho"}
+        }
         "Africa:Ndjamena"{
             ec{"N’Djamena"}
-        }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
         }
         "America:Araguaina"{
             ec{"Araguaína"}
@@ -29,9 +35,6 @@ et{
         }
         "America:Argentina:Tucuman"{
             ec{"Tucumán"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
@@ -47,9 +50,6 @@ et{
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Eirunepe"{
             ec{"Eirunepé"}
@@ -182,6 +182,9 @@ et{
         }
         "Asia:Riyadh"{
             ec{"Ar-Riyāḑ"}
+        }
+        "Asia:Saigon"{
+            ec{"Hô Chi Minh"}
         }
         "Asia:Sakhalin"{
             ec{"Sahhalin"}
@@ -336,11 +339,11 @@ et{
         "Indian:Cocos"{
             ec{"Kookossaared"}
         }
+        "Indian:Mahe"{
+            ec{"Mahé"}
+        }
         "Indian:Maldives"{
             ec{"Maldiivid"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Easter"{
             ec{"Lihavõttesaar"}
@@ -357,8 +360,14 @@ et{
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }
+        "Pacific:Kanton"{
+            ec{"Abariringa"}
+        }
         "Pacific:Marquesas"{
             ec{"Markiisaared"}
+        }
+        "Pacific:Noumea"{
+            ec{"Nouméa"}
         }
         "Pacific:Palau"{
             ec{"Belau"}
@@ -570,7 +579,7 @@ et{
             ls{"Davise aeg"}
         }
         "meta:DumontDUrville"{
-            ls{"Dumont-d’Urville’i aeg"}
+            ls{"Dumont d’Urville’i aeg"}
         }
         "meta:East_Timor"{
             ls{"Ida-Timori aeg"}
@@ -633,6 +642,11 @@ et{
         }
         "meta:Gilbert_Islands"{
             ls{"Gilberti saarte aeg"}
+        }
+        "meta:Greenland"{
+            ld{"Gröönimaa suveaeg"}
+            lg{"Gröönimaa aeg"}
+            ls{"Gröönimaa standardaeg"}
         }
         "meta:Greenland_Eastern"{
             ld{"Ida-Gröönimaa suveaeg"}
@@ -710,6 +724,9 @@ et{
             ld{"Kamtšatka suveaeg"}
             lg{"Petropavlovsk-Kamtšatski aeg"}
             ls{"Kamtšatka standardaeg"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Kasahstani aeg"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Ida-Kasahstani aeg"}

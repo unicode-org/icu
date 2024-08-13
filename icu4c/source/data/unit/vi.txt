@@ -118,6 +118,10 @@ vi{
             permyriad{
                 other{"{0} phần vạn"}
             }
+            portion-per-1e9{
+                dnam{"phần tỷ"}
+                other{"{0} phần tỷ"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -178,6 +182,13 @@ vi{
             terabyte{
                 dnam{"terabyte"}
                 other{"{0} terabyte"}
+            }
+        }
+        duration{
+            night{
+                dnam{"đêm"}
+                other{"{0} đêm"}
+                per{"{0}/đêm"}
             }
         }
         electric{
@@ -486,6 +497,10 @@ vi{
                 dnam{"hải lý/giờ"}
                 other{"{0} hải lý/giờ"}
             }
+            light-speed{
+                dnam{"tốc độ ánh sáng"}
+                other{"{0} tốc độ ánh sáng"}
+            }
             meter-per-second{
                 dnam{"mét/giây"}
                 other{"{0} mét/giây"}
@@ -631,6 +646,9 @@ vi{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                other{"{0}ppb"}
+            }
         }
         digital{
             byte{
@@ -644,6 +662,11 @@ vi{
         duration{
             millisecond{
                 other{"{0}miligiây"}
+            }
+            night{
+                dnam{"đêm"}
+                other{"{0} đêm"}
+                per{"{0}/đêm"}
             }
         }
         energy{
@@ -732,6 +755,12 @@ vi{
                 other{"{0} mb"}
             }
         }
+        speed{
+            light-speed{
+                dnam{"tốc độ ánh sáng"}
+                other{"{0}tốc độ ánh sáng"}
+            }
+        }
         volume{
             cubic-kilometer{
                 other{"{0}km³"}
@@ -788,6 +817,9 @@ vi{
             }
             permyriad{
                 dnam{"phần vạn"}
+            }
+            portion-per-1e9{
+                dnam{"phần tỷ"}
             }
         }
         consumption{
@@ -856,6 +888,11 @@ vi{
             nanosecond{
                 dnam{"nano giây"}
                 other{"{0} nano giây"}
+            }
+            night{
+                dnam{"đêm"}
+                other{"{0} đêm"}
+                per{"{0}/đêm"}
             }
             quarter{
                 dnam{"quý"}
@@ -1005,6 +1042,10 @@ vi{
             }
         }
         speed{
+            light-speed{
+                dnam{"tốc độ ánh sáng"}
+                other{"{0} tốc độ ánh sáng"}
+            }
             mile-per-hour{
                 other{"{0} mph"}
             }

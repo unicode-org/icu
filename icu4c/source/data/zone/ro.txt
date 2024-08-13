@@ -18,17 +18,11 @@ ro{
         "Africa:Sao_Tome"{
             ec{"Sao Tomé"}
         }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
         }
         "America:Cancun"{
             ec{"Cancun"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Guadeloupe"{
             ec{"Guadelupa"}
@@ -255,9 +249,6 @@ ro{
         }
         "Indian:Maldives"{
             ec{"Maldive"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Easter"{
             ec{"Insula Paștelui"}
@@ -625,6 +616,9 @@ ro{
             ld{"Ora de vară din Petropavlovsk-Kamciațki"}
             lg{"Ora din Petropavlovsk-Kamciațki"}
             ls{"Ora standard din Petropavlovsk-Kamciațki"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Ora din Kazahstan"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Ora din Kazahstanul de Est"}

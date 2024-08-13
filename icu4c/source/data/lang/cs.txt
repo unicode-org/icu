@@ -92,6 +92,7 @@ cs{
         bjn{"bandžarština"}
         bkm{"kom"}
         bla{"siksika"}
+        blo{"aniiština"}
         bm{"bambarština"}
         bn{"bengálština"}
         bo{"tibetština"}
@@ -332,6 +333,7 @@ cs{
         kv{"komijština"}
         kw{"kornština"}
         kwk{"kvakiutština"}
+        kxv{"kúvi"}
         ky{"kyrgyzština"}
         la{"latina"}
         lad{"ladinština"}
@@ -620,13 +622,13 @@ cs{
         und{"neznámý jazyk"}
         ur{"urdština"}
         uz{"uzbečtina"}
-        vai{"vai"}
         ve{"venda"}
         vec{"benátština"}
         vep{"vepština"}
         vi{"vietnamština"}
         vls{"vlámština (západní)"}
         vmf{"němčina (mohansko-franské dialekty)"}
+        vmw{"makhuwština"}
         vo{"volapük"}
         vot{"votština"}
         vro{"võruština"}
@@ -642,6 +644,7 @@ cs{
         xal{"kalmyčtina"}
         xh{"xhoština"}
         xmf{"mingrelština"}
+        xnr{"kángrí"}
         xog{"sogština"}
         yao{"jaoština"}
         yap{"japština"}

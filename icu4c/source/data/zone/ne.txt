@@ -1580,6 +1580,9 @@ ne{
             lg{"जापान समय"}
             ls{"जापान मानक समय"}
         }
+        "meta:Kazakhstan"{
+            ls{"काजकस्तानको समय"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"पूर्वी काजकस्तान समय"}
         }

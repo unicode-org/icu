@@ -181,7 +181,10 @@ pcm{
             ec{"Sálta"}
         }
         "America:Argentina:San_Juan"{
-            ec{"San Hwan"}
+            ec{"Sán Hwán"}
+        }
+        "America:Argentina:San_Luis"{
+            ec{"Sán Luis"}
         }
         "America:Argentina:Tucuman"{
             ec{"Túkúman"}
@@ -632,6 +635,9 @@ pcm{
         }
         "Asia:Bahrain"{
             ec{"Bahrén"}
+        }
+        "Asia:Baku"{
+            ec{"Báku"}
         }
         "Asia:Bangkok"{
             ec{"Bánkọk"}
@@ -1519,6 +1525,9 @@ pcm{
             ld{"Japan Délaít Taim"}
             lg{"Japan Taim"}
             ls{"Japan Fíksd Taim"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Kazékstan Taim"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Íst Kazékstan Taim"}

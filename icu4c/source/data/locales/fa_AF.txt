@@ -63,8 +63,8 @@ fa_AF{
                 stand-alone{
                     narrow{
                         afternoon1{"بعد از چاشت"}
-                        morning1{"ب"}
-                        night1{"ش"}
+                        morning1{"بامداد"}
+                        night1{"شب"}
                     }
                 }
             }

@@ -2534,9 +2534,4 @@ bs_Cyrl{
             other{"зимбабвејски долари"}
         }
     }
-    CurrencyUnitPatterns{
-        few{"{0} {1}"}
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

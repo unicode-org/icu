@@ -2,16 +2,15 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ml{
-    AuxExemplarCharacters{"[\u200C\u200Dഃ ൠ ഌ ൡ ൿ]"}
+    AuxExemplarCharacters{"[\u200C\u200Dഃ ൠ ഌ ൡ ൿ ൺ ൻ ം ർ ൽ ൾ ാ ി ീ ു ൂ ൃ െ േ ൈ ൊ ോ ൗ ്]"}
     ExemplarCharacters{
-        "[അ ആ ഇ ഈ ഉ ഊ ഋ എ ഏ ഐ ഒ ഓ ഔ ക ഖ ഗ ഘ ങ ച ഛ ജ ഝ ഞ ട ഠ ഡ ഢ ണ ൺ ത ഥ ദ ധ ന ൻ പ ഫ ബ"
-        " ഭ മ ം യ ര ർ ല ൽ വ ശ ഷ സ ഹ ള ൾ ഴ റ ാ ി ീ ു ൂ ൃ െ േ ൈ ൊ ോ ൌ ൗ ്]"
+        "[അ{അഃ} {അം} ആ ഇ ഈ ഉ ഊ ഋ എ ഏ ഐ ഒ ഓ ഔ ക ഖ ഗ ഘ ങ ച ഛ ജ ഝ ഞ ട ഠ ഡ ഢ ണ ത ഥ ദ ധ ന "
+        "പ ഫ ബ ഭ മ യ ര ല വ ശ ഷ സ ഹ ള ഴ റ]"
     }
     ExemplarCharactersIndex{
         "[അ ആ ഇ ഈ ഉ ഊ ഋ എ ഏ ഐ ഒ ഓ ഔ ക ഖ ഗ ഘ ങ ച ഛ ജ ഝ ഞ ട ഠ ഡ ഢ ണ ത ഥ ദ ധ ന പ ഫ ബ ഭ മ"
         " യ ര ല വ ശ ഷ സ ഹ ള ഴ റ]"
     }
-    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0൦ 1൧ 2൨ 3൩ 4൪ 5൫ 6൬ 7൭ 8൮ 9൯]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
         latn{
@@ -54,16 +53,16 @@ ml{
                         other{"000 ദശലക്ഷം"}
                     }
                     1000000000{
-                        one{"0 ലക്ഷം കോടി"}
-                        other{"0 ലക്ഷം കോടി"}
+                        one{"0 ബില്യൺ"}
+                        other{"0 ബില്യൺ"}
                     }
                     10000000000{
-                        one{"00 ലക്ഷം കോടി"}
-                        other{"00 ലക്ഷം കോടി"}
+                        one{"00 ബില്യൺ"}
+                        other{"00 ബില്യൺ"}
                     }
                     100000000000{
-                        one{"000 ലക്ഷം കോടി"}
-                        other{"000 ലക്ഷം കോടി"}
+                        one{"000 ബില്യൺ"}
+                        other{"000 ബില്യൺ"}
                     }
                     1000000000000{
                         one{"0 ട്രില്യൺ"}
@@ -409,7 +408,7 @@ ml{
                 Bhms{"B h:mm:ss"}
                 EBhm{"E, B h:mm"}
                 EBhms{"E, B h:mm:ss"}
-                GyMd{"M/d/y GGGGG"}
+                GyMd{"M/d/y G"}
                 MEd{"d/M, E"}
                 MMMMEd{"MMMM d, E"}
                 MMMMW{
@@ -514,7 +513,7 @@ ml{
             }
             eras{
                 abbreviated{
-                    "ക്രി.മു.",
+                    "ബി.സി.",
                     "എഡി",
                 }
                 abbreviated%variant{
@@ -733,6 +732,20 @@ ml{
                         "മാഘം",
                         "ഫൽഗുനം",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
                     wide{
                         "ചൈത്രം",
                         "വൈശാഖം",
@@ -746,22 +759,6 @@ ml{
                         "പൗഷം",
                         "മാഘം",
                         "ഫാൽഗുനം",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "ചൈ",
-                        "വൈ",
-                        "ജ്യേ",
-                        "ആ",
-                        "ശ്രാ",
-                        "ഭാ",
-                        "ആ",
-                        "കാ",
-                        "മാ",
-                        "പൗ",
-                        "മാ",
-                        "ഫ",
                     }
                 }
             }

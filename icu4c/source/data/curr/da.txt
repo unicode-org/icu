@@ -2103,8 +2103,4 @@ da{
             other{"Zimbabwiske dollar (2008)"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

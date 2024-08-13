@@ -647,6 +647,9 @@ mi{
             lg{"Wā Hapani"}
             ls{"Wā Hapani Arowhānui"}
         }
+        "meta:Kazakhstan"{
+            ls{"Wā Katatānga"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Wā Katatānga ki te Rāwhiti"}
         }

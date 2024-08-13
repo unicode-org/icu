@@ -1218,7 +1218,4 @@ id{
             other{"Dinar Keras Yugoslavia"}
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

@@ -9,12 +9,6 @@ da{
         "Africa:Algiers"{
             ec{"Algier"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
         }
@@ -23,9 +17,6 @@ da{
         }
         "America:Cayman"{
             ec{"Caymanøerne"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Merida"{
             ec{"Merida"}
@@ -188,9 +179,6 @@ da{
         }
         "Indian:Maldives"{
             ec{"Maldiverne"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Easter"{
             ec{"Påskeøen"}
@@ -554,6 +542,9 @@ da{
             ld{"Petropavlovsk-Kamchatski sommertid"}
             lg{"Petropavlovsk-Kamchatski tid"}
             ls{"Petropavlovsk-Kamchatski normaltid"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Kasakhstansk tid"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Østkasakhstansk tid"}

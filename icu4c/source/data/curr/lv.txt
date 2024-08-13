@@ -1631,9 +1631,4 @@ lv{
             zero{"Zimbabves dollāri (2009)"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-        zero{"{0} {1}"}
-    }
 }

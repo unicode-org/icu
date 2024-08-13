@@ -822,8 +822,41 @@ sk{
                 other{"{0} karátov"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    accusative{
+                        few{"{0} miligramy na deciliter"}
+                        many{"{0} miligramu na deciliter"}
+                        one{"{0} miligram na deciliter"}
+                        other{"{0} miligramov na deciliter"}
+                    }
+                    dative{
+                        few{"{0} miligramom na deciliter"}
+                        many{"{0} miligramu na deciliter"}
+                        one{"{0} miligramu na deciliter"}
+                        other{"{0} miligramom na deciliter"}
+                    }
+                    genitive{
+                        few{"{0} miligramov na deciliter"}
+                        many{"{0} miligramu na deciliter"}
+                        one{"{0} miligramu na deciliter"}
+                        other{"{0} miligramov na deciliter"}
+                    }
+                    instrumental{
+                        few{"{0} miligramami na deciliter"}
+                        many{"{0} miligramu na deciliter"}
+                        one{"{0} miligramom na deciliter"}
+                        other{"{0} miligramami na deciliter"}
+                    }
+                    locative{
+                        few{"{0} miligramoch na deciliter"}
+                        many{"{0} miligramu na deciliter"}
+                        one{"{0} miligrame na deciliter"}
+                        other{"{0} miligramoch na deciliter"}
+                    }
+                }
                 dnam{"miligramy na deciliter"}
                 few{"{0} miligramy na deciliter"}
+                gender{"inanimate"}
                 many{"{0} miligramu na deciliter"}
                 one{"{0} miligram na deciliter"}
                 other{"{0} miligramov na deciliter"}
@@ -1067,6 +1100,46 @@ sk{
                 many{"{0} desatiny promile"}
                 one{"{0} desatina promile"}
                 other{"{0} desatín promile"}
+            }
+            portion-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} častice na miliardu"}
+                        many{"{0} častice na miliardu"}
+                        one{"{0} časticu na miliardu"}
+                        other{"{0} častíc na miliardu"}
+                    }
+                    dative{
+                        few{"{0} časticiam na miliardu"}
+                        many{"{0} častice na miliardu"}
+                        one{"{0} častici na miliardu"}
+                        other{"{0} časticiam na miliardu"}
+                    }
+                    genitive{
+                        few{"{0} častíc na miliardu"}
+                        many{"{0} častice na miliardu"}
+                        one{"{0} častice na miliardu"}
+                        other{"{0} častíc na miliardu"}
+                    }
+                    instrumental{
+                        few{"{0} časticami na miliardu"}
+                        many{"{0} častice na miliardu"}
+                        one{"{0} časticou na miliardu"}
+                        other{"{0} časticami na miliardu"}
+                    }
+                    locative{
+                        few{"{0} časticiach na miliardu"}
+                        many{"{0} častice na miliardu"}
+                        one{"{0} častici na miliardu"}
+                        other{"{0} časticiach na miliardu"}
+                    }
+                }
+                dnam{"častice na miliardu"}
+                few{"{0} častice na miliardu"}
+                gender{"feminine"}
+                many{"{0} častice na miliardu"}
+                one{"{0} častica na miliardu"}
+                other{"{0} častíc na miliardu"}
             }
         }
         consumption{
@@ -1998,6 +2071,47 @@ sk{
                 one{"{0} nanosekunda"}
                 other{"{0} nanosekúnd"}
             }
+            night{
+                case{
+                    accusative{
+                        few{"{0} noci"}
+                        many{"{0} noci"}
+                        one{"{0} noc"}
+                        other{"{0} nocí"}
+                    }
+                    dative{
+                        few{"{0} nociam"}
+                        many{"{0} noci"}
+                        one{"noci"}
+                        other{"{0} nociam"}
+                    }
+                    genitive{
+                        few{"{0} nocí"}
+                        many{"{0} noci"}
+                        one{"noci"}
+                        other{"{0} nocí"}
+                    }
+                    instrumental{
+                        few{"{0} nocami"}
+                        many{"{0} noci"}
+                        one{"nocou"}
+                        other{"{0} nocami"}
+                    }
+                    locative{
+                        few{"{0} nociach"}
+                        many{"{0} noci"}
+                        one{"noci"}
+                        other{"{0} nociach"}
+                    }
+                }
+                dnam{"noci"}
+                few{"{0} noci"}
+                gender{"feminine"}
+                many{"{0} noci"}
+                one{"{0} noc"}
+                other{"{0} nocí"}
+                per{"{0}/noc"}
+            }
             quarter{
                 case{
                     accusative{
@@ -2427,8 +2541,41 @@ sk{
                 other{"{0} joulov"}
             }
             kilocalorie{
+                case{
+                    accusative{
+                        few{"{0} kilokalórie"}
+                        many{"{0} kilokalórie"}
+                        one{"{0} kilokalóriu"}
+                        other{"{0} kilokalórii"}
+                    }
+                    dative{
+                        few{"{0} kilokalóriám"}
+                        many{"{0} kilokalórie"}
+                        one{"{0} kilokalórii"}
+                        other{"{0} kilokalóriám"}
+                    }
+                    genitive{
+                        few{"{0} kilokalórií"}
+                        many{"{0} kilokalórie"}
+                        one{"{0} kilokalórie"}
+                        other{"{0} kilokalórii"}
+                    }
+                    instrumental{
+                        few{"{0} kilokalóriami"}
+                        many{"{0} kilokalórie"}
+                        one{"{0} kilokalóriou"}
+                        other{"{0} kilokalóriami"}
+                    }
+                    locative{
+                        few{"{0} kilokalóriách"}
+                        many{"{0} kilokalórie"}
+                        one{"{0} kilokalórii"}
+                        other{"{0} kilokalóriách"}
+                    }
+                }
                 dnam{"kilokalórie"}
                 few{"{0} kilokalórie"}
+                gender{"feminine"}
                 many{"{0} kilokalórie"}
                 one{"{0} kilokalória"}
                 other{"{0} kilokalórií"}
@@ -2523,7 +2670,44 @@ sk{
         }
         force{
             kilowatt-hour-per-100-kilometer{
+                case{
+                    accusative{
+                        few{"{0} kilowatthodiny na 100 kilometrov"}
+                        many{"{0} kilowatthodiny na 100 kilometrov"}
+                        one{"{0} kilowatthodinu na 100 kilometrov"}
+                        other{"{0} kilowatthodín na 100 kilometrov"}
+                    }
+                    dative{
+                        few{"{0} kilowatthodinám na 100 kilometrov"}
+                        many{"{0} kilowatthodiny na 100 kilometrov"}
+                        one{"{0} kilowatthodine na 100 kilometrov"}
+                        other{"{0} kilowatthodinám na 100 kilometrov"}
+                    }
+                    genitive{
+                        few{"{0} kilowatthodín na 100 kilometrov"}
+                        many{"{0} kilowatthodiny na 100 kilometrov"}
+                        one{"{0} kilowatthodiny na 100 kilometrov"}
+                        other{"{0} kilowatthodín na 100 kilometrov"}
+                    }
+                    instrumental{
+                        few{"{0} kilowatthodinami na 100 kilometrov"}
+                        many{"{0} kilowatthodiny na 100 kilometrov"}
+                        one{"{0} kilowatthodinou na 100 kilometrov"}
+                        other{"{0} kilowatthodinami na 100 kilometrov"}
+                    }
+                    locative{
+                        few{"{0} kilowatthodinách na 100 kilometrov"}
+                        many{"{0} kilowatthodiny na 100 kilometrov"}
+                        one{"{0} kilowatthodine na 100 kilometrov"}
+                        other{"{0} kilowatthodinách na 100 kilometrov"}
+                    }
+                }
+                dnam{"kilowatthodiny na 100 kilometrov"}
+                few{"{0} kilowatthodiny na 100 kilometrov"}
                 gender{"feminine"}
+                many{"{0} kilowatthodiny na 100 kilometrov"}
+                one{"{0} kilowatthodina na 100 kilometrov"}
+                other{"{0} kilowatthodín na 100 kilometrov"}
             }
             newton{
                 case{
@@ -2976,6 +3160,13 @@ sk{
                 one{"{0} decimeter"}
                 other{"{0} decimetrov"}
             }
+            earth-radius{
+                dnam{"polomer Zeme"}
+                few{"{0} polomery Zeme"}
+                many{"{0} polomeru Zeme"}
+                one{"{0} polomer Zeme"}
+                other{"{0} polomerov Zeme"}
+            }
             fathom{
                 dnam{"siahy"}
                 few{"{0} siahy"}
@@ -3317,8 +3508,41 @@ sk{
                 other{"{0} pikometrov"}
             }
             point{
+                case{
+                    accusative{
+                        few{"{0} typografické body"}
+                        many{"{0} typografického bodu"}
+                        one{"{0} typografický bod"}
+                        other{"{0} typografických bodov"}
+                    }
+                    dative{
+                        few{"{0} typografickým bodom"}
+                        many{"{0} typografického bodu"}
+                        one{"{0} typografickému bodu"}
+                        other{"{0} typografickým bodom"}
+                    }
+                    genitive{
+                        few{"{0} typografických bodov"}
+                        many{"{0} typografického bodu"}
+                        one{"{0} typografického bodu"}
+                        other{"{0} typografických bodov"}
+                    }
+                    instrumental{
+                        few{"{0} typografickými bodmi"}
+                        many{"{0} typografického bodu"}
+                        one{"{0} typografickým bodom"}
+                        other{"{0} typografickými bodmi"}
+                    }
+                    locative{
+                        few{"{0} typografických bodoch"}
+                        many{"{0} typografického bodu"}
+                        one{"{0} typografickom bode"}
+                        other{"{0} typografických bodoch"}
+                    }
+                }
                 dnam{"typografické body"}
                 few{"{0} typografické body"}
+                gender{"inanimate"}
                 many{"{0} typografického bodu"}
                 one{"{0} typografický bod"}
                 other{"{0} typografických bodov"}
@@ -4227,8 +4451,41 @@ sk{
                 other{"{0} milibarov"}
             }
             millimeter-ofhg{
+                case{
+                    accusative{
+                        few{"{0} milimetre ortuťového stĺpca"}
+                        many{"{0} milimetra ortuťového stĺpca"}
+                        one{"{0} milimeter ortuťového stĺpca"}
+                        other{"{0} milimetrov ortuťového stĺpca"}
+                    }
+                    dative{
+                        few{"{0} milimetrom ortuťového stĺpca"}
+                        many{"{0} milimetra ortuťového stĺpca"}
+                        one{"{0} milimetru ortuťového stĺpca"}
+                        other{"{0} milimetrom ortuťového stĺpca"}
+                    }
+                    genitive{
+                        few{"{0} milimetrov ortuťového stĺpca"}
+                        many{"{0} milimetra ortuťového stĺpca"}
+                        one{"{0} milimetra ortuťového stĺpca"}
+                        other{"{0} milimetrov ortuťového stĺpca"}
+                    }
+                    instrumental{
+                        few{"{0} milimetrami ortuťového stĺpca"}
+                        many{"{0} milimetra ortuťového stĺpca"}
+                        one{"{0} milimetrom ortuťového stĺpca"}
+                        other{"{0} milimetrami ortuťového stĺpca"}
+                    }
+                    locative{
+                        few{"{0} milimetroch ortuťového stĺpca"}
+                        many{"{0} milimetra ortuťového stĺpca"}
+                        one{"{0} milimetri ortuťového stĺpca"}
+                        other{"{0} milimetroch ortuťového stĺpca"}
+                    }
+                }
                 dnam{"milimetre ortuťového stĺpca"}
                 few{"{0} milimetre ortuťového stĺpca"}
+                gender{"inanimate"}
                 many{"{0} milimetra ortuťového stĺpca"}
                 one{"{0} milimeter ortuťového stĺpca"}
                 other{"{0} milimetrov ortuťového stĺpca"}
@@ -4335,6 +4592,46 @@ sk{
                 many{"{0} uzla"}
                 one{"{0} uzol"}
                 other{"{0} uzlov"}
+            }
+            light-speed{
+                case{
+                    accusative{
+                        few{"{0} rýchlosti svetla"}
+                        many{"{0} rýchlosti svetla"}
+                        one{"{0} rýchlosť svetla"}
+                        other{"{0} rýchlostí svetla"}
+                    }
+                    dative{
+                        few{"{0} rýchlostiam svetla"}
+                        many{"{0} rýchlosti svetla"}
+                        one{"{0} rýchlosti svetla"}
+                        other{"{0} rýchlostiam svetla"}
+                    }
+                    genitive{
+                        few{"{0} rýchlostí svetla"}
+                        many{"{0} rýchlosti svetla"}
+                        one{"{0} rýchlosti svetla"}
+                        other{"{0} rýchlostí svetla"}
+                    }
+                    instrumental{
+                        few{"{0} rýchlosťami svetla"}
+                        many{"{0} rýchlosti svetla"}
+                        one{"{0} rýchlosťou svetla"}
+                        other{"{0} rýchlosťami svetla"}
+                    }
+                    locative{
+                        few{"{0} rýchlostiach svetla"}
+                        many{"{0} rýchlosti svetla"}
+                        one{"{0} rýchlosti svetla"}
+                        other{"{0} rýchlostiach svetla"}
+                    }
+                }
+                dnam{"rýchlosť svetla"}
+                few{"{0} rýchlosti svetla"}
+                gender{"feminine"}
+                many{"{0} rýchlosti svetla"}
+                one{"{0} rýchlosť svetla"}
+                other{"{0} rýchlostí svetla"}
             }
             meter-per-second{
                 case{
@@ -5202,6 +5499,14 @@ sk{
                 other{"{0} m."}
                 per{"{0}/m."}
             }
+            night{
+                dnam{"noci"}
+                few{"{0} noci"}
+                many{"{0} noci"}
+                one{"{0} noc"}
+                other{"{0} nocí"}
+                per{"{0}/noc"}
+            }
             week{
                 dnam{"t."}
                 few{"{0} t."}
@@ -5209,6 +5514,15 @@ sk{
                 one{"{0} t."}
                 other{"{0} t."}
                 per{"{0}/t."}
+            }
+        }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"kWh/100 km"}
+                few{"{0} kWh/100 km"}
+                many{"{0} kWh/100 km"}
+                one{"{0} kWh/100 km"}
+                other{"{0} kWh/100 km"}
             }
         }
         graphics{
@@ -5236,6 +5550,15 @@ sk{
                 many{"{0} mb"}
                 one{"{0} mb"}
                 other{"{0} mb"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"c0"}
+                few{"{0} c0"}
+                many{"{0} c0"}
+                one{"{0} c0"}
+                other{"{0} c0"}
             }
         }
     }
@@ -5408,6 +5731,14 @@ sk{
                 other{"{0} mes."}
                 per{"{0}/mes."}
             }
+            night{
+                dnam{"noci"}
+                few{"{0} noci"}
+                many{"{0} noci"}
+                one{"{0} noc"}
+                other{"{0} nocí"}
+                per{"{0}/noc"}
+            }
             quarter{
                 dnam{"štvrťrok"}
                 few{"{0} štvrťroky"}
@@ -5471,6 +5802,15 @@ sk{
                 many{"{0} thm"}
                 one{"{0} thm"}
                 other{"{0} thm"}
+            }
+        }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"kWh/100 km"}
+                few{"{0} kWh/100 km"}
+                many{"{0} kWh/100 km"}
+                one{"{0} kWh/100 km"}
+                other{"{0} kWh/100 km"}
             }
         }
         graphics{
@@ -5554,6 +5894,15 @@ sk{
         power{
             watt{
                 dnam{"W"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"c0"}
+                few{"{0} c0"}
+                many{"{0} c0"}
+                one{"{0} c0"}
+                other{"{0} c0"}
             }
         }
         temperature{

@@ -33,8 +33,9 @@ am{
                         other{"{0} ራዲያኖች"}
                     }
                 }
-                one{"{0} rad"}
-                other{"{0} rad"}
+                dnam{"ራዲ"}
+                one{"{0} ራዲ"}
+                other{"{0} ራዲ"}
             }
             revolution{
                 case{
@@ -43,8 +44,9 @@ am{
                         other{"{0} ኡደቶች"}
                     }
                 }
-                one{"{0} rev"}
-                other{"{0} rev"}
+                dnam{"ኡደት"}
+                one{"{0} ኡደት"}
+                other{"{0} ኡደት"}
             }
         }
         area{
@@ -71,8 +73,14 @@ am{
                 one{"{0} ካሬ ሜትር"}
                 other{"{0} ካሬ ሜትር"}
             }
+            square-yard{
+                dnam{"ስኴር ያርድ"}
+                one{"{0} ስኴር ያርድ"}
+                other{"{0} ስኴር ያርድ"}
+            }
         }
         compound{
+            1024p8{"ዮቢ {0}"}
             10p-1{"ደሲ{0}"}
             10p-12{"ፒኮ{0}"}
             10p-15{"ፌምቶ{0}"}
@@ -86,6 +94,9 @@ am{
             10p1{"ዴካ{0}"}
             10p18{"ኤክሳ {0}"}
             10p2{"ሄክቶ{0}"}
+            10p21{"ዜታ {0}"}
+            10p24{"ዮታ {0}"}
+            10p27{"ሮና {0}"}
             10p3{"ኪሎ{0}"}
             10p6{"ሜጋ{0}"}
             10p9{"ጊጋ{0}"}
@@ -264,6 +275,18 @@ am{
                 one{"{0} ወር"}
                 other{"{0} ወራት"}
             }
+            night{
+                case{
+                    accusative{
+                        one{"{0}/ለሊት"}
+                        other{"{0}/ለሊት"}
+                    }
+                }
+                dnam{"ለሊት"}
+                one{"{0}/ለሊት"}
+                other{"{0}/ለሊት"}
+                per{"{0}/ለሊት"}
+            }
             quarter{
                 case{
                     accusative{
@@ -294,8 +317,9 @@ am{
                         other{"{0} አምፒሮች"}
                     }
                 }
-                one{"{0} A"}
-                other{"{0} A"}
+                dnam{"አምፒር"}
+                one{"{0} አምፒር"}
+                other{"{0} አምፒር"}
             }
             ohm{
                 case{
@@ -314,13 +338,44 @@ am{
                         other{"{0} ቮልቶች"}
                     }
                 }
-                one{"{0} V"}
-                other{"{0} V"}
+                dnam{"ቮልት"}
+                one{"{0} ቮልት"}
+                other{"{0} ቮልት"}
             }
         }
         energy{
-            calorie{
-                dnam{"cal"}
+            joule{
+                case{
+                    accusative{
+                        one{"{0} ጁልስ"}
+                        other{"{0} ጁልስ"}
+                    }
+                }
+                dnam{"ጁልስ"}
+                one{"{0} ጁልስ"}
+                other{"{0} ጁልስ"}
+            }
+            kilocalorie{
+                case{
+                    accusative{
+                        one{"{0} ኪሎ ካሎሪ"}
+                        other{"{0} ኪሎ ካሎሪ"}
+                    }
+                }
+                dnam{"ኪሎ ካሎሪ"}
+                one{"{0} ኪሎ ካሎሪ"}
+                other{"{0} ኪሎ ካሎሪ"}
+            }
+            kilojoule{
+                case{
+                    accusative{
+                        one{"{0} ኪጁ"}
+                        other{"{0} ኪጁ"}
+                    }
+                }
+                dnam{"ኪጁ"}
+                one{"{0} ኪጁ"}
+                other{"{0} ኪጁ"}
             }
         }
         force{
@@ -347,15 +402,49 @@ am{
             }
         }
         frequency{
+            gigahertz{
+                case{
+                    accusative{
+                        one{"{0} ጊጋኸርዝ"}
+                        other{"{0} ጊጋኸርዝ"}
+                    }
+                }
+                dnam{"ጊጋኸርዝ"}
+                one{"{0} ጊጋኸርዝ"}
+                other{"{0} ጊጋኸርዝ"}
+            }
             hertz{
                 case{
                     accusative{
-                        one{"{0} hertz"}
-                        other{"{0} hertz"}
+                        one{"{0} ኸርዝ"}
+                        other{"{0} ኸርዝ"}
                     }
                 }
-                one{"{0} Hz"}
-                other{"{0} Hz"}
+                dnam{"ኸርዝ"}
+                one{"{0} ኸርዝ"}
+                other{"{0} ኸርዝ"}
+            }
+            kilohertz{
+                case{
+                    accusative{
+                        one{"{0} ኪሎኸርዝ"}
+                        other{"{0} ኪሎኸርዝ"}
+                    }
+                }
+                dnam{"ኪሎኸርዝ"}
+                one{"{0} ኪሎኸርዝ"}
+                other{"{0} ኪሎኸርዝ"}
+            }
+            megahertz{
+                case{
+                    accusative{
+                        one{"{0} ሜጋኸርዝ"}
+                        other{"{0} ሜጋኸርዝ"}
+                    }
+                }
+                dnam{"ሜጋኸርዝ"}
+                one{"{0} ሜጋኸርዝ"}
+                other{"{0} ሜጋኸርዝ"}
             }
         }
         graphics{
@@ -485,8 +574,9 @@ am{
                 other{"{0} CD"}
             }
             dalton{
-                one{"{0} ዳተንስ"}
-                other{"{0} ዳተንስ"}
+                dnam{"ዳልተንስ"}
+                one{"{0} ዳልተንስ"}
+                other{"{0} ዳልተንስ"}
             }
             earth-mass{
                 one{"{0} ኤርዝማስስ"}
@@ -519,8 +609,20 @@ am{
                         other{"{0} ማይክሮ ግራም"}
                     }
                 }
-                one{"{0} μg"}
-                other{"{0} μg"}
+                dnam{"ማግ"}
+                one{"{0} ማግ"}
+                other{"{0} ማግ"}
+            }
+            milligram{
+                case{
+                    accusative{
+                        one{"{0} ሚግ"}
+                        other{"{0} ሚግ"}
+                    }
+                }
+                dnam{"ሚግ"}
+                one{"{0} ሚግ"}
+                other{"{0} ሚግ"}
             }
             solar-mass{
                 one{"{0} ሶላር ማስስ"}
@@ -538,6 +640,17 @@ am{
             }
         }
         power{
+            gigawatt{
+                case{
+                    accusative{
+                        one{"{0} ጊዋ"}
+                        other{"{0} ጊዋ"}
+                    }
+                }
+                dnam{"ጊጋ ዋት"}
+                one{"{0} ጊዋ"}
+                other{"{0} ጊዋ"}
+            }
             horsepower{
                 one{"{0} የፈረስ ጉልበት"}
                 other{"{0} የፈረስ ጉልበት"}
@@ -551,6 +664,28 @@ am{
                 }
                 one{"{0} ኪሎዋት"}
                 other{"{0} ኪሎዋት"}
+            }
+            megawatt{
+                case{
+                    accusative{
+                        one{"{0} ሜዋ"}
+                        other{"{0} ሜዋ"}
+                    }
+                }
+                dnam{"ሜጋ ዋት"}
+                one{"{0} ሜዋ"}
+                other{"{0} ሜዋ"}
+            }
+            milliwatt{
+                case{
+                    accusative{
+                        one{"{0} ሚዋ"}
+                        other{"{0} ሚዋ"}
+                    }
+                }
+                dnam{"ሚሊ ዋት"}
+                one{"{0} ሚዋ"}
+                other{"{0} ሚዋ"}
             }
             watt{
                 case{
@@ -600,6 +735,17 @@ am{
                 one{"{0} ኪሎሜትር በሰዓት"}
                 other{"{0} ኪሎሜትር በሰዓት"}
             }
+            light-speed{
+                case{
+                    accusative{
+                        one{"{0} ብርሃን"}
+                        other{"{0} ብርሃን"}
+                    }
+                }
+                dnam{"ብርሃን"}
+                one{"{0} ብርሃን"}
+                other{"{0} ብርሃን"}
+            }
             meter-per-second{
                 case{
                     accusative{
@@ -637,8 +783,9 @@ am{
                         other{"{0} ኬልቪኖች"}
                     }
                 }
-                one{"{0} K"}
-                other{"{0} K"}
+                dnam{"ኬ"}
+                one{"{0} ኬ"}
+                other{"{0} ኬ"}
             }
         }
         volume{
@@ -671,6 +818,16 @@ am{
                 one{"{0} ኩቢክ ማይል"}
                 other{"{0} ኩቢክ ማይል"}
             }
+            cubic-yard{
+                dnam{"ኪዩቢክ ያርድ"}
+                one{"{0} ኪዩቢክ ያርድ"}
+                other{"{0} ኪዩቢክ ያርድ"}
+            }
+            cup{
+                dnam{"ኩባያ"}
+                one{"{0} ኩባያ"}
+                other{"{0} ኩባያ"}
+            }
             deciliter{
                 case{
                     accusative{
@@ -687,6 +844,12 @@ am{
                 one{"{0} Imp. fluid ኦንስስ"}
                 other{"{0} Imp. fluid ኦንስስ"}
             }
+            gallon{
+                dnam{"ጋሎን"}
+                one{"{0}/ጋሎን"}
+                other{"{0}/ጋሎን"}
+                per{"{0}/ጋሎን"}
+            }
             hectoliter{
                 case{
                     accusative{
@@ -694,8 +857,9 @@ am{
                         other{"{0} ሄሊ"}
                     }
                 }
-                one{"{0} hL"}
-                other{"{0} hL"}
+                dnam{"ሄክቶሊትር"}
+                one{"{0} ሄሊ"}
+                other{"{0} ሄሊ"}
             }
             liter{
                 case{
@@ -714,8 +878,9 @@ am{
                         other{"{0} ሜሊ"}
                     }
                 }
-                one{"{0} ML"}
-                other{"{0} ML"}
+                dnam{"ሜጋሊትር"}
+                one{"{0} ሜሊ"}
+                other{"{0} ሜሊ"}
             }
             pint-metric{
                 case{
@@ -726,6 +891,21 @@ am{
                 }
                 one{"{0} mpt"}
                 other{"{0} mpt"}
+            }
+            quart{
+                dnam{"ኳርትስ"}
+                one{"{0} ኳርትስ"}
+                other{"{0} ኳርትስ"}
+            }
+            tablespoon{
+                dnam{"የሻይ ማንኪያ"}
+                one{"{0} የሻይ ማንኪያ"}
+                other{"{0} የሻይ ማንኪያ"}
+            }
+            teaspoon{
+                dnam{"የሻይ ማንኪያዎች"}
+                one{"{0} የሻይ ማንኪያዎች"}
+                other{"{0} የሻይ ማንኪያዎች"}
             }
         }
     }
@@ -763,6 +943,17 @@ am{
                 one{"{0} ማይል²"}
                 other{"{0} ማይል²"}
             }
+            square-yard{
+                one{"{0} ስኴር ያርድ"}
+                other{"{0} ስኴር ያርድ"}
+            }
+        }
+        compound{
+            1024p8{"ዮቢ {0}"}
+            10p-6{"ማይክሮ{0}"}
+            10p21{"ዜታ {0}"}
+            10p24{"ዮታ {0}"}
+            10p27{"ሮና {0}"}
         }
         concentr{
             percent{
@@ -804,6 +995,12 @@ am{
                 one{"{0} ወር"}
                 other{"{0} ወር"}
             }
+            night{
+                dnam{"ለሊቶች"}
+                one{"{0} ለሊት"}
+                other{"{0} ለሊት"}
+                per{"{0}/ለሊት"}
+            }
             quarter{
                 one{"{0} ሩብ"}
                 other{"{0} ሩ"}
@@ -820,6 +1017,57 @@ am{
             year{
                 one{"{0} ዓመት"}
                 other{"{0} ዓ"}
+            }
+        }
+        electric{
+            ampere{
+                dnam{"አምፒር"}
+                one{"{0} አምፒር"}
+                other{"{0} አምፒር"}
+            }
+            volt{
+                dnam{"ቮልት"}
+                one{"{0} ቮልት"}
+                other{"{0} ቮልት"}
+            }
+        }
+        energy{
+            joule{
+                dnam{"ጁልስ"}
+                one{"{0} ጁልስ"}
+                other{"{0} ጁልስ"}
+            }
+            kilocalorie{
+                dnam{"ኪሎ ካሎሪ"}
+                one{"{0} ኪሎ ካሎሪ"}
+                other{"{0} ኪሎ ካሎሪ"}
+            }
+            kilojoule{
+                dnam{"ኪጁ"}
+                one{"{0} ኪጁ"}
+                other{"{0} ኪጁ"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"ጊጋኸርዝ"}
+                one{"{0} ጊጋኸርዝ"}
+                other{"{0} ጊጋኸርዝ"}
+            }
+            hertz{
+                dnam{"ኸርዝ"}
+                one{"{0} ኸርዝ"}
+                other{"{0} ኸርዝ"}
+            }
+            kilohertz{
+                dnam{"ኪሎኸርዝ"}
+                one{"{0} ኪሎኸርዝ"}
+                other{"{0} ኪሎኸርዝ"}
+            }
+            megahertz{
+                dnam{"ሜጋኸርዝ"}
+                one{"{0} ሜጋኸርዝ"}
+                other{"{0} ሜጋኸርዝ"}
             }
         }
         graphics{
@@ -844,6 +1092,16 @@ am{
             carat{
                 dnam{"ካራት"}
             }
+            dalton{
+                dnam{"ዳልተንስ"}
+                one{"{0} ዳልተንስ"}
+                other{"{0} ዳልተንስ"}
+            }
+            microgram{
+                dnam{"ማግ"}
+                one{"{0} ማግ"}
+                other{"{0} ማግ"}
+            }
             milligram{
                 dnam{"ሚሊግራም"}
                 one{"{0} ሚሊግራም"}
@@ -851,9 +1109,24 @@ am{
             }
         }
         power{
+            gigawatt{
+                dnam{"ጊዋ"}
+                one{"{0} ጊዋ"}
+                other{"{0} ጊዋ"}
+            }
             horsepower{
                 one{"{0} የፈረስ ኃይል"}
                 other{"{0} የፈረስ ኃይል"}
+            }
+            megawatt{
+                dnam{"ሜዋ"}
+                one{"{0} ሜዋ"}
+                other{"{0} ሜዋ"}
+            }
+            milliwatt{
+                dnam{"ሚዋ"}
+                one{"{0} ሚዋ"}
+                other{"{0} ሚዋ"}
             }
         }
         pressure{
@@ -878,6 +1151,13 @@ am{
                 other{"{0} ሜፓ"}
             }
         }
+        speed{
+            light-speed{
+                dnam{"ብርሃን"}
+                one{"{0} ብርሃን"}
+                other{"{0} ብርሃን"}
+            }
+        }
         temperature{
             celsius{
                 one{"{0}°"}
@@ -894,6 +1174,11 @@ am{
                 one{"{0} ኤጫ"}
                 other{"{0} ኤጫ"}
             }
+            cubic-yard{
+                dnam{"ኪዩቢክ ያርድ"}
+                one{"{0} ኪዩቢክ ያርድ"}
+                other{"{0} ኪዩቢክ ያርድ"}
+            }
             cup{
                 dnam{"ኩባያ"}
                 one{"{0} ኩባያ"}
@@ -902,6 +1187,17 @@ am{
             dram{
                 one{"{0} ክመ"}
                 other{"{0} ክመ"}
+            }
+            gallon{
+                dnam{"ጋሎን"}
+                one{"{0} ጋሎን"}
+                other{"{0} ጋሎን"}
+                per{"{0}/ጋሎን"}
+            }
+            hectoliter{
+                dnam{"ሄሊ"}
+                one{"{0} ሄሊ"}
+                other{"{0} ሄሊ"}
             }
             megaliter{
                 dnam{"ሜጋሊትር"}
@@ -912,9 +1208,24 @@ am{
                 one{"{0} ሚሊ"}
                 other{"{0} ሚሊ"}
             }
+            quart{
+                dnam{"ኳርትስ"}
+                one{"{0} ኳርትስ"}
+                other{"{0} ኳርትስ"}
+            }
             quart-imperial{
                 one{"{0} ፈመ"}
                 other{"{0} ፈመ"}
+            }
+            tablespoon{
+                dnam{"የሻይ ማንኪያ"}
+                one{"{0} የሻይ ማንኪያ"}
+                other{"{0} የሻይ ማንኪያ"}
+            }
+            teaspoon{
+                dnam{"የሻይ ማንኪያዎች"}
+                one{"{0} የሻይ ማንኪያዎች"}
+                other{"{0} የሻይ ማንኪያዎች"}
             }
         }
     }
@@ -946,6 +1257,16 @@ am{
                 dnam{"ዲግሪ"}
                 one{"{0}°ዲግሪ"}
                 other{"{0}°ዲግሪ"}
+            }
+            radian{
+                dnam{"ራዲ"}
+                one{"{0} ራዲ"}
+                other{"{0} ራዲ"}
+            }
+            revolution{
+                dnam{"ኡደት"}
+                one{"{0} ኡደት"}
+                other{"{0} ኡደት"}
             }
         }
         area{
@@ -999,6 +1320,11 @@ am{
                 other{"{0} ካሬ ማይል"}
                 per{"{0}/ማይል²"}
             }
+            square-yard{
+                dnam{"ስኴር ያርድ"}
+                one{"{0} ስኴር ያርድ"}
+                other{"{0} ስኴር ያርድ"}
+            }
         }
         compound{
             1024p1{"{0} ኪቢ"}
@@ -1007,6 +1333,7 @@ am{
             1024p4{"{0} ቴቢ"}
             1024p5{"{0} ፔቢ"}
             1024p7{"{0} ዜቢ"}
+            1024p8{"ዮቢ {0}"}
             10p-1{"ደ{0}"}
             10p-12{"ፒ{0}"}
             10p-15{"ፌ{0}"}
@@ -1015,11 +1342,15 @@ am{
             10p-21{"ዜ{0}"}
             10p-24{"ዮ{0}"}
             10p-3{"ሚ{0}"}
+            10p-6{"ማይክሮ{0}"}
             10p-9{"ና{0}"}
             10p1{"ዴ{0}"}
             10p12{"ቴራ {0}"}
             10p15{"ፔታ {0}"}
             10p2{"ሄ{0}"}
+            10p21{"ዜታ {0}"}
+            10p24{"ዮታ {0}"}
+            10p27{"ሮና {0}"}
             10p3{"ኪ{0}"}
             10p6{"ሜ{0}"}
             10p9{"ጊ{0}"}
@@ -1173,6 +1504,12 @@ am{
                 one{"{0} ናኖሰከንድ"}
                 other{"{0} ናኖሰከንድ"}
             }
+            night{
+                dnam{"ለሊቶች"}
+                one{"{0} ለሊት"}
+                other{"{0} ለሊት"}
+                per{"{0}/ለሊት"}
+            }
             quarter{
                 dnam{"ሩብ"}
                 one{"{0} ሩብ"}
@@ -1198,6 +1535,18 @@ am{
                 per{"{0}/ዓ"}
             }
         }
+        electric{
+            ampere{
+                dnam{"አምፒር"}
+                one{"{0} አምፒር"}
+                other{"{0} አምፒር"}
+            }
+            volt{
+                dnam{"ቮልት"}
+                one{"{0} ቮልት"}
+                other{"{0} ቮልት"}
+            }
+        }
         energy{
             calorie{
                 dnam{"ካሎሪ"}
@@ -1214,12 +1563,49 @@ am{
                 one{"{0} ካሎሪ"}
                 other{"{0} ካሎሪ"}
             }
+            joule{
+                dnam{"ጁልስ"}
+                one{"{0} ጁልስ"}
+                other{"{0} ጁልስ"}
+            }
+            kilocalorie{
+                dnam{"ኪሎ ካሎሪ"}
+                one{"{0} ኪሎ ካሎሪ"}
+                other{"{0} ኪሎ ካሎሪ"}
+            }
+            kilojoule{
+                dnam{"ኪጁ"}
+                one{"{0} ኪጁ"}
+                other{"{0} ኪጁ"}
+            }
         }
         force{
             newton{
                 dnam{"ኒ"}
                 one{"{0} ኒ"}
                 other{"{0} ኒ"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"ጊጋኸርዝ"}
+                one{"{0} ጊጋኸርዝ"}
+                other{"{0} ጊጋኸርዝ"}
+            }
+            hertz{
+                dnam{"ኸርዝ"}
+                one{"{0} ኸርዝ"}
+                other{"{0} ኸርዝ"}
+            }
+            kilohertz{
+                dnam{"ኪሎኸርዝ"}
+                one{"{0} ኪሎኸርዝ"}
+                other{"{0} ኪሎኸርዝ"}
+            }
+            megahertz{
+                dnam{"ሜጋኸርዝ"}
+                one{"{0} ሜጋኸርዝ"}
+                other{"{0} ሜጋኸርዝ"}
             }
         }
         graphics{
@@ -1368,7 +1754,9 @@ am{
         }
         mass{
             dalton{
-                dnam{"ዳተንስ"}
+                dnam{"ዳልተንስ"}
+                one{"{0} ዳልተንስ"}
+                other{"{0} ዳልተንስ"}
             }
             earth-mass{
                 dnam{"ኤርዝማስስ"}
@@ -1389,6 +1777,16 @@ am{
                 one{"{0} ኪግ"}
                 other{"{0} ኪግ"}
                 per{"{0}/ኪሎግራም"}
+            }
+            microgram{
+                dnam{"ማግ"}
+                one{"{0} ማግ"}
+                other{"{0} ማግ"}
+            }
+            milligram{
+                dnam{"ሚግ"}
+                one{"{0} ሚግ"}
+                other{"{0} ሚግ"}
             }
             ounce{
                 dnam{"አውንስ"}
@@ -1422,6 +1820,11 @@ am{
             }
         }
         power{
+            gigawatt{
+                dnam{"ጊጋ ዋት"}
+                one{"{0} ጊዋ"}
+                other{"{0} ጊዋ"}
+            }
             horsepower{
                 dnam{"የፈረስ ጉልበት"}
                 one{"{0} የፈጉ"}
@@ -1431,6 +1834,16 @@ am{
                 dnam{"ኪሎዋት"}
                 one{"{0} ኪዋ"}
                 other{"{0} ኪዋ"}
+            }
+            megawatt{
+                dnam{"ሜዋ"}
+                one{"{0} ሜዋ"}
+                other{"{0} ሜዋ"}
+            }
+            milliwatt{
+                dnam{"ሚዋ"}
+                one{"{0} ሚዋ"}
+                other{"{0} ሚዋ"}
             }
             watt{
                 dnam{"ዋት"}
@@ -1486,6 +1899,11 @@ am{
                 one{"{0} ኪሜ/ሰ"}
                 other{"{0} ኪሜ/ሰ"}
             }
+            light-speed{
+                dnam{"ብርሃን"}
+                one{"{0} ብርሃን"}
+                other{"{0} ብርሃን"}
+            }
             meter-per-second{
                 dnam{"ሜትር በሰከንድ"}
                 one{"{0} ሜ/ሴ"}
@@ -1507,6 +1925,11 @@ am{
                 dnam{"ዲግሪ ፋራንሃይት"}
                 one{"{0}°ፋ"}
                 other{"{0}°ፋ"}
+            }
+            kelvin{
+                dnam{"ኬ"}
+                one{"{0} ኬ"}
+                other{"{0} ኬ"}
             }
         }
         torque{
@@ -1569,6 +1992,16 @@ am{
                 one{"{0} ማይል³"}
                 other{"{0} ማይል³"}
             }
+            cubic-yard{
+                dnam{"ኪዩቢክ ያርድ"}
+                one{"{0} ኪዩቢክ ያርድ"}
+                other{"{0} ኪዩቢክ ያርድ"}
+            }
+            cup{
+                dnam{"ኩባያ"}
+                one{"{0} ኩባያ"}
+                other{"{0} ኩባያ"}
+            }
             deciliter{
                 dnam{"ዴሊ"}
                 one{"{0} ዴሊ"}
@@ -1600,10 +2033,15 @@ am{
                 other{"{0} fl oz"}
             }
             gallon{
-                dnam{"gal"}
-                one{"{0} gal"}
-                other{"{0} gal"}
-                per{"{0}/gal"}
+                dnam{"ጋሎን"}
+                one{"{0}/ጋሎን"}
+                other{"{0} ጋሎን"}
+                per{"{0}/ጋሎን"}
+            }
+            hectoliter{
+                dnam{"ሄሊ"}
+                one{"{0} ሄሊ"}
+                other{"{0} ሄሊ"}
             }
             jigger{
                 dnam{"ሙጃሌ"}
@@ -1616,6 +2054,11 @@ am{
                 other{"{0} ሊ"}
                 per{"{0}/ሊትር"}
             }
+            megaliter{
+                dnam{"ሜጋሊትር"}
+                one{"{0} ሜሊ"}
+                other{"{0} ሜሊ"}
+            }
             milliliter{
                 dnam{"ሚሊ ሊትር"}
                 one{"{0} ሚሊ ሊትር"}
@@ -1626,10 +2069,25 @@ am{
                 one{"{0} ቁንጥ"}
                 other{"{0} ቁንጥ"}
             }
+            quart{
+                dnam{"ኳርትስ"}
+                one{"{0} ኳርትስ"}
+                other{"{0} ኳርትስ"}
+            }
             quart-imperial{
                 dnam{"የፈሳሽ መለኪያ"}
                 one{"{0} የፈሳሽ መለኪያ"}
                 other{"{0} የፈሳሽ መለኪያ"}
+            }
+            tablespoon{
+                dnam{"የሻይ ማንኪያ"}
+                one{"{0} የሻይ ማንኪያ"}
+                other{"{0} የሻይ ማንኪያ"}
+            }
+            teaspoon{
+                dnam{"የሻይ ማንኪያዎች"}
+                one{"{0} የሻይ ማንኪያዎች"}
+                other{"{0} የሻይ ማንኪያዎች"}
             }
         }
     }

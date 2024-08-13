@@ -197,6 +197,12 @@ mn{
                 other{"Картанд {0} Х байна. Тэднийг авах уу?"}
             }
         }
+        mong{
+            symbols{
+                decimal{","}
+                group{" "}
+            }
+        }
     }
     calendar{
         chinese{
@@ -271,26 +277,26 @@ mn{
                 Ed{"dd. E"}
                 Ehm{"E. h:mm a"}
                 Ehms{"E. h:mm:ss a"}
-                GyMMM{"G y 'оны' MMM"}
-                GyMMMEd{"G y 'оны' MMM'ын' d. E"}
-                GyMMMd{"G y 'оны' MMM'ын' d"}
+                GyMMM{"G y 'оны' MM-'р' 'сар'"}
+                GyMMMEd{"G y 'оны' MM-'р' 'сарын' d, E"}
+                GyMMMd{"G y 'оны' MM-'р' 'сарын' d"}
                 GyMd{"GGGGG y.MM.dd"}
                 H{"HH 'ц'"}
                 M{"LLLLL"}
                 MEd{"MMMMM/dd. E"}
-                MMMEd{"MMM'ын' d. E"}
-                MMMMd{"MMMM'ын' d"}
-                MMMd{"MMM'ын' d"}
+                MMMEd{"MM-'р' 'сарын' d, E"}
+                MMMMd{"MM-'р' 'сарын' d"}
+                MMMd{"MM-'р' 'сарын' d"}
                 Md{"MMMMM/dd"}
                 h{"h 'ц' a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 yyyyM{"GGGGG y MMMMM"}
                 yyyyMEd{"GGGGG y.MM.dd. E"}
-                yyyyMMM{"G y 'оны' MMM"}
-                yyyyMMMEd{"G y 'оны' MMM'ын' d. E"}
-                yyyyMMMM{"G y 'оны' MMMM"}
-                yyyyMMMd{"G y 'оны' MMM'ын' d"}
+                yyyyMMM{"G y 'оны' MM-'р' 'сар'"}
+                yyyyMMMEd{"G y 'оны' MM-'р' 'сарын' d, E"}
+                yyyyMMMM{"G y 'оны' MM-'р' 'сар'"}
+                yyyyMMMd{"G y 'оны' MM-'р' 'сарын' d"}
                 yyyyMd{"GGGGG y.MM.dd"}
                 yyyyQQQ{"G y 'оны' QQQ"}
                 yyyyQQQQ{"G y 'оны' QQQQ"}

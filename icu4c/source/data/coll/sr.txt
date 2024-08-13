@@ -8,7 +8,7 @@ sr{
                 "[reorder Cyrl]"
                 "[suppressContractions [Ии]]"
             }
-            Version{"45"}
+            Version{"46"}
         }
     }
 }

@@ -601,9 +601,36 @@ mr{
                 other{"{0} कॅरेट्स"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    ablative{
+                        one{"{0} मिलीग्रॅम प्रति डेसीलिटरनी"}
+                        other{"{0} मिलीग्रॅम्स प्रति डेसीलिटरहून"}
+                    }
+                    accusative{
+                        one{"{0} मिलीग्रॅम प्रति डेसीलिटरला"}
+                        other{"{0} मिलीग्रॅम्स प्रति डेसीलिटरना"}
+                    }
+                    dative{
+                        one{"{0} मिलीग्रॅम प्रति डेसीलिटरसाठी"}
+                        other{"{0} मिलीग्रॅम्स प्रति डेसीलिटरसाठी"}
+                    }
+                    ergative{
+                        one{"{0} मिलीग्रॅम प्रति डेसीलिटरने"}
+                        other{"{0} मिलीग्रॅम्स प्रति डेसीलिटरने"}
+                    }
+                    genitive{
+                        one{"{0} मिलीग्रॅम प्रति डेसीलिटरचे"}
+                        other{"{0} मिलीग्रॅम्स प्रति डेसीलिटरचे"}
+                    }
+                    locative{
+                        one{"{0} मिलीग्रॅम प्रति डेसीलिटरहून"}
+                        other{"{0} मिलीग्रॅम्स प्रति डेसीलिटरहून"}
+                    }
+                }
                 dnam{"मिलीग्रामस् पर डेसीलिटर"}
-                one{"{0} मिलीग्राम पर डेसीलिटर"}
-                other{"{0} मिलीग्रामस् पर डेसीलिटर"}
+                gender{"neuter"}
+                one{"{0} मिलीग्रॅम प्रति डेसीलिटर"}
+                other{"{0} मिलीग्रॅम्स प्रति डेसीलिटर"}
             }
             millimole-per-liter{
                 case{
@@ -792,6 +819,38 @@ mr{
                 gender{"masculine"}
                 one{"{0} पर्मिरेड"}
                 other{"{0} पर्मिरेड"}
+            }
+            portion-per-1e9{
+                case{
+                    ablative{
+                        one{"{0} भाग प्रति अब्जाहून"}
+                        other{"{0} भाग प्रति अब्जांहून"}
+                    }
+                    accusative{
+                        one{"{0} भाग प्रति अब्जना"}
+                        other{"{0} भाग प्रति अब्जांना"}
+                    }
+                    dative{
+                        one{"{0} भाग प्रति अब्जासाठी"}
+                        other{"{0} भाग प्रति अब्जांसाठी"}
+                    }
+                    ergative{
+                        one{"{0} भाग प्रति अब्जाने"}
+                        other{"{0} भाग प्रति अब्जांनी"}
+                    }
+                    genitive{
+                        one{"{0} भाग प्रति अब्जचे"}
+                        other{"{0} भाग प्रति अब्जांचे"}
+                    }
+                    locative{
+                        one{"{0} भाग प्रति अब्जहून"}
+                        other{"{0} भाग प्रति अब्जांहून"}
+                    }
+                }
+                dnam{"भाग प्रति अब्ज"}
+                gender{"neuter"}
+                one{"{0} भाग प्रति अब्ज"}
+                other{"{0} भाग प्रति अब्ज"}
             }
         }
         consumption{
@@ -1517,6 +1576,39 @@ mr{
                 one{"{0} नॅनोसेकंद"}
                 other{"{0} नॅनोसेकंद"}
             }
+            night{
+                case{
+                    ablative{
+                        one{"{0} रात्रीपासून"}
+                        other{"{0} रात्रीपासून"}
+                    }
+                    accusative{
+                        one{"रात्री"}
+                        other{"{0} रात्री"}
+                    }
+                    dative{
+                        one{"रात्री"}
+                        other{"{0} रात्री"}
+                    }
+                    ergative{
+                        one{"{0} रात्रीने"}
+                        other{"{0} रात्रीने"}
+                    }
+                    genitive{
+                        one{"रात्रीचा"}
+                        other{"{0} रात्रीला"}
+                    }
+                    locative{
+                        one{"रात्री"}
+                        other{"{0} रात्रीस"}
+                    }
+                }
+                dnam{"रात्री"}
+                gender{"feminine"}
+                one{"रात्र"}
+                other{"{0} रात्री"}
+                per{"{0}/रात्र"}
+            }
             quarter{
                 case{
                     ablative{
@@ -1854,9 +1946,36 @@ mr{
                 other{"{0} ज्यूल"}
             }
             kilocalorie{
-                dnam{"किलोकॅलोरी"}
-                one{"{0} किलोकॅलोरी"}
-                other{"{0} किलोकॅलोरी"}
+                case{
+                    ablative{
+                        one{"{0} किलोकॅलरीतून"}
+                        other{"{0} किलोकॅलरीहून"}
+                    }
+                    accusative{
+                        one{"{0} किलोकॅलरीला"}
+                        other{"{0} किलोकॅलरींना"}
+                    }
+                    dative{
+                        one{"{0} किलोकॅलोरीसाठी"}
+                        other{"{0} किलोकॅलरीसाठी"}
+                    }
+                    ergative{
+                        one{"{0} किलोकॅलरीने"}
+                        other{"{0} किलोकॅलरी"}
+                    }
+                    genitive{
+                        one{"{0} किलोकॅलरीचा"}
+                        other{"{0} किलोकॅलरीची"}
+                    }
+                    locative{
+                        one{"{0} किलोकॅलरीला"}
+                        other{"{0} किलोकॅलरीतून"}
+                    }
+                }
+                dnam{"किलोकॅलरी"}
+                gender{"feminine"}
+                one{"{0} किलोकॅलरी"}
+                other{"{0} किलोकॅलरी"}
             }
             kilojoule{
                 case{
@@ -2597,6 +2716,37 @@ mr{
                 one{"{0} पिकोमीटर"}
                 other{"{0} पिकोमीटर"}
             }
+            point{
+                case{
+                    ablative{
+                        one{"{0} बिंदुपासून"}
+                        other{"{0} बिंदुपासून"}
+                    }
+                    accusative{
+                        one{"{0} बिंदूला"}
+                        other{"{0} बिंदुला"}
+                    }
+                    dative{
+                        one{"{0} बिंदूसाठी"}
+                        other{"{0} बिंदुस"}
+                    }
+                    ergative{
+                        one{"{0} बिंदुने"}
+                        other{"{0} बिंदुने"}
+                    }
+                    genitive{
+                        one{"{0} बिंदूच्या"}
+                        other{"{0} बिंदुच्या"}
+                    }
+                    locative{
+                        one{"बिंदूचा"}
+                        other{"{0} बिंदुचा"}
+                    }
+                }
+                gender{"masculine"}
+                one{"{0} बिंदु"}
+                other{"{0} बिंदु"}
+            }
             solar-radius{
                 one{"{0} सौर त्रिज्या"}
                 other{"{0} सौर त्रिज्या"}
@@ -3279,41 +3429,71 @@ mr{
                 other{"{0} मिलिबार"}
             }
             millimeter-ofhg{
+                case{
+                    ablative{
+                        one{"{0} मर्क्यूरी मिलिमीटरहून"}
+                        other{"{0} मर्क्यूरी मिलिमीटरहून"}
+                    }
+                    accusative{
+                        one{"{0} मर्क्यूरी मिलिमीटरला"}
+                        other{"{0} मर्क्यूरी मिलिमीटरना"}
+                    }
+                    dative{
+                        one{"{0} मर्क्यूरी मिलिमीटरसाठी"}
+                        other{"{0} मर्क्यूरी मिलिमीटरला"}
+                    }
+                    ergative{
+                        one{"{0} मर्क्यूरी मिलिमीटरने"}
+                        other{"{0} मर्क्यूरी मिलिमीटरने"}
+                    }
+                    genitive{
+                        one{"{0} मर्क्यूरी मिलिमीटरचे"}
+                        other{"{0} मर्क्यूरी मिलिमीटरच्या"}
+                    }
+                    locative{
+                        one{"{0} मर्क्यूरी मिलिमीटरचा"}
+                        other{"{0} मर्क्यूरी मिलिमीटरपासून"}
+                    }
+                }
                 dnam{"मर्क्यूरी मिलिमीटर"}
+                gender{"neuter"}
                 one{"{0} मर्क्यूरी मिलिमीटर"}
                 other{"{0} मर्क्यूरी मिलिमीटर"}
             }
             pascal{
                 case{
                     ablative{
-                        one{"{0} पास्कालपासून"}
-                        other{"{0} पास्कालहून"}
+                        one{"{0} पास्कलपासून"}
+                        other{"{0} पास्कलहून"}
                     }
                     accusative{
-                        one{"{0} पास्कालला"}
-                        other{"{0} पास्कालना"}
+                        one{"पास्कलला"}
+                        other{"{0} पास्कलना"}
                     }
                     dative{
-                        one{"{0} पास्कालला"}
-                        other{"{0} पास्कालसाठी"}
+                        one{"{0} पास्कलला"}
+                        other{"{0} पास्कलसाठी"}
                     }
                     ergative{
-                        one{"{0} पास्कालने"}
-                        other{"{0} पास्कालनी"}
+                        one{"{0} पास्कलने"}
+                        other{"{0} पास्कलनी"}
                     }
                     genitive{
-                        one{"{0} पास्कालचा"}
-                        other{"{0} पास्कालचे"}
+                        one{"{0} पास्कलचा"}
+                        other{"{0} पास्कल"}
                     }
                     locative{
-                        one{"{0} पास्कालशी"}
-                        other{"{0} पास्कालचा"}
+                        one{"{0} पास्कलशी"}
+                        other{"{0} पास्कलचा"}
+                    }
+                    oblique{
+                        one{"{0} पास्कल"}
                     }
                 }
                 dnam{"पास्काल"}
                 gender{"masculine"}
-                one{"{0} पास्काल"}
-                other{"{0} पास्काल"}
+                one{"{0} पास्कल"}
+                other{"{0} पास्कल"}
             }
             pound-force-per-square-inch{
                 dnam{"प्रति चौरस इंच पाउंड"}
@@ -3363,6 +3543,38 @@ mr{
                 dnam{"नॉट"}
                 one{"{0} नॉट"}
                 other{"{0} नॉट"}
+            }
+            light-speed{
+                case{
+                    ablative{
+                        one{"प्रकाशापासून"}
+                        other{"{0} प्रकाशापासून"}
+                    }
+                    accusative{
+                        one{"प्रकाशाला"}
+                        other{"{0} प्रकाशाला"}
+                    }
+                    dative{
+                        one{"प्रकाशासाठी"}
+                        other{"{0} प्रकाशासाठी"}
+                    }
+                    ergative{
+                        one{"प्रकाशाने"}
+                        other{"{0} प्रकाश"}
+                    }
+                    genitive{
+                        one{"प्रकाशाचे"}
+                        other{"{0} प्रकाशांचे"}
+                    }
+                    locative{
+                        one{"प्रकाशामध्ये"}
+                        other{"{0} प्रकाशामध्ये"}
+                    }
+                }
+                dnam{"प्रकाश"}
+                gender{"masculine"}
+                one{"प्रकाश"}
+                other{"{0} प्रकाश"}
             }
             meter-per-second{
                 case{
@@ -4075,6 +4287,11 @@ mr{
                 one{"{0}ppm"}
                 other{"{0}ppm"}
             }
+            portion-per-1e9{
+                dnam{"भाग/अब्ज"}
+                one{"{0} भाग/अब्ज"}
+                other{"{0} भाग/अब्ज"}
+            }
         }
         consumption{
             mile-per-gallon{
@@ -4161,6 +4378,12 @@ mr{
             nanosecond{
                 dnam{"नॅसे"}
             }
+            night{
+                dnam{"रात्री"}
+                one{"{0} रात्र"}
+                other{"{0} रात्र"}
+                per{"{0}/रात्र"}
+            }
             quarter{
                 one{"{0}ति"}
                 other{"{0}ति"}
@@ -4185,6 +4408,11 @@ mr{
             british-thermal-unit{
                 one{"{0}Btu"}
                 other{"{0}Btu"}
+            }
+            kilocalorie{
+                dnam{"किकॅल"}
+                one{"{0} किकॅ"}
+                other{"{0} किकॅ"}
             }
         }
         force{
@@ -4240,10 +4468,6 @@ mr{
             meter{
                 one{"{0}मी"}
                 other{"{0}मी"}
-            }
-            mile{
-                one{"{0}मैल"}
-                other{"{0}मैल"}
             }
             millimeter{
                 one{"{0}मिमी"}
@@ -4339,6 +4563,11 @@ mr{
             kilometer-per-hour{
                 one{"{0}किप्रता"}
                 other{"{0}किप्रता"}
+            }
+            light-speed{
+                dnam{"प्र"}
+                one{"{0} प्रकाश"}
+                other{"{0} प्रकाश"}
             }
             meter-per-second{
                 one{"{0}मी/से"}
@@ -4535,6 +4764,11 @@ mr{
             permyriad{
                 dnam{"पर्मिरेड"}
             }
+            portion-per-1e9{
+                dnam{"भाग/अब्ज"}
+                one{"{0} भाग प्रति अब्ज"}
+                other{"{0} भाप्रअ"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -4647,6 +4881,12 @@ mr{
                 one{"{0} नॅसे"}
                 other{"{0} नॅसे"}
             }
+            night{
+                dnam{"रात्री"}
+                one{"{0} रात्र"}
+                other{"{0} रात्र"}
+                per{"{0}/रात्र"}
+            }
             quarter{
                 dnam{"तिमाही"}
                 one{"{0} तिमाही"}
@@ -4692,6 +4932,9 @@ mr{
                 one{"{0} बिटीयू"}
                 other{"{0} बिटीयू"}
             }
+            calorie{
+                dnam{"कॅ"}
+            }
             electronvolt{
                 dnam{"इलेक्ट्रॉनव्होल्ट"}
             }
@@ -4702,6 +4945,11 @@ mr{
             }
             joule{
                 dnam{"ज्यूल"}
+            }
+            kilocalorie{
+                dnam{"किकॅ"}
+                one{"{0} किकॅ"}
+                other{"{0} किकॅ"}
             }
             kilojoule{
                 dnam{"किलोज्यूल"}
@@ -4932,6 +5180,11 @@ mr{
                 dnam{"किमी/तास"}
                 one{"{0} किप्रता"}
                 other{"{0} किप्रता"}
+            }
+            light-speed{
+                dnam{"प्र"}
+                one{"{0} प्रकाश"}
+                other{"{0} प्रकाश"}
             }
             meter-per-second{
                 dnam{"मीटर/सेक"}

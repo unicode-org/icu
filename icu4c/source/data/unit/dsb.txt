@@ -277,6 +277,13 @@ dsb{
                 other{"{0} źaseśinow promila"}
                 two{"{0} źaseśinje promila"}
             }
+            portion-per-1e9{
+                dnam{"miliardnina"}
+                few{"{0} miliardniny"}
+                one{"{0} miliardnina"}
+                other{"{0} miliardninow"}
+                two{"{0} miliardninje"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -458,6 +465,14 @@ dsb{
                 one{"{0} nanosekunda"}
                 other{"{0} nanosekundow"}
                 two{"{0} nanosekunźe"}
+            }
+            night{
+                dnam{"pśenocowanja"}
+                few{"{0} pśenocowanja"}
+                one{"{0} pśenocowanje"}
+                other{"{0} pśenocowanjow"}
+                per{"{0} na pśenocowanje"}
+                two{"{0} pśenocowani"}
             }
             quarter{
                 dnam{"kwartale"}
@@ -1110,6 +1125,13 @@ dsb{
                 other{"{0} sukow"}
                 two{"{0} suka"}
             }
+            light-speed{
+                dnam{"spěšnosć swětła"}
+                few{"{0} spěšnosći swětła"}
+                one{"{0} spěšnosć swětła"}
+                other{"{0} spěšnosćow swětła"}
+                two{"{0} spěšnosći swětła"}
+            }
             meter-per-second{
                 dnam{"metry na sekundu"}
                 few{"{0} metry na sekundu"}
@@ -1423,6 +1445,15 @@ dsb{
                 two{"{0}°"}
             }
         }
+        concentr{
+            portion-per-1e9{
+                dnam{"n"}
+                few{"{0} n"}
+                one{"{0} n"}
+                other{"{0} n"}
+                two{"{0} n"}
+            }
+        }
         duration{
             day{
                 dnam{"d"}
@@ -1459,6 +1490,15 @@ dsb{
                 one{"{0} s"}
                 other{"{0} s"}
                 two{"{0} s"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"c"}
+                few{"{0} c"}
+                one{"{0} c"}
+                other{"{0} c"}
+                two{"{0} c"}
             }
         }
         volume{
@@ -1562,6 +1602,13 @@ dsb{
                 other{"{0} ‱"}
                 two{"{0} ‱"}
             }
+            portion-per-1e9{
+                dnam{"nano"}
+                few{"{0} nano"}
+                one{"{0} nano"}
+                other{"{0} nano"}
+                two{"{0} nano"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1645,6 +1692,14 @@ dsb{
                 other{"{0} mjas."}
                 per{"{0} /mjas."}
                 two{"{0} mjas."}
+            }
+            night{
+                dnam{"nocy"}
+                few{"{0} nocy"}
+                one{"{0} noc"}
+                other{"{0} nocow"}
+                per{"{0} na noc"}
+                two{"{0} nocy"}
             }
             quarter{
                 dnam{"kwart."}
@@ -1764,6 +1819,13 @@ dsb{
                 one{"{0} sk"}
                 other{"{0} sk"}
                 two{"{0} sk"}
+            }
+            light-speed{
+                dnam{"spěšnosć sw."}
+                few{"{0} spěšnosći sw."}
+                one{"{0} spěšnosć sw."}
+                other{"{0} spěšnosćow sw."}
+                two{"{0} spěšnosći sw."}
             }
             mile-per-hour{
                 dnam{"mph"}

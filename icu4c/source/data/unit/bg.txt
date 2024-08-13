@@ -187,6 +187,11 @@ bg{
                 one{"{0} базисен пункт"}
                 other{"{0} базисни пункта"}
             }
+            portion-per-1e9{
+                dnam{"части на милиард"}
+                one{"{0} част на милиард"}
+                other{"{0} части на милиард"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -315,6 +320,12 @@ bg{
                 dnam{"наносекунди"}
                 one{"{0} наносекунда"}
                 other{"{0} наносекунди"}
+            }
+            night{
+                dnam{"нощи"}
+                one{"{0} нощ"}
+                other{"{0} нощи"}
+                per{"{0} на нощ"}
             }
             quarter{
                 dnam{"тримесечия"}
@@ -795,6 +806,11 @@ bg{
                 one{"{0} възел"}
                 other{"{0} възла"}
             }
+            light-speed{
+                dnam{"светлина"}
+                one{"{0} светлина"}
+                other{"{0} светлина"}
+            }
             meter-per-second{
                 dnam{"метри за секунда"}
                 one{"{0} метър за секунда"}
@@ -1005,10 +1021,6 @@ bg{
             }
         }
         area{
-            square-foot{
-                one{"{0} кв. фут"}
-                other{"{0} кв. фута"}
-            }
             square-mile{
                 one{"{0} кв. миля"}
                 other{"{0} кв. мили"}
@@ -1017,6 +1029,14 @@ bg{
         concentr{
             percent{
                 dnam{"%"}
+            }
+            permyriad{
+                dnam{"‱"}
+            }
+        }
+        digital{
+            petabyte{
+                dnam{"PB"}
             }
         }
         duration{
@@ -1032,6 +1052,12 @@ bg{
             month{
                 dnam{"мес."}
                 per{"{0}/мес."}
+            }
+            night{
+                dnam{"нощи"}
+                one{"{0} нощ"}
+                other{"{0} нощи"}
+                per{"{0}/нощ"}
             }
             quarter{
                 one{"{0} трим."}
@@ -1059,34 +1085,14 @@ bg{
             }
         }
         length{
-            foot{
-                one{"{0} фут"}
-                other{"{0} фута"}
-            }
             inch{
                 one{"{0}\u0022"}
                 other{"{0}\u0022"}
-            }
-            mile{
-                one{"{0} миля"}
-                other{"{0} мили"}
-            }
-            yard{
-                one{"{0} ярд"}
-                other{"{0} ярда"}
             }
         }
         mass{
             dalton{
                 dnam{"Da"}
-            }
-            ounce{
-                one{"{0} унц."}
-                other{"{0} унц."}
-            }
-            pound{
-                one{"{0} фунт"}
-                other{"{0} фунта"}
             }
         }
         power{
@@ -1100,24 +1106,19 @@ bg{
                 one{"{0} по Б"}
                 other{"{0} по Б"}
             }
+            light-speed{
+                dnam{"светлина"}
+                one{"{0} светлина"}
+                other{"{0} светлина"}
+            }
             mile-per-hour{
                 one{"{0} миля/ч"}
                 other{"{0} мили/ч"}
             }
         }
-        temperature{
-            fahrenheit{
-                one{"{0} °F"}
-                other{"{0} °F"}
-            }
-        }
         volume{
             barrel{
                 dnam{"bbl"}
-            }
-            cubic-mile{
-                one{"{0} куб. миля"}
-                other{"{0} куб. мили"}
             }
             dessert-spoon{
                 one{"{0} дес. лъж."}
@@ -1126,6 +1127,9 @@ bg{
             dessert-spoon-imperial{
                 one{"{0} брит. дес. лъж."}
                 other{"{0} брит. дес. лъж."}
+            }
+            pint-metric{
+                dnam{"pt"}
             }
         }
     }
@@ -1186,6 +1190,9 @@ bg{
             }
             permyriad{
                 dnam{"базисен пункт"}
+            }
+            portion-per-1e9{
+                dnam{"части/милиард"}
             }
         }
         consumption{
@@ -1269,6 +1276,12 @@ bg{
                 one{"{0} мес."}
                 other{"{0} мес."}
                 per{"{0}/месец"}
+            }
+            night{
+                dnam{"нощи"}
+                one{"{0} нощ"}
+                other{"{0} нощи"}
+                per{"{0}/нощ"}
             }
             quarter{
                 dnam{"тримес."}
@@ -1415,6 +1428,11 @@ bg{
             beaufort{
                 one{"{0} по Bft"}
                 other{"{0} по Bft"}
+            }
+            light-speed{
+                dnam{"светлина"}
+                one{"{0} светлина"}
+                other{"{0} светлина"}
             }
             mile-per-hour{
                 dnam{"mph"}

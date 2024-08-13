@@ -1260,6 +1260,9 @@ tk{
         "meta:Kamchatka"{
             lg{"Petropavlowsk-Kamçatskiý wagty"}
         }
+        "meta:Kazakhstan"{
+            ls{"Gazagystan wagty"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Gündogar Gazagystan wagty"}
         }

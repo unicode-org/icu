@@ -1043,7 +1043,7 @@ mi{
             other{"tāra Tirinaki Tōpako"}
         }
         TWD{
-            other{"tāra Taiwana hou"}
+            other{"tāra Taiwana Hou"}
         }
         TZS{
             other{"hereni Tānahia"}
@@ -1096,8 +1096,5 @@ mi{
         ZMW{
             other{"kwacha Tāmipia"}
         }
-    }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
     }
 }

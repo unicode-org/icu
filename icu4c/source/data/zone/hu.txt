@@ -10,7 +10,7 @@ hu{
             ec{"Algír"}
         }
         "Africa:Asmera"{
-            ec{"Asmera"}
+            ec{"Aszmara"}
         }
         "Africa:Cairo"{
             ec{"Kairó"}
@@ -30,9 +30,6 @@ hu{
         "Africa:Malabo"{
             ec{"Malabó"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "Africa:Tunis"{
             ec{"Tunisz"}
         }
@@ -44,9 +41,6 @@ hu{
         }
         "America:Argentina:Tucuman"{
             ec{"Tucumán"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
@@ -65,9 +59,6 @@ hu{
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Dominica"{
             ec{"Dominika"}
@@ -458,9 +449,6 @@ hu{
         }
         "Indian:Maldives"{
             ec{"Maldív-szigetek"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Chatham"{
             ec{"Chatham-szigetek"}
@@ -870,6 +858,9 @@ hu{
             ld{"Petropavlovszk-kamcsatkai nyári idő"}
             lg{"Petropavlovszk-kamcsatkai idő"}
             ls{"Petropavlovszk-kamcsatkai zónaidő"}
+        }
+        "meta:Kazakhstan"{
+            ls{"kazahsztáni idő"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"kelet-kazahsztáni idő"}

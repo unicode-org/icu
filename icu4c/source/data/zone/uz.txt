@@ -547,7 +547,7 @@ uz{
             ec{"Pxenyan"}
         }
         "Asia:Qostanay"{
-            ec{"Kustanay"}
+            ec{"Qoʻstanay"}
         }
         "Asia:Qyzylorda"{
             ec{"Qizilo‘rda"}
@@ -1190,6 +1190,9 @@ uz{
             ld{"Yaponiya yozgi vaqti"}
             lg{"Yaponiya vaqti"}
             ls{"Yaponiya standart vaqti"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Qozogʻiston vaqti"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Sharqiy Qozogʻiston vaqti"}

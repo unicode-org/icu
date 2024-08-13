@@ -176,6 +176,11 @@ tr{
                 one{"onbinde {0}"}
                 other{"onbinde {0}"}
             }
+            portion-per-1e9{
+                dnam{"parça/milyar"}
+                one{"{0} parça/milyar"}
+                other{"{0} parça/milyar"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -281,6 +286,12 @@ tr{
             nanosecond{
                 one{"{0} nanosaniye"}
                 other{"{0} nanosaniye"}
+            }
+            night{
+                dnam{"gece"}
+                one{"{0} gece"}
+                other{"{0} gece"}
+                per{"{0}/gece"}
             }
             quarter{
                 one{"{0} çeyrek"}
@@ -696,6 +707,11 @@ tr{
                 one{"{0} knot"}
                 other{"{0} knot"}
             }
+            light-speed{
+                dnam{"ışık"}
+                one{"{0} ışık"}
+                other{"{0} ışık"}
+            }
             meter-per-second{
                 dnam{"metre/saniye"}
                 one{"{0} metre/saniye"}
@@ -931,6 +947,12 @@ tr{
             nanosecond{
                 dnam{"nsn"}
             }
+            night{
+                dnam{"gece"}
+                one{"{0} gece"}
+                other{"{0} gece"}
+                per{"{0}/gece"}
+            }
             quarter{
                 dnam{"çey."}
                 per{"{0}/çey."}
@@ -1016,6 +1038,11 @@ tr{
             }
         }
         speed{
+            light-speed{
+                dnam{"ışık"}
+                one{"{0} ışık"}
+                other{"{0} ışık"}
+            }
             mile-per-hour{
                 dnam{"mil/sa"}
             }
@@ -1139,6 +1166,9 @@ tr{
                 one{"‱{0}"}
                 other{"‱{0}"}
             }
+            portion-per-1e9{
+                dnam{"parça/milyar"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1237,6 +1267,12 @@ tr{
                 dnam{"nanosaniye"}
                 one{"{0} nsn"}
                 other{"{0} nsn"}
+            }
+            night{
+                dnam{"gece"}
+                one{"{0} gece"}
+                other{"{0} gece"}
+                per{"{0}/gece"}
             }
             quarter{
                 dnam{"çeyrek"}
@@ -1445,6 +1481,11 @@ tr{
                 dnam{"km/sa"}
                 one{"{0} km/sa"}
                 other{"{0} km/sa"}
+            }
+            light-speed{
+                dnam{"ışık"}
+                one{"{0} ışık"}
+                other{"{0} ışık"}
             }
             meter-per-second{
                 dnam{"m/sn"}

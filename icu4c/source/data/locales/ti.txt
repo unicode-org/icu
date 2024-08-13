@@ -29,6 +29,7 @@ ti{
             }
             patterns{
                 currencyFormat{"¤#,##0.00"}
+                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
             }
             patternsLong{
                 decimalFormat{
@@ -133,6 +134,56 @@ ti{
                         other{"¤000 ት"}
                     }
                 }
+                currencyFormat%alphaNextToNumber{
+                    1000{
+                        one{"¤ 0 ሽ"}
+                        other{"¤ 0 ሽ"}
+                    }
+                    10000{
+                        one{"¤ 00 ሽ"}
+                        other{"¤ 00 ሽ"}
+                    }
+                    100000{
+                        one{"¤ 000 ሽ"}
+                        other{"¤ 000 ሽ"}
+                    }
+                    1000000{
+                        one{"¤ 0 ሚ"}
+                        other{"¤ 0 ሚ"}
+                    }
+                    10000000{
+                        one{"¤ 00 ሚ"}
+                        other{"¤ 00 ሚ"}
+                    }
+                    100000000{
+                        one{"¤ 000 ሚ"}
+                        other{"¤ 000 ሚ"}
+                    }
+                    1000000000{
+                        one{"¤ 0 ቢ"}
+                        other{"¤ 0 ቢ"}
+                    }
+                    10000000000{
+                        one{"¤ 00 ቢ"}
+                        other{"¤ 00 ቢ"}
+                    }
+                    100000000000{
+                        one{"¤ 000 ቢ"}
+                        other{"¤ 000 ቢ"}
+                    }
+                    1000000000000{
+                        one{"¤ 0 ት"}
+                        other{"¤ 0 ት"}
+                    }
+                    10000000000000{
+                        one{"¤ 00 ት"}
+                        other{"¤ 00 ት"}
+                    }
+                    100000000000000{
+                        one{"¤ 000 ት"}
+                        other{"¤ 000 ት"}
+                    }
+                }
                 decimalFormat{
                     1000{
                         one{"0 ሽ"}
@@ -186,6 +237,9 @@ ti{
             }
         }
         minimalPairs{
+            ordinal{
+                other{"መበል {0}ይ መሰል ውሰድ።"}
+            }
             plural{
                 one{"{0} መዓልቲ"}
                 other{"{0} መዓልታት"}
@@ -194,16 +248,84 @@ ti{
         traditional{"ethi"}
     }
     calendar{
+        ethiopic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "መስከረም",
+                        "ጥቅምቲ",
+                        "ሕዳር",
+                        "ታሕሳስ",
+                        "ጥሪ",
+                        "ለካቲት",
+                        "መጋቢት",
+                        "ሚያዚያ",
+                        "ጉንበት",
+                        "ሰነ",
+                        "ሓምለ",
+                        "ነሓሰ",
+                        "ጷጉሜ",
+                    }
+                    wide{
+                        "መስከረም",
+                        "ጥቅምቲ",
+                        "ሕዳር",
+                        "ታሕሳስ",
+                        "ጥሪ",
+                        "ለካቲት",
+                        "መጋቢት",
+                        "ሚያዚያ",
+                        "ጉንበት",
+                        "ሰነ",
+                        "ሓምለ",
+                        "ነሓሰ",
+                        "ጷጉሜ",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "መስከረም",
+                        "ጥቅምቲ",
+                        "ሕዳር",
+                        "ታሕሳስ",
+                        "ጥሪ",
+                        "ለካቲት",
+                        "መጋቢት",
+                        "ሚያዚያ",
+                        "ጉንበት",
+                        "ሰነ",
+                        "ሓምለ",
+                        "ነሓሰ",
+                        "ጷጉሜ",
+                    }
+                    wide{
+                        "መስከረም",
+                        "ጥቅምቲ",
+                        "ሕዳር",
+                        "ታሕሳስ",
+                        "ጥሪ",
+                        "ለካቲት",
+                        "መጋቢት",
+                        "ሚያዚያ",
+                        "ጉንበት",
+                        "ሰነ",
+                        "ሓምለ",
+                        "ነሓሰ",
+                        "ጷጉሜ",
+                    }
+                }
+            }
+        }
         generic{
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE፣ d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd/MM/yy GGGGG",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/y GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -227,19 +349,17 @@ ti{
                 "GGGGGyyMMdd",
             }
             availableFormats{
-                Ed{"E d"}
+                Ed{"d E"}
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E፣ d MMM y G"}
-                GyMMMd{"d MMM y G"}
-                GyMd{"d/M/y GGGGG"}
+                GyMMMd{"MMM d, y G"}
+                GyMd{"M/d/y GGGGG"}
                 MEd{"E፣ d/M"}
-                MMMEd{"E፣ d MMM"}
-                MMMMd{"d MMMM"}
+                MMMEd{"E, MMM d"}
                 MMMMdd{"dd MMMM"}
-                MMMd{"d MMM"}
                 MMdd{"dd/MM"}
-                Md{"d/M"}
+                Md{"M/d"}
                 y{"y G"}
                 yMM{"MM/y"}
                 yMMMM{"MMMM y"}
@@ -248,20 +368,111 @@ ti{
                 yyyyM{"M/y GGGGG"}
                 yyyyMEd{"E፣ d/M/y GGGGG"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"E፣ d MMM y G"}
+                yyyyMMMEd{"E, MMM d, y G"}
                 yyyyMMMM{"MMMM y G"}
-                yyyyMMMd{"d MMM y G"}
-                yyyyMd{"d/M/y GGGGG"}
+                yyyyMMMd{"MMM d, y G"}
+                yyyyMd{"M/d/y GGGGG"}
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
             }
             intervalFormats{
+                Gy{
+                    G{"y G – y G"}
+                    y{"y – y G"}
+                }
+                GyM{
+                    G{"M/y GGGGG – M/y GGGGG"}
+                    M{"M/y – M/y GGGGG"}
+                    y{"M/y – M/y GGGGG"}
+                }
+                GyMEd{
+                    G{"E, M/d/y GGGGG – E, M/d/y GGGGG"}
+                    M{"E, M/d/y – E, M/d/y GGGGG"}
+                    d{"E, M/d/y – E, M/d/y GGGGG"}
+                    y{"E, M/d/y – E, M/d/y GGGGG"}
+                }
+                GyMMM{
+                    G{"MMM y G – MMM y G"}
+                    M{"MMM – MMM y G"}
+                    y{"MMM y – MMM y G"}
+                }
+                GyMMMEd{
+                    G{"E, MMM d, y G – E, MMM d, y G"}
+                    M{"E, MMM d – E, MMM d, y G"}
+                    d{"E, MMM d – E, MMM d, y G"}
+                    y{"E, MMM d, y – E, MMM d, y G"}
+                }
+                GyMMMd{
+                    G{"MMM d, y G – MMM d, y G"}
+                    M{"MMM d – MMM d, y G"}
+                    d{"MMM d – d, y G"}
+                    y{"MMM d, y – MMM d, y G"}
+                }
+                GyMd{
+                    G{"M/d/y GGGGG – M/d/y GGGGG"}
+                    M{"M/d/y – M/d/y GGGGG"}
+                    d{"M/d/y – M/d/y GGGGG"}
+                    y{"M/d/y – M/d/y GGGGG"}
+                }
                 M{
                     M{"M–M"}
+                }
+                MEd{
+                    M{"E, M/d – E, M/d"}
+                    d{"E, M/d – E, M/d"}
+                }
+                MMM{
+                    M{"MMM – MMM"}
+                }
+                MMMEd{
+                    M{"E, MMM d – E, MMM d"}
+                    d{"E, MMM d – E, MMM d"}
+                }
+                MMMd{
+                    M{"MMM d – MMM d"}
+                }
+                Md{
+                    M{"M/d – M/d"}
+                    d{"M/d – M/d"}
                 }
                 fallback{"{0} – {1}"}
                 hm{
                     h{"h:mm – h:mm a"}
+                }
+                y{
+                    y{"y – y G"}
+                }
+                yM{
+                    M{"M/y – M/y GGGGG"}
+                    y{"M/y – M/y GGGGG"}
+                }
+                yMEd{
+                    M{"E, M/d/y – E, M/d/y GGGGG"}
+                    d{"E, M/d/y – E, M/d/y GGGGG"}
+                    y{"E, M/d/y – E, M/d/y GGGGG"}
+                }
+                yMMM{
+                    M{"MMM – MMM y G"}
+                    y{"MMM y – MMM y G"}
+                }
+                yMMMEd{
+                    M{"E, MMM d – E, MMM d, y G"}
+                    d{"E, MMM d – E, MMM d, y G"}
+                    y{"E, MMM d, y – E, MMM d, y G"}
+                }
+                yMMMM{
+                    M{"MMMM – MMMM y G"}
+                    y{"MMMM y – MMMM y G"}
+                }
+                yMMMd{
+                    M{"MMM d – MMM d, y G"}
+                    d{"MMM d – d, y G"}
+                    y{"MMM d, y – MMM d, y G"}
+                }
+                yMd{
+                    M{"M/d/y – M/d/y GGGGG"}
+                    d{"M/d/y – M/d/y GGGGG"}
+                    y{"M/d/y – M/d/y GGGGG"}
                 }
             }
         }
@@ -276,9 +487,9 @@ ti{
                 "h:mm:ss a",
                 "h:mm a",
                 "EEEE፣ d MMMM y",
-                "d MMMM y",
-                "d MMM y",
-                "dd/MM/yy",
+                "MMMM d, y",
+                "MMM d, y",
+                "M/d/yy",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -304,21 +515,20 @@ ti{
             availableFormats{
                 EHm{"E፣ HH:mm"}
                 EHms{"E፣ HH:mm:ss"}
-                Ed{"E d"}
+                Ed{"d E"}
                 Ehm{"E፣ h:mm a"}
                 Ehms{"E፣ h:mm:ss a"}
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E፣ d MMM y G"}
-                GyMMMd{"d MMM y G"}
-                GyMd{"d/M/y GGGGG"}
+                GyMMMd{"MMM d, y G"}
+                GyMd{"M/d/y G"}
                 MEd{"E፣ d/M"}
                 MMMEd{"E፣ d MMM"}
                 MMMMW{
                     one{"ሰሙን W ናይ MMMM"}
                     other{"ሰሙን W ናይ MMMM"}
                 }
-                MMMMd{"d MMMM"}
                 MMMMdd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMdd{"d/M"}
@@ -327,9 +537,10 @@ ti{
                 yMEd{"E፣ d/M/y"}
                 yMM{"M/y"}
                 yMMM{"MMM y"}
+                yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
-                yMd{"d/M/y"}
+                yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
@@ -504,7 +715,7 @@ ti{
                         "ለካቲት",
                         "መጋቢት",
                         "ሚያዝያ",
-                        "ግንቦት",
+                        "ጉንበት",
                         "ሰነ",
                         "ሓምለ",
                         "ነሓሰ",
@@ -529,6 +740,20 @@ ti{
                         "ሕ",
                         "ታ",
                     }
+                    wide{
+                        "ጥሪ",
+                        "ለካቲት",
+                        "መጋቢት",
+                        "ሚያዝያ",
+                        "ጉንበት",
+                        "ሰነ",
+                        "ሓምለ",
+                        "ነሓሰ",
+                        "መስከረም",
+                        "ጥቅምቲ",
+                        "ሕዳር",
+                        "ታሕሳስ",
+                    }
                 }
             }
             quarters{
@@ -548,37 +773,123 @@ ti{
                 }
             }
         }
+        islamic{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/y GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                GyMMMd{"MMM d, y G"}
+                GyMd{"M/d/y GGGGG"}
+                MMMEd{"E, MMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M/d"}
+                yyyyMMMEd{"E, MMM d, y G"}
+                yyyyMMMd{"MMM d, y G"}
+                yyyyMd{"M/d/y GGGGG"}
+            }
+        }
     }
     characterLabel{
         activities{"ንጥፈታት"}
+        african_scripts{"ናይ አፍሪቃ ጽሑፍ"}
+        american_scripts{"ናይ አመሪካ ጽሑፍ"}
         animal{"እንስሳታት"}
         animals_nature{"እንስሳታትን ተፈጥሮን"}
         arrows{"ፍላጻ"}
         body{"ኣካላት"}
+        box_drawing{"ናይ ሳጹን ስእሊ"}
+        braille{"ብሬል"}
         building{"ህንጻ"}
-        digits{"ኣሃዛት"}
+        bullets_stars{"ነጥቢ ወይ ኮኾብ"}
+        consonantal_jamo{"ተስማማዒ ጃሞ"}
+        currency_symbols{"ምልክት ባጤራ"}
+        dash_connector{"ዳሽ ወይ መታሓሓዚ"}
+        digits{"ኣሃዝ"}
+        dingbats{"ዲንግባት"}
+        divination_symbols{"ምልክት ጥንቖላ"}
+        downwards_arrows{"ንታሕቲ ዘመልክት ፍላጻ"}
+        downwards_upwards_arrows{"ንታሕቲ ዘመልክት ንላዕሊ ዘመልክት ፍላጻ"}
+        east_asian_scripts{"ምብራቕ ኤስያዊ ጽሑፍ"}
         emoji{"ኢሞጂታት"}
+        european_scripts{"ኤውሮጳዊ ጽሑፍ"}
         female{"ደቂ ኣንስትዮ"}
         flag{"ባንዴራ"}
         flags{"ባንዴራታት"}
         food_drink{"መግብን መስተን"}
         format{"ቅርጽታት"}
-        heart{"ልብታት"}
+        format_whitespace{"ቅርጺን ባዶ ቦታን"}
+        full_width_form_variant{"ምሉእ ስፍሓት ዘለዎ ፍልልይ"}
+        geometric_shapes{"ጂኦሜትሪካዊ ቅርጺ"}
+        half_width_form_variant{"ፍርቂ ስፍሓት ዘለዎ ፍልልይ"}
+        han_characters{"ናይ ሃን ገጸ ባህሪ"}
+        han_radicals{"ናይ ሃን ራዲካል"}
+        hanja{"ሃንጃ"}
+        hanzi_simplified{"ሃንዚ (ዝተቓለለ)"}
+        hanzi_traditional{"ሃንዚ (ባህላዊ)"}
+        heart{"ልቢ"}
+        historic_scripts{"ታሪኻዊ ጽሑፍ"}
+        ideographic_desc_characters{"ስነ-ሓሳባዊ መግለጺ"}
+        japanese_kana{"ጃፓናዊ ካና"}
+        kanbun{"ካንቡን"}
+        kanji{"ካንጂ"}
+        keycap{"ዝምልከት ቁልፊ"}
+        leftwards_arrows{"ንጸጋም ዘመልክት ፍላጻ"}
+        leftwards_rightwards_arrows{"ንጸጋም ዘመልክት ይየማን ዘመልክት ፍላጻ"}
+        letterlike_symbols{"ፊደል ዝመስል ምልክት"}
+        limited_use{"ውሱን-ኣጠቓቕማ"}
         male{"ደቂ ተባዕትዮ"}
+        math_symbols{"ናይ ሒሳብ ምልክት"}
+        middle_eastern_scripts{"ናይ ማእከላይ ምብራቕ ጽሑፍ"}
         miscellaneous{"ዝተፈላለዩ"}
-        modifier{"ለወጥቲ"}
+        modern_scripts{"ዘመናዊ ጽሑፍ"}
+        modifier{"መቐየሪ"}
+        musical_symbols{"ሙዚቃዊ ምልክት"}
         nature{"ተፈጥሮ"}
+        nonspacing{"ቦታ ዘይብሉ"}
         numbers{"ቁጽርታት"}
-        objects{"ነገራት"}
-        other{"ካልኦት"}
-        person{"ሰባት"}
+        objects{"አቕሓ"}
+        other{"ካልእ"}
+        paired{"ዝተጻመደ"}
+        person{"ሰብ"}
+        phonetic_alphabet{"ድምጻዊ ፊደላት"}
+        pictographs{"ምስላዊ ስእሊ"}
         place{"ቦታታት"}
         plant{"ኣትክልቲ"}
+        punctuation{"ስርዓተ ነጥቢ"}
+        rightwards_arrows{"ንየማን ዘመልክት ፍላጻ"}
+        sign_standard_symbols{"ምልክት ወይ ምልክት"}
+        small_form_variant{"ንኣሽተይ ፍልልያት"}
+        smiley{"ፍሽኽታ"}
+        smileys_people{"ፍሽኽታ ወይ ሰብ"}
+        south_asian_scripts{"ናይ ደቡብ ኤስያዊ ጽሑፍ"}
+        southeast_asian_scripts{"ናይ ደቡባዊ ምብራቕ ኤስያ ጽሑፍ"}
+        spacing{"ክፍተት ምሃብ"}
         sport{"ስፖርት"}
         symbols{"ምልክታት"}
-        travel{"ጉዕዞታት"}
+        technical_symbols{"ቴክኒካዊ ምልክት"}
+        tone_marks{"ናይ ድምጺ ምልክት"}
+        travel{"ምጉዓዝ"}
         travel_places{"ጉዕዞታትን መዓርፎታትን"}
+        upwards_arrows{"ንላዕሊ ዘመልክት ፍላጻ"}
+        variant_forms{"ዝፈላለይ"}
+        vocalic_jamo{"ድምጻዊ ጃሞ"}
         weather{"ኩነታት ኣየር"}
+        western_asian_scripts{"ምዕራብ ኤስያዊ ጽሑፍ"}
+        whitespace{"ባዶ ቦታ"}
     }
     delimiters{
         alternateQuotationEnd{"”"}
@@ -637,7 +948,7 @@ ti{
                     other{"ኣብ {0} ዓርቢ"}
                 }
                 past{
-                    one{"ኣብ {0} ዓርቢ"}
+                    one{"ቅድሚ {0} ዓርቢ"}
                     other{"ቅድሚ {0} ዓርቢ"}
                 }
             }
@@ -756,7 +1067,7 @@ ti{
             }
         }
         second{
-            dn{"ካልኢት"}
+            dn{"ሴኮንድ"}
             relative{
                 "0"{"ሕጂ"}
             }
@@ -770,6 +1081,12 @@ ti{
                     other{"ቅድሚ {0} ካልኢት"}
                 }
             }
+        }
+        second-narrow{
+            dn{"ሴኮንድ"}
+        }
+        second-short{
+            dn{"ሴኮንድ"}
         }
         sun{
             relative{
@@ -879,9 +1196,9 @@ ti{
         year{
             dn{"ዓመት"}
             relative{
-                "-1"{"ዓሚ"}
+                "-1"{"ዝሓለፈ ዓመት"}
                 "0"{"ሎሚ ዓመት"}
-                "1"{"ንዓመታ"}
+                "1"{"ዝመጽእ ዓመት"}
             }
             relativeTime{
                 future{
@@ -895,6 +1212,11 @@ ti{
             }
         }
         year-narrow{
+            relative{
+                "-1"{"ዝሓለፈ ዓመት"}
+                "0"{"ሎሚ ዓመት"}
+                "1"{"ዝመጽእ ዓመት"}
+            }
             relativeTime{
                 past{
                     one{"ቅድሚ {0} ዓ"}
@@ -903,6 +1225,11 @@ ti{
             }
         }
         year-short{
+            relative{
+                "-1"{"ዝሓለፈ ዓመት"}
+                "0"{"ሎሚ ዓመት"}
+                "1"{"ዝመጽእ ዓመት"}
+            }
             relativeTime{
                 past{
                     one{"ቅድሚ -{0} ዓ"}
@@ -930,8 +1257,11 @@ ti{
             middle{"{0}፣ {1}"}
             start{"{0}፣ {1}"}
         }
+        standard-narrow{
+            2{"{0}፣ {1}"}
+        }
         unit{
-            end{"{0}ን {1}ን"}
+            2{"{0}፣ {1}"}
         }
         unit-narrow{
             2{"{0} {1}"}
@@ -940,6 +1270,7 @@ ti{
             start{"{0} {1}"}
         }
         unit-short{
+            2{"{0}፣ {1}"}
             end{"{0}፣ {1}"}
         }
     }
@@ -954,56 +1285,49 @@ ti{
                 "und",
                 "ti",
             }
-            surnameFirst{
-                "ko",
-                "si",
-                "ta",
-                "te",
-                "vi",
-                "yue",
-                "zh",
-            }
         }
         namePattern{
             givenFirst-long-addressing-formal{"{title} {surname}"}
             givenFirst-long-addressing-informal{"{given-informal}"}
-            givenFirst-long-monogram-formal{"{surname-monogram-allCaps}"}
+            givenFirst-long-monogram-informal{"{given-informal-monogram-allCaps}{surname-monogram-allCaps}"}
+            givenFirst-long-referring-formal{"{title} {given} {given2} {surname} {generation}፣ {credentials}"}
             givenFirst-long-referring-informal{"{given-informal} {surname}"}
             givenFirst-medium-addressing-formal{"{title} {surname}"}
             givenFirst-medium-addressing-informal{"{given-informal}"}
-            givenFirst-medium-referring-formal{"{given} {given2-initial} {surname} {generation}, {credentials}"}
+            givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-medium-referring-formal{"{given} {given2-initial} {surname} {generation}፣ {credentials}"}
             givenFirst-medium-referring-informal{"{given-informal} {surname}"}
             givenFirst-short-addressing-formal{"{title} {surname}"}
             givenFirst-short-addressing-informal{"{given-informal}"}
-            givenFirst-short-monogram-formal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}"
-            }
-            givenFirst-short-monogram-informal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}"
-            }
+            givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-short-referring-formal{"{given-initial} {given2-initial} {surname}"}
             givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
-            sorting-long-referring-formal{"{surname-core}, {given} {given2} {surname-prefix}"}
-            sorting-long-referring-informal{"{surname} {surname2}, {title} {given} {given2} {credentials}"}
+            sorting-long-referring-formal{"{surname-core}፣ {given} {given2} {surname-prefix}"}
+            sorting-long-referring-informal{"{surname}, {given-informal}"}
             sorting-medium-referring-formal{"{surname-core}, {given} {given2-initial} {surname-prefix}"}
             sorting-medium-referring-informal{"{surname}, {given-informal}"}
+            sorting-short-referring-formal{"{surname-core}፣ {given} {given2} {surname-prefix}"}
+            sorting-short-referring-informal{"{surname-core}፣ {given} {given2} {surname-prefix}"}
             surnameFirst-long-addressing-formal{"{title} {surname}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
             surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-informal-monogram-allCaps}"}
-            surnameFirst-long-referring-formal{"{title} {surname} {given} {given2} {generation}, {credentials}"}
+            surnameFirst-long-referring-formal{"{surname} {title} {given} {given2} {generation}፣ {credentials}"}
             surnameFirst-long-referring-informal{"{surname} {given-informal}"}
             surnameFirst-medium-addressing-formal{"{title} {surname}"}
             surnameFirst-medium-addressing-informal{"{given-informal}"}
             surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
-            surnameFirst-medium-referring-formal{"{surname} {given} {given2-initial} {generation}, {credentials}"}
+            surnameFirst-medium-referring-formal{"{surname} {given} {given2-initial} {generation}፣ {credentials}"}
             surnameFirst-medium-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-short-addressing-formal{"{title} {surname}"}
             surnameFirst-short-addressing-informal{"{given-informal}"}
             surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
-            surnameFirst-short-referring-formal{"{surname} {surname2} {title} {given} {given2} {credentials}"}
+            surnameFirst-short-referring-formal{"{surname} {given-initial} {given2-initial}"}
             surnameFirst-short-referring-informal{"{surname} {given-initial}"}
+        }
+        parameterDefault{
+            formality{"informal"}
         }
     }
 }

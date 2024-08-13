@@ -451,7 +451,7 @@ tr{
                 GyMMM{"G MMM y"}
                 GyMMMEd{"G d MMM y E"}
                 GyMMMd{"G d MMM y"}
-                GyMd{"d/M/y GGGGG"}
+                GyMd{"GGGGG dd.MM.y"}
                 MEd{"d/MM E"}
                 MMMEd{"d MMM E"}
                 MMMMEd{"d MMMM E"}
@@ -1444,25 +1444,6 @@ tr{
         metric{"Metrik"}
     }
     parse{
-        date{
-            lenient{
-                "[\\- ‑ . /]",
-                "[\\: ∶]",
-            }
-        }
-        general{
-            lenient{
-                "[.．․﹒ 。｡︒]",
-                "['＇’ ՚ ᾽᾿ ʼ]",
-                "[%％﹪ ٪]",
-                "[‰ ؉]",
-                "[\$＄﹩]",
-                "[£ ₤]",
-                "[¥￥]",
-                "[₩￦]",
-                "[₹ ₨ {Rp} {Rs}]",
-            }
-        }
         number{
             lenient{
                 "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",

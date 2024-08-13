@@ -905,7 +905,7 @@ de{
         }
         SLL{
             "SLL",
-            "Sierra-leonischer Leone (1964—2022)",
+            "Sierra-leonischer Leone (1964–2022)",
         }
         SOS{
             "SOS",
@@ -1876,8 +1876,8 @@ de{
             other{"Sierra-leonische Leones"}
         }
         SLL{
-            one{"Sierra-leonischer Leone (1964—2022)"}
-            other{"Sierra-leonische Leones (1964—2022)"}
+            one{"Sierra-leonischer Leone (1964–2022)"}
+            other{"Sierra-leonische Leones (1964–2022)"}
         }
         SRG{
             one{"Suriname-Gulden"}
@@ -2067,9 +2067,5 @@ de{
             one{"Zaire-Neuer Zaïre (1993–1998)"}
             other{"Zaire-Neue Zaïre (1993–1998)"}
         }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

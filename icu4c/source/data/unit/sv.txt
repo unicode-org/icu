@@ -176,7 +176,7 @@ sv{
             1024p7{"zebi{0}"}
             1024p8{"yobe{0}"}
             10p-1{"deci{0}"}
-            10p-12{"pico{0}"}
+            10p-12{"piko{0}"}
             10p-15{"femto{0}"}
             10p-18{"atto{0}"}
             10p-2{"centi{0}"}
@@ -269,7 +269,14 @@ sv{
                 other{"{0} karat"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    genitive{
+                        one{"{0} milligram per deciliters"}
+                        other{"{0} milligram per deciliters"}
+                    }
+                }
                 dnam{"milligram per deciliter"}
+                gender{"neuter"}
                 one{"{0} milligram per deciliter"}
                 other{"{0} milligram per deciliter"}
             }
@@ -342,6 +349,18 @@ sv{
                 gender{"common"}
                 one{"{0} promyriad"}
                 other{"{0} promyriad"}
+            }
+            portion-per-1e9{
+                case{
+                    genitive{
+                        one{"{0} miljarddels"}
+                        other{"{0} miljarddelars"}
+                    }
+                }
+                dnam{"miljarddelar"}
+                gender{"common"}
+                one{"{0} miljarddel"}
+                other{"{0} miljarddelar"}
             }
         }
         consumption{
@@ -636,6 +655,19 @@ sv{
                 one{"{0} nanosekund"}
                 other{"{0} nanosekunder"}
             }
+            night{
+                case{
+                    genitive{
+                        one{"{0} natts"}
+                        other{"{0} nätters"}
+                    }
+                }
+                dnam{"nätter"}
+                gender{"common"}
+                one{"{0} natt"}
+                other{"{0} nätter"}
+                per{"{0} per natt"}
+            }
             quarter{
                 case{
                     genitive{
@@ -777,6 +809,12 @@ sv{
                 other{"{0} joule"}
             }
             kilocalorie{
+                case{
+                    genitive{
+                        one{"{0} kilokaloris"}
+                        other{"{0} kilokaloriers"}
+                    }
+                }
                 dnam{"kilokalorier"}
                 gender{"common"}
                 one{"{0} kilokalori"}
@@ -1094,6 +1132,17 @@ sv{
                 one{"{0} pikometer"}
                 other{"{0} pikometer"}
             }
+            point{
+                case{
+                    genitive{
+                        one{"{0} punkts"}
+                        other{"{0} punkters"}
+                    }
+                }
+                gender{"common"}
+                one{"{0} pkt"}
+                other{"{0} pkt"}
+            }
             solar-radius{
                 dnam{"solradier"}
                 gender{"common"}
@@ -1405,7 +1454,14 @@ sv{
                 other{"{0} millibar"}
             }
             millimeter-ofhg{
+                case{
+                    genitive{
+                        one{"{0} millimeter kvicksilvers"}
+                        other{"{0} millimeter kvicksilvers"}
+                    }
+                }
                 dnam{"millimeter kvicksilver"}
+                gender{"common"}
                 one{"{0} millimeter kvicksilver"}
                 other{"{0} millimeter kvicksilver"}
             }
@@ -1444,6 +1500,18 @@ sv{
                 gender{"common"}
                 one{"{0} kilometer per timme"}
                 other{"{0} kilometer per timme"}
+            }
+            light-speed{
+                case{
+                    genitive{
+                        one{"{0} ljus"}
+                        other{"{0} ljus"}
+                    }
+                }
+                dnam{"ljus"}
+                gender{"neuter"}
+                one{"{0} ljus"}
+                other{"{0} ljus"}
             }
             meter-per-second{
                 case{
@@ -1889,6 +1957,10 @@ sv{
                 one{"{0}‱"}
                 other{"{0}‱"}
             }
+            portion-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -2004,6 +2076,12 @@ sv{
             nanosecond{
                 one{"{0}ns"}
                 other{"{0}ns"}
+            }
+            night{
+                dnam{"nttr"}
+                one{"{0}ntt"}
+                other{"{0}nttr"}
+                per{"{0}/ntt"}
             }
             quarter{
                 one{"{0}k"}
@@ -2385,6 +2463,11 @@ sv{
                 one{"{0}knop"}
                 other{"{0}knop"}
             }
+            light-speed{
+                dnam{"ljs"}
+                one{"{0}ljs"}
+                other{"{0}ljs"}
+            }
             meter-per-second{
                 one{"{0}m/s"}
                 other{"{0}m/s"}
@@ -2719,6 +2802,12 @@ sv{
                 other{"{0} mån"}
                 per{"{0}/mån"}
             }
+            night{
+                dnam{"nätter"}
+                one{"{0} natt"}
+                other{"{0} nätter"}
+                per{"{0}/natt"}
+            }
             quarter{
                 dnam{"k"}
                 one{"{0} k"}
@@ -2941,6 +3030,11 @@ sv{
                 dnam{"knop"}
                 one{"{0} knop"}
                 other{"{0} knop"}
+            }
+            light-speed{
+                dnam{"ljus"}
+                one{"{0} ljus"}
+                other{"{0} ljus"}
             }
             mile-per-hour{
                 dnam{"mile/timme"}

@@ -52,6 +52,11 @@ ia{
                 one{"{0} acre"}
                 other{"{0} acres"}
             }
+            dunam{
+                dnam{"dunames"}
+                one{"{0} dunams"}
+                other{"{0} dunams"}
+            }
             hectare{
                 dnam{"hectares"}
                 one{"{0} hectare"}
@@ -337,6 +342,11 @@ ia{
                 dnam{"calorias"}
                 one{"{0} caloria"}
                 other{"{0} calorias"}
+            }
+            foodcalorie{
+                dnam{"kilocalorias"}
+                one{"{0} kilocaloria"}
+                other{"{0} kilocalorias"}
             }
             joule{
                 dnam{"joules"}
@@ -797,6 +807,11 @@ ia{
                 one{"{0} quarto"}
                 other{"{0} quartos"}
             }
+            quart-imperial{
+                dnam{"Quartos imperial"}
+                one{"{0} quarto imperial"}
+                other{"{0} quartos imperial"}
+            }
             tablespoon{
                 dnam{"coclearatas a suppa"}
                 one{"{0} coclearata a suppa"}
@@ -992,6 +1007,11 @@ ia{
                 one{"{0}ml"}
                 other{"{0}ml"}
             }
+            pinch{
+                dnam{"pn"}
+                one{"{0}pn"}
+                other{"{0}pn"}
+            }
             pint{
                 one{"{0}pt"}
                 other{"{0}pt"}
@@ -1004,6 +1024,11 @@ ia{
             quart{
                 one{"{0}qt"}
                 other{"{0}qt"}
+            }
+            quart-imperial{
+                dnam{"qt imp"}
+                one{"{0}qt imp"}
+                other{"{0}qt imp"}
             }
             tablespoon{
                 dnam{"c. a suppa"}
@@ -1037,6 +1062,11 @@ ia{
         area{
             acre{
                 dnam{"ac"}
+            }
+            dunam{
+                dnam{"dunames"}
+                one{"{0} dunams"}
+                other{"{0} dunams"}
             }
             hectare{
                 dnam{"ha"}
@@ -1259,6 +1289,11 @@ ia{
                 one{"{0} ml"}
                 other{"{0} ml"}
             }
+            pinch{
+                dnam{"pinciata"}
+                one{"{0} pn"}
+                other{"{0} pn"}
+            }
             pint{
                 dnam{"pintas"}
             }
@@ -1266,6 +1301,11 @@ ia{
                 dnam{"ptm"}
                 one{"{0} ptm"}
                 other{"{0} ptm"}
+            }
+            quart-imperial{
+                dnam{"Quarto imp."}
+                one{"{0} quarto imp"}
+                other{"{0} quartos imp"}
             }
             tablespoon{
                 dnam{"cocl. a suppa"}

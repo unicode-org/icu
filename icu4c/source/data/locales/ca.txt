@@ -571,7 +571,7 @@ ca{
                 yMMMd{"d MMM 'del' y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
-                yQQQQ{"QQQQ y"}
+                yQQQQ{"QQQQ 'del' y"}
                 yw{
                     one{"'setmana' w 'del' Y"}
                     other{"'setmana' w 'del' Y"}
@@ -618,15 +618,6 @@ ca{
                         evening1{"vespre"}
                         midnight{"mitjanit"}
                         morning1{"matinada"}
-                        morning2{"matí"}
-                        night1{"nit"}
-                    }
-                    narrow{
-                        afternoon1{"migdia"}
-                        afternoon2{"tarda"}
-                        evening1{"vespre"}
-                        midnight{"mitjanit"}
-                        morning1{"mat."}
                         morning2{"matí"}
                         night1{"nit"}
                     }
@@ -1534,19 +1525,6 @@ ca{
             lenient{
                 "[\\- ‑ . /]",
                 "[\\: ∶]",
-            }
-        }
-        general{
-            lenient{
-                "[.．․﹒ 。｡︒]",
-                "['＇’ ՚ ᾽᾿ ʼ]",
-                "[%％﹪ ٪]",
-                "[‰ ؉]",
-                "[\$＄﹩]",
-                "[£ ₤]",
-                "[¥￥]",
-                "[₩￦]",
-                "[₹ ₨ {Rp} {Rs}]",
             }
         }
         number{

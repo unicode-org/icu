@@ -7,6 +7,29 @@ az{
     ExemplarCharactersIndex{"[A B C Ç D E Ə F G Ğ H X I İ J K Q L M N O Ö P R S Ş T U Ü V Y Z W]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
+        arab{
+            patterns{
+                decimalFormat{"standart onluq kəsr0.###"}
+                scientificFormat{"standart elmi#"}
+            }
+            symbols{
+                group{","}
+                minusSign{"-"}
+                percentSign{"٪"}
+                plusSign{"+"}
+            }
+        }
+        arabext{
+            patterns{
+                decimalFormat{"standart onluq kəsr0.###"}
+            }
+            symbols{
+                decimal{","}
+                minusSign{"-"}
+                percentSign{"~"}
+                plusSign{"+"}
+            }
+        }
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
@@ -1184,7 +1207,7 @@ az{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

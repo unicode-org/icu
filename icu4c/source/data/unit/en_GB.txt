@@ -3,4 +3,105 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en_GB{
     %%Parent{"en_001"}
+    units{
+        force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"kilowatt-hours per 100 kilometres"}
+            }
+        }
+        length{
+            decimeter{
+                dnam{"decimetres"}
+            }
+            micrometer{
+                dnam{"micrometres"}
+            }
+        }
+        temperature{
+            generic{
+                dnam{"degrees"}
+            }
+        }
+        volume{
+            dessert-spoon{
+                dnam{"US dessertspoons"}
+            }
+            dessert-spoon-imperial{
+                dnam{"dessertspoons"}
+            }
+            quart-imperial{
+                dnam{"quarts"}
+            }
+        }
+    }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0}G"}
+                other{"{0}G"}
+            }
+        }
+        area{
+            square-meter{
+                dnam{"m²"}
+            }
+        }
+        length{
+            meter{
+                dnam{"m"}
+            }
+        }
+        mass{
+            carat{
+                one{"{0}ct"}
+                other{"{0}ct"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°C"}
+                other{"{0}°C"}
+            }
+        }
+        volume{
+            gallon{
+                one{"{0}USgal"}
+                other{"{0}USgal"}
+                per{"{0}/USgal"}
+            }
+            quart{
+                dnam{"USqt"}
+                one{"{0}USqt"}
+                other{"{0}USqt"}
+            }
+        }
+    }
+    unitsShort{
+        area{
+            square-meter{
+                dnam{"m²"}
+            }
+        }
+        length{
+            meter{
+                dnam{"m"}
+            }
+        }
+        mass{
+            grain{
+                one{"{0} gr"}
+                other{"{0} gr"}
+            }
+        }
+        volume{
+            drop{
+                one{"{0} drop"}
+                other{"{0} drops"}
+            }
+            pinch{
+                one{"{0} pinch"}
+                other{"{0} pinches"}
+            }
+        }
+    }
 }

@@ -720,8 +720,4 @@ zu{
             other{"i-West African CFA francs"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

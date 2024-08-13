@@ -40,7 +40,7 @@ zu{
         ann{"isi-Obolo"}
         anp{"isi-Angika"}
         ar{"isi-Arabic"}
-        ar_001{"isi-Arabic esivamile sesimanje"}
+        ar_001{"Isi-Arabic Esivamile Sesimanje"}
         arn{"isi-Mapuche"}
         arp{"isi-Arapaho"}
         ars{"isi-Najdi Arabic"}
@@ -65,6 +65,7 @@ zu{
         bi{"isi-Bislama"}
         bin{"isi-Bini"}
         bla{"isi-Siksika"}
+        blo{"isi-Anii"}
         bm{"isi-Bambara"}
         bn{"isi-Bengali"}
         bo{"isi-Tibetan"}
@@ -242,6 +243,7 @@ zu{
         kv{"isi-Komi"}
         kw{"isi-Cornish"}
         kwk{"Kwakʼwala"}
+        kxv{"Kuvi"}
         ky{"isi-Kyrgyz"}
         la{"isi-Latin"}
         lad{"isi-Ladino"}
@@ -250,8 +252,10 @@ zu{
         lez{"isi-Lezghian"}
         lg{"isi-Ganda"}
         li{"isi-Limburgish"}
+        lij{"IsiLigurian"}
         lil{"isi-Lillooet"}
         lkt{"isi-Lakota"}
+        lmo{"IsiLombard"}
         ln{"isi-Lingala"}
         lo{"isi-Lao"}
         lou{"isi-Louisiana Creole"}
@@ -409,6 +413,7 @@ zu{
         sw_CD{"isi-Congo Swahili"}
         swb{"isi-Comorian"}
         syr{"isi-Syriac"}
+        szl{"iSilesian"}
         ta{"isi-Tamil"}
         tce{"Southern Tutchone"}
         te{"isi-Telugu"}
@@ -449,7 +454,9 @@ zu{
         uz{"isi-Uzbek"}
         vai{"isi-Vai"}
         ve{"isi-Venda"}
+        vec{"IsiVenetian"}
         vi{"isi-Vietnamese"}
+        vmw{"Makhuwa"}
         vo{"isi-Volapük"}
         vun{"isiVunjo"}
         wa{"isi-Walloon"}
@@ -461,6 +468,7 @@ zu{
         wuu{"isi-Wu Chinese"}
         xal{"isi-Kalmyk"}
         xh{"isiXhosa"}
+        xnr{"Kangri"}
         xog{"isi-Soga"}
         yav{"isi-Yangben"}
         ybb{"isi-Yemba"}
@@ -468,16 +476,18 @@ zu{
         yo{"isi-Yoruba"}
         yrl{"isi-Nheengatu"}
         yue{"isi-Cantonese"}
+        za{"IsiZhuang"}
         zgh{"isi-Moroccan Tamazight esivamile"}
         zh{"isi-Chinese"}
         zh_Hans{"isi-Chinese (esenziwe-lula)"}
-        zh_Hant{"isi-Chinese (Sasendulo)"}
+        zh_Hant{"Isi-Chinese Sasendulo"}
         zu{"isiZulu"}
         zun{"isi-Zuni"}
         zxx{"akukho okuqukethwe kolimi"}
         zza{"isi-Zaza"}
     }
     Languages%long{
+        zh_Hans{"Isi-Chinese Esenziwe Lula"}
         zh_Hant{"isi-Chinese (sasendulo)"}
     }
     Languages%menu{

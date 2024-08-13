@@ -333,7 +333,7 @@ jv{
         }
         LSL{
             "LSL",
-            "Lesotho Loti",
+            "Loti Lesotho",
         }
         LYD{
             "LYD",
@@ -441,7 +441,7 @@ jv{
         }
         PHP{
             "₱",
-            "Piso Filipina",
+            "Peso Filipina",
         }
         PKR{
             "PKR",
@@ -646,10 +646,13 @@ jv{
     }
     CurrencyPlurals{
         LSL{
-            other{"Lesotho lotis"}
+            other{"Loti Lesotho"}
         }
         MAD{
             other{"Dirham Moroko"}
+        }
+        PHP{
+            other{"Peso Filipina"}
         }
     }
     CurrencyUnitPatterns{

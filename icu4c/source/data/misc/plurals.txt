@@ -33,6 +33,7 @@ plurals:table(nofallback){
         chr{"set7"}
         ckb{"set7"}
         cs{"set28"}
+        csw{"set5"}
         cy{"set39"}
         da{"set8"}
         de{"set3"}
@@ -111,6 +112,7 @@ plurals:table(nofallback){
         lg{"set7"}
         lij{"set3"}
         lkt{"set0"}
+        lld{"set23"}
         ln{"set5"}
         lo{"set0"}
         lt{"set31"}
@@ -281,6 +283,7 @@ plurals:table(nofallback){
         kw{"set53"}
         ky{"set40"}
         lij{"set50"}
+        lld{"set49"}
         lo{"set42"}
         lt{"set40"}
         lv{"set40"}

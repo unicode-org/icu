@@ -4,6 +4,9 @@
 blo{
     Keys{
         calendar{"ɩshilé n’ɩŋɔrɔ ɩtʊrka"}
+        currency{"gɩtanɩ"}
+        ms{"ʊfaŋʊ kayaashɩ"}
+        numbers{"ɩnɔmba"}
     }
     Languages{
         ar{"gɩlaaribuja"}
@@ -40,7 +43,6 @@ blo{
         zh{"gɩcaɩnaja, manɖarɛŋ"}
     }
     Languages%short{
-        en_GB{"gɛɛshɩ (GT)"}
         en_US{"gɛɛshɩ (GKA)"}
     }
     Languages%variant{
@@ -49,6 +51,7 @@ blo{
     Scripts{
         Arab{"laaribu kʊja"}
         Cyrl{"Siril kʊja"}
+        Deva{"defanagari kʊja"}
         Hans{"aburoka"}
         Hant{"tututu"}
         Jpan{"Japaŋ kʊja"}
@@ -85,6 +88,11 @@ blo{
         }
         collation{
             standard{"ɩbii kʊnyaʊ ɖeiɖei"}
+        }
+        ms{
+            metric{"mɛta kʊfaŋʊ kayaashɩ"}
+            uksystem{"Gɛɛshɩ kʊfaŋʊ kayaashɩ"}
+            ussystem{"Amalɩka kʊfaŋʊ kayaashɩ"}
         }
         numbers{
             latn{"latɛŋ"}

@@ -431,7 +431,7 @@ fil{
                 MMMEd{"E, MMM d"}
                 MMMMEd{"E, MMMM d"}
                 MMMMW{
-                    one{"'ika'-W 'linggo' 'ng' MMMM"}
+                    one{"'linggo' W 'ng' MMMM"}
                     other{"'linggo' W 'ng' MMMM"}
                 }
                 Md{"M/d"}
@@ -466,14 +466,14 @@ fil{
                         "Biy",
                         "Sab",
                     }
-                    short{
-                        "Li",
-                        "Lu",
-                        "Ma",
-                        "Mi",
-                        "Hu",
-                        "Bi",
-                        "Sa",
+                    narrow{
+                        "Lin",
+                        "Lun",
+                        "Mar",
+                        "Miy",
+                        "Huw",
+                        "Biy",
+                        "Sab",
                     }
                     wide{
                         "Linggo",
@@ -495,24 +495,42 @@ fil{
                         "Biy",
                         "Sab",
                     }
+                    short{
+                        "Lin",
+                        "Lun",
+                        "Mar",
+                        "Miy",
+                        "Huw",
+                        "Biy",
+                        "Sab",
+                    }
                 }
             }
             dayPeriod{
                 format{
                     abbreviated{
-                        afternoon1{"tanghali"}
+                        afternoon1{"ng hapon"}
                         evening1{"ng gabi"}
                         midnight{"hatinggabi"}
-                        morning1{"nang umaga"}
+                        morning1{"ng umaga"}
                         morning2{"madaling-araw"}
                         night1{"ng gabi"}
                         noon{"tanghaling-tapat"}
                     }
                     narrow{
-                        afternoon1{"sa hapon"}
-                        evening1{"sa gabi"}
+                        afternoon1{"ng hapon"}
+                        evening1{"ng gabi"}
                         midnight{"hatinggabi"}
-                        morning1{"umaga"}
+                        morning1{"ng umaga"}
+                        morning2{"madaling-araw"}
+                        night1{"ng gabi"}
+                        noon{"tanghaling-tapat"}
+                    }
+                    wide{
+                        afternoon1{"ng hapon"}
+                        evening1{"ng gabi"}
+                        midnight{"hatinggabi"}
+                        morning1{"ng umaga"}
                         morning2{"madaling-araw"}
                         night1{"ng gabi"}
                         noon{"tanghaling-tapat"}
@@ -520,13 +538,6 @@ fil{
                 }
                 stand-alone{
                     abbreviated{
-                        afternoon1{"hapon"}
-                        evening1{"gabi"}
-                        morning1{"umaga"}
-                        morning2{"madaling-araw"}
-                        night1{"gabi"}
-                    }
-                    wide{
                         afternoon1{"hapon"}
                         evening1{"gabi"}
                         morning1{"umaga"}
@@ -969,7 +980,11 @@ fil{
             relativeTime{
                 future{
                     one{"sa {0} Biy."}
-                    other{"sa {0} (na) Biyernes"}
+                    other{"sa {0} Biy"}
+                }
+                past{
+                    one{"sa {0} (na) Biy ang nakalipas"}
+                    other{"{0} (na) Biy ang nakalipas"}
                 }
             }
         }
@@ -1448,7 +1463,7 @@ fil{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

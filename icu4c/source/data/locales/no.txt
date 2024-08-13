@@ -2636,17 +2636,6 @@ no{
         }
         week-narrow{
             dn{"u."}
-            relativePeriod{"u. {0}"}
-            relativeTime{
-                future{
-                    one{"+{0} u."}
-                    other{"+{0} u."}
-                }
-                past{
-                    one{"-{0} u."}
-                    other{"-{0} u."}
-                }
-            }
         }
         week-short{
             relativePeriod{"uken med {0}"}

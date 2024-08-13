@@ -113,11 +113,26 @@ parameters; surnameFirst; short; monogram; informal
 endName
 
 # nativeGS
-name ; given; ኢሬን
+name ; given; አይሪን
 name ; surname; አድለር
 name ; locale; am_AQ
 
-expectedResult; አድለር ኢሬን
+expectedResult; አይሪን አድለር
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+
+expectedResult; አድለር አይሪን
 
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
@@ -138,31 +153,7 @@ parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
-expectedResult; ኢሬን አድለር
-
-parameters; givenFirst; long; referring; formal
-parameters; givenFirst; long; referring; informal
-parameters; givenFirst; long; addressing; formal
-parameters; givenFirst; long; addressing; informal
-parameters; givenFirst; medium; referring; formal
-parameters; givenFirst; medium; referring; informal
-parameters; givenFirst; medium; addressing; formal
-parameters; givenFirst; medium; addressing; informal
-parameters; givenFirst; short; referring; formal
-parameters; givenFirst; short; referring; informal
-parameters; givenFirst; short; addressing; formal
-parameters; givenFirst; short; addressing; informal
-
-expectedResult; አኢ
-
-parameters; surnameFirst; long; monogram; formal
-parameters; surnameFirst; long; monogram; informal
-parameters; surnameFirst; medium; monogram; formal
-parameters; surnameFirst; medium; monogram; informal
-parameters; surnameFirst; short; monogram; formal
-parameters; surnameFirst; short; monogram; informal
-
-expectedResult; ኢአ
+expectedResult; አአ
 
 parameters; givenFirst; long; monogram; formal
 parameters; givenFirst; long; monogram; informal
@@ -170,16 +161,37 @@ parameters; givenFirst; medium; monogram; formal
 parameters; givenFirst; medium; monogram; informal
 parameters; givenFirst; short; monogram; formal
 parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
 # nativeGGS
-name ; given; ጆን
+name ; given; ሜሪ ሱ
 name ; given2; ሃሚሽ
 name ; surname; ዋትሰን
 name ; locale; am_AQ
 
-expectedResult; ዋትሰን ጆን ሃሚሽ
+expectedResult; ሜሪ ሱ ሃሚሽ ዋትሰን
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+
+expectedResult; ዋትሰን ሜሪ ሱ ሃሚሽ
 
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
@@ -200,31 +212,7 @@ parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
-expectedResult; ጆን ሃሚሽ ዋትሰን
-
-parameters; givenFirst; long; referring; formal
-parameters; givenFirst; long; referring; informal
-parameters; givenFirst; long; addressing; formal
-parameters; givenFirst; long; addressing; informal
-parameters; givenFirst; medium; referring; formal
-parameters; givenFirst; medium; referring; informal
-parameters; givenFirst; medium; addressing; formal
-parameters; givenFirst; medium; addressing; informal
-parameters; givenFirst; short; referring; formal
-parameters; givenFirst; short; referring; informal
-parameters; givenFirst; short; addressing; formal
-parameters; givenFirst; short; addressing; informal
-
-expectedResult; ዋጆሃ
-
-parameters; surnameFirst; long; monogram; formal
-parameters; surnameFirst; long; monogram; informal
-parameters; surnameFirst; medium; monogram; formal
-parameters; surnameFirst; medium; monogram; informal
-parameters; surnameFirst; short; monogram; formal
-parameters; surnameFirst; short; monogram; informal
-
-expectedResult; ጆሃዋ
+expectedResult; ሜሃዋ
 
 parameters; givenFirst; long; monogram; formal
 parameters; givenFirst; long; monogram; informal
@@ -232,20 +220,29 @@ parameters; givenFirst; medium; monogram; formal
 parameters; givenFirst; medium; monogram; informal
 parameters; givenFirst; short; monogram; formal
 parameters; givenFirst; short; monogram; informal
+
+expectedResult; ዋሜሃ
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
 # nativeFull
 name ; title; አቶ
-name ; given; በርታም ዊልበርፎርስ
+name ; given; በርትራም ዊልበርፎርስ
 name ; given-informal; በርቲ
 name ; given2; ሄነሪ ሮበርት
 name ; surname-core; ዉስተር
-name ; generation; ተማሪ
-name ; credentials; ኤምፒ
+name ; generation; ልጅ
+name ; credentials; የፓርላማ አባል
 name ; locale; am_AQ
 
-expectedResult; አቶ በርታም ዊልበርፎርስ ሄነሪ ሮበርት ዉስተር ኤምፒ
+expectedResult; አቶ በርትራም ዊልበርፎርስ ሄነሪ ሮበርት ዉስተር የፓርላማ አባል
 
 parameters; givenFirst; long; referring; formal
 parameters; givenFirst; long; referring; informal
@@ -260,7 +257,7 @@ parameters; givenFirst; short; referring; informal
 parameters; givenFirst; short; addressing; formal
 parameters; givenFirst; short; addressing; informal
 
-expectedResult; ዉስተር አቶ በርታም ዊልበርፎርስ ሄነሪ ሮበርት ኤምፒ
+expectedResult; ዉስተር አቶ በርትራም ዊልበርፎርስ ሄነሪ ሮበርት የፓርላማ አባል
 
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
@@ -303,7 +300,7 @@ endName
 
 # foreignG
 name ; given; ሲንባድ
-name ; locale; ko_AQ
+name ; locale; ja_AQ
 
 expectedResult; ሲንባድ
 
@@ -358,7 +355,7 @@ endName
 # foreignGS
 name ; given; ካቲ
 name ; surname; ሙለር
-name ; locale; ko_AQ
+name ; locale; ja_AQ
 
 expectedResult; ሙለር ካቲ
 
@@ -417,12 +414,12 @@ parameters; givenFirst; short; monogram; informal
 endName
 
 # foreignGGS
-name ; given; ዛዚላ
+name ; given; ዛዚሊያ
 name ; given2; ሃሚሽ
 name ; surname; ስቶበር
-name ; locale; ko_AQ
+name ; locale; ja_AQ
 
-expectedResult; ስቶበር ዛዚላ ሃሚሽ
+expectedResult; ስቶበር ዛዚሊያ ሃሚሽ
 
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
@@ -443,7 +440,7 @@ parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
-expectedResult; ዛዚላ ሃሚሽ ስቶበር
+expectedResult; ዛዚሊያ ሃሚሽ ስቶበር
 
 parameters; givenFirst; long; referring; formal
 parameters; givenFirst; long; referring; informal
@@ -482,15 +479,15 @@ endName
 name ; title; ፕ/ር ዶ/ር
 name ; given; አዳ ኮርኔሊያ
 name ; given-informal; ኒል
-name ; given2; ኢቫ ሶፊያ
-name ; surname-prefix; ቫን ደን
+name ; given2; ሴዛር ማርቲን
+name ; surname-prefix; ቮን
 name ; surname-core; ብሩህል
 name ; surname2; ጎንዛሌዝ ዶሚንጎ
-name ; generation; ተማሪ
-name ; credentials; ሚ/ዶ ዶ/ር
-name ; locale; ko_AQ
+name ; generation; ልጅ
+name ; credentials; ዶ/ር የጥርስ ዶ/ር
+name ; locale; ja_AQ
 
-expectedResult; ቫን ደን ብሩህል ጎንዛሌዝ ዶሚንጎ, ፕ/ር ዶ/ር አዳ ኮርኔሊያ ኢቫ ሶፊያ ሚ/ዶ ዶ/ር
+expectedResult; ቮን ብሩህል ጎንዛሌዝ ዶሚንጎ, ፕ/ር ዶ/ር አዳ ኮርኔሊያ ሴዛር ማርቲን ዶ/ር የጥርስ ዶ/ር
 
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
@@ -499,7 +496,7 @@ parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
-expectedResult; ቫን ደን ብሩህል ጎንዛሌዝ ዶሚንጎ ፕ/ር ዶ/ር አዳ ኮርኔሊያ ኢቫ ሶፊያ ሚ/ዶ ዶ/ር
+expectedResult; ቮን ብሩህል ጎንዛሌዝ ዶሚንጎ ፕ/ር ዶ/ር አዳ ኮርኔሊያ ሴዛር ማርቲን ዶ/ር የጥርስ ዶ/ር
 
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
@@ -514,7 +511,7 @@ parameters; surnameFirst; short; referring; informal
 parameters; surnameFirst; short; addressing; formal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; ፕ/ር ዶ/ር አዳ ኮርኔሊያ ኢቫ ሶፊያ ቫን ደን ብሩህል ጎንዛሌዝ ዶሚንጎ ሚ/ዶ ዶ/ር
+expectedResult; ፕ/ር ዶ/ር አዳ ኮርኔሊያ ሴዛር ማርቲን ቮን ብሩህል ጎንዛሌዝ ዶሚንጎ ዶ/ር የጥርስ ዶ/ር
 
 parameters; givenFirst; long; referring; formal
 parameters; givenFirst; long; referring; informal
@@ -529,7 +526,7 @@ parameters; givenFirst; short; referring; informal
 parameters; givenFirst; short; addressing; formal
 parameters; givenFirst; short; addressing; informal
 
-expectedResult; ቫአኢ
+expectedResult; ቮአሴ
 
 parameters; surnameFirst; long; monogram; formal
 parameters; surnameFirst; long; monogram; informal
@@ -538,7 +535,7 @@ parameters; surnameFirst; medium; monogram; informal
 parameters; surnameFirst; short; monogram; formal
 parameters; surnameFirst; short; monogram; informal
 
-expectedResult; አኢቫ
+expectedResult; አሴቮ
 
 parameters; givenFirst; long; monogram; formal
 parameters; givenFirst; long; monogram; informal

@@ -395,10 +395,10 @@ ga{
         }
         duration{
             century{
-                dnam{"céadta bliain"}
+                dnam{"na céadta bliain"}
                 few{"{0} chéad bliain"}
                 many{"{0} gcéad bliain"}
-                one{"{0} chéad bliain"}
+                one{"céad bliain"}
                 other{"{0} céad bliain"}
                 two{"{0} chéad bliain"}
             }
@@ -430,6 +430,15 @@ ga{
                 one{"{0} nanashoicind"}
                 other{"{0} nanashoicind"}
                 two{"{0} nanashoicind"}
+            }
+            night{
+                dnam{"oícheanta"}
+                few{"{0} oíche"}
+                many{"{0} n-oíche"}
+                one{"{0} oíche amháin"}
+                other{"{0} oíche"}
+                per{"{0} san oíche"}
+                two{"{0} oíche"}
             }
             quarter{
                 dnam{"ceathrúna"}
@@ -1500,6 +1509,15 @@ ga{
                 other{"{0}ns"}
                 two{"{0}ns"}
             }
+            night{
+                dnam{"oí"}
+                few{"{0}oí"}
+                many{"{0}oí"}
+                one{"{0}oí"}
+                other{"{0}oí"}
+                per{"{0}/oíche"}
+                two{"{0}oí"}
+            }
             quarter{
                 few{"{0} cna"}
                 many{"{0} cna"}
@@ -2152,6 +2170,9 @@ ga{
             }
         }
         duration{
+            century{
+                dnam{"céadta bl"}
+            }
             day{
                 dnam{"lá"}
                 few{"{0} lá"}
@@ -2187,6 +2208,15 @@ ga{
                 other{"{0} m"}
                 per{"{0}/mí"}
                 two{"{0} mí"}
+            }
+            night{
+                dnam{"oícheanta"}
+                few{"{0} oíche"}
+                many{"{0} n-oíche"}
+                one{"{0} oíche"}
+                other{"{0} oíche"}
+                per{"{0}/oíche"}
+                two{"{0} oíche"}
             }
             quarter{
                 dnam{"ctú"}

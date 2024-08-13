@@ -1182,7 +1182,7 @@ zh{
             ec{"富纳富提"}
         }
         "Pacific:Galapagos"{
-            ec{"加拉帕戈斯"}
+            ec{"科隆群岛"}
         }
         "Pacific:Gambier"{
             ec{"甘比尔"}
@@ -1526,7 +1526,7 @@ zh{
             ls{"格林尼治标准时间"}
         }
         "meta:Galapagos"{
-            ls{"加拉帕戈斯时间"}
+            ls{"科隆群岛时间"}
         }
         "meta:Gambier"{
             ls{"甘比尔时间"}
@@ -1615,6 +1615,9 @@ zh{
             ld{"彼得罗巴甫洛夫斯克-堪察加夏令时间"}
             lg{"彼得罗巴甫洛夫斯克-堪察加时间"}
             ls{"彼得罗巴甫洛夫斯克-堪察加标准时间"}
+        }
+        "meta:Kazakhstan"{
+            ls{"哈萨克斯坦时间"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"哈萨克斯坦东部时间"}

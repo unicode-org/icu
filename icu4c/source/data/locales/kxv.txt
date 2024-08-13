@@ -12,6 +12,124 @@ kxv{
                 currencyFormat{"¤#,##,##0.00"}
                 decimalFormat{"#,##,##0.###"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        other{"0 hjar"}
+                    }
+                    10000{
+                        other{"00 hjar"}
+                    }
+                    100000{
+                        other{"000 hjar"}
+                    }
+                    1000000{
+                        other{"0 million"}
+                    }
+                    10000000{
+                        other{"00 million"}
+                    }
+                    100000000{
+                        other{"000 million"}
+                    }
+                    1000000000{
+                        other{"0 billion"}
+                    }
+                    10000000000{
+                        other{"00 billion"}
+                    }
+                    100000000000{
+                        other{"000 billion"}
+                    }
+                    1000000000000{
+                        other{"0 trillion"}
+                    }
+                    10000000000000{
+                        other{"00 trillion"}
+                    }
+                    100000000000000{
+                        other{"000 trillion"}
+                    }
+                }
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"¤0h"}
+                    }
+                    10000{
+                        other{"¤00h"}
+                    }
+                    100000{
+                        other{"¤000h"}
+                    }
+                    1000000{
+                        other{"¤0mi"}
+                    }
+                    10000000{
+                        other{"¤00mi"}
+                    }
+                    100000000{
+                        other{"¤000mi"}
+                    }
+                    1000000000{
+                        other{"¤0bi"}
+                    }
+                    10000000000{
+                        other{"¤00bi"}
+                    }
+                    100000000000{
+                        other{"¤000bi"}
+                    }
+                    1000000000000{
+                        other{"¤0tri"}
+                    }
+                    10000000000000{
+                        other{"¤00tri"}
+                    }
+                    100000000000000{
+                        other{"¤000tri"}
+                    }
+                }
+                decimalFormat{
+                    1000{
+                        other{"0 h"}
+                    }
+                    10000{
+                        other{"00 h"}
+                    }
+                    100000{
+                        other{"000 h"}
+                    }
+                    1000000{
+                        other{"0 mi"}
+                    }
+                    10000000{
+                        other{"00 mi"}
+                    }
+                    100000000{
+                        other{"000 mi"}
+                    }
+                    1000000000{
+                        other{"0 bi"}
+                    }
+                    10000000000{
+                        other{"00 bi"}
+                    }
+                    100000000000{
+                        other{"000 bi"}
+                    }
+                    1000000000000{
+                        other{"0 tri"}
+                    }
+                    10000000000000{
+                        other{"00 tri"}
+                    }
+                    100000000000000{
+                        other{"000 tri"}
+                    }
+                }
+            }
         }
     }
     calendar{
@@ -38,6 +156,11 @@ kxv{
                 "{1}, {0}",
             }
             availableFormats{
+                Bh{"B h"}
+                Bhm{"B h:mm"}
+                Bhms{"B h:mm:ss"}
+                EBhm{"E B h:mm"}
+                EBhms{"E B h:mm:ss"}
                 GyMMMEd{"G E, d MMM y"}
                 GyMMMd{"G d MMM y"}
                 GyMd{"GGGGG d/M/y"}
@@ -57,6 +180,15 @@ kxv{
                 yyyyQQQQ{"QQQQ G y"}
             }
             intervalFormats{
+                Bh{
+                    B{"B h – B h"}
+                    h{"B h–h"}
+                }
+                Bhm{
+                    B{"B h:mm – B h:mm"}
+                    h{"B h:mm–h:mm"}
+                    m{"B h:mm–h:mm"}
+                }
                 M{
                     M{"M–M"}
                 }
@@ -148,7 +280,7 @@ kxv{
             }
             availableFormats{
                 Bh{"B h"}
-                Bhm{">B h:mm"}
+                Bhm{"B h:mm"}
                 Bhms{"B h:mm:ss"}
                 EBhm{"E B h:mm"}
                 EBhms{"E B h:mm:ss"}
@@ -162,6 +294,9 @@ kxv{
                 GyMd{"GGGGG d/M/y"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
+                MMMMW{
+                    other{"MMMM 'tã' 'vara' W"}
+                }
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d/M"}
@@ -174,6 +309,9 @@ kxv{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
+                yw{
+                    other{"Y 'tã' 'vara' w"}
+                }
             }
             dayNames{
                 format{
@@ -362,14 +500,6 @@ kxv{
                         "4th kuarṭr",
                     }
                 }
-                stand-alone{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                }
             }
         }
     }
@@ -442,10 +572,6 @@ kxv{
         standard{
             2{"{0} aḍe {1}"}
             end{"{0}, aḍe {1}"}
-        }
-        unit{
-            2{"{0}, {1}"}
-            end{"{0}, {1}"}
         }
         unit-narrow{
             2{"{0} {1}"}

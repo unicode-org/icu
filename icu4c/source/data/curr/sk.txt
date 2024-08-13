@@ -905,7 +905,7 @@ sk{
         }
         SLL{
             "SLL",
-            "sierraleonský leone (1964—2022)",
+            "sierraleonský leone (1964 – 2022)",
         }
         SOS{
             "SOS",
@@ -2576,10 +2576,10 @@ sk{
             other{"sierraleonských leone"}
         }
         SLL{
-            few{"sierraleonské leone (1964—2022)"}
-            many{"sierraleonského leone (1964—2022)"}
-            one{"sierraleonský leone (1964—2022)"}
-            other{"sierraleonských leone (1964—2022)"}
+            few{"sierraleonské leone (1964 – 2022)"}
+            many{"sierraleonského leone (1964 – 2022)"}
+            one{"sierraleonský leone (1964 – 2022)"}
+            other{"sierraleonských leone (1964 – 2022)"}
         }
         SOS{
             few{"somálske šilingy"}
@@ -3031,11 +3031,5 @@ sk{
             one{"zimbabwiansky dolár (2008)"}
             other{"zimbabwianskych dolárov (2008)"}
         }
-    }
-    CurrencyUnitPatterns{
-        few{"{0} {1}"}
-        many{"{0} {1}"}
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

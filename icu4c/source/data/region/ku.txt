@@ -8,32 +8,32 @@ ku{
         003{"Amerîkaya Bakur"}
         005{"Amerîkaya Başûr"}
         009{"Okyanûsya"}
-        011{"Afrîkaya Rojava"}
+        011{"Rojavayê Afrîkayê"}
         013{"Amerîkaya Navîn"}
-        014{"Afrîkaya Rojhilat"}
-        015{"Afrîkaya Bakur"}
+        014{"Rojhilatê Afrîkayê"}
+        015{"Bakurê Afrîkayê"}
         017{"Afrîkaya Navîn"}
         018{"Başûrê Afrîkayê"}
         019{"Amerîka"}
         021{"Bakurê Amerîkayê"}
         029{"Karayîb"}
-        030{"Asyaya Rojhilat"}
-        034{"Asyaya Başûr"}
-        035{"Asyaya Başûrrojhilat"}
-        039{"Ewropaya Başûr"}
+        030{"Rojhilatê Asyayê"}
+        034{"Başûrê Asyayê"}
+        035{"Başûrrojhilatê Asyayê"}
+        039{"Başûrê Ewropayê"}
         053{"Awistralasya"}
         054{"Melanezya"}
         057{"Herêma Mîkronezyayê"}
         061{"Polînezya"}
         142{"Asya"}
         143{"Asyaya Navîn"}
-        145{"Asyaya Rojava"}
+        145{"Rojavayê Asyayê"}
         150{"Ewropa"}
-        151{"Ewropaya Rojhilat"}
-        154{"Ewropaya Bakur"}
-        155{"Ewropaya Rojava"}
+        151{"Rojhilatê Ewropayê"}
+        154{"Bakurê Ewropayê"}
+        155{"Rojavayê Ewropayê"}
         202{"Afrîkaya Jêra Sahrayê"}
-        419{"Amerîkaya Latînî"}
+        419{"Amerîkaya Latîn"}
         AC{"Girava Ascensionê"}
         AD{"Andorra"}
         AE{"Mîrgehên Erebî yên Yekbûyî"}
@@ -51,7 +51,7 @@ ku{
         AW{"Arûba"}
         AX{"Giravên Alandê"}
         AZ{"Azerbeycan"}
-        BA{"Bosniya û Hersek"}
+        BA{"Bosna û Hersek"}
         BB{"Barbados"}
         BD{"Bengladeş"}
         BE{"Belçîka"}
@@ -75,15 +75,15 @@ ku{
         CA{"Kanada"}
         CC{"Giravên Kokosê (Keeling)"}
         CD{"Kongo - Kînşasa"}
-        CF{"Komara Afrîkaya Navend"}
+        CF{"Komara Afrîkaya Navîn"}
         CG{"Kongo - Brazzaville"}
         CH{"Swîsre"}
         CI{"Côte d’Ivoire"}
-        CK{"Giravên Cook"}
+        CK{"Giravên Cookê"}
         CL{"Şîle"}
         CM{"Kamerûn"}
         CN{"Çîn"}
-        CO{"Kolombiya"}
+        CO{"Kolombîya"}
         CP{"Girava Clippertonê"}
         CQ{"Sark"}
         CR{"Kosta Rîka"}
@@ -107,8 +107,8 @@ ku{
         EH{"Sahraya Rojava"}
         ER{"Erître"}
         ES{"Spanya"}
-        ET{"Etiyopya"}
-        EU{"Yekîtiya Ewropayê"}
+        ET{"Etîyopya"}
+        EU{"Yekîtîya Ewropayê"}
         EZ{"Herêma Ewroyê"}
         FI{"Fînlenda"}
         FJ{"Fîjî"}
@@ -117,20 +117,20 @@ ku{
         FO{"Giravên Faroeyê"}
         FR{"Fransa"}
         GA{"Gabon"}
-        GB{"Keyaniya Yekbûyî"}
+        GB{"Qiralîyeta Yekbûyî"}
         GD{"Grenada"}
         GE{"Gurcistan"}
         GF{"Guyanaya Fransî"}
         GG{"Guernsey"}
         GH{"Gana"}
-        GI{"Cîbraltar"}
+        GI{"Cebelîtariq"}
         GL{"Grînlanda"}
-        GM{"Gambiya"}
+        GM{"Gambîya"}
         GN{"Gîne"}
         GP{"Guadeloupe"}
         GQ{"Gîneya Ekwadorê"}
-        GR{"Yewnanistan"}
-        GS{"Giravên Georgiyaya Başûr û Sandwicha Başûr"}
+        GR{"Yûnanistan"}
+        GS{"Giravên Georgîyaya Başûr û Sandwicha Başûr"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Gîne-Bissau"}
@@ -138,7 +138,7 @@ ku{
         HK{"Hong Konga HîT ya Çînê"}
         HM{"Giravên Heard û MacDonaldê"}
         HN{"Hondûras"}
-        HR{"Kroatya"}
+        HR{"Xirwatistan"}
         HT{"Haîtî"}
         HU{"Macaristan"}
         IC{"Giravên Kanaryayê"}
@@ -148,7 +148,7 @@ ku{
         IM{"Girava Manê"}
         IN{"Hindistan"}
         IO{"Herêma Okyanûsa Hindî ya Brîtanyayê"}
-        IQ{"Iraq"}
+        IQ{"Îraq"}
         IR{"Îran"}
         IS{"Îslanda"}
         IT{"Îtalya"}
@@ -162,8 +162,8 @@ ku{
         KI{"Kirîbatî"}
         KM{"Komor"}
         KN{"Saint Kitts û Nevîs"}
-        KP{"Korêya Bakur"}
-        KR{"Korêya Başûr"}
+        KP{"Koreya Bakur"}
+        KR{"Koreya Başûr"}
         KW{"Kuweyt"}
         KY{"Giravên Kaymanê"}
         KZ{"Qazaxistan"}
@@ -178,24 +178,24 @@ ku{
         LU{"Luksembûrg"}
         LV{"Letonya"}
         LY{"Lîbya"}
-        MA{"Maroko"}
+        MA{"Fas"}
         MC{"Monako"}
         MD{"Moldova"}
         ME{"Montenegro"}
         MF{"Saint Martin"}
         MG{"Madagaskar"}
-        MH{"Giravên Marşal"}
+        MH{"Giravên Marşalê"}
         MK{"Makendonyaya Bakur"}
         ML{"Malî"}
-        MM{"Myanmar (Birmanya)"}
-        MN{"Mongolya"}
+        MM{"Myanmar (Bûrma)"}
+        MN{"Moxolistan"}
         MO{"Makaoya Hît ya Çînê"}
         MP{"Giravên Bakurê Marianan"}
         MQ{"Martînîk"}
         MR{"Morîtanya"}
         MS{"Montserat"}
         MT{"Malta"}
-        MU{"Maurîtius"}
+        MU{"Mauritius"}
         MV{"Maldîva"}
         MW{"Malawî"}
         MX{"Meksîka"}
@@ -216,13 +216,13 @@ ku{
         OM{"Oman"}
         PA{"Panama"}
         PE{"Perû"}
-        PF{"Polînezyaya Fransî"}
+        PF{"Polînezyaya Fransizî"}
         PG{"Papua Gîneya Nû"}
         PH{"Fîlîpîn"}
         PK{"Pakistan"}
         PL{"Polonya"}
         PM{"Saint-Pierre û Miquelon"}
-        PN{"Giravên Pitcairn"}
+        PN{"Giravên Pitcairnê"}
         PR{"Porto Rîko"}
         PS{"Herêmên Filîstînî"}
         PT{"Portûgal"}
@@ -254,7 +254,7 @@ ku{
         ST{"Sao Tome û Prînsîpe"}
         SV{"El Salvador"}
         SX{"Sint Marteen"}
-        SY{"Sûrî"}
+        SY{"Sûrîye"}
         SZ{"Eswatînî"}
         TA{"Tristan da Cunha"}
         TC{"Giravên Turks û Kaîkosê"}
@@ -268,7 +268,7 @@ ku{
         TM{"Tirkmenistan"}
         TN{"Tûnis"}
         TO{"Tonga"}
-        TR{"Tirkiye"}
+        TR{"Tirkîye"}
         TT{"Trînîdad û Tobago"}
         TV{"Tûvalû"}
         TW{"Taywan"}
@@ -276,16 +276,16 @@ ku{
         UA{"Ûkrayna"}
         UG{"Ûganda"}
         UM{"Giravên Biçûk ên Derveyî DYAyê"}
-        UN{"Neteweyên Yekbûyî"}
+        UN{"Miletên Yekbûyî"}
         US{"Dewletên Yekbûyî yên Amerîkayê"}
         UY{"Ûrûguay"}
-        UZ{"Ûzbêkistan"}
+        UZ{"Ozbekistan"}
         VA{"Vatîkan"}
         VC{"Saint Vincent û Giravên Grenadînê"}
         VE{"Venezuela"}
         VG{"Giravên Vîrjînê yên Brîtanyayê"}
         VI{"Giravên Vîrjînê yên Amerîkayê"}
-        VN{"Viyetnam"}
+        VN{"Vîetnam"}
         VU{"Vanûatû"}
         WF{"Wallis û Futuna"}
         WS{"Samoa"}
@@ -295,15 +295,15 @@ ku{
         YE{"Yemen"}
         YT{"Mayotte"}
         ZA{"Afrîkaya Başûr"}
-        ZM{"Zambiya"}
+        ZM{"Zambîya"}
         ZW{"Zîmbabwe"}
         ZZ{"Herêma Nenas"}
     }
     Countries%chagos{
-        IO{"Komgiravên Archilpelagoyê"}
+        IO{"Komgiravên Çagosê"}
     }
     Countries%short{
-        GB{"KY"}
+        GB{"QY"}
         HK{"Hong Kong"}
         MO{"Makao"}
         PS{"Filistîn"}
@@ -313,7 +313,6 @@ ku{
         CD{"Kongo (KDK)"}
         CG{"Kongo (Komar)"}
         CI{"Perava Ivoryê"}
-        CZ{"Komara Çekî"}
         FK{"Giravên Falklandê (Giravên Malvînê)"}
         NZ{"Aoteroaya Zelandaya Nû"}
         SZ{"Swazîlenda"}

@@ -33,14 +33,8 @@ sl{
         "Africa:Mogadishu"{
             ec{"Mogadišu"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "America:Anguilla"{
             ec{"Angvila"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Bahia_Banderas"{
             ec{"Bahia de Banderas"}
@@ -53,9 +47,6 @@ sl{
         }
         "America:Costa_Rica"{
             ec{"Kostarika"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Dominica"{
             ec{"Dominika"}
@@ -325,7 +316,7 @@ sl{
             ec{"Köbenhavn"}
         }
         "Europe:Dublin"{
-            ld{"irski standardni čas"}
+            ld{"Irski standardni čas"}
         }
         "Europe:Isle_of_Man"{
             ec{"Otok Man"}
@@ -337,7 +328,7 @@ sl{
             ec{"Lizbona"}
         }
         "Europe:London"{
-            ld{"britanski poletni čas"}
+            ld{"Britanski poletni čas"}
         }
         "Europe:Luxembourg"{
             ec{"Luksemburg"}
@@ -729,6 +720,9 @@ sl{
             ld{"Petropavlovsk-Kamčatski poletni čas"}
             lg{"Petropavlovsk-Kamčatski čas"}
             ls{"Petropavlovsk-Kamčatski standardni čas"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Kazahstanski čas"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Vzhodni kazahstanski čas"}

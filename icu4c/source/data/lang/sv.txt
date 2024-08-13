@@ -92,6 +92,7 @@ sv{
         bjn{"banjariska"}
         bkm{"bamekon"}
         bla{"siksika"}
+        blo{"anii"}
         bm{"bambara"}
         bn{"bengali"}
         bo{"tibetanska"}
@@ -222,7 +223,7 @@ sv{
         gay{"gayo"}
         gba{"gbaya"}
         gbz{"zoroastrisk dari"}
-        gd{"skotsk gäliska"}
+        gd{"skotsk gaeliska"}
         gez{"etiopiska"}
         gil{"gilbertiska"}
         gl{"galiciska"}
@@ -340,6 +341,7 @@ sv{
         kv{"kome"}
         kw{"korniska"}
         kwk{"kwakʼwala"}
+        kxv{"kuvi"}
         ky{"kirgiziska"}
         la{"latin"}
         lad{"ladino"}
@@ -369,7 +371,6 @@ sv{
         lua{"luba-lulua"}
         lui{"luiseño"}
         lun{"lunda"}
-        luo{"luo"}
         lus{"lushai"}
         luy{"luhya"}
         lv{"lettiska"}
@@ -636,6 +637,7 @@ sv{
         vi{"vietnamesiska"}
         vls{"västflamländska"}
         vmf{"Main-frankiska"}
+        vmw{"makua"}
         vo{"volapük"}
         vot{"votiska"}
         vro{"võru"}
@@ -651,6 +653,7 @@ sv{
         xal{"kalmuckiska"}
         xh{"xhosa"}
         xmf{"mingrelianska"}
+        xnr{"kangri"}
         xog{"lusoga"}
         yao{"kiyao"}
         yap{"japetiska"}
@@ -903,6 +906,8 @@ sv{
             indian{"indisk kalender"}
             islamic{"islamisk kalender"}
             islamic-civil{"islamisk civil kalender"}
+            islamic-rgsa{"islamisk kalender, Saudi-Arabien"}
+            islamic-tbla{"islamisk kalender, astronomisk"}
             islamic-umalqura{"islamisk kalender, Umm al-Qura"}
             iso8601{"ISO 8601-kalender"}
             japanese{"japansk kalender"}

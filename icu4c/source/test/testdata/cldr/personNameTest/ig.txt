@@ -311,7 +311,7 @@ parameters; surnameFirst; short; monogram; informal
 endName
 
 # nativeFull
-name ; title; Mr.
+name ; title; Maazị
 name ; given; Christopher
 name ; given-informal; Chris
 name ; given2; Chukwudike
@@ -320,11 +320,11 @@ name ; generation; Jr
 name ; credentials; MP
 name ; locale; ig_AQ
 
-expectedResult; Amadi Mr. Christopher Chukwudike Jr, MP
+expectedResult; Amadi Maazị Christopher Chukwudike Jr, MP
 
 parameters; surnameFirst; long; referring; formal
 
-expectedResult; Mr. Christopher Chukwudike Amadi MP
+expectedResult; Maazị Christopher Chukwudike Amadi MP
 
 parameters; givenFirst; long; referring; formal
 parameters; givenFirst; long; referring; informal
@@ -371,7 +371,7 @@ expectedResult; Chris Amadi
 
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; Mr. Amadi
+expectedResult; Maazị Amadi
 
 parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal

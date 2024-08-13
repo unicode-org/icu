@@ -1542,8 +1542,4 @@ ml{
             other{"സിംബാബ്‌വെ ഡോളേഴ്സ്"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

@@ -187,6 +187,11 @@ chr{
                 one{"{0} ᏋᎻᎵᎠᏗ"}
                 other{"{0} ᏋᎻᎵᎠᏗ"}
             }
+            portion-per-1e9{
+                dnam{"ᏚᏙᏢᏒ ᎢᏳᏓᎵ ᎢᏳᏔᎵᎳᏗᏅᏛ"}
+                one{"{0} ᎤᏙᏢᏒ ᎢᏳᏓᎵ ᎢᏳᏔᎵᎳᏗᏅᏛ"}
+                other{"{0} ᏚᏙᏢᏒ ᎢᏳᏓᎵ ᎢᏳᏔᎵᎳᏗᏅᏛ"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -314,6 +319,12 @@ chr{
             nanosecond{
                 one{"{0} ᎾᏃᎠᏎᏢ"}
                 other{"{0} ᎾᏃᏗᏎᏢ"}
+            }
+            night{
+                dnam{"ᏚᎵᏏᏂᏒ"}
+                one{"{0} ᎤᏒ"}
+                other{"{0} ᏚᎵᏏᏂᏒ"}
+                per{"{0}/ᎤᏒ"}
             }
             quarter{
                 dnam{"ᎯᎸᏍᎩ ᎩᏄᏘᏗ"}
@@ -765,6 +776,11 @@ chr{
                 one{"{0} ᎠᎧᏁᎲ"}
                 other{"{0} ᏓᎧᏁᎲ"}
             }
+            light-speed{
+                dnam{"ᎠᏨᏍᏗ"}
+                one{"{0} ᎠᏨᏍᏗ"}
+                other{"{0} ᎠᏨᏍᏗ"}
+            }
             meter-per-second{
                 dnam{"ᏗᏟᎶᏗ ᎠᏎᏢ ᎢᏳᏓᎵ"}
                 one{"{0} ᎠᏟᎶᏗ ᎠᏎᏢ ᎢᏳᏓᎵ"}
@@ -1082,6 +1098,10 @@ chr{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1208,6 +1228,12 @@ chr{
             nanosecond{
                 one{"{0}ᎾᏃ"}
                 other{"{0}ᎾᏃ"}
+            }
+            night{
+                dnam{"ᏚᎵᏏᏂᏒ"}
+                one{"{0}ᎤᏒ"}
+                other{"{0}ᏚᎵᏏᏂᏒ"}
+                per{"{0}/ᎤᏒ"}
             }
             quarter{
                 one{"{0}Ꭿ"}
@@ -1627,6 +1653,11 @@ chr{
                 one{"{0}kn"}
                 other{"{0}kn"}
             }
+            light-speed{
+                dnam{"ᎠᏨᏍᏗ"}
+                one{"{0}ᎠᏨᏍᏗ"}
+                other{"{0}ᎠᏨᏍᏗ"}
+            }
             meter-per-second{
                 dnam{"m/s"}
                 one{"{0}m/s"}
@@ -1914,6 +1945,9 @@ chr{
             permyriad{
                 dnam{"ᏋᎻᎵᎠᏗ"}
             }
+            portion-per-1e9{
+                dnam{"ᏚᏙᏢᏒ/ᎢᏳᏔᎵᎳᏗᏅᏛ"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -2026,6 +2060,12 @@ chr{
                 dnam{"ᎾᏃᏗᏎᏢ"}
                 one{"{0} ᎾᏃ"}
                 other{"{0} ᎾᏃ"}
+            }
+            night{
+                dnam{"ᏚᎵᏏᏂᏒ"}
+                one{"{0} ᎤᏒ"}
+                other{"{0} ᏚᎵᏏᏂᏒ"}
+                per{"{0}/ᎤᏒ"}
             }
             quarter{
                 dnam{"ᎯᎸᏍᎩ"}
@@ -2237,6 +2277,11 @@ chr{
         speed{
             kilometer-per-hour{
                 dnam{"km/ᏑᏟᎶᏓ"}
+            }
+            light-speed{
+                dnam{"ᎠᏨᏍᏗ"}
+                one{"{0} ᎠᏨᏍᏗ"}
+                other{"{0} ᎠᏨᏍᏗ"}
             }
             meter-per-second{
                 dnam{"ᏗᏟᎶᏗ/ᎠᏎ"}

@@ -119,6 +119,8 @@ name ; locale; gd_AQ
 
 expectedResult; Dhòmhnallach, Oighrig
 
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
@@ -129,8 +131,6 @@ expectedResult; Dhòmhnallach Oighrig
 
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
-parameters; surnameFirst; medium; referring; formal
-parameters; surnameFirst; medium; referring; informal
 
 expectedResult; Oighrig Dhòmhnallach
 
@@ -142,11 +142,8 @@ parameters; givenFirst; short; addressing; formal
 
 expectedResult; Dhòmhnallach, O.
 
-parameters; sorting; short; referring; formal
-
-expectedResult; Dhòmhnallach O.
-
 parameters; surnameFirst; short; referring; formal
+parameters; sorting; short; referring; formal
 
 expectedResult; O. Dhòmhnallach
 
@@ -205,6 +202,7 @@ name ; locale; gd_AQ
 
 expectedResult; Caimbeul, Dòmhnall Iain Tormod
 
+parameters; surnameFirst; medium; referring; informal
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 
@@ -212,7 +210,6 @@ expectedResult; Caimbeul Dòmhnall Iain Tormod
 
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
-parameters; surnameFirst; medium; referring; informal
 
 expectedResult; Dòmhnall Iain Tormod Caimbeul
 
@@ -222,13 +219,10 @@ parameters; givenFirst; medium; referring; informal
 
 expectedResult; Caimbeul, Dòmhnall Iain T.
 
+parameters; surnameFirst; medium; referring; formal
 parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
-
-expectedResult; Caimbeul Dòmhnall Iain T.
-
-parameters; surnameFirst; medium; referring; formal
 
 expectedResult; Dòmhnall Iain T. Caimbeul
 
@@ -247,11 +241,8 @@ parameters; surnameFirst; medium; addressing; informal
 
 expectedResult; Caimbeul, D. I. T.
 
-parameters; sorting; short; referring; formal
-
-expectedResult; Caimbeul D. I. T.
-
 parameters; surnameFirst; short; referring; formal
+parameters; sorting; short; referring; formal
 
 expectedResult; D. I. T. Caimbeul
 
@@ -317,7 +308,7 @@ name ; surname2; Chorùna
 name ; credentials; am post
 name ; locale; gd_AQ
 
-expectedResult; Mac a’ Ghobhainn Chorùna Mgr. Dòmhnall Iain Bàn am post
+expectedResult; Mac a’ Ghobhainn Chorùna, Mgr. Dòmhnall Iain Bàn am post
 
 parameters; surnameFirst; long; referring; formal
 
@@ -325,15 +316,15 @@ expectedResult; Mgr. Dòmhnall Iain Bàn Mac a’ Ghobhainn Chorùna am post
 
 parameters; givenFirst; long; referring; formal
 
+expectedResult; Mac a’ Ghobhainn, Dòmhnall Iain B. am post
+
+parameters; surnameFirst; medium; referring; formal
+
 expectedResult; Dòmhnall Iain B. Mac a’ Ghobhainn am post
 
 parameters; givenFirst; medium; referring; formal
 
-expectedResult; Mac a’ Ghobhainn Dòmhnall Iain B. am post
-
-parameters; surnameFirst; medium; referring; formal
-
-expectedResult; Mac a’ Ghobhainn Chorùna Donaidh Bàn
+expectedResult; Mac a’ Ghobhainn Chorùna, Donaidh Bàn
 
 parameters; surnameFirst; long; referring; informal
 
@@ -351,16 +342,13 @@ parameters; givenFirst; short; addressing; formal
 
 expectedResult; Mac a’ Ghobhainn, Donaidh Bàn
 
+parameters; surnameFirst; medium; referring; informal
 parameters; sorting; long; referring; informal
 
 expectedResult; Donaidh Bàn Mac a’ Ghobhainn
 
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
-
-expectedResult; Mac a’ Ghobhainn Donaidh Bàn
-
-parameters; surnameFirst; medium; referring; informal
 
 expectedResult; Mac a’ Ghobhainn, Donaidh B.
 
@@ -369,15 +357,12 @@ parameters; sorting; short; referring; informal
 
 expectedResult; Mac a’ Ghobhainn, D. I. B.
 
+parameters; surnameFirst; short; referring; formal
 parameters; sorting; short; referring; formal
 
 expectedResult; D. I. B. Mac a’ Ghobhainn
 
 parameters; givenFirst; short; referring; formal
-
-expectedResult; Mac a’ Ghobhainn D. I. B.
-
-parameters; surnameFirst; short; referring; formal
 
 expectedResult; Mgr. Mac a’ Ghobhainn
 
@@ -497,6 +482,8 @@ name ; locale; ja_AQ
 
 expectedResult; Miller, Kate
 
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
@@ -515,20 +502,15 @@ expectedResult; Miller Kate
 
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
-parameters; surnameFirst; medium; referring; formal
-parameters; surnameFirst; medium; referring; informal
 
 expectedResult; Miller, K.
 
+parameters; surnameFirst; short; referring; formal
 parameters; sorting; short; referring; formal
 
 expectedResult; K. Miller
 
 parameters; givenFirst; short; referring; formal
-
-expectedResult; Miller K.
-
-parameters; surnameFirst; short; referring; formal
 
 expectedResult; Miller
 
@@ -583,6 +565,7 @@ name ; locale; ja_AQ
 
 expectedResult; Smith, Cecilia Angela
 
+parameters; surnameFirst; medium; referring; informal
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 
@@ -596,10 +579,10 @@ expectedResult; Smith Cecilia Angela
 
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
-parameters; surnameFirst; medium; referring; informal
 
 expectedResult; Smith, Cecilia A.
 
+parameters; surnameFirst; medium; referring; formal
 parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
@@ -607,10 +590,6 @@ parameters; sorting; short; referring; informal
 expectedResult; Cecilia A. Smith
 
 parameters; givenFirst; medium; referring; formal
-
-expectedResult; Smith Cecilia A.
-
-parameters; surnameFirst; medium; referring; formal
 
 expectedResult; Cecilia Angela
 
@@ -625,15 +604,12 @@ parameters; givenFirst; short; addressing; formal
 
 expectedResult; Smith, C. A.
 
+parameters; surnameFirst; short; referring; formal
 parameters; sorting; short; referring; formal
 
 expectedResult; C. A. Smith
 
 parameters; givenFirst; short; referring; formal
-
-expectedResult; Smith C. A.
-
-parameters; surnameFirst; short; referring; formal
 
 expectedResult; Cecilia A.
 
@@ -697,25 +673,25 @@ name ; generation; Jr
 name ; credentials; MD DDS
 name ; locale; ja_AQ
 
+expectedResult; von Brühl González Domingo, Prof. Dr. Ada Cornelia César Martín Jr, MD DDS
+
+parameters; surnameFirst; long; referring; formal
+
 expectedResult; Prof. Dr. Ada Cornelia César Martín von Brühl González Domingo Jr, MD DDS
 
 parameters; givenFirst; long; referring; formal
 
-expectedResult; von Brühl González Domingo Prof. Dr. Ada Cornelia César Martín Jr, MD DDS
-
-parameters; surnameFirst; long; referring; formal
-
-expectedResult; von Brühl González Domingo Neele César Martín
+expectedResult; von Brühl González Domingo, Neele César Martín
 
 parameters; surnameFirst; long; referring; informal
+
+expectedResult; von Brühl, Ada Cornelia C. M. Jr, MD DDS
+
+parameters; surnameFirst; medium; referring; formal
 
 expectedResult; Ada Cornelia C. M. von Brühl Jr, MD DDS
 
 parameters; givenFirst; medium; referring; formal
-
-expectedResult; von Brühl Ada Cornelia C. M. Jr, MD DDS
-
-parameters; surnameFirst; medium; referring; formal
 
 expectedResult; Brühl, Ada Cornelia César Martín von
 
@@ -727,16 +703,16 @@ parameters; sorting; medium; referring; formal
 
 expectedResult; von Brühl, Neele César Martín
 
-parameters; sorting; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
 
 expectedResult; Neele César Martín von Brühl
 
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; von Brühl Neele César Martín
+expectedResult; Brühl, Neele César Martín
 
-parameters; surnameFirst; medium; referring; informal
+parameters; sorting; long; referring; informal
 
 expectedResult; Ada Cornelia von Brühl
 
@@ -746,18 +722,13 @@ expectedResult; Brühl, A. C. C. M. von
 
 parameters; sorting; short; referring; formal
 
-expectedResult; von Brühl, Neele C. M.
+expectedResult; von Brühl, A. C. C. M.
 
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; A. C. C. M. von Brühl
 
 parameters; givenFirst; short; referring; formal
-
-expectedResult; von Brühl A. C. C. M.
-
-parameters; surnameFirst; short; referring; formal
 
 expectedResult; Prof. Dr. von Brühl
 
@@ -766,6 +737,11 @@ parameters; givenFirst; medium; addressing; formal
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; short; addressing; formal
+
+expectedResult; Brühl, Neele C. M.
+
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; Neele César Martín
 

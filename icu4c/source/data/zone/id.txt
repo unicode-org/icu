@@ -531,6 +531,9 @@ id{
             lg{"Waktu Petropavlovsk-Kamchatsky"}
             ls{"Waktu Standar Petropavlovsk-Kamchatsky"}
         }
+        "meta:Kazakhstan"{
+            ls{"Waktu Kazakhstan"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Waktu Kazakhstan Timur"}
         }

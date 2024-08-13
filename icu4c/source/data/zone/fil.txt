@@ -3,9 +3,6 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fil{
     zoneStrings{
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
         }
@@ -27,17 +24,11 @@ fil{
         "America:Rankin_Inlet"{
             ec{"Makipot na Look ng Rankin"}
         }
-        "America:St_Barthelemy"{
-            ec{"St. Barthélemy"}
-        }
         "Asia:Macau"{
             ec{"Macau"}
         }
         "Asia:Qostanay"{
             ec{"Kostanay"}
-        }
-        "Asia:Rangoon"{
-            ec{"Rangoon"}
         }
         "Asia:Saigon"{
             ec{"Lungsod ng Ho Chi Minh"}
@@ -56,9 +47,6 @@ fil{
         }
         "Europe:London"{
             ld{"Oras sa Tag-init ng Britain"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Enderbury"{
             ec{"Enderbury"}
@@ -154,19 +142,19 @@ fil{
             ls{"Standard na Oras sa Gitnang Australya"}
         }
         "meta:Australia_CentralWestern"{
-            ld{"Daylight Time sa Gitnang Kanlurang Australya"}
-            lg{"Oras ng Gitnang Kanluran ng Australya"}
-            ls{"Standard Time ng Gitnang Kanluran ng Australya"}
+            ld{"Daylight Time sa Gitnang Kanlurang Australia"}
+            lg{"Oras ng Gitnang Kanluran ng Australia"}
+            ls{"Standard Time ng Gitnang Kanluran ng Australia"}
         }
         "meta:Australia_Eastern"{
-            ld{"Daylight Time sa Silangang Australya"}
-            lg{"Oras sa Silangang Australya"}
-            ls{"Standard na Oras sa Silangang Australya"}
+            ld{"Daylight Time sa Silangang Australia"}
+            lg{"Oras sa Silangang Australia"}
+            ls{"Standard na Oras sa Silangang Australia"}
         }
         "meta:Australia_Western"{
-            ld{"Daylight Time sa Kanlurang Australya"}
-            lg{"Oras sa Kanlurang Australya"}
-            ls{"Standard na Oras sa Kanlurang Australya"}
+            ld{"Daylight Time sa Kanlurang Australia"}
+            lg{"Oras sa Kanlurang Australia"}
+            ls{"Standard na Oras sa Kanlurang Australia"}
         }
         "meta:Azerbaijan"{
             ld{"Oras sa Tag-init ng Azerbaijan"}
@@ -387,6 +375,9 @@ fil{
             ld{"Summer Time sa Petropavlovsk-Kamchatski"}
             lg{"Oras sa Petropavlovsk-Kamchatski"}
             ls{"Standard Time sa Petropavlovsk-Kamchatski"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Oras ng Kazakhstan"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Oras sa Silangang Kazakhstan"}

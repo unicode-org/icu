@@ -283,12 +283,6 @@ zh_Hant_HK{
         LTL{
             other{"立陶宛里塔"}
         }
-        STD{
-            other{"聖多美和普林西比多布拉 (1977–2017)"}
-        }
-        SZL{
-            other{"斯威士蘭里朗吉尼"}
-        }
         XOF{
             other{"西非法郎"}
         }

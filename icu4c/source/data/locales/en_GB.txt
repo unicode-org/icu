@@ -5,27 +5,14 @@ en_GB{
     %%Parent{"en_001"}
     calendar{
         generic{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd/MM/y GGGGG",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
             availableFormats{
-                GyMMMEEEEd{"EEEE d MMM y G"}
+                GyMMMEEEEd{"EEEE, d MMM y G"}
+                MEd{"E dd/MM"}
                 MMMEEEEd{"EEEE d MMM"}
+                MMMEd{"E d MMM"}
                 MMMMEEEEd{"EEEE d MMMM"}
-                yyyyMMMEEEEd{"EEEE d MMM y G"}
-                yyyyMMMMEEEEd{"EEEE d MMMM y G"}
+                yyyyMMMEEEEd{"EEEE, d MMM y G"}
+                yyyyMMMMEEEEd{"EEEE, d MMMM y G"}
             }
             intervalFormats{
                 GyMMMEEEEd{
@@ -58,7 +45,7 @@ en_GB{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE d MMMM y",
+                "EEEE, d MMMM y",
                 "d MMMM y",
                 "d MMM y",
                 "dd/MM/y",
@@ -79,12 +66,14 @@ en_GB{
                 "yMMdd",
             }
             availableFormats{
-                GyMMMEEEEd{"EEEE d MMM y G"}
+                GyMMMEEEEd{"EEEE, d MMM y G"}
                 GyMd{"dd/MM/y G"}
+                MEd{"E dd/MM"}
                 MMMEEEEd{"EEEE d MMM"}
+                MMMEd{"E d MMM"}
                 MMMMEEEEd{"EEEE d MMMM"}
-                yMMMEEEEd{"EEEE d MMM y"}
-                yMMMMEEEEd{"EEEE d MMMM y"}
+                yMMMEEEEd{"EEEE, d MMM y"}
+                yMMMMEEEEd{"EEEE, d MMMM y"}
             }
             intervalFormats{
                 GyMMMEEEEd{
@@ -114,8 +103,11 @@ en_GB{
         islamic{
             availableFormats{
                 Ed{"E d"}
+                GyMMMEEEEd{"EEEE, d MMM y G"}
                 M{"LL"}
                 yyyyM{"MM/y GGGGG"}
+                yyyyMMMEEEEd{"EEEE, d MMM y G"}
+                yyyyMMMMEEEEd{"EEEE, d MMMM y G"}
             }
         }
     }

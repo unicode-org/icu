@@ -859,21 +859,12 @@ so{
                         "J",
                         "S",
                     }
-                    short{
-                        "Axd",
-                        "Isn",
-                        "Tldo",
-                        "Arbaco",
-                        "Khms",
-                        "Jmc",
-                        "Sbti",
-                    }
                 }
             }
             dayPeriod{
                 stand-alone{
-                    abbreviated{
-                        am{"AM"}
+                    narrow{
+                        am{"GH"}
                         pm{"GD"}
                     }
                     wide{
@@ -1015,18 +1006,18 @@ so{
                         "Dis",
                     }
                     wide{
-                        "Bisha Koobaad",
-                        "Bisha Labaad",
-                        "Bisha Saddexaad",
-                        "Bisha Afraad",
-                        "Bisha Shanaad",
-                        "Bisha Lixaad",
-                        "Bisha Todobaad",
-                        "Bisha Sideedaad",
-                        "Bisha Sagaalaad",
-                        "Bisha Tobnaad",
-                        "Bisha Kow iyo Tobnaad",
-                        "Bisha Laba iyo Tobnaad",
+                        "Janaayo",
+                        "Febraayo",
+                        "Maarso",
+                        "Abriil",
+                        "Maayo",
+                        "Juun",
+                        "Luulyo",
+                        "Agosto",
+                        "Sebtembar",
+                        "Oktoobar",
+                        "Noofeembar",
+                        "Diseembar",
                     }
                 }
                 stand-alone{
@@ -1049,9 +1040,9 @@ so{
                         "Febraayo",
                         "Maarso",
                         "Abriil",
-                        "May",
+                        "Maayo",
                         "Juun",
-                        "Luuliyo",
+                        "Luulyo",
                         "Ogosto",
                         "Sebteembar",
                         "Oktoobar",
@@ -1556,7 +1547,7 @@ so{
             }
         }
         quarter{
-            dn{"Rubuc"}
+            dn{"rubuc"}
             relative{
                 "-1"{"Rubucii hore"}
                 "0"{"Rubucan"}
@@ -1839,7 +1830,7 @@ so{
             dn{"mlnta-tdbdka bsha"}
         }
         year{
-            dn{"Sannad"}
+            dn{"sannad"}
             relative{
                 "-1"{"Sannadkii hore"}
                 "0"{"Sannadkan"}
@@ -1931,7 +1922,7 @@ so{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

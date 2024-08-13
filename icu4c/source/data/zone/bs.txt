@@ -743,11 +743,14 @@ bs{
             lg{"Petropavlovsk-Kamčatski vreme"}
             ls{"Petropavlovsk-Kamčatski standardno vreme"}
         }
+        "meta:Kazakhstan"{
+            ls{"kazahstansko vrijeme"}
+        }
         "meta:Kazakhstan_Eastern"{
-            ls{"Istočnokazahstansko vrijeme"}
+            ls{"istočnokazahstansko vrijeme"}
         }
         "meta:Kazakhstan_Western"{
-            ls{"Zapadnokazahstansko vrijeme"}
+            ls{"zapadnokazahstansko vrijeme"}
         }
         "meta:Korea"{
             ld{"Korejsko ljetno vrijeme"}
@@ -763,7 +766,7 @@ bs{
             ls{"Krasnojarsko standardno vrijeme"}
         }
         "meta:Kyrgystan"{
-            ls{"Kirgistansko vrijeme"}
+            ls{"kirgistansko vrijeme"}
         }
         "meta:Lanka"{
             ls{"Lanka vreme"}
@@ -967,7 +970,7 @@ bs{
             ls{"Tajpejsko standardno vrijeme"}
         }
         "meta:Tajikistan"{
-            ls{"Tadžikistansko vrijeme"}
+            ls{"tadžikistansko vrijeme"}
         }
         "meta:Tokelau"{
             ls{"Vrijeme na Ostrvu Tokelau"}
@@ -981,9 +984,9 @@ bs{
             ls{"Čučko vrijeme"}
         }
         "meta:Turkmenistan"{
-            ld{"Turkmenistansko ljetno vrijeme"}
-            lg{"Turkmenistansko vrijeme"}
-            ls{"Turkmenistansko standardno vrijeme"}
+            ld{"turkmenistansko ljetno vrijeme"}
+            lg{"turkmenistansko vrijeme"}
+            ls{"turkmenistansko standardno vrijeme"}
         }
         "meta:Tuvalu"{
             ls{"Tuvaluansko vrijeme"}
@@ -994,9 +997,9 @@ bs{
             ls{"Urugvajsko standardno vrijeme"}
         }
         "meta:Uzbekistan"{
-            ld{"Uzbekistansko ljetno vrijeme"}
-            lg{"Uzbekistansko vrijeme"}
-            ls{"Uzbekistansko standardno vrijeme"}
+            ld{"uzbekistansko ljetno vrijeme"}
+            lg{"uzbekistansko vrijeme"}
+            ls{"uzbekistansko standardno vrijeme"}
         }
         "meta:Vanuatu"{
             ld{"Vanuatuansko ljetno vrijeme"}

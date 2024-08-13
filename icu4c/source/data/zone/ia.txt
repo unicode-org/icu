@@ -6,9 +6,6 @@ ia{
         "Africa:Djibouti"{
             ec{"Djibuti"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "America:Bahia_Banderas"{
             ec{"Bahia de Banderas"}
         }
@@ -17,9 +14,6 @@ ia{
         }
         "America:Cayman"{
             ec{"Caiman"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Martinique"{
             ec{"Martinica"}
@@ -164,9 +158,6 @@ ia{
         }
         "Indian:Mayotte"{
             ec{"Mayotta"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Easter"{
             ec{"Pascha"}
@@ -485,6 +476,9 @@ ia{
             ld{"hora estive de Japon"}
             lg{"hora de Japon"}
             ls{"hora standard de Japon"}
+        }
+        "meta:Kazakhstan"{
+            ls{"hora de Kazakhstan"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"hora de Kazakhstan del Est"}

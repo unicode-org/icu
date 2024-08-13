@@ -109,8 +109,8 @@ nn{
                     }
                 }
                 dnam{"delar per million"}
-                one{"{0} milliondel"}
-                other{"{0} milliondelar"}
+                one{"{0} del per million"}
+                other{"{0} delar per million"}
             }
         }
         consumption{
@@ -207,6 +207,9 @@ nn{
                 one{"{0} nanosekund"}
                 other{"{0} nanosekund"}
             }
+            night{
+                gender{"feminine"}
+            }
             second{
                 case{
                     genitive{
@@ -276,6 +279,12 @@ nn{
                 other{"{0} joule"}
             }
             kilocalorie{
+                case{
+                    genitive{
+                        one{"{0} kilokaloris"}
+                        other{"{0} kilokaloriers"}
+                    }
+                }
                 dnam{"kilokaloriar"}
                 one{"{0} kilokalori"}
                 other{"{0} kilokaloriar"}
@@ -375,6 +384,12 @@ nn{
                 gender{"feminine"}
             }
             point{
+                case{
+                    genitive{
+                        one{"{0} typografisk punkts"}
+                        other{"{0} typografiske punkts"}
+                    }
+                }
                 dnam{"typografiske punkt"}
                 one{"{0} typografisk punkt"}
                 other{"{0} typografiske punkt"}
@@ -676,6 +691,9 @@ nn{
             millimole-per-liter{
                 dnam{"mmol/l"}
             }
+            portion-per-1e9{
+                dnam{"delar/milliard"}
+            }
         }
         consumption{
             liter-per-kilometer{
@@ -811,6 +829,9 @@ nn{
             }
         }
         mass{
+            earth-mass{
+                dnam{"jordmassar"}
+            }
             solar-mass{
                 dnam{"solmassar"}
             }

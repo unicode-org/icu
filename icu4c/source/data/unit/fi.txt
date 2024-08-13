@@ -403,6 +403,24 @@ fi{
                 other{"{0} karaattia"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    elative{
+                        one{"{0} milligrammasta desilitrassa"}
+                        other{"{0} milligrammasta desilitrassa"}
+                    }
+                    genitive{
+                        one{"{0} milligramman desilitrassa"}
+                        other{"{0} milligramman desilitrassa"}
+                    }
+                    illative{
+                        one{"{0} milligrammaan desilitrassa"}
+                        other{"{0} milligrammaan desilitrassa"}
+                    }
+                    partitive{
+                        one{"{0} milligrammaa desilitrassa"}
+                        other{"{0} milligrammaa desilitrassa"}
+                    }
+                }
                 dnam{"milligrammat desilitrassa"}
                 one{"{0} milligramma desilitrassa"}
                 other{"{0} milligrammaa desilitrassa"}
@@ -543,6 +561,29 @@ fi{
                 }
                 one{"{0} peruspiste"}
                 other{"{0} peruspistettä"}
+            }
+            portion-per-1e9{
+                case{
+                    elative{
+                        one{"{0} miljardisosasta"}
+                        other{"{0} miljardisosasta"}
+                    }
+                    genitive{
+                        one{"{0} miljardisosan"}
+                        other{"{0} miljardisosan"}
+                    }
+                    illative{
+                        one{"{0} miljardisosaan"}
+                        other{"{0} miljardisosaan"}
+                    }
+                    partitive{
+                        one{"{0} miljardisosaa"}
+                        other{"{0} miljardisosaa"}
+                    }
+                }
+                dnam{"miljardisosat"}
+                one{"{0} miljardisosa"}
+                other{"{0} miljardisosaa"}
             }
         }
         consumption{
@@ -1073,6 +1114,30 @@ fi{
                 one{"{0} nanosekunti"}
                 other{"{0} nanosekuntia"}
             }
+            night{
+                case{
+                    elative{
+                        one{"{0} yöstä"}
+                        other{"{0} yöstä"}
+                    }
+                    genitive{
+                        one{"{0} yön"}
+                        other{"{0} yön"}
+                    }
+                    illative{
+                        one{"{0} yöhön"}
+                        other{"{0} yöhön"}
+                    }
+                    partitive{
+                        one{"{0} yötä"}
+                        other{"{0} yötä"}
+                    }
+                }
+                dnam{"yöt"}
+                one{"{0} yö"}
+                other{"{0} yötä"}
+                per{"{0} / yö"}
+            }
             quarter{
                 case{
                     elative{
@@ -1327,6 +1392,24 @@ fi{
                 other{"{0} joulea"}
             }
             kilocalorie{
+                case{
+                    elative{
+                        one{"{0} kilokalorista"}
+                        other{"{0} kilokalorista"}
+                    }
+                    genitive{
+                        one{"{0} kilokalorin"}
+                        other{"{0} kilokalorin"}
+                    }
+                    illative{
+                        one{"{0} kilokaloriin"}
+                        other{"{0} kilokaloriin"}
+                    }
+                    partitive{
+                        one{"{0} kilokaloria"}
+                        other{"{0} kilokaloria"}
+                    }
+                }
                 dnam{"kilokalorit"}
                 one{"{0} kilokalori"}
                 other{"{0} kilokaloria"}
@@ -2430,6 +2513,24 @@ fi{
                 other{"{0} millibaaria"}
             }
             millimeter-ofhg{
+                case{
+                    elative{
+                        one{"{0} elohopeamillimetristä"}
+                        other{"{0} elohopeamillimetristä"}
+                    }
+                    genitive{
+                        one{"{0} elohopeamillimetrin"}
+                        other{"{0} elohopeamillimetrin"}
+                    }
+                    illative{
+                        one{"{0} elohopeamillimetriin"}
+                        other{"{0} elohopeamillimetriin"}
+                    }
+                    partitive{
+                        one{"{0} elohopeamillimetriä"}
+                        other{"{0} elohopeamillimetriä"}
+                    }
+                }
                 dnam{"elohopeamillimetrit"}
                 one{"{0} elohopeamillimetri"}
                 other{"{0} elohopeamillimetriä"}
@@ -2496,6 +2597,29 @@ fi{
                 dnam{"solmut"}
                 one{"{0} solmu"}
                 other{"{0} solmua"}
+            }
+            light-speed{
+                case{
+                    elative{
+                        one{"{0} valonnopeudesta"}
+                        other{"{0} valonnopeudesta"}
+                    }
+                    genitive{
+                        one{"{0} valonnopeuden"}
+                        other{"{0} valonnopeuden"}
+                    }
+                    illative{
+                        one{"{0} valonnopeuteen"}
+                        other{"{0} valonnopeuteen"}
+                    }
+                    partitive{
+                        one{"{0} valonnopeutta"}
+                        other{"{0} valonnopeutta"}
+                    }
+                }
+                dnam{"valonnopeudet"}
+                one{"{0} valonnopeus"}
+                other{"{0} valonnopeutta"}
             }
             meter-per-second{
                 case{
@@ -3183,6 +3307,12 @@ fi{
                 one{"{0}ns"}
                 other{"{0}ns"}
             }
+            night{
+                dnam{"yöt"}
+                one{"{0}yö"}
+                other{"{0}yöt"}
+                per{"{0}/yö"}
+            }
             second{
                 dnam{"s"}
                 one{"{0}s"}
@@ -3578,6 +3708,11 @@ fi{
                 one{"{0}kn"}
                 other{"{0}kn"}
             }
+            light-speed{
+                dnam{"c"}
+                one{"{0} c"}
+                other{"{0} c"}
+            }
             meter-per-second{
                 one{"{0}m/s"}
                 other{"{0}m/s"}
@@ -3910,6 +4045,12 @@ fi{
                 other{"{0} kk"}
                 per{"{0}/kk"}
             }
+            night{
+                dnam{"yöt"}
+                one{"{0} yö"}
+                other{"{0} yö"}
+                per{"{0}/yö"}
+            }
             quarter{
                 dnam{"q"}
             }
@@ -4052,6 +4193,13 @@ fi{
                 dnam{"mmHg"}
                 one{"{0} mmHg"}
                 other{"{0} mmHg"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"c"}
+                one{"{0} c"}
+                other{"{0} c"}
             }
         }
         temperature{

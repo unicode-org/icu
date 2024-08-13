@@ -589,6 +589,9 @@ qu{
             lg{"Hora de Japón"}
             ls{"Hora Estandar de Japón"}
         }
+        "meta:Kazakhstan"{
+            ls{"Hora de Kazajistán"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Hora de Kazajistán Oriental"}
         }

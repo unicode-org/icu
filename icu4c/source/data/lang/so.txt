@@ -48,10 +48,11 @@ so{
         bez{"Bena"}
         bg{"Bulgeeriyaan"}
         bgc{"Haryanvi"}
-        bho{"U dhashay Bhohp"}
+        bho{"Bhojpuri"}
         bi{"U dhashay Bislam"}
         bin{"U dhashay Bin"}
         bla{"Siksiká"}
+        blo{"Anii"}
         bm{"Bambaara"}
         bn{"Bangladesh"}
         bo{"Tibeetaan"}
@@ -116,7 +117,7 @@ so{
         eo{"Isberaanto"}
         es{"Isbaanish"}
         es_419{"Isbaanishka Laatiin Ameerika"}
-        es_ES{"Isbaanish (Isbayn)"}
+        es_ES{"Isbaanish Yurub"}
         es_MX{"Isbaanishka Mexico"}
         et{"Istooniyaan"}
         eu{"Basquu"}
@@ -170,6 +171,7 @@ so{
         iba{"Iban"}
         ibb{"Ibibio"}
         id{"Indunusiyaan"}
+        ie{"Interlingue"}
         ig{"Igbo"}
         ii{"Sijuwan Yi"}
         ikt{"Western Canadian Inuktitut"}
@@ -222,6 +224,7 @@ so{
         kv{"Komi"}
         kw{"Kornish"}
         kwk{"Kwakʼwala"}
+        kxv{"Kufi"}
         ky{"Kirgiis"}
         la{"Laatiin"}
         lad{"Ladino"}
@@ -230,8 +233,10 @@ so{
         lez{"Lezghian"}
         lg{"Gandha"}
         li{"Limburgish"}
+        lij{"Liguuriyaan"}
         lil{"Lillooet"}
         lkt{"Laakoota"}
+        lmo{"Lombard"}
         ln{"Lingala"}
         lo{"Lao"}
         lou{"Louisiana Creole"}
@@ -248,7 +253,7 @@ so{
         lv{"Laatfiyaan"}
         mad{"Madurese"}
         mag{"Magahi"}
-        mai{"Dadka Maithili"}
+        mai{"Maithili"}
         mak{"Makasar"}
         mas{"Masaay"}
         mdf{"Moksha"}
@@ -256,7 +261,7 @@ so{
         mer{"Meeru"}
         mfe{"Moorisayn"}
         mg{"Malagaasi"}
-        mgh{"Makhuwa"}
+        mgh{"Luuqadda Makhuwa-Meetto"}
         mgo{"Meetaa"}
         mh{"Marshallese"}
         mi{"Maaoori"}
@@ -273,7 +278,7 @@ so{
         ms{"Malaay"}
         mt{"Maltiis"}
         mua{"Miyundhaang"}
-        mul{"Luuqado kala duwan"}
+        mul{"Luuqaddo badan"}
         mus{"Muscogee"}
         mwl{"Mirandese"}
         my{"Burmese"}
@@ -322,12 +327,12 @@ so{
         pis{"Pijin"}
         pl{"Boolish"}
         pqm{"Maliseet-Passamaquoddy"}
-        prg{"Brashiyaanki Hore"}
+        prg{"Brashiyaan"}
         ps{"Bashtuu"}
         pt{"Boortaqiis"}
         pt_BR{"Boortaqiiska Baraasiil"}
-        pt_PT{"Boortaqiis (Boortuqaal)"}
-        qu{"Quwejuwa"}
+        pt_PT{"Boortaqiiska Yurub"}
+        qu{"Quechua"}
         raj{"Rajasthani"}
         rap{"Rapanui"}
         rar{"Rarotongan"}
@@ -342,7 +347,7 @@ so{
         rwk{"Raawa"}
         sa{"Sanskrit"}
         sad{"Sandawe"}
-        sah{"Saaqa"}
+        sah{"Yakut"}
         saq{"Sambuuru"}
         sat{"Santali"}
         sba{"Ngambay"}
@@ -357,7 +362,7 @@ so{
         sg{"Sango"}
         shi{"Shilha"}
         shn{"Shan"}
-        si{"Sinhaleys"}
+        si{"Sinhala"}
         sk{"Isloofaak"}
         sl{"Islofeeniyaan"}
         slh{"Southern Lushootseed"}
@@ -378,7 +383,8 @@ so{
         sv{"Iswiidhish"}
         sw{"Sawaaxili"}
         swb{"Comorian"}
-        syr{"Syria"}
+        syr{"Af-Siriyak"}
+        szl{"Sileshiyaan"}
         ta{"Tamiil"}
         tce{"Southern Tutchone"}
         te{"Teluugu"}
@@ -418,7 +424,9 @@ so{
         uz{"Usbakis"}
         vai{"Faayi"}
         ve{"Venda"}
+        vec{"Dadka Fenaays"}
         vi{"Fiitnaamays"}
+        vmw{"Af-Makhuwa"}
         vo{"Folabuuk"}
         vun{"Fuunjo"}
         wa{"Walloon"}
@@ -428,7 +436,8 @@ so{
         wo{"Woolof"}
         wuu{"Wu Chinese"}
         xal{"Kalmyk"}
-        xh{"Hoosta"}
+        xh{"Xhosa"}
+        xnr{"Kangri"}
         xog{"Sooga"}
         yav{"Yaangbeen"}
         ybb{"Yemba"}
@@ -436,20 +445,25 @@ so{
         yo{"Yoruuba"}
         yrl{"Nheengatu"}
         yue{"Kantoneese"}
+        za{"Zhuang"}
         zgh{"Morokaanka Tamasayt Rasmiga"}
-        zh{"Shiinaha Mandarin"}
+        zh{"Shinees"}
         zh_Hans{"Shiinaha Rasmiga ah"}
-        zh_Hant{"Shiinahii Hore"}
+        zh_Hant{"Af-Shiineeska Qadiimiga ah"}
         zu{"Zuulu"}
         zun{"Zuni"}
         zxx{"Luuqad Looma Hayo"}
         zza{"Zaza"}
     }
+    Languages%long{
+        zh_Hans{"Shiineeska Mandarin ee Rasmiga ah"}
+        zh_Hant{"Af-Shiineeska Mandarin ee Qadiimiga ah"}
+    }
     Languages%menu{
         yue{"Shiinays, Cantonese"}
+        zh{"Af-Shiineeska Mandarin"}
     }
     Languages%short{
-        az{"Aseeri"}
         en_GB{"Ingiriiska Boqortooyada Midooday"}
         en_US{"Ingiriiska Maraykanka"}
     }
@@ -580,7 +594,7 @@ so{
         Prti{"Qoraalka Parthian"}
         Qaag{"Qoraalka Sawgiga"}
         Rjng{"Dadka Rejan"}
-        Rohg{"Hanifi Rohingya"}
+        Rohg{"Hanifi"}
         Runr{"Dadka Rejang"}
         Samr{"Dadka Samaritan"}
         Sarb{"Crabiyaankii Hore ee Wuqooyi"}

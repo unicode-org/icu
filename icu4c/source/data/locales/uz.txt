@@ -8,6 +8,12 @@ uz{
     ExemplarCharactersNumbers{"[  \\- ‑ , % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
+        arab{
+            symbols{
+                approximatelySign{"≈"}
+                exponential{"^"}
+            }
+        }
         arabext{
             symbols{
                 minusSign{"-"}
@@ -732,30 +738,60 @@ uz{
                     abbreviated{
                         "Muh.",
                         "Saf.",
-                        "Rob. avv.",
-                        "Rob. ox.",
+                        "Rab. avv.",
+                        "Rab. son.",
                         "Jum. avv.",
-                        "Jum. ox.",
+                        "Jum. son.",
                         "Raj.",
                         "Sha.",
                         "Ram.",
                         "Shav.",
-                        "Zul-q.",
-                        "Zul-h.",
+                        "Zulq.",
+                        "Zulh.",
                     }
                     wide{
                         "Muharram",
                         "Safar",
-                        "Robi’ ul-avval",
-                        "Robi’ ul-oxir",
-                        "Jumad ul-avval",
-                        "Jumad ul-oxir",
+                        "Rabiʼul avval",
+                        "Rabiʼus soniy",
+                        "Jumodul avval",
+                        "Jumodus soniy",
                         "Rajab",
                         "Sha’bon",
                         "Ramazon",
                         "Shavvol",
-                        "Zul-qa’da",
-                        "Zul-hijja",
+                        "Zulqaʼda",
+                        "Zulhijja",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Muh.",
+                        "Saf.",
+                        "Rab. avv.",
+                        "Rab. son.",
+                        "Jum. avv.",
+                        "Jum. son.",
+                        "Raj.",
+                        "Sha.",
+                        "Ram.",
+                        "Shav.",
+                        "Zulq.",
+                        "Zulh.",
+                    }
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʼul avval",
+                        "Rabiʼus soniy",
+                        "Jumodul avval",
+                        "Jumodus soniy",
+                        "Rajab",
+                        "Sha’bon",
+                        "Ramazon",
+                        "Shavvol",
+                        "Zulqaʼda",
+                        "Zulhijja",
                     }
                 }
             }
@@ -1302,6 +1338,9 @@ uz{
             surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
             surnameFirst-short-referring-formal{"{surname} {given-initial} {given2-initial}"}
             surnameFirst-short-referring-informal{"{surname} {given-initial}"}
+        }
+        parameterDefault{
+            formality{"informal"}
         }
     }
 }

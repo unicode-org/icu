@@ -56,7 +56,7 @@ ee{
         }
         "meta:Africa_Western"{
             ld{"West Africa dzomeŋɔli gaƒoƒo me"}
-            lg{"West Africa gaƒoƒo me"}
+            lg{"West Africa game"}
             ls{"West Africa nutome gaƒoƒo me"}
             sd{"WAST"}
             sg{"WAT"}
@@ -626,8 +626,8 @@ ee{
             ls{"Yekaterinburg nutome gaƒoƒo me"}
         }
         gmtFormat{"{0} GMT"}
-        regionFormat{"{0} gaƒoƒo me"}
-        regionFormatDaylight{"{0} kele gaƒoƒo me"}
-        regionFormatStandard{"{0} nutome gaƒoƒo me"}
+        regionFormat{"{0} game"}
+        regionFormatDaylight{"{0} ŋkekemeɣeyiɣi"}
+        regionFormatStandard{"{0} game ɖoɖoea"}
     }
 }

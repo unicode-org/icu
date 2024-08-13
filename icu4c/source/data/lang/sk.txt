@@ -78,6 +78,7 @@ sk{
         bin{"bini"}
         bkm{"kom"}
         bla{"siksika"}
+        blo{"anii"}
         bm{"bambarčina"}
         bn{"bengálčina"}
         bo{"tibetčina"}
@@ -299,6 +300,7 @@ sk{
         kv{"komijčina"}
         kw{"kornčina"}
         kwk{"kwakʼwala"}
+        kxv{"kuvi"}
         ky{"kirgizština"}
         la{"latinčina"}
         lad{"židovská španielčina"}
@@ -309,8 +311,10 @@ sk{
         lez{"lezginčina"}
         lg{"gandčina"}
         li{"limburčina"}
+        lij{"ligurčina"}
         lil{"lillooet"}
         lkt{"lakotčina"}
+        lmo{"lombardčina"}
         ln{"lingalčina"}
         lo{"laoština"}
         lol{"mongo"}
@@ -323,7 +327,6 @@ sk{
         lua{"lubčina (luluánska)"}
         lui{"luiseňo"}
         lun{"lunda"}
-        luo{"luo"}
         lus{"mizorámčina"}
         luy{"luhja"}
         lv{"lotyština"}
@@ -504,6 +507,7 @@ sk{
         swb{"komorčina"}
         syc{"sýrčina (klasická)"}
         syr{"sýrčina"}
+        szl{"sliezština"}
         ta{"tamilčina"}
         tce{"tutchone (juh)"}
         te{"telugčina"}
@@ -550,9 +554,10 @@ sk{
         und{"neznámy jazyk"}
         ur{"urdčina"}
         uz{"uzbečtina"}
-        vai{"vai"}
         ve{"vendčina"}
+        vec{"benátčina"}
         vi{"vietnamčina"}
+        vmw{"makhuwčina"}
         vo{"volapük"}
         vot{"vodčina"}
         vun{"vunjo"}
@@ -566,6 +571,7 @@ sk{
         wuu{"čínština (wu)"}
         xal{"kalmyčtina"}
         xh{"xhoština"}
+        xnr{"kángrí"}
         xog{"soga"}
         yao{"jao"}
         yap{"japčina"}
@@ -598,7 +604,7 @@ sk{
         zh{"čínština (mandarínska)"}
     }
     Languages%variant{
-        hi_Latn{"hingliš"}
+        hi_Latn{"hingličtina"}
     }
     Scripts{
         Adlm{"adlam"}
@@ -733,15 +739,15 @@ sk{
             tertiary{"Radiť akcenty/veľké a malé písmená/šírku"}
         }
         collation{
-            big5han{"tradičný čínsky Big5"}
+            big5han{"tradičné čínske zoradenie – Big5"}
             compat{"predchádzajúce zoradenie, kompatibilita"}
             dictionary{"slovníkové zoradenie"}
             ducet{"predvolené zoradenie unicode"}
             eor{"európske zoradenie"}
-            gb2312han{"zjednodušený čínsky GB2312"}
+            gb2312han{"zjednodušené čínske zoradenie – GB2312"}
             phonebook{"lexikografické zoradenie"}
             phonetic{"fonetické zoradenie"}
-            pinyin{"zoradenie pinyin"}
+            pinyin{"zoradenie pchin-jin"}
             search{"všeobecné vyhľadávanie"}
             searchjl{"Hľadať podľa počiatočnej spoluhlásky písma Hangul"}
             standard{"štandardné zoradenie"}

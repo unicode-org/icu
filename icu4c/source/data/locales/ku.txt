@@ -17,6 +17,160 @@ ku{
                 currencyFormat{"#,##0.00 ¤"}
                 percentFormat{"%#,##0"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        one{"0 hezar"}
+                        other{"0 hezar"}
+                    }
+                    10000{
+                        one{"00 hezar"}
+                        other{"00 hezar"}
+                    }
+                    100000{
+                        one{"000 hezar"}
+                        other{"000 hezar"}
+                    }
+                    1000000{
+                        one{"0 milyon"}
+                        other{"0 milyon"}
+                    }
+                    10000000{
+                        one{"00 milyon"}
+                        other{"00 milyon"}
+                    }
+                    100000000{
+                        one{"000 milyon"}
+                        other{"000 milyon"}
+                    }
+                    1000000000{
+                        one{"0 milyar"}
+                        other{"0 milyar"}
+                    }
+                    10000000000{
+                        one{"00 milyar"}
+                        other{"00 milyar"}
+                    }
+                    100000000000{
+                        one{"000 milyar"}
+                        other{"000 milyar"}
+                    }
+                    1000000000000{
+                        one{"0 trilyon"}
+                        other{"0 trilyon"}
+                    }
+                    10000000000000{
+                        one{"00 trilyon"}
+                        other{"00 trilyon"}
+                    }
+                    100000000000000{
+                        one{"000 trilyon"}
+                        other{"000 trilyon"}
+                    }
+                }
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        one{"0H ¤"}
+                        other{"0H ¤"}
+                    }
+                    10000{
+                        one{"00H ¤"}
+                        other{"00H ¤"}
+                    }
+                    100000{
+                        one{"000H ¤"}
+                        other{"000H ¤"}
+                    }
+                    1000000{
+                        one{"0MN ¤"}
+                        other{"0MN ¤"}
+                    }
+                    10000000{
+                        one{"00MN ¤"}
+                        other{"00MN ¤"}
+                    }
+                    100000000{
+                        one{"000MN ¤"}
+                        other{"000MN ¤"}
+                    }
+                    1000000000{
+                        one{"0MR ¤"}
+                        other{"0MR ¤"}
+                    }
+                    10000000000{
+                        one{"00MR ¤"}
+                        other{"00MR ¤"}
+                    }
+                    100000000000{
+                        one{"000MR ¤"}
+                        other{"000MR ¤"}
+                    }
+                    1000000000000{
+                        one{"0TN ¤"}
+                        other{"0TN ¤"}
+                    }
+                    10000000000000{
+                        one{"00TN ¤"}
+                        other{"00TN ¤"}
+                    }
+                    100000000000000{
+                        one{"000TN ¤"}
+                        other{"000TN ¤"}
+                    }
+                }
+                decimalFormat{
+                    1000{
+                        one{"0H"}
+                        other{"0H"}
+                    }
+                    10000{
+                        one{"00H"}
+                        other{"00H"}
+                    }
+                    100000{
+                        one{"000H"}
+                        other{"000H"}
+                    }
+                    1000000{
+                        one{"0MN"}
+                        other{"0MN"}
+                    }
+                    10000000{
+                        one{"00MN"}
+                        other{"00MN"}
+                    }
+                    100000000{
+                        one{"000MN"}
+                        other{"000MN"}
+                    }
+                    1000000000{
+                        one{"0MR"}
+                        other{"0MR"}
+                    }
+                    10000000000{
+                        one{"00MR"}
+                        other{"00MR"}
+                    }
+                    100000000000{
+                        one{"000MR"}
+                        other{"000MR"}
+                    }
+                    1000000000000{
+                        one{"0TN"}
+                        other{"0TN"}
+                    }
+                    10000000000000{
+                        one{"00TN"}
+                        other{"00TN"}
+                    }
+                    100000000000000{
+                        one{"000TN"}
+                        other{"000TN"}
+                    }
+                }
+            }
             symbols{
                 decimal{","}
                 group{"."}
@@ -274,15 +428,6 @@ ku{
                         "Î",
                         "Ş",
                     }
-                    short{
-                        "yş",
-                        "dş",
-                        "sş",
-                        "çş",
-                        "pş",
-                        "în",
-                        "şm",
-                    }
                 }
             }
             eras{
@@ -523,6 +668,22 @@ ku{
     characterLabel{
         animal{"heywan"}
         animals_nature{"heywan an xweza"}
+        building{"avahî"}
+        currency_symbols{"sembola pereyan"}
+        digits{"reqam"}
+        female{"jin"}
+        flag{"ala"}
+        flags{"ala"}
+        food_drink{"xwarin û vexwarin"}
+        format_whitespace{"format û valahî"}
+        heart{"dil"}
+        male{"mêr"}
+        numbers{"reqam"}
+        punctuation{"niqteşanî"}
+        sport{"spor"}
+        symbols{"sembol"}
+        travel{"seyahat"}
+        weather{"hewa"}
     }
     fields{
         day{
@@ -593,18 +754,37 @@ ku{
             dn{"meh"}
             relative{
                 "-1"{"meha borî"}
-                "0"{"vê mehê"}
+                "0"{"ev meh"}
+                "1"{"meha bê"}
+            }
+        }
+        month-narrow{
+            relative{
+                "-1"{"meha borî"}
+                "0"{"ev meh"}
+                "1"{"meha bê"}
+            }
+        }
+        month-short{
+            relative{
+                "-1"{"meha borî"}
+                "0"{"ev meh"}
                 "1"{"meha bê"}
             }
         }
         quarter{
             dn{"çaryek"}
+            relative{
+                "-1"{"çaryeka dawî"}
+                "0"{"ev çaryek"}
+                "1"{"çaryeka were"}
+            }
         }
         quarter-short{
             dn{"çrk."}
         }
         second{
-            dn{"saniye"}
+            dn{"sanîye"}
             relative{
                 "0"{"vêga"}
             }
@@ -616,21 +796,28 @@ ku{
             dn{"hefte"}
             relative{
                 "-1"{"hefteya borî"}
-                "0"{"vê hefteyê"}
+                "0"{"ev hefte"}
                 "1"{"hefteya bê"}
             }
-            relativePeriod{"hefteya {0}(y)ê"}
+            relativePeriod{"hefteya {0}"}
         }
         week-narrow{
             dn{"hf"}
+            relative{
+                "-1"{"hft. borî"}
+                "0"{"ev hft."}
+                "1"{"hft. bê"}
+            }
+            relativePeriod{"hefteya {0}"}
         }
         week-short{
             dn{"hf."}
             relative{
                 "-1"{"hft. borî"}
-                "0"{"vê hft."}
+                "0"{"ev hft."}
                 "1"{"hft. bê"}
             }
+            relativePeriod{"hefteya {0}"}
         }
         weekOfMonth{
             dn{"hefteya mehê"}
@@ -662,7 +849,7 @@ ku{
         year-short{
             relativeTime{
                 future{
-                    one{"piştî salekê"}
+                    one{"piştî {0} salan"}
                     other{"piştî {0} salan"}
                 }
                 past{
@@ -700,25 +887,6 @@ ku{
         metric{"metrîk"}
     }
     parse{
-        date{
-            lenient{
-                "[\\- ‑ . /]",
-                "[\\: ∶]",
-            }
-        }
-        general{
-            lenient{
-                "[.．․﹒ 。｡︒]",
-                "['＇’ ՚ ᾽᾿ ʼ]",
-                "[%％﹪ ٪]",
-                "[‰ ؉]",
-                "[\$＄﹩]",
-                "[£ ₤]",
-                "[¥￥]",
-                "[₩￦]",
-                "[₹ ₨ {Rp} {Rs}]",
-            }
-        }
         number{
             lenient{
                 "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",

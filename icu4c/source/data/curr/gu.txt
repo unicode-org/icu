@@ -695,8 +695,4 @@ gu{
             other{"પશ્ચિમી આફ્રિકન [CFA] ફ્રેંક્સ"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

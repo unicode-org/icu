@@ -364,6 +364,7 @@ eu{
                 Bhm{"B h:mm"}
                 Bhms{"B h:mm:s"}
                 EBhm{"E B h:mm"}
+                EBhms{"E B h:mm:ss"}
                 Ed{"d, EEEE"}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
@@ -688,12 +689,12 @@ eu{
                     "G.a.",
                 }
                 wide{
-                    "K.a.",
+                    "Kristo aurretik",
                     "Kristo ondoren",
                 }
                 wide%variant{
-                    "Gure aroaren aurretik",
-                    "Gure aroa",
+                    "oraingo aroaren aurretik",
+                    "oraingo aroa",
                 }
             }
             intervalFormats{

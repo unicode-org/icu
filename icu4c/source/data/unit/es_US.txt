@@ -10,9 +10,6 @@ es_US{
             10p-30{"quecto {0}"}
         }
         concentr{
-            milligram-ofglucose-per-deciliter{
-                dnam{"miligramos por decilitro"}
-            }
             percent{
                 dnam{"por ciento"}
             }
@@ -93,8 +90,12 @@ es_US{
         speed{
             beaufort{
                 dnam{"Escala Beaufort"}
+                gender{"feminine"}
                 one{"Escala Beaufort {0}"}
                 other{"Escala Beaufort {0}"}
+            }
+            light-speed{
+                other{"{0} luces"}
             }
         }
         temperature{
@@ -159,7 +160,6 @@ es_US{
                 dnam{"a"}
                 one{"{0}a"}
                 other{"{0}a"}
-                per{"{0}/a"}
             }
         }
         energy{
@@ -169,10 +169,6 @@ es_US{
             }
         }
         length{
-            astronomical-unit{
-                one{"{0}ua"}
-                other{"{0}ua"}
-            }
             fathom{
                 dnam{"braza"}
             }
@@ -193,7 +189,6 @@ es_US{
                 other{"{0}mm"}
             }
             nautical-mile{
-                dnam{"mn"}
                 one{"{0}mn"}
                 other{"{0}mn"}
             }
@@ -201,6 +196,10 @@ es_US{
         speed{
             beaufort{
                 dnam{"B"}
+            }
+            light-speed{
+                one{"{0}luz"}
+                other{"{0}luces"}
             }
         }
         temperature{
@@ -227,6 +226,9 @@ es_US{
             }
             permille{
                 dnam{"‰"}
+            }
+            portion-per-1e9{
+                dnam{"partes/mil millones"}
             }
         }
         digital{
@@ -292,6 +294,9 @@ es_US{
             knot{
                 one{"{0} nudo"}
                 other{"{0} nudos"}
+            }
+            light-speed{
+                other{"{0} de luces"}
             }
         }
         torque{

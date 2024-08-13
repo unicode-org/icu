@@ -22,7 +22,7 @@ fr_CA{
             ec{"Center [Dakota du Nord]"}
         }
         "America:North_Dakota:New_Salem"{
-            ec{"New Salem, Dakota du Nord"}
+            ec{"New Salem [Dakota du Nord]"}
         }
         "America:St_Johns"{
             ec{"St. John’s"}
@@ -33,9 +33,6 @@ fr_CA{
         "America:St_Thomas"{
             ec{"Saint Thomas"}
         }
-        "America:Tegucigalpa"{
-            ec{"Tégucigalpa"}
-        }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
         }
@@ -44,6 +41,9 @@ fr_CA{
         }
         "Asia:Thimphu"{
             ec{"Thimphou"}
+        }
+        "Atlantic:Canary"{
+            ec{"îles Canaries"}
         }
         "Atlantic:Faeroe"{
             ec{"îles Féroé"}
@@ -317,6 +317,9 @@ fr_CA{
             ld{"heure avancée de Hovd"}
             lg{"heure de Hovd"}
             ls{"heure normale de Hovd"}
+        }
+        "meta:Indian_Ocean"{
+            ls{"heure de l’océan Indien"}
         }
         "meta:Iran"{
             ld{"heure avancée d’Iran"}

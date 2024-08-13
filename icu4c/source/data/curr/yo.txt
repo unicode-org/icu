@@ -946,7 +946,4 @@ yo{
             other{"àwọn kàwasà Sámbíà"}
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

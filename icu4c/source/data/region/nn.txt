@@ -43,7 +43,7 @@ nn{
         TF{"Dei franske sørterritoria"}
         TL{"Aust-Timor"}
         UM{"USAs ytre småøyar"}
-        UN{"Sameinte nasjonar"}
+        UN{"Dei sameinte nasjonane"}
         VC{"St. Vincent og Grenadinane"}
         VG{"Dei britiske Jomfruøyane"}
         VI{"Dei amerikanske Jomfruøyane"}

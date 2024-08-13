@@ -373,6 +373,9 @@ sw{
             lg{"Saa za Petropavlovsk-Kamchatski"}
             ls{"Saa za Wastani za Petropavlovsk-Kamchatski"}
         }
+        "meta:Kazakhstan"{
+            ls{"Saa za Kazakhstan"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Saa za Kazakhstan Mashariki"}
         }

@@ -1517,6 +1517,9 @@ lt{
             lg{"Kamčiatkos Petropavlovsko laikas"}
             ls{"Kamčiatkos Petropavlovsko žiemos laikas"}
         }
+        "meta:Kazakhstan"{
+            ls{"Kazachstano laikas"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Rytų Kazachstano laikas"}
         }

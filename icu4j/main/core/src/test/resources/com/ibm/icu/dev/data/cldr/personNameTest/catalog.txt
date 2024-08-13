@@ -4,10 +4,12 @@
 #  SPDX-License-Identifier: Unicode-DFS-2016
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
 #af.txt
+ak.txt
 am.txt
 ar.txt
 as.txt
 az.txt
+bal_Latn.txt
 be.txt
 bg.txt
 bn.txt
@@ -68,6 +70,7 @@ nn.txt
 no.txt
 or.txt
 pa.txt
+pcm.txt
 pl.txt
 ps.txt
 pt.txt

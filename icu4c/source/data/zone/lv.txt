@@ -1446,6 +1446,9 @@ lv{
             lg{"Petropavlovskas-Kamčatskas laiks"}
             ls{"Petropavlovskas-Kamčatskas ziemas laiks"}
         }
+        "meta:Kazakhstan"{
+            ls{"Kazahstānas laiks"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Austrumkazahstānas laiks"}
         }

@@ -265,7 +265,7 @@ hu{
         }
         CSD{
             "CSD",
-            "szerb dinár",
+            "szerb dinár (2002–2006)",
         }
         CSK{
             "CSK",
@@ -437,7 +437,7 @@ hu{
         }
         HNL{
             "HNL",
-            "hodurasi lempira",
+            "hondurasi lempira",
         }
         HRD{
             "HRD",
@@ -481,7 +481,7 @@ hu{
         }
         IRR{
             "IRR",
-            "iráni rial",
+            "iráni riál",
         }
         ISK{
             "ISK",
@@ -617,7 +617,7 @@ hu{
         }
         MKD{
             "MKD",
-            "macedon dínár",
+            "macedón dénár",
         }
         MKN{
             "MKN",
@@ -729,7 +729,7 @@ hu{
         }
         OMR{
             "OMR",
-            "ománi rial",
+            "ománi riál",
         }
         PAB{
             "PAB",
@@ -777,7 +777,7 @@ hu{
         }
         QAR{
             "QAR",
-            "katari rial",
+            "katari riál",
         }
         RHD{
             "RHD",
@@ -793,7 +793,7 @@ hu{
         }
         RSD{
             "RSD",
-            "szerb dínár",
+            "szerb dinár",
         }
         RUB{
             "RUB",
@@ -809,7 +809,7 @@ hu{
         }
         SAR{
             "SAR",
-            "szaúdi riyal",
+            "szaúdi riál",
         }
         SBD{
             "SBD",
@@ -857,7 +857,7 @@ hu{
         }
         SLL{
             "SLL",
-            "Sierra Leone-i leone (1964—2022)",
+            "Sierra Leone-i leone (1964–2022)",
         }
         SOS{
             "SOS",
@@ -989,11 +989,11 @@ hu{
         }
         UYU{
             "UYU",
-            "uruguay-i peso",
+            "uruguayi peso",
         }
         UZS{
             "UZS",
-            "üzbegisztáni szum",
+            "üzbegisztáni szom",
         }
         VEB{
             "VEB",
@@ -1105,7 +1105,7 @@ hu{
         }
         YER{
             "YER",
-            "jemeni rial",
+            "jemeni riál",
         }
         YUD{
             "YUD",
@@ -1201,13 +1201,25 @@ hu{
             one{"görög drachma"}
             other{"görög drachma"}
         }
+        HNL{
+            one{"hondurasi lempira"}
+            other{"hondurasi lempira"}
+        }
         HRD{
             one{"horvát dínár"}
             other{"horvát dínár"}
         }
+        IRR{
+            one{"iráni riál"}
+            other{"iráni riál"}
+        }
         ITL{
             one{"olasz líra"}
             other{"olasz líra"}
+        }
+        MKD{
+            one{"macedón dénár"}
+            other{"macedón dénár"}
         }
         MTL{
             one{"máltai líra"}
@@ -1229,6 +1241,10 @@ hu{
             one{"nicaraguai córdoba (1988–1911)"}
             other{"nicaraguai córdoba (1988–1911)"}
         }
+        OMR{
+            one{"ománi riál"}
+            other{"ománi riál"}
+        }
         PLZ{
             one{"lengyel zloty (PLZ)"}
             other{"lengyel zloty (PLZ)"}
@@ -1237,9 +1253,21 @@ hu{
             one{"portugál escudo"}
             other{"portugál escudo"}
         }
+        QAR{
+            one{"katari riál"}
+            other{"katari riál"}
+        }
         RHD{
             one{"Rhodéziai dollár"}
             other{"Rhodéziai dollár"}
+        }
+        RSD{
+            one{"szerb dinár"}
+            other{"szerb dinár"}
+        }
+        SAR{
+            one{"szaúdi riál"}
+            other{"szaúdi riál"}
         }
         SIT{
             one{"szlovén tolár"}
@@ -1248,6 +1276,10 @@ hu{
         SKK{
             one{"szlovák korona"}
             other{"szlovák korona"}
+        }
+        SLL{
+            one{"Sierra Leone-i leone (1964–2022)"}
+            other{"Sierra Leone-i leone (1964–2022)"}
         }
         SUR{
             one{"szovjet rubel"}
@@ -1281,6 +1313,10 @@ hu{
             one{"uruguayi peso"}
             other{"uruguayi peso"}
         }
+        UZS{
+            one{"üzbegisztáni szom"}
+            other{"üzbegisztáni szom"}
+        }
         XEU{
             one{"Európai pénznemegység"}
             other{"Európai pénznemegység"}
@@ -1297,6 +1333,10 @@ hu{
             one{"(ismeretlen pénznem)"}
             other{"(ismeretlen pénznem)"}
         }
+        YER{
+            one{"jemeni riál"}
+            other{"jemeni riál"}
+        }
         YUD{
             one{"jugoszláv kemény dinár (1966–1990)"}
             other{"jugoszláv kemény dinár (1966–1990)"}
@@ -1309,9 +1349,5 @@ hu{
             one{"jugoszláv konvertibilis dinár (1990–1992)"}
             other{"jugoszláv konvertibilis dinár (1990–1992)"}
         }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

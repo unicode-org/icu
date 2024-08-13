@@ -78,6 +78,7 @@ es{
         bin{"bini"}
         bkm{"kom"}
         bla{"siksika"}
+        blo{"anii"}
         bm{"bambara"}
         bn{"bengalí"}
         bo{"tibetano"}
@@ -302,6 +303,7 @@ es{
         kv{"komi"}
         kw{"córnico"}
         kwk{"kwakʼwala"}
+        kxv{"kuvi"}
         ky{"kirguís"}
         la{"latín"}
         lad{"ladino"}
@@ -312,6 +314,7 @@ es{
         lez{"lezgiano"}
         lg{"ganda"}
         li{"limburgués"}
+        lij{"ligur"}
         lil{"lillooet"}
         lkt{"lakota"}
         lmo{"lombardo"}
@@ -327,7 +330,6 @@ es{
         lua{"luba-lulua"}
         lui{"luiseño"}
         lun{"lunda"}
-        luo{"luo"}
         lus{"mizo"}
         luy{"luyia"}
         lv{"letón"}
@@ -509,6 +511,7 @@ es{
         swb{"comorense"}
         syc{"siríaco clásico"}
         syr{"siriaco"}
+        szl{"silesio"}
         ta{"tamil"}
         tce{"tutchone meridional"}
         te{"telugu"}
@@ -555,9 +558,10 @@ es{
         und{"lengua desconocida"}
         ur{"urdu"}
         uz{"uzbeko"}
-        vai{"vai"}
         ve{"venda"}
+        vec{"veneciano"}
         vi{"vietnamita"}
+        vmw{"makua"}
         vo{"volapük"}
         vot{"vótico"}
         vun{"vunjo"}
@@ -571,6 +575,7 @@ es{
         wuu{"chino wu"}
         xal{"kalmyk"}
         xh{"xhosa"}
+        xnr{"kangri"}
         xog{"soga"}
         yao{"yao"}
         yap{"yapés"}

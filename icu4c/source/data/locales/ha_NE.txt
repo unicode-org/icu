@@ -4,4 +4,249 @@
 ha_NE{
     AuxExemplarCharacters{"[áàâ éèê íìî óòô p q {r̃} úùû v x {ʼy}]"}
     ExemplarCharactersIndex{"[A B Ɓ C D Ɗ E F G H I J K Ƙ L M N O P Q R S T U V W X Y Ƴ Z]"}
+    NumberElements{
+        latn{
+            patternsShort{
+                currencyFormat{
+                    100000{
+                        one{"¤ 000K"}
+                        other{"¤ 000D"}
+                    }
+                }
+                decimalFormat{
+                    1000{
+                        one{"0D"}
+                        other{"0D"}
+                    }
+                    10000{
+                        one{"00D"}
+                        other{"00D"}
+                    }
+                    100000{
+                        one{"000D"}
+                        other{"000D"}
+                    }
+                }
+            }
+        }
+    }
+    fields{
+        day{
+            relativeTime{
+                future{
+                    one{"a cikin rana {0}"}
+                    other{"a cikin kwanaki {0}"}
+                }
+                past{
+                    one{"rana da ya gabata {0}"}
+                    other{"kwanaki da suka gabata {0}"}
+                }
+            }
+        }
+        fri{
+            relativeTime{
+                future{
+                    one{"cikin Jumaʼa {0}"}
+                    other{"cikin {0} Jumaʼa"}
+                }
+                past{
+                    one{"Jumaʼa {0} da ta wuce"}
+                    other{"{0} Jumaʼa da ta wuce"}
+                }
+            }
+        }
+        hour{
+            relativeTime{
+                future{
+                    one{"cikin awa {0}"}
+                    other{"cikin {0} awa"}
+                }
+                past{
+                    one{"awa {0} da ta gabata"}
+                    other{"{0} awa da ya gabata"}
+                }
+            }
+        }
+        minute{
+            relativeTime{
+                future{
+                    one{"cikin minti {0}"}
+                    other{"cikin {0} minti"}
+                }
+                past{
+                    one{"minti {0} da ya gabata"}
+                    other{"{0} minti da ya gabata"}
+                }
+            }
+        }
+        mon{
+            relative{
+                "-1"{"Litinin din da ta gabata"}
+                "0"{"wannan Litinin din"}
+                "1"{"Litinin din da ya gabata"}
+            }
+            relativeTime{
+                future{
+                    one{"cikin Litinin {0}"}
+                    other{"cikin {0} Litinin"}
+                }
+                past{
+                    one{"Litinin {0} da ta gabata"}
+                    other{"{0} Litinin din da ta gabata"}
+                }
+            }
+        }
+        mon-narrow{
+            relativeTime{
+                past{
+                    one{"{0} Litinin din da ta"}
+                    other{"{0} Litinin din da ta"}
+                }
+            }
+        }
+        month{
+            relativeTime{
+                past{
+                    one{"watan da ya gabata"}
+                    other{"watanni da suka gabata {0}}"}
+                }
+            }
+        }
+        month-narrow{
+            relativeTime{
+                past{
+                    one{"watan da ya gabata {0}"}
+                    other{"watanni {0} da suka gabata"}
+                }
+            }
+        }
+        month-short{
+            relativeTime{
+                past{
+                    one{"wata {0} da ya gabata"}
+                    other{"watan da ya gabata {0}"}
+                }
+            }
+        }
+        quarter{
+            relativeTime{
+                past{
+                    one{"kwata da suka gabata {0}"}
+                    other{"kwatas da suka gabata {0}"}
+                }
+            }
+        }
+        sat{
+            relativeTime{
+                future{
+                    one{"cikin Asabar {0}"}
+                    other{"cikin {0} Asabar"}
+                }
+                past{
+                    one{"Asabar {0} da ta wuce"}
+                    other{"{0} Asabar din da ya wuce"}
+                }
+            }
+        }
+        second{
+            relativeTime{
+                future{
+                    one{"cikin dakika {0}"}
+                    other{"cikin {0} dakika"}
+                }
+                past{
+                    one{"dakika {0} da ta gabata"}
+                    other{"{0} dakika da ya gabata"}
+                }
+            }
+        }
+        sun{
+            relativeTime{
+                future{
+                    one{"cikin Lahadi {0}"}
+                    other{"cikin {0} Lahadi"}
+                }
+                past{
+                    one{"Lahadi {0} da ta gabata"}
+                    other{"{0} Lahadin da ta gabata"}
+                }
+            }
+        }
+        thu{
+            relativeTime{
+                future{
+                    one{"cikin Alhamis {0}"}
+                    other{"cikin {0} Alhamis"}
+                }
+                past{
+                    one{"Alhamis {0} da ta gabata"}
+                    other{"{0} Alhamis din da ya gabata"}
+                }
+            }
+        }
+        tue{
+            relativeTime{
+                future{
+                    one{"cikin Talata {0}"}
+                    other{"cikin {0} Talata"}
+                }
+                past{
+                    one{"Talata {0} da ta gabata"}
+                    other{"{0} Talatar da ta gabata"}
+                }
+            }
+        }
+        wed{
+            relativeTime{
+                future{
+                    one{"cikin Laraba {0}"}
+                    other{"cikin {0} Laraba"}
+                }
+                past{
+                    one{"Laraba {0} da ta gabata"}
+                    other{"{0} Laraba da ta gabata"}
+                }
+            }
+        }
+        week{
+            relativeTime{
+                past{
+                    one{"mako da ya gabata {0}"}
+                    other{"makonni da suka gabata {0}"}
+                }
+            }
+        }
+        week-narrow{
+            relativeTime{
+                past{
+                    one{"mako da suka gabata {0}"}
+                    other{"mako {0} da ya gabata"}
+                }
+            }
+        }
+        week-short{
+            relativeTime{
+                future{
+                    one{"a cikin mako {0}"}
+                    other{"a cikin mako {0}"}
+                }
+                past{
+                    one{"mako {0} da ya gabata"}
+                    other{"mako da ya gabata {0}"}
+                }
+            }
+        }
+        year{
+            relativeTime{
+                past{
+                    one{"shekara {0} da ta gabata"}
+                    other{"shekara da suka gabata {0}"}
+                }
+            }
+        }
+    }
+    measurementSystemNames{
+        UK{"Tsarin awo kasar Ingila"}
+        US{"Amurka"}
+    }
 }

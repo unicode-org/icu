@@ -905,7 +905,7 @@ fi{
         }
         SLL{
             "SLL",
-            "Sierra Leonen leone (1964—2022)",
+            "Sierra Leonen leone (1964–2022)",
         }
         SOS{
             "SOS",
@@ -2211,12 +2211,12 @@ fi{
             other{"Slovakian korunaa"}
         }
         SLE{
-            one{"Sierra Leonen leonea"}
+            one{"Sierra Leonen leone"}
             other{"Sierra Leonen leonea"}
         }
         SLL{
-            one{"Sierra Leonen leone (1964—2022)"}
-            other{"Sierra Leonen leonea (1964—2022)"}
+            one{"Sierra Leonen leone (1964–2022)"}
+            other{"Sierra Leonen leonea (1964–2022)"}
         }
         SOS{
             one{"Somalian šillinki"}
@@ -2355,8 +2355,8 @@ fi{
             other{"Uzbekistanin somia"}
         }
         VEB{
-            one{"Venezuelan bolivar (1871–2008)"}
-            other{"Venezuelan bolivaria (1871–2008)"}
+            one{"Venezuelan bolívar (1871–2008)"}
+            other{"Venezuelan bolívaria (1871–2008)"}
         }
         VEF{
             one{"Venezuelan bolívar (2008–2018)"}
@@ -2526,9 +2526,5 @@ fi{
             one{"Zimbabwen dollari (2008)"}
             other{"Zimbabwen dollaria (2008)"}
         }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

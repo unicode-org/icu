@@ -156,6 +156,11 @@ ky{
                 one{"миллионго {0} бөлүк"}
                 other{"миллионго {0} бөлүк"}
             }
+            portion-per-1e9{
+                dnam{"мкг/л"}
+                one{"{0} мкг/л"}
+                other{"{0} мкг/л"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -268,6 +273,12 @@ ky{
                 dnam{"наносекунд"}
                 one{"{0} наносекунд"}
                 other{"{0} наносекунд"}
+            }
+            night{
+                dnam{"түн"}
+                one{"{0}/түн"}
+                other{"{0}/түн"}
+                per{"{0}/түнүнө"}
             }
             quarter{
                 dnam{"чейрек"}
@@ -631,6 +642,11 @@ ky{
                 one{"{0} түйүн"}
                 other{"{0} түйүн"}
             }
+            light-speed{
+                dnam{"жарык"}
+                one{"{0} жарык"}
+                other{"{0} жарык"}
+            }
             meter-per-second{
                 dnam{"секундасына метр"}
                 one{"секундасына {0} метр"}
@@ -832,6 +848,11 @@ ky{
             percent{
                 dnam{"%"}
             }
+            portion-per-1e9{
+                dnam{"мкг/л"}
+                one{"{0} мкг/л"}
+                other{"{0} мкг/л"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -861,6 +882,12 @@ ky{
             }
             minute{
                 dnam{"мүн"}
+            }
+            night{
+                dnam{"түн"}
+                one{"{0}/түн"}
+                other{"{0}/түн"}
+                per{"{0}/түн"}
             }
             quarter{
                 one{"{0}/ч"}
@@ -951,6 +978,11 @@ ky{
             }
         }
         speed{
+            light-speed{
+                dnam{"жарык"}
+                one{"{0} жарык"}
+                other{"{0} жарык"}
+            }
             meter-per-second{
                 one{"{0} м/с"}
                 other{"{0} м/с"}
@@ -1146,6 +1178,11 @@ ky{
             permillion{
                 dnam{"миллионго/бөлүк"}
             }
+            portion-per-1e9{
+                dnam{"мкг/л"}
+                one{"{0} мкг/л"}
+                other{"{0} мкг/л"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1282,6 +1319,12 @@ ky{
                 dnam{"наносек"}
                 one{"{0} нс"}
                 other{"{0} нс"}
+            }
+            night{
+                dnam{"түн"}
+                one{"{0}/түн"}
+                other{"{0}/түн"}
+                per{"{0}/түн"}
             }
             quarter{
                 dnam{"чрк"}
@@ -1656,6 +1699,11 @@ ky{
                 dnam{"тн"}
                 one{"{0} тн"}
                 other{"{0} тн"}
+            }
+            light-speed{
+                dnam{"жарык"}
+                one{"{0} жарык"}
+                other{"{0} жарык"}
             }
             meter-per-second{
                 dnam{"метр/сек."}

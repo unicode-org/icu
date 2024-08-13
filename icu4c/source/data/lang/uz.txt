@@ -54,6 +54,7 @@ uz{
         bi{"bislama"}
         bin{"bini"}
         bla{"siksika"}
+        blo{"Anii"}
         bm{"bambara"}
         bn{"bengal"}
         bo{"tibet"}
@@ -174,6 +175,7 @@ uz{
         iba{"iban"}
         ibb{"ibibio"}
         id{"indonez"}
+        ie{"interlingve"}
         ig{"igbo"}
         ii{"sichuan"}
         ikt{"sharqiy-kanada inuktitut"}
@@ -227,6 +229,7 @@ uz{
         kv{"komi"}
         kw{"korn"}
         kwk{"kvakvala"}
+        kxv{"kuvi"}
         ky{"qirgʻizcha"}
         la{"lotincha"}
         lad{"ladino"}
@@ -235,8 +238,10 @@ uz{
         lez{"lezgin"}
         lg{"ganda"}
         li{"limburg"}
+        lij{"liguryan"}
         lil{"lilluet"}
         lkt{"lakota"}
+        lmo{"lombard"}
         ln{"lingala"}
         lo{"laos"}
         lou{"luiziana kreol"}
@@ -247,7 +252,6 @@ uz{
         lu{"luba-katanga"}
         lua{"luba-lulua"}
         lun{"lunda"}
-        luo{"luo"}
         lus{"lushay"}
         luy{"luhya"}
         lv{"latishcha"}
@@ -391,7 +395,8 @@ uz{
         sw{"suaxili"}
         sw_CD{"suaxili (Kongo)"}
         swb{"qamar"}
-        syr{"suriyacha"}
+        syr{"suryoniy"}
+        szl{"silez"}
         ta{"tamil"}
         tce{"janubiy tutchone"}
         te{"telugu"}
@@ -429,9 +434,10 @@ uz{
         und{"noma’lum til"}
         ur{"urdu"}
         uz{"o‘zbek"}
-        vai{"vai"}
         ve{"venda"}
+        vec{"venet"}
         vi{"vyetnam"}
+        vmw{"makua"}
         vo{"volapyuk"}
         vun{"vunjo"}
         wa{"vallon"}
@@ -443,6 +449,7 @@ uz{
         wuu{"vu xitoy"}
         xal{"qalmoq"}
         xh{"kxosa"}
+        xnr{"kangri"}
         xog{"soga"}
         yav{"yangben"}
         ybb{"yemba"}
@@ -450,8 +457,10 @@ uz{
         yo{"yoruba"}
         yrl{"nyengatu"}
         yue{"kanton"}
+        za{"Chjuan"}
         zgh{"tamazigxt"}
         zh{"xitoy"}
+        zh_Hans{"xitoy (soddalashgan)"}
         zh_Hant{"xitoy (an’anaviy)"}
         zu{"zulu"}
         zun{"zuni"}

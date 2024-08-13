@@ -75,21 +75,9 @@ en_AU{
         }
         duration{
             century{
-                dnam{"C."}
-                one{"{0}C."}
-                other{"{0}C."}
-            }
-            microsecond{
-                dnam{"μsec."}
-            }
-            millisecond{
-                dnam{"msec."}
-            }
-            second{
-                dnam{"sec."}
-                one{"{0}s."}
-                other{"{0}s."}
-                per{"{0} ps."}
+                dnam{"C"}
+                one{"{0}C"}
+                other{"{0}C"}
             }
         }
         speed{
@@ -222,24 +210,9 @@ en_AU{
         }
         duration{
             century{
-                dnam{"C."}
-                one{"{0} C."}
-                other{"{0} C."}
-            }
-            microsecond{
-                dnam{"μsec."}
-            }
-            millisecond{
-                dnam{"millisec."}
-            }
-            nanosecond{
-                dnam{"nanosec."}
-            }
-            second{
-                dnam{"sec."}
-                one{"{0} sec."}
-                other{"{0} secs"}
-                per{"{0} ps."}
+                dnam{"C"}
+                one{"{0} C"}
+                other{"{0} C"}
             }
         }
         energy{

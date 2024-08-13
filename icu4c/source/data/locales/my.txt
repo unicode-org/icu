@@ -123,13 +123,13 @@ my{
                         other{"00 ကုဋေ"}
                     }
                     1000000000{
-                        other{"000 ကုဋေ"}
+                        other{"000 ဋေ"}
                     }
                     10000000000{
-                        other{"ကုဋေ 0 ထ"}
+                        other{"ဋေ 0 ထ"}
                     }
                     100000000000{
-                        other{"ကုဋေ 0 သ"}
+                        other{"ဋေ 0 သ"}
                     }
                     1000000000000{
                         other{"ဋေ 0 သိန်း"}
@@ -199,7 +199,7 @@ my{
                 Ehms{"E a h:mm:ss"}
                 GyMMMd{"G d MMM y"}
                 GyMd{"GGGGG y/M/d"}
-                MMMEd{"MMM d၊ E"}
+                MMMEd{"MMM d E"}
                 MMMMEd{"MMMM d Eနေ့"}
                 Md{"d/M"}
                 h{"a h"}
@@ -293,9 +293,9 @@ my{
                 "z HH:mm:ss",
                 "H:mm:ss",
                 "H:mm",
-                "y၊ MMMM d၊ EEEE",
-                "y၊ MMMM d",
-                "y၊ MMM d",
+                "y MMMM d EEEE",
+                "y MMMM d",
+                "y MMM d",
                 "d/M/yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -323,31 +323,26 @@ my{
                 EBhm{"E B h:mm"}
                 EBhms{"E B h:mm:ss"}
                 Ed{"d ရက် E"}
-                Ehm{"E B h:mm"}
-                Ehms{"E B h:mm:ss"}
-                GyMMMEd{"G y၊ MMM d၊ E"}
-                GyMMMd{"G y၊ MMM d"}
+                Ehm{"E a h:mm"}
+                Ehms{"E a h:mm:ss"}
+                GyMMMEd{"G y/ MMM d/ E"}
                 GyMd{"G y/M/d"}
                 Hmsv{"v HH:mm:ss"}
                 Hmv{"v HH:mm"}
-                MEd{"d/M၊ E"}
-                MMMEd{"MMM d၊ E"}
-                MMMMEd{"MMMM d ရက် E"}
+                MEd{"d/M E"}
+                MMMEd{"MMM d E"}
+                MMMMEd{"MMMM d E"}
                 MMMMW{
                     other{"MMMM လ W ပတ်မြောက်"}
                 }
-                MMMd{"d MMM"}
                 Md{"d/M"}
-                h{"B h"}
-                hm{"B h:mm"}
-                hms{"B h:mm:ss"}
+                h{"a h"}
+                hm{"a h:mm"}
+                hms{"a h:mm:ss"}
                 hmsv{"v a h:mm:ss"}
                 hmv{"v a h:mm"}
-                yM{"M/y"}
-                yMEd{"d/M/y၊ E"}
-                yMMM{"MMM y"}
-                yMMMEd{"y၊ MMM d၊ E"}
-                yMMMd{"y၊ MMM d"}
+                yMEd{"d/M/y E"}
+                yMMMEd{"y MMM d E"}
                 yMd{"d/M/y"}
                 yw{
                     other{"Y ခု w ပတ်မြောက်"}
@@ -355,6 +350,15 @@ my{
             }
             dayNames{
                 format{
+                    short{
+                        "နွေ",
+                        "လာ",
+                        "ဂါ",
+                        "ဟူး",
+                        "တေး",
+                        "ကြာ",
+                        "နေ",
+                    }
                     wide{
                         "တနင်္ဂနွေ",
                         "တနင်္လာ",
@@ -433,16 +437,16 @@ my{
                     y{"G y/M – y/M"}
                 }
                 GyMEd{
-                    G{"G y/M/d၊ E – G y/M/d၊ E"}
-                    M{"G y/M/d၊ E – y/M/d၊ E"}
-                    d{"G y/M/d၊ E – y/M/d၊ E"}
-                    y{"G y/M/d၊ E – y/M/d၊ E"}
+                    G{"G y/M/d E – G y/M/d E"}
+                    M{"G y/M/d E – y/M/d E"}
+                    d{"G y/M/d E – y/M/d E"}
+                    y{"G y/M/d E – y/M/d E"}
                 }
                 GyMMMEd{
-                    G{"G y MMM d၊ E – G y MMM d၊ E"}
-                    M{"G y MMM d၊ E – MMM d၊ E"}
-                    d{"G y MMM d၊ E – MMM d၊ E"}
-                    y{"G y MMM d၊ E – y MMM d၊ E"}
+                    G{"G y MMM d E – G y MMM d E"}
+                    M{"G y MMM d E – MMM d E"}
+                    d{"G y MMM d E – MMM d E"}
+                    y{"G y MMM d E – y MMM d E"}
                 }
                 GyMMMd{
                     d{"G y MMM d – d"}
@@ -472,14 +476,14 @@ my{
                 }
                 MEd{
                     M{"d/M- EEEE – d/M- EEEE"}
-                    d{"d/M၊ EEEE – d/M၊ EEEE"}
+                    d{"d/M EEEE – d/M EEEE"}
                 }
                 MMM{
                     M{"MMM – MMM"}
                 }
                 MMMEd{
-                    M{"MMM d၊ E – MMM d၊ E"}
-                    d{"MMM d၊ E – MMM d၊ E"}
+                    M{"MMM d E – MMM d E"}
+                    d{"MMM d E – MMM d E"}
                 }
                 MMMd{
                     d{"MMM d – d"}
@@ -518,25 +522,23 @@ my{
                     y{"M/y – M/y"}
                 }
                 yMEd{
-                    M{"d/M/y၊ EEEE – d/M/y၊ EEEE"}
-                    d{"d/M/y၊ EEEE – d/M/y၊ EEEE"}
-                    y{"d/M/y၊ EEEE – d/M/y၊ EEEE"}
+                    M{"d/M/y EEEE – d/M/y EEEE"}
+                    d{"d/M/y EEE – d/M/y EEEE"}
+                    y{"d/M/y EEEE – d/M/y EEEE"}
                 }
                 yMMM{
                     M{"y MMM – MMM"}
                 }
                 yMMMEd{
-                    M{"y၊ MMM d၊ EEEE – MMM d၊ EEEE"}
-                    d{"y၊ MMM d၊ EEEE – MMM d၊ EEEE"}
-                    y{"y၊ MMM d၊ EEEE – y၊ MMM d၊ EEEE"}
+                    M{"y MMM d EEEE – MMM d EEEE"}
+                    d{"y MMM d EEEE – MMM d EEEE"}
+                    y{"y MMM d EEEE – y MMM d EEEE"}
                 }
                 yMMMM{
                     M{"y MMMM – MMMM"}
                 }
                 yMMMd{
-                    M{"y၊ MMM d – MMM d"}
-                    d{"y၊ MMM d – d"}
-                    y{"y၊ MMM d – y၊ MMM d"}
+                    d{"y MMM d – d"}
                 }
                 yMd{
                     M{"d/M/y – d/M/y"}
@@ -594,6 +596,12 @@ my{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
                     wide{
                         "ပထမ သုံးလပတ်",
                         "ဒုတိယ သုံးလပတ်",
@@ -602,6 +610,12 @@ my{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
                     narrow{
                         "ပ",
                         "ဒု",
@@ -1006,7 +1020,7 @@ my{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

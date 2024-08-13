@@ -3107,12 +3107,4 @@ cy{
             zero{"doler Zimbabwe (2008)"}
         }
     }
-    CurrencyUnitPatterns{
-        few{"{0} {1}"}
-        many{"{0} {1}"}
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-        two{"{0} {1}"}
-        zero{"{0} {1}"}
-    }
 }

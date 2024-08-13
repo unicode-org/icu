@@ -233,7 +233,7 @@ uk{
                 accusative{"Знайшли {0}"}
                 dative{"Це відповідає {0}"}
                 genitive{"Немає {0}"}
-                instrumental{"Вимірюється не {0}"}
+                instrumental{"Вимірюється {0}"}
                 locative{"Міститься в {0}"}
                 nominative{"Є {0}"}
             }
@@ -679,12 +679,20 @@ uk{
                     abbreviated{
                         afternoon1{"дня"}
                         evening1{"вечора"}
-                        midnight{"опівночі"}
+                        midnight{"ночі"}
                         morning1{"ранку"}
                         night1{"ночі"}
-                        noon{"опівдні"}
+                        noon{"дня"}
                     }
                     narrow{
+                        afternoon1{"дня"}
+                        evening1{"вечора"}
+                        midnight{"ночі"}
+                        morning1{"ранку"}
+                        night1{"ночі"}
+                        noon{"дня"}
+                    }
+                    wide{
                         afternoon1{"дня"}
                         evening1{"вечора"}
                         midnight{"ночі"}
@@ -2336,7 +2344,7 @@ uk{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

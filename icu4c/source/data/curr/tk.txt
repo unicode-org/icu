@@ -1285,8 +1285,4 @@ tk{
             other{"zambiýa kwaçasy"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

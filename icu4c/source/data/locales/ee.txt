@@ -522,7 +522,7 @@ ee{
                         "dzodze",
                         "tedoxe",
                         "afɔfĩe",
-                        "dama",
+                        "dame",
                         "masa",
                         "siamlɔm",
                         "deasiamime",
@@ -796,6 +796,6 @@ ee{
     measurementSystemNames{
         UK{"uk"}
         US{"us"}
-        metric{"metric"}
+        metric{"dzidzeti"}
     }
 }

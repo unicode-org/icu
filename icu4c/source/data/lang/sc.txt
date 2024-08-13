@@ -53,6 +53,7 @@ sc{
         bi{"bislama"}
         bin{"bini"}
         bla{"pees nieddos"}
+        blo{"anii"}
         bm{"bambara"}
         bn{"bengalesu"}
         bo{"tibetanu"}
@@ -171,6 +172,7 @@ sc{
         iba{"iban"}
         ibb{"ibibio"}
         id{"indonesianu"}
+        ie{"interlìngue"}
         ig{"igbo"}
         ii{"sichuan yi"}
         ikt{"inuktitut canadesu otzidentale"}
@@ -223,6 +225,7 @@ sc{
         kv{"komi"}
         kw{"còrnicu"}
         kwk{"kwakʼwala"}
+        kxv{"kuvi"}
         ky{"chirghisu"}
         la{"latinu"}
         lad{"giudeu-ispagnolu"}
@@ -245,7 +248,6 @@ sc{
         lu{"luba-katanga"}
         lua{"tshiluba"}
         lun{"lunda"}
-        luo{"luo"}
         lus{"mizo"}
         luy{"luyia"}
         lv{"lètone"}
@@ -386,6 +388,7 @@ sc{
         sw_CD{"swahili de su Congo"}
         swb{"comorianu"}
         syr{"sirìacu"}
+        szl{"silesianu"}
         ta{"tamil"}
         tce{"tutchone meridionale"}
         te{"telugu"}
@@ -423,10 +426,10 @@ sc{
         und{"limba disconnota"}
         ur{"urdu"}
         uz{"uzbecu"}
-        vai{"vai"}
         ve{"venda"}
         vec{"vènetu"}
         vi{"vietnamita"}
+        vmw{"macua"}
         vo{"volapük"}
         vun{"vunjo"}
         wa{"vallonu"}
@@ -437,6 +440,7 @@ sc{
         wuu{"wu"}
         xal{"calmucu"}
         xh{"xhosa"}
+        xnr{"kangri"}
         xog{"soga"}
         yav{"yangben"}
         ybb{"yemba"}
@@ -444,6 +448,7 @@ sc{
         yo{"yoruba"}
         yrl{"nheengatu"}
         yue{"cantonesu"}
+        za{"zhuang"}
         zgh{"tamazight istandard marochinu"}
         zh{"tzinesu"}
         zh_Hans{"tzinesu semplificadu"}

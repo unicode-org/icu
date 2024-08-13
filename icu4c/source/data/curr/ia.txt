@@ -1298,8 +1298,4 @@ ia{
             other{"riales yemeni"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

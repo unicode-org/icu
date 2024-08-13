@@ -81,17 +81,39 @@ so{
             }
         }
         compound{
-            1024p8{"dheer{0}"}
+            1024p1{"kibi{0}"}
+            1024p2{"mebi{0}"}
+            1024p3{"gibi{0}"}
+            1024p4{"tebi{0}"}
+            1024p5{"pebi{0}"}
+            1024p6{"exbi{0}"}
+            1024p7{"zebi{0}"}
+            1024p8{"yobi{0}"}
             10p-1{"deci{0}"}
+            10p-12{"pico{0}"}
+            10p-15{"femto{0}"}
+            10p-18{"atto{0}"}
             10p-2{"senti{0}"}
+            10p-21{"zepto{0}"}
+            10p-24{"yocto{0}"}
             10p-27{"ronto{0}"}
+            10p-3{"milli{0}"}
             10p-30{"quecto{0}"}
+            10p-6{"mikro{0}"}
+            10p-9{"nano{0}"}
+            10p1{"deka{0}"}
+            10p12{"tera{0}"}
             10p15{"peta{0}"}
             10p18{"exa{0}"}
+            10p2{"hecto{0}"}
             10p21{"zetta{0}"}
             10p24{"yotta{0}"}
             10p27{"ronna{0}"}
+            10p3{"kilo{0}"}
             10p30{"quetta{0}"}
+            10p6{"mega{0}"}
+            10p9{"giga{0}"}
+            per{"{0} kiiba {1}"}
             power2{
                 one{
                     _{
@@ -154,6 +176,11 @@ so{
             permyriad{
                 one{"{0} bermiraad"}
                 other{"{0} bermiraad"}
+            }
+            portion-per-1e9{
+                dnam{"qeybaha bilyankiiba"}
+                one{"{0} qeybaha bilyankiiba"}
+                other{"{0} qeybaha bilyankiiba"}
             }
         }
         consumption{
@@ -240,7 +267,7 @@ so{
         }
         duration{
             century{
-                dnam{"qarni"}
+                dnam{"qarniyo"}
                 one{"{0} qarni"}
                 other{"{0} qarniyo"}
             }
@@ -285,6 +312,12 @@ so{
                 dnam{"nanoseken"}
                 one{"{0} nanoseken"}
                 other{"{0} nanoseken"}
+            }
+            night{
+                dnam{"habeeno"}
+                one{"{0} habeen"}
+                other{"{0} habeeno"}
+                per{"{0} halkii habeen"}
             }
             quarter{
                 dnam{"Rubucyo"}
@@ -441,11 +474,21 @@ so{
                 one{"{0} desimitir"}
                 other{"{0} dsimitir"}
             }
+            fathom{
+                dnam{"fathoms"}
+                one{"{0} fathom"}
+                other{"{0} fathoms"}
+            }
             foot{
                 dnam{"fiit"}
                 one{"Fuudh"}
                 other{"{0} fiit"}
                 per{"{0} fiitkiiba"}
+            }
+            furlong{
+                dnam{"furlongs"}
+                one{"{0} furlong"}
+                other{"{0} furlongs"}
             }
             inch{
                 dnam{"Injis"}
@@ -525,6 +568,16 @@ so{
             }
         }
         light{
+            candela{
+                dnam{"candela"}
+                one{"{0} candela"}
+                other{"{0} candela"}
+            }
+            lumen{
+                dnam{"lumen"}
+                one{"{0} lumen"}
+                other{"{0} lumen"}
+            }
             lux{
                 one{"{0} laks"}
                 other{"{0} laks"}
@@ -591,6 +644,11 @@ so{
                 dnam{"cufka qorraxda"}
                 one{"{0} cufka qorraxda"}
                 other{"{0} cufka qorraxda"}
+            }
+            stone{
+                dnam{"dhagaxo"}
+                one{"{0} dhagax"}
+                other{"{0} dhagaxo"}
             }
             ton{
                 one{"{0} tan"}
@@ -691,6 +749,11 @@ so{
                 dnam{"nott"}
                 one{"{0} nott"}
                 other{"{0} nott"}
+            }
+            light-speed{
+                dnam{"nal"}
+                one{"{0} nal"}
+                other{"{0} nal"}
             }
             meter-per-second{
                 dnam{"mitir ilbiriqsigiiba"}
@@ -897,6 +960,11 @@ so{
                 one{"{0}ppm"}
                 other{"{0}ppm#"}
             }
+            portion-per-1e9{
+                dnam{"qb"}
+                one{"{0}qb"}
+                other{"{0}qb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -941,6 +1009,12 @@ so{
                 dnam{"Bil"}
                 one{"{0}b"}
                 other{"{0}b"}
+            }
+            night{
+                dnam{"habeeno"}
+                one{"{0}habeen"}
+                other{"{0}habeeno"}
+                per{"{0}/habeen"}
             }
             quarter{
                 dnam{"Rubac"}
@@ -997,6 +1071,12 @@ so{
                 one{"{0}R⊕"}
                 other{"{0}R⊕"}
             }
+            fathom{
+                dnam{"fathom"}
+            }
+            furlong{
+                dnam{"furlong"}
+            }
             kilometer{
                 one{"{0}km"}
                 other{"{0}km"}
@@ -1016,6 +1096,7 @@ so{
                 other{"{0}cd"}
             }
             lumen{
+                dnam{"lumen"}
                 one{"{0}lm"}
                 other{"{0}lm"}
             }
@@ -1033,6 +1114,11 @@ so{
             kilogram{
                 one{"{0}kg"}
                 other{"{0}kg"}
+            }
+            stone{
+                dnam{"dx"}
+                one{"{0}dx"}
+                other{"{0}dx"}
             }
         }
         pressure{
@@ -1053,6 +1139,15 @@ so{
         speed{
             kilometer-per-hour{
                 dnam{"km/s"}
+            }
+            knot{
+                one{"{0}nt"}
+                other{"{0}nt"}
+            }
+            light-speed{
+                dnam{"nal"}
+                one{"{0}nal"}
+                other{"{0}nal"}
             }
         }
         temperature{
@@ -1211,6 +1306,11 @@ so{
             permyriad{
                 dnam{"bermiraad"}
             }
+            portion-per-1e9{
+                dnam{"qeybaha/bilyan"}
+                one{"{0} qb"}
+                other{"{0} qb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1313,6 +1413,12 @@ so{
             }
             nanosecond{
                 dnam{"nanosek"}
+            }
+            night{
+                dnam{"habeeno"}
+                one{"{0} habeen"}
+                other{"{0} habeeno"}
+                per{"{0}/habeen"}
             }
             quarter{
                 dnam{"Rubuc"}
@@ -1424,6 +1530,12 @@ so{
                 one{"{0}dm"}
                 other{"{0}dm"}
             }
+            fathom{
+                dnam{"fathoms"}
+            }
+            furlong{
+                dnam{"furlongs"}
+            }
             inch{
                 dnam{"injis"}
             }
@@ -1476,6 +1588,12 @@ so{
             }
         }
         light{
+            candela{
+                dnam{"candela"}
+            }
+            lumen{
+                dnam{"lumen"}
+            }
             lux{
                 dnam{"laks"}
             }
@@ -1521,6 +1639,11 @@ so{
                 dnam{"xufka qorraxda"}
                 one{"{0} CQ"}
                 other{"{0} CQ"}
+            }
+            stone{
+                dnam{"dhagaxo"}
+                one{"{0} dx"}
+                other{"{0} dx"}
             }
             ton{
                 dnam{"tan"}
@@ -1573,6 +1696,11 @@ so{
                 dnam{"nt"}
                 one{"{0} nt"}
                 other{"{0} nt"}
+            }
+            light-speed{
+                dnam{"nal"}
+                one{"{0} nal"}
+                other{"{0} nal"}
             }
             meter-per-second{
                 dnam{"mitir/ilbrqsi"}

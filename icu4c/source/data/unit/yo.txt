@@ -3,6 +3,14 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 yo{
     units{
+        area{
+            acre{
+                dnam{"sare"}
+            }
+            hectare{
+                dnam{"hekita"}
+            }
+        }
         compound{
             1024p1{"kibi{0}"}
             1024p2{"mẹ́bì {0}"}
@@ -12,6 +20,30 @@ yo{
             1024p6{"ẹ́síbì {0}"}
             1024p7{"sẹ́bì {0}"}
             1024p8{"yóòbù {0}"}
+            10p-1{"desi{0}"}
+            10p-12{"piko{0}"}
+            10p-15{"femuto{0}"}
+            10p-18{"ato{0}"}
+            10p-2{"senti{0}"}
+            10p-21{"seputo{0}"}
+            10p-24{"yokito{0}"}
+            10p-27{"ronto{0}"}
+            10p-3{"mili{0}"}
+            10p-30{"kuekito{0}"}
+            10p-6{"maikiro{0}"}
+            10p-9{"nano{0}"}
+            10p1{"deka{0}"}
+            10p12{"tera{0}"}
+            10p15{"peta{0}"}
+            10p18{"ekisa{0}"}
+            10p2{"hekito{0}"}
+            10p21{"seta{0}"}
+            10p24{"yota{0}"}
+            10p27{"ronna{0}"}
+            10p3{"kilo{0}"}
+            10p30{"kueta{0}"}
+            10p6{"mega{0}"}
+            10p9{"giga{0}"}
             power2{
                 other{
                     _{
@@ -34,6 +66,14 @@ yo{
             }
             permille{
                 other{"{0} ìdákan nínú ẹgbẹ̀rún"}
+            }
+            portion-per-1e9{
+                dnam{"ẹ̀yà nínú ìdá blíọ̀nù"}
+            }
+        }
+        consumption{
+            mile-per-gallon-imperial{
+                dnam{"maili ninu ami galọọnu kan"}
             }
         }
         digital{
@@ -96,6 +136,11 @@ yo{
             microsecond{
                 dnam{"iseju aya kekere"}
             }
+            night{
+                dnam{"àwọn alẹ́"}
+                other{"àwọn alẹ́ {0}"}
+                per{"{0}/alẹ́"}
+            }
             quarter{
                 dnam{"idamerin"}
                 other{"{0} idamerin"}
@@ -132,6 +177,9 @@ yo{
                 dnam{"àwọn fọ́lọ́ọ̀ngì"}
                 other{"{0} àwọn fọ́lọ́ọ̀ngì"}
             }
+            meter{
+                dnam{"mita"}
+            }
         }
         light{
             candela{
@@ -150,11 +198,23 @@ yo{
             stone{
                 other{"{0} àwon okùta"}
             }
+            tonne{
+                dnam{"mẹtiriki tọọnu"}
+            }
+        }
+        pressure{
+            millimeter-ofhg{
+                dnam{"milimita ti makuiri"}
+            }
         }
         speed{
             beaufort{
                 dnam{"Beaufort"}
                 other{"Beaufort {0}"}
+            }
+            light-speed{
+                dnam{"ìmọ́lẹ̀"}
+                other{"{0} ìmọ́lẹ̀"}
             }
         }
         volume{
@@ -162,12 +222,18 @@ yo{
                 dnam{"búsẹ́ẹ̀li"}
                 other{"{0} búsẹ́ẹ̀li"}
             }
+            cup{
+                dnam{"àwọn ife"}
+            }
             dessert-spoon{
-                dnam{"àmì ṣíbí oúnjẹ́ kékeré"}
-                other{"{0} àmì ṣíbí oúnjẹ́ kékeré"}
+                dnam{"àwọn ṣíbí oúnjẹ́ kékeré"}
+                other{"àwọn {0} àmì ṣíbí oúnjẹ́ kékeré"}
             }
             dessert-spoon-imperial{
                 dnam{"ṣíbí oúnjẹ kékeré"}
+            }
+            liter{
+                dnam{"lita"}
             }
             quart-imperial{
                 dnam{"ìdásímérin"}
@@ -194,12 +260,14 @@ yo{
         }
         area{
             acre{
+                dnam{"sare"}
                 other{"{0}ac"}
             }
             dunam{
                 other{"{0}dunam"}
             }
             hectare{
+                dnam{"hekita"}
                 other{"{0}ha"}
             }
             square-centimeter{
@@ -314,6 +382,11 @@ yo{
             minute{
                 other{"{0}/ìṣ"}
             }
+            night{
+                dnam{"àwọn alẹ́"}
+                other{"àwọn alẹ́{0}"}
+                per{"{0}/alẹ́"}
+            }
             quarter{
                 other{"{0} i"}
             }
@@ -413,6 +486,9 @@ yo{
             }
             furlong{
                 other{"{0}fur"}
+            }
+            meter{
+                dnam{"mita"}
             }
         }
         light{
@@ -523,6 +599,10 @@ yo{
             knot{
                 other{"{0}kn"}
             }
+            light-speed{
+                dnam{"ìmọ́lẹ̀"}
+                other{"{0}ìmọ́lẹ̀"}
+            }
             meter-per-second{
                 other{"{0}m/s"}
             }
@@ -583,6 +663,7 @@ yo{
                 other{"{0}yd³"}
             }
             cup{
+                dnam{"ife"}
                 other{"{0}c"}
             }
             cup-metric{
@@ -627,6 +708,7 @@ yo{
                 other{"{0}jìgá"}
             }
             liter{
+                dnam{"lita"}
                 per{"{0}/L"}
             }
             megaliter{
@@ -660,6 +742,14 @@ yo{
         }
     }
     unitsShort{
+        area{
+            acre{
+                dnam{"sare"}
+            }
+            hectare{
+                dnam{"hekita"}
+            }
+        }
         compound{
             1024p1{"àmì Kí {0}"}
             1024p2{"àmì Mi {0}"}
@@ -749,6 +839,11 @@ yo{
                 other{"{0} oṣù"}
                 per{"{0}/oṣù"}
             }
+            night{
+                dnam{"àwọn alẹ́"}
+                other{"àwọn alẹ́ {0}"}
+                per{"{0}/alẹ́"}
+            }
             quarter{
                 dnam{"idame"}
                 other{"{0} idame"}
@@ -794,10 +889,13 @@ yo{
                 dnam{"fọ́lọ́ọ̀ngì"}
                 other{"{0} fọ́"}
             }
+            meter{
+                dnam{"mita"}
+            }
         }
         light{
             candela{
-                dnam{"sídiì"}
+                dnam{"kandẹ́là"}
                 other{"{0} sídiì"}
             }
             lumen{
@@ -814,9 +912,18 @@ yo{
                 dnam{"àwon okùta"}
             }
         }
+        speed{
+            light-speed{
+                dnam{"ìmọ́lẹ̀"}
+                other{"{0} ìmọ́lẹ̀"}
+            }
+        }
         volume{
             bushel{
                 dnam{"Búsẹ́ẹ̀li"}
+            }
+            cup{
+                dnam{"ife"}
             }
             dessert-spoon{
                 dnam{"ṣíbí oúnjẹ́ kékeré"}
@@ -837,6 +944,9 @@ yo{
             jigger{
                 dnam{"jígà"}
                 other{"{0} jígà"}
+            }
+            liter{
+                dnam{"lita"}
             }
             pinch{
                 dnam{"píńṣì"}

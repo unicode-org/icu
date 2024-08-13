@@ -24,17 +24,11 @@ fi{
         "Africa:Ndjamena"{
             ec{"N’Djamena"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "America:Araguaina"{
             ec{"Araguaína"}
         }
         "America:Argentina:Tucuman"{
             ec{"Tucumán"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Bogota"{
             ec{"Bogotá"}
@@ -44,9 +38,6 @@ fi{
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Eirunepe"{
             ec{"Eirunepé"}
@@ -346,9 +337,6 @@ fi{
         }
         "Indian:Maldives"{
             ec{"Malediivit"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Chatham"{
             ec{"Chathamsaaret"}
@@ -724,6 +712,9 @@ fi{
             ld{"Kamtšatkan kesäaika"}
             lg{"Kamtšatkan aika"}
             ls{"Kamtšatkan normaaliaika"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Kazakstanin aika"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Itä-Kazakstanin aika"}

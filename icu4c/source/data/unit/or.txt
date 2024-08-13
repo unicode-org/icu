@@ -177,6 +177,11 @@ or{
                 one{"{0} ପରମାଇରିଆଡ"}
                 other{"{0} ପରମାଇରିଆଡ"}
             }
+            portion-per-1e9{
+                dnam{"ବିଲିୟନ ପ୍ରତି ଅଂଶଗୁଡିକ"}
+                one{"{0} ପାର୍ଟ୍ସ ପ୍ରତି ବିଲିୟନ୍"}
+                other{"{0} ପାର୍ଟ୍ସ ପ୍ରତି ବିଲିୟନ୍"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -239,7 +244,7 @@ or{
                 other{"{0} ମେଗାବାଇଟ୍"}
             }
             petabyte{
-                dnam{"PB"}
+                dnam{"ପେଟାବାଇଟ୍‌"}
             }
             terabit{
                 dnam{"ଟେରାବିଟ୍"}
@@ -290,6 +295,12 @@ or{
                 one{"{0} ନାନୋସେକେଣ୍ଡ"}
                 other{"{0} ନାନୋସେକେଣ୍ଡ"}
             }
+            night{
+                dnam{"ରାତି"}
+                one{"{0} ରାତି"}
+                other{"{0} ରାତି"}
+                per{"{0} ପ୍ରତି ରାତି"}
+            }
             quarter{
                 one{"{0} କ୍ୱାର୍ଟର୍"}
                 other{"{0} କ୍ୱାର୍ଟର୍ସ"}
@@ -301,7 +312,7 @@ or{
                 per{"ସପ୍ତାହକୁ {0}"}
             }
             year{
-                per{"ବର୍ଷକୁ {0}"}
+                per{"{0} ପ୍ରତି ବର୍ଷ"}
             }
         }
         electric{
@@ -539,8 +550,9 @@ or{
                 other{"{0} ପଏଣ୍ଟ୍"}
             }
             solar-radius{
+                dnam{"ସୋଲାର ବ୍ୟାସାର୍ଦ୍ଧ"}
                 one{"{0} ସୋଲାର ବ୍ୟାସାର୍ଦ୍ଧ"}
-                other{"{0} ସୋଲାର ରାଡି"}
+                other{"{0} ସୋଲାର ବ୍ୟାସାର୍ଦ୍ଧ"}
             }
         }
         light{
@@ -698,6 +710,11 @@ or{
                 one{"{0} କିଲୋମିଟର୍ ପ୍ରତି ଘଣ୍ଟା"}
                 other{"{0} କିଲୋମିଟର୍ ପ୍ରତି ଘଣ୍ଟା"}
             }
+            light-speed{
+                dnam{"ଆଲୋକ"}
+                one{"{0} ଆଲୋକ"}
+                other{"{0} ଆଲୋକ"}
+            }
             meter-per-second{
                 dnam{"ମିଟର୍ ପ୍ରତି ସେକେଣ୍ଡ୍"}
                 one{"{0} ମିଟର୍ ପ୍ରତି ସେକେଣ୍ଡ୍"}
@@ -734,7 +751,7 @@ or{
             }
             pound-force-foot{
                 dnam{"ପାଉଣ୍ଡ-ଫିଟ"}
-                one{"{0} ପାଉଣ୍ଡ-ଫୁଟ"}
+                one{"{0} ପାଉଣ୍ଡ୍-ଫୋର୍ସ୍‌-ଫୁଟ୍‌"}
                 other{"{0} ପାଉଣ୍ଡ-ଫିଟ"}
             }
         }
@@ -978,6 +995,10 @@ or{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1028,6 +1049,12 @@ or{
             month{
                 one{"{0}ମାସ"}
                 other{"{0}ମାସ"}
+            }
+            night{
+                dnam{"ରାତି"}
+                one{"{0} ରାତି"}
+                other{"{0} ରାତି"}
+                per{"{0}/ରାତି"}
             }
             second{
                 one{"{0}ସେକ୍"}
@@ -1090,8 +1117,8 @@ or{
         length{
             astronomical-unit{
                 dnam{"ଖଗୋ. ଇକା."}
-                one{"{0} ଖଗୋ. ଇକା."}
-                other{"{0} ଖଗୋ. ଇକା."}
+                one{"{0}au"}
+                other{"{0}au"}
             }
             centimeter{
                 one{"{0} ସେମି"}
@@ -1109,6 +1136,8 @@ or{
             }
             fathom{
                 dnam{"ଫେଦମ୍"}
+                one{"{0}fth"}
+                other{"{0} fth"}
             }
             furlong{
                 dnam{"ଫର୍ଲଙ୍ଗ୍"}
@@ -1150,6 +1179,9 @@ or{
                 dnam{"pm"}
                 one{"{0}ପି.ମି."}
                 other{"{0}ପି.ମି."}
+            }
+            solar-radius{
+                dnam{"R☉"}
             }
             yard{
                 dnam{"ଗଜ"}
@@ -1242,6 +1274,11 @@ or{
             knot{
                 dnam{"ଗଣ୍ଠି"}
             }
+            light-speed{
+                dnam{"ଆଲୋକ"}
+                one{"{0} ଆଲୋକ"}
+                other{"{0} ଆଲୋକ"}
+            }
             meter-per-second{
                 dnam{"ମିଟର/ସେ"}
             }
@@ -1278,10 +1315,13 @@ or{
                 other{"{0} ସେ. ଲି."}
             }
             cubic-centimeter{
-                dnam{"ଘନସେମି"}
                 one{"{0}/ଘନସେମି"}
                 other{"{0}/ଘନସେମି"}
-                per{"{0}/ଘନସେମି"}
+            }
+            cubic-foot{
+                dnam{"ft³"}
+                one{"{0}ft³"}
+                other{"{0}ft³"}
             }
             cubic-inch{
                 dnam{"ଘନଇଞ୍ଚ"}
@@ -1289,32 +1329,59 @@ or{
                 other{"{0} ଘନଇଞ୍ଚ"}
             }
             cubic-kilometer{
-                dnam{"ଘନକି.ମି."}
                 one{"{0}ଘନକି.ମି."}
                 other{"{0}ଘନକି.ମି."}
             }
             cubic-meter{
-                dnam{"ଘନମି"}
                 one{"{0}/ ଘନମି"}
                 other{"{0}/ ଘନମି"}
-                per{"{0}/ ଘନମି"}
             }
             cubic-mile{
                 dnam{"ଘନମାଇଲ୍"}
                 one{"{0}ଘନମାଇଲ୍"}
                 other{"{0}ଘନମାଇଲ୍"}
             }
+            cubic-yard{
+                dnam{"yd³"}
+                one{"{0}yd³"}
+                other{"{0}yd³"}
+            }
             cup{
                 one{"{0} କପ"}
                 other{"{0} କପ"}
+            }
+            cup-metric{
+                dnam{"mcup"}
+                one{"{0}mc"}
+                other{"{0}mc"}
             }
             deciliter{
                 dnam{"ଡେ. ଲି."}
                 one{"{0} ଡେ. ଲି."}
                 other{"{0} ଡେ. ଲି."}
             }
+            dessert-spoon{
+                dnam{"dsp"}
+                one{"{0}dsp"}
+                other{"{0}dsp"}
+            }
+            dessert-spoon-imperial{
+                dnam{"dsp Imp"}
+                one{"{0}dsp-Imp"}
+                other{"{0}dsp-Imp"}
+            }
+            dram{
+                dnam{"fl.dr."}
+                one{"{0}fl.dr."}
+                other{"{0}fl.dr."}
+            }
             drop{
                 dnam{"dr"}
+                one{"{0}dr"}
+                other{"{0}dr"}
+            }
+            fluid-ounce{
+                dnam{"fl oz"}
             }
             gallon{
                 dnam{"ଗେଲନ୍"}
@@ -1328,9 +1395,18 @@ or{
                 other{"{0} ଇମ୍ପିଗେଲନ୍"}
                 per{"{0}/ ଇମ୍ପିଗେଲନ୍"}
             }
+            hectoliter{
+                one{"{0}hL"}
+                other{"{0} ହେଲି"}
+            }
             liter{
                 one{"{0}ଲି"}
                 other{"{0}ଲି"}
+            }
+            megaliter{
+                dnam{"ML"}
+                one{"{0}ML"}
+                other{"{0}ML"}
             }
             milliliter{
                 dnam{"ମି. ଲି."}
@@ -1341,6 +1417,16 @@ or{
                 dnam{"ଚିମୁଟ"}
                 one{"{0} ଚିମୁଟ"}
                 other{"{0} ଚିମୁଟ"}
+            }
+            pint-metric{
+                dnam{"pt"}
+                one{"{0}mpt"}
+                other{"{0}mpt"}
+            }
+            teaspoon{
+                dnam{"tsp"}
+                one{"{0}tsp"}
+                other{"{0}tsp"}
             }
         }
     }
@@ -1499,6 +1585,9 @@ or{
             permyriad{
                 dnam{"ପରମାଇରିଆଡ"}
             }
+            portion-per-1e9{
+                dnam{"ପାର୍ଟ୍ସ/ବିଲିୟନ୍"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1577,7 +1666,7 @@ or{
             }
             decade{
                 one{"{0} ଦଶନ୍ଧି"}
-                other{"{0} dec"}
+                other{"{0} ଦଶନ୍ଧି"}
             }
             hour{
                 dnam{"ଘଣ୍ଟା"}
@@ -1602,6 +1691,12 @@ or{
                 one{"{0} ମାସ"}
                 other{"{0} ମାସ"}
                 per{"{0}/ମାସ"}
+            }
+            night{
+                dnam{"ରାତି"}
+                one{"{0} ରାତି"}
+                other{"{0} ରାତି"}
+                per{"{0}/ରାତି"}
             }
             quarter{
                 dnam{"କ୍ୱାର୍ଟର୍ସ"}
@@ -1716,8 +1811,8 @@ or{
         length{
             astronomical-unit{
                 dnam{"ଆୟୁ"}
-                one{"{0} ଆୟୁ"}
-                other{"{0} ଆୟୁ"}
+                one{"{0} au"}
+                other{"{0} au"}
             }
             centimeter{
                 dnam{"ସେମି"}
@@ -1795,8 +1890,8 @@ or{
             }
             nautical-mile{
                 dnam{"ନୌମି"}
-                one{"{0} ନୌମି"}
-                other{"{0} ନୌମି"}
+                one{"{0} nmi"}
+                other{"{0} nmi"}
             }
             parsec{
                 dnam{"ପାରସେକ୍"}
@@ -1814,7 +1909,7 @@ or{
                 other{"{0} ପ"}
             }
             solar-radius{
-                dnam{"ସୋଲାର ରାଡି"}
+                dnam{"ସୋଲାର ବ୍ୟାସାର୍ଦ୍ଧ"}
             }
             yard{
                 dnam{"ୟାର୍ଡ୍"}
@@ -1963,6 +2058,11 @@ or{
                 one{"{0} ନଟ୍"}
                 other{"{0} ନଟ୍"}
             }
+            light-speed{
+                dnam{"ଆଲୋକ"}
+                one{"{0} ଆଲୋକ"}
+                other{"{0} ଆଲୋକ"}
+            }
             meter-per-second{
                 dnam{"ମିଟର୍/ସେ"}
                 one{"{0} ମି/ସେ"}
@@ -2037,8 +2137,8 @@ or{
             }
             cubic-yard{
                 dnam{"ୟାର୍ଡ୍³"}
-                one{"{0} ୟାର୍ଡ୍³"}
-                other{"{0} ୟାର୍ଡ୍³"}
+                one{"{0} yd³"}
+                other{"{0} yd³"}
             }
             cup{
                 dnam{"କପ୍"}
@@ -2046,7 +2146,6 @@ or{
                 other{"{0} କ"}
             }
             cup-metric{
-                dnam{"ମେକ"}
                 one{"{0} ମେକ"}
                 other{"{0} ମେକ"}
             }
@@ -2054,6 +2153,10 @@ or{
                 dnam{"ଡେଲି"}
                 one{"{0} ଡେଲି"}
                 other{"{0} ଡେଲି"}
+            }
+            dessert-spoon-imperial{
+                one{"{0} dsp-Imp."}
+                other{"{0} dsp-Imp."}
             }
             fluid-ounce{
                 dnam{"ଫ୍ଲୁ ଓଜ୍"}
@@ -2103,8 +2206,8 @@ or{
             }
             pint-metric{
                 dnam{"ମେପା"}
-                one{"{0} ମେପା"}
-                other{"{0} ମେପା"}
+                one{"{0} mpt"}
+                other{"{0} mpt"}
             }
             quart{
                 dnam{"କ୍ଵାର୍ଟ୍"}
@@ -2118,8 +2221,8 @@ or{
             }
             teaspoon{
                 dnam{"ଛୋଟ ଚାମଚ"}
-                one{"{0} ଛୋଟ ଚାମଚ"}
-                other{"{0} ଛୋଟ ଚାମଚ"}
+                one{"{0} tsp"}
+                other{"{0} tsp"}
             }
         }
     }

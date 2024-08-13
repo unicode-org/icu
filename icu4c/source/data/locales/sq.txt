@@ -457,7 +457,7 @@ sq{
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
                 MMMMW{
-                    one{"'java' W 'e' MMMM"}
+                    one{"'java' W 'e' 'muajit' MMMM"}
                     other{"'java' W 'e' MMMM"}
                 }
                 MMMMd{"d MMMM"}

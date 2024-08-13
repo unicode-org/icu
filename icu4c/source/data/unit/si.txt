@@ -154,6 +154,11 @@ si{
                 one{"{0} පර්මැරියඩ්"}
                 other{"{0} පර්මැරියඩ්"}
             }
+            portion-per-1e9{
+                dnam{"බිලියනයකට කොටස්"}
+                one{"බිලියනයකට කොටස් {0}"}
+                other{"බිලියනයකට කොටස් {0}"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -258,6 +263,12 @@ si{
                 dnam{"නැනෝතත්පර"}
                 one{"නැනෝතත්පර {0}"}
                 other{"නැනෝතත්පර {0}"}
+            }
+            night{
+                dnam{"රාත්‍රිය"}
+                one{"{0} රාත්‍රිය"}
+                other{"රාත්‍රිය {0}"}
+                per{"{0}/රාත්‍රිය"}
             }
             quarter{
                 one{"කාල {0}"}
@@ -683,6 +694,11 @@ si{
                 one{"නාවික සැතපුම් {0}"}
                 other{"නාවික සැතපුම් {0}"}
             }
+            light-speed{
+                dnam{"ආලෝකය"}
+                one{"{0} ආලෝකය"}
+                other{"ආලෝකය {0}"}
+            }
             meter-per-second{
                 one{"තත්පරයට මීටර් {0}"}
                 other{"තත්පරයට මීටර් {0}"}
@@ -960,6 +976,11 @@ si{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                dnam{"බිකො"}
+                one{"බිකො {0}"}
+                other{"බිකො {0}"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -990,6 +1011,12 @@ si{
             month{
                 one{"මා {0}"}
                 other{"මා {0}"}
+            }
+            night{
+                dnam{"රාත්‍රිය"}
+                one{"රාත්‍රිය {0}"}
+                other{"රාත්‍රිය {0}"}
+                per{"{0}/රාත්‍රිය"}
             }
             second{
                 dnam{"තත්"}
@@ -1123,6 +1150,11 @@ si{
             beaufort{
                 one{"බි{0}"}
                 other{"බි{0}"}
+            }
+            light-speed{
+                dnam{"ආලෝකය"}
+                one{"ආලෝකය {0}"}
+                other{"ආලෝකය {0}"}
             }
             meter-per-second{
                 dnam{"මී/තත්"}
@@ -1322,6 +1354,11 @@ si{
             permyriad{
                 dnam{"පර්මැරියඩ්"}
             }
+            portion-per-1e9{
+                dnam{"කොටස්/බිලියනය"}
+                one{"බිකො {0}"}
+                other{"බිකො {0}"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1458,6 +1495,12 @@ si{
                 dnam{"නැනෝතත්"}
                 one{"නැත {0}"}
                 other{"නැත {0}"}
+            }
+            night{
+                dnam{"රාත්‍රිය"}
+                one{"රාත්‍රිය {0}"}
+                other{"රාත්‍රිය {0}"}
+                per{"{0}/රාත්‍රිය"}
             }
             quarter{
                 dnam{"කාල"}
@@ -1927,6 +1970,11 @@ si{
                 dnam{"නාසැ"}
                 one{"නාසැ {0}"}
                 other{"නාසැ {0}"}
+            }
+            light-speed{
+                dnam{"ආලෝකය"}
+                one{"ආලෝකය {0}"}
+                other{"ආලෝකය {0}"}
             }
             meter-per-second{
                 dnam{"තත්පරයට මීටර්"}

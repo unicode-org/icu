@@ -92,6 +92,7 @@ lt{
         bjn{"bandžarų"}
         bkm{"komų"}
         bla{"siksikų"}
+        blo{"guanų"}
         bm{"bambarų"}
         bn{"bengalų"}
         bo{"tibetiečių"}
@@ -185,9 +186,6 @@ lt{
         enm{"Vidurio Anglijos"}
         eo{"esperanto"}
         es{"ispanų"}
-        es_419{"Lotynų Amerikos ispanų"}
-        es_ES{"Europos ispanų"}
-        es_MX{"Meksikos ispanų"}
         esu{"centrinės Aliaskos jupikų"}
         et{"estų"}
         eu{"baskų"}
@@ -338,6 +336,7 @@ lt{
         kv{"komi"}
         kw{"kornų"}
         kwk{"kvakvalų"}
+        kxv{"kuvi"}
         ky{"kirgizų"}
         la{"lotynų"}
         lad{"ladino"}
@@ -367,7 +366,6 @@ lt{
         lua{"luba lulua"}
         lui{"luiseno"}
         lun{"Lundos"}
-        luo{"luo"}
         lus{"mizo"}
         luy{"luja"}
         lv{"latvių"}
@@ -486,8 +484,6 @@ lt{
         pro{"senovės provansalų"}
         ps{"puštūnų"}
         pt{"portugalų"}
-        pt_BR{"Brazilijos portugalų"}
-        pt_PT{"Europos portugalų"}
         qu{"kečujų"}
         quc{"kičių"}
         qug{"Čimboraso aukštumų kečujų"}
@@ -627,13 +623,13 @@ lt{
         und{"nežinoma kalba"}
         ur{"urdų"}
         uz{"uzbekų"}
-        vai{"vai"}
         ve{"vendų"}
         vec{"venetų"}
         vep{"vepsų"}
         vi{"vietnamiečių"}
         vls{"vakarų flamandų"}
         vmf{"pagrindinė frankonų"}
+        vmw{"makua"}
         vo{"volapiuko"}
         vot{"Votik"}
         vro{"veru"}
@@ -649,6 +645,7 @@ lt{
         xal{"kalmukų"}
         xh{"kosų"}
         xmf{"megrelų"}
+        xnr{"kangri"}
         xog{"sogų"}
         yao{"jao"}
         yap{"japezų"}
@@ -875,6 +872,8 @@ lt{
             indian{"nacionalinis indų kalendorius"}
             islamic{"islamo kalendorius"}
             islamic-civil{"Islamo kalendorius (lentelinis, pilietinė era)"}
+            islamic-rgsa{"Islamo kalendorius (Saudo Arabija)"}
+            islamic-tbla{"Islamo kalendorius (lentelinis, astronominė era)"}
             islamic-umalqura{"Islamo kalendorius (Umm al-Qura)"}
             iso8601{"ISO 8601 kalendorius"}
             japanese{"japonų kalendorius"}

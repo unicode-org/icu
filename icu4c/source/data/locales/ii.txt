@@ -44,12 +44,53 @@ ii{
         " {MG} N {NB} {ND} {NG} {NJ} {NR} {NY} {NZ} O P Q R {RR} S {SH} {SS} T {UO} V"
         " W X Y Z {ZH} {ZZ}]"
     }
+    ExemplarCharactersNumbers{"[\\- ‑ , . {\\\\\\-} % ‰ + 0 1 2 3 4 5 6 7 8 9 {ꋍꑍꌕꇖꉬꃘꏃꉆꈬ}]"}
     ExemplarCharactersPunctuation{
         "[﹉﹊﹋﹌ _＿﹍﹎﹏︳︴ \\-－﹣ ‐‑ – —︱ ― ,，﹐ 、﹑ ;；﹔ \\:：﹕ !！﹗ ?？﹖ .．﹒ ‥︰ … 。 · ＇‘’ ＂“”〝"
         "〞 (（﹙︵ )）﹚︶ \\[［ \\]］ \\{｛﹛︷ \\}｝﹜︸ 〈︿ 〉﹀ 《︽ 》︾ 「﹁ 」﹂ 『﹃ 』﹄ 【︻ 】︼ 〔﹝︹ 〕﹞︺ 〖 "
         "〗 ‖ § @＠﹫ *＊﹡ /／ \\\\＼﹨ \\&＆﹠ #＃﹟ %％﹪ ‰ ′ ″ ‵ 〃 ※]"
     }
+    NumberElements{
+        minimalPairs{
+            plural{
+                other{"{0} ꑍ"}
+            }
+        }
+    }
     calendar{
+        generic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G y MMMM dꑍ,EEEE",
+                "G y MMMM dꑍ",
+                "G y MMM dꑍ",
+                "GGGGG y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"dꑍ,E"}
+                GyMMMEd{"G y MMMM dꑍ,E"}
+                GyMMMd{"G y MMM dꑍ"}
+                MMMEd{"MMM dꑍ,E"}
+                MMMMd{"MMMM dꑍ"}
+                MMMd{"MMM dꑍ"}
+                d{"dꑍ"}
+                yyyyMMMEd{"G y MMM dꑍ,E"}
+                yyyyMMMd{"G y MMM dꑍ"}
+            }
+            intervalFormats{
+                yMMMEd{
+                    y{"G y MMM dꑍ, E – y MMM dꑍ, E"}
+                }
+            }
+        }
         gregorian{
             AmPmMarkersAbbr{
                 "ꎸꄑ",
@@ -80,10 +121,27 @@ ii{
                 "yMMMd",
                 "yMMdd",
             }
+            availableFormats{
+                Ed{"dꑍ, E"}
+                GyMMMEd{"G y MMM dꑍ,E"}
+                GyMMMd{"G y MMM dꑍ"}
+                Hmsv{"v HH:mm:ss"}
+                MEd{"MMꆪ-ddꑍ，E"}
+                MMMEd{"MMMM dꑍ,E"}
+                MMMMd{"MMMM dꑍ"}
+                MMMd{"MMM dꑍ"}
+                Md{"MMꆪ-ddꑍ"}
+                d{"dꑍ"}
+                hm{"ah:mm"}
+                hms{"ah:mm:ss"}
+                hmsv{"v ah:mm:ss"}
+                yMMMEd{"y MMM dꑍ,E"}
+                yMMMd{"yꈎMꆪdꑍ"}
+            }
             dayNames{
                 format{
                     abbreviated{
-                        "ꑭꆏ",
+                        "ꑬꆏ",
                         "ꆏꋍ",
                         "ꆏꑍ",
                         "ꆏꌕ",
@@ -92,7 +150,7 @@ ii{
                         "ꆏꃘ",
                     }
                     wide{
-                        "ꑭꆏꑍ",
+                        "ꑬꆏꑍ",
                         "ꆏꊂꋍ",
                         "ꆏꊂꑍ",
                         "ꆏꊂꌕ",
@@ -120,7 +178,25 @@ ii{
                 }
             }
             intervalFormats{
+                MMMEd{
+                    M{"MMM dꑍ, E – MMM dꑍ, E"}
+                    d{"MMM dꑍ, E – MMM dꑍ, E"}
+                }
+                MMMd{
+                    M{"MMM dꑍ – MMM dꑍ"}
+                    d{"MMM dꑍ–dꑍ"}
+                }
                 fallback{"{0} – {1}"}
+                yMMMEd{
+                    M{"y MMM dꑍ, E – MMM dꑍ, E"}
+                    d{"y MMM dꑍ, E – MMM dꑍ, E"}
+                    y{"y MMM dꑍ, E – y MMM dꑍ, E"}
+                }
+                yMMMd{
+                    M{"y MMM dꑍ – MMM dꑍ"}
+                    d{"y MMM dꑍ–dꑍ"}
+                    y{"y MMM dꑍ – y MMM dꑍ"}
+                }
             }
             monthNames{
                 format{
@@ -135,18 +211,32 @@ ii{
                         "ꉆꆪ",
                         "ꈬꆪ",
                         "ꊰꆪ",
-                        "ꊰꊪꆪ",
+                        "ꊯꊪꆪ",
                         "ꊰꑋꆪ",
                     }
                 }
             }
             quarters{
                 format{
+                    abbreviated{
+                        "1ꄮꐰ",
+                        "2ꄮꐰ",
+                        "3ꄮꐰ",
+                        "4ꄮꐰ",
+                    }
                     wide{
-                        "ꃅꑌ",
-                        "ꃅꎸ",
-                        "ꃅꍵ",
-                        "ꃅꋆ",
+                        "ꄮꐰꋍꂷꂶꌠ",
+                        "ꄮꐰꑍꂷꂶꌠ",
+                        "ꄮꐰꌕꂷꂶꌠ",
+                        "ꄮꐰꇖꂷꂶꌠ",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
                     }
                 }
             }
@@ -154,9 +244,9 @@ ii{
     }
     fields{
         day{
-            dn{"ꑍ"}
+            dn{"ꃅꑍ"}
             relative{
-                "-1"{"ꀋꅔꉈ"}
+                "-1"{"ꀋꅔꉇ"}
                 "-2"{"ꎴꂿꋍꑍ"}
                 "0"{"ꀃꑍ"}
                 "1"{"ꃆꏂꑍ"}
@@ -170,31 +260,71 @@ ii{
             dn{"ꃅꋊ"}
         }
         hour{
-            dn{"ꄮꈉ"}
+            dn{"ꄮꈉꂷ"}
         }
         minute{
-            dn{"ꃏ"}
+            dn{"ꄮꈉꃏ"}
         }
         month{
-            dn{"ꆪ"}
+            dn{"ꃅꆪ"}
+            relative{
+                "-1"{"ꂴꁮꆪ"}
+                "0"{"ꀋꃋꋋꁮꆪ"}
+                "1"{"ꊁꁮꆪ"}
+            }
+        }
+        quarter{
+            dn{"ꄮꐰ"}
         }
         second{
-            dn{"ꇙ"}
+            dn{"ꄮꈉꇅ"}
         }
         week{
-            dn{"ꑭꆏ"}
+            dn{"ꆏꊂ"}
+            relative{
+                "-1"{"ꆏꊂꂴꂶꌠ"}
+                "0"{"ꀋꃋꋋꆏꊂ"}
+                "1"{"ꆏꊂꊁꂶꌠ"}
+            }
         }
         weekday{
-            dn{"ꆏꑍ"}
+            dn{"ꆏꑍꃅꑍ"}
         }
         year{
-            dn{"ꈎ"}
+            dn{"ꃅꈎ"}
+            relative{
+                "-1"{"ꀋꉊꄹꈎ"}
+                "0"{"ꀋꃋꎼꈎ"}
+                "1"{"ꑎꉐꄻꈎ"}
+            }
+        }
+        year-short{
+            relative{
+                "-1"{"ꀋꉊꄹꈎ"}
+                "0"{"ꎼꈎ"}
+                "1"{"ꑎꉐꄻꈎ"}
+            }
         }
         zone{
-            dn{"ꃅꄷꄮꈉ"}
+            dn{"ꄮꈉꎖꌐꅉ"}
+        }
+    }
+    listPattern{
+        or{
+            2{"{0}ꅀ{1}"}
+            end{"{0}ꅀ{1}"}
+            middle{"{0}、{1}"}
+            start{"{0}、{1}"}
+        }
+        standard{
+            2{"{0}ꌋꆀ{1}"}
+            end{"{0}ꌋꆀ{1}"}
+            middle{"{0}、{1}"}
+            start{"{0}、{1}"}
         }
     }
     measurementSystemNames{
+        UK{"ꑱꇩ"}
         US{"ꂰꇩ"}
         metric{"ꂰꌬꌠ"}
     }

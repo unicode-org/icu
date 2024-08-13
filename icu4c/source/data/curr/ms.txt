@@ -714,7 +714,4 @@ ms{
             other{"(mata wang tidak diketahui)"}
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

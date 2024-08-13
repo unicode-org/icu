@@ -696,8 +696,4 @@ ky{
             other{"(белгисиз акча)"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

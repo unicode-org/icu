@@ -10,6 +10,11 @@ en_IN{
                 other{"{0} earth radius"}
             }
         }
+        mass{
+            tonne{
+                dnam{"metric tonnes"}
+            }
+        }
         temperature{
             generic{
                 dnam{"°"}

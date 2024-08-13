@@ -160,6 +160,11 @@ gu{
                 one{"{0} પરમિરિયડ"}
                 other{"{0} પરમિરિયડ"}
             }
+            portion-per-1e9{
+                dnam{"પ્રતિ અબજ ભાગ"}
+                one{"{0} પ્રતિ અબજ ભાગ"}
+                other{"{0} પ્રતિ અબજ ભાગ"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -284,6 +289,12 @@ gu{
             nanosecond{
                 one{"{0} નેનોસેકંડ"}
                 other{"{0} નેનોસેકંડ"}
+            }
+            night{
+                dnam{"રાત"}
+                one{"{0} રાત"}
+                other{"{0} રાત"}
+                per{"{0}/રાત"}
             }
             quarter{
                 dnam{"ત્રિમાસિક"}
@@ -678,6 +689,11 @@ gu{
                 one{"{0} કિલોમીટર પ્રતિ કલાક"}
                 other{"{0} કિલોમીટર પ્રતિ કલાક"}
             }
+            light-speed{
+                dnam{"લાઇટ"}
+                one{"{0} લાઇટ"}
+                other{"{0} લાઇટ"}
+            }
             meter-per-second{
                 dnam{"મીટર પ્રતિ સેકન્ડ"}
                 one{"{0} મીટર પ્રતિ સેકન્ડ"}
@@ -869,6 +885,10 @@ gu{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                one{"{0} પ્રતિ અબજ ભાગ"}
+                other{"{0} પ્રતિ અબજ ભાગ"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -910,6 +930,12 @@ gu{
             }
             nanosecond{
                 dnam{"ns"}
+            }
+            night{
+                dnam{"રાત"}
+                one{"{0} રાત"}
+                other{"{0} રાત"}
+                per{"{0}/રાત"}
             }
             second{
                 one{"{0} સે"}
@@ -1005,6 +1031,11 @@ gu{
             kilometer-per-hour{
                 one{"{0} કિપ્રક"}
                 other{"{0} કિપ્રક"}
+            }
+            light-speed{
+                dnam{"લાઇટ"}
+                one{"{0} લાઇટ"}
+                other{"{0} લાઇટ"}
             }
         }
         temperature{
@@ -1182,6 +1213,11 @@ gu{
             permyriad{
                 dnam{"પરમિરિયડ"}
             }
+            portion-per-1e9{
+                dnam{"ભાગ/અબજ"}
+                one{"{0} પ્રતિ અબજ ભાગ"}
+                other{"{0} પ્રતિ અબજ ભાગ"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1270,6 +1306,12 @@ gu{
             }
             nanosecond{
                 dnam{"નેનોસેકંડ"}
+            }
+            night{
+                dnam{"રાત"}
+                one{"{0} રાત"}
+                other{"{0} રાત"}
+                per{"{0}/રાત"}
             }
             quarter{
                 dnam{"ત્રિમાસ"}
@@ -1569,6 +1611,11 @@ gu{
                 dnam{"નોટ"}
                 one{"{0} નોટ"}
                 other{"{0} નોટ"}
+            }
+            light-speed{
+                dnam{"લાઇટ"}
+                one{"{0} લાઇટ"}
+                other{"{0} લાઇટ"}
             }
             meter-per-second{
                 dnam{"મીટર/સેકન્ડ"}

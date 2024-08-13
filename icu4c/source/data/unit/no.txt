@@ -205,21 +205,7 @@ no{
                 one{
                     _{
                         _{"kvadrat{0}"}
-                        genitive{"kvadrat{0}"}
-                    }
-                    feminine{
-                        _{"kvadrat{0}"}
-                        genitive{"kvadrat{0}"}
-                    }
-                    masculine{
-                        _{"kvadrat{0}"}
-                        genitive{"kvadrat{0}"}
-                    }
-                }
-                other{
-                    _{
-                        _{"kvadrat{0}"}
-                        genitive{"kvadrat{0}"}
+                        genitive{"kvadrat{0}s"}
                     }
                     feminine{
                         _{"kvadrat{0}"}
@@ -227,7 +213,21 @@ no{
                     }
                     masculine{
                         _{"kvadrat{0}"}
-                        genitive{"kvadrat{0}"}
+                        genitive{"kvadrat{0}s"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kvadrat{0}"}
+                        genitive{"kvadrat{0}s"}
+                    }
+                    feminine{
+                        _{"kvadrat{0}"}
+                        genitive{"kvadrat{0}s"}
+                    }
+                    masculine{
+                        _{"kvadrat{0}"}
+                        genitive{"kvadrat{0}s"}
                     }
                 }
             }
@@ -235,7 +235,7 @@ no{
                 one{
                     _{
                         _{"kubikk{0}"}
-                        genitive{"kubikk{0}"}
+                        genitive{"kubikk{0}s"}
                     }
                     feminine{
                         _{"kubikk{0}"}
@@ -243,13 +243,13 @@ no{
                     }
                     masculine{
                         _{"kubikk{0}"}
-                        genitive{"kubikk{0}"}
+                        genitive{"kubikk{0}s"}
                     }
                 }
                 other{
                     _{
                         _{"kubikk{0}"}
-                        genitive{"kubikk{0}"}
+                        genitive{"kubikk{0}s"}
                     }
                     feminine{
                         _{"kubikk{0}"}
@@ -257,7 +257,7 @@ no{
                     }
                     masculine{
                         _{"kubikk{0}"}
-                        genitive{"kubikk{0}"}
+                        genitive{"kubikk{0}s"}
                     }
                 }
             }
@@ -286,7 +286,14 @@ no{
                 other{"{0} karat"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    genitive{
+                        one{"{0} milligram per desiliters"}
+                        other{"{0} milligram per desiliters"}
+                    }
+                }
                 dnam{"milligram per desiliter"}
+                gender{"neuter"}
                 one{"{0} milligram per desiliter"}
                 other{"{0} milligram per desiliter"}
             }
@@ -338,13 +345,13 @@ no{
             permillion{
                 case{
                     genitive{
-                        one{"{0} milliondels"}
-                        other{"{0} milliondelers"}
+                        one{"{0} del per millions"}
+                        other{"{0} deler per millions"}
                     }
                 }
-                dnam{"milliondeler"}
+                dnam{"deler per million"}
                 gender{"masculine"}
-                one{"{0} milliondel"}
+                one{"{0} del per million"}
                 other{"{0} deler per million"}
             }
             permyriad{
@@ -357,6 +364,18 @@ no{
                 gender{"masculine"}
                 one{"{0} promyriade"}
                 other{"{0} promyriade"}
+            }
+            portion-per-1e9{
+                case{
+                    genitive{
+                        one{"{0} del per milliards"}
+                        other{"{0} deler per milliards"}
+                    }
+                }
+                dnam{"deler per milliard"}
+                gender{"masculine"}
+                one{"{0} del per milliard"}
+                other{"{0} deler per milliard"}
             }
         }
         consumption{
@@ -645,6 +664,19 @@ no{
                 one{"{0} nanosekund"}
                 other{"{0} nanosekunder"}
             }
+            night{
+                case{
+                    genitive{
+                        one{"{0} natts"}
+                        other{"{0} netters"}
+                    }
+                }
+                dnam{"netter"}
+                gender{"masculine"}
+                one{"{0} natt"}
+                other{"{0} netter"}
+                per{"{0} per natt"}
+            }
             quarter{
                 case{
                     genitive{
@@ -780,6 +812,12 @@ no{
                 other{"{0} joule"}
             }
             kilocalorie{
+                case{
+                    genitive{
+                        one{"{0} kilokaloris"}
+                        other{"{0} kilokaloriers"}
+                    }
+                }
                 dnam{"kilokalorier"}
                 gender{"masculine"}
                 one{"{0} kilokalori"}
@@ -1109,7 +1147,14 @@ no{
                 other{"{0} pikometer"}
             }
             point{
+                case{
+                    genitive{
+                        one{"{0} typografisk punkts"}
+                        other{"{0} typografiske punkters"}
+                    }
+                }
                 dnam{"typografiske punkter"}
+                gender{"neuter"}
                 one{"{0} typografisk punkt"}
                 other{"{0} typografiske punkter"}
             }
@@ -1421,7 +1466,14 @@ no{
                 other{"{0} millibar"}
             }
             millimeter-ofhg{
+                case{
+                    genitive{
+                        one{"{0} millimeter kvikksølvs"}
+                        other{"{0} millimeter kvikksølvs"}
+                    }
+                }
                 dnam{"millimeter kvikksølv"}
+                gender{"masculine"}
                 one{"{0} millimeter kvikksølv"}
                 other{"{0} millimeter kvikksølv"}
             }
@@ -1465,6 +1517,18 @@ no{
                 dnam{"knop"}
                 one{"{0} knop"}
                 other{"{0} knop"}
+            }
+            light-speed{
+                case{
+                    genitive{
+                        one{"{0} lys'"}
+                        other{"{0} lys'"}
+                    }
+                }
+                dnam{"lys"}
+                gender{"neuter"}
+                one{"{0} lys"}
+                other{"{0} lys"}
             }
             meter-per-second{
                 case{
@@ -1764,7 +1828,7 @@ no{
             }
             pinch{
                 gender{"masculine"}
-                one{"{0} klype"}
+                one{"{0} klyper"}
                 other{"{0} klyper"}
             }
             pint{
@@ -1889,9 +1953,13 @@ no{
             }
             percent{
                 dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
             }
             permille{
                 dnam{"‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
             }
             permillion{
                 one{"{0}ppm"}
@@ -1899,13 +1967,19 @@ no{
             }
             permyriad{
                 dnam{"‱"}
+                one{"{0}‱"}
+                other{"{0}‱"}
+            }
+            portion-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
             }
         }
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100km"}
-                one{"{0} l/100km"}
-                other{"{0} l/100km"}
+                one{"{0}l/100km"}
+                other{"{0}l/100km"}
             }
             liter-per-kilometer{
                 dnam{"l/km"}
@@ -1999,7 +2073,6 @@ no{
             minute{
                 one{"{0}m"}
                 other{"{0}m"}
-                per{"{0}/m"}
             }
             month{
                 dnam{"måned"}
@@ -2010,6 +2083,12 @@ no{
             nanosecond{
                 one{"{0}ns"}
                 other{"{0}ns"}
+            }
+            night{
+                dnam{"netter"}
+                one{"{0} natt"}
+                other{"{0} netter"}
+                per{"{0}/natt"}
             }
             quarter{
                 dnam{"kv"}
@@ -2266,6 +2345,11 @@ no{
                 one{"{0}kn"}
                 other{"{0}kn"}
             }
+            light-speed{
+                dnam{"lys"}
+                one{"{0}lys"}
+                other{"{0}lys"}
+            }
             meter-per-second{
                 dnam{"m/s"}
                 one{"{0}m/s"}
@@ -2358,6 +2442,7 @@ no{
                 other{"{0}ml"}
             }
             pinch{
+                dnam{"kl."}
                 one{"{0} kl."}
                 other{"{0} kl."}
             }
@@ -2449,6 +2534,9 @@ no{
                 one{"{0} ‱"}
                 other{"{0} ‱"}
             }
+            portion-per-1e9{
+                dnam{"deler/milliard"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -2522,6 +2610,12 @@ no{
                 one{"{0} md."}
                 other{"{0} md."}
                 per{"{0}/md."}
+            }
+            night{
+                dnam{"netter"}
+                one{"{0} natt"}
+                other{"{0} netter"}
+                per{"{0}/natt"}
             }
             quarter{
                 dnam{"kvt"}
@@ -2732,6 +2826,11 @@ no{
                 one{"{0} km/t"}
                 other{"{0} km/t"}
             }
+            light-speed{
+                dnam{"lys"}
+                one{"{0} lys"}
+                other{"{0} lys"}
+            }
             meter-per-second{
                 dnam{"meter/s"}
             }
@@ -2871,8 +2970,8 @@ no{
             }
             pinch{
                 dnam{"klype"}
-                one{"{0} klype"}
-                other{"{0} klype"}
+                one{"{0} klyper"}
+                other{"{0} klyper"}
             }
             pint{
                 dnam{"pint"}

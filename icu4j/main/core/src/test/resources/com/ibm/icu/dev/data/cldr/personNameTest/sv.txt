@@ -687,45 +687,45 @@ endName
 
 # foreignFull
 name ; title; Prof. dr.
-name ; given; Ann-Christine
-name ; given-informal; Anki
-name ; given2; Eva Sofia
-name ; surname-prefix; van den
-name ; surname-core; Karlsson
-name ; surname2; Beck Strand
+name ; given; Ada Cornelia
+name ; given-informal; Neele
+name ; given2; César Martín
+name ; surname-prefix; von
+name ; surname-core; Brühl
+name ; surname2; González Domingo
 name ; generation; jr.
 name ; credentials; med. dr. fil. dr. jur. dr.
 name ; locale; ko_AQ
 
-expectedResult; med. dr. fil. dr. jur. dr. Ann-Christine Eva Sofia van den Karlsson Beck Strand
+expectedResult; med. dr. fil. dr. jur. dr. Ada Cornelia César Martín von Brühl González Domingo
 
 parameters; givenFirst; long; referring; formal
 
-expectedResult; van den Karlsson, Prof. dr. Ann-Christine Eva Sofia, med. dr. fil. dr. jur. dr.
+expectedResult; von Brühl, Prof. dr. Ada Cornelia César Martín, med. dr. fil. dr. jur. dr.
 
 parameters; surnameFirst; long; referring; formal
 
-expectedResult; van den Karlsson, Ann-Christine E S, med. dr. fil. dr. jur. dr.
+expectedResult; von Brühl, Ada Cornelia C M, med. dr. fil. dr. jur. dr.
 
 parameters; surnameFirst; medium; referring; formal
 
-expectedResult; med. dr. fil. dr. jur. dr. Ann-Christine E S van den Karlsson
+expectedResult; med. dr. fil. dr. jur. dr. Ada Cornelia C M von Brühl
 
 parameters; givenFirst; medium; referring; formal
 
-expectedResult; van den Karlsson Beck Strand, Ann-Christine Eva Sofia
+expectedResult; von Brühl González Domingo, Ada Cornelia César Martín
 
 parameters; sorting; long; referring; formal
 
-expectedResult; van den Karlsson Beck Strand, Ann-Christine E S
+expectedResult; von Brühl González Domingo, Ada Cornelia C M
 
 parameters; sorting; medium; referring; formal
 
-expectedResult; van den Karlsson Beck Strand, A C E S
+expectedResult; von Brühl González Domingo, A C C M
 
 parameters; sorting; short; referring; formal
 
-expectedResult; Prof. dr. van den Karlsson
+expectedResult; Prof. dr. von Brühl
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
@@ -734,15 +734,15 @@ parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; short; addressing; formal
 
-expectedResult; van den Karlsson, A C E S
+expectedResult; von Brühl, A C C M
 
 parameters; surnameFirst; short; referring; formal
 
-expectedResult; A C E S van den Karlsson
+expectedResult; A C C M von Brühl
 
 parameters; givenFirst; short; referring; formal
 
-expectedResult; van den Karlsson, Anki
+expectedResult; von Brühl, Neele
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
@@ -750,20 +750,20 @@ parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; Anki van den Karlsson
+expectedResult; Neele von Brühl
 
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; van den Karlsson, A C
+expectedResult; von Brühl, A C
 
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; Anki v d K
+expectedResult; Neele v B
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; Anki
+expectedResult; Neele
 
 parameters; givenFirst; long; addressing; informal
 parameters; givenFirst; medium; addressing; informal
@@ -772,27 +772,27 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; AEV
+expectedResult; ACV
 
 parameters; givenFirst; long; monogram; formal
 parameters; givenFirst; medium; monogram; formal
 
-expectedResult; VAE
+expectedResult; VAC
 
 parameters; surnameFirst; long; monogram; formal
 parameters; surnameFirst; long; monogram; informal
 parameters; surnameFirst; medium; monogram; formal
 
-expectedResult; AV
+expectedResult; NV
 
 parameters; givenFirst; long; monogram; informal
 parameters; givenFirst; medium; monogram; informal
 
-expectedResult; VA
+expectedResult; VN
 
 parameters; surnameFirst; medium; monogram; informal
 
-expectedResult; A
+expectedResult; N
 
 parameters; givenFirst; short; monogram; informal
 parameters; surnameFirst; short; monogram; informal

@@ -579,6 +579,9 @@ pt_PT{
             lg{"Hora de Petropavlovsk-Kamchatski"}
             ls{"Hora padrão de Petropavlovsk-Kamchatski"}
         }
+        "meta:Kazakhstan"{
+            ls{"Hora do Cazaquistão"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Hora do Cazaquistão Oriental"}
         }

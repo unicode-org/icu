@@ -1231,7 +1231,7 @@ root{
             symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
         }
     }
-    Version{"45"}
+    Version{"46"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}

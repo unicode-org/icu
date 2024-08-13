@@ -537,9 +537,13 @@ he{
             }
         }
         gregorian{
-            AmPmMarkersAbbr{
-                "לפנה״צ",
-                "אחה״צ",
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            AmPmMarkersNarrow{
+                "AM",
+                "PM",
             }
             DateTimePatterns{
                 "H:mm:ss zzzz",
@@ -580,7 +584,7 @@ he{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d בMMM y G"}
                 GyMMMd{"d בMMM y G"}
-                GyMd{"d/M/y GGGGG"}
+                GyMd{"d/M/y G"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -737,13 +741,13 @@ he{
                 }
                 GyM{
                     G{"M.y GGGGG – M.y GGGGG"}
-                    M{"M.y – M.y GGGGG"}
-                    y{"M.y – M.y GGGGG"}
+                    M{"M.y – M.y G"}
+                    y{"M.y – M.y G"}
                 }
                 GyMEd{
-                    G{"E, d.M.y GGGGG – E, d.M.y GGGGG"}
-                    M{"E, d.M.y – E, d.M.y GGGGG"}
-                    d{"E, d.M.y – E, d.M.y GGGGG"}
+                    G{"E, d.M.y G – E, d.M.y G"}
+                    M{"E, d.M.y – E, d.M.y G"}
+                    d{"E, d.M.y – E, d.M.y G"}
                     y{"E, d.M.y – E, d.M.y GGGGG"}
                 }
                 GyMMM{
@@ -764,10 +768,10 @@ he{
                     y{"d בMMM y – d בMMM y G"}
                 }
                 GyMd{
-                    G{"d.M.y GGGGG – d.M.y GGGGG"}
-                    M{"d.M.y – d.M.y GGGGG"}
-                    d{"d.M.y – d.M.y GGGGG"}
-                    y{"d.M.y – d.M.y GGGGG"}
+                    G{"d.M.y G – d.M.y G"}
+                    M{"d.M.y – d.M.y G"}
+                    d{"d.M.y – d.M.y G"}
+                    y{"d.M.y – d.M.y G"}
                 }
                 H{
                     H{"H–H"}
@@ -1662,12 +1666,27 @@ he{
             }
             relativeTime{
                 future{
-                    one{"בעוד יום שישי {0}"}
+                    one{"בעוד יום שישי אחד {0}"}
                     other{"בעוד {0} ימי שישי"}
                     two{"בעוד {0} ימי שישי"}
                 }
                 past{
-                    one{"לפני יום שישי {0}"}
+                    one{"לפני יום שישי אחד {0}"}
+                    other{"לפני {0} ימי שישי"}
+                    two{"לפני {0} ימי שישי"}
+                }
+            }
+        }
+        fri-narrow{
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי ו׳"}
+                    one{"בעוד יום ו׳ אחד {0}"}
+                    other{"בעוד {0} ימי ו׳"}
+                    two{"בעוד {0} ימי ו׳"}
+                }
+                past{
+                    one{"לפני יום ו׳ אחד {0}"}
                     other{"לפני {0} ימי שישי"}
                     two{"לפני {0} ימי שישי"}
                 }
@@ -1678,6 +1697,18 @@ he{
                 "-1"{"יום ו׳ שעבר"}
                 "0"{"יום ו׳"}
                 "1"{"יום ו׳ הבא"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד יום שישי אחד {0}"}
+                    other{"בעוד {0} ימי שישי"}
+                    two{"בעוד {0} ימי שישי"}
+                }
+                past{
+                    one{"לפני יום שישי אחד {0}"}
+                    other{"לפני {0} ימי שישי"}
+                    two{"לפני {0} ימי שישי"}
+                }
             }
         }
         hour{
@@ -1879,7 +1910,16 @@ he{
                     two{"בעוד {0} שבתות"}
                 }
                 past{
-                    one{"לפני שבת {0}"}
+                    one{"לפני שבת אחת {0}"}
+                    other{"לפני {0} שבתות"}
+                    two{"לפני {0} שבתות"}
+                }
+            }
+        }
+        sat-narrow{
+            relativeTime{
+                past{
+                    one{"לפני שבת אחת {0}"}
                     other{"לפני {0} שבתות"}
                     two{"לפני {0} שבתות"}
                 }
@@ -1890,6 +1930,13 @@ he{
                 "-1"{"שבת שעברה"}
                 "0"{"שבת"}
                 "1"{"שבת הבאה"}
+            }
+            relativeTime{
+                past{
+                    one{"לפני שבת אחת {0}"}
+                    other{"לפני {0} שבתות"}
+                    two{"לפני {0} שבתות"}
+                }
             }
         }
         second{
@@ -1943,6 +1990,15 @@ he{
                     one{"לפני יום ראשון {0}"}
                     other{"לפני {0} ימי ראשון"}
                     two{"לפני {0} ימי ראשון"}
+                }
+            }
+        }
+        sun-narrow{
+            relativeTime{
+                future{
+                    one{"בעוד יום ראשון {0}"}
+                    other{"בעוד {0} ימי ראשון"}
+                    two{"בעוד {0} ימי א׳"}
                 }
             }
         }
@@ -2099,13 +2155,11 @@ he{
             }
             relativeTime{
                 future{
-                    many{"בעוד {0} שנה"}
                     one{"בעוד שנה"}
                     other{"בעוד {0} שנים"}
                     two{"בעוד שנתיים"}
                 }
                 past{
-                    many{"לפני {0} שנה"}
                     one{"לפני שנה"}
                     other{"לפני {0} שנים"}
                     two{"לפני שנתיים"}
@@ -2167,7 +2221,7 @@ he{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

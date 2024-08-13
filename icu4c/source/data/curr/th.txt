@@ -1217,7 +1217,4 @@ th{
             other{"(ไม่ทราบชื่อสกุลเงิน)"}
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

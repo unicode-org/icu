@@ -144,6 +144,9 @@ ko{
                 dnam{"몰"}
                 other{"{0}몰"}
             }
+            portion-per-1e9{
+                other{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -243,6 +246,11 @@ ko{
             nanosecond{
                 dnam{"나노초"}
                 other{"{0}나노초"}
+            }
+            night{
+                dnam{"박"}
+                other{"{0}박"}
+                per{"1박당 {0}"}
             }
             second{
                 per{"초당 {0}"}
@@ -599,6 +607,10 @@ ko{
                 dnam{"노트"}
                 other{"{0}노트"}
             }
+            light-speed{
+                dnam{"광속"}
+                other{"{0}광속"}
+            }
             meter-per-second{
                 dnam{"미터 매 초"}
                 other{"초속 {0}미터"}
@@ -772,6 +784,11 @@ ko{
         }
     }
     unitsNarrow{
+        concentr{
+            portion-per-1e9{
+                other{"{0}ppb"}
+            }
+        }
         digital{
             byte{
                 dnam{"B"}
@@ -786,6 +803,11 @@ ko{
             }
             minute{
                 per{"{0}/분"}
+            }
+            night{
+                dnam{"박"}
+                other{"{0}박"}
+                per{"{0}/박"}
             }
             second{
                 per{"{0}/초"}
@@ -812,6 +834,10 @@ ko{
         speed{
             beaufort{
                 other{"B{0}"}
+            }
+            light-speed{
+                dnam{"광속"}
+                other{"{0}광속"}
             }
             mile-per-hour{
                 other{"{0}mph"}
@@ -905,6 +931,9 @@ ko{
             permillion{
                 other{"{0}ppm"}
             }
+            portion-per-1e9{
+                other{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -994,6 +1023,11 @@ ko{
             }
             nanosecond{
                 other{"{0}ns"}
+            }
+            night{
+                dnam{"박"}
+                other{"{0}박"}
+                per{"{0}/박"}
             }
             quarter{
                 dnam{"분기"}
@@ -1307,6 +1341,10 @@ ko{
             }
             knot{
                 other{"{0}kn"}
+            }
+            light-speed{
+                dnam{"광속"}
+                other{"{0}광속"}
             }
             meter-per-second{
                 other{"{0}m/s"}

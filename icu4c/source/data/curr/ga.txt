@@ -55,6 +55,10 @@ ga{
             "ARA",
             "Austral Airgintíneach",
         }
+        ARL{
+            "ARL",
+            "Peso Ley na hAirgintíne (1970–1983)",
+        }
         ARM{
             "ARM",
             "Peso na hAirgintíne (1881–1970)",
@@ -223,9 +227,17 @@ ga{
             "CDF",
             "Franc an Chongó",
         }
+        CHE{
+            "CHE",
+            "Euro WIR",
+        }
         CHF{
             "CHF",
             "Franc na hEilvéise",
+        }
+        CHW{
+            "CHW",
+            "Franc WIR",
         }
         CLE{
             "CLE",
@@ -1079,6 +1091,10 @@ ga{
             "YUN",
             "Dinar Inmhalartaithe Iúgslavach (1990–1992)",
         }
+        YUR{
+            "YUR",
+            "Dinar Leasaithe na hIúgsláive (1992–1993)",
+        }
         ZAL{
             "ZAL",
             "Rand na hAfraice Theas (airgeadúil)",
@@ -1106,6 +1122,10 @@ ga{
         ZWD{
             "ZWD",
             "Dollar Siombábach (1980–2008)",
+        }
+        ZWL{
+            "ZWL",
+            "Dollar na Siombáibe (2009)",
         }
     }
     Currencies%narrow{
@@ -1266,6 +1286,13 @@ ga{
             one{"lev crua na Bulgáire"}
             other{"lev crua na Bulgáire"}
             two{"lev chrua na Bulgáire"}
+        }
+        BGM{
+            few{"lev sóisialach na Bulgáire"}
+            many{"lev sóisialach na Bulgáire"}
+            one{"lev sóisialach na Bulgáire"}
+            other{"lev sóisialach na Bulgáire"}
+            two{"lev sóisialach na Bulgáire"}
         }
         BGN{
             few{"lev na Bulgáire"}
@@ -1449,12 +1476,26 @@ ga{
             other{"franc an Chongó"}
             two{"fhranc an Chongó"}
         }
+        CHE{
+            few{"euro WIR"}
+            many{"euro WIR"}
+            one{"WIR euro"}
+            other{"euro WIR"}
+            two{"euro WIR"}
+        }
         CHF{
             few{"fhranc na hEilvéise"}
             many{"bhfranc na hEilvéise"}
             one{"fhranc na hEilvéise"}
             other{"franc na hEilvéise"}
             two{"fhranc na hEilvéise"}
+        }
+        CHW{
+            few{"fhranc WIR"}
+            many{"bhfranc WIR"}
+            one{"fhranc WIR amháin"}
+            other{"franc WIR"}
+            two{"fhranc WIR"}
         }
         CLE{
             few{"escudo na Sile"}
@@ -2660,6 +2701,13 @@ ga{
             other{"Dínear Inathraithe Iúgslavach"}
             two{"Dínear Inathraithe Iúgslavach"}
         }
+        YUR{
+            few{"Dinar Leasaithe na hIúgsláive (1992–1993)"}
+            many{"Dinar Leasaithe na hIúgsláive (1992–1993)"}
+            one{"Dinar Leasaithe na hIúgsláive (1992–1993)"}
+            other{"Dinars Leasaithe na hIúgsláive (1992–1993)"}
+            two{"Dinar Leasaithe na hIúgsláive (1992–1993)"}
+        }
         ZAR{
             few{"rand na hAfraice Theas"}
             many{"rand na hAfraice Theas"}
@@ -2674,12 +2722,5 @@ ga{
             other{"kwacha na Saimbia"}
             two{"kwacha na Saimbia"}
         }
-    }
-    CurrencyUnitPatterns{
-        few{"{0} {1}"}
-        many{"{0} {1}"}
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-        two{"{0} {1}"}
     }
 }

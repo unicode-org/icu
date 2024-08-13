@@ -957,7 +957,7 @@ ko{
         }
         TRY{
             "TRY",
-            "터키 리라",
+            "튀르키예 리라",
         }
         TTD{
             "TTD",
@@ -1185,11 +1185,11 @@ ko{
         NIC{
             other{"니카라과 코르도바 오로(1988~1991)"}
         }
+        TRY{
+            other{"튀르키예 리라"}
+        }
         XXX{
             other{"(알 수 없는 통화 단위)"}
         }
-    }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
     }
 }

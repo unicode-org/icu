@@ -229,7 +229,7 @@ af{
         }
         GTQ{
             "GTQ",
-            "Guatemalaanse quetzal",
+            "Guatemalaanse kwetsal",
         }
         GYD{
             "GYD",
@@ -713,6 +713,10 @@ af{
             one{"euro"}
             other{"euro"}
         }
+        GTQ{
+            one{"Guatemalaanse kwetsal"}
+            other{"Guatemalaanse kwetsal"}
+        }
         INR{
             one{"Indiese rupee"}
             other{"Indiese rupee"}
@@ -729,9 +733,5 @@ af{
             one{"(onbekende geldeenheid)"}
             other{"(onbekende geldeenheid)"}
         }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

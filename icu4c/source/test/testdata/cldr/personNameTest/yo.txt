@@ -123,6 +123,7 @@ parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
 expectedResult; Adeboye Olabisi
@@ -131,6 +132,7 @@ parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; Olabisi Adeboye
 
@@ -138,19 +140,11 @@ parameters; givenFirst; long; referring; formal
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; formal
 parameters; givenFirst; medium; referring; informal
-
-expectedResult; Adeboye, O.
-
-parameters; sorting; short; referring; formal
+parameters; givenFirst; short; referring; formal
 
 expectedResult; Adeboye O.
 
-parameters; surnameFirst; short; referring; formal
 parameters; surnameFirst; short; referring; informal
-
-expectedResult; O. Adeboye
-
-parameters; givenFirst; short; referring; formal
 
 expectedResult; Olabisi A.
 
@@ -209,14 +203,17 @@ name ; locale; yo_AQ
 expectedResult; Akintola, Adeolu Adegboyega
 
 parameters; sorting; long; referring; formal
+parameters; sorting; short; referring; formal
 
 expectedResult; Adeolu Adegboyega Akintola
 
 parameters; givenFirst; long; referring; formal
+parameters; givenFirst; short; referring; formal
 
 expectedResult; Akintola Adeolu Adegboyega
 
 parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; Akintola, Adeolu A.
 
@@ -245,18 +242,6 @@ expectedResult; Akintola Adeolu
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
-
-expectedResult; Akintola, A. A.
-
-parameters; sorting; short; referring; formal
-
-expectedResult; A. A. Akintola
-
-parameters; givenFirst; short; referring; formal
-
-expectedResult; Akintola A. A.
-
-parameters; surnameFirst; short; referring; formal
 
 expectedResult; Akintola A.
 
@@ -320,38 +305,29 @@ name ; locale; yo_AQ
 expectedResult; Adebola Opeyemi Olumide Ajao Adekunle Asofin
 
 parameters; givenFirst; long; referring; formal
+parameters; givenFirst; short; referring; formal
 
 expectedResult; Adekunle Adebola Opeyemi Olumide Ajao Asofin
 
 parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; Adekunle, Adebola Opeyemi Olumide Ajao
 
 parameters; sorting; long; referring; formal
+parameters; sorting; short; referring; formal
 
-expectedResult; Adebola Opeyemi O. A. Adekunle Asofin
+expectedResult; Adebola Opeyemi O.A. Adekunle Asofin
 
 parameters; givenFirst; medium; referring; formal
 
-expectedResult; Adekunle Adebola Opeyemi O. A. Asofin
+expectedResult; Adekunle Adebola Opeyemi O.A. Asofin
 
 parameters; surnameFirst; medium; referring; formal
 
-expectedResult; Adekunle, Adebola Opeyemi O. A.
+expectedResult; Adekunle, Adebola Opeyemi O.A.
 
 parameters; sorting; medium; referring; formal
-
-expectedResult; Adekunle, A. O. O. A.
-
-parameters; sorting; short; referring; formal
-
-expectedResult; A. O. O. A. Adekunle
-
-parameters; givenFirst; short; referring; formal
-
-expectedResult; Adekunle A. O. O. A.
-
-parameters; surnameFirst; short; referring; formal
 
 expectedResult; Adekunle, Bolanle
 
@@ -378,7 +354,7 @@ expectedResult; Bolanle Adekunle
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; Adekunle A. O.
+expectedResult; Adekunle A.O.
 
 parameters; surnameFirst; short; referring; informal
 
@@ -492,6 +468,7 @@ parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
 expectedResult; Käthe Müller
@@ -500,6 +477,7 @@ parameters; givenFirst; long; referring; formal
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; formal
 parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; formal
 
 expectedResult; Müller Käthe
 
@@ -507,18 +485,10 @@ parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
-
-expectedResult; Müller, K.
-
-parameters; sorting; short; referring; formal
-
-expectedResult; K. Müller
-
-parameters; givenFirst; short; referring; formal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; Müller K.
 
-parameters; surnameFirst; short; referring; formal
 parameters; surnameFirst; short; referring; informal
 
 expectedResult; Käthe M.
@@ -578,14 +548,17 @@ name ; locale; ko_AQ
 expectedResult; Stöber, Zäzilia Hamish
 
 parameters; sorting; long; referring; formal
+parameters; sorting; short; referring; formal
 
 expectedResult; Stöber Zäzilia Hamish
 
 parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; Zäzilia Hamish Stöber
 
 parameters; givenFirst; long; referring; formal
+parameters; givenFirst; short; referring; formal
 
 expectedResult; Stöber, Zäzilia H.
 
@@ -614,18 +587,6 @@ expectedResult; Zäzilia Stöber
 
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
-
-expectedResult; Stöber, Z. H.
-
-parameters; sorting; short; referring; formal
-
-expectedResult; Stöber Z. H.
-
-parameters; surnameFirst; short; referring; formal
-
-expectedResult; Z. H. Stöber
-
-parameters; givenFirst; short; referring; formal
 
 expectedResult; Zäzilia S.
 
@@ -700,24 +661,27 @@ name ; locale; ko_AQ
 expectedResult; Ada Cornelia César Martín von Brühl M.D. Ph.D.
 
 parameters; givenFirst; long; referring; formal
+parameters; givenFirst; short; referring; formal
 
 expectedResult; von Brühl Ada Cornelia César Martín M.D. Ph.D.
 
 parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; short; referring; formal
 
-expectedResult; Ada Cornelia C. M. von Brühl M.D. Ph.D.
+expectedResult; Ada Cornelia C.M. von Brühl M.D. Ph.D.
 
 parameters; givenFirst; medium; referring; formal
 
-expectedResult; von Brühl Ada Cornelia C. M. M.D. Ph.D.
+expectedResult; von Brühl Ada Cornelia C.M. M.D. Ph.D.
 
 parameters; surnameFirst; medium; referring; formal
 
 expectedResult; Brühl, Ada Cornelia César Martín von
 
 parameters; sorting; long; referring; formal
+parameters; sorting; short; referring; formal
 
-expectedResult; Brühl, Ada Cornelia C. M. von
+expectedResult; Brühl, Ada Cornelia C.M. von
 
 parameters; sorting; medium; referring; formal
 
@@ -730,18 +694,6 @@ parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; short; addressing; formal
 
-expectedResult; Brühl, A. C. C. M. von
-
-parameters; sorting; short; referring; formal
-
-expectedResult; A. C. C. M. von Brühl
-
-parameters; givenFirst; short; referring; formal
-
-expectedResult; von Brühl A. C. C. M.
-
-parameters; surnameFirst; short; referring; formal
-
 expectedResult; von Brühl, Neele
 
 parameters; sorting; long; referring; informal
@@ -753,16 +705,16 @@ expectedResult; Neele von Brühl
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; von Brühl A. C.
-
-parameters; surnameFirst; short; referring; informal
-
 expectedResult; von Brühl Neele
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
 
-expectedResult; Neele v. B.
+expectedResult; von Brühl A.C.
+
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; Neele v.B.
 
 parameters; givenFirst; short; referring; informal
 

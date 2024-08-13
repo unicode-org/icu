@@ -2170,8 +2170,4 @@ el{
             other{"δολάρια Ζιμπάμπουε"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

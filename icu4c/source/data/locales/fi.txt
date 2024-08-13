@@ -642,10 +642,10 @@ fi{
                 Ehms{"E h.mm.ss a"}
                 Gy{"y G"}
                 GyMMM{"LLL y G"}
-                GyMMMEd{"E d. MMM y G"}
+                GyMMMEd{"E d.M.y G"}
                 GyMMMMEd{"E d. MMMM y G"}
                 GyMMMMd{"d. MMMM y G"}
-                GyMMMd{"d. MMM y G"}
+                GyMMMd{"d.M.y G"}
                 GyMd{"M.d.y G"}
                 H{"H"}
                 Hm{"H.mm"}
@@ -653,14 +653,14 @@ fi{
                 Hmsv{"H.mm.ss v"}
                 Hmv{"H.mm v"}
                 MEd{"E d.M."}
-                MMMEd{"ccc d. MMM"}
+                MMMEd{"ccc d.M."}
                 MMMMEd{"ccc d. MMMM"}
                 MMMMW{
                     one{"LLLL'n' W. 'viikko'"}
                     other{"LLLL'n' W. 'viikko'"}
                 }
                 MMMMd{"d. MMMM"}
-                MMMd{"d. MMM"}
+                MMMd{"d.M."}
                 Md{"d.M."}
                 h{"h a"}
                 hm{"h.mm a"}
@@ -672,12 +672,12 @@ fi{
                 yMEd{"E d.M.y"}
                 yMM{"M.y"}
                 yMMM{"LLL y"}
-                yMMMEd{"E d. MMM y"}
+                yMMMEd{"E d.M.y"}
                 yMMMM{"LLLL y"}
                 yMMMMEd{"E d. MMMM y"}
                 yMMMMccccd{"cccc d. MMMM y"}
                 yMMMMd{"d. MMMM y"}
-                yMMMd{"d. MMM y"}
+                yMMMd{"d.M.y"}
                 yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
@@ -698,7 +698,7 @@ fi{
                         "la",
                     }
                     wide{
-                        "sunnuntaina",
+                        "sunnuntai",
                         "maanantaina",
                         "tiistaina",
                         "keskiviikkona",
@@ -2015,7 +2015,7 @@ fi{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

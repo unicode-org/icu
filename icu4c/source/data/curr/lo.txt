@@ -1218,7 +1218,4 @@ lo{
             other{"(ສະກຸນເງິນທີ່ບໍ່ຮູ້ຈັກ)"}
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

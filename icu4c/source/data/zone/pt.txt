@@ -45,9 +45,6 @@ pt{
         "Africa:Porto-Novo"{
             ec{"Porto Novo"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "Africa:Tripoli"{
             ec{"Trípoli"}
         }
@@ -86,9 +83,6 @@ pt{
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Eirunepe"{
             ec{"Eirunepé"}
@@ -796,11 +790,14 @@ pt{
             lg{"Horário de Petropavlovsk-Kamchatski"}
             ls{"Horário Padrão de Petropavlovsk-Kamchatski"}
         }
+        "meta:Kazakhstan"{
+            ls{"Horário do Cazaquistão"}
+        }
         "meta:Kazakhstan_Eastern"{
-            ls{"Horário do Casaquistão Oriental"}
+            ls{"Horário do Cazaquistão Oriental"}
         }
         "meta:Kazakhstan_Western"{
-            ls{"Horário do Casaquistão Ocidental"}
+            ls{"Horário do Cazaquistão Ocidental"}
         }
         "meta:Korea"{
             ld{"Horário de Verão da Coreia"}

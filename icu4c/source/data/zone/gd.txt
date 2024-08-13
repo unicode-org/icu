@@ -27,9 +27,6 @@ gd{
         "Africa:Ndjamena"{
             ec{"N’Djaména"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "America:Anguilla"{
             ec{"Anguillia"}
         }
@@ -47,9 +44,6 @@ gd{
         }
         "America:Aruba"{
             ec{"Arùba"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Belem"{
             ec{"Belém"}
@@ -71,9 +65,6 @@ gd{
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Dominica"{
             ec{"Doiminicea"}
@@ -358,9 +349,6 @@ gd{
         "Indian:Mauritius"{
             ec{"Na h-Eileanan Mhoiriseas"}
         }
-        "Indian:Reunion"{
-            ec{"Réunion"}
-        }
         "Pacific:Easter"{
             ec{"Rapa Nui"}
         }
@@ -438,33 +426,33 @@ gd{
             ls{"Bun-àm Amasoin"}
         }
         "meta:America_Central"{
-            ld{"Tìde samhraidh Meadhan Aimeireaga a Tuath"}
-            lg{"Àm Meadhan Aimeireaga a Tuath"}
-            ls{"Bun-àm Meadhan Aimeireaga a Tuath"}
+            ld{"Tìde samhraidh Meadhan Aimeireaga"}
+            lg{"Àm Meadhan Aimeireaga"}
+            ls{"Bun-àm Meadhan Aimeireaga"}
             sd{"CDT"}
             sg{"CT"}
             ss{"CST"}
         }
         "meta:America_Eastern"{
-            ld{"Tìde samhraidh Aimeireaga a Tuath an Ear"}
-            lg{"Àm Aimeireaga a Tuath an Ear"}
-            ls{"Bun-àm Aimeireaga a Tuath an Ear"}
+            ld{"Tìde samhraidh Aimeireaga an Ear"}
+            lg{"Àm Aimeireaga an Ear"}
+            ls{"Bun-àm Aimeireaga an Ear"}
             sd{"EDT"}
             sg{"ET"}
             ss{"EST"}
         }
         "meta:America_Mountain"{
-            ld{"Tìde samhraidh Monadh Aimeireaga a Tuath"}
-            lg{"Àm Monadh Aimeireaga a Tuath"}
-            ls{"Bun-àm Monadh Aimeireaga a Tuath"}
+            ld{"Tìde samhraidh Monadh Aimeireaga"}
+            lg{"Àm Monadh Aimeireaga"}
+            ls{"Bun-àm Monadh Aimeireaga"}
             sd{"MDT"}
             sg{"MT"}
             ss{"MST"}
         }
         "meta:America_Pacific"{
-            ld{"Tìde samhraidh a’ Chuain Sèimh"}
-            lg{"Àm a’ Chuain Sèimh"}
-            ls{"Bun-àm a’ Chuain Sèimh"}
+            ld{"Tìde samhraidh a’ Chuain Shèimh"}
+            lg{"Àm a’ Chuain Shèimh"}
+            ls{"Bun-àm a’ Chuain Shèimh"}
             sd{"PDT"}
             sg{"PT"}
             ss{"PST"}
@@ -510,9 +498,9 @@ gd{
             ls{"Bun-àm Airmeinia"}
         }
         "meta:Atlantic"{
-            ld{"Tìde samhraidh a’ Chuain Siar"}
-            lg{"Àm a’ Chuain Siar"}
-            ls{"Bun-àm a’ Chuain Siar"}
+            ld{"Tìde samhraidh a’ Chuain Shiar"}
+            lg{"Àm a’ Chuain Shiar"}
+            ls{"Bun-àm a’ Chuain Shiar"}
             sd{"ADT"}
             sg{"AT"}
             ss{"AST"}
@@ -696,6 +684,11 @@ gd{
         "meta:Gilbert_Islands"{
             ls{"Àm Eileanan Ghileabairt"}
         }
+        "meta:Greenland"{
+            ld{"Tìde samhraidh na Graonlainne"}
+            lg{"Àm na Graonlainne"}
+            ls{"Bun-àm na Graonlainne"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Tìde samhraidh na Graonlainn an Ear"}
             lg{"Àm na Graonlainn an Ear"}
@@ -776,6 +769,9 @@ gd{
             lg{"Àm Petropavlovsk-Kamchatsky"}
             ls{"Bun-àm Petropavlovsk-Kamchatsky"}
         }
+        "meta:Kazakhstan"{
+            ls{"Àm Casachstàin"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Àm Casachstàin an Ear"}
         }
@@ -840,9 +836,9 @@ gd{
             ls{"Àm Mhawson"}
         }
         "meta:Mexico_Pacific"{
-            ld{"Tìde samhraidh a’ Chuain Sèimh Mheagsago"}
-            lg{"Àm a’ Chuain Sèimh Mheagsago"}
-            ls{"Bun-àm a’ Chuain Sèimh Mheagsago"}
+            ld{"Tìde samhraidh a’ Chuain Shèimh Mheagsago"}
+            lg{"Àm a’ Chuain Shèimh Mheagsago"}
+            ls{"Bun-àm a’ Chuain Shèimh Mheagsago"}
         }
         "meta:Mongolia"{
             ld{"Tìde samhraidh Ulan Bator"}
