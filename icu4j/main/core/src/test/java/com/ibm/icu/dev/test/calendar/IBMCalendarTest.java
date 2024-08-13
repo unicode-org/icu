@@ -205,8 +205,12 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         }
     }
 
+    private void verifyMinimalDaysInFirstWeek(String l, int minimalDays) {
+        assertEquals(l + " minimalDaysInFirstWeek", minimalDays,
+            Calendar.getInstance(Locale.forLanguageTag(l)).getMinimalDaysInFirstWeek());
+    }
     private void verifyFirstDayOfWeek(String l, int weekday) {
-        assertEquals(l, weekday,
+        assertEquals(l + " firstDayOfWeek", weekday,
             Calendar.getInstance(Locale.forLanguageTag(l)).getFirstDayOfWeek());
     }
     /**
@@ -273,6 +277,46 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         verifyFirstDayOfWeek("und-Hira", Calendar.SUNDAY);
 
         verifyFirstDayOfWeek("zxx", Calendar.MONDAY);
+    }
+
+    @Test
+    public void TestFWwithRGSD() {
+        // Region subtag is missing, so add likely subtags to get region.
+        verifyFirstDayOfWeek("en", Calendar.SUNDAY);
+        verifyMinimalDaysInFirstWeek("en", 1);
+
+        // Explicit region subtag "US" is present.
+        verifyFirstDayOfWeek("en-US", Calendar.SUNDAY);
+        verifyMinimalDaysInFirstWeek("en-US", 1);
+
+        // Explicit region subtag "DE" is present.
+        verifyFirstDayOfWeek("en-DE", Calendar.MONDAY);
+        verifyMinimalDaysInFirstWeek("en-DE", 4);
+
+        // Explicit region subtag "DE" is present, but there's also a valid
+        // region override to use "US".
+        verifyFirstDayOfWeek("en-DE-u-rg-uszzzz", Calendar.SUNDAY);
+        verifyMinimalDaysInFirstWeek("en-DE-u-rg-uszzzz", 1);
+
+        // Explicit region subtag "DE" is present. The region override should be
+        // ignored, because "AA" is not a valid region.
+        verifyFirstDayOfWeek("en-DE-u-rg-aazzzz", Calendar.MONDAY);
+        verifyMinimalDaysInFirstWeek("en-DE-u-rg-aazzzz", 4);
+
+        // Explicit region subtag "DE" is present. The region override should be
+        // ignored, because "001" is a macroregion.
+        verifyFirstDayOfWeek("en-DE-u-rg-001zzz", Calendar.MONDAY);
+        verifyMinimalDaysInFirstWeek("en-DE-u-rg-001zzz", 4);
+
+        // Region subtag is missing. The region override should be ignored, because
+        // "AA" is not a valid region.
+        verifyFirstDayOfWeek("en-u-rg-aazzzz", Calendar.SUNDAY);
+        verifyMinimalDaysInFirstWeek("en-u-rg-aazzzz", 1);
+
+        // Region subtag is missing. The region override should be ignored, because
+        // "001" is a macroregion.
+        verifyFirstDayOfWeek("en-u-rg-001zzz", Calendar.SUNDAY);
+        verifyMinimalDaysInFirstWeek("en-u-rg-001zzz", 1);
     }
 
     /**

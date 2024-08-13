@@ -973,14 +973,26 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * Get region code from a key in locale or null.
      */
     private static String getRegionFromKey(ULocale locale, String key) {
-        String region = locale.getKeywordValue(key);
-        if (region != null && region.length() >= 3 && region.length() <= 7) {
-            if (Character.isLetter(region.charAt(0))) {
-                return AsciiUtil.toUpperString(region.substring(0, 2));
-            } else {
-                // assume three-digit region code
-                return region.substring(0, 3);
-            }
+        String subdivision = locale.getKeywordValue(key);
+        // In UTS35
+        //   type = alphanum{3,8} (sep alphanum{3,8})* ;
+        // so we know the subdivision must fit the type already.
+        //
+        //   unicode_subdivision_id = unicode_region_subtag unicode_subdivision_suffix ;
+        //   unicode_region_subtag = (alpha{2} | digit{3}) ;
+        //   unicode_subdivision_suffix = alphanum{1,4} ;
+        // But we also know there are no id in start with digit{3} in
+        // https://github.com/unicode-org/cldr/blob/main/common/validity/subdivision.xml
+        // Therefore we can simplify as
+        // unicode_subdivision_id = alpha{2} alphanum{1,4}
+        //
+        // and only need to accept/reject the code based on the alpha{2} and the length.
+        if (subdivision == null || subdivision.length() < 3 || subdivision.length() > 6) {
+            return null;
+        }
+        String region = subdivision.substring(0, 2).toUpperCase();
+        if (RegionValidateMap.BUILTIN.isSet(region)) {
+            return region;
         }
         return null;
     }
@@ -4247,5 +4259,44 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 }
             }
         }
+    }
+    /**
+     * @internal Visible For Testing
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static class RegionValidateMap {
+        public RegionValidateMap() {
+            this.map = Arrays.copyOf(gValidRegionMap, gValidRegionMap.length);
+        }
+        public boolean isSet(String region) {
+            int index = value(region);
+            if (index < 0) {
+                return false;
+            }
+            return 0 != (map[index / 32] & (1 << (index % 32)));
+        }
+        public boolean equals(RegionValidateMap that) {
+            return Arrays.equals(map, that.map);
+        }
+        protected int value(String region) {
+              if (region.matches("[a-zA-Z][a-zA-Z]")) {
+                  region = region.toLowerCase();
+                  int aValue = "a".codePointAt(0);
+                  return (region.codePointAt(0) - aValue) * 26 + region.codePointAt(1) - aValue;
+              }
+              return -1;
+        }
+        protected int[] map;
+        static private int[] gValidRegionMap = {
+            0xeedf597c, 0xdeddbdef, 0x15943f3f, 0x0e00d580,
+            0xb0095c00, 0x0015fb9f, 0x781c068d, 0x0340400f,
+            0xf42b1d00, 0xfd4f8141, 0x25d7fffc, 0x0100084b,
+            0x538f3c40, 0x40000001, 0xfdf15100, 0x9fbb7ae7,
+            0x0410419a, 0x00408557, 0x00004002, 0x00100001,
+            0x00400408, 0x00000001,
+        };
+
+        public static RegionValidateMap BUILTIN = new RegionValidateMap();
     }
 }
