@@ -132,6 +132,10 @@
       "exp": "7:23:45\u202FPM GMT+03:30",
       "params": {"d": "2024-07-02T19:23:45+03:30"},
       "comment": "This checks that an argument can be a date literal string."
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime dateStyle=long} / {|2006-01-03| :datetime dateStyle=medium}",
+      "exp": "January 2, 2006 / Jan 3, 2006"
     }
   ]
 }

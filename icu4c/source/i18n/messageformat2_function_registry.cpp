@@ -25,6 +25,7 @@
 #include "messageformat2_function_registry_internal.h"
 #include "messageformat2_macros.h"
 #include "hash.h"
+#include "mutex.h"
 #include "number_types.h"
 #include "uvector.h" // U_ASSERT
 
@@ -1001,49 +1002,64 @@ static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorC
 Formatter* StandardFunctions::DateTimeFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    Formatter* result = new StandardFunctions::DateTime(locale, type);
+    Formatter* result = new StandardFunctions::DateTime(locale, *this, type);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
 }
 
-static UDate tryPattern(const char* pat, const UnicodeString& sourceStr, UErrorCode& errorCode) {
-    LocalPointer<DateFormat> dateParser(new SimpleDateFormat(UnicodeString(pat), errorCode));
-    if (U_FAILURE(errorCode)) {
-        return 0;
+static UMutex gDateTimeFactoryMutex;
+
+// Lazily initialize DateFormat objects used for parsing date literals
+void StandardFunctions::DateTimeFactory::initDateParsers(UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    Mutex lock(&gDateTimeFactoryMutex);
+
+    if (dateParser.isValid()) {
+        // Already initialized
+        return;
     }
-    return dateParser->parse(sourceStr, errorCode);
+
+    // Handles ISO 8601 date
+    dateParser.adoptInstead(new SimpleDateFormat(UnicodeString("YYYY-MM-dd"), errorCode));
+    // Handles ISO 8601 datetime without time zone
+    dateTimeParser.adoptInstead(new SimpleDateFormat(UnicodeString("YYYY-MM-dd'T'HH:mm:ss"), errorCode));
+    // Handles ISO 8601 datetime with 'Z' to denote UTC
+    dateTimeUTCParser.adoptInstead(new SimpleDateFormat(UnicodeString("YYYY-MM-dd'T'HH:mm:ssZ"), errorCode));
+    // Handles ISO 8601 datetime with timezone offset; 'zzzz' denotes timezone offset
+    dateTimeZoneParser.adoptInstead(new SimpleDateFormat(UnicodeString("YYYY-MM-dd'T'HH:mm:sszzzz"), errorCode));
 }
 
 // From https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md#date-and-time-operands :
 // "A date/time literal value is a non-empty string consisting of an ISO 8601 date, or
 // an ISO 8601 datetime optionally followed by a timezone offset."
-static UDate tryPatterns(const UnicodeString& sourceStr, UErrorCode& errorCode) {
+UDate StandardFunctions::DateTime::tryPatterns(const UnicodeString& sourceStr,
+                                               UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return 0;
     }
     // Handle ISO 8601 datetime (tryTimeZonePatterns() handles the case
     // where a timezone offset follows)
     if (sourceStr.length() > 10) {
-        return tryPattern("YYYY-MM-dd'T'HH:mm:ss", sourceStr, errorCode);
+        return parent.dateTimeParser->parse(sourceStr, errorCode);
     }
     // Handle ISO 8601 date
-    return tryPattern("YYYY-MM-dd", sourceStr, errorCode);
+    return parent.dateParser->parse(sourceStr, errorCode);
 }
 
 // See comment on tryPatterns() for spec reference
-static UDate tryTimeZonePatterns(const UnicodeString& sourceStr, UErrorCode& errorCode) {
+UDate StandardFunctions::DateTime::tryTimeZonePatterns(const UnicodeString& sourceStr,
+                                                       UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return 0;
     }
     int32_t len = sourceStr.length();
     if (len > 0 && sourceStr[len] == 'Z') {
-        // 'Z' to handle the literal 'Z'
-        return tryPattern("YYYY-MM-dd'T'HH:mm:ssZ", sourceStr, errorCode);
+        return parent.dateTimeUTCParser->parse(sourceStr, errorCode);
     }
-    // 'zzzz' to handle the case where the timezone offset follows the ISO 8601 datetime
-    return tryPattern("YYYY-MM-dd'T'HH:mm:sszzzz", sourceStr, errorCode);
+    return parent.dateTimeZoneParser->parse(sourceStr, errorCode);
 }
 
 static TimeZone* createTimeZone(const DateInfo& dateInfo, UErrorCode& errorCode) {
@@ -1074,7 +1090,8 @@ static bool hasTzOffset(const UnicodeString& sourceStr) {
 
 // Note: `calendar` option to :datetime not implemented yet;
 // Gregorian calendar is assumed
-static DateInfo createDateInfoFromString(const UnicodeString& sourceStr, UErrorCode& errorCode) {
+DateInfo StandardFunctions::DateTime::createDateInfoFromString(const UnicodeString& sourceStr,
+                                                               UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return {};
     }
@@ -1333,6 +1350,12 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     const Formattable& source = toFormat.asFormattable();
     switch (source.getType()) {
     case UFMT_STRING: {
+        // Lazily initialize date parsers used for parsing date literals
+        parent.initDateParsers(errorCode);
+        if (U_FAILURE(errorCode)) {
+            return {};
+        }
+
         const UnicodeString& sourceStr = source.getString(errorCode);
         U_ASSERT(U_SUCCESS(errorCode));
 

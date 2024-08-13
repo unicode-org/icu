@@ -64,6 +64,15 @@ namespace message2 {
 
             DateTimeType type;
             DateTimeFactory(DateTimeType t) : type(t) {}
+
+            // Lazily initialize cached date parsers
+            void initDateParsers(UErrorCode&);
+
+            // Cached parsers; lazily initialized
+            LocalPointer<DateFormat> dateParser;
+            LocalPointer<DateFormat> dateTimeParser;
+            LocalPointer<DateFormat> dateTimeUTCParser;
+            LocalPointer<DateFormat> dateTimeZoneParser;
         };
 
         class DateTime : public Formatter {
@@ -75,8 +84,17 @@ namespace message2 {
             const Locale& locale;
             const DateTimeFactory::DateTimeType type;
             friend class DateTimeFactory;
-            DateTime(const Locale& l, DateTimeFactory::DateTimeType t) : locale(l), type(t) {}
+            DateTime(const Locale& l, DateTimeFactory& p, DateTimeFactory::DateTimeType t)
+                : locale(l), type(t), parent(p) {}
             const LocalPointer<icu::DateFormat> icuFormatter;
+
+            // Stores the cached DateFormat objects for parsing date literals
+            DateTimeFactory& parent;
+
+            // Methods for parsing date literals
+            UDate tryPatterns(const UnicodeString&, UErrorCode&) const;
+            UDate tryTimeZonePatterns(const UnicodeString&, UErrorCode&) const;
+            DateInfo createDateInfoFromString(const UnicodeString&, UErrorCode&) const;
 
             /*
               Looks up an option by name, first checking `opts`, then the cached options
