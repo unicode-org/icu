@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Set;
 
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.impl.ICUData;
@@ -440,6 +441,22 @@ public class LongNameHandler
         // In ICU4J, this method gets a CurrencyData from CurrencyData.provider.
         // TODO(ICU4J): Implement this without going through CurrencyData, like in ICU4C?
         Map<String, String> data = CurrencyData.provider.getInstance(locale, true).getUnitPatterns();
+    	// Entries in the data map are filled in with any CurrencyUnitPatterns data for locale,
+    	// or if there is no CurrencyUnitPatterns data for locale since the patterns all inherited
+    	// from the "other" pattern in root (which is true for many locales in CLDR 46), then only
+    	// the "other" entry has a currency pattern. So now what we do is: For all valid plural keywords
+    	// for the locale, if the corresponding outArray[] entry is bogus, fill it in from the "other"
+    	// entry. 
+        PluralRules prules = PluralRules.forLocale(locale);
+        Set<String> keywords = prules.getKeywords();
+        String otherPattern = data.get("other");
+        if (keywords != null && otherPattern!= null) {
+            for (String keyword: keywords) {
+                if (!keyword.equals("other") && !data.containsKey(keyword)) {
+                    data.put(keyword, otherPattern);
+                }
+            }
+        } 
         for (Map.Entry<String, String> e : data.entrySet()) {
             String pluralKeyword = e.getKey();
             int index = getIndex(pluralKeyword);

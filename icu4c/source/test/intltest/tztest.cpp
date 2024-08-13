@@ -1342,7 +1342,6 @@ TimeZoneTest::TestAliasedNames()
         {"Chile/Continental", "America/Santiago"},
         {"Chile/EasterIsland", "Pacific/Easter"},
         {"Cuba", "America/Havana"},
-        {"EST", "Etc/GMT+5"},
         {"Egypt", "Africa/Cairo"},
         {"Eire", "Europe/Dublin"},
         {"Etc/GMT+0", "Etc/GMT"},
@@ -1362,7 +1361,6 @@ TimeZoneTest::TestAliasedNames()
         {"GMT-0", "Etc/GMT"},
         {"GMT0", "Etc/GMT"},
         {"Greenwich", "Etc/GMT"},
-        {"HST", "Etc/GMT+10"},
         {"Hongkong", "Asia/Hong_Kong"},
         {"Iceland", "Atlantic/Reykjavik"},
         {"Iran", "Asia/Tehran"},
@@ -1371,7 +1369,6 @@ TimeZoneTest::TestAliasedNames()
         {"Japan", "Asia/Tokyo"},
         {"Kwajalein", "Pacific/Kwajalein"},
         {"Libya", "Africa/Tripoli"},
-        {"MST", "Etc/GMT+7"},
         {"Mexico/BajaNorte", "America/Tijuana"},
         {"Mexico/BajaSur", "America/Mazatlan"},
         {"Mexico/General", "America/Mexico_City"},
@@ -1454,7 +1451,7 @@ TimeZoneTest::TestAliasedNames()
             from->getDisplayName(fromName);
             to->getDisplayName(toName);
             if(fromName.compare(toName) != 0) {
-                errln("Fail: Expected "+toName+" but got " + fromName);
+                errln("Fail: Expected " + toName + " but got " + fromName + " for index: "+ i);
             }
         }
         delete from;
@@ -2669,7 +2666,7 @@ void TimeZoneTest::TestGetIanaID() {
         {u"Europe/Zaporozhye",  u"Europe/Kyiv"},
         {u"Etc/GMT-1",          u"Etc/GMT-1"},
         {u"Etc/GMT+20",         UNKNOWN},
-        {u"PST8PDT",            u"PST8PDT"},
+        {u"PST8PDT",            u"America/Los_Angeles"},
         {u"GMT-08:00",          UNKNOWN},
         {nullptr,               nullptr}
     };

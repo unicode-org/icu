@@ -1191,9 +1191,9 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                 "buddhist",
                 "gregorian",    // iso8601 is a gregorian sub type
                 "gregorian",
-                "islamic-umalqura",
-                "islamic-umalqura",
-                "islamic-umalqura",
+                "gregorian",
+                "gregorian",
+                "gregorian",
                 "japanese",
                 "gregorian",
                 "gregorian",

@@ -52,6 +52,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
         Map<String, String> knownIssues = new HashMap<>();
 
         // there are no current locales for which we have known issues
+        knownIssues.put("bal_Latn.txt", "CLDR-17874");
 
         return knownIssues;
     }
