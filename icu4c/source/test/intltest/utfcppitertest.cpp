@@ -14,8 +14,9 @@
 // https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv
 using namespace std::string_view_literals;
 
-using U_HEADER_ONLY_NAMESPACE::U16Iterator;
 using U_HEADER_ONLY_NAMESPACE::U16_BEHAVIOR_NEGATIVE;
+using U_HEADER_ONLY_NAMESPACE::U16Iterator;
+using U_HEADER_ONLY_NAMESPACE::U16OneSeq;
 
 class U16IteratorTest : public IntlTest {
 public:
@@ -44,14 +45,17 @@ void U16IteratorTest::testExperiment() {
     std::u16string_view good(u"abçカ🚴"sv);
     const char16_t *goodLimit = good.data() + good.length();
     U16Iterator<char16_t, U16_BEHAVIOR_NEGATIVE> goodIter(good.data(), good.data(), goodLimit);
-    assertEquals("goodIter[0] *", u'a', *goodIter);
+    assertEquals("goodIter[0] * codePoint()", u'a', (*goodIter).codePoint());
     ++goodIter;  // pre-increment
-    assertEquals("goodIter[1] *", u'b', *goodIter);
+    assertEquals("goodIter[1] * codePoint()", u'b', (*goodIter).codePoint());
     ++goodIter;
-    assertEquals("goodIter[2] *", u'ç', *goodIter++);  // post-increment
-    assertEquals("goodIter[3] *", u'カ', *goodIter);
+    assertEquals("goodIter[2] * codePoint()", u'ç', (*goodIter++).codePoint());  // post-increment
+    assertEquals("goodIter[3] * codePoint()", u'カ', (*goodIter).codePoint());
     ++goodIter;
-    assertEquals("goodIter[4] *", U'🚴', *goodIter++);
+    const U16OneSeq<char16_t> &seq = *goodIter++;
+    assertEquals("goodIter[4] * codePoint()", U'🚴', seq.codePoint());
+    assertEquals("goodIter[4] * length()", 2, seq.length());
+    assertTrue("goodIter[4] * stringView()", seq.stringView() == u"🚴"sv);
     U16Iterator<char16_t, U16_BEHAVIOR_NEGATIVE> goodEndIter(good.data(), goodLimit, goodLimit);
     assertTrue("goodIter == goodEndIter", goodIter == goodEndIter);
 
