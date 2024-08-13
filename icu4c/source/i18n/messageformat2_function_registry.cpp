@@ -1078,6 +1078,10 @@ static TimeZone* createTimeZone(const DateInfo& dateInfo, UErrorCode& errorCode)
     return tz;
 }
 
+// Returns true iff `sourceStr` ends in an offset like +03:30 or -06:00
+// (This function is just used to determine whether to call tryPatterns()
+// or tryTimeZonePatterns(); tryTimeZonePatterns() checks fully that the
+// string matches the expected format)
 static bool hasTzOffset(const UnicodeString& sourceStr) {
     int32_t len = sourceStr.length();
 
