@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723566647210,
+  "lastUpdate": 1723577692481,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29697,6 +29697,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 81.2364,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "bae2aa65d8e99efbd4643ddb2da3cc71701e5070",
+          "message": "ICU-22696 Avoid unnecessary copies of already NUL terminated strings.",
+          "timestamp": "2024-08-13T21:15:26+02:00",
+          "tree_id": "cfe821f8d4434a740017e686db19d55127dc71de",
+          "url": "https://github.com/unicode-org/icu/commit/bae2aa65d8e99efbd4643ddb2da3cc71701e5070"
+        },
+        "date": 1723577548385,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 34.3432,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 80.5432,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
