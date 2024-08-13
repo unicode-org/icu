@@ -425,4 +425,19 @@ ulocimp_getKnownCanonicalizedLocaleForTest(int32_t& length);
 U_EXPORT bool
 ulocimp_isCanonicalizedLocaleForTest(const char* localeName);
 
+#ifdef __cplusplus
+U_NAMESPACE_BEGIN
+class U_COMMON_API RegionValidateMap : public UObject {
+ public:
+  RegionValidateMap();
+  virtual ~RegionValidateMap();
+  bool isSet(const char* region) const;
+  bool equals(const RegionValidateMap& that) const;
+ protected:
+  int32_t value(const char* region) const;
+  uint32_t map[22]; // 26x26/32 = 22;
+};
+U_NAMESPACE_END
+#endif /* __cplusplus */
+
 #endif

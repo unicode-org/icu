@@ -2190,7 +2190,6 @@ public class CalendarRegressionTest extends CoreTestFmwk {
             { "zh_TW@rg=IT53",         "gregorian" }, // two-digit subdivision code
             { "zh_TW@rg=AUnsw",        "gregorian" }, // three-letter subdivision code
             { "zh_TW@rg=EE130",        "gregorian" }, // three-digit subdivision code
-            { "zh_TW@rg=417zzzz",      "gregorian" }, // three-digit region code
         };
 
         String[] ALL = Calendar.getKeywordValuesForLocale("calendar", ULocale.getDefault(), false);

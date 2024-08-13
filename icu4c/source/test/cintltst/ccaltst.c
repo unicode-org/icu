@@ -45,6 +45,7 @@ void TestUcalOpenBufferRead(void);
 void TestGetTimeZoneOffsetFromLocal(void);
 
 void TestFWWithISO8601(void);
+void TestFWwithRGSD(void);
 
 void addCalTest(TestNode** root);
 
@@ -71,6 +72,7 @@ void addCalTest(TestNode** root)
     addTest(root, &TestUcalOpenBufferRead, "tsformat/ccaltst/TestUcalOpenBufferRead");
     addTest(root, &TestGetTimeZoneOffsetFromLocal, "tsformat/ccaltst/TestGetTimeZoneOffsetFromLocal");
     addTest(root, &TestFWWithISO8601, "tsformat/ccaltst/TestFWWithISO8601");
+    addTest(root, &TestFWwithRGSD, "tsformat/ccaltst/TestFWwithRGSD");
     addTest(root, &TestGetIanaTimeZoneID, "tstformat/ccaltst/TestGetIanaTimeZoneID");
 }
 
@@ -1616,7 +1618,7 @@ void TestGregorianChange(void) {
 }
 
 static void TestGetKeywordValuesForLocale(void) {
-#define PREFERRED_SIZE 26
+#define PREFERRED_SIZE 25
 #define MAX_NUMBER_OF_KEYWORDS 5
     const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS+1] = {
             { "root",        "gregorian", NULL, NULL, NULL, NULL },
@@ -1646,9 +1648,8 @@ static void TestGetKeywordValuesForLocale(void) {
             { "zh_TW@rg=IT53",         "gregorian", NULL, NULL, NULL, NULL }, // two-digit subdivision code
             { "zh_TW@rg=AUnsw",        "gregorian", NULL, NULL, NULL, NULL }, // three-letter subdivision code
             { "zh_TW@rg=EE130",        "gregorian", NULL, NULL, NULL, NULL }, // three-digit subdivision code
-            { "zh_TW@rg=417zzzz",      "gregorian", NULL, NULL, NULL, NULL }, // three-digit region code
     };
-    const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 5, 5, 2, 2, 2, 1, 3, 5, 4, 2, 3, 3, 1, 1, 1, 1, 1, 1, 1 };
+    const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 5, 5, 2, 2, 2, 1, 3, 5, 4, 2, 3, 3, 1, 1, 1, 1, 1, 1 };
     UErrorCode status = U_ZERO_ERROR;
     int32_t i, size, j;
     UEnumeration *all, *pref;
@@ -1688,7 +1689,7 @@ static void TestGetKeywordValuesForLocale(void) {
             }
             
             if (!matchPref) {
-                log_err("FAIL: Preferred values for locale \"%s\" does not match expected.\n", loc);
+                log_err("FAIL: Preferred values for locale (%d) \"%s\" does not match expected.\n", i, loc);
                 break;
             }
             uenum_close(pref);
@@ -2837,6 +2838,66 @@ TestFWWithISO8601(void) {
         if (i != actual) {
             log_err("ERROR: ucal_getAttribute(\"%s\", UCAL_FIRST_DAY_OF_WEEK) should be %d but get %d\n",
                     locale, i, actual);
+        }
+        ucal_close(cal);
+    }
+}
+
+void
+TestFWwithRGSD(void) {
+    typedef struct {
+        const char* locale;
+        int32_t first_day_of_week;
+        int32_t minimal_days;
+    } TestData;
+    const TestData TESTDATA[] = {
+        // Region subtag is missing, so add likely subtags to get region.
+        {"en", UCAL_SUNDAY, 1},
+
+        // Explicit region subtag "US" is present.
+        {"en-US", UCAL_SUNDAY, 1},
+
+        // Explicit region subtag "DE" is present.
+        {"en-DE", UCAL_MONDAY, 4},
+
+        // Explicit region subtag "DE" is present, but there's also a valid
+        // region override to use "US".
+        {"en-DE-u-rg-uszzzz", UCAL_SUNDAY, 1},
+
+        // Explicit region subtag "DE" is present. The region override should be
+        // ignored, because "AA" is not a valid region.
+        {"en-DE-u-rg-aazzzz", UCAL_MONDAY, 4},
+
+        // Explicit region subtag "DE" is present. The region override should be
+        // ignored, because "001" is a macroregion.
+        {"en-DE-u-rg-001zzz", UCAL_MONDAY, 4},
+
+        // Region subtag is missing. The region override should be ignored, because
+        // "AA" is not a valid region.
+        {"en-u-rg-aazzzz", UCAL_SUNDAY, 1},
+
+        // Region subtag is missing. The region override should be ignored, because
+        // "001" is a macroregion.
+        {"en-u-rg-001zzz", UCAL_SUNDAY, 1},
+
+        {NULL, 0, 0},
+    };
+    for (int32_t i = 0; TESTDATA[i].locale != NULL; i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UCalendar* cal = ucal_open(NULL, 0, TESTDATA[i].locale, UCAL_DEFAULT, &status);
+        if (U_FAILURE(status)) {
+            log_err("ucal_open failed: TESTDATA[%d].locale = '%s'\n", i, TESTDATA[i].locale);
+            continue;
+        }
+        int32_t first_day_Of_week = ucal_getAttribute(cal, UCAL_FIRST_DAY_OF_WEEK);
+        if (first_day_Of_week != TESTDATA[i].first_day_of_week) {
+            log_err("First day of week of '%s' is %d but expected to be %d\n", TESTDATA[i].locale,
+                    first_day_Of_week, TESTDATA[i].first_day_of_week);
+        }
+        int32_t minimal_days = ucal_getAttribute(cal, UCAL_MINIMAL_DAYS_IN_FIRST_WEEK);
+        if (minimal_days != TESTDATA[i].minimal_days) {
+            log_err("Minimal days of a week of '%s' is %d but expected to be %d\n", TESTDATA[i].locale,
+                    minimal_days, TESTDATA[i].minimal_days);
         }
         ucal_close(cal);
     }

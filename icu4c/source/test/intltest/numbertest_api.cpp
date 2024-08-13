@@ -2988,15 +2988,15 @@ void NumberFormatterApiTest::unitLocaleTags() {
          "fahrenheit", 0, "default", "fahrenheit", 0.0, u"0 degrees Fahrenheit"},
 
         // Test the behaviour of the `rg` tag
-        {u"Test the locale with rg = UK and without usage", "en-US-u-rg-ukzzzz", "fahrenheit", 0,
+        {u"Test the locale with rg = GB and without usage", "en-US-u-rg-gbzzzz", "fahrenheit", 0,
          nullptr, "fahrenheit", 0.0, u"0 degrees Fahrenheit"},
-        {u"Test the locale with rg = UK and with usage", "en-US-u-rg-ukzzzz", "fahrenheit", 0, "default",
+        {u"Test the locale with rg = GB and with usage", "en-US-u-rg-gbzzzz", "fahrenheit", 0, "default",
          "celsius", -18, u"-18 degrees Celsius"},
         {"Test the locale with mu = fahrenheit and without usage", "en-US-u-mu-fahrenheit", "celsius", 0,
          nullptr, "celsius", 0.0, "0 degrees Celsius"},
         {"Test the locale with mu = fahrenheit and with usage", "en-US-u-mu-fahrenheit", "celsius", 0,
          "default", "fahrenheit", 32.0, "32 degrees Fahrenheit"},
-        {u"Test the locale with rg = UKOI and with usage", "en-US-u-rg-ukoi", "fahrenheit", 0,
+        {u"Test the locale with rg = GBOXF and with usage", "en-US-u-rg-gboxf", "fahrenheit", 0,
          "default", "celsius", -18.0, u"-18 degrees Celsius"},
 
         // Test the priorities
