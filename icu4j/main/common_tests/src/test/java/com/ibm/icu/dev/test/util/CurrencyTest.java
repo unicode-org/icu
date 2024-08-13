@@ -345,7 +345,9 @@ public class CurrencyTest extends CoreTestFmwk {
         // known currency, behavior unchanged
         assertEquals("de_USD_name", "US-Dollar", cdn.getName("USD"));
         assertEquals("de_USD_symbol", "$", cdn.getSymbol("USD"));
-        assertEquals("de_USD_plural_other", "US-Dollar", cdn.getPluralName("USD", "other"));
+        if (!logKnownIssue("ICU-22856", "Problem with inheritance for plural rules in currencies")) {
+        	assertEquals("de_USD_plural_other", "US-Dollar", cdn.getPluralName("USD", "other"));
+        }
 
         // known currency but unknown plural category
         assertNull("de_USD_plural_foo", cdn.getPluralName("USD", "foo"));

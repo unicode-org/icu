@@ -2108,7 +2108,7 @@ void NumberFormatTest::TestCurrencyNames() {
     assertTrue("ucurr_getName (en_US default)",
                     U_USING_DEFAULT_WARNING == ec || U_USING_FALLBACK_WARNING == ec, true);
 
-    ucurr_getName(CAD, "ti", UCURR_LONG_NAME, &isChoiceFormat,
+    ucurr_getName(CAD, "to", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
     assertTrue("ucurr_getName (ti default)",
                     U_USING_DEFAULT_WARNING == ec, true);

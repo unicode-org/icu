@@ -2425,7 +2425,7 @@ public class TimeZoneTest extends CoreTestFmwk
                 {"Europe/Zaporozhye",   "Europe/Kyiv"},
                 {"Etc/GMT-1",           "Etc/GMT-1"},
                 {"Etc/GMT+20",          UNKNOWN},
-                {"PST8PDT",             "PST8PDT"},
+                {"PST8PDT",             "America/Los_Angeles"},
                 {"GMT-08:00",           UNKNOWN},
         };
 

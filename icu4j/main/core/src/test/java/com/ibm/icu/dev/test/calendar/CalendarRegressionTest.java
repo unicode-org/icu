@@ -2178,7 +2178,7 @@ public class CalendarRegressionTest extends CoreTestFmwk {
             {"en@calendar=islamic",     "gregorian"},
             {"zh_TW",       "gregorian", "roc", "chinese"},
             {"ar_IR",       "persian", "gregorian", "islamic", "islamic-civil", "islamic-tbla"},
-            {"th@rg=SAZZZZ", "islamic-umalqura", "gregorian", "islamic", "islamic-rgsa"},
+            {"th@rg=SAZZZZ", "gregorian", "islamic-umalqura", "islamic", "islamic-rgsa"},
 
             // tests for ICU-22364
             { "zh_CN@rg=TW",           "gregorian", "chinese" }, // invalid subdivision code

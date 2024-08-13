@@ -196,7 +196,7 @@
                 fa, ff, ff_Adlm, ff_CM, ff_GN, ff_MR, ff_SN, fi, fil, fo, fr, fur, fy
 
                 // G
-                ga, gd, gl, gsw, gu, guz, gv
+                ga, gaa, gd, gl, gsw, gu, guz, gv
 
                 // H
                 ha, haw, he, hi, hi_Latn, hr, hsb, hu, hy
@@ -208,7 +208,7 @@
                 ja, jgo, jmc, jv
 
                 // K
-                ka, kab, kam, kde, kea, kgp, khq, ki, kk, kkj, kl, kln, km, kn, ko, kok, ks
+                ka, kab, kam, kde, kea, kgp, khq, ki, kk, kkj, kl, kln, km, kn, ko, kok, kok_Latn, ks
                 ks_Deva, ks_IN, ksb, ksf, ksh, ku, kw, kxv, kxv_Deva, kxv_IN, kxv_Orya, kxv_Telu, ky
 
                 // L
@@ -219,7 +219,7 @@
                 mt, mua, my, mzn
 
                 // N
-                naq, nb, nd, nds, ne, nl, nmg, nn, nnh, no, no_NO, no_NO_NY, nqo, nus, nyn
+                naq, nb, nd, nds, ne, nl, nmg, nn, nnh, no, no_NO, no_NO_NY, nqo, nso, nus, nyn
 
                 // O
                 oc, om, or, os
@@ -236,10 +236,10 @@
                 // S
                 sa, sah, saq, sat, sat_IN, sbp, sc, sd, sd_Deva, sd_IN, sd_PK, se, seh, ses, sg, sh, sh_BA, sh_CS, sh_YU
                 shi, shi_Latn, shi_MA, si, sk, sl, smn, sn, so, sq, sr, sr_BA, sr_CS, sr_Cyrl_CS, sr_Cyrl_YU, sr_Latn
-                sr_Latn_CS, sr_Latn_YU, sr_ME, sr_RS, sr_XK, sr_YU, su, su_ID, sv, sw, syr, szl
+                sr_Latn_CS, sr_Latn_YU, sr_ME, sr_RS, sr_XK, sr_YU, st, su, su_ID, sv, sw, syr, szl
 
                 // T
-                ta, te, teo, tg, th, ti, tk, tl, tl_PH, to, tok, tr, tt, twq, tzm
+                ta, te, teo, tg, th, ti, tk, tl, tl_PH, tn, to, tok, tr, tt, twq, tzm
 
                 // U
                 ug, uk, ur, uz, uz_AF, uz_Arab, uz_Cyrl, uz_UZ
@@ -312,13 +312,13 @@
 
                     // K-P
                     ka, kk, kl, km, kn, kok, ko, ku, ky, lb, lij, lkt, ln, lo, lt, lv,
-                    mk, ml, mn, mo, mr, ms, mt, my, nb, nb_NO, ne, nl, nn, no, no_NO,
+                    mk, ml, mn, mo, mr, ms, mt, my, nb, nb_NO, ne, nl, nn, no, no_NO, nso,
                     om, or, pa_IN, pa, pa_Guru, pl, ps, pt,
 
                     // R-T
                     ro, ru, sa, se, sh_BA, sh_CS, sh, sh_YU, si, sk, sl, smn, sq,
-                    sr_BA, sr_Cyrl_ME, sr_Latn, sr_ME, sr_RS, sr, sv, sw,
-                    ta, te, th, tk, to, tr,
+                    sr_BA, sr_Cyrl_ME, sr_Latn, sr_ME, sr_RS, sr, st, sv, sw,
+                    ta, te, th, tk, tn, to, tr,
 
                     // U-Z
                     ug, uk, ur, uz, vi, wae, wo, xh, yi, yo, yue_CN, yue_Hans_CN, yue_Hans

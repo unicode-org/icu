@@ -99,9 +99,9 @@ static const UCalGetTypeTest ucalGetTypeTests[] = {
     { "th-TH-u-ca-gregory",      UCAL_DEFAULT,   "gregorian" },
     { "ja_JP@calendar=japanese", UCAL_GREGORIAN, "gregorian" },
     { "fr_CH",                   UCAL_DEFAULT,   "gregorian" },
-    { "fr_SA",                   UCAL_DEFAULT,   "islamic-umalqura" },
-    { "fr_CH@rg=sazzzz",         UCAL_DEFAULT,   "islamic-umalqura" },
-    { "fr_CH@rg=sa14",           UCAL_DEFAULT,   "islamic-umalqura" },
+    { "fr_SA",                   UCAL_DEFAULT,   "gregorian" },
+    { "fr_CH@rg=sazzzz",         UCAL_DEFAULT,   "gregorian" },
+    { "fr_CH@rg=sa14",           UCAL_DEFAULT,   "gregorian" },
     { "fr_CH@calendar=japanese;rg=sazzzz", UCAL_DEFAULT, "japanese" },
     { "fr_CH@rg=twcyi",          UCAL_DEFAULT,   "gregorian" }, // test for ICU-22364
     { "fr_CH@rg=ugw",            UCAL_DEFAULT,   "gregorian" }, // test for ICU-22364
@@ -1634,7 +1634,7 @@ static void TestGetKeywordValuesForLocale(void) {
             { "en@calendar=islamic",   "gregorian", NULL, NULL, NULL, NULL },
             { "zh_TW",       "gregorian", "roc", "chinese", NULL, NULL },
             { "ar_IR",       "persian", "gregorian", "islamic", "islamic-civil", "islamic-tbla" },
-            { "th@rg=SAZZZZ", "islamic-umalqura", "gregorian", "islamic", "islamic-rgsa", NULL },
+            { "th@rg=SAZZZZ", "gregorian", "islamic-umalqura", "islamic", "islamic-rgsa", NULL },
 
             // tests for ICU-22364
             { "zh_CN@rg=TW",           "gregorian", "chinese", NULL, NULL, NULL }, // invalid subdivision code
@@ -2860,7 +2860,7 @@ TestGetIanaTimeZoneID(void) {
         {u"Europe/Zaporozhye",  u"Europe/Kyiv"},
         {u"Etc/GMT-1",          u"Etc/GMT-1"},
         {u"Etc/GMT+20",         UNKNOWN},
-        {u"PST8PDT",            u"PST8PDT"},
+        {u"PST8PDT",            u"America/Los_Angeles"},
         {u"GMT-08:00",          UNKNOWN},
         {0,                     0}
     };

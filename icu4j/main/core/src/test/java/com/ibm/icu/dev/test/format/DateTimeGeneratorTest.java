@@ -429,9 +429,9 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         new String[] {"yM", "1.1999"}, // (fixed expected result per ticket 6872<-6626)
         new String[] {"yMMM", "tammi 1999"}, // (fixed expected result per ticket 6872<-7007)
         new String[] {"yMd", "13.1.1999"},
-        new String[] {"yMMMd", "13. tammik. 1999"},
+        new String[] {"yMMMd", "13.1.1999"},
         new String[] {"Md", "13.1."},
-        new String[] {"MMMd", "13. tammik."},
+        new String[] {"MMMd", "13.1."},
         new String[] {"MMMMd", "13. tammikuuta"},
         new String[] {"yQQQ", "1. nelj. 1999"},
         new String[] {"hhmm", "11.58\u202Fip."},
@@ -439,7 +439,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         new String[] {"jjmm", "23.58"},
         new String[] {"mmss", "58.59"},
         new String[] {"yyyyMMMM", "tammikuu 1999"}, // (new item for testing 6872<-5702,7007)
-        new String[] {"MMMEd", "ke 13. tammik."},
+        new String[] {"MMMEd", "ke 13.1."},
         new String[] {"Ed", "ke 13."},
         new String[] {"jmmssSSS", "23.58.59,123"},
         new String[] {"JJmm", "23.58"},
