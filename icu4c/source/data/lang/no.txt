@@ -92,6 +92,7 @@ no{
         bjn{"banjar"}
         bkm{"kom"}
         bla{"siksika"}
+        blo{"anii"}
         bm{"bambara"}
         bn{"bengali"}
         bo{"tibetansk"}
@@ -328,6 +329,7 @@ no{
         kv{"komi"}
         kw{"kornisk"}
         kwk{"kwak̓wala"}
+        kxv{"kuvi"}
         ky{"kirgisisk"}
         la{"latin"}
         lad{"ladinsk"}
@@ -357,7 +359,6 @@ no{
         lua{"luba-lulua"}
         lui{"luiseno"}
         lun{"lunda"}
-        luo{"luo"}
         lus{"mizo"}
         luy{"luhya"}
         lv{"latvisk"}
@@ -615,13 +616,13 @@ no{
         und{"ukjent språk"}
         ur{"urdu"}
         uz{"usbekisk"}
-        vai{"vai"}
         ve{"venda"}
         vec{"venetiansk"}
         vep{"vepsisk"}
         vi{"vietnamesisk"}
         vls{"vestflamsk"}
         vmf{"Main-frankisk"}
+        vmw{"makhuwa"}
         vo{"volapyk"}
         vot{"votisk"}
         vro{"sørestisk"}
@@ -637,6 +638,7 @@ no{
         xal{"kalmukkisk"}
         xh{"xhosa"}
         xmf{"mingrelsk"}
+        xnr{"kangri"}
         xog{"soga"}
         yao{"yao"}
         yap{"yapesisk"}
@@ -874,6 +876,8 @@ no{
             indian{"indisk nasjonalkalender"}
             islamic{"hijrikalender"}
             islamic-civil{"hijrikalender (tabell, sivil)"}
+            islamic-rgsa{"islamsk kalender (Saudi-Arabia, observasjon)"}
+            islamic-tbla{"islamsk kalender (tabell, astronomisk)"}
             islamic-umalqura{"hijrikalender (Umm al-Qura)"}
             iso8601{"ISO 8601-kalender"}
             japanese{"japansk kalender"}

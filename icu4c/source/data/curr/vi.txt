@@ -687,6 +687,10 @@ vi{
             "MUR",
             "Rupee Mauritius",
         }
+        MVP{
+            "MVP",
+            "Rupee Maldives (1947–1981)",
+        }
         MVR{
             "MVR",
             "Rufiyaa Maldives",
@@ -1196,9 +1200,6 @@ vi{
         AED{
             other{"dirham UAE"}
         }
-        AFN{
-            other{"afghani Afghanistan"}
-        }
         ALL{
             other{"lek Albania"}
         }
@@ -1223,9 +1224,6 @@ vi{
         BBD{
             other{"đô la Barbados"}
         }
-        BDT{
-            other{"taka Bangladesh"}
-        }
         BGN{
             other{"lev Bulgaria"}
         }
@@ -1249,9 +1247,6 @@ vi{
         }
         BSD{
             other{"đô la Bahamas"}
-        }
-        BTN{
-            other{"ngultrum Bhutan"}
         }
         BWP{
             other{"pula Botswana"}
@@ -1373,14 +1368,8 @@ vi{
         ILS{
             other{"sheqel Israel mới"}
         }
-        INR{
-            other{"rupee Ấn Độ"}
-        }
         IQD{
             other{"dinar Iraq"}
-        }
-        IRR{
-            other{"rial Iran"}
         }
         ISK{
             other{"króna Iceland"}
@@ -1427,9 +1416,6 @@ vi{
         LBP{
             other{"bảng Li-băng"}
         }
-        LKR{
-            other{"rupee Sri Lanka"}
-        }
         LRD{
             other{"đô la Liberia"}
         }
@@ -1469,8 +1455,8 @@ vi{
         MUR{
             other{"rupee Mauritius"}
         }
-        MVR{
-            other{"rufiyaa Maldives"}
+        MVP{
+            other{"Rupee Maldives (1947–1981)"}
         }
         MWK{
             other{"kwacha Malawi"}
@@ -1496,9 +1482,6 @@ vi{
         NOK{
             other{"krone Na Uy"}
         }
-        NPR{
-            other{"rupee Nepal"}
-        }
         NZD{
             other{"đô la New Zealand"}
         }
@@ -1516,9 +1499,6 @@ vi{
         }
         PHP{
             other{"peso Philipin"}
-        }
-        PKR{
-            other{"rupee Pakistan"}
         }
         PLN{
             other{"zloty Ba Lan"}
@@ -1561,12 +1541,6 @@ vi{
         }
         SHP{
             other{"bảng St. Helena"}
-        }
-        SLE{
-            other{"leone Sierra Leone"}
-        }
-        SLL{
-            other{"leone Sierra Leone (1964—2022)"}
         }
         SOS{
             other{"shilling Somali"}
@@ -1664,8 +1638,5 @@ vi{
         ZMW{
             other{"kwacha Zambia"}
         }
-    }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
     }
 }

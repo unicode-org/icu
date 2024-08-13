@@ -1571,6 +1571,9 @@ kxv{
             lg{"jāpān belā"}
             ls{"jāpān mānānka belā"}
         }
+        "meta:Kazakhstan"{
+            ls{"kājākstān belā"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"weḍāhapu kājākstān belā"}
         }

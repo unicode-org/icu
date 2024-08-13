@@ -458,7 +458,7 @@ ceb{
                         "Hunyo",
                         "Hulyo",
                         "Agosto",
-                        "Septiyembre",
+                        "Septyembre",
                         "Oktubre",
                         "Nobyembre",
                         "Disyembre",
@@ -478,6 +478,20 @@ ceb{
                         "O",
                         "N",
                         "D",
+                    }
+                    wide{
+                        "Enero",
+                        "Pebrero",
+                        "Marso",
+                        "Abril",
+                        "Mayo",
+                        "Hunyo",
+                        "Hulyo",
+                        "Agosto",
+                        "Septyembre",
+                        "Oktubre",
+                        "Nobyembre",
+                        "Disyembre",
                     }
                 }
             }
@@ -520,6 +534,12 @@ ceb{
         minute{
             dn{"minuto"}
         }
+        minute-narrow{
+            dn{"min"}
+        }
+        minute-short{
+            dn{"min."}
+        }
         month{
             dn{"buwan"}
             relative{
@@ -536,6 +556,9 @@ ceb{
         }
         second{
             dn{"segundo"}
+        }
+        second-narrow{
+            dn{"seg"}
         }
         second-short{
             dn{"seg."}

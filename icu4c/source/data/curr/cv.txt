@@ -644,7 +644,4 @@ cv{
             other{"Раҫҫей тенки"}
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

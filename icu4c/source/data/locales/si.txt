@@ -319,13 +319,13 @@ si{
                     m{"a h.mm – h.mm"}
                 }
                 hmv{
-                    a{"a h.mm – a hhh.mm v"}
+                    a{"a h.mm – a h.mm v"}
                     h{"a h.mm – h.mm v"}
                     m{"a h.mm – h.mm v"}
                 }
                 hv{
                     a{"a h – a h v"}
-                    h{"a h – h vv"}
+                    h{"a h – h v"}
                 }
                 yM{
                     M{"G y-M – y-M"}

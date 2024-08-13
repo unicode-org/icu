@@ -241,7 +241,14 @@ hi{
                 other{"{0} कैरट"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    oblique{
+                        one{"{0} मिलिग्राम प्रति डेसीलीटर"}
+                        other{"{0} मिलिग्राम प्रति डेसीलीटर"}
+                    }
+                }
                 dnam{"मिलिग्राम प्रति डेसीलीटर"}
+                gender{"masculine"}
                 one{"{0} मिलिग्राम प्रति डेसीलीटर"}
                 other{"{0} मिलिग्राम प्रति डेसीलीटर"}
             }
@@ -304,6 +311,18 @@ hi{
                 gender{"masculine"}
                 one{"{0} प्रति दस हज़ार"}
                 other{"{0} प्रति दस हज़ार"}
+            }
+            portion-per-1e9{
+                case{
+                    oblique{
+                        one{"{0} पार्ट प्रति बिलियन"}
+                        other{"{0} पार्ट्स प्रति बिलियन"}
+                    }
+                }
+                dnam{"पार्ट्स प्रति बिलियन"}
+                gender{"masculine"}
+                one{"{0} पार्ट प्रति बिलियन"}
+                other{"{0} पार्ट्स प्रति बिलियन"}
             }
         }
         consumption{
@@ -581,6 +600,19 @@ hi{
                 gender{"masculine"}
                 one{"{0} नैनो सेकंड"}
                 other{"{0} नैनो सेकंड"}
+            }
+            night{
+                case{
+                    oblique{
+                        one{"{0} रात"}
+                        other{"{0} रातें"}
+                    }
+                }
+                dnam{"रातें"}
+                gender{"feminine"}
+                one{"{0} रात"}
+                other{"{0} रातें"}
+                per{"{0} प्रति रात"}
             }
             quarter{
                 case{
@@ -1014,6 +1046,9 @@ hi{
                 one{"{0} पिकोमीटर"}
                 other{"{0} पिकोमीटर"}
             }
+            point{
+                gender{"masculine"}
+            }
             solar-radius{
                 case{
                     oblique{
@@ -1348,7 +1383,14 @@ hi{
                 other{"{0} मिलीबार"}
             }
             millimeter-ofhg{
+                case{
+                    oblique{
+                        one{"{0} मर्क्यूरी मिलीमीटर"}
+                        other{"{0} मर्क्यूरी मिलीमीटर"}
+                    }
+                }
                 dnam{"मर्क्यूरी मिलीमीटर"}
+                gender{"feminine"}
                 one{"{0} मर्क्यूरी मिलीमीटर"}
                 other{"{0} मर्क्यूरी मिलीमीटर"}
             }
@@ -1382,6 +1424,18 @@ hi{
                 gender{"masculine"}
                 one{"{0} किलोमीटर प्रति घंटा"}
                 other{"{0} किलोमीटर प्रति घंटा"}
+            }
+            light-speed{
+                case{
+                    oblique{
+                        one{"{0} लाइट"}
+                        other{"{0} लाइट"}
+                    }
+                }
+                dnam{"लाइट"}
+                gender{"feminine"}
+                one{"{0} लाइट"}
+                other{"{0} लाइट"}
             }
             meter-per-second{
                 case{
@@ -1885,6 +1939,12 @@ hi{
                 one{"{0} नैनो से"}
                 other{"{0} नैनो से"}
             }
+            night{
+                dnam{"रातें"}
+                one{"{0}रात"}
+                other{"{0}रातें"}
+                per{"{0}/रात"}
+            }
             second{
                 one{"{0} से"}
                 other{"{0} से"}
@@ -2067,6 +2127,11 @@ hi{
             kilometer-per-hour{
                 one{"{0} किमी/घं"}
                 other{"{0} किमी/घं"}
+            }
+            light-speed{
+                dnam{"लाइट"}
+                one{"{0} लाइट"}
+                other{"{0} लाइट"}
             }
             meter-per-second{
                 one{"{0} मी/से"}
@@ -2366,6 +2431,9 @@ hi{
             permillion{
                 dnam{"हिस्सा प्रति दस लाख"}
             }
+            portion-per-1e9{
+                dnam{"पार्ट्स/बिलियन"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -2454,6 +2522,12 @@ hi{
                 dnam{"नैनो से॰"}
                 one{"{0} नैनो से॰"}
                 other{"{0} नैनो से॰"}
+            }
+            night{
+                dnam{"रातें"}
+                one{"{0} रात"}
+                other{"{0} रातें"}
+                per{"{0}/रात"}
             }
             quarter{
                 dnam{"तिमा"}
@@ -2763,6 +2837,11 @@ hi{
                 dnam{"नॉट"}
                 one{"{0} नॉट"}
                 other{"{0} नॉट"}
+            }
+            light-speed{
+                dnam{"लाइट"}
+                one{"{0} लाइट"}
+                other{"{0} लाइट"}
             }
             meter-per-second{
                 dnam{"मीटर/से॰"}

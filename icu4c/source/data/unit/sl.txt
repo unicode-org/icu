@@ -2,11 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sl{
-    durationUnits{
-        hm{"h.mm"}
-        hms{"h.mm.ss"}
-        ms{"m.ss"}
-    }
     units{
         acceleration{
             g-force{
@@ -820,8 +815,41 @@ sl{
                 two{"{0} karata"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    accusative{
+                        few{"{0} miligrami na deciliter"}
+                        one{"{0} miligram na deciliter"}
+                        other{"{0} miligramov na deciliter"}
+                        two{"{0} miligrama na deciliter"}
+                    }
+                    dative{
+                        few{"{0} miligramom na deciliter"}
+                        one{"{0} miligramu na deciliter"}
+                        other{"{0} miligramom na deciliter"}
+                        two{"{0} miligramoma na deciliter"}
+                    }
+                    genitive{
+                        few{"{0} miligramov na deciliter"}
+                        one{"{0} miligrama na deciliter"}
+                        other{"{0} miligramov na deciliter"}
+                        two{"{0} miligramov na deciliter"}
+                    }
+                    instrumental{
+                        few{"{0} miligrami na deciliter"}
+                        one{"{0} miligramom na deciliter"}
+                        other{"{0} miligrami na deciliter"}
+                        two{"{0} miligramoma na deciliter"}
+                    }
+                    locative{
+                        few{"{0} miligramih na deciliter"}
+                        one{"{0} miligramu na deciliter"}
+                        other{"{0} miligramih na deciliter"}
+                        two{"{0} miligramih na deciliter"}
+                    }
+                }
                 dnam{"miligrami na deciliter"}
                 few{"{0} miligrami na deciliter"}
+                gender{"masculine"}
                 one{"{0} miligram na deciliter"}
                 other{"{0} miligramov na deciliter"}
                 two{"{0} miligrama na deciliter"}
@@ -1063,6 +1091,46 @@ sl{
                 one{"{0} desettisočina"}
                 other{"{0} desettisočin"}
                 two{"{0} desettisočini"}
+            }
+            portion-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} delce na milijardo"}
+                        one{"{0} delec na milijardo"}
+                        other{"{0} delcev na milijardo"}
+                        two{"{0} delca na milijardo"}
+                    }
+                    dative{
+                        few{"{0} delcem na milijardo"}
+                        one{"{0} delcu na milijardo"}
+                        other{"{0} delcem na milijardo"}
+                        two{"{0} delcema na milijardo"}
+                    }
+                    genitive{
+                        few{"{0} delcev na milijardo"}
+                        one{"{0} delca na milijardo"}
+                        other{"{0} delcev na milijardo"}
+                        two{"{0} delcev na milijardo"}
+                    }
+                    instrumental{
+                        few{"{0} delci na milijardo"}
+                        one{"{0} delcem na milijardo"}
+                        other{"{0} delci na milijardo"}
+                        two{"{0} delcema na milijardo"}
+                    }
+                    locative{
+                        few{"{0} delcih na milijardo"}
+                        one{"{0} delcu na milijardo"}
+                        other{"{0} delcih na milijardo"}
+                        two{"{0} delcih na milijardo"}
+                    }
+                }
+                dnam{"delci na milijardo"}
+                few{"{0} delci na milijardo"}
+                gender{"masculine"}
+                one{"{0} delec na milijardo"}
+                other{"{0} delcev na milijardo"}
+                two{"{0} delca na milijardo"}
             }
         }
         consumption{
@@ -1969,6 +2037,47 @@ sl{
                 other{"{0} nanosekund"}
                 two{"{0} nanosekundi"}
             }
+            night{
+                case{
+                    accusative{
+                        few{"{0} noči"}
+                        one{"{0} noč"}
+                        other{"{0} noči"}
+                        two{"{0} noči"}
+                    }
+                    dative{
+                        few{"{0} nočem"}
+                        one{"{0} noči"}
+                        other{"{0} nočem"}
+                        two{"{0} nočema"}
+                    }
+                    genitive{
+                        few{"{0} noči"}
+                        one{"{0} noči"}
+                        other{"{0} noči"}
+                        two{"{0} noči"}
+                    }
+                    instrumental{
+                        few{"{0} nočmi"}
+                        one{"{0} nočjo"}
+                        other{"{0} nočmi"}
+                        two{"{0} nočema"}
+                    }
+                    locative{
+                        few{"{0} nočeh"}
+                        one{"{0} noči"}
+                        other{"{0} nočeh"}
+                        two{"{0} nočeh"}
+                    }
+                }
+                dnam{"noči"}
+                few{"{0} noči"}
+                gender{"feminine"}
+                one{"{0} noč"}
+                other{"{0} noči"}
+                per{"{0} na noč"}
+                two{"{0} noči"}
+            }
             quarter{
                 case{
                     accusative{
@@ -2397,8 +2506,41 @@ sl{
                 two{"{0} džula"}
             }
             kilocalorie{
+                case{
+                    accusative{
+                        few{"{0} kilokalorije"}
+                        one{"{0} kilokalorijo"}
+                        other{"{0} kilokalorij"}
+                        two{"{0} kilokaloriji"}
+                    }
+                    dative{
+                        few{"{0} kilokalorijam"}
+                        one{"{0} kilokaloriji"}
+                        other{"{0} kilokalorijam"}
+                        two{"{0} kilokalorijama"}
+                    }
+                    genitive{
+                        few{"{0} kilokalorij"}
+                        one{"{0} kilokalorije"}
+                        other{"{0} kilokalorij"}
+                        two{"{0} kilokalorij"}
+                    }
+                    instrumental{
+                        few{"{0} kilokalorijami"}
+                        one{"{0} kilokalorijo"}
+                        other{"{0} kilokalorijami"}
+                        two{"{0} kilokalorijama"}
+                    }
+                    locative{
+                        few{"{0} kilokalorijah"}
+                        one{"{0} kilokaloriji"}
+                        other{"{0} kilokalorijah"}
+                        two{"{0} kilokalorijah"}
+                    }
+                }
                 dnam{"kilokalorije"}
                 few{"{0} kilokalorije"}
+                gender{"feminine"}
                 one{"{0} kilokalorija"}
                 other{"{0} kilokalorij"}
                 two{"{0} kilokaloriji"}
@@ -2745,16 +2887,16 @@ sl{
             }
             dot-per-inch{
                 dnam{"pik na palec"}
-                few{"{0} dpi"}
+                few{"{0} pike na palec"}
                 one{"{0} pika na palec"}
                 other{"{0} pik na palec"}
-                two{"{0} dpi"}
+                two{"{0} piki na palec"}
             }
             em{
                 case{
                     accusative{
                         few{"{0} eme"}
-                        one{"{0} em"}
+                        one{"{0} emov"}
                         other{"{0} emov"}
                         two{"{0} ema"}
                     }
@@ -2785,7 +2927,7 @@ sl{
                 }
                 few{"{0} emi"}
                 gender{"masculine"}
-                one{"{0} em"}
+                one{"{0} emov"}
                 other{"{0} emov"}
                 two{"{0} ema"}
             }
@@ -3345,8 +3487,41 @@ sl{
                 two{"{0} pikometra"}
             }
             point{
+                case{
+                    accusative{
+                        few{"{0} točke"}
+                        one{"{0} točko"}
+                        other{"{0} točk"}
+                        two{"{0} točki"}
+                    }
+                    dative{
+                        few{"{0} točkam"}
+                        one{"{0} točki"}
+                        other{"{0} točkam"}
+                        two{"{0} točkama"}
+                    }
+                    genitive{
+                        few{"{0} točk"}
+                        one{"{0} točke"}
+                        other{"{0} točk"}
+                        two{"{0} točk"}
+                    }
+                    instrumental{
+                        few{"{0} točkami"}
+                        one{"{0} točko"}
+                        other{"{0} točkami"}
+                        two{"{0} točkama"}
+                    }
+                    locative{
+                        few{"{0} točkah"}
+                        one{"{0} točki"}
+                        other{"{0} točkah"}
+                        two{"{0} točkah"}
+                    }
+                }
                 dnam{"točke"}
                 few{"{0} točke"}
+                gender{"feminine"}
                 one{"{0} točka"}
                 other{"{0} točk"}
                 two{"{0} točki"}
@@ -4254,8 +4429,41 @@ sl{
                 two{"{0} milibara"}
             }
             millimeter-ofhg{
+                case{
+                    accusative{
+                        few{"{0} milimetre živega srebra"}
+                        one{"{0} milimeter živega srebra"}
+                        other{"{0} milimetrov živega srebra"}
+                        two{"{0} milimetra živega srebra"}
+                    }
+                    dative{
+                        few{"{0} milimetrom živega srebra"}
+                        one{"{0} milimetru živega srebra"}
+                        other{"{0} milimetrom živega srebra"}
+                        two{"{0} milimetroma živega srebra"}
+                    }
+                    genitive{
+                        few{"{0} milimetrov živega srebra"}
+                        one{"{0} milimetra živega srebra"}
+                        other{"{0} milimetrov živega srebra"}
+                        two{"{0} milimetrov živega srebra"}
+                    }
+                    instrumental{
+                        few{"{0} milimetri živega srebra"}
+                        one{"{0} milimetrom živega srebra"}
+                        other{"{0} milimetri živega srebra"}
+                        two{"{0} milimetroma živega srebra"}
+                    }
+                    locative{
+                        few{"{0} milimetrih živega srebra"}
+                        one{"{0} milimetru živega srebra"}
+                        other{"{0} milimetrih živega srebra"}
+                        two{"{0} milimetrih živega srebra"}
+                    }
+                }
                 dnam{"milimetri živega srebra"}
                 few{"{0} milimetri živega srebra"}
+                gender{"masculine"}
                 one{"{0} milimeter živega srebra"}
                 other{"{0} milimetrov živega srebra"}
                 two{"{0} milimetra živega srebra"}
@@ -4362,6 +4570,46 @@ sl{
                 one{"{0} vozel"}
                 other{"{0} vozlov"}
                 two{"{0} vozla"}
+            }
+            light-speed{
+                case{
+                    accusative{
+                        few{"{0} svetlobe"}
+                        one{"{0} svetlobo"}
+                        other{"{0} svetlob"}
+                        two{"{0} svetlobi"}
+                    }
+                    dative{
+                        few{"{0} svetlobam"}
+                        one{"{0} svetlobi"}
+                        other{"{0} svetlobam"}
+                        two{"{0} svetlobama"}
+                    }
+                    genitive{
+                        few{"{0} svetlob"}
+                        one{"{0} svetlobe"}
+                        other{"{0} svetlob"}
+                        two{"{0} svetlob"}
+                    }
+                    instrumental{
+                        few{"{0} svetlobami"}
+                        one{"{0} svetlobo"}
+                        other{"{0} svetlobami"}
+                        two{"{0} svetlobama"}
+                    }
+                    locative{
+                        few{"{0} svetlobah"}
+                        one{"{0} svetlobi"}
+                        other{"{0} svetlobah"}
+                        two{"{0} svetlobah"}
+                    }
+                }
+                dnam{"svetloba"}
+                few{"{0} svetlobe"}
+                gender{"feminine"}
+                one{"{0} svetloba"}
+                other{"{0} svetlob"}
+                two{"{0} svetlobi"}
             }
             meter-per-second{
                 case{
@@ -5192,10 +5440,18 @@ sl{
                 per{"{0}/dan."}
             }
             hour{
-                dnam{"ur"}
+                dnam{"ura"}
             }
             month{
-                dnam{"mesecev"}
+                dnam{"mesec"}
+            }
+            night{
+                dnam{"noči"}
+                few{"{0} n"}
+                one{"{0} n"}
+                other{"{0} n"}
+                per{"{0}/noč"}
+                two{"{0} n"}
             }
             quarter{
                 few{"{0} čl."}
@@ -5211,7 +5467,7 @@ sl{
                 two{"{0} s"}
             }
             week{
-                dnam{"tednov"}
+                dnam{"t"}
             }
             year{
                 dnam{"let"}
@@ -5221,6 +5477,12 @@ sl{
             dot{
                 dnam{"pika"}
             }
+            em{
+                few{"{0} emi"}
+                one{"{0} emov"}
+                other{"{0} emov"}
+                two{"{0} ema"}
+            }
         }
         length{
             light-year{
@@ -5228,6 +5490,15 @@ sl{
                 one{"{0} sv. l."}
                 other{"{0} sv. l."}
                 two{"{0} sv. l."}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"svetloba"}
+                few{"{0} svetlobe"}
+                one{"{0} svetloba"}
+                other{"{0} svetlob"}
+                two{"{0} svetlobi"}
             }
         }
         temperature{
@@ -5420,6 +5691,14 @@ sl{
             month{
                 dnam{"meseci"}
             }
+            night{
+                dnam{"noči"}
+                few{"{0} noči"}
+                one{"{0} noč"}
+                other{"{0} noči"}
+                per{"{0}/noč"}
+                two{"{0} noči"}
+            }
             quarter{
                 dnam{"četrt"}
                 few{"{0} četrtl."}
@@ -5494,6 +5773,12 @@ sl{
                 other{"{0} dpi"}
                 two{"{0} dpi"}
             }
+            em{
+                few{"{0} emi"}
+                one{"{0} emov"}
+                other{"{0} emov"}
+                two{"{0} ema"}
+            }
         }
         length{
             astronomical-unit{
@@ -5518,6 +5803,9 @@ sl{
             }
             meter{
                 dnam{"m"}
+            }
+            point{
+                dnam{"točke"}
             }
         }
         mass{
@@ -5570,6 +5858,13 @@ sl{
                 one{"{0} Bf"}
                 other{"{0} Bf"}
                 two{"{0} Bf"}
+            }
+            light-speed{
+                dnam{"svetloba"}
+                few{"{0} svetlobe"}
+                one{"{0} svetloba"}
+                other{"{0} svetlob"}
+                two{"{0} svetlobi"}
             }
         }
         temperature{

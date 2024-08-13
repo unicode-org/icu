@@ -549,7 +549,7 @@ af{
                 }
                 wide{
                     "voor Christus",
-                    "na Christus",
+                    "ná Christus",
                 }
                 wide%variant{
                     "voor die gewone jaartelling",
@@ -602,6 +602,9 @@ af{
                     M{"y-M-d – y-M-d GGGGG"}
                     d{"y-M-d – y-M-d GGGGG"}
                     y{"y-M-d – y-M-d GGGGG"}
+                }
+                H{
+                    H{"HH – HH"}
                 }
                 M{
                     M{"M–M"}
@@ -751,14 +754,13 @@ af{
         arrows{"pyltjie"}
         body{"liggaam"}
         box_drawing{"bokstekening"}
-        braille{"Braille"}
         building{"gebou"}
-        bullets_stars{"kolpunt/sterretjie"}
+        bullets_stars{"kolpunt of sterretjie"}
         consonantal_jamo{"konsonantale jamo"}
         currency_symbols{"geldeenheidsimbool"}
-        dash_connector{"koppelteken/koppelaar"}
+        dash_connector{"koppelteken of koppelaar"}
         digits{"syfer"}
-        divination_symbols{"towersimbool"}
+        divination_symbols{"waarsêerysimbool"}
         downwards_arrows{"af-pyltjie"}
         downwards_upwards_arrows{"af-op-pyltjie"}
         east_asian_scripts{"Oos-Asiese skrif"}
@@ -771,7 +773,7 @@ af{
         format_whitespace{"formatering en witspasie"}
         full_width_form_variant{"volwye variant"}
         geometric_shapes{"geometriese vorm"}
-        half_width_form_variant{"Halfwye variant"}
+        half_width_form_variant{"halfwye variant"}
         han_characters{"Han-karakter"}
         han_radicals{"Han-radikaal"}
         hanzi_simplified{"Hanzi (vereenvoudig)"}
@@ -797,7 +799,7 @@ af{
         numbers{"nommers"}
         objects{"voorwerp"}
         other{"ander"}
-        paired{"Saamgevoeg"}
+        paired{"saamgevoeg"}
         person{"persoon"}
         phonetic_alphabet{"fonetiese alfabet"}
         pictographs{"piktogram"}
@@ -806,8 +808,8 @@ af{
         rightwards_arrows{"regs-pyltjie"}
         sign_standard_symbols{"teken of simbool"}
         small_form_variant{"klein variante"}
-        smiley{"gesiggie"}
-        smileys_people{"emosiekoon of mens"}
+        smiley{"glimlaggesiggie"}
+        smileys_people{"glimlaggesiggie of mens"}
         south_asian_scripts{"Suid-Asiese skrif"}
         southeast_asian_scripts{"Suidoos-Asiese skrif"}
         spacing{"spasiëring"}
@@ -1396,6 +1398,20 @@ af{
             end{"{0} en {1}"}
         }
         standard-narrow{
+            end{"{0}, {1}"}
+        }
+        unit{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+        }
+        unit-narrow{
+            2{"{0} {1}"}
+            end{"{0} {1}"}
+            middle{"{0} {1}"}
+            start{"{0} {1}"}
+        }
+        unit-short{
+            2{"{0}, {1}"}
             end{"{0}, {1}"}
         }
     }

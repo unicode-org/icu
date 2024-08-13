@@ -447,7 +447,22 @@ de{
                 other{"{0} Karat"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    accusative{
+                        one{"{0} Milligramm pro Deziliter"}
+                        other{"{0} Milligramm pro Deziliter"}
+                    }
+                    dative{
+                        one{"{0} Milligramm pro Deziliter"}
+                        other{"{0} Milligramm pro Deziliter"}
+                    }
+                    genitive{
+                        one{"{0} Milligramm pro Deziliter"}
+                        other{"{0} Milligramm pro Deziliter"}
+                    }
+                }
                 dnam{"Milligramm pro Deziliter"}
+                gender{"neuter"}
                 one{"{0} Milligramm pro Deziliter"}
                 other{"{0} Milligramm pro Deziliter"}
             }
@@ -570,6 +585,26 @@ de{
                 gender{"neuter"}
                 one{"{0} pro Zehntausend"}
                 other{"{0} pro Zehntausend"}
+            }
+            portion-per-1e9{
+                case{
+                    accusative{
+                        one{"{0} Milliardstel"}
+                        other{"{0} Milliardstel"}
+                    }
+                    dative{
+                        one{"{0} Milliardstel"}
+                        other{"{0} Milliardsteln"}
+                    }
+                    genitive{
+                        one{"{0} Milliardstels"}
+                        other{"{0} Milliardstel"}
+                    }
+                }
+                dnam{"Milliardstel"}
+                gender{"neuter"}
+                one{"{0} Milliardstel"}
+                other{"{0} Milliardstel"}
             }
         }
         consumption{
@@ -1087,6 +1122,27 @@ de{
                 one{"{0} Nanosekunde"}
                 other{"{0} Nanosekunden"}
             }
+            night{
+                case{
+                    accusative{
+                        one{"{0} Übernachtung"}
+                        other{"{0} Übernachtungen"}
+                    }
+                    dative{
+                        one{"{0} Übernachtung"}
+                        other{"{0} Übernachtungen"}
+                    }
+                    genitive{
+                        one{"{0} Übernachtung"}
+                        other{"{0} Übernachtungen"}
+                    }
+                }
+                dnam{"Übernachtungen"}
+                gender{"feminine"}
+                one{"{0} Übernachtung"}
+                other{"{0} Übernachtungen"}
+                per{"{0} pro Übernachtung"}
+            }
             quarter{
                 case{
                     accusative{
@@ -1161,7 +1217,7 @@ de{
                         other{"{0} Jahren"}
                     }
                     genitive{
-                        one{"{0} Jahrs"}
+                        one{"{0} Jahres"}
                         other{"{0} Jahre"}
                     }
                 }
@@ -1892,7 +1948,22 @@ de{
                 other{"{0} Pikometer"}
             }
             point{
+                case{
+                    accusative{
+                        one{"{0} DTP-Punkt"}
+                        other{"{0} DTP-Punkte"}
+                    }
+                    dative{
+                        one{"{0} DTP-Punkt"}
+                        other{"{0} DTP-Punkten"}
+                    }
+                    genitive{
+                        one{"{0} DTP-Punkts"}
+                        other{"{0} DTP-Punkte"}
+                    }
+                }
                 dnam{"DTP-Punkte"}
+                gender{"masculine"}
                 one{"{0} DTP-Punkt"}
                 other{"{0} DTP-Punkte"}
             }
@@ -2507,7 +2578,22 @@ de{
                 other{"{0} Millibar"}
             }
             millimeter-ofhg{
+                case{
+                    accusative{
+                        one{"{0} Millimeter Quecksilbersäule"}
+                        other{"{0} Millimeter Quecksilbersäule"}
+                    }
+                    dative{
+                        one{"{0} Millimeter Quecksilbersäule"}
+                        other{"{0} Millimeter Quecksilbersäule"}
+                    }
+                    genitive{
+                        one{"{0} Millimeter Quecksilbersäule"}
+                        other{"{0} Millimeter Quecksilbersäule"}
+                    }
+                }
                 dnam{"Millimeter Quecksilbersäule"}
+                gender{"masculine"}
                 one{"{0} Millimeter Quecksilbersäule"}
                 other{"{0} Millimeter Quecksilbersäule"}
             }
@@ -2539,7 +2625,22 @@ de{
         }
         speed{
             beaufort{
+                case{
+                    accusative{
+                        one{"Beaufort {0}"}
+                        other{"Beaufort {0}"}
+                    }
+                    dative{
+                        one{"Beaufort {0}"}
+                        other{"Beaufort {0}"}
+                    }
+                    genitive{
+                        one{"Beaufort {0}"}
+                        other{"Beaufort {0}"}
+                    }
+                }
                 dnam{"Beaufort"}
+                gender{"neuter"}
                 one{"Beaufort {0}"}
                 other{"Beaufort {0}"}
             }
@@ -2567,6 +2668,26 @@ de{
                 dnam{"Knoten"}
                 one{"{0} Knoten"}
                 other{"{0} Knoten"}
+            }
+            light-speed{
+                case{
+                    accusative{
+                        one{"{0} Lichtgeschwindigkeit"}
+                        other{"{0}-fache Lichtgeschwindigkeit"}
+                    }
+                    dative{
+                        one{"{0} Lichtgeschwindigkeit"}
+                        other{"{0}-facher Lichtgeschwindigkeit"}
+                    }
+                    genitive{
+                        one{"{0} Lichtgeschwindigkeit"}
+                        other{"{0}-facher Lichtgeschwindigkeit"}
+                    }
+                }
+                dnam{"Lichtgeschwindigkeit"}
+                gender{"feminine"}
+                one{"{0} Lichtgeschwindigkeit"}
+                other{"{0}-fache Lichtgeschwindigkeit"}
             }
             meter-per-second{
                 case{
@@ -3455,6 +3576,12 @@ de{
                 one{"{0} M"}
                 other{"{0} M"}
             }
+            night{
+                dnam{"Nächte"}
+                one{"{0}Nacht"}
+                other{"{0}Nächte"}
+                per{"{0}/Nacht"}
+            }
             quarter{
                 dnam{"Q"}
                 one{"{0} Q"}
@@ -3625,6 +3752,13 @@ de{
                 dnam{"W"}
             }
         }
+        speed{
+            light-speed{
+                dnam{"c"}
+                one{"{0} c"}
+                other{"{0} c"}
+            }
+        }
         temperature{
             fahrenheit{
                 one{"{0}°F"}
@@ -3755,6 +3889,11 @@ de{
                 one{"{0} ‱"}
                 other{"{0} ‱"}
             }
+            portion-per-1e9{
+                dnam{"Milliardstel"}
+                one{"{0} Milliardstel"}
+                other{"{0} Milliardstel"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -3848,6 +3987,12 @@ de{
                 one{"{0} Mon."}
                 other{"{0} Mon."}
                 per{"{0}/M"}
+            }
+            night{
+                dnam{"Nächte"}
+                one{"{0} Nacht"}
+                other{"{0} Nächte"}
+                per{"{0}/Nacht"}
             }
             quarter{
                 dnam{"Quart."}
@@ -4017,6 +4162,13 @@ de{
         pressure{
             millibar{
                 dnam{"Millibar"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"Lichtgeschw."}
+                one{"{0} Lichtgeschw."}
+                other{"{0}-fache Lichtg."}
             }
         }
         temperature{

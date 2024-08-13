@@ -1266,8 +1266,4 @@ ta{
             other{"ஸாம்பியன் குவாச்சாக்கள்"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

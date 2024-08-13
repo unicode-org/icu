@@ -1604,6 +1604,9 @@ chr{
             lg{"ᏣᏩᏂᏏ ᎠᏟᎢᎵᏒ"}
             ls{"ᏣᏩᏂᏏ ᎠᏟᎶᏍᏗ ᎠᏟᎢᎵᏒ"}
         }
+        "meta:Kazakhstan"{
+            ls{"ᎧᏎᎧᏍᏕᏂ ᎠᏟᎢᎵᏒ"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"ᏗᎧᎸᎬ ᎧᏎᎧᏍᏕᏂ ᎠᏟᎢᎵᏒ"}
         }

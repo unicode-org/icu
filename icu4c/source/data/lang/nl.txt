@@ -94,6 +94,7 @@ nl{
         bjn{"Banjar"}
         bkm{"Kom"}
         bla{"Siksika"}
+        blo{"Anii"}
         bm{"Bambara"}
         bn{"Bengaals"}
         bo{"Tibetaans"}
@@ -330,6 +331,7 @@ nl{
         kv{"Komi"}
         kw{"Cornish"}
         kwk{"Kwakʼwala"}
+        kxv{"Kuvi"}
         ky{"Kirgizisch"}
         la{"Latijn"}
         lad{"Ladino"}
@@ -622,6 +624,7 @@ nl{
         vi{"Vietnamees"}
         vls{"West-Vlaams"}
         vmf{"Opperfrankisch"}
+        vmw{"Makhuwa"}
         vo{"Volapük"}
         vot{"Votisch"}
         vro{"Võro"}
@@ -637,6 +640,7 @@ nl{
         xal{"Kalmuks"}
         xh{"Xhosa"}
         xmf{"Mingreels"}
+        xnr{"Kangri"}
         xog{"Soga"}
         yao{"Yao"}
         yap{"Yapees"}
@@ -679,7 +683,6 @@ nl{
         Adlm{"Adlam"}
         Afak{"Defaka"}
         Aghb{"Kaukasisch Albanees"}
-        Ahom{"Ahom"}
         Arab{"Arabisch"}
         Aran{"Nastaliq"}
         Armi{"Keizerlijk Aramees"}
@@ -700,7 +703,6 @@ nl{
         Cakm{"Chakma"}
         Cans{"Verenigde Canadese Aboriginal-symbolen"}
         Cari{"Carisch"}
-        Cham{"Cham"}
         Cher{"Cherokee"}
         Chrs{"Chorasmisch"}
         Cirt{"Cirth"}
@@ -746,7 +748,6 @@ nl{
         Hung{"Oudhongaars"}
         Inds{"Indus"}
         Ital{"Oud-italisch"}
-        Jamo{"Jamo"}
         Java{"Javaans"}
         Jpan{"Japans"}
         Jurc{"Jurchen"}
@@ -785,7 +786,6 @@ nl{
         Merc{"Meroitisch cursief"}
         Mero{"Meroïtisch"}
         Mlym{"Malayalam"}
-        Modi{"Modi"}
         Mong{"Mongools"}
         Moon{"Moon"}
         Mroo{"Mro"}
@@ -854,7 +854,6 @@ nl{
         Tfng{"Tifinagh"}
         Tglg{"Tagalog"}
         Thaa{"Thaana"}
-        Thai{"Thai"}
         Tibt{"Tibetaans"}
         Tirh{"Tirhuta"}
         Tnsa{"Tangsa"}
@@ -899,6 +898,8 @@ nl{
             indian{"Indiase nationale kalender"}
             islamic{"Islamitische kalender"}
             islamic-civil{"Islamitische kalender (cyclisch)"}
+            islamic-rgsa{"Islamitische kalender (Saudi–Arabië)"}
+            islamic-tbla{"Islamitische kalender (epoche)"}
             islamic-umalqura{"Islamitische kalender (Umm al-Qura)"}
             iso8601{"ISO-8601-kalender"}
             japanese{"Japanse kalender"}

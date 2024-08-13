@@ -185,6 +185,11 @@ et{
                 one{"{0} promüriaad"}
                 other{"{0} promüriaadi"}
             }
+            portion-per-1e9{
+                dnam{"miljardikosa"}
+                one{"{0} miljardikosa"}
+                other{"{0} miljardikosa"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -316,6 +321,12 @@ et{
                 dnam{"nanosekundid"}
                 one{"{0} nanosekund"}
                 other{"{0} nanosekundit"}
+            }
+            night{
+                dnam{"ööd"}
+                one{"{0} öö"}
+                other{"{0} ööd"}
+                per{"{0} öö kohta"}
             }
             quarter{
                 dnam{"kvartalid"}
@@ -776,6 +787,11 @@ et{
                 one{"{0} sõlm"}
                 other{"{0} sõlme"}
             }
+            light-speed{
+                dnam{"valguskiirus"}
+                one{"{0} valguskiirus"}
+                other{"{0} valguskiirust"}
+            }
             meter-per-second{
                 dnam{"meetrid sekundis"}
                 one{"{0} meeter sekundis"}
@@ -1025,6 +1041,12 @@ et{
                 one{"{0} k"}
                 other{"{0} k"}
             }
+            night{
+                dnam{"ööd"}
+                one{"{0} öö"}
+                other{"{0} ööd"}
+                per{"{0}/öö"}
+            }
             second{
                 dnam{"s"}
                 one{"{0} s"}
@@ -1086,6 +1108,11 @@ et{
             beaufort{
                 one{"B{0}"}
                 other{"B{0}"}
+            }
+            light-speed{
+                dnam{"valguskiirus"}
+                one{"{0} valguskiirus"}
+                other{"{0} valguskiirust"}
             }
         }
         volume{
@@ -1195,6 +1222,11 @@ et{
             permyriad{
                 dnam{"promüriaad"}
             }
+            portion-per-1e9{
+                dnam{"osakesed/miljard"}
+                one{"{0} miljardikosa"}
+                other{"{0} miljardikosa"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1265,6 +1297,12 @@ et{
                 one{"{0} kuu"}
                 other{"{0} kuud"}
                 per{"{0}/k"}
+            }
+            night{
+                dnam{"ööd"}
+                one{"{0} öö"}
+                other{"{0} ööd"}
+                per{"{0}/öö"}
             }
             quarter{
                 dnam{"kv"}
@@ -1465,6 +1503,13 @@ et{
                 dnam{"in Hg"}
                 one{"{0} in Hg"}
                 other{"{0} in Hg"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"valguskiirus"}
+                one{"{0} valguskiirus"}
+                other{"{0} valguskiirust"}
             }
         }
         temperature{

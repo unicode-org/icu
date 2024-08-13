@@ -76,7 +76,4 @@ su{
             other{"(mata uang teu dikenal)"}
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

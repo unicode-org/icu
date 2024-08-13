@@ -1578,6 +1578,9 @@ zu{
             lg{"esase-Petropavlovsk-Kamchatski Time"}
             ls{"esase-Petropavlovsk-Kamchatski Standard Time"}
         }
+        "meta:Kazakhstan"{
+            ls{"Isikhathi saseKazakhstan"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Isikhathi sase-Mpumalanga ne-Kazakhstan"}
         }

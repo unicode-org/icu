@@ -546,6 +546,9 @@ jv{
             lg{"Wektu Jepang"}
             ls{"Wektu Standar Jepang"}
         }
+        "meta:Kazakhstan"{
+            ls{"Wektu Kazakhstan"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Wektu Kazakhstan Wetan"}
         }

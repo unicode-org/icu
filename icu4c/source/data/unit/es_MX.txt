@@ -5,9 +5,6 @@ es_MX{
     %%Parent{"es_419"}
     units{
         concentr{
-            milligram-ofglucose-per-deciliter{
-                dnam{"miligramos por decilitro"}
-            }
             percent{
                 dnam{"por ciento"}
             }
@@ -165,19 +162,11 @@ es_MX{
                 one{"{0} mm"}
                 other{"{0}mm"}
             }
-            nautical-mile{
-                dnam{"M"}
-            }
         }
         mass{
             kilogram{
                 one{"{0} kg"}
                 other{"{0}kg"}
-            }
-        }
-        power{
-            horsepower{
-                dnam{"CV"}
             }
         }
         pressure{

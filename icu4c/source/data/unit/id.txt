@@ -150,6 +150,10 @@ id{
             permyriad{
                 other{"{0} permyriad"}
             }
+            portion-per-1e9{
+                dnam{"bagian per miliar"}
+                other{"{0} bagian per miliar"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -247,6 +251,11 @@ id{
             nanosecond{
                 dnam{"nanodetik"}
                 other{"{0} nanodetik"}
+            }
+            night{
+                dnam{"malam"}
+                other{"{0} malam"}
+                per{"{0} per malam"}
             }
             quarter{
                 dnam{"kuartal"}
@@ -603,6 +612,10 @@ id{
                 dnam{"knot"}
                 other{"{0} knot"}
             }
+            light-speed{
+                dnam{"cahaya"}
+                other{"{0} cahaya"}
+            }
             meter-per-second{
                 dnam{"meter per detik"}
                 other{"{0} meter per detik"}
@@ -867,6 +880,11 @@ id{
             }
         }
         duration{
+            night{
+                dnam{"malam"}
+                other{"{0} malam"}
+                per{"{0}/malam"}
+            }
             quarter{
                 other{"{0}k"}
             }
@@ -979,6 +997,10 @@ id{
         speed{
             kilometer-per-hour{
                 other{"{0}km/j"}
+            }
+            light-speed{
+                dnam{"cahaya"}
+                other{"{0} cahaya"}
             }
             meter-per-second{
                 dnam{"m/dtk"}
@@ -1094,6 +1116,9 @@ id{
             permyriad{
                 dnam{"permyriad"}
             }
+            portion-per-1e9{
+                dnam{"bagian/miliar"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1187,6 +1212,11 @@ id{
             nanosecond{
                 dnam{"nanodtk"}
                 other{"{0} ndtk"}
+            }
+            night{
+                dnam{"malam"}
+                other{"{0} malam"}
+                per{"{0}/malam"}
             }
             quarter{
                 dnam{"krt"}
@@ -1362,6 +1392,10 @@ id{
             kilometer-per-hour{
                 dnam{"km/jam"}
                 other{"{0} km/j"}
+            }
+            light-speed{
+                dnam{"cahaya"}
+                other{"{0} cahaya"}
             }
             meter-per-second{
                 dnam{"meter/dtk"}

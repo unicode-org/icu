@@ -39,9 +39,6 @@ cs{
         "Africa:Tripoli"{
             ec{"Tripolis"}
         }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia"{
             ec{"Bahía"}
         }
@@ -62,9 +59,6 @@ cs{
         }
         "America:Costa_Rica"{
             ec{"Kostarika"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Dominica"{
             ec{"Dominika"}
@@ -423,9 +417,6 @@ cs{
         }
         "Indian:Mauritius"{
             ec{"Mauricius"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Chatham"{
             ec{"Chathamské ostrovy"}
@@ -834,6 +825,9 @@ cs{
             ld{"petropavlovsko-kamčatský letní čas"}
             lg{"petropavlovsko-kamčatský čas"}
             ls{"petropavlovsko-kamčatský standardní čas"}
+        }
+        "meta:Kazakhstan"{
+            ls{"kazachstánský čas"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"východokazachstánský čas"}

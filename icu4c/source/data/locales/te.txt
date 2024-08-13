@@ -12,7 +12,7 @@ te{
         " మ య ర ఱ ల వ శ ష స హ ళ]"
     }
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0౦ 1౧ 2౨ 3౩ 4౪ 5౫ 6౬ 7౭ 8౮ 9౯]"}
-    ExemplarCharactersPunctuation{"[\\- ‑ , ; \\: ! ? . '‘’ \u0022“” ( ) \\[ \\] \\{ \\}]"}
+    ExemplarCharactersPunctuation{"[\\- ‑ , ; \\: ! ? . '‘’ \u0022“” ( ) \\[ \\] \\{ \\} \\& #]"}
     NumberElements{
         latn{
             miscPatterns{
@@ -1505,10 +1505,10 @@ te{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₹ ₨ {Rp} {Rs}]",
+                "[₹ ₨ {రూ} {రూ.} {Rp} {Rs}]",
             }
         }
         number{

@@ -18,14 +18,8 @@ hr{
         "Africa:Lome"{
             ec{"Lomé"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "America:Anguilla"{
             ec{"Angvila"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
@@ -35,9 +29,6 @@ hr{
         }
         "America:Costa_Rica"{
             ec{"Kostarika"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Dominica"{
             ec{"Dominika"}
@@ -123,6 +114,12 @@ hr{
         "Asia:Kamchatka"{
             ec{"Kamčatka"}
         }
+        "Asia:Karachi"{
+            ec{"Karači"}
+        }
+        "Asia:Katmandu"{
+            ec{"Katmandu"}
+        }
         "Asia:Khandyga"{
             ec{"Handiga"}
         }
@@ -154,7 +151,7 @@ hr{
             ec{"Kizilorda"}
         }
         "Asia:Rangoon"{
-            ec{"Rangoon"}
+            ec{"Rangun"}
         }
         "Asia:Riyadh"{
             ec{"Rijad"}
@@ -164,6 +161,9 @@ hr{
         }
         "Asia:Sakhalin"{
             ec{"Sahalin"}
+        }
+        "Asia:Seoul"{
+            ec{"Seul"}
         }
         "Asia:Shanghai"{
             ec{"Šangaj"}
@@ -180,8 +180,14 @@ hr{
         "Asia:Tehran"{
             ec{"Teheran"}
         }
+        "Asia:Tokyo"{
+            ec{"Tokio"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"Ulan Bator"}
+        }
+        "Asia:Urumqi"{
+            ec{"Urumči"}
         }
         "Asia:Yakutsk"{
             ec{"Jakutsk"}
@@ -193,7 +199,10 @@ hr{
             ec{"Erevan"}
         }
         "Atlantic:Azores"{
-            ec{"Azorski otoci"}
+            ec{"Azori"}
+        }
+        "Atlantic:Bermuda"{
+            ec{"Bermudi"}
         }
         "Atlantic:Canary"{
             ec{"Kanari"}
@@ -203,6 +212,9 @@ hr{
         }
         "Atlantic:South_Georgia"{
             ec{"Južna Georgija"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"Sveta Helena"}
         }
         "Etc:UTC"{
             ls{"koordinirano svjetsko vrijeme"}
@@ -305,9 +317,6 @@ hr{
         }
         "Indian:Mauritius"{
             ec{"Mauricijus"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Enderbury"{
             ec{"Enderbury"}
@@ -504,10 +513,10 @@ hr{
             ls{"choibalsansko standardno vrijeme"}
         }
         "meta:Christmas"{
-            ls{"vrijeme Božićnog otoka"}
+            ls{"vrijeme Božićnog Otoka"}
         }
         "meta:Cocos"{
-            ls{"vrijeme Kokosovih otoka"}
+            ls{"vrijeme Kokosovih Otoka"}
         }
         "meta:Colombia"{
             ld{"kolumbijsko ljetno vrijeme"}
@@ -515,9 +524,9 @@ hr{
             ls{"kolumbijsko standardno vrijeme"}
         }
         "meta:Cook"{
-            ld{"Cookovi otoci, polusatni pomak, ljetno vrijeme"}
-            lg{"vrijeme Cookovih otoka"}
-            ls{"standardno vrijeme Cookovih otoka"}
+            ld{"Cookovi Otoci, polusatni pomak, ljetno vrijeme"}
+            lg{"vrijeme Cookovih Otoka"}
+            ls{"standardno vrijeme Cookovih Otoka"}
         }
         "meta:Cuba"{
             ld{"kubansko ljetno vrijeme"}
@@ -582,7 +591,7 @@ hr{
             ls{"vrijeme Francuske Gijane"}
         }
         "meta:French_Southern"{
-            ls{"vrijeme Francuskih južnih i antarktičkih teritorija"}
+            ls{"vrijeme Francuskih Južnih Teritorija"}
         }
         "meta:GMT"{
             ls{"univerzalno vrijeme"}
@@ -678,6 +687,9 @@ hr{
             ld{"Petropavlovsk-kamčatsko ljetno vrijeme"}
             lg{"Petropavlovsk-kamčatsko vrijeme"}
             ls{"Petropavlovsk-kamčatsko standardno vrijeme"}
+        }
+        "meta:Kazakhstan"{
+            ls{"kazahstansko vrijeme"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"istočnokazahstansko vrijeme"}
@@ -883,7 +895,7 @@ hr{
             ls{"singapursko vrijeme"}
         }
         "meta:Solomon"{
-            ls{"vrijeme Salomonskih Otoka"}
+            ls{"vrijeme Salomonovih Otoka"}
         }
         "meta:South_Georgia"{
             ls{"vrijeme Južne Georgije"}

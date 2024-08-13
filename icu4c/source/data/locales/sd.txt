@@ -13,7 +13,23 @@ sd{
     }
     ExemplarCharactersPunctuation{"[⹁ ⁏ \\: ! ۔ ‘ ( ) \\[ \\] \\{ \\} /]"}
     NumberElements{
+        arab{
+            symbols{
+                decimal{"."}
+            }
+        }
+        arabext{
+            symbols{
+                decimal{"."}
+                group{"،"}
+            }
+        }
         default{"arab"}
+        deva{
+            symbols{
+                group{"،"}
+            }
+        }
         latn{
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
@@ -290,7 +306,7 @@ sd{
                 "yMMdd",
             }
             availableFormats{
-                GyMd{"M/d/y GGGGG"}
+                GyMd{"M/d/y G"}
                 MMMMW{
                     one{"ھفتو W جو MMMM"}
                     other{"ھفتو W جو MMMM"}
@@ -926,14 +942,21 @@ sd{
         standard{
             2{"{0} ۽ {1}"}
             end{"{0}، ۽ {1}"}
+            middle{"{0}، {1}"}
+            start{"{0}، {1}"}
         }
         standard-narrow{
-            2{"{0}, {1}"}
+            2{"{0}، {1}"}
             end{"{0}, {1}"}
+            middle{"{0}، {1}"}
+        }
+        unit{
+            middle{"{0}، {1}"}
         }
         unit-short{
-            2{"{0}, {1}"}
+            2{"{0}، {1}"}
             end{"{0}, {1}"}
+            middle{"{0}، {1}"}
         }
     }
     measurementSystemNames{

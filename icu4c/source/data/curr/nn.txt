@@ -308,13 +308,9 @@ nn{
             "SDP",
             "gamle sudanske pund",
         }
-        SLE{
-            "SLE",
-            "sierraleonske leonar",
-        }
         SLL{
             "SLL",
-            "sierraleonske leonar (1964—2022)",
+            "sierraleonsk leone (1964—2022)",
         }
         SUR{
             "SUR",
@@ -450,10 +446,6 @@ nn{
             one{"belarusisk ny rubel (BYB)"}
             other{"belarusiske nye rublar (BYB)"}
         }
-        BYN{
-            one{"ny belarusisk rubel"}
-            other{"nye belarusiske rublar"}
-        }
         BYR{
             one{"belarusisk rubel (2000–2016)"}
             other{"belarusiske rublar (2000–2016)"}
@@ -489,9 +481,6 @@ nn{
         GRD{
             one{"gresk drakme"}
             other{"greske drakmar"}
-        }
-        GWP{
-            one{"Guinea-Bissau-peso"}
         }
         HRD{
             one{"kroatisk dinar"}
@@ -548,10 +537,6 @@ nn{
         RON{
             one{"rumensk leu"}
             other{"rumenske leuar"}
-        }
-        RUR{
-            one{"russisk rubel (1991–1998)"}
-            other{"russiske rublar (1991–1998)"}
         }
         SAR{
             one{"saudiarabisk rial"}

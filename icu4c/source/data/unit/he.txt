@@ -223,6 +223,7 @@ he{
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"מיליגרם/דציליטר"}
+                gender{"masculine"}
                 many{"{0} מיליגרם/דציליטר"}
                 one{"{0} מיליגרם/דציליטר"}
                 other{"{0} מיליגרם/דציליטר"}
@@ -276,6 +277,13 @@ he{
                 other{"{0} רבביות"}
                 two{"{0} רבביות"}
             }
+            portion-per-1e9{
+                dnam{"חלקים למיליארד"}
+                gender{"masculine"}
+                one{"{0} חלקים למיליארד"}
+                other{"{0} חלקים למיליארד"}
+                two{"{0} חלקים למיליארד"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -318,6 +326,9 @@ he{
         digital{
             bit{
                 gender{"masculine"}
+                one{"ביט {0}"}
+                other{"{0} ביט"}
+                two{"{0} ביט"}
             }
             byte{
                 gender{"masculine"}
@@ -326,7 +337,7 @@ he{
                 dnam{"ג׳יגה-ביט"}
                 gender{"masculine"}
                 many{"{0} ג'יגה-ביט"}
-                one{"{0} ג'יגה-ביט"}
+                one{"{0} ג׳יגה-ביט"}
                 other{"{0} ג'יגה-ביט"}
                 two{"{0} ג'יגה-ביט"}
             }
@@ -462,6 +473,14 @@ he{
                 other{"{0} ננו שניות"}
                 two{"{0} ננו שניות"}
             }
+            night{
+                dnam{"לילות"}
+                gender{"masculine"}
+                one{"{0} לילה"}
+                other{"{0} לילות"}
+                per{"{0}/לילה"}
+                two{"{0} לילות"}
+            }
             quarter{
                 gender{"masculine"}
                 many{"{0} רבעונים"}
@@ -563,6 +582,7 @@ he{
             }
             kilocalorie{
                 dnam{"קילו קלוריות"}
+                gender{"feminine"}
                 many{"{0} קילו קלוריות"}
                 one{"קילו קלוריה {0}"}
                 other{"{0} קילו קלוריות"}
@@ -649,9 +669,10 @@ he{
         graphics{
             dot{
                 dnam{"נקודות קטנות"}
+                many{"{0} נקודות קטנות"}
                 one{"{0} נקודה"}
-                other{"‎{0} px ‎"}
-                two{"‎{0} px ‎"}
+                other{"{0} נקודות קטנות"}
+                two{"שתי נקודות קטנות"}
             }
             dot-per-centimeter{
                 dnam{"נקודות לסנטימטר"}
@@ -661,10 +682,10 @@ he{
                 two{"‎{0} נקודות לסנטימטר"}
             }
             dot-per-inch{
-                many{"{0} ppi"}
-                one{"נקודות לאינץ׳"}
+                many{"{0} נקודות לאינץ׳"}
+                one{"נקודה לאינץ׳"}
                 other{"‎{0} dpi‎"}
-                two{"{0} ppi"}
+                two{"{0} נקודות לאינץ׳"}
             }
             em{
                 dnam{"קו מפריד מסוג em"}
@@ -829,9 +850,10 @@ he{
                 two{"{0} פיקומטרים"}
             }
             point{
+                gender{"feminine"}
                 one{"נקודה"}
                 other{"{0} נקודות"}
-                two{"{0} נק'"}
+                two{"{0} נקודות"}
             }
             solar-radius{
                 dnam{"רדיוס סולרי"}
@@ -1071,6 +1093,7 @@ he{
             }
             millimeter-ofhg{
                 dnam{"מילימטר כספית"}
+                gender{"masculine"}
                 many{"{0} מילימטר כספית"}
                 one{"מילימטר כספית אחד"}
                 other{"{0} מילימטר כספית"}
@@ -1114,6 +1137,13 @@ he{
                 other{"{0} קשר"}
                 two{"שני קשר"}
             }
+            light-speed{
+                dnam{"אור"}
+                gender{"masculine"}
+                one{"{0} אור"}
+                other{"{0} אור"}
+                two{"{0} אור"}
+            }
             meter-per-second{
                 dnam{"מטר לשנייה"}
                 gender{"masculine"}
@@ -1147,6 +1177,7 @@ he{
                 two{"{0} מעלות פרנהייט"}
             }
             generic{
+                dnam{"מעלת טמפרטורה"}
                 gender{"feminine"}
             }
             kelvin{
@@ -1302,6 +1333,9 @@ he{
                 other{"{0} דראם אלכוהול"}
                 two{"{0} דראם אלכוהול"}
             }
+            drop{
+                dnam{"טיפות"}
+            }
             fluid-ounce{
                 dnam{"אונקיות נוזלים"}
                 many{"{0} אונקיות נוזלים"}
@@ -1442,7 +1476,7 @@ he{
             }
             hectare{
                 many{"{0} הקטאר"}
-                one{"הקטאר {0}"}
+                one{"‎{0} ha"}
                 other{"{0} הקטאר"}
                 two{"{0} הקטאר"}
             }
@@ -1486,6 +1520,11 @@ he{
             }
         }
         digital{
+            gigabit{
+                one{"‎{0}Gb"}
+                other{"{0} Gb"}
+                two{"{0} Gb"}
+            }
             gigabyte{
                 dnam{"ג״ב"}
                 many{"{0} ג״ב"}
@@ -1516,8 +1555,9 @@ he{
                 two{"{0} י׳"}
             }
             hour{
-                one{"שעה {0}"}
+                one{"שע' {0}"}
                 other{"{0} שע׳"}
+                per{"{0}/שע׳"}
                 two{"{0} שע׳"}
             }
             month{
@@ -1525,6 +1565,16 @@ he{
                 one{"ח׳ {0}"}
                 other{"{0} ח׳"}
                 two{"{0} ח׳"}
+            }
+            nanosecond{
+                dnam{"ns"}
+            }
+            night{
+                dnam{"לילות"}
+                one{"{0} לילה"}
+                other{"{0} לילות"}
+                per{"{0}/לילה"}
+                two{"{0} לילות"}
             }
             second{
                 one{"שניה"}
@@ -1536,6 +1586,7 @@ he{
                 many{"{0} ש′"}
                 one{"ש′ {0}"}
                 other{"{0} ש′"}
+                per{"{0}/שב׳"}
                 two{"{0} ש′"}
             }
             year{
@@ -1560,7 +1611,7 @@ he{
                 many{"{0} kWh/100km"}
                 one{"{0} kWh/100km"}
                 other{"{0} kWh"}
-                two{"{0} קוט\u0022ש/100 ק\u0022מ"}
+                two{"{0} kWh/100km"}
             }
         }
         graphics{
@@ -1573,6 +1624,7 @@ he{
                 two{"‎{0} ppcm‎"}
             }
             dot-per-inch{
+                dnam{"dpi"}
                 many{"{0} ppi"}
                 one{"{0} dpi"}
                 other{"‎{0} dpi‎"}
@@ -1586,23 +1638,17 @@ he{
                 other{"{0} au"}
                 two{"{0} au"}
             }
-            centimeter{
-                one{"ס\u0022מ {0}"}
-                other{"{0} ס״מ"}
-                two{"{0} ס״מ"}
-            }
             foot{
                 many{"{0} רגל"}
-                one{"רגל {0}"}
+                one{"‎{0} ft"}
                 other{"{0} רגל"}
-                per{"{0}/רגל"}
                 two{"{0} רגל"}
             }
             inch{
+                dnam{"in"}
                 many{"{0} אינץ׳"}
-                one{"אינץ׳ {0}"}
+                one{"‎{0} in"}
                 other{"{0} אינץ׳"}
-                per{"{0}/אינץ׳"}
                 two{"{0} אינץ׳"}
             }
             meter{
@@ -1613,7 +1659,7 @@ he{
             }
             micrometer{
                 many{"{0} μm"}
-                one{"{0} μm"}
+                one{"‎{0} μm‎"}
                 other{"{0} μm"}
                 two{"{0} μm"}
             }
@@ -1629,7 +1675,7 @@ he{
             }
             nanometer{
                 many{"{0} nm"}
-                one{"{0} nm"}
+                one{"‎{0} nm"}
                 other{"{0} nm"}
                 two{"{0} nm"}
             }
@@ -1641,7 +1687,7 @@ he{
             }
             picometer{
                 many{"{0} פיקומטר"}
-                one{"פיקומטר {0}"}
+                one{"pm ‏{0}"}
                 other{"{0} פיקומטר"}
                 two{"{0} פיקומטר"}
             }
@@ -1676,7 +1722,7 @@ he{
             }
             tonne{
                 many{"{0} t"}
-                one{"{0} t"}
+                one{"‎t {0}"}
                 other{"{0} t"}
                 two{"{0} t"}
             }
@@ -1685,7 +1731,7 @@ he{
             millibar{
                 dnam{"מ״ב"}
                 many{"{0} מיליבר"}
-                one{"מיליבר {0}"}
+                one{"{0} מ″ב"}
                 other{"{0} מיליבר"}
                 two{"{0} מיליבר"}
             }
@@ -1696,11 +1742,11 @@ he{
                 other{"B{0}"}
                 two{"B {0}"}
             }
-            meter-per-second{
-                many{"{0} מ/ש"}
-                one{"{0} מ/ש"}
-                other{"{0} מ/ש"}
-                two{"{0} מ/ש"}
+            light-speed{
+                dnam{"אור"}
+                one{"{0} אור"}
+                other{"{0} אור"}
+                two{"{0} אור"}
             }
         }
         volume{
@@ -1739,6 +1785,9 @@ he{
         acceleration{
             g-force{
                 dnam{"כוח ג׳י"}
+                one{"G ‏{0}"}
+                other{"{0} G"}
+                two{"{0} G"}
             }
         }
         angle{
@@ -1911,6 +1960,9 @@ he{
             }
             gigabit{
                 dnam{"Gbit"}
+                one{"‎ {0} Gb"}
+                other{"{0} Gb"}
+                two{"{0} Gb"}
             }
             megabit{
                 dnam{"Mbit"}
@@ -1962,6 +2014,13 @@ he{
             }
             nanosecond{
                 dnam{"ננו שניות"}
+            }
+            night{
+                dnam{"לילות"}
+                one{"{0} לילה"}
+                other{"{0} לילות"}
+                per{"{0}/לילה"}
+                two{"{0} לילות"}
             }
             quarter{
                 dnam{"רבעונים"}
@@ -2026,9 +2085,10 @@ he{
         force{
             kilowatt-hour-per-100-kilometer{
                 dnam{"קוט״ש/100 ק״מ"}
-                one{"{0} קוט\u0022ש/100 ק\u0022מ"}
-                other{"{0} קוט\u0022ש/100 ק\u0022מ"}
-                two{"{0} קוט\u0022ש/100 ק\u0022מ"}
+                many{"{0} קוט״ש/100 ק״מ"}
+                one{"{0} קוט״ש/100 ק״מ"}
+                other{"{0} קוט״ש/100 ק״מ"}
+                two{"{0} קוט״ש/100 ק״מ"}
             }
         }
         graphics{
@@ -2036,10 +2096,11 @@ he{
                 dnam{"נקודה קטנה"}
             }
             dot-per-inch{
-                dnam{"נקודות לאינץ׳"}
+                dnam{"dpi"}
+                many{"‎{0} dpi"}
                 one{"{0} dpi"}
                 other{"‎{0} dpi‎"}
-                two{"‎{0} ppi‎"}
+                two{"‎{0} dpi‎"}
             }
             em{
                 one{"‎{0} em ‎"}
@@ -2157,13 +2218,13 @@ he{
                 dnam{"פ״מ"}
                 one{"פ“מ {0}"}
                 other{"{0} פ\u0022מ"}
-                two{"{0} פ\u0022מ"}
+                two{"{0} פ״מ"}
             }
             point{
                 dnam{"נקודות"}
-                one{"{0} נק'"}
+                one{"נק׳ {0}"}
                 other{"{0} נק'"}
-                two{"{0} נק'"}
+                two{"{0} נק׳"}
             }
             solar-radius{
                 one{"‎{0} R☉‎"}
@@ -2237,6 +2298,7 @@ he{
                 two{"{0} ט׳"}
             }
             tonne{
+                dnam{"טון מ׳"}
                 one{"{0} טון מ׳"}
                 other{"{0} טון מ׳"}
                 two{"{0} טון מ׳"}
@@ -2270,6 +2332,12 @@ he{
                 one{"{0} קמ״ש"}
                 other{"{0} קמ״ש"}
                 two{"{0} קמ״ש"}
+            }
+            light-speed{
+                dnam{"אור"}
+                one{"{0} אור"}
+                other{"{0} אור"}
+                two{"{0} אור"}
             }
             meter-per-second{
                 dnam{"מ׳/שנ׳"}

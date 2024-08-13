@@ -22,13 +22,13 @@ sr_Cyrl_ME{
             }
             availableFormats{
                 MMMMW{
-                    few{"W. 'сједмица' 'у' MMMM"}
-                    one{"W. 'сједмица' 'у' MMMM"}
+                    few{"MMMM: W. 'недеља'"}
+                    one{"MMMM: W. 'недеља'"}
                     other{"W. 'сједмица' 'у' MMMM"}
                 }
                 yw{
-                    few{"w. 'сједмица' 'у' Y."}
-                    one{"w. 'сједмица' 'у' Y."}
+                    few{"w. 'недеља' 'у' Y."}
+                    one{"w. 'недеља' 'у' Y."}
                     other{"w. 'сједмица' 'у' Y."}
                 }
             }

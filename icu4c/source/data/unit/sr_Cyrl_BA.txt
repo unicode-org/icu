@@ -16,6 +16,31 @@ sr_Cyrl_BA{
             10p27{"R{0}"}
             10p30{"Q{0}"}
         }
+        concentr{
+            portion-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} дијела на милијарду"}
+                        one{"{0} дио на милијарду"}
+                        other{"{0} дијелова на милијарду"}
+                    }
+                    genitive{
+                        few{"{0} дијела на милијарду"}
+                        one{"{0} дијела на милијарду"}
+                        other{"{0} дијелова на милијарду"}
+                    }
+                    instrumental{
+                        few{"{0} дијела на милијарду"}
+                        one{"{0} дијелом на милијарду"}
+                        other{"{0} дијелова на милијарду"}
+                    }
+                }
+                dnam{"дијелови на милијарду"}
+                few{"{0} дијела на милијарду"}
+                one{"{0} дио на милијарду"}
+                other{"{0} дијелова на милијарду"}
+            }
+        }
         duration{
             century{
                 case{
@@ -133,6 +158,29 @@ sr_Cyrl_BA{
                 one{"B {0}"}
                 other{"B {0}"}
             }
+            light-speed{
+                case{
+                    accusative{
+                        few{"{0} свјетла"}
+                        one{"{0} свјетло"}
+                        other{"{0} свјетла"}
+                    }
+                    genitive{
+                        few{"{0} свјетла"}
+                        one{"{0} свјетла"}
+                        other{"{0} свјетала"}
+                    }
+                    instrumental{
+                        few{"{0} свјетла"}
+                        one{"{0} свјетлом"}
+                        other{"{0} свјетала"}
+                    }
+                }
+                dnam{"свјетло"}
+                few{"{0} свјетла"}
+                one{"{0} свјетло"}
+                other{"{0} свјетла"}
+            }
         }
         volume{
             acre-foot{
@@ -148,6 +196,11 @@ sr_Cyrl_BA{
         }
     }
     unitsNarrow{
+        concentr{
+            portion-per-1e9{
+                dnam{"дијелови/милијарда"}
+            }
+        }
         duration{
             month{
                 few{"{0} мјес."}
@@ -184,6 +237,12 @@ sr_Cyrl_BA{
                 one{"B {0}"}
                 other{"B {0}"}
             }
+            light-speed{
+                dnam{"свјетло"}
+                few{"{0} свјетла"}
+                one{"{0} свјетло"}
+                other{"{0} свјетала"}
+            }
         }
         volume{
             barrel{
@@ -211,6 +270,11 @@ sr_Cyrl_BA{
         }
     }
     unitsShort{
+        concentr{
+            portion-per-1e9{
+                dnam{"дијелови/милијарда"}
+            }
+        }
         duration{
             month{
                 dnam{"мјесеци"}
@@ -237,6 +301,12 @@ sr_Cyrl_BA{
                 few{"B {0}"}
                 one{"B {0}"}
                 other{"Б {0}"}
+            }
+            light-speed{
+                dnam{"свјетло"}
+                few{"{0} свјетла"}
+                one{"{0} свјетло"}
+                other{"{0} свјетала"}
             }
         }
     }

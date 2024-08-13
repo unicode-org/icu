@@ -644,9 +644,6 @@ mi{
                 future{
                     other{"+{0} Hwh"}
                 }
-                past{
-                    other{"-{0} hwh"}
-                }
             }
         }
         quarter-short{
@@ -947,7 +944,6 @@ mi{
                 "0"{"i tēnei w."}
                 "1"{"ā tērā w."}
             }
-            relativePeriod{"t w o {0}"}
             relativeTime{
                 future{
                     other{"+{0} w"}
@@ -1028,8 +1024,14 @@ mi{
     }
     listPattern{
         or{
-            2{"{0} {1} rānei"}
+            2{"{0}, {1} rānei"}
             end{"{0}, {1} rānei"}
+        }
+        or-narrow{
+            2{"{0}, {1} rānei"}
+        }
+        or-short{
+            2{"{0}, {1} rānei"}
         }
         standard-narrow{
             2{"{0}, {1}"}

@@ -17,7 +17,10 @@ kok{
     NumberElements{
         deva{
             patterns{
-                currencyFormat{"¤#,##0.00"}
+                currencyFormat{"¤#,##,##0.00"}
+            }
+            symbols{
+                nan{"0/0"}
             }
         }
         latn{
@@ -256,6 +259,20 @@ kok{
                     d{"d-M-y GGGGG – d-M-y"}
                     y{"d-M-y – d-M-y GGGGG"}
                 }
+                H{
+                    H{"HH – HH"}
+                }
+                Hm{
+                    H{"HH:mm – HH:mm"}
+                    m{"HH:mm – HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm – HH:mm v"}
+                    m{"HH:mm – HH:mm v"}
+                }
+                Hv{
+                    H{"HH – HH v"}
+                }
                 M{
                     M{"M–M"}
                 }
@@ -279,6 +296,24 @@ kok{
                     d{"d-M – d-M"}
                 }
                 fallback{"{0} – {1}"}
+                h{
+                    a{"a h – a h"}
+                    h{"a h – h"}
+                }
+                hm{
+                    a{"a h:mm – a h:mm"}
+                    h{"a h:mm – h:mm"}
+                    m{"a h:mm – h:mm"}
+                }
+                hmv{
+                    a{"a h:mm – a h:mm v"}
+                    h{"a h:mm – h:mm v"}
+                    m{"a h:mm – h:mm v"}
+                }
+                hv{
+                    a{"a h – a h v"}
+                    h{"a h – h v"}
+                }
                 y{
                     y{"y–y G"}
                 }
@@ -318,8 +353,8 @@ kok{
         }
         gregorian{
             AmPmMarkers{
-                "सकाळ",
-                "सांज",
+                "सकाळीं",
+                "सांजे",
             }
             AmPmMarkersNarrow{
                 "a",
@@ -364,6 +399,7 @@ kok{
                 yM{"M-y"}
                 yMEd{"d-M-y, E"}
                 yMMMM{"MMMM, y"}
+                yMMMd{"d MMM, y"}
                 yMd{"d-M-y"}
             }
             dayNames{
@@ -416,6 +452,14 @@ kok{
                 abbreviated%variant{
                     "BCE",
                     "CE",
+                }
+                narrow{
+                    "क्रि.आ.",
+                    "क्रि.श.",
+                }
+                narrow%variant{
+                    "BC",
+                    "AD",
                 }
                 wide{
                     "क्रिस्तपूर्व",
@@ -756,6 +800,16 @@ kok{
                 }
             }
         }
+        minute-narrow{
+            relative{
+                "0"{"हो मिन"}
+            }
+        }
+        minute-short{
+            relative{
+                "0"{"हो मिन."}
+            }
+        }
         mon{
             relative{
                 "-1"{"निमाणो सोमार"}
@@ -817,6 +871,20 @@ kok{
                 }
             }
         }
+        quarter-narrow{
+            relative{
+                "-1"{"फाटलें तिम्ह"}
+                "0"{"हें तिम्ह"}
+                "1"{"फुडलें तिम्ह"}
+            }
+        }
+        quarter-short{
+            relative{
+                "-1"{"फाटलें तिम्ह."}
+                "0"{"हें तिम्ह."}
+                "1"{"फुडलें तिम्ह."}
+            }
+        }
         sat{
             relative{
                 "-1"{"निमाणो शेनवार"}
@@ -836,7 +904,7 @@ kok{
             relative{
                 "-1"{"निमाणो शे."}
                 "0"{"हो शे."}
-                "1"{"फुडलो शे."}
+                "1"{"फुडलो शेन."}
             }
         }
         sat-short{
@@ -869,7 +937,7 @@ kok{
         }
         sun{
             relative{
-                "-1"{"निमाणो आयतार"}
+                "-1"{"फाटलो आयतार"}
                 "0"{"हो आयतार"}
                 "1"{"फुडलो आयतार"}
             }
@@ -928,7 +996,7 @@ kok{
         }
         tue-narrow{
             relative{
-                "-1"{"निमाणो मं."}
+                "-1"{"फाटलो मं."}
                 "0"{"हो मं."}
                 "1"{"फुडलो मं."}
             }
@@ -942,7 +1010,7 @@ kok{
         }
         wed{
             relative{
-                "-1"{"निमाणो बुधवार"}
+                "-1"{"फाटलो बुधवार"}
                 "0"{"हो बुधवार"}
                 "1"{"फुडलो बुधवार"}
             }

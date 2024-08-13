@@ -200,6 +200,11 @@ sc{
                 one{"{0} pro deghemìgia"}
                 other{"{0} pro deghemìgia"}
             }
+            portion-per-1e9{
+                dnam{"partes pro milliardu"}
+                one{"{0} parte pro milliardu"}
+                other{"{0} partes pro milliardu"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -327,6 +332,12 @@ sc{
                 dnam{"nanosegundos"}
                 one{"{0} nanosegundu"}
                 other{"{0} nanosegundos"}
+            }
+            night{
+                dnam{"notes"}
+                one{"{0} note"}
+                other{"{0} notes"}
+                per{"{0} pro note"}
             }
             quarter{
                 one{"{0} cuartu"}
@@ -809,6 +820,11 @@ sc{
                 one{"{0} nodu"}
                 other{"{0} nodos"}
             }
+            light-speed{
+                dnam{"lughe"}
+                one{"{0} a sa velotzidade de sa lughe"}
+                other{"{0} a sa velotzidade de sa lughe"}
+            }
             meter-per-second{
                 dnam{"metros a su segundu"}
                 one{"{0} metru a su segundu"}
@@ -1106,6 +1122,10 @@ sc{
                 one{"{0}ppm"}
                 other{"{0}ppm"}
             }
+            portion-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1208,6 +1228,12 @@ sc{
                 one{"{0}me."}
                 other{"{0}me."}
                 per{"{0}/me."}
+            }
+            night{
+                dnam{"notes"}
+                one{"{0} note"}
+                other{"{0} notes"}
+                per{"{0}/note"}
             }
             quarter{
                 dnam{"crt"}
@@ -1602,6 +1628,11 @@ sc{
                 one{"{0}kn"}
                 other{"{0}kn"}
             }
+            light-speed{
+                dnam{"lughe"}
+                one{"{0}l"}
+                other{"{0}l"}
+            }
             meter-per-second{
                 one{"{0}m/s"}
                 other{"{0}m/s"}
@@ -1826,6 +1857,9 @@ sc{
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
+            portion-per-1e9{
+                dnam{"partes/milliardu"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1897,6 +1931,12 @@ sc{
             nanosecond{
                 one{"{0}ns"}
                 other{"{0}ns"}
+            }
+            night{
+                dnam{"notes"}
+                one{"{0} note"}
+                other{"{0} notes"}
+                per{"{0}/note"}
             }
             quarter{
                 dnam{"cuartos"}
@@ -2016,6 +2056,13 @@ sc{
                 dnam{"mmHg"}
                 one{"{0} mmHg"}
                 other{"{0} mmHg"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"lughe"}
+                one{"{0} lughe"}
+                other{"{0} lughe"}
             }
         }
         temperature{

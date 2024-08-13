@@ -1,0 +1,63 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
+ha_NE{
+    CurrencyPlurals{
+        BOB{
+            one{"boliviano na ƙasar Bolivia"}
+            other{"Boloviano na ƙasar Bolivia"}
+        }
+        CLP{
+            one{"peso na ƙasar Chile"}
+            other{"Peso na ƙasar Chile"}
+        }
+        COP{
+            one{"peso na ƙasar Columbia"}
+            other{"Peso na ƙasar Columbia"}
+        }
+        CRC{
+            one{"colón na ƙasar Costa Rica"}
+            other{"colón na ƙasar Costa Rica"}
+        }
+        GYD{
+            one{"dalar Guyana"}
+            other{"Dalar Guyana"}
+        }
+        NIO{
+            one{"córdoba na ƙasar Nicaragua"}
+            other{"Córdoba na ƙasar Nicaragua"}
+        }
+        PAB{
+            one{"balboa na ƙasar Panama"}
+            other{"Balboa na ƙasar Panama"}
+        }
+        PEN{
+            one{"sol na ƙasar Peru"}
+            other{"Sol na ƙasar Peru"}
+        }
+        PHP{
+            one{"kuɗin Philippine"}
+            other{"Kuɗin Philippine"}
+        }
+        PYG{
+            one{"guarani na ƙasar Paraguay"}
+            other{"Guarani na ƙasar Paraguay"}
+        }
+        SRD{
+            one{"dalar ƙasar Suriname"}
+            other{"Dalar ƙasar Suriname"}
+        }
+        USD{
+            one{"Dalar Amirka"}
+            other{"Dalar Amurka"}
+        }
+        VES{
+            one{"bolívar na ƙasar Venezuela"}
+            other{"Bolívar na ƙasar Venezuela"}
+        }
+    }
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+    }
+}

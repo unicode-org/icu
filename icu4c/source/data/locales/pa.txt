@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 pa{
-    AuxExemplarCharacters{"[\u200C\u200Dਃ ਂ ਁ {ਲ਼}]"}
+    AuxExemplarCharacters{"[\u200C\u200Dਃ ਂ {ਲ਼}]"}
     ExemplarCharacters{
         "[ੱ ੰ ਼ ੦ ੧ ੨ ੩ ੪ ੫ ੬ ੭ ੮ ੯ ੴ ੳ ਉ ਊ ਓ ਅ ਆ ਐ ਔ ੲ ਇ ਈ ਏ ਸ{ਸ਼} ਹ ਕ ਖ{ਖ਼} ਗ{ਗ਼} ਘ"
         " ਙ ਚ ਛ ਜ{ਜ਼} ਝ ਞ ਟ ਠ ਡ ਢ ਣ ਤ ਥ ਦ ਧ ਨ ਪ ਫ{ਫ਼} ਬ ਭ ਮ ਯ ਰ ਲ ਵ ੜ ੍ ਾ ਿ ੀ ੁ ੂ ੇ ੈ"
@@ -12,6 +12,21 @@ pa{
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0੦ 1੧ 2੨ 3੩ 4੪ 5੫ 6੬ 7੭ 8੮ 9੯]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . '‘’ \u0022“” ( ) \\[ \\] / \\& ′ ″]"}
     NumberElements{
+        arab{
+            patterns{
+                currencyFormat{"¤#,##,##0.00"}
+                currencyFormat%noCurrency{"#,##,##0.00"}
+            }
+            symbols{
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                minusSign{"-"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+            }
+        }
         arabext{
             patterns{
                 currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
@@ -1346,7 +1361,7 @@ pa{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

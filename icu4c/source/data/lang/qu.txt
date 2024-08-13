@@ -28,6 +28,7 @@ qu{
         ann{"Obolo Simi"}
         anp{"Angika"}
         ar{"Arabe Simi"}
+        ar_001{"Musuq Estandar Arabe Simi"}
         arn{"Mapuche Simi"}
         arp{"Arapaho"}
         ars{"Árabe Najdi Simi"}
@@ -479,7 +480,6 @@ qu{
         Hebr{"Hebreo Simi"}
         Hira{"Hiragana"}
         Hrkt{"Japones silabico sananpakuna"}
-        Jamo{"Jamo"}
         Jpan{"Japones Simi"}
         Kana{"Katakana"}
         Khmr{"Khmer"}

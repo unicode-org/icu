@@ -195,6 +195,11 @@ mk{
                 one{"{0} десетилјадити дел"}
                 other{"{0} десетилјадити делови"}
             }
+            portion-per-1e9{
+                dnam{"делови на милијарда"}
+                one{"{0} дел на милијарда"}
+                other{"{0} дела на милијарда"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -318,6 +323,12 @@ mk{
                 dnam{"наносекунди"}
                 one{"{0} наносекунда"}
                 other{"{0} наносекунди"}
+            }
+            night{
+                dnam{"ноќи"}
+                one{"{0} ноќ"}
+                other{"{0} ноќи"}
+                per{"{0}/ноќ"}
             }
             quarter{
                 one{"{0} тримесечје"}
@@ -791,6 +802,11 @@ mk{
                 one{"{0} јазол"}
                 other{"{0} јазли"}
             }
+            light-speed{
+                dnam{"светлина"}
+                one{"{0} светлина"}
+                other{"{0} светлини"}
+            }
             meter-per-second{
                 dnam{"метри во секунда"}
                 one{"{0} метар во секунда"}
@@ -1109,6 +1125,12 @@ mk{
                 other{"{0} м."}
                 per{"{0}/м."}
             }
+            night{
+                dnam{"ноќи"}
+                one{"{0} н."}
+                other{"{0} н."}
+                per{"{0}/ноќ"}
+            }
             quarter{
                 dnam{"т."}
                 one{"{0} т."}
@@ -1202,6 +1224,11 @@ mk{
         speed{
             kilometer-per-hour{
                 dnam{"km/hr"}
+            }
+            light-speed{
+                dnam{"светлина"}
+                one{"{0} светлина"}
+                other{"{0} светлини"}
             }
             meter-per-second{
                 dnam{"m/s"}
@@ -1434,6 +1461,12 @@ mk{
                 one{"{0} нс"}
                 other{"{0} нс"}
             }
+            night{
+                dnam{"ноќи"}
+                one{"{0} ноќ"}
+                other{"{0} ноќи"}
+                per{"{0}/ноќ"}
+            }
             quarter{
                 dnam{"тримесечја"}
                 one{"{0} тримес."}
@@ -1573,6 +1606,11 @@ mk{
             }
             kilometer-per-hour{
                 dnam{"км/час"}
+            }
+            light-speed{
+                dnam{"светлина"}
+                one{"{0} светлина"}
+                other{"{0} светлини"}
             }
             meter-per-second{
                 dnam{"метри/сек"}

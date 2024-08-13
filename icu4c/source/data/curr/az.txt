@@ -2100,8 +2100,4 @@ az{
             other{"Zimbabve dolları (2008)"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

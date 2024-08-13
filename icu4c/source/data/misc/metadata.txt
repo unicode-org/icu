@@ -5566,6 +5566,7 @@ metadata:table(nofallback){
         "zh_Hans",
         "zh_Hans_CN",
         "zh_Hant_TW",
+        "zh_Latn_CN",
         "zu_ZA",
     }
 }

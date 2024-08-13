@@ -798,8 +798,4 @@ hi{
             other{"(अज्ञात मुद्रा)"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

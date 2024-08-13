@@ -54,9 +54,6 @@ tr{
         "Africa:Tunis"{
             ec{"Tunus"}
         }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
         }
@@ -65,9 +62,6 @@ tr{
         }
         "America:Costa_Rica"{
             ec{"Kosta Rika"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Dominica"{
             ec{"Dominika"}
@@ -723,6 +717,9 @@ tr{
             ld{"Petropavlovsk-Kamçatski Yaz Saati"}
             lg{"Petropavlovsk-Kamçatski Saati"}
             ls{"Petropavlovsk-Kamçatski Standart Saati"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Kazakistan Saati"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Doğu Kazakistan Saati"}

@@ -53,6 +53,7 @@ tk{
         bi{"bislama dili"}
         bin{"bini dili"}
         bla{"siksika dili"}
+        blo{"blo dili"}
         bm{"bamana"}
         bn{"bengal dili"}
         bo{"tibet dili"}
@@ -97,7 +98,7 @@ tk{
         de_CH{"ýokarky nemes dili (Şweýsariýa)"}
         dgr{"dogrib dili"}
         dje{"zarma dili"}
-        doi{"Dogri"}
+        doi{"dogri"}
         dsb{"aşaky lužits dili"}
         dua{"duala dili"}
         dv{"diwehi dili"}
@@ -164,6 +165,7 @@ tk{
         iba{"iban dili"}
         ibb{"ibibio dili"}
         id{"indonez dili"}
+        ie{"interlingwe dili"}
         ig{"igbo dili"}
         ii{"syçuan-i dili"}
         ikt{"Günorta Kanada iniktitut dili"}
@@ -216,6 +218,7 @@ tk{
         kv{"komi dili"}
         kw{"korn dili"}
         kwk{"kwakwala dili"}
+        kxv{"kuwi dili"}
         ky{"gyrgyz dili"}
         la{"latyn dili"}
         lad{"ladino dili"}
@@ -224,8 +227,10 @@ tk{
         lez{"lezgin dili"}
         lg{"ganda dili"}
         li{"limburg dili"}
+        lij{"ligur dili"}
         lil{"lilluet dili"}
         lkt{"lakota dili"}
+        lmo{"lombard dili"}
         ln{"lingala dili"}
         lo{"laos dili"}
         lou{"Luiziana kreol dili"}
@@ -378,6 +383,7 @@ tk{
         sw_CD{"kongo suahili dili"}
         swb{"komor dili"}
         syr{"siriýa dili"}
+        szl{"silez dili"}
         ta{"tamil dili"}
         tce{"günorta tutçone dili"}
         te{"telugu dili"}
@@ -417,7 +423,9 @@ tk{
         uz{"özbek dili"}
         vai{"wai dili"}
         ve{"wenda dili"}
+        vec{"wenesian dili"}
         vi{"wýetnam dili"}
+        vmw{"mahuwa dili"}
         vo{"wolapýuk dili"}
         vun{"wunýo dili"}
         wa{"wallon dili"}
@@ -428,6 +436,7 @@ tk{
         wuu{"u hytaý dili"}
         xal{"galmyk dili"}
         xh{"kosa dili"}
+        xnr{"kangri dili"}
         xog{"soga dili"}
         yav{"ýangben dili"}
         ybb{"ýemba dili"}
@@ -435,6 +444,7 @@ tk{
         yo{"ýoruba dili"}
         yrl{"nhengatu dili"}
         yue{"kanton dili"}
+        za{"çžuan dili"}
         zgh{"standart Marokko tamazight dili"}
         zh{"hytaý dili"}
         zh_Hans{"ýönekeýleşdirilen hytaý dili"}

@@ -1352,6 +1352,7 @@ zh_Hant{
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
                 GyMMMd{"Gy年M月d日"}
+                GyMd{"GGGGG y/M/d"}
                 MMMEd{"M月d日E"}
                 y{"Gy年"}
                 yyyy{"Gy年"}
@@ -2103,13 +2104,31 @@ zh_Hant{
             }
         }
         dayOfYear{
-            dn{"年天"}
+            dn{"該年第幾天"}
+        }
+        dayOfYear-narrow{
+            dn{"該年第幾天"}
+        }
+        dayOfYear-short{
+            dn{"該年第幾天"}
         }
         dayperiod{
-            dn{"上午/下午"}
+            dn{"時段"}
+        }
+        dayperiod-narrow{
+            dn{"時段"}
+        }
+        dayperiod-short{
+            dn{"時段"}
         }
         era{
-            dn{"年代"}
+            dn{"紀元"}
+        }
+        era-narrow{
+            dn{"紀元"}
+        }
+        era-short{
+            dn{"紀元"}
         }
         fri{
             relative{
@@ -2140,6 +2159,12 @@ zh_Hant{
                 }
             }
         }
+        hour-narrow{
+            dn{"時"}
+        }
+        hour-short{
+            dn{"時"}
+        }
         minute{
             dn{"分鐘"}
             relative{
@@ -2153,6 +2178,12 @@ zh_Hant{
                     other{"{0} 分鐘前"}
                 }
             }
+        }
+        minute-narrow{
+            dn{"分"}
+        }
+        minute-short{
+            dn{"分"}
         }
         mon{
             relative{
@@ -2186,7 +2217,7 @@ zh_Hant{
             }
         }
         quarter{
-            dn{"季"}
+            dn{"季度"}
             relative{
                 "-1"{"上一季"}
                 "0"{"這一季"}
@@ -2308,13 +2339,31 @@ zh_Hant{
             }
         }
         weekOfMonth{
-            dn{"週"}
+            dn{"該月第幾週"}
+        }
+        weekOfMonth-narrow{
+            dn{"月週次"}
+        }
+        weekOfMonth-short{
+            dn{"月週次"}
         }
         weekday{
-            dn{"週天"}
+            dn{"星期"}
+        }
+        weekday-narrow{
+            dn{"星期"}
+        }
+        weekday-short{
+            dn{"星期"}
         }
         weekdayOfMonth{
-            dn{"每月平日"}
+            dn{"該月第幾週"}
+        }
+        weekdayOfMonth-narrow{
+            dn{"該月第幾週"}
+        }
+        weekdayOfMonth-short{
+            dn{"該月第幾週"}
         }
         year{
             dn{"年"}

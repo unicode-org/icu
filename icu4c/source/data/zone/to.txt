@@ -6,26 +6,17 @@ to{
         "Africa:Sao_Tome"{
             ec{"Sao Tomé"}
         }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
         }
         "America:Cancun"{
             ec{"Cancun"}
         }
-        "America:Curacao"{
-            ec{"Curaçao"}
-        }
         "America:Merida"{
             ec{"Merida"}
         }
         "America:New_York"{
             ec{"Niu ʻIoke"}
-        }
-        "America:St_Barthelemy"{
-            ec{"St. Barthélemy"}
         }
         "Asia:Hebron"{
             ec{"Hepeloni"}
@@ -81,9 +72,6 @@ to{
         }
         "Europe:Vatican"{
             ec{"Vatikani"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Auckland"{
             ec{"ʻAokalani"}
@@ -141,6 +129,9 @@ to{
         }
         "Pacific:Norfolk"{
             ec{"Noafōki"}
+        }
+        "Pacific:Noumea"{
+            ec{"Numea"}
         }
         "Pacific:Pago_Pago"{
             ec{"Pangopango"}
@@ -522,6 +513,9 @@ to{
             ld{"houa fakalūsia-petelopavilovisiki taimi liliu"}
             lg{"houa fakalūsia-petelopavilovisiki"}
             ls{"houa fakalūsia-petelopavilovisiki taimi totonu"}
+        }
+        "meta:Kazakhstan"{
+            ls{"houa fakakasakitani"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"houa fakakasakitani-hahake"}

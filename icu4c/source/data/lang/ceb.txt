@@ -8,54 +8,47 @@ ceb{
         bn{"Bangla"}
         ceb{"Cebuano"}
         de{"German"}
-        de_AT{"Austrian German"}
         de_CH{"Swiss High German"}
         en{"English"}
-        en_AU{"English sa Australia"}
-        en_CA{"English sa Canada"}
         en_GB{"Britanikong English"}
-        en_US{"English sa America"}
+        en_US{"English (America)"}
         es{"Espanyol"}
         es_ES{"Espanyol (Europa)"}
         fr{"Pranses"}
-        fr_CA{"Pranses sa Canada"}
-        fr_CH{"Pranses sa Switzerland"}
         hi{"Hindi"}
         id{"Indonesian"}
-        it{"Italiano"}
+        it{"Italyano"}
         ja{"Hinapon"}
         ko{"Korean"}
         nl{"Dutch"}
         nl_BE{"Flemish"}
         pl{"Polish"}
         pt{"Portuguese"}
-        pt_BR{"Brazilyanong Portuguese"}
-        pt_PT{"Portuguese sa Europe"}
         ru{"Russian"}
         th{"Thai"}
         tr{"Turkish"}
         und{"Wala Mailhing Pinulongan"}
         zh{"Inintsik"}
-        zh_Hans{"Pinasimpleng Chinese"}
+        zh_Hans{"Pinasimple nga Chinese"}
         zh_Hant{"Tradisyonal nga Chinese"}
     }
     Languages%long{
-        zh_Hans{"Pinasimpleng Mandarin Chinese"}
+        zh_Hans{"Pinasimple nga Mandarin Chinese"}
         zh_Hant{"Tradisyonal nga Mandarin Chinese"}
     }
     Languages%menu{
         zh{"Chinese, Mandarin"}
     }
     Languages%short{
-        en_GB{"English sa UK"}
-        en_US{"English sa US"}
+        en_GB{"English (UK)"}
+        en_US{"English (US)"}
     }
     Languages%variant{
         hi_Latn{"Hinglish"}
     }
     Scripts{
-        Arab{"Arabo"}
-        Cyrl{"Sirilisko"}
+        Arab{"Arabiko"}
+        Cyrl{"Cyrillic"}
         Hans{"Pinasimple"}
         Hant{"Tradisyonal"}
         Jpan{"Japanese"}
@@ -65,7 +58,7 @@ ceb{
         Zzzz{"Wala Mailhing Script"}
     }
     Scripts%stand-alone{
-        Hans{"Pinasimpleng Han"}
+        Hans{"Pinasimple nga Han"}
         Hant{"Tradisyonal nga Han"}
     }
     Types{

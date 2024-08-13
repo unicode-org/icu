@@ -1789,11 +1789,11 @@ cy{
                     one{"ymhen blwyddyn"}
                     other{"ymhen {0} mlynedd"}
                     two{"ymhen {0} flynedd"}
-                    zero{"ymhen {0} mlynedd"}
+                    zero{"ymhen {0} o flynyddoedd"}
                 }
                 past{
-                    few{"{0} blynedd yn ôl"}
-                    many{"{0} blynedd yn ôl"}
+                    few{"{0} o flynyddoedd yn ôl"}
+                    many{"{0} o flynyddoedd yn ôl"}
                     one{"blwyddyn yn ôl"}
                     other{"{0} o flynyddoedd yn ôl"}
                     two{"{0} flynedd yn ôl"}
@@ -1812,15 +1812,15 @@ cy{
                     few{"ymhen {0} blynedd"}
                     many{"ymhen {0} blynedd"}
                     one{"ymhen bl."}
-                    other{"ymhen {0} mlynedd"}
+                    other{"ymhen {0} o flynyddoedd"}
                     two{"ymhen {0} flynedd"}
-                    zero{"ymhen {0} mlynedd"}
+                    zero{"ymhen {0} o flynyddoedd"}
                 }
                 past{
-                    few{"{0} blynedd yn ôl"}
-                    many{"{0} blynedd yn ôl"}
+                    few{"{0} o flynyddoedd yn ôl"}
+                    many{"{0} o flynyddoedd yn ôl"}
                     one{"blwyddyn yn ôl"}
-                    other{"{0} bl. yn ôl"}
+                    other{"{0} o flynyddoedd yn ôl"}
                     two{"{0} flynedd yn ôl"}
                     zero{"{0} o flynyddoedd yn ôl"}
                 }
@@ -1829,11 +1829,19 @@ cy{
         year-short{
             dn{"bl."}
             relativeTime{
+                future{
+                    few{"ymhen {0} blynedd"}
+                    many{"ymhen {0} blynedd"}
+                    one{"ymhen blwyddyn"}
+                    other{"ymhen {0} o flynyddoedd"}
+                    two{"ymhen {0} flynedd"}
+                    zero{"ymhen {0} o flynyddoedd"}
+                }
                 past{
-                    few{"{0} blynedd yn ôl"}
-                    many{"{0} blynedd yn ôl"}
+                    few{"{0} o flynyddoedd yn ôl"}
+                    many{"{0} o flynyddoedd yn ôl"}
                     one{"{0} bl. yn ôl"}
-                    other{"{0} bl. yn ôl"}
+                    other{"{0} o flynyddoedd yn ôl"}
                     two{"{0} flynedd yn ôl"}
                     zero{"{0} o flynyddoedd yn ôl"}
                 }

@@ -87,7 +87,7 @@ de_CH{
             }
             jigger{
                 dnam{"Schuss"}
-                one{"Schuss"}
+                one{"{0} Schuss"}
                 other{"{0} Schuss"}
             }
             pinch{

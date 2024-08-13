@@ -1033,7 +1033,4 @@ xnr{
             other{"ज़ाम्बिया दे क्वाचा"}
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

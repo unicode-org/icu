@@ -393,6 +393,24 @@ hu{
                 other{"{0} karát"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    accusative{
+                        one{"{0} milligramm/decilitert"}
+                        other{"{0} milligramm/decilitert"}
+                    }
+                    instrumental{
+                        one{"{0} milligramm/deciliterrel"}
+                        other{"{0} milligramm/deciliterrel"}
+                    }
+                    terminative{
+                        one{"{0} milligramm/deciliterig"}
+                        other{"{0} milligramm/deciliterig"}
+                    }
+                    translative{
+                        one{"{0} milligramm/deciliterré"}
+                        other{"{0} milligramm/deciliterré"}
+                    }
+                }
                 dnam{"milligramm/deciliter"}
                 one{"{0} milligramm/deciliter"}
                 other{"{0} milligramm/deciliter"}
@@ -1077,6 +1095,30 @@ hu{
                 one{"{0} nanoszekundum"}
                 other{"{0} nanoszekundum"}
             }
+            night{
+                case{
+                    accusative{
+                        one{"{0} éjszakát"}
+                        other{"{0} éjszakát"}
+                    }
+                    instrumental{
+                        one{"{0} éjszakával"}
+                        other{"{0} éjszakával"}
+                    }
+                    terminative{
+                        one{"{0} éjszakáig"}
+                        other{"{0} éjszakáig"}
+                    }
+                    translative{
+                        one{"{0} éjszakává"}
+                        other{"{0} éjszakává"}
+                    }
+                }
+                dnam{"éjszakák"}
+                one{"{0} éjszaka"}
+                other{"{0} éjszaka"}
+                per{"{0}/éjszaka"}
+            }
             quarter{
                 case{
                     accusative{
@@ -1326,6 +1368,24 @@ hu{
                 other{"{0} joule"}
             }
             kilocalorie{
+                case{
+                    accusative{
+                        one{"{0} kilokalóriát"}
+                        other{"{0} kilokalóriát"}
+                    }
+                    instrumental{
+                        one{"{0} kilokalóriával"}
+                        other{"{0} kilokalóriával"}
+                    }
+                    terminative{
+                        one{"{0} kilokalóriáig"}
+                        other{"{0} kilokalóriáig"}
+                    }
+                    translative{
+                        one{"{0} kilokalóriává"}
+                        other{"{0} kilokalóriává"}
+                    }
+                }
                 dnam{"kilokalória"}
                 one{"{0} kilokalória"}
                 other{"{0} kilokalória"}
@@ -1880,6 +1940,24 @@ hu{
                 other{"{0} pikométer"}
             }
             point{
+                case{
+                    accusative{
+                        one{"{0} pontot"}
+                        other{"{0} pontot"}
+                    }
+                    instrumental{
+                        one{"{0} ponttal"}
+                        other{"{0} ponttal"}
+                    }
+                    terminative{
+                        one{"{0} pontig"}
+                        other{"{0} pontig"}
+                    }
+                    translative{
+                        one{"{0} ponttá"}
+                        other{"{0} ponttá"}
+                    }
+                }
                 one{"{0} pont"}
                 other{"{0} pont"}
             }
@@ -2419,6 +2497,24 @@ hu{
                 other{"{0} millibar"}
             }
             millimeter-ofhg{
+                case{
+                    accusative{
+                        one{"{0} higanymillimétert"}
+                        other{"{0} higanymillimétert"}
+                    }
+                    instrumental{
+                        one{"{0} higanymilliméterrel"}
+                        other{"{0} higanymilliméterrel"}
+                    }
+                    terminative{
+                        one{"{0} higanymilliméterig"}
+                        other{"{0} higanymilliméterig"}
+                    }
+                    translative{
+                        one{"{0} higanymilliméterré"}
+                        other{"{0} higanymilliméterré"}
+                    }
+                }
                 dnam{"higanymilliméter"}
                 one{"{0} higanymilliméter"}
                 other{"{0} higanymilliméter"}
@@ -3006,6 +3102,12 @@ hu{
                 one{"{0} h."}
                 other{"{0} h."}
             }
+            night{
+                dnam{"éjszakák"}
+                one{"{0} éjszaka"}
+                other{"{0} éjszaka"}
+                per{"{0}/éjszaka"}
+            }
         }
         graphics{
             megapixel{
@@ -3185,6 +3287,12 @@ hu{
                 one{"{0} hónap"}
                 other{"{0} hónap"}
                 per{"{0}/hó"}
+            }
+            night{
+                dnam{"éjszakák"}
+                one{"{0} éjszaka"}
+                other{"{0} éjszaka"}
+                per{"{0}/éjszaka"}
             }
             quarter{
                 dnam{"n.év"}

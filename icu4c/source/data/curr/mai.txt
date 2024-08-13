@@ -45,7 +45,4 @@ mai{
             other{"(अज्ञात मुद्रा)"}
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

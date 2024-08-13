@@ -3,26 +3,14 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 xh{
     zoneStrings{
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
         }
         "America:Cancun"{
             ec{"Cancun"}
         }
-        "America:Curacao"{
-            ec{"Curaçao"}
-        }
         "America:Merida"{
             ec{"Merida"}
-        }
-        "America:St_Barthelemy"{
-            ec{"St. Barthélemy"}
         }
         "Asia:Qostanay"{
             ec{"Kostanay"}
@@ -41,9 +29,6 @@ xh{
         }
         "Europe:London"{
             ld{"British Summer Time"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "meta:Afghanistan"{
             ls{"Afghanistan Time"}
@@ -356,6 +341,9 @@ xh{
             ld{"Japan Daylight Time"}
             lg{"Japan Time"}
             ls{"Japan Standard Time"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Kazakhstan Time"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"East Kazakhstan Time"}

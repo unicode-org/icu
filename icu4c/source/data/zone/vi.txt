@@ -3,20 +3,11 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 vi{
     zoneStrings{
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
         }
         "America:Cancun"{
             ec{"Cancun"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Merida"{
             ec{"Merida"}
@@ -29,9 +20,6 @@ vi{
         }
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Bắc Dakota"}
-        }
-        "America:St_Barthelemy"{
-            ec{"St. Barthélemy"}
         }
         "Asia:Hong_Kong"{
             ec{"Hồng Kông"}
@@ -89,9 +77,6 @@ vi{
         }
         "Europe:Prague"{
             ec{"Praha"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Enderbury"{
             ec{"Enderbury"}
@@ -470,6 +455,9 @@ vi{
             ld{"Giờ mùa hè Petropavlovsk-Kamchatski"}
             lg{"Giờ Petropavlovsk-Kamchatski"}
             ls{"Giờ chuẩn Petropavlovsk-Kamchatski"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Giờ Kazakhstan"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Giờ Miền Đông Kazakhstan"}

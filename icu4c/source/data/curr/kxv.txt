@@ -40,7 +40,4 @@ kxv{
             "puṇātī lēmbū",
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

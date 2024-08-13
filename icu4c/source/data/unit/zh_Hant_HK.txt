@@ -199,10 +199,6 @@ zh_Hant_HK{
             }
         }
         speed{
-            beaufort{
-                dnam{"蒲福氏風級"}
-                other{"蒲福氏風級 {0} 級"}
-            }
             kilometer-per-hour{
                 dnam{"公里每小時"}
             }
@@ -267,6 +263,9 @@ zh_Hant_HK{
             }
             permillion{
                 other{"{0} ppm"}
+            }
+            portion-per-1e9{
+                dnam{"濃度/十億"}
             }
         }
         consumption{
@@ -352,9 +351,6 @@ zh_Hant_HK{
             grain{
                 other{"{0}格令"}
             }
-            kilogram{
-                other{"{0} 公斤"}
-            }
             ounce{
                 other{"{0} 安士"}
             }
@@ -366,11 +362,13 @@ zh_Hant_HK{
         }
         speed{
             beaufort{
-                dnam{"蒲福氏風級"}
                 other{"蒲福氏風級 {0} 級"}
             }
             kilometer-per-hour{
                 other{"{0}kph"}
+            }
+            light-speed{
+                other{"{0}夜"}
             }
             meter-per-second{
                 other{"{0}m/s"}

@@ -180,7 +180,7 @@ nl{
             item{
                 dnam{"onderdelen"}
                 gender{"neuter"}
-                one{"{0} onderdeel"}
+                one{"{0} ond."}
                 other{"{0} onderdelen"}
             }
             karat{
@@ -191,6 +191,7 @@ nl{
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"milligram per deciliter"}
+                gender{"neuter"}
                 one{"{0} milligram per deciliter"}
                 other{"{0} milligram per deciliter"}
             }
@@ -221,6 +222,9 @@ nl{
                 gender{"neuter"}
                 one{"{0} basispunt"}
                 other{"{0} basispunten"}
+            }
+            portion-per-1e9{
+                gender{"common"}
             }
         }
         consumption{
@@ -370,6 +374,13 @@ nl{
                 gender{"common"}
                 one{"{0} nanoseconde"}
                 other{"{0} nanoseconden"}
+            }
+            night{
+                dnam{"nachten"}
+                gender{"common"}
+                one{"{0} nacht"}
+                other{"{0} nachten"}
+                per{"{0} per nacht"}
             }
             quarter{
                 dnam{"kwartaal"}
@@ -674,6 +685,7 @@ nl{
                 other{"{0} picometer"}
             }
             point{
+                gender{"neuter"}
                 one{"{0} punt"}
                 other{"{0} punten"}
             }
@@ -878,6 +890,7 @@ nl{
             }
             millimeter-ofhg{
                 dnam{"millimeter-kwikdruk"}
+                gender{"neuter"}
                 one{"{0} millimeter-kwikdruk"}
                 other{"{0} millimeter-kwikdruk"}
             }
@@ -889,6 +902,9 @@ nl{
             }
         }
         speed{
+            beaufort{
+                gender{"neuter"}
+            }
             kilometer-per-hour{
                 dnam{"kilometer per uur"}
                 gender{"common"}
@@ -899,6 +915,12 @@ nl{
                 dnam{"knoop"}
                 one{"{0} knoop"}
                 other{"{0} knopen"}
+            }
+            light-speed{
+                dnam{"licht"}
+                gender{"neuter"}
+                one{"{0} licht"}
+                other{"{0} licht"}
             }
             meter-per-second{
                 dnam{"meter per seconde"}
@@ -1206,6 +1228,12 @@ nl{
                 other{"{0} m"}
                 per{"{0}/m"}
             }
+            night{
+                dnam{"nachten"}
+                one{"{0} nacht"}
+                other{"{0} nachten"}
+                per{"{0}/nacht"}
+            }
             quarter{
                 dnam{"kw."}
                 one{"{0} kw."}
@@ -1263,9 +1291,15 @@ nl{
                 other{"{0} gr"}
             }
         }
+        speed{
+            light-speed{
+                dnam{"licht"}
+                one{"{0}licht"}
+                other{"{0}licht"}
+            }
+        }
         temperature{
             celsius{
-                dnam{"°"}
                 one{"{0}°"}
                 other{"{0}°"}
             }
@@ -1361,7 +1395,7 @@ nl{
         concentr{
             item{
                 dnam{"onderdeel"}
-                one{"{0} onderdeel"}
+                one{"{0} ond."}
                 other{"{0} ond."}
             }
             karat{
@@ -1449,6 +1483,12 @@ nl{
                 one{"{0} mnd"}
                 other{"{0} mnd"}
                 per{"{0}/mnd"}
+            }
+            night{
+                dnam{"nachten"}
+                one{"{0} nacht"}
+                other{"{0} nachten"}
+                per{"{0}/nacht"}
             }
             quarter{
                 dnam{"kwart."}
@@ -1587,6 +1627,11 @@ nl{
                 dnam{"kt"}
                 one{"{0} kt"}
                 other{"{0} kt"}
+            }
+            light-speed{
+                dnam{"licht"}
+                one{"{0} licht"}
+                other{"{0} licht"}
             }
         }
         torque{

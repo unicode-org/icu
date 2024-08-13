@@ -673,8 +673,4 @@ chr{
             other{"(ᏄᏬᎵᏍᏛᎾ ᎠᏕᎳ)"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

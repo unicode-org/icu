@@ -1616,6 +1616,9 @@ yue{
             lg{"彼得羅巴甫洛夫斯克時間"}
             ls{"彼得羅巴甫洛夫斯克標準時間"}
         }
+        "meta:Kazakhstan"{
+            ls{"哈薩克時間"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"東哈薩克時間"}
         }

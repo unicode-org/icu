@@ -34,7 +34,7 @@ ha{
             ls{"Lokacin Gabashin Afirka"}
         }
         "meta:Africa_Southern"{
-            ls{"South Africa Standard Time"}
+            ls{"Tsayayyen Lokacin Afirka ta Kudu"}
         }
         "meta:Africa_Western"{
             ld{"Lokacin Bazara na Afirka ta Yamma"}
@@ -79,7 +79,7 @@ ha{
         "meta:Arabian"{
             ld{"Lokacin Rana na Arebiya"}
             lg{"Lokacin Arebiya"}
-            ls{"Arabian Standard Time"}
+            ls{"Tsayayyen lokacin Arebiya"}
         }
         "meta:Argentina"{
             ld{"Lokacin Bazara na Argentina"}
@@ -103,7 +103,7 @@ ha{
         }
         "meta:Australia_Central"{
             ld{"Lokacin Rana na Tsakiyar Austiraliya"}
-            lg{"Central Australia Time"}
+            lg{"Lokacin Tsakiyar Australiya"}
             ls{"Tsayayyen Lokacin Tsakiyar Austiraliya"}
         }
         "meta:Australia_CentralWestern"{
@@ -114,7 +114,7 @@ ha{
         "meta:Australia_Eastern"{
             ld{"Lokacin Rana na Gabashin Austiraliya"}
             lg{"Lokacin Gabashin Austiraliya"}
-            ls{"Australian Eastern Standard Time"}
+            ls{"Tsayayyen lokacin Gabashin Australia"}
         }
         "meta:Australia_Western"{
             ld{"Lokacin Rana na Yammacin Austiralia"}
@@ -137,7 +137,7 @@ ha{
             ls{"Tsayayyen Lokacin Bangladesh"}
         }
         "meta:Bhutan"{
-            ls{"Bhutan Time"}
+            ls{"Lokacin Bhutan"}
         }
         "meta:Bolivia"{
             ls{"Lokacin Bolivia"}
@@ -153,7 +153,7 @@ ha{
         "meta:Cape_Verde"{
             ld{"Lokacin Bazara na Cape Verde"}
             lg{"Lokacin Cape Verde"}
-            ls{"Cape Verde Standard Time"}
+            ls{"Tsayayyen lokacin Cape Verde"}
         }
         "meta:Chamorro"{
             ls{"Tsayayyen Lokacin Chamorro"}
@@ -251,7 +251,7 @@ ha{
             ls{"Lokacin Kudancin Faransa da Antarctic"}
         }
         "meta:GMT"{
-            ls{"Lokacin Greenwhich a London"}
+            ls{"Lokacin Greenwich a Ingila"}
         }
         "meta:Galapagos"{
             ls{"Lokacin Galapagos"}
@@ -260,7 +260,7 @@ ha{
             ls{"Lokacin Gambier"}
         }
         "meta:Georgia"{
-            ld{"Georgia Summer Time"}
+            ld{"Lokacin Bazara na Georgia"}
             lg{"Lokacin Georgia"}
             ls{"Tsayayyen Lokacin Georgia"}
         }
@@ -278,7 +278,7 @@ ha{
             ls{"Tsayayyen Lokacin Yammacin Greenland"}
         }
         "meta:Gulf"{
-            ls{"Lokacin Golf"}
+            ls{"Tsayayyen lokacin Gulf"}
         }
         "meta:Guyana"{
             ls{"Lokacin Guyana"}
@@ -299,7 +299,7 @@ ha{
             ls{"Tsayayyen Lokacin Hovd"}
         }
         "meta:India"{
-            ls{"India Standard Time"}
+            ls{"Tsayayyen lokacin Indiya"}
         }
         "meta:Indian_Ocean"{
             ls{"Lokacin Tekun Indiya"}
@@ -311,7 +311,7 @@ ha{
             ls{"Lokacin Indonesia ta Tsakiya"}
         }
         "meta:Indonesia_Eastern"{
-            ls{"Eastern Indonesia Time"}
+            ls{"Lokacin Gabashin Indonesia"}
         }
         "meta:Indonesia_Western"{
             ls{"Lokacin Yammacin Indonesia"}
@@ -327,14 +327,17 @@ ha{
             ls{"Tsayayyen Lokacin Irkutsk"}
         }
         "meta:Israel"{
-            ld{"Israel Daylight Time"}
+            ld{"Lokacin Hasken Rana na Israʼila"}
             lg{"Lokacin Israʼila"}
-            ls{"Israel Standard Time"}
+            ls{"Tsayayyen lokacin Israʼila"}
         }
         "meta:Japan"{
-            ld{"Japan Daylight Time"}
+            ld{"Lokacin Hasken Rana na Japan"}
             lg{"Lokacin Japan"}
-            ls{"Japan Standard Time"}
+            ls{"Tsayayyen lokacin Japan"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Lokacin Kazakhstan"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Lokacin Gabashin Kazakhstan"}
@@ -356,7 +359,7 @@ ha{
             ls{"Tsayayyen Lokacin Krasnoyarsk"}
         }
         "meta:Kyrgystan"{
-            ls{"Lokacin Kazakhstan"}
+            ls{"Lokacin Kyrgyzstan"}
         }
         "meta:Line_Islands"{
             ls{"Lokacin Line Islands"}
@@ -542,7 +545,7 @@ ha{
             ls{"Lokacin Tajikistan"}
         }
         "meta:Tokelau"{
-            ls{"Tokelau Time"}
+            ls{"Lokacin Tokelau"}
         }
         "meta:Tonga"{
             ld{"Lokacin Bazara na Tonga"}
@@ -553,7 +556,7 @@ ha{
             ls{"Lokacin Chuuk"}
         }
         "meta:Turkmenistan"{
-            ld{"Turkmenistan Summer Time"}
+            ld{"Lokacin Bazara na Turkmenistan"}
             lg{"Lokacin Turkmenistan"}
             ls{"Tsayayyen Lokacin Turkmenistan"}
         }

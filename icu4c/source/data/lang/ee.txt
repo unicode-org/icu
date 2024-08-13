@@ -39,10 +39,10 @@ ee{
         dv{"divehgbe"}
         dz{"dzongkhagbe"}
         ebu{"embugbe"}
-        ee{"Eʋegbe"}
+        ee{"eʋegbe"}
         efi{"efigbe"}
         el{"grisigbe"}
-        en{"Yevugbe"}
+        en{"iŋlisigbe"}
         en_AU{"Yevugbe (Australia)"}
         en_CA{"Yevugbe (Canada)"}
         en_GB{"Yevugbe (Britain)"}
@@ -212,7 +212,7 @@ ee{
         Knda{"kannadagbeŋɔŋlɔ"}
         Kore{"Koreagbeŋɔŋlɔ"}
         Laoo{"laogbeŋɔŋlɔ"}
-        Latn{"Latingbeŋɔŋlɔ"}
+        Latn{"latingbeŋɔŋlɔ"}
         Mlym{"malayagbeŋɔŋlɔ"}
         Mong{"mongoliagbeŋɔŋlɔ"}
         Mymr{"myanmargbeŋɔŋlɔ"}
@@ -299,6 +299,6 @@ ee{
     codePatterns{
         language{"gbegbɔgblɔ {0}"}
         script{"gbeŋɔŋlɔ {0}"}
-        territory{"memama {0}"}
+        territory{"nutome {0}"}
     }
 }

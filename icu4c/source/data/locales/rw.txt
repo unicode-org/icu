@@ -49,6 +49,8 @@ rw{
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
                 hmv{"h:mm a v"}
+                yMMMd{"d MMMM y"}
+                yMd{"dd-MM-y"}
             }
             dayNames{
                 format{
@@ -161,7 +163,7 @@ rw{
                         "Kamena",
                         "Nyakanga",
                         "Kanama",
-                        "Nzeli",
+                        "Nzeri",
                         "Ukwakira",
                         "Ugushyingo",
                         "Ukuboza",

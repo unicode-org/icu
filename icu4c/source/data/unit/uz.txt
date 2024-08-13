@@ -169,6 +169,11 @@ uz{
                 one{"{0} promiriada"}
                 other{"{0} promiriada"}
             }
+            portion-per-1e9{
+                dnam{"qism/milliard"}
+                one{"{0} ta qism/milliard"}
+                other{"{0} ta qism/milliard"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -263,6 +268,12 @@ uz{
             nanosecond{
                 one{"{0} nanosoniya"}
                 other{"{0} nanosoniya"}
+            }
+            night{
+                dnam{"kecha"}
+                one{"{0} kecha"}
+                other{"{0} kecha"}
+                per{"{0}/kecha"}
             }
             second{
                 dnam{"soniya"}
@@ -610,6 +621,11 @@ uz{
                 one{"Bofort {0}"}
                 other{"Bofort {0}"}
             }
+            light-speed{
+                dnam{"yorug‘lik tezligi"}
+                one{"{0} yorug‘lik tezligi"}
+                other{"{0} yorug‘lik tezligi"}
+            }
             meter-per-second{
                 dnam{"metr/soniya"}
                 one{"{0} metr/soniya"}
@@ -638,11 +654,6 @@ uz{
                 dnam{"nyuton-metr"}
                 one{"{0} nyuton-metr"}
                 other{"{0} nyuton-metr"}
-            }
-            pound-force-foot{
-                dnam{"funt-fut"}
-                one{"{0} funt-kuch-fut"}
-                other{"{0} funt-fut"}
             }
         }
         volume{
@@ -733,6 +744,9 @@ uz{
                 one{"{0} metrik pint"}
                 other{"{0} metrik pint"}
             }
+            quart-imperial{
+                dnam{"imp.kvarta"}
+            }
         }
     }
     unitsNarrow{
@@ -773,6 +787,11 @@ uz{
                 one{"{0}ppm"}
                 other{"{0}ppm"}
             }
+            portion-per-1e9{
+                dnam{"qism/milliard"}
+                one{"{0} ta qism/mlrd"}
+                other{"{0} ta qism/mlrd"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -783,6 +802,12 @@ uz{
         duration{
             millisecond{
                 dnam{"mson"}
+            }
+            night{
+                dnam{"kecha"}
+                one{"{0} kecha"}
+                other{"{0} kecha"}
+                per{"{0}/nkecha"}
             }
             quarter{
                 per{"{0}/ch."}
@@ -800,16 +825,12 @@ uz{
         }
         length{
             inch{
-                one{"{0} dyuym"}
-                other{"{0} dyuym"}
+                one{"{0} duym"}
+                other{"{0} duym"}
             }
             light-year{
                 one{"{0} yo.y."}
                 other{"{0} yo.y."}
-            }
-            mile{
-                one{"{0} milya"}
-                other{"{0} milya"}
             }
         }
         light{
@@ -835,25 +856,16 @@ uz{
         }
         power{
             horsepower{
-                one{"{0} hp"}
+                one{"{0} o.k."}
                 other{"{0} hp"}
-            }
-            kilowatt{
-                one{"{0} kW"}
-                other{"{0} kW"}
-            }
-            watt{
-                one{"{0} W"}
-                other{"{0} W"}
-            }
-        }
-        pressure{
-            hectopascal{
-                one{"{0} hPa"}
-                other{"{0} hPa"}
             }
         }
         speed{
+            light-speed{
+                dnam{"yorug‘lik tezligi"}
+                one{"{0} yorug‘lik tezligi"}
+                other{"{0} yorug‘lik tezligi"}
+            }
             mile-per-hour{
                 one{"{0} mi/h"}
                 other{"{0} mi/h"}
@@ -864,20 +876,22 @@ uz{
                 one{"{0}N⋅m"}
                 other{"{0}N⋅m"}
             }
-            pound-force-foot{
-                dnam{"funt-fut"}
-                one{"{0} funt-fut"}
-                other{"{0} funt-fut"}
-            }
         }
         volume{
             cubic-mile{
                 one{"{0} mi³"}
                 other{"{0} mi³"}
             }
+            dessert-spoon-imperial{
+                one{"{0} imp. desert qoshiq"}
+                other{"{0} imp. desert qoshiq"}
+            }
             liter{
                 one{"{0}L"}
                 other{"{0}L"}
+            }
+            quart-imperial{
+                dnam{"imp.kvarta"}
             }
         }
     }
@@ -982,6 +996,11 @@ uz{
             permyriad{
                 dnam{"promiriada"}
             }
+            portion-per-1e9{
+                dnam{"qism/milliard"}
+                one{"{0} ta qism/mlrd"}
+                other{"{0} ta qism/mlrd"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1082,6 +1101,12 @@ uz{
             }
             nanosecond{
                 dnam{"nanosoniya"}
+            }
+            night{
+                dnam{"kecha"}
+                one{"{0} kecha"}
+                other{"{0} kecha"}
+                per{"{0}/kecha"}
             }
             quarter{
                 dnam{"chorak"}
@@ -1429,6 +1454,11 @@ uz{
                 one{"{0} uzel"}
                 other{"{0} uzel"}
             }
+            light-speed{
+                dnam{"yorug‘lik tezligi"}
+                one{"{0} yorug‘lik tezligi"}
+                other{"{0} yorug‘lik tezligi"}
+            }
             mile-per-hour{
                 dnam{"mil/soat"}
                 one{"{0} mil/soat"}
@@ -1505,9 +1535,9 @@ uz{
                 other{"{0} desert qoshiq"}
             }
             dessert-spoon-imperial{
-                dnam{"imp desert qoshiq"}
-                one{"{0} imp desert qoshiq"}
-                other{"{0} imp desert qoshiq"}
+                dnam{"imp. desert qoshiq"}
+                one{"{0} imp. desert qoshiq"}
+                other{"{0} imp. desert qoshiq"}
             }
             dram{
                 dnam{"suyuqlik draxmasi"}
@@ -1573,7 +1603,7 @@ uz{
                 other{"{0} kvart"}
             }
             quart-imperial{
-                dnam{"imp kvarta"}
+                dnam{"imp.kvarta"}
                 one{"{0} imp. kvarta"}
                 other{"{0} imp. kvarta"}
             }

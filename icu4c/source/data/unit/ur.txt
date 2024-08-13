@@ -167,6 +167,7 @@ ur{
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"ملی گرام فی ڈیسی لیٹر"}
+                gender{"masculine"}
                 one{"{0} ملی گرام فی ڈیسی لیٹر"}
                 other{"{0} ملی گرام فی ڈیسی لیٹر"}
             }
@@ -202,6 +203,12 @@ ur{
                 gender{"feminine"}
                 one{"{0} پرمرئیڈ"}
                 other{"{0} پرمرئیڈ"}
+            }
+            portion-per-1e9{
+                dnam{"اجزا فی بلین"}
+                gender{"masculine"}
+                one{"{0} جزو فی بلین"}
+                other{"{0} اجزا فی بلین"}
             }
         }
         consumption{
@@ -342,6 +349,13 @@ ur{
             nanosecond{
                 gender{"masculine"}
             }
+            night{
+                dnam{"راتیں"}
+                gender{"feminine"}
+                one{"{0} رات"}
+                other{"{0} راتیں"}
+                per{"{0} فی رات"}
+            }
             quarter{
                 dnam{"کوارٹرز"}
                 gender{"masculine"}
@@ -411,6 +425,7 @@ ur{
             }
             kilocalorie{
                 dnam{"کلو کیلوریز"}
+                gender{"feminine"}
                 one{"{0} کلو کیلوری"}
                 other{"{0} کلو کیلوریز"}
             }
@@ -597,6 +612,7 @@ ur{
                 gender{"masculine"}
             }
             point{
+                gender{"masculine"}
                 one{"{0} پوائنٹ"}
                 other{"{0} پوائنٹس"}
             }
@@ -777,6 +793,7 @@ ur{
             }
             millimeter-ofhg{
                 dnam{"ملی میٹر مرکری"}
+                gender{"masculine"}
                 one{"{0} ملی میٹر مرکری"}
                 other{"{0} ملی میٹر مرکری"}
             }
@@ -807,6 +824,12 @@ ur{
                 dnam{"ناٹس"}
                 one{"{0} ناٹ"}
                 other{"{0} ناٹس"}
+            }
+            light-speed{
+                dnam{"روشنی"}
+                gender{"feminine"}
+                one{"{0} روشنی"}
+                other{"{0} روشنی"}
             }
             meter-per-second{
                 gender{"masculine"}
@@ -1070,6 +1093,10 @@ ur{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1107,6 +1134,12 @@ ur{
             month{
                 dnam{"مہینہ"}
                 per{"{0}/مہینہ"}
+            }
+            night{
+                dnam{"راتیں"}
+                one{"{0} رات"}
+                other{"{0} راتیں"}
+                per{"{0}/رات"}
             }
             quarter{
                 one{"{0}q"}
@@ -1257,6 +1290,11 @@ ur{
                 dnam{"km/hr"}
                 one{"{0}kph"}
                 other{"{0}kph"}
+            }
+            light-speed{
+                dnam{"روشنی"}
+                one{"{0} روشنی"}
+                other{"{0} روشنی"}
             }
             meter-per-second{
                 one{"{0}m/s"}
@@ -1441,6 +1479,9 @@ ur{
             permyriad{
                 dnam{"پرمرئیڈ"}
             }
+            portion-per-1e9{
+                dnam{"اجزا/بلین"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1531,6 +1572,12 @@ ur{
                 dnam{"نینو سیکنڈز"}
                 one{"{0} نینو سیکنڈ"}
                 other{"{0} نینو سیکنڈ"}
+            }
+            night{
+                dnam{"راتیں"}
+                one{"{0} رات"}
+                other{"{0} راتیں"}
+                per{"{0}/رات"}
             }
             quarter{
                 dnam{"کوارٹر"}
@@ -1754,6 +1801,11 @@ ur{
                 dnam{"کلومیٹر/گھنٹہ"}
                 one{"{0} kph"}
                 other{"{0} kph"}
+            }
+            light-speed{
+                dnam{"روشنی"}
+                one{"{0} روشنی"}
+                other{"{0} روشنی"}
             }
             meter-per-second{
                 dnam{"میٹر فی سیکنڈ"}

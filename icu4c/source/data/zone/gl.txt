@@ -66,9 +66,6 @@ gl{
         "America:Argentina:Tucuman"{
             ec{"Tucumán"}
         }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia"{
             ec{"Baía"}
         }
@@ -89,9 +86,6 @@ gl{
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Eirunepe"{
             ec{"Eirunepé"}
@@ -464,6 +458,9 @@ gl{
         "Pacific:Tahiti"{
             ec{"Tahití"}
         }
+        "meta:Acre"{
+            lg{"hora de Acre"}
+        }
         "meta:Afghanistan"{
             ls{"hora de Afganistán"}
         }
@@ -513,7 +510,7 @@ gl{
         }
         "meta:Anadyr"{
             ld{"Horario de verán de Anadir"}
-            lg{"Horario de Anadir"}
+            lg{"hora de Anadyr"}
             ls{"Horario estándar de Anadir"}
         }
         "meta:Apia"{
@@ -793,8 +790,11 @@ gl{
         }
         "meta:Kamchatka"{
             ld{"Horario de verán de Petropávlovsk-Kamchatski"}
-            lg{"Horario de Petropávlovsk-Kamchatski"}
+            lg{"hora estándar de Petropavlovsk-Kamchatski"}
             ls{"Horario estándar de Petropávlovsk-Kamchatski"}
+        }
+        "meta:Kazakhstan"{
+            ls{"hora de Kazakistán"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"hora de Kazakistán Oriental"}
@@ -969,7 +969,7 @@ gl{
         }
         "meta:Samara"{
             ld{"Horario de verán de Samara"}
-            lg{"Horario de Samara"}
+            lg{"hora de Samara"}
             ls{"Horario estándar de Samara"}
         }
         "meta:Samoa"{

@@ -360,6 +360,7 @@ fi{
         lil{"lillooet"}
         liv{"liivi"}
         lkt{"lakota"}
+        lld{"ladin"}
         lmo{"lombardi"}
         ln{"lingala"}
         lo{"lao"}
@@ -374,7 +375,6 @@ fi{
         lua{"luluanluba"}
         lui{"luiseño"}
         lun{"lunda"}
-        luo{"luo"}
         lus{"lusai"}
         luy{"luhya"}
         lv{"latvia"}
@@ -636,7 +636,6 @@ fi{
         und{"tuntematon kieli"}
         ur{"urdu"}
         uz{"uzbekki"}
-        vai{"vai"}
         ve{"venda"}
         vec{"venetsia"}
         vep{"vepsä"}

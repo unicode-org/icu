@@ -69,9 +69,6 @@ eu{
         "America:Cuiaba"{
             ec{"Cuiabá"}
         }
-        "America:Curacao"{
-            ec{"Curaçao"}
-        }
         "America:Dominica"{
             ec{"Dominika"}
         }
@@ -758,6 +755,9 @@ eu{
             lg{"Petropavlovsk-Kamchatskiko ordua"}
             ls{"Petropavlovsk-Kamchatskiko ordu estandarra"}
         }
+        "meta:Kazakhstan"{
+            ls{"Kazakhstango ordua"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Kazakhstango ekialdeko ordua"}
         }
@@ -1053,7 +1053,7 @@ eu{
         "meta:Yukon"{
             ls{"Yukongo ordua"}
         }
-        hourFormat{"+HH:mm;−HH:mm"}
+        hourFormat{"+HH:mm;–HH:mm"}
         regionFormat{"{0} aldeko ordua"}
         regionFormatDaylight{"{0} (udako ordua)"}
         regionFormatStandard{"{0} aldeko ordu estandarra"}

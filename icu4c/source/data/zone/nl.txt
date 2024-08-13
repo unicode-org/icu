@@ -24,9 +24,6 @@ nl{
         "America:Argentina:Tucuman"{
             ec{"Tucumán"}
         }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Belem"{
             ec{"Belém"}
         }
@@ -38,9 +35,6 @@ nl{
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Lower_Princes"{
             ec{"Beneden Prinsen Kwartier"}
@@ -282,9 +276,6 @@ nl{
         }
         "Indian:Maldives"{
             ec{"Maldiven"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Easter"{
             ec{"Paaseiland"}
@@ -685,6 +676,9 @@ nl{
             ld{"Petropavlovsk-Kamtsjatski-zomertijd"}
             lg{"Petropavlovsk-Kamtsjatski-tijd"}
             ls{"Petropavlovsk-Kamtsjatski-standaardtijd"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Kazachse tijd"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Oost-Kazachse tijd"}

@@ -18,6 +18,14 @@ ur{
     ExemplarCharactersPunctuation{"[، ؍ ٫ ٬ ؛ \\: ؟ . ۔ ( ) \\[ \\]]"}
     MoreInformation{"؟"}
     NumberElements{
+        arab{
+            symbols{
+                decimal{"،"}
+                exponential{"E"}
+                group{","}
+                plusSign{"+"}
+            }
+        }
         arabext{
             patterns{
                 currencyFormat%alphaNextToNumber{"¤ #,##0.00"}

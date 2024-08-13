@@ -24,9 +24,6 @@ fr{
         "Africa:Ndjamena"{
             ec{"N’Djamena"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "Africa:Tripoli"{
             ec{"Tripoli (Libye)"}
         }
@@ -41,9 +38,6 @@ fr{
         }
         "America:Argentina:Ushuaia"{
             ec{"Ushuaïa"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Bahia_Banderas"{
             ec{"Bahia de Banderas"}
@@ -62,9 +56,6 @@ fr{
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Detroit"{
             ec{"Détroit"}
@@ -795,6 +786,9 @@ fr{
             ld{"heure d’été de Petropavlovsk-Kamchatski"}
             lg{"heure de Petropavlovsk-Kamchatski"}
             ls{"heure normale de Petropavlovsk-Kamchatski"}
+        }
+        "meta:Kazakhstan"{
+            ls{"heure du Kazakhstan"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"heure de l’Est du Kazakhstan"}

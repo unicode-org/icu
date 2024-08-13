@@ -9,7 +9,7 @@ ku{
         }
         AFN{
             "AFN",
-            "efxaniyê efxanistanî",
+            "efxanîyê efxanistanî",
         }
         ALL{
             "ALL",
@@ -65,7 +65,7 @@ ku{
         }
         BIF{
             "BIF",
-            "frenkê birûndiyî",
+            "frankê birûndîyî",
         }
         BMD{
             "BMD",
@@ -117,7 +117,7 @@ ku{
         }
         CLP{
             "CLP",
-            "pesoyê şîliyê",
+            "pesoyê şîlîyê",
         }
         CNH{
             "CNH",
@@ -129,7 +129,7 @@ ku{
         }
         COP{
             "COP",
-            "pesoyê kolombiyayî",
+            "pesoyê kolombîyayî",
         }
         CRC{
             "CRC",
@@ -153,7 +153,7 @@ ku{
         }
         DJF{
             "DJF",
-            "frankê cîbûtiyî",
+            "frankê cîbûtîyî",
         }
         DKK{
             "DKK",
@@ -185,7 +185,7 @@ ku{
         }
         FJD{
             "FJD",
-            "dolarê fîjiyî",
+            "dolarê fîjîyî",
         }
         FKP{
             "FKP",
@@ -197,11 +197,11 @@ ku{
         }
         GEL{
             "GEL",
-            "lariyê gurcistanî",
+            "larîyê gurcistanî",
         }
         GHS{
             "GHS",
-            "cediyê ganayî",
+            "cedîyê ganayî",
         }
         GIP{
             "GIP",
@@ -209,7 +209,7 @@ ku{
         }
         GMD{
             "GMD",
-            "dalasiyê gambiyayî",
+            "dalasîyê gambîyayî",
         }
         GNF{
             "GNF",
@@ -237,7 +237,7 @@ ku{
         }
         HTG{
             "HTG",
-            "gûrdeyê haîtiyî",
+            "gûrdeyê haîtîyî",
         }
         HUF{
             "HUF",
@@ -245,7 +245,7 @@ ku{
         }
         IDR{
             "IDR",
-            "rûpiyê endonezî",
+            "rûpîyê endonezî",
         }
         ILS{
             "₪",
@@ -253,7 +253,7 @@ ku{
         }
         INR{
             "₹",
-            "rûpiyê hindistanî",
+            "rûpîyê hindistanî",
         }
         IQD{
             "IQD",
@@ -261,7 +261,7 @@ ku{
         }
         IRR{
             "IRR",
-            "riyalê îranî",
+            "rîyalê îranî",
         }
         ISK{
             "ISK",
@@ -325,7 +325,7 @@ ku{
         }
         LKR{
             "LKR",
-            "rûpiyê srî lankayî",
+            "rûpîyê srî lankayî",
         }
         LRD{
             "LRD",
@@ -333,7 +333,7 @@ ku{
         }
         LSL{
             "LSL",
-            "lotiyê lesothoyî",
+            "lotîyê lesothoyî",
         }
         LYD{
             "LYD",
@@ -373,15 +373,15 @@ ku{
         }
         MUR{
             "MUR",
-            "rûpiyê maûrîtîûsê",
+            "rûpîyê maûrîtîûsê",
         }
         MVR{
             "MVR",
-            "rûfiyaayê maldîvayî",
+            "rûfîyaayê maldîvayî",
         }
         MWK{
             "MWK",
-            "kwaçayê malawiyê",
+            "kwaçayê malawîyê",
         }
         MXN{
             "MX$",
@@ -413,7 +413,7 @@ ku{
         }
         NPR{
             "NPR",
-            "rûpiyê nepalî",
+            "rûpîyê nepalî",
         }
         NZD{
             "NZ$",
@@ -421,7 +421,7 @@ ku{
         }
         OMR{
             "OMR",
-            "riyalê umanî",
+            "rîyalê umanî",
         }
         PAB{
             "PAB",
@@ -441,19 +441,19 @@ ku{
         }
         PKR{
             "PKR",
-            "rûpiyê pakistanî",
+            "rûpîyê pakistanî",
         }
         PLN{
             "PLN",
-            "zlotiyê polonyayî",
+            "zlotîyê polonyayî",
         }
         PYG{
             "PYG",
-            "gûaraniyê paragûayî",
+            "gûaranîyê paragûayî",
         }
         QAR{
             "QAR",
-            "riyalê qeterî",
+            "rîyalê qeterî",
         }
         RON{
             "RON",
@@ -473,7 +473,7 @@ ku{
         }
         SAR{
             "SAR",
-            "riyalê siûdî",
+            "rîyalê siûdî",
         }
         SBD{
             "SBD",
@@ -481,7 +481,7 @@ ku{
         }
         SCR{
             "SCR",
-            "rûpiyê seyşelerî",
+            "rûpîyê seyşelerî",
         }
         SDG{
             "SDG",
@@ -529,7 +529,7 @@ ku{
         }
         SZL{
             "SZL",
-            "lîlangeniyê swazîlî",
+            "lîlangenîyê swazîlî",
         }
         THB{
             "THB",
@@ -621,11 +621,11 @@ ku{
         }
         XXX{
             "¤",
-            "(yekeya pereyê nenas)",
+            "(yekeya pereyî ya nenas)",
         }
         YER{
             "YER",
-            "riyalê yemenî",
+            "rîyalê yemenî",
         }
         ZAR{
             "ZAR",
@@ -633,7 +633,7 @@ ku{
         }
         ZMW{
             "ZMW",
-            "kwaçayê zambiyayî",
+            "kwaçayê zambîyayî",
         }
     }
     CurrencyPlurals{
@@ -642,8 +642,8 @@ ku{
             other{"dîrhemên MEYî"}
         }
         AFN{
-            one{"efxaniyê efxanistanî"}
-            other{"efxaniyên efxanistanî"}
+            one{"efxanîyê efxanistanî"}
+            other{"efxanîyên efxanistanî"}
         }
         ALL{
             one{"lekê arnawidî"}
@@ -694,8 +694,8 @@ ku{
             other{"dînarên behreynê"}
         }
         BIF{
-            one{"frenkê birûndiyî"}
-            other{"frenkên birûndiyî"}
+            one{"frankê birûndîyî"}
+            other{"frankên birûndîyî"}
         }
         BMD{
             one{"dolarê bermûdayî"}
@@ -723,7 +723,7 @@ ku{
         }
         BWP{
             one{"pulayê botswanayî"}
-            other{"pulayê nbotswanayî"}
+            other{"pulayên botswanayî"}
         }
         BYN{
             one{"rûbleyê belarûsî"}
@@ -746,8 +746,8 @@ ku{
             other{"frankên swîsrî"}
         }
         CLP{
-            one{"pesoyê şîliyê"}
-            other{"pesoyên şîliyê"}
+            one{"pesoyê şîlîyê"}
+            other{"pesoyên şîlîyê"}
         }
         CNH{
             one{"yûanê çînî (offshore)"}
@@ -758,8 +758,8 @@ ku{
             other{"yûanên çînî"}
         }
         COP{
-            one{"pesoyê kolombiyayî"}
-            other{"pesoyên kolombiyayî"}
+            one{"pesoyê kolombîyayî"}
+            other{"pesoyên kolombîyayî"}
         }
         CRC{
             one{"kolonê kosta rîkayî"}
@@ -782,8 +782,8 @@ ku{
             other{"kronên çekî"}
         }
         DJF{
-            one{"frankê cîbûtiyî"}
-            other{"frankên cîbûtiyî"}
+            one{"frankê cîbûtîyî"}
+            other{"frankên cîbûtîyî"}
         }
         DKK{
             one{"kronê danîmarkî"}
@@ -810,8 +810,8 @@ ku{
             other{"bîrên etyopyayî"}
         }
         FJD{
-            one{"dolarê fîjiyî"}
-            other{"dolarên fîjiyî"}
+            one{"dolarê fîjîyî"}
+            other{"dolarên fîjîyî"}
         }
         FKP{
             one{"paundê giravên falklandê"}
@@ -822,20 +822,20 @@ ku{
             other{"sterlînên brîtanî"}
         }
         GEL{
-            one{"lariyê gurcistanî"}
-            other{"lariyên gurcistanî"}
+            one{"larîyê gurcistanî"}
+            other{"larîyên gurcistanî"}
         }
         GHS{
-            one{"cediyê ganayî"}
-            other{"cediyên ganayî"}
+            one{"cedîyê ganayî"}
+            other{"cedîyên ganayî"}
         }
         GIP{
             one{"poundê gîbraltarê"}
             other{"poundên gîbraltarê"}
         }
         GMD{
-            one{"dalasiyê gambiyayî"}
-            other{"dalasiyên gambiyayî"}
+            one{"dalasîyê gambîyayî"}
+            other{"dalasîyên gambîyayî"}
         }
         GNF{
             one{"frankê gîneyî"}
@@ -862,32 +862,32 @@ ku{
             other{"kûnayên xirwatî"}
         }
         HTG{
-            one{"gûrdeyê haîtiyî"}
-            other{"gûrdeyên haîtiyî"}
+            one{"gûrdeyê haîtîyî"}
+            other{"gûrdeyên haîtîyî"}
         }
         HUF{
             one{"forîntê macarî"}
             other{"forîntên macarî"}
         }
         IDR{
-            one{"rûpiyê endonezî"}
-            other{"rûpiyên endonezî"}
+            one{"rûpîyê endonezî"}
+            other{"rûpîyên endonezî"}
         }
         ILS{
             one{"şekelê nû yê îsraîlî"}
             other{"şekelên nû yê îsraîlî"}
         }
         INR{
-            one{"rûpiyê hindistanî"}
-            other{"rûpiyên hindistanî"}
+            one{"rûpîyê hindistanî"}
+            other{"rûpîyên hindistanî"}
         }
         IQD{
             one{"dînarê îraqî"}
             other{"dînarên îraqî"}
         }
         IRR{
-            one{"riyalê îranî"}
-            other{"riyalên îranî"}
+            one{"rîyalê îranî"}
+            other{"rîyalên îranî"}
         }
         ISK{
             one{"kronê îslandayî"}
@@ -950,16 +950,16 @@ ku{
             other{"lîreyên libnanî"}
         }
         LKR{
-            one{"rûpiyê srî lankayî"}
-            other{"rûpiyên srî lankayî"}
+            one{"rûpîyê srî lankayî"}
+            other{"rûpîyên srî lankayî"}
         }
         LRD{
             one{"dolarê lîberyayî"}
             other{"dolarên lîberyayî"}
         }
         LSL{
-            one{"lotiyê lesothoyî"}
-            other{"lotiyên lesothoyî"}
+            one{"lotîyê lesothoyî"}
+            other{"lotîyên lesothoyî"}
         }
         LYD{
             one{"dînarê lîbyayî"}
@@ -998,16 +998,16 @@ ku{
             other{"ouguîayên morîtanyayî"}
         }
         MUR{
-            one{"rûpiyê maûrîtîûsê"}
-            other{"rûpiyên maûrîtîûsê"}
+            one{"rûpîyê maûrîtîûsê"}
+            other{"rûpîyên maûrîtîûsê"}
         }
         MVR{
-            one{"rûfiyaayê maldîvayî"}
-            other{"rûfiyaayên maldîvayî"}
+            one{"rûfîyaayê maldîvayî"}
+            other{"rûfîyaayên maldîvayî"}
         }
         MWK{
-            one{"kwaçayê malawiyê"}
-            other{"kwaçayên malawiyê"}
+            one{"kwaçayê malawîyê"}
+            other{"kwaçayên malawîyê"}
         }
         MXN{
             one{"pesoyê meksîkayî"}
@@ -1038,16 +1038,16 @@ ku{
             other{"kronên norweçî"}
         }
         NPR{
-            one{"rûpiyê nepalî"}
-            other{"rûpiyên nepalî"}
+            one{"rûpîyê nepalî"}
+            other{"rûpîyên nepalî"}
         }
         NZD{
             one{"dolarê zelandayî"}
             other{"dolarên zelandayî"}
         }
         OMR{
-            one{"riyalê umanî"}
-            other{"riyalên umanî"}
+            one{"rîyalê umanî"}
+            other{"rîyalên umanî"}
         }
         PAB{
             one{"balboayê panamayî"}
@@ -1066,20 +1066,20 @@ ku{
             other{"pesoyên fîlîpînî"}
         }
         PKR{
-            one{"rûpiyê pakistanî"}
-            other{"rûpiyên pakistanî"}
+            one{"rûpîyê pakistanî"}
+            other{"rûpîyên pakistanî"}
         }
         PLN{
-            one{"zlotiyê polonyayî"}
-            other{"zlotiyên polonyayî"}
+            one{"zlotîyê polonyayî"}
+            other{"zlotîyên polonyayî"}
         }
         PYG{
-            one{"gûaraniyê paragûayî"}
-            other{"gûaraniyên paragûayî"}
+            one{"gûaranîyê paragûayî"}
+            other{"gûaranîyên paragûayî"}
         }
         QAR{
-            one{"riyalê qeterî"}
-            other{"riyalên qeterî"}
+            one{"rîyalê qeterî"}
+            other{"rîyalên qeterî"}
         }
         RON{
             one{"leyê romanyayî"}
@@ -1098,16 +1098,16 @@ ku{
             other{"frankên rwandayî"}
         }
         SAR{
-            one{"riyalê siûdî"}
-            other{"riyalên siûdî"}
+            one{"rîyalê siûdî"}
+            other{"rîyalên siûdî"}
         }
         SBD{
             one{"dolarê giravên solomonî"}
             other{"dolarên giravên solomonî"}
         }
         SCR{
-            one{"rûpiyê seyşelerî"}
-            other{"rûpiyên seyşelerî"}
+            one{"rûpîyê seyşelerî"}
+            other{"rûpîyên seyşelerî"}
         }
         SDG{
             one{"lîreyê sûdanî"}
@@ -1154,8 +1154,8 @@ ku{
             other{"lîreyên sûrî"}
         }
         SZL{
-            one{"lîlangeniyê swazîlî"}
-            other{"lîlangeniyên swazîlî"}
+            one{"lîlangenîyê swazîlî"}
+            other{"lîlangenîyên swazîlî"}
         }
         THB{
             one{"bahtê taylandî"}
@@ -1246,24 +1246,20 @@ ku{
             other{"frankên CFPî"}
         }
         XXX{
-            one{"(yekeya pereyê nenas)"}
-            other{"(yekeyên pereyê nenas)"}
+            one{"yekeya pereyî ya nenas"}
+            other{"(yekeyên pereyî yên nenas)"}
         }
         YER{
-            one{"riyalê yemenî"}
-            other{"riyalên yemenî"}
+            one{"rîyalê yemenî"}
+            other{"rîyalên yemenî"}
         }
         ZAR{
             one{"randê afrîkaya başûrî"}
             other{"randên afrîkaya başûrî"}
         }
         ZMW{
-            one{"kwaçayê zambiyayî"}
-            other{"kwaçayên zambiyayî"}
+            one{"kwaçayê zambîyayî"}
+            other{"kwaçayên zambîyayî"}
         }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

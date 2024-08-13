@@ -17,6 +17,8 @@ fa{
                 currencyFormat{"‎¤#,##0.00"}
             }
             symbols{
+                exponential{"E"}
+                nan{"ناعدد"}
                 percentSign{"٪"}
             }
         }
@@ -637,14 +639,6 @@ fa{
                         night1{"شب"}
                         night2{"نیمه‌شب"}
                     }
-                    narrow{
-                        afternoon1{"ظ"}
-                        afternoon2{"ع"}
-                        morning1{"ب"}
-                        morning2{"ص"}
-                        night1{"ش"}
-                        night2{"ن"}
-                    }
                     wide{
                         afternoon1{"بعدازظهر"}
                         afternoon2{"عصر"}
@@ -656,14 +650,8 @@ fa{
                 }
                 stand-alone{
                     narrow{
-                        afternoon1{"ظ"}
-                        afternoon2{"ع"}
-                        am{"ق"}
-                        morning1{"ب"}
-                        morning2{"ص"}
-                        night1{"ش"}
-                        night2{"ن"}
-                        pm{"ب"}
+                        am{"ق‌ظ"}
+                        pm{"ب‌ظ"}
                     }
                     wide{
                         am{"قبل‌ازظهر"}
@@ -1725,10 +1713,10 @@ fa{
         flags{"پرچم‌ها"}
         food_drink{"غذا و نوشیدنی"}
         format{"قالب"}
-        format_whitespace{"قالب و فضای سفید"}
+        format_whitespace{"قالب و فاصله"}
         full_width_form_variant{"گونه قالب تمام‌پهنا"}
         geometric_shapes{"اشکال هندسی"}
-        half_width_form_variant{"گونه‌های قالب پهنا"}
+        half_width_form_variant{"گونه قالب نیم‌پهنا"}
         han_characters{"نویسه‌های هان"}
         han_radicals{"ریشه‌های هان"}
         hanja{"هانجا"}
@@ -1763,27 +1751,27 @@ fa{
         pictographs{"تصویرنگاشت"}
         place{"جا"}
         plant{"گیاه"}
-        punctuation{"سجاوندی"}
+        punctuation{"نشانه‌های سجاوندی"}
         rightwards_arrows{"پیکان‌های رو به راست"}
-        sign_standard_symbols{"نمادهای استاندارد/نشان"}
+        sign_standard_symbols{"نشان یا نماد"}
         small_form_variant{"گونه‌های کوچک"}
         smiley{"شکلک"}
-        smileys_people{"صورتک‌ها و افراد"}
+        smileys_people{"شکلک یا شخص"}
         south_asian_scripts{"دبیره‌های آسیای جنوبی"}
         southeast_asian_scripts{"دبیره‌های آسیای جنوب شرقی"}
         spacing{"فاصله‌گذاری"}
         sport{"ورزش"}
-        symbols{"علائم"}
+        symbols{"نماد"}
         technical_symbols{"علائم فنی"}
-        tone_marks{"نشانه‌های نواخت"}
+        tone_marks{"علامت نواخت"}
         travel{"مسافرت"}
-        travel_places{"سفر و جای‌ها"}
+        travel_places{"سفر یا مکان"}
         upwards_arrows{"پیکان‌های رو به بالا"}
         variant_forms{"گونه‌ها"}
         vocalic_jamo{"جاموی آوایی"}
         weather{"آب‌وهوا"}
         western_asian_scripts{"دبیره‌های آسیای غربی"}
-        whitespace{"فضای سفید"}
+        whitespace{"فاصله خالی"}
     }
     delimiters{
         alternateQuotationEnd{"›"}
@@ -1837,12 +1825,36 @@ fa{
             }
             relativeTime{
                 future{
-                    one{"{0} جمعهٔ بعد"}
-                    other{"{0} جمعهٔ بعد"}
+                    one{"{0} جمعه بعد"}
+                    other{"{0} جمعه بعد"}
                 }
                 past{
-                    one{"{0} جمعهٔ پیش"}
-                    other{"{0} جمعهٔ پیش"}
+                    one{"{0} جمعه قبل"}
+                    other{"{0} جمعه قبل"}
+                }
+            }
+        }
+        fri-narrow{
+            relativeTime{
+                future{
+                    one{"{0} جمعه بعد"}
+                    other{"{0} جمعه بعد"}
+                }
+                past{
+                    one{"{0} جمعه قبل"}
+                    other{"{0} جمعه قبل"}
+                }
+            }
+        }
+        fri-short{
+            relativeTime{
+                future{
+                    one{"{0} جمعه بعد"}
+                    other{"{0} جمعه بعد"}
+                }
+                past{
+                    one{"{0} جمعه قبل"}
+                    other{"{0} جمعه قبل"}
                 }
             }
         }
@@ -1886,12 +1898,36 @@ fa{
             }
             relativeTime{
                 future{
-                    one{"{0} دوشنبهٔ بعد"}
-                    other{"{0} دوشنبهٔ بعد"}
+                    one{"{0} دوشنبه بعد"}
+                    other{"{0} دوشنبه بعد"}
                 }
                 past{
-                    one{"{0} دوشنبهٔ پیش"}
-                    other{"{0} دوشنبهٔ پیش"}
+                    one{"{0} دوشنبه قبل"}
+                    other{"{0} دوشنبه قبل"}
+                }
+            }
+        }
+        mon-narrow{
+            relativeTime{
+                future{
+                    one{"{0} دوشنبه بعد"}
+                    other{"{0} دوشنبه بعد"}
+                }
+                past{
+                    one{"{0} دوشنبه قبل"}
+                    other{"{0} دوشنبه قبل"}
+                }
+            }
+        }
+        mon-short{
+            relativeTime{
+                future{
+                    one{"{0} دوشنبه بعد"}
+                    other{"{0} دوشنبه بعد"}
+                }
+                past{
+                    one{"{0} دوشنبه قبل"}
+                    other{"{0} دوشنبه قبل"}
                 }
             }
         }
@@ -1939,12 +1975,36 @@ fa{
             }
             relativeTime{
                 future{
-                    one{"{0} شنبهٔ بعد"}
-                    other{"{0} شنبهٔ بعد"}
+                    one{"{0} شنبه بعد"}
+                    other{"{0} شنبه بعد"}
                 }
                 past{
-                    one{"{0} شنبهٔ پیش"}
-                    other{"{0} شنبهٔ پیش"}
+                    one{"{0} شنبه قبل"}
+                    other{"{0} شنبه قبل"}
+                }
+            }
+        }
+        sat-narrow{
+            relativeTime{
+                future{
+                    one{"{0} شنبه بعد"}
+                    other{"{0} شنبه بعد"}
+                }
+                past{
+                    one{"{0} شنبه قبل"}
+                    other{"{0} شنبه قبل"}
+                }
+            }
+        }
+        sat-short{
+            relativeTime{
+                future{
+                    one{"{0} شنبه بعد"}
+                    other{"{0} شنبه بعد"}
+                }
+                past{
+                    one{"{0} شنبه قبل"}
+                    other{"{0} شنبه قبل"}
                 }
             }
         }
@@ -1972,12 +2032,36 @@ fa{
             }
             relativeTime{
                 future{
-                    one{"{0} یکشنبهٔ بعد"}
-                    other{"{0} یکشنبهٔ بعد"}
+                    one{"{0} یکشنبه بعد"}
+                    other{"{0} یکشنبه بعد"}
                 }
                 past{
-                    one{"{0} یکشنبهٔ پیش"}
-                    other{"{0} یکشنبهٔ پیش"}
+                    one{"{0} یکشنبه قبل"}
+                    other{"{0} یکشنبه قبل"}
+                }
+            }
+        }
+        sun-narrow{
+            relativeTime{
+                future{
+                    one{"{0} یکشنبه بعد"}
+                    other{"{0} یکشنبه بعد"}
+                }
+                past{
+                    one{"{0} یکشنبه قبل"}
+                    other{"{0} یکشنبه قبل"}
+                }
+            }
+        }
+        sun-short{
+            relativeTime{
+                future{
+                    one{"{0} یکشنبه بعد"}
+                    other{"{0} یکشنبه بعد"}
+                }
+                past{
+                    one{"{0} یکشنبه قبل"}
+                    other{"{0} یکشنبه قبل"}
                 }
             }
         }
@@ -1989,12 +2073,36 @@ fa{
             }
             relativeTime{
                 future{
-                    one{"{0} پنجشنبهٔ بعد"}
-                    other{"{0} پنجشنبهٔ بعد"}
+                    one{"{0} پنجشنبه بعد"}
+                    other{"{0} پنجشنبه بعد"}
                 }
                 past{
-                    one{"{0} پنجشنبهٔ پیش"}
-                    other{"{0} پنجشنبهٔ پیش"}
+                    one{"{0} پنجشنبه قبل"}
+                    other{"{0} پنجشنبه قبل"}
+                }
+            }
+        }
+        thu-narrow{
+            relativeTime{
+                future{
+                    one{"{0} پنجشنبه بعد"}
+                    other{"{0} پنجشنبه بعد"}
+                }
+                past{
+                    one{"{0} پنجشنبه قبل"}
+                    other{"{0} پنجشنبه قبل"}
+                }
+            }
+        }
+        thu-short{
+            relativeTime{
+                future{
+                    one{"{0} پنجشنبه بعد"}
+                    other{"{0} پنجشنبه بعد"}
+                }
+                past{
+                    one{"{0} پنجشنبه قبل"}
+                    other{"{0} پنجشنبه قبل"}
                 }
             }
         }
@@ -2006,12 +2114,36 @@ fa{
             }
             relativeTime{
                 future{
-                    one{"{0} سه‌شنبهٔ بعد"}
-                    other{"{0} سه‌شنبهٔ بعد"}
+                    one{"{0} سه‌شنبه بعد"}
+                    other{"{0} سه‌شنبه بعد"}
                 }
                 past{
-                    one{"{0} سه‌شنبهٔ پیش"}
-                    other{"{0} سه‌شنبهٔ پیش"}
+                    one{"{0} سه‌شنبه قبل"}
+                    other{"{0} سه‌شنبه قبل"}
+                }
+            }
+        }
+        tue-narrow{
+            relativeTime{
+                future{
+                    one{"{0} سه‌شنبه بعد"}
+                    other{"{0} سه‌شنبه بعد"}
+                }
+                past{
+                    one{"{0} سه‌شنبه قبل"}
+                    other{"{0} سه‌شنبه قبل"}
+                }
+            }
+        }
+        tue-short{
+            relativeTime{
+                future{
+                    one{"{0} سه‌شنبه بعد"}
+                    other{"{0} سه‌شنبه بعد"}
+                }
+                past{
+                    one{"{0} سه‌شنبه قبل"}
+                    other{"{0} سه‌شنبه قبل"}
                 }
             }
         }
@@ -2023,12 +2155,36 @@ fa{
             }
             relativeTime{
                 future{
-                    one{"{0} چهارشنبهٔ بعد"}
-                    other{"{0} چهارشنبهٔ بعد"}
+                    one{"{0} چهارشنبه بعد"}
+                    other{"{0} چهارشنبه بعد"}
                 }
                 past{
-                    one{"{0} چهارشنبهٔ پیش"}
-                    other{"{0} چهارشنبهٔ پیش"}
+                    one{"{0} چهارشنبه قبل"}
+                    other{"{0} چهارشنبه قبل"}
+                }
+            }
+        }
+        wed-narrow{
+            relativeTime{
+                future{
+                    one{"{0} چهارشنبه بعد"}
+                    other{"{0} چهارشنبه بعد"}
+                }
+                past{
+                    one{"{0} چهارشنبه قبل"}
+                    other{"{0} چهارشنبه قبل"}
+                }
+            }
+        }
+        wed-short{
+            relativeTime{
+                future{
+                    one{"{0} چهارشنبه بعد"}
+                    other{"{0} چهارشنبه بعد"}
+                }
+                past{
+                    one{"{0} چهارشنبه قبل"}
+                    other{"{0} چهارشنبه قبل"}
                 }
             }
         }

@@ -1053,7 +1053,4 @@ kok{
             other{"झांबियन क्वाचास"}
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

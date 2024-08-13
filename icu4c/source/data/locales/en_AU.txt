@@ -86,7 +86,7 @@ en_AU{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE d MMMM y",
+                "EEEE, d MMMM y",
                 "d MMMM y",
                 "d MMM y",
                 "d/M/yy",
@@ -108,7 +108,6 @@ en_AU{
             }
             availableFormats{
                 GyMMMEEEEd{"EEEE d MMM y G"}
-                GyMd{"d/M/y GGGGG"}
                 MEd{"E, d/M"}
                 MMMEEEEd{"EEEE d MMM"}
                 MMMMEEEEd{"EEEE d MMMM"}

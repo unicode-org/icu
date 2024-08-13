@@ -58,7 +58,7 @@ pa{
             ec{"ਦਾਰ ਏਸ ਸਲਾਮ"}
         }
         "Africa:Djibouti"{
-            ec{"ਜ਼ੀਬੂਤੀ"}
+            ec{"ਜਿਬੂਤੀ"}
         }
         "Africa:Douala"{
             ec{"ਡੌਆਲਾ"}
@@ -1601,6 +1601,9 @@ pa{
             ld{"ਜਪਾਨ ਪ੍ਰਕਾਸ਼ ਵੇਲਾ"}
             lg{"ਜਪਾਨ ਵੇਲਾ"}
             ls{"ਜਪਾਨ ਮਿਆਰੀ ਵੇਲਾ"}
+        }
+        "meta:Kazakhstan"{
+            ls{"ਕਜ਼ਾਖ਼ਸਤਾਨ ਵੇਲਾ"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"ਪੂਰਬੀ ਕਜ਼ਾਖ਼ਸਤਾਨ ਵੇਲਾ"}

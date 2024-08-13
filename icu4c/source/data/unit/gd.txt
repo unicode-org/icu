@@ -250,6 +250,13 @@ gd{
                 other{"{0} sna deich mìltean"}
                 two{"{0} sna deich mìltean"}
             }
+            portion-per-1e9{
+                dnam{"pàirt sa bhillean"}
+                few{"{0} pàirtean sa bhillean"}
+                one{"{0} phàirt sa bhillean"}
+                other{"{0} pàirt sa bhillean"}
+                two{"{0} phàirt sa bhillean"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -424,6 +431,14 @@ gd{
                 one{"{0} nano-diog"}
                 other{"{0} nano-diog"}
                 two{"{0} nano-diog"}
+            }
+            night{
+                dnam{"oidhche"}
+                few{"{0} oidhcheannan"}
+                one{"{0} oidhche"}
+                other{"{0} oidhche"}
+                per{"{0}/oidhche"}
+                two{"{0} oidhche"}
             }
             quarter{
                 dnam{"cairteal"}
@@ -1060,6 +1075,13 @@ gd{
                 other{"{0} mìle mara san uair"}
                 two{"{0} mhìle mara san uair"}
             }
+            light-speed{
+                dnam{"solas"}
+                few{"{0} solasan"}
+                one{"{0} sholas"}
+                other{"{0} solas"}
+                two{"{0} sholas"}
+            }
             meter-per-second{
                 dnam{"meatair san diog"}
                 few{"{0} meatairean san diog"}
@@ -1498,6 +1520,12 @@ gd{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                few{"{0}ppb"}
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+                two{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1655,6 +1683,14 @@ gd{
                 one{"{0}ns"}
                 other{"{0}ns"}
                 two{"{0}ns"}
+            }
+            night{
+                dnam{"oidhche"}
+                few{"{0}oidh."}
+                one{"{0}oidh."}
+                other{"{0}oidh."}
+                per{"{0}/oidh."}
+                two{"{0}oidh."}
             }
             quarter{
                 dnam{"c"}
@@ -2263,6 +2299,13 @@ gd{
                 other{"{0}kn"}
                 two{"{0}kn"}
             }
+            light-speed{
+                dnam{"solas"}
+                few{"{0}solas."}
+                one{"{0}sholas"}
+                other{"{0}solas"}
+                two{"{0}sholas"}
+            }
             meter-per-second{
                 dnam{"m/s"}
                 few{"{0}m/s"}
@@ -2639,6 +2682,9 @@ gd{
             permyriad{
                 dnam{"sna deich mìltean"}
             }
+            portion-per-1e9{
+                dnam{"pàirt/billean"}
+            }
         }
         consumption{
             liter-per-kilometer{
@@ -2735,6 +2781,14 @@ gd{
             }
             nanosecond{
                 dnam{"nano-diog"}
+            }
+            night{
+                dnam{"oidhche"}
+                few{"{0} oidhche."}
+                one{"{0} oidhche"}
+                other{"{0} oidhche"}
+                per{"{0}/oidhche"}
+                two{"{0} oidhche"}
             }
             quarter{
                 dnam{"cairt."}
@@ -2983,6 +3037,13 @@ gd{
         speed{
             kilometer-per-hour{
                 dnam{"km/uair"}
+            }
+            light-speed{
+                dnam{"solas"}
+                few{"{0} solasan"}
+                one{"{0} sholas"}
+                other{"{0} solas"}
+                two{"{0} sholas"}
             }
             meter-per-second{
                 dnam{"meatair/diog"}

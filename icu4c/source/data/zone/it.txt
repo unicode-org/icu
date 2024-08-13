@@ -33,26 +33,17 @@ it{
         "Africa:Ndjamena"{
             ec{"N’Djamena"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "Africa:Tunis"{
             ec{"Tunisi"}
         }
         "America:Argentina:Tucuman"{
             ec{"Tucumán"}
         }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bogota"{
             ec{"Bogotá"}
         }
         "America:Cayenne"{
             ec{"Caienna"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Guadeloupe"{
             ec{"Guadalupa"}
@@ -635,6 +626,9 @@ it{
             ld{"Ora legale di Petropavlovsk-Kamchatski"}
             lg{"Ora di Petropavlovsk-Kamchatski"}
             ls{"Ora standard di Petropavlovsk-Kamchatski"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Ora del Kazakistan"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Ora del Kazakistan orientale"}

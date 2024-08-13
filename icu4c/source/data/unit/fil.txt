@@ -188,6 +188,11 @@ fil{
                 one{"{0} permyriad"}
                 other{"{0} permyriad"}
             }
+            portion-per-1e9{
+                dnam{"parts per billion"}
+                one{"{0} part per billion"}
+                other{"{0} parts per billion"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -313,10 +318,16 @@ fil{
                 one{"{0} nanosegundo"}
                 other{"{0} nanosegundo"}
             }
+            night{
+                dnam{"mga gabi"}
+                one{"{0} gabi"}
+                other{"{0} gabi"}
+                per{"{0} kada gabi"}
+            }
             quarter{
                 dnam{"mga quarter"}
                 one{"{0} qtr"}
-                other{"{0} qaurter"}
+                other{"{0} quarter"}
             }
             second{
                 dnam{"mga segundo"}
@@ -791,7 +802,7 @@ fil{
                 other{"{0} newton-meter"}
             }
             pound-force-foot{
-                dnam{"pound-feet"}
+                dnam{"pound-force-feet"}
                 one{"{0} pound-force-foot"}
                 other{"{0} pound-feet"}
             }
@@ -1029,6 +1040,10 @@ fil{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1090,6 +1105,12 @@ fil{
             month{
                 one{"{0}buwan"}
                 other{"{0} buwan"}
+            }
+            night{
+                dnam{"mga gabi"}
+                one{"{0}gabi"}
+                other{"{0}gabi"}
+                per{"{0}/gabi"}
             }
             second{
                 one{"{0}s"}
@@ -1498,6 +1519,9 @@ fil{
             permyriad{
                 dnam{"permyriad"}
             }
+            portion-per-1e9{
+                dnam{"parts/billion"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1588,6 +1612,12 @@ fil{
             }
             nanosecond{
                 dnam{"nanoseg"}
+            }
+            night{
+                dnam{"mga gabi"}
+                one{"{0} gabi"}
+                other{"{0} gabi"}
+                per{"{0}/gabi"}
             }
             quarter{
                 one{"{0} qtr"}

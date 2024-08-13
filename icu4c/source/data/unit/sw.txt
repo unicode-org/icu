@@ -104,6 +104,11 @@ sw{
                 one{"permyriadi {0}"}
                 other{"permyriadi {0}"}
             }
+            portion-per-1e9{
+                dnam{"sehemu kwa kila bilioni"}
+                one{"sehemu {0} kwa kila bilioni"}
+                other{"sehemu {0} kwa kila bilioni"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -146,6 +151,12 @@ sw{
             millisecond{
                 one{"millisekunde {0}"}
                 other{"millisekunde {0}"}
+            }
+            night{
+                dnam{"usiku"}
+                one{"usiku {0}"}
+                other{"usiku {0}"}
+                per{"{0} kila usiku"}
             }
         }
         electric{
@@ -370,6 +381,11 @@ sw{
                 one{"kilomita {0} kwa saa"}
                 other{"kilomita {0} kwa saa"}
             }
+            light-speed{
+                dnam{"mwanga"}
+                one{"mwanga {0}"}
+                other{"mianga {0}"}
+            }
             meter-per-second{
                 one{"mita {0} kwa sekunde"}
                 other{"mita {0} kwa sekunde"}
@@ -535,6 +551,9 @@ sw{
             permillion{
                 dnam{"ppm"}
             }
+            portion-per-1e9{
+                dnam{"sehemu kwa kila bilioni"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -552,6 +571,12 @@ sw{
             }
             month{
                 dnam{"mwezi"}
+            }
+            night{
+                dnam{"usiku"}
+                one{"usiku {0}"}
+                other{"usiku {0}"}
+                per{"{0}/usiku"}
             }
             second{
                 one{"sek {0}"}
@@ -631,6 +656,11 @@ sw{
             }
         }
         speed{
+            light-speed{
+                dnam{"mwanga"}
+                one{"mwanga {0}"}
+                other{"mianga {0}"}
+            }
             meter-per-second{
                 one{"m {0}/s"}
                 other{"m {0}/s"}
@@ -807,6 +837,9 @@ sw{
             permyriad{
                 dnam{"permyriadi"}
             }
+            portion-per-1e9{
+                dnam{"sehemu kwa bilioni"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -939,6 +972,12 @@ sw{
                 dnam{"nanosekunde"}
                 one{"nanosekunde {0}"}
                 other{"nanosekunde {0}"}
+            }
+            night{
+                dnam{"usiku"}
+                one{"usiku {0}"}
+                other{"usiku {0}"}
+                per{"{0}/usiku"}
             }
             quarter{
                 dnam{"robo"}
@@ -1407,6 +1446,11 @@ sw{
                 dnam{"noti"}
                 one{"noti {0}"}
                 other{"noti {0}"}
+            }
+            light-speed{
+                dnam{"mwanga"}
+                one{"mwanga {0}"}
+                other{"mianga {0}"}
             }
             meter-per-second{
                 dnam{"mita kwa kila sekunde"}

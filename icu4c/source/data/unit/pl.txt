@@ -5,8 +5,50 @@ pl{
     units{
         acceleration{
             g-force{
-                dnam{"stała grawitacji"}
+                case{
+                    accusative{
+                        few{"{0} przyspieszenia ziemskie"}
+                        many{"{0} przyspieszeń ziemskich"}
+                        one{"przyspieszenie ziemskie"}
+                        other{"{0} przyspieszenia ziemskiego"}
+                    }
+                    dative{
+                        few{"{0} przyspieszeniom ziemskim"}
+                        many{"{0} przyspieszeniami ziemskimi"}
+                        one{"przyspieszeniu ziemskiemu"}
+                        other{"{0} przyspieszenia ziemskiego"}
+                    }
+                    genitive{
+                        few{"{0} przyspieszeń ziemskich"}
+                        many{"{0} przyspieszeń ziemskich"}
+                        one{"przyspieszenia ziemskiego"}
+                        other{"{0} przyspieszenia ziemskiego"}
+                    }
+                    instrumental{
+                        few{"{0} przyspieszeniami ziemskimi"}
+                        many{"{0} przyspieszeniami ziemskimi"}
+                        one{"przyspieszeniem ziemskim"}
+                        other{"{0} przyspieszenia ziemskiego"}
+                    }
+                    locative{
+                        few{"{0} przyspieszeniach ziemskich"}
+                        many{"{0} przyspieszeniach ziemskich"}
+                        one{"przyspieszeniu ziemskim"}
+                        other{"{0} przyspieszenia ziemskiego"}
+                    }
+                    vocative{
+                        few{"{0} przyspieszenia ziemskie"}
+                        many{"{0} przyspieszeń ziemskich"}
+                        one{"przyspieszenie ziemskie"}
+                        other{"{0} przyspieszenia ziemskiego"}
+                    }
+                }
+                dnam{"przyspieszenie ziemskie"}
+                few{"{0} przyspieszenia ziemskie"}
                 gender{"neuter"}
+                many{"{0} przyspieszeń ziemskich"}
+                one{"przyspieszenie ziemskie"}
+                other{"{0} przyspieszenia ziemskiego"}
             }
             meter-per-square-second{
                 case{
@@ -696,8 +738,23 @@ pl{
                 other{"{0} karata"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    accusative{
+                        few{"{0} miligramy na decylitr"}
+                        many{"{0} miligramów na decylitr"}
+                        one{"{0} miligram na decylitr"}
+                        other{"{0} miligrama na decylitr"}
+                    }
+                    genitive{
+                        few{"{0} miligramów na decylitr"}
+                        many{"{0} miligramów na decylitr"}
+                        one{"{0} miligrama na decylitr"}
+                        other{"{0} miligrama na decylitr"}
+                    }
+                }
                 dnam{"miligramy na decylitr"}
                 few{"{0} miligramy na decylitr"}
+                gender{"inanimate"}
                 many{"{0} miligramów na decylitr"}
                 one{"{0} miligram na decylitr"}
                 other{"{0} miligrama na decylitr"}
@@ -850,6 +907,28 @@ pl{
                 many{"{0} punktów bazowych"}
                 one{"{0} punkt bazowy"}
                 other{"{0} punktu bazowego"}
+            }
+            portion-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} części na miliard"}
+                        many{"{0} części na miliard"}
+                        one{"{0} część na miliard"}
+                        other{"{0} części na miliard"}
+                    }
+                    genitive{
+                        few{"{0} części na miliard"}
+                        many{"{0} części na miliard"}
+                        one{"{0} części na miliard"}
+                        other{"{0} części na miliard"}
+                    }
+                }
+                dnam{"części na miliard"}
+                few{"{0} części na miliard"}
+                gender{"feminine"}
+                many{"{0} części na miliard"}
+                one{"{0} część na miliard"}
+                other{"{0} części na miliard"}
             }
         }
         consumption{
@@ -1103,7 +1182,7 @@ pl{
                     genitive{
                         few{"{0} kilobitów"}
                         many{"{0} kilobitów"}
-                        one{"{0} kilobita"}
+                        one{"{0} kilobitu"}
                         other{"{0} kilobita"}
                     }
                 }
@@ -1540,6 +1619,29 @@ pl{
                 many{"{0} nanosekund"}
                 one{"{0} nanosekunda"}
                 other{"{0} nanosekundy"}
+            }
+            night{
+                case{
+                    accusative{
+                        few{"{0} noce"}
+                        many{"{0} nocy"}
+                        one{"{0} noc"}
+                        other{"{0} nocy"}
+                    }
+                    genitive{
+                        few{"{0} nocy"}
+                        many{"{0} nocy"}
+                        one{"{0} nocy"}
+                        other{"{0} nocy"}
+                    }
+                }
+                dnam{"noce"}
+                few{"{0} noce"}
+                gender{"feminine"}
+                many{"{0} nocy"}
+                one{"{0} noc"}
+                other{"{0} nocy"}
+                per{"{0}/noc"}
             }
             quarter{
                 case{
@@ -2714,8 +2816,23 @@ pl{
                 other{"{0} pikometra"}
             }
             point{
+                case{
+                    accusative{
+                        few{"{0} punkty"}
+                        many{"{0} punktów"}
+                        one{"{0} punkt"}
+                        other{"{0} punktu"}
+                    }
+                    genitive{
+                        few{"{0} punktów"}
+                        many{"{0} punktów"}
+                        one{"{0} punktu"}
+                        other{"{0} punktu"}
+                    }
+                }
                 dnam{"punkty"}
                 few{"{0} punkty"}
+                gender{"inanimate"}
                 many{"{0} punktów"}
                 one{"{0} punkt"}
                 other{"{0} punktu"}
@@ -3610,28 +3727,43 @@ pl{
             millibar{
                 case{
                     accusative{
-                        few{"{0} millibary"}
-                        many{"{0} millibarów"}
-                        one{"{0} millibar"}
-                        other{"{0} millibara"}
+                        few{"{0} milibary"}
+                        many{"{0} milibarów"}
+                        one{"{0} milibar"}
+                        other{"{0} milibara"}
                     }
                     genitive{
                         few{"{0} milibarów"}
-                        many{"{0} millibarów"}
+                        many{"{0} milibarów"}
                         one{"{0} milibara"}
-                        other{"{0} millibara"}
+                        other{"{0} milibara"}
                     }
                 }
                 dnam{"milibary"}
-                few{"{0} millibary"}
+                few{"{0} milibary"}
                 gender{"inanimate"}
-                many{"{0} millibarów"}
-                one{"{0} millibar"}
-                other{"{0} millibara"}
+                many{"{0} milibarów"}
+                one{"{0} milibar"}
+                other{"{0} milibara"}
             }
             millimeter-ofhg{
+                case{
+                    accusative{
+                        few{"{0} milimetry słupa rtęci"}
+                        many{"{0} milimetrów słupa rtęci"}
+                        one{"{0} milimetr słupa rtęci"}
+                        other{"{0} milimetra słupa rtęci"}
+                    }
+                    genitive{
+                        few{"{0} milimetrów słupa rtęci"}
+                        many{"{0} milimetrów słupa rtęci"}
+                        one{"{0} milimetra słupa rtęci"}
+                        other{"{0} milimetra słupa rtęci"}
+                    }
+                }
                 dnam{"milimetry słupa rtęci"}
                 few{"{0} milimetry słupa rtęci"}
+                gender{"inanimate"}
                 many{"{0} milimetrów słupa rtęci"}
                 one{"{0} milimetr słupa rtęci"}
                 other{"{0} milimetra słupa rtęci"}
@@ -3720,6 +3852,28 @@ pl{
                 many{"{0} węzłów"}
                 one{"{0} węzeł"}
                 other{"{0} węzła"}
+            }
+            light-speed{
+                case{
+                    accusative{
+                        few{"{0} światła"}
+                        many{"{0} świateł"}
+                        one{"{0} światło"}
+                        other{"{0} światła"}
+                    }
+                    genitive{
+                        few{"{0} świateł"}
+                        many{"{0} świateł"}
+                        one{"{0} światła"}
+                        other{"{0} światła"}
+                    }
+                }
+                dnam{"światło"}
+                few{"{0} światła"}
+                gender{"neuter"}
+                many{"{0} świateł"}
+                one{"{0} światło"}
+                other{"{0} światła"}
             }
             meter-per-second{
                 case{
@@ -4383,7 +4537,7 @@ pl{
                     dative{
                         few{"{0} imperialnym łyżeczkom deserowym"}
                         many{"{0} imperialnym łyżeczkom deserowym"}
-                        one{"{0} imperialnej łyżeczkce deserowej"}
+                        one{"{0} imperialnej łyżeczce deserowej"}
                     }
                     genitive{
                         few{"{0} imperialnych łyżeczek deserowych"}
@@ -4467,7 +4621,7 @@ pl{
                     }
                     genitive{
                         few{"{0} kropel"}
-                        many{"{0} kropel"}
+                        many{"{0} kropli"}
                         one{"{0} kropli"}
                         other{"{0} kropli"}
                     }
@@ -5049,7 +5203,7 @@ pl{
                     dative{
                         few{"{0} łyżeczkom"}
                         many{"{0} łyżeczkom"}
-                        one{"{0} łyżeczkce"}
+                        one{"łyżeczce"}
                     }
                     genitive{
                         few{"{0} lyżeczek"}
@@ -5114,7 +5268,6 @@ pl{
         }
         duration{
             day{
-                dnam{"dzień"}
                 few{"{0} d."}
                 many{"{0} d."}
                 one{"{0} d."}
@@ -5136,6 +5289,14 @@ pl{
                 one{"{0} m-c"}
                 other{"{0} m-ca"}
                 per{"{0}/m-c"}
+            }
+            night{
+                dnam{"noce"}
+                few{"{0} noce"}
+                many{"{0} nocy"}
+                one{"{0} noc"}
+                other{"{0} nocy"}
+                per{"{0}/noc"}
             }
             second{
                 dnam{"s"}
@@ -5197,10 +5358,18 @@ pl{
         }
         speed{
             kilometer-per-hour{
+                dnam{"km/h"}
                 few{"{0} km/h"}
                 many{"{0} km/h"}
                 one{"{0} km/h"}
                 other{"{0}km/h"}
+            }
+            light-speed{
+                dnam{"św."}
+                few{"{0} św."}
+                many{"{0} św."}
+                one{"{0} św."}
+                other{"{0} św."}
             }
             mile-per-hour{
                 dnam{"mph"}
@@ -5453,6 +5622,14 @@ pl{
                 other{"{0} mies."}
                 per{"{0}/mies."}
             }
+            night{
+                dnam{"noce"}
+                few{"{0} noce"}
+                many{"{0} nocy"}
+                one{"{0} noc"}
+                other{"{0} nocy"}
+                per{"{0}/noc"}
+            }
             quarter{
                 dnam{"kw."}
                 few{"{0} kw."}
@@ -5653,6 +5830,13 @@ pl{
                 many{"{0} w."}
                 one{"{0} w."}
                 other{"{0} w."}
+            }
+            light-speed{
+                dnam{"św."}
+                few{"{0} św."}
+                many{"{0} św."}
+                one{"{0} św."}
+                other{"{0} św."}
             }
             mile-per-hour{
                 dnam{"mile/h"}

@@ -79,6 +79,10 @@ zh{
             permillion{
                 other{"百万分之{0}"}
             }
+            portion-per-1e9{
+                dnam{"十亿分比"}
+                other{"十亿分之{0}"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -148,6 +152,11 @@ zh{
             }
         }
         duration{
+            night{
+                dnam{"晚"}
+                other{"{0}晚"}
+                per{"{0}/晚"}
+            }
             quarter{
                 dnam{"季度"}
             }
@@ -393,6 +402,10 @@ zh{
                 dnam{"节"}
                 other{"{0}节"}
             }
+            light-speed{
+                dnam{"光"}
+                other{"{0}光"}
+            }
             meter-per-second{
                 dnam{"米/秒"}
                 other{"每秒{0}米"}
@@ -544,6 +557,11 @@ zh{
             }
             nanosecond{
                 other{"{0}ns"}
+            }
+            night{
+                dnam{"晚"}
+                other{"{0}晚"}
+                per{"{0}/晚"}
             }
         }
         electric{
@@ -851,6 +869,10 @@ zh{
             knot{
                 other{"{0}kn"}
             }
+            light-speed{
+                dnam{"光"}
+                other{"{0}光"}
+            }
             meter-per-second{
                 dnam{"米/秒"}
                 other{"{0}m/s"}
@@ -1131,6 +1153,11 @@ zh{
                 dnam{"纳秒"}
                 other{"{0}纳秒"}
             }
+            night{
+                dnam{"晚"}
+                other{"{0}晚"}
+                per{"{0}/晚"}
+            }
             quarter{
                 dnam{"季"}
                 other{"{0}季"}
@@ -1350,6 +1377,12 @@ zh{
             millimeter-ofhg{
                 dnam{"mmHg"}
                 other{"{0} mmHg"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"光"}
+                other{"{0}光"}
             }
         }
         temperature{

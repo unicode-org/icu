@@ -4,16 +4,15 @@
 kn{
     AuxExemplarCharacters{"[\u200C\u200D ೞ]"}
     ExemplarCharacters{
-        "[಼ ೦ ೧ ೨ ೩ ೪ ೫ ೬ ೭ ೮ ೯ ಅ ಆ ಇ ಈ ಉ ಊ ಋ ೠ ಌ ೡ ಎ ಏ ಐ ಒ ಓ ಔ ಂ ಃ ಕ ಖ ಗ ಘ ಙ ಚ ಛ ಜ ಝ"
-        " ಞ ಟ ಠ ಡ ಢ ಣ ತ ಥ ದ ಧ ನ ಪ ಫ ಬ ಭ ಮ ಯ ರ ಱ ಲ ವ ಶ ಷ ಸ ಹ ಳ ಽ ಾ ಿ ೀ ು ೂ ೃ ೄ ೆ ೇ ೈ ೊ"
-        " ೋ ೌ ್ ೕ ೖ]"
+        "[಼ ಅ ಆ ಇ ಈ ಉ ಊ ಋ ೠ ಌ ೡ ಎ ಏ ಐ ಒ ಓ ಔ ಂ ಃ ಕ ಖ ಗ ಘ ಙ ಚ ಛ ಜ ಝ ಞ ಟ ಠ ಡ ಢ ಣ ತ ಥ ದ ಧ"
+        " ನ ಪ ಫ ಬ ಭ ಮ ಯ ರ ಱ ಲ ವ ಶ ಷ ಸ ಹ ಳ ಽ ಾ ಿ ೀ ು ೂ ೃ ೄ ೆ ೇ ೈ ೊ ೋ ೌ ್ ೕ ೖ]"
     }
     ExemplarCharactersIndex{
         "[ಅ ಆ ಇ ಈ ಉ ಊ ಋ ೠ ಌ ೡ ಎ ಏ ಐ ಒ ಓ ಔ ಕ ಖ ಗ ಘ ಙ ಚ ಛ ಜ ಝ ಞ ಟ ಠ ಡ ಢ ಣ ತ ಥ ದ ಧ ನ ಪ ಫ"
         " ಬ ಭ ಮ ಯ ರ ಱ ಲ ವ ಶ ಷ ಸ ಹ ಳ ೞ]"
     }
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0೦ 1೧ 2೨ 3೩ 4೪ 5೫ 6೬ 7೭ 8೮ 9೯]"}
-    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] @ * / \\& # ′ ″]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
         latn{
             miscPatterns{
@@ -368,13 +367,13 @@ kn{
             }
         }
         gregorian{
-            AmPmMarkersAbbr{
-                "ಪೂರ್ವಾಹ್ನ",
-                "ಅಪರಾಹ್ನ",
+            AmPmMarkers{
+                "AM",
+                "PM",
             }
             AmPmMarkersNarrow{
-                "ಪೂ",
-                "ಅ",
+                "a",
+                "p",
             }
             DateTimePatterns{
                 "hh:mm:ss a zzzz",
@@ -477,7 +476,17 @@ kn{
                 }
                 stand-alone{
                     abbreviated{
+                        am{"AM"}
                         midnight{"ಮಧ್ಯರಾತ್ರಿ"}
+                        pm{"PM"}
+                    }
+                    narrow{
+                        am{"AM"}
+                        pm{"PM"}
+                    }
+                    wide{
+                        am{"AM"}
+                        pm{"PM"}
                     }
                 }
             }
@@ -569,14 +578,14 @@ kn{
             monthNames{
                 format{
                     abbreviated{
-                        "ಜನವರಿ",
-                        "ಫೆಬ್ರವರಿ",
+                        "ಜನ",
+                        "ಫೆಬ್ರ",
                         "ಮಾರ್ಚ್",
                         "ಏಪ್ರಿ",
                         "ಮೇ",
                         "ಜೂನ್",
                         "ಜುಲೈ",
-                        "ಆಗಸ್ಟ್",
+                        "ಆಗ",
                         "ಸೆಪ್ಟೆಂ",
                         "ಅಕ್ಟೋ",
                         "ನವೆಂ",
@@ -873,9 +882,6 @@ kn{
         dayperiod-narrow{
             dn{"AM/PM"}
         }
-        dayperiod-short{
-            dn{"ಪೂರ್ವಾಹ್ನ/ಅಪರಾಹ್ನ"}
-        }
         era{
             dn{"ಯುಗ"}
         }
@@ -900,14 +906,6 @@ kn{
             relativeTime{
                 past{
                     one{"{0} ಶುಕ್ರವಾರದ ಹಿಂದೆ"}
-                    other{"{0} ಶುಕ್ರವಾರಗಳ ಹಿಂದೆ"}
-                }
-            }
-        }
-        fri-short{
-            relativeTime{
-                past{
-                    one{"{0} ಶುಕ್ರವಾರಗಳ ಹಿಂದೆ"}
                     other{"{0} ಶುಕ್ರವಾರಗಳ ಹಿಂದೆ"}
                 }
             }
@@ -980,6 +978,7 @@ kn{
             }
         }
         month-narrow{
+            dn{"ತಿಂ"}
             relativeTime{
                 past{
                     one{"{0} ತಿಂಗಳ ಹಿಂದೆ"}
@@ -988,6 +987,7 @@ kn{
             }
         }
         month-short{
+            dn{"ತಿಂ."}
             relativeTime{
                 past{
                     one{"{0} ತಿಂಗಳು ಹಿಂದೆ"}
@@ -1226,12 +1226,6 @@ kn{
         metric{"ಮೆಟ್ರಿಕ್"}
     }
     parse{
-        date{
-            lenient{
-                "[\\- ‑ . /]",
-                "[\\: ∶]",
-            }
-        }
         general{
             lenient{
                 "[.．․﹒ 。｡︒]",
@@ -1239,10 +1233,10 @@ kn{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₹ ₨ {Rp} {Rs}]",
+                "[₹ {ರೂ}]",
             }
         }
         number{
@@ -1262,15 +1256,6 @@ kn{
             givenFirst{
                 "und",
                 "kn",
-            }
-            surnameFirst{
-                "ko",
-                "si",
-                "ta",
-                "te",
-                "vi",
-                "yue",
-                "zh",
             }
         }
         namePattern{

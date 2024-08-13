@@ -697,10 +697,6 @@ ha{
             one{"Dalolin Brunei"}
             other{"Dalolin Brunei"}
         }
-        BOB{
-            one{"boliviano na ƙasar Bolivia"}
-            other{"Boloviano na ƙasar Bolivia"}
-        }
         BRL{
             one{"Ril Kuɗin Birazil"}
             other{"Ril Kuɗin Birazil"}
@@ -713,21 +709,9 @@ ha{
             one{"ngultrum na ƙasar Bhutan"}
             other{"Ngultrum na ƙasar Bhutan"}
         }
-        CLP{
-            one{"peso na ƙasar Chile"}
-            other{"Peso na ƙasar Chile"}
-        }
         CNH{
             one{"yuwan na ƙasar Sin (na wajen ƙasa)"}
             other{"yuwan na ƙasar Sin (na wajen ƙasa)"}
-        }
-        COP{
-            one{"peso na ƙasar Columbia"}
-            other{"Peso na ƙasar Columbia"}
-        }
-        CRC{
-            one{"colón na ƙasar Costa Rica"}
-            other{"colón na ƙasar Costa Rica"}
         }
         CUP{
             one{"peso na ƙasar Cuba"}
@@ -764,10 +748,6 @@ ha{
         GTQ{
             one{"quetzal na ƙasar Guatemala"}
             other{"Quetzal na ƙasar Guatemala"}
-        }
-        GYD{
-            one{"dalar Guyana"}
-            other{"Dalar Guyana"}
         }
         HKD{
             one{"dalar Hong Kong"}
@@ -893,10 +873,6 @@ ha{
             one{"Nairar Nijeriya"}
             other{"Nairorin Najeriya"}
         }
-        NIO{
-            one{"córdoba na ƙasar Nicaragua"}
-            other{"Córdoba na ƙasar Nicaragua"}
-        }
         NOK{
             one{"krone na ƙasar Norway"}
             other{"Krone na ƙasar Norway"}
@@ -909,21 +885,9 @@ ha{
             one{"Dalolin New Zealand"}
             other{"Dalolin New Zealand"}
         }
-        PAB{
-            one{"balboa na ƙasar Panama"}
-            other{"Balboa na ƙasar Panama"}
-        }
-        PEN{
-            one{"sol na ƙasar Peru"}
-            other{"Sol na ƙasar Peru"}
-        }
         PGK{
             one{"kina na ƙasar Papua Sabon Guinea"}
             other{"Kina na ƙasar Papua Sabon Guinea"}
-        }
-        PHP{
-            one{"kuɗin Philippine"}
-            other{"Kuɗin Philippine"}
         }
         PKR{
             one{"rupee na ƙasar Pakistan"}
@@ -932,10 +896,6 @@ ha{
         PLN{
             one{"kuɗin Polan"}
             other{"kuɗaɗen Polan"}
-        }
-        PYG{
-            one{"guarani na ƙasar Paraguay"}
-            other{"Guarani na ƙasar Paraguay"}
         }
         RON{
             one{"kuɗin Romania"}
@@ -972,10 +932,6 @@ ha{
         SLL{
             one{"Kuɗin Saliyo (1964—2022)"}
             other{"Kuɗin Saliyo (1964—2022)"}
-        }
-        SRD{
-            one{"dalar ƙasar Suriname"}
-            other{"Dalar ƙasar Suriname"}
         }
         SSP{
             one{"fam na Kudancin Sudan"}
@@ -1017,10 +973,6 @@ ha{
             one{"Sulallan Yuganda"}
             other{"Sulallan Yuganda"}
         }
-        USD{
-            one{"Dalar Amirka"}
-            other{"Dalar Amurka"}
-        }
         UYU{
             one{"peso na ƙasar Uruguay"}
             other{"Peso na ƙasar Uruguay"}
@@ -1028,10 +980,6 @@ ha{
         UZS{
             one{"som na ƙasar Uzbekistan"}
             other{"Som na ƙasar Uzbekistan"}
-        }
-        VES{
-            one{"bolívar na ƙasar Venezuela"}
-            other{"Bolívar na ƙasar Venezuela"}
         }
         VND{
             one{"kuɗin Vietnam"}
@@ -1061,9 +1009,5 @@ ha{
             one{"riyal ɗin Yemen"}
             other{"Riyal ɗin Yemen"}
         }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

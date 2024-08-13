@@ -89,7 +89,7 @@ sd{
         }
         concentr{
             milligram-ofglucose-per-deciliter{
-                one{"{0} mg/dL"}
+                one{"{0} مليگرام في ڊيسيليٽر"}
                 other{"{0} ملي گرامز في ڊيسي ليٽر"}
             }
             mole{
@@ -105,6 +105,11 @@ sd{
             permyriad{
                 one{"{0} پيرمائيرڊ"}
                 other{"{0} پيرمائيرڊ"}
+            }
+            portion-per-1e9{
+                dnam{"حصا في ارب"}
+                one{"{0} حصو في ارب"}
+                other{"{0} حصا في ارب"}
             }
         }
         consumption{
@@ -185,12 +190,34 @@ sd{
         duration{
             century{
                 dnam{"صديون"}
-                one{"{0} c"}
+                one{"{0} صدي"}
                 other{"{0} صديون"}
+            }
+            month{
+                one{"{0} مهينو"}
+                other{"{0} مهينا"}
+                per{"{0} في مهينو"}
+            }
+            night{
+                dnam{"راتيون"}
+                one{"{0} رات"}
+                other{"{0} راتيون"}
+                per{"{0} في رات"}
+            }
+            quarter{
+                dnam{"ٽه ماهيون"}
+                one{"{0} ٽه ماهيون"}
+                other{"{0} ٽه ماهيون"}
+                per{"{0}/ٽه ماهي"}
             }
             second{
                 one{"{0} في سيڪنڊ"}
                 other{"{0} سيڪنڊ"}
+            }
+            week{
+                one{"{0} هفتو"}
+                other{"{0} هفتا"}
+                per{"{0} في هفتو"}
             }
         }
         electric{
@@ -452,6 +479,11 @@ sd{
                 one{"بوفورٽ {0}"}
                 other{"بوفورٽ {0}"}
             }
+            light-speed{
+                dnam{"نوري"}
+                one{"{0} نوري"}
+                other{"{0} نوري"}
+            }
         }
         temperature{
             celsius{
@@ -526,22 +558,67 @@ sd{
                 other{"{0}m²"}
             }
         }
+        concentr{
+            portion-per-1e9{
+                dnam{"ح ف ا"}
+                one{"{0}ح ف ا"}
+                other{"{0}ح ف ا"}
+            }
+        }
         duration{
+            century{
+                dnam{"ص"}
+                one{"{0}ص"}
+                other{"{0}ص"}
+            }
+            day{
+                one{"{0}ڏينهن"}
+                other{"{0}ڏينهن"}
+                per{"{0}/ڏينهن"}
+            }
+            decade{
+                one{"{0}ڏهاڪ"}
+                other{"{0}ڏهاڪ"}
+            }
+            microsecond{
+                one{"{0}مائڪرو سيڪنڊ"}
+                other{"{0}مائڪرو سيڪنڊ"}
+            }
             millisecond{
                 one{"{0} ms"}
                 other{"{0} ms"}
             }
             month{
                 dnam{"مهينو"}
+                one{"{0}مهينو"}
+                other{"{0}مهينا"}
+                per{"{0}/مهينو"}
+            }
+            night{
+                dnam{"راتيون"}
+                one{"{0}رات"}
+                other{"{0}راتيون"}
+                per{"{0}/رات"}
+            }
+            quarter{
+                one{"{0}ٽه ماهي"}
+                other{"{0}ٽه ماهي"}
+                per{"{0}/ٽه ماهي"}
             }
             second{
-                one{"{0} s"}
-                other{"{0} سيڪنڊ"}
+                one{"{0}سيڪنڊ"}
+                other{"{0}سيڪنڊ"}
             }
             week{
                 dnam{"هفتو"}
-                one{"{0} هفتا"}
-                other{"{0} هفتي"}
+                one{"{0}هفتو"}
+                other{"{0}هفتا"}
+                per{"{0}/هفتو"}
+            }
+            year{
+                one{"{0}س"}
+                other{"{0}س"}
+                per{"{0}/س"}
             }
         }
         force{
@@ -634,6 +711,11 @@ sd{
             kilometer-per-hour{
                 one{"{0} km/h"}
                 other{"{0} km/h"}
+            }
+            light-speed{
+                dnam{"نوري"}
+                one{"{0}نوري"}
+                other{"{0}نوري"}
             }
         }
     }
@@ -757,6 +839,11 @@ sd{
             permyriad{
                 dnam{"پيرمائيرڊ"}
             }
+            portion-per-1e9{
+                dnam{"حصا/ارب"}
+                one{"{0} ح ف ا"}
+                other{"{0} ح ف ا"}
+            }
         }
         consumption{
             liter-per-kilometer{
@@ -806,16 +893,21 @@ sd{
             }
         }
         duration{
+            century{
+                dnam{"ص"}
+                one{"{0} ص"}
+                other{"{0} ص"}
+            }
             day{
                 dnam{"ڏينهن"}
                 one{"{0} ڏينهن"}
                 other{"{0} ڏينهن"}
-                per{"{0} في ڏينهن"}
+                per{"{0}/ڏينهن"}
             }
             decade{
                 dnam{"ڏهاڪا"}
                 one{"{0} ڏهاڪو"}
-                other{"{0} ڏهاڪا"}
+                other{"{0} ڏهاڪ"}
             }
             hour{
                 dnam{"ڪلاڪ"}
@@ -841,20 +933,26 @@ sd{
             }
             month{
                 dnam{"مهينا"}
-                one{"{0} مهينا"}
+                one{"{0} مهينو"}
                 other{"{0} مهينا"}
-                per{"{0} في مهيني"}
+                per{"{0}/مهينو"}
             }
             nanosecond{
                 dnam{"نينو سيڪنڊ"}
                 one{"{0} نينو سيڪنڊ"}
                 other{"{0} نينو سيڪنڊ"}
             }
+            night{
+                dnam{"راتيون"}
+                one{"{0} رات"}
+                other{"{0} راتيون"}
+                per{"{0}/رات"}
+            }
             quarter{
                 dnam{"ٽه ماهي"}
-                one{"{0} ٽه ماهي"}
-                other{"{0} ٽه ماهي"}
-                per{"{0} في ٽه ماهي"}
+                one{"{0} ٽه ماهيون"}
+                other{"{0} ٽه ماهيون"}
+                per{"{0}/ٽه ماهي"}
             }
             second{
                 dnam{"سيڪنڊ"}
@@ -864,15 +962,15 @@ sd{
             }
             week{
                 dnam{"هفتا"}
-                one{"{0} هفتا"}
+                one{"{0} هفتو"}
                 other{"{0} هفتا"}
-                per{"{0} في هفتي"}
+                per{"{0}/هفتو"}
             }
             year{
                 dnam{"سال"}
                 one{"{0} سال"}
                 other{"{0} سال"}
-                per{"{0} في سال"}
+                per{"{0}/س"}
             }
         }
         electric{
@@ -1199,6 +1297,11 @@ sd{
                 dnam{"ناٽ"}
                 one{"{0} ناٽ"}
                 other{"{0} ناٽ"}
+            }
+            light-speed{
+                dnam{"نوري"}
+                one{"{0} نوري"}
+                other{"{0} نوري"}
             }
             meter-per-second{
                 dnam{"ميٽر في سيڪنڊ"}

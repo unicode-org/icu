@@ -82,7 +82,7 @@ nn{
             ls{"normaltid for sentrale Nord-Amerika"}
         }
         "meta:America_Eastern"{
-            ld{"sommartid for den nordamerikansk austkysten"}
+            ld{"sommartid for den nordamerikanske austkysten"}
             lg{"tidssone for den nordamerikanske austkysten"}
             ls{"normaltid for den nordamerikanske austkysten"}
         }

@@ -1226,7 +1226,4 @@ zh_Hant{
             other{"（未知貨幣）"}
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

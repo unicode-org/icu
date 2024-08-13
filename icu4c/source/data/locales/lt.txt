@@ -788,21 +788,9 @@ lt{
                 }
                 h{
                     a{"h a – h a"}
-                    h{"hh–hh a"}
-                }
-                hm{
-                    a{"hh:mm a–hh:mm a"}
-                    h{"hh:mm–hh:mm a"}
-                    m{"hh:mm–hh:mm a"}
-                }
-                hmv{
-                    a{"hh:mm a–hh:mm a v"}
-                    h{"hh:mm–hh:mm a v"}
-                    m{"h:mm–h:mm a v"}
                 }
                 hv{
                     a{"h a – h a v"}
-                    h{"hh–hh a v"}
                 }
                 yM{
                     M{"y-MM – y-MM"}
@@ -1971,7 +1959,7 @@ lt{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

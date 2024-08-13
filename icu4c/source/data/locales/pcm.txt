@@ -1075,6 +1075,9 @@ pcm{
         }
     }
     personNames{
+        initialPattern{
+            initialSequence{"{0}{1}"}
+        }
         nameOrderLocales{
             givenFirst{
                 "und",
@@ -1104,12 +1107,12 @@ pcm{
             givenFirst-short-addressing-informal{"{given-informal}"}
             givenFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
-            givenFirst-short-referring-formal{"{given-initial} {given2-initial} {surname}"}
+            givenFirst-short-referring-formal{"{given-initial}{given2-initial} {surname}"}
             givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
             sorting-long-referring-formal{"{surname}, {given} {given2} {credentials}"}
             sorting-long-referring-informal{"{surname}, {given-informal}"}
             sorting-medium-referring-informal{"{surname}, {given-informal}"}
-            sorting-short-referring-formal{"{surname}, {given-initial} {given2-initial}"}
+            sorting-short-referring-formal{"{surname-core}, {given-initial}{given2-initial} {surname-prefix}"}
             sorting-short-referring-informal{"{surname}, {given-informal}"}
             surnameFirst-long-addressing-formal{"{title} {surname}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
@@ -1123,7 +1126,7 @@ pcm{
             surnameFirst-short-addressing-informal{"{given-informal}"}
             surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
-            surnameFirst-short-referring-formal{"{surname} {given-initial} {given2-initial}"}
+            surnameFirst-short-referring-formal{"{surname} {given-initial}{given2-initial}"}
             surnameFirst-short-referring-informal{"{surname} {given-initial}"}
         }
     }

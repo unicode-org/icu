@@ -1219,7 +1219,7 @@ is{
         mon-narrow{
             relative{
                 "-1"{"síðasta mán."}
-                "0"{"þessi mán."}
+                "0"{"á mán."}
                 "1"{"nk. mán."}
             }
         }
@@ -1417,7 +1417,7 @@ is{
         sun-short{
             relative{
                 "-1"{"síðasta sun."}
-                "0"{"þessi sun."}
+                "0"{"á sun."}
                 "1"{"næsta sun."}
             }
             relativeTime{
@@ -1450,15 +1450,15 @@ is{
         }
         thu-narrow{
             relative{
-                "-1"{"síðasti fim."}
-                "0"{"þessi fim."}
+                "-1"{"síðasta fim."}
+                "0"{"á fim."}
                 "1"{"nk. fim."}
             }
         }
         thu-short{
             relative{
-                "-1"{"síðasti fim."}
-                "0"{"þessi fim."}
+                "-1"{"síðasta fim."}
+                "0"{"á fim."}
                 "1"{"næstkomandi fim."}
             }
             relativeTime{
@@ -1491,15 +1491,15 @@ is{
         }
         tue-narrow{
             relative{
-                "-1"{"síðasti þri."}
-                "0"{"þessi þri."}
+                "-1"{"síðasta þri."}
+                "0"{"á þri."}
                 "1"{"nk. þri."}
             }
         }
         tue-short{
             relative{
-                "-1"{"síðasti þri."}
-                "0"{"þessi þri."}
+                "-1"{"síðasta þri."}
+                "0"{"á þri."}
                 "1"{"næstkomandi þri."}
             }
             relativeTime{
@@ -1532,15 +1532,15 @@ is{
         }
         wed-narrow{
             relative{
-                "-1"{"síðasti mið."}
-                "0"{"þessi mið."}
+                "-1"{"síðasta mið."}
+                "0"{"á mið."}
                 "1"{"nk. mið."}
             }
         }
         wed-short{
             relative{
-                "-1"{"síðasti mið."}
-                "0"{"þessi mið."}
+                "-1"{"síðasta mið."}
+                "0"{"á mið."}
                 "1"{"næstkomandi mið."}
             }
             relativeTime{
@@ -1609,14 +1609,6 @@ is{
                 }
             }
         }
-        year-narrow{
-            relativeTime{
-                past{
-                    one{"fyrir {0} árum"}
-                    other{"fyrir {0} árum"}
-                }
-            }
-        }
         zone{
             dn{"tímabelti"}
         }
@@ -1661,7 +1653,7 @@ is{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

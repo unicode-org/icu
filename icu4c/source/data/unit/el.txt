@@ -348,7 +348,18 @@ el{
                 other{"{0} καράτια"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    accusative{
+                        one{"{0} χιλιοστόγραμμο ανά δεκατόλιτρο"}
+                        other{"{0} χιλιοστόγραμμα ανά δεκατόλιτρο"}
+                    }
+                    genitive{
+                        one{"{0} χιλιοστόγραμμου ανά δεκατόλιτρο"}
+                        other{"{0} χιλιοστόγραμμων ανά δεκατόλιτρο"}
+                    }
+                }
                 dnam{"χιλιοστόγραμμα ανά δεκατόλιτρο"}
+                gender{"neuter"}
                 one{"{0} χιλιοστόγραμμο ανά δεκατόλιτρο"}
                 other{"{0} χιλιοστόγραμμα ανά δεκατόλιτρο"}
             }
@@ -431,6 +442,22 @@ el{
                 gender{"neuter"}
                 one{"{0} τοις δεκάκις χιλίοις"}
                 other{"{0} τοις δεκάκις χιλίοις"}
+            }
+            portion-per-1e9{
+                case{
+                    accusative{
+                        one{"{0} μέρος στο δισεκατομμύριο"}
+                        other{"{0} μέρη στο δισεκατομμύριο"}
+                    }
+                    genitive{
+                        one{"{0} μέρους στο δισεκατομμύριο"}
+                        other{"{0} μερών στο δισεκατομμύριο"}
+                    }
+                }
+                dnam{"μέρη στο δισεκατομμύριο"}
+                gender{"neuter"}
+                one{"{0} μέρος στο δισεκατομμύριο"}
+                other{"{0} μέρη στο δισεκατομμύριο"}
             }
         }
         consumption{
@@ -797,6 +824,23 @@ el{
                 one{"{0} νανοδευτερόλεπτο"}
                 other{"{0} νανοδευτερόλεπτα"}
             }
+            night{
+                case{
+                    accusative{
+                        one{"{0} νύχτα"}
+                        other{"{0} νύχτες"}
+                    }
+                    genitive{
+                        one{"{0} νύχτας"}
+                        other{"{0} νυχτών"}
+                    }
+                }
+                dnam{"νύχτες"}
+                gender{"feminine"}
+                one{"{0} νύχτα"}
+                other{"{0} νύχτες"}
+                per{"{0}/νύχτα"}
+            }
             quarter{
                 case{
                     accusative{
@@ -976,7 +1020,18 @@ el{
                 other{"{0} τζάουλ"}
             }
             kilocalorie{
+                case{
+                    accusative{
+                        one{"{0} χιλιοθερμίδα"}
+                        other{"{0} χιλιοθερμίδες"}
+                    }
+                    genitive{
+                        one{"{0} χιλιοθερμίδας"}
+                        other{"{0} χιλιοθερμίδων"}
+                    }
+                }
                 dnam{"χιλιοθερμίδες"}
+                gender{"feminine"}
                 one{"{0} χιλιοθερμίδα"}
                 other{"{0} χιλιοθερμίδες"}
             }
@@ -1397,6 +1452,17 @@ el{
                 other{"{0} πικόμετρα"}
             }
             point{
+                case{
+                    accusative{
+                        one{"{0} στιγμή"}
+                        other{"{0} στιγμές"}
+                    }
+                    genitive{
+                        one{"{0} στιγμής"}
+                        other{"{0} στιγμών"}
+                    }
+                }
+                gender{"feminine"}
                 one{"{0} στιγμή"}
                 other{"{0} στιγμές"}
             }
@@ -1765,7 +1831,18 @@ el{
                 other{"{0} μιλιμπάρ"}
             }
             millimeter-ofhg{
+                case{
+                    accusative{
+                        one{"{0} χιλιοστόμετρο στήλης υδραργύρου"}
+                        other{"{0} χιλιοστόμετρα στήλης υδραργύρου"}
+                    }
+                    genitive{
+                        one{"{0} χιλιοστομέτρου στήλης υδραργύρου"}
+                        other{"{0} χιλιοστόμετρων στήλης υδραργύρου"}
+                    }
+                }
                 dnam{"χιλιοστόμετρα στήλης υδραργύρου"}
+                gender{"neuter"}
                 one{"{0} χιλιοστόμετρο στήλης υδραργύρου"}
                 other{"{0} χιλιοστόμετρα στήλης υδραργύρου"}
             }
@@ -1793,7 +1870,18 @@ el{
         }
         speed{
             beaufort{
+                case{
+                    accusative{
+                        one{"{0} μποφόρ"}
+                        other{"{0} μποφόρ"}
+                    }
+                    genitive{
+                        one{"{0} μποφόρ"}
+                        other{"{0} μποφόρ"}
+                    }
+                }
                 dnam{"μποφόρ"}
+                gender{"neuter"}
                 one{"{0} μποφόρ"}
                 other{"{0} μποφόρ"}
             }
@@ -1817,6 +1905,22 @@ el{
                 dnam{"κόμβος"}
                 one{"{0} κόμβος"}
                 other{"{0} κόμβοι"}
+            }
+            light-speed{
+                case{
+                    accusative{
+                        one{"{0} φως"}
+                        other{"{0} φως"}
+                    }
+                    genitive{
+                        one{"φωτός"}
+                        other{"{0} φωτός"}
+                    }
+                }
+                dnam{"φως"}
+                gender{"neuter"}
+                one{"{0} φως"}
+                other{"{0} φως"}
             }
             meter-per-second{
                 case{
@@ -2361,6 +2465,12 @@ el{
             nanosecond{
                 dnam{"ns"}
             }
+            night{
+                dnam{"νύχτ."}
+                one{"{0} νύχτ."}
+                other{"{0} νύχτ."}
+                per{"{0}/νύχτ."}
+            }
             quarter{
                 one{"{0} τέτ."}
                 other{"{0} τέτ."}
@@ -2534,6 +2644,11 @@ el{
                 dnam{"χλμ/ώ."}
                 one{"{0} χλμ/ώ."}
                 other{"{0} χλμ/ώ."}
+            }
+            light-speed{
+                dnam{"φώς"}
+                one{"{0} φως"}
+                other{"{0} φως"}
             }
             meter-per-second{
                 dnam{"μ./δ."}
@@ -2749,6 +2864,9 @@ el{
             permyriad{
                 dnam{"τοις δεκάκις χιλίοις"}
             }
+            portion-per-1e9{
+                dnam{"μέρη/δισεκατομμύριο"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -2827,6 +2945,12 @@ el{
             }
             nanosecond{
                 dnam{"νανοδεύτερα"}
+            }
+            night{
+                dnam{"νύχτ."}
+                one{"{0} νύχτ."}
+                other{"{0} νύχτ."}
+                per{"{0}/νύχτ."}
             }
             quarter{
                 dnam{"τετ."}
@@ -3153,6 +3277,11 @@ el{
                 dnam{"κμβ"}
                 one{"{0} κμβ"}
                 other{"{0} κμβ"}
+            }
+            light-speed{
+                dnam{"φως"}
+                one{"{0} φως"}
+                other{"{0} φως"}
             }
             meter-per-second{
                 dnam{"μέτρα/δευτ."}

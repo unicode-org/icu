@@ -186,6 +186,11 @@ pcm{
                 one{"{0} Fọ Ích Tẹ́n Taúzan"}
                 other{"{0} Fọ Ích Tẹ́n Taúzan"}
             }
+            portion-per-1e9{
+                dnam{"pat fọ ích bíliọn"}
+                one{"{0} pat fọ ích bíliọn"}
+                other{"{0} pat fọ ích bíliọn"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -311,6 +316,12 @@ pcm{
                 one{"{0} Nánosẹ́kọn"}
                 other{"{0} Nánosẹ́kọn"}
             }
+            night{
+                dnam{"nait"}
+                one{"{0} nait"}
+                other{"{0} nait"}
+                per{"{0}/nait"}
+            }
             quarter{
                 dnam{"kwọ́ta"}
                 one{"{0} kwọ́ta"}
@@ -368,6 +379,11 @@ pcm{
                 dnam{"Ẹlẹ́ktrọ́nvolt-dẹm"}
                 one{"{0} Ẹlẹ́ktrọ́nvolt"}
                 other{"{0} Ẹlẹ́ktrọ́nvolt"}
+            }
+            foodcalorie{
+                dnam{"Kálọ́ri-dẹm"}
+                one{"{0} Kálọ́ri"}
+                other{"{0} Kálọ́ri"}
             }
             joule{
                 dnam{"Jul-dẹm"}
@@ -435,6 +451,20 @@ pcm{
             }
         }
         graphics{
+            dot{
+                one{"{0}dọt"}
+                other{"{0}dọt"}
+            }
+            dot-per-centimeter{
+                dnam{"Pọint-dẹm fọ ích sẹntímíta"}
+                one{"{0} Pọint fọ ích sẹntímíta"}
+                other{"{0} Pọint fọ ích sẹntímíta"}
+            }
+            dot-per-inch{
+                dnam{"Pọint-Dẹm Fọ Ẹ́vrí Inch"}
+                one{"{0} Pọint Fọ Ẹ́vrí Inch"}
+                other{"{0} Pọint Fọ Ẹ́vrí Inch"}
+            }
             em{
                 dnam{"Taipógráfik em"}
                 one{"{0} em"}
@@ -759,6 +789,11 @@ pcm{
             knot{
                 dnam{"Nọt-dẹm"}
             }
+            light-speed{
+                dnam{"laít"}
+                one{"{0} laít"}
+                other{"{0} laít"}
+            }
             meter-per-second{
                 dnam{"Míta-dẹm Fọ Ẹ́vrí Sẹ́kọn"}
                 one{"{0} Míta Fọ Ẹ́vrí Sẹ́kọn"}
@@ -996,6 +1031,11 @@ pcm{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                dnam{"pfib"}
+                one{"{0}pfib"}
+                other{"{0}pfib"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1083,6 +1123,12 @@ pcm{
                 one{"{0}Mọnt"}
                 other{"{0}Mọnt"}
             }
+            night{
+                dnam{"nait"}
+                one{"{0}nait"}
+                other{"{0}nait"}
+                per{"{0}/nait"}
+            }
             second{
                 dnam{"Sẹ́kọn"}
                 one{"{0}Sẹ́kọn"}
@@ -1153,6 +1199,11 @@ pcm{
         speed{
             kilometer-per-hour{
                 dnam{"km/áw"}
+            }
+            light-speed{
+                dnam{"laít"}
+                one{"{0}laít"}
+                other{"{0}laít"}
             }
         }
         temperature{
@@ -1304,6 +1355,11 @@ pcm{
             permyriad{
                 dnam{"Fọ Ích Tẹ́n Taúzan"}
             }
+            portion-per-1e9{
+                dnam{"pat/bíliọn"}
+                one{"{0} pfib"}
+                other{"{0} pfib"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1419,6 +1475,12 @@ pcm{
                 one{"{0} Nansẹk"}
                 other{"{0} Nansẹk"}
             }
+            night{
+                dnam{"nait"}
+                one{"{0} nait"}
+                other{"{0} nait"}
+                per{"{0}/nait"}
+            }
             quarter{
                 dnam{"kwt"}
                 one{"{0} kwt"}
@@ -1474,6 +1536,11 @@ pcm{
                 one{"{0} ẹV"}
                 other{"{0} ẹV"}
             }
+            foodcalorie{
+                dnam{"Kal"}
+                one{"{0} Kal"}
+                other{"{0} Kal"}
+            }
             joule{
                 dnam{"Joules"}
             }
@@ -1505,6 +1572,21 @@ pcm{
             }
         }
         graphics{
+            dot{
+                dnam{"dọt"}
+                one{"{0} dọt"}
+                other{"{0} dọt"}
+            }
+            dot-per-centimeter{
+                dnam{"Pọints fọ ích sẹntímíta"}
+                one{"{0} PFIS"}
+                other{"{0} PFIS"}
+            }
+            dot-per-inch{
+                dnam{"Pọints Fọ Ẹ́vrí Inch"}
+                one{"{0} PFẸI"}
+                other{"{0} PFẸI"}
+            }
             megapixel{
                 dnam{"Mẹ́gapíksẹls"}
                 one{"{0} Mẹ́gapíks"}
@@ -1681,6 +1763,11 @@ pcm{
                 dnam{"Nọt"}
                 one{"{0} Nọt"}
                 other{"{0} Nọt"}
+            }
+            light-speed{
+                dnam{"laít"}
+                one{"{0} laít"}
+                other{"{0} laít"}
             }
             meter-per-second{
                 dnam{"Mítas/Sẹk"}

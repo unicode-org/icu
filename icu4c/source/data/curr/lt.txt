@@ -2974,10 +2974,4 @@ lt{
             other{"Zimbabvės dolerių (2008)"}
         }
     }
-    CurrencyUnitPatterns{
-        few{"{0} {1}"}
-        many{"{0} {1}"}
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

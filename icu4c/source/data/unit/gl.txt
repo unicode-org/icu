@@ -183,6 +183,11 @@ gl{
             permyriad{
                 dnam{"tanto por dez mil"}
             }
+            portion-per-1e9{
+                dnam{"partes por mil millóns"}
+                one{"{0} parte por mil millóns"}
+                other{"{0} partes por mil millóns"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -313,6 +318,12 @@ gl{
                 dnam{"nanosegundos"}
                 one{"{0} nanosegundo"}
                 other{"{0} nanosegundos"}
+            }
+            night{
+                dnam{"noites"}
+                one{"{0} noite"}
+                other{"{0} noites"}
+                per{"{0} por noite"}
             }
             quarter{
                 dnam{"trimestres"}
@@ -780,6 +791,11 @@ gl{
                 one{"{0} nó"}
                 other{"{0} nós"}
             }
+            light-speed{
+                dnam{"luz"}
+                one{"{0} luz"}
+                other{"{0} luz"}
+            }
             meter-per-second{
                 dnam{"metros por segundo"}
                 one{"{0} metro por segundo"}
@@ -1025,6 +1041,11 @@ gl{
             karat{
                 dnam{"kt"}
             }
+            portion-per-1e9{
+                dnam{"ppmm"}
+                one{"{0} ppmm"}
+                other{"{0} ppmm"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1052,6 +1073,12 @@ gl{
                 one{"{0} m."}
                 other{"{0} m."}
                 per{"{0}/m."}
+            }
+            night{
+                dnam{"noites"}
+                one{"{0} noite"}
+                other{"{0} noites"}
+                per{"{0}/noite"}
             }
             quarter{
                 one{"{0} tr."}
@@ -1163,6 +1190,11 @@ gl{
                 one{"{0} nó"}
                 other{"{0} nós"}
             }
+            light-speed{
+                dnam{"luz"}
+                one{"{0} luz"}
+                other{"{0} luz"}
+            }
             mile-per-hour{
                 dnam{"mi/h"}
             }
@@ -1268,6 +1300,11 @@ gl{
                 one{"{0} ‱"}
                 other{"{0} ‱"}
             }
+            portion-per-1e9{
+                dnam{"partes/mil millóns"}
+                one{"{0} ppmm"}
+                other{"{0} ppmm"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1335,6 +1372,12 @@ gl{
                 one{"{0} mes"}
                 other{"{0} meses"}
                 per{"{0}/mes"}
+            }
+            night{
+                dnam{"noites"}
+                one{"{0} noite"}
+                other{"{0} noites"}
+                per{"{0}/noite"}
             }
             quarter{
                 dnam{"trim."}
@@ -1542,6 +1585,11 @@ gl{
                 dnam{"nós"}
                 one{"{0} nós"}
                 other{"{0} nós"}
+            }
+            light-speed{
+                dnam{"luz"}
+                one{"{0} luz"}
+                other{"{0} luz"}
             }
             mile-per-hour{
                 dnam{"millas/hora"}

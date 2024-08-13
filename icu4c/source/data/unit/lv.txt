@@ -551,7 +551,30 @@ lv{
                 zero{"{0} karātu"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    accusative{
+                        one{"{0} miligramu uz decilitru"}
+                        other{"{0} miligramus uz decilitru"}
+                        zero{"{0} miligramu uz decilitru"}
+                    }
+                    dative{
+                        one{"{0} miligramam uz decilitru"}
+                        other{"{0} miligramiem uz decilitru"}
+                        zero{"{0} miligramu uz decilitru"}
+                    }
+                    genitive{
+                        one{"{0} miligrama uz decilitru"}
+                        other{"{0} miligramu uz decilitru"}
+                        zero{"{0} miligramu uz decilitru"}
+                    }
+                    locative{
+                        one{"{0} miligramā uz decilitru"}
+                        other{"{0} miligramos uz decilitru"}
+                        zero{"{0} miligramu uz decilitru"}
+                    }
+                }
                 dnam{"miligrami uz decilitru"}
+                gender{"masculine"}
                 one{"{0} miligrams uz decilitru"}
                 other{"{0} miligrami uz decilitru"}
                 zero{"{0} miligramu uz decilitru"}
@@ -725,6 +748,35 @@ lv{
                 one{"{0} promiriāde"}
                 other{"{0} promiriādes"}
                 zero{"{0}‱"}
+            }
+            portion-per-1e9{
+                case{
+                    accusative{
+                        one{"{0} miljarddaļu"}
+                        other{"{0} miljarddaļas"}
+                        zero{"{0} miljarddaļu"}
+                    }
+                    dative{
+                        one{"{0} miljarddaļai"}
+                        other{"{0} miljarddaļām"}
+                        zero{"{0} miljarddaļu"}
+                    }
+                    genitive{
+                        one{"{0} miljarddaļas"}
+                        other{"{0} miljarddaļu"}
+                        zero{"{0} miljarddaļu"}
+                    }
+                    locative{
+                        one{"{0} miljarddaļā"}
+                        other{"{0} miljarddaļās"}
+                        zero{"{0} miljarddaļu"}
+                    }
+                }
+                dnam{"miljarddaļas"}
+                gender{"feminine"}
+                one{"{0} miljarddaļa"}
+                other{"{0} miljarddaļas"}
+                zero{"{0} miljarddaļu"}
             }
         }
         consumption{
@@ -1123,7 +1175,7 @@ lv{
             century{
                 case{
                     accusative{
-                        one{"{0} gadsimts"}
+                        one{"{0} gadsimtu"}
                         other{"{0} gadsimtus"}
                         zero{"{0} gadsimtu"}
                     }
@@ -1384,6 +1436,36 @@ lv{
                 other{"{0} nanosekundes"}
                 zero{"{0} nanosekunžu"}
             }
+            night{
+                case{
+                    accusative{
+                        one{"{0} nakti"}
+                        other{"{0} naktis"}
+                        zero{"{0} nakšu"}
+                    }
+                    dative{
+                        one{"{0} naktij"}
+                        other{"{0} naktīm"}
+                        zero{"{0} nakšu"}
+                    }
+                    genitive{
+                        one{"{0} nakti"}
+                        other{"{0} nakšu"}
+                        zero{"{0} nakšu"}
+                    }
+                    locative{
+                        one{"{0} naktī"}
+                        other{"{0} naktīs"}
+                        zero{"{0} nakšu"}
+                    }
+                }
+                dnam{"naktis"}
+                gender{"feminine"}
+                one{"{0} nakts"}
+                other{"{0} naktis"}
+                per{"{0}/nakts"}
+                zero{"{0} nakšu"}
+            }
             quarter{
                 case{
                     accusative{
@@ -1641,7 +1723,7 @@ lv{
                     }
                     genitive{
                         one{"{0} kalorijas"}
-                        other{"{0} kalorijas"}
+                        other{"{0} kaloriju"}
                         zero{"{0} kaloriju"}
                     }
                     locative{
@@ -1697,7 +1779,30 @@ lv{
                 zero{"{0} džoulu"}
             }
             kilocalorie{
+                case{
+                    accusative{
+                        one{"{0} kilokaloriju"}
+                        other{"{0} kilokalorijas"}
+                        zero{"{0} kilokaloriju"}
+                    }
+                    dative{
+                        one{"{0} kilokalorijai"}
+                        other{"{0} kilokalorijām"}
+                        zero{"{0} kilokaloriju"}
+                    }
+                    genitive{
+                        one{"{0} kilokalorijas"}
+                        other{"{0} kilokaloriju"}
+                        zero{"{0} kilokaloriju"}
+                    }
+                    locative{
+                        one{"{0} kilokalorijā"}
+                        other{"{0} kilokalorijās"}
+                        zero{"{0} kilokaloriju"}
+                    }
+                }
                 dnam{"kilokalorijas"}
+                gender{"feminine"}
                 one{"{0} kilokalorija"}
                 other{"{0} kilokalorijas"}
                 zero{"{0} kilokaloriju"}
@@ -1802,29 +1907,29 @@ lv{
                     accusative{
                         one{"{0} ņūtonu"}
                         other{"{0} ņūtonus"}
-                        zero{"{0} N"}
+                        zero{"{0} ņūtonu"}
                     }
                     dative{
                         one{"{0} ņūtonam"}
                         other{"{0} ņūtoniem"}
-                        zero{"{0} N"}
+                        zero{"{0} ņūtonu"}
                     }
                     genitive{
                         one{"{0} ņūtona"}
                         other{"{0} ņūtonu"}
-                        zero{"{0} N"}
+                        zero{"{0} ņūtonu"}
                     }
                     locative{
                         one{"{0} ņūtonā"}
                         other{"{0} ņūtonos"}
-                        zero{"{0} N"}
+                        zero{"{0} ņūtonu"}
                     }
                 }
                 dnam{"ņūtoni"}
                 gender{"masculine"}
                 one{"{0} ņūtons"}
                 other{"{0} ņūtoni"}
-                zero{"{0} N"}
+                zero{"{0} ņūtonu"}
             }
             pound-force{
                 dnam{"jaudas māciņas"}
@@ -1972,85 +2077,85 @@ lv{
                     accusative{
                         one{"{0} megapikseli"}
                         other{"{0} megapikseļus"}
-                        zero{"{0} MP"}
+                        zero{"{0} megapikseļu"}
                     }
                     dative{
                         one{"{0} megapikselim"}
                         other{"{0} megapikseļiem"}
-                        zero{"{0} MP"}
+                        zero{"{0} megapikseļu"}
                     }
                     genitive{
                         one{"{0} megapikseļa"}
                         other{"{0} megapikseļu"}
-                        zero{"{0} MP"}
+                        zero{"{0} megapikseļu"}
                     }
                     locative{
                         one{"{0} megapikselī"}
                         other{"{0} megapikseļos"}
-                        zero{"{0} MP"}
+                        zero{"{0} megapikseļu"}
                     }
                 }
                 gender{"masculine"}
                 one{"{0} megapikselis"}
                 other{"{0} megapikseļi"}
-                zero{"{0} MP"}
+                zero{"{0} megapikseļu"}
             }
             pixel{
                 case{
                     accusative{
                         one{"{0} pikseli"}
                         other{"{0} pikseļus"}
-                        zero{"{0} px"}
+                        zero{"{0} pikseļu"}
                     }
                     dative{
                         one{"{0} pikselim"}
                         other{"{0} pikseļiem"}
-                        zero{"{0} px"}
+                        zero{"{0} pikseļu"}
                     }
                     genitive{
                         one{"{0} pikseļa"}
                         other{"{0} pikseļu"}
-                        zero{"{0} px"}
+                        zero{"{0} pikseļu"}
                     }
                     locative{
                         one{"{0} pikselī"}
                         other{"{0} pikseļos"}
-                        zero{"{0} px"}
+                        zero{"{0} pikseļu"}
                     }
                 }
                 gender{"masculine"}
                 one{"{0} pikselis"}
                 other{"{0} pikseļi"}
-                zero{"{0} px"}
+                zero{"{0} pikseļu"}
             }
             pixel-per-centimeter{
                 case{
                     accusative{
                         one{"{0} pikseli centimetrā"}
                         other{"{0} pikseļus centimetrā"}
-                        zero{"{0} ppcm"}
+                        zero{"{0} pikseļu centimetrā"}
                     }
                     dative{
                         one{"{0} pikselim centimetrā"}
                         other{"{0} pikseļiem centimetrā"}
-                        zero{"{0} ppcm"}
+                        zero{"{0} pikseļu centimetrā"}
                     }
                     genitive{
                         one{"{0} pikseļa centimetrā"}
                         other{"{0} pikseļu centimetrā"}
-                        zero{"{0} ppcm"}
+                        zero{"{0} pikseļu centimetrā"}
                     }
                     locative{
                         one{"{0} pikselī centimetrā"}
                         other{"{0} pikseļos centimetrā"}
-                        zero{"{0} ppcm"}
+                        zero{"{0} pikseļu centimetrā"}
                     }
                 }
                 dnam{"pikseļi centimetrā"}
                 gender{"masculine"}
                 one{"{0} pikselis centimetrā"}
                 other{"{0} pikseļi centimetrā"}
-                zero{"{0} ppcm"}
+                zero{"{0} pikseļu centimetrā"}
             }
             pixel-per-inch{
                 dnam{"pikseļi collā"}
@@ -2375,6 +2480,29 @@ lv{
                 zero{"{0} pikometru"}
             }
             point{
+                case{
+                    accusative{
+                        one{"{0} punktu"}
+                        other{"{0} punktus"}
+                        zero{"{0} punktu"}
+                    }
+                    dative{
+                        one{"{0} punktam"}
+                        other{"{0} punktiem"}
+                        zero{"{0} punktu"}
+                    }
+                    genitive{
+                        one{"{0} punkta"}
+                        other{"{0} punktu"}
+                        zero{"{0} punktu"}
+                    }
+                    locative{
+                        one{"{0} punktā"}
+                        other{"{0} punktos"}
+                        zero{"{0} punktu"}
+                    }
+                }
+                gender{"masculine"}
                 one{"{0} punkts"}
                 other{"{0} punkti"}
                 zero{"{0} punktu"}
@@ -2867,7 +2995,7 @@ lv{
                     }
                     dative{
                         one{"{0} atmosfērai"}
-                        other{"{0} atmosfēras"}
+                        other{"{0} atmosfērām"}
                         zero{"{0} atmosfēras"}
                     }
                     genitive{
@@ -2956,29 +3084,29 @@ lv{
                     accusative{
                         one{"{0} kilopaskālu"}
                         other{"{0} kilopaskālus"}
-                        zero{"{0} kPa"}
+                        zero{"{0} kilopaskālu"}
                     }
                     dative{
                         one{"{0} kilopaskālam"}
                         other{"{0} kilopaskāliem"}
-                        zero{"{0} kPa"}
+                        zero{"{0} kilopaskālu"}
                     }
                     genitive{
                         one{"{0} kilopaskāla"}
                         other{"{0} kilopaskālu"}
-                        zero{"{0} kPa"}
+                        zero{"{0} kilopaskālu"}
                     }
                     locative{
                         one{"{0} kilopaskālā"}
                         other{"{0} kilopaskālos"}
-                        zero{"{0} kPa"}
+                        zero{"{0} kilopaskālu"}
                     }
                 }
                 dnam{"kilopaskāli"}
                 gender{"masculine"}
                 one{"{0} kilopaskāls"}
                 other{"{0} kilopaskāli"}
-                zero{"{0} kPa"}
+                zero{"{0} kilopaskālu"}
             }
             megapascal{
                 case{
@@ -3039,7 +3167,30 @@ lv{
                 zero{"{0} milibāru"}
             }
             millimeter-ofhg{
+                case{
+                    accusative{
+                        one{"{0} dzīvsudraba stabiņa milimetru"}
+                        other{"{0} dzīvsudraba stabiņa milimetrus"}
+                        zero{"{0} dzīvsudraba stabiņa milimetru"}
+                    }
+                    dative{
+                        one{"{0} dzīvsudraba stabiņa milimetram"}
+                        other{"{0} dzīvsudraba stabiņa milimetriem"}
+                        zero{"{0} dzīvsudraba stabiņa milimetru"}
+                    }
+                    genitive{
+                        one{"{0} dzīvsudraba stabiņa milimetra"}
+                        other{"{0} dzīvsudraba stabiņa milimetru"}
+                        zero{"{0} dzīvsudraba stabiņa milimetru"}
+                    }
+                    locative{
+                        one{"{0} dzīvsudraba stabiņa milimetrā"}
+                        other{"{0} dzīvsudraba stabiņa milimetros"}
+                        zero{"{0} dzīvsudraba stabiņa milimetru"}
+                    }
+                }
                 dnam{"dzīvsudraba stabiņa milimetri"}
+                gender{"masculine"}
                 one{"{0} dzīvsudraba stabiņa milimetrs"}
                 other{"{0} dzīvsudraba stabiņa milimetri"}
                 zero{"{0} dzīvsudraba stabiņa milimetru"}
@@ -3120,6 +3271,35 @@ lv{
                 one{"{0} mezgls"}
                 other{"{0} mezgli"}
                 zero{"{0} mezglu"}
+            }
+            light-speed{
+                case{
+                    accusative{
+                        one{"{0} gaismu"}
+                        other{"{0} gaismas"}
+                        zero{"{0} gaismas"}
+                    }
+                    dative{
+                        one{"{0} gaismai"}
+                        other{"{0} gaismām"}
+                        zero{"{0} gaismas"}
+                    }
+                    genitive{
+                        one{"{0} gaismas"}
+                        other{"{0} gaismu"}
+                        zero{"{0} gaismas"}
+                    }
+                    locative{
+                        one{"{0} gaismā"}
+                        other{"{0} gaismās"}
+                        zero{"{0} gaismas"}
+                    }
+                }
+                dnam{"gaisma"}
+                gender{"feminine"}
+                one{"{0} gaisma"}
+                other{"{0} gaismas"}
+                zero{"{0} gaismas"}
             }
             meter-per-second{
                 case{
@@ -3595,7 +3775,7 @@ lv{
                 case{
                     accusative{
                         one{"{0} litru"}
-                        other{"{0} litri"}
+                        other{"{0} litrus"}
                         zero{"{0} litru"}
                     }
                     dative{
@@ -3748,7 +3928,6 @@ lv{
     unitsNarrow{
         acceleration{
             g-force{
-                dnam{"Brīvās krišanas paātrinājums:"}
                 one{"{0}G"}
                 other{"{0}G"}
                 zero{"{0}G"}
@@ -3790,6 +3969,11 @@ lv{
                 zero{"{0}mi²"}
             }
         }
+        concentr{
+            portion-per-1e9{
+                dnam{"miljarddaļas"}
+            }
+        }
         duration{
             hour{
                 dnam{"h"}
@@ -3803,6 +3987,13 @@ lv{
                 other{"{0} m."}
                 per{"{0}/m."}
                 zero{"{0} m."}
+            }
+            night{
+                dnam{"naktis"}
+                one{"{0} nakts"}
+                other{"{0} naktis"}
+                per{"{0}/nakts"}
+                zero{"{0} nakšu"}
             }
             quarter{
                 one{"{0} c."}
@@ -3868,11 +4059,6 @@ lv{
                 one{"{0} sk.j."}
                 other{"{0} sk.j."}
                 zero{"{0} sk.j."}
-            }
-            millimeter{
-                one{"{0}mm"}
-                other{"{0} mm"}
-                zero{"{0} mm"}
             }
             nautical-mile{
                 dnam{"j.j."}
@@ -3976,6 +4162,12 @@ lv{
                 one{"{0} mezgls"}
                 other{"{0} mezgli"}
                 zero{"{0} mezgli"}
+            }
+            light-speed{
+                dnam{"gaisma"}
+                one{"{0} gaisma"}
+                other{"{0} gaismas"}
+                zero{"{0} gaismu"}
             }
             meter-per-second{
                 one{"{0}m/s"}
@@ -4094,6 +4286,9 @@ lv{
             permyriad{
                 dnam{"promiriāde"}
             }
+            portion-per-1e9{
+                dnam{"miljarddaļas"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -4168,6 +4363,13 @@ lv{
                 other{"{0} mēn."}
                 per{"{0}/mēn."}
                 zero{"{0} mēn."}
+            }
+            night{
+                dnam{"naktis"}
+                one{"{0} nakts"}
+                other{"{0} naktis"}
+                per{"{0}/nakts"}
+                zero{"{0} nakšu"}
             }
             quarter{
                 dnam{"cet."}
@@ -4412,6 +4614,12 @@ lv{
             }
             knot{
                 dnam{"mezgls"}
+            }
+            light-speed{
+                dnam{"gaisma"}
+                one{"{0} gaisma"}
+                other{"{0} gaismas"}
+                zero{"{0} gaismu"}
             }
         }
         temperature{

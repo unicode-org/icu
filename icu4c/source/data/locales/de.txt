@@ -362,6 +362,7 @@ de{
                 "GGGGGyyMMdd",
             }
             availableFormats{
+                Bh{"h 'Uhr' B"}
                 Ed{"E, d."}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
@@ -376,7 +377,7 @@ de{
                 MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
                 Md{"d.M."}
-                h{"h a"}
+                h{"h 'Uhr' B"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 y{"y G"}
@@ -1109,6 +1110,9 @@ de{
         era-narrow{
             dn{"E"}
         }
+        era-short{
+            dn{"Ep."}
+        }
         fri{
             relative{
                 "-1"{"letzten Freitag"}
@@ -1298,6 +1302,7 @@ de{
             }
         }
         month-short{
+            dn{"Mon."}
             relativeTime{
                 past{
                     one{"vor {0} Monat"}
@@ -1655,9 +1660,6 @@ de{
         weekOfMonth{
             dn{"Woche des Monats"}
         }
-        weekOfMonth-narrow{
-            dn{"Wo. des Monats"}
-        }
         weekOfMonth-short{
             dn{"W/M"}
         }
@@ -1731,7 +1733,7 @@ de{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

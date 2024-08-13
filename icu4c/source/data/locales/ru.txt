@@ -787,18 +787,14 @@ ru{
                 }
             }
             intervalFormats{
-                Bhm{
-                    h{"h:mm – h:mm B"}
-                    m{"h:mm – h:mm B"}
-                }
                 Gy{
                     G{"y 'г'. G – y 'г'. G"}
                     y{"y–y 'гг'. G"}
                 }
                 GyM{
                     G{"MM.y G – MM.y G"}
-                    M{"MM.y – MM.y G"}
-                    y{"MM.y – MM.y G"}
+                    M{"MM.y–MM.y G"}
+                    y{"MM.y–MM.y G"}
                 }
                 GyMEd{
                     G{"ccc, dd.MM.y G – ccc, dd.MM.y G"}
@@ -825,9 +821,9 @@ ru{
                 }
                 GyMd{
                     G{"dd.MM.y G – dd.MM.y G"}
-                    M{"dd.MM.y – dd.MM.y G"}
-                    d{"dd.MM.y – dd.MM.y G"}
-                    y{"dd.MM.y – dd.MM.y G"}
+                    M{"dd.MM.y–dd.MM.y G"}
+                    d{"dd.MM.y–dd.MM.y G"}
+                    y{"dd.MM.y–dd.MM.y G"}
                 }
                 M{
                     M{"M–M"}
@@ -851,8 +847,8 @@ ru{
                     d{"d–d MMM"}
                 }
                 Md{
-                    M{"dd.MM – dd.MM"}
-                    d{"dd.MM – dd.MM"}
+                    M{"dd.MM–dd.MM"}
+                    d{"dd.MM–dd.MM"}
                 }
                 fallback{"{0} – {1}"}
                 h{
@@ -874,8 +870,8 @@ ru{
                     h{"h–h a v"}
                 }
                 yM{
-                    M{"MM.y – MM.y"}
-                    y{"MM.y – MM.y"}
+                    M{"MM.y–MM.y"}
+                    y{"MM.y–MM.y"}
                 }
                 yMEd{
                     M{"ccc, dd.MM.y – ccc, dd.MM.y"}
@@ -901,9 +897,9 @@ ru{
                     y{"d MMM y 'г'. – d MMM y 'г'."}
                 }
                 yMd{
-                    M{"dd.MM.y – dd.MM.y"}
-                    d{"dd.MM.y – dd.MM.y"}
-                    y{"dd.MM.y – dd.MM.y"}
+                    M{"dd.MM.y–dd.MM.y"}
+                    d{"dd.MM.y–dd.MM.y"}
+                    y{"dd.MM.y–dd.MM.y"}
                 }
             }
             monthNames{
@@ -2494,7 +2490,7 @@ ru{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

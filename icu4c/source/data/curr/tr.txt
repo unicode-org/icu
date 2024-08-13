@@ -1349,8 +1349,4 @@ tr{
             other{"Zimbabve doları (2008)"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

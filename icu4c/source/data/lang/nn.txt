@@ -33,7 +33,6 @@ nn{
         ebu{"embu"}
         egy{"gammalegyptisk"}
         elx{"elamite"}
-        fil{"filippinsk"}
         fro{"gammalfransk"}
         frs{"austfrisisk"}
         fur{"friulisk"}
@@ -120,7 +119,6 @@ nn{
         Perm{"gammalpermisk"}
         Phlp{"salmepahlavi"}
         Sgnw{"teiknskrift"}
-        Syrc{"syriakisk"}
         Syre{"syriakisk (estrangelo-variant)"}
         Syrj{"syriakisk (vestleg variant)"}
         Syrn{"syriakisk (austleg variant)"}

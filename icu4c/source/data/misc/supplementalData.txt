@@ -2102,8 +2102,8 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
         SA{
-            "islamic-umalqura",
             "gregorian",
+            "islamic-umalqura",
             "islamic",
             "islamic-rgsa",
         }
@@ -2176,7 +2176,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"45"}
+    cldrVersion{"46"}
     codeMappings{
         {
             "AA",
@@ -11910,7 +11910,10 @@ supplementalData:table(nofallback){
                 "volume-sai",
                 "volume-to-jp",
                 "volume-koku",
+                "concentr-portion-per-1e9",
                 "mass-fun",
+                "duration-night",
+                "speed-light-speed",
             }
         }
         variant{
@@ -35959,6 +35962,33 @@ supplementalData:table(nofallback){
             preferred{"H"}
         }
         en_001{
+            allowed{
+                "h",
+                "hb",
+                "H",
+                "hB",
+            }
+            preferred{"h"}
+        }
+        en_HK{
+            allowed{
+                "h",
+                "hb",
+                "H",
+                "hB",
+            }
+            preferred{"h"}
+        }
+        en_IL{
+            allowed{
+                "H",
+                "h",
+                "hb",
+                "hB",
+            }
+            preferred{"H"}
+        }
+        en_MY{
             allowed{
                 "h",
                 "hb",

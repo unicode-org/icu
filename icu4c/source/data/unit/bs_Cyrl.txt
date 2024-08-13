@@ -127,6 +127,12 @@ bs_Cyrl{
             }
         }
         graphics{
+            dot-per-centimeter{
+                dnam{"тачке по центиметру"}
+            }
+            dot-per-inch{
+                dnam{"тачке по инчу"}
+            }
             megapixel{
                 dnam{"мегапиксели"}
             }

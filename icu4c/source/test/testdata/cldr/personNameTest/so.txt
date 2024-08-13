@@ -312,67 +312,62 @@ endName
 
 # nativeFull
 name ; title; Mudane
-name ; given; Abdi Taban
-name ; given-informal; Shermake
-name ; given2; Nadifa Maxamed
-name ; surname-core; Iman
+name ; given; Bertram Wilberforce
+name ; given-informal; Bertie
+name ; given2; Henry Robert
+name ; surname-core; Wooster
 name ; generation; Jr
 name ; credentials; MP
 name ; locale; so_AQ
 
-expectedResult; Iman Mudane Abdi Taban Nadifa Maxamed Jr, MP
+expectedResult; Wooster Mudane Bertram Wilberforce Henry Robert Jr, MP
 
 parameters; surnameFirst; long; referring; formal
 
-expectedResult; Mudane Abdi Taban Nadifa Maxamed Iman MP
+expectedResult; Mudane Bertram Wilberforce Henry Robert Wooster MP
 
 parameters; givenFirst; long; referring; formal
 
-expectedResult; Iman, Abdi Taban Nadifa Maxamed
+expectedResult; Wooster, Bertram Wilberforce Henry Robert
 
 parameters; sorting; long; referring; formal
 
-expectedResult; Abdi Taban N. M. Iman MP
+expectedResult; Bertram Wilberforce H. R. Wooster MP
 
 parameters; givenFirst; medium; referring; formal
 
-expectedResult; Iman Abdi Taban N. M. MP
+expectedResult; Wooster Bertram Wilberforce H. R. MP
 
 parameters; surnameFirst; medium; referring; formal
 
-expectedResult; Iman, Abdi Taban N. M.
+expectedResult; Wooster, Bertram Wilberforce H. R.
 
 parameters; sorting; medium; referring; formal
 
-expectedResult; Iman, A. T. N. M.
+expectedResult; Wooster, B. W. H. R.
 
 parameters; sorting; short; referring; formal
 
-expectedResult; A. T. N. M. Iman
+expectedResult; B. W. H. R. Wooster
 
 parameters; givenFirst; short; referring; formal
 
-expectedResult; Iman A. T. N. M.
+expectedResult; Wooster B. W. H. R.
 
 parameters; surnameFirst; short; referring; formal
 
-expectedResult; Iman, Shermake
+expectedResult; Wooster, Bertie
 
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; Iman Shermake
-
-parameters; surnameFirst; long; referring; informal
-parameters; surnameFirst; medium; referring; informal
-
-expectedResult; Shermake Iman
+expectedResult; Bertie Wooster
 
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; Mudane Iman
+expectedResult; Mudane Wooster
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
@@ -381,15 +376,20 @@ parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; short; addressing; formal
 
-expectedResult; Shermake I.
+expectedResult; Wooster Bertie
 
-parameters; givenFirst; short; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
 
-expectedResult; Iman A. T.
+expectedResult; Wooster B. W.
 
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; Shermake
+expectedResult; Bertie W.
+
+parameters; givenFirst; short; referring; informal
+
+expectedResult; Bertie
 
 parameters; givenFirst; long; addressing; informal
 parameters; givenFirst; medium; addressing; informal
@@ -398,35 +398,35 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; ANI
+expectedResult; BHW
 
 parameters; givenFirst; long; monogram; formal
 
-expectedResult; IAN
+expectedResult; WBH
 
 parameters; surnameFirst; long; monogram; formal
 
-expectedResult; IS
-
-parameters; surnameFirst; long; monogram; informal
-
-expectedResult; SI
+expectedResult; BW
 
 parameters; givenFirst; long; monogram; informal
 
-expectedResult; I
+expectedResult; WB
 
-parameters; givenFirst; medium; monogram; formal
-parameters; givenFirst; short; monogram; formal
-parameters; surnameFirst; medium; monogram; formal
-parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; long; monogram; informal
 
-expectedResult; S
+expectedResult; B
 
 parameters; givenFirst; medium; monogram; informal
 parameters; givenFirst; short; monogram; informal
 parameters; surnameFirst; medium; monogram; informal
 parameters; surnameFirst; short; monogram; informal
+
+expectedResult; W
+
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 

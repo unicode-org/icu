@@ -437,7 +437,7 @@ ig{
         }
         PHP{
             "₱",
-            "Ego piso obodo Philippine",
+            "Ego Piso obodo Philippine",
         }
         PKR{
             "PKR",
@@ -775,8 +775,5 @@ ig{
         ZMW{
             other{"Ego kwachas obodo Zambia"}
         }
-    }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
     }
 }

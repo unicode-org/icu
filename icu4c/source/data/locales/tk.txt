@@ -8,6 +8,11 @@ tk{
     ExemplarCharactersNumbers{"[  \\- ‑ , % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{"[\\- ‑ – — , ; \\: ! ? . … \u0022“” ( ) \\[ \\] \\{ \\} § @ * #]"}
     NumberElements{
+        arabext{
+            symbols{
+                nan{"San däl"}
+            }
+        }
         latn{
             patterns{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
@@ -335,7 +340,7 @@ tk{
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 GyMMM{"G MMM y"}
-                GyMMMEd{"G d MMM y E"}
+                GyMMMEd{"G d MMM y, E"}
                 GyMMMd{"G d MMM y"}
                 GyMd{"GGGGG dd.MM.y"}
                 MEd{"dd.MM E"}
@@ -700,24 +705,25 @@ tk{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM, y G"}
                 GyMMMd{"d MMM, y G"}
-                GyMd{"d/M/y GGGGG"}
-                MEd{"E, d/M"}
+                GyMd{"d.M.y GGGGG"}
+                MEd{"E, d.M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"d MMMM, E"}
-                Md{"d/M"}
+                Md{"d.M"}
                 y{"y G"}
+                yMEd{"dd.MM.y, E"}
                 yMMM{"MMM, y"}
                 yMMMEd{"d MMM, y, E"}
                 yMMMM{"MMMM, y"}
                 yMMMd{"d MMM, y"}
                 yyyy{"y G"}
-                yyyyM{"M/y GGGGG"}
-                yyyyMEd{"E, d/M/y GGGGG"}
+                yyyyM{"M.y GGGGG"}
+                yyyyMEd{"E, d.M.y GGGGG"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E, d MMM, y G"}
                 yyyyMMMM{"MMMM, y G"}
                 yyyyMMMd{"d MMM, y G"}
-                yyyyMd{"d/M/y GGGGG"}
+                yyyyMd{"d.M.y GGGGG"}
                 yyyyQQQ{"QQQ, y G"}
                 yyyyQQQQ{"QQQQ, y G"}
             }
@@ -1542,7 +1548,7 @@ tk{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

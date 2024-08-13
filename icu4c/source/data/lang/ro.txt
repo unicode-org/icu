@@ -78,6 +78,7 @@ ro{
         bin{"bini"}
         bkm{"kom"}
         bla{"siksika"}
+        blo{"anii"}
         bm{"bambara"}
         bn{"bengaleză"}
         bo{"tibetană"}
@@ -293,6 +294,7 @@ ro{
         kv{"komi"}
         kw{"cornică"}
         kwk{"kwakʼwala"}
+        kxv{"kuvi"}
         ky{"kârgâză"}
         la{"latină"}
         lad{"ladino"}
@@ -306,6 +308,7 @@ ro{
         lij{"liguriană"}
         lil{"lillooet"}
         lkt{"lakota"}
+        lmo{"lombardă"}
         ln{"lingala"}
         lo{"laoțiană"}
         lol{"mongo"}
@@ -318,7 +321,6 @@ ro{
         lua{"luba-lulua"}
         lui{"luiseno"}
         lun{"lunda"}
-        luo{"luo"}
         lus{"mizo"}
         luy{"luyia"}
         lv{"letonă"}
@@ -498,6 +500,7 @@ ro{
         swb{"comoreză"}
         syc{"siriacă clasică"}
         syr{"siriacă"}
+        szl{"sileziană"}
         ta{"tamilă"}
         tce{"tutchone de sud"}
         te{"telugu"}
@@ -544,10 +547,10 @@ ro{
         und{"limbă necunoscută"}
         ur{"urdu"}
         uz{"uzbecă"}
-        vai{"vai"}
         ve{"venda"}
         vec{"venetă"}
         vi{"vietnameză"}
+        vmw{"makhuwa"}
         vo{"volapuk"}
         vot{"votică"}
         vun{"vunjo"}
@@ -561,6 +564,7 @@ ro{
         wuu{"chineză wu"}
         xal{"calmucă"}
         xh{"xhosa"}
+        xnr{"kangri"}
         xog{"soga"}
         yao{"yao"}
         yap{"yapeză"}

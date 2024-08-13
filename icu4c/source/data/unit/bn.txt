@@ -163,6 +163,11 @@ bn{
                 one{"{0} পারমিরিয়াড"}
                 other{"{0} পারমিরিয়াড"}
             }
+            portion-per-1e9{
+                dnam{"পার্ট প্রতি বিলিয়ন"}
+                one{"{0} পার্ট প্রতি বিলিয়ন"}
+                other{"{0} পার্ট প্রতি বিলিয়ন"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -258,6 +263,12 @@ bn{
             nanosecond{
                 one{"{0} ন্যানোসেকেন্ড"}
                 other{"{0} ন্যানোসেকেন্ড"}
+            }
+            night{
+                dnam{"রাত্রি"}
+                one{"{0} রাত্রি"}
+                other{"{0} রাত্রি"}
+                per{"{0}/রাত্রি"}
             }
         }
         electric{
@@ -628,6 +639,11 @@ bn{
                 one{"{0} নট"}
                 other{"{0} নট"}
             }
+            light-speed{
+                dnam{"আঃবঃ"}
+                one{"{0} আঃবঃ"}
+                other{"{0} আঃবঃ"}
+            }
             meter-per-second{
                 one{"{0} মিটার প্রতি সেকেন্ড"}
                 other{"{0} মিটার প্রতি সেকেন্ড"}
@@ -878,6 +894,10 @@ bn{
             permille{
                 dnam{"‰"}
             }
+            portion-per-1e9{
+                one{"{0}ppb"}
+                other{"{0} ppb"}
+            }
         }
         consumption{
             mile-per-gallon-imperial{
@@ -916,6 +936,12 @@ bn{
                 one{"{0}ns"}
                 other{"{0}ns"}
             }
+            night{
+                dnam{"রাত্রি"}
+                one{"{0}রাত্রি"}
+                other{"{0}রাত্রি"}
+                per{"{0}/রাত্রি"}
+            }
             quarter{
                 one{"{0}ত্রৈমাসিক"}
                 other{"{0}ত্রৈমাসিক"}
@@ -923,7 +949,7 @@ bn{
             second{
                 one{"{0} সেঃ"}
                 other{"{0} সেঃ"}
-                per{"{0}/সে:"}
+                per{"{0}/সেঃ"}
             }
             week{
                 per{"{0}/সপ্তাহ"}
@@ -1029,6 +1055,11 @@ bn{
                 dnam{"km/hr"}
                 one{"{0}kph"}
                 other{"{0}kph"}
+            }
+            light-speed{
+                dnam{"আঃবঃ"}
+                one{"{0} আঃবঃ"}
+                other{"{0} আঃবঃ"}
             }
             meter-per-second{
                 dnam{"মি/সেক"}
@@ -1220,6 +1251,9 @@ bn{
             permyriad{
                 dnam{"পারমিরিয়াড"}
             }
+            portion-per-1e9{
+                dnam{"পার্ট/ বিলিয়ন"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1277,7 +1311,7 @@ bn{
                 dnam{"দিন"}
                 one{"{0} দিন"}
                 other{"{0} দিন"}
-                per{"{0} প্রতি দিন"}
+                per{"{0}/দিন"}
             }
             decade{
                 dnam{"দশক"}
@@ -1310,6 +1344,12 @@ bn{
             }
             nanosecond{
                 dnam{"ন্যানোসেকেন্ড"}
+            }
+            night{
+                dnam{"রাত্রি"}
+                one{"{0} রাত্রি"}
+                other{"{0} রাত্রি"}
+                per{"{0}/রাত্রি"}
             }
             quarter{
                 dnam{"ত্রৈমাসিক"}
@@ -1524,6 +1564,11 @@ bn{
             kilometer-per-hour{
                 one{"{0} kph"}
                 other{"{0} km/h"}
+            }
+            light-speed{
+                dnam{"আঃবঃ"}
+                one{"{0} আঃবঃ"}
+                other{"{0} আঃবঃ"}
             }
             meter-per-second{
                 dnam{"মিটার প্রতি সেকেন্ড"}

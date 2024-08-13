@@ -3,7 +3,8 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 xh{
     Languages{
-        af{"isiBhulu"}
+        af{"IsiBhulu"}
+        am{"IsiAmharic"}
         ar{"Isi-Arabhu"}
         ar_001{"Isi-Arabhu (Sale mihla)"}
         bn{"IsiBangla"}
@@ -35,6 +36,7 @@ xh{
         pt_BR{"IsiPhuthukezi SaseBrazil"}
         pt_PT{"IsiPhuthukezi SasePortugal"}
         ru{"Isi-Russian"}
+        sq{"IsiAlbania"}
         th{"Isi-Thai"}
         tr{"Isi-Turkish"}
         und{"Unknown language"}

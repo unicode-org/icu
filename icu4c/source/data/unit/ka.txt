@@ -162,6 +162,11 @@ ka{
                 one{"{0} ნაწილი მილიონზე"}
                 other{"{0} ნაწილი მილიონზე"}
             }
+            portion-per-1e9{
+                dnam{"ნაწილი მილიარდზე"}
+                one{"{0} ნაწილი მილიარდზე"}
+                other{"{0} ნაწილი მილიარდზე"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -275,6 +280,12 @@ ka{
                 dnam{"ნანოწამი"}
                 one{"{0} ნანოწამი"}
                 other{"{0} ნანოწამი"}
+            }
+            night{
+                dnam{"ღამე"}
+                one{"{0} ღამე"}
+                other{"{0} ღამე"}
+                per{"{0}/ღამე"}
             }
             quarter{
                 dnam{"კვარტალი"}
@@ -690,6 +701,11 @@ ka{
                 one{"{0} კვანძი"}
                 other{"{0} კვანძი"}
             }
+            light-speed{
+                dnam{"სინათლის სიჩქარე"}
+                one{"{0}-მაგი სინათლის სიჩქარე"}
+                other{"{0}-მაგი სინათლის სიჩქარე"}
+            }
             meter-per-second{
                 dnam{"მეტრი წამში"}
                 one{"{0} მეტრი წამში"}
@@ -865,6 +881,11 @@ ka{
                 other{"{0} წმ"}
             }
         }
+        concentr{
+            portion-per-1e9{
+                dnam{"ნ/მ"}
+            }
+        }
         consumption{
             liter-per-100-kilometer{
                 one{"{0}ლ/100კმ"}
@@ -883,6 +904,12 @@ ka{
             }
             month{
                 per{"{0}/თ."}
+            }
+            night{
+                dnam{"ღამე"}
+                one{"{0} ღამე"}
+                other{"{0} ღამე"}
+                per{"{0}/ღამე"}
             }
             second{
                 one{"{0}წმ"}
@@ -932,6 +959,13 @@ ka{
             millibar{
                 one{"{0} მბრ"}
                 other{"{0} მბრ"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"c"}
+                one{"{0} c"}
+                other{"{0} c"}
             }
         }
         volume{
@@ -1093,6 +1127,11 @@ ka{
             permillion{
                 dnam{"ნაწილი/მილიონზე"}
             }
+            portion-per-1e9{
+                dnam{"ნაწილი/მილიარდზე"}
+                one{"{0} ნ/მ"}
+                other{"{0} ნ/მ"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1219,6 +1258,12 @@ ka{
                 dnam{"ნწმ"}
                 one{"{0} ნწმ"}
                 other{"{0} ნწმ"}
+            }
+            night{
+                dnam{"ღამე"}
+                one{"{0} ღამე"}
+                other{"{0} ღამე"}
+                per{"{0}/ღამე"}
             }
             quarter{
                 dnam{"კვარტ"}
@@ -1689,6 +1734,11 @@ ka{
                 dnam{"კვძ."}
                 one{"{0} კვძ."}
                 other{"{0} კვძ."}
+            }
+            light-speed{
+                dnam{"სინათლის სიჩქ."}
+                one{"{0}-მაგი სინათ. სიჩქ."}
+                other{"{0}-მაგი სინათ. სიჩქ."}
             }
             meter-per-second{
                 dnam{"მ/წმ"}

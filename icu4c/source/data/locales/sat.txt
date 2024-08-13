@@ -89,7 +89,11 @@ sat{
             }
             eras{
                 abbreviated{
-                    "ᱥᱮᱨᱢᱟ ᱞᱟᱦᱟ",
+                    "ᱵᱤ ᱥᱤ",
+                    "ᱤᱥᱣᱤ",
+                }
+                abbreviated%variant{
+                    "ᱵᱤ ᱥᱤ ᱤ",
                     "ᱤᱥᱣᱤ",
                 }
             }

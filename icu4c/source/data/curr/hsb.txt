@@ -1906,10 +1906,4 @@ hsb{
             two{"sambiskej kwachaj"}
         }
     }
-    CurrencyUnitPatterns{
-        few{"{0} {1}"}
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-        two{"{0} {1}"}
-    }
 }

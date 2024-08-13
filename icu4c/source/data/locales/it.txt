@@ -2,8 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 it{
-    AuxExemplarCharacters{"[ªáâåäã æ ç êë íîï ñ ºôöõø œ ß úûü ÿ]"}
-    ExemplarCharacters{"[aà b c d eéè f g h iì j k l m n oóò p q r s t uù v w x y z]"}
+    AuxExemplarCharacters{"[ªáâåäã æ ç êë íîï ñ ºóôöõø œ ß úûü ÿ]"}
+    ExemplarCharacters{"[aà b c d eéè f g h iì j k l m n oò p q r s t uù v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     ExemplarCharactersPunctuation{"[\\- ‑ — , ; \\: ! ? . … '’ \u0022“” « » ( ) \\[ \\] \\{ \\} @ /]"}
     NumberElements{
@@ -93,16 +93,16 @@ it{
                         other{"000 Mln ¤"}
                     }
                     1000000000{
-                        one{"0 Mrd ¤"}
-                        other{"0 Mrd ¤"}
+                        one{"0 Mld ¤"}
+                        other{"0 Mld ¤"}
                     }
                     10000000000{
-                        one{"00 Mrd ¤"}
-                        other{"00 Mrd ¤"}
+                        one{"00 Mld ¤"}
+                        other{"00 Mld ¤"}
                     }
                     100000000000{
-                        one{"000 Mrd ¤"}
-                        other{"000 Mrd ¤"}
+                        one{"000 Mld ¤"}
+                        other{"000 Mld ¤"}
                     }
                     1000000000000{
                         one{"0 Bln ¤"}
@@ -143,16 +143,16 @@ it{
                         other{"000 Mln"}
                     }
                     1000000000{
-                        one{"0 Mrd"}
-                        other{"0 Mrd"}
+                        one{"0 Mld"}
+                        other{"0 Mld"}
                     }
                     10000000000{
-                        one{"00 Mrd"}
-                        other{"00 Mrd"}
+                        one{"00 Mld"}
+                        other{"00 Mld"}
                     }
                     100000000000{
-                        one{"000 Mrd"}
-                        other{"000 Mrd"}
+                        one{"000 Mld"}
+                        other{"000 Mld"}
                     }
                     1000000000000{
                         one{"0 Bln"}
@@ -188,6 +188,7 @@ it{
                 other{"{0} giorni"}
             }
         }
+        minimumGroupingDigits{"2"}
     }
     calendar{
         buddhist{
@@ -1434,7 +1435,7 @@ it{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

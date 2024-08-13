@@ -138,6 +138,10 @@ my{
             permyriad{
                 other{"{0} ပါမီရိတ်"}
             }
+            portion-per-1e9{
+                dnam{"သန်းတစ်ထောင်ပုံ တစ်ပုံ"}
+                other{"သန်းတစ်ထောင်ပုံ {0} ပုံ"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -224,6 +228,11 @@ my{
             }
             nanosecond{
                 other{"{0} နာနိုစက္ကန့်"}
+            }
+            night{
+                dnam{"ည"}
+                other{"{0} ည"}
+                per{"{0}/ည"}
             }
             quarter{
                 dnam{"ကွာတား"}
@@ -340,8 +349,8 @@ my{
         }
         length{
             astronomical-unit{
-                dnam{"နက်ခတ်တဗဒေယူနဈ"}
-                other{"{0} နက်ခတ်တဗဒေယူနဈ"}
+                dnam{"နက္ခတဗေဒ ယူနစ်"}
+                other{"{0} နက္ခတဗေဒ ယူနစ်"}
             }
             centimeter{
                 dnam{"စင်တီမီတာ"}
@@ -539,6 +548,10 @@ my{
                 dnam{"နော့တီကယ်မိုင်"}
                 other{"{0} နော့တီကယ်မိုင်"}
             }
+            light-speed{
+                dnam{"အလင်း"}
+                other{"{0} အလင်း"}
+            }
             meter-per-second{
                 other{"တစ်စက္ကန့်လျှင် {0} မီတာ"}
             }
@@ -664,6 +677,16 @@ my{
                 other{"{0}°"}
             }
         }
+        area{
+            square-centimeter{
+                dnam{"cm²"}
+            }
+        }
+        concentr{
+            portion-per-1e9{
+                other{"{0}ppb"}
+            }
+        }
         consumption{
             liter-per-100-kilometer{
                 dnam{"L/100km"}
@@ -694,6 +717,11 @@ my{
         duration{
             millisecond{
                 other{"{0} ms"}
+            }
+            night{
+                dnam{"ည"}
+                other{"{0} ည"}
+                per{"{0}/ည"}
             }
             second{
                 other{"{0} s"}
@@ -784,6 +812,12 @@ my{
                 dnam{"psi"}
             }
         }
+        speed{
+            light-speed{
+                dnam{"အလင်း"}
+                other{"{0}အလင်း"}
+            }
+        }
         volume{
             barrel{
                 dnam{"စည်"}
@@ -851,9 +885,6 @@ my{
             hectare{
                 dnam{"ဟက်တာ"}
             }
-            square-centimeter{
-                dnam{"စတုရန်းစင်တီမီတာ"}
-            }
             square-foot{
                 dnam{"စတုရန်းပေ"}
             }
@@ -882,6 +913,9 @@ my{
             }
             permyriad{
                 dnam{"ပါမီရိတ်"}
+            }
+            portion-per-1e9{
+                dnam{"သန်းတစ်ထောင်ပုံ တစ်ပုံ"}
             }
         }
         consumption{
@@ -977,6 +1011,11 @@ my{
             }
             nanosecond{
                 dnam{"နာနိုစက္ကန့်"}
+            }
+            night{
+                dnam{"ည"}
+                other{"{0} ည"}
+                per{"{0}/ည"}
             }
             second{
                 dnam{"စက္ကန့်"}
@@ -1202,6 +1241,10 @@ my{
         speed{
             kilometer-per-hour{
                 dnam{"ကီလိုမီတာ/နာရီ"}
+            }
+            light-speed{
+                dnam{"အလင်း"}
+                other{"{0} အလင်း"}
             }
             meter-per-second{
                 dnam{"မီတာ/စက္ကန့်"}

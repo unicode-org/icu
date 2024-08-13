@@ -39,23 +39,14 @@ dsb{
         "Africa:Porto-Novo"{
             ec{"Porto Novo"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "Africa:Tripoli"{
             ec{"Tripolis"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Bogota"{
             ec{"Bogotá"}
         }
         "America:Cayman"{
             ec{"Kaimaniske kupy"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Havana"{
             ec{"Havanna"}
@@ -273,11 +264,11 @@ dsb{
         "Indian:Maldives"{
             ec{"Malediwy"}
         }
-        "Indian:Reunion"{
-            ec{"Réunion"}
-        }
         "Pacific:Easter"{
             ec{"Jatšowne kupy"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Enderbury"}
         }
         "Pacific:Fiji"{
             ec{"Fidži"}
@@ -602,6 +593,9 @@ dsb{
             ld{"Japański lěśojski cas"}
             lg{"Japański cas"}
             ls{"Japański standardny cas"}
+        }
+        "meta:Kazakhstan"{
+            ls{"kazachiski cas"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Pódzajtšnokazachski cas"}

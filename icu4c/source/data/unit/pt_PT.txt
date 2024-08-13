@@ -80,6 +80,11 @@ pt_PT{
                 one{"{0} milimole por litro"}
                 other{"{0} milimoles por litro"}
             }
+            portion-per-1e9{
+                dnam{"partes por mil milhões"}
+                one{"{0} parte por mil milhões"}
+                other{"{0} partes por mil milhões"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -264,6 +269,11 @@ pt_PT{
             karat{
                 dnam{"quilates"}
             }
+            portion-per-1e9{
+                dnam{"ppmm"}
+                one{"{0} ppmm"}
+                other{"{0} ppmm"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -293,22 +303,21 @@ pt_PT{
                 one{"{0} pt"}
                 other{"{0} pts"}
             }
-            dot-per-inch{
-                dnam{"ppp"}
-                one{"{0} ppp"}
-                other{"{0} ppp"}
-            }
         }
         length{
             foot{
                 dnam{"pés"}
                 per{"{0}/pé"}
             }
+            inch{
+                dnam{"pol."}
+            }
             meter{
                 dnam{"metro"}
             }
             mile{
-                dnam{"milha"}
+                one{"{0} mi"}
+                other{"{0} mi"}
             }
             parsec{
                 dnam{"pc"}
@@ -336,10 +345,6 @@ pt_PT{
             }
         }
         speed{
-            beaufort{
-                one{"{0} B"}
-                other{"{0} B"}
-            }
             kilometer-per-hour{
                 one{"{0} km/h"}
                 other{"{0} km/h"}
@@ -431,6 +436,11 @@ pt_PT{
             }
             millimole-per-liter{
                 dnam{"milimole/litro"}
+            }
+            portion-per-1e9{
+                dnam{"partes/mil milhões"}
+                one{"{0} ppmm"}
+                other{"{0} ppmm"}
             }
         }
         consumption{

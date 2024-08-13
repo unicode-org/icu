@@ -15,6 +15,9 @@ ig{
         "Europe:London"{
             ld{"Oge Okpomọkụ Britain"}
         }
+        "Pacific:Enderbury"{
+            ec{"Enderbury"}
+        }
         "meta:Afghanistan"{
             ls{"Oge Afghanistan"}
         }
@@ -326,6 +329,9 @@ ig{
             ld{"Oge Ihe Japan"}
             lg{"Oge Japan"}
             ls{"Oge Izugbe Japan"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Oge Kazakhstan"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Oge Mpaghara Ọwụwa Anyanwụ Kazakhstan"}

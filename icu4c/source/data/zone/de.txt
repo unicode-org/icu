@@ -36,14 +36,8 @@ de{
         "Africa:Porto-Novo"{
             ec{"Porto Novo"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "Africa:Tripoli"{
             ec{"Tripolis"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
@@ -56,9 +50,6 @@ de{
         }
         "America:Cordoba"{
             ec{"Córdoba"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Havana"{
             ec{"Havanna"}
@@ -306,9 +297,6 @@ de{
         "Indian:Maldives"{
             ec{"Malediven"}
         }
-        "Indian:Reunion"{
-            ec{"Réunion"}
-        }
         "Pacific:Easter"{
             ec{"Osterinsel"}
         }
@@ -369,9 +357,9 @@ de{
             ls{"Nordamerikanische Ostküsten-Normalzeit"}
         }
         "meta:America_Mountain"{
-            ld{"Rocky-Mountain-Sommerzeit"}
-            lg{"Rocky-Mountain-Zeit"}
-            ls{"Rocky-Mountain-Normalzeit"}
+            ld{"Rocky-Mountains-Sommerzeit"}
+            lg{"Rocky-Mountains-Zeit"}
+            ls{"Rocky-Mountains-Normalzeit"}
         }
         "meta:America_Pacific"{
             ld{"Nordamerikanische Westküsten-Sommerzeit"}
@@ -678,6 +666,9 @@ de{
             lg{"Kamtschatka-Zeit"}
             ls{"Kamtschatka-Normalzeit"}
         }
+        "meta:Kazakhstan"{
+            ls{"Kasachische Zeit"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Ostkasachische Zeit"}
         }
@@ -698,7 +689,7 @@ de{
             ls{"Krasnojarsker Normalzeit"}
         }
         "meta:Kyrgystan"{
-            ls{"Kirgisistan-Zeit"}
+            ls{"Kirgisische Zeit"}
         }
         "meta:Lanka"{
             ls{"Sri-Lanka-Zeit"}
@@ -902,7 +893,7 @@ de{
             ls{"Taipeh-Normalzeit"}
         }
         "meta:Tajikistan"{
-            ls{"Tadschikistan-Zeit"}
+            ls{"Tadschikische Zeit"}
         }
         "meta:Tokelau"{
             ls{"Tokelau-Zeit"}
@@ -916,9 +907,9 @@ de{
             ls{"Chuuk-Zeit"}
         }
         "meta:Turkmenistan"{
-            ld{"Turkmenistan-Sommerzeit"}
+            ld{"Turkmenische Sommerzeit"}
             lg{"Turkmenistan-Zeit"}
-            ls{"Turkmenistan-Normalzeit"}
+            ls{"Turkmenische Normalzeit"}
         }
         "meta:Tuvalu"{
             ls{"Tuvalu-Zeit"}
@@ -929,9 +920,9 @@ de{
             ls{"Uruguayische Normalzeit"}
         }
         "meta:Uzbekistan"{
-            ld{"Usbekistan-Sommerzeit"}
-            lg{"Usbekistan-Zeit"}
-            ls{"Usbekistan-Normalzeit"}
+            ld{"Usbekische Sommerzeit"}
+            lg{"Usbekische Zeit"}
+            ls{"Usbekische Normalzeit"}
         }
         "meta:Vanuatu"{
             ld{"Vanuatu-Sommerzeit"}

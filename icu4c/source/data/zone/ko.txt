@@ -1613,6 +1613,9 @@ ko{
             lg{"페트로파블롭스크-캄차츠키 시간"}
             ls{"페트로파블롭스크-캄차츠키 표준시"}
         }
+        "meta:Kazakhstan"{
+            ls{"카자흐스탄 시간"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"동부 카자흐스탄 시간"}
         }

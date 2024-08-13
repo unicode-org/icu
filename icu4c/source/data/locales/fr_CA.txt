@@ -806,6 +806,11 @@ fr_CA{
             dn{"j de l’année"}
         }
         fri-narrow{
+            relative{
+                "-1"{"ven dernier"}
+                "0"{"ce ven"}
+                "1"{"ven prochain"}
+            }
             relativeTime{
                 future{
                     one{"dans {0} ven"}
@@ -818,6 +823,11 @@ fr_CA{
             }
         }
         mon-narrow{
+            relative{
+                "-1"{"lun dernier"}
+                "0"{"ce lun"}
+                "1"{"lun prochain"}
+            }
             relativeTime{
                 future{
                     one{"dans {0} lun"}
@@ -852,7 +862,7 @@ fr_CA{
         }
         sat-narrow{
             relative{
-                "-1"{"sam. dernier"}
+                "-1"{"sam dernier"}
                 "0"{"ce sam"}
                 "1"{"sam proch"}
             }
@@ -876,6 +886,11 @@ fr_CA{
             }
         }
         sun-narrow{
+            relative{
+                "-1"{"dim dernier"}
+                "0"{"ce dim"}
+                "1"{"dim prochain"}
+            }
             relativeTime{
                 future{
                     one{"dans {0} dim"}
@@ -888,6 +903,11 @@ fr_CA{
             }
         }
         thu-narrow{
+            relative{
+                "-1"{"jeu dernier"}
+                "0"{"ce jeu"}
+                "1"{"jeu prochain"}
+            }
             relativeTime{
                 future{
                     one{"dans {0} jeu"}
@@ -900,6 +920,11 @@ fr_CA{
             }
         }
         tue-narrow{
+            relative{
+                "-1"{"mar dernier"}
+                "0"{"ce mar"}
+                "1"{"mar prochain"}
+            }
             relativeTime{
                 future{
                     one{"dans {0} mar"}
@@ -912,6 +937,11 @@ fr_CA{
             }
         }
         wed-narrow{
+            relative{
+                "-1"{"mer dernier"}
+                "0"{"ce mer"}
+                "1"{"mer prochain"}
+            }
             relativeTime{
                 future{
                     one{"dans {0} mer"}
@@ -946,6 +976,15 @@ fr_CA{
         }
     }
     personNames{
+        nameOrderLocales{
+            surnameFirst{
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
         namePattern{
             sorting-long-referring-informal{"{surname-core}, {given-informal} {surname-prefix}"}
             sorting-medium-referring-informal{"{surname-core}, {given-informal} {surname-prefix}"}

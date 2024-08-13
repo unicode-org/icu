@@ -1678,6 +1678,7 @@ sv{
             }
         }
         day-narrow{
+            dn{"d"}
             relative{
                 "-1"{"igår"}
                 "0"{"idag"}
@@ -1695,6 +1696,7 @@ sv{
             }
         }
         day-short{
+            dn{"d."}
             relativeTime{
                 future{
                     one{"om {0} d"}
@@ -1708,6 +1710,12 @@ sv{
         }
         dayOfYear{
             dn{"dag under året"}
+        }
+        dayOfYear-narrow{
+            dn{"d u å"}
+        }
+        dayOfYear-short{
+            dn{"d. under å."}
         }
         dayperiod{
             dn{"fm/em"}
@@ -1915,7 +1923,6 @@ sv{
             }
         }
         month-narrow{
-            dn{"mån"}
             relativeTime{
                 future{
                     one{"+{0} mån."}
@@ -1928,7 +1935,7 @@ sv{
             }
         }
         month-short{
-            dn{"m"}
+            dn{"mån"}
             relative{
                 "-1"{"förra mån."}
                 "0"{"denna mån."}
@@ -2322,7 +2329,7 @@ sv{
             }
         }
         week-short{
-            dn{"v"}
+            dn{"v."}
             relative{
                 "-1"{"förra v."}
                 "0"{"denna v."}
@@ -2343,16 +2350,25 @@ sv{
             dn{"vecka i månaden"}
         }
         weekOfMonth-narrow{
-            dn{"vk.i mån."}
+            dn{"v i mån"}
         }
         weekOfMonth-short{
-            dn{"vk. i mån."}
+            dn{"v. i mån."}
         }
         weekday{
             dn{"veckodag"}
         }
+        weekday-narrow{
+            dn{"vd"}
+        }
+        weekday-short{
+            dn{"veckod."}
+        }
         weekdayOfMonth{
             dn{"veckodag i månad"}
+        }
+        weekdayOfMonth-narrow{
+            dn{"vd i m"}
         }
         weekdayOfMonth-short{
             dn{"veckodag i mån."}

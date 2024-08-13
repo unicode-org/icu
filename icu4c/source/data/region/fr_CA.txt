@@ -17,6 +17,7 @@ fr_CA{
         BZ{"Bélize"}
         CC{"îles Cocos (Keeling)"}
         CK{"îles Cook"}
+        CP{"île Clipperton"}
         CX{"île Christmas"}
         FK{"îles Malouines"}
         FO{"îles Féroé"}

@@ -18,26 +18,14 @@ af{
         "Africa:Mogadishu"{
             ec{"Mogadisjoe"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
         }
         "America:Cambridge_Bay"{
             ec{"Cambridgebaai"}
         }
-        "America:Cancun"{
-            ec{"Cancun"}
-        }
         "America:Cayman"{
             ec{"Kaaiman"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Glace_Bay"{
             ec{"Glacebaai"}
@@ -47,9 +35,6 @@ af{
         }
         "America:Jamaica"{
             ec{"Jamaika"}
-        }
-        "America:Merida"{
-            ec{"Merida"}
         }
         "America:Mexico_City"{
             ec{"Meksikostad"}
@@ -64,7 +49,7 @@ af{
             ec{"New Salem, Noord-Dakota"}
         }
         "America:St_Barthelemy"{
-            ec{"Sint Barthélemy"}
+            ec{"Sint Bartholomeus"}
         }
         "America:St_Johns"{
             ec{"Sint John’s"}
@@ -271,9 +256,6 @@ af{
         "Indian:Maldives"{
             ec{"Maledive"}
         }
-        "Indian:Reunion"{
-            ec{"Réunion"}
-        }
         "Pacific:Easter"{
             ec{"Paas"}
         }
@@ -464,7 +446,7 @@ af{
             ls{"Kokoseilande-tyd"}
         }
         "meta:Colombia"{
-            ld{"Colombia-somertyd"}
+            ld{"Colombië-somertyd"}
             lg{"Colombië-tyd"}
             ls{"Colombië-standaardtyd"}
         }
@@ -619,6 +601,9 @@ af{
             ld{"Petropavlovsk-Kamchatski-somertyd"}
             lg{"Petropavlovsk-Kamchatski-tyd"}
             ls{"Petropavlovsk-Kamchatski-standaardtyd"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Kazakstan-tyd"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Oos-Kazakstan-tyd"}

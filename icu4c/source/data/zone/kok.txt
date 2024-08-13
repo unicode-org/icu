@@ -1578,6 +1578,9 @@ kok{
             lg{"जपान वेळ"}
             ls{"जपान प्रमाणित वेळ"}
         }
+        "meta:Kazakhstan"{
+            ls{"कझाखस्तान वेळ"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"उदेंत कझाकस्तान वेळ"}
         }

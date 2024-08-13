@@ -15,6 +15,7 @@ tg{
                 atLeast{"⩾{0}"}
             }
             patterns{
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"#,##0.00 ¤"}
             }
             patternsLong{
@@ -60,22 +61,22 @@ tg{
             patternsShort{
                 currencyFormat{
                     1000{
-                        other{"0 ҳзр'.' ¤"}
+                        other{"¤0 ҳазор"}
                     }
                     10000{
-                        other{"00 ҳзр'.' ¤"}
+                        other{"¤00 ҳазор"}
                     }
                     100000{
-                        other{"000 ҳзр'.' ¤"}
+                        other{"¤000 ҳазор"}
                     }
                     1000000{
-                        other{"0 млн'.' ¤"}
+                        other{"¤0 млн"}
                     }
                     10000000{
-                        other{"00 млн'.' ¤"}
+                        other{"¤00 млн"}
                     }
                     100000000{
-                        other{"000 млн'.' ¤"}
+                        other{"¤000 млн"}
                     }
                     1000000000{
                         other{"0 млрд'.' ¤"}
@@ -140,6 +141,14 @@ tg{
                 group{" "}
             }
         }
+        minimalPairs{
+            ordinal{
+                other{"{0}-умро рост кунед."}
+            }
+            plural{
+                other{"{0} рӯз"}
+            }
+        }
     }
     calendar{
         generic{
@@ -158,6 +167,12 @@ tg{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} 'соати' {0}",
+                "{1} 'соати' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -175,6 +190,7 @@ tg{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"M/d/y GGGGG"}
                 MEd{"E, dd-MM"}
                 MMMEd{"E, d MMM"}
                 MMMMd{"d MMMM"}
@@ -319,6 +335,12 @@ tg{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} 'соати' {0}",
+                "{1} 'соати' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -354,8 +376,8 @@ tg{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM, y"}
                 yMMMM{"MMMM y"}
-                yMMMd{"d MMM, y"}
-                yMd{"d/M/y"}
+                yMMMd{"d MMM y"}
+                yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
@@ -673,8 +695,8 @@ tg{
                         "Дхул-Ҳ.",
                     }
                     wide{
-                        "муҳаррам",
-                        "сафар",
+                        "Муҳаррам",
+                        "Сафар",
                         "Рабеъ I",
                         "Рабеъ II",
                         "ҷимоди-ул-уло",
@@ -689,16 +711,16 @@ tg{
                 }
                 stand-alone{
                     wide{
-                        "муҳаррам",
-                        "сафар",
+                        "Муҳаррам",
+                        "Сафар",
                         "Рабеъ I",
                         "Рабеъ II",
-                        "ҷимоди-ул-уло",
-                        "ҷимоди-ул-сони",
-                        "раҷаб",
-                        "Шабан",
-                        "Рамадан",
-                        "Шаввал",
+                        "Ҷимоди-ул-уло",
+                        "Ҷимоди-ул-сони",
+                        "Раҷаб",
+                        "Шаъбон",
+                        "Рамазон",
+                        "Шаавол",
                         "Дхул-Қидаҳ",
                         "Дхул-Ҳиҷҷаҳ",
                     }
@@ -751,10 +773,6 @@ tg{
             }
         }
     }
-    delimiters{
-        quotationEnd{"«"}
-        quotationStart{"»"}
-    }
     fields{
         day{
             dn{"рӯз"}
@@ -779,7 +797,7 @@ tg{
             dn{"рӯзи с."}
         }
         dayperiod{
-            dn{"AM/PM"}
+            dn{"субҳ/бегоҳ"}
         }
         era{
             dn{"мабдаи таърих"}
@@ -1268,6 +1286,32 @@ tg{
         }
         zone{
             dn{"минтақаи вақт"}
+        }
+    }
+    listPattern{
+        or{
+            2{"{0}, ё {1}"}
+            end{"{0}, ё {1}"}
+        }
+        or-narrow{
+            2{"{0}, ё {1}"}
+            end{"{0}, ё {1}"}
+        }
+        or-short{
+            2{"{0}, ё {1}"}
+            end{"{0}, ё {1}"}
+        }
+        standard{
+            2{"{0} ва {1}"}
+        }
+        standard-short{
+            2{"{0} ва {1}"}
+        }
+        unit-narrow{
+            2{"{0} {1}"}
+            end{"{0} {1}"}
+            middle{"{0} {1}"}
+            start{"{0} {1}"}
         }
     }
     measurementSystemNames{

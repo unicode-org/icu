@@ -6,12 +6,6 @@ fo{
         "Africa:Djibouti"{
             ec{"Djibuti"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
         }
@@ -23,9 +17,6 @@ fo{
         }
         "America:Costa_Rica"{
             ec{"Kosta Rika"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Jamaica"{
             ec{"Jamaika"}
@@ -143,9 +134,6 @@ fo{
         }
         "Indian:Mauritius"{
             ec{"Móritius"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Enderbury"{
             ec{"Enderbury"}
@@ -464,6 +452,9 @@ fo{
             ld{"Japan summartíð"}
             lg{"Japan tíð"}
             ls{"Japan vanlig tíð"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Kasakstan tíð"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Eystur Kasakstan tíð"}

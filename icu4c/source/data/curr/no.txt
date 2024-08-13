@@ -901,11 +901,11 @@ no{
         }
         SLE{
             "SLE",
-            "sierraleonske leone",
+            "sierraleonsk leone",
         }
         SLL{
             "SLL",
-            "sierraleonske leone (1964—2022)",
+            "sierraleonsk leone (1964–2022)",
         }
         SOS{
             "SOS",
@@ -2096,11 +2096,11 @@ no{
         }
         SLE{
             one{"sierraleonsk leone"}
-            other{"sierraleonske leone"}
+            other{"sierraleonske leoner"}
         }
         SLL{
-            one{"sierraleonsk leone (1964—2022)"}
-            other{"sierraleonske leone (1964—2022)"}
+            one{"sierraleonsk leone (1964–2022)"}
+            other{"sierraleonske leoner (1964–2022)"}
         }
         SOS{
             one{"somalisk shilling"}
@@ -2394,9 +2394,5 @@ no{
             one{"zimbabwisk dollar (2008)"}
             other{"zimbabwiske dollar (2008)"}
         }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

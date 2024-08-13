@@ -1537,6 +1537,9 @@ blo{
             lg{"Japaŋ kaakɔŋkɔŋɔ̀"}
             ls{"Japaŋ kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
+        "meta:Kazakhstan"{
+            ls{"Kasastan kaakɔŋkɔŋɔ̀"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Kasastan gajakalaŋ kaakɔŋkɔŋɔ̀"}
         }

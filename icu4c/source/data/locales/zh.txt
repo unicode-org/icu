@@ -1479,6 +1479,9 @@ zh{
                 MEd{"M-dE"}
                 MMM{"LLL"}
                 Md{"M-d"}
+                yyyyMEd{"Gy/M/dE"}
+                yyyyMMMEd{"Gy年M月d日E"}
+                yyyyMd{"Gy/M/d"}
             }
             eras{
                 abbreviated{
@@ -2429,7 +2432,13 @@ zh{
             dn{"月中周"}
         }
         weekday{
-            dn{"工作日"}
+            dn{"星期"}
+        }
+        weekday-narrow{
+            dn{"星期"}
+        }
+        weekday-short{
+            dn{"星期"}
         }
         weekdayOfMonth{
             dn{"月中日"}
@@ -2497,7 +2506,7 @@ zh{
                 "[%％﹪ ٪]",
                 "[‰ ؉]",
                 "[\$＄﹩]",
-                "[£ ₤]",
+                "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₹ ₨ {Rp} {Rs}]",

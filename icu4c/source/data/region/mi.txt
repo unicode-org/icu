@@ -14,7 +14,7 @@ mi{
         015{"Āwherika ki te Raki"}
         017{"Te Pokapū o Āwherika"}
         018{"Āwherika Whakatetonga"}
-        019{"Amerika"}
+        019{"Ngā Amerika"}
         021{"Te Raki o Amerika"}
         029{"Karapīana"}
         030{"Āhia ki te Rāwhiti"}

@@ -78,6 +78,7 @@ bs{
         bin{"bini"}
         bkm{"kom"}
         bla{"siksika"}
+        blo{"anii"}
         bm{"bambara"}
         bn{"bengalski"}
         bo{"tibetanski"}
@@ -290,6 +291,7 @@ bs{
         kv{"komi"}
         kw{"kornski"}
         kwk{"kvakvala"}
+        kxv{"kuvi"}
         ky{"kirgiški"}
         la{"latinski"}
         lad{"ladino"}
@@ -316,7 +318,6 @@ bs{
         lua{"luba-lulua"}
         lui{"luiseno"}
         lun{"lunda"}
-        luo{"luo"}
         lus{"mizo"}
         luy{"luhija"}
         lv{"latvijski"}
@@ -494,6 +495,7 @@ bs{
         swb{"komorski"}
         syc{"klasični sirijski"}
         syr{"sirijski"}
+        szl{"šleski"}
         ta{"tamilski"}
         tce{"južni tučoni"}
         te{"telugu"}
@@ -540,10 +542,10 @@ bs{
         und{"nepoznati jezik"}
         ur{"urdu"}
         uz{"uzbečki"}
-        vai{"vai"}
         ve{"venda"}
         vec{"venecijanski"}
         vi{"vijetnamski"}
+        vmw{"makua"}
         vo{"volapuk"}
         vot{"votski"}
         vun{"vunjo"}
@@ -557,6 +559,7 @@ bs{
         wuu{"Wu kineski"}
         xal{"kalmik"}
         xh{"hosa"}
+        xnr{"kangri"}
         xog{"soga"}
         yao{"jao"}
         yap{"japeški"}
@@ -809,7 +812,7 @@ bs{
         calendar{
             buddhist{"budistički kalendar"}
             chinese{"kineski kalendar"}
-            coptic{"Koptski kalendar"}
+            coptic{"koptski kalendar"}
             dangi{"dangi kalendar"}
             ethiopic{"etiopski kalendar"}
             ethiopic-amete-alem{"etiopski kalendar \u0022Amete Alem\u0022"}
@@ -818,6 +821,8 @@ bs{
             indian{"indijski nacionalni kalendar"}
             islamic{"islamski kalendar"}
             islamic-civil{"islamski građanski kalendar, tabelarni"}
+            islamic-rgsa{"islamski kalendar za Saudijsku Arabiju"}
+            islamic-tbla{"islamski kalendar, tabelarni, astronomska epoha"}
             islamic-umalqura{"islamski kalendar, Umm al-Qura"}
             iso8601{"kalendar ISO-8601"}
             japanese{"japanski kalendar"}
@@ -963,7 +968,7 @@ bs{
             mymrshan{"mijanmarske šan cifre"}
             mymrtlng{"mijanmarske tai laing cifre"}
             nagm{"nag mundari cifre"}
-            native{"Izvorne cifre"}
+            native{"izvorni brojevi"}
             nkoo{"n’ko cifre"}
             olck{"ol čiki cifre"}
             orya{"orijski brojevi"}

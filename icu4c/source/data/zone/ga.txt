@@ -36,9 +36,6 @@ ga{
         "Africa:Nouakchott"{
             ec{"Nuacsat"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "Africa:Tripoli"{
             ec{"Tripilí"}
         }
@@ -50,9 +47,6 @@ ga{
         }
         "America:Aruba"{
             ec{"Arúba"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
@@ -808,6 +802,9 @@ ga{
             ld{"Am Samhraidh Phetropavlovsk-Kamchatski"}
             lg{"Am Phetropavlovsk-Kamchatski"}
             ls{"Am Caighdeánach Phetropavlovsk-Kamchatski"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Am na Casacstáine"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Am Oirthear na Casacstáine"}

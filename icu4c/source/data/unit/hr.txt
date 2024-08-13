@@ -493,8 +493,26 @@ hr{
                 other{"{0} karata"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    accusative{
+                        few{"{0} miligrama po decilitru"}
+                        one{"{0} miligram po decilitru"}
+                        other{"{0} miligrama po decilitru"}
+                    }
+                    genitive{
+                        few{"{0} miligrama po decilitru"}
+                        one{"{0} mligrama po decilitru"}
+                        other{"{0} miligrama po decilitru"}
+                    }
+                    instrumental{
+                        few{"{0} miligrama po decilitru"}
+                        one{"{0} miligramom po decilitru"}
+                        other{"{0} miligrama po decilitru"}
+                    }
+                }
                 dnam{"miligrami po decilitru"}
                 few{"{0} miligrama po decilitru"}
+                gender{"inanimate"}
                 one{"{0} miligram po decilitru"}
                 other{"{0} miligrama po decilitru"}
             }
@@ -641,6 +659,30 @@ hr{
                 gender{"inanimate"}
                 one{"{0} permyriad"}
                 other{"{0} permyriada"}
+            }
+            portion-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} dijela na milijardu"}
+                        one{"{0} dio na milijardu"}
+                        other{"{0} dijelova na milijardu"}
+                    }
+                    genitive{
+                        few{"{0} dijela na milijardu"}
+                        one{"{0} dijela na milijardu"}
+                        other{"{0} dijelova na milijardu"}
+                    }
+                    instrumental{
+                        few{"{0} dijela na milijardu"}
+                        one{"{0} dijelom na milijardu"}
+                        other{"{0} dijelova na milijardu"}
+                    }
+                }
+                dnam{"dijelovi na milijardu"}
+                few{"{0} dijela na milijardu"}
+                gender{"inanimate"}
+                one{"{0} dio na milijardu"}
+                other{"{0} dijelova na milijardu"}
             }
         }
         consumption{
@@ -1219,6 +1261,31 @@ hr{
                 one{"{0} nanosekunda"}
                 other{"{0} nanosekundi"}
             }
+            night{
+                case{
+                    accusative{
+                        few{"{0} noći"}
+                        one{"{0} noć"}
+                        other{"{0} noći"}
+                    }
+                    genitive{
+                        few{"{0} noći"}
+                        one{"{0} noći"}
+                        other{"{0} noći"}
+                    }
+                    instrumental{
+                        few{"{0} noći"}
+                        one{"{0} noći"}
+                        other{"{0} noći"}
+                    }
+                }
+                dnam{"noći"}
+                few{"{0} noći"}
+                gender{"feminine"}
+                one{"{0} noć"}
+                other{"{0} noći"}
+                per{"{0}/noć"}
+            }
             quarter{
                 case{
                     accusative{
@@ -1484,8 +1551,26 @@ hr{
                 other{"{0} džula"}
             }
             kilocalorie{
+                case{
+                    accusative{
+                        few{"{0} kilokalorije"}
+                        one{"{0} kilokaloriju"}
+                        other{"{0} kilokalorija"}
+                    }
+                    genitive{
+                        few{"{0} kilokalorije"}
+                        one{"{0} kilokalorije"}
+                        other{"{0} kilokalorija"}
+                    }
+                    instrumental{
+                        few{"{0} kilokalorije"}
+                        one{"{0} kilokalorijom"}
+                        other{"{0} kilokalorija"}
+                    }
+                }
                 dnam{"kilokalorije"}
                 few{"{0} kilokalorije"}
+                gender{"feminine"}
                 one{"{0} kilokalorija"}
                 other{"{0} kilokalorija"}
             }
@@ -2089,7 +2174,25 @@ hr{
                 other{"{0} pikometara"}
             }
             point{
+                case{
+                    accusative{
+                        few{"{0} tipografske točke"}
+                        one{"{0} tipografsku točku"}
+                        other{"{0} tipografskih točaka"}
+                    }
+                    genitive{
+                        few{"{0} tipografske točke"}
+                        one{"{0} tipografske točke"}
+                        other{"{0} tipografskih točaka"}
+                    }
+                    instrumental{
+                        few{"{0} tipografske točke"}
+                        one{"{0} tipografskom točkom"}
+                        other{"{0} tipografskih točaka"}
+                    }
+                }
                 few{"{0} tipografske točke"}
+                gender{"feminine"}
                 one{"{0} tipografska točka"}
                 other{"{0} tipografskih točaka"}
             }
@@ -2664,8 +2767,26 @@ hr{
                 other{"{0} milibara"}
             }
             millimeter-ofhg{
+                case{
+                    accusative{
+                        few{"{0} milimetra živina stupca"}
+                        one{"{0} milimetar živina stupca"}
+                        other{"{0} milimetara živina stupca"}
+                    }
+                    genitive{
+                        few{"{0} milimetra živina stupca"}
+                        one{"{0} milimetar živina stupca"}
+                        other{"{0} milimetara živina stupca"}
+                    }
+                    instrumental{
+                        few{"{0} milimetra živina stupca"}
+                        one{"{0} milimetar živina stupca"}
+                        other{"{0} milimetara živina stupca"}
+                    }
+                }
                 dnam{"milimetri živina stupca"}
                 few{"{0} milimetra živina stupca"}
+                gender{"inanimate"}
                 one{"{0} milimetar živina stupca"}
                 other{"{0} milimetara živina stupca"}
             }
@@ -2733,6 +2854,30 @@ hr{
                 few{"{0} čvora"}
                 one{"{0} čvor"}
                 other{"{0} čvorova"}
+            }
+            light-speed{
+                case{
+                    accusative{
+                        few{"{0} svjetla"}
+                        one{"{0} svjetlo"}
+                        other{"{0} svjetala"}
+                    }
+                    genitive{
+                        few{"{0} svjetla"}
+                        one{"{0} svjetla"}
+                        other{"{0} svjetala"}
+                    }
+                    instrumental{
+                        few{"{0} svjetla"}
+                        one{"{0} svjetlom"}
+                        other{"{0} svjetala"}
+                    }
+                }
+                dnam{"svjetlo"}
+                few{"{0} svjetla"}
+                gender{"neuter"}
+                one{"{0} svjetlo"}
+                other{"{0} svjetala"}
             }
             meter-per-second{
                 case{
@@ -3267,6 +3412,9 @@ hr{
                 one{"{0} mol"}
                 other{"{0} mola"}
             }
+            portion-per-1e9{
+                dnam{"dijelovi/milijarda"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -3292,6 +3440,13 @@ hr{
                 few{"{0} m"}
                 one{"{0} m"}
                 other{"{0} m"}
+            }
+            night{
+                dnam{"noć"}
+                few{"{0} noći"}
+                one{"{0} noć"}
+                other{"{0} noći"}
+                per{"{0}/noć"}
             }
         }
         force{
@@ -3340,6 +3495,14 @@ hr{
                 few{"{0} mb"}
                 one{"{0} mb"}
                 other{"{0} mb"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"svjetlo"}
+                few{"{0} svjetla"}
+                one{"{0} svjetlo"}
+                other{"{0} svjetala"}
             }
         }
         volume{
@@ -3459,6 +3622,9 @@ hr{
                 one{"{0} ‱"}
                 other{"{0} ‱"}
             }
+            portion-per-1e9{
+                dnam{"dijelovi/milijarda"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -3535,6 +3701,13 @@ hr{
                 one{"{0} mj."}
                 other{"{0} mj."}
                 per{"{0}/mj."}
+            }
+            night{
+                dnam{"noć"}
+                few{"{0} noći"}
+                one{"{0} noć"}
+                other{"{0} noći"}
+                per{"{0}/noć"}
             }
             quarter{
                 dnam{"čet."}
@@ -3695,6 +3868,12 @@ hr{
                 few{"{0} čv"}
                 one{"{0} čv"}
                 other{"{0} čv"}
+            }
+            light-speed{
+                dnam{"svjetlo"}
+                few{"{0} svjetla"}
+                one{"{0} svjetlo"}
+                other{"{0} svjetala"}
             }
         }
         temperature{

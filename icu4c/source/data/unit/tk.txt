@@ -100,7 +100,7 @@ tk{
             10p-12{"piko{0}"}
             10p-15{"femto{0}"}
             10p-18{"atto{0}"}
-            10p-2{"senti{0}"}
+            10p-2{"santi{0}"}
             10p-21{"zepto{0}"}
             10p-24{"ýokto{0}"}
             10p-27{"ronto{0}"}
@@ -115,7 +115,6 @@ tk{
             10p2{"gekto{0}"}
             10p21{"zetta{0}"}
             10p24{"ýotta{0}"}
-            10p27{"ronna{0}"}
             10p3{"kilo{0}"}
             10p30{"kwetta{0}"}
             10p6{"mega{0}"}
@@ -178,6 +177,11 @@ tk{
             permyriad{
                 one{"{0} permiriad"}
                 other{"{0} permiriad"}
+            }
+            portion-per-1e9{
+                dnam{"bölejik/milliard"}
+                one{"milliardda {0} bölejik"}
+                other{"milliardda {0} bölejik"}
             }
         }
         consumption{
@@ -303,6 +307,12 @@ tk{
                 dnam{"nanosekunt"}
                 one{"{0} nanosekunt"}
                 other{"{0} nanosekunt"}
+            }
+            night{
+                dnam{"gije"}
+                one{"{0} gije"}
+                other{"{0} gije"}
+                per{"{0}/gije"}
             }
             quarter{
                 dnam{"çärýek"}
@@ -433,6 +443,11 @@ tk{
             }
         }
         graphics{
+            dot-per-centimeter{
+                dnam{"santimetr başyna nokat"}
+                one{"santimetr başyna {0} nokat"}
+                other{"santimetr başyna {0} nokat"}
+            }
             dot-per-inch{
                 dnam{"nokat dýuým başyna"}
                 one{"{0} nokat dýuým başyna"}
@@ -653,7 +668,6 @@ tk{
                 other{"{0} tonna"}
             }
             tonne{
-                dnam{"metrik tonna"}
                 one{"{0} metrik tonna"}
                 other{"{0} metrik tonna"}
             }
@@ -754,6 +768,11 @@ tk{
                 dnam{"düwün"}
                 one{"{0} düwün"}
                 other{"{0} düwün"}
+            }
+            light-speed{
+                dnam{"ýagtylyk"}
+                one{"{0} ýagtylyk"}
+                other{"{0} ýagtylyk"}
             }
             meter-per-second{
                 dnam{"metr/sekunt"}
@@ -972,9 +991,17 @@ tk{
                 other{"{0}″"}
             }
         }
+        compound{
+            10p-2{"s{0}"}
+        }
         concentr{
             percent{
                 dnam{"%"}
+            }
+            portion-per-1e9{
+                dnam{"bmlrd"}
+                one{"{0} bmlrd"}
+                other{"{0} bmlrd"}
             }
         }
         consumption{
@@ -1014,6 +1041,12 @@ tk{
                 dnam{"a"}
                 one{"{0}a"}
                 other{"{0}a"}
+            }
+            night{
+                dnam{"gije"}
+                one{"{0} gije"}
+                other{"{0} gije"}
+                per{"{0}/gije"}
             }
             quarter{
                 one{"{0}ç"}
@@ -1112,6 +1145,11 @@ tk{
                 dnam{"km/sag"}
                 one{"{0}km/sag"}
                 other{"{0}km/sag"}
+            }
+            light-speed{
+                dnam{"ýagtylyk"}
+                one{"{0} ýagtylyk"}
+                other{"{0} ýagtylyk"}
             }
             meter-per-second{
                 dnam{"m/s"}
@@ -1237,6 +1275,11 @@ tk{
             permyriad{
                 dnam{"permiriad"}
             }
+            portion-per-1e9{
+                dnam{"bölejik/milliard"}
+                one{"{0} bölejik/milliard"}
+                other{"{0} bölejik/milliard"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1332,6 +1375,12 @@ tk{
                 one{"{0} a"}
                 other{"{0} a"}
                 per{"{0}/a"}
+            }
+            night{
+                dnam{"gije"}
+                one{"{0} gije"}
+                other{"{0} gije"}
+                per{"{0}/gije"}
             }
             quarter{
                 dnam{"çär"}
@@ -1651,6 +1700,11 @@ tk{
                 dnam{"dü."}
                 one{"{0} dü."}
                 other{"{0} dü."}
+            }
+            light-speed{
+                dnam{"ýagtylyk"}
+                one{"{0} ýagtylyk"}
+                other{"{0} ýagtylyk"}
             }
             meter-per-second{
                 dnam{"metr/sek"}

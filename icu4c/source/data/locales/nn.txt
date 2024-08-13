@@ -3,13 +3,8 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 nn{
     %%Parent{"no"}
-    AuxExemplarCharacters{"[áǎ čç đ èê ńñ ŋ š ŧ ü ž ä ö]"}
     NumberElements{
         latn{
-            patterns{
-                accountingFormat{"#,##0.00 ¤"}
-                accountingFormat%noCurrency{"#,##0.00"}
-            }
             patternsLong{
                 decimalFormat{
                     1000000{
@@ -72,25 +67,8 @@ nn{
     calendar{
         generic{
             intervalFormats{
-                MMMEd{
-                    d{"E d.–E d. MMM"}
-                }
-                yM{
-                    M{"MM.y–MM.y G"}
-                    y{"MM.y–MM.y G"}
-                }
-                yMEd{
-                    M{"E dd.MM.y–E dd.MM.y G"}
-                    d{"E dd.MM.y–E dd.MM.y G"}
-                    y{"E dd.MM.y–E dd.MM.y G"}
-                }
                 yMMMEd{
                     d{"E d.–E d. MMM y G"}
-                }
-                yMd{
-                    M{"dd.MM.y–dd.MM.y G"}
-                    d{"dd.MM.y–dd.MM.y G"}
-                    y{"dd.MM.y–dd.MM.y G"}
                 }
             }
         }
@@ -268,6 +246,7 @@ nn{
         technical_symbols{"tekniske symbol"}
         tone_marks{"tonemerke"}
         travel_places{"reise og stadar"}
+        upwards_arrows{"piler som peiker oppover"}
         variant_forms{"variantar"}
         weather{"vêr"}
         western_asian_scripts{"vestasiatiske skriftsystem"}
@@ -826,15 +805,15 @@ nn{
         }
         week-narrow{
             dn{"v."}
-            relativePeriod{"v. m. {0}"}
+            relativePeriod{"veka med {0}"}
             relativeTime{
                 future{
-                    one{"+{0} v."}
-                    other{"+{0} v."}
+                    one{"om {0} v."}
+                    other{"om {0} v."}
                 }
                 past{
-                    one{"–{0} v."}
-                    other{"–{0} v."}
+                    one{"for {0} v. sidan"}
+                    other{"for {0} v. sidan"}
                 }
             }
         }

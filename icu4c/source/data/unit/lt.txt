@@ -749,8 +749,41 @@ lt{
                 other{"{0} karatų"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    accusative{
+                        few{"{0} miligramus decilitre"}
+                        many{"{0} miligramo decilitre"}
+                        one{"{0} miligramą decilitre"}
+                        other{"{0} miligramų decilitre"}
+                    }
+                    dative{
+                        few{"{0} miligramams decilitre"}
+                        many{"{0} miligramo decilitre"}
+                        one{"{0} miligramui decilitre"}
+                        other{"{0} miligramų decilitre"}
+                    }
+                    genitive{
+                        few{"{0} miligramų decilitre"}
+                        many{"{0} miligramo decilitre"}
+                        one{"{0} miligramo decilitre"}
+                        other{"{0} miligramų decilitre"}
+                    }
+                    instrumental{
+                        few{"{0} miligramais decilitre"}
+                        many{"{0} miligramo decilitre"}
+                        one{"{0} miligramu decilitre"}
+                        other{"{0} miligramų decilitre"}
+                    }
+                    locative{
+                        few{"{0} miligramuose decilitre"}
+                        many{"{0} miligramo decilitre"}
+                        one{"{0} miligrame decilitre"}
+                        other{"{0} miligramų decilitre"}
+                    }
+                }
                 dnam{"miligramai decilitre"}
                 few{"{0} miligramai decilitre"}
+                gender{"masculine"}
                 many{"{0} miligramo decilitre"}
                 one{"{0} miligramas decilitre"}
                 other{"{0} miligramų decilitre"}
@@ -955,6 +988,46 @@ lt{
             }
             permyriad{
                 gender{"masculine"}
+            }
+            portion-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} milijonines dalelytes"}
+                        many{"{0} milijoninės dalelytės"}
+                        one{"{0} milijoninę dalelytę"}
+                        other{"{0} milijoninių dalelyčių"}
+                    }
+                    dative{
+                        few{"{0} milijoninėms dalelytėms"}
+                        many{"{0} milijoninės dalelytės"}
+                        one{"{0} milijoninei dalelytei"}
+                        other{"{0} milijoninių dalelyčių"}
+                    }
+                    genitive{
+                        few{"{0} milijoninių dalelyčių"}
+                        many{"{0} milijoninės dalelytės"}
+                        one{"{0} milijoninės dalelytės"}
+                        other{"{0} milijoninių dalelyčių"}
+                    }
+                    instrumental{
+                        few{"{0} milijoninėmis dalelytėmis"}
+                        many{"{0} milijoninės dalelytės"}
+                        one{"{0} milijonine dalelyte"}
+                        other{"{0} milijoninių dalelyčių"}
+                    }
+                    locative{
+                        few{"{0} milijoninėse dalelytėse"}
+                        many{"{0} milijoninės dalelytės"}
+                        one{"{0} milijoninėje dalelytėje"}
+                        other{"{0} milijoninių dalelyčių"}
+                    }
+                }
+                dnam{"milijoninės dalelytės"}
+                few{"{0} milijoninės dalelytės"}
+                gender{"feminine"}
+                many{"{0} milijoninės dalelytės"}
+                one{"{0} milijoninė dalelytė"}
+                other{"{0} milijoninių dalelyčių"}
             }
         }
         consumption{
@@ -1861,6 +1934,47 @@ lt{
                 one{"{0} nanosekundė"}
                 other{"{0} nanosekundžių"}
             }
+            night{
+                case{
+                    accusative{
+                        few{"{0} naktis"}
+                        many{"{0} nakties"}
+                        one{"{0} naktis"}
+                        other{"{0} naktų"}
+                    }
+                    dative{
+                        few{"{0} naktims"}
+                        many{"{0} nakties"}
+                        one{"{0} nakčiai"}
+                        other{"{0} naktų"}
+                    }
+                    genitive{
+                        few{"{0} naktų"}
+                        many{"{0} nakties"}
+                        one{"{0} nakties"}
+                        other{"{0} naktų"}
+                    }
+                    instrumental{
+                        few{"{0} naktimis"}
+                        many{"{0} nakties"}
+                        one{"{0} naktimi"}
+                        other{"{0} naktų"}
+                    }
+                    locative{
+                        few{"{0} naktyse"}
+                        many{"{0} nakties"}
+                        one{"{0} naktyje"}
+                        other{"{0} naktų"}
+                    }
+                }
+                dnam{"naktis"}
+                few{"{0} naktys"}
+                gender{"feminine"}
+                many{"{0} nakties"}
+                one{"{0} naktis"}
+                other{"{0} naktų"}
+                per{"{0}/nakt."}
+            }
             quarter{
                 case{
                     accusative{
@@ -2283,8 +2397,41 @@ lt{
                 other{"{0} džaulių"}
             }
             kilocalorie{
+                case{
+                    accusative{
+                        few{"{0} kilokalorijas"}
+                        many{"{0} kilokalorijos"}
+                        one{"{0} kilokaloriją"}
+                        other{"{0} kilokalorijų"}
+                    }
+                    dative{
+                        few{"{0} kilokalorijoms"}
+                        many{"{0} kilokalorijos"}
+                        one{"{0} kilokalorijai"}
+                        other{"{0} kilokalorijų"}
+                    }
+                    genitive{
+                        few{"{0} kilokalorijų"}
+                        many{"{0} kilokalorijos"}
+                        one{"{0} kilokalorijos"}
+                        other{"{0} kilokalorijų"}
+                    }
+                    instrumental{
+                        few{"{0} kilokalorijomis"}
+                        many{"{0} kilokalorijos"}
+                        one{"{0} kilokalorija"}
+                        other{"{0} kilokalorijų"}
+                    }
+                    locative{
+                        few{"{0} kilokalorijose"}
+                        many{"{0} kilokalorijos"}
+                        one{"{0} kilokalorijoje"}
+                        other{"{0} kilokalorijų"}
+                    }
+                }
                 dnam{"kilokalorijos"}
                 few{"{0} kilokalorijos"}
+                gender{"feminine"}
                 many{"{0} kilokalorijos"}
                 one{"{0} kilokalorija"}
                 other{"{0} kilokalorijų"}
@@ -3237,11 +3384,44 @@ lt{
                 other{"{0} pikometrų"}
             }
             point{
+                case{
+                    accusative{
+                        few{"{0} punktus"}
+                        many{"{0} punkto"}
+                        one{"{0} punktą"}
+                        other{"{0} punktų"}
+                    }
+                    dative{
+                        few{"{0} punktams"}
+                        many{"{0} punkto"}
+                        one{"{0} punktui"}
+                        other{"{0} punktų"}
+                    }
+                    genitive{
+                        few{"{0} punktų"}
+                        many{"{0} punkto"}
+                        one{"{0} punkto"}
+                        other{"{0} punktų"}
+                    }
+                    instrumental{
+                        few{"{0} punktais"}
+                        many{"{0} punkto"}
+                        one{"{0} punktu"}
+                        other{"{0} punktų"}
+                    }
+                    locative{
+                        few{"{0} punktuose"}
+                        many{"{0} punkto"}
+                        one{"{0} punkte"}
+                        other{"{0} punktų"}
+                    }
+                }
                 dnam{"punktai"}
                 few{"{0} punktai"}
-                many{"{0} punktų"}
+                gender{"masculine"}
+                many{"{0} punkto"}
                 one{"{0} punktas"}
-                other{"{0} punkto"}
+                other{"{0} punktų"}
             }
             solar-radius{
                 dnam{"saulės spinduliuotė"}
@@ -4126,8 +4306,41 @@ lt{
                 other{"{0} milibarų"}
             }
             millimeter-ofhg{
+                case{
+                    accusative{
+                        few{"{0} gysidabrio stulpelio milimetrus"}
+                        many{"{0} gysidabrio stulpelio milimetro"}
+                        one{"{0} gysidabrio stulpelio milimetrą"}
+                        other{"{0} gysidabrio stulpelio milimetrų"}
+                    }
+                    dative{
+                        few{"{0} gysidabrio stulpelio milimetrams"}
+                        many{"{0} gysidabrio stulpelio milimetro"}
+                        one{"{0} gysidabrio stulpelio milimetrui"}
+                        other{"{0} gysidabrio stulpelio milimetrų"}
+                    }
+                    genitive{
+                        few{"{0} gysidabrio stulpelio milimetrų"}
+                        many{"{0} gysidabrio stulpelio milimetro"}
+                        one{"{0} gysidabrio stulpelio milimetro"}
+                        other{"{0} gysidabrio stulpelio milimetrų"}
+                    }
+                    instrumental{
+                        few{"{0} gysidabrio stulpelio milimetrais"}
+                        many{"{0} gysidabrio stulpelio milimetro"}
+                        one{"{0} gysidabrio stulpelio milimetru"}
+                        other{"{0} gysidabrio stulpelio milimetrų"}
+                    }
+                    locative{
+                        few{"{0} gysidabrio stulpelio milimetruose"}
+                        many{"{0} gysidabrio stulpelio milimetro"}
+                        one{"{0} gysidabrio stulpelio milimetre"}
+                        other{"{0} gysidabrio stulpelio milimetrų"}
+                    }
+                }
                 dnam{"gysidabrio stulpelio milimetrai"}
                 few{"{0} gysidabrio stulpelio milimetrai"}
+                gender{"masculine"}
                 many{"{0} gysidabrio stulpelio milimetro"}
                 one{"{0} gysidabrio stulpelio milimetras"}
                 other{"{0} gysidabrio stulpelio milimetrų"}
@@ -4231,6 +4444,46 @@ lt{
                 many{"{0} mazgo"}
                 one{"{0} mazgas"}
                 other{"{0} mazgų"}
+            }
+            light-speed{
+                case{
+                    accusative{
+                        few{"{0} šviesos greičius"}
+                        many{"{0} šviesos greičio"}
+                        one{"{0} šviesos greitį"}
+                        other{"{0} šviesos greičių"}
+                    }
+                    dative{
+                        few{"{0} šviesos greičiams"}
+                        many{"{0} šviesos greičio"}
+                        one{"{0} šviesos greičiui"}
+                        other{"{0} šviesos greičių"}
+                    }
+                    genitive{
+                        few{"{0} šviesos greičių"}
+                        many{"{0} šviesos greičio"}
+                        one{"{0} šviesos greičio"}
+                        other{"{0} šviesos greičių"}
+                    }
+                    instrumental{
+                        few{"{0} šviesos greičiais"}
+                        many{"{0} šviesos greičio"}
+                        one{"{0} šviesos greičiu"}
+                        other{"{0} šviesos greičių"}
+                    }
+                    locative{
+                        few{"{0} šviesos greičiuose"}
+                        many{"{0} šviesos greičio"}
+                        one{"{0} šviesos greityje"}
+                        other{"{0} šviesos greičių"}
+                    }
+                }
+                dnam{"šviesos greitis"}
+                few{"{0} šviesos greičiai"}
+                gender{"masculine"}
+                many{"{0} šviesos greičio"}
+                one{"{0} šviesos greitis"}
+                other{"{0} šviesos greičių"}
             }
             meter-per-second{
                 case{
@@ -5044,6 +5297,13 @@ lt{
             percent{
                 dnam{"%"}
             }
+            portion-per-1e9{
+                dnam{"dalelytė/mln."}
+                few{"{0} dalelytės/mln."}
+                many{"{0} dalelytės/mln."}
+                one{"{0} dalelytė/mln."}
+                other{"{0} dalelyčių/mln."}
+            }
         }
         consumption{
             mile-per-gallon{
@@ -5067,6 +5327,14 @@ lt{
             month{
                 dnam{"mėnuo"}
             }
+            night{
+                dnam{"nakt."}
+                few{"{0} nakt."}
+                many{"{0} nakt."}
+                one{"{0} nakt."}
+                other{"{0} nakt."}
+                per{"{0}/nakt."}
+            }
             second{
                 few{"{0} s"}
                 many{"{0} s"}
@@ -5084,6 +5352,13 @@ lt{
                 many{"{0} km/h"}
                 one{"{0} km/h"}
                 other{"{0} km/h"}
+            }
+            light-speed{
+                dnam{"c"}
+                few{"{0} šv. greit."}
+                many{"{0} šv. greit."}
+                one{"{0} šv. greit."}
+                other{"{0} šv. greit."}
             }
             meter-per-second{
                 dnam{"m/s"}
@@ -5221,6 +5496,13 @@ lt{
                 one{"{0} ‰"}
                 other{"{0} ‰"}
             }
+            portion-per-1e9{
+                dnam{"dalelytė/mln."}
+                few{"{0} dalelytės/mln."}
+                many{"{0} dalelytės/mln."}
+                one{"{0} dalelytė/mln."}
+                other{"{0} dalelyčių/mln."}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -5329,6 +5611,14 @@ lt{
             }
             nanosecond{
                 dnam{"nanosek."}
+            }
+            night{
+                dnam{"nakt."}
+                few{"{0} nakt."}
+                many{"{0} nakt."}
+                one{"{0} nakt."}
+                other{"{0} nakt."}
+                per{"{0}/nakt."}
             }
             quarter{
                 dnam{"ketv."}
@@ -5568,6 +5858,13 @@ lt{
                 many{"{0} KN"}
                 one{"{0} KN"}
                 other{"{0} KN"}
+            }
+            light-speed{
+                dnam{"c"}
+                few{"{0} šv. greit."}
+                many{"{0} šv. greit."}
+                one{"{0} šv. greit."}
+                other{"{0} šv. greit."}
             }
             meter-per-second{
                 dnam{"m/sek."}

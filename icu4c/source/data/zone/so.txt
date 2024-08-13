@@ -1431,6 +1431,9 @@ so{
             lg{"Wakhtiga Petropavlovsk-Kamchatski"}
             ls{"Wakhtiga Caadiga ah ee Petropavlovsk-Kamchatski"}
         }
+        "meta:Kazakhstan"{
+            ls{"Wakhtiga Kazakhistan"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Waqtiga Bariga Kasakhistaan"}
         }

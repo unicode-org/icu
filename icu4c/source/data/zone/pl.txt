@@ -66,17 +66,11 @@ pl{
         "Africa:Porto-Novo"{
             ec{"Porto Novo"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
         "Africa:Tripoli"{
             ec{"Trypolis"}
         }
         "Africa:Windhoek"{
             ec{"Windhuk"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
         }
         "America:Bahia"{
             ec{"Salvador"}
@@ -102,9 +96,6 @@ pl{
         "America:Cuiaba"{
             ec{"Cuiabá"}
         }
-        "America:Curacao"{
-            ec{"Curaçao"}
-        }
         "America:Dominica"{
             ec{"Dominika"}
         }
@@ -125,9 +116,6 @@ pl{
         }
         "America:Jamaica"{
             ec{"Jamajka"}
-        }
-        "America:Kentucky:Monticello"{
-            ec{"Monticello"}
         }
         "America:Maceio"{
             ec{"Maceió"}
@@ -538,9 +526,6 @@ pl{
         "Indian:Mayotte"{
             ec{"Majotta"}
         }
-        "Indian:Reunion"{
-            ec{"Réunion"}
-        }
         "Pacific:Bougainville"{
             ec{"Wyspa Bougainville’a"}
         }
@@ -895,6 +880,9 @@ pl{
             ld{"czas Pietropawłowsk Kamczacki letni"}
             lg{"czas Pietropawłowsk Kamczacki"}
             ls{"czas standardowy Pietropawłowsk Kamczacki"}
+        }
+        "meta:Kazakhstan"{
+            ls{"czas Kazachstan"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"czas Kazachstan Wschodni"}

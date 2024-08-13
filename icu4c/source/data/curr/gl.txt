@@ -674,7 +674,7 @@ gl{
         }
         SLL{
             "SLL",
-            "leone de Serra Leoa (1964—2022)",
+            "leone de Serra Leoa (1964–2022)",
         }
         SOS{
             "SOS",
@@ -1453,8 +1453,8 @@ gl{
             other{"leones de Serra Leoa"}
         }
         SLL{
-            one{"leone de Serra Leoa (1964—2022)"}
-            other{"leones de Serra Leoa (1964—2022)"}
+            one{"leone de Serra Leoa (1964–2022)"}
+            other{"leones de Serra Leoa (1964–2022)"}
         }
         SOS{
             one{"xilin somalí"}
@@ -1604,9 +1604,5 @@ gl{
             one{"kwacha zambiano"}
             other{"kwachas zambianos"}
         }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

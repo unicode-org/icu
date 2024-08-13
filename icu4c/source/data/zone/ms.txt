@@ -406,6 +406,9 @@ ms{
             lg{"Waktu Petropavlovsk-Kamchatski"}
             ls{"Waktu Piawai Petropavlovsk-Kamchatski"}
         }
+        "meta:Kazakhstan"{
+            ls{"Waktu Kazakhstan"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Waktu Kazakhstan Timur"}
         }

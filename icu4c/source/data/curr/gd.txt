@@ -493,11 +493,11 @@ gd{
         }
         ILR{
             "ILR",
-            "Sheqel Iosraeleach (1980–1985)",
+            "Secel Iosraeleach (1980–1985)",
         }
         ILS{
             "₪",
-            "Sheqel ùr Iosraeleach",
+            "Secel ùr Iosraeleach",
         }
         INR{
             "₹",
@@ -1110,6 +1110,10 @@ gd{
         XCD{
             "EC$",
             "Dolar Caraibeach earach",
+        }
+        XCG{
+            "Cg.",
+            "Gulden Caraibeach",
         }
         XDR{
             "XDR",
@@ -1964,16 +1968,16 @@ gd{
             two{"phunnd Iosraeleach"}
         }
         ILR{
-            few{"sheqel Iosraeleach (1980–1985)"}
-            one{"sheqel Iosraeleach (1980–1985)"}
-            other{"sheqel Iosraeleach (1980–1985)"}
-            two{"sheqel Iosraeleach (1980–1985)"}
+            few{"secelean Iosraeleach (1980–1985)"}
+            one{"shecel Iosraeleach (1980–1985)"}
+            other{"secel Iosraeleach (1980–1985)"}
+            two{"shecel Iosraeleach (1980–1985)"}
         }
         ILS{
-            few{"sheqel ùr Iosraeleach"}
-            one{"sheqel ùr Iosraeleach"}
-            other{"sheqel ùr Iosraeleach"}
-            two{"sheqel ùr Iosraeleach"}
+            few{"secelean ùra Iosraeleach"}
+            one{"shecel ùr Iosraeleach"}
+            other{"secel ùr Iosraeleach"}
+            two{"shecel ùr Iosraeleach"}
         }
         INR{
             few{"rupee Innseanach"}
@@ -2893,6 +2897,12 @@ gd{
             other{"dolar Caraibeach earach"}
             two{"dholar Caraibeach earach"}
         }
+        XCG{
+            few{"gulden Caraibeach"}
+            one{"ghulden Caraibeach"}
+            other{"gulden Caraibeach"}
+            two{"ghulden Caraibeach"}
+        }
         XDR{
             few{"còirichean tarraing sònraichte"}
             one{"chòir tarraing shònraichte"}
@@ -3061,11 +3071,5 @@ gd{
             other{"dolar Sìombabuthach (2008)"}
             two{"dholar Sìombabuthach (2008)"}
         }
-    }
-    CurrencyUnitPatterns{
-        few{"{0} {1}"}
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-        two{"{0} {1}"}
     }
 }

@@ -90,7 +90,7 @@ mn{
             1024p6{"эксби{0}"}
             1024p7{"зэби{0}"}
             1024p8{"яиобэ{0}"}
-            10p-1{"деси{0}"}
+            10p-1{"деци{0}"}
             10p-12{"пико{0}"}
             10p-15{"фемто{0}"}
             10p-18{"атто{0}"}
@@ -162,6 +162,11 @@ mn{
             permyriad{
                 one{"арван мянганы {0} хувь"}
                 other{"арван мянганы {0} хувь"}
+            }
+            portion-per-1e9{
+                dnam{"мкг/кг"}
+                one{"{0} мкг/кг"}
+                other{"{0} мкг/кг"}
             }
         }
         consumption{
@@ -259,6 +264,12 @@ mn{
                 dnam{"наносекунд"}
                 one{"{0} наносекунд"}
                 other{"{0} наносекунд"}
+            }
+            night{
+                dnam{"шөнө"}
+                one{"{0} шөнө"}
+                other{"{0} шөнө"}
+                per{"{0}/шөнөдөө"}
             }
             second{
                 dnam{"секунд"}
@@ -378,6 +389,11 @@ mn{
             }
         }
         graphics{
+            dot-per-inch{
+                dnam{"цэг/инч"}
+                one{"{0} цэг/инч"}
+                other{"{0} цэг/инч"}
+            }
             pixel-per-centimeter{
                 dnam{"пиксель/см"}
                 one{"{0} пиксель/см"}
@@ -391,9 +407,9 @@ mn{
         }
         length{
             astronomical-unit{
-                dnam{"сансрын нэгж"}
-                one{"{0} сансрын нэгж"}
-                other{"{0} сансрын нэгж"}
+                dnam{"одон орны нэгж"}
+                one{"{0} одон орны нэгж"}
+                other{"{0} одон орны нэгж"}
             }
             centimeter{
                 dnam{"сантиметр"}
@@ -643,6 +659,11 @@ mn{
             knot{
                 dnam{"зангилаа"}
             }
+            light-speed{
+                dnam{"гэрлийн хурд"}
+                one{"{0} гэрлийн хурд"}
+                other{"{0} гэрлийн хурд"}
+            }
             meter-per-second{
                 dnam{"секундэд ногдох метр"}
                 one{"секундэд {0} метр"}
@@ -877,6 +898,11 @@ mn{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                dnam{"мкг/кг"}
+                one{"{0} мкг/кг"}
+                other{"{0} мкг/кг"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -903,6 +929,12 @@ mn{
             month{
                 one{"{0}с"}
                 other{"{0}с"}
+            }
+            night{
+                dnam{"шөнө"}
+                one{"{0}шөнө"}
+                other{"{0}шөнө"}
+                per{"{0}/шөнө"}
             }
             week{
                 dnam{"д.х"}
@@ -934,9 +966,9 @@ mn{
         }
         length{
             astronomical-unit{
-                dnam{"au"}
-                one{"{0}au"}
-                other{"{0}au"}
+                dnam{"о.о.н"}
+                one{"{0}о.о.н"}
+                other{"{0}о.о.н"}
             }
             foot{
                 one{"{0}′"}
@@ -1018,6 +1050,11 @@ mn{
         speed{
             kilometer-per-hour{
                 dnam{"км/ц"}
+            }
+            light-speed{
+                dnam{"гэрлийн хурд"}
+                one{"{0} гэрлийн хурд"}
+                other{"{0} гэрлийн хурд"}
             }
             meter-per-second{
                 dnam{"м/с"}
@@ -1216,11 +1253,16 @@ mn{
             }
             permillion{
                 dnam{"хувь/сая"}
-                one{"{0}x10⁻⁶"}
+                one{"саяны {0} хувь"}
                 other{"{0}x10⁻⁶"}
             }
             permyriad{
                 dnam{"арван мянганы хувь"}
+            }
+            portion-per-1e9{
+                dnam{"мкг/кг"}
+                one{"{0} мкг/кг"}
+                other{"{0} мкг/кг"}
             }
         }
         consumption{
@@ -1358,6 +1400,12 @@ mn{
                 dnam{"наносек"}
                 one{"{0} нс"}
                 other{"{0} нс"}
+            }
+            night{
+                dnam{"шөнө"}
+                one{"{0} шөнө"}
+                other{"{0} шөнө"}
+                per{"{0}/шөнө"}
             }
             quarter{
                 dnam{"улирал"}
@@ -1497,12 +1545,17 @@ mn{
                 one{"{0} цэг/см"}
                 other{"{0} цэг/см"}
             }
+            dot-per-inch{
+                dnam{"цэг/инч"}
+                one{"{0} цэг/инч"}
+                other{"{0} цэг/инч"}
+            }
         }
         length{
             astronomical-unit{
-                dnam{"сн"}
-                one{"{0} сн"}
-                other{"{0} сн"}
+                dnam{"о.о.н"}
+                one{"{0} о.о.н"}
+                other{"{0} о.о.н"}
             }
             centimeter{
                 dnam{"см"}
@@ -1605,6 +1658,11 @@ mn{
             }
         }
         light{
+            lumen{
+                dnam{"люмен"}
+                one{"{0} люмен"}
+                other{"{0} люмен"}
+            }
             lux{
                 dnam{"люкс"}
                 one{"{0} люкс"}
@@ -1785,6 +1843,11 @@ mn{
                 dnam{"занг."}
                 one{"{0} занг."}
                 other{"{0} занг."}
+            }
+            light-speed{
+                dnam{"гэрлийн хурд"}
+                one{"{0} гэрлийн хурд"}
+                other{"{0} гэрлийн хурд"}
             }
             meter-per-second{
                 dnam{"метр/сек"}

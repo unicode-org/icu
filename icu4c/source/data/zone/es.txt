@@ -81,9 +81,6 @@ es{
         "America:Argentina:Tucuman"{
             ec{"Tucumán"}
         }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia"{
             ec{"Bahía"}
         }
@@ -891,6 +888,9 @@ es{
             ld{"hora de verano de Kamchatka"}
             lg{"hora de Kamchatka"}
             ls{"hora estándar de Kamchatka"}
+        }
+        "meta:Kazakhstan"{
+            ls{"hora de Kazajistán"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"hora de Kazajistán oriental"}

@@ -4,47 +4,92 @@
 ig{
     units{
         compound{
+            10p-1{"deci{0}"}
             10p-27{"ronto{0}"}
             10p-30{"kwekto{0}"}
+            10p-6{"obere{0}"}
+            10p12{"tera{0}"}
             10p27{"ronna{0}"}
             10p30{"kwetta{0}"}
+            10p6{"mega{0}"}
+            10p9{"giga{0}"}
+            per{"{0} per {1}"}
             power2{
                 other{
                     _{
-                        _{"{0} square"}
+                        _{"{0} sukwia"}
                     }
                 }
             }
             power3{
                 other{
                     _{
-                        _{"{0} cubic"}
+                        _{"{0} kubik"}
                     }
                 }
             }
         }
+        concentr{
+            portion-per-1e9{
+                dnam{"akụkụ kwa ijeri"}
+                other{"{0} akụkụ kwa ijeri"}
+            }
+        }
+        coordinate{
+            dnam{"cardinal direction"}
+            north{"{0} north"}
+            south{"{0} south"}
+            west{"{0} west"}
+        }
         duration{
             century{
                 dnam{"Ọtụtụ nari afọ"}
+                other{"{0} Ọtụtụ nari afọ"}
             }
             day{
                 dnam{"Ọtụtụ Ubochi"}
+                other{"{0} Ọtụtụ Ubochi"}
             }
             decade{
                 dnam{"Ọtụtụ afọ iri"}
+                other{"{0} Ọtụtụ afọ iri"}
+            }
+            hour{
+                dnam{"Ọtụtụ awa"}
+                other{"{0} Ọtụtụ awa"}
+            }
+            minute{
+                dnam{"nkeji"}
+                other{"{0} nkeji"}
+                per{"{0} kwa nkeji"}
             }
             month{
                 dnam{"Ọtụtụ Ọnwa"}
+                other{"{0} Ọnwa"}
+                per{"{0} kwa Ọnwa"}
+            }
+            night{
+                dnam{"Ọtụtụ abali"}
+                other{"{0} Ọtụtụ abali"}
+                per{"{0} kwa abali"}
             }
             quarter{
                 dnam{"Nkeji Nkeano"}
                 other{"{0}/q"}
             }
+            second{
+                dnam{"sekọnd"}
+                other{"{0} sekọnd"}
+                per{"{0} kwa sekọnd"}
+            }
             week{
                 dnam{"Ọtụtụ Izu"}
+                other{"{0} Ọtụtụ Izu"}
+                per{"{0} kwa Izu"}
             }
             year{
                 dnam{"Ọtụtụ Afọ"}
+                other{"{0} Ọtụtụ Afọ"}
             }
         }
         energy{
@@ -62,6 +107,20 @@ ig{
                 dnam{"ntụpọ kwa inch"}
                 other{"{0} ntụpọ kwa inch"}
             }
+            megapixel{
+                dnam{"megapixels"}
+            }
+            pixel{
+                other{"{0} pixels"}
+            }
+            pixel-per-centimeter{
+                dnam{"pixels per centimeter"}
+                other{"{0} pixels per centimeter"}
+            }
+            pixel-per-inch{
+                dnam{"pixels per inch"}
+                other{"{0} pixels per inch"}
+            }
         }
         length{
             earth-radius{
@@ -72,6 +131,10 @@ ig{
             beaufort{
                 dnam{"Beaufort"}
                 other{"Beaufort {0}"}
+            }
+            light-speed{
+                dnam{"ìhè"}
+                other{"{0} ìhè"}
             }
         }
         volume{
@@ -94,14 +157,30 @@ ig{
             permillion{
                 other{"{0}ppm"}
             }
+            portion-per-1e9{
+                dnam{"akụkụ/ijeri"}
+            }
         }
         duration{
+            day{
+                dnam{"Ubochi"}
+                other{"{0} Ọtụtụ Ubochi"}
+            }
+            hour{
+                dnam{"awa"}
+                other{"{0} awa"}
+            }
             microsecond{
                 dnam{"μsec"}
                 other{"{0}μs"}
             }
             nanosecond{
                 other{"{0}ns"}
+            }
+            night{
+                dnam{"Ọtụtụ abali"}
+                other{"{0}Ọtụtụ abali"}
+                per{"{0}/abali"}
             }
             quarter{
                 other{"{0}q"}
@@ -126,10 +205,12 @@ ig{
                 other{"{0}ntụpọ"}
             }
             dot-per-centimeter{
-                other{"{0}nksm"}
+                dnam{"dpcm"}
+                other{"{0}dpcm"}
             }
             dot-per-inch{
-                other{"{0}nki"}
+                dnam{"dpi"}
+                other{"{0}dpi"}
             }
             em{
                 other{"{0}em"}
@@ -140,18 +221,14 @@ ig{
             pixel{
                 other{"{0}px"}
             }
-            pixel-per-centimeter{
-                dnam{"pksm"}
-                other{"{0}pksm"}
-            }
-            pixel-per-inch{
-                dnam{"pki"}
-                other{"{0}pki"}
-            }
         }
         speed{
             beaufort{
                 other{"B{0}"}
+            }
+            light-speed{
+                dnam{"ìhè"}
+                other{"{0}ìhè"}
             }
         }
     }
@@ -161,10 +238,32 @@ ig{
                 dnam{"ihe"}
                 other{"{0} ihe"}
             }
+            portion-per-1e9{
+                dnam{"akụkụ/ijeri"}
+            }
         }
         duration{
+            day{
+                dnam{"Ọtụtụ Ubochi"}
+                other{"{0} Ọtụtụ Ubochi"}
+            }
+            hour{
+                dnam{"Ọtụtụ awa"}
+                other{"{0} awa"}
+            }
+            month{
+                other{"{0} mths"}
+            }
+            night{
+                dnam{"Ọtụtụ abali"}
+                other{"{0} Ọtụtụ abali"}
+                per{"{0}/abali"}
+            }
             quarter{
                 other{"{0} qtrs"}
+            }
+            week{
+                other{"{0} wks"}
             }
         }
         energy{
@@ -179,15 +278,24 @@ ig{
                 other{"{0} ntụpọ"}
             }
             dot-per-centimeter{
-                dnam{"nksm"}
-                other{"{0} nksm"}
+                dnam{"dpcm"}
+                other{"{0} dpcm"}
             }
             dot-per-inch{
-                dnam{"nki"}
+                dnam{"dpi"}
                 other{"{0} nki"}
             }
         }
+        speed{
+            light-speed{
+                dnam{"ìhè"}
+                other{"{0} ìhè"}
+            }
+        }
         volume{
+            dessert-spoon{
+                dnam{"ngaji mégharia onu"}
+            }
             drop{
                 dnam{"dobé"}
             }
