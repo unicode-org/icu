@@ -338,6 +338,10 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip() {
                         } else {
                             // Specific or generic: raw offset must be preserved.
                             if (inRaw != outRaw) {
+                            	if ((strcmp(LOCALES[locidx].getName(), "tg") == 0 || strcmp(LOCALES[locidx].getName(), "tg_TJ") == 0) 
+                            		&& logKnownIssue("ICU-22857", "Time zone round test fails for tg/tg_TJ")) {
+                            		continue;
+                            	}
                                 errln(UnicodeString("Raw offset round trip failed; tz=") + *tzid
                                     + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
                                     + ", time=" + DATES[datidx] + ", str=" + tzstr

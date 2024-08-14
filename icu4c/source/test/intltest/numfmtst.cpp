@@ -2110,7 +2110,7 @@ void NumberFormatTest::TestCurrencyNames() {
 
     ucurr_getName(CAD, "to", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
-    assertTrue("ucurr_getName (ti default)",
+    assertTrue("ucurr_getName (to default)",
                     U_USING_DEFAULT_WARNING == ec, true);
 
     // Test that a default warning is being returned when falling back to root. JB 4536.

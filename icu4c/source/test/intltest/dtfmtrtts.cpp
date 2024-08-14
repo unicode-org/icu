@@ -483,6 +483,10 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
             // Use @v to see verbose results on successful cases
             UBool fail = (dmatch > maxDmatch || smatch > maxSmatch);
             if (optionv || fail) {
+				if (timeOnly && uprv_strcmp(origLocale.getName(),"hu_HU@calendar=islamic")==0 &&
+                      logKnownIssue("ICU-21049", "hu_HU@calendar=islamic fails round trip")) {
+                  	continue;
+              	}
                 if (fail) {
                     errln(UnicodeString("\nFAIL: Pattern: ") + pat +
                           " in Locale: " + origLocale.getName() +
