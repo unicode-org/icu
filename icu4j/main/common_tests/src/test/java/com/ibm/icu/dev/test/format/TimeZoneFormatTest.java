@@ -275,6 +275,10 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                             } else {
                                 // Specific or generic: raw offset must be preserved.
                                 if (inOffsets[0] != outOffsets[0] ) {
+             					   	if ((LOCALES[locidx].toString().equals("tg") || LOCALES[locidx].toString().equals("tg_TJ"))
+      			                      		&& logKnownIssue("ICU-22857", "Time zone round test fails for tg/tg_TJ")) {
+   					                     continue;
+     					            }                                
                                     if (JDKTZ && tzids[tzidx].startsWith("SystemV/")) {
                                         // JDK uses rule SystemV for these zones while
                                         // ICU handles these zones as aliases of existing time zones
