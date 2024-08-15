@@ -839,8 +839,8 @@ static void TestISO8601(void) {
     } TestCase;
     
     const TestCase testCases[] = {
-        { "en_GB@calendar=iso8601;rg=uszzzz", u"EEEEyMMMMdjmm", u"EEEE d MMMM y 'at' h:mm a" },
-        { "en_GB@calendar=iso8601;rg=uszzzz", u"EEEEyMMMMdHmm", u"EEEE d MMMM y 'at' HH:mm" },
+        { "en_GB@calendar=iso8601;rg=uszzzz", u"EEEEyMMMMdjmm", u"EEEE, d MMMM y 'at' h:mm a" },
+        { "en_GB@calendar=iso8601;rg=uszzzz", u"EEEEyMMMMdHmm", u"EEEE, d MMMM y 'at' HH:mm" },
         { "en_GB@calendar=iso8601;rg=uszzzz", u"Edjmm",         u"EEE d, h:mm a" },
         { "en_GB@calendar=iso8601;rg=uszzzz", u"EdHmm",         u"EEE d, HH:mm" },
 
