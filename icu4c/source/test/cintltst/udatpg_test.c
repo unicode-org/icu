@@ -862,10 +862,10 @@ static void TestISO8601(void) {
         if (assertSuccess("Error creating dtpg", &err)) {
             UChar actualPattern[200];
             
-            udatpg_getBestPatternWithOptions(dtpg, testCases[i].skeleton, -1, 0, actualPattern, 200, &err);
+            udatpg_getBestPatternWithOptions(dtpg, testCases[i].skeleton, -1, 0, actualPattern, UPRV_LENGTHOF(actualPattern), &err);
             if (assertSuccess("Error getting best pattern", &err)) {
                 char errorMessage[200];
-                snprintf(errorMessage, 200, "Wrong pattern for %s and %s", testCases[i].locale, austrdup(testCases[i].skeleton));
+                snprintf(errorMessage, UPRV_LENGTHOF(errorMessage), "Wrong pattern for %s and %s", testCases[i].locale, austrdup(testCases[i].skeleton));
                 assertUEquals(errorMessage, testCases[i].expectedPattern, actualPattern);
             }
         }
