@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723611439850,
+  "lastUpdate": 1723682564181,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -69807,6 +69807,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1524.7274,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dragan@unicode.org",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "committer": {
+            "email": "131725218+DraganBesevic@users.noreply.github.com",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "distinct": true,
+          "id": "045350e7c1e21861d9a664a586a33ad70a7ad387",
+          "message": "ICU-22723 Integrate CLDR 46 release alpha0, part 4, fixes for exausting tests",
+          "timestamp": "2024-08-14T17:09:35-07:00",
+          "tree_id": "0086847282e134f70965b7394e64b27fbf3e0446",
+          "url": "https://github.com/unicode-org/icu/commit/045350e7c1e21861d9a664a586a33ad70a7ad387"
+        },
+        "date": 1723682420737,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77835.1392,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 166642.8639,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.539,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.432,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.3037,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8909.9944,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 32938.1343,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1521.676,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
