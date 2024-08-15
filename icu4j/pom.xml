@@ -273,13 +273,19 @@
                 <goal>add-resource</goal>
               </goals>
               <configuration>
-                <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
                 <resources>
                   <resource>
-                    <directory>${rootlocation}/..</directory>
+                    <directory>${rootlocation}/../testdata/</directory>
                     <includes>
-                      <include>LICENSE</include>
-                      <include>testdata/</include>
+                      <!-- Do not "repair" this to use ${rootlocation}/../ and LICENSE.
+                        This is a workaround for Eclipse, which fails to import the projects because
+                        ${rootlocation}/../ overlaps with the location of the sub-projects (for example main/core).
+                        True, because {rootlocation} is resolved to $icu_root/icu4j.
+                        So ${rootlocation}/../ points to $icu_root, which overlaps with $icu_root/icu4j/main/core.
+                        But $icu_root/testdata/ does not overlap with $icu_root/icu4j/ so all is good.
+                        We then go up one step for the LICENSE, because Eclipse does not validate for files overlapping, only folders.
+                      -->
+                      <include>../LICENSE</include>
                     </includes>
                   </resource>
                 </resources>
