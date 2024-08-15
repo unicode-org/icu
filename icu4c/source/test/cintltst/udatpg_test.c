@@ -30,6 +30,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include <stdbool.h>
+#include <stdio.h>  // for sprintf()
 
 #include "unicode/udat.h"
 #include "unicode/udatpg.h"
@@ -51,6 +52,7 @@ static void TestGetDefaultHourCycleOnEmptyInstance(void);
 static void TestEras(void);
 static void TestDateTimePatterns(void);
 static void TestRegionOverride(void);
+static void TestISO8601(void);
 
 void addDateTimePatternGeneratorTest(TestNode** root) {
     TESTCASE(TestOpenClose);
@@ -63,6 +65,7 @@ void addDateTimePatternGeneratorTest(TestNode** root) {
     TESTCASE(TestEras);
     TESTCASE(TestDateTimePatterns);
     TESTCASE(TestRegionOverride);
+    TESTCASE(TestISO8601);
 }
 
 /*
@@ -821,6 +824,49 @@ static void TestRegionOverride(void) {
             if (assertSuccess("Error using dtpg", &err)) {
                 assertIntEquals("Wrong hour cycle", testCases[i].expectedHourCycle, actualHourCycle);
                 assertUEquals("Wrong pattern", testCases[i].expectedPattern, actualPattern);
+            }
+        }
+        udatpg_close(dtpg);
+    }
+}
+
+// Test for ICU-22668
+static void TestISO8601(void) {
+    typedef struct TestCase {
+        const char* locale;
+        const UChar* skeleton;
+        const UChar* expectedPattern;
+    } TestCase;
+    
+    const TestCase testCases[] = {
+        { "en_GB@calendar=iso8601;rg=uszzzz", u"EEEEyMMMMdjmm", u"EEEE d MMMM y 'at' h:mm a" },
+        { "en_GB@calendar=iso8601;rg=uszzzz", u"EEEEyMMMMdHmm", u"EEEE d MMMM y 'at' HH:mm" },
+        { "en_GB@calendar=iso8601;rg=uszzzz", u"Edjmm",         u"EEE d, h:mm a" },
+        { "en_GB@calendar=iso8601;rg=uszzzz", u"EdHmm",         u"EEE d, HH:mm" },
+
+        { "en_US@calendar=iso8601",           u"EEEEyMMMMdjmm", u"EEEE, MMMM d, y 'at' h:mm a" },
+        { "en_US@calendar=iso8601",           u"EEEEyMMMMdHmm", u"EEEE, MMMM d, y 'at' HH:mm" },
+        { "en_US@calendar=iso8601",           u"Edjmm",         u"d EEE, h:mm a" },
+        { "en_US@calendar=iso8601",           u"EdHmm",         u"d EEE, HH:mm" },
+
+        { "en_US",                            u"EEEEyMMMMdjmm", u"EEEE, MMMM d, y 'at' h:mm a" },
+        { "en_US",                            u"EEEEyMMMMdHmm", u"EEEE, MMMM d, y 'at' HH:mm" },
+        { "en_US",                            u"Edjmm",         u"d EEE, h:mm a" },
+        { "en_US",                            u"EdHmm",         u"d EEE, HH:mm" },
+    };
+    
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
+        UErrorCode err = U_ZERO_ERROR;
+        UDateTimePatternGenerator* dtpg = udatpg_open(testCases[i].locale, &err);
+        
+        if (assertSuccess("Error creating dtpg", &err)) {
+            UChar actualPattern[200];
+            
+            udatpg_getBestPatternWithOptions(dtpg, testCases[i].skeleton, -1, 0, actualPattern, 200, &err);
+            if (assertSuccess("Error getting best pattern", &err)) {
+                char errorMessage[200];
+                snprintf(errorMessage, 200, "Wrong pattern for %s and %s", testCases[i].locale, austrdup(testCases[i].skeleton));
+                assertUEquals(errorMessage, testCases[i].expectedPattern, actualPattern);
             }
         }
         udatpg_close(dtpg);

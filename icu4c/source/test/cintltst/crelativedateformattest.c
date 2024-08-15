@@ -343,7 +343,9 @@ static const RelDateTimeFormatTestItem fmtTestItems[] = {
       ak_decDef_long_stdAlon_sec,   ak_attrDef_long_stdAlon_sec},
     { "en_IN", -1, UDAT_STYLE_SHORT, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_WEDNESDAY,
       enIN_decDef_short_midSent_weds, enIN_attrDef_short_midSent_weds},
-    { NULL,  0, (UDateRelativeDateTimeFormatterStyle)0, (UDisplayContext)0, (URelativeDateTimeUnit)0, NULL, NULL } /* terminator */
+    // test for ICU-22668
+    { "en@calendar=iso8601", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_SECOND,
+      en_decDef_long_midSent_sec,   en_attrDef_long_midSent_sec },    { NULL,  0, (UDateRelativeDateTimeFormatterStyle)0, (UDisplayContext)0, (URelativeDateTimeUnit)0, NULL, NULL } /* terminator */
 };
 
 enum { kUBufMax = 64, kBBufMax = 256 };

@@ -1,4 +1,4 @@
-﻿// © 2016 and later: Unicode, Inc. and others.
+// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 root{
@@ -2663,6 +2663,20 @@ root{
             intervalFormats:alias{"/LOCALE/calendar/islamic/intervalFormats"}
             monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
             quarters:alias{"/LOCALE/calendar/islamic/quarters"}
+        }
+        iso8601{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras:alias{"/LOCALE/calendar/gregorian/eras"}
+            intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
+            monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         japanese{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
