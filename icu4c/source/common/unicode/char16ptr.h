@@ -309,13 +309,19 @@ inline OldUChar *toOldUCharPtr(char16_t *p) {
 
 #ifndef U_FORCE_HIDE_INTERNAL_API
 /**
- * Is T convertible to a std::u16string_view or to a 16-bit std::wstring_view?
+ * Is T convertible to a std::u16string_view or some other 16-bit string view?
  * @internal
  */
 template<typename T>
 constexpr bool ConvertibleToU16StringView =
-    std::is_convertible_v<T, std::u16string_view> ||
-    (U_SIZEOF_WCHAR_T==2 && std::is_convertible_v<T, std::wstring_view>);
+    std::is_convertible_v<T, std::u16string_view>
+#if !U_CHAR16_IS_TYPEDEF
+    || std::is_convertible_v<T, std::basic_string_view<uint16_t>>
+#endif
+#if U_SIZEOF_WCHAR_T==2
+    || std::is_convertible_v<T, std::wstring_view>
+#endif
+    ;
 
 namespace internal {
 /**
@@ -323,6 +329,17 @@ namespace internal {
  * @internal
  */
 inline std::u16string_view toU16StringView(std::u16string_view sv) { return sv; }
+
+#if !U_CHAR16_IS_TYPEDEF
+/**
+ * Basically undefined behavior but sometimes necessary conversion
+ * from std::basic_string_view<uint16_t> to std::u16string_view.
+ * @internal
+ */
+inline std::u16string_view toU16StringView(std::basic_string_view<uint16_t> sv) {
+    return { ConstChar16Ptr(sv.data()), sv.length() };
+}
+#endif
 
 #if U_SIZEOF_WCHAR_T==2
 /**
@@ -334,6 +351,29 @@ inline std::u16string_view toU16StringView(std::wstring_view sv) {
     return { ConstChar16Ptr(sv.data()), sv.length() };
 }
 #endif
+
+/**
+ * Pass-through overload.
+ * @internal
+ */
+template <typename T,
+          typename = typename std::enable_if_t<!std::is_pointer_v<std::remove_reference_t<T>>>>
+inline std::u16string_view toU16StringViewNullable(const T& text) {
+    return toU16StringView(text);
+}
+
+/**
+ * In case of nullptr, return an empty view.
+ * @internal
+ */
+template <typename T,
+          typename = typename std::enable_if_t<std::is_pointer_v<std::remove_reference_t<T>>>,
+          typename = void>
+inline std::u16string_view toU16StringViewNullable(const T& text) {
+    if (text == nullptr) return {};  // For backward compatibility.
+    return toU16StringView(text);
+}
+
 }  // internal
 #endif  // U_FORCE_HIDE_INTERNAL_API
 

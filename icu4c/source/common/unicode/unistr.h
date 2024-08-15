@@ -105,13 +105,11 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * this macro was provided for portability and efficiency when
  * initializing UnicodeStrings from literals.
  *
- * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+ * Since C++17 and ICU 76, you can use UTF-16 string literals with compile-time
  * length determination:
  * \code
- * #include &lt;string_view&gt;
- * using namespace std::string_view_literals;
- * UnicodeString str(u"literal"sv);
- * if (str == u"other literal"sv) { ... }
+ * UnicodeString str(u"literal");
+ * if (str == u"other literal") { ... }
  * \endcode
  *
  * The string parameter must be a C string literal.
@@ -335,13 +333,11 @@ public:
    * which is, or which is implicitly convertible to,
    * a std::u16string_view or (if U_SIZEOF_WCHAR_T==2) std::wstring_view.
    *
-   * For performance, you can use std::u16string_view literals with compile-time
+   * For performance, you can use UTF-16 string literals with compile-time
    * length determination:
    * \code
-   * #include &lt;string_view&gt;
-   * using namespace std::string_view_literals;
    * UnicodeString str = ...;
-   * if (str == u"literal"sv) { ... }
+   * if (str == u"literal") { ... }
    * \endcode
    * @param text The string view to compare to this string.
    * @return true if `text` contains the same characters as this one, false otherwise.
@@ -3080,6 +3076,7 @@ public:
    */
   UNISTR_FROM_CHAR_EXPLICIT UnicodeString(UChar32 ch);
 
+#ifdef U_HIDE_DRAFT_API
   /**
    * char16_t* constructor.
    *
@@ -3088,20 +3085,19 @@ public:
    * on the compiler command line or similar.
    *
    * Note, for string literals:
-   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * Since C++17 and ICU 76, you can use UTF-16 string literals with compile-time
    * length determination:
    * \code
-   * #include &lt;string_view&gt;
-   * using namespace std::string_view_literals;
-   * UnicodeString str(u"literal"sv);
-   * if (str == u"other literal"sv) { ... }
+   * UnicodeString str(u"literal");
+   * if (str == u"other literal") { ... }
    * \endcode
    *
    * @param text The characters to place in the UnicodeString.  `text`
    * must be NUL (U+0000) terminated.
    * @stable ICU 2.0
    */
-  UNISTR_FROM_STRING_EXPLICIT UnicodeString(const char16_t *text);
+  UNISTR_FROM_STRING_EXPLICIT UnicodeString(const char16_t *text) :
+      UnicodeString(text, -1) {}
 
 #if !U_CHAR16_IS_TYPEDEF
   /**
@@ -3113,20 +3109,18 @@ public:
    * on the compiler command line or similar.
    *
    * Note, for string literals:
-   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * Since C++17 and ICU 76, you can use UTF-16 string literals with compile-time
    * length determination:
    * \code
-   * #include &lt;string_view&gt;
-   * using namespace std::string_view_literals;
-   * UnicodeString str(u"literal"sv);
-   * if (str == u"other literal"sv) { ... }
+   * UnicodeString str(u"literal");
+   * if (str == u"other literal") { ... }
    * \endcode
    *
    * @param text NUL-terminated UTF-16 string
    * @stable ICU 59
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const uint16_t *text) :
-      UnicodeString(ConstChar16Ptr(text)) {}
+      UnicodeString(ConstChar16Ptr(text), -1) {}
 #endif
 
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
@@ -3140,21 +3134,20 @@ public:
    * on the compiler command line or similar.
    *
    * Note, for string literals:
-   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * Since C++17 and ICU 76, you can use UTF-16 string literals with compile-time
    * length determination:
    * \code
-   * #include &lt;string_view&gt;
-   * using namespace std::string_view_literals;
-   * UnicodeString str(u"literal"sv);
-   * if (str == u"other literal"sv) { ... }
+   * UnicodeString str(u"literal");
+   * if (str == u"other literal") { ... }
    * \endcode
    *
    * @param text NUL-terminated UTF-16 string
    * @stable ICU 59
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const wchar_t *text) :
-      UnicodeString(ConstChar16Ptr(text)) {}
+      UnicodeString(ConstChar16Ptr(text), -1) {}
 #endif
+#endif  // U_HIDE_DRAFT_API
 
   /**
    * nullptr_t constructor.
@@ -3172,13 +3165,11 @@ public:
    * char16_t* constructor.
    *
    * Note, for string literals:
-   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * Since C++17 and ICU 76, you can use UTF-16 string literals with compile-time
    * length determination:
    * \code
-   * #include &lt;string_view&gt;
-   * using namespace std::string_view_literals;
-   * UnicodeString str(u"literal"sv);
-   * if (str == u"other literal"sv) { ... }
+   * UnicodeString str(u"literal");
+   * if (str == u"other literal") { ... }
    * \endcode
    *
    * @param text The characters to place in the UnicodeString.
@@ -3195,13 +3186,11 @@ public:
    * Delegates to UnicodeString(const char16_t *, int32_t).
    *
    * Note, for string literals:
-   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * Since C++17 and ICU 76, you can use UTF-16 string literals with compile-time
    * length determination:
    * \code
-   * #include &lt;string_view&gt;
-   * using namespace std::string_view_literals;
-   * UnicodeString str(u"literal"sv);
-   * if (str == u"other literal"sv) { ... }
+   * UnicodeString str(u"literal");
+   * if (str == u"other literal") { ... }
    * \endcode
    *
    * @param text UTF-16 string
@@ -3219,13 +3208,11 @@ public:
    * Delegates to UnicodeString(const char16_t *, int32_t).
    *
    * Note, for string literals:
-   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * Since C++17 and ICU 76, you can use UTF-16 string literals with compile-time
    * length determination:
    * \code
-   * #include &lt;string_view&gt;
-   * using namespace std::string_view_literals;
-   * UnicodeString str(u"literal"sv);
-   * if (str == u"other literal"sv) { ... }
+   * UnicodeString str(u"literal");
+   * if (str == u"other literal") { ... }
    * \endcode
    *
    * @param text UTF-16 string
@@ -3259,9 +3246,9 @@ public:
    * @draft ICU 76
    */
   template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
-  explicit inline UnicodeString(const S &text) {
+  UNISTR_FROM_STRING_EXPLICIT UnicodeString(const S &text) {
     fUnion.fFields.fLengthAndFlags = kShortString;
-    doAppend(internal::toU16StringView(text));
+    doAppend(internal::toU16StringViewNullable(text));
   }
 #endif  // U_HIDE_DRAFT_API
 
@@ -3280,13 +3267,11 @@ public:
    * so that both strings then alias the same readonly-text.
    *
    * Note, for string literals:
-   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * Since C++17 and ICU 76, you can use UTF-16 string literals with compile-time
    * length determination:
    * \code
-   * #include &lt;string_view&gt;
-   * using namespace std::string_view_literals;
-   * UnicodeString alias = UnicodeString::readOnlyAlias(u"literal"sv);
-   * if (str == u"other literal"sv) { ... }
+   * UnicodeString alias = UnicodeString::readOnlyAlias(u"literal");
+   * if (str == u"other literal") { ... }
    * \endcode
    *
    * @param isTerminated specifies if `text` is `NUL`-terminated.
@@ -3369,13 +3354,11 @@ public:
    * the constructor that takes a US_INV (for its enum EInvariant).
    *
    * Note, for string literals:
-   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * Since C++17 and ICU 76, you can use UTF-16 string literals with compile-time
    * length determination:
    * \code
-   * #include &lt;string_view&gt;
-   * using namespace std::string_view_literals;
-   * UnicodeString str(u"literal"sv);
-   * if (str == u"other literal"sv) { ... }
+   * UnicodeString str(u"literal");
+   * if (str == u"other literal") { ... }
    * \endcode
    *
    * It is recommended to mark this constructor "explicit" by
@@ -3485,13 +3468,11 @@ public:
    * \endcode
    *
    * Note, for string literals:
-   * Since C++17 and ICU 76, you can use std::u16string_view literals with compile-time
+   * Since C++17 and ICU 76, you can use UTF-16 string literals with compile-time
    * length determination:
    * \code
-   * #include &lt;string_view&gt;
-   * using namespace std::string_view_literals;
-   * UnicodeString str(u"literal"sv);
-   * if (str == u"other literal"sv) { ... }
+   * UnicodeString str(u"literal");
+   * if (str == u"other literal") { ... }
    * \endcode
    *
    * @param src String using only invariant characters.

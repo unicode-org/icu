@@ -230,11 +230,6 @@ UnicodeString::UnicodeString(UChar32 ch) {
   }
 }
 
-UnicodeString::UnicodeString(const char16_t *text) {
-  fUnion.fFields.fLengthAndFlags = kShortString;
-  doAppend(text, 0, -1);
-}
-
 UnicodeString::UnicodeString(const char16_t *text,
                              int32_t textLength) {
   fUnion.fFields.fLengthAndFlags = kShortString;
