@@ -78,8 +78,11 @@ static UOption options[]={
     UOPTION_DEF("fast", '\1', UOPT_NO_ARG)
 };
 
-extern "C" int
+U_NAMESPACE_END
+
+int
 main(int argc, char* argv[]) {
+    U_NAMESPACE_USE
     U_MAIN_INIT_ARGS(argc, argv);
 
     /* preset then read command line options */
@@ -227,6 +230,8 @@ main(int argc, char* argv[]) {
 
 #endif
 }
+
+U_NAMESPACE_BEGIN
 
 #if !UCONFIG_NO_NORMALIZATION
 
