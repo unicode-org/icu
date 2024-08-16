@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723760245840,
+  "lastUpdate": 1723798628350,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -69963,6 +69963,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1526.7695,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "esther.wang@garmin.com",
+            "name": "Esther Wang",
+            "username": "EstherWx"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "1c312f7caa8cb7847059e6d79715aec3f2e333f8",
+          "message": "ICU-22861 std::max deduced conflicting types in unifiedcache.cpp",
+          "timestamp": "2024-08-16T10:33:38+02:00",
+          "tree_id": "ed8ddafa1874c2445272bdff976bcaca4a57480b",
+          "url": "https://github.com/unicode-org/icu/commit/1c312f7caa8cb7847059e6d79715aec3f2e333f8"
+        },
+        "date": 1723798483130,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77845.6522,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 166703.4865,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.539,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.3876,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.3048,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8967.6051,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 33097.7691,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1548.6813,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
