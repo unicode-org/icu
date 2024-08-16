@@ -803,38 +803,58 @@ DateTimePatternGenerator::staticGetBaseSkeleton(
 
 void
 DateTimePatternGenerator::addICUPatterns(const Locale& locale, UErrorCode& status) {
-    if (U_FAILURE(status)) { return; }
-    UnicodeString dfPattern;
-    UnicodeString conflictingString;
-    DateFormat* df;
+    if (U_FAILURE(status)) {
+        return;
+    }
+    
+    LocalUResourceBundlePointer rb(ures_open(nullptr, locale.getBaseName(), &status));
+    CharString calendarTypeToUse; // to be filled in with the type to use, if all goes well
+    getCalendarTypeToUse(locale, calendarTypeToUse, status);
 
-    // Load with ICU patterns
-    for (int32_t i=DateFormat::kFull; i<=DateFormat::kShort; i++) {
-        DateFormat::EStyle style = static_cast<DateFormat::EStyle>(i);
-        df = DateFormat::createDateInstance(style, locale);
-        SimpleDateFormat* sdf;
-        if (df != nullptr && (sdf = dynamic_cast<SimpleDateFormat*>(df)) != nullptr) {
-            sdf->toPattern(dfPattern);
-            addPattern(dfPattern, false, conflictingString, status);
+    // HACK to get around the fact that the old SimpleDateFormat code (actually, Calendar::getCalendarTypeForLocale() )
+    // returns "gregorian" for ja_JP_TRADITIONAL instead of "japanese"
+    if (uprv_strcmp(locale.getBaseName(), "ja_JP_TRADITIONAL") == 0) {
+        calendarTypeToUse.clear().append("gregorian", status);
+    }
+    
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    // TODO: See ICU-22867
+    CharString patternResourcePath;
+    patternResourcePath.append(DT_DateTimeCalendarTag, status)
+        .append('/', status)
+        .append(calendarTypeToUse, status)
+        .append('/', status)
+        .append(DT_DateTimePatternsTag, status);
+
+    LocalUResourceBundlePointer dateTimePatterns(ures_getByKeyWithFallback(rb.getAlias(), patternResourcePath.data(),
+                                                                           nullptr, &status));
+    if (ures_getType(dateTimePatterns.getAlias()) != URES_ARRAY || ures_getSize(dateTimePatterns.getAlias()) < 8) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+
+    for (int32_t i = 0; U_SUCCESS(status) && i < DateFormat::kDateTime; i++) {
+        LocalUResourceBundlePointer patternRes(ures_getByIndex(dateTimePatterns.getAlias(), i, nullptr, &status));
+        UnicodeString pattern;
+        switch (ures_getType(patternRes.getAlias())) {
+            case URES_STRING:
+                pattern = ures_getUnicodeString(patternRes.getAlias(), &status);
+                break;
+            case URES_ARRAY:
+                pattern = ures_getUnicodeStringByIndex(patternRes.getAlias(), 0, &status);
+                break;
+            default:
+                status = U_INVALID_FORMAT_ERROR;
+                return;
         }
-        // TODO Maybe we should return an error when the date format isn't simple.
-        delete df;
-        if (U_FAILURE(status)) { return; }
-
-        df = DateFormat::createTimeInstance(style, locale);
-        if (df != nullptr && (sdf = dynamic_cast<SimpleDateFormat*>(df)) != nullptr) {
-            sdf->toPattern(dfPattern);
-            addPattern(dfPattern, false, conflictingString, status);
-
-            // TODO: C++ and Java are inconsistent (see #12568).
-            // C++ uses MEDIUM, but Java uses SHORT.
-            if ( i==DateFormat::kShort && !dfPattern.isEmpty() ) {
-                consumeShortTimePattern(dfPattern, status);
-            }
+        
+        if (U_SUCCESS(status)) {
+            UnicodeString conflictingPattern;
+            addPatternWithSkeleton(pattern, nullptr, false, conflictingPattern, status);
         }
-        // TODO Maybe we should return an error when the date format isn't simple.
-        delete df;
-        if (U_FAILURE(status)) { return; }
     }
 }
 
@@ -905,7 +925,12 @@ DateTimePatternGenerator::getCalendarTypeToUse(const Locale& locale, CharString&
             &localStatus);
         localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY-1] = 0; // ensure null termination
         // now get the calendar key value from that locale
-        destination = ulocimp_getKeywordValue(localeWithCalendarKey, "calendar", localStatus);
+        // (the call to ures_getFunctionalEquivalent() above might fail, and if it does, localeWithCalendarKey
+        // won't contain a `calendar` keyword.  If this happens, the line below will stomp on `destination`,
+        // so we have to check the return code before overwriting `destination`.)
+        if (U_SUCCESS(localStatus)) {
+            destination = ulocimp_getKeywordValue(localeWithCalendarKey, "calendar", localStatus);
+        }
         // If the input locale was invalid, don't fail with missing resource error, instead
         // continue with default of Gregorian.
         if (U_FAILURE(localStatus) && localStatus != U_MISSING_RESOURCE_ERROR) {
