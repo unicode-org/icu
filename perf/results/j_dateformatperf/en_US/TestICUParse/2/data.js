@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723759455159,
+  "lastUpdate": 1723798070642,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24057,6 +24057,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 138.47165388630407,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "esther.wang@garmin.com",
+            "name": "Esther Wang",
+            "username": "EstherWx"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "1c312f7caa8cb7847059e6d79715aec3f2e333f8",
+          "message": "ICU-22861 std::max deduced conflicting types in unifiedcache.cpp",
+          "timestamp": "2024-08-16T10:33:38+02:00",
+          "tree_id": "ed8ddafa1874c2445272bdff976bcaca4a57480b",
+          "url": "https://github.com/unicode-org/icu/commit/1c312f7caa8cb7847059e6d79715aec3f2e333f8"
+        },
+        "date": 1723797926760,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 142.777760791696,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
