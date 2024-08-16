@@ -47,7 +47,8 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(11, test_jConsistencyOddLocales);
         TESTCASE(12, testBestPattern);
         TESTCASE(13, testDateTimePatterns);
-        TESTCASE(14, testRegionOverride);
+        TESTCASE(14, testISO8601);
+        TESTCASE(15, testRegionOverride);
         default: name = ""; break;
     }
 }
@@ -1770,6 +1771,31 @@ void IntlTestDateTimePatternGeneratorAPI::testDateTimePatterns() {
                 errln("ERROR: getDateTimeFormat for en after second mod, style %d, expect \"%s\", get \"%s\"",
                         patStyle, bExpect, bGet);
             }
+        }
+    }
+}
+
+// Test for ICU-21839: Make sure ISO8601 patterns/symbols are inherited from Gregorian
+void IntlTestDateTimePatternGeneratorAPI::testISO8601() {
+    const char* localeIDs[] = {
+        "de-AT-u-ca-iso8601",
+        "de-CH-u-ca-iso8601",
+    };
+    const UChar* skeleton = u"jms";
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(localeIDs); i++) {
+        UErrorCode err = U_ZERO_ERROR;
+        LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(Locale::forLanguageTag(localeIDs[i], err), err));
+        UnicodeString pattern = dtpg->getBestPattern(skeleton, err);
+        if (pattern.indexOf(UnicodeString(u"├")) >= 0 || pattern.indexOf(UnicodeString(u"Minute")) >= 0) {
+            errln(UnicodeString("ERROR: locale ") + localeIDs[i] + UnicodeString(", skeleton ") + skeleton + UnicodeString(", bad pattern: ") + pattern);
+        }
+
+        LocalPointer<DateFormat> df(DateFormat::createTimeInstance(DateFormat::MEDIUM, Locale::forLanguageTag(localeIDs[i], err)));
+        UnicodeString format;
+        df->format(ucal_getNow(), format, err);
+        if (format.indexOf(UnicodeString(u"├")) >= 0 || format.indexOf(UnicodeString(u"Minute")) >= 0) {
+            errln(UnicodeString("ERROR: locale ") + localeIDs[i] + UnicodeString(", MEDIUM, bad format: ") + format);
         }
     }
 }

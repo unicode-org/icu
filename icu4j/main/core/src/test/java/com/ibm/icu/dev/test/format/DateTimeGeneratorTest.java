@@ -1417,6 +1417,16 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                 new TestOptionsItem( "zh@calendar=chinese",  "ULLL",  "U\u5E74MMM",  DateTimePatternGenerator.MATCH_NO_OPTIONS ),
                 new TestOptionsItem( "zh@calendar=chinese",  "yMMM",  "rU\u5E74MMM", DateTimePatternGenerator.MATCH_NO_OPTIONS ),
                 new TestOptionsItem( "zh@calendar=chinese",  "GUMMM", "rU\u5E74MMM", DateTimePatternGenerator.MATCH_NO_OPTIONS ),
+
+                // tests for ICU-22669
+                new TestOptionsItem("zh_TW",           "jjm",  "ah:mm",     DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+                new TestOptionsItem("zh_TW",           "jjm",  "ahh:mm",    DateTimePatternGenerator.MATCH_ALL_FIELDS_LENGTH ),
+                new TestOptionsItem("zh_TW",           "jjms", "ah:mm:ss",  DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+                new TestOptionsItem("zh_TW",           "jjms", "ahh:mm:ss", DateTimePatternGenerator.MATCH_ALL_FIELDS_LENGTH ),
+                new TestOptionsItem("zh_TW@hours=h23", "jjm",  "HH:mm",     DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+                new TestOptionsItem("zh_TW@hours=h23", "jjm",  "HH:mm",     DateTimePatternGenerator.MATCH_ALL_FIELDS_LENGTH ), // (without the fix, we get "HH:m" here)
+                new TestOptionsItem("zh_TW@hours=h23", "jjms", "HH:mm:ss",  DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+                new TestOptionsItem("zh_TW@hours=h23", "jjms", "HH:mm:ss",  DateTimePatternGenerator.MATCH_ALL_FIELDS_LENGTH ),
         };
 
         for (int i = 0; i < testOptionsData.length; ++i) {
