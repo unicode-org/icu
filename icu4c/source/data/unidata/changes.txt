@@ -67,7 +67,7 @@ https://github.com/unicode-org/unicodetools/issues/492 adjust cldr/*BreakTest ge
 Markus:
 
 export UNIDATA_ROOT=~/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni16/beta
+export UNICODE_DATA=$UNIDATA_ROOT/uni16/final
 export CLDR_SRC=~/cldr/uni/src
 export ICU_ROOT=~/icu/uni
 export ICU_SRC=$ICU_ROOT/src
@@ -81,7 +81,7 @@ export UNICODE_TOOLS=~/unitools/mine/src
 Elango:
 
 export UNIDATA_ROOT=~/oss/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni16/beta
+export UNICODE_DATA=$UNIDATA_ROOT/uni16/final
 export CLDR_SRC=~/oss/cldr/mine/src
 export ICU_ROOT=~/oss/icu
 export ICU_SRC=$ICU_ROOT
@@ -101,11 +101,14 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
 *** Configure: Build Unicode data for ICU4J
 - Run ICU4C "configure" _after_ updating the Unicode version number in uchar.h
     so that the makefiles see the new version number.
+- FYI: The option that adds the additional Unicode data files for ICU4J is
+    ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data
+- Markus's version:
   cd $ICU_OUT/icu4c
   ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data CXXFLAGS="-DU_USING_ICU_NAMESPACE=0 -Wimplicit-fallthrough" CPPFLAGS="-DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1 -fsanitize=bounds" LDFLAGS=-fsanitize=bounds ../../src/icu4c/source/runConfigureICU --enable-debug --disable-release Linux/clang --prefix=/usr/local/google/home/mscherer/icu/mine/inst/icu4c > config.out 2>&1 ; tail config.out
-  + Elango's version (diff default C++ compiler & in-source build paths):
-    cd $ICU_OUT/icu4c/source
-    ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data CXXFLAGS="-DU_USING_ICU_NAMESPACE=0 -Wimplicit-fallthrough" CPPFLAGS="-DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1 -fsanitize=bounds" LDFLAGS=-fsanitize=bounds ./runConfigureICU --enable-debug --disable-release Linux/gcc --prefix=/usr/local/google/home/elango/oss/icu/icu4c > config.out 2>&1 ; tail config.out
+- Elango's version (diff default C++ compiler & in-source build paths):
+  cd $ICU_OUT/icu4c/source
+  ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data CXXFLAGS="-DU_USING_ICU_NAMESPACE=0 -Wimplicit-fallthrough" CPPFLAGS="-DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1 -fsanitize=bounds" LDFLAGS=-fsanitize=bounds ./runConfigureICU --enable-debug --disable-release Linux/gcc --prefix=/usr/local/google/home/elango/oss/icu/icu4c > config.out 2>&1 ; tail config.out
 
 *** data files & enums & parser code
 
@@ -129,7 +132,7 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
     and which might at this point be *ahead* of "Public"
     ~ before the Unicode release copy files from "dev" subfolders, for example
       https://github.com/unicode-org/unicodetools/tree/main/unicodetools/data/ucd/dev
-  + for final-release data files, the source of truth are the files in
+  + for final-release data files, the source of truth is the files in
     https://www.unicode.org/Public/(version) [=UCD],
     https://www.unicode.org/Public/UCA/(version),
     https://www.unicode.org/Public/idna/(version),
@@ -139,6 +142,9 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
   From Unicode 12/CLDR 35/ICU 64 to Unicode 15.0/CLDR 43/ICU 73,
   CLDR used modified grapheme break rules.
   This might happen again.
+  + To check in the Unicode Tools workspace:
+    ~/unitools/mine/Generated$ meld UCD/16.0.0/auxiliary/*GraphemeBreakTest.txt UCD/16.0.0/cldr/GraphemeBreakTest-cldr.txt
+  + If different, and after copying into CLDR:
     cp $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt icu4c/source/test/testdata
   or
     cp ~/unitools/mine/Generated/UCD/16.0.0/cldr/GraphemeBreakTest-cldr.txt icu4c/source/test/testdata/GraphemeBreakTest.txt
@@ -206,7 +212,7 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
 * build ICU
   to make sure that there are no syntax errors
 
-  $ICU_OUT/icu4c$ echo;echo; date; make -j7 tests &> out.txt ; tail -n 30 out.txt ; date
+  $ICU_OUT/icu4c$ echo;echo; date; make -j20 tests &> out.txt ; tail -n 30 out.txt ; date
 
 * Bazel build process
 
@@ -235,10 +241,11 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
   so at this time we might get some collation test failures.
   Ignore these for now.
 - Some properties are hardcoded in the ICU libraries because they apply to
-  few character or ranges, and are not expected to change often.
+  few characters or ranges, and are not expected to change often.
   They are tested at least in C++ intltest (e.g., against ppucd.txt).
   If these tests fail, then update the implementation and the tests.
 - update CLDR GraphemeBreakTest.txt
+  (see the download section above about this file)
     cd ~/unitools/mine/Generated
     cp UCD/16.0.0/cldr/GraphemeBreakTest-cldr.txt $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
     cp UCD/16.0.0/cldr/GraphemeBreakTest-cldr.html $CLDR_SRC/common/properties/segments/GraphemeBreakTest.html

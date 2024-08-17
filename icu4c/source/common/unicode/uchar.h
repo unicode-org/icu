@@ -2289,6 +2289,8 @@ typedef enum UJoiningGroup {
     U_JG_THIN_YEH,  /**< @stable ICU 70 */
     U_JG_VERTICAL_TAIL,  /**< @stable ICU 70 */
 
+    U_JG_KASHMIRI_YEH,  /**< @stable ICU 76 */
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UJoiningGroup value.

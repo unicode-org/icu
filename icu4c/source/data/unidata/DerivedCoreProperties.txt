@@ -1,5 +1,5 @@
 # DerivedCoreProperties-16.0.0.txt
-# Date: 2024-05-02, 15:02:37 GMT
+# Date: 2024-05-31, 18:09:32 GMT
 # © 2024 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use and license, see https://www.unicode.org/terms_of_use.html
@@ -10699,8 +10699,11 @@ E01F0..E0FFF  ; Default_Ignorable_Code_Point
 0C81          ; Grapheme_Extend
 0CBC          ; Grapheme_Extend
 0CBF          ; Grapheme_Extend
+0CC0          ; Grapheme_Extend
 0CC2          ; Grapheme_Extend
 0CC6          ; Grapheme_Extend
+0CC7..0CC8    ; Grapheme_Extend
+0CCA..0CCB    ; Grapheme_Extend
 0CCC..0CCD    ; Grapheme_Extend
 0CD5..0CD6    ; Grapheme_Extend
 0CE2..0CE3    ; Grapheme_Extend
@@ -10780,9 +10783,11 @@ E01F0..E0FFF  ; Default_Ignorable_Code_Point
 1B34          ; Grapheme_Extend
 1B35          ; Grapheme_Extend
 1B36..1B3A    ; Grapheme_Extend
+1B3B          ; Grapheme_Extend
 1B3C          ; Grapheme_Extend
+1B3D          ; Grapheme_Extend
 1B42          ; Grapheme_Extend
-1B44          ; Grapheme_Extend
+1B43..1B44    ; Grapheme_Extend
 1B6B..1B73    ; Grapheme_Extend
 1B80..1B81    ; Grapheme_Extend
 1BA2..1BA5    ; Grapheme_Extend
@@ -11024,7 +11029,7 @@ FF9E..FF9F    ; Grapheme_Extend
 E0020..E007F  ; Grapheme_Extend
 E0100..E01EF  ; Grapheme_Extend
 
-# Total code points: 2185
+# Total code points: 2193
 
 # ================================================
 
@@ -11316,10 +11321,8 @@ E0100..E01EF  ; Grapheme_Extend
 0CB5..0CB9    ; Grapheme_Base
 0CBD          ; Grapheme_Base
 0CBE          ; Grapheme_Base
-0CC0..0CC1    ; Grapheme_Base
+0CC1          ; Grapheme_Base
 0CC3..0CC4    ; Grapheme_Base
-0CC7..0CC8    ; Grapheme_Base
-0CCA..0CCB    ; Grapheme_Base
 0CDD..0CDE    ; Grapheme_Base
 0CE0..0CE1    ; Grapheme_Base
 0CE6..0CEF    ; Grapheme_Base
@@ -11526,9 +11529,7 @@ E0100..E01EF  ; Grapheme_Extend
 1AA8..1AAD    ; Grapheme_Base
 1B04          ; Grapheme_Base
 1B05..1B33    ; Grapheme_Base
-1B3B          ; Grapheme_Base
-1B3D..1B41    ; Grapheme_Base
-1B43          ; Grapheme_Base
+1B3E..1B41    ; Grapheme_Base
 1B45..1B4C    ; Grapheme_Base
 1B4E..1B4F    ; Grapheme_Base
 1B50..1B59    ; Grapheme_Base
@@ -12811,7 +12812,7 @@ FFFC..FFFD    ; Grapheme_Base
 30000..3134A  ; Grapheme_Base
 31350..323AF  ; Grapheme_Base
 
-# Total code points: 152738
+# Total code points: 152730
 
 # ================================================
 
@@ -13026,8 +13027,11 @@ ABED          ; Grapheme_Link
 0C81          ; InCB; Extend
 0CBC          ; InCB; Extend
 0CBF          ; InCB; Extend
+0CC0          ; InCB; Extend
 0CC2          ; InCB; Extend
 0CC6          ; InCB; Extend
+0CC7..0CC8    ; InCB; Extend
+0CCA..0CCB    ; InCB; Extend
 0CCC..0CCD    ; InCB; Extend
 0CD5..0CD6    ; InCB; Extend
 0CE2..0CE3    ; InCB; Extend
@@ -13106,9 +13110,11 @@ ABED          ; Grapheme_Link
 1B34          ; InCB; Extend
 1B35          ; InCB; Extend
 1B36..1B3A    ; InCB; Extend
+1B3B          ; InCB; Extend
 1B3C          ; InCB; Extend
+1B3D          ; InCB; Extend
 1B42          ; InCB; Extend
-1B44          ; InCB; Extend
+1B43..1B44    ; InCB; Extend
 1B6B..1B73    ; InCB; Extend
 1B80..1B81    ; InCB; Extend
 1BA2..1BA5    ; InCB; Extend
@@ -13351,6 +13357,6 @@ FF9E..FF9F    ; InCB; Extend
 E0020..E007F  ; InCB; Extend
 E0100..E01EF  ; InCB; Extend
 
-# Total code points: 2184
+# Total code points: 2192
 
 # EOF
