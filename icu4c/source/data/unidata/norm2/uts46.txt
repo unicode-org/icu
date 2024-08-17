@@ -1,6 +1,6 @@
 # Original file:
 # IdnaMappingTable.txt
-# Date: 2024-05-03, 23:53:50 GMT
+# Date: 2024-07-03, 21:52:28 GMT
 # © 2024 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use and license, see https://www.unicode.org/terms_of_use.html
@@ -26,11 +26,11 @@
 # Use this file as the second gennorm2 input file after nfc.txt.
 # ================================================
 #
-# 0000..002C  disallowed_STD3_valid     # 1.1  <control-0000>..COMMA
+# 0000..002C  valid                     # 1.1  <control-0000>..COMMA
 # 002D..002E  valid                     # 1.1  HYPHEN-MINUS..FULL STOP
-# 002F        disallowed_STD3_valid     # 1.1  SOLIDUS
+# 002F        valid                     # 1.1  SOLIDUS
 # 0030..0039  valid                     # 1.1  DIGIT ZERO..DIGIT NINE
-# 003A..0040  disallowed_STD3_valid     # 1.1  COLON..COMMERCIAL AT
+# 003A..0040  valid                     # 1.1  COLON..COMMERCIAL AT
 0041          >0061                     # 1.1  LATIN CAPITAL LETTER A
 0042          >0062                     # 1.1  LATIN CAPITAL LETTER B
 0043          >0063                     # 1.1  LATIN CAPITAL LETTER C
@@ -57,9 +57,9 @@
 0058          >0078                     # 1.1  LATIN CAPITAL LETTER X
 0059          >0079                     # 1.1  LATIN CAPITAL LETTER Y
 005A          >007A                     # 1.1  LATIN CAPITAL LETTER Z
-# 005B..0060  disallowed_STD3_valid     # 1.1  LEFT SQUARE BRACKET..GRAVE ACCENT
+# 005B..0060  valid                     # 1.1  LEFT SQUARE BRACKET..GRAVE ACCENT
 # 0061..007A  valid                     # 1.1  LATIN SMALL LETTER A..LATIN SMALL LETTER Z
-# 007B..007F  disallowed_STD3_valid     # 1.1  LEFT CURLY BRACKET..<control-007F>
+# 007B..007F  valid                     # 1.1  LEFT CURLY BRACKET..<control-007F>
 0080..009F    >FFFD                     # 1.1  <control-0080>..<control-009F>
 00A0          >0020                     # 1.1  NO-BREAK SPACE
 # 00A1..00A7  valid                     # 1.1  INVERTED EXCLAMATION MARK..SECTION SIGN
@@ -1707,7 +1707,7 @@
 # 19B0..19C9  valid                     # 4.1  NEW TAI LUE VOWEL SIGN VOWEL SHORTENER..NEW TAI LUE TONE MARK-2
 19CA..19CF    >FFFD                     # NA   <reserved-19CA>..<reserved-19CF>
 # 19D0..19D9  valid                     # 4.1  NEW TAI LUE DIGIT ZERO..NEW TAI LUE DIGIT NINE
-# 19DA        valid                  ;      ; XV8 # 5.2  NEW TAI LUE THAM DIGIT ONE
+# 19DA        valid      ;      ; XV8   # 5.2  NEW TAI LUE THAM DIGIT ONE
 19DB..19DD    >FFFD                     # NA   <reserved-19DB>..<reserved-19DD>
 # 19DE..19DF  valid                     # 4.1  NEW TAI LUE SIGN LAE..NEW TAI LUE SIGN LAEV
 # 19E0..19FF  valid                     # 4.0  KHMER SYMBOL PATHAMASAT..KHMER SYMBOL DAP-PRAM ROC

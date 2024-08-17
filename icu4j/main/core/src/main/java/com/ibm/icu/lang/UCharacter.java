@@ -3451,6 +3451,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 70 */
         public static final int VERTICAL_TAIL = 103;
 
+        /** @stable ICU 76 */
+        public static final int KASHMIRI_YEH = 104;
+
         /**
          * One more than the highest normal JoiningGroup value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.JoiningGroup).
@@ -3458,7 +3461,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 104;
+        public static final int COUNT = 105;
     }
 
     /**

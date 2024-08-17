@@ -506,7 +506,7 @@ static const Value VALUES_gc[30] = {
     Value(U_FINAL_PUNCTUATION, "Pf Final_Punctuation"),
 };
 
-static const Value VALUES_jg[104] = {
+static const Value VALUES_jg[105] = {
     Value(U_JG_NO_JOINING_GROUP, "No_Joining_Group No_Joining_Group"),
     Value(U_JG_AIN, "Ain Ain"),
     Value(U_JG_ALAPH, "Alaph Alaph"),
@@ -611,6 +611,7 @@ static const Value VALUES_jg[104] = {
     Value(U_JG_HANIFI_ROHINGYA_PA, "Hanifi_Rohingya_Pa Hanifi_Rohingya_Pa"),
     Value(U_JG_THIN_YEH, "Thin_Yeh Thin_Yeh"),
     Value(U_JG_VERTICAL_TAIL, "Vertical_Tail Vertical_Tail"),
+    Value(U_JG_KASHMIRI_YEH, "Kashmiri_Yeh Kashmiri_Yeh"),
 };
 
 static const Value VALUES_jt[6] = {
@@ -1332,7 +1333,7 @@ static const Property PROPERTIES[121] = {
     Property(UCHAR_DECOMPOSITION_TYPE, "dt Decomposition_Type", VALUES_dt, 18),
     Property(UCHAR_EAST_ASIAN_WIDTH, "ea East_Asian_Width", VALUES_ea, 6),
     Property(UCHAR_GENERAL_CATEGORY, "gc General_Category", VALUES_gc, 30),
-    Property(UCHAR_JOINING_GROUP, "jg Joining_Group", VALUES_jg, 104),
+    Property(UCHAR_JOINING_GROUP, "jg Joining_Group", VALUES_jg, 105),
     Property(UCHAR_JOINING_TYPE, "jt Joining_Type", VALUES_jt, 6),
     Property(UCHAR_LINE_BREAK, "lb Line_Break", VALUES_lb, 48),
     Property(UCHAR_NUMERIC_TYPE, "nt Numeric_Type", VALUES_nt, 4),

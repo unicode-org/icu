@@ -726,11 +726,12 @@ void AlphabeticIndexTest::TestChineseUnihan() {
         logln("Chinese/unihan has %d buckets/labels", bucketCount);
     }
     // bucketIndex = radical number, adjusted for simplified radicals in lower buckets.
+    // CLDR 46+/ICU 76+ use a radical-stroke order matching UAX #38
+    // which has buckets only for traditional radicals.
     int32_t bucketIndex = index.getBucketIndex(UnicodeString(static_cast<char16_t>(0x4e5d)), status);
     assertEquals("getBucketIndex(U+4E5D)", 5, bucketIndex);
-    // radical 100, and there is a 90' since Unicode 8
     bucketIndex = index.getBucketIndex(UnicodeString(static_cast<char16_t>(0x7527)), status);
-    assertEquals("getBucketIndex(U+7527)", 101, bucketIndex);
+    assertEquals("getBucketIndex(U+7527)", 100, bucketIndex);
 }
 
 void AlphabeticIndexTest::testHasBuckets() {
