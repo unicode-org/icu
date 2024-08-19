@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1724094018990,
+  "lastUpdate": 1724099396710,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54117,6 +54117,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 7.2644,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ashutosh@yandex.ru",
+            "name": "Anton Voloshin",
+            "username": "ashutosh108"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "e4cba341b655aa0705966c8c310f43d1b2d57603",
+          "message": "ICU-22850 ucol_openRules: fix ucol_open reference in the description\n\nIt should obviously be ucol_open here. This typo was introduced in the\nhttps://github.com/unicode-org/icu/commit/0335b3b9c3aaa5d6826b33cb3f45e56b917618e9",
+          "timestamp": "2024-08-19T13:03:21-07:00",
+          "tree_id": "7e7a00cdb491cc15bcf59014f3edb723926c4d9e",
+          "url": "https://github.com/unicode-org/icu/commit/e4cba341b655aa0705966c8c310f43d1b2d57603"
+        },
+        "date": 1724099248431,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 6.9923,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 6.9783,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 6.9897,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 7.2546,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 7.2128,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 7.2538,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
