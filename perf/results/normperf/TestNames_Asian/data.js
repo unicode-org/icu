@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723841833202,
+  "lastUpdate": 1724083798984,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -53997,6 +53997,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 11.8191,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "654010905@qq.com",
+            "name": "taiyang-li",
+            "username": "taiyang-li"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "0253c828d96b6b97347b432b4f43d63522fe7016",
+          "message": "ICU-22832 Fix msan complain about use-of-uninitialized-value",
+          "timestamp": "2024-08-19T08:43:38-07:00",
+          "tree_id": "747af9f152dcfd9d594e54327e045311e92d3e3e",
+          "url": "https://github.com/unicode-org/icu/commit/0253c828d96b6b97347b432b4f43d63522fe7016"
+        },
+        "date": 1724083654531,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 13.016,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 10.2489,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 10.1833,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 10.9876,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 11.8688,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 11.8125,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
