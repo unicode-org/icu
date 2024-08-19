@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1724083329362,
+  "lastUpdate": 1724093383179,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24387,6 +24387,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.9241347715228978,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "committer": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "distinct": true,
+          "id": "305098bdf8cba7a60daf24c9529765dd03abea0d",
+          "message": "ICU-22722 Update README.md\n\nSee #3111 and ICU-22722",
+          "timestamp": "2024-08-19T13:41:03-05:00",
+          "tree_id": "721196f4fe08f372cdd2db7d10baa3a0f5900296",
+          "url": "https://github.com/unicode-org/icu/commit/305098bdf8cba7a60daf24c9529765dd03abea0d"
+        },
+        "date": 1724093238108,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.9324540617511654,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
