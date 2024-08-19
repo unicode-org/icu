@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1723841205696,
+  "lastUpdate": 1724083155738,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24327,6 +24327,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 5.411117124556516,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "654010905@qq.com",
+            "name": "taiyang-li",
+            "username": "taiyang-li"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "0253c828d96b6b97347b432b4f43d63522fe7016",
+          "message": "ICU-22832 Fix msan complain about use-of-uninitialized-value",
+          "timestamp": "2024-08-19T08:43:38-07:00",
+          "tree_id": "747af9f152dcfd9d594e54327e045311e92d3e3e",
+          "url": "https://github.com/unicode-org/icu/commit/0253c828d96b6b97347b432b4f43d63522fe7016"
+        },
+        "date": 1724083008677,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 5.440899638942861,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
