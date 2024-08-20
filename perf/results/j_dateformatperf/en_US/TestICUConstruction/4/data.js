@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1724098441509,
+  "lastUpdate": 1724113660855,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24357,6 +24357,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1969.1011351785573,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "51e21af692e95737ad8f75fdf2dbf105fe5811b0",
+          "message": "ICU-22707 Unicode 16 aug16",
+          "timestamp": "2024-08-19T17:15:00-07:00",
+          "tree_id": "708ecdaff4df900a758d028755ef55e1d8db2c4b",
+          "url": "https://github.com/unicode-org/icu/commit/51e21af692e95737ad8f75fdf2dbf105fe5811b0"
+        },
+        "date": 1724113513788,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1965.8456769763723,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
