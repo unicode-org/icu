@@ -4727,6 +4727,13 @@ supplementalData:table(nofallback){
         ZW{
             {
                 from:intvector{
+                    400,
+                    1286681600,
+                }
+                id{"ZWG"}
+            }
+            {
+                from:intvector{
                     288,
                     -1751148544,
                 }
@@ -4739,8 +4746,8 @@ supplementalData:table(nofallback){
                 }
                 id{"ZWL"}
                 to:intvector{
-                    288,
-                    -1664748545,
+                    401,
+                    -1428052993,
                 }
             }
             {

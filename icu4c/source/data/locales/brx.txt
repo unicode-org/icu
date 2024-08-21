@@ -404,6 +404,7 @@ brx{
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
                 MMMMEd{"E, MMMM d"}
+                MMMMd{"MMMM d"}
                 MMMd{"d-MMM"}
                 Md{"M/d"}
                 h{"a नि h"}

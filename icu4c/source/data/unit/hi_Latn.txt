@@ -55,9 +55,6 @@ hi_Latn{
             }
         }
         length{
-            micrometer{
-                dnam{"micrometres"}
-            }
             mile-scandinavian{
                 dnam{"Scandinavian miles"}
             }

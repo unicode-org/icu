@@ -691,7 +691,7 @@ si{
         }
     }
     CurrencyUnitPatterns{
-        one{"{0} {1}"}
+        one{"{1}{0}"}
         other{"{1}{0}"}
     }
 }

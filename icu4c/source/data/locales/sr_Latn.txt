@@ -422,7 +422,7 @@ sr_Latn{
                 "EEEE, d. MMMM y.",
                 "d. MMMM y.",
                 "d. M. y.",
-                "d.M.yy.",
+                "d. M. y.",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -443,8 +443,7 @@ sr_Latn{
                 Bhm{"hh:mm B"}
                 Bhms{"hh:mm:ss B"}
                 E{"E"}
-                EBhm{"E hh:mm B"}
-                EBhms{"E hh:mm:ss B"}
+                EBhms{"E, hh:mm:ss B"}
                 Ed{"E d."}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
@@ -457,9 +456,9 @@ sr_Latn{
                 MMMEd{"E d. MMM"}
                 MMMMEd{"E, d. MMMM"}
                 MMMMW{
-                    few{"W. 'sedmica' 'u' MMMM."}
-                    one{"W. 'sedmica' 'u' MMMM."}
-                    other{"W. 'sedmica' 'u' MMMM."}
+                    few{"MMMM: W. 'nedelja'"}
+                    one{"MMMM: W. 'nedelja'"}
+                    other{"MMMM: W. 'nedelja'"}
                 }
                 MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
@@ -484,9 +483,9 @@ sr_Latn{
                 yQQQ{"QQQ y."}
                 yQQQQ{"QQQQ y."}
                 yw{
-                    few{"w. 'sedmica' 'u' Y."}
-                    one{"w. 'sedmica' 'u' Y."}
-                    other{"w. 'sedmica' 'u' Y."}
+                    few{"w. 'nedelja' 'u' Y."}
+                    one{"w. 'nedelja' 'u' Y."}
+                    other{"w. 'nedelja' 'u' Y."}
                 }
             }
             dayNames{
@@ -537,11 +536,19 @@ sr_Latn{
                         afternoon1{"po podne"}
                         evening1{"uveče"}
                         midnight{"ponoć"}
-                        morning1{"ujutro"}
+                        morning1{"ujutru"}
                         night1{"noću"}
                         noon{"podne"}
                     }
                     narrow{
+                        afternoon1{"po podne"}
+                        evening1{"uveče"}
+                        midnight{"ponoć"}
+                        morning1{"ujutru"}
+                        night1{"noću"}
+                        noon{"podne"}
+                    }
+                    wide{
                         afternoon1{"po podne"}
                         evening1{"uveče"}
                         midnight{"ponoć"}
@@ -556,10 +563,6 @@ sr_Latn{
                         evening1{"veče"}
                         morning1{"jutro"}
                         night1{"noć"}
-                    }
-                    narrow{
-                        am{"pre podne"}
-                        pm{"po podne"}
                     }
                 }
             }
@@ -1217,8 +1220,7 @@ sr_Latn{
         whitespace{"Razmak"}
     }
     delimiters{
-        alternateQuotationEnd{"‘"}
-        quotationEnd{"“"}
+        alternateQuotationStart{"’"}
         quotationStart{"„"}
     }
     fields{
@@ -1815,9 +1817,9 @@ sr_Latn{
         }
     }
     measurementSystemNames{
-        UK{"UK"}
-        US{"SAD"}
-        metric{"Metrički"}
+        UK{"britanski"}
+        US{"američki"}
+        metric{"metrički"}
     }
     parse{
         date{
@@ -1836,7 +1838,7 @@ sr_Latn{
                 "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₹ ₨ {Rp} {Rs}]",
+                "[₹ {Rp} {Rs}₨]",
             }
         }
         number{

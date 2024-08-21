@@ -297,14 +297,23 @@ sr_Latn{
                     _{
                         _{"kvadratna {0}"}
                     }
+                    feminine{
+                        _{"kvadratna {0}"}
+                    }
                 }
                 one{
                     _{
                         _{"kvadratni {0}"}
                     }
+                    feminine{
+                        _{"kvadratna {0}"}
+                    }
                 }
                 other{
                     _{
+                        _{"kvadratnih {0}"}
+                    }
+                    feminine{
                         _{"kvadratnih {0}"}
                     }
                 }
@@ -370,8 +379,21 @@ sr_Latn{
                 other{"{0} karata"}
             }
             milligram-ofglucose-per-deciliter{
+                case{
+                    genitive{
+                        few{"{0} miligrama po decilitru"}
+                        one{"{0} miligrama po decilitru"}
+                        other{"{0} miligrama po decilitru"}
+                    }
+                    instrumental{
+                        few{"{0} miligrama po decilitru"}
+                        one{"{0} miligramom po decilitru"}
+                        other{"{0} miligrama po decilitru"}
+                    }
+                }
                 dnam{"miligrami po decilitru"}
                 few{"{0} miligrama po decilitru"}
+                gender{"inanimate"}
                 one{"{0} miligram po decilitru"}
                 other{"{0} miligrama po decilitru"}
             }
@@ -476,6 +498,30 @@ sr_Latn{
             permyriad{
                 gender{"inanimate"}
             }
+            portion-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} dela na milijardu"}
+                        one{"{0} deo na milijardu"}
+                        other{"{0} delova na milijardu"}
+                    }
+                    genitive{
+                        few{"{0} dela na milijardu"}
+                        one{"{0} dela na milijardu"}
+                        other{"{0} delova na milijardu"}
+                    }
+                    instrumental{
+                        few{"{0} dela na milijardu"}
+                        one{"{0} delom na milijardu"}
+                        other{"{0} delova na milijardu"}
+                    }
+                }
+                dnam{"delovi na milijardu"}
+                few{"{0} dela na milijardu"}
+                gender{"inanimate"}
+                one{"{0} deo na milijardu"}
+                other{"{0} delova na milijardu"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -530,7 +576,11 @@ sr_Latn{
             }
         }
         coordinate{
-            dnam{"glavni pravac"}
+            dnam{"strana sveta"}
+            east{"{0} E"}
+            north{"{0} N"}
+            south{"{0} S"}
+            west{"{0} W"}
         }
         digital{
             bit{
@@ -798,7 +848,7 @@ sr_Latn{
                         other{"{0} decenija"}
                     }
                     instrumental{
-                        few{"{0} decenije"}
+                        few{"{0} decenijom"}
                         one{"{0} decenijom"}
                         other{"{0} decenija"}
                     }
@@ -930,6 +980,31 @@ sr_Latn{
                 gender{"feminine"}
                 one{"{0} nanosekunda"}
                 other{"{0} nanosekundi"}
+            }
+            night{
+                case{
+                    accusative{
+                        few{"{0} noći"}
+                        one{"{0} noć"}
+                        other{"{0} noći"}
+                    }
+                    genitive{
+                        few{"{0} noći"}
+                        one{"{0} noći"}
+                        other{"{0} noći"}
+                    }
+                    instrumental{
+                        few{"{0} noći"}
+                        one{"{0} noći"}
+                        other{"{0} noći"}
+                    }
+                }
+                dnam{"noć"}
+                few{"{0} noći"}
+                gender{"feminine"}
+                one{"{0} noć"}
+                other{"{0} noći"}
+                per{"{0}/noć"}
             }
             quarter{
                 case{
@@ -1164,8 +1239,26 @@ sr_Latn{
                 other{"{0} džula"}
             }
             kilocalorie{
+                case{
+                    accusative{
+                        few{"{0} kilokalorije"}
+                        one{"{0} kilokaloriju"}
+                        other{"{0} kilokalorija"}
+                    }
+                    genitive{
+                        few{"{0} kilokalorije"}
+                        one{"{0} kilokalorije"}
+                        other{"{0} kilokalorija"}
+                    }
+                    instrumental{
+                        few{"{0} kilokalorije"}
+                        one{"{0} kilokalorijom"}
+                        other{"{0} kilokalorija"}
+                    }
+                }
                 dnam{"kilokalorije"}
                 few{"{0} kilokalorije"}
+                gender{"feminine"}
                 one{"{0} kilokalorija"}
                 other{"{0} kilokalorija"}
             }
@@ -1213,7 +1306,28 @@ sr_Latn{
         }
         force{
             kilowatt-hour-per-100-kilometer{
+                case{
+                    accusative{
+                        few{"{0} kilovat-sata na 100 kilometara"}
+                        one{"{0} kilovat-sat na 100 kilometara"}
+                        other{"{0} kilovat-sati na 100 kilometara"}
+                    }
+                    genitive{
+                        few{"{0} kilovat-sata na 100 kilometara"}
+                        one{"{0} kilovat-sata na 100 kilometara"}
+                        other{"{0} kilovat-sati na 100 kilometara"}
+                    }
+                    instrumental{
+                        few{"{0} kilovat-sata na 100 kilometara"}
+                        one{"{0} kilovat-satom na 100 kilometara"}
+                        other{"{0} kilovat-sati na 100 kilometara"}
+                    }
+                }
+                dnam{"kilovat-sati na 100 kilometara"}
+                few{"{0} kilovat-sata na 100 kilometara"}
                 gender{"inanimate"}
+                one{"{0} kilovat-sat na 100 kilometara"}
+                other{"{0} kilovat-sati na 100 kilometara"}
             }
             newton{
                 case{
@@ -1628,6 +1742,30 @@ sr_Latn{
                 gender{"inanimate"}
                 one{"{0} pikometar"}
                 other{"{0} pikometara"}
+            }
+            point{
+                case{
+                    accusative{
+                        few{"{0} tipografske tačke"}
+                        one{"{0} tipografsku tačku"}
+                        other{"{0} tipografskih tačaka"}
+                    }
+                    genitive{
+                        few{"{0} tipografskih tačaka"}
+                        one{"{0} tipografske tačke"}
+                        other{"{0} tipografskih tačaka"}
+                    }
+                    instrumental{
+                        few{"{0} tipografske tačke"}
+                        one{"{0} tipografskom tačkom"}
+                        other{"{0} tipografskih tačaka"}
+                    }
+                }
+                dnam{"tipografske tačke"}
+                few{"{0} tipografske tačke"}
+                gender{"feminine"}
+                one{"{0} tipografska tačka"}
+                other{"{0} tipografskih tačaka"}
             }
             solar-radius{
                 dnam{"sunčevi poluprečnici"}
@@ -2121,8 +2259,21 @@ sr_Latn{
                 other{"{0} milibara"}
             }
             millimeter-ofhg{
+                case{
+                    genitive{
+                        few{"{0} milimetra živinog stuba"}
+                        one{"{0} milimetra živinog stuba"}
+                        other{"{0} milimetara živinog stuba"}
+                    }
+                    instrumental{
+                        few{"{0} milimetra živinog stuba"}
+                        one{"{0} milimetrom živinog stuba"}
+                        other{"{0} milimetara živinog stuba"}
+                    }
+                }
                 dnam{"milimetri živinog stuba"}
                 few{"{0} milimetra živinog stuba"}
+                gender{"inanimate"}
                 one{"{0} milimetar živinog stuba"}
                 other{"{0} milimetara živinog stuba"}
             }
@@ -2183,6 +2334,30 @@ sr_Latn{
                 few{"{0} čvora"}
                 one{"{0} čvor"}
                 other{"{0} čvorova"}
+            }
+            light-speed{
+                case{
+                    accusative{
+                        few{"{0} svetla"}
+                        one{"{0} svetlo"}
+                        other{"{0} svetala"}
+                    }
+                    genitive{
+                        few{"{0} svetla"}
+                        one{"{0} svetla"}
+                        other{"{0} svetala"}
+                    }
+                    instrumental{
+                        few{"{0} svetla"}
+                        one{"{0} svetlom"}
+                        other{"{0} svetala"}
+                    }
+                }
+                dnam{"svetlo"}
+                few{"{0} svetla"}
+                gender{"neuter"}
+                one{"{0} svetlo"}
+                other{"{0} svetala"}
             }
             meter-per-second{
                 case{
@@ -2645,6 +2820,12 @@ sr_Latn{
                 other{"{0} mpg Imp"}
             }
         }
+        coordinate{
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}W"}
+        }
         duration{
             day{
                 dnam{"d"}
@@ -2668,6 +2849,13 @@ sr_Latn{
                 few{"{0} m"}
                 one{"{0} m"}
                 other{"{0} m"}
+            }
+            night{
+                dnam{"noć"}
+                few{"{0} noći"}
+                one{"{0} noć"}
+                other{"{0} noći"}
+                per{"{0}/noć"}
             }
             quarter{
                 few{"{0} k"}
@@ -2740,6 +2928,14 @@ sr_Latn{
                 few{"{0} ks"}
                 one{"{0} ks"}
                 other{"{0} ks"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"svetlo"}
+                few{"{0} svetla"}
+                one{"{0} svetlo"}
+                other{"{0} svetala"}
             }
         }
         volume{
@@ -2829,6 +3025,9 @@ sr_Latn{
             permille{
                 dnam{"promil"}
             }
+            portion-per-1e9{
+                dnam{"delovi/milijarda"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -2846,10 +3045,10 @@ sr_Latn{
         }
         coordinate{
             dnam{"pravac"}
-            east{"{0}I"}
-            north{"{0}S"}
-            south{"{0}J"}
-            west{"{0}Z"}
+            east{"{0} E"}
+            north{"{0} N"}
+            south{"{0} S"}
+            west{"{0} W"}
         }
         digital{
             bit{
@@ -2905,6 +3104,13 @@ sr_Latn{
                 one{"{0} mes."}
                 other{"{0} mes."}
                 per{"{0}/m"}
+            }
+            night{
+                dnam{"noć"}
+                few{"{0} noći"}
+                one{"{0} noć"}
+                other{"{0} noći"}
+                per{"{0}/noć"}
             }
             quarter{
                 dnam{"kv"}
@@ -3027,6 +3233,9 @@ sr_Latn{
             picometer{
                 dnam{"pikometri"}
             }
+            point{
+                dnam{"tipografske tačke"}
+            }
             yard{
                 dnam{"jardi"}
                 few{"{0} jrd"}
@@ -3056,6 +3265,12 @@ sr_Latn{
                 few{"B {0}"}
                 one{"B {0}"}
                 other{"B {0}"}
+            }
+            light-speed{
+                dnam{"svetlo"}
+                few{"{0} svetla"}
+                one{"{0} svetlo"}
+                other{"{0} svetala"}
             }
             meter-per-second{
                 dnam{"metri u sekundi"}

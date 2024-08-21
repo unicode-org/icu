@@ -16,6 +16,31 @@ sr_Latn_BA{
             10p27{"R{0}"}
             10p30{"Q{0}"}
         }
+        concentr{
+            portion-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} dijela na milijardu"}
+                        one{"{0} dio na milijardu"}
+                        other{"{0} dijelova na milijardu"}
+                    }
+                    genitive{
+                        few{"{0} dijela na milijardu"}
+                        one{"{0} dijela na milijardu"}
+                        other{"{0} dijelova na milijardu"}
+                    }
+                    instrumental{
+                        few{"{0} dijela na milijardu"}
+                        one{"{0} dijelom na milijardu"}
+                        other{"{0} dijelova na milijardu"}
+                    }
+                }
+                dnam{"dijelovi na milijardu"}
+                few{"{0} dijela na milijardu"}
+                one{"{0} dio na milijardu"}
+                other{"{0} dijelova na milijardu"}
+            }
+        }
         duration{
             century{
                 case{
@@ -133,6 +158,29 @@ sr_Latn_BA{
                 one{"B {0}"}
                 other{"B {0}"}
             }
+            light-speed{
+                case{
+                    accusative{
+                        few{"{0} svjetla"}
+                        one{"{0} svjetlo"}
+                        other{"{0} svjetla"}
+                    }
+                    genitive{
+                        few{"{0} svjetla"}
+                        one{"{0} svjetla"}
+                        other{"{0} svjetala"}
+                    }
+                    instrumental{
+                        few{"{0} svjetla"}
+                        one{"{0} svjetlom"}
+                        other{"{0} svjetala"}
+                    }
+                }
+                dnam{"svjetlo"}
+                few{"{0} svjetla"}
+                one{"{0} svjetlo"}
+                other{"{0} svjetla"}
+            }
         }
         volume{
             acre-foot{
@@ -148,6 +196,11 @@ sr_Latn_BA{
         }
     }
     unitsNarrow{
+        concentr{
+            portion-per-1e9{
+                dnam{"dijelovi/milijarda"}
+            }
+        }
         duration{
             month{
                 few{"{0} mjes."}
@@ -184,6 +237,12 @@ sr_Latn_BA{
                 one{"B {0}"}
                 other{"B {0}"}
             }
+            light-speed{
+                dnam{"svjetlo"}
+                few{"{0} svjetla"}
+                one{"{0} svjetlo"}
+                other{"{0} svjetala"}
+            }
         }
         volume{
             barrel{
@@ -211,6 +270,11 @@ sr_Latn_BA{
         }
     }
     unitsShort{
+        concentr{
+            portion-per-1e9{
+                dnam{"dijelovi/milijarda"}
+            }
+        }
         duration{
             month{
                 dnam{"mjeseci"}
@@ -237,6 +301,12 @@ sr_Latn_BA{
                 few{"B {0}"}
                 one{"B {0}"}
                 other{"B {0}"}
+            }
+            light-speed{
+                dnam{"svjetlo"}
+                few{"{0} svjetla"}
+                one{"{0} svjetlo"}
+                other{"{0} svjetala"}
             }
         }
     }

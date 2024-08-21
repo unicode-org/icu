@@ -6,35 +6,35 @@ ak{
         001{"wiase"}
         002{"Abibirem"}
         003{"Amɛrika Atifi"}
-        005{"Amԑrika Anaafoͻ"}
+        005{"Amɛrika Anaafoɔ"}
         009{"Osiana"}
-        011{"Abibirem Atͻeɛ Fam"}
-        013{"Amԑrika Mfimfini"}
+        011{"Abibirem Atɔeɛ Fam"}
+        013{"Amɛrika Mfimfini"}
         014{"Abibirem Apueiɛ Fam"}
         015{"Abibirem Atifi Fam"}
         017{"Abibirem Mfimfini"}
-        018{"Abibirem Anaafoͻ Fam"}
-        019{"Amɛrikafoͻ"}
+        018{"Abibirem Anaafoɔ Fam"}
+        019{"Amɛrikafoɔ"}
         021{"Amɛrika Atifi Fam"}
         029{"Karibia"}
-        030{"Asia Apueiԑ"}
-        034{"Asia Anaafoͻ"}
-        035{"Asia Anaafoͻ Apuieԑ"}
-        039{"Yuropu Anaafoͻ"}
+        030{"Asia Apueiɛ"}
+        034{"Asia Anaafoɔ"}
+        035{"Asia Anaafoɔ Apuieɛ"}
+        039{"Yuropu Anaafoɔ"}
         053{"Ɔstrelia ne Asia"}
         054{"Melanesia"}
         057{"Micronesia Mantam"}
-        061{"Pͻlenesia"}
+        061{"Pɔlenesia"}
         142{"Asia"}
         143{"Asia Mfimfini"}
-        145{"Asia Atͻeԑ"}
+        145{"Asia Atɔeɛ"}
         150{"Yuropu"}
-        151{"Yuropu Apuieԑ"}
+        151{"Yuropu Apuieɛ"}
         154{"Yuropu Atifi"}
-        155{"Yuropu Atͻeԑ"}
-        202{"Abibirem Mpaprɛ Anaafoͻ"}
+        155{"Yuropu Atɔeɛ"}
+        202{"Abibirem Mpaprɛ Anaafoɔ"}
         419{"Laaten Amɛrika"}
-        AC{"Asԑnhyin"}
+        AC{"Asɛnhyin"}
         AD{"Andora"}
         AE{"United Arab Emirates"}
         AF{"Afganistan"}
@@ -73,7 +73,7 @@ ak{
         BY{"Bɛlarus"}
         BZ{"Beliz"}
         CA{"Kanada"}
-        CC{"Kokoso Supͻ"}
+        CC{"Kokoso Supɔ"}
         CD{"Kongo Kinhyaahya"}
         CF{"Afrika Finimfin Man"}
         CG{"Kongo"}
@@ -89,21 +89,21 @@ ak{
         CU{"Kuba"}
         CV{"Kepvɛdfo Islands"}
         CW{"Kurakaw"}
-        CX{"Buronya Supͻ"}
-        CY{"Saeprͻso"}
-        CZ{"Kyԑk"}
+        CX{"Buronya Supɔ"}
+        CY{"Saeprɔso"}
+        CZ{"Kyɛk"}
         DE{"Gyaaman"}
-        DG{"Diԑgo Gaasia"}
+        DG{"Diɛgo Gaasia"}
         DJ{"Gyibuti"}
         DK{"Dɛnmak"}
         DM{"Dɔmeneka"}
         DO{"Dɔmeneka Man"}
         DZ{"Ɔlgyeria"}
         EA{"Ceuta ne Melilla"}
-        EC{"Yikuwedͻ"}
+        EC{"Yikuwedɔ"}
         EE{"Ɛstonia"}
         EG{"Misrim"}
-        EH{"Sahara Atͻeԑ"}
+        EH{"Sahara Atɔeɛ"}
         ER{"Ɛritrea"}
         ES{"Spain"}
         ET{"Ithiopia"}
@@ -111,7 +111,7 @@ ak{
         EZ{"Yuropu Fam"}
         FI{"Finland"}
         FJ{"Figyi"}
-        FK{"Fͻkman Aeland"}
+        FK{"Fɔkman Aeland"}
         FM{"Maekronehyia"}
         FO{"Faro Aeland"}
         FR{"Franse"}
@@ -120,7 +120,7 @@ ak{
         GD{"Grenada"}
         GE{"Gyɔgyea"}
         GF{"Frɛnkye Gayana"}
-        GG{"Guԑnse"}
+        GG{"Guɛnse"}
         GH{"Gaana"}
         GI{"Gyebralta"}
         GL{"Greenman"}
@@ -129,13 +129,13 @@ ak{
         GP{"Guwadelup"}
         GQ{"Gini Ikuweta"}
         GR{"Greekman"}
-        GS{"Gyͻͻgyia Anaafoͻ ne Sandwich Aeland Anaafoͻ"}
+        GS{"Gyɔɔgyia Anaafoɔ ne Sandwich Aeland Anaafoɔ"}
         GT{"Guwatemala"}
         GU{"Guam"}
         GW{"Gini Bisaw"}
         GY{"Gayana"}
-        HK{"Hͻnkͻn Kyaena"}
-        HM{"Heard ne McDonald Supͻ"}
+        HK{"Hɔnkɔn Kyaena"}
+        HM{"Heard ne McDonald Supɔ"}
         HN{"Hɔnduras"}
         HR{"Krowehyia"}
         HT{"Heiti"}
@@ -151,7 +151,7 @@ ak{
         IR{"Iran"}
         IS{"Aesland"}
         IT{"Itali"}
-        JE{"Gyԑsi"}
+        JE{"Gyɛsi"}
         JM{"Gyameka"}
         JO{"Gyɔdan"}
         JP{"Gyapan"}
@@ -162,7 +162,7 @@ ak{
         KM{"Kɔmɔrɔs"}
         KN{"Saint Kitts ne Nɛves"}
         KP{"Korea Atifi"}
-        KR{"Korea Anaafoͻ"}
+        KR{"Korea Anaafoɔ"}
         KW{"Kuweti"}
         KY{"Kemanfo Islands"}
         KZ{"Kazakstan"}
@@ -174,7 +174,7 @@ ak{
         LR{"Laeberia"}
         LS{"Lesoto"}
         LT{"Lituwenia"}
-        LU{"Lusimbԑg"}
+        LU{"Lusimbɛg"}
         LV{"Latvia"}
         LY{"Libya"}
         MA{"Moroko"}
@@ -186,7 +186,7 @@ ak{
         MH{"Mahyaa Aeland"}
         MK{"Mesidonia Atifi"}
         ML{"Mali"}
-        MM{"Mayaama (Bԑԑma)"}
+        MM{"Mayaama (Bɛɛma)"}
         MN{"Mɔngolia"}
         MO{"Makaw Kyaena"}
         MP{"Mariana Atifi Fam Aeland"}
@@ -203,12 +203,12 @@ ak{
         NA{"Namibia"}
         NC{"Kaledonia Foforo"}
         NE{"Nigyɛɛ"}
-        NF{"Norfold Supͻ"}
+        NF{"Norfold Supɔ"}
         NG{"Naegyeria"}
         NI{"Nekaraguwa"}
         NL{"Nɛdɛland"}
         NO{"Nɔɔwe"}
-        NP{"Nԑpal"}
+        NP{"Nɛpal"}
         NR{"Naworu"}
         NU{"Niyu"}
         NZ{"Ziland Foforo"}
@@ -231,7 +231,7 @@ ak{
         QO{"Osiana Ano Ano"}
         RE{"Reyuniɔn"}
         RO{"Romenia"}
-        RS{"Sԑbia"}
+        RS{"Sɛbia"}
         RU{"Rɔhyea"}
         RW{"Rewanda"}
         SA{"Saudi Arabia"}
@@ -244,7 +244,7 @@ ak{
         SI{"Slovinia"}
         SJ{"Svalbard ne Jan Mayen"}
         SK{"Slovakia"}
-        SL{"Sɛra Liͻn"}
+        SL{"Sɛra Liɔn"}
         SM{"San Marino"}
         SN{"Senegal"}
         SO{"Somalia"}
@@ -274,15 +274,15 @@ ak{
         TZ{"Tansania"}
         UA{"Ukren"}
         UG{"Yuganda"}
-        UM{"U.S. Nkyԑnnkyԑn Supɔ Ahodoɔ"}
+        UM{"U.S. Nkyɛnnkyɛn Supɔ Ahodoɔ"}
         UN{"Amansan Nkabomkuo"}
         US{"Amɛrika"}
         UY{"Yurugwae"}
-        UZ{"Usbԑkistan"}
+        UZ{"Usbɛkistan"}
         VA{"Vatican Man"}
         VC{"Saint Vincent ne Grenadines"}
         VE{"Venezuela"}
-        VG{"Ngresifoͻ Virgin Island"}
+        VG{"Ngresifoɔ Virgin Island"}
         VI{"Amɛrika Virgin Islands"}
         VN{"Viɛtnam"}
         VU{"Vanuatu"}
@@ -291,26 +291,26 @@ ak{
         XA{"Anto Kasa"}
         XB{"Anto Bidi"}
         XK{"Kosovo"}
-        YE{"Yԑmԑn"}
+        YE{"Yɛmɛn"}
         YT{"Mayɔte"}
-        ZA{"Abibirem Anaafoͻ"}
+        ZA{"Abibirem Anaafoɔ"}
         ZM{"Zambia"}
         ZW{"Zimbabue"}
-        ZZ{"Mantam a Yԑnnim"}
+        ZZ{"Mantam a Yɛnnim"}
     }
     Countries%chagos{
         IO{"Kyagɔso Akyipalego"}
     }
     Countries%short{
-        HK{"Hͻnkͻn"}
+        HK{"Hɔnkɔn"}
         MO{"Makaw"}
     }
     Countries%variant{
         CD{"DR Kongo"}
         CG{"Kongo Man"}
-        CZ{"Kyԑk Man"}
-        FK{"Fͻkman Aeland (Islas Maivinas)"}
-        NZ{"Ziland Foforɔ a ԑwɔ Awotiarua"}
-        TL{"Timͻ Apueiԑ"}
+        CZ{"Kyɛk Man"}
+        FK{"Fɔkman Aeland (Islas Maivinas)"}
+        NZ{"Ziland Foforɔ a ɛwɔ Awotiarua"}
+        TL{"Timɔ Apueiɛ"}
     }
 }

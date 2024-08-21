@@ -1624,6 +1624,9 @@ sr_Latn{
             lg{"Petropavlovsko-kamčatsko vreme"}
             ls{"Petropavlovsko-kamčatsko standardno vreme"}
         }
+        "meta:Kazakhstan"{
+            ls{"Kazahstansko vreme"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Istočno-kazahstansko vreme"}
         }

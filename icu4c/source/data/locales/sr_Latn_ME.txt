@@ -22,13 +22,13 @@ sr_Latn_ME{
             }
             availableFormats{
                 MMMMW{
-                    few{"W. 'sjedmica' 'u' MMMM"}
-                    one{"W. 'sjedmica' 'u' MMMM"}
+                    few{"MMMM: W. 'nedelja'"}
+                    one{"MMMM: W. 'nedelja'"}
                     other{"W. 'sjedmica' 'u' MMMM"}
                 }
                 yw{
-                    few{"w. 'sjedmica' 'u' Y."}
-                    one{"w. 'sjedmica' 'u' Y."}
+                    few{"w. 'nedelja' 'u' Y."}
+                    one{"w. 'nedelja' 'u' Y."}
                     other{"w. 'sjedmica' 'u' Y."}
                 }
             }

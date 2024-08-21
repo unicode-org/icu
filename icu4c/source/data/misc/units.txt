@@ -2014,6 +2014,16 @@ units:table(nofallback){
                         unit{"kilometer-per-hour"}
                     }
                 }
+                CN{
+                    {
+                        unit{"meter-per-second"}
+                    }
+                }
+                DK{
+                    {
+                        unit{"meter-per-second"}
+                    }
+                }
                 FI{
                     {
                         unit{"meter-per-second"}
@@ -2022,6 +2032,11 @@ units:table(nofallback){
                 GB{
                     {
                         unit{"mile-per-hour"}
+                    }
+                }
+                JP{
+                    {
+                        unit{"meter-per-second"}
                     }
                 }
                 KR{

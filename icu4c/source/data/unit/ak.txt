@@ -46,7 +46,7 @@ ak{
         compound{
             10p-1{"dɛci{0}"}
             10p-12{"piko{0}"}
-            10p-15{"fɛmtͻ{0}"}
+            10p-15{"fɛmtɔ{0}"}
             10p-18{"atto{0}"}
             10p-2{"sɛnti{0}"}
             10p-3{"mili{0}"}
@@ -58,7 +58,7 @@ ak{
             10p2{"hɛkto{0}"}
             10p3{"kilo{0}"}
             10p6{"mɛga{0}"}
-            per{"{0} wͻ {1} biara mu"}
+            per{"{0} wɔ {1} biara mu"}
             power2{
                 one{
                     _{
@@ -230,9 +230,9 @@ ak{
                 other{"{0} dec"}
             }
             hour{
-                dnam{"dͻnhwere"}
-                one{"dͻnhwere {0}"}
-                other{"dͻnhwere {0}"}
+                dnam{"dɔnhwere"}
+                one{"dɔnhwere {0}"}
+                other{"dɔnhwere {0}"}
             }
             microsecond{
                 dnam{"μsecs"}
@@ -278,10 +278,10 @@ ak{
                 per{"sima sini biara {0}"}
             }
             week{
-                dnam{"nnawͻtwe"}
-                one{"nnawͻtwe {0}"}
-                other{"nnawͻtwe {0}"}
-                per{"nnawͻtwe biara {0}"}
+                dnam{"nnawɔtwe"}
+                one{"nnawɔtwe {0}"}
+                other{"nnawɔtwe {0}"}
+                per{"nnawɔtwe biara {0}"}
             }
             year{
                 dnam{"mfeɛ"}
@@ -539,8 +539,8 @@ ak{
         speed{
             knot{
                 dnam{"Pɔ"}
-                one{"Pͻ {0}"}
-                other{"Pͻ {0}"}
+                one{"Pɔ {0}"}
+                other{"Pɔ {0}"}
             }
             light-speed{
                 dnam{"kanea"}
@@ -577,9 +577,9 @@ ak{
                 other{"atere {0}"}
             }
             dram{
-                dnam{"drͻm"}
-                one{"drͻm fl {0}"}
-                other{"drͻm fl {0}"}
+                dnam{"drɔm"}
+                one{"drɔm fl {0}"}
+                other{"drɔm fl {0}"}
             }
             drop{
                 dnam{"koko"}
@@ -600,9 +600,9 @@ ak{
                 dnam{"pints"}
             }
             tablespoon{
-                dnam{"Atere kԑseԑ"}
-                one{"Atere kԑseԑ {0}"}
-                other{"Atere kԑseԑ {0}"}
+                dnam{"Atere kɛseɛ"}
+                one{"Atere kɛseɛ {0}"}
+                other{"Atere kɛseɛ {0}"}
             }
             teaspoon{
                 dnam{"atere fa"}
@@ -687,7 +687,7 @@ ak{
                 other{"nna {0}"}
             }
             hour{
-                dnam{"dͻnhwere"}
+                dnam{"dɔnhwere"}
             }
             microsecond{
                 dnam{"μsec"}
@@ -702,7 +702,7 @@ ak{
                 per{"{0}/anadwo"}
             }
             week{
-                dnam{"nnawͻtwe"}
+                dnam{"nnawɔtwe"}
             }
             year{
                 dnam{"mfeɛ"}
@@ -810,8 +810,8 @@ ak{
             }
             dram{
                 dnam{"fl.dr."}
-                one{"drͻm fl {0}"}
-                other{"drͻm fl {0}"}
+                one{"drɔm fl {0}"}
+                other{"drɔm fl {0}"}
             }
             drop{
                 dnam{"dr"}
@@ -942,7 +942,7 @@ ak{
                 other{"nna {0}"}
             }
             hour{
-                dnam{"dͻnhwere"}
+                dnam{"dɔnhwere"}
             }
             microsecond{
                 dnam{"μsecs"}
@@ -960,7 +960,7 @@ ak{
                 per{"{0}/anadwo"}
             }
             week{
-                dnam{"nnawͻtwe"}
+                dnam{"nnawɔtwe"}
             }
             year{
                 dnam{"mfeɛ"}
@@ -1082,9 +1082,9 @@ ak{
                 other{"{0} dsp"}
             }
             dram{
-                dnam{"drͻm"}
-                one{"drͻm {0}"}
-                other{"drͻm {0}"}
+                dnam{"drɔm"}
+                one{"drɔm {0}"}
+                other{"drɔm {0}"}
             }
             drop{
                 dnam{"koko"}

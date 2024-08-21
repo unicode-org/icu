@@ -552,6 +552,7 @@ ta{
                     other{"MMMM W -ஆம் வாரம்"}
                 }
                 MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
                 MMdd{"dd-MM"}
                 Md{"d/M"}
                 yM{"M/y"}
@@ -1749,7 +1750,7 @@ ta{
                 "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₹ ₨ {Rp} {Rs}]",
+                "[₹ {Rp} {Rs}₨]",
             }
         }
         number{

@@ -86,7 +86,7 @@ sr_Latn{
         }
         BAM{
             "KM",
-            "bosansko-hercegovačka konvertibilna marka",
+            "bosanskohercegovačka konvertibilna marka",
         }
         BBD{
             "BBD",
@@ -338,7 +338,7 @@ sr_Latn{
         }
         EUR{
             "€",
-            "Evro",
+            "evro",
         }
         FIM{
             "FIM",
@@ -926,7 +926,7 @@ sr_Latn{
         }
         TTD{
             "TTD",
-            "Trinidad-tobagoški dolar",
+            "trinidadskotobaški dolar",
         }
         TWD{
             "NT$",
@@ -1082,7 +1082,7 @@ sr_Latn{
         }
         XXX{
             "¤",
-            "Nepoznata valuta",
+            "nepoznata valuta",
         }
         YDD{
             "YDD",
@@ -1248,9 +1248,9 @@ sr_Latn{
             other{"bosansko-hercegovačkih dinara"}
         }
         BAM{
-            few{"bosansko-hercegovačke konvertibilne marke"}
-            one{"bosansko-hercegovačka konvertibilna marka"}
-            other{"bosansko-hercegovačkih konvertibilnih maraka"}
+            few{"bosanskohercegovačke konvertibilne marke"}
+            one{"bosanskohercegovačka konvertibilna marka"}
+            other{"bosanskohercegovačkih konvertibilnih maraka"}
         }
         BBD{
             few{"barbadoška dolara"}
@@ -2298,9 +2298,9 @@ sr_Latn{
             other{"turskih lira"}
         }
         TTD{
-            few{"trinidad-tobagoška dolara"}
-            one{"trinidad-tobagoški dolar"}
-            other{"trinidad-tobagoških dolara"}
+            few{"trinidadskotobaška dolara"}
+            one{"trinidadskotobaški dolar"}
+            other{"trinidadskotobaških dolara"}
         }
         TWD{
             few{"nova tajvanska dolara"}
@@ -2567,10 +2567,5 @@ sr_Latn{
             one{"zimbabvejski dolar (2008)"}
             other{"zimbabvejskih dolara (2008)"}
         }
-    }
-    CurrencyUnitPatterns{
-        few{"{0} {1}"}
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

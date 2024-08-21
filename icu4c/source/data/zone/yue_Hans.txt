@@ -1617,6 +1617,9 @@ yue_Hans{
             lg{"彼得罗巴甫洛夫斯克时间"}
             ls{"彼得罗巴甫洛夫斯克标准时间"}
         }
+        "meta:Kazakhstan"{
+            ls{"哈萨克时间"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"东哈萨克时间"}
         }

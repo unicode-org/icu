@@ -22,9 +22,6 @@ en_AU{
             kilometer{
                 dnam{"kilometre"}
             }
-            micrometer{
-                dnam{"micrometres"}
-            }
         }
         pressure{
             pound-force-per-square-inch{
@@ -35,7 +32,6 @@ en_AU{
         }
         temperature{
             generic{
-                dnam{"degrees"}
                 one{"{0} degree"}
                 other{"{0} degrees"}
             }
@@ -84,12 +80,6 @@ en_AU{
             kilometer-per-hour{
                 one{"{0} km/h"}
                 other{"{0} km/h"}
-            }
-        }
-        temperature{
-            celsius{
-                one{"{0}°C"}
-                other{"{0}°C"}
             }
         }
         volume{
