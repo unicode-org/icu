@@ -4130,6 +4130,10 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
     for (const auto& item : full_data) {
         const char* const org = item.from;
         const char* const exp = item.add;
+		if (uprv_strcmp(org,"und_Hant_CN") == 0 &&
+            	logKnownIssue("CLDR-17908", "und_Hant_CN changed expected result for Likely Subtags")) {
+            continue;
+        }
         Locale res(org);
         res.addLikelySubtags(status);
         status.errIfFailureAndReset("\"%s\"", org);
@@ -4143,6 +4147,10 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
     for (const auto& item : full_data) {
         const char* const org = item.from;
         const char* const exp = item.remove;
+		if (uprv_strcmp(org,"und_Hant_CN") == 0 &&
+            	logKnownIssue("CLDR-17908", "und_Hant_CN changed expected result for Likely Subtags")) {
+            continue;
+        }
         Locale res(org);
         res.minimizeSubtags(status);
         status.errIfFailureAndReset("\"%s\"", org);

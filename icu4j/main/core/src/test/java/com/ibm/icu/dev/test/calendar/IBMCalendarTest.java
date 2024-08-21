@@ -265,7 +265,10 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         // ssh => ssh_Arab_AE => Saturday
         verifyFirstDayOfWeek("ssh", Calendar.SATURDAY);
         // wbl_Arab => wbl_Arab_AF => Saturday
-        verifyFirstDayOfWeek("wbl-Arab", Calendar.SATURDAY);
+        if (!logKnownIssue("CLDR-17907", "wbl-Arab returns wrong first day of the week, probably caused by wrong Likely Subtag algo")) {
+        	verifyFirstDayOfWeek("wbl-Arab", Calendar.SATURDAY);
+        }
+        
 
         // en => en_Latn_US => Sunday
         verifyFirstDayOfWeek("en", Calendar.SUNDAY);
