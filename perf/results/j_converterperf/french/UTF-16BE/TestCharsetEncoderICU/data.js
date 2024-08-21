@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1724113989862,
+  "lastUpdate": 1724262817761,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24417,6 +24417,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 6.284386894438419,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "01d755749c8f5ee5ea1dd2f2c68f574b1b6e7ff4",
+          "message": "ICU-22853 Support formatting types in java.time",
+          "timestamp": "2024-08-21T10:38:58-07:00",
+          "tree_id": "fc35526e29d9d522c7ca7562b7c97c814d58a85f",
+          "url": "https://github.com/unicode-org/icu/commit/01d755749c8f5ee5ea1dd2f2c68f574b1b6e7ff4"
+        },
+        "date": 1724262667637,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 6.299524819215659,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
