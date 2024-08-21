@@ -362,6 +362,8 @@ RegionTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* 
    TESTCASE_AUTO(TestNoContainedRegions);
    TESTCASE_AUTO(TestGroupingChildren);
    TESTCASE_AUTO(TestGetRegionForSupplementalDataMatch);
+   TESTCASE_AUTO(TestRegionDeprecate);
+   TESTCASE_AUTO(TestRegionUndefined);
    TESTCASE_AUTO_END;
 }
 
@@ -838,6 +840,46 @@ void RegionTest::TestGetRegionForSupplementalDataMatch(void) {
         }
         printf("\n};\n");
         errln("ulocimp_getRegionForSupplementalData() differs from supplementalData");
+    }
+}
+
+// ICU-22868
+void RegionTest::TestRegionDeprecate() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalUResourceBundlePointer supplementalData(ures_openDirect(nullptr,"supplementalData",&status));
+    LocalUResourceBundlePointer idValidity(ures_getByKey(supplementalData.getAlias(),"idValidity",nullptr,&status));
+    LocalUResourceBundlePointer regionList(ures_getByKey(idValidity.getAlias(),"region",nullptr,&status));
+    LocalUResourceBundlePointer deprecated(ures_getByKey(regionList.getAlias(),"deprecated",nullptr,&status));
+    while (U_SUCCESS(status) && ures_hasNext(deprecated.getAlias())) {
+        UnicodeString region = ures_getNextUnicodeString(deprecated.getAlias(),nullptr,&status);
+        if (U_SUCCESS(status)) {
+            std::string str;
+            const Region *r = Region::getInstance(region.toUTF8String<std::string>(str).c_str(), status);
+            if (U_FAILURE(status) || r == nullptr) {
+                errln("Region %s should be found even it is deprecated.\n", str.c_str());
+            } else if (r->getType() != URGN_DEPRECATED) {
+                errln("getType() of Region %s should return URGN_DEPRECATED(%d) but return %d.\n",
+                      str.c_str(), URGN_DEPRECATED, r->getType());
+            }
+        }
+    }
+}
+
+// ICU-22868
+void RegionTest::TestRegionUndefined() {
+    // These regions are not defined in
+    // https://github.com/unicode-org/cldr/blob/main/common/validity/region.xml
+    // Region::getInstance should not create them
+    // successuflly and return URGN_TERRITORY.
+    const char* undefined[] = {
+        "CT", "DY", "HV", "JT", "MI", "NH", "NQ", "PU", "PZ", "RH", "UK", "VD", "WK"
+    };
+    for (int32_t i = 0; i < UPRV_LENGTHOF(undefined); i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        const Region *r = Region::getInstance(undefined[i] ,status);
+        if (U_SUCCESS(status) || r != nullptr) {
+            errln("Region %s should not be found because it is not defined.\n", undefined[i]);
+        }
     }
 }
 

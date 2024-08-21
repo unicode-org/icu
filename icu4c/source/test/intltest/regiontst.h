@@ -41,6 +41,9 @@ public:
     void TestGroupingChildren();
     void TestGetRegionForSupplementalDataMatch();
 
+    void TestRegionDeprecate();
+    void TestRegionUndefined();
+
 private:
 
     UBool optionv; // true if @v option is given on command line

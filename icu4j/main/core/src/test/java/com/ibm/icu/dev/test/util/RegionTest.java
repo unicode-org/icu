@@ -633,6 +633,7 @@ public class RegionTest extends CoreTestFmwk {
             }
         }
     }
+<<<<<<< HEAD
 
     public static class MutableRegionValidateMap extends ULocale.RegionValidateMap {
         public MutableRegionValidateMap() {
@@ -671,6 +672,40 @@ public class RegionTest extends CoreTestFmwk {
             }
             System.out.println("\n};");
             errln("Error !!!!");
+        }
+    }
+
+    @Test
+    public void TestRegionDeprecate() {
+        UResourceBundle supplementalData = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,"supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle idValidity = supplementalData.get("idValidity");
+        UResourceBundle regionList = idValidity.get("region");
+        UResourceBundle deprecatedList = regionList.get("deprecated");
+        for (String deprecated : deprecatedList.getStringArray()) {
+            Region r = Region.getInstance(deprecated);
+            if (r.getType() != Region.RegionType.DEPRECATED) {
+                errln("getType() of Region " +  deprecated + " should return DEPRECATED (" +
+                    Region.RegionType.DEPRECATED + ") but return " + r.getType());
+            }
+        }
+    }
+
+    @Test
+    public void TestRegionUndefined() {
+        // These regions are not defined in
+        // https://github.com/unicode-org/cldr/blob/main/common/validity/region.xml
+        // Region.getInstance should not create them
+        // successuflly and return URGN_TERRITORY.
+        String[] testData = {
+            "CT", "DY", "HV", "JT", "MI", "NH", "NQ", "PU", "PZ", "RH", "UK", "VD", "WK"
+        };
+        for (String undefined : testData) {
+            try {
+                Region.getInstance(undefined);
+                errln("Region " +  undefined + " should not be found because it is not defined.\n");
+            } catch ( Exception ex ) {
+                // Do nothing - we're supposed to get here.
+            }
         }
     }
 }
