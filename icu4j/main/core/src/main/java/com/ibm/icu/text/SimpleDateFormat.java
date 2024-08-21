@@ -17,6 +17,8 @@ import java.text.AttributedString;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
+import java.time.Clock;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,6 +32,7 @@ import com.ibm.icu.impl.DayPeriodRules;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.JavaTimeConverters;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
@@ -3917,6 +3920,10 @@ public class SimpleDateFormat extends DateFormat {
             calendar.setTime((Date)obj);
         } else if (obj instanceof Number) {
             calendar.setTimeInMillis(((Number)obj).longValue());
+        } else if (obj instanceof Clock) {
+            cal = JavaTimeConverters.temporalToCalendar((Clock) obj);
+        } else if (obj instanceof Temporal) {
+            cal = JavaTimeConverters.temporalToCalendar((Temporal) obj);
         } else {
             throw new IllegalArgumentException("Cannot format given Object as a Date");
         }

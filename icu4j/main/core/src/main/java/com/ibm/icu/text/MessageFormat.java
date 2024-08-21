@@ -24,6 +24,8 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.time.Clock;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,6 +43,7 @@ import com.ibm.icu.text.MessagePattern.ArgType;
 import com.ibm.icu.text.MessagePattern.Part;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.text.PluralRules.PluralType;
+import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
@@ -1745,8 +1748,17 @@ public class MessageFormat extends UFormat {
                 if (arg instanceof Number) {
                     // format number if can
                     dest.formatAndAppend(getStockNumberFormatter(), arg);
-                 } else if (arg instanceof Date) {
+                } else if (arg instanceof Date) {
                     // format a Date if can
+                    dest.formatAndAppend(getStockDateFormatter(), arg);
+                } else if (arg instanceof Calendar) {
+                    // format a Calendar if can
+                    dest.formatAndAppend(getStockDateFormatter(), arg);
+                } else if (arg instanceof Clock) {
+                    // format a Clock if can
+                    dest.formatAndAppend(getStockDateFormatter(), arg);
+                } else if (arg instanceof Temporal) {
+                    // format a Temporal if can
                     dest.formatAndAppend(getStockDateFormatter(), arg);
                 } else {
                     dest.append(arg.toString());
