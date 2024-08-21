@@ -422,6 +422,7 @@ km{
                 MMMMW{
                     other{"សប្តាហ៍ទី W នៃខែ MMMM"}
                 }
+                MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d/M"}
                 yM{"M/y"}

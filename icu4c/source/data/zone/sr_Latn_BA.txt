@@ -384,6 +384,9 @@ sr_Latn_BA{
             lg{"Japansko vrijeme"}
             ls{"Japansko standardno vrijeme"}
         }
+        "meta:Kazakhstan"{
+            ls{"Kazahstansko vrijeme"}
+        }
         "meta:Kazakhstan_Eastern"{
             ls{"Istočno-kazahstansko vrijeme"}
         }

@@ -344,6 +344,7 @@ pa{
                 GyMd{"d/M/GGGGG y"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
+                MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d/M"}
                 y{"y G"}
@@ -1364,7 +1365,7 @@ pa{
                 "[£￡ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₹ ₨ {Rp} {Rs}]",
+                "[₹ {Rp} {Rs}₨]",
             }
         }
         number{

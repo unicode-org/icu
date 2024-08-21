@@ -9,7 +9,7 @@ ak{
         }
         AFN{
             "AFN",
-            "Afghanfoͻ Afghani",
+            "Afghanfoɔ Afghani",
         }
         ALL{
             "ALL",
@@ -89,7 +89,7 @@ ak{
         }
         BTN{
             "BTN",
-            "Butanfoͻ ngutrum",
+            "Butanfoɔ ngutrum",
         }
         BWP{
             "BWP",
@@ -233,7 +233,7 @@ ak{
         }
         HKD{
             "HK$",
-            "Hͻnkͻn Dͻla",
+            "Hɔnkɔn Dɔla",
         }
         HNL{
             "HNL",
@@ -269,7 +269,7 @@ ak{
         }
         IRR{
             "IRR",
-            "Yiranfoͻ rial",
+            "Yiranfoɔ rial",
         }
         ISK{
             "ISK",
@@ -309,7 +309,7 @@ ak{
         }
         KRW{
             "₩",
-            "Korea Anaafoͻ won",
+            "Korea Anaafoɔ won",
         }
         KWD{
             "KWD",
@@ -333,7 +333,7 @@ ak{
         }
         LKR{
             "LKR",
-            "Sri Lankafoͻ rupee",
+            "Sri Lankafoɔ rupee",
         }
         LRD{
             "LRD",
@@ -369,7 +369,7 @@ ak{
         }
         MNT{
             "MNT",
-            "Mongoliafoͻ tugrike",
+            "Mongoliafoɔ tugrike",
         }
         MOP{
             "MOP",
@@ -389,7 +389,7 @@ ak{
         }
         MVR{
             "MVR",
-            "Maldivefoͻ rufiyaa",
+            "Maldivefoɔ rufiyaa",
         }
         MWK{
             "MWK",
@@ -429,7 +429,7 @@ ak{
         }
         NPR{
             "NPR",
-            "Nepalfoͻ rupee",
+            "Nepalfoɔ rupee",
         }
         NZD{
             "NZ$",
@@ -457,7 +457,7 @@ ak{
         }
         PKR{
             "PKR",
-            "Pakistanfoͻ rupee",
+            "Pakistanfoɔ rupee",
         }
         PLN{
             "PLN",
@@ -585,7 +585,7 @@ ak{
         }
         TWD{
             "NT$",
-            "Taewanfoͻ dͻla foforͻ",
+            "Taewanfoɔ dɔla foforɔ",
         }
         TZS{
             "TZS",
@@ -605,7 +605,7 @@ ak{
         }
         UYU{
             "UYU",
-            "Yurugueԑ peso",
+            "Yurugueɛ peso",
         }
         UZS{
             "UZS",
@@ -670,8 +670,8 @@ ak{
     }
     CurrencyPlurals{
         AFN{
-            one{"Afghanfoͻ Afghani"}
-            other{"Afghanfoͻ Afghani"}
+            one{"Afghanfoɔ Afghani"}
+            other{"Afghanfoɔ Afghani"}
         }
         ALL{
             one{"Albania lek"}
@@ -734,8 +734,8 @@ ak{
             other{"Bahama dɔla"}
         }
         BTN{
-            one{"Butanfoͻ ngutrum"}
-            other{"Butanfoͻ ngutrum"}
+            one{"Butanfoɔ ngutrum"}
+            other{"Butanfoɔ ngutrum"}
         }
         BYN{
             one{"Bɛlaruhyia ruble"}
@@ -818,8 +818,8 @@ ak{
             other{"Gayana dɔla"}
         }
         HKD{
-            one{"Hͻnkͻn Dͻla"}
-            other{"Hͻnkͻn Dͻla"}
+            one{"Hɔnkɔn Dɔla"}
+            other{"Hɔnkɔn Dɔla"}
         }
         HNL{
             one{"Hɔndura lɛmpira"}
@@ -850,8 +850,8 @@ ak{
             other{"Irak dinaa"}
         }
         IRR{
-            one{"Yiranfoͻ rial"}
-            other{"Yiranfoͻ rial"}
+            one{"Yiranfoɔ rial"}
+            other{"Yiranfoɔ rial"}
         }
         ISK{
             one{"Icelandfoɔ króna"}
@@ -878,8 +878,8 @@ ak{
             other{"Korea Atifi won"}
         }
         KRW{
-            one{"Korea Anaafoͻ won"}
-            other{"Korea Anaafoͻ won"}
+            one{"Korea Anaafoɔ won"}
+            other{"Korea Anaafoɔ won"}
         }
         KWD{
             one{"Kuwait dinaa"}
@@ -902,8 +902,8 @@ ak{
             other{"Lɛbanon pɔn"}
         }
         LKR{
-            one{"Sri Lankafoͻ rupee"}
-            other{"Sri Lankafoͻ rupee"}
+            one{"Sri Lankafoɔ rupee"}
+            other{"Sri Lankafoɔ rupee"}
         }
         MDL{
             one{"Moldova leu"}
@@ -918,16 +918,16 @@ ak{
             other{"Mayamaa kyat"}
         }
         MNT{
-            one{"Mongoliafoͻ tugrike"}
-            other{"Mongoliafoͻ tugrike"}
+            one{"Mongoliafoɔ tugrike"}
+            other{"Mongoliafoɔ tugrike"}
         }
         MOP{
             one{"Makaw pataka"}
             other{"Makaw pataka"}
         }
         MVR{
-            one{"Maldivefoͻ rufiyaa"}
-            other{"Maldivefoͻ rufiyaa"}
+            one{"Maldivefoɔ rufiyaa"}
+            other{"Maldivefoɔ rufiyaa"}
         }
         MWK{
             one{"Malawi Kwakya"}
@@ -954,8 +954,8 @@ ak{
             other{"Nɔɔwee kroner"}
         }
         NPR{
-            one{"Nepalfoͻ rupee"}
-            other{"Nepalfoͻ rupee"}
+            one{"Nepalfoɔ rupee"}
+            other{"Nepalfoɔ rupee"}
         }
         NZD{
             one{"New Zealand Dɔla"}
@@ -982,8 +982,8 @@ ak{
             other{"Filipine peso"}
         }
         PKR{
-            one{"Pakistanfoͻ rupee"}
-            other{"Pakistanfoͻ rupee"}
+            one{"Pakistanfoɔ rupee"}
+            other{"Pakistanfoɔ rupee"}
         }
         PLN{
             one{"Pɔlihye zloty"}
@@ -1058,16 +1058,16 @@ ak{
             other{"Trinidad ne Tobago dɔla"}
         }
         TWD{
-            one{"Taelanfoͻ dͻla foforͻ"}
-            other{"Taewanfoͻ dͻla foforͻ"}
+            one{"Taelanfoɔ dɔla foforɔ"}
+            other{"Taewanfoɔ dɔla foforɔ"}
         }
         UAH{
             one{"Yukren hryvnia"}
             other{"Yukren hryvnia"}
         }
         UYU{
-            one{"Yurugueԑ peso"}
-            other{"Yurugueԑ peso"}
+            one{"Yurugueɛ peso"}
+            other{"Yurugueɛ peso"}
         }
         UZS{
             one{"Yusbɛkistan som"}

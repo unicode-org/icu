@@ -722,6 +722,9 @@ en{
         yue{"Chinese, Cantonese"}
         zh{"Chinese, Mandarin"}
     }
+    Languages%official{
+        mus{"Mvskoke"}
+    }
     Languages%short{
         az{"Azeri"}
         en_GB{"UK English"}

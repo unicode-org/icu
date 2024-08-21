@@ -17,6 +17,11 @@ nqo{
             }
         }
         native{"nkoo"}
+        nkoo{
+            symbols{
+                group{"،"}
+            }
+        }
     }
     calendar{
         gregorian{

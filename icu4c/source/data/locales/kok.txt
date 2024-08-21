@@ -395,9 +395,11 @@ kok{
                 MEd{"d-M, E"}
                 MMMEd{"E, d MMM"}
                 MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
                 Md{"d-M"}
                 yM{"M-y"}
                 yMEd{"d-M-y, E"}
+                yMMM{"MMM, y"}
                 yMMMM{"MMMM, y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d-M-y"}

@@ -1,5 +1,5 @@
 
-# Test data for unit preferences
+# Test data for unit region preferences
 #  Copyright © 1991-2024 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
 #  SPDX-License-Identifier: Unicode-3.0
@@ -384,9 +384,9 @@ speed;	wind;	001;	11/36;	0.3055555555555556;	meter-per-second;	11/10;	1.1;	kilom
 speed;	wind;	001;	5/18;	0.2777777777777778;	meter-per-second;	1;	1.0;	kilometer-per-hour
 speed;	wind;	001;	1/4;	0.25;	meter-per-second;	9/10;	0.9;	kilometer-per-hour
 
-speed;	wind;	FI;	11/10;	1.1;	meter-per-second;	11/10;	1.1;	meter-per-second
-speed;	wind;	FI;	1;	1.0;	meter-per-second;	1;	1.0;	meter-per-second
-speed;	wind;	FI;	9/10;	0.9;	meter-per-second;	9/10;	0.9;	meter-per-second
+speed;	wind;	CN;	11/10;	1.1;	meter-per-second;	11/10;	1.1;	meter-per-second
+speed;	wind;	CN;	1;	1.0;	meter-per-second;	1;	1.0;	meter-per-second
+speed;	wind;	CN;	9/10;	0.9;	meter-per-second;	9/10;	0.9;	meter-per-second
 
 speed;	wind;	GB;	15367/31250;	0.491744;	meter-per-second;	11/10;	1.1;	mile-per-hour
 speed;	wind;	GB;	1397/3125;	0.44704;	meter-per-second;	1;	1.0;	mile-per-hour

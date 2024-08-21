@@ -3,21 +3,21 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ak{
     Keys{
-        calendar{"Kalԑnna"}
-        cf{"Sika Fͻmate"}
+        calendar{"Kalɛnna"}
+        cf{"Sika Fɔmate"}
         collation{"Nyiyie Kwan"}
         currency{"Sika"}
-        hc{"Dͻnhwere Nkͻmmaeԑ (12 anaa 24)"}
-        lb{"Line Break Nhyehyԑeԑ"}
-        ms{"Nsusudeԑ Sestԑm"}
-        numbers{"Nԑma"}
+        hc{"Dɔnhwere Nkɔmmaeɛ (12 anaa 24)"}
+        lb{"Line Break Nhyehyɛeɛ"}
+        ms{"Nsusudeɛ Sestɛm"}
+        numbers{"Nɛma"}
     }
     Languages{
         af{"Afrikaans"}
         ak{"Akan"}
         am{"Amarik"}
         ar{"Arabeke"}
-        ar_001{"Arabeke Kasa Nhyehyԑeԑ Foforͻ"}
+        ar_001{"Arabeke Kasa Nhyehyɛeɛ Foforɔ"}
         as{"Asamese"}
         ast{"Asturiani"}
         az{"Asabegyanni"}
@@ -41,12 +41,12 @@ ak{
         de{"Gyaaman"}
         de_AT{"Ɔstria Gyaaman"}
         de_CH{"Swisalande Gyaaman"}
-        doi{"Dͻgri"}
-        dsb{"Sͻͻbia a ԑwͻ fam"}
+        doi{"Dɔgri"}
+        dsb{"Sɔɔbia a ɛwɔ fam"}
         el{"Greek kasa"}
         en{"Borɔfo"}
-        en_GB{"Ngresi Borͻfo"}
-        en_US{"Amԑrika Borͻfo"}
+        en_GB{"Ngresi Borɔfo"}
+        en_US{"Amɛrika Borɔfo"}
         eo{"Esperanto"}
         es{"Spain kasa"}
         es_419{"Spain kasa (Laaten Amɛrika)"}
@@ -58,8 +58,8 @@ ak{
         fil{"Filipin kasa"}
         fo{"Farosi"}
         fr{"Frɛnkye"}
-        fr_CA{"Kanada Frԑnkye"}
-        fr_CH{"Swisalande Frԑnkye"}
+        fr_CA{"Kanada Frɛnkye"}
+        fr_CH{"Swisalande Frɛnkye"}
         fy{"Atɔeɛ Fam Frihyia Kasa"}
         ga{"Aerelande kasa"}
         gd{"Skotlandfoɔ Galek Kasa"}
@@ -68,7 +68,7 @@ ak{
         ha{"Hausa"}
         he{"Hibri kasa"}
         hi{"Hindi"}
-        hi_Latn{"Laatenfoͻ Hindi"}
+        hi_Latn{"Laatenfoɔ Hindi"}
         hr{"Kurowehyia kasa"}
         hsb{"Atifi fam Sɔɔbia Kasa"}
         hu{"Hangri kasa"}
@@ -81,7 +81,7 @@ ak{
         it{"Italy kasa"}
         ja{"Gyapan kasa"}
         jv{"Gyabanis kasa"}
-        ka{"Gyͻͻgyia kasa"}
+        ka{"Gyɔɔgyia kasa"}
         kea{"Kabuvadianu"}
         kgp{"Kaingang"}
         kk{"kasaki kasa"}
@@ -89,11 +89,11 @@ ak{
         kn{"Kanada"}
         ko{"Korea kasa"}
         kok{"Konkani kasa"}
-        ks{"Kahyimiԑ"}
-        ku{"Kԑԑde kasa"}
+        ks{"Kahyimiɛ"}
+        ku{"Kɛɛde kasa"}
         kxv{"Kuvi kasa"}
-        ky{"Kԑgyese kasa"}
-        lb{"Lͻsimbͻge kasa"}
+        ky{"Kɛgyese kasa"}
+        lb{"Lɔsimbɔge kasa"}
         lij{"Liguria kasa"}
         lmo{"Lombad kasa"}
         lo{"Lawo kasa"}
@@ -101,31 +101,31 @@ ak{
         lv{"Latvia kasa"}
         mai{"Maetili"}
         mi{"Mawori"}
-        mk{"Mԑsidonia kasa"}
+        mk{"Mɛsidonia kasa"}
         ml{"Malayalam kasa"}
-        mn{"Mongoliafoͻ kasa"}
+        mn{"Mongoliafoɔ kasa"}
         mni{"Manipuri"}
         mr{"Marati"}
         ms{"Malay kasa"}
         mt{"Malta kasa"}
-        mul{"Kasa ahodoͻ"}
+        mul{"Kasa ahodoɔ"}
         my{"Bɛɛmis kasa"}
-        nds{"Gyaaman kasa a ԑwͻ fam"}
+        nds{"Gyaaman kasa a ɛwɔ fam"}
         ne{"Nɛpal kasa"}
         nl{"Dɛɛkye"}
-        nl_BE{"Dԑԑkye (Bԑԑgyiͻm"}
-        nn{"Nͻwefoͻ Ninͻso"}
-        no{"Nͻwefoͻ kasa"}
+        nl_BE{"Dɛɛkye (Bɛɛgyiɔm"}
+        nn{"Nɔwefoɔ Ninɔso"}
+        no{"Nɔwefoɔ kasa"}
         nqo{"Nko"}
         oc{"Osita kasa"}
         or{"Odia"}
         pa{"Pungyabi kasa"}
-        pcm{"Nigeriafoͻ Pigyin"}
+        pcm{"Nigeriafoɔ Pigyin"}
         pl{"Pɔland kasa"}
         prg{"Prusia kasa"}
         ps{"Pahyito"}
         pt{"Pɔɔtugal kasa"}
-        qu{"Kwԑkya"}
+        qu{"Kwɛkya"}
         raj{"Ragyasitan kasa"}
         rm{"Romanhye kasa"}
         ro{"Romenia kasa"}
@@ -141,7 +141,7 @@ ak{
         sl{"Slovɛniafoɔ Kasa"}
         so{"Somalia kasa"}
         sq{"Aabeniani"}
-        sr{"Sԑbia Kasa"}
+        sr{"Sɛbia Kasa"}
         su{"Sunda Kasa"}
         sv{"Sweden kasa"}
         sw{"Swahili"}
@@ -149,7 +149,7 @@ ak{
         szl{"Silesiafoɔ Kasa"}
         ta{"Tamil kasa"}
         te{"Telugu"}
-        tg{"Tԑgyeke kasa"}
+        tg{"Tɛgyeke kasa"}
         th{"Taeland kasa"}
         ti{"Tigrinya kasa"}
         tk{"Tɛkmɛnistan Kasa"}
@@ -160,7 +160,7 @@ ak{
         uk{"Ukren kasa"}
         und{"kasa a yɛnnim"}
         ur{"Urdu kasa"}
-        uz{"Usbԑkistan Kasa"}
+        uz{"Usbɛkistan Kasa"}
         vec{"Vɛnihyia Kasa"}
         vi{"Viɛtnam kasa"}
         vmw{"Makuwa"}
@@ -172,13 +172,13 @@ ak{
         yue{"Kantonese"}
         za{"Zuang"}
         zh{"Kyaena kasa"}
-        zh_Hans{"Kyaena kasa a emu yԑ mmrԑ"}
+        zh_Hans{"Kyaena kasa a emu yɛ mmrɛ"}
         zh_Hant{"Tete Kyaena kasa"}
         zu{"Zulu"}
         zxx{"Lengwestese biara nnim"}
     }
     Languages%long{
-        zh_Hans{"Mandarin Kyaena kasa a emu yԑ mmrԑ"}
+        zh_Hans{"Mandarin Kyaena kasa a emu yɛ mmrɛ"}
         zh_Hant{"Tete Mandarin Kyaena kasa"}
     }
     Languages%menu{
@@ -186,7 +186,7 @@ ak{
         zh{"Madarin, Kyaena kasa"}
     }
     Languages%variant{
-        hi_Latn{"Hindibrͻfo"}
+        hi_Latn{"Hindibrɔfo"}
     }
     Scripts{
         Adlm{"Adlam kasa"}
@@ -195,14 +195,14 @@ ak{
         Armn{"Amenia kasa"}
         Beng{"Bangala kasa"}
         Bopo{"Bopomofo kasa"}
-        Brai{"Anifrafoͻ kasa"}
+        Brai{"Anifrafoɔ kasa"}
         Cakm{"Kyakma kasa"}
-        Cans{"Kanadafoͻ Kann Kasa a Wͻakeka Abom"}
+        Cans{"Kanadafoɔ Kann Kasa a Wɔakeka Abom"}
         Cher{"Kɛroki"}
         Cyrl{"Kreleke"}
-        Deva{"Dԑvanagari kasa"}
+        Deva{"Dɛvanagari kasa"}
         Ethi{"Yitiopia kasa"}
-        Geor{"Dwͻͻgyia kasa"}
+        Geor{"Dwɔɔgyia kasa"}
         Grek{"Griiki kasa"}
         Gujr{"Gudwurati kasa"}
         Guru{"Gurumuki kasa"}
@@ -213,9 +213,9 @@ ak{
         Hant{"Tete"}
         Hebr{"Hibri kasa"}
         Hira{"Hiragana kasa"}
-        Hrkt{"Gyapanfoͻ selabolo kasa"}
+        Hrkt{"Gyapanfoɔ selabolo kasa"}
         Jamo{"Gyamo kasa"}
-        Jpan{"Gyapanfoͻ kasa"}
+        Jpan{"Gyapanfoɔ kasa"}
         Kana{"Katakana kasa"}
         Khmr{"Kɛma kasa"}
         Knda{"Kanada kasa"}
@@ -223,7 +223,7 @@ ak{
         Laoo{"Lawo kasa"}
         Latn{"Laatin"}
         Mlym{"Malayalam kasa"}
-        Mong{"Mongoliafoͻ kasa"}
+        Mong{"Mongoliafoɔ kasa"}
         Mtei{"Meeti Mayɛke kasa"}
         Mymr{"Mayama kasa"}
         Nkoo{"Nko kasa"}
@@ -237,14 +237,14 @@ ak{
         Telu{"Telugu kasa"}
         Tfng{"Tifinafo kasa"}
         Thaa{"Taana kasa"}
-        Thai{"Taelanfoͻ kasa"}
-        Tibt{"Tibɛtanfoͻ kasa"}
+        Thai{"Taelanfoɔ kasa"}
+        Tibt{"Tibɛtanfoɔ kasa"}
         Vaii{"Vai kasa"}
-        Yiii{"Yifoͻ kasa"}
+        Yiii{"Yifoɔ kasa"}
         Zmth{"Nkontabudeɛ"}
         Zsye{"Yimogyi"}
         Zsym{"Ahyɛnsodeɛ"}
-        Zxxx{"Deɛ wͻntwerɛeɛ"}
+        Zxxx{"Deɛ wɔntwerɛeɛ"}
         Zyyy{"obiara nim"}
         Zzzz{"Deɛ yɛnnim"}
     }
@@ -253,87 +253,87 @@ ak{
     }
     Types{
         calendar{
-            buddhist{"Budafoɔ Kalԑnna"}
-            chinese{"Kyaenafoɔ Kalԑnna"}
-            coptic{"Kɔtesefoɔ Kalԑnna"}
-            dangi{"Dangi Kalԑnna"}
-            ethiopic{"Yitiopia Kalԑnna"}
-            ethiopic-amete-alem{"Yitiopia Amete Alԑm Kalԑnna"}
-            gregorian{"Gregorian Kalԑnna"}
-            hebrew{"Hibri Kalԑnda"}
-            islamic{"Higyiri Kalԑnda"}
-            islamic-civil{"Higyiri Kalԑnda (tabula, sivil epokyi"}
-            islamic-umalqura{"Higyiri Kalԑnda (Ummm al-Kura)"}
-            iso8601{"ISO-8601 Kalԑnna"}
-            japanese{"Gyapanfoͻ Kalԑnda"}
-            persian{"Pԑԑsiafoͻ Kalԑnda"}
-            roc{"Minguo Kalԑnda"}
+            buddhist{"Budafoɔ Kalɛnna"}
+            chinese{"Kyaenafoɔ Kalɛnna"}
+            coptic{"Kɔtesefoɔ Kalɛnna"}
+            dangi{"Dangi Kalɛnna"}
+            ethiopic{"Yitiopia Kalɛnna"}
+            ethiopic-amete-alem{"Yitiopia Amete Alɛm Kalɛnna"}
+            gregorian{"Gregorian Kalɛnna"}
+            hebrew{"Hibri Kalɛnda"}
+            islamic{"Higyiri Kalɛnda"}
+            islamic-civil{"Higyiri Kalɛnda (tabula, sivil epokyi"}
+            islamic-umalqura{"Higyiri Kalɛnda (Ummm al-Kura)"}
+            iso8601{"ISO-8601 Kalɛnna"}
+            japanese{"Gyapanfoɔ Kalɛnda"}
+            persian{"Pɛɛsiafoɔ Kalɛnda"}
+            roc{"Minguo Kalɛnda"}
         }
         cf{
-            account{"Sika Nkotabuo Fͻmate"}
-            standard{"Sika Fͻmate Susudua"}
+            account{"Sika Nkotabuo Fɔmate"}
+            standard{"Sika Fɔmate Susudua"}
         }
         collation{
-            ducet{"Koodu Korͻ Nyiyie Kwan a ԑdi Kan"}
-            search{"Daa-Botaeԑ Adehwehwԑ"}
+            ducet{"Koodu Korɔ Nyiyie Kwan a ɛdi Kan"}
+            search{"Daa-Botaeɛ Adehwehwɛ"}
             standard{"Nyiyie Kwan Susudua"}
         }
         hc{
-            h11{"Nnɔnhwere 12 Sestԑm (0–11)"}
-            h12{"Nnɔnhwere 12 Sestԑm (1–12"}
-            h23{"Nnɔnhwere 24 Sestԑm (0–23)"}
-            h24{"Nnɔnhwere 24 Sestԑm (0–24)"}
+            h11{"Nnɔnhwere 12 Sestɛm (0–11)"}
+            h12{"Nnɔnhwere 12 Sestɛm (1–12"}
+            h23{"Nnɔnhwere 24 Sestɛm (0–23)"}
+            h24{"Nnɔnhwere 24 Sestɛm (0–24)"}
         }
         lb{
-            loose{"Line Break Nhyehyԑeԑ a Emu Yԑ Mmrԑ"}
-            normal{"Daa Line Break Nhyehyԑeԑ"}
-            strict{"Line Break Nhyehyԑeԑ Ferenkyemm"}
+            loose{"Line Break Nhyehyɛeɛ a Emu Yɛ Mmrɛ"}
+            normal{"Daa Line Break Nhyehyɛeɛ"}
+            strict{"Line Break Nhyehyɛeɛ Ferenkyemm"}
         }
         ms{
-            metric{"Mԑtreke Nhyehyԑeԑ"}
-            uksystem{"Imperial Nsusudeԑ Sestԑm"}
-            ussystem{"US Nsusudeԑ Sestԑm"}
+            metric{"Mɛtreke Nhyehyɛeɛ"}
+            uksystem{"Imperial Nsusudeɛ Sestɛm"}
+            ussystem{"US Nsusudeɛ Sestɛm"}
         }
         numbers{
             arab{"Arabeke Digyete"}
-            arabext{"Arabeke Digyete a Wͻatrԑm"}
-            armn{"Aamenia Nͻma"}
-            armnlow{"Aamenia Nͻma Nkumaa"}
+            arabext{"Arabeke Digyete a Wɔatrɛm"}
+            armn{"Aamenia Nɔma"}
+            armnlow{"Aamenia Nɔma Nkumaa"}
             beng{"Bangla Gigyete"}
             cakm{"Kyakma Digyete"}
             deva{"Devanagari Gigyete"}
-            ethi{"Yitiopia Nͻma"}
+            ethi{"Yitiopia Nɔma"}
             fullwide{"Digyete a Emu Pi"}
-            geor{"Gyͻgyea Nͻma"}
-            grek{"Griiki Nͻma"}
-            greklow{"Griiki Nͻma Nkumaa"}
+            geor{"Gyɔgyea Nɔma"}
+            grek{"Griiki Nɔma"}
+            greklow{"Griiki Nɔma Nkumaa"}
             gujr{"Gugyarati Digyete"}
             guru{"Gurumuki Digyete"}
-            hanidec{"Kyaenafoɔ Dԑsima Nͻma"}
-            hans{"Kyaenafoɔ Dԑsima Nͻma a Emu Yԑ Mmrԑ"}
-            hansfin{"Kyaenafoɔ Sikasԑm Dԑsima Nͻma a Emu Yԑ Mmrԑ"}
-            hant{"Kyaenafoɔ Tete Nͻma"}
-            hantfin{"Tete Kyaena Sikasԑm Nͻma"}
-            hebr{"Hibri Nͻma"}
+            hanidec{"Kyaenafoɔ Dɛsima Nɔma"}
+            hans{"Kyaenafoɔ Dɛsima Nɔma a Emu Yɛ Mmrɛ"}
+            hansfin{"Kyaenafoɔ Sikasɛm Dɛsima Nɔma a Emu Yɛ Mmrɛ"}
+            hant{"Kyaenafoɔ Tete Nɔma"}
+            hantfin{"Tete Kyaena Sikasɛm Nɔma"}
+            hebr{"Hibri Nɔma"}
             java{"Gyavaniisi Digyete"}
-            jpan{"Gyapanfoͻ Nͻma"}
-            jpanfin{"Gyapanfoͻ Sikasԑm Nͻma"}
+            jpan{"Gyapanfoɔ Nɔma"}
+            jpanfin{"Gyapanfoɔ Sikasɛm Nɔma"}
             khmr{"Kima Digyete"}
             knda{"Kanada Digyete"}
             laoo{"Lawo Digyete"}
-            latn{"Atͻeԑ Fam Digyete"}
+            latn{"Atɔeɛ Fam Digyete"}
             mlym{"Malayalam Digyete"}
-            mtei{"Meeti Mayԑke Digyete"}
+            mtei{"Meeti Mayɛke Digyete"}
             mymr{"Mayaama Digyete"}
             olck{"Ol Kyiki Digyete"}
             orya{"Odia Digyete"}
-            roman{"Roman Nͻma"}
-            romanlow{"Romanfoͻ Nͻma Nkumaa"}
-            taml{"Tamil Tete Nͻma"}
+            roman{"Roman Nɔma"}
+            romanlow{"Romanfoɔ Nɔma Nkumaa"}
+            taml{"Tamil Tete Nɔma"}
             tamldec{"Tamil Digyete"}
             telu{"Telugu Digyete"}
-            thai{"Taelanfoͻ Digyete"}
-            tibt{"Tibԑtan Digyete"}
+            thai{"Taelanfoɔ Digyete"}
+            tibt{"Tibɛtan Digyete"}
             vaii{"Vai Gigyete"}
         }
     }

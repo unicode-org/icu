@@ -357,7 +357,9 @@ ti{
                 GyMd{"M/d/y GGGGG"}
                 MEd{"E፣ d/M"}
                 MMMEd{"E, MMM d"}
+                MMMMd{"d MMMM"}
                 MMMMdd{"dd MMMM"}
+                MMMd{"d MMM"}
                 MMdd{"dd/MM"}
                 Md{"M/d"}
                 y{"y G"}
@@ -529,6 +531,7 @@ ti{
                     one{"ሰሙን W ናይ MMMM"}
                     other{"ሰሙን W ናይ MMMM"}
                 }
+                MMMMd{"d MMMM"}
                 MMMMdd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMdd{"d/M"}

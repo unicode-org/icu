@@ -58,7 +58,7 @@ ak{
             ec{"Wagadugu"}
         }
         "America:Anchorage"{
-            ec{"Ankͻragyi"}
+            ec{"Ankɔragyi"}
         }
         "America:Anguilla"{
             ec{"Anguila"}
@@ -67,7 +67,7 @@ ak{
             ec{"La Riogya"}
         }
         "America:Argentina:Rio_Gallegos"{
-            ec{"Rio Gallegͻs"}
+            ec{"Rio Gallegɔs"}
         }
         "America:Argentina:San_Juan"{
             ec{"San Dwuan"}
@@ -82,7 +82,7 @@ ak{
             ec{"Bɛlɛm"}
         }
         "America:Belize"{
-            ec{"Bԑlisi"}
+            ec{"Bɛlisi"}
         }
         "America:Blanc-Sablon"{
             ec{"Blanc-Sablɔn"}
@@ -115,13 +115,13 @@ ak{
             ec{"Kyihuahua"}
         }
         "America:Cordoba"{
-            ec{"Kͻͻdͻba"}
+            ec{"Kɔɔdɔba"}
         }
         "America:Costa_Rica"{
             ec{"Kɔsta Rika"}
         }
         "America:Creston"{
-            ec{"Krԑston"}
+            ec{"Krɛston"}
         }
         "America:Cuiaba"{
             ec{"Kuiaba"}
@@ -136,7 +136,7 @@ ak{
             ec{"Dɔɔson Kreek"}
         }
         "America:Denver"{
-            ec{"Dԑnva"}
+            ec{"Dɛnva"}
         }
         "America:Detroit"{
             ec{"Detrɔit"}
@@ -151,10 +151,10 @@ ak{
             ec{"El Salvadɔɔ"}
         }
         "America:Fort_Nelson"{
-            ec{"Fɔt Nԑlson"}
+            ec{"Fɔt Nɛlson"}
         }
         "America:Fortaleza"{
-            ec{"Fͻͻtalɛsa"}
+            ec{"Fɔɔtalɛsa"}
         }
         "America:Goose_Bay"{
             ec{"Guus Bay"}
@@ -175,10 +175,10 @@ ak{
             ec{"Gayana"}
         }
         "America:Hermosillo"{
-            ec{"Hԑmɔsilo"}
+            ec{"Hɛmɔsilo"}
         }
         "America:Indiana:Petersburg"{
-            ec{"Pitԑsbԑgye, Indiana"}
+            ec{"Pitɛsbɛgye, Indiana"}
         }
         "America:Indiana:Tell_City"{
             ec{"Tell Siti, Indiana"}
@@ -199,13 +199,13 @@ ak{
             ec{"Dwudwui"}
         }
         "America:Kentucky:Monticello"{
-            ec{"Mɔntisԑlo, Kԑntԑki"}
+            ec{"Mɔntisɛlo, Kɛntɛki"}
         }
         "America:Kralendijk"{
-            ec{"Kralԑngyik"}
+            ec{"Kralɛngyik"}
         }
         "America:Los_Angeles"{
-            ec{"Lɔs Angyԑlis"}
+            ec{"Lɔs Angyɛlis"}
         }
         "America:Lower_Princes"{
             ec{"Lowa Prinse Kɔta"}
@@ -226,16 +226,16 @@ ak{
             ec{"Masatlan"}
         }
         "America:Mendoza"{
-            ec{"Mɛndͻsa"}
+            ec{"Mɛndɔsa"}
         }
         "America:Menominee"{
-            ec{"Mԑnɔminee"}
+            ec{"Mɛnɔminee"}
         }
         "America:Metlakatla"{
-            ec{"Mԑtlakatla"}
+            ec{"Mɛtlakatla"}
         }
         "America:Mexico_City"{
-            ec{"Mԑksiko Siti"}
+            ec{"Mɛksiko Siti"}
         }
         "America:Moncton"{
             ec{"Mɔnktin"}
@@ -253,16 +253,16 @@ ak{
             ec{"Beula, Nɔf Dakota"}
         }
         "America:North_Dakota:Center"{
-            ec{"Sԑnta, Nɔf Dakota"}
+            ec{"Sɛnta, Nɔf Dakota"}
         }
         "America:North_Dakota:New_Salem"{
-            ec{"New Salԑm, Nɔf Dakota"}
+            ec{"New Salɛm, Nɔf Dakota"}
         }
         "America:Ojinaga"{
             ec{"Ogyinaga"}
         }
         "America:Paramaribo"{
-            ec{"Paramaribͻ"}
+            ec{"Paramaribɔ"}
         }
         "America:Phoenix"{
             ec{"Finisk"}
@@ -271,7 +271,7 @@ ak{
             ec{"Spain Pɔɔto"}
         }
         "America:Porto_Velho"{
-            ec{"Pͻͻto Velho"}
+            ec{"Pɔɔto Velho"}
         }
         "America:Puerto_Rico"{
             ec{"Puɛto Riko"}
@@ -430,7 +430,7 @@ ak{
             ec{"Yɛkatɛrinbɛg"}
         }
         "Atlantic:Bermuda"{
-            ec{"Bԑmuda"}
+            ec{"Bɛmuda"}
         }
         "Atlantic:Canary"{
             ec{"Kanari"}
@@ -442,7 +442,7 @@ ak{
             ec{"Rɛɛkgyavik"}
         }
         "Atlantic:South_Georgia"{
-            ec{"Gyͻͻgyia Anaafoͻ"}
+            ec{"Gyɔɔgyia Anaafoɔ"}
         }
         "Atlantic:Stanley"{
             ec{"Stanli"}
@@ -609,7 +609,7 @@ ak{
             ec{"Figyi"}
         }
         "Pacific:Galapagos"{
-            ec{"Galapagͻs"}
+            ec{"Galapagɔs"}
         }
         "Pacific:Guadalcanal"{
             ec{"Guadaakanaa"}
@@ -783,14 +783,14 @@ ak{
             ls{"Kyili Susudua Berɛ"}
         }
         "meta:China"{
-            ld{"Kyaena Awia Berԑ"}
-            lg{"Kyaena Berԑ"}
-            ls{"Kyaena Susudua Berԑ"}
+            ld{"Kyaena Awia Berɛ"}
+            lg{"Kyaena Berɛ"}
+            ls{"Kyaena Susudua Berɛ"}
         }
         "meta:Choibalsan"{
-            ld{"Kobaasan Awia Berԑ"}
-            lg{"Kobaasan Berԑ"}
-            ls{"Kobaasan Susudua Berԑ"}
+            ld{"Kobaasan Awia Berɛ"}
+            lg{"Kobaasan Berɛ"}
+            ls{"Kobaasan Susudua Berɛ"}
         }
         "meta:Christmas"{
             ls{"Buronya Aeland Berɛ"}
@@ -828,7 +828,7 @@ ak{
             ls{"Easta Aeland Susudua Berɛ"}
         }
         "meta:Ecuador"{
-            ls{"Yikuwedͻ Berɛ"}
+            ls{"Yikuwedɔ Berɛ"}
         }
         "meta:Europe_Central"{
             ld{"Yuropu Mfinimfini Awia Berɛ"}
@@ -849,9 +849,9 @@ ak{
             ls{"Yuropu Atɔeeɛ Susudua Berɛ"}
         }
         "meta:Falkland"{
-            ld{"Fͻkman Aeland Awia Berɛ"}
-            lg{"Fͻkman Aeland Berɛ"}
-            ls{"Fͻkman Aeland Susudua Berɛ"}
+            ld{"Fɔkman Aeland Awia Berɛ"}
+            lg{"Fɔkman Aeland Berɛ"}
+            ls{"Fɔkman Aeland Susudua Berɛ"}
         }
         "meta:Fiji"{
             ld{"Figyi Awia Berɛ"}
@@ -868,7 +868,7 @@ ak{
             ls{"Greenwich Mean Berɛ"}
         }
         "meta:Galapagos"{
-            ls{"Galapagͻs Berɛ"}
+            ls{"Galapagɔs Berɛ"}
         }
         "meta:Gambier"{
             ls{"Gambier Berɛ"}
@@ -903,14 +903,14 @@ ak{
             ls{"Hawaii-Aleutian Susudua Berɛ"}
         }
         "meta:Hong_Kong"{
-            ld{"Hͻnkͻn Awia Berԑ"}
-            lg{"Hͻnkͻn Berԑ"}
-            ls{"Hͻnkͻn Susudua Berԑ"}
+            ld{"Hɔnkɔn Awia Berɛ"}
+            lg{"Hɔnkɔn Berɛ"}
+            ls{"Hɔnkɔn Susudua Berɛ"}
         }
         "meta:Hovd"{
-            ld{"Hovd Awia Berԑ"}
-            lg{"Hovd Berԑ"}
-            ls{"Hovd Susudua Berԑ"}
+            ld{"Hovd Awia Berɛ"}
+            lg{"Hovd Berɛ"}
+            ls{"Hovd Susudua Berɛ"}
         }
         "meta:India"{
             ls{"India Susudua Berɛ"}
@@ -946,9 +946,9 @@ ak{
             ls{"Israel Susudua Berɛ"}
         }
         "meta:Japan"{
-            ld{"Gyapan Awia Berԑ"}
-            lg{"Gyapan Berԑ"}
-            ls{"Gyapan Susudua Berԑ"}
+            ld{"Gyapan Awia Berɛ"}
+            lg{"Gyapan Berɛ"}
+            ls{"Gyapan Susudua Berɛ"}
         }
         "meta:Kazakhstan"{
             ls{"Kazakstan Berɛ"}
@@ -960,9 +960,9 @@ ak{
             ls{"Kazakstan Atɔeɛ Berɛ"}
         }
         "meta:Korea"{
-            ld{"Korean Awia Berԑ"}
-            lg{"Korean Berԑ"}
-            ls{"Korean Susudua Berԑ"}
+            ld{"Korean Awia Berɛ"}
+            lg{"Korean Berɛ"}
+            ls{"Korean Susudua Berɛ"}
         }
         "meta:Kosrae"{
             ls{"Kosrae Berɛ"}
@@ -1014,9 +1014,9 @@ ak{
             ls{"Mɛksiko Pasifik Susudua Berɛ"}
         }
         "meta:Mongolia"{
-            ld{"Yulanbata Awia Berԑ"}
-            lg{"Yulanbata Berԑ"}
-            ls{"Yulanbata Susudua Berԑ"}
+            ld{"Yulanbata Awia Berɛ"}
+            lg{"Yulanbata Berɛ"}
+            ls{"Yulanbata Susudua Berɛ"}
         }
         "meta:Moscow"{
             ld{"Mɔsko Awia Berɛ"}
@@ -1030,7 +1030,7 @@ ak{
             ls{"Nauru Berɛ"}
         }
         "meta:Nepal"{
-            ls{"Nԑpal Berɛ"}
+            ls{"Nɛpal Berɛ"}
         }
         "meta:New_Caledonia"{
             ld{"Kaledonia Foforɔ Awia Berɛ"}
@@ -1111,7 +1111,7 @@ ak{
             ls{"Ponape Berɛ"}
         }
         "meta:Pyongyang"{
-            ls{"Pyongyang Berԑ"}
+            ls{"Pyongyang Berɛ"}
         }
         "meta:Reunion"{
             ls{"Réunion Berɛ"}
@@ -1139,7 +1139,7 @@ ak{
             ls{"Solomon Aeland Berɛ"}
         }
         "meta:South_Georgia"{
-            ls{"Gyͻͻgyia Anaafoͻ Berɛ"}
+            ls{"Gyɔɔgyia Anaafoɔ Berɛ"}
         }
         "meta:Suriname"{
             ls{"Suriname Berɛ"}
@@ -1151,9 +1151,9 @@ ak{
             ls{"Tahiti Berɛ"}
         }
         "meta:Taipei"{
-            ld{"Taipei Awia Berԑ"}
-            lg{"Taipei Berԑ"}
-            ls{"Taipei Susudua Berԑ"}
+            ld{"Taipei Awia Berɛ"}
+            lg{"Taipei Berɛ"}
+            ls{"Taipei Susudua Berɛ"}
         }
         "meta:Tajikistan"{
             ls{"Tagyikistan Berɛ"}
@@ -1183,9 +1183,9 @@ ak{
             ls{"Yurugwae Susudua Berɛ"}
         }
         "meta:Uzbekistan"{
-            ld{"Usbԑkistan Awia Berɛ"}
-            lg{"Usbԑkistan Berɛ"}
-            ls{"Usbԑkistan Susudua Berɛ"}
+            ld{"Usbɛkistan Awia Berɛ"}
+            lg{"Usbɛkistan Berɛ"}
+            ls{"Usbɛkistan Susudua Berɛ"}
         }
         "meta:Vanuatu"{
             ld{"Vanuatu Awia Berɛ"}

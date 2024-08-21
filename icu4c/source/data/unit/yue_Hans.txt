@@ -30,6 +30,12 @@ yue_Hans{
         compound{
             per{"每 {1} {0}"}
         }
+        concentr{
+            portion-per-1e9{
+                dnam{"十亿分点浓度"}
+                other{"{0} 十亿分点浓度"}
+            }
+        }
         consumption{
             liter-per-100-kilometer{
                 dnam{"每 100 公里公升"}
@@ -59,6 +65,11 @@ yue_Hans{
             }
             month{
                 per{"每月 {0}"}
+            }
+            night{
+                dnam{"晚"}
+                other{"{0} 晚"}
+                per{"{0}/晚"}
             }
             quarter{
                 per{"每季 {0}"}
@@ -178,6 +189,10 @@ yue_Hans{
                 dnam{"每小时公里"}
                 other{"每小时 {0} 公里"}
             }
+            light-speed{
+                dnam{"光速"}
+                other{"{0} 光速"}
+            }
             meter-per-second{
                 dnam{"每秒公尺"}
                 other{"每秒 {0} 米"}
@@ -232,6 +247,11 @@ yue_Hans{
                 other{"{0}m/s²"}
             }
         }
+        concentr{
+            portion-per-1e9{
+                other{"{0}ppb"}
+            }
+        }
         consumption{
             liter-per-100-kilometer{
                 dnam{"升/100公里"}
@@ -241,6 +261,13 @@ yue_Hans{
             byte{
                 dnam{"B"}
                 other{"{0}byte"}
+            }
+        }
+        duration{
+            night{
+                dnam{"晚"}
+                other{"{0}晚"}
+                per{"{0}/晚"}
             }
         }
         graphics{
@@ -286,6 +313,10 @@ yue_Hans{
         speed{
             kilometer-per-hour{
                 other{"{0}公里/小时"}
+            }
+            light-speed{
+                dnam{"光速"}
+                other{"{0}光速"}
             }
             meter-per-second{
                 other{"{0}m/s"}
@@ -457,6 +488,9 @@ yue_Hans{
                 dnam{"点子"}
                 other{"{0} 点子"}
             }
+            portion-per-1e9{
+                dnam{"浓度/十亿"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -523,6 +557,11 @@ yue_Hans{
             nanosecond{
                 dnam{"奈秒"}
                 other{"{0} 奈秒"}
+            }
+            night{
+                dnam{"晚"}
+                other{"{0} 晚"}
+                per{"{0}/晚"}
             }
             quarter{
                 dnam{"季"}
@@ -915,6 +954,10 @@ yue_Hans{
             knot{
                 dnam{"节"}
                 other{"{0} 节"}
+            }
+            light-speed{
+                dnam{"光速"}
+                other{"{0} 光速"}
             }
             meter-per-second{
                 dnam{"公尺/秒"}

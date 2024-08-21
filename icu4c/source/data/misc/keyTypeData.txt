@@ -473,6 +473,7 @@ keyTypeData:table(nofallback){
             zrn{""}
             zrz{""}
             zwd{""}
+            zwg{""}
             zwl{""}
             zwr{""}
         }

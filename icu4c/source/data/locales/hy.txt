@@ -245,6 +245,7 @@ hy{
                 Hms{"H:mm:ss"}
                 MEd{"dd.MM, E"}
                 MMMEd{"d MMM, E"}
+                MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"dd.MM"}
                 y{"y, G"}
@@ -397,6 +398,7 @@ hy{
                     one{"MMMM W-ին շաբաթ"}
                     other{"MMMM W-րդ շաբաթ"}
                 }
+                MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"dd.MM"}
                 yM{"MM.y"}
