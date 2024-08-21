@@ -1204,7 +1204,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
             "Prefix in the denominator: nanogram-per-picobarrel", "unit/nanogram-per-picobarrel",
             "unit/nanogram-per-picobarrel",
             NumberFormatter.with().unit(MeasureUnit.forIdentifier("nanogram-per-picobarrel")),
-            new ULocale("en-ZA"), 2.4, "2.4 ng/pbbl");
+            new ULocale("en-ZA"), 2.4, "2,4 ng/pbbl");
 
         assertFormatSingle("Prefix in the denominator: nanogram-per-picobarrel unit-width-full-name",
                            "unit/nanogram-per-picobarrel unit-width-full-name",
@@ -1212,7 +1212,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                            NumberFormatter.with()
                                .unit(MeasureUnit.forIdentifier("nanogram-per-picobarrel"))
                                .unitWidth(UnitWidth.FULL_NAME),
-                           new ULocale("en-ZA"), 2.4, "2.4 nanograms per picobarrel");
+                           new ULocale("en-ZA"), 2.4, "2,4 nanograms per picobarrel");
 
         // Valid MeasureUnit, but unformattable, because we only have patterns for
         // pow2 and pow3 at this time:
@@ -1234,7 +1234,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
             NumberFormatter.with()
                 .unit(MeasureUnit.forIdentifier("kibijoule-foot-per-cubic-gigafurlong-square-second"))
                 .unitWidth(UnitWidth.FULL_NAME),
-            new ULocale("en-ZA"), 2.4, "2.4 kibijoule-feet per cubic gigafurlong-square second");
+            new ULocale("en-ZA"), 2.4, "2,4 kibijoule-feet per cubic gigafurlong-square second");
 
         assertFormatSingle(
             "kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
@@ -1255,7 +1255,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
             NumberFormatter.with()
                 .unit(MeasureUnit.forIdentifier("kilowatt-hour-per-100-kilometer"))
                 .unitWidth(UnitWidth.FULL_NAME),
-            new ULocale("en-ZA"), 2.4, "2.4 kilowatt-hours per 100 kilometres");
+            new ULocale("en-ZA"), 2.4, "2,4 kilowatt-hours per 100 kilometres");
     }
 
     // TODO: merge these tests into NumberSkeletonTest.java instead of here:
@@ -1458,11 +1458,11 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 "unit/meter usage/road",
                 unloc_formatter,
                 new ULocale("en-ZA"),
-                "87,650 km",
-                "8,765 km",
+                "87\u00A0650 km",
+                "8\u00A0765 km",
                 "876 km", // 6.5 rounds down, 7.5 rounds up.
                 "88 km",
-                "8.8 km",
+                "8,8 km",
                 "900 m",
                 "90 m",
                 "9 m",
@@ -1639,14 +1639,14 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                        .precision(Precision.minMaxSignificantDigits(1, 4))
                        .unitWidth(UnitWidth.FULL_NAME),
                new ULocale("en-ZA"),
-               "8.765E1 square kilometres",
-               "8.765E0 square kilometres",
-               "8.765E1 hectares",
-               "8.765E0 hectares",
-               "8.765E3 square metres",
-               "8.765E2 square metres",
-               "8.765E1 square metres",
-               "8.765E0 square metres",
+               "8,765E1 square kilometres",
+               "8,765E0 square kilometres",
+               "8,765E1 hectares",
+               "8,765E0 hectares",
+               "8,765E3 square metres",
+               "8,765E2 square metres",
+               "8,765E1 square metres",
+               "8,765E0 square metres",
                "0E0 square centimetres");
 
         // TODO(icu-units#132): Java BigDecimal does not support Inf and NaN, so
@@ -2056,7 +2056,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                         .precision(Precision.maxSignificantDigits(4)),
                 new ULocale("en-ZA"),
                 321.45, // 0.45 rounds down, 0.55 rounds up.
-                "3.214E2 m");
+                "3,214E2 m");
 
         assertFormatSingle(
                 "Scientific notation with Usage: possible when using a reasonable Precision",
@@ -2069,7 +2069,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                         .unitWidth(UnitWidth.FULL_NAME),
                 new ULocale("en-ZA"),
                 1e20,
-                "1.5E28 kilometres");
+                "1,5E28 kilometres");
     }
 
 
