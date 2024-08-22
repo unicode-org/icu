@@ -6202,8 +6202,8 @@ static void TestLikelySubtags(void)
         const char* const minimal = full_data[i][0];
         const char* const maximal = full_data[i][1];
 
-		if (uprv_strcmp(minimal, "und_Hant_CN") == 0 &&
-            	log_knownIssue("CLDR-17908", "und_Hant_CN changed expected result for Likely Subtags")) {
+        if (uprv_strcmp(minimal, "und_Hant_CN") == 0 &&
+                log_knownIssue("CLDR-17908", "und_Hant_CN changed expected result for Likely Subtags")) {
             continue;
         }
 
