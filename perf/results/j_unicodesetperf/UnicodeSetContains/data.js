@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1724341276786,
+  "lastUpdate": 1724350593334,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24597,6 +24597,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetContains",
             "value": 1.749629016984269,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "5e22f0076ec9b55056cd8a84e9ef370632f44174",
+          "message": "ICU-22854 Implement subdivision validation",
+          "timestamp": "2024-08-22T11:02:36-07:00",
+          "tree_id": "9d56ba0b6cdaa2821e493de892a58123677fbf3a",
+          "url": "https://github.com/unicode-org/icu/commit/5e22f0076ec9b55056cd8a84e9ef370632f44174"
+        },
+        "date": 1724350448568,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetContains",
+            "value": 1.7446946588734453,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
