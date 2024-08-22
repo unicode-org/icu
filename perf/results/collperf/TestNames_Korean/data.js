@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1724263034846,
+  "lastUpdate": 1724342162740,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -48759,6 +48759,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12590271.9971,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dragan@unicode.org",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "committer": {
+            "email": "131725218+DraganBesevic@users.noreply.github.com",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "distinct": true,
+          "id": "aabadf728944e290c6e47ba73c7485fefa036548",
+          "message": "ICU-22723 Integrate CLDR 46 release alpha2, part 5, exclude failing unit tests for exhaust tests; spaces <-> tabs",
+          "timestamp": "2024-08-22T08:22:56-07:00",
+          "tree_id": "d4b02287f69204a2f7981b14a16d723f6fb919f5",
+          "url": "https://github.com/unicode-org/icu/commit/aabadf728944e290c6e47ba73c7485fefa036548"
+        },
+        "date": 1724342012896,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 226.878,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 54845258.0913,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12097098.1066,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 51779055.5954,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12678660.1284,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
