@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1724262675108,
+  "lastUpdate": 1724341854190,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24417,6 +24417,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.5608310538102136,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dragan@unicode.org",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "committer": {
+            "email": "131725218+DraganBesevic@users.noreply.github.com",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "distinct": true,
+          "id": "aabadf728944e290c6e47ba73c7485fefa036548",
+          "message": "ICU-22723 Integrate CLDR 46 release alpha2, part 5, exclude failing unit tests for exhaust tests; spaces <-> tabs",
+          "timestamp": "2024-08-22T08:22:56-07:00",
+          "tree_id": "d4b02287f69204a2f7981b14a16d723f6fb919f5",
+          "url": "https://github.com/unicode-org/icu/commit/aabadf728944e290c6e47ba73c7485fefa036548"
+        },
+        "date": 1724341699890,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.562575920161968,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
