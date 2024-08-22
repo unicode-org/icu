@@ -5632,11 +5632,7 @@ void CalendarTest::TestFirstDayOfWeek() {
     verifyFirstDayOfWeek("und-Thaa", UCAL_FRIDAY);
 
     // ssh => ssh_Arab_AE => Saturday
-    verifyFirstDayOfWeek("ssh", UCAL_SATURDAY);
-    // wbl_Arab => wbl_Arab_AF => Saturday
-	if (!logKnownIssue("CLDR-17907", "wbl-Arab returns wrong first day of the week, probably caused by wrong Likely Subtag algo")) {
-       verifyFirstDayOfWeek("wbl-Arab", UCAL_SATURDAY);
-    }    
+    verifyFirstDayOfWeek("ssh", UCAL_SATURDAY);  
     
     // en => en_Latn_US => Sunday
     verifyFirstDayOfWeek("en", UCAL_SUNDAY);
