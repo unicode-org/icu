@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1724351114527,
+  "lastUpdate": 1724540089118,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24747,6 +24747,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.009331556520310355,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "committer": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "distinct": true,
+          "id": "9bb4536ad77652b7d0da2794a10c6ccf0064a6cf",
+          "message": "ICU-22374 guard gCollationBinKey behind if !UCONFIG_NO_COLLATION\n\nSee #2442",
+          "timestamp": "2024-08-24T17:39:30-05:00",
+          "tree_id": "4e4f19439624d5d4702b55b7e216fcb763f5644b",
+          "url": "https://github.com/unicode-org/icu/commit/9bb4536ad77652b7d0da2794a10c6ccf0064a6cf"
+        },
+        "date": 1724539944459,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.009403336005463565,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
