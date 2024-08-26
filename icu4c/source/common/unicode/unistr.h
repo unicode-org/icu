@@ -364,6 +364,30 @@ public:
    */
   inline bool operator!= (const UnicodeString& text) const;
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Inequality operator. Performs only bitwise comparison with `text`
+   * which is, or which is implicitly convertible to,
+   * a std::u16string_view or (if U_SIZEOF_WCHAR_T==2) std::wstring_view.
+   *
+   * For performance, you can use std::u16string_view literals with compile-time
+   * length determination:
+   * \code
+   * #include &lt;string_view&gt;
+   * using namespace std::string_view_literals;
+   * UnicodeString str = ...;
+   * if (str != u"literal"sv) { ... }
+   * \endcode
+   * @param text The string view to compare to this string.
+   * @return false if `text` contains the same characters as this one, true otherwise.
+   * @draft ICU 76
+   */
+  template<typename S, typename = std::enable_if_t<ConvertibleToU16StringView<S>>>
+  inline bool operator!=(const S &text) const {
+    return !operator==(text);
+  }
+#endif  // U_HIDE_DRAFT_API
+
   /**
    * Greater than operator. Performs only bitwise comparison.
    * @param text The UnicodeString to compare to this one.

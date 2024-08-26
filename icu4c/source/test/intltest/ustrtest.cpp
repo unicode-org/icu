@@ -2453,6 +2453,14 @@ void UnicodeStringTest::TestU16StringView() {
     assertFalse("any == string-str16", any == str16);
     assertTrue("any == string-any", any == u"any"s);
 
+    // operator!=
+    assertTrue("any != pointer-p16", any != p16);
+    assertFalse("any != pointer-any", any != u"any");
+    assertTrue("any != string_view-sv16", any != sv16);
+    assertFalse("any != string_view-any", any != u"any"sv);
+    assertTrue("any != string-str16", any != str16);
+    assertFalse("any != string-any", any != u"any"s);
+
     // Assignment copies the string contents.
     UnicodeString x;
     x = p16;
@@ -2540,6 +2548,14 @@ void UnicodeStringTest::TestWStringView() {
     assertTrue("any == string_view-any", any == L"any"sv);
     assertFalse("any == string-str16", any == str16);
     assertTrue("any == string-any", any == L"any"s);
+
+    // operator!=
+    assertTrue("any != pointer-p16", any != p16);
+    assertFalse("any != pointer-any", any != L"any");
+    assertTrue("any != string_view-sv16", any != sv16);
+    assertFalse("any != string_view-any", any != L"any"sv);
+    assertTrue("any != string-str16", any != str16);
+    assertFalse("any != string-any", any != L"any"s);
 
     // Assignment copies the string contents.
     UnicodeString x;
