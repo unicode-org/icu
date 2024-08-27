@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1724781656375,
+  "lastUpdate": 1724796284633,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24747,6 +24747,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetContains",
             "value": 1.752857505485833,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "1414e80f6c1376afa65eb388aaaafb53169fc3dc",
+          "message": "ICU-22722 Add RelativeDateTimeFormatter to main API page via docmain.h\n\nSee #3119",
+          "timestamp": "2024-08-27T14:53:04-07:00",
+          "tree_id": "e84b2248d38536d80b263a110ece7a350041b33a",
+          "url": "https://github.com/unicode-org/icu/commit/1414e80f6c1376afa65eb388aaaafb53169fc3dc"
+        },
+        "date": 1724796139941,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetContains",
+            "value": 1.7422812275759594,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
