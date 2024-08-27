@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1724780893304,
+  "lastUpdate": 1724781812051,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24387,6 +24387,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 244.78367666275489,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vital.had@gmail.com",
+            "name": "Sergey Fedorov",
+            "username": "barracuda156"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "a4ace3ace7f7209fcae86040db28431b53e1015a",
+          "message": "ICU-22807 Fix for missing __STDC_FORMAT_MACROS before inttypes.h\n\nCo-authored-by: Markus Scherer <markus.icu@gmail.com>",
+          "timestamp": "2024-08-27T10:52:14-07:00",
+          "tree_id": "c33bc275ce137d42bbe27b82f0bf3cd0f7196428",
+          "url": "https://github.com/unicode-org/icu/commit/a4ace3ace7f7209fcae86040db28431b53e1015a"
+        },
+        "date": 1724781672037,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 237.58051691930987,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
