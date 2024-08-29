@@ -15,7 +15,7 @@
   <description>International Components for Unicode for Java (ICU4J) is a mature, widely used Java library
     providing Unicode and Globalization support.
     This is the base artifact with common settings, not intended to use directly.</description>
-  <url>https://icu.unicode.org/</url>
+  <url>${proj.url}</url>
   <inceptionYear>1995</inceptionYear>
 
   <organization>
@@ -56,12 +56,17 @@
     <maven-central-releases-repo-url>${maven-central-repo-url}/service/local/staging/deploy/maven2</maven-central-releases-repo-url>
     <maven-central-snapshots-repo-url>${maven-central-repo-url}/content/repositories/snapshots</maven-central-snapshots-repo-url>
 
+    <!-- This is the folder where we gather the files to be posted in the Github Release-->
+    <release.directory>${project.build.directory}/release_directory</release.directory>
+
     <junit.version>4.13.2</junit.version>
     <junitparams.version>1.1.1</junitparams.version>
-    <gson.version>2.10.1</gson.version>
+    <gson.version>2.11.0</gson.version>
+    <commons-cli.version>1.9.0</commons-cli.version>
 
     <proj-title>International Components for Unicode for Java</proj-title>
     <proj.displayname>${project.artifactId}</proj.displayname>
+    <proj.url>https://icu.unicode.org/</proj.url>
 
     <!-- Version update! -->
     <icu.major.version>76</icu.major.version>
@@ -166,12 +171,12 @@
 
   <distributionManagement>
     <repository>
-      <id>icu4j-releases</id>
+      <id>icu4j-maven-repo</id>
       <name>ICU4J Central Repository</name>
       <url>${maven-central-releases-repo-url}</url>
     </repository>
     <snapshotRepository>
-      <id>icu4j-snapshots</id>
+      <id>icu4j-maven-repo</id>
       <name>ICU4J Central Development Repository</name>
       <url>${maven-central-snapshots-repo-url}</url>
     </snapshotRepository>
@@ -182,7 +187,7 @@
       <plugins>
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
-          <version>3.3.1</version>
+          <version>3.4.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
@@ -190,7 +195,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.11.0</version>
+          <version>3.13.0</version>
           <!-- Plugin bug, maven.compiler.* properties are not honored, see
             https://issues.apache.org/jira/browse/MCOMPILER-545
           -->
@@ -201,7 +206,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.1.2</version>
+          <version>3.4.0</version>
           <configuration>
             <includes>
               <!-- Some test files start with "IntlTest...". Many don't fit
@@ -218,48 +223,48 @@
         </plugin>
         <plugin>
           <artifactId>maven-failsafe-plugin</artifactId>
-          <version>3.1.2</version>
+          <version>3.4.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.1.3</version>
         </plugin>
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.1.3</version>
         </plugin>
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
-          <version>4.0.0-M9</version>
+          <version>4.0.0-M16</version>
         </plugin>
         <plugin>
           <artifactId>maven-source-plugin</artifactId>
-          <version>3.3.0</version>
+          <version>3.3.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-gpg-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.5</version>
         </plugin>
         <plugin>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.4.5</version>
+          <version>3.7.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>3.5.0</version>
+          <version>3.6.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.6.0</version>
+          <version>3.7.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.6.0</version>
+          <version>3.8.0</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
-          <version>3.4.0</version>
+          <version>3.6.0</version>
           <executions>
             <execution>
               <!-- Workaround for Windows symlink issue:
@@ -302,11 +307,35 @@
         </plugin>
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
-          <version>3.0.1</version>
+          <version>3.1.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>flatten-maven-plugin</artifactId>
+          <version>1.6.0</version>
+          <configuration>
+            <flattenMode>ossrh</flattenMode>
+          </configuration>
+          <executions>
+            <execution>
+              <id>flatten</id>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>flatten</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>flatten.clean</id>
+              <phase>clean</phase>
+              <goals>
+                <goal>clean</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.3.0</version>
+          <version>3.5.0</version>
           <executions>
             <execution>
               <id>enforce-maven</id>
@@ -316,7 +345,7 @@
               <configuration>
                 <rules>
                   <requireMavenVersion>
-                    <version>3.2.5</version>
+                    <version>3.6.3</version>
                   </requireMavenVersion>
                 </rules>
               </configuration>
@@ -325,7 +354,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.5.0</version>
+          <version>3.8.0</version>
           <configuration>
             <excludePackageNames>com.ibm.icu.impl,com.ibm.icu.impl.*,com.ibm.icu.dev.*,com.ibm.icu.samples,com.ibm.icu.samples.*</excludePackageNames>
             <!--
@@ -350,6 +379,8 @@
             <charset>UTF-8</charset>
             <breakiterator>true</breakiterator>
             <use>true</use>
+            <maxmemory>256m</maxmemory>
+            <minmemory>256m</minmemory>
             <!-- <verbose>true</verbose> -->
             <additionalJOptions>
               <additionalJOption>-J-Djcitesourcepath=${icu4j.api.doc.root.dir}/samples/src/main/java${path.separator}${icu4j.api.doc.root.dir}/demos/src/main/java${path.separator}${icu4j.api.doc.root.dir}/main/core/src/main/java</additionalJOption>
@@ -400,7 +431,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.3.0</version>
+          <version>3.4.2</version>
           <configuration>
             <archive>
               <manifest>
@@ -432,7 +463,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.4.1</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -685,6 +716,77 @@
       </build>
     </profile>
 
+    <profile>
+        <id>release_files</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <configuration>
+                        <outputDirectory>${release.directory}</outputDirectory>
+                        <overWriteReleases>true</overWriteReleases>
+                        <overWriteSnapshots>true</overWriteSnapshots>
+                        <artifactItems>
+                        <!-- icu4j -->
+                        <artifactItem>
+                            <groupId>com.ibm.icu</groupId>
+                            <artifactId>icu4j</artifactId>
+                            <version>${project.version}</version>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>com.ibm.icu</groupId>
+                            <artifactId>icu4j</artifactId>
+                            <version>${project.version}</version>
+                            <classifier>sources</classifier>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>com.ibm.icu</groupId>
+                            <artifactId>icu4j</artifactId>
+                            <version>${project.version}</version>
+                            <classifier>javadoc</classifier>
+                        </artifactItem>
+                        <!-- icu4j-charset -->
+                        <artifactItem>
+                            <groupId>com.ibm.icu</groupId>
+                            <artifactId>icu4j-charset</artifactId>
+                            <version>${project.version}</version>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>com.ibm.icu</groupId>
+                            <artifactId>icu4j-charset</artifactId>
+                            <version>${project.version}</version>
+                            <classifier>sources</classifier>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>com.ibm.icu</groupId>
+                            <artifactId>icu4j-charset</artifactId>
+                            <version>${project.version}</version>
+                            <classifier>javadoc</classifier>
+                        </artifactItem>
+                        <!-- icu4j-localespi -->
+                        <artifactItem>
+                            <groupId>com.ibm.icu</groupId>
+                            <artifactId>icu4j-localespi</artifactId>
+                            <version>${project.version}</version>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>com.ibm.icu</groupId>
+                            <artifactId>icu4j-localespi</artifactId>
+                            <version>${project.version}</version>
+                            <classifier>sources</classifier>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>com.ibm.icu</groupId>
+                            <artifactId>icu4j-localespi</artifactId>
+                            <version>${project.version}</version>
+                            <classifier>javadoc</classifier>
+                        </artifactItem>
+                        </artifactItems>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </build>
+    </profile>
   </profiles>
 
 </project>

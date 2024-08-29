@@ -14,6 +14,7 @@
 
   <artifactId>icu4j-charset</artifactId>
   <description>icu4j-charset is a supplemental library for icu4j, implementing Java Charset SPI.</description>
+  <url>${proj.url}</url>
 
   <properties>
     <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
@@ -68,6 +69,17 @@
               <Export-Package>com.ibm.icu.charset</Export-Package>
             </manifestEntries>
           </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <!-- We want to deploy this to Maven -->
+        <configuration>
+          <skip>false</skip>
         </configuration>
       </plugin>
     </plugins>
