@@ -245,7 +245,7 @@ Locale::getDisplayName(const Locale &displayLocale,
     return result;
 }
 
-#if ! UCONFIG_NO_BREAK_ITERATION
+#if !UCONFIG_NO_BREAK_ITERATION
 
 // -------------------------------------
 // Gets the objectLocale display name in the default locale language.
