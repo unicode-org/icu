@@ -1,0 +1,115 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
+
+name: Publish to Nexus Sonatype OSS
+
+# For this to run you should define the follwing GitHub Secrets in the proper Environment.
+# In Settings -- Environments -- release_env -- Environment secrets:
+# * MAVEN_CENTRAL_USERNAME & MAVEN_CENTRAL_TOKEN:
+#   * Go to https://oss.sonatype.org and login with the `icu-robot` user
+#   * Top-right select "Profile"
+#   * Open the drop-down list showing "Summary" and select "User Token"
+#   * Click the "Access User Token" button
+#   * The `username` (first, shorter part of the token) goes in the `MAVEN_CENTRAL_USERNAME` secret
+#   * The `password` (second, longer part of the token) goes in the `MAVEN_CENTRAL_TOKEN` secret
+# * MAVEN_GPG_PRIVATE_KEY: an ASCII dump of the GPG private signing key:
+#     `gpg --output icu_release_signing.asc --armor --export-secret-key <key_id>`
+# * MAVEN_GPG_PASSPHRASE: the GPG password used to protect that key
+
+on:
+  # To trigger the Env Test workflow manually, follow the instructions in
+  # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
+  workflow_dispatch:
+    inputs:
+      gitTag:
+        # TODO: make this mandatory and validate that it is in a release* branch and looks like
+        # 'release-\d+.\d+ or something like that.
+        # For now we don't do it so that we can test.
+        description: 'Git tag at which to sync for deploy and release'
+        type: string
+
+env:
+  SHARED_MVN_ARGS: '--no-transfer-progress --show-version --batch-mode'
+  RELEASE_FOLDER: 'target/release_files'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: release-env
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+
+    - name: Checkout repo files
+      uses: actions/checkout@v4.1.7
+      with:
+        lfs: true
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4.2.2
+      with:
+        java-version: '8' # The custom Taglets for javadoc (tools/build) are still Java 8. They need updating to use a different JDK version.
+        distribution: 'temurin'
+        server-id: icu4j-maven-repo # Value of the distributionManagement/repository/id field of the pom.xml
+        server-username: MAVEN_USERNAME # env variable for username in deploy
+        server-password: MAVEN_CENTRAL_TOKEN # env variable for token in deploy
+        gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
+        gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
+        settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+    # TODO: enable tests? We don't want to release until we are 100% sure everything works.
+    - name: Build all of ICU
+      run: |
+        # Really important to do this first because we need `tools/build` for the javadoc applets
+        mvn install --file icu4j/tools/build \
+          ${SHARED_MVN_ARGS} \
+          -DskipTests -DskipITs
+
+    - name: Build and deploy to Maven Central
+      run: |
+        mvn deploy --file icu4j \
+          ${SHARED_MVN_ARGS} \
+          --settings $GITHUB_WORKSPACE/settings.xml \
+          --errors --fail-at-end -DdeployAtEnd=true \
+          -DskipTests -DskipITs \
+          -P with_sources,with_javadoc,with_signature
+      env:
+        MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+        MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
+        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+    # These are files that will end in the "Release" section of the GitHub repo.
+    # So the jar files published in GitHub are binary identical to the ones in Maven Central.
+    - name: Prepare release folder
+      run: |
+        pushd icu4j
+        ICU_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        # Copy the artifacts (with sources and javdoc .jar files) to the release folder
+        mvn dependency:copy \
+          ${SHARED_MVN_ARGS} \
+          -DskipTests -DskipITs \
+          -Drelease.directory=${RELEASE_FOLDER} \
+          -P release_files
+        # Build the full javadoc to be posted on the public site
+        mvn site \
+          ${SHARED_MVN_ARGS} \
+          -DskipITs -DskipTests \
+          -P with_full_javadoc
+        jar -Mcf ${RELEASE_FOLDER}/icu4j-${ICU_VERSION}-fulljavadoc.jar \
+          -C target/site/apidocs/ .
+        # Create the file with MD5 checksums
+        pushd ${RELEASE_FOLDER}
+        md5sum *.jar > icu4j-${ICU_VERSION}.md5
+        popd # out of $RELEASE_FOLDER
+        popd # out of icu4j
+
+    # TODO: add them to the GitHub "Release" page automatically
+    - name: Upload build results
+      uses: actions/upload-artifact@v4.3.6
+      with:
+        path: ./icu4j/${{ env.RELEASE_FOLDER }}/*
+        retention-days: 3 # TBD if we want to keep them longer
+        overwrite: true
+

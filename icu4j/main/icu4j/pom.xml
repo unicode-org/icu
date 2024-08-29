@@ -16,6 +16,7 @@
   <artifactId>icu4j</artifactId>
   <description>International Components for Unicode for Java (ICU4J) is a mature, widely used Java library
     providing Unicode and Globalization support</description>
+  <url>${proj.url}</url>
 
   <properties>
     <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
@@ -112,6 +113,17 @@
               <followSymlinks>false</followSymlinks>
             </fileset>
           </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <!-- We want to deploy this to Maven -->
+        <configuration>
+          <skip>false</skip>
         </configuration>
       </plugin>
     </plugins>
