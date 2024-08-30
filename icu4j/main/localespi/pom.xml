@@ -15,6 +15,11 @@
   <artifactId>icu4j-localespi</artifactId>
   <description>icu4j-localespi is a supplemental library for icu4j, implementing Java Locale SPI.</description>
   <url>${proj.url}</url>
+  <scm>
+    <connection>${proj.scm.connection}</connection>
+    <developerConnection>${proj.scm.developerConnection}</developerConnection>
+    <url>${proj.scm.url}</url>
+  </scm>
 
   <properties>
     <proj.displayname>JDK locale service provider</proj.displayname>
