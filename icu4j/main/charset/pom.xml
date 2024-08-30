@@ -15,6 +15,11 @@
   <artifactId>icu4j-charset</artifactId>
   <description>icu4j-charset is a supplemental library for icu4j, implementing Java Charset SPI.</description>
   <url>${proj.url}</url>
+  <scm>
+    <connection>${proj.scm.connection}</connection>
+    <developerConnection>${proj.scm.developerConnection}</developerConnection>
+    <url>${proj.scm.url}</url>
+  </scm>
 
   <properties>
     <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>

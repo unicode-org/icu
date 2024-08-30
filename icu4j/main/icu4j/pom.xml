@@ -17,6 +17,11 @@
   <description>International Components for Unicode for Java (ICU4J) is a mature, widely used Java library
     providing Unicode and Globalization support</description>
   <url>${proj.url}</url>
+  <scm>
+    <connection>${proj.scm.connection}</connection>
+    <developerConnection>${proj.scm.developerConnection}</developerConnection>
+    <url>${proj.scm.url}</url>
+  </scm>
 
   <properties>
     <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>

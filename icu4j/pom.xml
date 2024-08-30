@@ -67,6 +67,9 @@
     <proj-title>International Components for Unicode for Java</proj-title>
     <proj.displayname>${project.artifactId}</proj.displayname>
     <proj.url>https://icu.unicode.org/</proj.url>
+    <proj.scm.connection>scm:git:git://github.com/unicode-org/icu.git</proj.scm.connection>
+    <proj.scm.developerConnection>scm:git:git@github.com:unicode-org/icu.git</proj.scm.developerConnection>
+    <proj.scm.url>https://github.com/unicode-org/icu</proj.scm.url>
 
     <!-- Version update! -->
     <icu.major.version>76</icu.major.version>
@@ -159,9 +162,9 @@
   </mailingLists>
 
   <scm>
-    <connection>scm:git:git://github.com/unicode-org/icu.git</connection>
-    <developerConnection>scm:git:git@github.com:unicode-org/icu.git</developerConnection>
-    <url>https://github.com/unicode-org/icu</url>
+    <connection>${proj.scm.connection}</connection>
+    <developerConnection>${proj.scm.developerConnection}</developerConnection>
+    <url>${proj.scm.url}</url>
   </scm>
 
   <issueManagement>
@@ -373,7 +376,7 @@
             <doctitle>${icu4j.api.doc.window.title}</doctitle>
             <header>${icu4j.api.doc.header}</header>
             <bottom>${icu4j.api.doc.copyright.footer}</bottom>
-            <stylesheetfile>stylesheet8.css</stylesheetfile>
+            <stylesheetfile>${icu4j.api.doc.root.dir}/stylesheet8.css</stylesheetfile>
             <encoding>UTF-8</encoding>
             <docencoding>UTF-8</docencoding>
             <charset>UTF-8</charset>
