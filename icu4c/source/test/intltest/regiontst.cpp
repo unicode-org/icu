@@ -837,7 +837,26 @@ void RegionTest::TestGetRegionForSupplementalDataMatch(void) {
             printf("0x%08x, ", data[i]);
         }
         printf("\n};\n");
-        errln("ulocimp_getRegionForSupplementalData() differs from supplementalData");
+        errln("ulocimp_getRegionForSupplementalData() inconsistent with supplementalData");
+    }
+
+    // Ensure consistency with Region API.
+    MutableRegionValidateMap prefab2;
+    char code[3] = "AA";
+    for (code[0] ='A' ; code[0] <= 'Z'; code[0]++) {
+        for (code[1] ='A' ; code[1] <= 'Z'; code[1]++) {
+            status = U_ZERO_ERROR;
+            const Region *r = Region::getInstance(code, status);
+            // The Region code successfully created by Region::getInstance with
+            // type URGN_TERRITORY. Notice the r->getRegionCode() may not be the
+            // same as the same as the one calling getInstance.
+            if (U_SUCCESS(status) && (r != nullptr) && r->getType() == URGN_TERRITORY ) {
+                 prefab2.add(r->getRegionCode());
+            }
+        }
+    }
+    if (!prefab2.equals(builtin)) {
+        errln("ulocimp_getRegionForSupplementalData() inconsistent with Region::getInstance");
     }
 }
 
