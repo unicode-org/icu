@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725084203313,
+  "lastUpdate": 1725145011164,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -82167,6 +82167,96 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIsWhiteSpace",
             "value": 4.5872,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "edbf02094f6105f45873947a3509ebcbc43ddf14",
+          "message": "ICU-22606 Correct urls in the scm entry; fix JCite styles in javadoc\n\n1. The flatten plugin appended the relative module paths to the URLs in <scm>.\nThe same kind of problem solved earlier with ${proj.url}, and fixed the same way.\nI was unable to find any way to tell the plugin to not do that append, even after\nreading some of the plugin code.\n\n2. The stylesheet containing the JCite styles was not copied in the generated javadoc.\nThe first part of our custom stylesheet is 100% the same as the oficial one.\nSo the only part that was visually affected was the code produced by JCite.\nThe code still used <pre> and <code>, so it was monospaced and well indented / wrapped,\nbut no syntax colors.",
+          "timestamp": "2024-08-31T15:37:10-07:00",
+          "tree_id": "710920e32e050d2cabaa7a75d9b7a5e99011fbed",
+          "url": "https://github.com/unicode-org/icu/commit/edbf02094f6105f45873947a3509ebcbc43ddf14"
+        },
+        "date": 1725144862383,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIsAlpha",
+            "value": 4.2827,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsUpper",
+            "value": 4.5746,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsLower",
+            "value": 4.2807,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsDigit",
+            "value": 4.2615,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsSpace",
+            "value": 4.9031,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsAlphaNumeric",
+            "value": 4.2637,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsPrint",
+            "value": 4.2613,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsControl",
+            "value": 4.2792,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToLower",
+            "value": 5.4481,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToUpper",
+            "value": 5.4883,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsWhiteSpace",
+            "value": 4.5899,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
