@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725084466569,
+  "lastUpdate": 1725145327413,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -87837,6 +87837,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.9662,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "edbf02094f6105f45873947a3509ebcbc43ddf14",
+          "message": "ICU-22606 Correct urls in the scm entry; fix JCite styles in javadoc\n\n1. The flatten plugin appended the relative module paths to the URLs in <scm>.\nThe same kind of problem solved earlier with ${proj.url}, and fixed the same way.\nI was unable to find any way to tell the plugin to not do that append, even after\nreading some of the plugin code.\n\n2. The stylesheet containing the JCite styles was not copied in the generated javadoc.\nThe first part of our custom stylesheet is 100% the same as the oficial one.\nSo the only part that was visually affected was the code produced by JCite.\nThe code still used <pre> and <code>, so it was monospaced and well indented / wrapped,\nbut no syntax colors.",
+          "timestamp": "2024-08-31T15:37:10-07:00",
+          "tree_id": "710920e32e050d2cabaa7a75d9b7a5e99011fbed",
+          "url": "https://github.com/unicode-org/icu/commit/edbf02094f6105f45873947a3509ebcbc43ddf14"
+        },
+        "date": 1725145180525,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.7952,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.6335,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 23.6942,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 27.1092,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 39.5631,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 35.5597,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.8783,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.0595,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 83.5596,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.3653,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 39.4966,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 41.2127,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
