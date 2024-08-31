@@ -670,7 +670,28 @@ public class RegionTest extends CoreTestFmwk {
                 System.out.printf("0x%08x, ", data[i]);
             }
             System.out.println("\n};");
-            errln("Error !!!!");
+            errln("ULocale.RegionValidateMap.BUILTIN inconsistent with supplementalData)");
+        }
+        MutableRegionValidateMap prefab2 = new MutableRegionValidateMap();
+        char[] code = new char[2];
+        for (code[0] = 'A'; code[0] <= 'Z'; code[0]++) {
+            for (code[1] = 'A'; code[1] <= 'Z'; code[1]++) {
+                String str = new String(code);
+                try {
+                    Region r = Region.getInstance(str);
+                    // The Region code successfully created by Region.getInstance with
+                    // type URGN_TERRITORY. Notice the r.toString() may not be the
+                    // same as the same as the one passing into getInstance.
+                    if (r.getType() == Region.RegionType.TERRITORY) {
+                        prefab2.add(r.toString());
+                    }
+                } catch (Exception e) {
+                    // noop
+                }
+            }
+        }
+        if (!ULocale.RegionValidateMap.BUILTIN.equals(prefab2)) {
+            errln("ULocale.RegionValidateMap.BUILTIN inconsistent with Region.getInstance()");
         }
     }
 }
