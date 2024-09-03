@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725144282066,
+  "lastUpdate": 1725397651985,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24897,6 +24897,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1910.9930439929176,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "5faea996b088158d464e51706ae30811ca2ac08b",
+          "message": "ICU-22723 Update double-conversion",
+          "timestamp": "2024-09-03T14:00:55-07:00",
+          "tree_id": "bfe43d47ffb2b0e12237c45c8cad4fe6ad80afc8",
+          "url": "https://github.com/unicode-org/icu/commit/5faea996b088158d464e51706ae30811ca2ac08b"
+        },
+        "date": 1725397508470,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2003.0340044525624,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
