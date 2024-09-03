@@ -1,0 +1,37 @@
+name: CIFuzz
+on: [pull_request]
+permissions:
+  contents: read
+jobs:
+ Fuzzing:
+   runs-on: ubuntu-latest
+   permissions:
+     security-events: write
+   steps:
+   - name: Build Fuzzers
+     id: build
+     uses: google/oss-fuzz/infra/cifuzz/actions/build_fuzzers@a790ab47e189e5e3b4941b991f4784ec769a9e70
+     with:
+       oss-fuzz-project-name: 'double-conversion'
+       language: c++
+   - name: Run Fuzzers
+     uses: google/oss-fuzz/infra/cifuzz/actions/run_fuzzers@a790ab47e189e5e3b4941b991f4784ec769a9e70
+     with:
+       oss-fuzz-project-name: 'double-conversion'
+       language: c++
+       fuzz-seconds: 300
+       output-sarif: true
+   - name: Upload Crash
+     uses: actions/upload-artifact@65d862660abb392b8c4a3d1195a2108db131dd05
+     if: failure() && steps.build.outcome == 'success'
+     with:
+       name: artifacts
+       path: ./out/artifacts
+   - name: Upload Sarif
+     if: always() && steps.build.outcome == 'success'
+     uses: github/codeql-action/upload-sarif@ce84bed59466c6755ffcf84a426881bafbb162e1
+     with:
+      # Path to SARIF file relative to the root of the repository
+      sarif_file: cifuzz-sarif/results.sarif
+      checkout_path: cifuzz-sarif
+      category: CIFuzz

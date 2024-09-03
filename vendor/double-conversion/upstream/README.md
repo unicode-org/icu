@@ -1,4 +1,8 @@
+Double Conversion
+========
 https://github.com/google/double-conversion
+
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/google/double-conversion/badge)](https://securityscorecards.dev/viewer/?uri=github.com/google/double-conversion)
 
 This project (double-conversion) provides binary-decimal and decimal-binary
 routines for IEEE doubles.
