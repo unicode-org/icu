@@ -153,7 +153,7 @@ See the [Building ICU4C](./icu4c/build) section.
 From ICU version 4.2 on, the configure script will build with the default bit
 width of your platform. You can request 64 or 32 bits with the
 **--with-library-bits=** option, (e.g. `runConfigureICU Linux
-**--with-library-bits=64**` or `runConfigureICU MacOSX
+**--with-library-bits=64**` or `runConfigureICU macOS
 **--with-library-bits=32**`).
 (For the behavior of attempting 64 bits if possible, use
 **--with-library-bits=64else32**).
