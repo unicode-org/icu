@@ -524,14 +524,14 @@ The autoconf docs use the term "build" for A, and "host" for B. More details at:
 Three initially-empty directories will be used in this example:
 
 | **/icu**    | a copy of the ICU source                                                    |
-| **/buildA** | an empty directory, it will contain ICU built for A  (MacOSX in this case)  |
+| **/buildA** | an empty directory, it will contain ICU built for A  (macOS in this case)  |
 | **/buildB** | an empty directory, it will contain ICU built for B  (HaikuOS in this case) |
 
 1.  Check out or unpack the ICU source code into the `/icu` directory.You will have the directories `/icu/source`, etc.
 2.  Build ICU in `/buildA` normally (using `runConfigureICU` or `configure`):
 ```
 cd /buildA
-sh /icu/source/runConfigureICU MacOSX
+sh /icu/source/runConfigureICU macOS
 gnumake
 ```
 3.  Set `PATH` or other variables as needed, such as `CPPFLAGS`.

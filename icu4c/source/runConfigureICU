@@ -52,8 +52,8 @@ The following names can be supplied as the argument for platform:
     Linux/ECC           Use the Intel ECC compiler on Linux
     Linux/ICC           Use the Intel ICC compiler on Linux
     Linux/VA            Use the IBM XL compiler on Power PC Linux
-    MacOSX              Use the default compilers on MacOS X (Darwin)
-    MacOSX/GCC          Use the GNU gcc/g++ compilers on MacOSX (Darwin)
+    macOS               Use the default compilers on macOS (Darwin)
+    macOS/gcc           Use the GNU gcc/g++ compilers on macOS (Darwin)
     MinGW               Use the GNU gcc/g++ compilers on MinGW
     MSYS/MSVC           Use the Microsoft Visual C++ compiler on MSYS
     QNX                 Use the QNX QCC compiler on QNX/Neutrino
@@ -318,7 +318,7 @@ case $platform in
         DEBUG_CXXFLAGS='/Zi'
         DEBUG_LDFLAGS='/DEBUG'
         ;;
-    MacOSX)
+    macOS|MacOSX)
         THE_OS="MacOS X (Darwin)"
         THE_COMP="the default"
         RELEASE_CFLAGS='-O2'
@@ -326,7 +326,7 @@ case $platform in
         DEBUG_CFLAGS='-g -O0'
         DEBUG_CXXFLAGS='-g -O0'
         ;;
-    MacOSX/GCC)
+    macOS/gcc|MacOSX/GCC)
         THE_OS="MacOS X (Darwin)"
         THE_COMP="the GNU C++"
         RELEASE_CFLAGS='-O2'

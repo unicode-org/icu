@@ -168,7 +168,7 @@ export ICU_DATA_VER=icudt(version)b
 2a. Configure ICU4C, build and test without new data first, to verify that
 there are no pre-existing errors, and to build some tools needed for later
 steps. Here `<platform>` is the runConfigureICU code for the platform you
-are building on, e.g. Linux, MacOSX, Cygwin.
+are building on, e.g. Linux, macOS, Cygwin.
 (optionally build with debug enabled)
 ```
 cd $ICU4C_DIR/source
