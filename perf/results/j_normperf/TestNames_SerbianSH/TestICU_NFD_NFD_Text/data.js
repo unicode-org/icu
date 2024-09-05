@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725397548952,
+  "lastUpdate": 1725559146503,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24957,6 +24957,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 3.0034726303351813,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "964bdc54f766b81bd55ca9554e788a746c57ae09",
+          "message": "ICU-22881 Switch to using macOS instead of MacOSX in runConfigureICU.\n\nThe old names are kept as aliases, but not listed in the help messsage.",
+          "timestamp": "2024-09-05T19:37:32+02:00",
+          "tree_id": "7c5ead7bef23d3438bc28f9a3fe1e3b18e949bc3",
+          "url": "https://github.com/unicode-org/icu/commit/964bdc54f766b81bd55ca9554e788a746c57ae09"
+        },
+        "date": 1725559003948,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.1395170747541608,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
