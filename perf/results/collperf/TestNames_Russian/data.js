@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725559892189,
+  "lastUpdate": 1725561621265,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -49569,6 +49569,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 128707.2899,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "4ef58328d04633ad90fa89e7f7cbbd89e2d16b2e",
+          "message": "ICU-22716 Reduce the data size to test calendar fuzzer\n\nCalendar fuzzer test too many operations and cause timeout\nwhich does not suerface the real issue. Limit the test data size to 100\ninstead of 1000 instead.",
+          "timestamp": "2024-09-05T11:17:07-07:00",
+          "tree_id": "19af712133e36d79e615332468517a4a5c04660f",
+          "url": "https://github.com/unicode-org/icu/commit/4ef58328d04633ad90fa89e7f7cbbd89e2d16b2e"
+        },
+        "date": 1725561474590,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 539.3432,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 603726.9837,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 87063.8553,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 539400.5667,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 128156.4183,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
