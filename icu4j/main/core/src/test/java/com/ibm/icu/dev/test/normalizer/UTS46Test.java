@@ -168,6 +168,15 @@ public class UTS46Test extends CoreTestFmwk {
         info=new IDNA.Info();
         idna.labelToUnicode("Xn---", result, info);
         assertTrue("empty Xn---", info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        // Unicode 15.1 UTS #46:
+        // Added an additional condition in 4.1 Validity Criteria to
+        // disallow labels such as xn--xn---epa., which do not round-trip.
+        // --> Validity Criteria new criterion 4:
+        // If not CheckHyphens, the label must not begin with “xn--”.
+        idna.labelToUnicode("xn--xn---epa", result, info);
+        assertTrue("error for xn--xn---epa",
+                info.getErrors().contains(IDNA.Error.INVALID_ACE_LABEL));
     }
 
     @Test
@@ -813,6 +822,16 @@ public class UTS46Test extends CoreTestFmwk {
         }
     }
 
+    private static String escapeTestString(String s, String sameAs) {
+        s = Utility.unescape(s.trim());
+        if (s.isEmpty()) {
+            s = sameAs;  // blank means same as another string
+        } else if (s.equals("\"\"")) {
+            s = "";  // explicit empty string (new in Unicode 16)
+        }
+        return s;
+    }
+
     private void checkIdnaTestResult(String line, String type,
             String expected, CharSequence result, String status, IDNA.Info info) {
         // An error in toUnicode or toASCII is indicated by a value in square brackets,
@@ -825,6 +844,18 @@ public class UTS46Test extends CoreTestFmwk {
             }
             if (!status.equals("[]")) {
                 expectedHasErrors = true;
+            }
+            // ICU workaround:
+            // We do effectively VerifyDnsLength (we always check for lengths), except,
+            // based on past bug reports, we do not do the following in UTS #46 ToASCII:
+            // When VerifyDnsLength is true, the empty root label is disallowed.
+            // Ignore the expected error if it is the only one.
+            // TODO: ICU-22882 - Report the empty root label separately from empty non-root labels.
+            if (type.startsWith("toASCII") && status.equals("[A4_2]") && !info.hasErrors()) {
+                String a = result.toString();
+                if (a.endsWith(".") && !a.contains("..")) {
+                    expectedHasErrors = false;
+                }
             }
         }
         if (expectedHasErrors != info.hasErrors()) {
@@ -841,10 +872,6 @@ public class UTS46Test extends CoreTestFmwk {
 
     @Test
     public void IdnaTest() throws IOException {
-        if (logKnownIssue("ICU-22707",
-                "The UTS #46 spec is changing for Unicode 16; need to adjust ICU impl")) {
-            return;
-        }
         BufferedReader idnaTestFile = TestUtil.getDataReader("unicode/IdnaTestV2.txt", "UTF-8");
         Pattern semi = Pattern.compile(";");
         try {
@@ -862,16 +889,15 @@ public class UTS46Test extends CoreTestFmwk {
 
                 // IdnaTestV2.txt (since Unicode 11)
                 // Column 1: source
-                // The source string to be tested
-                String source = Utility.unescape(fields[0].trim());
+                // The source string to be tested.
+                // "" means the empty string.
+                String source = escapeTestString(fields[0], "");
 
                 // Column 2: toUnicode
                 // The result of applying toUnicode to the source, with Transitional_Processing=false.
                 // A blank value means the same as the source value.
-                String toUnicode = Utility.unescape(fields[1].trim());
-                if (toUnicode.isEmpty()) {
-                    toUnicode = source;
-                }
+                // "" means the empty string.
+                String toUnicode = escapeTestString(fields[1], source);
 
                 // Column 3: toUnicodeStatus
                 // A set of status codes, each corresponding to a particular test.
@@ -881,10 +907,8 @@ public class UTS46Test extends CoreTestFmwk {
                 // Column 4: toAsciiN
                 // The result of applying toASCII to the source, with Transitional_Processing=false.
                 // A blank value means the same as the toUnicode value.
-                String toAsciiN = Utility.unescape(fields[3].trim());
-                if (toAsciiN.isEmpty()) {
-                    toAsciiN = toUnicode;
-                }
+                // "" means the empty string.
+                String toAsciiN = escapeTestString(fields[3], toUnicode);
 
                 // Column 5: toAsciiNStatus
                 // A set of status codes, each corresponding to a particular test.
@@ -897,10 +921,8 @@ public class UTS46Test extends CoreTestFmwk {
                 // Column 6: toAsciiT
                 // The result of applying toASCII to the source, with Transitional_Processing=true.
                 // A blank value means the same as the toAsciiN value.
-                String toAsciiT = Utility.unescape(fields[5].trim());
-                if (toAsciiT.isEmpty()) {
-                    toAsciiT = toAsciiN;
-                }
+                // "" means the empty string.
+                String toAsciiT = escapeTestString(fields[5], toAsciiN);
 
                 // Column 7: toAsciiTStatus
                 // A set of status codes, each corresponding to a particular test.
