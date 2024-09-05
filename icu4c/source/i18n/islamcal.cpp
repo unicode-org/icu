@@ -476,7 +476,6 @@ int64_t IslamicCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
     // This may be called by Calendar::handleComputeJulianDay with months out of the range
     // 0..11. Need to handle that here since monthStart requires months in the range 0.11.
     if (month > 11) {
-        eyear += (month / 12);
         if (uprv_add32_overflow(eyear, (month / 12), &eyear)) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return 0;
