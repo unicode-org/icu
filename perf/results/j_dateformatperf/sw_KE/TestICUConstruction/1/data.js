@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725559049440,
+  "lastUpdate": 1725560959788,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24627,6 +24627,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 3019.9945292779607,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "4ef58328d04633ad90fa89e7f7cbbd89e2d16b2e",
+          "message": "ICU-22716 Reduce the data size to test calendar fuzzer\n\nCalendar fuzzer test too many operations and cause timeout\nwhich does not suerface the real issue. Limit the test data size to 100\ninstead of 1000 instead.",
+          "timestamp": "2024-09-05T11:17:07-07:00",
+          "tree_id": "19af712133e36d79e615332468517a4a5c04660f",
+          "url": "https://github.com/unicode-org/icu/commit/4ef58328d04633ad90fa89e7f7cbbd89e2d16b2e"
+        },
+        "date": 1725560817382,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 3036.0350814666403,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
