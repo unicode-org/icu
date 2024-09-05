@@ -1,0 +1,69 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Actions configuration for Exhaustive Tests for ICU.
+# 
+# Note: The exhaustive test configuration is in a separate file
+# so that it can be run independently from the regular builds.
+#
+# To run these tests, go to the Actions Tab of your repo on the github page, 
+# select "Exhaustive Tests for ICU" and manually trigger the workflow for your branch.
+
+name: Exhaustive Tests for ICU
+
+on:
+  push:
+    # Runs post merge on maintenance branches
+    branches:
+      - 'maint/maint*'
+    paths:
+      - 'icu4c/**'
+      - 'icu4j/**'
+      - '.github/workflows/**'
+  schedule:
+    # Runs daily on default branch (main) only.
+    # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule
+    - cron: '0 4 * * 6' # Run every Saturday at 4:00 UTC
+  workflow_dispatch:
+    # Run manually on any branch
+
+# For non-release branches (namely: PRs), only run CI on the most recent commit. Cancel
+# runs on previous commits mid-flight when new commits are pushed.
+# https://docs.github.com/en/actions/using-jobs/using-concurrency#example-only-cancel-in-progress-jobs-on-specific-branches
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !contains(github.ref, 'maint/') && github.ref != 'main' }}
+
+jobs:
+  # Runs exhaustive tests for ICU4J on Linux
+  icu4j-linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Build and Exhaustive Tests
+        run: |
+          echo "Building ICU4J" && cd icu4j && mvn install -DICU.exhaustive=10
+        env:
+          BUILD: ICU4J
+      - name: List failures (if any)
+        if: failure()
+        run: |
+          cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`
+        timeout-minutes: 2
+
+
+  icu4c-linux-clang:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Build
+        run: |
+          cd icu4c/source && ./runConfigureICU Linux/clang && make -j -l4.5
+      - name: Exhaustive Tests
+        run: |
+          cd icu4c/source && make check-exhaustive
+        env:
+          CC: clang
+          CXX: clang++

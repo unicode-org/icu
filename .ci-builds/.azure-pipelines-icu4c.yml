@@ -67,7 +67,7 @@ jobs:
     # calling makeconv for it, although the Makefile has appropriate dependencies.
     - script: |
         cd icu4c/source && \
-        ICU_DATA_FILTER_FILE=../../.ci-builds/data-filter.json ./runConfigureICU Linux && \
+        ICU_DATA_FILTER_FILE=../../.github/data-filter.json ./runConfigureICU Linux && \
         make -j2 tests && \
         \[ ! -d data/out/build/icudt66l/translit \] && \
         (cd test/intltest && LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./intltest translit/TransliteratorTest/TestBasicTransliteratorEvenWithoutData) && \
@@ -272,7 +272,7 @@ jobs:
       - Cmd
   steps:
     - powershell: |
-        $filterPath = $Env:BUILD_SOURCESDIRECTORY + "\.ci-builds\data-filter.json"
+        $filterPath = $Env:BUILD_SOURCESDIRECTORY + "\.github\data-filter.json"
         $vstsCommandString = "vso[task.setvariable variable=ICU_DATA_FILTER_FILE]" + $filterPath
         Write-Host "##$vstsCommandString"
     - task: VSBuild@1

@@ -474,7 +474,7 @@ make check
 ## Test ICU4C Samples and Demos
 
 ### Windows build and test
-Note: Since ICU 73, this task has been included in the Azure DevOps Pipeline which is triggered automatically upon merging with main/maint* branches.
+Note: Since ICU 76, this task has been included in the GHA workflows which are triggered automatically upon merging with main/maint* branches.
 These instructions explain how to run the tests manually.
 
 To build the ICU4C samples on Windows with Visual Studio, use the following

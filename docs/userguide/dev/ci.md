@@ -30,10 +30,7 @@ ICU4J's unit tests in JUnit).
 ICU uses Continuous Integration systems to run these tests automatically for each new code contribution,
 and upon each update to a future contribution under development
 (that is: for each [successful Pull Request merge, and upon a new push of new git commits to a Pull Request](../gitdev.md)).
-ICU has 2 systems configured to run Continuous Integration testing:
-
-* Github Actions
-* Azure Pipelines
+ICU has GitHub Actions configured to run Continuous Integration testing.
 
 Continuous Integration systems can also be used to regularly and automatically run other tasks besides testing.
 ICU uses a CI workflow to automatically publish changes to its User Guide that is hosted on Github Pages.
@@ -121,70 +118,18 @@ the workflow will not run and Github is not capable of ignoring the check in tha
 
 Open Source users can now access machines with [at least 4 cores available per job](https://github.blog/2024-01-17-github-hosted-runners-double-the-power-for-open-source/).
 
-## Azure Pipelines
+### Exhaustive Tests
+Exhaustive tests run tests on a larger, more complete dataset than the regular unit tests.
+The larger dataset makes them run much longer than an individual unit test.
+Thus, exhaustive tests are not run automatically on every PR.
+They must pass before new versions of CLDR can be integrated into ICU,
+which is a part of the release process.
 
-ICU also uses [Azure Pipelines](https://azure.microsoft.com/en-us/products/devops/pipelines) to run CI jobs.
+It may be desirable to run exhaustive tests manually on a PR for areas of code that are known to need the extra test coverage provided by exhaustive tests.
+To trigger exhaustive tests manually:
 
-### Workflow files
-
-Workflow files are in YAML form stored at `.ci-builds/`.
-
-### UI Dashboard
-
-All Azure piplines show up in the 
-[Azure Piplines ICU project dashboard](https://dev.azure.com/ms/icu/),
-specifically in the 
-[Pipelines page](https://dev.azure.com/ms/icu/_build).
-
-After clicking on a specific pipeline,
-all of the instances/runs for that pipeline appear.
-All of the runs can be filtered in the Branch filter by the destination branch name (ex: `main`) or the PR number (ex: `2874`).
-
-### Configuration
-
-#### Initial Setup with Github.
-
-The upstream Github repo needs to be connected to Azure Pipelines in order for Azure Pipelines to listen for and trigger new pipelines based on events occuring in Github,
-and to return the status back to Github.
-This configuration is started by ensuring that the upstream ICU repo `unicode-org/icu` has the Azure Pipelines 3rd party app installed from the Github Marketplace.
-
-Once installed, the app will appear in the repo's Github "Settings" page under "Integrations" > "Github Apps".
-
-In order to configure a newly pipeline in Azure using the Github app for Azure Pipelines, you must do:
-
-1. Create and check-in a new YAML file in the icu repo at `.ci-builds/`
-2. In the repo settings, go to "Github Apps"
-3. In the Installed GitHub Apps section, click option to configure "Azure Pipelines".
-4. A page to update Azure Pipeline's repository access apears next. Click on "Update access".
-5. Next a page to authenticate with your Microsoft credentials appear. Sign in with Microsoft credentials.
-6. Select ADO org as `ms` and project as `icu`, click on continue.
-7. After authentication from Azure and Github, you come to the new pipeline wizard.
-8. Select repo as `unicode-org/icu` and select "Existing Azure Pipelines YAML file" and choose the yaml file created in step #1
-9. Review YAML file and click save. You will find a new pipeline created with name `unicode-org.icu`. Rename it to a more appropriate name
-
-***The pipline should now run as per the YAML rules and would be visible from Github settings for branch protection.***
-
-
-#### Jobs
-
-Jobs can be added, removed, and edited merely by editing the YAML workflow files.
-
-The syntax for Azure Pipelines workflows is very similar to Github Actions, including the YAML format.
-However, there are noteworthy differences in functionality and the expression of equivalent configurations aross the systems and syntaxes.
-
-#### Conditional Triggers
-
-Conditional triggers can be configured for Azure Pipelines similarly to Github Actions.
-
-Note: The triggers for merges to a branch (ex: `main`) may need to be duplicated into a separate trigger section for Pull Requests because they seem to be handled differently.
-
-### Caveats
-
-In order to set up a pipeline, a person must simultaneously have access to the Azure Pipelines project for ICU and to the Github ICU repository.
-
-If an Azure Pipeline only has one job,
-that job might not be shown on a PR's main page within the list of all of the running CI checks.
-There will only be an entry with the pipeline name in the list of checks.
-However, if an Azure Pipeline has multiple jobs,
-then each of the constituent jobs of the pipeline will be represent in the list of checks,
-in addition to an entry for the pipeline itself.
+1. Go to your respective fork of the project (username/icu) if the PR is not already merged. Otherwise, go to https://github.com/unicode-org/icu
+2. Select on the "Actions" tab from the top bar
+    ![GHA Actions](../assets/gha_tab.png)
+3. On the left pane under All workflows, find "Exhaustive Tests for ICU" and click on run workflow, select branch and click 'Run workflow'.
+    ![Run Workflow](../assets/gha_run_workflow.png)
