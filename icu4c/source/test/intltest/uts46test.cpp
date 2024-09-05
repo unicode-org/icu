@@ -340,6 +340,18 @@ void UTS46Test::TestACELabelEdgeCases() {
         idna->labelToUnicode(u"Xn---", result, info, errorCode);
         assertTrue("empty Xn---", (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
     }
+
+    {
+        // Unicode 15.1 UTS #46:
+        // Added an additional condition in 4.1 Validity Criteria to
+        // disallow labels such as xn--xn---epa., which do not round-trip.
+        // --> Validity Criteria new criterion 4:
+        // If not CheckHyphens, the label must not begin with “xn--”.
+        IDNAInfo info;
+        idna->labelToUnicode("xn--xn---epa", result, info, errorCode);
+        assertTrue("error for xn--xn---epa",
+                (info.getErrors()&UIDNA_ERROR_INVALID_ACE_LABEL)!=0);
+    }
 }
 
 void UTS46Test::TestTooLong() {
@@ -1016,9 +1028,15 @@ idnaTestLineFn(void *context,
     reinterpret_cast<UTS46Test *>(context)->idnaTestOneLine(fields, *pErrorCode);
 }
 
-UnicodeString s16FromField(char *(&field)[2]) {
+UnicodeString s16FromField(char *(&field)[2], const UnicodeString &sameAs) {
     int32_t length = static_cast<int32_t>(field[1] - field[0]);
-    return UnicodeString::fromUTF8(StringPiece(field[0], length)).trim().unescape();
+    UnicodeString s = UnicodeString::fromUTF8(StringPiece(field[0], length)).trim().unescape();
+    if (s.isEmpty()) {
+        s = sameAs;  // blank means same as another string
+    } else if (s == u"\"\"") {
+        s.remove();  // explicit empty string (new in Unicode 16)
+    }
+    return s;
 }
 
 std::string statusFromField(char *(&field)[2]) {
@@ -1049,6 +1067,20 @@ void UTS46Test::checkIdnaTestResult(const char *line, const char *type,
         if (strcmp(status, reinterpret_cast<const char*>(u8"[]")) != 0) {
             expectedHasErrors = true;
         }
+        // ICU workaround:
+        // We do effectively VerifyDnsLength (we always check for lengths), except,
+        // based on past bug reports, we do not do the following in UTS #46 ToASCII:
+        // When VerifyDnsLength is true, the empty root label is disallowed.
+        // Ignore the expected error if it is the only one.
+        // TODO: ICU-22882 - Report the empty root label separately from empty non-root labels.
+        if (strncmp(type, "toASCII", 7) == 0 &&  // startsWith
+                strcmp(status, "[A4_2]") == 0 && !info.hasErrors()) {
+            if (result.endsWith(UnicodeString::readOnlyAlias(u".")) &&
+                    // !contains
+                    result.indexOf(UnicodeString::readOnlyAlias(u"..")) < 0) {
+                expectedHasErrors = false;
+            }
+        }
     }
     if (expectedHasErrors != info.hasErrors()) {
         errln("%s  expected errors %s %d != %d = actual has errors: %04lx\n    %s",
@@ -1064,16 +1096,15 @@ void UTS46Test::checkIdnaTestResult(const char *line, const char *type,
 void UTS46Test::idnaTestOneLine(char *fields[][2], UErrorCode &errorCode) {
     // IdnaTestV2.txt (since Unicode 11)
     // Column 1: source
-    // The source string to be tested
-    UnicodeString source = s16FromField(fields[0]);
+    // The source string to be tested.
+    // "" means the empty string.
+    UnicodeString source = s16FromField(fields[0], UnicodeString());
 
     // Column 2: toUnicode
     // The result of applying toUnicode to the source, with Transitional_Processing=false.
     // A blank value means the same as the source value.
-    UnicodeString toUnicode = s16FromField(fields[1]);
-    if (toUnicode.isEmpty()) {
-        toUnicode = source;
-    }
+    // "" means the empty string.
+    UnicodeString toUnicode = s16FromField(fields[1], source);
 
     // Column 3: toUnicodeStatus
     // A set of status codes, each corresponding to a particular test.
@@ -1083,10 +1114,8 @@ void UTS46Test::idnaTestOneLine(char *fields[][2], UErrorCode &errorCode) {
     // Column 4: toAsciiN
     // The result of applying toASCII to the source, with Transitional_Processing=false.
     // A blank value means the same as the toUnicode value.
-    UnicodeString toAsciiN = s16FromField(fields[3]);
-    if (toAsciiN.isEmpty()) {
-        toAsciiN = toUnicode;
-    }
+    // "" means the empty string.
+    UnicodeString toAsciiN = s16FromField(fields[3], toUnicode);
 
     // Column 5: toAsciiNStatus
     // A set of status codes, each corresponding to a particular test.
@@ -1099,10 +1128,8 @@ void UTS46Test::idnaTestOneLine(char *fields[][2], UErrorCode &errorCode) {
     // Column 6: toAsciiT
     // The result of applying toASCII to the source, with Transitional_Processing=true.
     // A blank value means the same as the toAsciiN value.
-    UnicodeString toAsciiT = s16FromField(fields[5]);
-    if (toAsciiT.isEmpty()) {
-        toAsciiT = toAsciiN;
-    }
+    // "" means the empty string.
+    UnicodeString toAsciiT = s16FromField(fields[5], toAsciiN);
 
     // Column 7: toAsciiTStatus
     // A set of status codes, each corresponding to a particular test.
@@ -1133,12 +1160,7 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
 
 }  // namespace
 
-// http://www.unicode.org/Public/idna/latest/IdnaTest.txt
 void UTS46Test::IdnaTest() {
-    if (logKnownIssue("ICU-22707",
-                      "The UTS #46 spec is changing for Unicode 16; need to adjust ICU impl")) {
-        return;
-    }
     IcuTestErrorCode errorCode(*this, "IdnaTest");
     const char *sourceTestDataPath = getSourceTestData(errorCode);
     if (errorCode.errIfFailureAndReset("unable to find the source/test/testdata "
@@ -1158,7 +1180,7 @@ void UTS46Test::IdnaTest() {
     // Comments are indicated with hash marks.
     char *fields[kNumFields][2];
     u_parseDelimitedFile(path.data(), ';', fields, kNumFields, idnaTestLineFn, this, errorCode);
-    if (errorCode.errIfFailureAndReset("error parsing IdnaTest.txt")) {
+    if (errorCode.errIfFailureAndReset("error parsing IdnaTestV2.txt")) {
         return;
     }
 }

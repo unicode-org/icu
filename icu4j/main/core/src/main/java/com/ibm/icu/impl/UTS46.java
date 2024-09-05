@@ -358,7 +358,12 @@ public final class UTS46 extends IDNA {
             // In the code further below, if we find non-LDH ASCII and we have UIDNA_USE_STD3_RULES
             // then we will set UIDNA_ERROR_INVALID_ACE_LABEL there too.
             boolean isValid=uts46Norm2.isNormalized(fromPunycode);
-            if(!isValid) {
+            // Unicode 15.1 UTS #46:
+            // Added an additional condition in 4.1 Validity Criteria to
+            // disallow labels such as xn--xn---epa., which do not round-trip.
+            // --> Validity Criteria new criterion 4:
+            // If not CheckHyphens, the label must not begin with “xn--”.
+            if(!isValid || startsWithXNDashDash(fromPunycode)) {
                 addLabelError(info, Error.INVALID_ACE_LABEL);
                 return markBadACELabel(dest, labelStart, labelLength, toASCII, info);
             }
@@ -488,6 +493,12 @@ public final class UTS46 extends IDNA {
         }
         return replaceLabel(dest, destLabelStart, destLabelLength, labelString, labelLength);
     }
+
+    private static boolean startsWithXNDashDash(CharSequence s) {
+        return s.length()>=4 &&
+                s.charAt(0)=='x' && s.charAt(1)=='n' && s.charAt(2)=='-' && s.charAt(3)=='-';
+    }
+
     private int
     markBadACELabel(StringBuilder dest,
                     int labelStart, int labelLength,
