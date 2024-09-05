@@ -824,3 +824,85 @@ jobs:
           publish_branch: main
           publish_dir: ./perf
           keep_files: true
+
+  # Build ICU and tests sample on some windows configurations
+  icu4c-windows-msvc-postmerge:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        arch: [x64, x86]
+        config: [Debug, Release]
+        include:
+          - arch: x86
+            platform: Win32
+          - arch: x64
+            platform: x64
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v1
+      - name: Build Solution
+        run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=${{ matrix.config }} /p:Platform=${{ matrix.platform }}
+      - name: Run Tests (icucheck.bat)
+        run: icu4c/source/allinone/icucheck.bat ${{ matrix.arch }} ${{ matrix.config }}
+      - name: Build Sample Solution
+        run: msbuild icu4c/source/samples/all/all.sln /p:Configuration=${{ matrix.config }} /p:Platform=${{ matrix.arch }}
+      - name: Test Samples (samplecheck.bat)
+        run: icu4c/source/samples/all/samplecheck.bat ${{ matrix.arch }} ${{ matrix.config }}
+
+  icu4c-windows-cygwin-gcc:
+    runs-on: windows-latest
+    timeout-minutes: 50
+    env:
+      ICU_CI_CACHE: c:\icu-ci-cache
+      CYG_URL: https://cygwin.com/setup-x86_64.exe
+      CYG_MIRROR: http://mirrors.kernel.org/sourceware/cygwin/
+      CYG_PACKAGES: automake,gcc-core,gcc-g++,make,pkg-config,perl,python3
+      CYG_ROOT: c:\cygwin-root
+      CYG_CACHE: 'c:\icu-ci-cache\cygwin64-v3'
+      CYG_CACHED_SETUP: 'c:\icu-ci-cache\cygwin64-v3\setup.exe'
+      CYG_VERSION_KEY: cygwin-3.2
+    defaults:
+      run:
+        shell: cmd
+    steps:
+      - name: Configure Git to checkout with Unix line endings (LF)
+        run: |
+          git config --global core.autocrlf input
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Restore Cygwin cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.CYG_CACHE }}
+          key: ${{ hashFiles('.github/workflows/icu_merge_ci.yml') }}
+      - name: Download Cygwin setup
+        shell: pwsh
+        run: |
+          if ( !(Test-Path "${{ env.CYG_CACHED_SETUP }}" -NewerThan (Get-Date).AddDays(-7)) )
+          {
+            Write-Host "Cached Cygwin setup does not exist or is older than 7 days, downloading from external site."
+            New-Item -Force -Type Directory ${{ env.CYG_CACHE }}
+            Write-Host "Downloading Cygwin setup..."
+            $start_time = Get-Date
+            (New-Object System.Net.WebClient).DownloadFile("${{ env.CYG_URL }}", "${{ env.CYG_CACHED_SETUP }}")
+            Write-Output "Download took: $((Get-Date).Subtract($start_time).Seconds) second(s)."
+          }
+      - name: Install Cygwin
+        run: |
+          ${{ env.CYG_CACHED_SETUP }} --no-verify --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --only-site --site "${{ env.CYG_MIRROR }}" --root "${{ env.CYG_ROOT }}" --local-package-dir "${{ env.CYG_CACHE }}" --packages "${{ env.CYG_PACKAGES }}"
+      - name: Check Cygwin environment
+        run: |
+          ${{ env.CYG_ROOT }}/bin/sh -lc 'echo Hello' && ${{ env.CYG_ROOT }}/bin/sh -lc 'uname -a'
+      - name: Build ICU (source and test)
+        run: |
+          ${{ env.CYG_ROOT }}/bin/bash -lc "cd $(cygpath \"${{ github.workspace }}\") && cd icu4c/source && ./runConfigureICU Cygwin && make tests -j -l4.5"
+        env:
+          CC: gcc
+          CXX: g++
+      - name: Run Tests
+        run: |
+          ${{ env.CYG_ROOT }}/bin/bash -lc "cd $(cygpath \"${{ github.workspace }}\") && cd icu4c/source && make -j -l4.5 check"
+        env:
+          CC: gcc
+          CXX: g++

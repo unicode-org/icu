@@ -75,6 +75,26 @@ jobs:
           make install;
           PATH=$PREFIX/bin:$PATH make -C test/hdrtst check
 
+  #gcc 11 with c++ 20
+  gcc11-cpp20:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Install GCC-11
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt update
+          sudo apt install gcc-11 g++-11
+      - name: Build and Test
+        env:
+          CC: gcc-11
+          CXX: g++-11
+          CXXFLAGS: -std=c++20 -fext-numeric-literals
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux
+          make -j -l4.5 check;
+
   # clang release build with some options to enforce useful constraints.
   # Includes dependency checker on an in-source, optimized build.
   # Includes checking @draft etc. API tags vs. ifndef guards like
@@ -106,6 +126,12 @@ jobs:
         run: |
           cd icu4c;
           source/test/hdrtst/testtagsguards.sh;
+      - name: Test C Default locale
+        run: |
+          cd icu4c/source/test/cintltst && LANG=C LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./cintltst /tsutil/cloctst/TestCDefaultLocale
+      - name: Test C.UTF-8 Default locale
+        run: |
+          cd icu4c/source/test/cintltst && LANG=C.UTF-8 LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./cintltst /tsutil/cloctst/TestCDefaultLocale
       - name: Make Dist
         env:
           CPPFLAGS: -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
@@ -240,6 +266,81 @@ jobs:
           CPPFLAGS: -fsanitize=thread
           LDFLAGS: -fsanitize=thread
 
+  #------------------------------------------------------
+  # Clang Linux with data filter
+  # Note: This job uses `make -j2` instead of `make -j -l4.5` because with more parallelism (PR #2456)
+  # this check became flaky. The build apparently was not done copying one or another .ucm file before
+  # calling makeconv for it, although the Makefile has appropriate dependencies.
+  clang-datafilter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Extract ICU version
+        run: |
+          # Extract ICU version from icuver.txt
+          icuverContent=$(cat icu4c/source/data/misc/icuver.txt)
+          icuVersion=$(echo "$icuverContent" | grep -oP 'ICUVersion\{"\K\d+\.\d+\.\d+\.\d+')
+          majorVersion=$(echo "$icuVersion" | cut -d. -f1)
+          echo "majorVersion=$majorVersion"
+          echo "majorVersion=$majorVersion" >> $GITHUB_ENV
+      - name: Build ICU4C with clang
+        run: |
+          cd icu4c/source && \
+          ICU_DATA_FILTER_FILE=../../.github/data-filter.json ./runConfigureICU Linux/clang && \
+          make -j2 tests && \
+          \[ ! -d data/out/build/icudt${majorVersion}l/translit \] && \
+          (cd test/intltest && LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./intltest translit/TransliteratorTest/TestBasicTransliteratorEvenWithoutData) && \
+          (cd test/cintltst && LANG=C LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./cintltst /tsutil/cloctst/TestEnglishExemplarCharacters /tsutil/cldrtest/TestCoverage)
+
+  # Clang Linux with CPP 17
+  clang-cpp17:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Build ICU4C with CPP 17
+        env:
+          CXXFLAGS: -std=c++17 -Winvalid-constexpr
+        run: |
+          cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux/clang && make -j -l4.5 check
+
+  # Clang Linux with LANG: en_US@calendar=gregorian;hours=h12
+  clang-lang-with-extn-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Linux Clang - LANG has extension tags
+        env:
+          LANG: "en_US@calendar=gregorian;hours=h12"
+        run: |
+          cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux/clang && make -j -l4.5 check
+
+  # Clang Linux 16 with CPP20 and treat warnings as errors 
+  clang16-cpp20-warning-as-errors:
+      runs-on: ubuntu-latest
+      strategy:
+        fail-fast: false
+        matrix:
+          flags: 
+            - '-std=c++20'
+            - '-std=c++20 -stdlib=libc++'
+      steps:
+        - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        - name: Install Clang-16
+          run: |
+            curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+            sudo apt-add-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-16 main'
+            sudo apt update
+            sudo apt install -qy clang-16 lld-16 libc++-16-dev libc++abi-16-dev
+        - name: Clang-16 build and Test
+          env:
+            CC: clang-16
+            CXX: clang++-16
+            # TODO: add '-Werror' after fixing ICU-22873
+            CPPFLAGS: '-Wall -Wextra -Wno-strict-prototypes -Wctad-maybe-unsupported'
+            CXXFLAGS: ${{ matrix.flags }}
+          run: |
+            cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux/clang && make -j -l4.5 check
+
   # MacOS with clang
   macos-clang:
     runs-on: macos-latest
@@ -247,10 +348,162 @@ jobs:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: ICU4C with clang on MacOS
+        env:
+          # TODO: add '-Werror' after fixing ICU-22874
+          CPPFLAGS: '-Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wctad-maybe-unsupported' 
         run: |
           cd icu4c/source;
           PYTHON=python3 ./runConfigureICU MacOSX;
           make -j -l4.5 check
+
+  # Windows MSVC builds
+  windows-msvc:
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        include: 
+          - test_flags: 'x64 Debug'
+            build_flags: '/p:Configuration=Debug /p:Platform=x64'
+          - test_flags: 'x86 Debug'
+            build_flags: '/p:Configuration=Debug /p:Platform=Win32'
+          - test_flags: 'arm Release'
+            build_flags: '/p:Configuration=Release /p:Platform=ARM'
+          - test_flags: 'x64 Release'
+            build_flags: '/p:LanguageStandard=stdcpplatest /p:Configuration=Release /p:Platform=x64'
+          - test_flags: 'x64 Release'
+            build_flags: '/p:_HAS_EXCEPTIONS=0 /p:Configuration=Release /p:Platform=x64'
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v2
+      - name: Build Solution x64
+        if: contains(matrix.test_flags, 'arm Release')
+        run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64
+      - name: Build Solution
+        run: |
+          msbuild icu4c/source/allinone/allinone.sln ${{ matrix.build_flags }}
+      - name: Run ${{ matrix.test_flags }} Tests (icucheck.bat)
+        if: contains(matrix.test_flags, 'arm Release') == false
+        run: |
+          icu4c\source\allinone\icucheck.bat ${{ matrix.test_flags }}
+
+  # Windows data filter build
+  windows-msvc-datafilter:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - name: Set ICU_DATA_FILTER_FILE variable
+      run: |
+        $filterPath = "${{ github.workspace }}\.github\data-filter.json"
+        echo "ICU_DATA_FILTER_FILE=$filterPath" >> $GITHUB_ENV
+      shell: pwsh
+    - name: Set up MSBuild
+      uses: microsoft/setup-msbuild@v2
+    - name: Build Solution with Data Filter
+      run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64 /p:SkipUWP=true
+
+  # Windows MSVC distribution release
+  windows-msvc-dist-release:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include: 
+          - arch: 'x64'
+            plat: 'x64'
+            win_ver: 'Win64'
+          - arch: 'x86'
+            plat: 'Win32'
+            win_ver: 'Win32'
+          - arch: 'arm64'
+            plat: 'ARM64'
+            win_ver: 'WinARM64'
+    steps:
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - name: Set up MSBuild
+      uses: microsoft/setup-msbuild@v2
+    - name: Build Solution x64
+      if: contains(matrix.win_ver, 'ARM64')
+      run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64
+    - name: Build Solution
+      run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=${{ matrix.plat }}
+    - name: Run Tests (icucheck.bat)
+      if: contains(matrix.win_ver, 'ARM64') == false
+      run: icu4c/source/allinone/icucheck.bat ${{ matrix.arch }} Release
+    - name: "Run PowerShell: Distrelease script (${{ matrix.arch }})"
+      run: |
+        cd ./icu4c/
+        ./packaging/distrelease.ps1 -arch ${{ matrix.arch }}
+      shell: pwsh
+    - name: Extract ICU version and rename zip file
+      id: set-zip-name
+      run: |
+        # Extract ICU version from icuver.txt
+        $icuverContent = Get-Content icu4c\source\data\misc\icuver.txt
+        $icuVersion = ($icuverContent -match 'ICUVersion{"(\d+\.\d+\.\d+\.\d+)"}')[0]
+        $icuVersion -match '\{"(.*?)"\}' | Out-Null
+        $icuVersion = $matches[1]
+        $majorVersion = $icuVersion.Split('.')[0]
+        $minorVersion = $icuVersion.Split('.')[1]
+        # Determine the new file name based on the version
+        if ($minorVersion -eq "0") {
+          $newZipName = "icu4c-${majorVersion}rc-${{ matrix.win_ver }}-MSVC2022"
+        } else {
+          $newZipName = "icu4c-${majorVersion}_${minorVersion}-${{ matrix.win_ver }}-MSVC2022"
+        }
+        # Debugging: Print the new zip name
+        Write-Host "New Zip Name: $newZipName"
+        # Rename the existing zip file
+        cd icu4c\source\dist\ && ls -l .
+        Rename-Item -Path icu-windows.zip -NewName "${newZipName}.zip"
+        echo $newZipName
+        ls -l .
+        echo "newZipName=$newZipName" | Out-File -FilePath $env:GITHUB_ENV -Append
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: icu4c.${{ matrix.win_ver }}.run_#${{ github.run_number }}
+        path: icu4c/source/dist/${{ env.newZipName }}.zip
+
+  # Window MSYS2 tests
+  windows-msys2-gcc-x86_64:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - name: Set up MSYS2
+      uses: msys2/setup-msys2@v2
+      id: msys2
+      with:
+        update: true
+        msystem: mingw64
+        install: > 
+          base-devel 
+          mingw-w64-x86_64-toolchain 
+          make
+    - name: 'Verify MinGW Installation'
+      run: gcc --version
+    - name: Build and Test
+      run: |
+        cd '${{ github.workspace }}' && cd icu4c/source && ./runConfigureICU MinGW --prefix='/tmp/build-icu' && make -j -l4.5 check
+    - name: Make install
+      run: |
+        cd '${{ github.workspace }}' && cd icu4c/source && make install && cd /tmp/build-icu && echo 'Recursive ls' && ls -lR
+    - name: Run icuinfo
+      run: |
+        echo 'Run icuinfo from MSYS shell' && cd /tmp/build-icu/bin && ./icuinfo.exe
+    - name: Run icuinfo from CMD
+      shell: cmd
+      run: |
+        cd /d ${{ steps.msys2.outputs.msys2-location }}\tmp\build-icu\bin
+        set PATH=C:\tools\msys64\mingw64\bin;%PATH%
+        .\icuinfo.exe
 
   # Run ICU4C tests with stubdata.
   run-with-stubdata:
@@ -593,3 +846,75 @@ jobs:
           mkdir -p lib
           pushd common && make -j -l4.5 && popd
           pushd i18n && make -j -l4.5 && popd
+
+  # Workflow for ICU Export Data for ICU4X
+  icu4c-icuexportdata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Build
+        run: |
+          cd icu4c/source && ./runConfigureICU Linux && make -j -l4.5
+        env:
+          CC: clang
+          CXX: clang++
+      - name: Build property data files
+        run: |
+          cd icu4c/source
+          mkdir -p icuexportdata/uprops/fast
+          ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata/uprops/fast --trie-type fast --all
+          mkdir -p icuexportdata/uprops/small
+          ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata/uprops/small --trie-type small --all
+        env:
+          LD_LIBRARY_PATH: lib
+      - name: Build normalization data files
+        run: |
+          cd icu4c/source
+          mkdir -p icuexportdata/norm/fast
+          ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/fast --trie-type fast --all
+          mkdir -p icuexportdata/norm/small
+          ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/small --trie-type small --all
+        env:
+          LD_LIBRARY_PATH: lib
+      - name: Build case data files
+        run: |
+          cd icu4c/source
+          mkdir -p icuexportdata/ucase/fast
+          ./bin/icuexportdata --mode ucase --index --copyright --verbose --destdir icuexportdata/ucase/fast --trie-type fast --all
+          mkdir -p icuexportdata/ucase/small
+          ./bin/icuexportdata --mode ucase --index --copyright --verbose --destdir icuexportdata/ucase/small --trie-type small --all
+        env:
+          LD_LIBRARY_PATH: lib
+      - name: Build collation data files
+        run: |
+          cd icu4c/source
+          cd data/coll
+          FILES=$(ls *.txt)
+          cd ../../
+          mkdir -p icuexportdata/collation/unihan
+          ./bin/genrb -X -s data/coll --ucadata data/in/coll/ucadata-unihan-icu4x.icu -d icuexportdata/collation/unihan $FILES
+          rm icuexportdata/collation/unihan/*.res
+          mkdir -p icuexportdata/collation/implicithan
+          ./bin/genrb -X -s data/coll --ucadata data/in/coll/ucadata-implicithan-icu4x.icu -d icuexportdata/collation/implicithan $FILES
+          rm icuexportdata/collation/implicithan/*.res
+        env:
+          LD_LIBRARY_PATH: lib
+      - name: Build segmenter dictionary files
+        run: |
+          cd icu4c/source
+          mkdir -p icuexportdata/segmenter/dictionary
+          for FILE in $(ls data/brkitr/dictionaries | xargs -n 1 basename); do
+            ./bin/gendict --uchars --toml data/brkitr/dictionaries/$FILE icuexportdata/segmenter/dictionary/$(basename $FILE .txt).toml
+          done
+        env:
+          LD_LIBRARY_PATH: lib
+      - name: Zip
+        run: |
+          cd icu4c/source/icuexportdata
+          zip -r ../../../icuexportdata_tag-goes-here.zip .
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: icuexportdata_output
+          path: icuexportdata_tag-goes-here.zip

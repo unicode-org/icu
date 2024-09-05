@@ -309,36 +309,24 @@ run \`make dist\`.
     *   Click on the green check mark (✔) on the most recent/last commit. (It
         might be a red X if the builds failed, hopefully not).
         *   This will open up a pop-up with links to various CI builds.
-    *   Click on one of the various links that says "Details" for the Azure CI
-        builds.
+    *   Click on one of the various links that says "Details" for any of the GHA
+        builds and click on "Summary".
         *   This will open up the GitHub overview of the build status.<br>
-            ![image](azure-ci-builds.png)<br>
-    *   Click on the link "View more details on Azure Pipelines" link.
-        *   This will take you to the actual Azure CI build page.
-    *   On the top right of the page there should be a button titled
-        "Artifacts". Click this and it should show a drop-down with various ZIP
-        files that you can download.<br>
-        ![image](azure-ci-builds-artifacts.png)<br>
-    *   The ZIP may automatically download for you.
-    *   However, if you are signed-in to visualstudio.com then you might see a
-        dialog titled "Artifacts explorer".
-    *   In this case click on the name, then the "..." button to download the
-        zip file.<br>
-        ![image](azure-ci-builds-artifacts-download.png)<br>
-    *   Download both the x64 (64-bit) and x86 (32-bit) ZIP files.
+            ![image](gha-ci-summary.png)<br>
+    *   Scroll down at the bottom to find the sub-section "Artifacts". It should show you list of zips you can download<br>
+        ![image](gha-ci-artifacts.png)<br>
+    *   Download the x64, x86 and ARM zip files.
     *   For each architecture:
         *   Extract the Zip file. (It will have a name like
-            "20190829.6_ICU4C_MSVC_x64_Release.zip").
+            "icu4c.Win64.run_#104.zip").
         *   Navigate into the folder with the same name.
-        *   Rename the file "icu-windows.zip" to the appropriate name:
-            *   Ex: The x64 zip for version 64.1 was named
-                "icu4c-64_1-Win64-MSVC2017.zip"
-            *   Ex: The x86 zip for version 64.1 was named
-                "icu4c-64_1-Win32-MSVC2017.zip"
-            *   Note: Note: As of ICU 68, the pre-built binaries use MSVC2019
-                instead of MSVC2017.
+        *   Check and verify the names of the zip file are appropriate:
+            *   Ex: The x64 zip for version 76.1 should be named
+                "icu4c-76_1-Win64-MSVC2022.zip"
+            *   Ex: The x86 zip for version 76.1 should be named
+                "icu4c-76_1-Win32-MSVC2022.zip"
         *   Note: For RC releases the name looked like this:
-            "icu4c-64rc-Win64-MSVC2017.zip"
+            "icu4c-76rc-Win64-MSVC2022"
 *   ~~AIX Bin:~~ (AIX is broken and ignored for now.)
     *   ~~login to gcc119.fsffrance.org and copy the ICU4C source archive
         created above to there.~~
@@ -360,7 +348,7 @@ run \`make dist\`.
 This step publishes pre-processed Unicode property data, which may be ingested by downstream clients such as ICU4X.
 
 *   Using the output from the build bots:
-    *   Navigate to the Azure Pipeline `C: Create Artifacts from icuexportdata` and download its single artifact (`icuexportdata_output`)
+    *   Navigate to the GHA Workflow `icu4c-icuexportdata` and download the artifact (`icuexportdata_output`) from summary page
     *   Unzip the file
     *   Rename the `icuexportdata_tag-goes-here.zip` file to the correct tag (replacing slashes with dashes)
 

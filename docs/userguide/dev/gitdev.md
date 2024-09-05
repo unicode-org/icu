@@ -591,16 +591,9 @@ Send the PR off for review. As in the Easy Way, **you should use the MERGE COMMI
 
 ## Requesting an Exhaustive Test run on a Pull-Request (PR)
 
-The ICU4C and ICU4J Exhaustive Tests run on the main branch after a pull-request
-has been submitted. They do not run on pull-requests by default as they take 1-2
-hours to run.
+The ICU4C and ICU4J Exhaustive Tests run on the main branch periodically once 
+every Saturday (at 4:00 AM UTC) and post merging on the maintenance branches. 
+They do not run on pull-requests by default as they take 1-2 hours to run.
 
-However, you can manually request the CI builds to run the exhaustive tests on a
-PR by commenting with the following text:
-
-```
-/azp run CI-Exhaustive
-```
-
-This will trigger the test run on the PR. This is covered more in a separate
-[document](https://docs.google.com/document/d/1kmcFFUozpWah_y7dk_Inlw_BIq3vG3-ZR2A28tIiXJc/edit?usp=sharing).
+However, you can manually request the CI builds to run the exhaustive tests.
+See [Continuous Integration / Exhaustive Tests](../userguide/dev/ci.md#exhaustive-tests).

@@ -379,12 +379,12 @@ If the data is OK , other sources of failure can include:
 
 Exhautive tests should always be run for a CLDR-ICU integration PR before it is merged.
 Once you have a PR, you can do this for both C and J as part of the pre-merge CI tests
-by adding the following as a comment in the pull request:<br>
-`/azp run CI-Exhaustive` (the exhaustive tests are not run automatically on every PR).
+by manually running a workflow (the exhaustive tests are not run automatically on every PR).
+See [Continuous Integration / Exhaustive Tests](../userguide/dev/ci.md#exhaustive-tests).
 
 The following instructions run the ICU4C exhaustive tests locally (which you may want to do
 before even committing changes, or which may be necessary to diagnose failures in the
-CI tests:
+CI tests):
 ```
 cd $ICU4C_DIR/source
 export INTLTEST_OPTS="-e"
