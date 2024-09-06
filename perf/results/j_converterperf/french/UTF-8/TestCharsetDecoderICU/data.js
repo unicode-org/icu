@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725605014803,
+  "lastUpdate": 1725612455873,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24867,6 +24867,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.5600017400788477,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "cjchapman@unicode.org",
+            "name": "Chris Chapman",
+            "username": "cjchapman"
+          },
+          "committer": {
+            "email": "cjchapman@apple.com",
+            "name": "Christopher Chapman",
+            "username": "cjchapman"
+          },
+          "distinct": true,
+          "id": "46712bff3dd2be6e3def01be97eb4050f054cda7",
+          "message": "ICU-22877 revised \"Region code\" (formerly \"Country code\") section",
+          "timestamp": "2024-09-05T15:23:33-07:00",
+          "tree_id": "c9344e495793736557a0e808b32618280d51d8ad",
+          "url": "https://github.com/unicode-org/icu/commit/46712bff3dd2be6e3def01be97eb4050f054cda7"
+        },
+        "date": 1725612276732,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5593540858749306,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
