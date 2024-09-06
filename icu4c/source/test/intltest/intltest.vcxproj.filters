@@ -490,6 +490,9 @@
     <ClCompile Include="ustrtest.cpp">
       <Filter>strings</Filter>
     </ClCompile>
+    <ClCompile Include="utfcppitertest.cpp">
+      <Filter>strings</Filter>
+    </ClCompile>
     <ClCompile Include="utxttest.cpp">
       <Filter>strings</Filter>
     </ClCompile>

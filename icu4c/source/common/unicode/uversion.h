@@ -98,6 +98,14 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
  * @stable ICU 2.4
  */
 
+/**
+ * \def U_HEADER_ONLY_NAMESPACE
+ * Namespace used for header-only APIs.
+ * Different when used inside ICU to prevent public use of internal instantiations.
+ *
+ * @draft ICU 76
+ */
+
 #   if U_DISABLE_RENAMING
 #       define U_ICU_NAMESPACE icu
         namespace U_ICU_NAMESPACE { }
@@ -124,6 +132,17 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 #   if U_USING_ICU_NAMESPACE
         U_NAMESPACE_USE
 #   endif
+
+#if defined(U_COMBINED_IMPLEMENTATION) || defined(U_COMMON_IMPLEMENTATION) || \
+        defined(U_I18N_IMPLEMENTATION) || defined(U_IO_IMPLEMENTATION) || \
+        defined(U_LAYOUTEX_IMPLEMENTATION) || defined(U_TOOLUTIL_IMPLEMENTATION)
+#   define U_HEADER_ONLY_NAMESPACE U_ICU_NAMESPACE::internal
+#else
+#   define U_HEADER_ONLY_NAMESPACE U_ICU_NAMESPACE::header
+#endif
+
+namespace U_HEADER_ONLY_NAMESPACE {}
+
 #endif /* __cplusplus */
 
 /*===========================================================================*/
