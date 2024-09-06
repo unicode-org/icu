@@ -841,7 +841,7 @@ jobs:
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v2
       - name: Build Solution
         run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=${{ matrix.config }} /p:Platform=${{ matrix.platform }}
       - name: Run Tests (icucheck.bat)
@@ -872,7 +872,7 @@ jobs:
           git config --global core.autocrlf input
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Restore Cygwin cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ env.CYG_CACHE }}
           key: ${{ hashFiles('.github/workflows/icu_merge_ci.yml') }}
