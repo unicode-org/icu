@@ -27,7 +27,13 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.*;
+import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.PatternTokenizer;
+import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.SimpleFormatterImpl;
+import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ICUCloneNotSupportedException;

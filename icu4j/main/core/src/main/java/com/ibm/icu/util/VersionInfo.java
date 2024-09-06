@@ -9,8 +9,9 @@
 
 package com.ibm.icu.util;
 
-import com.ibm.icu.impl.ICUData;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.ibm.icu.impl.ICUData;
 
 /**
  * Class to store version numbers of the form major.minor.milli.micro.

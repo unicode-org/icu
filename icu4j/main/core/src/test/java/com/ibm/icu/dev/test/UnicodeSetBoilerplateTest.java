@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.ibm.icu.dev.test.TestBoilerplate;
 import com.ibm.icu.text.UnicodeSet;
 
 /**

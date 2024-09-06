@@ -5,7 +5,6 @@ package com.ibm.icu.dev.test.message2;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
-import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
