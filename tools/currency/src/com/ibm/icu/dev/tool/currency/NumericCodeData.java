@@ -414,6 +414,7 @@ public class NumericCodeData {
         {"ZRZ", "180"},
         {"ZWC", "716"},
         {"ZWD", "716"},
+        {"ZWG", "924"},
         {"ZWL", "932"},
         {"ZWN", "942"},
         {"ZWR", "935"},
