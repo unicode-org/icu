@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725576250115,
+  "lastUpdate": 1725605974566,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -88221,6 +88221,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 41.8871,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "91ed39fb9d72a922011433006645b3773493793b",
+          "message": "ICU-22847 Migrate ADO pipelines to GHA\n\n  See #3112\r\n    - Update Docs\r\n    - Make exhaustive tests run manually, based on cron for main and post merge for maint",
+          "timestamp": "2024-09-06T11:52:01+05:30",
+          "tree_id": "832656d38c3eb60b86ce9b3a40259d052c6b264a",
+          "url": "https://github.com/unicode-org/icu/commit/91ed39fb9d72a922011433006645b3773493793b"
+        },
+        "date": 1725605832550,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.9118,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.6946,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 23.7932,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 31.2481,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 41.3701,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 37.5756,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.3803,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.0423,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 83.9252,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.5039,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 39.0235,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.3712,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
