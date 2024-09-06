@@ -20,7 +20,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.StringTransform;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
