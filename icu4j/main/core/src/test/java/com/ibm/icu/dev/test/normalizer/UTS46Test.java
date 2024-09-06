@@ -180,6 +180,24 @@ public class UTS46Test extends CoreTestFmwk {
     }
 
     @Test
+    public void TestDefaultNontransitional() {
+        // Unicode 15.1 UTS #46 deprecated transitional processing.
+        // ICU 76 changed IDNA.DEFAULT to set the nontransitional options.
+        IDNA forZero = IDNA.getUTS46Instance(0);
+        IDNA forDefault = IDNA.getUTS46Instance(IDNA.DEFAULT);
+        StringBuilder result = new StringBuilder();
+        IDNA.Info info = new IDNA.Info();
+        forZero.labelToUnicode("Fⓤßẞ", result, info);
+        assertEquals("forZero.toUnicode(Fⓤßẞ)", "fussss", result.toString());
+        forZero.labelToASCII("Fⓤßẞ", result, info);
+        assertEquals("forZero.toASCII(Fⓤßẞ)", "fussss", result.toString());
+        forDefault.labelToUnicode("Fⓤßẞ", result, info);
+        assertEquals("forDefault.toUnicode(Fⓤßẞ)", "fußß", result.toString());
+        forDefault.labelToASCII("Fⓤßẞ", result, info);
+        assertEquals("forDefault.toASCII(Fⓤßẞ)", "xn--fu-hiaa", result.toString());
+    }
+
+    @Test
     public void TestTooLong() {
         // ICU-13727: Limit input length for n^2 algorithm
         // where well-formed strings are at most 59 characters long.
