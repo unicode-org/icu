@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725561597806,
+  "lastUpdate": 1725605412933,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -49623,6 +49623,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1301172.858,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "91ed39fb9d72a922011433006645b3773493793b",
+          "message": "ICU-22847 Migrate ADO pipelines to GHA\n\n  See #3112\r\n    - Update Docs\r\n    - Make exhaustive tests run manually, based on cron for main and post merge for maint",
+          "timestamp": "2024-09-06T11:52:01+05:30",
+          "tree_id": "832656d38c3eb60b86ce9b3a40259d052c6b264a",
+          "url": "https://github.com/unicode-org/icu/commit/91ed39fb9d72a922011433006645b3773493793b"
+        },
+        "date": 1725605262820,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 272.2999,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 2952382.9166,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1304365.4319,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 2712840.5373,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1302050.7979,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
