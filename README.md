@@ -19,10 +19,8 @@ Build | Status
 ------|-------
 GitHub Actions (ICU4C) | [![GHA ICU4C](https://github.com/unicode-org/icu/workflows/GHA%20ICU4C/badge.svg)](https://github.com/unicode-org/icu/actions?query=workflow%3A%22GHA+ICU4C%22+branch%3Amain)
 GitHub Actions (ICU4J) | [![GHA ICU4J](https://github.com/unicode-org/icu/workflows/GHA%20ICU4J/badge.svg)](https://github.com/unicode-org/icu/actions?query=workflow%3A%22GHA+ICU4J%22+branch%3Amain)
-Azure Pipelines (ICU4C) | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI?branchName=main)](https://dev.azure.com/ms/icu/_build/latest?definitionId=360&branchName=main)
-Azure Pipelines (ICU4J) | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status%2Funicode-org%2FCI-ICU4J?branchName=main)](https://dev.azure.com/ms/icu/_build/latest?definitionId=631&branchName=main)
-Azure Pipelines (Exhaustive Tests) | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI-Exhaustive-Main?branchName=main)](https://dev.azure.com/ms/icu/_build/latest?definitionId=361&branchName=main)
-Github Actions (Valgrind) | [![GHA CI Valgrind](https://github.com/unicode-org/icu/workflows/GHA%20CI%20Valgrind/badge.svg)](https://github.com/unicode-org/icu/actions/workflows/icu_valgrind.yml?query=workflow%3A%22GHA+CI%22+branch%3Amain)
+GitHub Actions (Valgrind) | [![GHA CI Valgrind](https://github.com/unicode-org/icu/workflows/GHA%20CI%20Valgrind/badge.svg)](https://github.com/unicode-org/icu/actions/workflows/icu_valgrind.yml?query=workflow%3A%22GHA+CI%22+branch%3Amain)
+Exhaustive Tests | [![Exhaustive Tests for ICU](https://github.com/unicode-org/icu/actions/workflows/icu_exhaustive_tests.yml/badge.svg?branch=main)](https://github.com/unicode-org/icu/actions/workflows/icu_exhaustive_tests.yml?query=branch%3Amain)
 Fuzzing | [![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/badges/icu.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:icu)
 OpenSSF Scorecard | [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/unicode-org/icu/badge)](https://securityscorecards.dev/viewer/?uri=github.com/unicode-org/icu)
 
