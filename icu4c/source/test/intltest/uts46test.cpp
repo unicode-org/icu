@@ -42,6 +42,7 @@ public:
     void TestNotSTD3();
     void TestInvalidPunycodeDigits();
     void TestACELabelEdgeCases();
+    void TestDefaultNontransitional();
     void TestTooLong();
     void TestSomeCases();
     void IdnaTest();
@@ -88,6 +89,7 @@ void UTS46Test::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestNotSTD3);
     TESTCASE_AUTO(TestInvalidPunycodeDigits);
     TESTCASE_AUTO(TestACELabelEdgeCases);
+    TESTCASE_AUTO(TestDefaultNontransitional);
     TESTCASE_AUTO(TestTooLong);
     TESTCASE_AUTO(TestSomeCases);
     TESTCASE_AUTO(IdnaTest);
@@ -352,6 +354,27 @@ void UTS46Test::TestACELabelEdgeCases() {
         assertTrue("error for xn--xn---epa",
                 (info.getErrors()&UIDNA_ERROR_INVALID_ACE_LABEL)!=0);
     }
+}
+
+void UTS46Test::TestDefaultNontransitional() {
+    IcuTestErrorCode errorCode(*this, "TestDefaultNontransitional()");
+    // Unicode 15.1 UTS #46 deprecated transitional processing.
+    // ICU 76 changed UIDNA_DEFAULT to set the nontransitional options.
+    LocalPointer<IDNA> forZero(IDNA::createUTS46Instance(0, errorCode));
+    LocalPointer<IDNA> forDefault(IDNA::createUTS46Instance(UIDNA_DEFAULT, errorCode));
+    if(errorCode.isFailure()) {
+        return;
+    }
+    UnicodeString result;
+    IDNAInfo info;
+    forZero->labelToUnicode(u"Fⓤßẞ", result, info, errorCode);
+    assertEquals("forZero.toUnicode(Fⓤßẞ)", u"fussss", result);
+    forZero->labelToASCII(u"Fⓤßẞ", result, info, errorCode);
+    assertEquals("forZero.toASCII(Fⓤßẞ)", u"fussss", result);
+    forDefault->labelToUnicode(u"Fⓤßẞ", result, info, errorCode);
+    assertEquals("forDefault.toUnicode(Fⓤßẞ)", u"fußß", result);
+    forDefault->labelToASCII(u"Fⓤßẞ", result, info, errorCode);
+    assertEquals("forDefault.toASCII(Fⓤßẞ)", u"xn--fu-hiaa", result);
 }
 
 void UTS46Test::TestTooLong() {
