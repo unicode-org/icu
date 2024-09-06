@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725561407543,
+  "lastUpdate": 1725605195288,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30633,6 +30633,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 80.0343,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "91ed39fb9d72a922011433006645b3773493793b",
+          "message": "ICU-22847 Migrate ADO pipelines to GHA\n\n  See #3112\r\n    - Update Docs\r\n    - Make exhaustive tests run manually, based on cron for main and post merge for maint",
+          "timestamp": "2024-09-06T11:52:01+05:30",
+          "tree_id": "832656d38c3eb60b86ce9b3a40259d052c6b264a",
+          "url": "https://github.com/unicode-org/icu/commit/91ed39fb9d72a922011433006645b3773493793b"
+        },
+        "date": 1725605046166,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 33.1076,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 80.3721,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
