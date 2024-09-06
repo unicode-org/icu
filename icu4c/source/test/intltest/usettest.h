@@ -104,6 +104,9 @@ private:
     void assertNext(UnicodeSetIterator &iter, const UnicodeString &expected);
     void TestSkipToStrings();
     void TestPatternCodePointComplement();
+    void TestSimpleCaseFolding();
+    void TestCompareFullSimpleCaseFolding();
+    void TestChangesWhenCasefolded();
 
 private:
 
