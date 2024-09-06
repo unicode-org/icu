@@ -346,14 +346,12 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-
       - name: ICU4C with clang on MacOS
         env:
-          # TODO: add '-Werror' after fixing ICU-22874
-          CPPFLAGS: '-Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wctad-maybe-unsupported' 
+          CPPFLAGS: '-Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wctad-maybe-unsupported -Werror -Wno-error=strict-prototypes' 
         run: |
           cd icu4c/source;
-          PYTHON=python3 ./runConfigureICU MacOSX;
+          PYTHON=python3 ./runConfigureICU macOS;
           make -j -l4.5 check
 
   # Windows MSVC builds
