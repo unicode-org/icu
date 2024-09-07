@@ -6,6 +6,7 @@
 #include "fuzzer_utils.h"
 #include "unicode/localpointer.h"
 #include "unicode/timezone.h"
+#include "unicode/vtzone.h"
 
 IcuEnvironment* env = new IcuEnvironment();
 
@@ -31,7 +32,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   UBool system;
   icu::TimeZone::getCanonicalID(fuzzstr, output, system, status);
 
-
   status = U_ZERO_ERROR;
   icu::TimeZone::getIanaID(fuzzstr, output, status);
 
@@ -40,5 +40,10 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
   status = U_ZERO_ERROR;
   icu::TimeZone::getRegion(fuzzstr, status);
+
+  tz.adoptInstead(icu::VTimeZone::createVTimeZoneByID(fuzzstr));
+
+  status = U_ZERO_ERROR;
+  tz.adoptInstead(icu::VTimeZone::createVTimeZone(fuzzstr, status));
   return 0;
 }
