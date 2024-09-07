@@ -9,7 +9,11 @@
 #include <string>
 #include <memory>
 #include "fuzzer_utils.h"
+#include "unicode/choicfmt.h"
+#include "unicode/compactdecimalformat.h"
+#include "unicode/decimfmt.h"
 #include "unicode/numfmt.h"
+#include "unicode/rbnf.h"
 
 IcuEnvironment* env = new IcuEnvironment();
 
@@ -31,15 +35,61 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
   const icu::Locale& locale = GetRandomLocale(rnd);
 
-  std::unique_ptr<icu::NumberFormat> fmt(
-      icu::NumberFormat::createInstance(locale, status));
-  if (U_FAILURE(status)) {
-    return 0;
-  }
-
   icu::UnicodeString fuzzstr(false, fuzzbuff.get(), unistr_size);
   icu::Formattable result;
-  fmt->parse(fuzzstr, result, status);
+  std::unique_ptr<icu::NumberFormat> fmt(
+      icu::NumberFormat::createInstance(locale, status));
+  if (U_SUCCESS(status)) {
+      fmt->parse(fuzzstr, result, status);
+  }
 
+  status = U_ZERO_ERROR;
+  fmt.reset(icu::NumberFormat::createCurrencyInstance(locale, status));
+  if (U_SUCCESS(status)) {
+      fmt->parse(fuzzstr, result, status);
+  }
+
+  status = U_ZERO_ERROR;
+  fmt.reset(icu::NumberFormat::createPercentInstance(locale, status));
+  if (U_SUCCESS(status)) {
+      fmt->parse(fuzzstr, result, status);
+  }
+
+  status = U_ZERO_ERROR;
+  fmt.reset(icu::NumberFormat::createScientificInstance(locale, status));
+  if (U_SUCCESS(status)) {
+      fmt->parse(fuzzstr, result, status);
+  }
+
+  status = U_ZERO_ERROR;
+  icu::ChoiceFormat cfmt(fuzzstr, status);
+  if (U_SUCCESS(status)) {
+      cfmt.parse(fuzzstr, result, status);
+  }
+
+  UParseError perror;
+  status = U_ZERO_ERROR;
+  icu::RuleBasedNumberFormat rbfmt(fuzzstr, locale, perror, status);
+  if (U_SUCCESS(status)) {
+      rbfmt.parse(fuzzstr, result, status);
+  }
+
+  status = U_ZERO_ERROR;
+  icu::DecimalFormat dfmt(fuzzstr, status);
+  if (U_SUCCESS(status)) {
+      dfmt.parse(fuzzstr, result, status);
+  }
+
+  status = U_ZERO_ERROR;
+  fmt.reset(icu::CompactDecimalFormat::createInstance(locale, UNUM_SHORT, status));
+  if (U_SUCCESS(status)) {
+      fmt->parse(fuzzstr, result, status);
+  }
+
+  status = U_ZERO_ERROR;
+  fmt.reset(icu::CompactDecimalFormat::createInstance(locale, UNUM_LONG, status));
+  if (U_SUCCESS(status)) {
+      fmt->parse(fuzzstr, result, status);
+  }
   return 0;
 }
