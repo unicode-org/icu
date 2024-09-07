@@ -1,18 +1,26 @@
 name: CIFuzz
 on:
-  # comments out triggerin on PR for now
-  # pull_request:
-  #   paths:
-  #    - '**.c'
-  #    - '**.cc'
-  #    - '**.cpp'
-  #    - '**.cxx'
-  #    - '**.h'
-  # Only trigger by post merge for now.
+  pull_request:
+    branches: '**'
+    paths:
+      - '**.c'
+      - '**.cc'
+      - '**.cpp'
+      - '**.cxx'
+      - '**.h'
+      - '.github/workflows/**'
   push:
     branches:
       - main
       - 'maint/maint*'
+    paths:
+      - '**.c'
+      - '**.cc'
+      - '**.cpp'
+      - '**.cxx'
+      - '**.h'
+      - '.github/workflows/**'
+  workflow_dispatch:
 permissions: {}
 jobs:
   Fuzzing:
