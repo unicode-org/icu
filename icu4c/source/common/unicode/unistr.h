@@ -3122,8 +3122,10 @@ public:
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const char16_t *text) :
       UnicodeString(text, -1) {}
+#endif  // U_HIDE_DRAFT_API
 
-#if !U_CHAR16_IS_TYPEDEF
+#if !U_CHAR16_IS_TYPEDEF && \
+    (defined(U_HIDE_DRAFT_API) || (defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 180000))
   /**
    * uint16_t * constructor.
    * Delegates to UnicodeString(const char16_t *).
@@ -3147,7 +3149,7 @@ public:
       UnicodeString(ConstChar16Ptr(text), -1) {}
 #endif
 
-#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+#if defined(U_HIDE_DRAFT_API) && (U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN))
   /**
    * wchar_t * constructor.
    * (Only defined if U_SIZEOF_WCHAR_T==2.)
@@ -3171,7 +3173,6 @@ public:
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const wchar_t *text) :
       UnicodeString(ConstChar16Ptr(text), -1) {}
 #endif
-#endif  // U_HIDE_DRAFT_API
 
   /**
    * nullptr_t constructor.
