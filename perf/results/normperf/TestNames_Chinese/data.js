@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725660793814,
+  "lastUpdate": 1725884912146,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -55437,6 +55437,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 22.6541,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "6c9d39a08c469a755fcbec1719bcd0d3af217e7f",
+          "message": "ICU-22843 Enable constructing UnicodeString from literal in fixed time.\n\nWhen passing a string literal to any of the legacy constructors that\ntake just a plain pointer to a UTF-16 string it becomes necessary to\niterate through the string to find its length, even though this length\nwas known to the compiler (which just has no way of passing it on to the\nconstructor).\n\nBut when calling the new templated string view constructor instead it\nbecomes possible for the compiler to use the known length of a string\nliteral to directly create a string view of the correct size and pass\nthis on to the constructor.\n\nBy replacing the legacy constructors with the new constructor this is\nmade the default behaviour.",
+          "timestamp": "2024-09-09T13:50:58+02:00",
+          "tree_id": "3f87d48a016403e9fa8c90e5b63985748feb618e",
+          "url": "https://github.com/unicode-org/icu/commit/6c9d39a08c469a755fcbec1719bcd0d3af217e7f"
+        },
+        "date": 1725884768227,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 16.0025,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 16.0112,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 17.358,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 17.5321,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 17.4971,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 22.1662,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
