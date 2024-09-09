@@ -22,7 +22,7 @@ $consonant = [\u1000-\u1021];
 $vowelsign = [\u102B-\u1030\u1032];  # Unicode vowel signs except E (1031)
 $vowelsAndConsonants = [\u1000-\u102a];
 $umedial = [\u103B-\u103E];    # Medial codepoints in Unicode
-$vowelmedial = [\u102B-\u1030\u1032\1u36\u1037\u103A-\u103F];  # Union of vowel signs and medials
+$vowelmedial = [\u102B-\u1030\u1032\u1036\u1037\u103A-\u103F];  # Union of vowel signs and medials
 $ukinzi = \u1004\u103A\u1039;  # Codepoints representing kinzi in Unicode
 # Zawgyi medial ra has multiple representations
 $zmedialra = [\u103B\u107E-\u1084];

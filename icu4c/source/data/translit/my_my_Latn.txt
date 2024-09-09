@@ -127,7 +127,7 @@ $consonants = [\u1000-\u1021];
 # ျတ\u103A > yat;
 \u103B\u1010\u103A > yat;
 # ြက\u103A  > yet;
-\u103C\u1000\103A > yet;
+\u103C\u1000\u103A > yet;
 # ျက\u103A > yet;
 \u103B\u1000\u103A > yet;
 # ျင\u103A > yin;

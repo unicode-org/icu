@@ -7,7 +7,7 @@
 #
 
 # Copyright (C) 2011-2013, Apple Inc. and others. All Rights Reserved.
-# Remove \0301 following Greek, with possible intervening 0308 marks.
+# Remove \u0301 following Greek, with possible intervening 0308 marks.
 ::NFD();
 # For uppercasing (not titlecasing!) remove all greek accents from greek letters.
 # This is done in two groups, to account for canonical ordering.
