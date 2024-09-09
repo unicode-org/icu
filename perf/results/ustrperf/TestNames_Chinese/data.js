@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725661186472,
+  "lastUpdate": 1725885419880,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -88605,6 +88605,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 41.9209,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "6c9d39a08c469a755fcbec1719bcd0d3af217e7f",
+          "message": "ICU-22843 Enable constructing UnicodeString from literal in fixed time.\n\nWhen passing a string literal to any of the legacy constructors that\ntake just a plain pointer to a UTF-16 string it becomes necessary to\niterate through the string to find its length, even though this length\nwas known to the compiler (which just has no way of passing it on to the\nconstructor).\n\nBut when calling the new templated string view constructor instead it\nbecomes possible for the compiler to use the known length of a string\nliteral to directly create a string view of the correct size and pass\nthis on to the constructor.\n\nBy replacing the legacy constructors with the new constructor this is\nmade the default behaviour.",
+          "timestamp": "2024-09-09T13:50:58+02:00",
+          "tree_id": "3f87d48a016403e9fa8c90e5b63985748feb618e",
+          "url": "https://github.com/unicode-org/icu/commit/6c9d39a08c469a755fcbec1719bcd0d3af217e7f"
+        },
+        "date": 1725885268623,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.6788,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.6176,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 23.7137,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 27.01,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.024,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 33.0653,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.6139,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.8802,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 79.5372,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.4863,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 35.5821,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.184,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
