@@ -111,10 +111,10 @@ Oracle JRE, you should go to the J2SE download page
 download the latest JDK DST Timezone Update Tool and apply the patch to your
 local JRE.
 
-To run the test case, you just need to invoke the ant target "jdktzCheck".
+To run the test case, you just need to invoke mvn verify goal with the special property as below.
 
 ```sh
-$ ant jdktzCheck
+$ mvn verify -Dcom.ibm.icu.util.TimeZone.DefaultTimeZoneType=JDK
 ```
 
 **Note:** You might not be able to get the update tool matching the tzdata
