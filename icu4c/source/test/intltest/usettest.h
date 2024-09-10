@@ -105,6 +105,15 @@ private:
     void TestSkipToStrings();
     void TestPatternCodePointComplement();
 
+    void TestCodePointIterator();
+    void TestUSetCodePointIterator();
+    void TestRangeIterator();
+    void TestUSetRangeIterator();
+    void TestStringIterator();
+    void TestUSetStringIterator();
+    void TestElementIterator();
+    void TestUSetElementIterator();
+
 private:
 
     UBool toPatternAux(UChar32 start, UChar32 end);

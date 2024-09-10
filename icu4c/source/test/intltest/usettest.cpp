@@ -12,9 +12,11 @@
 */
 
 #include <stdio.h>
-
 #include <string.h>
+
+#include <string_view>
 #include <unordered_map>
+
 #include "unicode/utypes.h"
 #include "usettest.h"
 #include "unicode/ucnv.h"
@@ -104,6 +106,14 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestEmptyString);
     TESTCASE_AUTO(TestSkipToStrings);
     TESTCASE_AUTO(TestPatternCodePointComplement);
+    TESTCASE_AUTO(TestCodePointIterator);
+    TESTCASE_AUTO(TestUSetCodePointIterator);
+    TESTCASE_AUTO(TestRangeIterator);
+    TESTCASE_AUTO(TestUSetRangeIterator);
+    TESTCASE_AUTO(TestStringIterator);
+    TESTCASE_AUTO(TestUSetStringIterator);
+    TESTCASE_AUTO(TestElementIterator);
+    TESTCASE_AUTO(TestUSetElementIterator);
     TESTCASE_AUTO_END;
 }
 
@@ -4258,4 +4268,224 @@ void UnicodeSetTest::TestPatternCodePointComplement() {
                 notBasic.contains(u"🐿\uFE0F"));
         assertFalse("[:Basic_Emoji:].complement() --> no bicycle", notBasic.contains(U'🚲'));
     }
+}
+
+void UnicodeSetTest::TestCodePointIterator() {
+    IcuTestErrorCode errorCode(*this, "TestCodePointIterator");
+    UnicodeSet set(u"[abcçカ🚴]", errorCode);
+    UnicodeString result;
+    for (UChar32 c : set.codePoints()) {
+        // printf("set.codePoint U+%04lx\n", (long)c);
+        result.append(u' ').append(c);
+    }
+    assertEquals(WHERE, u" a b c ç カ 🚴", result);
+
+    // codePoints() returns USetCodePoints for which explicit APIs are tested via USet.
+}
+
+void UnicodeSetTest::TestUSetCodePointIterator() {
+    IcuTestErrorCode errorCode(*this, "TestUSetCodePointIterator");
+    using U_HEADER_NESTED_NAMESPACE::USetCodePoints;
+    LocalUSetPointer uset(uset_openPattern(u"[abcçカ🚴]", -1, errorCode));
+    UnicodeString result;
+    for (UChar32 c : USetCodePoints(uset.getAlias())) {
+        // printf("uset.codePoint U+%04lx\n", (long)c);
+        result.append(u' ').append(c);
+    }
+    assertEquals(WHERE, u" a b c ç カ 🚴", result);
+
+    USetCodePoints range1(uset.getAlias());
+    auto range2(range1);  // copy constructor
+    auto iter = range1.begin();
+    auto limit = range2.end();
+    // operator* with pre- and post-increment
+    assertEquals(WHERE, u'a', *iter);
+    ++iter;
+    assertEquals(WHERE, u'b', *iter);
+    assertEquals(WHERE, u'c', *++iter);
+    auto iter2(iter);  // copy constructor
+    assertEquals(WHERE, u'c', *iter2++);
+    assertEquals(WHERE, u'ç', *iter2++);
+    assertEquals(WHERE, u'カ', *iter2);
+    assertTrue(WHERE, ++iter2 != limit);
+    auto iter3(iter2++);
+    assertEquals(WHERE, U'🚴', *iter3);
+    assertTrue(WHERE, iter2 == limit);
+}
+
+void UnicodeSetTest::TestRangeIterator() {
+    IcuTestErrorCode errorCode(*this, "TestRangeIterator");
+    UnicodeSet set(u"[abcçカ🚴]", errorCode);
+    UnicodeString result;
+    for (auto [start, end] : set.ranges()) {
+        // printf("set.range U+%04lx..U+%04lx\n", (long)start, (long)end);
+        result.append(u' ').append(start).append(u'-').append(end);
+    }
+    assertEquals(WHERE, u" a-c ç-ç カ-カ 🚴-🚴", result);
+    result.remove();
+    for (auto range : set.ranges()) {
+        for (UChar32 c : range) {
+            // printf("set.range.c U+%04lx\n", (long)c);
+            result.append(u' ').append(c);
+        }
+        result.append(u" |");
+    }
+    assertEquals(WHERE, u" a b c | ç | カ | 🚴 |", result);
+
+    // ranges() returns USetRanges for which explicit APIs are tested via USet.
+}
+
+void UnicodeSetTest::TestUSetRangeIterator() {
+    IcuTestErrorCode errorCode(*this, "TestUSetRangeIterator");
+    using U_HEADER_NESTED_NAMESPACE::USetRanges;
+    using U_HEADER_NESTED_NAMESPACE::CodePointRange;
+    LocalUSetPointer uset(uset_openPattern(u"[abcçカ🚴]", -1, errorCode));
+    UnicodeString result;
+    for (auto [start, end] : USetRanges(uset.getAlias())) {
+        // printf("uset.range U+%04lx..U+%04lx\n", (long)start, (long)end);
+        result.append(u' ').append(start).append(u'-').append(end);
+    }
+    assertEquals(WHERE, u" a-c ç-ç カ-カ 🚴-🚴", result);
+    result.remove();
+    for (auto range : USetRanges(uset.getAlias())) {
+        for (UChar32 c : range) {
+            // printf("uset.range.c U+%04lx\n", (long)c);
+            result.append(u' ').append(c);
+        }
+        result.append(u" |");
+    }
+    assertEquals(WHERE, u" a b c | ç | カ | 🚴 |", result);
+
+    USetRanges range1(uset.getAlias());
+    auto range2(range1);  // copy constructor
+    auto iter = range1.begin();
+    auto limit = range2.end();
+    // operator* with pre- and post-increment
+    {
+        auto cpRange = *iter;
+        assertEquals(WHERE, u'a', cpRange.rangeStart);
+        assertEquals(WHERE, u'c', cpRange.rangeEnd);
+        assertEquals(WHERE, 3, cpRange.size());
+        auto cpRange2(cpRange);
+        auto cpIter = cpRange.begin();
+        auto cpLimit = cpRange2.end();
+        assertEquals(WHERE, u'a', *cpIter++);
+        assertEquals(WHERE, u'b', *cpIter);
+        assertTrue(WHERE, cpIter != cpLimit);
+        CodePointRange::iterator cpIter2(u'b');  // public constructor
+        assertTrue(WHERE, cpIter == cpIter2);
+        assertEquals(WHERE, u'c', *++cpIter);
+        assertTrue(WHERE, cpIter != cpIter2);
+        assertTrue(WHERE, ++cpIter == cpLimit);
+    }
+    ++iter;
+    auto iter2(iter);  // copy constructor
+    assertEquals(WHERE, u'ç', (*iter2).rangeStart);
+    assertEquals(WHERE, u'ç', (*iter2).rangeEnd);
+    assertEquals(WHERE, 1, (*iter2).size());
+    assertEquals(WHERE, u'ç', (*iter2++).rangeStart);
+    assertEquals(WHERE, u'カ', (*iter2).rangeStart);
+    assertTrue(WHERE, ++iter2 != limit);
+    auto iter3(iter2++);
+    assertEquals(WHERE, U'🚴', (*iter3).rangeStart);
+    assertTrue(WHERE, iter2 == limit);
+
+    {
+        CodePointRange cpRange(u'h', u'k');  // public constructor
+        // FYI: currently no operator==
+        assertEquals(WHERE, u'h', cpRange.rangeStart);
+        assertEquals(WHERE, u'k', cpRange.rangeEnd);
+        assertEquals(WHERE, 4, cpRange.size());
+        assertEquals(WHERE, u'i', *++(cpRange.begin()));
+    }
+}
+
+void UnicodeSetTest::TestStringIterator() {
+    IcuTestErrorCode errorCode(*this, "TestStringIterator");
+    UnicodeSet set(u"[abcçカ🚴{}{abc}{de}]", errorCode);
+    UnicodeString result;
+    for (auto s : set.strings()) {
+        // UnicodeString us(s);
+        // std::string u8;
+        // printf("set.string length %ld \"%s\"\n", (long)s.length(), us.toUTF8String(u8).c_str());
+        result.append(u" \"").append(s).append(u'"');
+    }
+    assertEquals(WHERE, uR"( "" "abc" "de")", result);
+
+    // strings() returns USetStrins for which explicit APIs are tested via USet.
+}
+
+void UnicodeSetTest::TestUSetStringIterator() {
+    IcuTestErrorCode errorCode(*this, "TestUSetStringIterator");
+    using U_HEADER_NESTED_NAMESPACE::USetStrings;
+    LocalUSetPointer uset(uset_openPattern(u"[abcçカ🚴{}{abc}{de}]", -1, errorCode));
+    UnicodeString result;
+    for (auto s : USetStrings(uset.getAlias())) {
+        // UnicodeString us(s);
+        // std::string u8;
+        // printf("uset.string length %ld \"%s\"\n", (long)s.length(), us.toUTF8String(u8).c_str());
+        result.append(u" \"").append(s).append(u'"');
+    }
+    assertEquals(WHERE, uR"( "" "abc" "de")", result);
+
+    USetStrings range1(uset.getAlias());
+    auto range2(range1);  // copy constructor
+    auto iter = range1.begin();
+    auto limit = range2.end();
+    // operator* with pre- and post-increment
+    assertEquals(WHERE, UnicodeString(), UnicodeString(*iter));
+    assertEquals(WHERE, u"abc", UnicodeString(*++iter));
+    auto iter2(iter);  // copy constructor
+    assertEquals(WHERE, u"abc", UnicodeString(*iter2++));
+    assertTrue(WHERE, iter2 != limit);
+    auto iter3(iter2++);
+    assertEquals(WHERE, u"de", UnicodeString(*iter3));
+    assertTrue(WHERE, iter2 == limit);
+}
+
+void UnicodeSetTest::TestElementIterator() {
+    IcuTestErrorCode errorCode(*this, "TestElementIterator");
+    UnicodeSet set(u"[abcçカ🚴{}{abc}{de}]", errorCode);
+    UnicodeString result;
+    for (auto el : set) {
+        // std::string u8;
+        // printf("set.string length %ld \"%s\"\n", (long)el.length(), el.toUTF8String(u8).c_str());
+        result.append(u" \"").append(el).append(u'"');
+    }
+    assertEquals(WHERE, uR"( "a" "b" "c" "ç" "カ" "🚴" "" "abc" "de")", result);
+
+    // begin() & end() return USetElementIterator for which explicit APIs are tested via USet.
+}
+
+void UnicodeSetTest::TestUSetElementIterator() {
+    IcuTestErrorCode errorCode(*this, "TestUSetElementIterator");
+    using U_HEADER_NESTED_NAMESPACE::USetElements;
+    LocalUSetPointer uset(uset_openPattern(u"[abcçカ🚴{}{abc}{de}]", -1, errorCode));
+    UnicodeString result;
+    for (auto el : USetElements(uset.getAlias())) {
+        // std::string u8;
+        // printf("uset.string length %ld \"%s\"\n", (long)el.length(), el.toUTF8String(u8).c_str());
+        result.append(u" \"").append(el).append(u'"');
+    }
+    assertEquals(WHERE, uR"( "a" "b" "c" "ç" "カ" "🚴" "" "abc" "de")", result);
+
+    USetElements range1(uset.getAlias());
+    auto range2(range1);  // copy constructor
+    auto iter = range1.begin();
+    auto limit = range2.end();
+    // operator* with pre- and post-increment
+    assertEquals(WHERE, u"a", *iter);
+    ++iter;
+    assertEquals(WHERE, u"b", *iter);
+    assertEquals(WHERE, u"c", *++iter);
+    auto iter2(iter);  // copy constructor
+    assertEquals(WHERE, u"c", *iter2++);
+    // skip çカ🚴
+    ++++++iter2;
+    assertEquals(WHERE, UnicodeString(), *iter2++);
+    assertEquals(WHERE, u"abc", *iter2);
+    assertTrue(WHERE, ++iter2 != limit);
+    auto iter3(iter2++);
+    assertEquals(WHERE, u"de", *iter3);
+    assertTrue(WHERE, iter2 == limit);
 }
