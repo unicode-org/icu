@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725986661659,
+  "lastUpdate": 1725989755815,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25287,6 +25287,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2013.4099225740902,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "7cad791fb666e6759bd7aaea0461eebafbda9cfe",
+          "message": "ICU-22843 Simplify UTF-16 string literals.",
+          "timestamp": "2024-09-10T18:58:01+02:00",
+          "tree_id": "dc7535760c25af4acbcb7fe09d2fa09fca1a3399",
+          "url": "https://github.com/unicode-org/icu/commit/7cad791fb666e6759bd7aaea0461eebafbda9cfe"
+        },
+        "date": 1725989610225,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1965.3160645318553,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
