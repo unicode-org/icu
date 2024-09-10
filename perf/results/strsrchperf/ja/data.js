@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725990156539,
+  "lastUpdate": 1726005808439,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30957,6 +30957,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 61.5146,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "937f4adba50a1e4a952862297bda10941aae2791",
+          "message": "ICU-22723 Update BRS task doc for JDK TZ check",
+          "timestamp": "2024-09-10T12:31:48-04:00",
+          "tree_id": "a97014820247924f59a8f5d54e6f8fd46cca8c2b",
+          "url": "https://github.com/unicode-org/icu/commit/937f4adba50a1e4a952862297bda10941aae2791"
+        },
+        "date": 1726005662607,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 29.3076,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 59.3769,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
