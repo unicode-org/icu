@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725973801773,
+  "lastUpdate": 1725992512942,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -88989,6 +88989,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 38.9781,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "3abf474f260ff871961a198d97fd785f18bd6654",
+          "message": "ICU-22843 Check libc++ version for std::basic_string_view<uint16_t>.\n\nAs was pointed out in PR #3106, the standard doesn't mandate the\nexistence of std::char_traits<uint16_t> and libc++ did actually\ndeprecate it in release 18 and delete it in release 19.\n\nAs ICU4C uses this for backward compatibility for old code that still\ndepends on setting -DUCHAR_TYPE=uint16_t it'd be nice to keep using it\nas long as possible but once it's gone from the standard library there\nisn't really much useful that ICU4C could do about that so conditionally\ncompiling the code when the standard library version is old enough\nshould suffice for keeping backward compatibility for yet some time.\n\nhttps://github.com/llvm/llvm-project/commit/cce062d",
+          "timestamp": "2024-09-10T18:18:15+02:00",
+          "tree_id": "8c2908b31f415ce0c47a5d39df9833db91948791",
+          "url": "https://github.com/unicode-org/icu/commit/3abf474f260ff871961a198d97fd785f18bd6654"
+        },
+        "date": 1725992361149,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.0215,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.6607,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 23.7355,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 27.2861,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 37.7568,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.7371,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.6794,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.162,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 79.2784,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.7481,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 35.3916,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 38.6058,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
