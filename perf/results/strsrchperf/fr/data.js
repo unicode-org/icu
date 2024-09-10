@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725973038884,
+  "lastUpdate": 1725986566257,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30849,6 +30849,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 53.2066,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "3abf474f260ff871961a198d97fd785f18bd6654",
+          "message": "ICU-22843 Check libc++ version for std::basic_string_view<uint16_t>.\n\nAs was pointed out in PR #3106, the standard doesn't mandate the\nexistence of std::char_traits<uint16_t> and libc++ did actually\ndeprecate it in release 18 and delete it in release 19.\n\nAs ICU4C uses this for backward compatibility for old code that still\ndepends on setting -DUCHAR_TYPE=uint16_t it'd be nice to keep using it\nas long as possible but once it's gone from the standard library there\nisn't really much useful that ICU4C could do about that so conditionally\ncompiling the code when the standard library version is old enough\nshould suffice for keeping backward compatibility for yet some time.\n\nhttps://github.com/llvm/llvm-project/commit/cce062d",
+          "timestamp": "2024-09-10T18:18:15+02:00",
+          "tree_id": "8c2908b31f415ce0c47a5d39df9833db91948791",
+          "url": "https://github.com/unicode-org/icu/commit/3abf474f260ff871961a198d97fd785f18bd6654"
+        },
+        "date": 1725986420637,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 25.194,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 53.1756,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
