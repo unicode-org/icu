@@ -194,7 +194,7 @@ complete a complete description of the API.
 | `(?! ...)`    | Negative look-ahead assertion. True if the parenthesized pattern does not match at the current input position. Does not advance the input position.
 | `(?<= ...)`   | Look-behind assertion. True if the parenthesized pattern matches text preceding the current input position, with the last character of the match being the input character just before the current position. Does not alter the input position. The length of possible strings matched by the look-behind pattern must not be unbounded (no \* or + operators.)
 | `(?<! ...)`   | Negative Look-behind assertion. True if the parenthesized pattern does not match text preceding the current input position, with the last character of the match being the input character just before the current position. Does not alter the input position. The length of possible strings matched by the look-behind pattern must not be unbounded (no \* or + operators.)
-| `(?<name>...)` | Named capture group. The <angle brackets> are literal - they appear in the pattern.
+| `(?<name>...)` | Named capture group. The \<angle brackets> are literal - they appear in the pattern.
 | `(?ismwx-ismwx:...)`  | Flag settings. Evaluate the parenthesized expression with the specified flags enabled or -disabled.
 | `(?ismwx-ismwx)`      | Flag settings. Change the flag settings. Changes apply to the portion of the pattern following the setting. For example, (?i) changes to a case insensitive match.
 
