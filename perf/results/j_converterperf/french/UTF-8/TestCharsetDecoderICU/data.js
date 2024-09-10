@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1725889247271,
+  "lastUpdate": 1725948994501,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25047,6 +25047,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.5597276466154932,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "94c309d9a646521bbed7b9ee99b768097fcea622",
+          "message": "ICU-22847 Remove instances of ADO pipelines",
+          "timestamp": "2024-09-10T11:36:26+05:30",
+          "tree_id": "4fe43044b0ff4c27ead941aecac564e690319537",
+          "url": "https://github.com/unicode-org/icu/commit/94c309d9a646521bbed7b9ee99b768097fcea622"
+        },
+        "date": 1725948841345,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5590657946697019,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
