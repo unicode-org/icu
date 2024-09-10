@@ -43,6 +43,7 @@ FUZZER_TARGETS = \
 		 dtfmtsym_fuzzer \
 		 list_format_fuzzer locale_fuzzer \
 		 locale_morph_fuzzer \
+		 message_formatter_fuzzer \
 		 normalizer2_fuzzer \
 		 number_format_fuzzer \
 		 number_formatter_fuzzer \
