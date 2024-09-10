@@ -242,7 +242,7 @@ void UnicodeSet::closeOverCaseInsensitive(bool simple) {
     // therefore, start with no strings and add only those needed.
     // Do this before processing code points, because they may add strings.
     if (!simple && foldSet.hasStrings()) {
-        foldSet.strings->removeAllElements();
+        foldSet.strings_->removeAllElements();
     }
 
     USetAdder sa = {
@@ -276,8 +276,8 @@ void UnicodeSet::closeOverCaseInsensitive(bool simple) {
     }
     if (hasStrings()) {
         UnicodeString str;
-        for (int32_t j=0; j<strings->size(); ++j) {
-            const UnicodeString* pStr = static_cast<const UnicodeString*>(strings->elementAt(j));
+        for (int32_t j=0; j<strings_->size(); ++j) {
+            const UnicodeString* pStr = static_cast<const UnicodeString*>(strings_->elementAt(j));
             if (simple) {
                 if (scfString(*pStr, str)) {
                     foldSet.remove(*pStr).add(str);
@@ -334,8 +334,8 @@ void UnicodeSet::closeOverAddCaseMappings() {
         BreakIterator *bi = BreakIterator::createWordInstance(root, status);
         if (U_SUCCESS(status)) {
 #endif
-            for (int32_t j=0; j<strings->size(); ++j) {
-                const UnicodeString* pStr = static_cast<const UnicodeString*>(strings->elementAt(j));
+            for (int32_t j=0; j<strings_->size(); ++j) {
+                const UnicodeString* pStr = static_cast<const UnicodeString*>(strings_->elementAt(j));
                 (str = *pStr).toLower(root);
                 foldSet.add(str);
 #if !UCONFIG_NO_BREAK_ITERATION
