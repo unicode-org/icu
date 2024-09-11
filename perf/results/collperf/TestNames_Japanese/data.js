@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726035629703,
+  "lastUpdate": 1726080683867,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -50433,6 +50433,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5799271.1125,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "6b00ed56d859535ee2cbc65abb2e8215499d347b",
+          "message": "ICU-22814 Run CIFuzz on PR\n\nCIFuzz ran on post merged since 7/20\nhttps://github.com/unicode-org/icu/actions/workflows/cifuzz.yml\n\nTurn to run on every PR",
+          "timestamp": "2024-09-11T11:24:51-07:00",
+          "tree_id": "a386dfa2b77c403a567bf72f36d2448793dcc964",
+          "url": "https://github.com/unicode-org/icu/commit/6b00ed56d859535ee2cbc65abb2e8215499d347b"
+        },
+        "date": 1726080530473,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 212.2517,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20959720.8614,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5491722.9546,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20101912.6775,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5715894.0602,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
