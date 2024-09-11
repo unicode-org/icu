@@ -156,6 +156,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestFormatAttributes);
   TESTCASE_AUTO(TestFieldPositionIterator);
   TESTCASE_AUTO(TestDecimal);
+  TESTCASE_AUTO(TestDecimalFormatParse7E);
   TESTCASE_AUTO(TestCurrencyFractionDigits);
   TESTCASE_AUTO(TestExponentParse);
   TESTCASE_AUTO(TestExplicitParents);
@@ -6978,6 +6979,15 @@ void NumberFormatTest::TestDecimal() {
     }
 #endif
 
+}
+void NumberFormatTest::TestDecimalFormatParse7E() {
+    UErrorCode  status = U_ZERO_ERROR;
+    UnicodeString testdata = u"~";
+    icu::Formattable result;
+    icu::DecimalFormat dfmt(testdata, status);
+    if (U_SUCCESS(status)) {
+        dfmt.parse(testdata, result, status);
+    }
 }
 
 void NumberFormatTest::TestCurrencyFractionDigits() {
