@@ -2420,6 +2420,7 @@ void UnicodeStringTest::TestU16StringView() {
     const char16_t *p16 = u"p16";
     std::u16string_view sv16 = u"sv16";
     std::u16string str16 = u"str16";
+    UnicodeString ustr = u"ustr";
 
     // These copy the string contents.
     UnicodeString fromPtr(p16);  // pointer is convertible to std::u16string_view
@@ -2443,6 +2444,10 @@ void UnicodeStringTest::TestU16StringView() {
     UnicodeString aliasFromStr = UnicodeString::readOnlyAlias(str16);
     assertTrue("aliasFromStr pointer alias", aliasFromStr.getBuffer() == str16.data());
     assertEquals("aliasFromStr length", (int32_t)str16.length(), aliasFromStr.length());
+
+    UnicodeString aliasFromUStr = UnicodeString::readOnlyAlias(ustr);
+    assertTrue("aliasFromUStr pointer alias", aliasFromUStr.getBuffer() == ustr.getBuffer());
+    assertEquals("aliasFromUStr length", ustr.length(), aliasFromUStr.length());
 
     // operator==
     UnicodeString any(true, u"any", 3);
