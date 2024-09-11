@@ -64,15 +64,6 @@ namespace message2 {
 
             DateTimeType type;
             DateTimeFactory(DateTimeType t) : type(t) {}
-
-            // Lazily initialize cached date parsers
-            void initDateParsers(UErrorCode&);
-
-            // Cached parsers; lazily initialized
-            LocalPointer<DateFormat> dateParser;
-            LocalPointer<DateFormat> dateTimeParser;
-            LocalPointer<DateFormat> dateTimeUTCParser;
-            LocalPointer<DateFormat> dateTimeZoneParser;
         };
 
         class DateTime : public Formatter {
@@ -84,12 +75,9 @@ namespace message2 {
             const Locale& locale;
             const DateTimeFactory::DateTimeType type;
             friend class DateTimeFactory;
-            DateTime(const Locale& l, DateTimeFactory& p, DateTimeFactory::DateTimeType t)
-                : locale(l), type(t), parent(p) {}
+            DateTime(const Locale& l, DateTimeFactory::DateTimeType t)
+                : locale(l), type(t) {}
             const LocalPointer<icu::DateFormat> icuFormatter;
-
-            // Stores the cached DateFormat objects for parsing date literals
-            DateTimeFactory& parent;
 
             // Methods for parsing date literals
             UDate tryPatterns(const UnicodeString&, UErrorCode&) const;

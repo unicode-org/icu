@@ -27,6 +27,7 @@
 #include "hash.h"
 #include "mutex.h"
 #include "number_types.h"
+#include "ucln_in.h"
 #include "uvector.h" // U_ASSERT
 
 // The C99 standard suggested that C++ implementations not define PRId64 etc. constants
@@ -1002,34 +1003,64 @@ static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorC
 Formatter* StandardFunctions::DateTimeFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    Formatter* result = new StandardFunctions::DateTime(locale, *this, type);
+    Formatter* result = new StandardFunctions::DateTime(locale, type);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
 }
 
-static UMutex gDateTimeFactoryMutex;
+// DateFormat parsers that are shared across threads
+static DateFormat* dateParser = nullptr;
+static DateFormat* dateTimeParser = nullptr;
+static DateFormat* dateTimeUTCParser = nullptr;
+static DateFormat* dateTimeZoneParser = nullptr;
+static icu::UInitOnce gMF2DateParsersInitOnce {};
 
-// Lazily initialize DateFormat objects used for parsing date literals
-void StandardFunctions::DateTimeFactory::initDateParsers(UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-
-    Mutex lock(&gDateTimeFactoryMutex);
-
-    if (dateParser.isValid()) {
-        // Already initialized
-        return;
+// Clean up shared DateFormat objects
+static UBool mf2_date_parsers_cleanup() {
+    if (dateParser != nullptr) {
+        delete dateParser;
+        dateParser = nullptr;
     }
+    if (dateTimeParser != nullptr) {
+        delete dateTimeParser;
+        dateTimeParser = nullptr;
+    }
+    if (dateTimeUTCParser != nullptr) {
+        delete dateTimeUTCParser;
+        dateTimeUTCParser = nullptr;
+    }
+    if (dateTimeZoneParser != nullptr) {
+        delete dateTimeZoneParser;
+        dateTimeZoneParser = nullptr;
+    }
+    return true;
+}
+
+// Initialize DateFormat objects used for parsing date literals
+static void initDateParsersOnce(UErrorCode& errorCode) {
+    U_ASSERT(dateParser == nullptr);
+    U_ASSERT(dateTimeParser == nullptr);
+    U_ASSERT(dateTimeUTCParser == nullptr);
+    U_ASSERT(dateTimeZoneParser == nullptr);
 
     // Handles ISO 8601 date
-    dateParser.adoptInstead(new SimpleDateFormat(UnicodeString("YYYY-MM-dd"), errorCode));
+    dateParser = new SimpleDateFormat(UnicodeString("YYYY-MM-dd"), errorCode);
     // Handles ISO 8601 datetime without time zone
-    dateTimeParser.adoptInstead(new SimpleDateFormat(UnicodeString("YYYY-MM-dd'T'HH:mm:ss"), errorCode));
+    dateTimeParser = new SimpleDateFormat(UnicodeString("YYYY-MM-dd'T'HH:mm:ss"), errorCode);
     // Handles ISO 8601 datetime with 'Z' to denote UTC
-    dateTimeUTCParser.adoptInstead(new SimpleDateFormat(UnicodeString("YYYY-MM-dd'T'HH:mm:ssZ"), errorCode));
+    dateTimeUTCParser = new SimpleDateFormat(UnicodeString("YYYY-MM-dd'T'HH:mm:ssZ"), errorCode);
     // Handles ISO 8601 datetime with timezone offset; 'zzzz' denotes timezone offset
-    dateTimeZoneParser.adoptInstead(new SimpleDateFormat(UnicodeString("YYYY-MM-dd'T'HH:mm:sszzzz"), errorCode));
+    dateTimeZoneParser = new SimpleDateFormat(UnicodeString("YYYY-MM-dd'T'HH:mm:sszzzz"), errorCode);
+    ucln_i18n_registerCleanup(UCLN_I18N_MF2_DATE_PARSERS, mf2_date_parsers_cleanup);
+}
+
+// Lazily initialize DateFormat objects used for parsing date literals
+static void initDateParsers(UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    umtx_initOnce(gMF2DateParsersInitOnce, &initDateParsersOnce, errorCode);
 }
 
 // From https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md#date-and-time-operands :
@@ -1043,10 +1074,10 @@ UDate StandardFunctions::DateTime::tryPatterns(const UnicodeString& sourceStr,
     // Handle ISO 8601 datetime (tryTimeZonePatterns() handles the case
     // where a timezone offset follows)
     if (sourceStr.length() > 10) {
-        return parent.dateTimeParser->parse(sourceStr, errorCode);
+        return dateTimeParser->parse(sourceStr, errorCode);
     }
     // Handle ISO 8601 date
-    return parent.dateParser->parse(sourceStr, errorCode);
+    return dateParser->parse(sourceStr, errorCode);
 }
 
 // See comment on tryPatterns() for spec reference
@@ -1057,9 +1088,9 @@ UDate StandardFunctions::DateTime::tryTimeZonePatterns(const UnicodeString& sour
     }
     int32_t len = sourceStr.length();
     if (len > 0 && sourceStr[len] == 'Z') {
-        return parent.dateTimeUTCParser->parse(sourceStr, errorCode);
+        return dateTimeUTCParser->parse(sourceStr, errorCode);
     }
-    return parent.dateTimeZoneParser->parse(sourceStr, errorCode);
+    return dateTimeZoneParser->parse(sourceStr, errorCode);
 }
 
 static TimeZone* createTimeZone(const DateInfo& dateInfo, UErrorCode& errorCode) {
@@ -1355,7 +1386,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     switch (source.getType()) {
     case UFMT_STRING: {
         // Lazily initialize date parsers used for parsing date literals
-        parent.initDateParsers(errorCode);
+        initDateParsers(errorCode);
         if (U_FAILURE(errorCode)) {
             return {};
         }
