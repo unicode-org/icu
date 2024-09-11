@@ -3600,6 +3600,29 @@ public:
   static inline UnicodeString readOnlyAlias(const S &text) {
     return readOnlyAliasFromU16StringView(internal::toU16StringView(text));
   }
+
+  /**
+   * Readonly-aliasing factory method.
+   * Aliases the same buffer as the input `text`.
+   *
+   * The text will be used for the UnicodeString object, but
+   * it will not be released when the UnicodeString is destroyed.
+   * This has copy-on-write semantics:
+   * When the string is modified, then the buffer is first copied into
+   * newly allocated memory.
+   * The aliased buffer is never modified.
+   *
+   * In an assignment to another UnicodeString, when using the copy constructor
+   * or the assignment operator, the text will be copied.
+   * When using fastCopyFrom(), the text will be aliased again,
+   * so that both strings then alias the same readonly-text.
+   *
+   * @param text The UnicodeString to alias.
+   * @draft ICU 76
+   */
+  static inline UnicodeString readOnlyAlias(const UnicodeString &text) {
+    return readOnlyAliasFromUnicodeString(text);
+  }
 #endif  // U_HIDE_DRAFT_API
 
   /**
@@ -3730,6 +3753,7 @@ protected:
 
 private:
   static UnicodeString readOnlyAliasFromU16StringView(std::u16string_view text);
+  static UnicodeString readOnlyAliasFromUnicodeString(const UnicodeString &text);
 
   // For char* constructors. Could be made public.
   UnicodeString &setToUTF8(StringPiece utf8);
