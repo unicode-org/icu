@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726093037185,
+  "lastUpdate": 1726096249222,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25317,6 +25317,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.420604667278826,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "0cb5bc6707dbf605c2fa2a369233048cefe0ce8b",
+          "message": "ICU-22843 Disambiguate UnicodeString::readOnlyAlias() for MSVC.\n\nBoth std::u16string_view and std::wstring_view are possible matches for\nUnicodeString as a template parameter, but adding an explicit overload\navoids both having to make that choice and taking the detour through\ncreating any string view at all.",
+          "timestamp": "2024-09-12T00:36:49+02:00",
+          "tree_id": "f6df2dde03fece88a0f85e796f4c3a24faaf5357",
+          "url": "https://github.com/unicode-org/icu/commit/0cb5bc6707dbf605c2fa2a369233048cefe0ce8b"
+        },
+        "date": 1726096095590,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.4175821282568903,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
