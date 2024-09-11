@@ -196,6 +196,12 @@ value, such as `ucol_greater`, `ucol_greaterOrEqual`, `ucol_equal` (in C)
 `Collator::greater`, `Collator::greaterOrEqual`, `Collator::equal` (in C++) and
 `Collator.equals` (in Java).
 
+As of ICU 76 there are also C++ convenience functions and templates to create
+standard library compliant comparison function objects that use a collator to
+perform comparisons (instead of using the comparison operators on the strings
+being compared), such as `Collator::less()` for a C++ API `Collator` or
+`collator::less()` for a C API `UCollator`.
+
 ### Examples
 
 **C:**
@@ -236,6 +242,48 @@ if(U_SUCCESS(status)) {
 }
 delete coll;
 }
+```
+
+**C++:** (as of ICU 76)
+
+```c++
+icu::ErrorCode status;
+icu::Locale locale = icu::Locale::forLanguageTag("sv", status);
+icu::LocalPointer<Collator> collator(icu::Collator::createInstance(locale, status), status);
+status.assertSuccess(); // Override ErrorCode::handleFailure() to handle failure.
+
+std::vector<std::string> utf8{
+    "Arnold", "Øystein", "Ingrid", "Åke", "Olof", "İsmail", "Örjan",
+};
+
+std::sort(utf8.begin(), utf8.end(), collator->less());
+
+std::vector<UnicodeString> utf16{
+    u"Arnold", u"Øystein", u"Ingrid", u"Åke", u"Olof", u"İsmail", u"Örjan",
+};
+
+std::sort(utf16.begin(), utf16.end(), collator->less());
+```
+
+**C++:** (calling the ICU C API, as of ICU 76)
+
+```c++
+UErrorCode status = U_ZERO_ERROR;
+icu::LocalUCollatorPointer ucollator(ucol_open("sv", &status));
+assert(U_SUCCESS(status));
+assert(ucollator.isValid());
+
+std::vector<std::string> utf8{
+    "Arnold", "Øystein", "Ingrid", "Åke", "Olof", "İsmail", "Örjan",
+};
+
+std::sort(utf8.begin(), utf8.end(), icu::header::collator::less(ucollator.getAlias()));
+
+std::vector<std::u16string> utf16{
+    u"Arnold", u"Øystein", u"Ingrid", u"Åke", u"Olof", u"İsmail", u"Örjan",
+};
+
+std::sort(utf16.begin(), utf16.end(), icu::header::collator::less(ucollator.getAlias()));
 ```
 
 **Java:**

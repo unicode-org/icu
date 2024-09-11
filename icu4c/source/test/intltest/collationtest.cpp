@@ -11,6 +11,9 @@
 * created by: Markus W. Scherer
 */
 
+#include <string>
+#include <vector>
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_COLLATION
@@ -81,6 +84,10 @@ public:
     void TestLongLocale();
     void TestBuilderContextsOverflow();
     void TestHang22414();
+    void TestCollatorPredicates();
+    void TestUCollatorPredicates();
+    void TestCollatorPredicateTypes();
+    void TestUCollatorPredicateTypes();
 
 private:
     void checkFCD(const char *name, CollationIterator &ci, CodePointIterator &cpi);
@@ -154,6 +161,10 @@ void CollationTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
     TESTCASE_AUTO(TestLongLocale);
     TESTCASE_AUTO(TestBuilderContextsOverflow);
     TESTCASE_AUTO(TestHang22414);
+    TESTCASE_AUTO(TestCollatorPredicates);
+    TESTCASE_AUTO(TestUCollatorPredicates);
+    TESTCASE_AUTO(TestCollatorPredicateTypes);
+    TESTCASE_AUTO(TestUCollatorPredicateTypes);
     TESTCASE_AUTO_END;
 }
 
@@ -1923,6 +1934,150 @@ void CollationTest::TestBuilderContextsOverflow() {
     if(errorCode.isSuccess()) {
         logln("successfully built the Collator");
     }
+}
+
+// Verify that every Collator predicate performs the correct comparison.
+void CollationTest::TestCollatorPredicates() {
+    IcuTestErrorCode status(*this, "TestCollatorPredicates");
+    setRootCollator(status);
+    status.assertSuccess();
+
+    assertTrue("[01] equal_to", coll->equal_to()("aaa", "aaa"));
+    assertTrue("[02] not_equal_to", coll->not_equal_to()("aaa", "bbb"));
+
+    assertTrue("[03] greater", coll->greater()("bbb", "aaa"));
+    assertTrue("[04] less", coll->less()("aaa", "bbb"));
+
+    assertTrue("[05] greater_equal", coll->greater_equal()("aaa", "aaa"));
+    assertTrue("[06] greater_equal", coll->greater_equal()("bbb", "aaa"));
+    assertTrue("[07] less_equal", coll->less_equal()("aaa", "aaa"));
+    assertTrue("[08] less_equal", coll->less_equal()("aaa", "bbb"));
+
+    assertFalse("[09] equal_to", coll->equal_to()("aaa", "bbb"));
+    assertFalse("[10] not_equal_to", coll->not_equal_to()("aaa", "aaa"));
+
+    assertFalse("[11] greater", coll->greater()("aaa", "aaa"));
+    assertFalse("[12] greater", coll->greater()("aaa", "bbb"));
+    assertFalse("[13] less", coll->less()("aaa", "aaa"));
+    assertFalse("[14] less", coll->less()("bbb", "aaa"));
+
+    assertFalse("[15] greater_equal", coll->greater_equal()("aaa", "bbb"));
+    assertFalse("[16] less_equal", coll->less_equal()("bbb", "aaa"));
+}
+
+// Verify that every UCollator predicate performs the correct comparison.
+void CollationTest::TestUCollatorPredicates() {
+    using namespace U_HEADER_NESTED_NAMESPACE;
+    IcuTestErrorCode status(*this, "TestUCollatorPredicates");
+    setRootCollator(status);
+    status.assertSuccess();
+    const UCollator* const ucol = coll->toUCollator();
+
+    assertTrue("[01] equal_to", collator::equal_to(ucol)("aaa", "aaa"));
+    assertTrue("[02] not_equal_to", collator::not_equal_to(ucol)("aaa", "bbb"));
+
+    assertTrue("[03] greater", collator::greater(ucol)("bbb", "aaa"));
+    assertTrue("[04] less", collator::less(ucol)("aaa", "bbb"));
+
+    assertTrue("[05] greater_equal", collator::greater_equal(ucol)("aaa", "aaa"));
+    assertTrue("[06] greater_equal", collator::greater_equal(ucol)("bbb", "aaa"));
+    assertTrue("[07] less_equal", collator::less_equal(ucol)("aaa", "aaa"));
+    assertTrue("[08] less_equal", collator::less_equal(ucol)("aaa", "bbb"));
+
+    assertFalse("[09] equal_to", collator::equal_to(ucol)("aaa", "bbb"));
+    assertFalse("[10] not_equal_to", collator::not_equal_to(ucol)("aaa", "aaa"));
+
+    assertFalse("[11] greater", collator::greater(ucol)("aaa", "aaa"));
+    assertFalse("[12] greater", collator::greater(ucol)("aaa", "bbb"));
+    assertFalse("[13] less", collator::less(ucol)("aaa", "aaa"));
+    assertFalse("[14] less", collator::less(ucol)("bbb", "aaa"));
+
+    assertFalse("[15] greater_equal", collator::greater_equal(ucol)("aaa", "bbb"));
+    assertFalse("[16] less_equal", collator::less_equal(ucol)("bbb", "aaa"));
+}
+
+namespace {
+
+constexpr char16_t TEXT_CHAR16[] = u"char16";
+#if !U_CHAR16_IS_TYPEDEF && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION < 180000)
+constexpr uint16_t TEXT_UINT16[] = { 0x75, 0x69, 0x6e, 0x74, 0x31, 0x36, 0x00 };
+#endif
+#if U_SIZEOF_WCHAR_T==2
+constexpr wchar_t TEXT_WCHAR[] = L"wchar";
+#endif
+
+constexpr char TEXT_CHAR[] = "char";
+#if defined(__cpp_char8_t)
+constexpr char8_t TEXT_CHAR8[] = u8"char8";
+#endif
+
+}  // namespace
+
+// Verify that the Collator predicates handle all string types.
+void CollationTest::TestCollatorPredicateTypes() {
+    IcuTestErrorCode status(*this, "TestCollatorPredicateTypes");
+    setRootCollator(status);
+    status.assertSuccess();
+    const auto equal_to = coll->equal_to();
+
+    assertTrue("char16_t", equal_to(TEXT_CHAR16, TEXT_CHAR16));
+    assertTrue("u16string_view", equal_to(std::u16string_view{TEXT_CHAR16}, TEXT_CHAR16));
+
+#if !U_CHAR16_IS_TYPEDEF && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION < 180000)
+    assertTrue("uint16_t", equal_to(TEXT_UINT16, TEXT_UINT16));
+    assertTrue("basic_string_view<uint16_t>",
+               equal_to(std::basic_string_view<uint16_t>{TEXT_UINT16}, TEXT_UINT16));
+#endif
+
+#if U_SIZEOF_WCHAR_T==2
+    assertTrue("wchar_t", equal_to(TEXT_WCHAR, TEXT_WCHAR));
+    assertTrue("wstring_view", equal_to(std::wstring_view{TEXT_WCHAR}, TEXT_WCHAR));
+#endif
+
+    assertTrue("char", equal_to(TEXT_CHAR, TEXT_CHAR));
+    assertTrue("string_view", equal_to(std::string_view{TEXT_CHAR}, TEXT_CHAR));
+
+#if defined(__cpp_char8_t)
+    assertTrue("char8_t", equal_to(TEXT_CHAR8, TEXT_CHAR8));
+    assertTrue("u8string_view", equal_to(std::u8string_view{TEXT_CHAR8}, TEXT_CHAR8));
+#endif
+
+    assertTrue("UnicodeString", equal_to(UnicodeString::readOnlyAlias(TEXT_CHAR16), TEXT_CHAR16));
+    assertTrue("string", equal_to(std::string{TEXT_CHAR}, TEXT_CHAR));
+}
+
+// Verify that the UCollator predicates handle all string types.
+void CollationTest::TestUCollatorPredicateTypes() {
+    using namespace U_HEADER_NESTED_NAMESPACE;
+    IcuTestErrorCode status(*this, "TestUCollatorPredicateTypes");
+    setRootCollator(status);
+    status.assertSuccess();
+    const auto equal_to = collator::equal_to(coll->toUCollator());
+
+    assertTrue("char16_t", equal_to(TEXT_CHAR16, TEXT_CHAR16));
+    assertTrue("u16string_view", equal_to(std::u16string_view{TEXT_CHAR16}, TEXT_CHAR16));
+
+#if !U_CHAR16_IS_TYPEDEF && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION < 180000)
+    assertTrue("uint16_t", equal_to(TEXT_UINT16, TEXT_UINT16));
+    assertTrue("basic_string_view<uint16_t>",
+               equal_to(std::basic_string_view<uint16_t>{TEXT_UINT16}, TEXT_UINT16));
+#endif
+
+#if U_SIZEOF_WCHAR_T==2
+    assertTrue("wchar_t", equal_to(TEXT_WCHAR, TEXT_WCHAR));
+    assertTrue("wstring_view", equal_to(std::wstring_view{TEXT_WCHAR}, TEXT_WCHAR));
+#endif
+
+    assertTrue("char", equal_to(TEXT_CHAR, TEXT_CHAR));
+    assertTrue("string_view", equal_to(std::string_view{TEXT_CHAR}, TEXT_CHAR));
+
+#if defined(__cpp_char8_t)
+    assertTrue("char8_t", equal_to(TEXT_CHAR8, TEXT_CHAR8));
+    assertTrue("u8string_view", equal_to(std::u8string_view{TEXT_CHAR8}, TEXT_CHAR8));
+#endif
+
+    assertTrue("UnicodeString", equal_to(UnicodeString::readOnlyAlias(TEXT_CHAR16), TEXT_CHAR16));
+    assertTrue("string", equal_to(std::string{TEXT_CHAR}, TEXT_CHAR));
 }
 
 #endif  // !UCONFIG_NO_COLLATION
