@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726006232581,
+  "lastUpdate": 1726015914078,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25047,6 +25047,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1941.6721450991265,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "37b41495d7161cf25daa72ee842d02258bafbbff",
+          "message": "ICU-22876 C++ UnicodeSet/USet easy item iteration\n\nSee #3120",
+          "timestamp": "2024-09-10T17:38:03-07:00",
+          "tree_id": "9c00d982227a415594eff64cb0a95f136a18fd4b",
+          "url": "https://github.com/unicode-org/icu/commit/37b41495d7161cf25daa72ee842d02258bafbbff"
+        },
+        "date": 1726015759004,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1948.4427208937268,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
