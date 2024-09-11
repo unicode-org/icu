@@ -10,10 +10,6 @@
 name: Wait for Required Checks
 
 on:
-  push:
-    branches:
-      - main
-      - 'maint/maint*'
   pull_request:
     branches: '**'
 
