@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726015836480,
+  "lastUpdate": 1726035064608,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25047,6 +25047,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 3008.491951657757,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "9270216cb73faa128a9d77a14175fc4a164747ad",
+          "message": "ICU-22863 Remove extra line in Islamic calendar\n\nFix a regression caused by d43d216febe18d37ad840cbac3f953b989b65965",
+          "timestamp": "2024-09-10T22:53:06-07:00",
+          "tree_id": "5de040142b86fbeae4bcad392dcb9ffd2ad992eb",
+          "url": "https://github.com/unicode-org/icu/commit/9270216cb73faa128a9d77a14175fc4a164747ad"
+        },
+        "date": 1726034911278,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 3044.0157328284968,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
