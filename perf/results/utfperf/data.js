@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726090817913,
+  "lastUpdate": 1726093112470,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -39267,6 +39267,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.9736,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "fda22239525b92b49ba34ebaeb98cd1e554fd6ab",
+          "message": "ICU-22723 Regenerated urename.h.",
+          "timestamp": "2024-09-11T14:42:46-07:00",
+          "tree_id": "f4f2ec15fb34245267c35408634bbe38fe36428d",
+          "url": "https://github.com/unicode-org/icu/commit/fda22239525b92b49ba34ebaeb98cd1e554fd6ab"
+        },
+        "date": 1726092956402,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.2884,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.0326,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.9716,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
