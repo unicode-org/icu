@@ -281,6 +281,10 @@ OptionMap::OptionMap(const UVector& opts, UErrorCode& status) : len(opts.size())
 
 OptionMap::OptionMap(const OptionMap& other) : len(other.len) {
     U_ASSERT(!other.bogus);
+    if (len == 0) {
+        bogus = false;
+        return;
+    }
     UErrorCode localErrorCode = U_ZERO_ERROR;
     Option* result = copyArray(other.options.getAlias(), len, localErrorCode);
     if (U_FAILURE(localErrorCode)) {
