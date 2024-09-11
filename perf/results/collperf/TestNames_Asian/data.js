@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726080715601,
+  "lastUpdate": 1726084215804,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -50325,6 +50325,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2053398.5425,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "36555b780029f2a739c527505dc66ac24f98fc08",
+          "message": "ICU-22716 Temp turn off message_formatter_fuzzer\n\nThe running of message_formatter_fuzzer cause out of memory problem.\nWe will address that in later PR.",
+          "timestamp": "2024-09-11T12:12:36-07:00",
+          "tree_id": "f1b91b2006128b2bed52e47a06b2ee3318a31843",
+          "url": "https://github.com/unicode-org/icu/commit/36555b780029f2a739c527505dc66ac24f98fc08"
+        },
+        "date": 1726084059057,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 208.3958,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8705598.4296,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1978882.6334,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7962560.3113,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2030455.7937,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
