@@ -308,6 +308,16 @@ UnicodeString UnicodeString::readOnlyAliasFromU16StringView(std::u16string_view 
   return result;
 }
 
+UnicodeString UnicodeString::readOnlyAliasFromUnicodeString(const UnicodeString &text) {
+  UnicodeString result;
+  if (text.isBogus()) {
+    result.setToBogus();
+  } else {
+    result.setTo(false, text.getBuffer(), text.length());
+  }
+  return result;
+}
+
 #if U_CHARSET_IS_UTF8
 
 UnicodeString::UnicodeString(const char *codepageData) {
