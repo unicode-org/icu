@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726016728804,
+  "lastUpdate": 1726035623449,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -50217,6 +50217,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12848829.8965,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "9270216cb73faa128a9d77a14175fc4a164747ad",
+          "message": "ICU-22863 Remove extra line in Islamic calendar\n\nFix a regression caused by d43d216febe18d37ad840cbac3f953b989b65965",
+          "timestamp": "2024-09-10T22:53:06-07:00",
+          "tree_id": "5de040142b86fbeae4bcad392dcb9ffd2ad992eb",
+          "url": "https://github.com/unicode-org/icu/commit/9270216cb73faa128a9d77a14175fc4a164747ad"
+        },
+        "date": 1726035470860,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 220.5769,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 56776167.3647,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12102613.6686,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 51893716.5087,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12729166.056,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
