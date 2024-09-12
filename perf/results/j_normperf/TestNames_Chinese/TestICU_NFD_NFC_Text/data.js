@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726151542310,
+  "lastUpdate": 1726154227345,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -51296,6 +51296,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 5.228804161631819,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "e14347b77a0b8cc88e845211577dec402e4e8025",
+          "message": "ICU-22883 Update CLDR-ICU instructions with CLDR prereqs for BRS integrations",
+          "timestamp": "2024-09-12T08:11:17-07:00",
+          "tree_id": "e0d007ed84f83d3dd0041600f141eda37baebb5a",
+          "url": "https://github.com/unicode-org/icu/commit/e14347b77a0b8cc88e845211577dec402e4e8025"
+        },
+        "date": 1726154076841,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 5.207968836815684,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
