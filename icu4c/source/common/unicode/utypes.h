@@ -54,21 +54,36 @@
  * integer and other types.
  */
 
+/** @{ API visibility control */
 
 /**
  * \def U_SHOW_CPLUSPLUS_API
+ * When defined to 1 (=default) and compiled with a C++ compiler, both C and C++ APIs are visible.
+ * Otherwise, only C APIs are visible; this is for C++ users who want to
+ * restrict their usage to binary stable C APIs exported by ICU DLLs.
+ * @internal
+ */
+/**
+ * \def U_SHOW_CPLUSPLUS_HEADER_API
+ * When defined to 1 (=default) and compiled with a C++ compiler, C++ header-only APIs are visible.
+ * This is for C++ users who restrict their usage to binary stable C APIs exported by ICU DLLs
+ * (U_SHOW_CPLUSPLUS_API=0)
+ * but who still want to use C++ header-only APIs which do not rely on ICU DLL exports.
  * @internal
  */
 #ifdef __cplusplus
 #   ifndef U_SHOW_CPLUSPLUS_API
 #       define U_SHOW_CPLUSPLUS_API 1
 #   endif
+#   ifndef U_SHOW_CPLUSPLUS_HEADER_API
+#       define U_SHOW_CPLUSPLUS_HEADER_API 1
+#   endif
 #else
 #   undef U_SHOW_CPLUSPLUS_API
 #   define U_SHOW_CPLUSPLUS_API 0
+#   undef U_SHOW_CPLUSPLUS_HEADER_API
+#   define U_SHOW_CPLUSPLUS_HEADER_API 0
 #endif
-
-/** @{ API visibility control */
 
 /**
  * \def U_HIDE_DRAFT_API
