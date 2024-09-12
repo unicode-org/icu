@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726147585759,
+  "lastUpdate": 1726149801395,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -90429,6 +90429,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 38.1426,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@lamtrinh.dev",
+            "name": "LamTrinh.Dev",
+            "username": "lamtrinhdev"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f6b274a197d62ac1b7453aba70e3c99f9df307de",
+          "message": "ICU-22721 Enhance #if for locdispnames.cpp\n\nEnhance #if for locdispnames.cpp\n\nICU-22721 Enhance #if for locdispnames.cpp, remove auto-generate file in local git.\n\nICU-22721 Enhance #if for locdispnames.cpp.\n\nICU-22721 Enhance #if for locdispnames.cpp, revert old-xmls.tar.bz2 file from main branch.\n\nICU-22721 Enhance #if for locdispnames.cpp\n\nEnhance #if for locdispnames.cpp\n\nICU-22721 Enhance #if for locdispnames.cpp, remove auto-generate file in local git.\n\nICU-22721 Enhance #if for locdispnames.cpp.\n\nICU-22721 Enhance #if for locdispnames.cpp, revert old-xmls.tar.bz2 file from main branch.",
+          "timestamp": "2024-09-10T14:32:14-07:00",
+          "tree_id": "39708e619571f6a2170935a99747facc31e77390",
+          "url": "https://github.com/unicode-org/icu/commit/f6b274a197d62ac1b7453aba70e3c99f9df307de"
+        },
+        "date": 1726149647193,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.229,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.251,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 23.9313,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 27.4012,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 39.2575,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 34.5939,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 28.4576,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.9459,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 84.2221,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 20.7757,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.8609,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 38.6058,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
