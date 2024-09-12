@@ -206,6 +206,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
 
     TESTCASE_AUTO(Test22633HebrewLargeNegativeDay);
     TESTCASE_AUTO(Test22730JapaneseOverflow);
+    TESTCASE_AUTO(Test22730CopticOverflow);
 
     TESTCASE_AUTO(TestAddOverflow);
 
@@ -5883,6 +5884,17 @@ void CalendarTest::Test22730JapaneseOverflow() {
         status);
     calendar->clear();
     calendar->roll(UCAL_EXTENDED_YEAR, -1946156856, status);
+    assertEquals("status return without overflow", status, U_ILLEGAL_ARGUMENT_ERROR);
+}
+
+void CalendarTest::Test22730CopticOverflow() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> calendar(
+        Calendar::createInstance(Locale("tn-BW-u-ca-coptic"), status),
+        status);
+    calendar->clear();
+    calendar->set(UCAL_JULIAN_DAY, -2147456654);
+    calendar->roll(UCAL_ORDINAL_MONTH, 6910543, status);
     assertEquals("status return without overflow", status, U_ILLEGAL_ARGUMENT_ERROR);
 }
 

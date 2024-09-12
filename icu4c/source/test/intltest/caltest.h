@@ -347,6 +347,7 @@ public: // package
     void Test22633AddTwiceGetTimeOverflow();
     void Test22633RollTwiceGetTimeOverflow();
     void Test22730JapaneseOverflow();
+    void Test22730CopticOverflow();
 
     void Test22750Roll();
 
