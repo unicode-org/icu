@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726147076759,
+  "lastUpdate": 1726149373663,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -50865,6 +50865,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1307964.784,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@lamtrinh.dev",
+            "name": "LamTrinh.Dev",
+            "username": "lamtrinhdev"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f6b274a197d62ac1b7453aba70e3c99f9df307de",
+          "message": "ICU-22721 Enhance #if for locdispnames.cpp\n\nEnhance #if for locdispnames.cpp\n\nICU-22721 Enhance #if for locdispnames.cpp, remove auto-generate file in local git.\n\nICU-22721 Enhance #if for locdispnames.cpp.\n\nICU-22721 Enhance #if for locdispnames.cpp, revert old-xmls.tar.bz2 file from main branch.\n\nICU-22721 Enhance #if for locdispnames.cpp\n\nEnhance #if for locdispnames.cpp\n\nICU-22721 Enhance #if for locdispnames.cpp, remove auto-generate file in local git.\n\nICU-22721 Enhance #if for locdispnames.cpp.\n\nICU-22721 Enhance #if for locdispnames.cpp, revert old-xmls.tar.bz2 file from main branch.",
+          "timestamp": "2024-09-10T14:32:14-07:00",
+          "tree_id": "39708e619571f6a2170935a99747facc31e77390",
+          "url": "https://github.com/unicode-org/icu/commit/f6b274a197d62ac1b7453aba70e3c99f9df307de"
+        },
+        "date": 1726149218781,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 275.7735,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 2950393.9371,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1303445.5737,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 2724524.7671,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1305684.3026,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
