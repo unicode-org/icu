@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726154643028,
+  "lastUpdate": 1726155381310,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25527,6 +25527,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.423500921283819,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "266a2b8de2220ba9af789d6e9960616174c68dc6",
+          "message": "ICU-22716 Add MessageFormat fuzzer\n\nICU-22716 improve",
+          "timestamp": "2024-09-10T22:50:33-07:00",
+          "tree_id": "683e2c1b3835ed5964e2f5fb56f22d066cc4c97b",
+          "url": "https://github.com/unicode-org/icu/commit/266a2b8de2220ba9af789d6e9960616174c68dc6"
+        },
+        "date": 1726155230441,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.4245487426809413,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
