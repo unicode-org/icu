@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726148998815,
+  "lastUpdate": 1726151694935,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25557,6 +25557,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.04773509114118451,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "8e40ed3e78630991dcc4702a451e0d65f2f6b104",
+          "message": "ICU-22875 escape less-than sign in regex.md",
+          "timestamp": "2024-09-10T14:28:30-07:00",
+          "tree_id": "1b5131664ff2680e40ca3d15e949c085dc6689c3",
+          "url": "https://github.com/unicode-org/icu/commit/8e40ed3e78630991dcc4702a451e0d65f2f6b104"
+        },
+        "date": 1726151536746,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.0476906651135474,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
