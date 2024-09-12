@@ -1325,7 +1325,7 @@ U_CAPI UBool U_EXPORT2
 uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
                         UChar32* pStart, UChar32* pEnd);
 
-#if U_SHOW_CPLUSPLUS_API
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
 #ifndef U_HIDE_DRAFT_API
 
 namespace U_HEADER_ONLY_NAMESPACE {
@@ -1893,6 +1893,6 @@ private:
 }  // namespace U_HEADER_ONLY_NAMESPACE
 
 #endif  // U_HIDE_DRAFT_API
-#endif  // U_SHOW_CPLUSPLUS_API
+#endif  // U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
 
 #endif  // __USET_H__
