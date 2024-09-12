@@ -82,6 +82,21 @@ considerations:
   resolving build issues and test failures for both ICU4C and ICU4J.
 * After everything is committed, you will need to tag the cldr and cldr-staging
   sources that ended up being used for the integration (see process below).
+* Before doing the integration, there are some prerequisite tasks to do in CLDR,
+  as described in the next section.
+
+# CLDR prerequisites for BRS integrations
+
+The following tasks should be done in the CLDR repo before beginning a CLDR-ICU
+integration that ss part of the BRS process; handle each of these using a separate
+ticket and a separate PR:
+
+1. Generate updated CLDR test data (which is copied to ICU), using the process in
+   [Generating CLDR testData](https://docs.google.com/document/d/1-RC99npKcSSwUoYGkSzxaKOe76gYRkWhGdFzCdIBCu4/edit#heading=h.2rum9c6hrr4w)
+
+2. Run CLDRModify with no options with no options and then with -fP. The webpage
+   for CLDRModify is currently being converted to markdown, a reference to it will
+   be added when that process is complete.
 
 # Environment variables
 
