@@ -186,9 +186,6 @@ if test "$srcdir" = "."; then
   fi
 fi
 
-#AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
-#AC_CHECK_PROG(STRIP, strip, strip, true)
-
 # TODO(ICU-20301): Remove fallback to Python 2.
 AC_CHECK_PROGS(PYTHON, python3 "py -3" python "py")
 AC_SUBST(PYTHON)
@@ -338,24 +335,6 @@ AC_ARG_ENABLE(auto-cleanup,
 )
 AC_MSG_RESULT($enabled)
 AC_SUBST(UCLN_NO_AUTO_CLEANUP)
-
-# MSVC floating-point option
-MSVC_RELEASE_FLAG=""
-if test $enabled = yes
-then
-    if test $icu_cv_host_frag = mh-cygwin-msvc -o $icu_cv_host_frag = mh-msys-msvc
-    then
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-    #if defined _MSC_VER && _MSC_VER >= 1400
-    #else
-    Microsoft Visual C++ < 2005
-    #endif
-        ]], [[]])],[MSVC_RELEASE_FLAG="/fp:precise"],[MSVC_RELEASE_FLAG="/Op"])
-
-        CFLAGS="${CFLAGS} ${MSVC_RELEASE_FLAG}"
-        CXXFLAGS="${CXXFLAGS} ${MSVC_RELEASE_FLAG}"
-    fi
-fi
 
 # Check whether to enabled draft APIs
 AC_MSG_CHECKING([whether to enable draft APIs])
@@ -710,20 +689,7 @@ fi
 AC_SUBST(U_HAVE_NL_LANGINFO_CODESET)
 AC_SUBST(U_NL_LANGINFO_CODESET)
 
-# Namespace support checks
 AC_LANG(C++)
-AC_MSG_CHECKING([for namespace support])
-AC_CACHE_VAL(ac_cv_namespace_ok,
-    [AC_LINK_IFELSE([AC_LANG_PROGRAM([namespace x_version {void f(){}}
-    namespace x = x_version;
-    using namespace x_version;
-    ], [f();])],[ac_cv_namespace_ok=yes],[ac_cv_namespace_ok=no])] )
-AC_MSG_RESULT($ac_cv_namespace_ok)
-if test $ac_cv_namespace_ok = no
-then
-    AC_MSG_ERROR(Namespace support is required to build ICU.)
-fi
-
 AC_MSG_CHECKING([for properly overriding new and delete])
 U_OVERRIDE_CXX_ALLOCATION=0
 U_HAVE_PLACEMENT_NEW=0
