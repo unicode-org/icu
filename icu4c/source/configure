@@ -4134,9 +4134,6 @@ if test "$srcdir" = "."; then
   fi
 fi
 
-#AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
-#AC_CHECK_PROG(STRIP, strip, strip, true)
-
 # TODO(ICU-20301): Remove fallback to Python 2.
 for ac_prog in python3 "py -3" python "py"
 do
@@ -5412,40 +5409,6 @@ fi
 $as_echo "$enabled" >&6; }
 
 
-# MSVC floating-point option
-MSVC_RELEASE_FLAG=""
-if test $enabled = yes
-then
-    if test $icu_cv_host_frag = mh-cygwin-msvc -o $icu_cv_host_frag = mh-msys-msvc
-    then
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-    #if defined _MSC_VER && _MSC_VER >= 1400
-    #else
-    Microsoft Visual C++ < 2005
-    #endif
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  MSVC_RELEASE_FLAG="/fp:precise"
-else
-  MSVC_RELEASE_FLAG="/Op"
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-        CFLAGS="${CFLAGS} ${MSVC_RELEASE_FLAG}"
-        CXXFLAGS="${CXXFLAGS} ${MSVC_RELEASE_FLAG}"
-    fi
-fi
-
 # Check whether to enabled draft APIs
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable draft APIs" >&5
 $as_echo_n "checking whether to enable draft APIs... " >&6; }
@@ -6669,47 +6632,11 @@ fi
 
 
 
-# Namespace support checks
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for namespace support" >&5
-$as_echo_n "checking for namespace support... " >&6; }
-if ${ac_cv_namespace_ok+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-namespace x_version {void f(){}}
-    namespace x = x_version;
-    using namespace x_version;
-
-int
-main ()
-{
-f();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_namespace_ok=yes
-else
-  ac_cv_namespace_ok=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_namespace_ok" >&5
-$as_echo "$ac_cv_namespace_ok" >&6; }
-if test $ac_cv_namespace_ok = no
-then
-    as_fn_error $? "Namespace support is required to build ICU." "$LINENO" 5
-fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for properly overriding new and delete" >&5
 $as_echo_n "checking for properly overriding new and delete... " >&6; }
