@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726147356876,
+  "lastUpdate": 1726149589019,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -84597,6 +84597,96 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIsWhiteSpace",
             "value": 4.587,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@lamtrinh.dev",
+            "name": "LamTrinh.Dev",
+            "username": "lamtrinhdev"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f6b274a197d62ac1b7453aba70e3c99f9df307de",
+          "message": "ICU-22721 Enhance #if for locdispnames.cpp\n\nEnhance #if for locdispnames.cpp\n\nICU-22721 Enhance #if for locdispnames.cpp, remove auto-generate file in local git.\n\nICU-22721 Enhance #if for locdispnames.cpp.\n\nICU-22721 Enhance #if for locdispnames.cpp, revert old-xmls.tar.bz2 file from main branch.\n\nICU-22721 Enhance #if for locdispnames.cpp\n\nEnhance #if for locdispnames.cpp\n\nICU-22721 Enhance #if for locdispnames.cpp, remove auto-generate file in local git.\n\nICU-22721 Enhance #if for locdispnames.cpp.\n\nICU-22721 Enhance #if for locdispnames.cpp, revert old-xmls.tar.bz2 file from main branch.",
+          "timestamp": "2024-09-10T14:32:14-07:00",
+          "tree_id": "39708e619571f6a2170935a99747facc31e77390",
+          "url": "https://github.com/unicode-org/icu/commit/f6b274a197d62ac1b7453aba70e3c99f9df307de"
+        },
+        "date": 1726149432061,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIsAlpha",
+            "value": 4.2834,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsUpper",
+            "value": 4.5768,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsLower",
+            "value": 4.2831,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsDigit",
+            "value": 4.2644,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsSpace",
+            "value": 4.9055,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsAlphaNumeric",
+            "value": 5.1901,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsPrint",
+            "value": 4.2633,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsControl",
+            "value": 4.2826,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToLower",
+            "value": 5.4484,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToUpper",
+            "value": 5.4877,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsWhiteSpace",
+            "value": 4.5892,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
