@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726147355057,
+  "lastUpdate": 1726149593811,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -56517,6 +56517,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 11.7474,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@lamtrinh.dev",
+            "name": "LamTrinh.Dev",
+            "username": "lamtrinhdev"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f6b274a197d62ac1b7453aba70e3c99f9df307de",
+          "message": "ICU-22721 Enhance #if for locdispnames.cpp\n\nEnhance #if for locdispnames.cpp\n\nICU-22721 Enhance #if for locdispnames.cpp, remove auto-generate file in local git.\n\nICU-22721 Enhance #if for locdispnames.cpp.\n\nICU-22721 Enhance #if for locdispnames.cpp, revert old-xmls.tar.bz2 file from main branch.\n\nICU-22721 Enhance #if for locdispnames.cpp\n\nEnhance #if for locdispnames.cpp\n\nICU-22721 Enhance #if for locdispnames.cpp, remove auto-generate file in local git.\n\nICU-22721 Enhance #if for locdispnames.cpp.\n\nICU-22721 Enhance #if for locdispnames.cpp, revert old-xmls.tar.bz2 file from main branch.",
+          "timestamp": "2024-09-10T14:32:14-07:00",
+          "tree_id": "39708e619571f6a2170935a99747facc31e77390",
+          "url": "https://github.com/unicode-org/icu/commit/f6b274a197d62ac1b7453aba70e3c99f9df307de"
+        },
+        "date": 1726149442309,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 12.4252,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 9.041,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 9.0378,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 10.6761,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 11.6807,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 11.6541,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
