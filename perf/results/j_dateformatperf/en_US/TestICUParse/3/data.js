@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726164626427,
+  "lastUpdate": 1726168560287,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25767,6 +25767,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 891.5647178382837,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "fd8a55252734d950df57845a5afa19e0f14b4640",
+          "message": "ICU-22884 Fix assertion and Heap-use-after-free\n\nIssue in icu_76::message2::MessageFormatter::~MessageFormatter",
+          "timestamp": "2024-09-12T11:57:38-07:00",
+          "tree_id": "be38d2bccd3597dbdab023dfbdadf2957fab9c51",
+          "url": "https://github.com/unicode-org/icu/commit/fd8a55252734d950df57845a5afa19e0f14b4640"
+        },
+        "date": 1726168400006,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 899.1471132878728,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
