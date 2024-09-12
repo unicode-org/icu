@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726118902288,
+  "lastUpdate": 1726143631241,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25647,6 +25647,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.5126407640151793,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "3a74fcf052fee4c89ff92107cf3f22f8ae3bea03",
+          "message": "ICU-22716 Test more number format",
+          "timestamp": "2024-09-10T22:50:47-07:00",
+          "tree_id": "2cab0fad74c040ebdbba20cd70cac36e51ea8474",
+          "url": "https://github.com/unicode-org/icu/commit/3a74fcf052fee4c89ff92107cf3f22f8ae3bea03"
+        },
+        "date": 1726143475318,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.370648699516527,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
