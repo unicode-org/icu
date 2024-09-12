@@ -29,5 +29,9 @@ jobs:
         # It won't pass until all of the pipeline's checks pass.
         # For the ICU4J and ICU4C pipelines, this is called `CI-ICU4J` and `CI-ICU4C`.
         # These checks will return a "neutral" status, which this GH Action interprets as a failure.
+        # ClusterFuzzLite/CIFuzz appears to be spawned after a CIFuzz job finishes, but its status of
+        # "neutral" is interpreted by this action as a failure.
         # Since the jobs are superfluous, they can be ignored.
-        ignore: "CI-ICU4C,CI-ICU4J"
+        ignore: "CI-ICU4C,CI-ICU4J,ClusterFuzzLite/CIFuzz"
+        # Wait for 2 minutes before this action begins its work by polling Github for job/check status
+        delay: 120s
