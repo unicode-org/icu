@@ -11,6 +11,7 @@
 * created by: Markus W. Scherer
 */
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -88,6 +89,7 @@ public:
     void TestUCollatorPredicates();
     void TestCollatorPredicateTypes();
     void TestUCollatorPredicateTypes();
+    void TestCollatorMap();
 
 private:
     void checkFCD(const char *name, CollationIterator &ci, CodePointIterator &cpi);
@@ -165,6 +167,7 @@ void CollationTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
     TESTCASE_AUTO(TestUCollatorPredicates);
     TESTCASE_AUTO(TestCollatorPredicateTypes);
     TESTCASE_AUTO(TestUCollatorPredicateTypes);
+    TESTCASE_AUTO(TestCollatorMap);
     TESTCASE_AUTO_END;
 }
 
@@ -2078,6 +2081,45 @@ void CollationTest::TestUCollatorPredicateTypes() {
 
     assertTrue("UnicodeString", equal_to(UnicodeString::readOnlyAlias(TEXT_CHAR16), TEXT_CHAR16));
     assertTrue("string", equal_to(std::string{TEXT_CHAR}, TEXT_CHAR));
+}
+
+void CollationTest::TestCollatorMap() {
+    using namespace U_HEADER_NESTED_NAMESPACE;
+    IcuTestErrorCode status(*this, "TestCollatorMap");
+    setRootCollator(status);
+    status.assertSuccess();
+    coll->setStrength(Collator::PRIMARY);
+    std::map<std::string, int, decltype(coll->less())> m{coll->less()};
+    ++m["a"];
+    ++m["b"];
+    ++m["A"];
+    assertEquals("m.size()", 2, m.size());
+    assertEquals(R"(m["a"])", 2, m["a"]);
+
+    std::map<std::u16string, int, collator::less> u16m{collator::less(coll->toUCollator())};
+    ++u16m[u"a"];
+    ++u16m[u"b"];
+    ++u16m[u"A"];
+    assertEquals("u16m.size()", 2, u16m.size());
+    assertEquals(R"(u16m["a"])", 2, u16m[u"a"]);
+
+#if defined(__cpp_char8_t)
+    std::map<std::u8string, int, collator::less> u8m{collator::less(coll->toUCollator())};
+    ++u8m[u8"a"];
+    ++u8m[u8"b"];
+    ++u8m[u8"A"];
+    assertEquals("u8m.size()", 2, u8m.size());
+    assertEquals(R"(u8m["a"])", 2, u8m[u8"a"]);
+#endif
+
+    std::map<UnicodeString, int, collator::less> um{collator::less(coll->toUCollator())};
+    // Only UnicodeString allows heterogeneous lookup across encodings:
+    ++um[u"a"];
+    ++um["b"];
+    // ++um[u8"A"];  // TODO(egg): Should this be legal?
+    ++um["A"];
+    assertEquals("u16m.size()", 2, um.size());
+    assertEquals(R"(u16m["a"])", 2, um[u"a"]);
 }
 
 #endif  // !UCONFIG_NO_COLLATION
