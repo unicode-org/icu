@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726179486987,
+  "lastUpdate": 1726181843022,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25827,6 +25827,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.3183281170446683,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "5447a230701c156383fa6c6887d8f0babf0fd34d",
+          "message": "ICU-22876 add U_SHOW_CPLUSPLUS_HEADER_API for C++ header-only APIs",
+          "timestamp": "2024-09-12T15:36:40-07:00",
+          "tree_id": "0fd0ba22589dbc3194b605322fe3b9ce45af0e93",
+          "url": "https://github.com/unicode-org/icu/commit/5447a230701c156383fa6c6887d8f0babf0fd34d"
+        },
+        "date": 1726181682546,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.3204266172038026,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
