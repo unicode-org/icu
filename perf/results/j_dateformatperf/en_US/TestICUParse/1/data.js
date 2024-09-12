@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726148719434,
+  "lastUpdate": 1726151433941,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25587,6 +25587,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 360.8572100159336,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "8e40ed3e78630991dcc4702a451e0d65f2f6b104",
+          "message": "ICU-22875 escape less-than sign in regex.md",
+          "timestamp": "2024-09-10T14:28:30-07:00",
+          "tree_id": "1b5131664ff2680e40ca3d15e949c085dc6689c3",
+          "url": "https://github.com/unicode-org/icu/commit/8e40ed3e78630991dcc4702a451e0d65f2f6b104"
+        },
+        "date": 1726151277891,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 378.6777731410353,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
