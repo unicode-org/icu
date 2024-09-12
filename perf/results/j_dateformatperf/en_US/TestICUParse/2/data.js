@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726095967129,
+  "lastUpdate": 1726118610873,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25317,6 +25317,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 174.32083361178053,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "752da7303fa2e55a5f358400674bb3c00429b83a",
+          "message": "ICU-22730 Fix int overflow inside CE Calendar",
+          "timestamp": "2024-09-11T22:07:01-07:00",
+          "tree_id": "44123000d76521f63161c19ba77c3b0d4509806d",
+          "url": "https://github.com/unicode-org/icu/commit/752da7303fa2e55a5f358400674bb3c00429b83a"
+        },
+        "date": 1726118457393,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 140.10420937940944,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
