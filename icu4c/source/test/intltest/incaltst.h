@@ -41,6 +41,7 @@ public:
     void TestForceGannenNumbering();
     
     void TestPersian();
+    void TestPersianData();
     void TestPersianFormat();
 
     void TestConsistencyGregorian();
