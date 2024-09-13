@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726244947909,
+  "lastUpdate": 1726248305116,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26037,6 +26037,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.0790003759853506,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "33a788b35382028f9e8ab95321060a18388a474f",
+          "message": "ICU-22721 Set delay for CI enforce checks job to allow other jobs to init\n\nSee #3160",
+          "timestamp": "2024-09-12T15:18:28-07:00",
+          "tree_id": "995afe1a6d0046345581231a7571d9ae63e01ac8",
+          "url": "https://github.com/unicode-org/icu/commit/33a788b35382028f9e8ab95321060a18388a474f"
+        },
+        "date": 1726248149969,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.000920249265681,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
