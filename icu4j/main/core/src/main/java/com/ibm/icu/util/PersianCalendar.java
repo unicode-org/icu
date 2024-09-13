@@ -10,7 +10,9 @@
 package com.ibm.icu.util;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import com.ibm.icu.util.ULocale.Category;
 
@@ -93,6 +95,22 @@ public class PersianCalendar extends Calendar {
     
     private static final int PERSIAN_EPOCH = 1948320;
 
+    private static final int NON_LEAP_YEARS[] = {
+       1502, 1601, 1634, 1667, 1700, 1733, 1766, 1799, 1832, 1865, 1898, 1931, 1964, 1997, 2030, 2059,
+       2063, 2096, 2129, 2158, 2162, 2191, 2195, 2224, 2228, 2257, 2261, 2290, 2294, 2323, 2327, 2356,
+       2360, 2389, 2393, 2422, 2426, 2455, 2459, 2488, 2492, 2521, 2525, 2554, 2558, 2587, 2591, 2620,
+       2624, 2653, 2657, 2686, 2690, 2719, 2723, 2748, 2752, 2756, 2781, 2785, 2789, 2818, 2822, 2847,
+       2851, 2855, 2880, 2884, 2888, 2913, 2917, 2921, 2946, 2950, 2954, 2979, 2983, 2987,
+    };
+
+    private static Set<Integer> LEAP_CORRECTION = null;
+    {
+        Set<Integer> prefab = new HashSet<Integer>(NON_LEAP_YEARS.length);
+        for (int nonLeap : NON_LEAP_YEARS) {
+            prefab.add(nonLeap);
+        }
+        LEAP_CORRECTION = prefab;
+    }
     //-------------------------------------------------------------------------
     // Constructors...
     //-------------------------------------------------------------------------
@@ -312,10 +330,15 @@ public class PersianCalendar extends Calendar {
      */
     private final static boolean isLeapYear(int year)
     {
+        if (year >= NON_LEAP_YEARS[0] && LEAP_CORRECTION.contains(year)) {
+            return false;
+        }
+        if (year > NON_LEAP_YEARS[0] && LEAP_CORRECTION.contains(year-1)) {
+            return true;
+        }
         int[] remainder = new int[1];
         floorDivide(25 * year + 11, 33, remainder);
         return remainder[0] < 8;
-        
     }
 
     //----------------------------------------------------------------------
@@ -375,12 +398,12 @@ public class PersianCalendar extends Calendar {
             month = rem[0];
         }
 
-        int julianDay = PERSIAN_EPOCH - 1 + 365 * (eyear - 1) + floorDivide(8 * eyear + 21, 33);
+        long julianDay = PERSIAN_EPOCH - 1L + firstJulianOfYear(eyear);
         if (month != 0) {
             julianDay += MONTH_COUNT[month][2];
         }
-        return julianDay;
-    }    
+        return (int)julianDay;
+    }
 
     //-------------------------------------------------------------------------
     // Functions for converting from milliseconds to field values
@@ -401,6 +424,13 @@ public class PersianCalendar extends Calendar {
         return year;
     }
 
+    private static long firstJulianOfYear(int year) {
+        long julianDay = 365L * (year - 1L) + floorDivide(8L * year + 21, 33L);
+        if (year > NON_LEAP_YEARS[0] && LEAP_CORRECTION.contains(year-1)) {
+            julianDay--;
+        }
+        return julianDay;
+    }
     /**
      * Override Calendar to compute several fields specific to the Persian
      * calendar system.  These are:
@@ -425,16 +455,22 @@ public class PersianCalendar extends Calendar {
         long daysSinceEpoch = julianDay - PERSIAN_EPOCH;
         year = 1 + (int) floorDivide(33 * daysSinceEpoch + 3, 12053);
 
-        long farvardin1 = 365L * (year - 1L) + floorDivide(8L * year + 21, 33L);
+        long farvardin1 = firstJulianOfYear(year);
+
         dayOfYear = (int)(daysSinceEpoch - farvardin1); // 0-based
+        if (dayOfYear == 365 && year >= NON_LEAP_YEARS[0] && LEAP_CORRECTION.contains(year)) {
+            year++;
+            dayOfYear = 0;
+        }
         if (dayOfYear < 216) { // Compute 0-based month
             month = dayOfYear / 31;
         } else {
             month = (dayOfYear - 6) / 30;
         }
-        dayOfMonth = dayOfYear - MONTH_COUNT[month][2] + 1;
+
         ++dayOfYear; // Make it 1-based now
-        
+        dayOfMonth = dayOfYear - MONTH_COUNT[month][2];
+
         internalSet(ERA, 0);
         internalSet(YEAR, year);
         internalSet(EXTENDED_YEAR, year);
