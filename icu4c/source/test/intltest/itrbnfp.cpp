@@ -40,6 +40,7 @@ void IntlTestRBNFParse::runIndexedTest(int32_t index, UBool exec, const char* &n
     switch (index) {
 #if U_HAVE_RBNF
         TESTCASE(0, TestParse);
+        TESTCASE(1, Test2GreaterParse);
 #else
         TESTCASE(0, TestRBNFParseDisabled);
 #endif
@@ -50,6 +51,19 @@ void IntlTestRBNFParse::runIndexedTest(int32_t index, UBool exec, const char* &n
 }
 
 #if U_HAVE_RBNF
+
+void
+IntlTestRBNFParse::Test2GreaterParse() {
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError perror;
+    RuleBasedNumberFormat rbnf(u">>", Locale::getUS(), perror, status);
+    Formattable result;
+    if (U_FAILURE(status)) {
+        errln("FAIL: could not create NumberFormat - %s", u_errorName(status));
+        return;
+    }
+    rbnf.parse(u"a", result, status);
+}
 
 void 
 IntlTestRBNFParse::TestParse() {
