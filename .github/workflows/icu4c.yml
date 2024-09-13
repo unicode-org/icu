@@ -314,8 +314,8 @@ jobs:
         run: |
           cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux/clang && make -j -l4.5 check
 
-  # Clang Linux 16 with CPP20 and treat warnings as errors 
-  clang16-cpp20-warning-as-errors:
+  # Clang Linux 18 with CPP20 and treat warnings as errors 
+  clang18-cpp20-warning-as-errors:
       runs-on: ubuntu-latest
       strategy:
         fail-fast: false
@@ -325,21 +325,19 @@ jobs:
             - '-std=c++20 -stdlib=libc++'
       steps:
         - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        - name: Install Clang-16
+        - name: Install Clang-18
           run: |
-            curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-            sudo apt-add-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-16 main'
-            sudo apt update
-            sudo apt install -qy clang-16 lld-16 libc++-16-dev libc++abi-16-dev
-        - name: Clang-16 build and Test
+            wget https://apt.llvm.org/llvm.sh
+            chmod u+x llvm.sh
+            sudo ./llvm.sh 18 all
+        - name: Clang-18 build and Test
           env:
-            CC: clang-16
-            CXX: clang++-16
-            # TODO: add '-Werror' after fixing ICU-22873
-            CPPFLAGS: '-Wall -Wextra -Wctad-maybe-unsupported'
+            CC: clang-18
+            CXX: clang++-18
+            CPPFLAGS: '-Wall -Wextra -Wctad-maybe-unsupported -Werror'
             CXXFLAGS: ${{ matrix.flags }}
           run: |
-            cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux/clang && make -j -l4.5 check
+            cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux && make -j -l4.5 check
 
   # MacOS with clang
   macos-clang:
