@@ -41,6 +41,10 @@ public:
     void TestForceGannenNumbering();
     
     void TestPersian();
+    void TestPersianJulianDayToYMD();
+    void TestPersianYMDToJulianDay();
+    void TestPersianJan1ToGregorian();
+    void TestGregorianToPersian();
     void TestPersianFormat();
 
     void TestConsistencyGregorian();
