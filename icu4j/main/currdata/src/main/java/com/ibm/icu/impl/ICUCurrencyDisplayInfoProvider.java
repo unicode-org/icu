@@ -325,7 +325,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             Map<String, String> result = unitPatternsCache;
             if (result == null) {
                 result = new HashMap<>();
-                CurrencySink sink = new CurrencySink(!fallback, CurrencySink.EntrypointTable.CURRENCY_UNIT_PATTERNS);
+                CurrencySink sink = new CurrencySink(false, CurrencySink.EntrypointTable.CURRENCY_UNIT_PATTERNS);
                 sink.unitPatterns = result;
                 rb.getAllItemsWithFallback("CurrencyUnitPatterns", sink);
                 unitPatternsCache = result;
