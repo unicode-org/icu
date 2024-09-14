@@ -929,9 +929,6 @@ void IntlCalendarTest::TestPersianData() {
       {775489, 1503, 1, 1},
       {1317874, 2988, 1, 1},
     };
-    std::string utf8;
-    UnicodeString id;
-    printf("%s\n", cal->getTimeZone().getID(id).toUTF8String<std::string>(utf8).c_str());
     for (const auto &testCase : testCases1) {
         status = U_ZERO_ERROR;
         int32_t jday = testCase.rd + 1721424;
@@ -940,17 +937,10 @@ void IntlCalendarTest::TestPersianData() {
         int32_t actualYear = cal->get(UCAL_YEAR, status);
         int32_t actualMonth = cal->get(UCAL_MONTH, status)+1;
         int32_t actualDay = cal->get(UCAL_DAY_OF_MONTH, status)+1;
-        if (actualYear != testCase.year || actualMonth != testCase.month ||
-            actualDay != testCase.day) {
-            printf("rd %d = jday %d-> expect Persian(%d, %d, %d) actual Persian(%d, %d, %d)\n",
-                   testCase.rd,
-                   jday,
-                   testCase.year,
-                   testCase.month,
-                   testCase.day,
-                   actualYear,
-                   actualMonth,
-                   actualDay);
+        if (actualYear != testCase.year || actualMonth != testCase.month || actualDay != testCase.day) {
+            errln(UnicodeString("rd ") + testCase.rd + " = jday " + jday + " -> expect Persian(" +
+                  testCase.year + "/" + testCase.month + "/" + testCase.day + ") " +
+                  "actual Persian(" + actualYear + "/" + actualMonth + "/" + actualDay + ")");
         }
 
         cal->clear();
@@ -960,13 +950,8 @@ void IntlCalendarTest::TestPersianData() {
         int32_t actualJday = cal->get(UCAL_JULIAN_DAY, status);
         int32_t actualRD = actualJday - 1721424;
         if (actualRD != testCase.rd) {
-            printf("Persian(%d, %d, %d) => expect rd %d but actual jd: %d rd: %d\n",
-                   testCase.year,
-                   testCase.month,
-                   testCase.day,
-                   testCase.rd,
-                   actualJday,
-                   actualRD);
+            errln(UnicodeString("Persian(") + testCase.year + "/" + testCase.month + "/" + testCase.day + ") => "+
+                  "expect rd " + testCase.rd + " but actual jd: " + actualJday + " = rd " + actualRD);
         }
     }
 
@@ -1283,9 +1268,9 @@ void IntlCalendarTest::TestPersianData() {
         int32_t actualMonth =  gcal->get(UCAL_MONTH, status)+1;
         int32_t actualDay =  gcal->get(UCAL_DAY_OF_MONTH, status);
         if (actualYear != testCase.year || actualMonth != testCase.month || actualDay != testCase.day) {
-            printf("Persian(%d, 1, 1) => expect Gregorian(%d, %d, %d) actual Gregorian(%d, %d, %d)\n",
-                testCase.pYear, testCase.year, testCase.month, testCase.day,
-                actualYear, actualMonth, actualDay);
+            errln(UnicodeString("Persian(") + testCase.pYear + ", 1, 1) => " +
+                  "expect Gregorian(" + testCase.year + "/" +  testCase.month + "/" + testCase.day + ") " +
+                  "actual Gregorian(" + actualYear + "/" + actualMonth + "/" + actualDay + ")");
         }
 
         gcal->clear();
@@ -1297,10 +1282,9 @@ void IntlCalendarTest::TestPersianData() {
         int32_t persianMonth =  cal->get(UCAL_MONTH, status)+1;
         int32_t persianDay =  cal->get(UCAL_DAY_OF_MONTH, status);
         if (persianYear != testCase.pYear || persianMonth != 1 || persianDay != 1) {
-            printf("Gregorian(%d, %d, %d) => expect Persian(%d 1 1) actual Persian(%d, %d %d)\n",
-                testCase.year, testCase.month, testCase.day,
-                testCase.pYear,
-                persianYear, persianMonth, persianDay);
+            errln(UnicodeString("Gregorian(") + testCase.year + "/" + testCase.month + "/" + testCase.day + ") "+
+                  " => expect Persian(" + testCase.pYear + "/1/1) actual " +
+                  "Persian(" + persianYear + "/" + persianMonth + "/" + persianDay + ")");
         }
     }
 }
