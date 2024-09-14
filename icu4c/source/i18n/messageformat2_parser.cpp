@@ -1785,7 +1785,7 @@ UnicodeString Parser::parseText(UErrorCode& status) {
         return str;
     }
 
-    if (!(isTextChar(source[index] || source[index] == BACKSLASH))) {
+    if (!(isTextChar(source[index]) || source[index] == BACKSLASH)) {
         // Error -- text is expected here
         ERROR(parseError, status, index);
         return str;
