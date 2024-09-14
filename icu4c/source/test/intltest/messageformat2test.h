@@ -87,6 +87,8 @@ private:
     void testMessageFormatDateTimeSkeleton(message2::TestCase::Builder&, IcuTestErrorCode&);
     void testMf1Behavior(message2::TestCase::Builder&, IcuTestErrorCode&);
 
+    void testHighLoneSurrogate(void);
+    void testLowLoneSurrogate(void);
 }; // class TestMessageFormat2
 
 U_NAMESPACE_BEGIN

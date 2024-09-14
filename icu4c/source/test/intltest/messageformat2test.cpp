@@ -30,6 +30,8 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(testAPI);
     TESTCASE_AUTO(testAPISimple);
     TESTCASE_AUTO(testDataModelAPI);
+    TESTCASE_AUTO(testHighLoneSurrogate);
+    TESTCASE_AUTO(testLowLoneSurrogate);
     TESTCASE_AUTO(dataDrivenTests);
     TESTCASE_AUTO_END;
 }
@@ -261,6 +263,30 @@ void TestMessageFormat2::testAPICustomFunctions() {
     // "informal" is the default formality and "length" is the default length
     assertEquals("testAPICustomFunctions", "Hello John", result);
     delete person;
+}
+
+// ICU-22890 lone surrogate cause infinity loop
+void TestMessageFormat2::testHighLoneSurrogate() {
+    IcuTestErrorCode errorCode(*this, "testHighLoneSurrogate");
+    UParseError pe = { 0, 0, {0}, {0} };
+    // Lone surrogate with only high surrogate
+    UnicodeString loneSurrogate({0xda02, 0});
+    icu::message2::MessageFormatter msgfmt1 =
+      icu::message2::MessageFormatter::Builder(errorCode)
+      .setPattern(loneSurrogate, pe, errorCode)
+      .build(errorCode);
+}
+
+// ICU-22890 lone surrogate cause infinity loop
+void TestMessageFormat2::testLowLoneSurrogate() {
+    IcuTestErrorCode errorCode(*this, "testLowLoneSurrogate");
+    UParseError pe = { 0, 0, {0}, {0} };
+    // Lone surrogate with only low surrogate
+    UnicodeString loneSurrogate({0xdc02, 0});
+    icu::message2::MessageFormatter msgfmt2 =
+      icu::message2::MessageFormatter::Builder(errorCode)
+      .setPattern(loneSurrogate, pe, errorCode)
+      .build(errorCode);
 }
 
 void TestMessageFormat2::dataDrivenTests() {
