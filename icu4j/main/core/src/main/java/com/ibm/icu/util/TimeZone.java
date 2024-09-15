@@ -1191,7 +1191,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      */
     public static String getIanaID(String id) {
         String ianaId = TimeZone.UNKNOWN_ZONE_ID;
-        if (id == null || id.length() == 0 || id.equals(TimeZone.UNKNOWN_ZONE)) {
+        if (id == null || id.length() == 0 || id.equals(TimeZone.UNKNOWN_ZONE_ID)) {
             return ianaId;
         }
         String tmpIanaId = ZoneMeta.getIanaID(id);
