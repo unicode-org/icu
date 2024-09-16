@@ -4473,6 +4473,14 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: versions of the compilers used:" >&5
+printf "%s\n" "$as_me: versions of the compilers used:" >&6;}
+(
+    set -x
+    $CC --version
+    $CXX --version
+) 2>&1 | sed 's/^/  /' >&6
+
 # pkg-config is needed for harfbuzz support
 
 
