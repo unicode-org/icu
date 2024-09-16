@@ -336,7 +336,7 @@ jobs:
             CC: clang-16
             CXX: clang++-16
             # TODO: add '-Werror' after fixing ICU-22873
-            CPPFLAGS: '-Wall -Wextra -Wno-strict-prototypes -Wctad-maybe-unsupported'
+            CPPFLAGS: '-Wall -Wextra -Wctad-maybe-unsupported'
             CXXFLAGS: ${{ matrix.flags }}
           run: |
             cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux/clang && make -j -l4.5 check
@@ -348,7 +348,7 @@ jobs:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: ICU4C with clang on MacOS
         env:
-          CPPFLAGS: '-Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wctad-maybe-unsupported -Werror -Wno-error=strict-prototypes' 
+          CPPFLAGS: '-Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wctad-maybe-unsupported -Werror'
         run: |
           cd icu4c/source;
           PYTHON=python3 ./runConfigureICU macOS;
