@@ -6,15 +6,16 @@ AC_COPYRIGHT([ Copyright (C) 2016 and later: Unicode, Inc. and others. License &
 
 # NOTE: please use 'autoreconf' to rebuild, otherwise 'aclocal && autoconf'.
 
-# Check for autoconf version
-AC_PREREQ(2.69)
+# Check for minimum autoconf version. Use exactly this version when rebuilding
+# 'aclocal.m4' and 'configure' for merging upstream, to avoid spurious diffs.
+AC_PREREQ([2.72])
 
 # Process this file with autoreconf to produce a configure script
 AC_INIT([ICU],
-        m4_esyscmd_s([sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' "./common/unicode/uvernum.h]"),
-        [http://icu-project.org/bugs],
-        [International Components for Unicode],
-        [http://icu-project.org])
+        m4_esyscmd_s([sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' common/unicode/uvernum.h]),
+        [https://icu.unicode.org/bugs],
+        [icu4c],
+        [https://icu.unicode.org/])
 
 # Instruct Python to never write any byte code to the ICU source tree.
 PYTHONDONTWRITEBYTECODE=1
@@ -652,14 +653,13 @@ fi
 AC_SUBST(U_HAVE_DIRENT_H)
 
 # Check for endianness
-AC_C_BIGENDIAN()
-if test $ac_cv_c_bigendian = no; then
-U_IS_BIG_ENDIAN=0
-U_ENDIAN_CHAR="l"
-else
-U_IS_BIG_ENDIAN=1
-U_ENDIAN_CHAR="b"
-fi
+AC_C_BIGENDIAN([
+    U_IS_BIG_ENDIAN=1
+    U_ENDIAN_CHAR="b"
+  ], [
+    U_IS_BIG_ENDIAN=0
+    U_ENDIAN_CHAR="l"
+  ], [], AC_MSG_ERROR([universal endianness not supported]))
 AC_SUBST(U_IS_BIG_ENDIAN)
 
 # Do various POSIX related checks
