@@ -1,3 +1,4 @@
+FORCE COMPILATION TO FAIL FOR TESTING
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
