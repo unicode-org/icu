@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726248635329,
+  "lastUpdate": 1726497373939,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31821,6 +31821,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 58.3094,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "688957e94e520b5539846a1c4116b25a69030702",
+          "message": "ICU-22874 Remove now obsolete -Wstrict-prototypes workarounds.",
+          "timestamp": "2024-09-16T16:12:35+02:00",
+          "tree_id": "4736dc6f869a7b17f07f79bbf31af77229ab36cd",
+          "url": "https://github.com/unicode-org/icu/commit/688957e94e520b5539846a1c4116b25a69030702"
+        },
+        "date": 1726497205595,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 27.7106,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 58.0005,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
