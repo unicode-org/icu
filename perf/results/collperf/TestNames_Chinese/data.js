@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726497532744,
+  "lastUpdate": 1726519696352,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -51621,6 +51621,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2101751.9633,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "ee7cc23cd3144d5663da34885b3d13e463112e43",
+          "message": "ICU-22856 Fix ICUCurrencyDisplayInfoProvider.fetchUnitPatterns() so that it doesn't skip inheriting patterns\nfrom root.",
+          "timestamp": "2024-09-16T13:29:45-07:00",
+          "tree_id": "cc3e640d8b1eea8823fb8de6cac1c8bef5e0b921",
+          "url": "https://github.com/unicode-org/icu/commit/ee7cc23cd3144d5663da34885b3d13e463112e43"
+        },
+        "date": 1726519531327,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 160.0817,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8705345.2009,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2088538.1564,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7651457.5148,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2092594.4264,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
