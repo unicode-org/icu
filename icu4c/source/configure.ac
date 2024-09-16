@@ -133,6 +133,13 @@ AC_SUBST(ENABLE_RELEASE)
 AC_PROG_CC([cc clang gcc c99 c89 xlc_r xlc cl.exe icc])
 AC_PROG_CXX([c++ clang++ g++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RCC])
 
+AC_MSG_NOTICE([versions of the compilers used:])
+(
+    set -x
+    $CC --version
+    $CXX --version
+) 2>&1 | sed 's/^/  /' >&AS_MESSAGE_FD
+
 # pkg-config is needed for harfbuzz support
 PKG_PROG_PKG_CONFIG([0.20])
 PKG_CHECK_MODULES(ICULEHB, icu-le-hb, have_icu_le_hb=true, :)
