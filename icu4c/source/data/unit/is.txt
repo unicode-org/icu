@@ -2335,26 +2335,6 @@ is{
                 one{"{0} hnútur"}
                 other{"{0} hnútar"}
             }
-            light-speed{
-                case{
-                    accusative{
-                        one{"{0} ljóshraða"}
-                        other{"{0} ljóshraða"}
-                    }
-                    dative{
-                        one{"{0} ljóshraða"}
-                        other{"{0} ljóshröðum"}
-                    }
-                    genitive{
-                        one{"{0} ljóshraða"}
-                        other{"{0} ljóshraða"}
-                    }
-                }
-                dnam{"ljóshraði"}
-                gender{"masculine"}
-                one{"{0} ljóshraði"}
-                other{"{0} ljóshraðar"}
-            }
             meter-per-second{
                 case{
                     accusative{
@@ -3006,11 +2986,6 @@ is{
             kilometer-per-hour{
                 dnam{"km/klst."}
             }
-            light-speed{
-                dnam{"ljóshr."}
-                one{"{0} ljóshr."}
-                other{"{0} ljóshr."}
-            }
             meter-per-second{
                 dnam{"m/sek."}
             }
@@ -3512,11 +3487,6 @@ is{
                 dnam{"kílómetrar á klukkustund"}
                 one{"{0} km/klst."}
                 other{"{0} km/klst."}
-            }
-            light-speed{
-                dnam{"ljóshr."}
-                one{"{0} ljóshr."}
-                other{"{0} ljóshr."}
             }
             meter-per-second{
                 dnam{"metrar/sek."}

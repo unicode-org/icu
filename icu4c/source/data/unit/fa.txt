@@ -378,11 +378,6 @@ fa{
                 one{"{0} کیلومتر در ساعت"}
                 other{"{0} کیلومتر در ساعت"}
             }
-            light-speed{
-                dnam{"نور"}
-                one{"{0} نور"}
-                other{"{0} نور"}
-            }
             meter-per-second{
                 one{"{0} متر در ثانیه"}
                 other{"{0} متر در ثانیه"}
@@ -1060,11 +1055,6 @@ fa{
                 dnam{"kn"}
                 one{"{0}kn"}
                 other{"{0}kn"}
-            }
-            light-speed{
-                dnam{"نور"}
-                one{"{0} نور"}
-                other{"{0} نور"}
             }
             meter-per-second{
                 dnam{"m/s"}
@@ -1946,11 +1936,6 @@ fa{
                 dnam{"گره"}
                 one{"{0} گره"}
                 other{"{0} گره"}
-            }
-            light-speed{
-                dnam{"نور"}
-                one{"{0} نور"}
-                other{"{0} نور"}
             }
             meter-per-second{
                 dnam{"متر در ثانیه"}

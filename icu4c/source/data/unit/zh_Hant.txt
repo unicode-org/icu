@@ -251,10 +251,6 @@ zh_Hant{
                 dnam{"每小時公里"}
                 other{"每小時 {0} 公里"}
             }
-            light-speed{
-                dnam{"夜"}
-                other{"{0} 夜"}
-            }
             meter-per-second{
                 dnam{"每秒公尺"}
                 other{"每秒 {0} 公尺"}
@@ -720,10 +716,6 @@ zh_Hant{
             }
             kilometer-per-hour{
                 other{"{0}公里/小時"}
-            }
-            light-speed{
-                dnam{"夜"}
-                other{"{0} 夜"}
             }
             meter-per-second{
                 other{"{0}公尺/秒"}
@@ -1415,10 +1407,6 @@ zh_Hant{
             knot{
                 dnam{"節"}
                 other{"{0} 節"}
-            }
-            light-speed{
-                dnam{"夜"}
-                other{"{0} 夜"}
             }
             meter-per-second{
                 dnam{"公尺/秒"}

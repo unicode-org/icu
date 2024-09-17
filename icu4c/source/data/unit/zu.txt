@@ -163,10 +163,6 @@ zu{
                 one{"{0} iviki"}
                 other{"{0} amaviki"}
             }
-            year{
-                one{"{0} y"}
-                other{"{0} y"}
-            }
         }
         energy{
             foodcalorie{
@@ -420,10 +416,6 @@ zu{
             week{
                 one{"{0} w"}
                 other{"{0} w"}
-            }
-            year{
-                one{"{0} y"}
-                other{"{0} y"}
             }
         }
         electric{
@@ -942,11 +934,6 @@ zu{
                 dnam{"amaviki"}
                 one{"{0} viki"}
                 other{"{0} amaviki"}
-            }
-            year{
-                dnam{"y"}
-                one{"{0} y"}
-                other{"{0} yrs"}
             }
         }
         energy{

@@ -874,12 +874,6 @@ bs{
                 one{"{0} čvor"}
                 other{"{0} čvorova"}
             }
-            light-speed{
-                dnam{"brzina svjetlosti"}
-                few{"{0} brzine svjetlosti"}
-                one{"{0} brzina svjetlosti"}
-                other{"{0} brzina svjetlosti"}
-            }
             meter-per-second{
                 dnam{"metri u sekundi"}
                 few{"{0} metra u sekundi"}
@@ -1291,14 +1285,6 @@ bs{
                 other{"{0} mb"}
             }
         }
-        speed{
-            light-speed{
-                dnam{"brz. svjetlosti"}
-                few{"{0} brz. svjetlosti"}
-                one{"{0} brz. svjetlosti"}
-                other{"{0} brz. svjetlosti"}
-            }
-        }
         temperature{
             celsius{
                 few{"{0}°"}
@@ -1699,12 +1685,6 @@ bs{
                 few{"{0} čv"}
                 one{"{0} čv"}
                 other{"{0} čv"}
-            }
-            light-speed{
-                dnam{"brz. svjetlosti"}
-                few{"{0} brz. svjetlosti"}
-                one{"{0} brz. svjetlosti"}
-                other{"{0} brz. svjetlosti"}
             }
         }
         temperature{

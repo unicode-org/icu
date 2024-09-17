@@ -155,7 +155,7 @@ yo{
             }
             year{
                 dnam{"ọ̀dún"}
-                per{"{0} ọd"}
+                other{"{0} ọ̀dún"}
             }
         }
         force{
@@ -393,6 +393,10 @@ yo{
             week{
                 dnam{"ọṣẹ́"}
                 per{"{0}/ọ̀ṣẹ̀"}
+            }
+            year{
+                dnam{"ọd"}
+                other{"{0} ọd"}
             }
         }
         electric{
@@ -862,7 +866,6 @@ yo{
             year{
                 dnam{"ọd"}
                 other{"{0} ọd"}
-                per{"{0}/ọd"}
             }
         }
         force{

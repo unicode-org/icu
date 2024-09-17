@@ -779,11 +779,6 @@ sq{
                 one{"{0} milje nautike në orë"}
                 other{"{0} milje nautike në orë"}
             }
-            light-speed{
-                dnam{"shpejtësi drite"}
-                one{"{0} shpejtësi drite"}
-                other{"{0} shpejtësi drite"}
-            }
             meter-per-second{
                 dnam{"metra në sekondë"}
                 one{"{0} metër në sekondë"}
@@ -1135,13 +1130,6 @@ sq{
                 other{"{0} mb"}
             }
         }
-        speed{
-            light-speed{
-                dnam{"shpejtësi drite"}
-                one{"{0} shp. dr."}
-                other{"{0} shp. dr."}
-            }
-        }
         temperature{
             celsius{
                 dnam{"°C"}
@@ -1425,11 +1413,6 @@ sq{
                 dnam{"km/orë"}
                 one{"{0} km/orë"}
                 other{"{0} km/orë"}
-            }
-            light-speed{
-                dnam{"shpejtësi drite"}
-                one{"{0} shpejtësi drite"}
-                other{"{0} shpejtësi drite"}
             }
         }
         temperature{

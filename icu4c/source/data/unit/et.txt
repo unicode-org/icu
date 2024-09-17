@@ -787,11 +787,6 @@ et{
                 one{"{0} sõlm"}
                 other{"{0} sõlme"}
             }
-            light-speed{
-                dnam{"valguskiirus"}
-                one{"{0} valguskiirus"}
-                other{"{0} valguskiirust"}
-            }
             meter-per-second{
                 dnam{"meetrid sekundis"}
                 one{"{0} meeter sekundis"}
@@ -1108,11 +1103,6 @@ et{
             beaufort{
                 one{"B{0}"}
                 other{"B{0}"}
-            }
-            light-speed{
-                dnam{"valguskiirus"}
-                one{"{0} valguskiirus"}
-                other{"{0} valguskiirust"}
             }
         }
         volume{
@@ -1503,13 +1493,6 @@ et{
                 dnam{"in Hg"}
                 one{"{0} in Hg"}
                 other{"{0} in Hg"}
-            }
-        }
-        speed{
-            light-speed{
-                dnam{"valguskiirus"}
-                one{"{0} valguskiirus"}
-                other{"{0} valguskiirust"}
             }
         }
         temperature{

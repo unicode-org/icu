@@ -701,11 +701,6 @@ ka{
                 one{"{0} კვანძი"}
                 other{"{0} კვანძი"}
             }
-            light-speed{
-                dnam{"სინათლის სიჩქარე"}
-                one{"{0}-მაგი სინათლის სიჩქარე"}
-                other{"{0}-მაგი სინათლის სიჩქარე"}
-            }
             meter-per-second{
                 dnam{"მეტრი წამში"}
                 one{"{0} მეტრი წამში"}
@@ -959,13 +954,6 @@ ka{
             millibar{
                 one{"{0} მბრ"}
                 other{"{0} მბრ"}
-            }
-        }
-        speed{
-            light-speed{
-                dnam{"c"}
-                one{"{0} c"}
-                other{"{0} c"}
             }
         }
         volume{
@@ -1734,11 +1722,6 @@ ka{
                 dnam{"კვძ."}
                 one{"{0} კვძ."}
                 other{"{0} კვძ."}
-            }
-            light-speed{
-                dnam{"სინათლის სიჩქ."}
-                one{"{0}-მაგი სინათ. სიჩქ."}
-                other{"{0}-მაგი სინათ. სიჩქ."}
             }
             meter-per-second{
                 dnam{"მ/წმ"}

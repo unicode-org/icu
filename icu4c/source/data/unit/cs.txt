@@ -5729,9 +5729,6 @@ cs{
                 dnam{"ha"}
             }
         }
-        compound{
-            times{"{0}{1}"}
-        }
         concentr{
             item{
                 dnam{"položky"}

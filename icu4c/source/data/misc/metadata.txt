@@ -2312,6 +2312,10 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"GP"}
             }
+            frgua{
+                reason{"deprecated"}
+                replacement{"GP"}
+            }
             frh{
                 reason{"deprecated"}
                 replacement{"frcor"}
@@ -2332,9 +2336,17 @@ metadata:table(nofallback){
                 reason{"deprecated"}
                 replacement{"frnaq"}
             }
+            frlre{
+                reason{"deprecated"}
+                replacement{"RE"}
+            }
             frm{
                 reason{"deprecated"}
                 replacement{"frges"}
+            }
+            frmay{
+                reason{"deprecated"}
+                replacement{"YT"}
             }
             frmf{
                 reason{"overlong"}

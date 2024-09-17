@@ -2598,29 +2598,6 @@ fi{
                 one{"{0} solmu"}
                 other{"{0} solmua"}
             }
-            light-speed{
-                case{
-                    elative{
-                        one{"{0} valonnopeudesta"}
-                        other{"{0} valonnopeudesta"}
-                    }
-                    genitive{
-                        one{"{0} valonnopeuden"}
-                        other{"{0} valonnopeuden"}
-                    }
-                    illative{
-                        one{"{0} valonnopeuteen"}
-                        other{"{0} valonnopeuteen"}
-                    }
-                    partitive{
-                        one{"{0} valonnopeutta"}
-                        other{"{0} valonnopeutta"}
-                    }
-                }
-                dnam{"valonnopeudet"}
-                one{"{0} valonnopeus"}
-                other{"{0} valonnopeutta"}
-            }
             meter-per-second{
                 case{
                     elative{
@@ -3708,11 +3685,6 @@ fi{
                 one{"{0}kn"}
                 other{"{0}kn"}
             }
-            light-speed{
-                dnam{"c"}
-                one{"{0} c"}
-                other{"{0} c"}
-            }
             meter-per-second{
                 one{"{0}m/s"}
                 other{"{0}m/s"}
@@ -4193,13 +4165,6 @@ fi{
                 dnam{"mmHg"}
                 one{"{0} mmHg"}
                 other{"{0} mmHg"}
-            }
-        }
-        speed{
-            light-speed{
-                dnam{"c"}
-                one{"{0} c"}
-                other{"{0} c"}
             }
         }
         temperature{
