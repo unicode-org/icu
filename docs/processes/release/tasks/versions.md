@@ -161,7 +161,12 @@ Changing the version for Java starting with ICU 74 requires a few steps:
     public static final String <b>ICU_DATA_VERSION_PATH = "74b";</b>
     </pre>
 
-2. When creating the final release of a major ICU version, 
+2. [icu4j/main/core/src/test/java/com/ibm/icu/dev/test/util/DebugUtilitiesData.java](https://github.com/unicode-org/icu/blob/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/util/DebugUtilitiesData.java)
+
+    There is a public string named `ICU4C_VERSION` which should be updated accordingly.
+    'public static final String ICU4C_VERSION="74.0.1";'
+
+3. When creating the final release of a major ICU version, 
 or a point release (minor version update on a maintenance branch),
 update the Maven project version for ICU4J at the root (`icu4j/pom.xml`) and all of the submodules
 with the following Maven command.
@@ -185,7 +190,7 @@ The command requires a version number string that follows the typical Java / Mav
     mvn versions:set -DnewVersion=74.1 -DgenerateBackupPoms=false
     ```
 
-3. Immediately after creating the final release of a major ICU version, update the value that represents just the major version number of the semantic version. To do this, update the value of the ICU `icu.major.version` property in the root Maven pom.xml file at `icu4j/pom.xml`.
+4. Immediately after creating the final release of a major ICU version, update the value that represents just the major version number of the semantic version. To do this, update the value of the ICU `icu.major.version` property in the root Maven pom.xml file at `icu4j/pom.xml`.
 
     This can be done by running the following command:
 
@@ -198,12 +203,16 @@ The command requires a version number string that follows the typical Java / Mav
     In other words, the above `versions:set-property` step should be executed at the same time
     `mvn versions:set -DnewVersion=74.0.1-SNAPSHOT` is executed.
 
-4. Update the following variables in `icu4j/releases_tools/shared.sh`
+5. Update the following variables in `icu4j/releases_tools/shared.sh`
 
     * `artifact_version` - The version used in the Maven `pom.xml` files. You can alternatively produce this value by running `mvn help:evaluate -Dexpression=project.version -q -DforceStdout`.
     * `github_rel_version` - The version used in the name of the GitHub downloadable artifacts. For example "73_2" or "74rc".
     * `api_report_version` - The major version of the new version. Change during RC BRS.
     * `api_report_prev_version`  - The major version of the previous version. Change during RC BRS.
+
+6. cldr-to-icu build tool has a dependency on the icu4j packages which needs to be updated in [`tools/cldr/cldr-to-icu/pom.xml`](https://github.com/unicode-org/icu/blob/main/tools/cldr/cldr-to-icu/pom.xml). Please update it to match the version that was updated in `icu4j/pom.xml` in the steps above.
+
+    `<version>74.0.1-SNAPSHOT</version>`
 
 
 #### Until ICU 73 (inclusive)
