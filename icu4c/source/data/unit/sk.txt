@@ -4593,46 +4593,6 @@ sk{
                 one{"{0} uzol"}
                 other{"{0} uzlov"}
             }
-            light-speed{
-                case{
-                    accusative{
-                        few{"{0} rýchlosti svetla"}
-                        many{"{0} rýchlosti svetla"}
-                        one{"{0} rýchlosť svetla"}
-                        other{"{0} rýchlostí svetla"}
-                    }
-                    dative{
-                        few{"{0} rýchlostiam svetla"}
-                        many{"{0} rýchlosti svetla"}
-                        one{"{0} rýchlosti svetla"}
-                        other{"{0} rýchlostiam svetla"}
-                    }
-                    genitive{
-                        few{"{0} rýchlostí svetla"}
-                        many{"{0} rýchlosti svetla"}
-                        one{"{0} rýchlosti svetla"}
-                        other{"{0} rýchlostí svetla"}
-                    }
-                    instrumental{
-                        few{"{0} rýchlosťami svetla"}
-                        many{"{0} rýchlosti svetla"}
-                        one{"{0} rýchlosťou svetla"}
-                        other{"{0} rýchlosťami svetla"}
-                    }
-                    locative{
-                        few{"{0} rýchlostiach svetla"}
-                        many{"{0} rýchlosti svetla"}
-                        one{"{0} rýchlosti svetla"}
-                        other{"{0} rýchlostiach svetla"}
-                    }
-                }
-                dnam{"rýchlosť svetla"}
-                few{"{0} rýchlosti svetla"}
-                gender{"feminine"}
-                many{"{0} rýchlosti svetla"}
-                one{"{0} rýchlosť svetla"}
-                other{"{0} rýchlostí svetla"}
-            }
             meter-per-second{
                 case{
                     accusative{
@@ -5552,15 +5512,6 @@ sk{
                 other{"{0} mb"}
             }
         }
-        speed{
-            light-speed{
-                dnam{"c0"}
-                few{"{0} c0"}
-                many{"{0} c0"}
-                one{"{0} c0"}
-                other{"{0} c0"}
-            }
-        }
     }
     unitsShort{
         acceleration{
@@ -5600,9 +5551,6 @@ sk{
             hectare{
                 dnam{"hektáre"}
             }
-        }
-        compound{
-            times{"{0}{1}"}
         }
         concentr{
             item{
@@ -5894,15 +5842,6 @@ sk{
         power{
             watt{
                 dnam{"W"}
-            }
-        }
-        speed{
-            light-speed{
-                dnam{"c0"}
-                few{"{0} c0"}
-                many{"{0} c0"}
-                one{"{0} c0"}
-                other{"{0} c0"}
             }
         }
         temperature{

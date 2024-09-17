@@ -607,10 +607,6 @@ ko{
                 dnam{"노트"}
                 other{"{0}노트"}
             }
-            light-speed{
-                dnam{"광속"}
-                other{"{0}광속"}
-            }
             meter-per-second{
                 dnam{"미터 매 초"}
                 other{"초속 {0}미터"}
@@ -834,10 +830,6 @@ ko{
         speed{
             beaufort{
                 other{"B{0}"}
-            }
-            light-speed{
-                dnam{"광속"}
-                other{"{0}광속"}
             }
             mile-per-hour{
                 other{"{0}mph"}
@@ -1341,10 +1333,6 @@ ko{
             }
             knot{
                 other{"{0}kn"}
-            }
-            light-speed{
-                dnam{"광속"}
-                other{"{0}광속"}
             }
             meter-per-second{
                 other{"{0}m/s"}

@@ -248,7 +248,6 @@ da{
                     }
                 }
             }
-            times{"{0} gange {1}"}
         }
         concentr{
             item{
@@ -1507,18 +1506,6 @@ da{
                 one{"{0} kilometer i timen"}
                 other{"{0} kilometer i timen"}
             }
-            light-speed{
-                case{
-                    genitive{
-                        one{"{0} gang lysets hastigheds"}
-                        other{"{0} gange lysets hastigheds"}
-                    }
-                }
-                dnam{"lysets hastighed"}
-                gender{"common"}
-                one{"{0} gang lysets hastighed"}
-                other{"{0} gange lysets hastighed"}
-            }
             meter-per-second{
                 case{
                     genitive{
@@ -1893,9 +1880,6 @@ da{
                 other{"{0}m²"}
             }
         }
-        compound{
-            times{"{0}⋅{1}"}
-        }
         concentr{
             millimole-per-liter{
                 dnam{"mmol/L"}
@@ -2097,11 +2081,6 @@ da{
                 one{"{0} km/t"}
                 other{"{0} km/t"}
             }
-            light-speed{
-                dnam{"lyset"}
-                one{"{0} gang lyset"}
-                other{"{0} gange lyset"}
-            }
             meter-per-second{
                 one{"{0}m/s"}
                 other{"{0}m/s"}
@@ -2189,9 +2168,6 @@ da{
                 one{"{0} kvadratfod"}
                 other{"{0} kvadratfod"}
             }
-        }
-        compound{
-            times{"{0} ⋅ {1}"}
         }
         concentr{
             item{
@@ -2493,11 +2469,6 @@ da{
                 dnam{"knob"}
                 one{"{0} knob"}
                 other{"{0} knob"}
-            }
-            light-speed{
-                dnam{"lyshastigheden"}
-                one{"{0} gang lyshastigheden"}
-                other{"{0} gange lyshastigheden"}
             }
             mile-per-hour{
                 dnam{"engelske mil/timen"}

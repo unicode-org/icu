@@ -4445,46 +4445,6 @@ lt{
                 one{"{0} mazgas"}
                 other{"{0} mazgų"}
             }
-            light-speed{
-                case{
-                    accusative{
-                        few{"{0} šviesos greičius"}
-                        many{"{0} šviesos greičio"}
-                        one{"{0} šviesos greitį"}
-                        other{"{0} šviesos greičių"}
-                    }
-                    dative{
-                        few{"{0} šviesos greičiams"}
-                        many{"{0} šviesos greičio"}
-                        one{"{0} šviesos greičiui"}
-                        other{"{0} šviesos greičių"}
-                    }
-                    genitive{
-                        few{"{0} šviesos greičių"}
-                        many{"{0} šviesos greičio"}
-                        one{"{0} šviesos greičio"}
-                        other{"{0} šviesos greičių"}
-                    }
-                    instrumental{
-                        few{"{0} šviesos greičiais"}
-                        many{"{0} šviesos greičio"}
-                        one{"{0} šviesos greičiu"}
-                        other{"{0} šviesos greičių"}
-                    }
-                    locative{
-                        few{"{0} šviesos greičiuose"}
-                        many{"{0} šviesos greičio"}
-                        one{"{0} šviesos greityje"}
-                        other{"{0} šviesos greičių"}
-                    }
-                }
-                dnam{"šviesos greitis"}
-                few{"{0} šviesos greičiai"}
-                gender{"masculine"}
-                many{"{0} šviesos greičio"}
-                one{"{0} šviesos greitis"}
-                other{"{0} šviesos greičių"}
-            }
             meter-per-second{
                 case{
                     accusative{
@@ -5353,13 +5313,6 @@ lt{
                 one{"{0} km/h"}
                 other{"{0} km/h"}
             }
-            light-speed{
-                dnam{"c"}
-                few{"{0} šv. greit."}
-                many{"{0} šv. greit."}
-                one{"{0} šv. greit."}
-                other{"{0} šv. greit."}
-            }
             meter-per-second{
                 dnam{"m/s"}
                 few{"{0} m/s"}
@@ -5858,13 +5811,6 @@ lt{
                 many{"{0} KN"}
                 one{"{0} KN"}
                 other{"{0} KN"}
-            }
-            light-speed{
-                dnam{"c"}
-                few{"{0} šv. greit."}
-                many{"{0} šv. greit."}
-                one{"{0} šv. greit."}
-                other{"{0} šv. greit."}
             }
             meter-per-second{
                 dnam{"m/sek."}

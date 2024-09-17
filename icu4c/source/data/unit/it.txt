@@ -174,7 +174,6 @@ it{
                     }
                 }
             }
-            times{"{0} {1}"}
         }
         concentr{
             item{
@@ -941,7 +940,6 @@ it{
                 other{"{0} nodi"}
             }
             light-speed{
-                dnam{"luce"}
                 gender{"feminine"}
                 one{"{0} alla velocità della luce"}
                 other{"{0} alla velocità della luce"}
@@ -1813,7 +1811,6 @@ it{
                 other{"{0}kn"}
             }
             light-speed{
-                dnam{"luce"}
                 one{"{0}l"}
                 other{"{0}l"}
             }
@@ -2253,7 +2250,6 @@ it{
                 other{"Bft {0}"}
             }
             light-speed{
-                dnam{"luce"}
                 one{"{0} luce"}
                 other{"{0} luce"}
             }

@@ -2669,26 +2669,6 @@ de{
                 one{"{0} Knoten"}
                 other{"{0} Knoten"}
             }
-            light-speed{
-                case{
-                    accusative{
-                        one{"{0} Lichtgeschwindigkeit"}
-                        other{"{0}-fache Lichtgeschwindigkeit"}
-                    }
-                    dative{
-                        one{"{0} Lichtgeschwindigkeit"}
-                        other{"{0}-facher Lichtgeschwindigkeit"}
-                    }
-                    genitive{
-                        one{"{0} Lichtgeschwindigkeit"}
-                        other{"{0}-facher Lichtgeschwindigkeit"}
-                    }
-                }
-                dnam{"Lichtgeschwindigkeit"}
-                gender{"feminine"}
-                one{"{0} Lichtgeschwindigkeit"}
-                other{"{0}-fache Lichtgeschwindigkeit"}
-            }
             meter-per-second{
                 case{
                     accusative{
@@ -3752,13 +3732,6 @@ de{
                 dnam{"W"}
             }
         }
-        speed{
-            light-speed{
-                dnam{"c"}
-                one{"{0} c"}
-                other{"{0} c"}
-            }
-        }
         temperature{
             fahrenheit{
                 one{"{0}°F"}
@@ -4162,13 +4135,6 @@ de{
         pressure{
             millibar{
                 dnam{"Millibar"}
-            }
-        }
-        speed{
-            light-speed{
-                dnam{"Lichtgeschw."}
-                one{"{0} Lichtgeschw."}
-                other{"{0}-fache Lichtg."}
             }
         }
         temperature{

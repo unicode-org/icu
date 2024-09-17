@@ -621,11 +621,6 @@ uz{
                 one{"Bofort {0}"}
                 other{"Bofort {0}"}
             }
-            light-speed{
-                dnam{"yorug‘lik tezligi"}
-                one{"{0} yorug‘lik tezligi"}
-                other{"{0} yorug‘lik tezligi"}
-            }
             meter-per-second{
                 dnam{"metr/soniya"}
                 one{"{0} metr/soniya"}
@@ -861,11 +856,6 @@ uz{
             }
         }
         speed{
-            light-speed{
-                dnam{"yorug‘lik tezligi"}
-                one{"{0} yorug‘lik tezligi"}
-                other{"{0} yorug‘lik tezligi"}
-            }
             mile-per-hour{
                 one{"{0} mi/h"}
                 other{"{0} mi/h"}
@@ -1453,11 +1443,6 @@ uz{
                 dnam{"uzel"}
                 one{"{0} uzel"}
                 other{"{0} uzel"}
-            }
-            light-speed{
-                dnam{"yorug‘lik tezligi"}
-                one{"{0} yorug‘lik tezligi"}
-                other{"{0} yorug‘lik tezligi"}
             }
             mile-per-hour{
                 dnam{"mil/soat"}

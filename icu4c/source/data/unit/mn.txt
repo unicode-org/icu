@@ -659,11 +659,6 @@ mn{
             knot{
                 dnam{"зангилаа"}
             }
-            light-speed{
-                dnam{"гэрлийн хурд"}
-                one{"{0} гэрлийн хурд"}
-                other{"{0} гэрлийн хурд"}
-            }
             meter-per-second{
                 dnam{"секундэд ногдох метр"}
                 one{"секундэд {0} метр"}
@@ -1050,11 +1045,6 @@ mn{
         speed{
             kilometer-per-hour{
                 dnam{"км/ц"}
-            }
-            light-speed{
-                dnam{"гэрлийн хурд"}
-                one{"{0} гэрлийн хурд"}
-                other{"{0} гэрлийн хурд"}
             }
             meter-per-second{
                 dnam{"м/с"}
@@ -1843,11 +1833,6 @@ mn{
                 dnam{"занг."}
                 one{"{0} занг."}
                 other{"{0} занг."}
-            }
-            light-speed{
-                dnam{"гэрлийн хурд"}
-                one{"{0} гэрлийн хурд"}
-                other{"{0} гэрлийн хурд"}
             }
             meter-per-second{
                 dnam{"метр/сек"}

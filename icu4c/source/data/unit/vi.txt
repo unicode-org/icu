@@ -497,10 +497,6 @@ vi{
                 dnam{"hải lý/giờ"}
                 other{"{0} hải lý/giờ"}
             }
-            light-speed{
-                dnam{"tốc độ ánh sáng"}
-                other{"{0} tốc độ ánh sáng"}
-            }
             meter-per-second{
                 dnam{"mét/giây"}
                 other{"{0} mét/giây"}
@@ -753,12 +749,6 @@ vi{
             }
             millibar{
                 other{"{0} mb"}
-            }
-        }
-        speed{
-            light-speed{
-                dnam{"tốc độ ánh sáng"}
-                other{"{0}tốc độ ánh sáng"}
             }
         }
         volume{
@@ -1042,10 +1032,6 @@ vi{
             }
         }
         speed{
-            light-speed{
-                dnam{"tốc độ ánh sáng"}
-                other{"{0} tốc độ ánh sáng"}
-            }
             mile-per-hour{
                 other{"{0} mph"}
             }

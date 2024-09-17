@@ -639,11 +639,6 @@ bn{
                 one{"{0} নট"}
                 other{"{0} নট"}
             }
-            light-speed{
-                dnam{"আঃবঃ"}
-                one{"{0} আঃবঃ"}
-                other{"{0} আঃবঃ"}
-            }
             meter-per-second{
                 one{"{0} মিটার প্রতি সেকেন্ড"}
                 other{"{0} মিটার প্রতি সেকেন্ড"}
@@ -1055,11 +1050,6 @@ bn{
                 dnam{"km/hr"}
                 one{"{0}kph"}
                 other{"{0}kph"}
-            }
-            light-speed{
-                dnam{"আঃবঃ"}
-                one{"{0} আঃবঃ"}
-                other{"{0} আঃবঃ"}
             }
             meter-per-second{
                 dnam{"মি/সেক"}
@@ -1564,11 +1554,6 @@ bn{
             kilometer-per-hour{
                 one{"{0} kph"}
                 other{"{0} km/h"}
-            }
-            light-speed{
-                dnam{"আঃবঃ"}
-                one{"{0} আঃবঃ"}
-                other{"{0} আঃবঃ"}
             }
             meter-per-second{
                 dnam{"মিটার প্রতি সেকেন্ড"}

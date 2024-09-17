@@ -1389,9 +1389,6 @@ nl{
                 per{"{0} per mi²"}
             }
         }
-        compound{
-            times{"{0}{1}"}
-        }
         concentr{
             item{
                 dnam{"onderdeel"}

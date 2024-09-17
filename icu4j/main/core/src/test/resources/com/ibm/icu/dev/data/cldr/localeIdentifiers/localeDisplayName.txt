@@ -2194,6 +2194,32 @@ nl-Latn-BE; ਫਲੈਮਿਸ਼ (ਲਾਤੀਨੀ)
 zh-Hans-fonipa; ਚੀਨੀ (ਸਰਲ, FONIPA)
 
 
+@locale=pcm
+@languageDisplay=standard
+
+en-MM; Ínglish (Miánma [Bọ́ma])
+es; Spánish Lángwej
+es-419; Spánish Lángwej (Látín Amẹ́ríka)
+es-Cyrl-MX; Spánish Lángwej (Sírílik, Mẹ́ksíko)
+hi-Latn; Híndi Lángwej (Látin)
+nl-BE; Dọch Lángwej (Bẹ́ljọm)
+nl-Latn-BE; Dọch Lángwej (Látin, Bẹ́ljọm)
+zh-Hans-fonipa; Mandarín Chainíz Lángwej (Ízí Chainíz Lángwej, FONIPA)
+
+
+@locale=pcm
+@languageDisplay=dialect
+
+en-MM; Ínglish (Miánma [Bọ́ma])
+es; Spánish Lángwej
+es-419; Látín Amẹ́ríka Spánish
+es-Cyrl-MX; Mẹ́ksiko Spánish (Sírílik)
+hi-Latn; Híndi [Látin]
+nl-BE; Flẹ́mish Lángwej
+nl-Latn-BE; Flẹ́mish Lángwej (Látin)
+zh-Hans-fonipa; Mandarín Chainíz Lángwej (Ízí Chainíz Lángwej, FONIPA)
+
+
 @locale=pl
 @languageDisplay=standard
 
@@ -2738,6 +2764,32 @@ hi-Latn; ฮินดี (ละติน)
 nl-BE; เฟลมิช
 nl-Latn-BE; เฟลมิช (ละติน)
 zh-Hans-fonipa; จีนตัวย่อ (สัทอักษรสากล)
+
+
+@locale=ti
+@languageDisplay=standard
+
+en-MM; እንግሊዝኛ (ሚያንማር [በርማ])
+es; ስጳንኛ
+es-419; ስጳንኛ (ላቲን ኣመሪካ)
+es-Cyrl-MX; ስጳንኛ (ቋንቋ ሲሪል፣ ሜክሲኮ)
+hi-Latn; ሂንዲ (ላቲን)
+nl-BE; ዳች (ቤልጅዩም)
+nl-Latn-BE; ዳች (ላቲን፣ ቤልጅዩም)
+zh-Hans-fonipa; ቻይንኛ (ዝተቐለለ፣ FONIPA)
+
+
+@locale=ti
+@languageDisplay=dialect
+
+en-MM; እንግሊዝኛ (ሚያንማር [በርማ])
+es; ስጳንኛ
+es-419; ስጳንኛ (ላቲን ኣመሪካ)
+es-Cyrl-MX; ስጳንኛ (ቋንቋ ሲሪል፣ ሜክሲኮ)
+hi-Latn; ሂንዲ (ላቲን)
+nl-BE; ፍላሚሽ
+nl-Latn-BE; ፍላሚሽ (ላቲን)
+zh-Hans-fonipa; ቀሊል ቻይንኛ (FONIPA)
 
 
 @locale=tk

@@ -285,6 +285,8 @@ ak{
             }
             year{
                 dnam{"mfeɛ"}
+                one{"mfeɛ {0}"}
+                other{"mfeɛ {0}"}
                 per{"mfeɛ biara {0}"}
             }
         }

@@ -684,9 +684,6 @@ nn{
                 per{"{0}/mi²"}
             }
         }
-        compound{
-            times{"{0}{1}"}
-        }
         concentr{
             millimole-per-liter{
                 dnam{"mmol/l"}
