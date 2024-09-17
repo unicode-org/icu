@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726519430132,
+  "lastUpdate": 1726567098167,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25947,6 +25947,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.7932069303909353,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "6020a98fbbbfd57415c36c1c710a328e99ef675d",
+          "message": "ICU-22873 Update configure files from configure.ac using autoreconf.",
+          "timestamp": "2024-09-17T15:06:39+05:30",
+          "tree_id": "4bed6efbde94d2ec7741cd6821e367edcbe4d16b",
+          "url": "https://github.com/unicode-org/icu/commit/6020a98fbbbfd57415c36c1c710a328e99ef675d"
+        },
+        "date": 1726566935842,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.6811683077366415,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
