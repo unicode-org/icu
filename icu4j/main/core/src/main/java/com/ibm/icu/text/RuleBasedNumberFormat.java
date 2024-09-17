@@ -1329,7 +1329,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
             // try parsing the string with the rule set.  If it gets past the
             // high-water mark, update the high-water mark and the result
-            tempResult = ruleSets[i].parse(workingText, workingPos, Double.MAX_VALUE, 0);
+            tempResult = ruleSets[i].parse(workingText, workingPos, Double.MAX_VALUE, 0, 0);
             if (workingPos.getIndex() > highWaterMark.getIndex()) {
                 result = tempResult;
                 highWaterMark.setIndex(workingPos.getIndex());

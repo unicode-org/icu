@@ -162,6 +162,7 @@ class IntlTestRBNF : public IntlTest {
     void TestMinMaxIntegerDigitsIgnored();
     void TestNumberingSystem();
     void TestMemoryLeak22899();
+    void TestInfiniteRecursion();
 
 protected:
   virtual void doTest(RuleBasedNumberFormat* formatter, const char* const testData[][2], UBool testParsing);

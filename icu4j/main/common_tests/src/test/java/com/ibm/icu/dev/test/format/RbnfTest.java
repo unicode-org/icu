@@ -1908,4 +1908,47 @@ public class RbnfTest extends CoreTestFmwk {
         rbnf.setDefaultRuleSet("%ethiopic");
         assertEquals("Wrong result with Ethiopic rule set", "፻፳፫", rbnf.format(123));
     }
+
+    @Test
+    public void TestInfiniteRecursion() {
+        final String[] badRules = {
+                ">>",
+                "<<",
+                "<<<",
+                ">>>",
+                "%foo: x=%foo=",
+                "%one: x>%two>; %two: y>%one>;"
+        };
+
+        for (String badRule : badRules) {
+            try {
+                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(badRule);
+                try {
+                    rbnf.format(5);
+                    // we don't actually care about the result; we just want to make sure the function returns
+                } catch (IllegalStateException e) {
+                    // we're supposed to get an IllegalStateException; swallow it and continue
+                }
+
+                try {
+                    rbnf.parse("foo");
+                    errln("Parse test didn't throw an exception!");
+                } catch (IllegalStateException e) {
+                    // we're supposed to get an IllegalStateException; swallow it and continue
+                } catch (ParseException e) {
+                    // if we don't hit the recursion limit, we'll still fail to parse the number,
+                    // so also swallow this exception and continue
+                }
+            } catch (IllegalArgumentException e) {
+                // ">>>" generates a parse exception when you try to create the formatter (so we expect that rather
+                // than re-throwing and triggering a test failure)
+                // (eventually it'd be nice to statically analyze the rules for (at least) the most common
+                // causes of infinite recursion, in which case we'd end up down here and need to check
+                // the error code.  But for now, we probably won't end up here and don't care if we do)
+                if (!badRule.equals("<<<")) {
+                    throw e;
+                }
+            }
+        }
+    }
 }

@@ -918,6 +918,7 @@ NFRule::doParse(const UnicodeString& text,
                 UBool isFractionRule,
                 double upperBound,
                 uint32_t nonNumericalExecutedRuleMask,
+                int32_t recursionCount,
                 Formattable& resVal) const
 {
     // internally we operate on a copy of the string being parsed
@@ -1021,6 +1022,7 @@ NFRule::doParse(const UnicodeString& text,
         double partialResult = matchToDelimiter(workText, start, tempBaseValue,
             temp, pp, sub1,
             nonNumericalExecutedRuleMask,
+            recursionCount,
             upperBound);
 
         // if we got a successful match (or were trying to match a
@@ -1042,6 +1044,7 @@ NFRule::doParse(const UnicodeString& text,
             partialResult = matchToDelimiter(workText2, 0, partialResult,
                 temp, pp2, sub2,
                 nonNumericalExecutedRuleMask,
+                recursionCount,
                 upperBound);
 
             // if we got a successful match on this second
@@ -1179,6 +1182,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
                          ParsePosition& pp,
                          const NFSubstitution* sub,
                          uint32_t nonNumericalExecutedRuleMask,
+                         int32_t recursionCount,
                          double upperBound) const
 {
 	UErrorCode status = U_ZERO_ERROR;
@@ -1213,6 +1217,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
                     formatter->isLenient(),
 #endif
                     nonNumericalExecutedRuleMask,
+                    recursionCount,
                     result);
 
                 // if the substitution could match all the text up to
@@ -1267,6 +1272,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
             formatter->isLenient(),
 #endif
             nonNumericalExecutedRuleMask,
+            recursionCount,
             result);
         if (success && (tempPP.getIndex() != 0)) {
             // if there's a successful match (or it's a null
