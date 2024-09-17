@@ -77,6 +77,7 @@ public:
                   UBool isFractional, 
                   double upperBound,
                   uint32_t nonNumericalExecutedRuleMask,
+                  int32_t recursionCount,
                   Formattable& result) const;
 
     UBool shouldRollBack(int64_t number) const;
@@ -98,6 +99,7 @@ private:
     double matchToDelimiter(const UnicodeString& text, int32_t startPos, double baseValue,
                             const UnicodeString& delimiter, ParsePosition& pp, const NFSubstitution* sub, 
                             uint32_t nonNumericalExecutedRuleMask,
+                            int32_t recursionCount,
                             double upperBound) const;
     void stripPrefix(UnicodeString& text, const UnicodeString& prefix, ParsePosition& pp) const;
 

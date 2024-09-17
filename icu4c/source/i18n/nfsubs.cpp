@@ -175,6 +175,7 @@ public:
         double upperBound,
         UBool lenientParse,
         uint32_t nonNumericalExecutedRuleMask,
+        int32_t recursionCount,
         Formattable& result) const override;
 
     virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const override {
@@ -242,6 +243,7 @@ public:
         double upperBound,
         UBool lenientParse,
         uint32_t nonNumericalExecutedRuleMask,
+        int32_t recursionCount,
         Formattable& result) const override;
 
     virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const override { return newRuleValue + oldRuleValue; }
@@ -314,6 +316,7 @@ public:
         double upperBound,
         UBool /*lenientParse*/,
         uint32_t nonNumericalExecutedRuleMask,
+        int32_t recursionCount,
         Formattable& result) const override;
 
     virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const override { return newRuleValue / oldRuleValue; }
@@ -706,6 +709,7 @@ NFSubstitution::doParse(const UnicodeString& text,
                         double upperBound,
                         UBool lenientParse,
                         uint32_t nonNumericalExecutedRuleMask,
+                        int32_t recursionCount,
                         Formattable& result) const
 {
 #ifdef RBNF_DEBUG
@@ -726,7 +730,7 @@ NFSubstitution::doParse(const UnicodeString& text,
     // on), then also try parsing the text using a default-
     // constructed NumberFormat
     if (ruleSet != nullptr) {
-        ruleSet->parse(text, parsePosition, upperBound, nonNumericalExecutedRuleMask, result);
+        ruleSet->parse(text, parsePosition, upperBound, nonNumericalExecutedRuleMask, recursionCount, result);
         if (lenientParse && !ruleSet->isFractionRuleSet() && parsePosition.getIndex() == 0) {
             UErrorCode status = U_ZERO_ERROR;
             NumberFormat* fmt = NumberFormat::createInstance(status);
@@ -949,18 +953,19 @@ ModulusSubstitution::doParse(const UnicodeString& text,
                              double upperBound,
                              UBool lenientParse,
                              uint32_t nonNumericalExecutedRuleMask,
+                             int32_t recursionCount,
                              Formattable& result) const
 {
     // if this isn't a >>> substitution, we can just use the
     // inherited parse() routine to do the parsing
     if (ruleToUse == nullptr) {
-        return NFSubstitution::doParse(text, parsePosition, baseValue, upperBound, lenientParse, nonNumericalExecutedRuleMask, result);
+        return NFSubstitution::doParse(text, parsePosition, baseValue, upperBound, lenientParse, nonNumericalExecutedRuleMask, recursionCount, result);
 
         // but if it IS a >>> substitution, we have to do it here: we
         // use the specific rule's doParse() method, and then we have to
         // do some of the other work of NFRuleSet.parse()
     } else {
-        ruleToUse->doParse(text, parsePosition, false, upperBound, nonNumericalExecutedRuleMask, result);
+        ruleToUse->doParse(text, parsePosition, false, upperBound, nonNumericalExecutedRuleMask, recursionCount, result);
 
         if (parsePosition.getIndex() != 0) {
             UErrorCode status = U_ZERO_ERROR;
@@ -1136,12 +1141,13 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
                 double /*upperBound*/,
                 UBool lenientParse,
                 uint32_t nonNumericalExecutedRuleMask,
+                int32_t recursionCount,
                 Formattable& resVal) const
 {
     // if we're not in byDigits mode, we can just use the inherited
     // doParse()
     if (!byDigits) {
-        return NFSubstitution::doParse(text, parsePosition, baseValue, 0, lenientParse, nonNumericalExecutedRuleMask, resVal);
+        return NFSubstitution::doParse(text, parsePosition, baseValue, 0, lenientParse, nonNumericalExecutedRuleMask, recursionCount, resVal);
 
         // if we ARE in byDigits mode, parse the text one digit at a time
         // using this substitution's owning rule set (we do this by setting
@@ -1160,7 +1166,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
         while (workText.length() > 0 && workPos.getIndex() != 0) {
             workPos.setIndex(0);
             Formattable temp;
-            getRuleSet()->parse(workText, workPos, 10, nonNumericalExecutedRuleMask, temp);
+            getRuleSet()->parse(workText, workPos, 10, nonNumericalExecutedRuleMask, recursionCount, temp);
             UErrorCode status = U_ZERO_ERROR;
             digit = temp.getLong(status);
 //            digit = temp.getType() == Formattable::kLong ?
@@ -1271,6 +1277,7 @@ NumeratorSubstitution::doParse(const UnicodeString& text,
                                double upperBound,
                                UBool /*lenientParse*/,
                                uint32_t nonNumericalExecutedRuleMask,
+                               int32_t recursionCount,
                                Formattable& result) const
 {
     // we don't have to do anything special to do the parsing here,
@@ -1289,7 +1296,7 @@ NumeratorSubstitution::doParse(const UnicodeString& text,
 
         while (workText.length() > 0 && workPos.getIndex() != 0) {
             workPos.setIndex(0);
-            getRuleSet()->parse(workText, workPos, 1, nonNumericalExecutedRuleMask, temp); // parse zero or nothing at all
+            getRuleSet()->parse(workText, workPos, 1, nonNumericalExecutedRuleMask, recursionCount, temp); // parse zero or nothing at all
             if (workPos.getIndex() == 0) {
                 // we failed, either there were no more zeros, or the number was formatted with digits
                 // either way, we're done
@@ -1311,7 +1318,7 @@ NumeratorSubstitution::doParse(const UnicodeString& text,
     }
 
     // we've parsed off the zeros, now let's parse the rest from our current position
-    NFSubstitution::doParse(workText, parsePosition, withZeros ? 1 : baseValue, upperBound, false, nonNumericalExecutedRuleMask, result);
+    NFSubstitution::doParse(workText, parsePosition, withZeros ? 1 : baseValue, upperBound, false, nonNumericalExecutedRuleMask, recursionCount, result);
 
     if (withZeros) {
         // any base value will do in this case.  is there a way to

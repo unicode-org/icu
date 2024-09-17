@@ -1362,7 +1362,7 @@ RuleBasedNumberFormat::parse(const UnicodeString& text,
             ParsePosition working_pp(0);
             Formattable working_result;
 
-            rp->parse(workingText, working_pp, kMaxDouble, 0, working_result);
+            rp->parse(workingText, working_pp, kMaxDouble, 0, 0, working_result);
             if (working_pp.getIndex() > high_pp.getIndex()) {
                 high_pp = working_pp;
                 high_result = working_result;

@@ -689,13 +689,19 @@ static void dumpUS(FILE* f, const UnicodeString& us) {
 #endif
 
 UBool
-NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBound, uint32_t nonNumericalExecutedRuleMask, Formattable& result) const
+NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBound, uint32_t nonNumericalExecutedRuleMask, int32_t recursionCount, Formattable& result) const
 {
     // try matching each rule in the rule set against the text being
     // parsed.  Whichever one matches the most characters is the one
     // that determines the value we return.
 
     result.setLong(0);
+
+    // dump out if we've reached the recursion limit
+    if (recursionCount >= RECURSION_LIMIT) {
+        // stop recursion
+        return false;
+    }
 
     // dump out if there's no text to parse
     if (text.length() == 0) {
@@ -720,7 +726,7 @@ NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBoun
             nonNumericalExecutedRuleMask |= 1 << i;
 
             Formattable tempResult;
-            UBool success = nonNumericalRules[i]->doParse(text, workingPos, 0, upperBound, nonNumericalExecutedRuleMask, tempResult);
+            UBool success = nonNumericalRules[i]->doParse(text, workingPos, 0, upperBound, nonNumericalExecutedRuleMask, recursionCount + 1, tempResult);
             if (success && (workingPos.getIndex() > highWaterMark.getIndex())) {
                 result = tempResult;
                 highWaterMark = workingPos;
@@ -759,7 +765,7 @@ NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBoun
                 continue;
             }
             Formattable tempResult;
-            UBool success = rules[i]->doParse(text, workingPos, fIsFractionRuleSet, upperBound, nonNumericalExecutedRuleMask, tempResult);
+            UBool success = rules[i]->doParse(text, workingPos, fIsFractionRuleSet, upperBound, nonNumericalExecutedRuleMask, recursionCount + 1, tempResult);
             if (success && workingPos.getIndex() > highWaterMark.getIndex()) {
                 result = tempResult;
                 highWaterMark = workingPos;
