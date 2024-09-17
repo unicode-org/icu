@@ -1743,7 +1743,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         String[][] cases = new String[][]{
             // ars is interesting because it does not have a region, but it aliases
             // to ar_SA, which has a region.
-            {"ars", "h a", "h:mm a", "HOUR_CYCLE_12"},
+            {"ars", "h\u202Fa", "h:mm a", "HOUR_CYCLE_12"},
             // en_NH is interesting because NH is a depregated region code.
             {"en_NH", "h\u202Fa", "h:mm\u202Fa", "HOUR_CYCLE_12"},
             // ch_ZH is a typo (should be zh_CN), but we should fail gracefully.

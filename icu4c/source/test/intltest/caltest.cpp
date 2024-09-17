@@ -5605,7 +5605,7 @@ void CalendarTest::TestFirstDayOfWeek() {
 
     // Test -u-rg- value
     verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-mvzzzz-sd-usca", UCAL_FRIDAY);
-    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-aezzzz-sd-usca", UCAL_SATURDAY);
+    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-aezzzz-sd-usca", UCAL_MONDAY);
     verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-uszzzz-sd-usca", UCAL_SUNDAY);
     verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-gbzzzz-sd-usca", UCAL_MONDAY);
 
@@ -5616,13 +5616,13 @@ void CalendarTest::TestFirstDayOfWeek() {
 
     // Test Region Tags only
     verifyFirstDayOfWeek("en-MV", UCAL_FRIDAY);
-    verifyFirstDayOfWeek("en-AE", UCAL_SATURDAY);
+    verifyFirstDayOfWeek("en-AE", UCAL_MONDAY);
     verifyFirstDayOfWeek("en-US", UCAL_SUNDAY);
     verifyFirstDayOfWeek("dv-GB", UCAL_MONDAY);
 
     // Test -u-sd-
     verifyFirstDayOfWeek("en-u-sd-mv00", UCAL_FRIDAY);
-    verifyFirstDayOfWeek("en-u-sd-aeaj", UCAL_SATURDAY);
+    verifyFirstDayOfWeek("en-u-sd-aeaj", UCAL_MONDAY);
     verifyFirstDayOfWeek("en-u-sd-usca", UCAL_SUNDAY);
     verifyFirstDayOfWeek("dv-u-sd-gbsct", UCAL_MONDAY);
 
@@ -5633,7 +5633,7 @@ void CalendarTest::TestFirstDayOfWeek() {
     verifyFirstDayOfWeek("und-Thaa", UCAL_FRIDAY);
 
     // ssh => ssh_Arab_AE => Saturday
-    verifyFirstDayOfWeek("ssh", UCAL_SATURDAY);  
+    verifyFirstDayOfWeek("ssh", UCAL_MONDAY);  
     
     // en => en_Latn_US => Sunday
     verifyFirstDayOfWeek("en", UCAL_SUNDAY);

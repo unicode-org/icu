@@ -239,7 +239,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
 
         // Test -u-rg- value
         verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-mvzzzz-sd-usca", Calendar.FRIDAY);
-        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-aezzzz-sd-usca", Calendar.SATURDAY);
+        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-aezzzz-sd-usca", Calendar.MONDAY);
         verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-uszzzz-sd-usca", Calendar.SUNDAY);
         verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-gbzzzz-sd-usca", Calendar.MONDAY);
 
@@ -250,7 +250,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
 
         // Test Region Tags only
         verifyFirstDayOfWeek("en-MV", Calendar.FRIDAY);
-        verifyFirstDayOfWeek("en-AE", Calendar.SATURDAY);
+        verifyFirstDayOfWeek("en-AE", Calendar.MONDAY);
         verifyFirstDayOfWeek("en-US", Calendar.SUNDAY);
         verifyFirstDayOfWeek("dv-GB", Calendar.MONDAY);
 
@@ -267,7 +267,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         verifyFirstDayOfWeek("und-Thaa", Calendar.FRIDAY);
 
         // ssh => ssh_Arab_AE => Saturday
-        verifyFirstDayOfWeek("ssh", Calendar.SATURDAY);
+        verifyFirstDayOfWeek("ssh", Calendar.MONDAY);
         // wbl_Arab => wbl_Arab_AF => Saturday
         if (!logKnownIssue("CLDR-17907", "wbl-Arab returns wrong first day of the week, probably caused by wrong Likely Subtag algo")) {
         	verifyFirstDayOfWeek("wbl-Arab", Calendar.SATURDAY);
