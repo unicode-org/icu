@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726701810015,
+  "lastUpdate": 1726703081404,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26067,6 +26067,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1936.642258752682,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "f19e598155325ecb1413dcdb4ed56a680ddde9bf",
+          "message": "ICU-22723 Frontload ICU4J change report 75-76",
+          "timestamp": "2024-09-18T16:36:12-07:00",
+          "tree_id": "0c6ef39c97f58e252cca7a7fcdbb5382485d3cbf",
+          "url": "https://github.com/unicode-org/icu/commit/f19e598155325ecb1413dcdb4ed56a680ddde9bf"
+        },
+        "date": 1726702916432,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1946.5466687327432,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
