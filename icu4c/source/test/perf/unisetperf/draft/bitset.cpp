@@ -190,9 +190,9 @@ public:
 
     UBool contains(UChar32 c) const override {
         if (static_cast<uint32_t>(c) <= 0xff) {
-            return static_cast<UBool>((latin1Set[c >> 5] & (static_cast<uint32_t>(1) << (c & 0x1f))) != 0);
+            return (latin1Set[c >> 5] & (static_cast<uint32_t>(1) << (c & 0x1f))) != 0;
         } else if (static_cast<uint32_t>(c) < 0xffff) {
-            return static_cast<UBool>((bits[c >> 6] & (INT64_C(1) << (c & 0x3f))) != 0);
+            return (bits[c >> 6] & (INT64_C(1) << (c & 0x3f))) != 0;
         } else {
             return restSet->contains(c);
         }

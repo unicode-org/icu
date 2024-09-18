@@ -355,7 +355,7 @@ UBool UnicodeSet::contains(UChar32 c) const {
         return false;
     }
     int32_t i = findCodePoint(c);
-    return static_cast<UBool>(i & 1); // return true if odd
+    return i & 1; // return true if odd
 }
 
 /**
@@ -460,7 +460,7 @@ UBool UnicodeSet::containsAll(const UnicodeSet& c) const {
  * @return true if the test condition is met
  */
 UBool UnicodeSet::containsAll(const UnicodeString& s) const {
-    return static_cast<UBool>(span(s.getBuffer(), s.length(), USET_SPAN_CONTAINED) == s.length());
+    return span(s.getBuffer(), s.length(), USET_SPAN_CONTAINED) == s.length();
 }
 
 /**
@@ -505,7 +505,7 @@ UBool UnicodeSet::containsNone(const UnicodeSet& c) const {
  * @return true if the test condition is met
  */
 UBool UnicodeSet::containsNone(const UnicodeString& s) const {
-    return static_cast<UBool>(span(s.getBuffer(), s.length(), USET_SPAN_NOT_CONTAINED) == s.length());
+    return span(s.getBuffer(), s.length(), USET_SPAN_NOT_CONTAINED) == s.length();
 }
 
 /**

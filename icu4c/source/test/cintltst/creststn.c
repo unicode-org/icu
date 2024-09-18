@@ -2055,7 +2055,7 @@ static UBool testTag(const char* frag,
     ures_close(tags);
     ures_close(arrayItem1);
     free(base);
-    return (UBool)(failNum == fail);
+    return failNum == fail;
 }
 
 static void record_pass(void)

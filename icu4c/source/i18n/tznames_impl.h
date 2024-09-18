@@ -99,7 +99,7 @@ struct CharacterNode {
 };
 
 inline UBool CharacterNode::hasValues() const {
-    return static_cast<UBool>(fValues != nullptr);
+    return fValues != nullptr;
 }
 
 inline int32_t CharacterNode::countValues() const {

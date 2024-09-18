@@ -2530,7 +2530,7 @@ public:
     }
 
     UBool hasStrings() const {
-        return static_cast<UBool>(stringsLength > 0);
+        return stringsLength > 0;
     }
 
     UBool hasStringsWithSurrogates() const {

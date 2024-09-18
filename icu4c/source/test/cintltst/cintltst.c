@@ -723,7 +723,7 @@ U_CFUNC UBool assertTrue(const char* msg, int /*not UBool*/ condition) {
         log_verbose("Ok: %s\n", msg);
     }
 #endif
-    return (UBool)condition;   
+    return condition;
 }
 
 U_CFUNC UBool assertEquals(const char* message, const char* expected,

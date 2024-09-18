@@ -506,7 +506,7 @@ isInNullBlock(UNewTrie2 *trie, UChar32 c, UBool forLSCP) {
             ((c>>UTRIE2_SHIFT_2)&UTRIE2_INDEX_2_MASK);
     }
     block=trie->index2[i2];
-    return static_cast<UBool>(block == trie->dataNullOffset);
+    return block == trie->dataNullOffset;
 }
 
 static int32_t
@@ -603,7 +603,7 @@ releaseDataBlock(UNewTrie2 *trie, int32_t block) {
 
 static inline UBool
 isWritableBlock(UNewTrie2 *trie, int32_t block) {
-    return static_cast<UBool>(block != trie->dataNullOffset && 1 == trie->map[block >> UTRIE2_SHIFT_2]);
+    return block != trie->dataNullOffset && 1 == trie->map[block >> UTRIE2_SHIFT_2];
 }
 
 static inline void
@@ -891,7 +891,7 @@ equal_int32(const int32_t *s, const int32_t *t, int32_t length) {
         ++t;
         --length;
     }
-    return static_cast<UBool>(length == 0);
+    return length == 0;
 }
 
 static inline UBool
@@ -901,7 +901,7 @@ equal_uint32(const uint32_t *s, const uint32_t *t, int32_t length) {
         ++t;
         --length;
     }
-    return static_cast<UBool>(length == 0);
+    return length == 0;
 }
 
 static int32_t

@@ -342,7 +342,7 @@ uprv_isNaN(double number)
     BitPatternConversion convertedNumber;
     convertedNumber.d64 = number;
     /* Infinity is 0x7FF0000000000000U. Anything greater than that is a NaN */
-    return (UBool)((convertedNumber.i64 & U_INT64_MAX) > gInf.i64);
+    return (convertedNumber.i64 & U_INT64_MAX) > gInf.i64;
 
 #elif U_PLATFORM == U_PF_OS390
     uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
@@ -368,7 +368,7 @@ uprv_isInfinite(double number)
     BitPatternConversion convertedNumber;
     convertedNumber.d64 = number;
     /* Infinity is exactly 0x7FF0000000000000U. */
-    return (UBool)((convertedNumber.i64 & U_INT64_MAX) == gInf.i64);
+    return (convertedNumber.i64 & U_INT64_MAX) == gInf.i64;
 #elif U_PLATFORM == U_PF_OS390
     uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
                         sizeof(uint32_t));
@@ -389,7 +389,7 @@ U_CAPI UBool U_EXPORT2
 uprv_isPositiveInfinity(double number)
 {
 #if IEEE_754 || U_PLATFORM == U_PF_OS390
-    return (UBool)(number > 0 && uprv_isInfinite(number));
+    return number > 0 && uprv_isInfinite(number);
 #else
     return uprv_isInfinite(number);
 #endif
@@ -399,7 +399,7 @@ U_CAPI UBool U_EXPORT2
 uprv_isNegativeInfinity(double number)
 {
 #if IEEE_754 || U_PLATFORM == U_PF_OS390
-    return (UBool)(number < 0 && uprv_isInfinite(number));
+    return number < 0 && uprv_isInfinite(number);
 
 #else
     uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
@@ -744,11 +744,11 @@ static UBool isValidOlsonID(const char *id) {
     The timezone is sometimes set to "CST-7CDT", "CST6CDT5,J129,J131/19:30",
     "GRNLNDST3GRNLNDDT" or similar, so we cannot use it.
     The rest of the time it could be an Olson ID. George */
-    return static_cast<UBool>(id[idx] == 0
+    return id[idx] == 0
         || uprv_strcmp(id, "PST8PDT") == 0
         || uprv_strcmp(id, "MST7MDT") == 0
         || uprv_strcmp(id, "CST6CDT") == 0
-        || uprv_strcmp(id, "EST5EDT") == 0);
+        || uprv_strcmp(id, "EST5EDT") == 0;
 }
 
 /* On some Unix-like OS, 'posix' subdirectory in

@@ -171,7 +171,7 @@ static UBool defaultContains(const BinaryProperty &prop, UChar32 c, UProperty /*
 }
 
 static UBool caseBinaryPropertyContains(const BinaryProperty &/*prop*/, UChar32 c, UProperty which) {
-    return static_cast<UBool>(ucase_hasBinaryProperty(c, which));
+    return ucase_hasBinaryProperty(c, which);
 }
 
 static UBool isBidiControl(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
@@ -242,7 +242,7 @@ static UBool changesWhenCasefolded(const BinaryProperty &/*prop*/, UChar32 c, UP
     if(c>=0) {
         /* single code point */
         const char16_t *resultString;
-        return static_cast<UBool>(ucase_toFullFolding(c, &resultString, U_FOLD_CASE_DEFAULT) >= 0);
+        return ucase_toFullFolding(c, &resultString, U_FOLD_CASE_DEFAULT) >= 0;
     } else {
         /* guess some large but stack-friendly capacity */
         char16_t dest[2*UCASE_MAX_STRING_LENGTH];
@@ -250,9 +250,9 @@ static UBool changesWhenCasefolded(const BinaryProperty &/*prop*/, UChar32 c, UP
         destLength=u_strFoldCase(dest, UPRV_LENGTHOF(dest),
                                   nfd.getBuffer(), nfd.length(),
                                   U_FOLD_CASE_DEFAULT, &errorCode);
-        return static_cast<UBool>(U_SUCCESS(errorCode) &&
+        return U_SUCCESS(errorCode) &&
                        0!=u_strCompare(nfd.getBuffer(), nfd.length(),
-                                       dest, destLength, false));
+                                       dest, destLength, false);
     }
 }
 #endif

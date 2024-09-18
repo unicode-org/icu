@@ -2849,7 +2849,7 @@ Calendar::inDaylightTime(UErrorCode& status) const
     // Force an update of the state of the Calendar.
     const_cast<Calendar*>(this)->complete(status); // cast away const
 
-    return static_cast<UBool>(U_SUCCESS(status) ? internalGet(UCAL_DST_OFFSET) != 0 : false);
+    return U_SUCCESS(status) ? internalGet(UCAL_DST_OFFSET) != 0 : false;
 }
 
 bool

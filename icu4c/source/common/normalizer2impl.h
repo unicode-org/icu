@@ -364,7 +364,7 @@ public:
         // 0<=lead<=0xffff
         uint8_t bits=smallFCD[lead>>8];
         if(bits==0) { return false; }
-        return static_cast<UBool>((bits >> ((lead >> 5) & 7)) & 1);
+        return (bits >> ((lead >> 5) & 7)) & 1;
     }
     /** Returns the FCD value from the regular normalization data. */
     uint16_t getFCD16FromNormData(UChar32 c) const;

@@ -84,7 +84,7 @@ public:
     }
 
     UBool isEmpty() const {
-        return static_cast<UBool>(length == 0);
+        return length == 0;
     }
 
     // Reduce all stored offsets by delta, used when the current position

@@ -58,7 +58,7 @@ ufmt_isdigit(char16_t  c,
 {
     int digitVal = ufmt_digitvalue(c);
 
-    return static_cast<UBool>(digitVal < radix && digitVal >= 0);
+    return digitVal < radix && digitVal >= 0;
 }
 
 #define TO_UC_DIGIT(a) a <= 9 ? (DIGIT_0 + a) : (0x0037 + a)

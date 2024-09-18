@@ -428,7 +428,7 @@ UBool testTag(const char* frag,
         ures_close(theBundle);
     }
     free(base);
-    return (UBool)(passNum == pass);
+    return passNum == pass;
 }
 
 void record_pass(void)

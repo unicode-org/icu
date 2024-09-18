@@ -1022,7 +1022,7 @@ uhash_compareUChars(const UHashTok key1, const UHashTok key2) {
         ++p1;
         ++p2;
     }
-    return (UBool)(*p1 == *p2);
+    return *p1 == *p2;
 }
 
 U_CAPI UBool U_EXPORT2
@@ -1039,7 +1039,7 @@ uhash_compareChars(const UHashTok key1, const UHashTok key2) {
         ++p1;
         ++p2;
     }
-    return (UBool)(*p1 == *p2);
+    return *p1 == *p2;
 }
 
 U_CAPI UBool U_EXPORT2
@@ -1056,7 +1056,7 @@ uhash_compareIChars(const UHashTok key1, const UHashTok key2) {
         ++p1;
         ++p2;
     }
-    return (UBool)(*p1 == *p2);
+    return *p1 == *p2;
 }
 
 U_CAPI UBool U_EXPORT2
@@ -1093,5 +1093,5 @@ uhash_hashLong(const UHashTok key) {
 
 U_CAPI UBool U_EXPORT2
 uhash_compareLong(const UHashTok key1, const UHashTok key2) {
-    return (UBool)(key1.integer == key2.integer);
+    return key1.integer == key2.integer;
 }

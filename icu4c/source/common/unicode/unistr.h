@@ -4227,18 +4227,18 @@ UnicodeString::hashCode() const
 
 inline UBool
 UnicodeString::isBogus() const
-{ return static_cast<UBool>(fUnion.fFields.fLengthAndFlags & kIsBogus); }
+{ return fUnion.fFields.fLengthAndFlags & kIsBogus; }
 
 inline UBool
 UnicodeString::isWritable() const
-{ return static_cast<UBool>(!(fUnion.fFields.fLengthAndFlags & (kOpenGetBuffer | kIsBogus))); }
+{ return !(fUnion.fFields.fLengthAndFlags & (kOpenGetBuffer | kIsBogus)); }
 
 inline UBool
 UnicodeString::isBufferWritable() const
 {
-  return static_cast<UBool>(
+  return
       !(fUnion.fFields.fLengthAndFlags&(kOpenGetBuffer|kIsBogus|kBufferIsReadonly)) &&
-      (!(fUnion.fFields.fLengthAndFlags&kRefCounted) || refCount()==1));
+      (!(fUnion.fFields.fLengthAndFlags&kRefCounted) || refCount()==1);
 }
 
 inline const char16_t *

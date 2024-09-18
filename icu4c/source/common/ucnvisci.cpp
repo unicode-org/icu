@@ -174,7 +174,7 @@ isPNJConsonant(UChar32 c) {
     if (c < 0xa00 || 0xa50 <= c) {
         return false;
     } else {
-        return static_cast<UBool>(pnjMap[c - 0xa00] & 1);
+        return pnjMap[c - 0xa00] & 1;
     }
 }
 
@@ -183,7 +183,7 @@ isPNJBindiTippi(UChar32 c) {
     if (c < 0xa00 || 0xa50 <= c) {
         return false;
     } else {
-        return static_cast<UBool>(pnjMap[c - 0xa00] >> 1);
+        return pnjMap[c - 0xa00] >> 1;
     }
 }
 U_CDECL_BEGIN

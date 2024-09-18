@@ -293,14 +293,14 @@ BMPSet::contains(UChar32 c) const {
     if (static_cast<uint32_t>(c) <= 0xff) {
         return latin1Contains[c];
     } else if (static_cast<uint32_t>(c) <= 0x7ff) {
-        return static_cast<UBool>((table7FF[c & 0x3f] & (static_cast<uint32_t>(1) << (c >> 6))) != 0);
+        return (table7FF[c & 0x3f] & (static_cast<uint32_t>(1) << (c >> 6))) != 0;
     } else if (static_cast<uint32_t>(c) < 0xd800 || (c >= 0xe000 && c <= 0xffff)) {
         int lead=c>>12;
         uint32_t twoBits=(bmpBlockBits[(c>>6)&0x3f]>>lead)&0x10001;
         if(twoBits<=1) {
             // All 64 code points with the same bits 15..6
             // are either in the set or not.
-            return static_cast<UBool>(twoBits);
+            return twoBits;
         } else {
             // Look up the code point in its 4k block of code points.
             return containsSlow(c, list4kStarts[lead], list4kStarts[lead+1]);

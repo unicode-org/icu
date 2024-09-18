@@ -850,7 +850,7 @@ private:
     }
     UBool attributeHasBeenSetExplicitly(int32_t attribute) const {
         // assert(0 <= attribute < ATTR_LIMIT);
-        return static_cast<UBool>((explicitlySetAttributes & (static_cast<uint32_t>(1) << attribute)) != 0);
+        return (explicitlySetAttributes & (static_cast<uint32_t>(1) << attribute)) != 0;
     }
 
     /**

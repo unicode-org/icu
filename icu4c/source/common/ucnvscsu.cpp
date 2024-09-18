@@ -893,9 +893,9 @@ getWindow(const uint32_t offsets[8], uint32_t c) {
 /* is the character in the dynamic window starting at the offset, or in the direct-encoded range? */
 static UBool
 isInOffsetWindowOrDirect(uint32_t offset, uint32_t c) {
-    return static_cast<UBool>(c<=offset+0x7f &&
+    return c<=offset+0x7f &&
           (c>=offset || (c<=0x7f &&
-                        (c>=0x20 || (1UL<<c)&0x2601))));
+                        (c>=0x20 || (1UL<<c)&0x2601)));
                                 /* binary 0010 0110 0000 0001,
                                    check for b==0xd || b==0xa || b==9 || b==0 */
 }

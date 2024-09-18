@@ -389,7 +389,7 @@ utrie2_close(UTrie2 *trie) {
 
 U_CAPI UBool U_EXPORT2
 utrie2_isFrozen(const UTrie2 *trie) {
-    return (UBool)(trie->newTrie==nullptr);
+    return trie->newTrie==nullptr;
 }
 
 U_CAPI int32_t U_EXPORT2

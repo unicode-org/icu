@@ -1051,7 +1051,7 @@ NewResourceBundleTest::testTag(const char* frag,
         CONFIRM_EQ(count, tag_count);
 
     }
-    return static_cast<UBool>(failOrig == fail);
+    return failOrig == fail;
 }
 
 void

@@ -1233,7 +1233,7 @@ UBool
 Package::checkDependencies() {
     isMissingItems=false;
     enumDependencies(this, checkDependency);
-    return static_cast<UBool>(!isMissingItems);
+    return !isMissingItems;
 }
 
 void

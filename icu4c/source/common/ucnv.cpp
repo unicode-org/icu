@@ -2684,7 +2684,7 @@ ucnv_fixFileSeparator(const UConverter *cnv,
 
 U_CAPI UBool  U_EXPORT2
 ucnv_isAmbiguous(const UConverter *cnv) {
-    return (UBool)(ucnv_getAmbiguous(cnv)!=nullptr);
+    return ucnv_getAmbiguous(cnv)!=nullptr;
 }
 
 U_CAPI void  U_EXPORT2
