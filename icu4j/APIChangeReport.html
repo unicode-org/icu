@@ -4,259 +4,33 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!-- © 2024 and later: Unicode, Inc. and others. -->
 <!-- License & terms of use: http://www.unicode.org/copyright.html -->
-<title>ICU4J API Comparison: ICU4J 74 with ICU4J 75</title>
+<title>ICU4J API Comparison: ICU4J 75 with ICU4J 76</title>
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 74 with ICU4J 75</h1>
+<h1>ICU4J API Comparison: ICU4J 75 with ICU4J 76</h1>
 
 <hr/>
-<h2>Removed from ICU4J 74</h2>
+<h2>Removed from ICU4J 75</h2>
 <p>(no API removed)</p>
 
 <hr/>
-<h2>Deprecated or Obsoleted in ICU4J 75</h2>
+<h2>Deprecated or Obsoleted in ICU4J 76</h2>
 <p>(no API obsoleted)</p>
 
 <hr/>
-<h2>Changed in ICU4J 75 (old, new)</h2>
+<h2>Changed in ICU4J 76 (old, new)</h2>
 <p>(no API changed)</p>
 
 <hr/>
-<h2>Promoted to stable in ICU4J 75</h2>
-
-<h3>Package com.ibm.icu.text</h3>
-<ul>
-<li><span style='color:green'>(stable)</span> public interface <i>PersonName</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>PersonNameFormatter</i></li>
-<li><span style='color:green'>(stable)</span> public static class <i>PersonNameFormatter.Builder</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>SimplePersonName</i></li>
-<li><span style='color:green'>(stable)</span> public static class <i>SimplePersonName.Builder</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>PersonName.FieldModifier</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>PersonName.NameField</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>PersonName.PreferredOrder</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>PersonNameFormatter.DisplayOrder</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>PersonNameFormatter.Formality</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>PersonNameFormatter.Length</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>PersonNameFormatter.Usage</i></li>
-PersonName.FieldModifier
-<ul>
-<li><span style='color:green'>(stable)</span> public static PersonName.FieldModifier <i>forString</i>(java.lang.String)</li>
-<li><span style='color:green'>(stable)</span> public java.lang.String <i>toString</i>()</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.FieldModifier ALL_CAPS</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.FieldModifier CORE</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.FieldModifier INFORMAL</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.FieldModifier INITIAL</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.FieldModifier INITIAL_CAP</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.FieldModifier MONOGRAM</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.FieldModifier PREFIX</li>
-</ul>
-PersonName.NameField
-<ul>
-<li><span style='color:green'>(stable)</span> public java.lang.String <i>toString</i>()</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.NameField CREDENTIALS</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.NameField GENERATION</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.NameField GIVEN</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.NameField GIVEN2</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.NameField SURNAME</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.NameField SURNAME2</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.NameField TITLE</li>
-</ul>
-PersonName.PreferredOrder
-<ul>
-<li><span style='color:green'>(stable)</span> public static final PersonName.PreferredOrder DEFAULT</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.PreferredOrder GIVEN_FIRST</li>
-<li><span style='color:green'>(stable)</span> public static final PersonName.PreferredOrder SURNAME_FIRST</li>
-</ul>
-PersonNameFormatter.DisplayOrder
-<ul>
-<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.DisplayOrder DEFAULT</li>
-<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.DisplayOrder SORTING</li>
-</ul>
-PersonNameFormatter.Formality
-<ul>
-<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.Formality FORMAL</li>
-<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.Formality INFORMAL</li>
-</ul>
-PersonNameFormatter.Length
-<ul>
-<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.Length LONG</li>
-<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.Length MEDIUM</li>
-<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.Length SHORT</li>
-</ul>
-PersonNameFormatter.Usage
-<ul>
-<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.Usage ADDRESSING</li>
-<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.Usage MONOGRAM</li>
-<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.Usage REFERRING</li>
-</ul>
-UnicodeSet
-<ul>
-<li><span style='color:green'>(stable)</span> public static final int SIMPLE_CASE_INSENSITIVE</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-MeasureUnit
-<ul>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit BEAUFORT</li>
-</ul>
-</ul>
-
-
-<hr/>
-<h2>Added in ICU4J 75</h2>
+<h2>Promoted to stable in ICU4J 76</h2>
 
 <h3>Package com.ibm.icu.lang</h3>
 <ul>
-<li><span style='color:orange'>(draft)</span> public static enum <i>UCharacter.IdentifierStatus</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>UCharacter.IdentifierType</i></li>
-UCharacter
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final int <i>getIdentifierTypes</i>(int, java.util.EnumSet&lt;UCharacter.IdentifierType&gt;)</li>
-<li><span style='color:orange'>(draft)</span> public static final boolean <i>hasIdentifierType</i>(int, UCharacter.IdentifierType)</li>
-</ul>
-UCharacter.IdentifierStatus
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierStatus ALLOWED</li>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierStatus RESTRICTED</li>
-</ul>
-UCharacter.IdentifierType
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType DEFAULT_IGNORABLE</li>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType DEPRECATED</li>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType EXCLUSION</li>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType INCLUSION</li>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType LIMITED_USE</li>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType NOT_CHARACTER</li>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType NOT_NFKC</li>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType NOT_XID</li>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType OBSOLETE</li>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType RECOMMENDED</li>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType TECHNICAL</li>
-<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType UNCOMMON_USE</li>
-</ul>
 UProperty
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final int IDENTIFIER_STATUS</li>
-<li><span style='color:orange'>(draft)</span> public static final int IDENTIFIER_TYPE</li>
-</ul>
-UScript
-<ul>
-<li><span style='color:green'>(stable)</span> public static final int ARABIC_NASTALIQ</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.message2</h3>
-<ul>
-MFDataModel.Attribute
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.LiteralOrVariableRef value</li>
-</ul>
-MFDataModel.CatchallKey
-<ul>
-<li><span style='color:orange'>(draft)</span> public <i>MFDataModel.CatchallKey</i>()</li>
-</ul>
-MFDataModel.FunctionAnnotation
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
-<li><span style='color:orange'>(draft)</span> public final java.util.Map&lt;java.lang.String, MFDataModel.Option&gt; options</li>
-</ul>
-MFDataModel.FunctionExpression
-<ul>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.FunctionAnnotation annotation</li>
-<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Attribute&gt; attributes</li>
-</ul>
-MFDataModel.InputDeclaration
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.VariableExpression value</li>
-</ul>
-MFDataModel.Literal
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.lang.String value</li>
-</ul>
-MFDataModel.LiteralExpression
-<ul>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.Annotation annotation</li>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.Literal arg</li>
-<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Attribute&gt; attributes</li>
-</ul>
-MFDataModel.LocalDeclaration
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.Expression value</li>
-</ul>
-MFDataModel.Markup
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Attribute&gt; attributes</li>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.Markup.Kind kind</li>
-<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
-<li><span style='color:orange'>(draft)</span> public final java.util.Map&lt;java.lang.String, MFDataModel.Option&gt; options</li>
-</ul>
-MFDataModel.Option
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.LiteralOrVariableRef value</li>
-</ul>
-MFDataModel.Pattern
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.PatternPart&gt; parts</li>
-</ul>
-MFDataModel.PatternMessage
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Declaration&gt; declarations</li>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.Pattern pattern</li>
-</ul>
-MFDataModel.SelectMessage
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Declaration&gt; declarations</li>
-<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Expression&gt; selectors</li>
-<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Variant&gt; variants</li>
-</ul>
-MFDataModel.StringPart
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.lang.String value</li>
-</ul>
-MFDataModel.UnsupportedAnnotation
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.lang.String source</li>
-</ul>
-MFDataModel.UnsupportedExpression
-<ul>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.UnsupportedAnnotation annotation</li>
-<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Attribute&gt; attributes</li>
-</ul>
-MFDataModel.UnsupportedStatement
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.lang.String body</li>
-<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Expression&gt; expressions</li>
-<li><span style='color:orange'>(draft)</span> public final java.lang.String keyword</li>
-</ul>
-MFDataModel.VariableExpression
-<ul>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.Annotation annotation</li>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.VariableRef arg</li>
-<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Attribute&gt; attributes</li>
-</ul>
-MFDataModel.VariableRef
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
-</ul>
-MFDataModel.Variant
-<ul>
-<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.LiteralOrCatchallKey&gt; keys</li>
-<li><span style='color:orange'>(draft)</span> public final MFDataModel.Pattern value</li>
-</ul>
-MFParseException
-<ul>
-<li><span style='color:orange'>(draft)</span> public <i>MFParseException</i>(java.lang.String, int)</li>
-<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getMessage</i>()</li>
-</ul>
-MFSerializer
-<ul>
-<li><span style='color:orange'>(draft)</span> public <i>MFSerializer</i>()</li>
+<li><span style='color:green'>(stable)</span> public static final int IDS_UNARY_OPERATOR</li>
+<li><span style='color:green'>(stable)</span> public static final int ID_COMPAT_MATH_CONTINUE</li>
+<li><span style='color:green'>(stable)</span> public static final int ID_COMPAT_MATH_START</li>
 </ul>
 </ul>
 
@@ -264,26 +38,190 @@ MFSerializer
 <ul>
 LocalizedNumberFormatter
 <ul>
-<li><span style='color:orange'>(draft)</span> public UnlocalizedNumberFormatter <i>withoutLocale</i>()</li>
+<li><span style='color:green'>(stable)</span> public UnlocalizedNumberFormatter <i>withoutLocale</i>()</li>
 </ul>
 LocalizedNumberRangeFormatter
 <ul>
-<li><span style='color:orange'>(draft)</span> public UnlocalizedNumberRangeFormatter <i>withoutLocale</i>()</li>
+<li><span style='color:green'>(stable)</span> public UnlocalizedNumberRangeFormatter <i>withoutLocale</i>()</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+Normalizer2
+<ul>
+<li><span style='color:green'>(stable)</span> public static Normalizer2 <i>getNFKCSimpleCasefoldInstance</i>()</li>
+</ul>
+PersonName.FieldModifier
+<ul>
+<li><span style='color:green'>(stable)</span> public static final PersonName.FieldModifier GENITIVE</li>
+<li><span style='color:green'>(stable)</span> public static final PersonName.FieldModifier VOCATIVE</li>
+</ul>
+PersonNameFormatter.DisplayOrder
+<ul>
+<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.DisplayOrder FORCE_GIVEN_FIRST</li>
+<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.DisplayOrder FORCE_SURNAME_FIRST</li>
+</ul>
+PersonNameFormatter.Formality
+<ul>
+<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.Formality DEFAULT</li>
+</ul>
+PersonNameFormatter.Length
+<ul>
+<li><span style='color:green'>(stable)</span> public static final PersonNameFormatter.Length DEFAULT</li>
+</ul>
+SpoofChecker
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>areConfusable</i>(int, java.lang.CharSequence, java.lang.CharSequence)</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getBidiSkeleton</i>(int, java.lang.CharSequence)</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
-MeasureUnit.MeasurePrefix
+Calendar
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix QUECTO</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix QUETTA</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix RONNA</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix RONTO</li>
+<li><span style='color:green'>(stable)</span> public static final int ORDINAL_MONTH</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getTemporalMonthCode</i>()</li>
+<li><span style='color:green'>(stable)</span> public boolean <i>inTemporalLeapYear</i>()</li>
+<li><span style='color:green'>(stable)</span> public void <i>setTemporalMonthCode</i>(java.lang.String)</li>
+</ul>
+ChineseCalendar
+<ul>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getTemporalMonthCode</i>()</li>
+<li><span style='color:green'>(stable)</span> public boolean <i>inTemporalLeapYear</i>()</li>
+<li><span style='color:green'>(stable)</span> public void <i>setTemporalMonthCode</i>(java.lang.String)</li>
+</ul>
+HebrewCalendar
+<ul>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getTemporalMonthCode</i>()</li>
+<li><span style='color:green'>(stable)</span> public boolean <i>inTemporalLeapYear</i>()</li>
+<li><span style='color:green'>(stable)</span> public void <i>setTemporalMonthCode</i>(java.lang.String)</li>
+</ul>
+IslamicCalendar
+<ul>
+<li><span style='color:green'>(stable)</span> public boolean <i>inTemporalLeapYear</i>()</li>
+</ul>
+MeasureUnit
+<ul>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit GASOLINE_ENERGY_DENSITY</li>
+</ul>
+TimeZone
+<ul>
+<li><span style='color:green'>(stable)</span> public static java.lang.String <i>getIanaID</i>(java.lang.String)</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Added in ICU4J 76</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public static enum <i>UCharacter.IndicConjunctBreak</i></li>
+UCharacter.IndicConjunctBreak
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IndicConjunctBreak CONSONANT</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IndicConjunctBreak EXTEND</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IndicConjunctBreak LINKER</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IndicConjunctBreak NONE</li>
+</ul>
+UCharacter.IndicSyllabicCategory
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int REORDERING_KILLER</li>
+</ul>
+UCharacter.JoiningGroup
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int KASHMIRI_YEH</li>
+</ul>
+UCharacter.UnicodeBlock
+<ul>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock EGYPTIAN_HIEROGLYPHS_EXTENDED_A</li>
+<li><span style='color:green'>(stable)</span> public static final int EGYPTIAN_HIEROGLYPHS_EXTENDED_A_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock GARAY</li>
+<li><span style='color:green'>(stable)</span> public static final int GARAY_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock GURUNG_KHEMA</li>
+<li><span style='color:green'>(stable)</span> public static final int GURUNG_KHEMA_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock KIRAT_RAI</li>
+<li><span style='color:green'>(stable)</span> public static final int KIRAT_RAI_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MYANMAR_EXTENDED_C</li>
+<li><span style='color:green'>(stable)</span> public static final int MYANMAR_EXTENDED_C_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock OL_ONAL</li>
+<li><span style='color:green'>(stable)</span> public static final int OL_ONAL_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock SUNUWAR</li>
+<li><span style='color:green'>(stable)</span> public static final int SUNUWAR_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock SYMBOLS_FOR_LEGACY_COMPUTING_SUPPLEMENT</li>
+<li><span style='color:green'>(stable)</span> public static final int SYMBOLS_FOR_LEGACY_COMPUTING_SUPPLEMENT_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock TODHRI</li>
+<li><span style='color:green'>(stable)</span> public static final int TODHRI_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock TULU_TIGALARI</li>
+<li><span style='color:green'>(stable)</span> public static final int TULU_TIGALARI_ID</li>
+</ul>
+UProperty
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final int INDIC_CONJUNCT_BREAK</li>
+<li><span style='color:orange'>(draft)</span> public static final int MODIFIER_COMBINING_MARK</li>
+</ul>
+UScript
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int GARAY</li>
+<li><span style='color:green'>(stable)</span> public static final int GURUNG_KHEMA</li>
+<li><span style='color:green'>(stable)</span> public static final int KIRAT_RAI</li>
+<li><span style='color:green'>(stable)</span> public static final int OL_ONAL</li>
+<li><span style='color:green'>(stable)</span> public static final int SUNUWAR</li>
+<li><span style='color:green'>(stable)</span> public static final int TODHRI</li>
+<li><span style='color:green'>(stable)</span> public static final int TULU_TIGALARI</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+DateFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String <i>format</i>(java.time.temporal.Temporal)</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.StringBuffer <i>format</i>(java.time.temporal.Temporal, java.lang.StringBuffer, java.text.FieldPosition)</li>
+</ul>
+DateIntervalFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.StringBuffer <i>format</i>(java.time.temporal.Temporal, java.time.temporal.Temporal, java.lang.StringBuffer, java.text.FieldPosition)</li>
+<li><span style='color:orange'>(draft)</span> public DateIntervalFormat.FormattedDateInterval <i>formatToValue</i>(java.time.temporal.Temporal, java.time.temporal.Temporal)</li>
+</ul>
+RelativeDateTimeFormatter.RelativeUnit
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeUnit FRIDAYS</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeUnit MONDAYS</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeUnit QUARTERS</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeUnit SATURDAYS</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeUnit SUNDAYS</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeUnit THURSDAYS</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeUnit TUESDAYS</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeUnit WEDNESDAYS</li>
+</ul>
+UnicodeSet
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.util.stream.IntStream <i>codePointStream</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.Iterable&lt;java.lang.Integer&gt; <i>codePoints</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.util.stream.Stream&lt;UnicodeSet.EntryRange&gt; <i>rangeStream</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.util.stream.Stream&lt;java.lang.String&gt; <i>stream</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.util.stream.Stream&lt;java.lang.String&gt; <i>stringStream</i>()</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+MeasureUnit
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit LIGHT_SPEED</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit NIGHT</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit PORTION_PER_1E9</li>
+</ul>
+VersionInfo
+<ul>
+<li><span style='color:green'>(stable)</span> public static final VersionInfo UNICODE_16_0</li>
 </ul>
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Mon Mar 25 13:11:50 EDT 2024<br/>© 2024 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Sep 18 16:18:21 PDT 2024<br/>© 2024 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></font></i></p>
 </body>
 </html>
