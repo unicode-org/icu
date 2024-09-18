@@ -87,7 +87,7 @@ public class MFDataModel {
      */
     @Deprecated
     public interface Declaration {
-        // Provides a common type for InputDeclaration, LocalDeclaration, and UnsupportedStatement.
+        // Provides a common type for InputDeclaration, and LocalDeclaration
     }
 
     /**
@@ -127,28 +127,6 @@ public class MFDataModel {
         public LocalDeclaration(String name, Expression value) {
             this.name = name;
             this.value = value;
-        }
-    }
-
-    /**
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    @Deprecated
-    public static class UnsupportedStatement implements Declaration {
-        public final String keyword;
-        public final String body;
-        public final List<Expression> expressions;
-
-        /**
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        @Deprecated
-        public UnsupportedStatement(String keyword, String body, List<Expression> expressions) {
-            this.keyword = keyword;
-            this.body = body;
-            this.expressions = expressions;
         }
     }
 
@@ -317,26 +295,6 @@ public class MFDataModel {
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    public static class UnsupportedExpression implements Expression {
-        public final UnsupportedAnnotation annotation;
-        public final List<Attribute> attributes;
-
-        /**
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        @Deprecated
-        public UnsupportedExpression(UnsupportedAnnotation annotation, List<Attribute> attributes) {
-            this.annotation = annotation;
-            this.attributes = attributes;
-        }
-    }
-
-    /**
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    @Deprecated
     public static class Attribute {
         public final String name;
         public final LiteralOrVariableRef value;
@@ -438,24 +396,6 @@ public class MFDataModel {
         public Option(String name, LiteralOrVariableRef value) {
             this.name = name;
             this.value = value;
-        }
-    }
-
-    /**
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    @Deprecated
-    public static class UnsupportedAnnotation implements Annotation {
-        public final String source;
-
-        /**
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        @Deprecated
-        public UnsupportedAnnotation(String source) {
-            this.source = source;
         }
     }
 

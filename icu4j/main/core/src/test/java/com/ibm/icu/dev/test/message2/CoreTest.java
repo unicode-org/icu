@@ -4,14 +4,11 @@
 package com.ibm.icu.dev.test.message2;
 
 import java.io.Reader;
-import java.lang.reflect.Type;
-import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.google.gson.reflect.TypeToken;
 import com.ibm.icu.dev.test.CoreTestFmwk;
 
 @SuppressWarnings({"static-method", "javadoc"})

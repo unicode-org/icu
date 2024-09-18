@@ -147,13 +147,13 @@ public class MFParser {
 
     // abnf: placeholder = expression / markup
     // abnf: expression = literal-expression
-    // abnf: / variable-expression
-    // abnf: / annotation-expression
+    // abnf:            / variable-expression
+    // abnf:            / annotation-expression
     // abnf: literal-expression = "{" [s] literal [s annotation] *(s attribute) [s] "}"
     // abnf: variable-expression = "{" [s] variable [s annotation] *(s attribute) [s] "}"
     // abnf: annotation-expression = "{" [s] annotation *(s attribute) [s] "}"
     // abnf: markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}" ; open and standalone
-    // abnf: / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}" ; close
+    // abnf:        / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}" ; close
     private MFDataModel.Expression getPlaceholder() throws MFParseException {
         int cp = input.peekChar();
         if (cp != '{') {
@@ -168,9 +168,7 @@ public class MFParser {
             result = getMarkup();
         } else if (cp == '$') {
             result = getVariableExpression();
-        } else if (StringUtils.isFunctionSigil(cp)
-                || StringUtils.isPrivateAnnotationSigil(cp)
-                || StringUtils.isReservedAnnotationSigil(cp)) {
+        } else if (StringUtils.isFunctionSigil(cp)) {
             result = getAnnotationExpression();
         } else {
             result = getLiteralExpression();
@@ -214,16 +212,8 @@ public class MFParser {
                 checkCondition(identifier != null, "Annotation / function name missing");
                 Map<String, MFDataModel.Option> options = getOptions();
                 return new MFDataModel.FunctionAnnotation(identifier, options);
-            default: // reserved && private
-                if (StringUtils.isReservedAnnotationSigil(cp)
-                        || StringUtils.isPrivateAnnotationSigil(cp)) {
-                    cp = input.readCodePoint();
-                    // The sigil is part of the body.
-                    // Safe to cast to char, the code point is in BMP
-                    identifier = (char) cp + getIdentifier();
-                    String body = getReservedBody();
-                    return new MFDataModel.UnsupportedAnnotation(identifier + body);
-                }
+            default:
+                // OK to continue and return null, it is an error.
         }
         input.gotoPosition(position);
         return null;
@@ -246,7 +236,7 @@ public class MFParser {
                 Map<String, MFDataModel.Option> options = getOptions();
                 return new MFDataModel.FunctionAnnotation(identifier, options);
             default:
-                // reserved, private, function, something else,
+                // function or something else,
                 return null;
         }
     }
@@ -290,9 +280,6 @@ public class MFParser {
         if (annotation instanceof MFDataModel.FunctionAnnotation) {
             return new MFDataModel.FunctionExpression(
                     (MFDataModel.FunctionAnnotation) annotation, attributes);
-        } else if (annotation instanceof MFDataModel.UnsupportedAnnotation) {
-            return new MFDataModel.UnsupportedExpression(
-                    (MFDataModel.UnsupportedAnnotation) annotation, attributes);
         } else {
             error("Unexpected annotation : " + annotation);
         }
@@ -300,7 +287,7 @@ public class MFParser {
     }
 
     // abnf: markup = "{" [s] "#" identifier *(s option) *(s attribute) [s] ["/"] "}" ; open and standalone
-    // abnf: / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}" ; close
+    // abnf:        / "{" [s] "/" identifier *(s option) *(s attribute) [s] "}" ; close
     private MFDataModel.Markup getMarkup() throws MFParseException {
         int cp = input.peekChar(); // consume the '{'
         checkCondition(cp == '#' || cp == '/', "Should not happen. Expecting a markup.");
@@ -368,39 +355,6 @@ public class MFParser {
             input.gotoPosition(position);
         }
         return null;
-    }
-
-    // abnf: reserved-body = *([s] 1*(reserved-char / reserved-escape / quoted))
-    // abnf: reserved-escape = backslash ( backslash / "{" / "|" / "}" )
-    private String getReservedBody() throws MFParseException {
-        int spaceCount = skipWhitespaces();
-        StringBuilder result = new StringBuilder();
-        while (true) {
-            int cp = input.readCodePoint();
-            if (StringUtils.isReservedChar(cp)) {
-                result.appendCodePoint(cp);
-            } else if (cp == '\\') {
-                cp = input.readCodePoint();
-                checkCondition(
-                        cp == '{' || cp == '|' || cp == '}',
-                        "Invalid escape sequence. Only \\{, \\| and \\} are valid here.");
-                result.append(cp);
-            } else if (cp == '|') {
-                input.backup(1);
-                MFDataModel.Literal quoted = getQuotedLiteral();
-                result.append(quoted.value);
-            } else if (cp == EOF) {
-                return result.toString();
-            } else {
-                if (result.length() == 0) {
-                    input.backup(spaceCount + 1);
-                    return "";
-                } else {
-                    input.backup(1);
-                    return result.toString();
-                }
-            }
-        }
     }
 
     // abnf: identifier = [namespace ":"] name
@@ -650,7 +604,7 @@ public class MFParser {
     // abnf: key = literal / "*"
     private MFDataModel.Variant getVariant() throws MFParseException {
         List<MFDataModel.LiteralOrCatchallKey> keys = new ArrayList<>();
-        // abnf variant = key *(s key) [s] quoted-pattern
+        // abnf: variant = key *(s key) [s] quoted-pattern
         while (true) {
             // Space is required between keys
             MFDataModel.LiteralOrCatchallKey key = getKey(!keys.isEmpty());
@@ -705,8 +659,6 @@ public class MFParser {
 
     // abnf: input-declaration = input [s] variable-expression
     // abnf: local-declaration = local s variable [s] "=" [s] expression
-    // abnf: reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
-    // abnf: reserved-keyword = "." name
     private MFDataModel.Declaration getDeclaration() throws MFParseException {
         int position = input.getPosition();
         skipOptionalWhitespaces();
@@ -745,32 +697,8 @@ public class MFParser {
                 break;
             case "match":
                 return new MatchDeclaration();
-            default: // abnf: reserved-statement = reserved-keyword [s reserved-body] 1*([s] expression)
-                skipOptionalWhitespaces();
-                String body = getReservedBody();
-                List<MFDataModel.Expression> expressions = new ArrayList<>();
-                while (true) {
-                    skipOptionalWhitespaces();
-                    // Look ahead to detect the end of the unsupported statement
-                    // (next token either begins a placeholder or begins a complex body)
-                    cp = input.readCodePoint();
-                    int cp1 = input.readCodePoint();
-                    if (cp == '{' && cp1 == '{') {
-                        // End of unsupported statement
-                        input.backup(2);
-                        break;
-                    } else {
-                        input.backup(2);
-                    }
-                    expression = getPlaceholder();
-                    // This also covers != null
-                    if (expression instanceof MFDataModel.VariableExpression) {
-                        expressions.add(expression);
-                    } else {
-                        break;
-                    }
-                }
-                return new MFDataModel.UnsupportedStatement(declName, body, expressions);
+            default:
+               // OK to continue and return null, it is an error.
         }
         return null;
     }
