@@ -456,6 +456,76 @@ modification and is useful for operations on text that may have associated
 meta-data (e.g., styled text), especially in the Transliterator API.
 UnicodeString implements Replaceable.
 
+UnicodeString can be used together with standard library algorithms and containers:
+
+```c++
+#include <unicode/locid.h>
+#include <unicode/stringoptions.h>
+#include <unicode/unistr.h>
+#include <unicode/ustream.h>
+
+#include <algorithm>
+#include <cstdlib>
+#include <functional>
+#include <iostream>
+#include <ostream>
+#include <unordered_set>
+#include <vector>
+
+// Output all strings in this container to this stream.
+template <template <typename...> typename C, typename... Args>
+std::ostream& operator<<(std::ostream& stream, const C<Args...>& c) {
+    for (const icu::UnicodeString& s : c) {
+        stream << s << std::endl;
+    }
+    return stream;
+}
+
+int main(int argc, char* argv[]) {
+    // Create a set of icu::UnicodeString objects.
+    const auto hasher = std::mem_fn(&icu::UnicodeString::hashCode);
+    std::unordered_set<icu::UnicodeString, decltype(hasher)> set(
+        {u"aaa", u"bbb", u"ccc"}, 0, hasher);
+
+    std::cout << "-1-" << std::endl << set;
+
+    // Create a vector from the strings in the set.
+    std::vector<icu::UnicodeString> vector(set.begin(), set.end());
+
+    std::cout << "-2-" << std::endl << vector;
+
+    // For each string in the set, append it to the vector, then uppercase it.
+    for (const icu::UnicodeString& s : set) {
+        vector.emplace_back(s).toUpper(icu::Locale::getEnglish());
+    }
+
+    std::cout << "-3-" << std::endl << vector;
+
+    // Sort the strings in ascending order (the default).
+    std::sort(vector.begin(), vector.end());
+
+    std::cout << "-4-" << std::endl << vector;
+
+    // Sort the strings in descending order.
+    std::sort(vector.begin(), vector.end(), std::greater());
+
+    std::cout << "-5-" << std::endl << vector;
+
+    // Sort the strings in ascending order, case-insensitively.
+    std::sort(vector.begin(), vector.end(),
+              [](const icu::UnicodeString& lhs, const icu::UnicodeString& rhs) {
+                  return lhs.caseCompare(rhs, U_FOLD_CASE_DEFAULT) < 0;
+              });
+
+    std::cout << "-6-" << std::endl << vector;
+
+    return EXIT_SUCCESS;
+}
+```
+
+See the [Collation API](../collation/api.md) for how to use a collator to sort
+strings in natural language ordering for humans.
+
 ### C++ Unicode String Literals
 
 Like in C, there are macros that enable users to instantiate a UnicodeString
