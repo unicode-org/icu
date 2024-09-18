@@ -41,8 +41,6 @@
     { "src": "Hello world {$exp @valid @attr=a @attrb=123 @atrn=|foo bar|}" },
     { "src": "Hello world {$exp :date @valid @attr=aaaa @attrb=123 @atrn=|foo bar|}" },
     { "src": "Hello world {$exp :date year=numeric month=long day=numeric int=12 @valid @attr=a @attrb=123 @atrn=|foo bar|}" },
-    { "src": "Reserved {$exp &foo |something more protected|} and more" },
-    { "src": "Reserved {$exp %foo |something quoted \\| inside|} and more" },
     { "src": "{{.starting with dot is OK here}}" },
     { "src": "{{Some string pattern \\}, with {$foo} and {$exp :date style=long}!}}" },
     { "src": ".input {$pi :number} {{}}" },
@@ -51,11 +49,9 @@
     { "src": ".local $foo = {$exp :date} {{}}" },
     { "src": ".local $foo = {$exp :date year=numeric month=long day=numeric} {{}}" },
     { "src": ".local $bar = {$foo :date month=medium} {{}}" },
-    { "src": ".something |reserved=| {$foo :date} {{}}" },
     { "src": ".input {$a :date} .local $exp = {$a :date style=full} {{Your card expires on {$exp}!}}" },
-    { "src": ".input {$a :date} .local $b = {$a :date year=numeric month=long day=numeric} .local $c = {$b :date month=medium} .someting |reserved = \\| and more| {$x :date} {$y :date} {$z :number} {{}}" },
+    { "src": ".input {$a :date} .local $b = {$a :date year=numeric month=long day=numeric} .local $c = {$b :date month=medium} {{}}" },
     { "src": ".input {$x :number} {{_}}" },
-    { "src": ".local $foo = {|1|} {{_}}" },
-    { "src": ".unsupported |statement| {$x :number} {{_}}" }
+    { "src": ".local $foo = {|1|} {{_}}" }
   ]
 }

@@ -3,10 +3,6 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
-
 // See https://github.com/unicode-org/conformance/blob/main/schema/message_fmt2/testgen_schema.json
 
 // Class corresponding to the json test files.

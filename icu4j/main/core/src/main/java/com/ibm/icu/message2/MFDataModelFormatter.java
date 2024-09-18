@@ -28,8 +28,6 @@ import com.ibm.icu.message2.MFDataModel.Option;
 import com.ibm.icu.message2.MFDataModel.Pattern;
 import com.ibm.icu.message2.MFDataModel.SelectMessage;
 import com.ibm.icu.message2.MFDataModel.StringPart;
-import com.ibm.icu.message2.MFDataModel.UnsupportedAnnotation;
-import com.ibm.icu.message2.MFDataModel.UnsupportedExpression;
 import com.ibm.icu.message2.MFDataModel.VariableRef;
 import com.ibm.icu.message2.MFDataModel.Variant;
 import com.ibm.icu.util.Calendar;
@@ -104,7 +102,8 @@ class MFDataModelFormatter {
             variables = resolveDeclarations(sm.declarations, arguments);
             patternToRender = findBestMatchingPattern(sm, variables, arguments);
         } else {
-            formattingError("");
+            fatalFormattingError("Unknown message type.");
+            // formattingError throws, so the return does not actually happen
             return "ERROR!";
         }
 
@@ -123,10 +122,8 @@ class MFDataModelFormatter {
                 result.append(formattedExpression.getFormattedValue().toString());
             } else if (part instanceof MFDataModel.Markup) {
                 // Ignore
-            } else if (part instanceof MFDataModel.UnsupportedExpression) {
-                // Ignore
             } else {
-                formattingError("Unknown part type: " + part);
+                fatalFormattingError("Unknown part type: " + part);
             }
         }
         return result.toString();
@@ -217,7 +214,7 @@ class MFDataModelFormatter {
                     // spec: Append `ks` as the last element of the list `keys`.
                     keys.add(ks);
                 } else {
-                    formattingError("Literal expected, but got " + key);
+                    fatalFormattingError("Literal expected, but got " + key);
                 }
             }
             // spec: Let `rv` be the resolved value at index `i` of `res`.
@@ -249,7 +246,7 @@ class MFDataModelFormatter {
                 }
                 // spec: Assert that `key` is a _literal_.
                 if (!(key instanceof Literal)) {
-                    formattingError("Literal expected");
+                    fatalFormattingError("Literal expected");
                 }
                 // spec: Let `ks` be the resolved value of `key`.
                 String ks = ((Literal) key).value;
@@ -304,7 +301,7 @@ class MFDataModelFormatter {
                 if (!(key instanceof CatchallKey)) {
                     // spec: Assert that `key` is a _literal_.
                     if (!(key instanceof Literal)) {
-                        formattingError("Literal expected");
+                        fatalFormattingError("Literal expected");
                     }
                     // spec: Let `ks` be the resolved value of `key`.
                     String ks = ((Literal) key).value;
@@ -356,7 +353,7 @@ class MFDataModelFormatter {
         List<LiteralOrCatchallKey> v1 = o1.variant.keys;
         List<LiteralOrCatchallKey> v2 = o1.variant.keys;
         if (v1.size() != v2.size()) {
-            formattingError("The number of keys is not equal.");
+            fatalFormattingError("The number of keys is not equal.");
         }
         for (int i = 0; i < v1.size(); i++) {
             LiteralOrCatchallKey k1 = v1.get(i);
@@ -399,7 +396,7 @@ class MFDataModelFormatter {
         }
     }
 
-    private static void formattingError(String message) {
+    private static void fatalFormattingError(String message) {
         throw new IllegalArgumentException(message);
     }
 
@@ -512,24 +509,23 @@ class MFDataModelFormatter {
             // No output on markup, for now (we only format to string)
             return new FormattedPlaceholder(expression, new PlainStringFormattedValue(""));
         } else {
-            UnsupportedExpression ue = (UnsupportedExpression) expression;
-            char sigil = ue.annotation.source.charAt(0);
-            return new FormattedPlaceholder(
-                    expression, new PlainStringFormattedValue("{" + sigil + "}"));
+            if (expression == null) {
+                fatalFormattingError("unexpected null expression");
+            } else {
+                fatalFormattingError("unknown expression type "
+                        + expression.getClass().getName());
+            }
         }
 
         if (annotation instanceof FunctionAnnotation) {
             FunctionAnnotation fa = (FunctionAnnotation) annotation;
             if (functionName != null && !functionName.equals(fa.name)) {
-                formattingError(
+                fatalFormattingError(
                         "invalid function overrides, '" + functionName + "' <> '" + fa.name + "'");
             }
             functionName = fa.name;
             Map<String, Object> newOptions = convertOptions(fa.options, variables, arguments);
             options.putAll(newOptions);
-        } else if (annotation instanceof UnsupportedAnnotation) {
-            // We don't know how to format unsupported annotations
-            return new FormattedPlaceholder(expression, new PlainStringFormattedValue(fallbackString));
         }
 
         FormatterFactory funcFactory = getFormattingFunctionFactoryByName(toFormat, functionName);

@@ -19,14 +19,12 @@ public class SerializationTest extends CoreTestFmwk {
     @Test
     public void test() throws Exception {
         String[] testStrings = {
-            "Hello {$count &something}",
             "Hello world!",
             "{{.Hello world!}}",
             "Hello {userName}",
             "Hello {$userName}",
             "Hello {|-12345.12+e10|}",
             "Hello {$count :something max=10 min=1.1416 opt1=someString opt2=|a b \\| c| @a1 @a2=|| @a3=|str|}",
-            "Hello {$count &something}",
             ".input {$a :number} {{Hello world!}}",
             ".local $b = {$a :number} {{Hello world!}}",
             ".local $c = {1 :number} {{Hello {userName}}}",
@@ -57,7 +55,6 @@ public class SerializationTest extends CoreTestFmwk {
                     + ".match {$c}\n"
                     + "one {{{$c} dollar}}\n"
                     + "*   {{{$c} dollars}}",
-            ".local $c = {$count} .foobar |asd asd asd asd| {$bar1} {$bar2} {$bar3} .local $b = {$bar} {{Foo bar}}",
             ".local $c = {1 :number minimumFractionDigits=2}\n"
                     + ".match {$c}\n"
                     + "one {{{$c} dollar}}\n"

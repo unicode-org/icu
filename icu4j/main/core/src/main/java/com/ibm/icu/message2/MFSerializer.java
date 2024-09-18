@@ -27,9 +27,6 @@ import com.ibm.icu.message2.MFDataModel.PatternMessage;
 import com.ibm.icu.message2.MFDataModel.PatternPart;
 import com.ibm.icu.message2.MFDataModel.SelectMessage;
 import com.ibm.icu.message2.MFDataModel.StringPart;
-import com.ibm.icu.message2.MFDataModel.UnsupportedAnnotation;
-import com.ibm.icu.message2.MFDataModel.UnsupportedExpression;
-import com.ibm.icu.message2.MFDataModel.UnsupportedStatement;
 import com.ibm.icu.message2.MFDataModel.VariableExpression;
 import com.ibm.icu.message2.MFDataModel.VariableRef;
 import com.ibm.icu.message2.MFDataModel.Variant;
@@ -123,18 +120,9 @@ public class MFSerializer {
             functionExpressionToString((FunctionExpression) expression);
         } else if (expression instanceof Markup) {
             markupToString((Markup) expression);
-        } else if (expression instanceof UnsupportedExpression) {
-            unsupportedExpressionToString((UnsupportedExpression) expression);
         } else {
             errorType("Expression", expression);
         }
-    }
-
-    private void unsupportedExpressionToString(UnsupportedExpression ue) {
-        result.append('{');
-        annotationToString(ue.annotation);
-        attributesToString(ue.attributes);
-        result.append('}');
     }
 
     private void markupToString(Markup markup) {
@@ -193,16 +181,6 @@ public class MFSerializer {
             result.append(":");
             result.append(((FunctionAnnotation) annotation).name);
             optionsToString(((FunctionAnnotation) annotation).options);
-        } else if (annotation instanceof UnsupportedAnnotation) {
-            addSpaceIfNeeded();
-            String value = ((UnsupportedAnnotation) annotation).source;
-            for (int i = 0; i < value.length(); i++) {
-                char c = value.charAt(i);
-                if (c == '\\' || c == '{' || c == '}') {
-                    result.append('\\');
-                }
-                result.append(c);
-            }
         } else {
             errorType("Annotation", annotation);
         }
@@ -304,29 +282,9 @@ public class MFSerializer {
                 localDeclarationToString((LocalDeclaration) declaration);
             } else if (declaration instanceof InputDeclaration) {
                 inputDeclarationToString((InputDeclaration) declaration);
-            } else if (declaration instanceof UnsupportedStatement) {
-                unsupportedStatementToString((UnsupportedStatement) declaration);
             } else {
                 errorType("Declaration", declaration);
             }
-        }
-    }
-
-    private void unsupportedStatementToString(UnsupportedStatement declaration) {
-        addSpaceIfNeeded();
-        result.append('.');
-        result.append(declaration.keyword);
-        if (!declaration.body.isEmpty()) {
-            result.append(' ');
-        }
-        result.append('|');
-        result.append(declaration.body);
-        result.append('|');
-        needSpace = true;
-        for (Expression expression : declaration.expressions) {
-            addSpaceIfNeeded();
-            expressionToString(expression);
-            needSpace = true;
         }
     }
 

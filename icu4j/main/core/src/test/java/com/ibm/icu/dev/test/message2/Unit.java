@@ -4,7 +4,6 @@
 package com.ibm.icu.dev.test.message2;
 
 import java.util.List;
-import java.util.Map;
 import java.util.StringJoiner;
 
 // Class corresponding to the json test files.
