@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726676611651,
+  "lastUpdate": 1726683358425,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25977,6 +25977,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.415758562638412,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dragan@unicode.org",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "committer": {
+            "email": "131725218+DraganBesevic@users.noreply.github.com",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "distinct": true,
+          "id": "ce4b90e4843ebaaa7a6982f1685f235b2c44bfbe",
+          "message": "ICU-22723 Integrate CLDR 46 release beta1, part 3, source files",
+          "timestamp": "2024-09-18T10:41:49-07:00",
+          "tree_id": "f0ef77a59a75e8c47952afd714a599a1b525c955",
+          "url": "https://github.com/unicode-org/icu/commit/ce4b90e4843ebaaa7a6982f1685f235b2c44bfbe"
+        },
+        "date": 1726683195534,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.408857652278969,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
