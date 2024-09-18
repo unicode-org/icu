@@ -304,7 +304,7 @@ ubidi_setReorderingMode(UBiDi *pBiDi, UBiDiReorderingMode reorderingMode) UPRV_N
     if ((pBiDi!=nullptr) && (reorderingMode >= UBIDI_REORDER_DEFAULT)
                         && (reorderingMode < UBIDI_REORDER_COUNT)) {
         pBiDi->reorderingMode = reorderingMode;
-        pBiDi->isInverse = (UBool)(reorderingMode == UBIDI_REORDER_INVERSE_NUMBERS_AS_L);
+        pBiDi->isInverse = reorderingMode == UBIDI_REORDER_INVERSE_NUMBERS_AS_L;
     }
 }
 

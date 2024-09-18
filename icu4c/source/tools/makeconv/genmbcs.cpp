@@ -970,7 +970,7 @@ MBCSAddTable(NewConverter *cnvData, UCMTable *table, UConverterStaticData *stati
      * a sorted table, which makeconv generates when explicit precision
      * indicators are used.
      */
-    mbcsData->utf8Friendly=utf8Friendly=(UBool)((table->flagsType&UCM_FLAGS_EXPLICIT)!=0);
+    mbcsData->utf8Friendly = utf8Friendly = (table->flagsType & UCM_FLAGS_EXPLICIT) != 0;
     if(utf8Friendly) {
         mbcsData->utf8Max=MBCS_UTF8_MAX;
         if(SMALL && maxCharLength>1) {

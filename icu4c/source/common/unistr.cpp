@@ -125,7 +125,7 @@ U_COMMON_API UnicodeString U_EXPORT2
 unistr_internalConcat(const UnicodeString &s1, std::u16string_view s2) {
   int32_t sumLengths;
   if (s2.length() > INT32_MAX ||
-      uprv_add32_overflow(s1.length(), (int32_t)s2.length(), &sumLengths)) {
+      uprv_add32_overflow(s1.length(), static_cast<int32_t>(s2.length()), &sumLengths)) {
     UnicodeString bogus;
     bogus.setToBogus();
     return bogus;
@@ -301,7 +301,7 @@ UnicodeString::UnicodeString(const char *src, int32_t length, EInvariant) {
 UnicodeString UnicodeString::readOnlyAliasFromU16StringView(std::u16string_view text) {
   UnicodeString result;
   if (text.length() <= INT32_MAX) {
-    result.setTo(false, text.data(), (int32_t)text.length());
+    result.setTo(false, text.data(), static_cast<int32_t>(text.length()));
   } else {
     result.setToBogus();
   }
@@ -1622,7 +1622,7 @@ UnicodeString::doReplace(int32_t start, int32_t length, std::u16string_view src)
     setToBogus();
     return *this;
   }
-  return doReplace(start, length, src.data(), 0, (int32_t)src.length());
+  return doReplace(start, length, src.data(), 0, static_cast<int32_t>(src.length()));
 }
 
 // Versions of doReplace() only for append() variants.
@@ -1722,7 +1722,7 @@ UnicodeString::doAppend(std::u16string_view src) {
     setToBogus();
     return *this;
   }
-  return doAppend(src.data(), 0, (int32_t)src.length());
+  return doAppend(src.data(), 0, static_cast<int32_t>(src.length()));
 }
 
 /**

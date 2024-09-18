@@ -477,7 +477,7 @@ testTrieUTF8(const char *testName,
         }
         if(i8!=(p-s)) {
             log_err("error: wrong end index from UTRIE2_U8_NEXT(%s)(from %d %lx->U+%04lx): %ld != %ld\n",
-                    testName, (int)prev8, (unsigned long)bytes, (long)c, (long)(p-s), (long)i8);
+                    testName, (int)prev8, (unsigned long)bytes, (long)c, p - s, (long)i8);
             continue;
         }
         ++i;
@@ -510,7 +510,7 @@ testTrieUTF8(const char *testName,
         }
         if(i8!=(p-s)) {
             log_err("error: wrong end index from UTRIE2_U8_PREV(%s)(from %d %lx->U+%04lx): %ld != %ld\n",
-                    testName, (int)prev8, (unsigned long)bytes, (long)c, (long)(p-s), (long)i8);
+                    testName, (int)prev8, (unsigned long)bytes, (long)c, p - s, (long)i8);
             continue;
         }
     }

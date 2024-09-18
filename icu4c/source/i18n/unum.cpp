@@ -485,7 +485,7 @@ unum_parseDoubleCurrency(const UNumberFormat* fmt,
     if (U_FAILURE(*status)) {
         return doubleVal;
     }
-    const UnicodeString src((UBool)(textLength == -1), text, textLength);
+    const UnicodeString src(textLength == -1, text, textLength);
     ParsePosition pp;
     if (parsePos != nullptr) {
         pp.setIndex(*parsePos);

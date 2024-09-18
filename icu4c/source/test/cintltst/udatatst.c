@@ -1148,7 +1148,7 @@ static void TestICUDataName(void)
                 typeChar = 'l';
                 break;
           default:
-                log_err("Expected 1 or 0 for U_IS_BIG_ENDIAN, got %d!\n", (int)U_IS_BIG_ENDIAN);
+                log_err("Expected 1 or 0 for U_IS_BIG_ENDIAN, got %d!\n", U_IS_BIG_ENDIAN);
                 /* return; */
           }
           break;

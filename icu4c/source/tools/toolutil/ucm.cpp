@@ -575,8 +575,8 @@ ucm_checkBaseExt(UCMStates *baseStates,
 
     /* check */
     result=
-        checkBaseExtUnicode(baseStates, base, ext, (UBool)(moveTarget!=nullptr), intersectBase)|
-        checkBaseExtBytes(baseStates, base, ext, (UBool)(moveTarget!=nullptr), intersectBase);
+        checkBaseExtUnicode(baseStates, base, ext, moveTarget != nullptr, intersectBase) |
+        checkBaseExtBytes(baseStates, base, ext, moveTarget != nullptr, intersectBase);
 
     if(result&HAS_ERRORS) {
         return false;

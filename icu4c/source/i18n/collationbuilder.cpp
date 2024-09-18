@@ -1675,7 +1675,7 @@ ucol_openRules(const char16_t *rules, int32_t rulesLength,
         *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
-    UnicodeString r((UBool)(rulesLength < 0), rules, rulesLength);
+    UnicodeString r(rulesLength < 0, rules, rulesLength);
     coll->internalBuildTailoring(r, strength, normalizationMode, parseError, nullptr, *pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         delete coll;

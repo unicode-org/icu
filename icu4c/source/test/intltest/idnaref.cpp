@@ -276,8 +276,8 @@ idnaref_toASCII(const char16_t* src, int32_t srcLength,
             reqLength=0;
 
     //get the options
-    UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
-    UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
+    UBool allowUnassigned = (options & IDNAREF_ALLOW_UNASSIGNED) != 0;
+    UBool useSTD3ASCIIRules = (options & IDNAREF_USE_STD3_RULES) != 0;
 
     UBool* caseFlags = nullptr;
 
@@ -455,8 +455,8 @@ idnaref_toUnicode(const char16_t* src, int32_t srcLength,
     UBool* caseFlags = nullptr;
 
     //get the options
-    UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
-    UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
+    UBool allowUnassigned = (options & IDNAREF_ALLOW_UNASSIGNED) != 0;
+    UBool useSTD3ASCIIRules = (options & IDNAREF_USE_STD3_RULES) != 0;
 
     UBool srcIsASCII = true;
     UBool srcIsLDH = true;

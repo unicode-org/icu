@@ -3033,7 +3033,7 @@ public:
    * @draft ICU 76
    */
   inline operator std::u16string_view() const {
-    return { getBuffer(), (std::u16string_view::size_type)length() };
+    return {getBuffer(), static_cast<std::u16string_view::size_type>(length())};
   }
 
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)

@@ -1657,7 +1657,7 @@ public:
             int32_t length;
             const UChar *uchars = uset_getString(uset, index, &length);
             // assert uchars != nullptr;
-            return { ConstChar16Ptr(uchars), (uint32_t)length };
+            return {ConstChar16Ptr(uchars), static_cast<uint32_t>(length)};
         }
         return {};
     }

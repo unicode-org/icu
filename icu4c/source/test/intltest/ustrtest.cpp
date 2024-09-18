@@ -2439,11 +2439,11 @@ void UnicodeStringTest::TestU16StringView() {
 
     UnicodeString aliasFromSV = UnicodeString::readOnlyAlias(sv16);
     assertTrue("aliasFromSV pointer alias", aliasFromSV.getBuffer() == sv16.data());
-    assertEquals("aliasFromSV length", (int32_t)sv16.length(), aliasFromSV.length());
+    assertEquals("aliasFromSV length", static_cast<int32_t>(sv16.length()), aliasFromSV.length());
 
     UnicodeString aliasFromStr = UnicodeString::readOnlyAlias(str16);
     assertTrue("aliasFromStr pointer alias", aliasFromStr.getBuffer() == str16.data());
-    assertEquals("aliasFromStr length", (int32_t)str16.length(), aliasFromStr.length());
+    assertEquals("aliasFromStr length", static_cast<int32_t>(str16.length()), aliasFromStr.length());
 
     UnicodeString aliasFromUStr = UnicodeString::readOnlyAlias(ustr);
     assertTrue("aliasFromUStr pointer alias", aliasFromUStr.getBuffer() == ustr.getBuffer());
@@ -2494,7 +2494,7 @@ void UnicodeStringTest::TestU16StringView() {
     // Convert UnicodeString to string view.
     std::u16string_view sv16FromUniStr(any);
     assertTrue("sv16FromUniStr buffer alias", sv16FromUniStr.data() == any.getBuffer());
-    assertEquals("sv16FromUniStr length", any.length(), (int32_t)sv16FromUniStr.length());
+    assertEquals("sv16FromUniStr length", any.length(), static_cast<int32_t>(sv16FromUniStr.length()));
 
     // Just to show convenience: Convert UnicodeString to string view, then to std string.
     std::u16string str16FromUniStr(any);

@@ -460,7 +460,7 @@ void Parser::parseToken(const std::u16string_view& token, UErrorCode& errorCode)
     U_ASSERT(inBounds(source, index));
 
     int32_t tokenPos = 0;
-    while (tokenPos < (int32_t) token.length()) {
+    while (tokenPos < static_cast<int32_t>(token.length())) {
         if (source[index] != token[tokenPos]) {
             ERROR(parseError, errorCode, index);
             return;
@@ -1674,7 +1674,7 @@ void Parser::parseUnsupportedStatement(UErrorCode& status) {
 // Terrible hack to get around the ambiguity between unsupported keywords
 // and supported keywords
 bool Parser::nextIs(const std::u16string_view &keyword) const {
-    for(int32_t i = 0; i < (int32_t) keyword.length(); i++) {
+    for (int32_t i = 0; i < static_cast<int32_t>(keyword.length()); i++) {
         if (!inBounds(source, index + i) || source[index + i] != keyword[i]) {
             return false;
         }

@@ -1379,7 +1379,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
         log_err("ucal_get() failed: %s\n", u_errorName(status));
         goto cleanup;
     }
-    temp=(double)((double)offset / 1000.0 / 60.0 / 60.0);
+    temp = (double)offset / 1000.0 / 60.0 / 60.0;
     /*printf("offset for %s %f hr\n", austrdup(myDateFormat(datfor, date1)), temp);*/
        
     utc = ((ucal_get(cal, UCAL_HOUR_OF_DAY, &status) * 60 +
