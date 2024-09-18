@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726600810738,
+  "lastUpdate": 1726672999863,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -91965,6 +91965,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.4174,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "747d5eef3b049538b926a3f45ca854da7ea62359",
+          "message": "ICU-22834 Update tests to reflect MF2 schema in conformance repo\n\nThis also updates the spec tests from the current version of the MFWG\nrepository and removes some duplicate tests.\nSpec tests now reflect the message-format-wg repo as of\nhttps://github.com/unicode-org/message-format-wg/commit/5612f3b0508d63770b218d581c465aae878f5573\n\nIt also updates both the ICU4C and ICU4J parsers to follow the\ncurrent test schema in the conformance repository.\n\nThis includes adding code to both parsers to allow `src` to be\neither a single string or an array of strings (per\nhttps://github.com/unicode-org/conformance/pull/255 ),\nand eliminating `srcs` in tests.\n\nIt also includes other changes to make updated spec tests pass:\n\nICU4C: Allow trailing whitespace for complex messages, due to spec change\nICU4C: Parse number literals correctly in Number::format\nICU4J: Allow trailing whitespace after complex body, per spec change\nICU4C: Fix bug that was assuming an .input variable can't have a reserved annotation\nICU4C: Fix bug where unsupported '.i' was parsed as an '.input'\nICU4C/ICU4J: Handle markup with space after the initial left curly brace\nICU4C: Check for duplicate variant errors\nICU4C/ICU4J: Handle leading whitespace in complex messages\nICU4J: Treat whitespace after .input keyword as optional\nICU4J: Don't format unannotated number literals as numbers",
+          "timestamp": "2024-09-18T07:46:29-07:00",
+          "tree_id": "d4f3d6cc1a9aa1bcb99aeaa2516ca1592e05ef50",
+          "url": "https://github.com/unicode-org/icu/commit/747d5eef3b049538b926a3f45ca854da7ea62359"
+        },
+        "date": 1726672845336,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.7456,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.1494,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.2398,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 25.7948,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 36.829,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.9087,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 26.8478,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.2356,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 77.6445,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.5151,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.2272,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.0809,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
