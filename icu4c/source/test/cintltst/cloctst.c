@@ -2879,7 +2879,7 @@ static void TestDisplayNameWarning(void) {
  * starts with `prefix' plus an additional element, that is, string ==
  * prefix + '_' + x, then return 1.  Otherwise return a value < 0.
  */
-static UBool _loccmp(const char* string, const char* prefix) {
+static int32_t _loccmp(const char* string, const char* prefix) {
     int32_t slen = (int32_t)uprv_strlen(string),
             plen = (int32_t)uprv_strlen(prefix);
     int32_t c = uprv_strncmp(string, prefix, plen);

@@ -1139,18 +1139,7 @@ static void TestICUDataName(void)
     switch(U_CHARSET_FAMILY)
     {
     case U_ASCII_FAMILY:
-          switch((int)U_IS_BIG_ENDIAN)
-          {
-          case 1:
-                typeChar = 'b';
-                break;
-          case 0:
-                typeChar = 'l';
-                break;
-          default:
-                log_err("Expected 1 or 0 for U_IS_BIG_ENDIAN, got %d!\n", U_IS_BIG_ENDIAN);
-                /* return; */
-          }
+          typeChar = U_IS_BIG_ENDIAN ? 'b' : 'l';
           break;
     case U_EBCDIC_FAMILY:
         typeChar = 'e';
