@@ -19,6 +19,7 @@
 
 #if U_HAVE_RBNF
 
+#include <limits>
 #include "unicode/localpointer.h"
 #include "unicode/rbnf.h"
 #include "unicode/tblcoll.h"
@@ -116,9 +117,9 @@ NFRule::makeRules(UnicodeString& description,
     // new it up and initialize its basevalue and divisor
     // (this also strips the rule descriptor, if any, off the
     // description string)
-    NFRule* rule1 = new NFRule(rbnf, description, status);
+    LocalPointer<NFRule> rule1(new NFRule(rbnf, description, status));
     /* test for nullptr */
-    if (rule1 == nullptr) {
+    if (rule1.isNull()) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -144,7 +145,7 @@ NFRule::makeRules(UnicodeString& description,
     else {
         // if the description does contain a matched pair of brackets,
         // then it's really shorthand for two rules (with one exception)
-        NFRule* rule2 = nullptr;
+        LocalPointer<NFRule> rule2;
         UnicodeString sbuf;
 
         // we'll actually only split the rule into two rules if its
@@ -160,9 +161,9 @@ NFRule::makeRules(UnicodeString& description,
             // set, they both have the same base value; otherwise,
             // increment the original rule's base value ("rule1" actually
             // goes SECOND in the rule set's rule list)
-            rule2 = new NFRule(rbnf, UnicodeString(), status);
+            rule2.adoptInstead(new NFRule(rbnf, UnicodeString(), status));
             /* test for nullptr */
-            if (rule2 == nullptr) {
+            if (rule2.isNull()) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
@@ -217,20 +218,20 @@ NFRule::makeRules(UnicodeString& description,
         // BEFORE rule1 in the list: in all cases, rule2 OMITS the
         // material in the brackets and rule1 INCLUDES the material
         // in the brackets)
-        if (rule2 != nullptr) {
+        if (!rule2.isNull()) {
             if (rule2->baseValue >= kNoBase) {
-                rules.add(rule2);
+                rules.add(rule2.orphan());
             }
             else {
-                owner->setNonNumericalRule(rule2);
+                owner->setNonNumericalRule(rule2.orphan());
             }
         }
     }
     if (rule1->baseValue >= kNoBase) {
-        rules.add(rule1);
+        rules.add(rule1.orphan());
     }
     else {
-        owner->setNonNumericalRule(rule1);
+        owner->setNonNumericalRule(rule1.orphan());
     }
 }
 
@@ -289,7 +290,14 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
             while (p < descriptorLength) {
                 c = descriptor.charAt(p);
                 if (c >= gZero && c <= gNine) {
-                    val = val * ll_10 + static_cast<int32_t>(c - gZero);
+                    int32_t single_digit = static_cast<int32_t>(c - gZero);
+                    if ((val > 0 && val > (std::numeric_limits<int64_t>::max() - single_digit) / 10) ||
+                        (val < 0 && val < (std::numeric_limits<int64_t>::min() - single_digit) / 10)) {
+                        // out of int64_t range
+                        status = U_PARSE_ERROR;
+                        return;
+                    }
+                    val = val * ll_10 + single_digit;
                 }
                 else if (c == gSlash || c == gGreaterThan) {
                     break;
