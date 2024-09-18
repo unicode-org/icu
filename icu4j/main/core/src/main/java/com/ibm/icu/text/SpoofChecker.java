@@ -1489,7 +1489,7 @@ public class SpoofChecker {
      *            The second of the two strings to be compared for confusability.
      * @return Non-zero if s1 and s1 are confusable. If not 0, the value will indicate the type(s) of confusability
      *         found, as defined by spoof check test constants.
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public int areConfusable(int direction, CharSequence s1, CharSequence s2) {
         //
@@ -1554,7 +1554,7 @@ public class SpoofChecker {
      * @param str The input string whose bidiSkeleton will be generated.
      * @return The output skeleton string.
      *
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public String getBidiSkeleton(int direction, CharSequence str) {
         if (direction != Bidi.DIRECTION_LEFT_TO_RIGHT && direction != Bidi.DIRECTION_RIGHT_TO_LEFT) {
