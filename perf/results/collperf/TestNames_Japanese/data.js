@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726672350230,
+  "lastUpdate": 1726676908927,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -51837,6 +51837,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5655609.2992,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "32056302fc9a462d74e0694eac532f5d1ab428c9",
+          "message": "ICU-22722 Add example code for UnicodeString and the standard library.",
+          "timestamp": "2024-09-18T18:08:24+02:00",
+          "tree_id": "388283ac3ae0e5e9cb2a2ed10c6a8215815518aa",
+          "url": "https://github.com/unicode-org/icu/commit/32056302fc9a462d74e0694eac532f5d1ab428c9"
+        },
+        "date": 1726676747219,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 214.7121,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20928872.7885,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5510178.8358,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20287040.0889,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5779789.4041,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
