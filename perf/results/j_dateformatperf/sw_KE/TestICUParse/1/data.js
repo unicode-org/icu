@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726696586404,
+  "lastUpdate": 1726698360384,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26217,6 +26217,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 345.4480341883411,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "c92bf3dfecc90a59cf2de55285e98c7587ce25b9",
+          "message": "ICU-22723 Frontload ICU4J API promotions (BRS #18)",
+          "timestamp": "2024-09-18T15:09:03-07:00",
+          "tree_id": "44c8f48826a1d3e61c87d3dd66b3980d86d3a017",
+          "url": "https://github.com/unicode-org/icu/commit/c92bf3dfecc90a59cf2de55285e98c7587ce25b9"
+        },
+        "date": 1726698205815,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 367.3650810189877,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
