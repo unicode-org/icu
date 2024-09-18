@@ -267,27 +267,35 @@ NFRuleSet::parseRules(UnicodeString& description, UErrorCode& status)
  * @param rule The rule to set.
  */
 void NFRuleSet::setNonNumericalRule(NFRule *rule) {
-    int64_t baseValue = rule->getBaseValue();
-    if (baseValue == NFRule::kNegativeNumberRule) {
-        delete nonNumericalRules[NEGATIVE_RULE_INDEX];
-        nonNumericalRules[NEGATIVE_RULE_INDEX] = rule;
-    }
-    else if (baseValue == NFRule::kImproperFractionRule) {
-        setBestFractionRule(IMPROPER_FRACTION_RULE_INDEX, rule, true);
-    }
-    else if (baseValue == NFRule::kProperFractionRule) {
-        setBestFractionRule(PROPER_FRACTION_RULE_INDEX, rule, true);
-    }
-    else if (baseValue == NFRule::kDefaultRule) {
-        setBestFractionRule(DEFAULT_RULE_INDEX, rule, true);
-    }
-    else if (baseValue == NFRule::kInfinityRule) {
-        delete nonNumericalRules[INFINITY_RULE_INDEX];
-        nonNumericalRules[INFINITY_RULE_INDEX] = rule;
-    }
-    else if (baseValue == NFRule::kNaNRule) {
-        delete nonNumericalRules[NAN_RULE_INDEX];
-        nonNumericalRules[NAN_RULE_INDEX] = rule;
+    switch (rule->getBaseValue()) {
+        case NFRule::kNegativeNumberRule:
+            delete nonNumericalRules[NEGATIVE_RULE_INDEX];
+            nonNumericalRules[NEGATIVE_RULE_INDEX] = rule;
+            return;
+        case NFRule::kImproperFractionRule:
+            setBestFractionRule(IMPROPER_FRACTION_RULE_INDEX, rule, true);
+            return;
+        case NFRule::kProperFractionRule:
+            setBestFractionRule(PROPER_FRACTION_RULE_INDEX, rule, true);
+            return;
+        case NFRule::kDefaultRule:
+            setBestFractionRule(DEFAULT_RULE_INDEX, rule, true);
+            return;
+        case NFRule::kInfinityRule:
+            delete nonNumericalRules[INFINITY_RULE_INDEX];
+            nonNumericalRules[INFINITY_RULE_INDEX] = rule;
+            return;
+        case NFRule::kNaNRule:
+            delete nonNumericalRules[NAN_RULE_INDEX];
+            nonNumericalRules[NAN_RULE_INDEX] = rule;
+            return;
+        case NFRule::kNoBase:
+        case NFRule::kOtherRule:
+        default:
+            // If we do not remember the rule inside the object.
+            // delete it here to prevent memory leak.
+            delete rule;
+            return;
     }
 }
 

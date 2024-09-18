@@ -80,6 +80,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(28, TestNorwegianSpellout);
         TESTCASE(29, TestNumberingSystem);
         TESTCASE(30, TestDFRounding);
+        TESTCASE(31, TestMemoryLeak22899);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -1338,6 +1339,14 @@ void IntlTestRBNF::TestDFRounding()
         };
         doTest(nfFloor.getAlias(), integerTestData, false);
     }
+}
+
+void IntlTestRBNF::TestMemoryLeak22899()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError perror;
+    icu::UnicodeString str(u"0,31,01,30,01,0,01,01,30,01,30,31,01,30,01,30,30,00,01,0:");
+    icu::RuleBasedNumberFormat rbfmt(str, icu::Locale::getEnglish(), perror, status);
 }
 
 void 
