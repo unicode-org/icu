@@ -4266,9 +4266,17 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      */
     @Deprecated
     public static class RegionValidateMap {
+        /**
+         * @internal Visible For Testing
+         * @deprecated This API is ICU internal only.
+         */
         public RegionValidateMap() {
             this.map = Arrays.copyOf(gValidRegionMap, gValidRegionMap.length);
         }
+        /**
+         * @internal Visible For Testing
+         * @deprecated This API is ICU internal only.
+         */
         public boolean isSet(String region) {
             int index = value(region);
             if (index < 0) {
@@ -4276,9 +4284,17 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             }
             return 0 != (map[index / 32] & (1 << (index % 32)));
         }
+        /**
+         * @internal Visible For Testing
+         * @deprecated This API is ICU internal only.
+         */
         public boolean equals(RegionValidateMap that) {
             return Arrays.equals(map, that.map);
         }
+        /**
+         * @internal Visible For Testing
+         * @deprecated This API is ICU internal only.
+         */
         protected int value(String region) {
               if (region.matches("[a-zA-Z][a-zA-Z]")) {
                   region = region.toLowerCase();
@@ -4287,6 +4303,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
               }
               return -1;
         }
+        /**
+         * @internal Visible For Testing
+         * @deprecated This API is ICU internal only.
+         */
         protected int[] map;
         static private int[] gValidRegionMap = {
             0xeedf597c, 0xdeddbdef, 0x15943f3f, 0x0e00d580,
@@ -4297,6 +4317,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             0x00400408, 0x00000001,
         };
 
+        /**
+         * @internal Visible For Testing
+         * @deprecated This API is ICU internal only.
+         */
         public static RegionValidateMap BUILTIN = new RegionValidateMap();
     }
 }
