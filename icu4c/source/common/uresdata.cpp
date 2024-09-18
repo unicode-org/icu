@@ -140,7 +140,7 @@ isAcceptable(void *context,
              const char * /*type*/, const char * /*name*/,
              const UDataInfo *pInfo) {
     uprv_memcpy(context, pInfo->formatVersion, 4);
-    return static_cast<UBool>(
+    return
         pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
@@ -149,7 +149,7 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x65 &&
         pInfo->dataFormat[2]==0x73 &&
         pInfo->dataFormat[3]==0x42 &&
-        (1<=pInfo->formatVersion[0] && pInfo->formatVersion[0]<=3));
+        (1<=pInfo->formatVersion[0] && pInfo->formatVersion[0]<=3);
 }
 
 /* semi-public functions ---------------------------------------------------- */

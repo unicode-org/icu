@@ -72,8 +72,7 @@ static UBool U_CALLCONV compareEntries(const UHashTok p1, const UHashTok p2) {
     name2.pointer = b2->fName;
     path1.pointer = b1->fPath;
     path2.pointer = b2->fPath;
-    return static_cast<UBool>(uhash_compareChars(name1, name2) &&
-        uhash_compareChars(path1, path2));
+    return uhash_compareChars(name1, name2) && uhash_compareChars(path1, path2);
 }
 
 
@@ -1730,7 +1729,7 @@ U_CAPI UBool U_EXPORT2 ures_hasNext(const UResourceBundle *resB) {
   if(resB == nullptr) {
     return false;
   }
-  return (UBool)(resB->fIndex < resB->fSize-1);
+  return resB->fIndex < resB->fSize-1;
 }
 
 U_CAPI const char16_t* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t* len, const char ** key, UErrorCode *status) {

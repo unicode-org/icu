@@ -2137,7 +2137,7 @@ void initParser()
 }
 
 static inline UBool isTable(enum EResourceType type) {
-    return static_cast<UBool>(type == RESTYPE_TABLE || type == RESTYPE_TABLE_NO_FALLBACK);
+    return type == RESTYPE_TABLE || type == RESTYPE_TABLE_NO_FALLBACK;
 }
 
 static enum EResourceType

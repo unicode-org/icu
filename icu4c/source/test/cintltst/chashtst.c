@@ -379,9 +379,9 @@ static int32_t U_EXPORT2 U_CALLCONV hashChars(const UHashTok key) {
 }
 
 static UBool U_EXPORT2 U_CALLCONV isEqualChars(const UHashTok key1, const UHashTok key2) {
-    return (UBool)((key1.pointer != NULL) &&
-        (key2.pointer != NULL) &&
-        (uprv_strcmp((const char*)key1.pointer, (const char*)key2.pointer) == 0));
+    return key1.pointer != NULL &&
+           key2.pointer != NULL &&
+           uprv_strcmp((const char*)key1.pointer, (const char*)key2.pointer) == 0;
 }
 
 /**********************************************************************

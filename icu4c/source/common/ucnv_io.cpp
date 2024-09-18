@@ -205,7 +205,7 @@ static UBool U_CALLCONV
 isAcceptable(void * /*context*/,
              const char * /*type*/, const char * /*name*/,
              const UDataInfo *pInfo) {
-    return static_cast<UBool>(
+    return
         pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
@@ -213,7 +213,7 @@ isAcceptable(void * /*context*/,
         pInfo->dataFormat[1]==0x76 &&
         pInfo->dataFormat[2]==0x41 &&
         pInfo->dataFormat[3]==0x6c &&
-        pInfo->formatVersion[0]==3);
+        pInfo->formatVersion[0]==3;
 }
 
 static UBool U_CALLCONV ucnv_io_cleanup()
@@ -321,7 +321,7 @@ isAlias(const char *alias, UErrorCode *pErrorCode) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return false;
     }
-    return static_cast<UBool>(*alias != 0);
+    return *alias != 0;
 }
 
 static uint32_t getTagNumber(const char *tagname) {

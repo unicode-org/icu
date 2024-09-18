@@ -5644,7 +5644,7 @@ ucnv_MBCSGetStarters(const UConverter* cnv,
  */
 U_CFUNC UBool
 ucnv_MBCSIsLeadByte(UConverterSharedData *sharedData, char byte) {
-    return (UBool)MBCS_ENTRY_IS_TRANSITION(sharedData->mbcs.stateTable[0][(uint8_t)byte]);
+    return MBCS_ENTRY_IS_TRANSITION(sharedData->mbcs.stateTable[0][(uint8_t)byte]);
 }
 
 static void U_CALLCONV

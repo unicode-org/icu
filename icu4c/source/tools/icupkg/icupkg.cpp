@@ -253,7 +253,7 @@ isPackageName(const char *filename) {
     int32_t len;
 
     len = static_cast<int32_t>(strlen(filename)) - 4; /* -4: subtract the length of ".dat" */
-    return static_cast<UBool>(len > 0 && 0 == strcmp(filename + len, ".dat"));
+    return len > 0 && 0 == strcmp(filename + len, ".dat");
 }
 /*
 This line is required by MinGW because it incorrectly globs the arguments.

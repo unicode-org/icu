@@ -40,7 +40,7 @@ equal_uint32(const uint32_t *s, const uint32_t *t, int32_t length) {
         ++t;
         --length;
     }
-    return static_cast<UBool>(length == 0);
+    return length == 0;
 }
 
 /* Building a trie ----------------------------------------------------------*/

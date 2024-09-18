@@ -58,7 +58,7 @@ static UBool hasCESU8Data(const UConverter *cnv)
 #if UCONFIG_ONLY_HTML_CONVERSION
     return false;
 #else
-    return static_cast<UBool>(cnv->sharedData == &_CESU8Data);
+    return cnv->sharedData == &_CESU8Data;
 #endif
 }
 U_CDECL_BEGIN

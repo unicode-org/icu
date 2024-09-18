@@ -108,9 +108,9 @@ public:
 
     UBool contains(UChar32 c) const override {
         if (static_cast<uint32_t>(c) <= 0xff) {
-            return static_cast<UBool>(latin1[c]);
+            return latin1[c];
         } else if (static_cast<uint32_t>(c) < 0xffff) {
-            return static_cast<UBool>(UTRIE_GET8_FROM_LEAD(&trie, c));
+            return UTRIE_GET8_FROM_LEAD(&trie, c);
         } else {
             return restSet->contains(c);
         }

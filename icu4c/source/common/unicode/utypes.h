@@ -729,13 +729,13 @@ typedef enum UErrorCode {
      * @stable ICU 2.0
      */
     static
-    inline UBool U_SUCCESS(UErrorCode code) { return static_cast<UBool>(code <= U_ZERO_ERROR); }
+    inline UBool U_SUCCESS(UErrorCode code) { return code <= U_ZERO_ERROR; }
     /**
      * Does the error code indicate a failure?
      * @stable ICU 2.0
      */
     static
-    inline UBool U_FAILURE(UErrorCode code) { return static_cast<UBool>(code > U_ZERO_ERROR); }
+    inline UBool U_FAILURE(UErrorCode code) { return code > U_ZERO_ERROR; }
 #else
     /**
      * Does the error code indicate success?

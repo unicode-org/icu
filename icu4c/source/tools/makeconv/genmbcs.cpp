@@ -559,7 +559,7 @@ MBCSIsValid(NewConverter *cnvData,
             const uint8_t *bytes, int32_t length) {
     MBCSData *mbcsData=(MBCSData *)cnvData;
 
-    return (UBool)(1==ucm_countChars(&mbcsData->ucm->states, bytes, length));
+    return 1==ucm_countChars(&mbcsData->ucm->states, bytes, length);
 }
 U_CDECL_END
 static UBool

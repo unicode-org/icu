@@ -180,7 +180,7 @@ static UBool U_CALLCONV
 isAcceptable(void * /*context*/,
              const char * /*type*/, const char * /*name*/,
              const UDataInfo *pInfo) {
-    return static_cast<UBool>(
+    return
         pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
@@ -188,7 +188,7 @@ isAcceptable(void * /*context*/,
         pInfo->dataFormat[1]==0x6e &&
         pInfo->dataFormat[2]==0x61 &&
         pInfo->dataFormat[3]==0x6d &&
-        pInfo->formatVersion[0]==1);
+        pInfo->formatVersion[0]==1;
 }
 
 static void U_CALLCONV
@@ -415,7 +415,7 @@ compareName(UCharNames *names,
     }
 
     /* complete match? */
-    return static_cast<UBool>(*otherName == 0);
+    return *otherName == 0;
 }
 
 static uint8_t getCharCat(UChar32 cp) {

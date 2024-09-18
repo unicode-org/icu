@@ -499,12 +499,12 @@ ResourceBundleTest::testTag(const char* frag,
         else if (status != expected_resource_status)
         {
             record_fail("Error getting " + UnicodeString(tag));
-            return static_cast<UBool>(failOrig != fail);
+            return failOrig != fail;
         }
 
     }
 
-    return static_cast<UBool>(failOrig != fail);
+    return failOrig != fail;
 }
 
 void

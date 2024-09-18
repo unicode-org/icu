@@ -1874,7 +1874,7 @@ DateTimePatternGenerator::setAvailableFormat(const UnicodeString &key, UErrorCod
 
 UBool
 DateTimePatternGenerator::isAvailableFormatSet(const UnicodeString &key) const {
-    return static_cast<UBool>(fAvailableFormatKeyHash->geti(key) == 1);
+    return fAvailableFormatKeyHash->geti(key) == 1;
 }
 
 void
@@ -2576,7 +2576,7 @@ FormatParser::getCanonicalIndex(const UnicodeString& s, UBool strict) {
 
 UBool
 FormatParser::isQuoteLiteral(const UnicodeString& s) {
-    return static_cast<UBool>(s.charAt(0) == SINGLE_QUOTE);
+    return s.charAt(0) == SINGLE_QUOTE;
 }
 
 // This function assumes the current itemIndex points to the quote literal.
