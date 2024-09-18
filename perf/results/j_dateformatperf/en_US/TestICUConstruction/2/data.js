@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726671710868,
+  "lastUpdate": 1726676137191,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26187,6 +26187,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1939.2988300872762,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "32056302fc9a462d74e0694eac532f5d1ab428c9",
+          "message": "ICU-22722 Add example code for UnicodeString and the standard library.",
+          "timestamp": "2024-09-18T18:08:24+02:00",
+          "tree_id": "388283ac3ae0e5e9cb2a2ed10c6a8215815518aa",
+          "url": "https://github.com/unicode-org/icu/commit/32056302fc9a462d74e0694eac532f5d1ab428c9"
+        },
+        "date": 1726675965389,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1958.935994192166,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
