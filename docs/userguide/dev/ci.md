@@ -128,8 +128,7 @@ which is a part of the release process.
 It may be desirable to run exhaustive tests manually on a PR for areas of code that are known to need the extra test coverage provided by exhaustive tests.
 To trigger exhaustive tests manually:
 
-1. Go to your respective fork of the project (username/icu) if the PR is not already merged. Otherwise, go to https://github.com/unicode-org/icu
+1. Go to your respective fork of the project (username/icu) if the PR is not already merged. Otherwise, go to https://github.com/unicode-org/icu (Note: your fork's default (main) branch should be in sync with upstream main branch for new actions to appear in your fork)
 2. Select on the "Actions" tab from the top bar
-    ![GHA Actions](../assets/gha_tab.png)
 3. On the left pane under All workflows, find "Exhaustive Tests for ICU" and click on run workflow, select branch and click 'Run workflow'.
     ![Run Workflow](../assets/gha_run_workflow.png)
