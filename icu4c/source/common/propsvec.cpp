@@ -194,8 +194,8 @@ upvec_setValue(UPropsVectors *pv,
      * input range (only possible for the first and last rows)
      * and if their value differs from the input value.
      */
-    splitFirstRow= (UBool)(start!=(UChar32)firstRow[0] && value!=(firstRow[column]&mask));
-    splitLastRow= (UBool)(limit!=(UChar32)lastRow[1] && value!=(lastRow[column]&mask));
+    splitFirstRow = start != static_cast<UChar32>(firstRow[0]) && value != (firstRow[column] & mask);
+    splitLastRow = limit != static_cast<UChar32>(lastRow[1]) && value != (lastRow[column] & mask);
 
     /* split first/last rows if necessary */
     if(splitFirstRow || splitLastRow) {

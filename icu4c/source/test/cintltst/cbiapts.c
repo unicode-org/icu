@@ -256,19 +256,19 @@ static void TestBreakIteratorCAPI(void)
     start = ubrk_first(word);
     if(start!=0)
         log_err("error ubrk_start(word) did not return 0\n");
-    log_verbose("first (word = %d\n", (int32_t)start);
+    log_verbose("first (word = %d\n", start);
        pos=ubrk_next(word);
     if(pos!=4)
         log_err("error ubrk_next(word) did not return 4\n");
-    log_verbose("next (word = %d\n", (int32_t)pos);
+    log_verbose("next (word = %d\n", pos);
     pos=ubrk_following(word, 4);
     if(pos!=5)
         log_err("error ubrl_following(word,4) did not return 6\n");
-    log_verbose("next (word = %d\n", (int32_t)pos);
+    log_verbose("next (word = %d\n", pos);
     end=ubrk_last(word);
     if(end!=49)
         log_err("error ubrk_last(word) did not return 49\n");
-    log_verbose("last (word = %d\n", (int32_t)end);
+    log_verbose("last (word = %d\n", end);
 
     pos=ubrk_previous(word);
     log_verbose("%d   %d\n", end, pos);
@@ -294,36 +294,36 @@ static void TestBreakIteratorCAPI(void)
     pos = ubrk_following(character, 5);
     if(pos!=6)
        log_err("error ubrk_following(character,5) did not return 6\n");
-    log_verbose("Following (character,5) = %d\n", (int32_t)pos);
+    log_verbose("Following (character,5) = %d\n", pos);
     pos=ubrk_following(character, 18);
     if(pos!=19)
        log_err("error ubrk_following(character,18) did not return 19\n");
-    log_verbose("Followingcharacter,18) = %d\n", (int32_t)pos);
+    log_verbose("Followingcharacter,18) = %d\n", pos);
     pos=ubrk_preceding(character, 22);
     if(pos!=21)
        log_err("error ubrk_preceding(character,22) did not return 21\n");
-    log_verbose("preceding(character,22) = %d\n", (int32_t)pos);
+    log_verbose("preceding(character,22) = %d\n", pos);
 
 
     log_verbose("\nTesting the functions for line\n");
     pos=ubrk_first(line);
     if(pos != 0)
-        log_err("error ubrk_first(line) returned %d, expected 0\n", (int32_t)pos);
+        log_err("error ubrk_first(line) returned %d, expected 0\n", pos);
     pos = ubrk_next(line);
     pos=ubrk_following(line, 18);
     if(pos!=22)
         log_err("error ubrk_following(line) did not return 22\n");
-    log_verbose("following (line) = %d\n", (int32_t)pos);
+    log_verbose("following (line) = %d\n", pos);
 
 
     log_verbose("\nTesting the functions for sentence\n");
     pos = ubrk_first(sentence);
     pos = ubrk_current(sentence);
-    log_verbose("Current(sentence) = %d\n", (int32_t)pos);
+    log_verbose("Current(sentence) = %d\n", pos);
        pos = ubrk_last(sentence);
     if(pos!=49)
         log_err("error ubrk_last for sentence did not return 49\n");
-    log_verbose("Last (sentence) = %d\n", (int32_t)pos);
+    log_verbose("Last (sentence) = %d\n", pos);
     pos = ubrk_first(sentence);
     to = ubrk_following( sentence, 0 );
     if (to == 0) log_err("ubrk_following returned 0\n");

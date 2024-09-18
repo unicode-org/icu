@@ -353,10 +353,10 @@ u_strToPunycode(const char16_t *src, int32_t srcLength,
                 }
 
                 if(destLength<destCapacity) {
-                    dest[destLength]=digitToBasic(q, (UBool)(cpBuffer[j]<0));
+                    dest[destLength] = digitToBasic(q, cpBuffer[j] < 0);
                 }
                 ++destLength;
-                bias=adaptBias(delta, handledCPCount+1, (UBool)(handledCPCount==basicLength));
+                bias = adaptBias(delta, handledCPCount + 1, handledCPCount == basicLength);
                 delta=0;
                 ++handledCPCount;
             }
@@ -500,7 +500,7 @@ u_strFromPunycode(const char16_t *src, int32_t srcLength,
          * where needed instead of in for() loop tail.
          */
         ++destCPCount;
-        bias=adaptBias(i-oldi, destCPCount, (UBool)(oldi==0));
+        bias = adaptBias(i - oldi, destCPCount, oldi == 0);
 
         /*
          * i was supposed to wrap around from (incremented) destCPCount to 0,

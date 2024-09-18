@@ -1448,8 +1448,8 @@ ureldatefmt_combineDateAndTime( const URelativeDateTimeFormatter* reldatefmt,
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    UnicodeString relDateStr((UBool)(relativeDateStringLen == -1), relativeDateString, relativeDateStringLen);
-    UnicodeString timeStr((UBool)(timeStringLen == -1), timeString, timeStringLen);
+    UnicodeString relDateStr(relativeDateStringLen == -1, relativeDateString, relativeDateStringLen);
+    UnicodeString timeStr(timeStringLen == -1, timeString, timeStringLen);
     UnicodeString res(result, 0, resultCapacity);
     ((RelativeDateTimeFormatter*)reldatefmt)->combineDateAndTime(relDateStr, timeStr, res, *status);
     if (U_FAILURE(*status)) {

@@ -389,7 +389,7 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                 }
             }
             if (targetUniChar != missingCharMarker){
-               myConverterData->isTargetUCharDBCS = isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);     
+               myConverterData->isTargetUCharDBCS = isTargetUCharDBCS = targetUniChar > 0x00FF;
                  if(oldIsTargetUCharDBCS != isTargetUCharDBCS || !myConverterData->isEscapeAppended ){
                     /*Shifting from a double byte to single byte mode*/
                     if(!isTargetUCharDBCS){

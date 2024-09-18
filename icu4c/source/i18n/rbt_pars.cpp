@@ -1693,7 +1693,7 @@ utrans_stripRules(const char16_t *source, int32_t sourceLen, char16_t *target, U
         U16_NEXT_UNSAFE(source, index, c);
         source+=index;
         if(c == QUOTE) {
-            quoted = (UBool)!quoted;
+            quoted = !quoted;
         }
         else if (!quoted) {
             if (c == RULE_COMMENT_CHAR) {
@@ -1739,7 +1739,7 @@ utrans_stripRules(const char16_t *source, int32_t sourceLen, char16_t *target, U
                 }
                 else if (c2 == QUOTE) {
                     /* \' seen. Make sure we don't do anything when we see it again. */
-                    quoted = (UBool)!quoted;
+                    quoted = !quoted;
                 }
             }
         }

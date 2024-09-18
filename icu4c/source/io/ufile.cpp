@@ -255,7 +255,7 @@ u_feof(UFILE  *f)
     if (f == nullptr) {
         return true;
     }
-    endOfBuffer = (UBool)(f->str.fPos >= f->str.fLimit);
+    endOfBuffer = f->str.fPos >= f->str.fLimit;
     if (f->fFile != nullptr) {
         return endOfBuffer && feof(f->fFile);
     }

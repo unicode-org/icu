@@ -1282,8 +1282,8 @@ void TestSortKey(void)
 
       for(i=0;i<sortklen;i++)
         {
-          snprintf(junk2+strlen(junk2), sizeof(junk2)-strlen(junk2), "%02X ",(int)( 0xFF & sortk2[i]));
-          snprintf(junk3+strlen(junk3), sizeof(junk3)-strlen(junk3), "%02X ",(int)( 0xFF & sortk3[i]));
+          snprintf(junk2 + strlen(junk2), sizeof(junk2) - strlen(junk2), "%02X ", (0xFF & sortk2[i]));
+          snprintf(junk3 + strlen(junk3), sizeof(junk3) - strlen(junk3), "%02X ", (0xFF & sortk3[i]));
         }
 
       log_verbose("%s\n", junk2);

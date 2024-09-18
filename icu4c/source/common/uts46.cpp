@@ -1366,7 +1366,7 @@ uidna_labelToASCII(const UIDNA *idna,
     if(!checkArgs(label, length, dest, capacity, pInfo, pErrorCode)) {
         return 0;
     }
-    UnicodeString src((UBool)(length<0), label, length);
+    UnicodeString src(length < 0, label, length);
     UnicodeString destString(dest, 0, capacity);
     IDNAInfo info;
     reinterpret_cast<const IDNA *>(idna)->labelToASCII(src, destString, info, *pErrorCode);
@@ -1382,7 +1382,7 @@ uidna_labelToUnicode(const UIDNA *idna,
     if(!checkArgs(label, length, dest, capacity, pInfo, pErrorCode)) {
         return 0;
     }
-    UnicodeString src((UBool)(length<0), label, length);
+    UnicodeString src(length < 0, label, length);
     UnicodeString destString(dest, 0, capacity);
     IDNAInfo info;
     reinterpret_cast<const IDNA *>(idna)->labelToUnicode(src, destString, info, *pErrorCode);
@@ -1398,7 +1398,7 @@ uidna_nameToASCII(const UIDNA *idna,
     if(!checkArgs(name, length, dest, capacity, pInfo, pErrorCode)) {
         return 0;
     }
-    UnicodeString src((UBool)(length<0), name, length);
+    UnicodeString src(length < 0, name, length);
     UnicodeString destString(dest, 0, capacity);
     IDNAInfo info;
     reinterpret_cast<const IDNA *>(idna)->nameToASCII(src, destString, info, *pErrorCode);
@@ -1414,7 +1414,7 @@ uidna_nameToUnicode(const UIDNA *idna,
     if(!checkArgs(name, length, dest, capacity, pInfo, pErrorCode)) {
         return 0;
     }
-    UnicodeString src((UBool)(length<0), name, length);
+    UnicodeString src(length < 0, name, length);
     UnicodeString destString(dest, 0, capacity);
     IDNAInfo info;
     reinterpret_cast<const IDNA *>(idna)->nameToUnicode(src, destString, info, *pErrorCode);

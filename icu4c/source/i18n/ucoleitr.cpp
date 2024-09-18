@@ -289,7 +289,7 @@ ucol_openElements(const UCollator  *coll,
         return nullptr;
     }
 
-    UnicodeString s((UBool)(textLength < 0), text, textLength);
+    UnicodeString s(textLength < 0, text, textLength);
     CollationElementIterator *cei = rbc->createCollationElementIterator(s);
     if (cei == nullptr) {
         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -488,7 +488,7 @@ ucol_setText(      UCollationElements *elems,
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    UnicodeString s((UBool)(textLength < 0), text, textLength);
+    UnicodeString s(textLength < 0, text, textLength);
     return CollationElementIterator::fromUCollationElements(elems)->setText(s, *status);
 }
 

@@ -1440,7 +1440,7 @@ ucnv_swap(const UDataSwapper *ds,
                    MBCS_OPT_UNKNOWN_INCOMPATIBLE_MASK)==0
         ) {
             mbcsHeaderLength=mbcsHeader.options&MBCS_OPT_LENGTH_MASK;
-            noFromU=(UBool)((mbcsHeader.options&MBCS_OPT_NO_FROM_U)!=0);
+            noFromU = (mbcsHeader.options & MBCS_OPT_NO_FROM_U) != 0;
         } else {
             udata_printError(ds, "ucnv_swap(): unsupported _MBCSHeader.version %d.%d\n",
                              inMBCSHeader->version[0], inMBCSHeader->version[1]);

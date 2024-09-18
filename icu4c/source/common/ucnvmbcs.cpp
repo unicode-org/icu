@@ -924,7 +924,7 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
 
         bytes=mbcsTable->fromUnicodeBytes;
 
-        useFallback=(UBool)(which==UCNV_ROUNDTRIP_AND_FALLBACK_SET);
+        useFallback = which == UCNV_ROUNDTRIP_AND_FALLBACK_SET;
 
         switch(mbcsTable->outputType) {
         case MBCS_OUTPUT_3:
@@ -2823,7 +2823,7 @@ ucnv_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                  * - If any of the non-initial bytes could be the start of a character,
                  *   we stop the illegal sequence before the first one of those.
                  */
-                UBool isDBCSOnly=(UBool)(cnv->sharedData->mbcs.dbcsOnlyState!=0);
+                UBool isDBCSOnly = cnv->sharedData->mbcs.dbcsOnlyState != 0;
                 int8_t i;
                 for(i=1;
                     i<byteIndex && !isSingleOrLead(stateTable, state, isDBCSOnly, bytes[i]);
