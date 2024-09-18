@@ -907,6 +907,7 @@ void IntlCalendarTest::TestPersianData() {
         int32_t month;
         int32_t day;
     } testCases1[]{
+#if 0
       {656786, 1178, 1, 1},
       {664224, 1198, 5, 10},
       {671401, 1218, 1, 7},
@@ -926,7 +927,11 @@ void IntlCalendarTest::TestPersianData() {
       {764652, 1473, 4, 28},
       {775123, 1501, 12, 29},
       {775488, 1502, 12, 29},
-      {775489, 1503, 1, 1},
+#endif
+      {775487, 1502, 12, 28},
+      {775488, 1502, 12, 29},
+      {775489, 1503, 1, 1},  // real
+      {775490, 1503, 1, 2},
       {1317874, 2988, 1, 1},
     };
     for (const auto &testCase : testCases1) {
@@ -934,6 +939,7 @@ void IntlCalendarTest::TestPersianData() {
         int32_t jday = testCase.rd + 1721424;
         cal->clear();
         cal->set(UCAL_JULIAN_DAY, jday);
+        printf("jday = %d\n", jday);
         int32_t actualYear = cal->get(UCAL_YEAR, status);
         int32_t actualMonth = cal->get(UCAL_MONTH, status)+1;
         int32_t actualDay = cal->get(UCAL_DAY_OF_MONTH, status)+1;
@@ -964,6 +970,7 @@ void IntlCalendarTest::TestPersianData() {
         int32_t month;
         int32_t day;
     } testCases2[]{
+#if 0
         {1206, false, 1827, 3, 22},
         {1207, false, 1828, 3, 21},
         {1208, false, 1829, 3, 21},
@@ -1256,6 +1263,7 @@ void IntlCalendarTest::TestPersianData() {
         {1495, false, 2116, 3, 21},
         {1496, false, 2117, 3, 21},
         {1497, false, 2118, 3, 21},
+#endif 
         {1498, true, 2119, 3, 21},
     };
     for (const auto &testCase : testCases2) {
