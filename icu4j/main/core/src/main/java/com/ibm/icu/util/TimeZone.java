@@ -1187,7 +1187,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @return  The preferred time zone ID in the IANA time zone database, or {@link TimeZone#UNKNOWN_ZONE_ID}
      * if the input ID is not a system ID.
      * @see #getCanonicalID(String)
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public static String getIanaID(String id) {
         String ianaId = TimeZone.UNKNOWN_ZONE_ID;

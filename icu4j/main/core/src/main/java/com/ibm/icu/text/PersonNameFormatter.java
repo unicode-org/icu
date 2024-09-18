@@ -96,7 +96,7 @@ public class PersonNameFormatter {
 
         /**
          * The default name length for the locale.  For most locales, this is the same as MEDIUM.
-         * @draft ICU 74
+         * @stable ICU 74
          */
         DEFAULT
     }
@@ -149,7 +149,7 @@ public class PersonNameFormatter {
         /**
          * The default formality for the locale.  For most locales, this is the same as FORMAL, but for English,
          * this is the same as INFORMAL.
-         * @draft ICU 74
+         * @stable ICU 74
          */
         DEFAULT
     }
@@ -176,14 +176,14 @@ public class PersonNameFormatter {
         /**
          * Forces the formatter to format the name in given-first order.  If the name itself specifies
          * a display order, this overrides it.
-         * @draft ICU 74
+         * @stable ICU 74
          */
         FORCE_GIVEN_FIRST,
 
         /**
          * Forces the formatter to format the name in surname-first order.  If the name itself specifies
          * a display order, this overrides it.
-         * @draft ICU 74
+         * @stable ICU 74
          */
         FORCE_SURNAME_FIRST,
     }

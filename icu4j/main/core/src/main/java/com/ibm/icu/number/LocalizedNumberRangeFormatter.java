@@ -86,7 +86,7 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
      * Disassociate the locale from this formatter.
      *
      * @return The fluent chain.
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public UnlocalizedNumberRangeFormatter withoutLocale() {
         return new UnlocalizedNumberRangeFormatter(this, KEY_LOCALE, null);

@@ -125,7 +125,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * Disassociate the locale from this formatter.
      *
      * @return The fluent chain.
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public UnlocalizedNumberFormatter withoutLocale() {
         return new UnlocalizedNumberFormatter(this, KEY_LOCALE, null);

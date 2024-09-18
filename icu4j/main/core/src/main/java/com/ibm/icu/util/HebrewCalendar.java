@@ -919,7 +919,7 @@ public class HebrewCalendar extends Calendar {
     //-------------------------------------------------------------------------
     /**
      * {@inheritDoc}
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public boolean inTemporalLeapYear() {
         return isLeapYear(get(EXTENDED_YEAR));
@@ -940,7 +940,7 @@ public class HebrewCalendar extends Calendar {
      * non-leap year, and "M01" .. "M05", "M05L", "M06" .. "M12" for leap year.
      *
      * @return       One of 13 possible strings in {"M01".. "M05", "M05L", "M06" .. "M12"}.
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public String getTemporalMonthCode() {
         return gTemporalMonthCodesForHebrew[get(MONTH)];
@@ -955,7 +955,7 @@ public class HebrewCalendar extends Calendar {
      * are "M01" .. "M12" for non-leap years, and "M01" .. "M05", "M05L", "M06"
      * .. "M12" for leap year.
      * @param temporalMonth The value to be set for temporal monthCode.
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public void setTemporalMonthCode( String temporalMonth ) {
         if (temporalMonth.length() == 3 || temporalMonth.length() == 4) {

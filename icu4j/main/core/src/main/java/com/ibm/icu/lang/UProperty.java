@@ -621,7 +621,7 @@ public interface UProperty
      * Binary property IDS_Unary_Operator.
      * For programmatic determination of Ideographic Description Sequences.
      *
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public static final int IDS_UNARY_OPERATOR = 72;
 
@@ -629,7 +629,7 @@ public interface UProperty
      * Binary property ID_Compat_Math_Start.
      * <p>Used in mathematical identifier profile in UAX #31.
      *
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public static final int ID_COMPAT_MATH_START = 73;
 
@@ -637,7 +637,7 @@ public interface UProperty
      * Binary property ID_Compat_Math_Continue.
      * <p>Used in mathematical identifier profile in UAX #31.
      *
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public static final int ID_COMPAT_MATH_CONTINUE = 74;
 

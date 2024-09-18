@@ -1189,7 +1189,7 @@ public class IslamicCalendar extends Calendar {
      * proposal.
      * @return true if the date in the fields is in a Temporal proposal
      *               defined leap year. False otherwise.
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public boolean inTemporalLeapYear() {
         return getActualMaximum(DAY_OF_YEAR) == 355;

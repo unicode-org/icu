@@ -975,7 +975,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * is associated with ORDINAL_MONTH value 6 because 4665 is a leap year
      * and there is an extra "Leap Month 5" which associated with ORDINAL_MONTH
      * value 5 before "Month 6" of year 4664.
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public static final int ORDINAL_MONTH = 23;
 
@@ -2074,7 +2074,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * proposal.
      * @return true if the date in the fields is in a Temporal proposal
      *               defined leap year. False otherwise.
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public boolean inTemporalLeapYear() {
         // Default to Gregorian based leap year rule.
@@ -2100,7 +2100,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * years are "M01" to "M13".
      *
      * @return       One of 25 possible strings in {"M01".."M13", "M01L".."M12L"}.
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public String getTemporalMonthCode() {
         int month = get(MONTH);
@@ -2124,7 +2124,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * years are "M01" to "M13".
      * @param temporalMonth One of 25 possible strings in {"M01".. "M12", "M13", "M01L",
      *  "M12L"}.
-     * @draft ICU 74
+     * @stable ICU 74
      */
     public void setTemporalMonthCode( String temporalMonth ) {
         if (temporalMonth.length() == 3 && temporalMonth.charAt(0) == 'M') {
