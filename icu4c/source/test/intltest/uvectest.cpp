@@ -82,7 +82,7 @@ UVectorTest_compareInt32(UElement key1, UElement key2) {
 }
 
 U_CDECL_BEGIN
-static int8_t U_CALLCONV
+static UBool U_CALLCONV
 UVectorTest_compareCstrings(const UElement key1, const UElement key2) {
     return !strcmp((const char *)key1.pointer, (const char *)key2.pointer);
 }

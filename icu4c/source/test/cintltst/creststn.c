@@ -3035,7 +3035,6 @@ tres_getString(const UResourceBundle *resB,
     const char *s8;
     UChar32 c16, c8;
     int32_t length16, length8, i16, i8;
-    UBool forceCopy;
 
     if(length == NULL) {
         length = &length16;
@@ -3053,7 +3052,7 @@ tres_getString(const UResourceBundle *resB,
     length16 = *length;
 
     /* try the UTF-8 variant of ures_getStringXYZ() */
-    for(forceCopy = false; forceCopy <= true; ++forceCopy) {
+    for (int8_t forceCopy = 0; forceCopy <= 1; ++forceCopy) {
         p8 = buffer8;
         length8 = (int32_t)sizeof(buffer8);
         if(idx >= 0) {

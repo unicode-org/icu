@@ -431,12 +431,12 @@ compareUSets(const USet *a, const USet *b,
              const char *a_name, const char *b_name,
              UBool diffIsError) {
     /*
-     * Use an arithmetic & not a logical && so that both branches
+     * Use temporary variables so that both branches
      * are always taken and all differences are shown.
      */
-    return
-        showAMinusB(a, b, a_name, b_name, diffIsError) &
-        showAMinusB(b, a, b_name, a_name, diffIsError);
+    UBool ab = showAMinusB(a, b, a_name, b_name, diffIsError);
+    UBool ba = showAMinusB(b, a, b_name, a_name, diffIsError);
+    return ab && ba;
 }
 
 /* test isLetter(u_isapha()) and isDigit(u_isdigit()) */

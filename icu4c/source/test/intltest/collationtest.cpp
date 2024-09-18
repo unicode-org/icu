@@ -1754,10 +1754,10 @@ UBool CollationTest::checkCompareTwo(const char *norm, const UnicodeString &prev
     //   sortkey(str1 + "\uFFFE" + str2) == mergeSortkeys(sortkey(str1), sortkey(str2))
     // only that those two methods yield the same order.
     //
-    // Use bit-wise OR so that getMergedCollationKey() is always called for both strings.
-    if((getMergedCollationKey(prevString.getBuffer(), prevString.length(), prevKey, errorCode) |
-                getMergedCollationKey(s.getBuffer(), s.length(), key, errorCode)) ||
-            errorCode.isFailure()) {
+    // Use two variables so that getMergedCollationKey() is always called for both strings.
+    if (UBool prev = getMergedCollationKey(prevString.getBuffer(), prevString.length(), prevKey, errorCode),
+              curr = getMergedCollationKey(s.getBuffer(), s.length(), key, errorCode);
+        prev || curr || errorCode.isFailure()) {
         order = prevKey.compareTo(key, errorCode);
         if(order != expectedOrder || errorCode.isFailure()) {
             infoln(fileTestName);

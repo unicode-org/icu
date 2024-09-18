@@ -3918,7 +3918,7 @@ void CalendarTest::TestClearMonth() {
     if (failure(status, "Calendar::get(UCAL_MONTH)")) return;
     cal->clear(UCAL_MONTH);
     assertEquals("Calendar::isSet(UCAL_MONTH) after clear(UCAL_MONTH)", false, !!cal->isSet(UCAL_MONTH));
-    assertEquals("Calendar::get(UCAL_MONTH after clear(UCAL_MONTH))", UCAL_JANUARY, !!cal->get(UCAL_MONTH, status));
+    assertEquals("Calendar::get(UCAL_MONTH after clear(UCAL_MONTH))", UCAL_JANUARY, cal->get(UCAL_MONTH, status));
     if (failure(status, "Calendar::get(UCAL_MONTH)")) return;
 
     cal->set(UCAL_ORDINAL_MONTH, 7);
