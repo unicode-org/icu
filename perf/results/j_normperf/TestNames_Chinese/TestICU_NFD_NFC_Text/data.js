@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726699985197,
+  "lastUpdate": 1726701670306,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -52436,6 +52436,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 5.260887274839515,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "09c5aa1b7449fce136adf42a22ad13f0acb98aac",
+          "message": "ICU-22893 Remove support for Unsupported, Private & Reserved constructs\n\n- Matching PR #883 in the message-format-wg repo.\n- Also removes some unused imports",
+          "timestamp": "2024-09-18T16:12:54-07:00",
+          "tree_id": "e775a144ed7a3f667ff78918968f1b37912ed55a",
+          "url": "https://github.com/unicode-org/icu/commit/09c5aa1b7449fce136adf42a22ad13f0acb98aac"
+        },
+        "date": 1726701507209,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 5.22853862610444,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
