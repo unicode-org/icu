@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726600079033,
+  "lastUpdate": 1726672187460,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26157,6 +26157,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.5550878728127863,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "747d5eef3b049538b926a3f45ca854da7ea62359",
+          "message": "ICU-22834 Update tests to reflect MF2 schema in conformance repo\n\nThis also updates the spec tests from the current version of the MFWG\nrepository and removes some duplicate tests.\nSpec tests now reflect the message-format-wg repo as of\nhttps://github.com/unicode-org/message-format-wg/commit/5612f3b0508d63770b218d581c465aae878f5573\n\nIt also updates both the ICU4C and ICU4J parsers to follow the\ncurrent test schema in the conformance repository.\n\nThis includes adding code to both parsers to allow `src` to be\neither a single string or an array of strings (per\nhttps://github.com/unicode-org/conformance/pull/255 ),\nand eliminating `srcs` in tests.\n\nIt also includes other changes to make updated spec tests pass:\n\nICU4C: Allow trailing whitespace for complex messages, due to spec change\nICU4C: Parse number literals correctly in Number::format\nICU4J: Allow trailing whitespace after complex body, per spec change\nICU4C: Fix bug that was assuming an .input variable can't have a reserved annotation\nICU4C: Fix bug where unsupported '.i' was parsed as an '.input'\nICU4C/ICU4J: Handle markup with space after the initial left curly brace\nICU4C: Check for duplicate variant errors\nICU4C/ICU4J: Handle leading whitespace in complex messages\nICU4J: Treat whitespace after .input keyword as optional\nICU4J: Don't format unannotated number literals as numbers",
+          "timestamp": "2024-09-18T07:46:29-07:00",
+          "tree_id": "d4f3d6cc1a9aa1bcb99aeaa2516ca1592e05ef50",
+          "url": "https://github.com/unicode-org/icu/commit/747d5eef3b049538b926a3f45ca854da7ea62359"
+        },
+        "date": 1726672010393,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5535099285270307,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
