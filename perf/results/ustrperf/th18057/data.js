@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726772381226,
+  "lastUpdate": 1726781102274,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -92925,6 +92925,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.8269,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "23edf9cca6c71f3fb846eef59d70345a91ef1fc6",
+          "message": "ICU-22762 MF2: Add builder method to control error handling behavior\n\nAdd MessageFormatter::Builder::setErrorHandlingBehavior() method\nand a new enum type MessageFormatter::UMFErrorHandlingBehavior\nto denote strict or best-effort behavior.\n\nThe reason for adding a single method that takes an enum is to allow\nfor the possibility of more error handling modes in the future.\n\nCo-authored-by: Markus Scherer <markus.icu@gmail.com>",
+          "timestamp": "2024-09-19T13:21:56-07:00",
+          "tree_id": "ffeccd829e0ff706c2e71f7288f126ccffb611fa",
+          "url": "https://github.com/unicode-org/icu/commit/23edf9cca6c71f3fb846eef59d70345a91ef1fc6"
+        },
+        "date": 1726780914722,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.1776,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.4708,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.8933,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 32.1554,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 41.5948,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 37.1444,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.0012,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.3926,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 83.2012,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.837,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.5922,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.8358,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
