@@ -1194,6 +1194,9 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
                 RelativeDateTimeUnit.FRIDAY, enIN_decDef_short_midSent_friday),
             new TestRelativeDateTimeUnitItem("en_IN", -1, Style.SHORT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
                 RelativeDateTimeUnit.SATURDAY, enIN_decDef_short_midSent_saturday),
+
+            new TestRelativeDateTimeUnitItem("en@calendar=iso8601", -1, Style.LONG,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                RelativeDateTimeUnit.SECOND, en_decDef_long_midSent_sec),
         };
         for (TestRelativeDateTimeUnitItem item: items) {
             ULocale uloc = new ULocale(item.localeID);
