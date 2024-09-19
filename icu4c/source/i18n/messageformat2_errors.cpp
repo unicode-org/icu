@@ -19,10 +19,6 @@ namespace message2 {
     // Errors
     // -----------
 
-    void DynamicErrors::setReservedError(UErrorCode& status) {
-        addError(DynamicError(DynamicErrorType::ReservedError), status);
-    }
-
     void DynamicErrors::setFormattingError(const FunctionName& formatterName, UErrorCode& status) {
         addError(DynamicError(DynamicErrorType::FormattingError, formatterName), status);
     }
@@ -143,10 +139,6 @@ namespace message2 {
                 status = U_MF_OPERAND_MISMATCH_ERROR;
                 break;
             }
-            case DynamicErrorType::ReservedError: {
-                status = U_MF_UNSUPPORTED_EXPRESSION_ERROR;
-                break;
-            }
             case DynamicErrorType::SelectorError: {
                 status = U_MF_SELECTOR_ERROR;
                 break;
@@ -196,10 +188,6 @@ namespace message2 {
             dataModelError = true;
             break;
         }
-        case StaticErrorType::UnsupportedStatementError: {
-            dataModelError = true;
-            break;
-        }
         }
         syntaxAndDataModelErrors->adoptElement(errorP, status);
     }
@@ -225,10 +213,6 @@ namespace message2 {
         }
         case DynamicErrorType::OperandMismatchError: {
             formattingError = true;
-            resolutionAndFormattingErrors->adoptElement(errorP, status);
-            break;
-        }
-        case DynamicErrorType::ReservedError: {
             resolutionAndFormattingErrors->adoptElement(errorP, status);
             break;
         }
@@ -278,9 +262,6 @@ namespace message2 {
             case StaticErrorType::SyntaxError: {
                 status = U_MF_SYNTAX_ERROR;
                 break;
-            }
-            case StaticErrorType::UnsupportedStatementError: {
-                status = U_MF_UNSUPPORTED_STATEMENT_ERROR;
             }
             }
         }

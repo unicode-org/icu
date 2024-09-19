@@ -127,9 +127,6 @@ namespace message2 {
         void parseOption(OptionAdder<T>&, UErrorCode&);
         template<class T>
         void parseOptions(OptionAdder<T>&, UErrorCode&);
-	void parseReservedChunk(Reserved::Builder&, UErrorCode&);
-	Reserved parseReserved(UErrorCode&);
-        Reserved parseReservedBody(Reserved::Builder&, UErrorCode&);
 	Operator parseAnnotation(UErrorCode&);
 	void parseLiteralOrVariableWithAnnotation(bool, Expression::Builder&, UErrorCode&);
         Markup parseMarkup(UErrorCode&);

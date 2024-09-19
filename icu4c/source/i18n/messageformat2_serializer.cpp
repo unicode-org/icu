@@ -134,36 +134,10 @@ void Serializer::emitAttributes(const OptionMap& attributes) {
     }
 }
 
-void Serializer::emit(const Reserved& reserved) {
-    // Re-escape '\' / '{' / '|' / '}'
-    for (int32_t i = 0; i < reserved.numParts(); i++) {
-        const Literal& l = reserved.getPart(i);
-        if (l.isQuoted()) {
-            emit(l);
-        } else {
-            const UnicodeString& s = l.unquoted();
-            for (int32_t j = 0; j < s.length(); j++) {
-                switch(s[j]) {
-                case LEFT_CURLY_BRACE:
-                case PIPE:
-                case RIGHT_CURLY_BRACE:
-                case BACKSLASH: {
-                    emit(BACKSLASH);
-                    break;
-                }
-                default:
-                    break;
-                }
-                emit(s[j]);
-            }
-        }
-    }
-}
-
  void Serializer::emit(const Expression& expr) {
     emit(LEFT_CURLY_BRACE);
 
-    if (!expr.isReserved() && !expr.isFunctionCall()) {
+    if (!expr.isFunctionCall()) {
         // Literal or variable, no annotation
         emit(expr.getOperand());
     } else {
@@ -176,17 +150,12 @@ void Serializer::emit(const Reserved& reserved) {
         UErrorCode localStatus = U_ZERO_ERROR;
         const Operator* rator = expr.getOperator(localStatus);
         U_ASSERT(U_SUCCESS(localStatus));
-        if (rator->isReserved()) {
-          const Reserved& reserved = rator->asReserved();
-          emit(reserved);
-        } else {
-            emit(COLON);
-            emit(rator->getFunctionName());
-            // No whitespace after function name, in case it has
-            // no options. (when there are options, emit(OptionMap) will
-            // emit the leading whitespace)
-            emit(rator->getOptionsInternal());
-        }
+        emit(COLON);
+        emit(rator->getFunctionName());
+        // No whitespace after function name, in case it has
+        // no options. (when there are options, emit(OptionMap) will
+        // emit the leading whitespace)
+        emit(rator->getOptionsInternal());
     }
     emitAttributes(expr.getAttributesInternal());
     emit(RIGHT_CURLY_BRACE);
@@ -273,26 +242,6 @@ void Serializer::serializeDeclarations() {
     }
 }
 
-void Serializer::serializeUnsupported() {
-    const UnsupportedStatement* statements = dataModel.getUnsupportedStatementsInternal();
-    U_ASSERT(dataModel.unsupportedStatementsLen == 0 || statements != nullptr);
-
-    for (int32_t i = 0; i < dataModel.unsupportedStatementsLen; i++) {
-        const UnsupportedStatement& s = statements[i];
-        emit(s.getKeyword());
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        const Reserved* r = s.getBody(localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            whitespace();
-            emit(*r);
-        }
-        const Expression* e = s.getExpressionsInternal();
-        for (int32_t j = 0; j < s.expressionsLen; j++) {
-            emit(e[j]);
-        }
-    }
-}
-
 void Serializer::serializeSelectors() {
     U_ASSERT(!dataModel.hasPattern());
     const Expression* selectors = dataModel.getSelectorsInternal();
@@ -319,7 +268,6 @@ void Serializer::serializeVariants() {
 // Main (public) serializer method
 void Serializer::serialize() {
     serializeDeclarations();
-    serializeUnsupported();
     // Pattern message
     if (dataModel.hasPattern()) {
       emit(dataModel.getPattern());

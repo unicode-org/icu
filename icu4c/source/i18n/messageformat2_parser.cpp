@@ -104,8 +104,6 @@ static bool inRange(UChar32 c, UChar32 first, UChar32 last) {
 
   `isContentChar()`   : `content-char`
   `isTextChar()`      : `text-char`
-  `isReservedStart()` : `reserved-start`
-  `isReservedChar()`  : `reserved-char`
   `isAlpha()`         : `ALPHA`
   `isDigit()`         : `DIGIT`
   `isNameStart()`     : `name-start`
@@ -147,35 +145,6 @@ static bool isTextChar(UChar32 c) {
         || c == PERIOD
         || c == AT
         || c == PIPE;
-}
-
-// Note: this doesn't distinguish between private-use
-// and reserved, since the data model doesn't
-static bool isReservedStart(UChar32 c) {
-    switch (c) {
-    case BANG:
-    case PERCENT:
-    case ASTERISK:
-    case PLUS:
-    case LESS_THAN:
-    case GREATER_THAN:
-    case QUESTION:
-    case TILDE:
-    // Private-use
-    case CARET:
-    case AMPERSAND:
-        return true;
-    default:
-        return false;
-    }
-}
-
-static bool isReservedChar(UChar32 c) {
-    return isContentChar(c) || c == PERIOD;
-}
-
-static bool isReservedBodyStart(UChar32 c) {
-    return isReservedChar(c) || c == BACKSLASH || c == PIPE;
 }
 
 static bool isAlpha(UChar32 c) { return inRange(c, 0x0041, 0x005A) || inRange(c, 0x0061, 0x007A); }
@@ -230,24 +199,7 @@ static bool isFunctionStart(UChar32 c) {
 
 // Returns true iff `c` can begin an `annotation` nonterminal
 static bool isAnnotationStart(UChar32 c) {
-    return isFunctionStart(c) || isReservedStart(c);
-}
-
-// Returns true iff `c` can begin either a `reserved-char` or `reserved-escape`
-// literal
-static bool reservedChunkFollows(UChar32 c) {
-   switch(c) {
-       // reserved-escape
-       case BACKSLASH:
-       // literal
-       case PIPE: {
-           return true;
-       }
-       default: {
-           // reserved-char
-           return (isReservedChar(c));
-       }
-    }
+    return isFunctionStart(c);
 }
 
 // Returns true iff `c` can begin a `literal` nonterminal
@@ -1121,189 +1073,7 @@ Arbitrary lookahead is required to parse attribute lists, similarly to option li
 }
 
 /*
-  Consumes a non-empty sequence of reserved-chars, reserved-escapes, and
-  literals (as in 1*(reserved-char / reserved-escape / literal) in the `reserved-body` rule)
-
-  Appends it to `str`
-*/
-void Parser::parseReservedChunk(Reserved::Builder& result, UErrorCode& status) {
-    CHECK_ERROR(status);
-
-    bool empty = true;
-    UnicodeString chunk;
-    while(reservedChunkFollows(peek())) {
-        empty = false;
-        // reserved-char
-        if (isReservedChar(peek())) {
-            chunk += peek();
-            normalizedInput += peek();
-            // consume the char
-            next();
-            // Restore precondition
-            CHECK_BOUNDS(status);
-            continue;
-        }
-
-        if (chunk.length() > 0) {
-          result.add(Literal(false, chunk), status);
-          chunk.setTo(u"", 0);
-        }
-
-        if (peek() == BACKSLASH) {
-            // reserved-escape
-            result.add(Literal(false, parseEscapeSequence(status)), status);
-            chunk.setTo(u"", 0);
-        } else if (peek() == PIPE || isUnquotedStart(peek())) {
-            result.add(parseLiteral(status), status);
-        } else {
-            // The reserved chunk ends here
-            break;
-        }
-
-        CHECK_ERROR(status); // Avoid looping infinitely
-    }
-
-    // Add the last chunk if necessary
-    if (chunk.length() > 0) {
-        result.add(Literal(false, chunk), status);
-    }
-
-    if (empty) {
-        ERROR(status);
-    }
-}
-
-/*
-  Consume a `reserved-start` character followed by a possibly-empty sequence
-  of non-empty sequences of reserved characters, separated by whitespace.
-  Matches the `reserved` nonterminal in the grammar
-
-*/
-Reserved Parser::parseReserved(UErrorCode& status) {
-    Reserved::Builder builder(status);
-
-    if (U_FAILURE(status)) {
-        return {};
-    }
-
-    U_ASSERT(inBounds());
-
-    // Require a `reservedStart` character
-    if (!isReservedStart(peek())) {
-        ERROR(status);
-        return Reserved();
-    }
-
-    // Add the start char as a separate text chunk
-    UnicodeString firstCharString(peek());
-    builder.add(Literal(false, firstCharString), status);
-    if (U_FAILURE(status)) {
-        return {};
-    }
-    // Consume reservedStart
-    normalizedInput += peek();
-    next();
-    return parseReservedBody(builder, status);
-}
-
-Reserved Parser::parseReservedBody(Reserved::Builder& builder, UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return {};
-    }
-
-/*
-  Arbitrary lookahead is required to parse a `reserved`, for similar reasons
-  to why it's required for parsing function annotations.
-
-  In the grammar:
-
-  annotation = (function *(s option)) / reserved
-  expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
-  reserved       = reserved-start reserved-body
-  reserved-body  = *( [s] 1*(reserved-char / reserved-escape / literal))
-
-  When reading a whitespace character, it's ambiguous whether it's the optional
-  whitespace in this rule, or the optional whitespace that precedes a '}' in an
-  expression.
-
-  The ambiguity is resolved using the same grammar refactoring as shown in
-  the comment in `parseOptions()`.
-*/
-    // Consume reserved characters / literals / reserved escapes
-    // until a character that can't be in a `reserved-body` is seen
-    while (true) {
-        /*
-          First, if there is whitespace, it means either a chunk follows it,
-          or this is the trailing whitespace before the '}' that terminates an
-          expression.
-
-          Next, if the next character can start a reserved-char, reserved-escape,
-          or literal, then parse a "chunk" of reserved things.
-          In any other case, we exit successfully, since per the refactored
-          grammar rule:
-               annotation = (function *(s option) [s]) / (reserved [s])
-          it's valid to consume whitespace after a `reserved`.
-          (`parseExpression()` is responsible for checking that the next
-          character is in fact a '}'.)
-         */
-        if (!inBounds()) {
-            break;
-        }
-        int32_t numWhitespaceChars = 0;
-        int32_t savedIndex = index;
-        if (isWhitespace(peek())) {
-            parseOptionalWhitespace(status);
-            numWhitespaceChars = index - savedIndex;
-            // Restore precondition
-            if (!inBounds()) {
-                break;
-            }
-        }
-
-        if (reservedChunkFollows(peek())) {
-            parseReservedChunk(builder, status);
-
-            // Avoid looping infinitely
-            if (U_FAILURE(status) || !inBounds()) {
-                break;
-            }
-        } else {
-            if (numWhitespaceChars > 0) {
-                if (peek() == LEFT_CURLY_BRACE) {
-                    // Resolve even more ambiguity (space preceding another piece of
-                    // a `reserved-body`, vs. space preceding an expression in `reserved-statement`
-                    // "Backtrack"
-                    index -= numWhitespaceChars;
-                    break;
-                }
-                if (peek() == RIGHT_CURLY_BRACE) {
-                    // Not an error: just means there's no trailing whitespace
-                    // after this `reserved`
-                    break;
-                }
-                if (peek() == AT) {
-                    // Not an error, but we have to "backtrack" due to the ambiguity
-                    // between an `s` preceding another reserved chunk
-                    // and an `s` preceding an attribute list
-                    index -= numWhitespaceChars;
-                    break;
-                }
-                // Error: if there's whitespace, it must either be followed
-                // by a non-empty sequence or by '}'
-                ERROR(status);
-                break;
-            }
-            // If there was no whitespace, it's not an error,
-            // just the end of the reserved string
-            break;
-        }
-    }
-
-    return builder.build(status);
-}
-
-/*
-  Consume a function call or reserved string, matching the `annotation`
+  Consume a function call, matching the `annotation`
   nonterminal in the grammar
 
   Returns an `Operator` representing this (a reserved is a parse error)
@@ -1323,17 +1093,9 @@ Operator Parser::parseAnnotation(UErrorCode& status) {
         // Consume the options (which may be empty)
         parseOptions(addOptions, status);
     } else {
-      // Must be reserved
-      // A reserved sequence is not a parse error, but might be a formatting error
-      Reserved rator = parseReserved(status);
-      ratorBuilder.setReserved(std::move(rator));
+        ERROR(status);
     }
-    UErrorCode localStatus = U_ZERO_ERROR;
-    Operator result = ratorBuilder.build(localStatus);
-    // Either `setReserved` or `setFunctionName` was called,
-    // so there shouldn't be an error.
-    U_ASSERT(U_SUCCESS(localStatus));
-    return result;
+    return ratorBuilder.build(status);
 }
 
 /*
@@ -1614,95 +1376,6 @@ void Parser::parseInputDeclaration(UErrorCode& status) {
 }
 
 /*
-  Parses a `reserved-statement` per the grammar
- */
-void Parser::parseUnsupportedStatement(UErrorCode& status) {
-    U_ASSERT(inBounds() && peek() == PERIOD);
-
-    UnsupportedStatement::Builder builder(status);
-    CHECK_ERROR(status);
-
-    // Parse the keyword
-    UnicodeString keyword(PERIOD);
-    normalizedInput += UnicodeString(PERIOD);
-    next();
-    keyword += parseName(status);
-    builder.setKeyword(keyword);
-
-    // Parse the body, which is optional
-    // Lookahead is required to distinguish the `s` in reserved-body
-    // from the `s` in `[s] expression`
-    // Next character may be:
-    // * whitespace (followed by either a reserved-body start or
-    //   a '{')
-    // * a '{'
-
-    CHECK_BOUNDS(status);
-
-    if (peek() != LEFT_CURLY_BRACE) {
-        if (!isWhitespace(peek())) {
-            ERROR(status);
-            return;
-        }
-        // Expect a reserved-body start
-        int32_t savedIndex = index;
-        parseRequiredWhitespace(status);
-        CHECK_BOUNDS(status);
-        if (isReservedBodyStart(peek())) {
-            // There is a reserved body
-            Reserved::Builder r(status);
-            builder.setBody(parseReservedBody(r, status));
-        } else {
-            // No body -- backtrack so we can parse 1*([s] expression)
-            index = savedIndex;
-            normalizedInput.truncate(normalizedInput.length() - 1);
-        }
-        // Otherwise, the next character must be a '{'
-        // to open the required expression (or optional whitespace)
-        if (peek() != LEFT_CURLY_BRACE && !isWhitespace(peek())) {
-            ERROR(status);
-            return;
-        }
-    }
-
-    // Finally, parse the expressions
-
-    // Need to look ahead to disambiguate a '{' beginning
-    // an expression from one beginning with a quoted pattern
-    int32_t expressionCount = 0;
-    while (peek() == LEFT_CURLY_BRACE || isWhitespace(peek())) {
-        parseOptionalWhitespace(status);
-
-        bool nextIsLbrace = peek() == LEFT_CURLY_BRACE;
-        bool nextIsQuotedPattern = nextIsLbrace && inBounds(1)
-            && peek(1) == LEFT_CURLY_BRACE;
-        if (nextIsQuotedPattern) {
-            break;
-        }
-
-        builder.addExpression(parseExpression(status), status);
-        expressionCount++;
-    }
-    if (expressionCount <= 0) {
-        // At least one expression is required
-        ERROR(status);
-        return;
-    }
-    dataModel.addUnsupportedStatement(builder.build(status), status);
-}
-
-// Terrible hack to get around the ambiguity between unsupported keywords
-// and supported keywords
-bool Parser::nextIs(const std::u16string_view &keyword) const {
-    for (int32_t i = 0; i < static_cast<int32_t>(keyword.length()); i++) {
-        if (!inBounds(i) || peek(i) != keyword[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-/*
   Consume a possibly-empty sequence of declarations separated by whitespace;
   each declaration matches the `declaration` nonterminal in the grammar
 
@@ -1715,11 +1388,7 @@ void Parser::parseDeclarations(UErrorCode& status) {
 
     while (peek() == PERIOD) {
         CHECK_BOUNDS_1(status);
-        // Check for unsupported statements first
-        // Lookahead is needed to disambiguate keyword from known keywords
-        if (!nextIs(ID_MATCH) && !nextIs(ID_LOCAL) && !nextIs(ID_INPUT)) {
-            parseUnsupportedStatement(status);
-        } else if (peek(1) == ID_LOCAL[1]) {
+        if (peek(1) == ID_LOCAL[1]) {
             parseLocalDeclaration(status);
         } else if (peek(1) == ID_INPUT[1]) {
             parseInputDeclaration(status);

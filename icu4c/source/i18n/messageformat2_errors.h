@@ -58,7 +58,6 @@ namespace message2 {
         MissingSelectorAnnotation,
         NonexhaustivePattern,
         SyntaxError,
-        UnsupportedStatementError,
         VariantKeyMismatchError
     };
 
@@ -66,7 +65,6 @@ namespace message2 {
         UnresolvedVariable,
         FormattingError,
         OperandMismatchError,
-        ReservedError,
         SelectorError,
         UnknownFunction,
     };
@@ -123,7 +121,6 @@ namespace message2 {
 
         int32_t count() const;
         void setSelectorError(const FunctionName&, UErrorCode&);
-        void setReservedError(UErrorCode&);
         void setUnresolvedVariable(const VariableName&, UErrorCode&);
         void setUnknownFunction(const FunctionName&, UErrorCode&);
         void setFormattingError(const FunctionName&, UErrorCode&);

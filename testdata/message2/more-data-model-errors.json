@@ -102,34 +102,6 @@
         }
       ]
     },
-
-    {
-      "src": ".match {|horse| ^private}\n   1 {{The value is one.}}   * {{The value is not one.}}",
-      "expErrors": [
-        {
-          "type": "missing-selector-annotation"
-        }
-      ]
-    },
-
-    {
-      "src": ".match {$foo !select}  |1| {{one}}  * {{other}}",
-      "expErrors": [
-        {
-          "type": "missing-selector-annotation"
-        }
-      ]
-    },
-
-    {
-      "src": ".match {$foo ^select}  |1| {{one}}  * {{other}}",
-      "expErrors": [
-        {
-          "type": "missing-selector-annotation"
-        }
-      ]
-    },
-
     {
       "src": ".input {$foo} .match {$foo} one {{one}} * {{other}}",
       "expErrors": [
