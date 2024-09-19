@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726782517398,
+  "lastUpdate": 1726786552064,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26577,6 +26577,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 1.012197284564148,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "b3bf9f8c27cb1be17f92b85f9e2354fe3913a392",
+          "message": "ICU-22894 MF2, ICU4J: implements configuring the error handling behavior",
+          "timestamp": "2024-09-19T15:43:36-07:00",
+          "tree_id": "1219720ddf440806934ce140b713196c50d1eb20",
+          "url": "https://github.com/unicode-org/icu/commit/b3bf9f8c27cb1be17f92b85f9e2354fe3913a392"
+        },
+        "date": 1726786387767,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.9421534558851111,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
