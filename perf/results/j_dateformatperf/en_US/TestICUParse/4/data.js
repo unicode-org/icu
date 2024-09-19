@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726749745492,
+  "lastUpdate": 1726754072733,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26187,6 +26187,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 776.5664045810317,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "07e0f7ee2ffbfb37965c5a0711c34620851a579b",
+          "message": "ICU-22318 Fix bad spacing in utxttest.cpp",
+          "timestamp": "2024-09-19T14:51:01+02:00",
+          "tree_id": "8d01790f64d8d1a9050381b164a481a8c6f2a0ed",
+          "url": "https://github.com/unicode-org/icu/commit/07e0f7ee2ffbfb37965c5a0711c34620851a579b"
+        },
+        "date": 1726753906759,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 766.9843824849111,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
