@@ -3,7 +3,6 @@
 
 package com.ibm.icu.message2;
 
-import java.time.Clock;
 import java.time.temporal.Temporal;
 import java.util.Calendar;
 import java.util.Locale;
@@ -352,12 +351,10 @@ class DateTimeFormatterFactory implements FormatterFactory {
                     return new FormattedPlaceholder(
                             toFormat, new PlainStringFormattedValue("{|" + toFormat + "|}"));
                 }
-            } else if (toFormat instanceof Clock) {
-            	toFormat = JavaTimeConverters.temporalToCalendar((Clock) toFormat);
             } else if (toFormat instanceof Temporal) {
             	toFormat = JavaTimeConverters.temporalToCalendar((Temporal) toFormat);
             }
-            // Not an else-if here, because the `Clock` & `Temporal` conditions before make `toFormat` a `Calendar`
+            // Not an else-if here, because the `Temporal` conditions before make `toFormat` a `Calendar`
             if (toFormat instanceof Calendar) {
                 TimeZone tz = ((Calendar) toFormat).getTimeZone();
                 long milis = ((Calendar) toFormat).getTimeInMillis();

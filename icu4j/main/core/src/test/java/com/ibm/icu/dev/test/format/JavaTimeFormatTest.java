@@ -142,15 +142,11 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
         }
     }
 
-    @Test
-    public void testInstantAndClockFormatting() {
+    @Test(expected = IllegalArgumentException.class)
+    public void testInstantFormattingFails() {
         DateFormat formatFromSkeleton = DateFormat.getInstanceForSkeleton("yMMMMd jmsSSSvvvv", Locale.US);
-
         Instant instant = LDT.toInstant(ZoneOffset.UTC);
-        assertEquals("", "September 27, 2013 at 7:43:56.123 PM Greenwich Mean Time", formatFromSkeleton.format(instant));
-
-        Clock clock = Clock.fixed(instant, ZoneId.of("America/Los_Angeles"));
-        assertEquals("", "September 27, 2013 at 12:43:56.123 PM Pacific Time", formatFromSkeleton.format(clock));
+        formatFromSkeleton.format(instant);
     }
 
     @Test
@@ -208,15 +204,6 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
         arguments.put("expDate", LDT.atOffset(ZoneOffset.ofHours(2)));
         assertEquals("", expectedMf1Result, mf.format(arguments));
         assertEquals("", expectedMf2Result, mf2.formatToString(arguments));
-        // Instant
-        Instant instant = LDT.toInstant(ZoneOffset.UTC);
-        arguments.put("expDate", instant);
-        assertEquals("", expectedMf1Result, mf.format(arguments));
-        assertEquals("", expectedMf2Result, mf2.formatToString(arguments));
-        // Clock
-        arguments.put("expDate", Clock.fixed(instant, ZoneId.of("Europe/Paris")));
-        assertEquals("", expectedMf1Result, mf.format(arguments));
-        assertEquals("", expectedMf2Result, mf2.formatToString(arguments));
 
         // Test that both JDK and ICU Calendar are recognized as types.
         arguments.put("expDate", new java.util.GregorianCalendar(2013, 8, 27));
@@ -225,6 +212,31 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
         // I filed https://unicode-org.atlassian.net/browse/ICU-22852
         // MF2 converts the JDK Calendar to an ICU Calendar, so it works.
         assertEquals("", expectedMf2Result, mf2.formatToString(arguments));
+        
+        // Make sure that Instant and Clock are not formatted
+
+        // Instant
+        Instant instant = LDT.toInstant(ZoneOffset.UTC);
+        arguments.put("expDate", instant);
+        try {
+            mf.format(arguments);
+            fail("Should not be able to format java.time.Instant");
+        } catch (IllegalArgumentException ex) { /* expected to throw */ }
+        try {
+            mf2.formatToString(arguments);
+            fail("Should not be able to format java.time.Instant");
+        } catch (IllegalArgumentException ex) { /* expected to throw */ }
+
+        // Clock
+        arguments.put("expDate", Clock.fixed(instant, ZoneId.of("Europe/Paris")));
+        try {
+            mf.format(arguments);
+            fail("Should not be able to format java.time.Clock");
+        } catch (IllegalArgumentException ex) { /* expected to throw */ }
+        try {
+            mf2.formatToString(arguments);
+            fail("Should not be able to format java.time.Clock");
+        } catch (IllegalArgumentException ex) { /* expected to throw */ }
     }
 
     @Test

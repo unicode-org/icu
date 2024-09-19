@@ -5,7 +5,6 @@ package com.ibm.icu.impl;
 
 import static java.time.temporal.ChronoField.MILLI_OF_SECOND;
 
-import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,7 +33,7 @@ import com.ibm.icu.util.ULocale;
  *
  * <p>
  * The class includes methods for converting various temporal types, such as
- * {@link Instant}, {@link ZonedDateTime}, {@link OffsetTime}, {@link OffsetDateTime}, {@link LocalTime},
+ * {@link ZonedDateTime}, {@link OffsetTime}, {@link OffsetDateTime}, {@link LocalTime},
  * {@link ChronoLocalDate}, and {@link ChronoLocalDateTime}, to {@link Calendar} instances.
  *
  * <p>
@@ -50,47 +49,6 @@ public class JavaTimeConverters {
 
     private JavaTimeConverters() {
         // Prevent instantiation, making this an utility class
-    }
-
-    /**
-     * Converts the current instant from a {@link Clock} to a {@link Calendar}.
-     *
-     * <p>
-     * This method creates a {@link Calendar} instance that represents the current
-     * instant as provided by the specified {@link Clock}.
-     *
-     * @param clock The {@link Clock} providing the current instant.
-     * @return A {@link Calendar} instance representing the current instant as
-     *         provided by the specified {@link Clock}.
-     *
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static Calendar temporalToCalendar(Clock clock) {
-        long epochMillis = clock.millis();
-        String timeZone = clock.getZone().getId();
-        TimeZone icuTimeZone = TimeZone.getTimeZone(timeZone);
-        return millisToCalendar(epochMillis, icuTimeZone);
-    }
-
-    /**
-     * Converts an {@link Instant} to a {@link Calendar}.
-     *
-     * <p>
-     * This method creates a {@link Calendar} instance that represents the same
-     * point in time as the specified {@link Instant}. The resulting
-     * {@link Calendar} will be in the default time zone of the JVM.
-     *
-     * @param instant The {@link Instant} to convert.
-     * @return A {@link Calendar} instance representing the same point in time as
-     *         the specified {@link Instant}.
-     *
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static Calendar temporalToCalendar(Instant instant) {
-        long epochMillis = instant.toEpochMilli();
-        return millisToCalendar(epochMillis, TimeZone.GMT_ZONE);
     }
 
     /**
@@ -232,10 +190,9 @@ public class JavaTimeConverters {
      */
     @Deprecated
     public static Calendar temporalToCalendar(Temporal temp) {
-        if (temp instanceof Clock) {
-            return temporalToCalendar((Clock) temp);
-        } else if (temp instanceof Instant) {
-            return temporalToCalendar((Instant) temp);
+        if (temp instanceof Instant) {
+            throw new IllegalArgumentException("java.time.Instant cannot be formatted,"
+                    + " it does not have enough information");
         } else if (temp instanceof ZonedDateTime) {
             return temporalToCalendar((ZonedDateTime) temp);
         } else if (temp instanceof OffsetDateTime) {
@@ -253,8 +210,8 @@ public class JavaTimeConverters {
         } else if (temp instanceof ChronoLocalDateTime) {
             return temporalToCalendar((ChronoLocalDateTime<?>) temp);
         } else {
-            System.out.println("WTF is " + temp.getClass());
-            return null;
+            throw new IllegalArgumentException("This type cannot be formatted: "
+                    + temp.getClass().getName());
         }
     }
 
