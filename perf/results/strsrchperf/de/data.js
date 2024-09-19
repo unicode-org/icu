@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726769268992,
+  "lastUpdate": 1726771257342,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32505,6 +32505,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 51.6257,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "ac737dabcfc4d28e3a408161970a41dfab822024",
+          "message": "ICU-12865 Update API docs to reflect new features in ICU 54 and later :-)",
+          "timestamp": "2024-09-19T11:19:15-07:00",
+          "tree_id": "480e705f2c7959ff0eee9867d91990daabb57510",
+          "url": "https://github.com/unicode-org/icu/commit/ac737dabcfc4d28e3a408161970a41dfab822024"
+        },
+        "date": 1726771083486,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.8211,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 51.557,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
