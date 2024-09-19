@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726771476726,
+  "lastUpdate": 1726780394429,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -52539,6 +52539,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2114684.1396,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "23edf9cca6c71f3fb846eef59d70345a91ef1fc6",
+          "message": "ICU-22762 MF2: Add builder method to control error handling behavior\n\nAdd MessageFormatter::Builder::setErrorHandlingBehavior() method\nand a new enum type MessageFormatter::UMFErrorHandlingBehavior\nto denote strict or best-effort behavior.\n\nThe reason for adding a single method that takes an enum is to allow\nfor the possibility of more error handling modes in the future.\n\nCo-authored-by: Markus Scherer <markus.icu@gmail.com>",
+          "timestamp": "2024-09-19T13:21:56-07:00",
+          "tree_id": "ffeccd829e0ff706c2e71f7288f126ccffb611fa",
+          "url": "https://github.com/unicode-org/icu/commit/23edf9cca6c71f3fb846eef59d70345a91ef1fc6"
+        },
+        "date": 1726780230352,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 155.0361,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8680611.2747,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2113869.6375,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7662863.8042,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2102138.0657,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
