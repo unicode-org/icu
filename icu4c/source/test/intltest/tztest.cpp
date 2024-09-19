@@ -2460,7 +2460,7 @@ void TimeZoneTest::TestGetRegion()
         {"America/Indiana/Indianapolis",    "US"},  // CLDR alias
         {"Mexico/General",                  "MX"},  // Link America/Mexico_City, Olson backward
         {"Etc/UTC",                         "001"},
-        {"EST5EDT",                         "001"},
+        {"EST5EDT",                         "US"},
         {"PST",                             "US"},  // Link America/Los_Angeles
         {"Europe/Helsinki",                 "FI"},
         {"Europe/Mariehamn",                "AX"},  // Link Europe/Helsinki, but in zone.tab
