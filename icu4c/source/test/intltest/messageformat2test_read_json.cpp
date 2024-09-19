@@ -34,9 +34,6 @@ static UErrorCode getExpectedRuntimeErrorFromString(const std::string& errorName
     if (errorName == "unresolved-variable") {
         return U_MF_UNRESOLVED_VARIABLE_ERROR;
     }
-    if (errorName == "unsupported-expression") {
-        return U_MF_UNSUPPORTED_EXPRESSION_ERROR;
-    }
     if (errorName == "bad-operand") {
         return U_MF_OPERAND_MISMATCH_ERROR;
     }
@@ -58,11 +55,8 @@ static UErrorCode getExpectedRuntimeErrorFromString(const std::string& errorName
     if (errorName == "bad-selector") {
         return U_MF_SELECTOR_ERROR;
     }
-    if (errorName == "formatting-error") {
-        return U_MF_FORMATTING_ERROR;
-    }
 // Arbitrary default
-    return U_MF_UNSUPPORTED_STATEMENT_ERROR;
+    return U_MF_FORMATTING_ERROR;
 }
 
 static UnicodeString u_str(std::string s) {
@@ -295,16 +289,13 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
 
     // Do spec tests for syntax errors
     runTestsFromJsonFile(*this, "spec/syntax-errors.json", errorCode);
+    runTestsFromJsonFile(*this, "unsupported-expressions.json", errorCode);
+    runTestsFromJsonFile(*this, "unsupported-statements.json", errorCode);
+    runTestsFromJsonFile(*this, "syntax-errors-reserved.json", errorCode);
 
     // Do tests for data model errors
     runTestsFromJsonFile(*this, "spec/data-model-errors.json", errorCode);
     runTestsFromJsonFile(*this, "more-data-model-errors.json", errorCode);
-
-    // Do tests for reserved statements/expressions
-    runTestsFromJsonFile(*this, "spec/unsupported-expressions.json", errorCode);
-    runTestsFromJsonFile(*this, "spec/unsupported-statements.json", errorCode);
-    // Uncomment when reserved syntax is removed
-    // runTestsFromJsonFile(*this, "syntax-errors-reserved.json", errorCode);
 
     // Do valid spec tests
     runTestsFromJsonFile(*this, "spec/syntax.json", errorCode);

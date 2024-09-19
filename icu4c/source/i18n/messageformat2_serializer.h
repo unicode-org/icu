@@ -44,14 +44,12 @@ namespace message2 {
         void emit(const Key&);
         void emit(const SelectorKeys&);
         void emit(const Operand&);
-        void emit(const Reserved&);
         void emit(const Expression&);
         void emit(const PatternPart&);
         void emit(const Pattern&);
         void emit(const Variant*);
         void emitAttributes(const OptionMap&);
         void emit(const OptionMap&);
-        void serializeUnsupported();
         void serializeDeclarations();
         void serializeSelectors();
         void serializeVariants();

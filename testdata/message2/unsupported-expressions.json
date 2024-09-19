@@ -1,11 +1,11 @@
 {
   "scenario": "Reserved and private annotations",
-  "description": "Tests for unsupported expressions (reserved/private)",
+  "description": "Tests for unsupported expressions (reserved/private) (now syntax errors)",
   "defaultTestProperties": {
     "locale": "en-US",
     "expErrors": [
       {
-        "type": "unsupported-expression"
+        "type": "syntax-error"
       }
     ]
   },
@@ -47,7 +47,31 @@
     { "src": "hello {$foo    +num x \\\\ abcde |3.14| r  }"  },
     { "src": "hello {$foo    >num x \\\\ abcde |aaa||3.14||42| r  }"  },
     { "src": "hello {$foo    >num x \\\\ abcde |aaa||3.14| |42| r  }"  },
-    { "src" : ".input{ $n ~ }{{{$n}}}" }
+    { "src" : ".input{ $n ~ }{{{$n}}}" },
+    { "src":  "foo {+reserved}"},
+    { "src": "foo {&private}" },
+    { "src": "foo {?reserved @a @b=$c}" },
+    { "src": "{!.}" },
+    { "src": "{! .}" },
+    { "src": "{%}" },
+    { "src": "{*}" },
+    { "src": "{+}" },
+    { "src": "{<}" },
+    { "src": "{>}" },
+    { "src": "{?}" },
+    { "src": "{~}" },
+    { "src": "{^.}" },
+    { "src": "{^ .}" },
+    { "src": "{&}" },
+    { "src": "{!.\\{}" },
+    { "src": "{!. \\{}" },
+    { "src": "{!|a|}" },
+    { "src": "{^}" },
+    { "src": "{!}" },
+    { "src": ".match {$foo !select}  |1| {{one}}  * {{other}}" },
+    { "src": ".match {$foo ^select}  |1| {{one}}  * {{other}}" },
+    { "src": ".match {|horse| ^private}\n   1 {{The value is one.}}   * {{The value is not one.}}" },
+    { "src": ".match {$foo ^select}  |1| {{one}}  * {{other}}" }
   ]
 }
 

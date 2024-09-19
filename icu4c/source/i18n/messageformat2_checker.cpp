@@ -136,9 +136,7 @@ void Checker::addFreeVars(TypeEnvironment& t, const OptionMap& opts, UErrorCode&
 void Checker::addFreeVars(TypeEnvironment& t, const Operator& rator, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    if (!rator.isReserved()) {
-        addFreeVars(t, rator.getOptionsInternal(), status);
-    }
+    addFreeVars(t, rator.getOptionsInternal(), status);
 }
 
 void Checker::addFreeVars(TypeEnvironment& t, const Expression& rhs, UErrorCode& status) {
@@ -213,12 +211,10 @@ void Checker::requireAnnotated(const TypeEnvironment& t, const Expression& selec
     if (selectorExpr.isFunctionCall()) {
         return; // No error
     }
-    if (!selectorExpr.isReserved()) {
-        const Operand& rand = selectorExpr.getOperand();
-        if (rand.isVariable()) {
-            if (t.get(rand.asVariable()) == TypeEnvironment::Type::Annotated) {
-                return; // No error
-            }
+    const Operand& rand = selectorExpr.getOperand();
+    if (rand.isVariable()) {
+        if (t.get(rand.asVariable()) == TypeEnvironment::Type::Annotated) {
+            return; // No error
         }
     }
     // If this code is reached, an error was detected
@@ -239,9 +235,6 @@ void Checker::checkSelectors(const TypeEnvironment& t, UErrorCode& status) {
 TypeEnvironment::Type typeOf(TypeEnvironment& t, const Expression& expr) {
     if (expr.isFunctionCall()) {
         return TypeEnvironment::Type::Annotated;
-    }
-    if (expr.isReserved()) {
-        return TypeEnvironment::Type::Unannotated;
     }
     const Operand& rand = expr.getOperand();
     U_ASSERT(!rand.isNull());
@@ -295,11 +288,6 @@ void Checker::checkDeclarations(TypeEnvironment& t, UErrorCode& status) {
         }
         // Next, extend the type environment with a binding from lhs to its type
         t.extend(lhs, typeOf(t, rhs), status);
-    }
-
-    // Check for unsupported statements
-    if (dataModel.unsupportedStatementsLen > 0) {
-        errors.addError(StaticErrorType::UnsupportedStatementError, status);
     }
 }
 

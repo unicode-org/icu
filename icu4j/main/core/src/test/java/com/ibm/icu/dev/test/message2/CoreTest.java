@@ -42,6 +42,8 @@ public class CoreTest extends CoreTestFmwk {
                                                 "syntax-errors-end-of-input.json",
                                                 "syntax-errors-reserved.json",
                                                 "tricky-declarations.json",
+                                                "unsupported-expressions.json",
+                                                "unsupported-statements.json",
                                                 "valid-tests.json"};
 
     @Test
