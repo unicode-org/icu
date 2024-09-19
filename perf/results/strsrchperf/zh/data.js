@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726729864187,
+  "lastUpdate": 1726750068118,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32289,6 +32289,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 52.5948,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "59d39a2aa5d4879041ecc558a19d0c43501b8004",
+          "message": "ICU-22873 Update to clang18 and enable -Werror\n\nSee #3134",
+          "timestamp": "2024-09-19T12:14:38+05:30",
+          "tree_id": "de5f8abba018b3049eabb98951a778fb001a9f08",
+          "url": "https://github.com/unicode-org/icu/commit/59d39a2aa5d4879041ecc558a19d0c43501b8004"
+        },
+        "date": 1726749901893,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 24.4943,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 54.5438,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
