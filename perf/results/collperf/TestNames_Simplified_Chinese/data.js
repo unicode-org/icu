@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726761830774,
+  "lastUpdate": 1726767575310,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -52269,6 +52269,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2171465.1551,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "33589083+rqu@users.noreply.github.com",
+            "name": "rqu",
+            "username": "rqu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "e3e74bdd7272b17073fdd66f767b7758e3bfa372",
+          "message": "ICU-22721 Fix trivial slip-up in ICU4J TimeZone.java",
+          "timestamp": "2024-09-19T10:17:49-07:00",
+          "tree_id": "271ebfe36b823f96e7da7da739ca1dc832f54a9d",
+          "url": "https://github.com/unicode-org/icu/commit/e3e74bdd7272b17073fdd66f767b7758e3bfa372"
+        },
+        "date": 1726767406154,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 150.3849,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8735214.4364,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2106714.9753,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7836816.2371,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2166593.6477,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
