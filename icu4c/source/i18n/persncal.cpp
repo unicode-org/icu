@@ -154,16 +154,13 @@ int32_t PersianCalendar::handleGetLimit(UCalendarDateFields field, ELimitType li
 UBool PersianCalendar::isLeapYear(int32_t year)
 {
     if (year >= gMinCorrection && getLeapCorrection()->contains(year)) {
-  printf("%d is not leap year\n", year);
         return false;
     }
     if (year > gMinCorrection && getLeapCorrection()->contains(year-1)) {
-  printf("%d is leap year\n", year);
         return true;
     }
     int64_t y = static_cast<int64_t>(year) * 25LL + 11LL;
     bool res = (y % 33L < 8);
-  printf("%d is %s leap year\n", year, res ? "INDEED" : "NOT");
     return res;
 }
     
@@ -228,7 +225,6 @@ static int64_t firstJulianOfYear(int64_t year) {
 
 // Return JD of start of given month/year
 int64_t PersianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /*useMonth*/, UErrorCode& status) const {
-  printf("handleComputeMonthStart y=%d m=%d\n", eyear, month);
     if (U_FAILURE(status)) {
         return 0;
     }
@@ -242,11 +238,9 @@ int64_t PersianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
     }
 
     int64_t julianDay = PERSIAN_EPOCH - 1LL + firstJulianOfYear(eyear);
-    printf("julianDay correct to = %d\n", julianDay);
 
     if (month != 0) {
         julianDay += kPersianNumDays[month];
-    printf("julianDay add month to = %d\n", julianDay);
     }
 
     return julianDay;
@@ -281,7 +275,6 @@ int32_t PersianCalendar::handleGetExtendedYear(UErrorCode& status) {
  * method is called.
  */
 void PersianCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status) {
-  printf("handleComputeFields jd=%d\n", julianDay);
     int64_t daysSinceEpoch = julianDay - PERSIAN_EPOCH;
     int64_t year = ClockMath::floorDivideInt64(
         33LL * daysSinceEpoch + 3LL, 12053LL) + 1LL;
@@ -296,13 +289,10 @@ void PersianCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status)
     U_ASSERT(dayOfYear >= 0);
     U_ASSERT(dayOfYear < 366);
 
-    printf("a dayOfYear = %d\n", dayOfYear);
-                                                     //
     if (dayOfYear == 365 && year >= gMinCorrection && getLeapCorrection()->contains(year)) {
         year++;
         dayOfYear = 0;
     }
-    printf("b dayOfYear = %d\n", dayOfYear);
     int32_t month;
     if (dayOfYear < 216) { // Compute 0-based month
         month = dayOfYear / 31;
@@ -313,9 +303,7 @@ void PersianCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status)
     U_ASSERT(month < 12);
 
     ++dayOfYear; // Make it 1-based now
-    printf("c dayOfYear = %d\n", dayOfYear);
     int32_t dayOfMonth = dayOfYear - kPersianNumDays[month];
-    printf("d dayOfMonth = %d\n", dayOfMonth);
     U_ASSERT(dayOfMonth > 0);
     U_ASSERT(dayOfMonth <= 31);
 
