@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726780416285,
+  "lastUpdate": 1726782869301,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -52431,6 +52431,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5676121.5281,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "5991c9392c41369c9d4e9f7dd808b5b5b9a8c7fe",
+          "message": "ICU-22890 MF2: Add ICU4C test for lone surrogates\n\nAdd a test to ICU4C for handling of lone surrogates.\n\nIncidentally fix uninitialized-memory bug in MessageFormatter\n(initialize `errors` to nullptr)\n\nCo-authored-by: Frank Tang <ftang@chromium.org>",
+          "timestamp": "2024-09-19T14:28:02-07:00",
+          "tree_id": "8c6aae95e8985640592de3d69f57100a9f2972b3",
+          "url": "https://github.com/unicode-org/icu/commit/5991c9392c41369c9d4e9f7dd808b5b5b9a8c7fe"
+        },
+        "date": 1726782704617,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 233.8529,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21052895.4738,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5410464.3906,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19647210.4527,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5650871.693,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
