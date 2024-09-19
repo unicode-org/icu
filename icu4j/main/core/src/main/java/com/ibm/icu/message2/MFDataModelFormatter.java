@@ -29,6 +29,7 @@ import com.ibm.icu.message2.MFDataModel.SelectMessage;
 import com.ibm.icu.message2.MFDataModel.StringPart;
 import com.ibm.icu.message2.MFDataModel.VariableRef;
 import com.ibm.icu.message2.MFDataModel.Variant;
+import com.ibm.icu.message2.MessageFormatter.ErrorHandlingBehavior;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.CurrencyAmount;
 
@@ -39,6 +40,7 @@ import com.ibm.icu.util.CurrencyAmount;
 // TODO: move this in the MessageFormatter?
 class MFDataModelFormatter {
     private final Locale locale;
+    private final ErrorHandlingBehavior errorHandlingBehavior;
     private final MFDataModel.Message dm;
 
     private final MFFunctionRegistry standardFunctions;
@@ -46,8 +48,13 @@ class MFDataModelFormatter {
     private static final MFFunctionRegistry EMPTY_REGISTY = MFFunctionRegistry.builder().build();
 
     MFDataModelFormatter(
-            MFDataModel.Message dm, Locale locale, MFFunctionRegistry customFunctionRegistry) {
+            MFDataModel.Message dm,
+            Locale locale,
+            ErrorHandlingBehavior errorHandlingBehavior,
+            MFFunctionRegistry customFunctionRegistry) {
         this.locale = locale;
+        this.errorHandlingBehavior = errorHandlingBehavior == null
+                ? ErrorHandlingBehavior.BEST_EFFORT : errorHandlingBehavior;
         this.dm = dm;
         this.customFunctions =
                 customFunctionRegistry == null ? EMPTY_REGISTY : customFunctionRegistry;
@@ -94,18 +101,20 @@ class MFDataModelFormatter {
         if (dm instanceof MFDataModel.PatternMessage) {
             MFDataModel.PatternMessage pm = (MFDataModel.PatternMessage) dm;
             variables = resolveDeclarations(pm.declarations, arguments);
+            if (pm.pattern == null) {
+                fatalFormattingError("The PatternMessage is null.");
+            }
             patternToRender = pm.pattern;
         } else if (dm instanceof MFDataModel.SelectMessage) {
             MFDataModel.SelectMessage sm = (MFDataModel.SelectMessage) dm;
             variables = resolveDeclarations(sm.declarations, arguments);
             patternToRender = findBestMatchingPattern(sm, variables, arguments);
+            if (patternToRender == null) {
+                fatalFormattingError("Cannor find a match for the selector.");
+            }
         } else {
             fatalFormattingError("Unknown message type.");
             // formattingError throws, so the return does not actually happen
-            return "ERROR!";
-        }
-
-        if (patternToRender == null) {
             return "ERROR!";
         }
 
@@ -175,7 +184,7 @@ class MFDataModelFormatter {
                 // spec: Append `rv` as the last element of the list `res`.
                 res.add(rs);
             } else {
-                throw new IllegalArgumentException("Unknown selector type: " + functionName);
+                fatalFormattingError("Unknown selector type: " + functionName);
             }
         }
 
@@ -183,7 +192,7 @@ class MFDataModelFormatter {
         // or we have thrown an exception.
         // But just in case someone removes the throw above?
         if (res.size() != selectors.size()) {
-            throw new IllegalArgumentException(
+            fatalFormattingError(
                     "Something went wrong, not enough selector functions, "
                             + res.size() + " vs. " + selectors.size());
         }
@@ -322,8 +331,7 @@ class MFDataModelFormatter {
         // And should do that only once, when building the data model.
         if (patternToRender == null) {
             // If there was a case with all entries in the keys `*` this should not happen
-            throw new IllegalArgumentException(
-                    "The selection went wrong, cannot select any option.");
+            fatalFormattingError("The selection went wrong, cannot select any option.");
         }
 
         return patternToRender;
@@ -394,7 +402,7 @@ class MFDataModelFormatter {
         }
     }
 
-    private static void fatalFormattingError(String message) {
+    private static void fatalFormattingError(String message) throws IllegalArgumentException {
         throw new IllegalArgumentException(message);
     }
 
@@ -412,7 +420,7 @@ class MFDataModelFormatter {
                 functionName = customFunctions.getDefaultFormatterNameForType(clazz);
             }
             if (functionName == null) {
-                throw new IllegalArgumentException(
+                fatalFormattingError(
                         "Object to format without a function, and unknown type: "
                                 + toFormat.getClass().getName());
             }
@@ -528,11 +536,17 @@ class MFDataModelFormatter {
 
         FormatterFactory funcFactory = getFormattingFunctionFactoryByName(toFormat, functionName);
         if (funcFactory == null) {
+            if (errorHandlingBehavior == ErrorHandlingBehavior.STRICT) {
+                fatalFormattingError("unable to find function at " + fallbackString);
+            }
             return new FormattedPlaceholder(expression, new PlainStringFormattedValue(fallbackString));
         }
         Formatter ff = funcFactory.createFormatter(locale, options);
         String res = ff.formatToString(toFormat, arguments);
         if (res == null) {
+            if (errorHandlingBehavior == ErrorHandlingBehavior.STRICT) {
+                fatalFormattingError("unable to format string at " + fallbackString);
+            }
             res = fallbackString;
         }
 
