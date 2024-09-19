@@ -352,7 +352,7 @@ class DateTimeFormatterFactory implements FormatterFactory {
                             toFormat, new PlainStringFormattedValue("{|" + toFormat + "|}"));
                 }
             } else if (toFormat instanceof Temporal) {
-            	toFormat = JavaTimeConverters.temporalToCalendar((Temporal) toFormat);
+                toFormat = JavaTimeConverters.temporalToCalendar((Temporal) toFormat);
             }
             // Not an else-if here, because the `Temporal` conditions before make `toFormat` a `Calendar`
             if (toFormat instanceof Calendar) {

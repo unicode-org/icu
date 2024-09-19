@@ -85,8 +85,9 @@ public class TestUtils {
         //    "params": [{"name": "exp"}, { "value": { "date": 1722746637000 } }]
         for (int i = 0; i < params.length; i++) {
             Param pair = params[i];
-            if (pair.value instanceof Map) {
-                Map innerMap = (Map) pair.value;
+            if (pair.value instanceof Map<?, ?>) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> innerMap = (Map<String, Object>) pair.value;
                 if (innerMap.size() == 1 && innerMap.containsKey("date") && innerMap.get("date") instanceof Double) {
                     Long dateValue = Double.valueOf((Double) innerMap.get("date")).longValue();
                     params[i] = new Param(pair.name, new Date(dateValue));
@@ -103,8 +104,9 @@ public class TestUtils {
         //    "params": [{"name": "val"}, {"value": {"decimal": "1234567890123456789.987654321"}}]
         for (int i = 0; i < params.length; i++) {
             Param pair = params[i];
-            if (pair.value instanceof Map) {
-                Map innerMap = (Map) pair.value;
+            if (pair.value instanceof Map<?, ?>) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> innerMap = (Map<String, Object>) pair.value;
                 if (innerMap.size() == 1 && innerMap.containsKey("decimal")
                     && innerMap.get("decimal") instanceof String) {
                     String decimalValue = (String) innerMap.get("decimal");

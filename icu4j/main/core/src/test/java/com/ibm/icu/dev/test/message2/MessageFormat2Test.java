@@ -574,4 +574,85 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals("test local vars loop", "Count = 23, OffCount = 21, and delta=2.",
                 mfVar2.formatToString(Args.of("count", 23, "delta", 2)));
     }
+
+    // Needs more tests. Ported from the equivalent test in ICU4C
+    @Test
+    public void testFormatterAPI() {
+        String result;
+        Map<String, Object> messageArguments = new HashMap<>();
+
+        // Check that constructing the formatter fails
+        // if there's a syntax error
+        String pattern = "{{}";
+        MessageFormatter.Builder mfBuilder = MessageFormatter.builder();
+        MessageFormatter mf;
+        try {
+            mf = mfBuilder
+                    // This shouldn't matter, since there's a syntax error
+                    .setErrorHandlingBehavior(MessageFormatter.ErrorHandlingBehavior.BEST_EFFORT)
+                    .setPattern(pattern)
+                    .build();
+            errln("error expected");
+        } catch (IllegalArgumentException e) {
+            assertTrue("", e.getMessage().contains("Parse error"));
+        }
+
+        /*
+          Parsing is done when setPattern() is called,
+          so setErrorHandlingBehavior(MessageFormatter.ErrorHandlingBehavior.STRICT) or setSuppressErrors must be called
+          _before_ setPattern() to get the right behavior,
+          and if either method is called after setting a pattern,
+          setPattern() has to be called again.
+         */
+
+        // Should get the same behavior with strict errors
+        try {
+            mf = mfBuilder.setErrorHandlingBehavior(MessageFormatter.ErrorHandlingBehavior.STRICT)
+                    // Force re-parsing, as above comment
+                    .setPattern(pattern)
+                    .build();
+            errln("error expected");
+        } catch (IllegalArgumentException e) {
+            assertTrue("", e.getMessage().contains("Parse error"));
+        }
+
+        // Try the same thing for a pattern with a resolution error
+        pattern = "{{{$x}}}";
+        // Check that a pattern with a resolution error gives fallback output
+        mf = mfBuilder
+                .setErrorHandlingBehavior(MessageFormatter.ErrorHandlingBehavior.BEST_EFFORT)
+                .setPattern(pattern)
+                .build();
+        result = mf.formatToString(messageArguments);
+        assertEquals("", "{$x}", result);
+
+        try {
+            // Check that we do get an error with strict errors
+            mf = mfBuilder
+                    .setErrorHandlingBehavior(MessageFormatter.ErrorHandlingBehavior.STRICT)
+                    .build();
+            // U_ASSERT(U_SUCCESS(errorCode));
+            result = mf.formatToString(messageArguments);
+            errln("error expected");
+        } catch (IllegalArgumentException e) {
+            assertTrue("", e.getMessage().contains("unable to find function"));
+        }
+
+        // Finally, check a valid pattern
+        pattern = "hello";
+        mf = mfBuilder
+                .setPattern(pattern)
+                .setErrorHandlingBehavior(MessageFormatter.ErrorHandlingBehavior.BEST_EFFORT)
+                .build();
+        result = mf.formatToString(messageArguments);
+        assertEquals("", "hello", result);
+
+        // Check that behavior is the same with strict errors
+        mf = mfBuilder
+                .setErrorHandlingBehavior(MessageFormatter.ErrorHandlingBehavior.STRICT)
+                .build();
+        result = mf.formatToString(messageArguments);
+        assertEquals("", "hello", result);
+    }
+
 }
