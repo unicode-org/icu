@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726781066454,
+  "lastUpdate": 1726783466888,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -92925,6 +92925,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.6219,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "5991c9392c41369c9d4e9f7dd808b5b5b9a8c7fe",
+          "message": "ICU-22890 MF2: Add ICU4C test for lone surrogates\n\nAdd a test to ICU4C for handling of lone surrogates.\n\nIncidentally fix uninitialized-memory bug in MessageFormatter\n(initialize `errors` to nullptr)\n\nCo-authored-by: Frank Tang <ftang@chromium.org>",
+          "timestamp": "2024-09-19T14:28:02-07:00",
+          "tree_id": "8c6aae95e8985640592de3d69f57100a9f2972b3",
+          "url": "https://github.com/unicode-org/icu/commit/5991c9392c41369c9d4e9f7dd808b5b5b9a8c7fe"
+        },
+        "date": 1726783306807,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.9601,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.3879,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.7783,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 25.8903,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 37.7219,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.6708,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 26.984,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.2363,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 77.5122,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.8664,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.6062,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 40.3395,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
