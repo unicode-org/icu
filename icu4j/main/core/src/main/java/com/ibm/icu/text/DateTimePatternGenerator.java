@@ -175,12 +175,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         // first load with the ICU patterns
         ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, uLocale);
         String calendarTypeToUse = getCalendarTypeToUse(uLocale);
-        // TODO: this is a HACK to work around ICU-22668/CLDR-17892!  Remove once they're fixed!
-        // (Without this hack, DateTimeGeneratorTest.testISO8601() fails.  The corresponding test
-        // on the C++ side still _passes_, so I have NOT added this hack on the C++ side. --rtg 8/21/24)
-        if (calendarTypeToUse.equals("iso8601")) {
-            calendarTypeToUse = "gregorian";
-        }
         // TODO: See ICU-22867
         ICUResourceBundle dateTimePatterns = rb.getWithFallback("calendar/" + calendarTypeToUse + "/DateTimePatterns");
         if (dateTimePatterns.getType() != UResourceBundle.ARRAY || dateTimePatterns.getSize() < 8) {
