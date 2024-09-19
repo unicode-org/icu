@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726779878096,
+  "lastUpdate": 1726782259279,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26367,6 +26367,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 204.70467219554376,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "5991c9392c41369c9d4e9f7dd808b5b5b9a8c7fe",
+          "message": "ICU-22890 MF2: Add ICU4C test for lone surrogates\n\nAdd a test to ICU4C for handling of lone surrogates.\n\nIncidentally fix uninitialized-memory bug in MessageFormatter\n(initialize `errors` to nullptr)\n\nCo-authored-by: Frank Tang <ftang@chromium.org>",
+          "timestamp": "2024-09-19T14:28:02-07:00",
+          "tree_id": "8c6aae95e8985640592de3d69f57100a9f2972b3",
+          "url": "https://github.com/unicode-org/icu/commit/5991c9392c41369c9d4e9f7dd808b5b5b9a8c7fe"
+        },
+        "date": 1726782102575,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 184.4095273290661,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
