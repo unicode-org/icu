@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726754091096,
+  "lastUpdate": 1726761893459,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26217,6 +26217,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.416850111940923,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "0bf8a95309992b7cb940fdf0629d3d58e3104861",
+          "message": "ICU-22793 Remove superfluous return value typecasts to UBool.",
+          "timestamp": "2024-09-19T17:11:38+02:00",
+          "tree_id": "9bca0514364b76178410a4eecaca6435bea37dea",
+          "url": "https://github.com/unicode-org/icu/commit/0bf8a95309992b7cb940fdf0629d3d58e3104861"
+        },
+        "date": 1726761725323,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.5463057614059987,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
