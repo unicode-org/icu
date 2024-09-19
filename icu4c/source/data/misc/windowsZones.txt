@@ -713,7 +713,7 @@ windowsZones:table(nofallback){
         }
         "Ulaanbaatar Standard Time"{
             001{"Asia/Ulaanbaatar"}
-            MN{"Asia/Ulaanbaatar Asia/Choibalsan"}
+            MN{"Asia/Ulaanbaatar"}
         }
         "Venezuela Standard Time"{
             001{"America/Caracas"}
