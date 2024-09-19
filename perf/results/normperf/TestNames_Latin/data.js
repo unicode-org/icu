@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726769673612,
+  "lastUpdate": 1726780593015,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -58257,6 +58257,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 5.8572,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "23edf9cca6c71f3fb846eef59d70345a91ef1fc6",
+          "message": "ICU-22762 MF2: Add builder method to control error handling behavior\n\nAdd MessageFormatter::Builder::setErrorHandlingBehavior() method\nand a new enum type MessageFormatter::UMFErrorHandlingBehavior\nto denote strict or best-effort behavior.\n\nThe reason for adding a single method that takes an enum is to allow\nfor the possibility of more error handling modes in the future.\n\nCo-authored-by: Markus Scherer <markus.icu@gmail.com>",
+          "timestamp": "2024-09-19T13:21:56-07:00",
+          "tree_id": "ffeccd829e0ff706c2e71f7288f126ccffb611fa",
+          "url": "https://github.com/unicode-org/icu/commit/23edf9cca6c71f3fb846eef59d70345a91ef1fc6"
+        },
+        "date": 1726780429503,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 6.0758,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 5.8359,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 5.8448,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 5.7565,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 5.8688,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 5.8609,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
