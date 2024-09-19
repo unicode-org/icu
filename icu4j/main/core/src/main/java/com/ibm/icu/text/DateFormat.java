@@ -14,7 +14,6 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
-import java.time.Clock;
 import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.Date;
@@ -633,9 +632,6 @@ public abstract class DateFormat extends UFormat {
         } else if (obj instanceof Number) {
             return format( new Date(((Number)obj).longValue()),
                           toAppendTo, fieldPosition );
-        } else if (obj instanceof Clock) {
-            return format(JavaTimeConverters.temporalToCalendar((Clock) obj),
-                          toAppendTo, fieldPosition);
         } else if (obj instanceof Temporal) {
             return format( (Temporal)obj, toAppendTo, fieldPosition );
         } else {

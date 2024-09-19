@@ -3,7 +3,6 @@
 
 package com.ibm.icu.dev.test.format;
 
-import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -125,25 +124,10 @@ public class JavaTimeConvertersTest extends CoreTestFmwk {
 
     }
 
-    @Test
-    public void testInstantAndClock() {
-        // Instant has no time zone, assumes GMT.
-        EXPECTED_CALENDAR.setTimeZone(TimeZone.GMT_ZONE);
+    @Test(expected = IllegalArgumentException.class)
+    public void testInstantFails() {
         Instant instant = Instant.ofEpochMilli(EXPECTED_CALENDAR.getTimeInMillis());
-        Calendar calendar = JavaTimeConverters.temporalToCalendar(instant);
-        assertCalendarsEquals(EXPECTED_CALENDAR, calendar, DATE_ONLY_FIELDS);
-        assertCalendarsEquals(EXPECTED_CALENDAR, calendar, TIME_ONLY_FIELDS);
-        assertEquals("", EXPECTED_CALENDAR.getTimeZone().getID(), calendar.getTimeZone().getID());
-        assertEquals("", EXPECTED_CALENDAR.getTimeZone().getRawOffset(), calendar.getTimeZone().getRawOffset());
-        // Restore the time zone on the expected calendar
-        EXPECTED_CALENDAR.setTimeZone(TimeZone.getTimeZone(TIME_ZONE_ID));
-
-        Clock clock = Clock.fixed(instant, ZoneId.of(TIME_ZONE_ID));
-        calendar = JavaTimeConverters.temporalToCalendar(clock);
-        assertCalendarsEquals(EXPECTED_CALENDAR, calendar, DATE_ONLY_FIELDS);
-        assertCalendarsEquals(EXPECTED_CALENDAR, calendar, TIME_ONLY_FIELDS);
-        assertEquals("", EXPECTED_CALENDAR.getTimeZone().getID(), calendar.getTimeZone().getID());
-        assertEquals("", EXPECTED_CALENDAR.getTimeZone().getRawOffset(), calendar.getTimeZone().getRawOffset());
+        JavaTimeConverters.temporalToCalendar(instant);
     }
 
     // Compare the expected / actual calendar, but using an allowlist

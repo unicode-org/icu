@@ -24,7 +24,6 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
-import java.time.Clock;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -1753,9 +1752,6 @@ public class MessageFormat extends UFormat {
                     dest.formatAndAppend(getStockDateFormatter(), arg);
                 } else if (arg instanceof Calendar) {
                     // format a Calendar if can
-                    dest.formatAndAppend(getStockDateFormatter(), arg);
-                } else if (arg instanceof Clock) {
-                    // format a Clock if can
                     dest.formatAndAppend(getStockDateFormatter(), arg);
                 } else if (arg instanceof Temporal) {
                     // format a Temporal if can

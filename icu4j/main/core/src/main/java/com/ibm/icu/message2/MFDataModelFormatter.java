@@ -3,7 +3,6 @@
 
 package com.ibm.icu.message2;
 
-import java.time.Clock;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,7 +61,6 @@ class MFDataModelFormatter {
                         .setDefaultFormatterNameForType(Date.class, "datetime")
                         .setDefaultFormatterNameForType(Calendar.class, "datetime")
                         .setDefaultFormatterNameForType(java.util.Calendar.class, "datetime")
-                        .setDefaultFormatterNameForType(Clock.class, "datetime")
                         .setDefaultFormatterNameForType(Temporal.class, "datetime")
 
                         // Number formatting
