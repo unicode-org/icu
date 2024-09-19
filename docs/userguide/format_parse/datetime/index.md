@@ -205,7 +205,7 @@ Note that the examples may not reflect current CLDR data.
 | --- | --- | --- | --- |
 | `G` | era designator | `G`, `GG`, or `GGG`<br/>`GGGG`<br/>`GGGGG` | AD<br/>Anno Domini<br/>A |
 | `y` | year | `yy`<br/>`y` or `yyyy` | 96<br/>1996 |
-| `Y` | year of "Week of Year" | `Y` | 1997 |
+| `Y` | year in “Week of Year” based calendars in which the year transition occurs on a week boundary; may differ from calendar year ‘y’ near a year transition. This year designation is used with pattern character ‘w’ in the ISO 8601 year-week calendar, for example. | `Y` | 1997 |
 | `u` | extended year | `u` | 4601 |
 | `U` | cyclic year name, as in Chinese lunar calendar | `U` | 甲子 |
 | `r` | related Gregorian year | `r` | 1996 |
