@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726854690365,
+  "lastUpdate": 1726861191306,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -52809,6 +52809,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1315401.8907,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "94057e95501a88b2e2e5f4ca14a38ef23d0f6139",
+          "message": "ICU-22900 Remove deprecated SimpleNumber truncateStart\n\nSee #3192",
+          "timestamp": "2024-09-20T12:10:41-07:00",
+          "tree_id": "7da6d896cd46beb2bd21060888867a5452b20440",
+          "url": "https://github.com/unicode-org/icu/commit/94057e95501a88b2e2e5f4ca14a38ef23d0f6139"
+        },
+        "date": 1726861022185,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 275.875,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 3023361.4328,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1311990.7791,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 2743183.8869,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1309039.7058,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
