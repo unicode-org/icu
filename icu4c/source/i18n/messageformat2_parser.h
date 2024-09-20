@@ -102,7 +102,8 @@ namespace message2 {
         void parseUnsupportedStatement(UErrorCode&);
         void parseLocalDeclaration(UErrorCode&);
         void parseInputDeclaration(UErrorCode&);
-	void parseSelectors(UErrorCode&);
+        void parseSelectors(UErrorCode&);
+        void parseVariant(UErrorCode&);
 
 	void parseWhitespaceMaybeRequired(bool, UErrorCode&);
 	void parseRequiredWhitespace(UErrorCode&);

@@ -336,13 +336,13 @@ void MessageFormatter::resolveSelectors(MessageContext& context, const Environme
     CHECK_ERROR(status);
     U_ASSERT(!dataModel.hasPattern());
 
-    const Expression* selectors = dataModel.getSelectorsInternal();
+    const VariableName* selectors = dataModel.getSelectorsInternal();
     // 1. Let res be a new empty list of resolved values that support selection.
     // (Implicit, since `res` is an out-parameter)
     // 2. For each expression exp of the message's selectors
     for (int32_t i = 0; i < dataModel.numSelectors(); i++) {
         // 2i. Let rv be the resolved value of exp.
-        ResolvedSelector rv = formatSelectorExpression(env, selectors[i], context, status);
+        ResolvedSelector rv = formatSelector(env, selectors[i], context, status);
         if (rv.hasSelector()) {
             // 2ii. If selection is supported for rv:
             // (True if this code has been reached)
@@ -614,7 +614,10 @@ void MessageFormatter::sortVariants(const UVector& pref, UVector& vars, UErrorCo
 
 
 // Evaluate the operand
-ResolvedSelector MessageFormatter::resolveVariables(const Environment& env, const Operand& rand, MessageContext& context, UErrorCode &status) const {
+ResolvedSelector MessageFormatter::resolveVariables(const Environment& env,
+                                                    const Operand& rand,
+                                                    MessageContext& context,
+                                                    UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return {};
     }
@@ -628,7 +631,13 @@ ResolvedSelector MessageFormatter::resolveVariables(const Environment& env, cons
     }
 
     // Must be variable
-    const VariableName& var = rand.asVariable();
+    return resolveVariables(env, rand.asVariable(), context, status);
+}
+
+ResolvedSelector MessageFormatter::resolveVariables(const Environment& env,
+                                                    const VariableName& var,
+                                                    MessageContext& context,
+                                                    UErrorCode &status) const {
     // Resolve the variable
     if (env.has(var)) {
         const Closure& referent = env.lookup(var);
@@ -691,13 +700,16 @@ ResolvedSelector MessageFormatter::resolveVariables(const Environment& env,
     }
 }
 
-ResolvedSelector MessageFormatter::formatSelectorExpression(const Environment& globalEnv, const Expression& expr, MessageContext& context, UErrorCode &status) const {
+ResolvedSelector MessageFormatter::formatSelector(const Environment& globalEnv,
+                                                  const VariableName& var,
+                                                  MessageContext& context,
+                                                  UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return {};
     }
 
     // Resolve expression to determine if it's a function call
-    ResolvedSelector exprResult = resolveVariables(globalEnv, expr, context, status);
+    ResolvedSelector exprResult = resolveVariables(globalEnv, var, context, status);
 
     DynamicErrors& err = context.getErrors();
 

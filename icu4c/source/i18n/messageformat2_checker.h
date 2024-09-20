@@ -69,9 +69,9 @@ namespace message2 {
             : dataModel(d), errors(e), context(mf) {}
     private:
 
-        UnicodeString normalizeNFC(const Key&) const;
+        Key normalizeNFC(const Key&) const;
 
-        void requireAnnotated(const TypeEnvironment&, const Expression&, UErrorCode&);
+        void requireAnnotated(const TypeEnvironment&, const VariableName&, UErrorCode&);
         void addFreeVars(TypeEnvironment& t, const Operand&, UErrorCode&);
         void addFreeVars(TypeEnvironment& t, const Operator&, UErrorCode&);
         void addFreeVars(TypeEnvironment& t, const OptionMap&, UErrorCode&);

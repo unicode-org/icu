@@ -1,0 +1,120 @@
+{
+  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "scenario": "Pattern selection",
+  "description": "Tests for pattern selection",
+  "defaultTestProperties": {
+    "locale": "und"
+  },
+  "tests": [
+    {
+      "src": ".local $x = {1 :test:select} .match $x 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "exp": "1"
+    },
+    {
+      "src": ".local $x = {0 :test:select} .match $x 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "exp": "other"
+    },
+    {
+      "src": ".input {$x :test:select} .match $x 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "params": [{ "name": "x", "value": 1 }],
+      "exp": "1"
+    },
+    {
+      "src": ".input {$x :test:select} .match $x 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "params": [{ "name": "x", "value": 2 }],
+      "exp": "other"
+    },
+    {
+      "src": ".input {$x :test:select} .local $y = {$x} .match $y 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "params": [{ "name": "x", "value": 1 }],
+      "exp": "1"
+    },
+    {
+      "src": ".input {$x :test:select} .local $y = {$x} .match $y 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "params": [{ "name": "x", "value": 2 }],
+      "exp": "other"
+    },
+    {
+      "src": ".local $x = {1 :test:select decimalPlaces=1} .match $x 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "exp": "1.0"
+    },
+    {
+      "src": ".local $x = {1 :test:select decimalPlaces=1} .match $x 1 {{1}} 1.0 {{1.0}} * {{other}}",
+      "exp": "1.0"
+    },
+    {
+      "src": ".local $x = {1 :test:select decimalPlaces=9} .match $x 1.0 {{1.0}} 1 {{1}} * {{bad-option-value}}",
+      "exp": "bad-option-value",
+      "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
+    },
+    {
+      "src": ".input {$x :test:select} .local $y = {$x :test:select decimalPlaces=1} .match $y 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "params": [{ "name": "x", "value": 1 }],
+      "exp": "1.0"
+    },
+    {
+      "src": ".input {$x :test:select decimalPlaces=1} .local $y = {$x :test:select} .match $y 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "params": [{ "name": "x", "value": 1 }],
+      "exp": "1.0"
+    },
+    {
+      "src": ".input {$x :test:select decimalPlaces=9} .local $y = {$x :test:select decimalPlaces=1} .match $y 1.0 {{1.0}} 1 {{1}} * {{bad-option-value}}",
+      "params": [{ "name": "x", "value": 1 }],
+      "exp": "bad-option-value",
+      "expErrors": [
+        { "type": "bad-option" },
+        { "type": "bad-operand" },
+        { "type": "bad-selector" }
+      ]
+    },
+    {
+      "src": ".local $x = {1 :test:select fails=select} .match $x 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "exp": "other",
+      "expErrors": [{ "type": "bad-selector" }]
+    },
+    {
+      "src": ".local $x = {1 :test:select fails=format} .match $x 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "exp": "1"
+    },
+    {
+      "src": ".local $x = {1 :test:format} .match $x 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "exp": "other",
+      "expErrors": [{ "type": "bad-selector" }]
+    },
+    {
+      "src": ".input {$x :test:select} .match $x 1.0 {{1.0}} 1 {{1}} * {{other}}",
+      "exp": "other",
+      "expErrors": [
+        { "type": "unresolved-variable" },
+        { "type": "bad-operand" },
+        { "type": "bad-selector" }
+      ]
+    },
+    {
+      "src": ".local $x = {1 :test:select} .local $y = {1 :test:select} .match $x $y 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
+      "exp": "1,1"
+    },
+    {
+      "src": ".local $x = {1 :test:select} .local $y = {0 :test:select} .match $x $y 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
+      "exp": "1,*"
+    },
+    {
+      "src": ".local $x = {0 :test:select} .local $y = {1 :test:select} .match $x $y 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
+      "exp": "*,1"
+    },
+    {
+      "src": ".local $x = {0 :test:select} .local $y = {0 :test:select} .match $x $y 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
+      "exp": "*,*"
+    },
+    {
+      "src": ".local $x = {1 :test:select fails=select} .local $y = {1 :test:select} .match $x $y 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
+      "exp": "*,1",
+      "expErrors": [{ "type": "bad-selector" }]
+    },
+    {
+      "src": ".local $x = {1 :test:select} .local $y = {1 :test:format} .match $x $y 1 1 {{1,1}} 1 * {{1,*}} * 1 {{*,1}} * * {{*,*}}",
+      "exp": "1,*",
+      "expErrors": [{ "type": "bad-selector" }]
+    }
+  ]
+}

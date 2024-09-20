@@ -254,7 +254,8 @@ class TestUtils {
         if (!roundTrip(in, mf.getDataModel(), out)
             // For now, don't round-trip messages with these errors,
             // since duplicate options are dropped
-            && testCase.expectedErrorCode() != U_MF_DUPLICATE_OPTION_NAME_ERROR) {
+            && (testCase.expectSuccess() ||
+                (testCase.expectedErrorCode() != U_MF_DUPLICATE_OPTION_NAME_ERROR))) {
             failRoundTrip(tmsg, testCase, in, out);
         }
 

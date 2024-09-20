@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
   "scenario": "String function",
   "description": "The built-in formatter for strings.",
   "defaultTestProperties": {
@@ -6,7 +7,7 @@
   },
   "tests": [
     {
-      "src": ".match {$foo :string} |1| {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo |1| {{one}} * {{other}}",
       "params": [
         {
           "name": "foo",
@@ -16,18 +17,17 @@
       "exp": "one"
     },
     {
-      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
       "params": [
         {
           "name": "foo",
           "value": 1
         }
       ],
-      "exp": "one",
-      "ignoreJava": ":string doesn't stringify numbers?"
+      "exp": "one"
     },
     {
-      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
       "params": [
         {
           "name": "foo",
@@ -35,17 +35,16 @@
         }
       ],
       "exp": "other",
-      "ignoreCpp": "Can't handle null value for input variable"
+      "ignoreCpp": "Explicit null doesn't work"
     },
     {
-      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
       "exp": "other",
       "expErrors": [
         {
           "type": "unresolved-variable"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
     }
   ]
 }

@@ -339,8 +339,18 @@ namespace message2 {
         // Do not define default assignment operator
         const MessageFormatter &operator=(const MessageFormatter &) = delete;
 
-        ResolvedSelector resolveVariables(const Environment& env, const data_model::Operand&, MessageContext&, UErrorCode &) const;
-        ResolvedSelector resolveVariables(const Environment& env, const data_model::Expression&, MessageContext&, UErrorCode &) const;
+        ResolvedSelector resolveVariables(const Environment& env,
+                                          const data_model::VariableName&,
+                                          MessageContext&,
+                                          UErrorCode &) const;
+        ResolvedSelector resolveVariables(const Environment& env,
+                                          const data_model::Operand&,
+                                          MessageContext&,
+                                          UErrorCode &) const;
+        ResolvedSelector resolveVariables(const Environment& env,
+                                          const data_model::Expression&,
+                                          MessageContext&,
+                                          UErrorCode &) const;
 
         // Selection methods
 
@@ -373,8 +383,11 @@ namespace message2 {
                                                        FunctionOptions&& options,
                                                        MessageContext& context,
                                                        UErrorCode& status) const;
-        // Formats an expression that appears as a selector
-        ResolvedSelector formatSelectorExpression(const Environment& env, const data_model::Expression&, MessageContext&, UErrorCode&) const;
+        // Formats a variableName that appears as a selector
+        ResolvedSelector formatSelector(const Environment& env,
+                                        const data_model::VariableName&,
+                                        MessageContext&,
+                                        UErrorCode&) const;
         // Formats an expression that appears in a pattern or as the definition of a local variable
         [[nodiscard]] FormattedPlaceholder formatExpression(const Environment&, const data_model::Expression&, MessageContext&, UErrorCode&) const;
         [[nodiscard]] FunctionOptions resolveOptions(const Environment& env, const OptionMap&, MessageContext&, UErrorCode&) const;

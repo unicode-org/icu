@@ -512,21 +512,13 @@ VariableName Parser::parseVariableName(UErrorCode& errorCode) {
     VariableName result;
 
     U_ASSERT(inBounds());
-    // If the '$' is missing, we don't want a binding
-    // for this variable to be created.
-    bool valid = peek() == DOLLAR;
+
     parseToken(DOLLAR, errorCode);
     if (!inBounds()) {
         ERROR(errorCode);
         return result;
     }
-    UnicodeString varName = parseName(errorCode);
-    // Set the name to "" if the variable wasn't
-    // declared correctly
-    if (!valid) {
-        varName.remove();
-    }
-    return VariableName(varName);
+    return VariableName(parseName(errorCode));
 }
 
 /*
@@ -863,19 +855,9 @@ void Parser::parseAttribute(AttributeAdder<T>& attrAdder, UErrorCode& errorCode)
         parseTokenWithWhitespace(EQUALS, errorCode);
 
         UnicodeString rhsStr;
-        // Parse RHS, which is either a literal or variable
-        switch (peek()) {
-        case DOLLAR: {
-            rand = Operand(parseVariableName(errorCode));
-            break;
-        }
-        default: {
-            // Must be a literal
-            rand = Operand(parseLiteral(errorCode));
-            break;
-        }
-        }
-        U_ASSERT(!rand.isNull());
+        // Parse RHS, which must be a literal
+        // attribute = "@" identifier [o "=" o literal]
+        rand = Operand(parseLiteral(errorCode));
     } else {
         // attribute -> "@" identifier [[s] "=" [s]]
         // Use null operand, which `rand` is already set to
@@ -883,7 +865,7 @@ void Parser::parseAttribute(AttributeAdder<T>& attrAdder, UErrorCode& errorCode)
         index = savedIndex;
     }
 
-    attrAdder.addAttribute(lhs, std::move(rand), errorCode);
+    attrAdder.addAttribute(lhs, std::move(Operand(rand)), errorCode);
 }
 
 /*
@@ -1722,6 +1704,22 @@ Pattern Parser::parseSimpleMessage(UErrorCode& status) {
     return result.build(status);
 }
 
+void Parser::parseVariant(UErrorCode& status) {
+    CHECK_ERROR(status);
+
+    // At least one key is required
+    SelectorKeys keyList(parseNonEmptyKeys(status));
+
+    // parseNonEmptyKeys() consumes any trailing whitespace,
+    // so the pattern can be consumed next.
+
+    // Restore precondition before calling parsePattern()
+    // (which must return a non-null value)
+    CHECK_BOUNDS(status);
+    Pattern rhs = parseQuotedPattern(status);
+
+    dataModel.addVariant(std::move(keyList), std::move(rhs), status);
+}
 
 /*
   Consume a `selectors` (matching the nonterminal in the grammar),
@@ -1741,22 +1739,25 @@ void Parser::parseSelectors(UErrorCode& status) {
     // Parse selectors
     // "Backtracking" is required here. It's not clear if whitespace is
     // (`[s]` selector) or (`[s]` variant)
-    while (isWhitespace(peek()) || peek() == LEFT_CURLY_BRACE) {
-        parseOptionalWhitespace(status);
+    while (isWhitespace(peek()) || peek() == DOLLAR) {
+        int32_t whitespaceStart = index;
+        parseRequiredWhitespace(status);
         // Restore precondition
         CHECK_BOUNDS(status);
-        if (peek() != LEFT_CURLY_BRACE) {
+        if (peek() != DOLLAR) {
             // This is not necessarily an error, but rather,
             // means the whitespace we parsed was the optional
             // whitespace preceding the first variant, not the
-            // optional whitespace preceding a subsequent expression.
+            // required whitespace preceding a subsequent variable.
+            // In that case, "push back" the whitespace.
+            normalizedInput.truncate(normalizedInput.length() - 1);
+            index = whitespaceStart;
             break;
         }
-        Expression expression;
-        expression = parseExpression(status);
+        VariableName var = parseVariableName(status);
         empty = false;
 
-        dataModel.addSelector(std::move(expression), status);
+        dataModel.addSelector(std::move(var), status);
         CHECK_ERROR(status);
     }
 
@@ -1772,27 +1773,29 @@ void Parser::parseSelectors(UErrorCode& status) {
         }                                          \
 
     // Parse variants
+    // matcher = match-statement s variant *(o variant)
+
+    // Parse first variant
+    parseRequiredWhitespace(status);
+    if (!inBounds()) {
+        ERROR(status);
+        return;
+    }
+    parseVariant(status);
+    if (!inBounds()) {
+        // Not an error; there might be only one variant
+        return;
+    }
+
     while (isWhitespace(peek()) || isKeyStart(peek())) {
-        // Trailing whitespace is allowed
         parseOptionalWhitespace(status);
+        // Restore the precondition.
+        // Trailing whitespace is allowed.
         if (!inBounds()) {
             return;
         }
 
-        // At least one key is required
-        SelectorKeys keyList(parseNonEmptyKeys(status));
-
-        CHECK_ERROR(status);
-
-        // parseNonEmptyKeys() consumes any trailing whitespace,
-        // so the pattern can be consumed next.
-
-        // Restore precondition before calling parsePattern()
-        // (which must return a non-null value)
-        CHECK_BOUNDS(status);
-        Pattern rhs = parseQuotedPattern(status);
-
-        dataModel.addVariant(std::move(keyList), std::move(rhs), status);
+        parseVariant(status);
 
         // Restore the precondition, *without* erroring out if we've
         // reached the end of input. That's because it's valid for the
