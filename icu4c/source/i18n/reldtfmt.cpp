@@ -503,7 +503,7 @@ struct RelDateFmtDataSink : public ResourceSink {
 
         // Put in the proper spot, but don't override existing data.
         n = offset + UDAT_DIRECTION_THIS; // Converts to index in UDAT_R
-        if (n < fDatesLen && fDatesPtr[n].string == nullptr) {
+        if (0 <= n && n < fDatesLen && fDatesPtr[n].string == nullptr) {
           // Not found and n is an empty slot.
           fDatesPtr[n].offset = offset;
           fDatesPtr[n].string = value.getString(len, errorCode);
