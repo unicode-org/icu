@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
   "scenario": "Number function",
   "description": "The built-in formatter for numbers.",
   "defaultTestProperties": {
@@ -24,8 +25,7 @@
         {
           "type": "bad-operand"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
     },
     {
       "src": "invalid number literal {|.1| :number}",
@@ -34,8 +34,7 @@
         {
           "type": "bad-operand"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
     },
     {
       "src": "invalid number literal {|1.| :number}",
@@ -44,8 +43,7 @@
         {
           "type": "bad-operand"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
     },
     {
       "src": "invalid number literal {|01| :number}",
@@ -54,8 +52,7 @@
         {
           "type": "bad-operand"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
     },
     {
       "src": "invalid number literal {|+1| :number}",
@@ -64,8 +61,7 @@
         {
           "type": "bad-operand"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
     },
     {
       "src": "invalid number literal {|0x1| :number}",
@@ -74,8 +70,7 @@
         {
           "type": "bad-operand"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
     },
     {
       "src": "hello {:number}",
@@ -84,8 +79,7 @@
         {
           "type": "bad-operand"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
     },
     {
       "src": "hello {4.2 :number minimumFractionDigits=2}",
@@ -148,8 +142,7 @@
         {
           "type": "bad-option"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
     },
     {
       "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
@@ -164,8 +157,7 @@
         {
           "type": "bad-operand"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
     },
     {
       "src": ".input {$foo :number} {{bar {$foo}}}",
@@ -200,8 +192,7 @@
         {
           "type": "bad-option"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
     },
     {
       "src": ".input {$foo :number} {{bar {$foo}}}",
@@ -216,176 +207,7 @@
         {
           "type": "bad-operand"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
-    },
-    {
-      "src": ".match {$foo :number} one {{one}} * {{other}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 1
-        }
-      ],
-      "exp": "one"
-    },
-    {
-      "src": ".match {$foo :number} 1 {{=1}} one {{one}} * {{other}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 1
-        }
-      ],
-      "exp": "=1"
-    },
-    {
-      "src": ".match {$foo :number} one {{one}} 1 {{=1}} * {{other}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 1
-        }
-      ],
-      "exp": "=1"
-    },
-    {
-      "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 1
-        },
-        {
-          "name": "bar",
-          "value": 1
-        }
-      ],
-      "exp": "one one"
-    },
-    {
-      "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 1
-        },
-        {
-          "name": "bar",
-          "value": 2
-        }
-      ],
-      "exp": "one other"
-    },
-    {
-      "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 2
-        },
-        {
-          "name": "bar",
-          "value": 2
-        }
-      ],
-      "exp": "other"
-    },
-    {
-      "src": ".input {$foo :number} .match {$foo} one {{one}} * {{other}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 1
-        }
-      ],
-      "exp": "one"
-    },
-    {
-      "src": ".local $foo = {$bar :number} .match {$foo} one {{one}} * {{other}}",
-      "params": [
-        {
-          "name": "bar",
-          "value": 1
-        }
-      ],
-      "exp": "one"
-    },
-    {
-      "src": ".input {$foo :number} .local $bar = {$foo} .match {$bar} one {{one}} * {{other}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 1
-        }
-      ],
-      "exp": "one"
-    },
-    {
-      "src": ".input {$bar :number} .match {$bar} one {{one}} * {{other}}",
-      "params": [
-        {
-          "name": "bar",
-          "value": 2
-        }
-      ],
-      "exp": "other"
-    },
-    {
-      "src": ".input {$bar} .match {$bar :number} one {{one}} * {{other}}",
-      "params": [
-        {
-          "name": "bar",
-          "value": 1
-        }
-      ],
-      "exp": "one"
-    },
-    {
-      "src": ".input {$bar} .match {$bar :number} one {{one}} * {{other}}",
-      "params": [
-        {
-          "name": "bar",
-          "value": 2
-        }
-      ],
-      "exp": "other"
-    },
-    {
-      "src": ".input {$none} .match {$foo :number} one {{one}} * {{{$none}}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 1
-        }
-      ],
-      "exp": "one"
-    },
-    {
-      "src": ".local $bar = {$none} .match {$foo :number} one {{one}} * {{{$bar}}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 1
-        }
-      ],
-      "exp": "one"
-    },
-    {
-      "src": ".local $bar = {$none} .match {$foo :number} one {{one}} * {{{$bar}}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 2
-        }
-      ],
-      "exp": "{$none}",
-      "expErrors": [
-        {
-          "type": "unresolved-variable"
-        }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
     },
     {
       "src": "{42 :number @foo @bar=13}",
