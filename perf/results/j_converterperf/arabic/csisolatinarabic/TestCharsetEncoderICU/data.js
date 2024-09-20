@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726860879792,
+  "lastUpdate": 1726872668733,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26697,6 +26697,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.02827754787087,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "cjchapman@unicode.org",
+            "name": "Chris Chapman",
+            "username": "cjchapman"
+          },
+          "committer": {
+            "email": "cjchapman@apple.com",
+            "name": "Christopher Chapman",
+            "username": "cjchapman"
+          },
+          "distinct": true,
+          "id": "1c2a1c50b70be5bf34ece49b43165653c4aecb0a",
+          "message": "ICU-22896 updating tzdata to 2024b",
+          "timestamp": "2024-09-20T15:20:39-07:00",
+          "tree_id": "8f4ea1dd40aa62462f52ae97b419aa94265f7309",
+          "url": "https://github.com/unicode-org/icu/commit/1c2a1c50b70be5bf34ece49b43165653c4aecb0a"
+        },
+        "date": 1726872498977,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.0353247950103013,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
