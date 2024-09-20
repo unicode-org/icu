@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726849045954,
+  "lastUpdate": 1726851411015,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32613,6 +32613,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 51.3562,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "feca6eea68b79920fe0fde8ef47bda1b936958c1",
+          "message": "ICU-22723 Frontload ICU4C change report 75 -> 76",
+          "timestamp": "2024-09-18T14:56:40-07:00",
+          "tree_id": "b9f21d770680488a19b1379f899aeb1b4080a0de",
+          "url": "https://github.com/unicode-org/icu/commit/feca6eea68b79920fe0fde8ef47bda1b936958c1"
+        },
+        "date": 1726851247194,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.1946,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 50.0747,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
