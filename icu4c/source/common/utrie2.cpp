@@ -574,7 +574,15 @@ enumEitherTrie(const UTrie2 *trie,
                     c+=UTRIE2_DATA_BLOCK_LENGTH;
                 } else {
                     for(j=0; j<UTRIE2_DATA_BLOCK_LENGTH; ++j) {
-                        value=enumValue(context, data32!=nullptr ? data32[block+j] : idx[block+j]);
+                        if (data32!=nullptr) {
+                            value=enumValue(context, data32[block+j]);
+                        } else if (idx!=nullptr) {
+                            value=enumValue(context, idx[block+j]);
+                        } else {
+                            /* data32 and idx are not supposed to be NULL at the same time */
+                            U_ASSERT(false);
+                            return;
+                        }
                         if(value!=prevValue) {
                             if(prev<c && !enumRange(context, prev, c-1, prevValue)) {
                                 return;

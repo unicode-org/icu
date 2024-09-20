@@ -177,7 +177,9 @@ unum_clone(const UNumberFormat *fmt,
     } else {
         const RuleBasedNumberFormat* rbnf = dynamic_cast<const RuleBasedNumberFormat*>(nf);
         U_ASSERT(rbnf != nullptr);
-        res = rbnf->clone();
+        if (rbnf != nullptr) {
+            res = rbnf->clone();
+        }
     }
 
     if (res == nullptr) {
