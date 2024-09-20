@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726851601159,
+  "lastUpdate": 1726854714145,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -52701,6 +52701,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5506253.8173,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "09c5aa1b7449fce136adf42a22ad13f0acb98aac",
+          "message": "ICU-22893 Remove support for Unsupported, Private & Reserved constructs\n\n- Matching PR #883 in the message-format-wg repo.\n- Also removes some unused imports",
+          "timestamp": "2024-09-18T16:12:54-07:00",
+          "tree_id": "e775a144ed7a3f667ff78918968f1b37912ed55a",
+          "url": "https://github.com/unicode-org/icu/commit/09c5aa1b7449fce136adf42a22ad13f0acb98aac"
+        },
+        "date": 1726854552055,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 236.9676,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20853179.2693,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5325349.6159,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19765713.9405,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5542435.5912,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
