@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726843655372,
+  "lastUpdate": 1726848704332,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26607,6 +26607,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.4856769844403948,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "rp9.next@gmail.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "30efee0d3affad339ef9b259c9a67a373bb1cde7",
+          "message": "ICU-22723 BRS_76_RC: Update version number to 76.1-SNAPSHOT",
+          "timestamp": "2024-09-19T21:49:13+05:30",
+          "tree_id": "5ed88cd6106d25fda238394abe65c84bbf136894",
+          "url": "https://github.com/unicode-org/icu/commit/30efee0d3affad339ef9b259c9a67a373bb1cde7"
+        },
+        "date": 1726848543066,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.377163269674755,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
