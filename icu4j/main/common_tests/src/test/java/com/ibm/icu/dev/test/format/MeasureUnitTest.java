@@ -329,7 +329,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
         //generateConstants("76"); // for MeasureUnit.java, update generated MeasureUnit constants
         //generateBackwardCompatibilityTest("76"); // for MeasureUnitTest.java, create TestCompatible74
         //generateCXXHConstants("76"); // for measunit.h, update generated createXXX methods
-        generateCXXConstants(); // for measunit.cpp, update generated code
+        //generateCXXConstants(); // for measunit.cpp, update generated code
         //generateCXXBackwardCompatibilityTest("74"); // for measfmttest.cpp, create TestCompatible74
         //updateJAVAVersions("74"); // for MeasureUnitTest.java, JAVA_VERSIONS
     }
