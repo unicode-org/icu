@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726861342155,
+  "lastUpdate": 1726877197336,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -58677,6 +58677,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 32.4028,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "8f82facca870950fbd65b46ec33204b8ed0488e2",
+          "message": "ICU-22898 MF2 parser bug fixes\n\nICU4C: Escape curly braces when serializing and normalizing\nICU4C: Escape '|' in patterns\nICU4C: When normalizing input, escape optionally-escaped characters in patterns\nICU4C/ICU4J: Allow trailing whitespace after a match\nICU4C: Fix parser to iterate over code points, not code units\nAdd tests with old reserved syntax as syntax-error tests",
+          "timestamp": "2024-09-20T16:22:34-07:00",
+          "tree_id": "ac68cd15b25807b89ebdd5eede1a3b404405f52d",
+          "url": "https://github.com/unicode-org/icu/commit/8f82facca870950fbd65b46ec33204b8ed0488e2"
+        },
+        "date": 1726877024646,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 13.1048,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 23.4471,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 23.4235,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 11.8829,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 33.5584,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 33.5231,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
