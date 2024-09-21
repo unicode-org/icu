@@ -19,6 +19,7 @@ on:
     paths:
       - 'icu4c/**'
       - 'icu4j/**'
+      - 'testdata/**'
       - '.github/workflows/**'
   schedule:
     # Runs daily on default branch (main) only.

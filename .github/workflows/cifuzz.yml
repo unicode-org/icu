@@ -8,6 +8,7 @@ on:
       - '**.cpp'
       - '**.cxx'
       - '**.h'
+      - 'testdata/**'
       - '.github/workflows/**'
   push:
     branches:
@@ -19,6 +20,7 @@ on:
       - '**.cpp'
       - '**.cxx'
       - '**.h'
+      - 'testdata/**'
       - '.github/workflows/**'
   workflow_dispatch:
 permissions: {}
