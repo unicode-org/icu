@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726877166955,
+  "lastUpdate": 1726880513798,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -58737,6 +58737,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 14.0578,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "2f348f4c7a152688b26d215c23f2b2a5f0a824f3",
+          "message": "ICU-22902 Remove support for Unsupported, Private & Reserved constructs\n\nMatching PR #883 in the message-format-wg repo.\n\nAlso move spec tests for unsupported statements and expressions into new files\nto serve as syntax error tests.",
+          "timestamp": "2024-09-20T17:29:07-07:00",
+          "tree_id": "acc3d4f7922871e57cece6fd61009296d1052798",
+          "url": "https://github.com/unicode-org/icu/commit/2f348f4c7a152688b26d215c23f2b2a5f0a824f3"
+        },
+        "date": 1726880344983,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 15.7322,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 12.3202,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 12.289,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 12.9415,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 14.065,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 14.0189,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
