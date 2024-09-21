@@ -13,11 +13,13 @@ on:
       - 'maint/maint*'
     paths:
       - 'icu4c/**'
+      - 'testdata/**'
       - '.github/workflows/**'
   pull_request:
     branches: '**'
     paths:
       - 'icu4c/**'
+      - 'testdata/**'
       - '.github/workflows/**'
 
 # For non-release branches (namely: PRs), only run CI on the most recent commit. Cancel
