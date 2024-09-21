@@ -377,6 +377,10 @@ int main(int argc, char* argv[])
                     data.staticData.name);
             }
 
+            if (strlen(cnvName) + 1 > UPRV_LENGTHOF(data.staticData.name)) {
+                fprintf(stderr, "converter name %s too long\n", cnvName);
+                return U_BUFFER_OVERFLOW_ERROR;
+            }
             uprv_strcpy((char*)data.staticData.name, cnvName);
 
             if(!uprv_isInvariantString((char*)data.staticData.name, -1)) {
