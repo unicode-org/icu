@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1726880304571,
+  "lastUpdate": 1727042037089,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -53133,6 +53133,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5436170.2615,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "earlchew@amazon.com",
+            "name": "Earl Chew",
+            "username": "earlchew-aws"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "199bc827021ffdb43b6579d68e5eecf54c7f6f56",
+          "message": "ICU-22610 Use Requires.private and Libs.private\n\nTo prevent overlinking when publishing shared libraries,\nspecify internal dependencies using Requires.private and\nLibs.private.\n\nUse Libs.private in icu-uc.pc for libicudata.so, and\nRequires.private in icu-i18n.pc, icu-io.pc, and icu-lx.pc,\nso that ICU internal dependencies will not be bound\ninto clients.\n\nThe resulting *.pc files will produce the following\noutput for icu-i18n and icu-lx, provided pkgconf has\ncommit 78d53ea0 (2.2.0 or later) which de-duplicates\nmultiple -L options:\n\n    commit 78d53ea012dfbaf397bf8e6907efac5b51abac56\n    Author: Kai Pastor <dg0yt@darc.de>\n    Date:   Fri Feb 23 15:18:08 2024 +0100\n\n        Revise serials, traversal, flattening\n\n  ./configure --enable-shared ...\n\n    #\n    # icu-i18n\n    #\n\n    % pkgconf --libs  icu-i18n\n    -L/opt/local/lib -licui18n\n\n    % pkgconf --libs --static icu-i18n\n    -L/opt/local/lib -licui18n -licuuc -licudata -lpthread -lm\n\n    #\n    # icu-lx\n    #\n\n    % pkgconf  --libs icu-lx\n    -L/opt/local/lib -liculx\n\n    % pkgconf  --libs --static icu-lx\n    -L/opt/local/lib -liculx -L/usr/lib/x86_64-linux-gnu -licu-le-hb -lharfbuzz -lm -licuuc -licudata -lpthread -lm\n\n  ./configure --disable-shared --enable-static ...\n\n    #\n    # icu-i18n\n    #\n\n    % pkgconf --libs  icu-i18n\n    -L/opt/local/lib -licui18n -licuuc -licudata -lpthread -lm\n\n    % pkgconf  --libs --static icu-i18n\n    -L/opt/local/lib -licui18n -licuuc -licudata -lpthread -lm\n\n    #\n    # icu-lx\n    #\n\n    % pkgconf  --libs icu-lx\n    -L/opt/local/lib -liculx -L/usr/lib/x86_64-linux-gnu -licu-le-hb\n\n    % pkgconf  --libs --static icu-lx\n    -L/opt/local/lib -liculx -L/usr/lib/x86_64-linux-gnu -licu-le-hb -lharfbuzz -licuuc -licudata -lpthread -lm",
+          "timestamp": "2024-09-22T14:19:51-07:00",
+          "tree_id": "2a0aeeb5d7df72ebf493d11eef23fcf6b0ff5cd7",
+          "url": "https://github.com/unicode-org/icu/commit/199bc827021ffdb43b6579d68e5eecf54c7f6f56"
+        },
+        "date": 1727041865264,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 217.1221,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20783157.5515,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5243408.4997,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20769937.9035,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5421545.6196,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
