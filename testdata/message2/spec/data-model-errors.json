@@ -183,7 +183,12 @@
     },
     {
       "src": ".local $star = {star :string} .match $star |*| {{Literal star}} * {{The default}}",
+<<<<<<< HEAD
       "exp": "The default"
+=======
+      "exp": "The default",
+      "ignoreJava": "Unclear why would this be an error?"
+>>>>>>> 36235a555e (ICU-22908 MF2 ICU4J: Update spec tests and update implementation for recent spec changes)
     }
   ]
 }

@@ -163,14 +163,16 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
     private static class PluralSelectorImpl implements Selector {
         private static final String NO_MATCH = "\uFFFDNO_MATCH\uFFFE"; // Unlikely to show in a key
         private final PluralRules rules;
-        private Map<String, Object> fixedOptions;
-        private LocalizedNumberFormatter icuFormatter;
+        private final Map<String, Object> fixedOptions;
+        private final LocalizedNumberFormatter icuFormatter;
+        private final String kind;
 
         private PluralSelectorImpl(
                 Locale locale, PluralRules rules, Map<String, Object> fixedOptions, String kind) {
             this.rules = rules;
             this.fixedOptions = fixedOptions;
             this.icuFormatter = formatterForOptions(locale, fixedOptions, kind);
+            this.kind = kind;
         }
 
         /**
@@ -251,6 +253,9 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 valToCheck = ((Number) value).doubleValue();
             } else {
                 return false;
+            }
+            if ("integer".equals(kind)) {
+                valToCheck = valToCheck.longValue();
             }
 
             Number keyNrVal = OptUtils.asNumber(key);

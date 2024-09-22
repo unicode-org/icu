@@ -216,19 +216,34 @@
         { "type": "bad-selector" },
         { "type": "unknown-function" },
         { "type": "bad-selector" }
+<<<<<<< HEAD
       ]
+=======
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+>>>>>>> 36235a555e (ICU-22908 MF2 ICU4J: Update spec tests and update implementation for recent spec changes)
     },
     {
       "description": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector variant variant ...",
       "src": ".local $a={a :f}.match $a a{{}}b{{}}*{{}}",
       "exp": "",
+<<<<<<< HEAD
       "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
+=======
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+>>>>>>> 36235a555e (ICU-22908 MF2 ICU4J: Update spec tests and update implementation for recent spec changes)
     },
     {
       "description": "... variant -> key s quoted-pattern -> ...",
       "src": ".local $a={a :f}.match $a a {{}}*{{}}",
       "exp": "",
+<<<<<<< HEAD
       "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
+=======
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+>>>>>>> 36235a555e (ICU-22908 MF2 ICU4J: Update spec tests and update implementation for recent spec changes)
     },
     {
       "description": "... variant -> key s key s quoted-pattern -> ...",
@@ -239,13 +254,23 @@
         { "type": "bad-selector" },
         { "type": "unknown-function" },
         { "type": "bad-selector" }
+<<<<<<< HEAD
       ]
+=======
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+>>>>>>> 36235a555e (ICU-22908 MF2 ICU4J: Update spec tests and update implementation for recent spec changes)
     },
     {
       "description": "... key -> \"*\" ...",
       "src": ".local $a={a :f}.match $a *{{}}",
       "exp": "",
+<<<<<<< HEAD
       "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
+=======
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+>>>>>>> 36235a555e (ICU-22908 MF2 ICU4J: Update spec tests and update implementation for recent spec changes)
     },
     {
       "description": "simple-message -> simple-start pattern -> placeholder -> expression -> literal-expression -> \"{\" s literal \"}\"",

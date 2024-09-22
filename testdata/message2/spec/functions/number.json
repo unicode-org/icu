@@ -207,7 +207,12 @@
         {
           "type": "bad-operand"
         }
+<<<<<<< HEAD
       ]
+=======
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+>>>>>>> 36235a555e (ICU-22908 MF2 ICU4J: Update spec tests and update implementation for recent spec changes)
     },
     {
       "src": "{42 :number @foo @bar=13}",

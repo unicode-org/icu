@@ -559,9 +559,9 @@ public class MFParser {
         }
     }
 
-    // abnf: matcher = match-statement 1*([s] variant)
-    // abnf: match-statement = match 1*([s] selector)
-    // abnf: selector = expression
+    // abnf: matcher = match-statement s variant *([s] variant)
+    // abnf: match-statement = match 1*(s selector)
+    // abnf: selector = variable
     // abnf: variant = key *(s key) [s] quoted-pattern
     // abnf: key = literal / "*"
     // abnf: match = %s".match"
@@ -571,17 +571,18 @@ public class MFParser {
         // Look for selectors
         List<MFDataModel.Expression> expressions = new ArrayList<>();
         while (true) {
-            // Whitespace not required between selectors:
-            // match 1*([s] selector)
-            // Whitespace not required before first variant:
-            // matcher = match-statement 1*([s] variant)
-            skipOptionalWhitespaces();
-            MFDataModel.Expression expression = getPlaceholder();
-            if (expression == null) {
+            // Whitespace required between selectors but not required before first variant.
+            skipMandatoryWhitespaces();
+            int cp = input.peekChar();
+            if (cp != '$') {
                 break;
             }
-            checkCondition(
-                    !(expression instanceof MFDataModel.Markup), "Cannot do selection on markup");
+            MFDataModel.VariableRef variableRef = getVariableRef();
+            if (variableRef == null) {
+                break;
+            }
+            MFDataModel.Expression expression =
+                    new MFDataModel.VariableExpression(variableRef, null, new ArrayList<>());
             expressions.add(expression);
         }
 

@@ -129,7 +129,7 @@ public class TestUtils {
 
     static boolean expectsErrors(DefaultTestProperties defaults, Unit unit) {
         return (unit.expErrors != null && !unit.expErrors.isEmpty())
-            || (defaults.expErrors != null && defaults.expErrors.length > 0);
+            || (defaults.getExpErrors().length > 0);
     }
 
     static void runTestCase(DefaultTestProperties defaults, Unit unit) {
@@ -154,8 +154,8 @@ public class TestUtils {
                 MessageFormatter.builder().setPattern(pattern.toString());
         if (unit.locale != null && !unit.locale.isEmpty()) {
             mfBuilder.setLocale(Locale.forLanguageTag(unit.locale));
-        } else if (defaults.locale != null) {
-            mfBuilder.setLocale(Locale.forLanguageTag(defaults.locale));
+        } else if (defaults.getLocale() != null) {
+            mfBuilder.setLocale(Locale.forLanguageTag(defaults.getLocale()));
         } else {
             mfBuilder.setLocale(Locale.US);
         }

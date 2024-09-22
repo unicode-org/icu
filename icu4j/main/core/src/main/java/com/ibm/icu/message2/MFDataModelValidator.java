@@ -140,6 +140,7 @@ class MFDataModelValidator {
     private void validateExpression(Expression expression, boolean fromInput)
             throws MFParseException {
         String argName = null;
+        boolean wasLiteral = false;
         Annotation annotation = null;
         if (expression instanceof Literal) {
             // ...{foo}... or ...{|foo|}... or ...{123}...
@@ -148,6 +149,7 @@ class MFDataModelValidator {
             LiteralExpression le = (LiteralExpression) expression;
             argName = le.arg.value;
             annotation = le.annotation;
+            wasLiteral = true;
         } else if (expression instanceof VariableExpression) {
             VariableExpression ve = (VariableExpression) expression;
             // ...{$foo :bar opt1=|str| opt2=$x opt3=$y}...
@@ -184,7 +186,10 @@ class MFDataModelValidator {
                 addVariableDeclaration(argName);
             } else {
                 // Remember that we've seen it, to complain if there is a declaration later
-                declaredVars.add(argName);
+                if (!wasLiteral) {
+                    // We don't consider {|bar| :func} to be a declaration of a "bar" variable
+                    declaredVars.add(argName);
+                }
             }
         }
     }
