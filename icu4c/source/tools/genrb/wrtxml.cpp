@@ -187,7 +187,7 @@ static void strnrepchr(char* src, int32_t srcLen, char s, char r){
  */
 static char* parseFilename(const char* id, char* /*lang*/) {
     int idLen = static_cast<int>(uprv_strlen(id));
-    char* localeID = static_cast<char*>(uprv_malloc(idLen));
+    char* localeID = static_cast<char*>(uprv_malloc(idLen+1));
     int pos = 0;
     int canonCapacity = 0;
     char* canon = nullptr;
