@@ -612,9 +612,9 @@ static int32_t scriptGetMaxValue(const IntProperty &/*prop*/, UProperty /*which*
 
 /*
  * Map some of the Grapheme Cluster Break values to Hangul Syllable Types.
- * Hangul_Syllable_Type is redundant with a subset of Grapheme_Cluster_Break.
+ * Hangul_Syllable_Type used to be fully redundant with a subset of Grapheme_Cluster_Break.
  *
- * Starting with Unicode 16, there is an exception:
+ * Starting with Unicode 16, this is no longer true for HST=V vs. GCB=V in some cases:
  * Some Kirat Rai vowels are given GCB=V for proper grapheme clustering, but
  * they are of course not related to Hangul syllables.
  */
