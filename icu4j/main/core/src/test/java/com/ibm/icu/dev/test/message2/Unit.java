@@ -32,7 +32,7 @@ class Unit {
         this.expErrors = expErrors;
     }
 
-    class Error {
+    static class Error {
         final String name;
         final String type;
 
@@ -61,6 +61,9 @@ class Unit {
         }
         if (exp != null) {
             result.add("exp=" + escapeString(exp));
+        }
+        if (ignoreJava != null) {
+            result.add("ignoreJava=" + ignoreJava);
         }
         return result.toString();
     }

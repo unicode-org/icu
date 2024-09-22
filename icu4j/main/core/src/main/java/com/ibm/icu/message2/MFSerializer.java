@@ -79,7 +79,15 @@ public class MFSerializer {
         result.append(".match");
         for (Expression selector : message.selectors) {
             result.append(' ');
-            expressionToString(selector);
+            if (selector instanceof VariableExpression) {
+                VariableExpression ve = (VariableExpression) selector;
+                literalOrVariableRefToString(ve.arg);
+            } else {
+                // TODO: we have a (valid?) data model, so do we really want to fail?
+                // It is very close to release, so I am a bit reluctant to add a throw.
+                // I tried, and none of the unit tests fail (as expected). But still feels unsafe.
+                expressionToString(selector);
+            }
         }
         for (Variant variant : message.variants) {
             variantToString(variant);
