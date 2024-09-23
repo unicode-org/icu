@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727042629363,
+  "lastUpdate": 1727105228986,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -93885,6 +93885,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.9652,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "8f82facca870950fbd65b46ec33204b8ed0488e2",
+          "message": "ICU-22898 MF2 parser bug fixes\n\nICU4C: Escape curly braces when serializing and normalizing\nICU4C: Escape '|' in patterns\nICU4C: When normalizing input, escape optionally-escaped characters in patterns\nICU4C/ICU4J: Allow trailing whitespace after a match\nICU4C: Fix parser to iterate over code points, not code units\nAdd tests with old reserved syntax as syntax-error tests",
+          "timestamp": "2024-09-20T16:22:34-07:00",
+          "tree_id": "ac68cd15b25807b89ebdd5eede1a3b404405f52d",
+          "url": "https://github.com/unicode-org/icu/commit/8f82facca870950fbd65b46ec33204b8ed0488e2"
+        },
+        "date": 1727105060159,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.0875,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.3877,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.498,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 26.0823,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 36.947,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.8589,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.0402,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.9973,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 77.9308,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.4233,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.4183,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.4767,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
