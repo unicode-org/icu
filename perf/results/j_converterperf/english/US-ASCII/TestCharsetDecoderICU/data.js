@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727104317311,
+  "lastUpdate": 1727106744444,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26967,6 +26967,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.5556078985234513,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alex@0x0h.com",
+            "name": "Oleksandr Hubanov",
+            "username": "alexgubanow"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "5f9f8b205337415f4f5ab423cb3fa8b151de5df5",
+          "message": "ICU-22714 fix zos build, use OpenXL\n\nSee #3008",
+          "timestamp": "2024-09-20T17:12:28-07:00",
+          "tree_id": "0cbfcd9f23f8608b58efe6cb35c165547d719b20",
+          "url": "https://github.com/unicode-org/icu/commit/5f9f8b205337415f4f5ab423cb3fa8b151de5df5"
+        },
+        "date": 1727106572519,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5552418995929002,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
