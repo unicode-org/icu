@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727109646372,
+  "lastUpdate": 1727110944471,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26967,6 +26967,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 899.7875494097902,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "22fe3a14ab58973815fcc05dad6686a33d08725f",
+          "message": "ICU-22606 Point the Maven Central link to license to a versioned one",
+          "timestamp": "2024-09-23T09:54:41-07:00",
+          "tree_id": "59c610de46c54b3de63ac62a151527907ef32520",
+          "url": "https://github.com/unicode-org/icu/commit/22fe3a14ab58973815fcc05dad6686a33d08725f"
+        },
+        "date": 1727110729294,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 864.5033273607262,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
