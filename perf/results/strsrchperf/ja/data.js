@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727041855344,
+  "lastUpdate": 1727104462561,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32901,6 +32901,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 58.6126,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "8f82facca870950fbd65b46ec33204b8ed0488e2",
+          "message": "ICU-22898 MF2 parser bug fixes\n\nICU4C: Escape curly braces when serializing and normalizing\nICU4C: Escape '|' in patterns\nICU4C: When normalizing input, escape optionally-escaped characters in patterns\nICU4C/ICU4J: Allow trailing whitespace after a match\nICU4C: Fix parser to iterate over code points, not code units\nAdd tests with old reserved syntax as syntax-error tests",
+          "timestamp": "2024-09-20T16:22:34-07:00",
+          "tree_id": "ac68cd15b25807b89ebdd5eede1a3b404405f52d",
+          "url": "https://github.com/unicode-org/icu/commit/8f82facca870950fbd65b46ec33204b8ed0488e2"
+        },
+        "date": 1727104290705,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 26.2578,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 62.4394,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
