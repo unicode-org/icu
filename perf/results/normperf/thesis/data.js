@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727111877794,
+  "lastUpdate": 1727113407722,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -58977,6 +58977,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 3.2486,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "cjchapman@unicode.org",
+            "name": "Chris Chapman",
+            "username": "cjchapman"
+          },
+          "committer": {
+            "email": "cjchapman@apple.com",
+            "name": "Christopher Chapman",
+            "username": "cjchapman"
+          },
+          "distinct": true,
+          "id": "1c2a1c50b70be5bf34ece49b43165653c4aecb0a",
+          "message": "ICU-22896 updating tzdata to 2024b",
+          "timestamp": "2024-09-20T15:20:39-07:00",
+          "tree_id": "8f4ea1dd40aa62462f52ae97b419aa94265f7309",
+          "url": "https://github.com/unicode-org/icu/commit/1c2a1c50b70be5bf34ece49b43165653c4aecb0a"
+        },
+        "date": 1727113242804,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 3.2043,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 3.1841,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 3.1862,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.2508,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 3.2398,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 3.2422,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
