@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727110036627,
+  "lastUpdate": 1727111224498,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27057,6 +27057,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.0409787215919124,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "22fe3a14ab58973815fcc05dad6686a33d08725f",
+          "message": "ICU-22606 Point the Maven Central link to license to a versioned one",
+          "timestamp": "2024-09-23T09:54:41-07:00",
+          "tree_id": "59c610de46c54b3de63ac62a151527907ef32520",
+          "url": "https://github.com/unicode-org/icu/commit/22fe3a14ab58973815fcc05dad6686a33d08725f"
+        },
+        "date": 1727111054311,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.091290391535089,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
