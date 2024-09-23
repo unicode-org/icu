@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727042027354,
+  "lastUpdate": 1727104652937,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -53025,6 +53025,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2058027.4064,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "8f82facca870950fbd65b46ec33204b8ed0488e2",
+          "message": "ICU-22898 MF2 parser bug fixes\n\nICU4C: Escape curly braces when serializing and normalizing\nICU4C: Escape '|' in patterns\nICU4C: When normalizing input, escape optionally-escaped characters in patterns\nICU4C/ICU4J: Allow trailing whitespace after a match\nICU4C: Fix parser to iterate over code points, not code units\nAdd tests with old reserved syntax as syntax-error tests",
+          "timestamp": "2024-09-20T16:22:34-07:00",
+          "tree_id": "ac68cd15b25807b89ebdd5eede1a3b404405f52d",
+          "url": "https://github.com/unicode-org/icu/commit/8f82facca870950fbd65b46ec33204b8ed0488e2"
+        },
+        "date": 1727104478334,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 217.0898,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8799545.362,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2005738.4784,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 8134632.8246,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2051371.4134,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
