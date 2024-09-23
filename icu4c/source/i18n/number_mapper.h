@@ -201,7 +201,7 @@ struct DecimalFormatFields : public UMemory {
 #if U_HAVE_ATOMICS
     std::atomic<::icu::numparse::impl::NumberParserImpl*> atomicParser = {};
 #else
-    ::icu::numparse::impl::NumberParserImpl* atomicParser = nullptr;
+    ::icu::numparse::impl::NumberParserImpl* atomicParser = {};
 #endif
 
     /** The lazy-computed parser for .parseCurrency() */

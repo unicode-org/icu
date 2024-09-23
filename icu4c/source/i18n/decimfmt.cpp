@@ -1647,7 +1647,9 @@ void DecimalFormat::touch(UErrorCode& status) {
     delete fields->atomicCurrencyParser.exchange(nullptr);
 #else
     delete fields->atomicParser;
+    fields->atomicParser = nullptr;
     delete fields->atomicCurrencyParser;
+    fields->atomicCurrencyParser = nullptr;
 #endif
 
     // In order for the getters to work, we need to populate some fields in NumberFormat.
