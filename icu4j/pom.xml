@@ -114,7 +114,7 @@
   <licenses>
     <license>
       <name>Unicode-3.0</name>
-      <url>https://raw.githubusercontent.com/unicode-org/icu/main/LICENSE</url>
+      <url>https://raw.githubusercontent.com/unicode-org/icu/maint/maint-${icu.major.version}/LICENSE</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
