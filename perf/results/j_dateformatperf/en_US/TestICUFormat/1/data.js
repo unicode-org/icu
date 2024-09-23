@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727041432825,
+  "lastUpdate": 1727102372260,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26817,6 +26817,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 242.29688816505075,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "2f348f4c7a152688b26d215c23f2b2a5f0a824f3",
+          "message": "ICU-22902 Remove support for Unsupported, Private & Reserved constructs\n\nMatching PR #883 in the message-format-wg repo.\n\nAlso move spec tests for unsupported statements and expressions into new files\nto serve as syntax error tests.",
+          "timestamp": "2024-09-20T17:29:07-07:00",
+          "tree_id": "acc3d4f7922871e57cece6fd61009296d1052798",
+          "url": "https://github.com/unicode-org/icu/commit/2f348f4c7a152688b26d215c23f2b2a5f0a824f3"
+        },
+        "date": 1727102202756,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 239.15495335964272,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
