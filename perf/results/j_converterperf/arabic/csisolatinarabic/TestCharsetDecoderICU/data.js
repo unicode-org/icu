@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727112788301,
+  "lastUpdate": 1727143508140,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27057,6 +27057,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.012177045441746994,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ross.burton@arm.com",
+            "name": "Ross Burton",
+            "username": "rossburton"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "0f022dca90cfe6bbf6a74f605dcaf1b489d58a9b",
+          "message": "ICU-21172 fix install race\n\nThe generic recursive target calls target-local so also adding it to the\ndependency list results in races due to install-local being executed twice in\nparallel.  For example, install-manx can fail if the two install processes race\nand one process tries to chown a file that the other process has just deleted.\n\nAlso install-manx should be a phony target, and for clarity use $^ instead of $?\nin the install command.\n\nSigned-off-by: Ross Burton <ross.burton@arm.com>",
+          "timestamp": "2024-09-23T18:45:09-07:00",
+          "tree_id": "1f1dc6ca89bce85773ec8dd772f16a4f09ccaea4",
+          "url": "https://github.com/unicode-org/icu/commit/0f022dca90cfe6bbf6a74f605dcaf1b489d58a9b"
+        },
+        "date": 1727143338388,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.01209262409852841,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
