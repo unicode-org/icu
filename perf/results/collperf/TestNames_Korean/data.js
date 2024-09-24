@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727151914185,
+  "lastUpdate": 1727153956043,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -53295,6 +53295,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12654565.1589,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "36061ccee26bd54b2e72e11e0c662034e8f4511c",
+          "message": "ICU-22721 Comment (back) some code generation method\n\nDocumented in docs/processes/release/tasks/updating-measure-unit.md,\nupdating the data for measurement units requires one to uncomment some code\nin a unit test, run it, copy from stdout an paste in some other files.\n\nThat code is left enabled, spamming the stdandard output every time tests run.",
+          "timestamp": "2024-09-23T21:43:22-07:00",
+          "tree_id": "0195064f78731a9d3524c92caeca5df41150ffa5",
+          "url": "https://github.com/unicode-org/icu/commit/36061ccee26bd54b2e72e11e0c662034e8f4511c"
+        },
+        "date": 1727153785692,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 219.5753,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 55202953.0207,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12055364.9622,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 51544067.5947,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12836926.9272,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
