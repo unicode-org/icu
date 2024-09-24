@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727168894770,
+  "lastUpdate": 1727191126847,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -53619,6 +53619,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5425431.0262,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "1b33f5e30bf504bfad09eaac7809ff974e69cdae",
+          "message": "ICU-22889 Implemented a recursion limit in the RBNF parsing code to match the one already present in the RBNF\nformatting code.",
+          "timestamp": "2024-09-18T16:05:13-07:00",
+          "tree_id": "56d019520bffabdda2ce51829bb0714381a6fa65",
+          "url": "https://github.com/unicode-org/icu/commit/1b33f5e30bf504bfad09eaac7809ff974e69cdae"
+        },
+        "date": 1727190960174,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 216.8326,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21222866.5749,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5223524.3576,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20515277.6253,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5543088.256,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
