@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727208428338,
+  "lastUpdate": 1727211638827,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27447,6 +27447,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.4440247366117167,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "48cc8785f21c973608af545c5a6acbb2cc0d8e0d",
+          "message": "ICU-22730 Fix int32_t overflow in Persian calendar",
+          "timestamp": "2024-09-20T10:24:22-07:00",
+          "tree_id": "d596e84f6e3e00061a8c686553280d7aef75f63d",
+          "url": "https://github.com/unicode-org/icu/commit/48cc8785f21c973608af545c5a6acbb2cc0d8e0d"
+        },
+        "date": 1727211463587,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.437641337748236,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
