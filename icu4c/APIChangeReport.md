@@ -23,11 +23,49 @@ Removed from ICU 75
   
 | File | API | ICU 75 | ICU 76 |
 |---|---|---|---|
+| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addUnsupportedStatement(UnsupportedStatement&amp;&amp;, UErrorCode&amp;) |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Operator::Builder::setReserved(Reserved&amp;&amp;) |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Reserved::Builder::add(Literal&amp;&amp;, UErrorCode&amp;) |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Reserved::Builder::operator=(Builder&amp;&amp;)=delete |   _untagged _  | (missing)
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::Reserved::Builder::operator=(const Builder&amp;)=delete |   _untagged _  | (missing)
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::UnsupportedStatement::Builder::addExpression(Expression&amp;&amp;, UErrorCode&amp;) |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::UnsupportedStatement::Builder::operator=(Builder&amp;&amp;)=delete |   _untagged _  | (missing)
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::UnsupportedStatement::Builder::operator=(const Builder&amp;)=delete |   _untagged _  | (missing)
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::UnsupportedStatement::Builder::setBody(Reserved&amp;&amp;) |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::UnsupportedStatement::Builder::setKeyword(const UnicodeString&amp;) |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | Reserved icu::message2::data_model::Reserved::Builder::build(UErrorCode&amp;) const |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | Reserved&amp; icu::message2::data_model::Reserved::operator=(Reserved) |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | UnsupportedStatement icu::message2::data_model::UnsupportedStatement::Builder::build(UErrorCode&amp;) const |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | UnsupportedStatement&amp; icu::message2::data_model::UnsupportedStatement::operator=(UnsupportedStatement) |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | bool icu::message2::data_model::Expression::isReserved() const |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | const Literal&amp; icu::message2::data_model::Reserved::getPart(int32_t) const |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | const Reserved* icu::message2::data_model::UnsupportedStatement::getBody(UErrorCode&amp;) const |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | const UnicodeString &amp; icu::message2::data_model::UnsupportedStatement::getKeyword() const |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::Reserved::Builder::Builder(Builder&amp;&amp;)=delete |   _untagged _  | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::Reserved::Builder::Builder(UErrorCode&amp;) |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::Reserved::Builder::Builder(const Builder&amp;)=delete |   _untagged _  | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::Reserved::Builder::~Builder() |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::Reserved::Reserved() |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::Reserved::Reserved(const Reserved&amp;) |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::Reserved::~Reserved() |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::Builder::Builder(Builder&amp;&amp;)=delete |   _untagged _  | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::Builder::Builder(UErrorCode&amp;) |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::Builder::Builder(const Builder&amp;)=delete |   _untagged _  | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::Builder::~Builder() |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::UnsupportedStatement() |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::UnsupportedStatement(const UnsupportedStatement&amp;) |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | icu::message2::data_model::UnsupportedStatement::~UnsupportedStatement() |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | int32_t icu::message2::data_model::Reserved::numParts() const |  InternalICU 75 | (missing)
+| messageformat2_data_model.h | std::vector&lt; Expression &gt; icu::message2::data_model::UnsupportedStatement::getExpressions() const |  InternalICU 75 | (missing)
+| simplenumberformatter.h | void icu::number::SimpleNumber::truncateStart(uint32_t, UErrorCode&amp;) |  DeprecatedICU 75 | (missing)
 | unistr.h | UNISTR_FROM_STRING_EXPLICIT icu::UnicodeString::UnicodeString(const char16_t*) |  StableICU 2.0 | (missing)
 | unistr.h | UNISTR_FROM_STRING_EXPLICIT icu::UnicodeString::UnicodeString(const uint16_t*) |  StableICU 59 | (missing)
 | unistr.h | UNISTR_FROM_STRING_EXPLICIT icu::UnicodeString::UnicodeString(const wchar_t*) |  StableICU 59 | (missing)
 | unistr.h | UnicodeString&amp; icu::UnicodeString::remove(int32_t, int32_t length=(int32_t)) |  StableICU 2.0 | (missing)
 | unistr.h | UnicodeString&amp; icu::UnicodeString::removeBetween(int32_t, int32_t limit=(int32_t)) |  StableICU 2.0 | (missing)
+| usimplenumberformatter.h | void usnum_truncateStart(USimpleNumber*, int32_t, UErrorCode*) |  DeprecatedICU 75 | (missing)
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_UNSUPPORTED_EXPRESSION_ERROR |  InternalICU 75 | (missing)
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_UNSUPPORTED_STATEMENT_ERROR |  InternalICU 75 | (missing)
 
 ## Deprecated
 
@@ -177,6 +215,16 @@ Added in ICU 76
   
 | File | API | ICU 75 | ICU 76 |
 |---|---|---|---|
+| coll.h | auto icu::Collator::equal_to() const |  (missing) | DraftICU 76
+| coll.h | auto icu::Collator::greater() const |  (missing) | DraftICU 76
+| coll.h | auto icu::Collator::greater_equal() const |  (missing) | DraftICU 76
+| coll.h | auto icu::Collator::less() const |  (missing) | DraftICU 76
+| coll.h | auto icu::Collator::less_equal() const |  (missing) | DraftICU 76
+| coll.h | auto icu::Collator::not_equal_to() const |  (missing) | DraftICU 76
+| messageformat2.h | Builder&amp; icu::message2::MessageFormatter::Builder::setErrorHandlingBehavior(UMFErrorHandlingBehavior) |  (missing) | InternalICU 76
+| messageformat2.h | <tt>enum</tt>  							icu::message2::MessageFormatter::UMFErrorHandlingBehavior {} |  (missing) | InternalICU 76
+| messageformat2.h | <tt>enum</tt>  							icu::message2::MessageFormatter::UMFErrorHandlingBehavior::U_MF_BEST_EFFORT |  (missing) | InternalICU 76
+| messageformat2.h | <tt>enum</tt>  							icu::message2::MessageFormatter::UMFErrorHandlingBehavior::U_MF_STRICT |  (missing) | InternalICU 76
 | stringpiece.h | icu::StringPiece::operator std::string_view() const |  (missing) | Internal
 | uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_EGYPTIAN_HIEROGLYPHS_EXTENDED_A |  (missing) | StableICU 76| *(Born Stable)* |
 | uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_GARAY |  (missing) | StableICU 76| *(Born Stable)* |
@@ -196,6 +244,9 @@ Added in ICU 76
 | uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_KASHMIRI_YEH |  (missing) | StableICU 76| *(Born Stable)* |
 | uchar.h | <tt>enum</tt> UProperty::UCHAR_INDIC_CONJUNCT_BREAK |  (missing) | DraftICU 76
 | uchar.h | <tt>enum</tt> UProperty::UCHAR_MODIFIER_COMBINING_MARK |  (missing) | DraftICU 76
+| ucol.h | U_HEADER_ONLY_NAMESPACE::collator::internal::Predicate&lt; Compare, result &gt;::Predicate(const UCollator*) |  (missing) | Internal
+| ucol.h | bool U_HEADER_ONLY_NAMESPACE::collator::internal::Predicate&lt; Compare, result &gt;::operator()(const T&amp;, const U&amp;) const |  (missing) | Internal
+| ucol.h | bool U_HEADER_ONLY_NAMESPACE::collator::internal::Predicate&lt; Compare, result &gt;::operator()(std::string_view, std::string_view) const |  (missing) | Internal
 | uniset.h | U_HEADER_NESTED_NAMESPACE::USetCodePoints icu::UnicodeSet::codePoints() const |  (missing) | DraftICU 76
 | uniset.h | U_HEADER_NESTED_NAMESPACE::USetElementIterator icu::UnicodeSet::begin() const |  (missing) | DraftICU 76
 | uniset.h | U_HEADER_NESTED_NAMESPACE::USetElementIterator icu::UnicodeSet::end() const |  (missing) | DraftICU 76
@@ -212,6 +263,7 @@ Added in ICU 76
 | unistr.h | icu::UnicodeString::operator std::u16string_view() const |  (missing) | DraftICU 76
 | unistr.h | icu::UnicodeString::operator std::wstring_view() const |  (missing) | DraftICU 76
 | unistr.h | <tt>static</tt> UnicodeString icu::UnicodeString::readOnlyAlias(const S&amp;) |  (missing) | DraftICU 76
+| unistr.h | <tt>static</tt> UnicodeString icu::UnicodeString::readOnlyAlias(const UnicodeString&amp;) |  (missing) | DraftICU 76
 | uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_GARAY |  (missing) | StableICU 76| *(Born Stable)* |
 | uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_GURUNG_KHEMA |  (missing) | StableICU 76| *(Born Stable)* |
 | uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_KIRAT_RAI |  (missing) | StableICU 76| *(Born Stable)* |
@@ -261,6 +313,8 @@ Added in ICU 76
 | uset.h | const UChar* uset_getString(const USet*, int32_t, int32_t*) |  (missing) | DraftICU 76
 | uset.h | int32_t uset_getStringCount(const USet*) |  (missing) | DraftICU 76
 | uset.h | std::u16string_view U_HEADER_ONLY_NAMESPACE::USetStringIterator::operator* () const |  (missing) | DraftICU 76
+| utypes.h | <tt>#define</tt> U_SHOW_CPLUSPLUS_HEADER_API |  (missing) | Internal
+| utypes.h | <tt>enum</tt> UErrorCode::U_MF_DUPLICATE_VARIANT_ERROR |  (missing) | InternalICU 76
 
 ## Other
 
@@ -303,7 +357,7 @@ This section shows cases where the signature was "simplified" for the sake of co
 
 ## Colophon
 
-Contents generated by StableAPI tool on Fri Sep 13 10:27:19 PDT 2024
+Contents generated by StableAPI tool on Tue Sep 24 13:19:44 PDT 2024
 
 Copyright © 2019 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
