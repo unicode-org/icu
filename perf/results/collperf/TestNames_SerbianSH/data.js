@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727211844286,
+  "lastUpdate": 1727215305698,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54051,6 +54051,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16523588.8252,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "begasus@gmail.com",
+            "name": "Begasus",
+            "username": "Begasus"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "ce110680308ddaed880a18d64b32e0f06422534f",
+          "message": "ICU-22392 Add, primary support for Haiku",
+          "timestamp": "2024-09-24T14:34:11-07:00",
+          "tree_id": "d9b2b6bda2b5b21eb73795e9379fea58e03731da",
+          "url": "https://github.com/unicode-org/icu/commit/ce110680308ddaed880a18d64b32e0f06422534f"
+        },
+        "date": 1727215130458,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 316.1761,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 34468692.21,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 14695219.6013,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 35276774.5654,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16356042.7541,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
