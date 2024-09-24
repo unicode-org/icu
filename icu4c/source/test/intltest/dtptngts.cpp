@@ -589,7 +589,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     }
 
     // ======== Test getSkeleton and getBaseSkeleton
-    
+
     int32_t i, count = UPRV_LENGTHOF(testGetSkeletonAndBase);
     for (i = 0; i < count; i++) {
         status = U_ZERO_ERROR;
@@ -597,15 +597,15 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString expectedSkeleton     = UnicodeString(testGetSkeletonAndBase[i][1]);
         UnicodeString expectedBaseSkeleton = UnicodeString(testGetSkeletonAndBase[i][2]);
         UnicodeString retSkeleton = gen->getSkeleton(pattern, status);
-		if(U_FAILURE(status) || retSkeleton != expectedSkeleton ) {
-			 errln("ERROR: Unexpected result from getSkeleton().\n");
-			 errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected: ") + expectedSkeleton );
-		}
-		retSkeleton = gen->getBaseSkeleton(pattern, status);
-		if(U_FAILURE(status) || retSkeleton !=  expectedBaseSkeleton) {
-			 errln("ERROR: Unexpected result from getBaseSkeleton().\n");
-			 errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected:")+ expectedBaseSkeleton);
-		}
+        if(U_FAILURE(status) || retSkeleton != expectedSkeleton ) {
+             errln("ERROR: Unexpected result from getSkeleton().\n");
+             errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected: ") + expectedSkeleton );
+        }
+        retSkeleton = gen->getBaseSkeleton(pattern, status);
+        if(U_FAILURE(status) || retSkeleton !=  expectedBaseSkeleton) {
+             errln("ERROR: Unexpected result from getBaseSkeleton().\n");
+             errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected:")+ expectedBaseSkeleton);
+        }
     }
 
     delete format;
@@ -1391,11 +1391,6 @@ void IntlTestDateTimePatternGeneratorAPI::testJjMapping() {
             continue;
         }
         // Now check that shortPattern and jPattern use the same hour cycle
-        if ((uprv_strncmp(localeID, "csw", 3) == 0 || uprv_strncmp(localeID, "kxv_", 4) == 0 || uprv_strncmp(localeID, "zh_Hans_MY", 10) == 0
-                || uprv_strncmp(localeID, "yue_Hant_CN", 11) == 0) 
-        		&& logKnownIssue("CLDR-17199", "Need timeFormats with h for csw, kxv_Xxxx, zh_Hans_MY, yue_Hant_CN")) {
-            continue;
-        }
         UnicodeString jPatSkeleton = DateTimePatternGenerator::staticGetSkeleton(jPattern, status);
         UnicodeString shortPatSkeleton = DateTimePatternGenerator::staticGetSkeleton(shortPattern, status);
         if (U_FAILURE(status)) {
@@ -1477,13 +1472,13 @@ void IntlTestDateTimePatternGeneratorAPI::test20640_HourCyclArsEnNH() {
 void IntlTestDateTimePatternGeneratorAPI::testFallbackWithDefaultRootLocale() {
     UErrorCode status = U_ZERO_ERROR;
     char original[ULOC_FULLNAME_CAPACITY];
-    
+
     uprv_strcpy(original, uloc_getDefault());
     uloc_setDefault("root", &status);
     if (U_FAILURE(status)) {
         errln("ERROR: Failed to change the default locale to root! Default is: %s\n", uloc_getDefault());
     }
- 
+
     DateTimePatternGenerator* dtpg = icu::DateTimePatternGenerator::createInstance("abcdedf", status);
 
     if (U_FAILURE(status)) {
@@ -1617,23 +1612,23 @@ void IntlTestDateTimePatternGeneratorAPI::testBestPattern() {
         { "ckb_IR",     "mmSSS",       u"mm:ss\u066bSSS"     },
         { "ckb_IR",     "BSSS",        u"SSS \u251c'Dayperiod': B\u2524" },
     };
-    
+
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
         UErrorCode err = U_ZERO_ERROR;
         UnicodeString actualPattern;
-        
+
         if (uprv_strcmp(testCases[i].skeleton, "full") != 0) {
             LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(testCases[i].localeID, err), err);
             actualPattern = dtpg->getBestPattern(UnicodeString(testCases[i].skeleton), err);
         } else {
             LocalPointer<DateFormat> df(DateFormat::createDateInstance(DateFormat::kFull, testCases[i].localeID));
             SimpleDateFormat* sdf = dynamic_cast<SimpleDateFormat*>(df.getAlias());
-            
+
             if (sdf != nullptr) {
                 sdf->toPattern(actualPattern);
             }
         }
-        
+
         if (U_FAILURE(err)) {
             errln("Failure for test case %s/%s: %s", testCases[i].localeID, testCases[i].skeleton, u_errorName(err));
         } else {
@@ -1815,11 +1810,11 @@ void IntlTestDateTimePatternGeneratorAPI::testRegionOverride() {
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
         UErrorCode err = U_ZERO_ERROR;
         LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(testCases[i].locale, err));
-        
+
         if (assertSuccess("Error creating dtpg", err)) {
             UDateFormatHourCycle actualHourCycle = dtpg->getDefaultHourCycle(err);
             UnicodeString actualPattern = dtpg->getBestPattern(u"jmm", err);
-            
+
             if (assertSuccess("Error using dtpg", err)) {
                 assertEquals("Wrong hour cycle", testCases[i].expectedHourCycle, actualHourCycle);
                 assertEquals("Wrong pattern", testCases[i].expectedPattern, actualPattern);

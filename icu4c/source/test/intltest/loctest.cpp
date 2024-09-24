@@ -4130,10 +4130,6 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
     for (const auto& item : full_data) {
         const char* const org = item.from;
         const char* const exp = item.add;
-        if (uprv_strcmp(org,"und_Hant_CN") == 0 &&
-                logKnownIssue("CLDR-17908", "und_Hant_CN changed expected result for Likely Subtags")) {
-            continue;
-        }
         Locale res(org);
         res.addLikelySubtags(status);
         status.errIfFailureAndReset("\"%s\"", org);
@@ -4147,10 +4143,6 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
     for (const auto& item : full_data) {
         const char* const org = item.from;
         const char* const exp = item.remove;
-        if (uprv_strcmp(org,"und_Hant_CN") == 0 &&
-            	logKnownIssue("CLDR-17908", "und_Hant_CN changed expected result for Likely Subtags")) {
-            continue;
-        }
         Locale res(org);
         res.minimizeSubtags(status);
         status.errIfFailureAndReset("\"%s\"", org);
@@ -4174,10 +4166,10 @@ LocaleTest::TestKeywordVariants() {
         UErrorCode expectedStatus;
     } testCases[] = {
         {
-            "de_DE@  currency = euro; C o ll A t i o n   = Phonebook   ; C alen dar = buddhist   ", 
-            "de_DE@calendar=buddhist;collation=Phonebook;currency=euro", 
+            "de_DE@  currency = euro; C o ll A t i o n   = Phonebook   ; C alen dar = buddhist   ",
+            "de_DE@calendar=buddhist;collation=Phonebook;currency=euro",
             //"de_DE",
-            //"de_DE@calendar=buddhist;collation=Phonebook;currency=euro", 
+            //"de_DE@calendar=buddhist;collation=Phonebook;currency=euro",
             {"calendar", "collation", "currency"},
             3,
             U_ZERO_ERROR
@@ -4708,7 +4700,7 @@ void LocaleTest::TestGetLocale() {
 #if !UCONFIG_NO_SERVICE
     const char *req;
     Locale valid, actual, reqLoc;
-    
+
     // Calendar
 #if !UCONFIG_NO_FORMATTING
     {
@@ -4769,7 +4761,7 @@ void LocaleTest::TestGetLocale() {
                 errln("FAIL: DecimalFormatSymbols::getLocale() failed");
             } else {
                 _checklocs("DecimalFormatSymbols", req, valid, actual);
-            }        
+            }
         }
         delete nf;
     }
@@ -4798,7 +4790,7 @@ void LocaleTest::TestGetLocale() {
             } else {
                 _checklocs("SimpleDateFormat", req, valid, actual);
             }
-    
+
             const DateFormatSymbols* sym = dat->getDateFormatSymbols();
             if (sym == nullptr) {
                 errln("FAIL: getDateFormatSymbols returned nullptr");
@@ -4810,7 +4802,7 @@ void LocaleTest::TestGetLocale() {
                 errln("FAIL: DateFormatSymbols::getLocale() failed");
             } else {
                 _checklocs("DateFormatSymbols", req, valid, actual);
-            }        
+            }
         }
         delete df;
     }
@@ -4833,7 +4825,7 @@ void LocaleTest::TestGetLocale() {
             } else {
                 _checklocs("BreakIterator", req, valid, actual);
             }
-        
+
             // After registering something, the behavior should be different
             URegistryKey key = BreakIterator::registerInstance(brk, reqLoc, UBRK_WORD, ec);
             brk = nullptr; // registerInstance adopts
@@ -5103,8 +5095,8 @@ void LocaleTest::TestCanonicalization()
         { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
         { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
         { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
-        { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" }, 
-        { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" }, 
+        { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" },
+        { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" },
         { "no_NO_NY", "no_NO_NY", "no_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
         { "no@ny", "no@ny", "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
         { "no-no.utf32@B", "no_NO.utf32@B", "no_NO_B" }, /* POSIX ID */
@@ -5202,11 +5194,11 @@ void LocaleTest::TestCanonicalization()
         { "es_ES_PREEURO@currency=EUR", "es_ES_PREEURO@currency=EUR", "es_ES_PREEURO@currency=EUR" },
         { "es_ES_EURO@currency=ESP", "es_ES_EURO@currency=ESP", "es_ES_EURO@currency=ESP" },
     };
-    
+
     static const char* label[] = { "createFromName", "createCanonical", "Locale" };
 
     int32_t i, j;
-    
+
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
         for (j=0; j<3; ++j) {
             const char* expected = (j==1) ? testCases[i].canonicalID : testCases[i].getNameID;
@@ -5385,301 +5377,301 @@ void LocaleTest::TestCurrencyByDate()
 #if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
     UDate date = uprv_getUTCtime();
-	char16_t TMP[4] = {0, 0, 0, 0};
-	int32_t index = 0;
-	int32_t resLen = 0;
+    char16_t TMP[4] = {0, 0, 0, 0};
+    int32_t index = 0;
+    int32_t resLen = 0;
     UnicodeString tempStr, resultStr;
 
-	// Cycle through historical currencies
+    // Cycle through historical currencies
     date = static_cast<UDate>(-630720000000.0); // pre 1961 - no currency defined
     index = ucurr_countCurrencies("eo_AM", date, &status);
     if (index != 0)
-	{
-		errcheckln(status, "FAIL: didn't return 0 for eo_AM - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 0 for eo_AM - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AM", date, index, TMP, 4, &status);
     if (resLen != 0) {
-		errcheckln(status, "FAIL: eo_AM didn't return nullptr - %s", u_errorName(status));
+        errcheckln(status, "FAIL: eo_AM didn't return nullptr - %s", u_errorName(status));
     }
     status = U_ZERO_ERROR;
 
     date = static_cast<UDate>(0.0); // 1970 - one currency defined
     index = ucurr_countCurrencies("eo_AM", date, &status);
     if (index != 1)
-	{
-		errcheckln(status, "FAIL: didn't return 1 for eo_AM - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 1 for eo_AM - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AM", date, index, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("SUR");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return SUR for eo_AM - %s", u_errorName(status));
     }
 
     date = static_cast<UDate>(693792000000.0); // 1992 - one currency defined
-	index = ucurr_countCurrencies("eo_AM", date, &status);
+    index = ucurr_countCurrencies("eo_AM", date, &status);
     if (index != 1)
-	{
-		errcheckln(status, "FAIL: didn't return 1 for eo_AM - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 1 for eo_AM - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AM", date, index, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("RUR");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return RUR for eo_AM - %s", u_errorName(status));
     }
 
-	date = static_cast<UDate>(977616000000.0); // post 1993 - one currency defined
-	index = ucurr_countCurrencies("eo_AM", date, &status);
+    date = static_cast<UDate>(977616000000.0); // post 1993 - one currency defined
+    index = ucurr_countCurrencies("eo_AM", date, &status);
     if (index != 1)
-	{
-		errcheckln(status, "FAIL: didn't return 1 for eo_AM - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 1 for eo_AM - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AM", date, index, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("AMD");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return AMD for eo_AM - %s", u_errorName(status));
     }
 
     // Locale AD has multiple currencies at once
-	date = static_cast<UDate>(977616000000.0); // year 2001
-	index = ucurr_countCurrencies("eo_AD", date, &status);
+    date = static_cast<UDate>(977616000000.0); // year 2001
+    index = ucurr_countCurrencies("eo_AD", date, &status);
     if (index != 4)
-	{
-		errcheckln(status, "FAIL: didn't return 4 for eo_AD - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 4 for eo_AD - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AD", date, 1, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("EUR");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return EUR for eo_AD - %s", u_errorName(status));
     }
     resLen = ucurr_forLocaleAndDate("eo_AD", date, 2, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("ESP");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return ESP for eo_AD - %s", u_errorName(status));
     }
     resLen = ucurr_forLocaleAndDate("eo_AD", date, 3, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("FRF");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return FRF for eo_AD - %s", u_errorName(status));
     }
     resLen = ucurr_forLocaleAndDate("eo_AD", date, 4, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("ADP");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return ADP for eo_AD - %s", u_errorName(status));
     }
 
-	date = static_cast<UDate>(0.0); // year 1970
-	index = ucurr_countCurrencies("eo_AD", date, &status);
+    date = static_cast<UDate>(0.0); // year 1970
+    index = ucurr_countCurrencies("eo_AD", date, &status);
     if (index != 3)
-	{
-		errcheckln(status, "FAIL: didn't return 3 for eo_AD - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 3 for eo_AD - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AD", date, 1, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("ESP");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return ESP for eo_AD - %s", u_errorName(status));
     }
     resLen = ucurr_forLocaleAndDate("eo_AD", date, 2, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("FRF");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return FRF for eo_AD - %s", u_errorName(status));
     }
     resLen = ucurr_forLocaleAndDate("eo_AD", date, 3, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("ADP");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return ADP for eo_AD - %s", u_errorName(status));
     }
 
-	date = static_cast<UDate>(-630720000000.0); // year 1950
-	index = ucurr_countCurrencies("eo_AD", date, &status);
+    date = static_cast<UDate>(-630720000000.0); // year 1950
+    index = ucurr_countCurrencies("eo_AD", date, &status);
     if (index != 2)
-	{
-		errcheckln(status, "FAIL: didn't return 2 for eo_AD - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 2 for eo_AD - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AD", date, 1, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("ESP");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return ESP for eo_AD - %s", u_errorName(status));
     }
     resLen = ucurr_forLocaleAndDate("eo_AD", date, 2, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("ADP");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return ADP for eo_AD - %s", u_errorName(status));
     }
 
-	date = static_cast<UDate>(-2207520000000.0); // year 1900
-	index = ucurr_countCurrencies("eo_AD", date, &status);
+    date = static_cast<UDate>(-2207520000000.0); // year 1900
+    index = ucurr_countCurrencies("eo_AD", date, &status);
     if (index != 1)
-	{
-		errcheckln(status, "FAIL: didn't return 1 for eo_AD - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 1 for eo_AD - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AD", date, 1, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("ESP");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return ESP for eo_AD - %s", u_errorName(status));
     }
 
-	// Locale UA has gap between years 1994 - 1996
-	date = static_cast<UDate>(788400000000.0);
-	index = ucurr_countCurrencies("eo_UA", date, &status);
+    // Locale UA has gap between years 1994 - 1996
+    date = static_cast<UDate>(788400000000.0);
+    index = ucurr_countCurrencies("eo_UA", date, &status);
     if (index != 0)
-	{
-		errcheckln(status, "FAIL: didn't return 0 for eo_UA - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 0 for eo_UA - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_UA", date, index, TMP, 4, &status);
     if (resLen != 0) {
-		errcheckln(status, "FAIL: eo_UA didn't return nullptr - %s", u_errorName(status));
+        errcheckln(status, "FAIL: eo_UA didn't return nullptr - %s", u_errorName(status));
     }
     status = U_ZERO_ERROR;
 
-	// Test index bounds
+    // Test index bounds
     resLen = ucurr_forLocaleAndDate("eo_UA", date, 100, TMP, 4, &status);
     if (resLen != 0) {
-		errcheckln(status, "FAIL: eo_UA didn't return nullptr - %s", u_errorName(status));
+        errcheckln(status, "FAIL: eo_UA didn't return nullptr - %s", u_errorName(status));
     }
     status = U_ZERO_ERROR;
 
     resLen = ucurr_forLocaleAndDate("eo_UA", date, 0, TMP, 4, &status);
     if (resLen != 0) {
-		errcheckln(status, "FAIL: eo_UA didn't return nullptr - %s", u_errorName(status));
+        errcheckln(status, "FAIL: eo_UA didn't return nullptr - %s", u_errorName(status));
     }
     status = U_ZERO_ERROR;
 
-	// Test for bogus locale
-	index = ucurr_countCurrencies("eo_QQ", date, &status);
+    // Test for bogus locale
+    index = ucurr_countCurrencies("eo_QQ", date, &status);
     if (index != 0)
-	{
-		errcheckln(status, "FAIL: didn't return 0 for eo_QQ - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 0 for eo_QQ - %s", u_errorName(status));
+    }
     status = U_ZERO_ERROR;
     resLen = ucurr_forLocaleAndDate("eo_QQ", date, 1, TMP, 4, &status);
     if (resLen != 0) {
-		errcheckln(status, "FAIL: eo_QQ didn't return nullptr - %s", u_errorName(status));
+        errcheckln(status, "FAIL: eo_QQ didn't return nullptr - %s", u_errorName(status));
     }
     status = U_ZERO_ERROR;
     resLen = ucurr_forLocaleAndDate("eo_QQ", date, 0, TMP, 4, &status);
     if (resLen != 0) {
-		errcheckln(status, "FAIL: eo_QQ didn't return nullptr - %s", u_errorName(status));
+        errcheckln(status, "FAIL: eo_QQ didn't return nullptr - %s", u_errorName(status));
     }
     status = U_ZERO_ERROR;
 
     // Cycle through histrocial currencies
-	date = static_cast<UDate>(977616000000.0); // 2001 - one currency
-	index = ucurr_countCurrencies("eo_AO", date, &status);
+    date = static_cast<UDate>(977616000000.0); // 2001 - one currency
+    index = ucurr_countCurrencies("eo_AO", date, &status);
     if (index != 1)
-	{
-		errcheckln(status, "FAIL: didn't return 1 for eo_AO - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 1 for eo_AO - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AO", date, 1, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("AOA");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return AOA for eo_AO - %s", u_errorName(status));
     }
 
-	date = static_cast<UDate>(819936000000.0); // 1996 - 2 currencies
-	index = ucurr_countCurrencies("eo_AO", date, &status);
+    date = static_cast<UDate>(819936000000.0); // 1996 - 2 currencies
+    index = ucurr_countCurrencies("eo_AO", date, &status);
     if (index != 2)
-	{
-		errcheckln(status, "FAIL: didn't return 1 for eo_AO - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 1 for eo_AO - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AO", date, 1, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("AOR");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return AOR for eo_AO - %s", u_errorName(status));
     }
     resLen = ucurr_forLocaleAndDate("eo_AO", date, 2, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("AON");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return AON for eo_AO - %s", u_errorName(status));
     }
 
-	date = static_cast<UDate>(662256000000.0); // 1991 - 2 currencies
-	index = ucurr_countCurrencies("eo_AO", date, &status);
+    date = static_cast<UDate>(662256000000.0); // 1991 - 2 currencies
+    index = ucurr_countCurrencies("eo_AO", date, &status);
     if (index != 2)
-	{
-		errcheckln(status, "FAIL: didn't return 1 for eo_AO - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 1 for eo_AO - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AO", date, 1, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("AON");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return AON for eo_AO - %s", u_errorName(status));
     }
     resLen = ucurr_forLocaleAndDate("eo_AO", date, 2, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("AOK");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return AOK for eo_AO - %s", u_errorName(status));
     }
 
-	date = static_cast<UDate>(315360000000.0); // 1980 - one currency
-	index = ucurr_countCurrencies("eo_AO", date, &status);
+    date = static_cast<UDate>(315360000000.0); // 1980 - one currency
+    index = ucurr_countCurrencies("eo_AO", date, &status);
     if (index != 1)
-	{
-		errcheckln(status, "FAIL: didn't return 1 for eo_AO - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 1 for eo_AO - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AO", date, 1, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("AOK");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return AOK for eo_AO - %s", u_errorName(status));
     }
 
-	date = static_cast<UDate>(0.0); // 1970 - no currencies
-	index = ucurr_countCurrencies("eo_AO", date, &status);
+    date = static_cast<UDate>(0.0); // 1970 - no currencies
+    index = ucurr_countCurrencies("eo_AO", date, &status);
     if (index != 0)
-	{
-		errcheckln(status, "FAIL: didn't return 1 for eo_AO - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 1 for eo_AO - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_AO", date, 1, TMP, 4, &status);
     if (resLen != 0) {
-		errcheckln(status, "FAIL: eo_AO didn't return nullptr - %s", u_errorName(status));
+        errcheckln(status, "FAIL: eo_AO didn't return nullptr - %s", u_errorName(status));
     }
     status = U_ZERO_ERROR;
 
     // Test with currency keyword override
-	date = static_cast<UDate>(977616000000.0); // 2001 - two currencies
-	index = ucurr_countCurrencies("eo_DE@currency=DEM", date, &status);
+    date = static_cast<UDate>(977616000000.0); // 2001 - two currencies
+    index = ucurr_countCurrencies("eo_DE@currency=DEM", date, &status);
     if (index != 2)
-	{
-		errcheckln(status, "FAIL: didn't return 2 for eo_DE@currency=DEM - %s", u_errorName(status));
-	}
+    {
+        errcheckln(status, "FAIL: didn't return 2 for eo_DE@currency=DEM - %s", u_errorName(status));
+    }
     resLen = ucurr_forLocaleAndDate("eo_DE@currency=DEM", date, 1, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("EUR");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return EUR for eo_DE@currency=DEM - %s", u_errorName(status));
     }
     resLen = ucurr_forLocaleAndDate("eo_DE@currency=DEM", date, 2, TMP, 4, &status);
-	tempStr.setTo(TMP);
+    tempStr.setTo(TMP);
     resultStr.setTo("DEM");
     if (resultStr != tempStr) {
         errcheckln(status, "FAIL: didn't return DEM for eo_DE@currency=DEM - %s", u_errorName(status));
     }
 
     // Test Euro Support
-	status = U_ZERO_ERROR; // reset
+    status = U_ZERO_ERROR; // reset
     date = uprv_getUTCtime();
 
     char16_t USD[4];
     ucurr_forLocaleAndDate("en_US", date, 1, USD, 4, &status);
-    
-	char16_t YEN[4];
+
+    char16_t YEN[4];
     ucurr_forLocaleAndDate("ja_JP", date, 1, YEN, 4, &status);
 
     ucurr_forLocaleAndDate("en_US", date, 1, TMP, 4, &status);
@@ -5718,10 +5710,6 @@ void LocaleTest::TestIsRightToLeft() {
     assertTrue("ckb RTL", Locale("ckb").isRightToLeft(), false, true);  // Sorani Kurdish
     assertFalse("fil LTR", Locale("fil").isRightToLeft());
     assertFalse("he-Zyxw LTR", Locale("he-Zyxw").isRightToLeft());
-
-    if (logKnownIssue("CLDR-17908", "und_Hant_CN changed expected result for Likely Subtags")) {
-            return;
-    }   
 }
 
 void LocaleTest::TestBug11421() {
@@ -5740,7 +5728,7 @@ void LocaleTest::TestBug11421() {
 
 //  TestBug13277. The failure manifests as valgrind errors.
 //                See the trac ticket for details.
-//                
+//
 
 void LocaleTest::TestBug13277() {
     UErrorCode status = U_ZERO_ERROR;
@@ -5840,7 +5828,7 @@ void LocaleTest::TestLocaleCanonicalizationFromFile()
         return;
     }
     // Format:
-    // <source locale identifier>	;	<expected canonicalized locale identifier>
+    // <source locale identifier>   ;   <expected canonicalized locale identifier>
     while (fgets(line, static_cast<int>(sizeof(line)), testFile.getAlias()) != nullptr) {
         if (line[0] == '#') {
             // ignore any lines start with #
@@ -5925,14 +5913,6 @@ testLikelySubtagsLineFn(void *context,
         *pErrorCode = U_ZERO_ERROR;
         return;
     }
-    
-     if ( (uprv_strcmp(source.c_str(), "und-Latn-MU") == 0 || uprv_strcmp(source.c_str(), "und-Latn-RS") == 0 || uprv_strcmp(source.c_str(), "und-Latn-SL") == 0
-            || uprv_strcmp(source.c_str(), "und-Latn-TK") == 0 || uprv_strcmp(source.c_str(), "und-Latn-ZM") == 0 )
-                 && THIS->logKnownIssue("CLDR-17908", "und_Hant_CN changed expected result for Likely Subtags")) {
-             return;
-     }    
-    
- 
 
     Locale actualMax(l);
     actualMax.addLikelySubtags(*pErrorCode);
