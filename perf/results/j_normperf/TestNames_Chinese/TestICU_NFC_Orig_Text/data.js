@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727168356710,
+  "lastUpdate": 1727190986071,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27027,6 +27027,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 4.71615842349183,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "1b33f5e30bf504bfad09eaac7809ff974e69cdae",
+          "message": "ICU-22889 Implemented a recursion limit in the RBNF parsing code to match the one already present in the RBNF\nformatting code.",
+          "timestamp": "2024-09-18T16:05:13-07:00",
+          "tree_id": "56d019520bffabdda2ce51829bb0714381a6fa65",
+          "url": "https://github.com/unicode-org/icu/commit/1b33f5e30bf504bfad09eaac7809ff974e69cdae"
+        },
+        "date": 1727190788383,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 4.824980119031119,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
