@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727195198819,
+  "lastUpdate": 1727197705176,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27237,6 +27237,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetIterate",
             "value": 0.9240106024710296,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "531f595043b1961f513c49d7166ed554282bfc8b",
+          "message": "ICU-22853 Do not try to format java.time.Instant and Clock",
+          "timestamp": "2024-09-19T09:40:21-07:00",
+          "tree_id": "e50a72be480f2d37990fdc440c27ca8af9119b2b",
+          "url": "https://github.com/unicode-org/icu/commit/531f595043b1961f513c49d7166ed554282bfc8b"
+        },
+        "date": 1727197536627,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetIterate",
+            "value": 0.925157566191612,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
