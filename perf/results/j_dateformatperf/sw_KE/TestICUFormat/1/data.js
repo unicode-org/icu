@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727143373498,
+  "lastUpdate": 1727151312173,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26817,6 +26817,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 231.07207885332727,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "estetus@gmail.com",
+            "name": "Sergey Bronnikov",
+            "username": "ligurio"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "da60e7a70db7953f7e658b657ab2b9bc1b61feea",
+          "message": "ICU-22904 Svace: Fix potential out-of-bound access",
+          "timestamp": "2024-09-23T20:51:41-07:00",
+          "tree_id": "9e3619bf11da8260b193eab9d68a783a8281c99a",
+          "url": "https://github.com/unicode-org/icu/commit/da60e7a70db7953f7e658b657ab2b9bc1b61feea"
+        },
+        "date": 1727151152516,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 238.20520358875677,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
