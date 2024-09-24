@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727113340842,
+  "lastUpdate": 1727144078668,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -76905,6 +76905,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1557.0405,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ross.burton@arm.com",
+            "name": "Ross Burton",
+            "username": "rossburton"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "0f022dca90cfe6bbf6a74f605dcaf1b489d58a9b",
+          "message": "ICU-21172 fix install race\n\nThe generic recursive target calls target-local so also adding it to the\ndependency list results in races due to install-local being executed twice in\nparallel.  For example, install-manx can fail if the two install processes race\nand one process tries to chown a file that the other process has just deleted.\n\nAlso install-manx should be a phony target, and for clarity use $^ instead of $?\nin the install command.\n\nSigned-off-by: Ross Burton <ross.burton@arm.com>",
+          "timestamp": "2024-09-23T18:45:09-07:00",
+          "tree_id": "1f1dc6ca89bce85773ec8dd772f16a4f09ccaea4",
+          "url": "https://github.com/unicode-org/icu/commit/0f022dca90cfe6bbf6a74f605dcaf1b489d58a9b"
+        },
+        "date": 1727143907857,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 78286.5424,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 167621.0499,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5421,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.5166,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.3363,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 9162.2508,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 34128.4959,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1567.6271,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
