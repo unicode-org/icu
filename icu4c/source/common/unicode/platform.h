@@ -727,10 +727,13 @@
      * Doesn't work on Mac C11 (see workaround in ptypes.h)
      * or Cygwin less than 3.5.
      */
-#   if defined(__cplusplus) || !(U_PLATFORM_IS_DARWIN_BASED || (U_PLATFORM == U_PF_CYGWIN && CYGWIN_VERSION_DLL_MAJOR < 3005))
+#   if defined(__cplusplus)
 #       define U_HAVE_CHAR16_T 1
-#   else
+#   elif U_PLATFORM_IS_DARWIN_BASED || (U_PLATFORM == U_PF_CYGWIN && CYGWIN_VERSION_DLL_MAJOR < 3005)
 #       define U_HAVE_CHAR16_T 0
+#   else
+        // conformant C11
+#       define U_HAVE_CHAR16_T 1
 #   endif
 #endif
 
