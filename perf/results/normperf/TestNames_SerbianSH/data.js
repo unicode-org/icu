@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727154199553,
+  "lastUpdate": 1727169168269,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -59277,6 +59277,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 8.4007,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "303b7e81d7139e7cdc3f4fa27f1a4e49820b8fbf",
+          "message": "ICU-22897 Fix memory leak and int overflow\n\n1. Rewrite to use LocalPointer to prevent memory leak\n2. Rewrite the if/else to switch to make the logic clear\n3. Delete the rule if not remember inside the rule set to fix memory\nleak.\n4. Check base value calculation to avoid int64_t overflow.\n5. Add memory leak test",
+          "timestamp": "2024-09-18T14:40:13-07:00",
+          "tree_id": "5e26c5fddbbf66fa5d45b639c000cf96931190a8",
+          "url": "https://github.com/unicode-org/icu/commit/303b7e81d7139e7cdc3f4fa27f1a4e49820b8fbf"
+        },
+        "date": 1727168997067,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 10.0264,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 6.6274,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 6.647,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 7.6497,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 8.4227,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 8.54,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
