@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727199894665,
+  "lastUpdate": 1727201466943,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27387,6 +27387,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 308.2522703693916,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "0334d92394abd17006c9cc61d54822b06cbe92f8",
+          "message": "ICU-22721 simpler check for platforms that dont have char16_t",
+          "timestamp": "2024-09-24T10:56:14-07:00",
+          "tree_id": "d1408e826eaa081b414ebe0cd5eda9d1e3d7ac3d",
+          "url": "https://github.com/unicode-org/icu/commit/0334d92394abd17006c9cc61d54822b06cbe92f8"
+        },
+        "date": 1727201303688,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 325.94708573319,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
