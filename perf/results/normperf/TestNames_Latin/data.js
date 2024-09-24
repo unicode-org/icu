@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727152079123,
+  "lastUpdate": 1727154175684,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -59277,6 +59277,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 5.8931,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "36061ccee26bd54b2e72e11e0c662034e8f4511c",
+          "message": "ICU-22721 Comment (back) some code generation method\n\nDocumented in docs/processes/release/tasks/updating-measure-unit.md,\nupdating the data for measurement units requires one to uncomment some code\nin a unit test, run it, copy from stdout an paste in some other files.\n\nThat code is left enabled, spamming the stdandard output every time tests run.",
+          "timestamp": "2024-09-23T21:43:22-07:00",
+          "tree_id": "0195064f78731a9d3524c92caeca5df41150ffa5",
+          "url": "https://github.com/unicode-org/icu/commit/36061ccee26bd54b2e72e11e0c662034e8f4511c"
+        },
+        "date": 1727154002276,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 6.0675,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 5.8192,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 5.8085,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 5.77,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 5.8661,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 5.8848,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
