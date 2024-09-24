@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727113882573,
+  "lastUpdate": 1727144531310,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -94077,6 +94077,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 40.0763,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ross.burton@arm.com",
+            "name": "Ross Burton",
+            "username": "rossburton"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "0f022dca90cfe6bbf6a74f605dcaf1b489d58a9b",
+          "message": "ICU-21172 fix install race\n\nThe generic recursive target calls target-local so also adding it to the\ndependency list results in races due to install-local being executed twice in\nparallel.  For example, install-manx can fail if the two install processes race\nand one process tries to chown a file that the other process has just deleted.\n\nAlso install-manx should be a phony target, and for clarity use $^ instead of $?\nin the install command.\n\nSigned-off-by: Ross Burton <ross.burton@arm.com>",
+          "timestamp": "2024-09-23T18:45:09-07:00",
+          "tree_id": "1f1dc6ca89bce85773ec8dd772f16a4f09ccaea4",
+          "url": "https://github.com/unicode-org/icu/commit/0f022dca90cfe6bbf6a74f605dcaf1b489d58a9b"
+        },
+        "date": 1727144365283,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.4926,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.4557,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.3785,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 31.3786,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 42.789,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 36.2022,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 28.4256,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.7255,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 88.2692,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.0728,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 37.2327,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 40.1242,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
