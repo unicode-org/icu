@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727190962221,
+  "lastUpdate": 1727195655674,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33261,6 +33261,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 60.6665,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "23c641f8c9f16795baf2eb1672c420e6f02f8e6b",
+          "message": "ICU-22397 Better UserGuide explanation of date pattern char Y",
+          "timestamp": "2024-09-19T08:27:24-07:00",
+          "tree_id": "062e5e394c062929a1da1b3aacc2df1763033f03",
+          "url": "https://github.com/unicode-org/icu/commit/23c641f8c9f16795baf2eb1672c420e6f02f8e6b"
+        },
+        "date": 1727195482875,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 26.9674,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 60.5955,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
