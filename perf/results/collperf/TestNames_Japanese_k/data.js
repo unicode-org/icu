@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727153952978,
+  "lastUpdate": 1727168888102,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -53403,6 +53403,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5583131.5021,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "303b7e81d7139e7cdc3f4fa27f1a4e49820b8fbf",
+          "message": "ICU-22897 Fix memory leak and int overflow\n\n1. Rewrite to use LocalPointer to prevent memory leak\n2. Rewrite the if/else to switch to make the logic clear\n3. Delete the rule if not remember inside the rule set to fix memory\nleak.\n4. Check base value calculation to avoid int64_t overflow.\n5. Add memory leak test",
+          "timestamp": "2024-09-18T14:40:13-07:00",
+          "tree_id": "5e26c5fddbbf66fa5d45b639c000cf96931190a8",
+          "url": "https://github.com/unicode-org/icu/commit/303b7e81d7139e7cdc3f4fa27f1a4e49820b8fbf"
+        },
+        "date": 1727168716474,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 234.6731,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20531485.1895,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5396133.0405,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19385345.8775,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5702937.5901,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
