@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727205412713,
+  "lastUpdate": 1727208622324,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -53727,6 +53727,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12708661.4569,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "9fb6dca1f918f2f8a8009d83851d3b9a5f4156ed",
+          "message": "ICU-22721 Have the testdata folder trigger CI actions for both icu4c & icu4j",
+          "timestamp": "2024-09-24T12:44:29-07:00",
+          "tree_id": "3eb6dc00df2d6dc6b32565aa5db9d670e340a3bd",
+          "url": "https://github.com/unicode-org/icu/commit/9fb6dca1f918f2f8a8009d83851d3b9a5f4156ed"
+        },
+        "date": 1727208447704,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 222.9231,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 55285191.2681,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12210115.3509,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 51626319.235,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12762955.7004,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
