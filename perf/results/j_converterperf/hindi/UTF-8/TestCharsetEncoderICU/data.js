@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727205189963,
+  "lastUpdate": 1727208380418,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27417,6 +27417,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.5243828019578043,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "9fb6dca1f918f2f8a8009d83851d3b9a5f4156ed",
+          "message": "ICU-22721 Have the testdata folder trigger CI actions for both icu4c & icu4j",
+          "timestamp": "2024-09-24T12:44:29-07:00",
+          "tree_id": "3eb6dc00df2d6dc6b32565aa5db9d670e340a3bd",
+          "url": "https://github.com/unicode-org/icu/commit/9fb6dca1f918f2f8a8009d83851d3b9a5f4156ed"
+        },
+        "date": 1727208206361,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.5798053215299657,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
