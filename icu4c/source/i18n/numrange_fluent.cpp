@@ -248,29 +248,51 @@ LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(NFS<LNF>&& src) noe
         : NFS<LNF>(std::move(src)) {
     // Steal the compiled formatter
     LNF&& _src = static_cast<LNF&&>(src);
+#if U_HAVE_ATOMICS
     auto* stolen = _src.fAtomicFormatter.exchange(nullptr);
     delete fAtomicFormatter.exchange(stolen);
+#else
+    delete fAtomicFormatter;
+    fAtomicFormatter = _src.fAtomicFormatter;
+    _src.fAtomicFormatter = nullptr;
+#endif
 }
 
 LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(const LNF& other) {
     if (this == &other) { return *this; }  // self-assignment: no-op
     NFS<LNF>::operator=(static_cast<const NFS<LNF>&>(other));
+#if U_HAVE_ATOMICS
     // Do not steal; just clear
     delete fAtomicFormatter.exchange(nullptr);
+#else
+    delete fAtomicFormatter;
+    fAtomicFormatter = nullptr;
+#endif
     return *this;
 }
 
 LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(LNF&& src) noexcept {
     NFS<LNF>::operator=(static_cast<NFS<LNF>&&>(src));
+#if U_HAVE_ATOMICS
     // Steal the compiled formatter
     auto* stolen = src.fAtomicFormatter.exchange(nullptr);
     delete fAtomicFormatter.exchange(stolen);
+#else
+    delete fAtomicFormatter;
+    fAtomicFormatter = src.fAtomicFormatter;
+    src.fAtomicFormatter = nullptr;
+#endif
     return *this;
 }
 
 
 LocalizedNumberRangeFormatter::~LocalizedNumberRangeFormatter() {
+#if U_HAVE_ATOMICS
     delete fAtomicFormatter.exchange(nullptr);
+#else
+    delete fAtomicFormatter;
+    fAtomicFormatter = nullptr;
+#endif
 }
 
 LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(const RangeMacroProps& macros, const Locale& locale) {
@@ -365,7 +387,11 @@ LocalizedNumberRangeFormatter::getFormatter(UErrorCode& status) const {
     }
 
     // First try to get the pre-computed formatter
+#if U_HAVE_ATOMICS
     auto* ptr = fAtomicFormatter.load();
+#else
+    auto* ptr = fAtomicFormatter;
+#endif
     if (ptr != nullptr) {
         return ptr;
     }
@@ -380,6 +406,7 @@ LocalizedNumberRangeFormatter::getFormatter(UErrorCode& status) const {
     // it is set to what is actually stored in the atomic
     // if another thread beat us to computing the formatter object.
     auto* nonConstThis = const_cast<LocalizedNumberRangeFormatter*>(this);
+#if U_HAVE_ATOMICS
     if (!nonConstThis->fAtomicFormatter.compare_exchange_strong(ptr, temp.getAlias())) {
         // Another thread beat us to computing the formatter
         return ptr;
@@ -387,6 +414,10 @@ LocalizedNumberRangeFormatter::getFormatter(UErrorCode& status) const {
         // Our copy of the formatter got stored in the atomic
         return temp.orphan();
     }
+#else
+    nonConstThis->fAtomicFormatter = temp.getAlias();
+    return temp.orphan();
+#endif
 
 }
 

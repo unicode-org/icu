@@ -315,6 +315,20 @@
 #   define U_PLATFORM_IS_DARWIN_BASED 0
 #endif
 
+/**
+ * \def U_HAVE_ATOMICS
+ * Defines whether the platform supports atomic operations.
+ * @internal
+ */
+#ifdef U_HAVE_ATOMICS
+    /* Use the predefined value. */
+#elif defined(__wasi__) && !defined(_REENTRANT)
+    /* WASI does not support atomics when wasi-threads feature is not enabled */
+#   define U_HAVE_ATOMICS 0
+#else
+#   define U_HAVE_ATOMICS 1
+#endif
+
 /*===========================================================================*/
 /** @{ Compiler and environment features                                     */
 /*===========================================================================*/

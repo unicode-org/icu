@@ -7,7 +7,9 @@
 #ifndef __NUMBER_MAPPER_H__
 #define __NUMBER_MAPPER_H__
 
-#include <atomic>
+#if U_HAVE_ATOMICS
+#   include <atomic>
+#endif
 #include "number_types.h"
 #include "unicode/currpinf.h"
 #include "standardplural.h"
@@ -196,10 +198,18 @@ struct DecimalFormatFields : public UMemory {
     LocalizedNumberFormatter formatter;
 
     /** The lazy-computed parser for .parse() */
+#if U_HAVE_ATOMICS
     std::atomic<::icu::numparse::impl::NumberParserImpl*> atomicParser = {};
+#else
+    ::icu::numparse::impl::NumberParserImpl* atomicParser = {};
+#endif
 
     /** The lazy-computed parser for .parseCurrency() */
+#if U_HAVE_ATOMICS
     std::atomic<::icu::numparse::impl::NumberParserImpl*> atomicCurrencyParser = {};
+#else
+    ::icu::numparse::impl::NumberParserImpl* atomicCurrencyParser = {};
+#endif
 
     /** Small object ownership warehouse for the formatter and parser */
     DecimalFormatWarehouse warehouse;
