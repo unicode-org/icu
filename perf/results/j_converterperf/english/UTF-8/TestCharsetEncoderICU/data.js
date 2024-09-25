@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727300634269,
+  "lastUpdate": 1727305642847,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27657,6 +27657,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.34773688830377647,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "109008da3be2a796a26c812193d5998a6bd6a210",
+          "message": "ICU-22723 ICU76: Update known issue references to cloned reports. BRS #27\n\nSee #3215",
+          "timestamp": "2024-09-25T15:46:23-07:00",
+          "tree_id": "c718ab11acace62dbf183f4b539a5a5b018362b3",
+          "url": "https://github.com/unicode-org/icu/commit/109008da3be2a796a26c812193d5998a6bd6a210"
+        },
+        "date": 1727305441015,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.3480318538786401,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
