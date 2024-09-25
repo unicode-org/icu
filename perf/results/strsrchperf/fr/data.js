@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727220183680,
+  "lastUpdate": 1727270531443,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33549,6 +33549,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 50.1676,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "9adcf8bd093fcbc462ee82efd52d92d61b4ef3e1",
+          "message": "ICU-22668 Added unit tests to verify that CLDR-17892 addresses the original problem reported here and took out an\nearlier hack in the Java code to work around the original problem.",
+          "timestamp": "2024-09-20T16:00:33-07:00",
+          "tree_id": "1eb0e61f098d7f02d357407807090ddfca2cdbd5",
+          "url": "https://github.com/unicode-org/icu/commit/9adcf8bd093fcbc462ee82efd52d92d61b4ef3e1"
+        },
+        "date": 1727270359150,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.0466,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 51.2851,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
