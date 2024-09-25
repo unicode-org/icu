@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727278528996,
+  "lastUpdate": 1727282629212,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27627,6 +27627,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 310.65145240675173,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "8ce61b1139b86b55ca03818d8b5a85a0cdc2e02b",
+          "message": "ICU-22919 Enable CI with JDK 21 and fix the json parsing",
+          "timestamp": "2024-09-25T09:25:04-07:00",
+          "tree_id": "280398ceb7a51f0bcd19543259b66f96e7f5c12f",
+          "url": "https://github.com/unicode-org/icu/commit/8ce61b1139b86b55ca03818d8b5a85a0cdc2e02b"
+        },
+        "date": 1727282457823,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 302.9967381058409,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
