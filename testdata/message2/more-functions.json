@@ -102,19 +102,10 @@
     },
     {
       "src": "Default int64: {$val}!",
-      "exp": "Default int64: 1.234.567.890.123.456.800!",
+      "exp": "Default int64: 1.234.567.890.123.456.789!",
       "locale": "ro",
-      "params": [{ "name": "val", "value": 1234567890123456789 }],
-      "comment": "Rounded due to JSON not supporting full 64-bit ints",
-      "ignoreJava": "See https://unicode-org.atlassian.net/browse/ICU-22754?focusedCommentId=175932"
-    },
-    {
-      "src": "Default int64: {$val}!",
-      "exp": "Default int64: 1.234.567.890.123.456.770!",
-      "locale": "ro",
-      "params": [{ "name": "val", "value": 1234567890123456789 }],
-      "comment": "Rounded due to JSON not supporting full 64-bit ints",
-      "ignoreCpp": "See https://unicode-org.atlassian.net/browse/ICU-22754?focusedCommentId=175932"
+      "params": [{ "name": "val", "value": {"decimal": "1234567890123456789"} }],
+      "comment": "Rounded due to JSON not supporting full 64-bit ints"
     },
     {
       "src": "Default number: {$val}!",
