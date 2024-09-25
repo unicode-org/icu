@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727286907902,
+  "lastUpdate": 1727289431077,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -60057,6 +60057,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 3.2491,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alex@0x0h.com",
+            "name": "Oleksandr Hubanov",
+            "username": "alexgubanow"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "9d9bdfd64f02b9b4f513d1a9d79916e5b7372199",
+          "message": "ICU-22916 Remove use of makedep from MVS build, update doc\nalexgubanow alex@0x0h.com",
+          "timestamp": "2024-09-23T09:24:03-07:00",
+          "tree_id": "25f93b2891e426713a367d5bc840a072f291d7a1",
+          "url": "https://github.com/unicode-org/icu/commit/9d9bdfd64f02b9b4f513d1a9d79916e5b7372199"
+        },
+        "date": 1727289264500,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 3.2037,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 3.1879,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 3.197,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.254,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 3.2559,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 3.2428,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
