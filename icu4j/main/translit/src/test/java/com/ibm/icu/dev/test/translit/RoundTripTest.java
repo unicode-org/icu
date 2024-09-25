@@ -378,7 +378,7 @@ public class RoundTripTest extends TestFmwk {
 
     @Test
     public void TestCyrillic() throws IOException {
-        if (logKnownIssue("CLDR-16218", "ICU4C Transliterator RoundTripTest finds many problems with updated Cyrillic-Latin transform")) {
+        if (logKnownIssue("CLDR-17976", "ICU4C Transliterator RoundTripTest finds many problems with updated Cyrillic-Latin transform")) {
             return;
         }
         long start = System.currentTimeMillis();

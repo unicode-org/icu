@@ -620,16 +620,9 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
                 continue;
             }
 
-            if ((*tzid == "America/Miquelon" || *tzid == "America/Hermosillo" || *tzid == "America/Mazatlan")
-                    && uprv_strncmp(gLocaleData->locales[locidx].getName(),"ku",2) == 0
-                    && uprv_strcmp(PATTERNS[patidx], "v") == 0
-                    && logKnownIssue("CLDR-17024", "TestTimeRoundTrip fail with tz=America/Miquelon, pattern=v, locale=ku")) {
-                continue;
-            }
-
-
             BasicTimeZone *tz = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone(*tzid));
             sdf->setTimeZone(*tz);
+
 
             UDate t = gLocaleData->START_TIME;
             TimeZoneTransition tzt;

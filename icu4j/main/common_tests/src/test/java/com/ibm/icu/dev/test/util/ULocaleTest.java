@@ -4167,7 +4167,7 @@ public class ULocaleTest extends CoreTestFmwk {
 
         for (int i = 0; i < full_data.length; i++) {
 			if (full_data[i][0].equals("und_Hant_CN") &&
-            	logKnownIssue("CLDR-17908", "und_Hant_CN changed expected result for Likely Subtags")) {
+            	logKnownIssue("CLDR-17981", "und_Hant_CN changed expected result for Likely Subtags")) {
     	        continue;
         	}
             ULocale org = new ULocale(full_data[i][0]);
@@ -5720,7 +5720,7 @@ public class ULocaleTest extends CoreTestFmwk {
         } else {
 			if ( ( test.source.equals("und-Latn-MU") || test.source.equals("und-Latn-RS") || test.source.equals("und-Latn-SL") 
 					|| test.source.equals("und-Latn-TK") || test.source.equals("und-Latn-ZM") )
-				 && logKnownIssue("CLDR-17908", "und_Hant_CN changed expected result for Likely Subtags") ) {
+				 && logKnownIssue("CLDR-17981", "und_Hant_CN changed expected result for Likely Subtags") ) {
     	        return;
         	}        	
             assertEquals("addLikelySubtags(" + test.source + ")",
