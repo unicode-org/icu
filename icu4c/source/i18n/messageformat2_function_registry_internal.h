@@ -211,6 +211,60 @@ namespace message2 {
 
             TextSelector(const Locale& l) : locale(l) {}
         };
+
+        // See https://github.com/unicode-org/message-format-wg/blob/main/test/README.md
+        class TestFormatFactory : public FormatterFactory {
+        public:
+            Formatter* createFormatter(const Locale& locale, UErrorCode& status) override;
+            TestFormatFactory() {}
+            virtual ~TestFormatFactory();
+        };
+
+        class TestSelect;
+
+        class TestFormat : public Formatter {
+        public:
+            FormattedPlaceholder format(FormattedPlaceholder&& toFormat, FunctionOptions&& options, UErrorCode& status) const override;
+            virtual ~TestFormat();
+
+        private:
+            friend class TestFormatFactory;
+            friend class TestSelect;
+            TestFormat() {}
+            static void testFunctionParameters(const FormattedPlaceholder& arg,
+                                               const FunctionOptions& options,
+                                               int32_t& decimalPlaces,
+                                               bool& failsFormat,
+                                               bool& failsSelect,
+                                               double& input,
+                                               UErrorCode& status);
+
+        };
+
+        // See https://github.com/unicode-org/message-format-wg/blob/main/test/README.md
+        class TestSelectFactory : public SelectorFactory {
+        public:
+            Selector* createSelector(const Locale& locale, UErrorCode& status) const override;
+            TestSelectFactory() {}
+            virtual ~TestSelectFactory();
+        };
+
+        class TestSelect : public Selector {
+        public:
+            void selectKey(FormattedPlaceholder&& val,
+                           FunctionOptions&& options,
+                           const UnicodeString* keys,
+                           int32_t keysLen,
+                           UnicodeString* prefs,
+                           int32_t& prefsLen,
+                           UErrorCode& status) const override;
+            virtual ~TestSelect();
+
+        private:
+            friend class TestSelectFactory;
+            TestSelect() {}
+        };
+
     };
 
     extern void formatDateWithDefaults(const Locale& locale, UDate date, UnicodeString&, UErrorCode& errorCode);
