@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727283409002,
+  "lastUpdate": 1727286788451,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54159,6 +54159,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2160625.99,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1289042324@qq.com",
+            "name": "imurluck",
+            "username": "imurluck"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "1c33fcf81d28b12be5fce62b630ae66c0dc30d3f",
+          "message": "ICU-22761 Optimize get value of LocaleObjectCache\n\nSee #2984",
+          "timestamp": "2024-09-23T09:14:34-07:00",
+          "tree_id": "e7ac289b3b69ad833a58b9f5e36a60e7cfb5364c",
+          "url": "https://github.com/unicode-org/icu/commit/1c33fcf81d28b12be5fce62b630ae66c0dc30d3f"
+        },
+        "date": 1727286616483,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 154.404,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8741984.1971,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2113481.8285,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7728965.5728,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2170014.8864,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
