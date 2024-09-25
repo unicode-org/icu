@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727286211630,
+  "lastUpdate": 1727288710042,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27387,6 +27387,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 780.9147845462461,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alex@0x0h.com",
+            "name": "Oleksandr Hubanov",
+            "username": "alexgubanow"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "9d9bdfd64f02b9b4f513d1a9d79916e5b7372199",
+          "message": "ICU-22916 Remove use of makedep from MVS build, update doc\nalexgubanow alex@0x0h.com",
+          "timestamp": "2024-09-23T09:24:03-07:00",
+          "tree_id": "25f93b2891e426713a367d5bc840a072f291d7a1",
+          "url": "https://github.com/unicode-org/icu/commit/9d9bdfd64f02b9b4f513d1a9d79916e5b7372199"
+        },
+        "date": 1727288538602,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 730.69933202941,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
