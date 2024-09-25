@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727220425831,
+  "lastUpdate": 1727270855588,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54105,6 +54105,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2113079.5977,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "9adcf8bd093fcbc462ee82efd52d92d61b4ef3e1",
+          "message": "ICU-22668 Added unit tests to verify that CLDR-17892 addresses the original problem reported here and took out an\nearlier hack in the Java code to work around the original problem.",
+          "timestamp": "2024-09-20T16:00:33-07:00",
+          "tree_id": "1eb0e61f098d7f02d357407807090ddfca2cdbd5",
+          "url": "https://github.com/unicode-org/icu/commit/9adcf8bd093fcbc462ee82efd52d92d61b4ef3e1"
+        },
+        "date": 1727270684822,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 392.0936,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 12898367.5487,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2122607.3737,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 11797302.5519,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2160396.55,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
