@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727361959369,
+  "lastUpdate": 1727366770912,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27747,6 +27747,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.329794489647383,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mfabian@redhat.com",
+            "name": "Mike FABIAN",
+            "username": "mike-fabian"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "687ed05e55e5518fe48516f51bf82ec6d626cf6c",
+          "message": "ICU-22913 Fix coverity warning in wrtxml.cpp\n\nSee: https://unicode-org.atlassian.net/browse/ICU-22913",
+          "timestamp": "2024-09-23T19:57:57-07:00",
+          "tree_id": "728b04e0f6d791516e617f132f4826f6e6e0aaf6",
+          "url": "https://github.com/unicode-org/icu/commit/687ed05e55e5518fe48516f51bf82ec6d626cf6c"
+        },
+        "date": 1727366602177,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.2910735686736787,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
