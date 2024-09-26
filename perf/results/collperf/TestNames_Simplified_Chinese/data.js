@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727362528128,
+  "lastUpdate": 1727367415764,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54591,6 +54591,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2165475.901,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mfabian@redhat.com",
+            "name": "Mike FABIAN",
+            "username": "mike-fabian"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "687ed05e55e5518fe48516f51bf82ec6d626cf6c",
+          "message": "ICU-22913 Fix coverity warning in wrtxml.cpp\n\nSee: https://unicode-org.atlassian.net/browse/ICU-22913",
+          "timestamp": "2024-09-23T19:57:57-07:00",
+          "tree_id": "728b04e0f6d791516e617f132f4826f6e6e0aaf6",
+          "url": "https://github.com/unicode-org/icu/commit/687ed05e55e5518fe48516f51bf82ec6d626cf6c"
+        },
+        "date": 1727367239927,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 154.6489,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8787333.1198,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2110315.5852,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7875518.3842,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2161516.7928,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
