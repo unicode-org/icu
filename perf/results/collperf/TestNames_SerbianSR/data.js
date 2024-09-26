@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727367310226,
+  "lastUpdate": 1727371047329,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54645,6 +54645,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16631525.938,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mfabian@redhat.com",
+            "name": "Mike FABIAN",
+            "username": "mike-fabian"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "1754ff2a107bcd1de53d4627c9ee50bd5ce1c76a",
+          "message": "ICU-22909 Fix coverity warning in makeconv.cpp\n\nSee: https://unicode-org.atlassian.net/browse/ICU-22909",
+          "timestamp": "2024-09-23T20:49:24-07:00",
+          "tree_id": "b3731307516207f69b008a844dc6655aa346e291",
+          "url": "https://github.com/unicode-org/icu/commit/1754ff2a107bcd1de53d4627c9ee50bd5ce1c76a"
+        },
+        "date": 1727370862356,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 366.064,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 51685834.6683,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 14953341.7699,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 50111988.0886,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16319691.9328,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
