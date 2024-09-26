@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727305641230,
+  "lastUpdate": 1727362172437,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28047,6 +28047,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.5717806313111136,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yselkowi@redhat.com",
+            "name": "Yaakov Selkowitz",
+            "username": "yselkowitz"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "60d6bd71efc0cde8f861b109ff87dbbf9fc96586",
+          "message": "ICU-22721 Update filtration_test for Python 3.13\n\nSee #3046",
+          "timestamp": "2024-09-23T18:41:34-07:00",
+          "tree_id": "577defc1d3365711f1f083da0366625d707320ca",
+          "url": "https://github.com/unicode-org/icu/commit/60d6bd71efc0cde8f861b109ff87dbbf9fc96586"
+        },
+        "date": 1727361991421,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.434842364357406,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
