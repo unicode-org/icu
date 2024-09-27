@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727439314051,
+  "lastUpdate": 1727467961203,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28017,6 +28017,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 323.8351436242595,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "bd9ffc38f012e038117c1e991253575c52e61b64",
+          "message": "ICU-22930 The -sources.jar files in icu4j version 76.1 are AGAIN a lot bigger than before",
+          "timestamp": "2024-09-27T13:07:13-07:00",
+          "tree_id": "e5acf2b8995f6d2a9f93befe1bcd7b228908b2a0",
+          "url": "https://github.com/unicode-org/icu/commit/bd9ffc38f012e038117c1e991253575c52e61b64"
+        },
+        "date": 1727467785787,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 312.3670085630131,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
