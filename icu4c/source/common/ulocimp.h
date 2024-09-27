@@ -119,16 +119,16 @@ ulocimp_getKeywordValue(const char* localeID,
                         UErrorCode& status);
 
 U_EXPORT icu::CharString
-ulocimp_getLanguage(const char* localeID, UErrorCode& status);
+ulocimp_getLanguage(std::string_view localeID, UErrorCode& status);
 
 U_EXPORT icu::CharString
-ulocimp_getScript(const char* localeID, UErrorCode& status);
+ulocimp_getScript(std::string_view localeID, UErrorCode& status);
 
 U_EXPORT icu::CharString
-ulocimp_getRegion(const char* localeID, UErrorCode& status);
+ulocimp_getRegion(std::string_view localeID, UErrorCode& status);
 
 U_EXPORT icu::CharString
-ulocimp_getVariant(const char* localeID, UErrorCode& status);
+ulocimp_getVariant(std::string_view localeID, UErrorCode& status);
 
 U_EXPORT void
 ulocimp_setKeywordValue(std::string_view keywordName,
@@ -145,7 +145,7 @@ ulocimp_setKeywordValue(std::string_view keywords,
 
 U_EXPORT void
 ulocimp_getSubtags(
-        const char* localeID,
+        std::string_view localeID,
         icu::CharString* language,
         icu::CharString* script,
         icu::CharString* region,
@@ -155,7 +155,7 @@ ulocimp_getSubtags(
 
 U_EXPORT void
 ulocimp_getSubtags(
-        const char* localeID,
+        std::string_view localeID,
         icu::ByteSink* language,
         icu::ByteSink* script,
         icu::ByteSink* region,
@@ -165,7 +165,7 @@ ulocimp_getSubtags(
 
 inline void
 ulocimp_getSubtags(
-        const char* localeID,
+        std::string_view localeID,
         std::nullptr_t,
         std::nullptr_t,
         std::nullptr_t,
@@ -364,7 +364,7 @@ ulocimp_minimizeSubtags(const char* localeID,
                         UErrorCode& err);
 
 U_CAPI const char * U_EXPORT2
-locale_getKeywordsStart(const char *localeID);
+locale_getKeywordsStart(std::string_view localeID);
 
 bool
 ultag_isExtensionSubtags(const char* s, int32_t len);

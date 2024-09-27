@@ -371,7 +371,7 @@ uloc_isRightToLeft(const char *locale) {
         if (U_FAILURE(errorCode)) {
             return false;
         }
-        ulocimp_getSubtags(likely.data(), nullptr, &script, nullptr, nullptr, nullptr, errorCode);
+        ulocimp_getSubtags(likely.toStringPiece(), nullptr, &script, nullptr, nullptr, nullptr, errorCode);
         if (U_FAILURE(errorCode) || script.isEmpty()) {
             return false;
         }
@@ -441,7 +441,7 @@ ulocimp_getRegionForSupplementalData(const char *localeID, bool inferRegion,
                 UErrorCode rgStatus = U_ZERO_ERROR;
                 icu::CharString locBuf = ulocimp_addLikelySubtags(localeID, rgStatus);
                 if (U_SUCCESS(rgStatus)) {
-                    rgBuf = ulocimp_getRegion(locBuf.data(), status);
+                    rgBuf = ulocimp_getRegion(locBuf.toStringPiece(), status);
                 }
             }
         }

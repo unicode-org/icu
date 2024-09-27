@@ -3244,7 +3244,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
             const char *validLoc = ures_getLocaleByType(res, ULOC_VALID_LOCALE, &subStatus);
             if (U_SUCCESS(subStatus) && validLoc != nullptr && validLoc[0] != 0 && uprv_strcmp(validLoc, "root") != 0) {
                 CharString validLang = ulocimp_getLanguage(validLoc, subStatus);
-                CharString parentLang = ulocimp_getLanguage(parent.data(), subStatus);
+                CharString parentLang = ulocimp_getLanguage(parent.toStringPiece(), subStatus);
                 if (U_SUCCESS(subStatus) && validLang != parentLang) {
                     // validLoc is not root and has a different language than parent, use it instead
                     found.clear().append(validLoc, subStatus);
