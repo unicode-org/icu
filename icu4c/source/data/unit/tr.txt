@@ -176,11 +176,6 @@ tr{
                 one{"onbinde {0}"}
                 other{"onbinde {0}"}
             }
-            portion-per-1e9{
-                dnam{"parça/milyar"}
-                one{"{0} parça/milyar"}
-                other{"{0} parça/milyar"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1165,9 +1160,6 @@ tr{
                 dnam{"onbinde"}
                 one{"‱{0}"}
                 other{"‱{0}"}
-            }
-            portion-per-1e9{
-                dnam{"parça/milyar"}
             }
         }
         consumption{

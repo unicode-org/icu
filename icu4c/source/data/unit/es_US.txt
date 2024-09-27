@@ -227,9 +227,6 @@ es_US{
             permille{
                 dnam{"‰"}
             }
-            portion-per-1e9{
-                dnam{"partes/mil millones"}
-            }
         }
         digital{
             bit{

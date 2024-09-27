@@ -90,10 +90,6 @@ th{
             permyriad{
                 other{"{0} เปอร์มีเรียด"}
             }
-            portion-per-1e9{
-                dnam{"ส่วนต่อพันล้าน"}
-                other{"{0} ส่วนต่อพันล้าน"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -632,10 +628,6 @@ th{
             }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                dnam{"สตพล."}
-                other{"{0}สตพล."}
             }
         }
         consumption{
@@ -1327,10 +1319,6 @@ th{
             }
             permyriad{
                 dnam{"เปอร์มีเรียด"}
-            }
-            portion-per-1e9{
-                dnam{"ส่วน/พันล้าน"}
-                other{"{0} สตพล."}
             }
         }
         consumption{

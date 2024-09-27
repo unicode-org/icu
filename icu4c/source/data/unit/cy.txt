@@ -296,15 +296,6 @@ cy{
                 two{"{0}‱"}
                 zero{"{0}‱"}
             }
-            portion-per-1e9{
-                dnam{"rhannau fesul biliwn"}
-                few{"{0} rhan fesul biliwn"}
-                many{"{0} rhan fesul biliwn"}
-                one{"{0} rhan fesul biliwn"}
-                other{"{0} rhan fesul biliwn"}
-                two{"{0} rhan fesul biliwn"}
-                zero{"ppb"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1731,14 +1722,6 @@ cy{
             percent{
                 dnam{"%"}
             }
-            portion-per-1e9{
-                few{"{0} ppb"}
-                many{"{0} ppb"}
-                one{"{0}ppb"}
-                other{"{0}ppb"}
-                two{"{0} ppb"}
-                zero{"{0} ppb"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -2904,9 +2887,6 @@ cy{
             }
             permyriad{
                 dnam{"permyriad"}
-            }
-            portion-per-1e9{
-                dnam{"rhannau/biliwn"}
             }
         }
         consumption{

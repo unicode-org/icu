@@ -154,11 +154,6 @@ si{
                 one{"{0} පර්මැරියඩ්"}
                 other{"{0} පර්මැරියඩ්"}
             }
-            portion-per-1e9{
-                dnam{"බිලියනයකට කොටස්"}
-                one{"බිලියනයකට කොටස් {0}"}
-                other{"බිලියනයකට කොටස් {0}"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -976,11 +971,6 @@ si{
             permyriad{
                 dnam{"‱"}
             }
-            portion-per-1e9{
-                dnam{"බිකො"}
-                one{"බිකො {0}"}
-                other{"බිකො {0}"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1353,11 +1343,6 @@ si{
             }
             permyriad{
                 dnam{"පර්මැරියඩ්"}
-            }
-            portion-per-1e9{
-                dnam{"කොටස්/බිලියනය"}
-                one{"බිකො {0}"}
-                other{"බිකො {0}"}
             }
         }
         consumption{

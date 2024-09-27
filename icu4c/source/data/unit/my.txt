@@ -138,10 +138,6 @@ my{
             permyriad{
                 other{"{0} ပါမီရိတ်"}
             }
-            portion-per-1e9{
-                dnam{"သန်းတစ်ထောင်ပုံ တစ်ပုံ"}
-                other{"သန်းတစ်ထောင်ပုံ {0} ပုံ"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -682,11 +678,6 @@ my{
                 dnam{"cm²"}
             }
         }
-        concentr{
-            portion-per-1e9{
-                other{"{0}ppb"}
-            }
-        }
         consumption{
             liter-per-100-kilometer{
                 dnam{"L/100km"}
@@ -913,9 +904,6 @@ my{
             }
             permyriad{
                 dnam{"ပါမီရိတ်"}
-            }
-            portion-per-1e9{
-                dnam{"သန်းတစ်ထောင်ပုံ တစ်ပုံ"}
             }
         }
         consumption{

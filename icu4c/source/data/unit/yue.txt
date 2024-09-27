@@ -23,12 +23,6 @@ yue{
         compound{
             per{"每 {1} {0}"}
         }
-        concentr{
-            portion-per-1e9{
-                dnam{"十億分點濃度"}
-                other{"{0} 十億分點濃度"}
-            }
-        }
         duration{
             century{
                 other{"{0} 個世紀"}
@@ -174,11 +168,6 @@ yue{
         }
     }
     unitsNarrow{
-        concentr{
-            portion-per-1e9{
-                other{"{0}ppb"}
-            }
-        }
         digital{
             byte{
                 dnam{"B"}
@@ -412,9 +401,6 @@ yue{
             permyriad{
                 dnam{"點子"}
                 other{"{0} 點子"}
-            }
-            portion-per-1e9{
-                dnam{"濃度/十億"}
             }
         }
         consumption{

@@ -230,12 +230,6 @@ it{
                 one{"{0} punto base"}
                 other{"{0} punti base"}
             }
-            portion-per-1e9{
-                dnam{"parti per miliardo"}
-                gender{"feminine"}
-                one{"{0} parte per miliardo"}
-                other{"{0} parti per miliardo"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1292,10 +1286,6 @@ it{
             permillion{
                 one{"{0}ppm"}
                 other{"{0}ppm"}
-            }
-            portion-per-1e9{
-                one{"{0}ppb"}
-                other{"{0}ppb"}
             }
         }
         consumption{

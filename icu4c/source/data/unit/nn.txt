@@ -688,9 +688,6 @@ nn{
             millimole-per-liter{
                 dnam{"mmol/l"}
             }
-            portion-per-1e9{
-                dnam{"delar/milliard"}
-            }
         }
         consumption{
             liter-per-kilometer{

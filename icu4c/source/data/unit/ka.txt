@@ -162,11 +162,6 @@ ka{
                 one{"{0} ნაწილი მილიონზე"}
                 other{"{0} ნაწილი მილიონზე"}
             }
-            portion-per-1e9{
-                dnam{"ნაწილი მილიარდზე"}
-                one{"{0} ნაწილი მილიარდზე"}
-                other{"{0} ნაწილი მილიარდზე"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -876,11 +871,6 @@ ka{
                 other{"{0} წმ"}
             }
         }
-        concentr{
-            portion-per-1e9{
-                dnam{"ნ/მ"}
-            }
-        }
         consumption{
             liter-per-100-kilometer{
                 one{"{0}ლ/100კმ"}
@@ -1114,11 +1104,6 @@ ka{
             }
             permillion{
                 dnam{"ნაწილი/მილიონზე"}
-            }
-            portion-per-1e9{
-                dnam{"ნაწილი/მილიარდზე"}
-                one{"{0} ნ/მ"}
-                other{"{0} ნ/მ"}
             }
         }
         consumption{

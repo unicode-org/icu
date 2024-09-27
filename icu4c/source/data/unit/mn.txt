@@ -163,11 +163,6 @@ mn{
                 one{"арван мянганы {0} хувь"}
                 other{"арван мянганы {0} хувь"}
             }
-            portion-per-1e9{
-                dnam{"мкг/кг"}
-                one{"{0} мкг/кг"}
-                other{"{0} мкг/кг"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -893,11 +888,6 @@ mn{
             permyriad{
                 dnam{"‱"}
             }
-            portion-per-1e9{
-                dnam{"мкг/кг"}
-                one{"{0} мкг/кг"}
-                other{"{0} мкг/кг"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1248,11 +1238,6 @@ mn{
             }
             permyriad{
                 dnam{"арван мянганы хувь"}
-            }
-            portion-per-1e9{
-                dnam{"мкг/кг"}
-                one{"{0} мкг/кг"}
-                other{"{0} мкг/кг"}
             }
         }
         consumption{

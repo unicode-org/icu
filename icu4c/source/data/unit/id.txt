@@ -150,10 +150,6 @@ id{
             permyriad{
                 other{"{0} permyriad"}
             }
-            portion-per-1e9{
-                dnam{"bagian per miliar"}
-                other{"{0} bagian per miliar"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1115,9 +1111,6 @@ id{
             }
             permyriad{
                 dnam{"permyriad"}
-            }
-            portion-per-1e9{
-                dnam{"bagian/miliar"}
             }
         }
         consumption{

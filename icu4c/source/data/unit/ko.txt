@@ -144,9 +144,6 @@ ko{
                 dnam{"몰"}
                 other{"{0}몰"}
             }
-            portion-per-1e9{
-                other{"{0}ppb"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -780,11 +777,6 @@ ko{
         }
     }
     unitsNarrow{
-        concentr{
-            portion-per-1e9{
-                other{"{0}ppb"}
-            }
-        }
         digital{
             byte{
                 dnam{"B"}
@@ -922,9 +914,6 @@ ko{
             }
             permillion{
                 other{"{0}ppm"}
-            }
-            portion-per-1e9{
-                other{"{0}ppb"}
             }
         }
         consumption{

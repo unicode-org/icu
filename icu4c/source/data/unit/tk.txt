@@ -178,11 +178,6 @@ tk{
                 one{"{0} permiriad"}
                 other{"{0} permiriad"}
             }
-            portion-per-1e9{
-                dnam{"bölejik/milliard"}
-                one{"milliardda {0} bölejik"}
-                other{"milliardda {0} bölejik"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -998,11 +993,6 @@ tk{
             percent{
                 dnam{"%"}
             }
-            portion-per-1e9{
-                dnam{"bmlrd"}
-                one{"{0} bmlrd"}
-                other{"{0} bmlrd"}
-            }
         }
         consumption{
             mile-per-gallon-imperial{
@@ -1274,11 +1264,6 @@ tk{
             }
             permyriad{
                 dnam{"permiriad"}
-            }
-            portion-per-1e9{
-                dnam{"bölejik/milliard"}
-                one{"{0} bölejik/milliard"}
-                other{"{0} bölejik/milliard"}
             }
         }
         consumption{

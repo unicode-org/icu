@@ -104,11 +104,6 @@ sw{
                 one{"permyriadi {0}"}
                 other{"permyriadi {0}"}
             }
-            portion-per-1e9{
-                dnam{"sehemu kwa kila bilioni"}
-                one{"sehemu {0} kwa kila bilioni"}
-                other{"sehemu {0} kwa kila bilioni"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -551,9 +546,6 @@ sw{
             permillion{
                 dnam{"ppm"}
             }
-            portion-per-1e9{
-                dnam{"sehemu kwa kila bilioni"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -836,9 +828,6 @@ sw{
             }
             permyriad{
                 dnam{"permyriadi"}
-            }
-            portion-per-1e9{
-                dnam{"sehemu kwa bilioni"}
             }
         }
         consumption{

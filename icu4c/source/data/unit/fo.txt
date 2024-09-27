@@ -178,11 +178,6 @@ fo{
                 one{"{0} promyriad"}
                 other{"{0} promyriad"}
             }
-            portion-per-1e9{
-                dnam{"partar fyri hvørja milliard"}
-                one{"{0} part fyri hvørja milliard"}
-                other{"{0} partar fyri hvørja milliard"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -986,11 +981,6 @@ fo{
                 one{"{0}‱"}
                 other{"{0}‱"}
             }
-            portion-per-1e9{
-                dnam{"partar/mia."}
-                one{"{0}part/mia."}
-                other{"{0}partar/mia."}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1605,11 +1595,6 @@ fo{
                 dnam{"promyriad"}
                 one{"{0} ‱"}
                 other{"{0} ‱"}
-            }
-            portion-per-1e9{
-                dnam{"partar/milliard"}
-                one{"{0} part/mia."}
-                other{"{0} partar/mia."}
             }
         }
         consumption{
