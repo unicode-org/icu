@@ -958,6 +958,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     bool hasDateStyleOption = opts.getFunctionOption(dateStyleName, opt);
     bool hasTimeStyleOption = opts.getFunctionOption(timeStyleName, opt);
     bool noOptions = opts.optionsCount() == 0;
+    bool fieldOptions = false;
 
     bool useStyle = (type == DateTimeFactory::DateTimeType::DateTime
                      && (hasDateStyleOption || hasTimeStyleOption
@@ -995,114 +996,128 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
             timeStyle = stringToStyle(getFunctionOption(toFormat, opts, styleName), errorCode);
             df.adoptInstead(DateFormat::createTimeInstance(timeStyle, locale));
         }
-    } else {
-        // Build up a skeleton based on the field options, then use that to
-        // create the date formatter
+    }
+    // Build up a skeleton based on the field options, then use that to
+    // create the date formatter
 
-        UnicodeString skeleton;
-        #define ADD_PATTERN(s) skeleton += UnicodeString(s)
-        if (U_SUCCESS(errorCode)) {
-            // Year
-            UnicodeString year = getFunctionOption(toFormat, opts, UnicodeString("year"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useDate = true;
-                if (year == UnicodeString("2-digit")) {
-                    ADD_PATTERN("YY");
-                } else if (year == UnicodeString("numeric")) {
-                    ADD_PATTERN("YYYY");
-                }
-            }
-            // Month
-            UnicodeString month = getFunctionOption(toFormat, opts, UnicodeString("month"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useDate = true;
-                /* numeric, 2-digit, long, short, narrow */
-                if (month == UnicodeString("long")) {
-                    ADD_PATTERN("MMMM");
-                } else if (month == UnicodeString("short")) {
-                    ADD_PATTERN("MMM");
-                } else if (month == UnicodeString("narrow")) {
-                    ADD_PATTERN("MMMMM");
-                } else if (month == UnicodeString("numeric")) {
-                    ADD_PATTERN("M");
-                } else if (month == UnicodeString("2-digit")) {
-                    ADD_PATTERN("MM");
-                }
-            }
-            // Weekday
-            UnicodeString weekday = getFunctionOption(toFormat, opts, UnicodeString("weekday"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useDate = true;
-                if (weekday == UnicodeString("long")) {
-                    ADD_PATTERN("EEEE");
-                } else if (weekday == UnicodeString("short")) {
-                    ADD_PATTERN("EEEEE");
-                } else if (weekday == UnicodeString("narrow")) {
-                    ADD_PATTERN("EEEEE");
-                }
-            }
-            // Day
-            UnicodeString day = getFunctionOption(toFormat, opts, UnicodeString("day"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useDate = true;
-                if (day == UnicodeString("numeric")) {
-                    ADD_PATTERN("d");
-                } else if (day == UnicodeString("2-digit")) {
-                    ADD_PATTERN("dd");
-                }
-            }
-            // Hour
-            UnicodeString hour = getFunctionOption(toFormat, opts, UnicodeString("hour"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useTime = true;
-                if (hour == UnicodeString("numeric")) {
-                    ADD_PATTERN("h");
-                } else if (hour == UnicodeString("2-digit")) {
-                    ADD_PATTERN("hh");
-                }
-            }
-            // Minute
-            UnicodeString minute = getFunctionOption(toFormat, opts, UnicodeString("minute"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useTime = true;
-                if (minute == UnicodeString("numeric")) {
-                    ADD_PATTERN("m");
-                } else if (minute == UnicodeString("2-digit")) {
-                    ADD_PATTERN("mm");
-                }
-            }
-            // Second
-            UnicodeString second = getFunctionOption(toFormat, opts, UnicodeString("second"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useTime = true;
-                if (second == UnicodeString("numeric")) {
-                    ADD_PATTERN("s");
-                } else if (second == UnicodeString("2-digit")) {
-                    ADD_PATTERN("ss");
-                }
+    UnicodeString skeleton;
+#define ADD_PATTERN(s) skeleton += UnicodeString(s)
+    if (U_SUCCESS(errorCode)) {
+        // Year
+        UnicodeString year = getFunctionOption(toFormat, opts, UnicodeString("year"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useDate = true;
+            if (year == UnicodeString("2-digit")) {
+                ADD_PATTERN("YY");
+            } else if (year == UnicodeString("numeric")) {
+                ADD_PATTERN("YYYY");
             }
         }
-        /*
-          TODO
-          fractionalSecondDigits
-          hourCycle
-          timeZoneName
-          era
-         */
+        // Month
+        UnicodeString month = getFunctionOption(toFormat, opts, UnicodeString("month"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useDate = true;
+            /* numeric, 2-digit, long, short, narrow */
+            if (month == UnicodeString("long")) {
+                ADD_PATTERN("MMMM");
+            } else if (month == UnicodeString("short")) {
+                ADD_PATTERN("MMM");
+            } else if (month == UnicodeString("narrow")) {
+                ADD_PATTERN("MMMMM");
+            } else if (month == UnicodeString("numeric")) {
+                ADD_PATTERN("M");
+            } else if (month == UnicodeString("2-digit")) {
+                ADD_PATTERN("MM");
+            }
+        }
+        // Weekday
+        UnicodeString weekday = getFunctionOption(toFormat, opts, UnicodeString("weekday"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useDate = true;
+            if (weekday == UnicodeString("long")) {
+                ADD_PATTERN("EEEE");
+            } else if (weekday == UnicodeString("short")) {
+                ADD_PATTERN("EEEEE");
+            } else if (weekday == UnicodeString("narrow")) {
+                ADD_PATTERN("EEEEE");
+                }
+        }
+        // Day
+        UnicodeString day = getFunctionOption(toFormat, opts, UnicodeString("day"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useDate = true;
+            if (day == UnicodeString("numeric")) {
+                ADD_PATTERN("d");
+            } else if (day == UnicodeString("2-digit")) {
+                ADD_PATTERN("dd");
+            }
+        }
+        // Hour
+        UnicodeString hour = getFunctionOption(toFormat, opts, UnicodeString("hour"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useTime = true;
+            if (hour == UnicodeString("numeric")) {
+                ADD_PATTERN("h");
+            } else if (hour == UnicodeString("2-digit")) {
+                ADD_PATTERN("hh");
+            }
+        }
+        // Minute
+        UnicodeString minute = getFunctionOption(toFormat, opts, UnicodeString("minute"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useTime = true;
+            if (minute == UnicodeString("numeric")) {
+                ADD_PATTERN("m");
+            } else if (minute == UnicodeString("2-digit")) {
+                ADD_PATTERN("mm");
+            }
+        }
+        // Second
+        UnicodeString second = getFunctionOption(toFormat, opts, UnicodeString("second"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useTime = true;
+            if (second == UnicodeString("numeric")) {
+                ADD_PATTERN("s");
+            } else if (second == UnicodeString("2-digit")) {
+                ADD_PATTERN("ss");
+            }
+        }
+    }
+    /*
+      TODO
+      fractionalSecondDigits
+      hourCycle
+      timeZoneName
+      era
+    */
+    if ((fieldOptions && (hasDateStyleOption || hasTimeStyleOption))
+        && type == DateTimeFactory::DateTimeType::DateTime) {
+        // Can't have both field and style options
+        errorCode = U_MF_BAD_OPTION_ERROR;
+        return {};
+    }
+    if (!useStyle) {
         df.adoptInstead(DateFormat::createInstanceForSkeleton(skeleton, errorCode));
     }
 
