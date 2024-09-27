@@ -16,31 +16,6 @@ sr_Cyrl_BA{
             10p27{"R{0}"}
             10p30{"Q{0}"}
         }
-        concentr{
-            portion-per-1e9{
-                case{
-                    accusative{
-                        few{"{0} дијела на милијарду"}
-                        one{"{0} дио на милијарду"}
-                        other{"{0} дијелова на милијарду"}
-                    }
-                    genitive{
-                        few{"{0} дијела на милијарду"}
-                        one{"{0} дијела на милијарду"}
-                        other{"{0} дијелова на милијарду"}
-                    }
-                    instrumental{
-                        few{"{0} дијела на милијарду"}
-                        one{"{0} дијелом на милијарду"}
-                        other{"{0} дијелова на милијарду"}
-                    }
-                }
-                dnam{"дијелови на милијарду"}
-                few{"{0} дијела на милијарду"}
-                one{"{0} дио на милијарду"}
-                other{"{0} дијелова на милијарду"}
-            }
-        }
         duration{
             century{
                 case{
@@ -196,11 +171,6 @@ sr_Cyrl_BA{
         }
     }
     unitsNarrow{
-        concentr{
-            portion-per-1e9{
-                dnam{"дијелови/милијарда"}
-            }
-        }
         duration{
             month{
                 few{"{0} мјес."}
@@ -270,11 +240,6 @@ sr_Cyrl_BA{
         }
     }
     unitsShort{
-        concentr{
-            portion-per-1e9{
-                dnam{"дијелови/милијарда"}
-            }
-        }
         duration{
             month{
                 dnam{"мјесеци"}

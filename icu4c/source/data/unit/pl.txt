@@ -908,28 +908,6 @@ pl{
                 one{"{0} punkt bazowy"}
                 other{"{0} punktu bazowego"}
             }
-            portion-per-1e9{
-                case{
-                    accusative{
-                        few{"{0} części na miliard"}
-                        many{"{0} części na miliard"}
-                        one{"{0} część na miliard"}
-                        other{"{0} części na miliard"}
-                    }
-                    genitive{
-                        few{"{0} części na miliard"}
-                        many{"{0} części na miliard"}
-                        one{"{0} części na miliard"}
-                        other{"{0} części na miliard"}
-                    }
-                }
-                dnam{"części na miliard"}
-                few{"{0} części na miliard"}
-                gender{"feminine"}
-                many{"{0} części na miliard"}
-                one{"{0} część na miliard"}
-                other{"{0} części na miliard"}
-            }
         }
         consumption{
             liter-per-100-kilometer{

@@ -928,11 +928,6 @@ ps{
         }
     }
     unitsNarrow{
-        concentr{
-            portion-per-1e9{
-                dnam{"p/b"}
-            }
-        }
         consumption{
             mile-per-gallon-imperial{
                 dnam{"mpg UK"}
@@ -1182,9 +1177,6 @@ ps{
             }
             permyriad{
                 dnam{"زرمه"}
-            }
-            portion-per-1e9{
-                dnam{"p/b"}
             }
         }
         consumption{

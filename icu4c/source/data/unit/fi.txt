@@ -562,29 +562,6 @@ fi{
                 one{"{0} peruspiste"}
                 other{"{0} peruspistettä"}
             }
-            portion-per-1e9{
-                case{
-                    elative{
-                        one{"{0} miljardisosasta"}
-                        other{"{0} miljardisosasta"}
-                    }
-                    genitive{
-                        one{"{0} miljardisosan"}
-                        other{"{0} miljardisosan"}
-                    }
-                    illative{
-                        one{"{0} miljardisosaan"}
-                        other{"{0} miljardisosaan"}
-                    }
-                    partitive{
-                        one{"{0} miljardisosaa"}
-                        other{"{0} miljardisosaa"}
-                    }
-                }
-                dnam{"miljardisosat"}
-                one{"{0} miljardisosa"}
-                other{"{0} miljardisosaa"}
-            }
         }
         consumption{
             liter-per-100-kilometer{

@@ -179,11 +179,6 @@ af{
                 one{"{0} per tienduisend"}
                 other{"{0} per tienduisend"}
             }
-            portion-per-1e9{
-                dnam{"deeltjies per miljard"}
-                one{"{0} deeltjie per miljard"}
-                other{"{0} deeltjies per miljard"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1063,11 +1058,6 @@ af{
             permyriad{
                 dnam{"‱"}
             }
-            portion-per-1e9{
-                dnam{"deeltjies/miljard"}
-                one{"{0}deeltjie/miljard"}
-                other{"{0}deeltjies/miljard"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1819,11 +1809,6 @@ af{
             }
             permyriad{
                 dnam{"per tienduisend"}
-            }
-            portion-per-1e9{
-                dnam{"deeltjies/miljard"}
-                one{"{0} deeltjie/miljard"}
-                other{"{0} deeltjies/miljard"}
             }
         }
         consumption{

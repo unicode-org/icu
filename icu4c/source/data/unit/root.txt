@@ -177,10 +177,6 @@ root{
                 dnam{"‱"}
                 other{"{0}‱"}
             }
-            portion-per-1e9{
-                dnam{"ppb"}
-                other{"{0} ppb"}
-            }
         }
         consumption{
             liter-per-100-kilometer{

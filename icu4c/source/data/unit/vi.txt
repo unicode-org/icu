@@ -118,10 +118,6 @@ vi{
             permyriad{
                 other{"{0} phần vạn"}
             }
-            portion-per-1e9{
-                dnam{"phần tỷ"}
-                other{"{0} phần tỷ"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -642,9 +638,6 @@ vi{
             permyriad{
                 dnam{"‱"}
             }
-            portion-per-1e9{
-                other{"{0}ppb"}
-            }
         }
         digital{
             byte{
@@ -807,9 +800,6 @@ vi{
             }
             permyriad{
                 dnam{"phần vạn"}
-            }
-            portion-per-1e9{
-                dnam{"phần tỷ"}
             }
         }
         consumption{

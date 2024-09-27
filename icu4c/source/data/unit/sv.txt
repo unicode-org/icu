@@ -350,18 +350,6 @@ sv{
                 one{"{0} promyriad"}
                 other{"{0} promyriad"}
             }
-            portion-per-1e9{
-                case{
-                    genitive{
-                        one{"{0} miljarddels"}
-                        other{"{0} miljarddelars"}
-                    }
-                }
-                dnam{"miljarddelar"}
-                gender{"common"}
-                one{"{0} miljarddel"}
-                other{"{0} miljarddelar"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1956,10 +1944,6 @@ sv{
             permyriad{
                 one{"{0}‱"}
                 other{"{0}‱"}
-            }
-            portion-per-1e9{
-                one{"{0}ppb"}
-                other{"{0}ppb"}
             }
         }
         consumption{

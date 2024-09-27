@@ -131,11 +131,6 @@ ak{
                 one{"pɛɛmiride {0}"}
                 other{"pɛɛmiride {0}"}
             }
-            portion-per-1e9{
-                dnam{"paat ɔpepepem biara"}
-                one{"paat ɔpepepem biara {0}"}
-                other{"paat ɔpepepem biara {0}"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -654,9 +649,6 @@ ak{
             permyriad{
                 dnam{"pɛɛmiride"}
             }
-            portion-per-1e9{
-                dnam{"paat ɔpepepem biara"}
-            }
         }
         consumption{
             liter-per-kilometer{
@@ -889,9 +881,6 @@ ak{
             }
             permyriad{
                 dnam{"pɛɛmiride"}
-            }
-            portion-per-1e9{
-                dnam{"paat ɔpepepem biara"}
             }
         }
         consumption{

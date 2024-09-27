@@ -139,10 +139,6 @@ lo{
                 dnam{"ເປີ​ມີ​ຣຽດ"}
                 other{"{0} ເປີ​ມີ​ຣຽດ"}
             }
-            portion-per-1e9{
-                dnam{"ສ່ວນໃນພັນລ້ານສ່ວນ"}
-                other{"{0} ສ່ວນໃນພັນລ້ານສ່ວນ"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -554,10 +550,6 @@ lo{
             permille{
                 dnam{"‰"}
             }
-            portion-per-1e9{
-                dnam{"ສ່ວນ/ພັນລ້ານສ່ວນ"}
-                other{"{0}ppb"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -779,9 +771,6 @@ lo{
             }
             permillion{
                 dnam{"ພາດ/ລ້ານ"}
-            }
-            portion-per-1e9{
-                dnam{"ສ່ວນ/ພັນລ້ານສ່ວນ"}
             }
         }
         consumption{

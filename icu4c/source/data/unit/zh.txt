@@ -79,10 +79,6 @@ zh{
             permillion{
                 other{"百万分之{0}"}
             }
-            portion-per-1e9{
-                dnam{"十亿分比"}
-                other{"十亿分之{0}"}
-            }
         }
         consumption{
             liter-per-100-kilometer{

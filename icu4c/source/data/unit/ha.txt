@@ -182,11 +182,6 @@ ha{
                 one{"permyriad {0}"}
                 other{"permyriad {0}"}
             }
-            portion-per-1e9{
-                dnam{"sashi a cikin biliyan"}
-                one{"sashi {0} a cikin biliyan"}
-                other{"sashi {0} a cikin biliyan"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1117,11 +1112,6 @@ ha{
             permyriad{
                 dnam{"‱"}
             }
-            portion-per-1e9{
-                dnam{"sashi/biliyan"}
-                one{"sashi {0} a cikin biliyan"}
-                other{"sashi {0} a cikin biliyan"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1980,11 +1970,6 @@ ha{
                 dnam{"permyriad"}
                 one{"‱{0}"}
                 other{"‱{0}"}
-            }
-            portion-per-1e9{
-                dnam{"sashi/biliyan"}
-                one{"sashi {0} a cikin biliyan"}
-                other{"sashi {0} a cikin biliyan"}
             }
         }
         consumption{

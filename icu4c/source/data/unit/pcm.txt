@@ -186,11 +186,6 @@ pcm{
                 one{"{0} Fọ Ích Tẹ́n Taúzan"}
                 other{"{0} Fọ Ích Tẹ́n Taúzan"}
             }
-            portion-per-1e9{
-                dnam{"pat fọ ích bíliọn"}
-                one{"{0} pat fọ ích bíliọn"}
-                other{"{0} pat fọ ích bíliọn"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1031,11 +1026,6 @@ pcm{
             permyriad{
                 dnam{"‱"}
             }
-            portion-per-1e9{
-                dnam{"pfib"}
-                one{"{0}pfib"}
-                other{"{0}pfib"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1354,11 +1344,6 @@ pcm{
             }
             permyriad{
                 dnam{"Fọ Ích Tẹ́n Taúzan"}
-            }
-            portion-per-1e9{
-                dnam{"pat/bíliọn"}
-                one{"{0} pfib"}
-                other{"{0} pfib"}
             }
         }
         consumption{

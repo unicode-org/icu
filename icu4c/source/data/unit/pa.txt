@@ -288,18 +288,6 @@ pa{
                 one{"{0} ਪ੍ਰਤੀ ਦਸ ਹਜ਼ਾਰ"}
                 other{"{0} ਪ੍ਰਤੀ ਦਸ ਹਜ਼ਾਰ"}
             }
-            portion-per-1e9{
-                case{
-                    oblique{
-                        one{"{0} ਹਿੱਸਾ ਪ੍ਰਤੀ ਅਰਬ"}
-                        other{"{0} ਹਿੱਸਾ ਪ੍ਰਤੀ ਅਰਬ"}
-                    }
-                }
-                dnam{"ਹਿੱਸਾ ਪ੍ਰਤੀ ਅਰਬ"}
-                gender{"masculine"}
-                one{"{0} ਹਿੱਸਾ ਪ੍ਰਤੀ ਅਰਬ"}
-                other{"{0} ਹਿੱਸਾ ਪ੍ਰਤੀ ਅਰਬ"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -2081,9 +2069,6 @@ pa{
             }
             permyriad{
                 dnam{"ਪ੍ਰਤੀ ਦਸ ਹਜ਼ਾਰ"}
-            }
-            portion-per-1e9{
-                dnam{"ਹਿੱਸਾ/ਅਰਬ"}
             }
         }
         consumption{

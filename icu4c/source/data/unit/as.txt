@@ -135,11 +135,6 @@ as{
                 one{"{0} পাৰমিৰেইড"}
                 other{"{0} পাৰমিৰেইড"}
             }
-            portion-per-1e9{
-                dnam{"প্ৰতি বিলিয়নত অংশ"}
-                one{"{0} প্ৰতি বিলিয়নত অংশ"}
-                other{"{0} প্ৰতি বিলিয়নত অংশ"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -813,10 +808,6 @@ as{
             permyriad{
                 dnam{"‱"}
             }
-            portion-per-1e9{
-                one{"{0}ppb"}
-                other{"{0}ppb"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1135,9 +1126,6 @@ as{
             }
             permyriad{
                 dnam{"পাৰমিৰেইড"}
-            }
-            portion-per-1e9{
-                dnam{"অংশ/বিলিয়ন"}
             }
         }
         consumption{

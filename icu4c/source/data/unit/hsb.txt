@@ -277,13 +277,6 @@ hsb{
                 other{"{0} dźesaćinow promila"}
                 two{"{0} dźesaćinje promila"}
             }
-            portion-per-1e9{
-                dnam{"miliardćina"}
-                few{"{0} miliardćiny"}
-                one{"{0} miliardćina"}
-                other{"{0} miliardćinow"}
-                two{"{0} miliardćinje"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1447,15 +1440,6 @@ hsb{
                 two{"{0}°"}
             }
         }
-        concentr{
-            portion-per-1e9{
-                dnam{"n"}
-                few{"{0} n"}
-                one{"{0} n"}
-                other{"{0} n"}
-                two{"{0} n"}
-            }
-        }
         consumption{
             mile-per-gallon-imperial{
                 dnam{"mpg br."}
@@ -1648,13 +1632,6 @@ hsb{
                 one{"{0} ‱"}
                 other{"{0} ‱"}
                 two{"{0} ‱"}
-            }
-            portion-per-1e9{
-                dnam{"nano"}
-                few{"{0} nano"}
-                one{"{0} nano"}
-                other{"{0} nano"}
-                two{"{0} nano"}
             }
         }
         consumption{

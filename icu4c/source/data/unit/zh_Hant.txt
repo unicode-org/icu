@@ -62,10 +62,6 @@ zh_Hant{
                 dnam{"每公升毫莫耳"}
                 other{"每公升 {0} 毫莫耳"}
             }
-            portion-per-1e9{
-                dnam{"十億分點濃度"}
-                other{"{0} 十億分點濃度"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -365,9 +361,6 @@ zh_Hant{
             }
             permillion{
                 other{"{0}百萬分率"}
-            }
-            portion-per-1e9{
-                other{"{0}ppb"}
             }
         }
         consumption{
@@ -983,9 +976,6 @@ zh_Hant{
             permillion{
                 dnam{"百萬分率"}
                 other{"{0} 百萬分率"}
-            }
-            portion-per-1e9{
-                dnam{"濃度/十億"}
             }
         }
         consumption{

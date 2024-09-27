@@ -187,11 +187,6 @@ bg{
                 one{"{0} базисен пункт"}
                 other{"{0} базисни пункта"}
             }
-            portion-per-1e9{
-                dnam{"части на милиард"}
-                one{"{0} част на милиард"}
-                other{"{0} части на милиард"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1190,9 +1185,6 @@ bg{
             }
             permyriad{
                 dnam{"базисен пункт"}
-            }
-            portion-per-1e9{
-                dnam{"части/милиард"}
             }
         }
         consumption{

@@ -29,12 +29,6 @@ ig{
                 }
             }
         }
-        concentr{
-            portion-per-1e9{
-                dnam{"akụkụ kwa ijeri"}
-                other{"{0} akụkụ kwa ijeri"}
-            }
-        }
         coordinate{
             dnam{"cardinal direction"}
             north{"{0} north"}
@@ -157,9 +151,6 @@ ig{
             permillion{
                 other{"{0}ppm"}
             }
-            portion-per-1e9{
-                dnam{"akụkụ/ijeri"}
-            }
         }
         duration{
             day{
@@ -237,9 +228,6 @@ ig{
             item{
                 dnam{"ihe"}
                 other{"{0} ihe"}
-            }
-            portion-per-1e9{
-                dnam{"akụkụ/ijeri"}
             }
         }
         duration{
