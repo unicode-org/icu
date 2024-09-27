@@ -119,6 +119,13 @@
       "exp": "{$date}",
       "expErrors": [{"type": "bad-option"}],
       "params": [{ "name": "date", "value": { "date": 1669261357000 }}]
+    },
+    {
+      "comment": "Datetime can have style options or field options, but not both",
+      "src": "{$date :datetime timeStyle=full day=numeric}",
+      "exp": "{$date}",
+      "expErrors": [{"type": "bad-option"}],
+      "params": [{ "name": "date", "value": { "date": 1669261357000 }}]
     }
   ]
 }
