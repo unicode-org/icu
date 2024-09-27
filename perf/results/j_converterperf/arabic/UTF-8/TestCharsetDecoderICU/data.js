@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727373724879,
+  "lastUpdate": 1727417532701,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27687,6 +27687,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.4399085177722328,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "808b9762fe807b4d01b88bec3e29f3745b522209",
+          "message": "ICU-22928 Don't generate data for concentr/perbillion structure - binary data",
+          "timestamp": "2024-09-26T22:55:42-07:00",
+          "tree_id": "cfe5d2186deb2d5d5c3c825cf3301e7484158eb7",
+          "url": "https://github.com/unicode-org/icu/commit/808b9762fe807b4d01b88bec3e29f3745b522209"
+        },
+        "date": 1727417358336,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.680550346409855,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
