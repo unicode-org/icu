@@ -503,7 +503,7 @@
             </executions>
             <configuration>
               <excludes>
-                <exclude>/com/ibm/icu/impl/data/icudt*/**</exclude>
+                <exclude>/com/ibm/icu/impl/data/icudata/**</exclude>
                 <exclude>/com/ibm/icu/impl/duration/impl/data/*.xml</exclude>
                 <exclude>/com/ibm/icu/impl/duration/impl/data/*.xml.escaped</exclude>
                 <exclude>/com/ibm/icu/impl/duration/impl/data/*.txt</exclude>
