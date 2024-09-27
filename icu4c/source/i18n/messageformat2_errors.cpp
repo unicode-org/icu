@@ -27,6 +27,10 @@ namespace message2 {
         addError(DynamicError(DynamicErrorType::FormattingError, UnicodeString("unknown formatter")), status);
     }
 
+    void DynamicErrors::setBadOptionError(const FunctionName& functionName, UErrorCode& status) {
+        addError(DynamicError(DynamicErrorType::BadOptionError, functionName), status);
+    }
+
     void DynamicErrors::setOperandMismatchError(const FunctionName& formatterName, UErrorCode& status) {
         addError(DynamicError(DynamicErrorType::OperandMismatchError, formatterName), status);
     }
@@ -121,29 +125,27 @@ namespace message2 {
         if (U_FAILURE(status)) {
             return;
         }
-            U_ASSERT(resolutionAndFormattingErrors->size() > 0);
-            switch (first().type) {
-            case DynamicErrorType::UnknownFunction: {
-                status = U_MF_UNKNOWN_FUNCTION_ERROR;
-                break;
-            }
-            case DynamicErrorType::UnresolvedVariable: {
-                status = U_MF_UNRESOLVED_VARIABLE_ERROR;
-                break;
-            }
-            case DynamicErrorType::FormattingError: {
-                status = U_MF_FORMATTING_ERROR;
-                break;
-            }
-            case DynamicErrorType::OperandMismatchError: {
-                status = U_MF_OPERAND_MISMATCH_ERROR;
-                break;
-            }
-            case DynamicErrorType::SelectorError: {
-                status = U_MF_SELECTOR_ERROR;
-                break;
-            }
-            }
+        U_ASSERT(resolutionAndFormattingErrors->size() > 0);
+        switch (first().type) {
+        case DynamicErrorType::UnknownFunction:
+            status = U_MF_UNKNOWN_FUNCTION_ERROR;
+            break;
+        case DynamicErrorType::UnresolvedVariable:
+            status = U_MF_UNRESOLVED_VARIABLE_ERROR;
+            break;
+        case DynamicErrorType::FormattingError:
+            status = U_MF_FORMATTING_ERROR;
+            break;
+        case DynamicErrorType::OperandMismatchError:
+            status = U_MF_OPERAND_MISMATCH_ERROR;
+            break;
+        case DynamicErrorType::BadOptionError:
+            status = U_MF_BAD_OPTION_ERROR;
+            break;
+        case DynamicErrorType::SelectorError:
+            status = U_MF_SELECTOR_ERROR;
+            break;
+        }
     }
 
     void StaticErrors::addSyntaxError(UErrorCode& status) {
@@ -199,33 +201,23 @@ namespace message2 {
 
         void* errorP = static_cast<void*>(create<DynamicError>(std::move(e), status));
         U_ASSERT(resolutionAndFormattingErrors.isValid());
+        resolutionAndFormattingErrors->adoptElement(errorP, status);
 
         switch (type) {
-        case DynamicErrorType::UnresolvedVariable: {
+        case DynamicErrorType::UnresolvedVariable:
             unresolvedVariableError = true;
-            resolutionAndFormattingErrors->adoptElement(errorP, status);
             break;
-        }
-        case DynamicErrorType::FormattingError: {
+        case DynamicErrorType::FormattingError:
+        case DynamicErrorType::OperandMismatchError:
+        case DynamicErrorType::BadOptionError:
             formattingError = true;
-            resolutionAndFormattingErrors->adoptElement(errorP, status);
             break;
-        }
-        case DynamicErrorType::OperandMismatchError: {
-            formattingError = true;
-            resolutionAndFormattingErrors->adoptElement(errorP, status);
-            break;
-        }
-        case DynamicErrorType::SelectorError: {
+        case DynamicErrorType::SelectorError:
             selectorError = true;
-            resolutionAndFormattingErrors->adoptElement(errorP, status);
             break;
-        }
-        case DynamicErrorType::UnknownFunction: {
+        case DynamicErrorType::UnknownFunction:
             unknownFunctionError = true;
-            resolutionAndFormattingErrors->adoptElement(errorP, status);
             break;
-        }
         }
     }
 
