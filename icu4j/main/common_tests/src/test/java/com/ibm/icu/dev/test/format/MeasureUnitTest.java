@@ -2901,7 +2901,6 @@ public class MeasureUnitTest extends CoreTestFmwk {
                 MeasureUnit.PERMILLE,
                 MeasureUnit.PART_PER_MILLION,
                 MeasureUnit.PERMYRIAD,
-                MeasureUnit.PORTION_PER_1E9,
                 MeasureUnit.LITER_PER_100KILOMETERS,
                 MeasureUnit.LITER_PER_KILOMETER,
                 MeasureUnit.MILE_PER_GALLON,
@@ -4129,9 +4128,44 @@ public class MeasureUnitTest extends CoreTestFmwk {
                     System.out.println("#endif /* U_HIDE_DRAFT_API */");
                 }
                 System.out.println("");
+                // Hack: METRIC-TON unit changed its name from "metric-ton" to "tonne"
+                // In order to preserve the existing APIs for "metric-ton" we need to
+                // add those APIs manually
+                if (name.equals("Tonne")) {
+                    addCXXHForMetricTon();
+                }
             }
         }
         System.out.println("// End generated createXXX methods");
+    }
+
+    // Add the headers for "metric-ton"
+    // The tool won't create them any more    
+    private static void addCXXHForMetricTon() {
+        System.out.println("    /**");
+        System.out.println("     * Returns by pointer, unit of mass: metric-ton");
+        System.out.println("     * (renamed to tonne in CLDR 42 / ICU 72).");
+        System.out.println("     * Caller owns returned value and must free it.");
+        System.out.println("     * Note: In ICU 74 this will be deprecated in favor of");
+        System.out.println("     * createTonne(), which is currently draft but will");
+        System.out.println("     * become stable in ICU 74, and which uses the preferred naming.");
+        System.out.println("     * Also see {@link #getMetricTon()} and {@link #createTonne()}.");
+        System.out.println("     * @param status ICU error code.");
+        System.out.println("     * @stable ICU 54");
+        System.out.println("     */");
+        System.out.println("    static MeasureUnit *createMetricTon(UErrorCode &status);");
+        System.out.println("");
+        System.out.println("    /**");
+        System.out.println("     * Returns by value, unit of mass: metric-ton");
+        System.out.println("     * (renamed to tonne in CLDR 42 / ICU 72).");
+        System.out.println("     * Note: In ICU 74 this will be deprecated in favor of");
+        System.out.println("     * getTonne(), which is currently draft but will");
+        System.out.println("     * become stable in ICU 74, and which uses the preferred naming.");
+        System.out.println("     * Also see {@link #createMetricTon()} and {@link #getTonne()}.");
+        System.out.println("     * @stable ICU 64");
+        System.out.println("     */");
+        System.out.println("    static MeasureUnit getMetricTon();");
+        System.out.println("");
     }
 
     private static void checkForDup(
@@ -4308,9 +4342,31 @@ public class MeasureUnitTest extends CoreTestFmwk {
                         typeSubType.first, typeSubType.second);
                 System.out.println("}");
                 System.out.println();
+                // Hack: METRIC-TON unit changed its name from "metric-ton" to "tonne"
+                // In order to preserve the existing APIs for "metric-ton" we need to
+                // add those APIs manually
+                if (name.equals("Tonne")) {
+                    addCXXForMetricTon(typeSubType);
+                }
             }
         }
         System.out.println("// End generated code for measunit.cpp");
+    }
+
+    // Add the API skeletons for "metric-ton"
+    // The tool won't create them any more 
+    private static void addCXXForMetricTon(Pair<Integer, Integer> typeSubType) {
+        String name = "MetricTon";
+        System.out.printf("MeasureUnit *MeasureUnit::create%s(UErrorCode &status) {\n", name);
+        System.out.printf("    return MeasureUnit::create(%d, %d, status);\n",
+                        typeSubType.first, typeSubType.second);
+        System.out.println("}");
+        System.out.println();
+        System.out.printf("MeasureUnit MeasureUnit::get%s() {\n", name);
+        System.out.printf("    return MeasureUnit(%d, %d);\n",
+                        typeSubType.first, typeSubType.second);
+        System.out.println("}");
+        System.out.println();
     }
 
     private static String toCamelCase(MeasureUnit unit) {
