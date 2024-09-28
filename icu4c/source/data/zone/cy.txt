@@ -289,11 +289,6 @@ cy{
             lg{"Amser Tsieina"}
             ls{"Amser Safonol Tsieina"}
         }
-        "meta:Choibalsan"{
-            ld{"Amser Haf Choibalsan"}
-            lg{"Amser Choibalsan"}
-            ls{"Amser Safonol Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Amser Ynys Y Nadolig"}
         }

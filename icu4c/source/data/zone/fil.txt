@@ -208,11 +208,6 @@ fil{
             lg{"Oras sa China"}
             ls{"Standard na Oras sa China"}
         }
-        "meta:Choibalsan"{
-            ld{"Oras sa Tag-init ng Choibalsan"}
-            lg{"Oras sa Choibalsan"}
-            ls{"Standard na Oras sa Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Oras sa Christmas Island"}
         }

@@ -42,9 +42,6 @@ da{
         "Asia:Bishkek"{
             ec{"Bisjkek"}
         }
-        "Asia:Choibalsan"{
-            ec{"Tsjojbalsan"}
-        }
         "Asia:Damascus"{
             ec{"Damaskus"}
         }
@@ -362,11 +359,6 @@ da{
             ld{"Kinesisk sommertid"}
             lg{"Kinesisk tid"}
             ls{"Kinesisk normaltid"}
-        }
-        "meta:Choibalsan"{
-            ld{"Tsjojbalsan-sommertid"}
-            lg{"Tsjojbalsan-tid"}
-            ls{"Tsjojbalsan-normaltid"}
         }
         "meta:Christmas"{
             ls{"Juleøen-normaltid"}

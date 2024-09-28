@@ -594,9 +594,6 @@ lv{
         "Asia:Chita"{
             ec{"Čita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Čoibalsana"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -1268,11 +1265,6 @@ lv{
             ld{"Ķīnas vasaras laiks"}
             lg{"Ķīnas laiks"}
             ls{"Ķīnas ziemas laiks"}
-        }
-        "meta:Choibalsan"{
-            ld{"Čoibalsanas vasaras laiks"}
-            lg{"Čoibalsanas laiks"}
-            ls{"Čoibalsanas ziemas laiks"}
         }
         "meta:Christmas"{
             ls{"Ziemsvētku salas laiks"}

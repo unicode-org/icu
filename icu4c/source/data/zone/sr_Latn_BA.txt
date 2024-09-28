@@ -224,11 +224,6 @@ sr_Latn_BA{
             lg{"Kina vrijeme"}
             ls{"Kinesko standardno vrijeme"}
         }
-        "meta:Choibalsan"{
-            ld{"Čojbalsan, ljetnje vrijeme"}
-            lg{"Čojbalsan vrijeme"}
-            ls{"Čojbalsan, standardno vrijeme"}
-        }
         "meta:Christmas"{
             ls{"Božićno ostrvo vrijeme"}
         }

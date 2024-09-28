@@ -455,11 +455,6 @@ br{
             lg{"eur Sina"}
             ls{"eur cʼhoañv Sina"}
         }
-        "meta:Choibalsan"{
-            ld{"eur hañv Choibalsan"}
-            lg{"eur Choibalsan"}
-            ls{"eur cʼhoañv Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"eur Enez Christmas"}
         }

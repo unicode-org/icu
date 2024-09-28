@@ -147,9 +147,6 @@ cs{
         "Asia:Chita"{
             ec{"Čita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Čojbalsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -651,11 +648,6 @@ cs{
             ld{"čínský letní čas"}
             lg{"čínský čas"}
             ls{"čínský standardní čas"}
-        }
-        "meta:Choibalsan"{
-            ld{"čojbalsanský letní čas"}
-            lg{"čojbalsanský čas"}
-            ls{"čojbalsanský standardní čas"}
         }
         "meta:Christmas"{
             ls{"čas Vánočního ostrova"}

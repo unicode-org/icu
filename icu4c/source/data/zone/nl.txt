@@ -108,9 +108,6 @@ nl{
         "Asia:Calcutta"{
             ec{"Calcutta"}
         }
-        "Asia:Choibalsan"{
-            ec{"Tsjojbalsan"}
-        }
         "Asia:Dushanbe"{
             ec{"Doesjanbe"}
         }
@@ -492,11 +489,6 @@ nl{
             ld{"Chinese zomertijd"}
             lg{"Chinese tijd"}
             ls{"Chinese standaardtijd"}
-        }
-        "meta:Choibalsan"{
-            ld{"Tsjojbalsan-zomertijd"}
-            lg{"Tsjojbalsan-tijd"}
-            ls{"Tsjojbalsan-standaardtijd"}
         }
         "meta:Christmas"{
             ls{"Christmaseilandse tijd"}

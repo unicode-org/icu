@@ -164,11 +164,6 @@ wo{
             lg{"Waxtu Chine"}
             ls{"Waxtu buñ miin ci Chine"}
         }
-        "meta:Choibalsan"{
-            ld{"Choibalsan Summer Time"}
-            lg{"waxtu choibalsan"}
-            ls{"Choibalsan waxtu standard"}
-        }
         "meta:Christmas"{
             ls{"waxtu ile bu noel"}
         }

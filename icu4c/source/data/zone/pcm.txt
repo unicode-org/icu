@@ -660,9 +660,6 @@ pcm{
         "Asia:Chita"{
             ec{"Chítá"}
         }
-        "Asia:Choibalsan"{
-            ec{"Choibálsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolómbo"}
         }
@@ -1362,11 +1359,6 @@ pcm{
             ld{"Chaína Délaít Taim"}
             lg{"Chaína Taim"}
             ls{"Chaína Fíksd Taim"}
-        }
-        "meta:Choibalsan"{
-            ld{"Choibálsan Họ́t Sízin Taim"}
-            lg{"Choibálsan Taim"}
-            ls{"Choibálsan Fíksd Taim"}
         }
         "meta:Christmas"{
             ls{"Krísmás Aíland Taim"}

@@ -173,11 +173,6 @@ ha{
             lg{"Lokacin Sin"}
             ls{"Tsayayyen Lokacin Sin"}
         }
-        "meta:Choibalsan"{
-            ld{"Lokacin Bazara na Choibalsan"}
-            lg{"Lokacin Choibalsan"}
-            ls{"Tsayayyen Lokacin Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Lokacin Christmas Island"}
         }

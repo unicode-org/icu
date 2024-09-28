@@ -507,11 +507,6 @@ hr{
             lg{"kinesko vrijeme"}
             ls{"kinesko standardno vrijeme"}
         }
-        "meta:Choibalsan"{
-            ld{"choibalsansko ljetno vrijeme"}
-            lg{"choibalsansko vrijeme"}
-            ls{"choibalsansko standardno vrijeme"}
-        }
         "meta:Christmas"{
             ls{"vrijeme Božićnog Otoka"}
         }

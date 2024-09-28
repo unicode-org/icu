@@ -594,9 +594,6 @@ so{
         "Asia:Chita"{
             ec{"Jiita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Joybalsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -1259,11 +1256,6 @@ so{
             ld{"Waqtiga Dharaarta ee Shiinaha"}
             lg{"Waqtiga Shiinaha"}
             ls{"Waqtiga Caadiga Ah ee Shiinaha"}
-        }
-        "meta:Choibalsan"{
-            ld{"Waqtiga Xagaaga ee Joybalsan"}
-            lg{"Waqtiga Joybalsan"}
-            ls{"Waqtiga Caadiga Ah ee Joybalsan"}
         }
         "meta:Christmas"{
             ls{"Waqtiga Kirismas Aylaan"}

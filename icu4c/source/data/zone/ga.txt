@@ -622,11 +622,6 @@ ga{
             lg{"Am na Síne"}
             ls{"Am Caighdeánach na Síne"}
         }
-        "meta:Choibalsan"{
-            ld{"Am Samhraidh Choibalsan"}
-            lg{"Am Choibalsan"}
-            ls{"Am Caighdeánach Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Am Oileán na Nollag"}
         }

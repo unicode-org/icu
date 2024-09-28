@@ -19,9 +19,6 @@ nn{
         "Asia:Ashgabat"{
             ec{"Asjgabat"}
         }
-        "Asia:Choibalsan"{
-            ec{"Tsjojbalsan"}
-        }
         "Asia:Hovd"{
             ec{"Khovd"}
         }
@@ -185,11 +182,6 @@ nn{
             ld{"kinesisk sommartid"}
             lg{"kinesisk tid"}
             ls{"kinesisk normaltid"}
-        }
-        "meta:Choibalsan"{
-            ld{"sommartid for Tsjojbalsan"}
-            lg{"tidssone for Tsjojbalsan"}
-            ls{"normaltid for Tsjojbalsan"}
         }
         "meta:Cocos"{
             ls{"tidssone for Kokosøyane"}

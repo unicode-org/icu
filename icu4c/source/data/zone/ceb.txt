@@ -170,11 +170,6 @@ ceb{
             lg{"Oras sa China"}
             ls{"Standard nga Oras sa China"}
         }
-        "meta:Choibalsan"{
-            ld{"Oras sa Ting-init sa Choibalsan"}
-            lg{"Oras sa Choibalsan"}
-            ls{"Standard nga Oras sa Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Oras sa Christmas Island"}
         }

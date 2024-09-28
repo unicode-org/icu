@@ -126,9 +126,6 @@ fi{
         "Asia:Chita"{
             ec{"Tšita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Tšoibalsa"}
-        }
         "Asia:Damascus"{
             ec{"Damaskos"}
         }
@@ -541,11 +538,6 @@ fi{
             ld{"Kiinan kesäaika"}
             lg{"Kiinan aika"}
             ls{"Kiinan normaaliaika"}
-        }
-        "meta:Choibalsan"{
-            ld{"Tšoibalsan kesäaika"}
-            lg{"Tšoibalsan aika"}
-            ls{"Tšoibalsan normaaliaika"}
         }
         "meta:Christmas"{
             ls{"Joulusaaren aika"}

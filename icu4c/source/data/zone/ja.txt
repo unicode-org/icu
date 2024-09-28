@@ -678,9 +678,6 @@ ja{
         "Asia:Chita"{
             ec{"チタ"}
         }
-        "Asia:Choibalsan"{
-            ec{"チョイバルサン"}
-        }
         "Asia:Colombo"{
             ec{"コロンボ"}
         }
@@ -1444,11 +1441,6 @@ ja{
             ld{"中国夏時間"}
             lg{"中国時間"}
             ls{"中国標準時"}
-        }
-        "meta:Choibalsan"{
-            ld{"チョイバルサン夏時間"}
-            lg{"チョイバルサン時間"}
-            ls{"チョイバルサン標準時"}
         }
         "meta:Christmas"{
             ls{"クリスマス島時間"}

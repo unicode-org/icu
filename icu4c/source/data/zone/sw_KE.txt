@@ -127,11 +127,6 @@ sw_KE{
             lg{"Saa za Kepuvede"}
             ls{"Saa za Wastani za Kepuvede"}
         }
-        "meta:Choibalsan"{
-            ld{"Saa za Majira ya Joto za Choibalsan"}
-            lg{"Saa za Choibalsan"}
-            ls{"Saa za Wastani za Choibalsan"}
-        }
         "meta:Colombia"{
             ld{"Saa za Majira ya Joto za Kolombia"}
             lg{"Saa za Kolombia"}

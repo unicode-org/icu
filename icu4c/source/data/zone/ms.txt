@@ -237,11 +237,6 @@ ms{
             lg{"Waktu China"}
             ls{"Waktu Piawai China"}
         }
-        "meta:Choibalsan"{
-            ld{"Waktu Musim Panas Choibalsan"}
-            lg{"Waktu Choibalsan"}
-            ls{"Waktu Piawai Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Waktu Pulau Christmas"}
         }

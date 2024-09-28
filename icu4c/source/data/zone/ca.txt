@@ -534,11 +534,6 @@ ca{
             lg{"Hora de la Xina"}
             ls{"Hora estàndard de la Xina"}
         }
-        "meta:Choibalsan"{
-            ld{"Hora d’estiu de Choibalsan"}
-            lg{"Hora de Choibalsan"}
-            ls{"Hora estàndard de Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Hora de Kiritimati"}
         }

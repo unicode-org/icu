@@ -675,9 +675,6 @@ kxv{
         "Asia:Chita"{
             ec{"cita"}
         }
-        "Asia:Choibalsan"{
-            ec{"koibalsan"}
-        }
         "Asia:Colombo"{
             ec{"kolombo"}
         }
@@ -1407,11 +1404,6 @@ kxv{
             ld{"cin delāiṭ belā"}
             lg{"cin belā"}
             ls{"cin mānānka belā"}
-        }
-        "meta:Choibalsan"{
-            ld{"koibālsn kār~ā belā"}
-            lg{"koibālsn belā"}
-            ls{"koibālsn mānānka belā"}
         }
         "meta:Christmas"{
             ls{"krismās dīp belā"}

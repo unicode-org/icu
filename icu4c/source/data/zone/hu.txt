@@ -144,9 +144,6 @@ hu{
         "Asia:Chita"{
             ec{"Csita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Csojbalszan"}
-        }
         "Asia:Damascus"{
             ec{"Damaszkusz"}
         }
@@ -677,11 +674,6 @@ hu{
             ld{"kínai nyári idő"}
             lg{"kínai idő"}
             ls{"kínai téli idő"}
-        }
-        "meta:Choibalsan"{
-            ld{"csojbalszani nyári idő"}
-            lg{"csojbalszani idő"}
-            ls{"csojbalszani téli idő"}
         }
         "meta:Christmas"{
             ls{"karácsony-szigeti idő"}

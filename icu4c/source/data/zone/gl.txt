@@ -615,11 +615,6 @@ gl{
             lg{"hora da China"}
             ls{"hora estándar da China"}
         }
-        "meta:Choibalsan"{
-            ld{"hora de verán de Choibalsan"}
-            lg{"hora de Choibalsan"}
-            ls{"hora estándar de Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"hora da Illa Christmas"}
         }

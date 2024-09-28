@@ -93,9 +93,6 @@ de{
         "Asia:Chita"{
             ec{"Tschita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Tschoibalsan"}
-        }
         "Asia:Damascus"{
             ec{"Damaskus"}
         }
@@ -485,11 +482,6 @@ de{
             ld{"Chinesische Sommerzeit"}
             lg{"Chinesische Zeit"}
             ls{"Chinesische Normalzeit"}
-        }
-        "meta:Choibalsan"{
-            ld{"Tschoibalsan-Sommerzeit"}
-            lg{"Tschoibalsan-Zeit"}
-            ls{"Tschoibalsan-Normalzeit"}
         }
         "meta:Christmas"{
             ls{"Weihnachtsinsel-Zeit"}

@@ -194,11 +194,6 @@ ee{
             lg{"China gaƒoƒo me"}
             ls{"China nutome gaƒoƒo me"}
         }
-        "meta:Choibalsan"{
-            ld{"Choibalsan dzomeŋɔli gaƒoƒo me"}
-            lg{"Choibalsan gaƒoƒo me"}
-            ls{"Choibalsan nutome gaƒoƒo me"}
-        }
         "meta:Christmas"{
             ls{"Christmas Island gaƒoƒo me"}
         }

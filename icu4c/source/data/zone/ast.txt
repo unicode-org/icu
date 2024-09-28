@@ -554,11 +554,6 @@ ast{
             lg{"Hora de China"}
             ls{"Hora estándar de China"}
         }
-        "meta:Choibalsan"{
-            ld{"Hora braniega de Choibalsan"}
-            lg{"Hora de Choibalsan"}
-            ls{"Hora estándar de Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Hora estándar de la Islla Christmas"}
         }

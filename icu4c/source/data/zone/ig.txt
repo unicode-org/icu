@@ -167,11 +167,6 @@ ig{
             lg{"Oge China"}
             ls{"Oge Izugbe China"}
         }
-        "meta:Choibalsan"{
-            ld{"Oge Okpomọkụ Choibals"}
-            lg{"Oge Choibals"}
-            ls{"Oge Izugbe Choibals"}
-        }
         "meta:Christmas"{
             ls{"Oge Ekeresimesi Island"}
         }

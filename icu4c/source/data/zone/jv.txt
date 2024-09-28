@@ -383,11 +383,6 @@ jv{
             lg{"Wektu Cina"}
             ls{"Wektu Standar Cina"}
         }
-        "meta:Choibalsan"{
-            ld{"WEktu Ketigo Choibalsan"}
-            lg{"Wektu Choibalsan"}
-            ls{"Wektu Standar Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Wektu Pulo Natal"}
         }

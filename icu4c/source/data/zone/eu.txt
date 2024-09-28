@@ -159,9 +159,6 @@ eu{
         "Asia:Chita"{
             ec{"Txita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Txoibalsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -570,11 +567,6 @@ eu{
             ld{"Txinako udako ordua"}
             lg{"Txinako ordua"}
             ls{"Txinako ordu estandarra"}
-        }
-        "meta:Choibalsan"{
-            ld{"Txoibalsango udako ordua"}
-            lg{"Txoibalsango ordua"}
-            ls{"Txoibalsango ordu estandarra"}
         }
         "meta:Christmas"{
             ls{"Christmas uharteko ordua"}

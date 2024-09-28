@@ -580,11 +580,6 @@ gd{
             lg{"Àm na Sìne"}
             ls{"Bun-àm na Sìne"}
         }
-        "meta:Choibalsan"{
-            ld{"Tìde samhraidh Choibalsan"}
-            lg{"Àm Choibalsan"}
-            ls{"Bun-àm Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Àm Eilean na Nollaig"}
         }

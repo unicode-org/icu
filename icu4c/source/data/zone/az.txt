@@ -504,9 +504,6 @@ az{
         "Asia:Chita"{
             ec{"Çita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Çoybalsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -1069,11 +1066,6 @@ az{
             ld{"Çin Yay Vaxtı"}
             lg{"Çin Vaxtı"}
             ls{"Çin Standart Vaxtı"}
-        }
-        "meta:Choibalsan"{
-            ld{"Çoybalsan Yay Vaxtı"}
-            lg{"Çoybalsan Vaxtı"}
-            ls{"Çoybalsan Standart Vaxtı"}
         }
         "meta:Christmas"{
             ls{"Milad Adası Vaxtı"}

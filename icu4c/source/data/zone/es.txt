@@ -708,11 +708,6 @@ es{
             lg{"hora de China"}
             ls{"hora estándar de China"}
         }
-        "meta:Choibalsan"{
-            ld{"hora de verano de Choibalsan"}
-            lg{"hora de Choibalsan"}
-            ls{"hora estándar de Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"hora de la Isla de Navidad"}
         }

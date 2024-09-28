@@ -105,9 +105,6 @@ bs{
         "Asia:Brunei"{
             ec{"Bruneji"}
         }
-        "Asia:Choibalsan"{
-            ec{"Čojbalsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -561,11 +558,6 @@ bs{
             ld{"Kinesko ljetno vrijeme"}
             lg{"Kinesko vrijeme"}
             ls{"Kinesko standardno vrijeme"}
-        }
-        "meta:Choibalsan"{
-            ld{"Čojbalsansko ljetno vrijeme"}
-            lg{"Čojbalsansko vrijeme"}
-            ls{"Čojbalsansko standardno vrijeme"}
         }
         "meta:Christmas"{
             ls{"Vrijeme na Božićnom Ostrvu"}

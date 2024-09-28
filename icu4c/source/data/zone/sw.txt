@@ -205,11 +205,6 @@ sw{
             lg{"Saa za Uchina"}
             ls{"Saa za Wastani za Uchina"}
         }
-        "meta:Choibalsan"{
-            ld{"Saa za Majira ya joto za Choibalsan"}
-            lg{"Saa za Choibalsan"}
-            ls{"Saa za Wastani za Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Saa za Kisiwa cha Krismasi"}
         }

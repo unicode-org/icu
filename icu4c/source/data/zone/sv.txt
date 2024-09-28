@@ -111,9 +111,6 @@ sv{
         "Asia:Chita"{
             ec{"Tjita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Tjojbalsan"}
-        }
         "Asia:Damascus"{
             ec{"Damaskus"}
         }
@@ -485,11 +482,6 @@ sv{
             ld{"kinesisk sommartid"}
             lg{"kinesisk tid"}
             ls{"kinesisk normaltid"}
-        }
-        "meta:Choibalsan"{
-            ld{"Tjojbalsan, sommartid"}
-            lg{"Tjojbalsantid"}
-            ls{"Tjojbalsan, normaltid"}
         }
         "meta:Christmas"{
             ls{"Julöns tid"}
