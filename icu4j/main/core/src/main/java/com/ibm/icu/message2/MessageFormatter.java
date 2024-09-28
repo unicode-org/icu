@@ -308,6 +308,7 @@ public class MessageFormatter {
          * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         BEST_EFFORT,
         /**
          * Signal all {@code MessageFormat} errors by throwing a {@link RuntimeException}.
@@ -315,6 +316,7 @@ public class MessageFormatter {
          * @internal ICU 76 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         STRICT
     }
 
