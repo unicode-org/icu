@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727469280081,
+  "lastUpdate": 1727504075465,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -97053,6 +97053,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.6487,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dragan@unicode.org",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "committer": {
+            "email": "131725218+DraganBesevic@users.noreply.github.com",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "distinct": true,
+          "id": "de86b3269ec395f5a5c0595017259a2357975f53",
+          "message": "ICU-22723 Integrate CLDR 46 release beta3, part 3, source files",
+          "timestamp": "2024-09-27T22:38:13-07:00",
+          "tree_id": "6df4450515471f32785a56d184138d4e90685795",
+          "url": "https://github.com/unicode-org/icu/commit/de86b3269ec395f5a5c0595017259a2357975f53"
+        },
+        "date": 1727503894072,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.1515,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.3197,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.6828,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 28.5057,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 39.7253,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 36.2988,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.0632,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.1439,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 86.7131,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.7548,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.7012,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.3964,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
