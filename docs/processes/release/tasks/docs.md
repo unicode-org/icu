@@ -193,8 +193,8 @@ API change report.
 3.  The output file `icu4j<ver>.api3.gz` is created in `<icu4j_root>/out` directory.
 4.  Copy the output .gz file to `<icu4j_root>/tools/build` directory and check in the
     file to the repository.
-5.  You may delete very old versions of the API signature files. Keeping 10
-    versions to the latest should be good enough.
+5.  You may delete very old versions of the API signature files. We keep last 5
+    versions including a new release and ICU_3.6.
 
 Note: This task is only necessary for reference releases, because we won't
 change public APIs in maintenance releases. The API signature file for an ICU4J
