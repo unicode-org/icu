@@ -179,11 +179,6 @@ xh{
             lg{"China Time"}
             ls{"China Standard Time"}
         }
-        "meta:Choibalsan"{
-            ld{"Choibalsan Summer Time"}
-            lg{"Choibalsan Time"}
-            ls{"Choibalsan Standard Time"}
-        }
         "meta:Christmas"{
             ls{"Christmas Island Time"}
         }

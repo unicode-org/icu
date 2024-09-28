@@ -828,11 +828,6 @@ vec{
             lg{"Ora de la Sina"}
             ls{"Ora normale de la Sina"}
         }
-        "meta:Choibalsan"{
-            ld{"Ora d’istà de Choibalsan"}
-            lg{"Ora de Choibalsan"}
-            ls{"Ora normale de Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Ora de l’Ìzola de Nadale"}
         }

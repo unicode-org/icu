@@ -180,9 +180,6 @@ rm{
         "Asia:Brunei"{
             ec{"Bandar Seri Begawan"}
         }
-        "Asia:Choibalsan"{
-            ec{"Tschoibalsan"}
-        }
         "Asia:Dushanbe"{
             ec{"Duschanbe"}
         }

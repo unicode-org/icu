@@ -314,11 +314,6 @@ ia{
             lg{"hora de China"}
             ls{"hora standard de China"}
         }
-        "meta:Choibalsan"{
-            ld{"hora estive de Choibalsan"}
-            lg{"hora de Choibalsan"}
-            ls{"hora standard de Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"hora del Insula de Natal"}
         }

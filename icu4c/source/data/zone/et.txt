@@ -132,9 +132,6 @@ et{
         "Asia:Chita"{
             ec{"Tšita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Tšojbalsan"}
-        }
         "Asia:Damascus"{
             ec{"Damaskus"}
         }
@@ -548,11 +545,6 @@ et{
             ld{"Hiina suveaeg"}
             lg{"Hiina aeg"}
             ls{"Hiina standardaeg"}
-        }
-        "meta:Choibalsan"{
-            ld{"Tšojbalsani suveaeg"}
-            lg{"Tšojbalsani aeg"}
-            ls{"Tšojbalsani standardaeg"}
         }
         "meta:Christmas"{
             ls{"Jõulusaare aeg"}

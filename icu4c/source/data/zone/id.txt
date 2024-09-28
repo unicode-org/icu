@@ -348,11 +348,6 @@ id{
             lg{"Waktu Tiongkok"}
             ls{"Waktu Standar Tiongkok"}
         }
-        "meta:Choibalsan"{
-            ld{"Waktu Musim Panas Choibalsan"}
-            lg{"Waktu Choibalsan"}
-            ls{"Waktu Standar Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Waktu Pulau Natal"}
         }

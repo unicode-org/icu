@@ -477,9 +477,6 @@ sq{
         "Asia:Chita"{
             ec{"Çita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Çoibalsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -1050,11 +1047,6 @@ sq{
             ld{"Ora verore e Kinës"}
             lg{"Ora e Kinës"}
             ls{"Ora standarde e Kinës"}
-        }
-        "meta:Choibalsan"{
-            ld{"Ora verore e Çoibalsanit"}
-            lg{"Ora e Çoibalsanit"}
-            ls{"Ora standarde e Çoibalsanit"}
         }
         "meta:Christmas"{
             ls{"Ora e Ishullit të Krishtlindjeve"}

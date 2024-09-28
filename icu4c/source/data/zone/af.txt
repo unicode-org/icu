@@ -434,11 +434,6 @@ af{
             lg{"China-tyd"}
             ls{"China-standaardtyd"}
         }
-        "meta:Choibalsan"{
-            ld{"Choibalsan-somertyd"}
-            lg{"Choibalsan-tyd"}
-            ls{"Choibalsan-standaardtyd"}
-        }
         "meta:Christmas"{
             ls{"Christmaseiland-tyd"}
         }

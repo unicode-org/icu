@@ -678,9 +678,6 @@ ko{
         "Asia:Chita"{
             ec{"치타"}
         }
-        "Asia:Choibalsan"{
-            ec{"초이발산"}
-        }
         "Asia:Colombo"{
             ec{"콜롬보"}
         }
@@ -1444,11 +1441,6 @@ ko{
             ld{"중국 하계 표준시"}
             lg{"중국 시간"}
             ls{"중국 표준시"}
-        }
-        "meta:Choibalsan"{
-            ld{"초이발산 하계 표준시"}
-            lg{"초이발산 시간"}
-            ls{"초이발산 표준시"}
         }
         "meta:Christmas"{
             ls{"크리스마스섬 시간"}

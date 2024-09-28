@@ -282,11 +282,6 @@ vi{
             lg{"Giờ Trung Quốc"}
             ls{"Giờ Chuẩn Trung Quốc"}
         }
-        "meta:Choibalsan"{
-            ld{"Giờ Mùa Hè Choibalsan"}
-            lg{"Giờ Choibalsan"}
-            ls{"Giờ Chuẩn Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Giờ Đảo Christmas"}
         }

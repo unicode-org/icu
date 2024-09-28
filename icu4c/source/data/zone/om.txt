@@ -182,11 +182,6 @@ om{
             lg{"Sa’aatii Chaayinaa"}
             ls{"Sa’aatii Istaandaardii Chaayinaa"}
         }
-        "meta:Choibalsan"{
-            ld{"Sa’aatii Bonaa Choyibaalsaan"}
-            lg{"Sa’aatii Choyibaalsaan"}
-            ls{"Sa’aatii Istaandaardii Choyibaalsaan"}
-        }
         "meta:Christmas"{
             ls{"Sa’aatii Odola Kirismaas"}
         }

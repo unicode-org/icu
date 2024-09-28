@@ -405,11 +405,6 @@ lb{
             lg{"Chinesesch Zäit"}
             ls{"Chinesesch Normalzäit"}
         }
-        "meta:Choibalsan"{
-            ld{"Choibalsan-Summerzäit"}
-            lg{"Choibalsan-Zäit"}
-            ls{"Choibalsan-Normalzäit"}
-        }
         "meta:Christmas"{
             ls{"Chrëschtdagsinsel-Zäit"}
         }

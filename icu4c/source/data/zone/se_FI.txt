@@ -290,11 +290,6 @@ se_FI{
             lg{"Kiinná áigi"}
             ls{"Kiinná dálveáigi"}
         }
-        "meta:Choibalsan"{
-            ld{"Choibolsana geasseáigi"}
-            lg{"Choibolsana áigi"}
-            ls{"Choibolsana dálveáigi"}
-        }
         "meta:Christmas"{
             ls{"Juovlasullo áigi"}
         }

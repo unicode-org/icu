@@ -138,9 +138,6 @@ sl{
         "Asia:Chita"{
             ec{"Čita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Čojbalsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -552,11 +549,6 @@ sl{
             ld{"Kitajski poletni čas"}
             lg{"Kitajski čas"}
             ls{"Kitajski standardni čas"}
-        }
-        "meta:Choibalsan"{
-            ld{"Čojbalsanski poletni čas"}
-            lg{"Čojbalsanski čas"}
-            ls{"Čojbalsanski standardni čas"}
         }
         "meta:Christmas"{
             ls{"Božičnootoški čas"}

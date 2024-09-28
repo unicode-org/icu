@@ -477,9 +477,6 @@ uz{
         "Asia:Calcutta"{
             ec{"Kalkutta"}
         }
-        "Asia:Choibalsan"{
-            ec{"Choybalsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -1027,11 +1024,6 @@ uz{
             ld{"Xitoy yozgi vaqti"}
             lg{"Xitoy vaqti"}
             ls{"Xitoy standart vaqti"}
-        }
-        "meta:Choibalsan"{
-            ld{"Choybalsan yozgi vaqti"}
-            lg{"Choybalsan vaqti"}
-            ls{"Choybalsan standart vaqti"}
         }
         "meta:Christmas"{
             ls{"Rojdestvo oroli vaqti"}

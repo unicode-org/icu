@@ -450,11 +450,6 @@ it{
             lg{"Ora della Cina"}
             ls{"Ora standard della Cina"}
         }
-        "meta:Choibalsan"{
-            ld{"Ora legale di Choibalsan"}
-            lg{"Ora di Choibalsan"}
-            ls{"Ora standard di Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Ora dell’Isola Christmas"}
         }

@@ -343,11 +343,6 @@ to{
             lg{"houa fakasiaina"}
             ls{"houa fakasiaina taimi totonu"}
         }
-        "meta:Choibalsan"{
-            ld{"houa fakakoipalisani taimi liliu"}
-            lg{"houa fakakoipalisani"}
-            ls{"houa fakakoipalisani taimi totonu"}
-        }
         "meta:Christmas"{
             ls{"houa fakamotukilisimasi"}
         }

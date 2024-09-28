@@ -619,11 +619,6 @@ pt{
             lg{"Horário da China"}
             ls{"Horário Padrão da China"}
         }
-        "meta:Choibalsan"{
-            ld{"Horário de Verão de Choibalsan"}
-            lg{"Horário de Choibalsan"}
-            ls{"Horário Padrão de Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Horário da Ilha Christmas"}
         }

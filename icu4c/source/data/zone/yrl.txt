@@ -636,9 +636,6 @@ yrl{
         "Asia:Chita"{
             ec{"Xita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Xuibausã"}
-        }
         "Asia:Colombo"{
             ec{"Kurũbu"}
         }
@@ -1357,11 +1354,6 @@ yrl{
             ld{"Xina Kurasí Ara Hurariyu"}
             lg{"Xina Hurariyu"}
             ls{"Xina Hurariyu Retewa"}
-        }
-        "meta:Choibalsan"{
-            ld{"Xoibasã Kurasí Ara Hurariyu"}
-            lg{"Xoibasã Hurariyu"}
-            ls{"Xoibasã Hurariyu Retewa"}
         }
         "meta:Christmas"{
             ls{"KapuãmaKiritima Hurariyu"}

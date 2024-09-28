@@ -138,9 +138,6 @@ ku{
         "Asia:Chita"{
             ec{"Çîta"}
         }
-        "Asia:Choibalsan"{
-            ec{"Çoybalsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -592,11 +589,6 @@ ku{
             ld{"Saeta Havînê ya Çînê"}
             lg{"Saeta Çînê"}
             ls{"Saeta Standard a Çînê"}
-        }
-        "meta:Choibalsan"{
-            ld{"Saeta Havînê ya Choibalsanê"}
-            lg{"Saeta Choibalsanê"}
-            ls{"Saeta Standard a Choibalsanê"}
         }
         "meta:Christmas"{
             ls{"Saeta Girava Christmasê"}

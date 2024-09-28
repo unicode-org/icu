@@ -198,9 +198,6 @@ fr{
         "Asia:Chita"{
             ec{"Tchita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Tchoïbalsan"}
-        }
         "Asia:Damascus"{
             ec{"Damas"}
         }
@@ -615,11 +612,6 @@ fr{
             ld{"heure d’été de Chine"}
             lg{"heure de la Chine"}
             ls{"heure normale de la Chine"}
-        }
-        "meta:Choibalsan"{
-            ld{"heure d’été de Choibalsan"}
-            lg{"heure de Choibalsan"}
-            ls{"heure normale de Choibalsan"}
         }
         "meta:Christmas"{
             ls{"heure de l’île Christmas"}

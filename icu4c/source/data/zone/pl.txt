@@ -201,9 +201,6 @@ pl{
         "Asia:Chita"{
             ec{"Czyta"}
         }
-        "Asia:Choibalsan"{
-            ec{"Czojbalsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -703,11 +700,6 @@ pl{
             ld{"Chiny (czas letni)"}
             lg{"czas Chiny"}
             ls{"Chiny (czas standardowy)"}
-        }
-        "meta:Choibalsan"{
-            ld{"Czojbalsan (czas letni)"}
-            lg{"czas Czojbalsan"}
-            ls{"Czojbalsan (czas standardowy)"}
         }
         "meta:Christmas"{
             ls{"czas Wyspa Bożego Narodzenia"}

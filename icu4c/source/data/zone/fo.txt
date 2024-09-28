@@ -290,11 +290,6 @@ fo{
             lg{"Kina tíð"}
             ls{"Kina vanlig tíð"}
         }
-        "meta:Choibalsan"{
-            ld{"Choibalsan summartíð"}
-            lg{"Choibalsan tíð"}
-            ls{"Choibalsan vanlig tíð"}
-        }
         "meta:Christmas"{
             ls{"Jólaoyggj tíð"}
         }

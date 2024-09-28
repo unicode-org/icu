@@ -672,9 +672,6 @@ zu{
         "Asia:Chita"{
             ec{"i-Chita"}
         }
-        "Asia:Choibalsan"{
-            ec{"i-Choibalsan"}
-        }
         "Asia:Colombo"{
             ec{"i-Colombo"}
         }
@@ -1409,11 +1406,6 @@ zu{
             ld{"Isikhathi semini sase-China"}
             lg{"Isikhathi sase-China"}
             ls{"Isikhathi esivamile sase-China"}
-        }
-        "meta:Choibalsan"{
-            ld{"Isikhathi sehlobo e-Choibalsan"}
-            lg{"Isikhathi sase-Choibalsan"}
-            ls{"Isikhathi Esivamile sase-Choibalsan"}
         }
         "meta:Christmas"{
             ls{"Isikhathi sase-Christmas Island"}

@@ -678,9 +678,6 @@ yue{
         "Asia:Chita"{
             ec{"赤塔"}
         }
-        "Asia:Choibalsan"{
-            ec{"喬巴山"}
-        }
         "Asia:Colombo"{
             ec{"可倫坡"}
         }
@@ -1444,11 +1441,6 @@ yue{
             ld{"中國夏令時間"}
             lg{"中國時間"}
             ls{"中國標準時間"}
-        }
-        "meta:Choibalsan"{
-            ld{"喬巴山夏令時間"}
-            lg{"喬巴山時間"}
-            ls{"喬巴山標準時間"}
         }
         "meta:Christmas"{
             ls{"聖誕島時間"}

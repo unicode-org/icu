@@ -464,11 +464,6 @@ sc{
             lg{"Ora de sa Tzina"}
             ls{"Ora istandard de sa Tzina"}
         }
-        "meta:Choibalsan"{
-            ld{"Ora legale de Choibalsan"}
-            lg{"Ora de Choibalsan"}
-            ls{"Ora istandard de Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Ora de s’Ìsula de sa Natividade"}
         }

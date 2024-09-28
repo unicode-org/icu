@@ -129,9 +129,6 @@ tr{
         "Asia:Chita"{
             ec{"Çita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Çoybalsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -546,11 +543,6 @@ tr{
             ld{"Çin Yaz Saati"}
             lg{"Çin Saati"}
             ls{"Çin Standart Saati"}
-        }
-        "meta:Choibalsan"{
-            ld{"Çoybalsan Yaz Saati"}
-            lg{"Çoybalsan Saati"}
-            ls{"Çoybalsan Standart Saati"}
         }
         "meta:Christmas"{
             ls{"Christmas Adası Saati"}

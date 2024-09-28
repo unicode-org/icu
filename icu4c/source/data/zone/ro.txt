@@ -439,11 +439,6 @@ ro{
             lg{"Ora Chinei"}
             ls{"Ora standard a Chinei"}
         }
-        "meta:Choibalsan"{
-            ld{"Ora de vară din Choibalsan"}
-            lg{"Ora din Choibalsan"}
-            ls{"Ora standard din Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Ora din Insula Christmas"}
         }

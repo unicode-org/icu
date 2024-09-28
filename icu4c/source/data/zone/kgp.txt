@@ -672,9 +672,6 @@ kgp{
         "Asia:Chita"{
             ec{"Sita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Sojmarsỹ"}
-        }
         "Asia:Colombo"{
             ec{"Korãmmu"}
         }
@@ -1411,11 +1408,6 @@ kgp{
             ld{"Rỹ Kã óra Sĩnỹ tá"}
             lg{"Óra Sĩnỹ tá"}
             ls{"Óra Pã Sĩnỹ tá"}
-        }
-        "meta:Choibalsan"{
-            ld{"Rỹ Kã óra Sojmarsỹ tá"}
-            lg{"Óra Sojmarsỹ tá"}
-            ls{"Óra Pã Sojmarsỹ tá"}
         }
         "meta:Christmas"{
             ls{"Óra Krĩtimỹnh Goj-vẽso tá"}

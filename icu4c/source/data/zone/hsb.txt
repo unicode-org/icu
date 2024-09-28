@@ -428,11 +428,6 @@ hsb{
             lg{"chinski čas"}
             ls{"chinski standardny čas"}
         }
-        "meta:Choibalsan"{
-            ld{"Čojbalsanski lětni čas"}
-            lg{"Čojbalsanski čas"}
-            ls{"Čojbalsanski standardny čas"}
-        }
         "meta:Christmas"{
             ls{"čas Hodowneje kupy"}
         }

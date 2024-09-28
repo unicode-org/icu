@@ -484,11 +484,6 @@ mi{
             lg{"Wā Haina"}
             ls{"Wā Haina Arowhānui"}
         }
-        "meta:Choibalsan"{
-            ld{"Wā Choibalsan Raumati"}
-            lg{"Wā Choibalsan"}
-            ls{"Wā Choibalsan Arowhānui"}
-        }
         "meta:Christmas"{
             ls{"Wā o Te Moutere Kirihimete"}
         }

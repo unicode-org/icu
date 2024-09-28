@@ -509,11 +509,6 @@ is{
             lg{"Kínatími"}
             ls{"Staðaltími í Kína"}
         }
-        "meta:Choibalsan"{
-            ld{"Sumartími í Choibalsan"}
-            lg{"Tími í Choibalsan"}
-            ls{"Staðaltími í Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Jólaeyjartími"}
         }

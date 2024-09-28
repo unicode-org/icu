@@ -354,9 +354,6 @@ ak{
         "Asia:Chita"{
             ec{"Kyita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Koibaasan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -786,11 +783,6 @@ ak{
             ld{"Kyaena Awia Berɛ"}
             lg{"Kyaena Berɛ"}
             ls{"Kyaena Susudua Berɛ"}
-        }
-        "meta:Choibalsan"{
-            ld{"Kobaasan Awia Berɛ"}
-            lg{"Kobaasan Berɛ"}
-            ls{"Kobaasan Susudua Berɛ"}
         }
         "meta:Christmas"{
             ls{"Buronya Aeland Berɛ"}

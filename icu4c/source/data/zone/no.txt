@@ -87,9 +87,6 @@ no{
         "Asia:Chita"{
             ec{"Tsjita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Choybalsan"}
-        }
         "Asia:Damascus"{
             ec{"Damaskus"}
         }
@@ -473,11 +470,6 @@ no{
             ld{"kinesisk sommertid"}
             lg{"kinesisk tid"}
             ls{"kinesisk normaltid"}
-        }
-        "meta:Choibalsan"{
-            ld{"sommertid for Tsjojbalsan"}
-            lg{"tidssone for Tsjojbalsan"}
-            ls{"normaltid for Tsjojbalsan"}
         }
         "meta:Christmas"{
             ls{"tidssone for Christmasøya"}

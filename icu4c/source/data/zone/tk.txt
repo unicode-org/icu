@@ -504,9 +504,6 @@ tk{
         "Asia:Chita"{
             ec{"Çita"}
         }
-        "Asia:Choibalsan"{
-            ec{"Çoýbalsan"}
-        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -1093,11 +1090,6 @@ tk{
             ld{"Hytaý tomusky wagty"}
             lg{"Hytaý wagty"}
             ls{"Hytaý standart wagty"}
-        }
-        "meta:Choibalsan"{
-            ld{"Çoýbalsan tomusky wagt"}
-            lg{"Çoýbalsan wagty"}
-            ls{"Çoýbalsan standart wagty"}
         }
         "meta:Christmas"{
             ls{"Roždestwo adasy wagty"}

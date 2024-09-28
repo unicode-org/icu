@@ -476,11 +476,6 @@ yo{
             lg{"Àkókò Ṣáínà"}
             ls{"Àkókò Ìfẹnukòsí Ṣáínà"}
         }
-        "meta:Choibalsan"{
-            ld{"Àkókò Sọmà Choibalsan"}
-            lg{"Àkókò Choibalsan"}
-            ls{"Àkókò Ìfẹnukòsí Choibalsan"}
-        }
         "meta:Christmas"{
             ls{"Àkókò Erékùsù Christmas"}
         }

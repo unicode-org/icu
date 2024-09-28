@@ -235,11 +235,6 @@ fr_CA{
             lg{"heure de Chine"}
             ls{"heure normale de Chine"}
         }
-        "meta:Choibalsan"{
-            ld{"heure avancée de Choibalsan"}
-            lg{"heure de Choibalsan"}
-            ls{"heure normale de Choibalsan"}
-        }
         "meta:Colombia"{
             ld{"heure avancée de Colombie"}
             lg{"heure de Colombie"}

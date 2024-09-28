@@ -449,11 +449,6 @@ fy{
             lg{"Sineeske tiid"}
             ls{"Sineeske standerttiid"}
         }
-        "meta:Choibalsan"{
-            ld{"Tsjojbalsan simmertiid"}
-            lg{"Tsjojbalsan tiid"}
-            ls{"Tsjojbalsan standerttiid"}
-        }
         "meta:Christmas"{
             ls{"Krysteilânske tiid"}
         }

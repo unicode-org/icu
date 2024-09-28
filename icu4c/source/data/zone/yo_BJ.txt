@@ -201,11 +201,6 @@ yo_BJ{
             lg{"Àkókò Sháínà"}
             ls{"Àkókò Ìfɛnukòsí Sháínà"}
         }
-        "meta:Choibalsan"{
-            ld{"Àkókò Sɔmà Choibalsan"}
-            lg{"Àkókò Choibalsan"}
-            ls{"Àkókò Ìfɛnukòsí Choibalsan"}
-        }
         "meta:Cocos"{
             ls{"Àkókò Àwɔn Erékùsù Cocos"}
         }
