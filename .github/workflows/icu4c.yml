@@ -249,10 +249,10 @@ jobs:
         env:
           CC: clang
           CXX: clang++
-          # add -fsanitize=cfi-vcall -fsanitize=cfi-icall  later
-          CXXFLAGS: -flto -fvisibility=hidden -fsanitize=cfi-derived-cast -fno-sanitize-trap=cfi -fno-inline-functions -fno-inline -fno-omit-frame-pointer -O1
-          # add -fsanitize=cfi-vcall -fsanitize=cfi-icall  later
-          LDFLAGS: -flto -fvisibility=hidden -fuse-ld=gold -fsanitize=cfi-derived-cast -fsanitize=cfi-unrelated-cast -fno-sanitize-trap=cfi -fsanitize-cfi-icall-generalize-pointers
+          # add -fsanitize=cfi-vcall later
+          CXXFLAGS: -flto -fvisibility=hidden -fsanitize=cfi-derived-cast -fno-sanitize-trap=cfi -fno-inline-functions -fno-inline -fno-omit-frame-pointer -O1 -fsanitize=cfi-icall
+          # add -fsanitize=cfi-vcall later
+          LDFLAGS: -flto -fvisibility=hidden -fuse-ld=gold -fsanitize=cfi-derived-cast -fsanitize=cfi-unrelated-cast -fno-sanitize-trap=cfi -fsanitize-cfi-icall-generalize-pointers -fsanitize=cfi-icall
 
   # Clang Linux with thread sanitizer.
   clang-tsan:
