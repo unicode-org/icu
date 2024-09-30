@@ -241,15 +241,21 @@ Download Directories are located at, for example,
 corresponding to <http://download.icu-project.org/ex/files/icu4c/4.4.2/>
 Look at previous releases for an example.
 
-### Java Source/Bin:
+### Java Source/Bin
+
+**Post 76.1 see [Publish - Version 76.1](release.md)**
 
 Follow instructions here: [Building ICU4J Release Files](../release-build.md)
 
 ### C source/binary:
 
+**Post 76.1 see [Publish - Version 76.1](release.md)**
+
 <span style="background:yellow">***WORK IN PROGRESS***</a>
 
 #### Source and Linux Binaries:
+
+**Post 76.1 see [Publish - Version 76.1](release.md)**
 
 Important: this step works with Unix make + docker.
 
@@ -284,6 +290,9 @@ run \`make dist\`.
     local checkout. (Thus it will exclude any local uncommitted changes).
 
 #### Windows Binary:
+
+**Post 76.1 see [Publish - Version 76.1](release.md)** \
+That new flow overlaps with _"Using the output from the build bots"_ below.
 
 *   Manual process:
     *   Build with MSVC x64 Release. (See the ICU
@@ -345,6 +354,8 @@ run \`make dist\`.
 
 #### Output of icuexportdata:
 
+**Post 76.1 see [Publish - Version 76.1](release.md)**
+
 This step publishes pre-processed Unicode property data, which may be ingested by downstream clients such as ICU4X.
 
 *   Using the output from the build bots:
@@ -353,6 +364,8 @@ This step publishes pre-processed Unicode property data, which may be ingested b
     *   Rename the `icuexportdata_tag-goes-here.zip` file to the correct tag (replacing slashes with dashes)
 
 ### Signing archives and creating checksums:
+
+**Post 76.1 see [Publish - Version 76.1](release.md)**
 
 #### Step 0. PGP keys:
 
