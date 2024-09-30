@@ -1,0 +1,69 @@
+name: Release - Create checksums and GPG sign
+
+on:
+  workflow_dispatch:
+    inputs:
+      gitReleaseTag:
+        description: 'Release tag to upload to. Must start with "release-"'
+        type: string
+
+env:
+  RELEASE_FOLDER: '${{ github.workspace }}/releaseDist'
+
+jobs:
+  sign_and_checksums:
+    if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
+    runs-on: ubuntu-latest
+    environment: release-env
+
+    permissions:
+      contents: write # So that we can upload to release
+
+    steps:
+
+    - name: Checkout and setup
+      uses: actions/checkout@v4
+      with:
+        lfs: true
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+        gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+    - name: Get all release files
+      run: |
+        mkdir -p ${RELEASE_FOLDER}
+        pushd ${RELEASE_FOLDER}
+        gh release download ${{ inputs.gitReleaseTag }} -p "*.zip" -p "*.tgz" -p "*.jar" --repo=${{ github.repository }}
+        popd
+      env:
+        GH_TOKEN: ${{ github.token }}
+
+    - name: Checksums and sign
+      run: |
+        source icu4j/releases_tools/shared.sh
+        # Convert 76.1 to 76_1
+        underscore_version=$(echo $artifact_version | sed 's/\./_/g')
+        pushd ${RELEASE_FOLDER}
+        sha512sum -b icu4c*              > SHASUM512.txt
+        md5sum -b *.jar                  > icu4j-${artifact_version}.md5
+        md5sum -b icu4c-*-data-bin-*.zip > icu4c-${underscore_version}-binary.md5
+        md5sum -b icu4c-*-src.*          > icu4c-${underscore_version}-sources.md5
+        find . -type f -name 'icu4c*' -exec gpg --no-tty --batch --pinentry-mode loopback --passphrase=$MAVEN_GPG_PASSPHRASE -a --output {}.asc --detach-sig {} \;
+        gpg --no-tty --batch --pinentry-mode loopback --passphrase=$MAVEN_GPG_PASSPHRASE -a --output SHASUM512.txt.asc --detach-sig SHASUM512.txt
+        popd
+      env:
+        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+    - name: Upload to release
+      run: |
+        gh release upload ${{ inputs.gitReleaseTag }} LICENSE --clobber --repo=${{ github.repository }}
+        gh release upload ${{ inputs.gitReleaseTag }} ${RELEASE_FOLDER}/*.md5         --clobber --repo=${{ github.repository }}
+        gh release upload ${{ inputs.gitReleaseTag }} ${RELEASE_FOLDER}/*.asc         --clobber --repo=${{ github.repository }}
+        gh release upload ${{ inputs.gitReleaseTag }} ${RELEASE_FOLDER}/SHASUM512.txt --clobber --repo=${{ github.repository }}
+      env:
+        GH_TOKEN: ${{ github.token }}

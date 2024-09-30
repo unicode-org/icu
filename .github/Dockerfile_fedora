@@ -1,0 +1,9 @@
+FROM fedora:latest
+
+RUN dnf install -y gcc-c++ zip unzip git-core git-lfs doxygen
+RUN git lfs install --skip-repo \
+    && ln -s /usr/bin/python3 /usr/bin/python
+
+WORKDIR /root
+
+ENTRYPOINT [ "/bin/bash" ]
