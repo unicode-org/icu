@@ -11,28 +11,28 @@
   },
   "tests": [
     { "src": ".local $foo = {1 :number minimumIntegerDigits=-1} {{bar {$foo}}}",
-      "ignoreJava": "ICU4J doesn't validate options"
+      "ignoreJava": "ICU-22747 ICU4J doesn't validate options"
     },
     { "src": ".local $foo = {1 :number minimumIntegerDigits=foo} {{bar {$foo}}}",
-      "ignoreJava": "ICU4J doesn't validate options"
+      "ignoreJava": "ICU-22747 ICU4J doesn't validate options"
     },
     { "src": ".local $foo = {1 :number minimumFractionDigits=foo} {{bar {$foo}}}",
-      "ignoreJava": "ICU4J doesn't validate options"
+      "ignoreJava": "ICU-22747 ICU4J doesn't validate options"
     },
     { "src": ".local $foo = {1 :number maximumFractionDigits=foo} {{bar {$foo}}}",
-      "ignoreJava": "ICU4J doesn't validate options"
+      "ignoreJava": "ICU-22747 ICU4J doesn't validate options"
     },
     { "src": ".local $foo = {1 :number minimumSignificantDigits=foo} {{bar {$foo}}}",
-      "ignoreJava": "ICU4J doesn't validate options"
+      "ignoreJava": "ICU-22747 ICU4J doesn't validate options"
     },
     { "src": ".local $foo = {1 :number maximumSignificantDigits=foo} {{bar {$foo}}}",
-      "ignoreJava": "ICU4J doesn't validate options"
+      "ignoreJava": "ICU-22747 ICU4J doesn't validate options"
     },
     { "src": ".local $foo = {1 :integer minimumIntegerDigits=foo} {{bar {$foo}}}",
-      "ignoreJava": "ICU4J doesn't validate options"
+      "ignoreJava": "ICU-22747 ICU4J doesn't validate options"
     },
     { "src": ".local $foo = {1 :integer maximumSignificantDigits=foo} {{bar {$foo}}}",
-      "ignoreJava": "ICU4J doesn't validate options"
+      "ignoreJava": "ICU-22747 ICU4J doesn't validate options"
     }
   ]
 }

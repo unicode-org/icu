@@ -118,14 +118,16 @@
       "src": "{$date :datetime dateStyle=full weekday=short}",
       "exp": "{$date}",
       "expErrors": [{"type": "bad-option"}],
-      "params": [{ "name": "date", "value": { "date": 1669261357000 }}]
+      "params": [{ "name": "date", "value": { "date": 1669261357000 }}],
+      "ignoreJava": "ICU-22747 ICU4J doesn't validate options"
     },
     {
       "comment": "Datetime can have style options or field options, but not both",
       "src": "{$date :datetime timeStyle=full day=numeric}",
       "exp": "{$date}",
       "expErrors": [{"type": "bad-option"}],
-      "params": [{ "name": "date", "value": { "date": 1669261357000 }}]
+      "params": [{ "name": "date", "value": { "date": 1669261357000 }}],
+      "ignoreJava": "ICU-22747 ICU4J doesn't validate options"
     }
   ]
 }
