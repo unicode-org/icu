@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727502730671,
+  "lastUpdate": 1727703207975,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28077,6 +28077,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 321.3970099105098,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "dbb71b7c319cb86c30623506f7c1322252fd96b1",
+          "message": "ICU-22723 BRS76 Update ICU4J serialization test data",
+          "timestamp": "2024-09-30T09:27:21-04:00",
+          "tree_id": "d64ebf63201f5b8e56e703d88390411887e0f51f",
+          "url": "https://github.com/unicode-org/icu/commit/dbb71b7c319cb86c30623506f7c1322252fd96b1"
+        },
+        "date": 1727703037665,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 319.9399226395886,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
