@@ -1,7 +1,7 @@
 # This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
 # For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
 
-name: Publish to Nexus Sonatype OSS
+name: Release - ICU4J publish to Maven Central
 
 # For this to run you should define the follwing GitHub Secrets in the proper Environment.
 # In Settings -- Environments -- release_env -- Environment secrets:
@@ -21,24 +21,29 @@ on:
   # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
   workflow_dispatch:
     inputs:
-      gitTag:
-        # TODO: make this mandatory and validate that it is in a release* branch and looks like
-        # 'release-\d+.\d+ or something like that.
-        # For now we don't do it so that we can test.
-        description: 'Git tag at which to sync for deploy and release'
+      runTests:
+        description: 'Run the tests.'
+        type: boolean
+        default: true
+      deployToMaven:
+        description: 'Deploy to Maven Central (using Sonatype OSSRH)'
+        type: boolean
+        default: false
+      gitReleaseTag:
+        description: 'Release tag to upload to. Must start with "release-"'
         type: string
 
 env:
   SHARED_MVN_ARGS: '--no-transfer-progress --show-version --batch-mode'
-  RELEASE_FOLDER: 'target/release_files'
+  RELEASE_FOLDER: '${{ github.workspace }}/releaseDist'
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     environment: release-env
+
     permissions:
-      contents: read
-      packages: write
+      contents: write # So that we can upload to release
 
     steps:
 
@@ -59,8 +64,11 @@ jobs:
         gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-    # TODO: enable tests? We don't want to release until we are 100% sure everything works.
-    - name: Build all of ICU
+    - name: Run tests
+      if: ${{ inputs.runTests }}
+      run: mvn install --file icu4j ${SHARED_MVN_ARGS} --errors --fail-at-end
+
+    - name: Build javadoc taglets
       run: |
         # Really important to do this first because we need `tools/build` for the javadoc applets
         mvn install --file icu4j/tools/build \
@@ -69,8 +77,15 @@ jobs:
 
     - name: Build and deploy to Maven Central
       run: |
+        if [ "${{ inputs.deployToMaven }}" != "true" ]; then
+          echo Deploy to local folder
+          # Run the deploy, but do it to a local folder, not to Sonatype / Maven Central
+          export MAVEN_LOCAL='-DaltDeploymentRepository=tempid::file:./local-deploy-folder'
+        else
+          echo Deploy to Maven Central using Sonatype OSSRH
+        fi
         mvn deploy --file icu4j \
-          ${SHARED_MVN_ARGS} \
+          ${SHARED_MVN_ARGS} ${MAVEN_LOCAL} \
           --settings $GITHUB_WORKSPACE/settings.xml \
           --errors --fail-at-end -DdeployAtEnd=true \
           -DskipTests -DskipITs \
@@ -97,19 +112,22 @@ jobs:
           ${SHARED_MVN_ARGS} \
           -DskipITs -DskipTests \
           -P with_full_javadoc
+        # Archive the full doc in a jar. Should also be posted to the web as official doc.
         jar -Mcf ${RELEASE_FOLDER}/icu4j-${ICU_VERSION}-fulljavadoc.jar \
           -C target/site/apidocs/ .
-        # Create the file with MD5 checksums
-        pushd ${RELEASE_FOLDER}
-        md5sum *.jar > icu4j-${ICU_VERSION}.md5
-        popd # out of $RELEASE_FOLDER
         popd # out of icu4j
 
-    # TODO: add them to the GitHub "Release" page automatically
     - name: Upload build results
       uses: actions/upload-artifact@v4.3.6
       with:
-        path: ./icu4j/${{ env.RELEASE_FOLDER }}/*
+        name: icu4j-binaries
+        path: ${{ env.RELEASE_FOLDER }}
         retention-days: 3 # TBD if we want to keep them longer
         overwrite: true
 
+    - name: Upload to release
+      if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
+      run: |
+        gh release upload ${{ inputs.gitReleaseTag }} ${RELEASE_FOLDER}/* --clobber --repo=${{ github.repository }}
+      env:
+        GH_TOKEN: ${{ github.token }}

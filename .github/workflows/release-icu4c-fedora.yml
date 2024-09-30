@@ -1,0 +1,89 @@
+name: Release - ICU4C artifacts on Fedora
+
+on:
+  workflow_dispatch:
+    inputs:
+      runTests:
+        description: 'Run the tests.'
+        type: boolean
+        default: true
+      gitReleaseTag:
+        description: 'Release tag to upload to. Must start with "release-"'
+        type: string
+
+env:
+  RELEASE_FOLDER: '${{ github.workspace }}/releaseDist'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: release-env
+
+    container:
+      image: ghcr.io/${{ github.repository_owner }}/fedora-docker-gcr:latest
+      credentials:
+        username: ${{ secrets.DOCKER_CONTAINER_USER_NAME }}
+        password: ${{ secrets.DOCKER_CONTAINER_REGISTRY_TOKEN }}
+
+    permissions:
+      contents: write # So that we can upload to release
+
+    steps:
+
+    - name: Install gh (GitHub CLI)
+      run: |
+        # Don't install it in the docker image, get the latest (pros and cons)
+        dnf install -y gh
+
+    - name: Checkout and setup
+      uses: actions/checkout@v4
+      with:
+        lfs: true
+
+    - name: Config and build ICU4C proper
+      run: |
+        pushd icu4c/source
+        ./runConfigureICU Linux/gcc
+        make -j8
+        popd
+
+    - name: Run tests
+      if: ${{ inputs.runTests }}
+      run: |
+        pushd icu4c/source
+        make check
+        popd
+
+    - name: Build release ICU4C
+      run: |
+        pushd icu4c/source
+        make DESTDIR=${RELEASE_FOLDER}/icu releaseDist
+        popd
+
+    - name: Collect artifacts in one folder
+      run: |
+        # Get the OS version in VERSION_ID
+        source /etc/os-release
+        # Get the ICU version in artifact_version
+        source icu4j/releases_tools/shared.sh
+        # Convert 76.1 to 76_1
+        underscore_version=$(echo $artifact_version | sed 's/\./_/g')
+        pushd ${RELEASE_FOLDER}
+        tar -czf icu4c-${underscore_version}-Fedora_Linux${VERSION_ID}-x64.tgz icu
+        rm -fr icu
+        popd
+
+    - name: Upload build results
+      uses: actions/upload-artifact@v4.3.6
+      with:
+        name: icu4c-fedora-binaries
+        path: ${{ env.RELEASE_FOLDER }}
+        retention-days: 3 # TBD if we want to keep them longer
+        overwrite: true
+
+    - name: Upload to release
+      if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
+      run: |
+        gh release upload ${{ inputs.gitReleaseTag }} ${RELEASE_FOLDER}/* --clobber --repo=${{ github.repository }}
+      env:
+        GH_TOKEN: ${{ github.token }}
