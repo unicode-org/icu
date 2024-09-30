@@ -1,7 +1,7 @@
 ---
 layout: default
 title: ICU Documentation
-nav_order: 100
+nav_order: 1
 description: ICU Documentation
 ---
 
@@ -23,11 +23,15 @@ This is the new home of the User Guide (since 2020 August).
 
 ## ICU Site
 
-The official ICU Site is located at <https://icu.unicode.org>.
+The official ICU Site is located at https://icu.unicode.org/.
 It is the official landing page for the ICU project.
 
 Some of the pages from the ICU Site have been migrated here.
 The migrated sections and pages from the ICU Site are visible in the navigation bar of this site below the "ICU Site" section heading.
+
+### Downloading ICU
+
+The [Downloading ICU](download) page has been migrated here.
 
 ## ICU team member pages
 
