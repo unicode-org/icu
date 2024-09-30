@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727730461136,
+  "lastUpdate": 1727732285927,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34341,6 +34341,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 55.8653,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "61bbeb88989e9f837032dbd20cbabb5903b63558",
+          "message": "ICU-22723 download 76rc",
+          "timestamp": "2024-09-30T14:22:43-07:00",
+          "tree_id": "d831ee84097399f81c07573a48302434db06bf4b",
+          "url": "https://github.com/unicode-org/icu/commit/61bbeb88989e9f837032dbd20cbabb5903b63558"
+        },
+        "date": 1727732106441,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.1572,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 56.6507,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
