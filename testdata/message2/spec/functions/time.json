@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "$schema": "../../schemas/v0/tests.schema.json",
   "scenario": "Time function",
   "description": "The built-in formatter for times.",
   "defaultTestProperties": {

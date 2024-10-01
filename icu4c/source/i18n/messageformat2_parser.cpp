@@ -1973,7 +1973,7 @@ void Parser::parseSelectors(UErrorCode& status) {
     // Parse selectors
     // "Backtracking" is required here. It's not clear if whitespace is
     // (`[s]` selector) or (`[s]` variant)
-    while (isWhitespace(peek()) || peek() == DOLLAR) {
+    while (isWhitespace(peek()) || isBidiControl(peek()) || peek() == DOLLAR) {
         int32_t whitespaceStart = index;
         parseRequiredWhitespace(status);
         // Restore precondition
@@ -2006,25 +2006,14 @@ void Parser::parseSelectors(UErrorCode& status) {
             break;                                 \
         }                                          \
 
-    // Parse variants
-    // matcher = match-statement s variant *(o variant)
-
-    // Parse first variant
+    // Parse required whitespace before first variant
     parseRequiredWhitespace(status);
-    if (!inBounds()) {
-        ERROR(status);
-        return;
-    }
-    parseVariant(status);
-    if (!inBounds()) {
-        // Not an error; there might be only one variant
-        return;
-    }
+
+    // Parse variants
 
     while (isWhitespace(peek()) || isBidiControl(peek()) || isKeyStart(peek())) {
-        parseOptionalWhitespace();
-        // Restore the precondition.
         // Trailing whitespace is allowed.
+        parseOptionalWhitespace();
         if (!inBounds()) {
             return;
         }

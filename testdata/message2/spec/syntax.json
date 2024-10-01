@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "$schema": "../schemas/v0/tests.schema.json",
   "scenario": "Syntax",
   "description": "Test cases that do not depend on any registry definitions.",
   "defaultTestProperties": {
@@ -412,13 +412,7 @@
       "description": "... attribute -> \"@\" identifier s \"=\" s quoted-literal ...",
       "src": "{42 @foo=|bar|}",
       "exp": "42",
-      "expParts": [
-        {
-          "type": "string",
-          "source": "|42|",
-          "value": "42"
-        }
-      ]
+      "expParts": [{ "type": "string", "value": "42" }]
     },
     {
       "description": "... quoted-literal",
@@ -644,7 +638,7 @@
           "name": "tag"
         },
         {
-          "type": "literal",
+          "type": "text",
           "value": "content"
         }
       ]
@@ -659,7 +653,7 @@
           "name": "ns:tag"
         },
         {
-          "type": "literal",
+          "type": "text",
           "value": "content"
         },
         {
@@ -679,7 +673,7 @@
           "name": "tag"
         },
         {
-          "type": "literal",
+          "type": "text",
           "value": "content"
         }
       ]
@@ -722,13 +716,7 @@
     {
       "src": "{42 @foo @bar=13}",
       "exp": "42",
-      "expParts": [
-        {
-          "type": "string",
-          "source": "|42|",
-          "value": "42"
-        }
-      ]
+      "expParts": [{ "type": "string", "value": "42" }]
     },
     {
       "src": "{{trailing whitespace}} \n",
