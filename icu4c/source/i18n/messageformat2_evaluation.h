@@ -45,26 +45,51 @@ namespace message2 {
 
     using namespace data_model;
 
-    // InternalValue
-    // Encodes an "either a fallback string or a FormattedPlaceholder"
+    // InternalValue represents an intermediate value in the message
+    // formatter. An InternalValue can either be a fallback value (representing
+    // an error that occurred during formatting); a "suspension", meaning a function
+    // call that has yet to be fully resolved; or a fully-resolved FormattedPlaceholder.
+    // The "suspension" state is used in implementing selection; in a message like:
+    // .local $x = {1 :number}
+    // .match $x
+    // [...]
+    // $x can't be bound to a fully formatted value; the annotation needs to be
+    // preserved until the .match is evaluated. Moreover, any given function could
+    // be both a formatter and a selector, and it's ambiguous which one it's intended
+    // to be until the body of the message is processed.
     class InternalValue : public UObject {
-        public:
+    public:
         bool isFallback() const { return !fallbackString.isEmpty(); }
+        bool isSuspension() const { return !functionName.isEmpty(); }
         InternalValue() : fallbackString("") {}
         // Fallback constructor
         explicit InternalValue(UnicodeString fb) : fallbackString(fb) {}
-        // Regular value constructor
+        // Fully-evaluated value constructor
         explicit InternalValue(FormattedPlaceholder&& f)
-            : fallbackString(""), val(std::move(f)) {}
-        FormattedPlaceholder value() { return std::move(val); }
+            : fallbackString(""), functionName(""), resolvedOptions(nullptr),
+              operand(std::move(f)) {}
+        // Suspension constructor
+        InternalValue(const FunctionName& name,
+                      FunctionOptions&& options,
+                      FormattedPlaceholder&& rand,
+                      UErrorCode& status);
+        // Error code is set if this isn't fully evaluated
+        FormattedPlaceholder takeValue(UErrorCode& status);
+        // Error code is set if this is not a suspension
+        FormattedPlaceholder takeOperand(UErrorCode& status);
+        // Error code is set if this is not a suspension
+        FunctionOptions takeOptions(UErrorCode& status);
+        // Error code is set if this is not a suspension
+        FunctionName getFunctionName(UErrorCode& status) const;
         UnicodeString asFallback() const { return fallbackString; }
         virtual ~InternalValue();
         InternalValue& operator=(InternalValue&&);
         InternalValue(InternalValue&&);
-        private:
+    private:
         UnicodeString fallbackString; // Non-empty if fallback
-        // Otherwise, assumed to be a FormattedPlaceholder
-        FormattedPlaceholder val;
+        FunctionName functionName; // Non-empty if this is a suspension
+        LocalPointer<FunctionOptions> resolvedOptions; // Valid iff this is a suspension
+        FormattedPlaceholder operand;
     }; // class InternalValue
 
     // PrioritizedVariant
@@ -97,43 +122,6 @@ namespace message2 {
         }
         return 1;
     }
-
-    // Encapsulates a value to be scrutinized by a `match` with its resolved
-    // options and the name of the selector
-    class ResolvedSelector : public UObject {
-    public:
-        ResolvedSelector() {}
-        ResolvedSelector(const FunctionName& fn,
-                         Selector* selector,
-                         FunctionOptions&& options,
-                         FormattedPlaceholder&& value);
-        // Used either for errors, or when selector isn't yet known
-        explicit ResolvedSelector(FormattedPlaceholder&& value);
-        // Used for fallback values
-        explicit ResolvedSelector(const UnicodeString& fb);
-        bool hasSelector() const { return selector.isValid(); }
-        const FormattedPlaceholder& argument() const { return value; }
-        FormattedPlaceholder&& takeArgument() { return std::move(value); }
-        const Selector* getSelector() {
-            U_ASSERT(selector.isValid());
-            return selector.getAlias();
-        }
-        FunctionOptions&& takeOptions() {
-            return std::move(options);
-        }
-        const FunctionName& getSelectorName() const { return selectorName; }
-        virtual ~ResolvedSelector();
-        ResolvedSelector& operator=(ResolvedSelector&&) noexcept;
-        ResolvedSelector(ResolvedSelector&&);
-        bool isFallback() const { return !fallback.isEmpty(); }
-        const UnicodeString& getFallback() const { return fallback; }
-    private:
-        FunctionName selectorName; // For error reporting
-        LocalPointer<Selector> selector;
-        FunctionOptions options;
-        FormattedPlaceholder value;
-        UnicodeString fallback; // Non-empty if this is a fallback
-    }; // class ResolvedSelector
 
     // Closures and environments
     // -------------------------

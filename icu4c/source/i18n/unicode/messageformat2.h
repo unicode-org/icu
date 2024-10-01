@@ -339,8 +339,14 @@ namespace message2 {
         // Do not define default assignment operator
         const MessageFormatter &operator=(const MessageFormatter &) = delete;
 
+/*
+        ResolvedSelector resolveVariables(const Environment& env, const data_model::Operand&, MessageContext&, UErrorCode &) const;
+        ResolvedSelector resolveVariables(const Environment& env, const data_model::Expression&, MessageContext&, UErrorCode &) const;
+*/
+
         // Selection methods
 
+        bool isSelectable(const InternalValue&) const;
         // Takes a vector of FormattedPlaceholders
         void resolveSelectors(MessageContext&, const Environment& env, UErrorCode&, UVector&) const;
         // Takes a vector of vectors of strings (input) and a vector of PrioritizedVariants (output)
@@ -348,7 +354,7 @@ namespace message2 {
         // Takes a vector of vectors of strings (input) and a vector of PrioritizedVariants (input/output)
         void sortVariants(const UVector&, UVector&, UErrorCode&) const;
         // Takes a vector of strings (input) and a vector of strings (output)
-        void matchSelectorKeys(const UVector&, MessageContext&, InternalValue* rv, UVector&, UErrorCode&) const;
+        void matchSelectorKeys(const UVector&, MessageContext&, InternalValue&& rv, UVector&, UErrorCode&) const;
         // Takes a vector of FormattedPlaceholders (input),
         // and a vector of vectors of strings (output)
         void resolvePreferences(MessageContext&, UVector&, UVector&, UErrorCode&) const;
@@ -356,34 +362,22 @@ namespace message2 {
         // Formatting methods
         [[nodiscard]] FormattedPlaceholder formatLiteral(const UnicodeString&, const data_model::Literal&, UErrorCode&) const;
         void formatPattern(MessageContext&, const Environment&, const data_model::Pattern&, UErrorCode&, UnicodeString&) const;
-        // Evaluates a function call
+        [[nodiscard]] InternalValue eval(MessageContext&, InternalValue, UErrorCode&) const;
         // Dispatches on argument type
-        [[nodiscard]] InternalValue evalFormatterCall(FormattedPlaceholder&& argument,
-                                                      MessageContext& context,
-                                                      UErrorCode& status) const;
+        [[nodiscard]] FunctionName getFormatterNameByType(const FormattedPlaceholder& argument,
+                                                          UErrorCode& status) const;
+        // Formats a call to a formatting function
         // Dispatches on function name
-        [[nodiscard]] InternalValue evalFormatterCall(const FunctionName& functionName,
-                                                      FormattedPlaceholder&& argument,
-                                                      FunctionOptions&& options,
-                                                      MessageContext& context,
-                                                      UErrorCode& status) const;
-        // Formats an expression that appears as a selector
-        ResolvedSelector formatSelectorExpression(const Environment& env, const data_model::Expression&, MessageContext&, UErrorCode&) const;
-        // Formats an expression that appears in a pattern or as the definition of a local variable
+        [[nodiscard]] InternalValue apply(const FunctionName& functionName,
+                                          FormattedPlaceholder&& argument,
+                                          FunctionOptions&& options,
+                                          MessageContext& context,
+                                          UErrorCode& status) const;
         [[nodiscard]] InternalValue* formatExpression(const UnicodeString&,
                                                       const Environment&,
                                                       const data_model::Expression&,
                                                       MessageContext&,
                                                       UErrorCode&) const;
-        [[nodiscard]] InternalValue* formatOperand(const UnicodeString&,
-                                                   const Environment&,
-                                                   const data_model::Operand&,
-                                                   MessageContext&,
-                                                   UErrorCode&) const;
-        [[nodiscard]] FormattedPlaceholder evalArgument(const UnicodeString&,
-                                                        const data_model::VariableName&,
-                                                        MessageContext&,
-                                                        UErrorCode&) const;
         [[nodiscard]] FunctionOptions resolveOptions(const Environment& env, const OptionMap&, MessageContext&, UErrorCode&) const;
         void formatSelectors(MessageContext& context, const Environment& env, UErrorCode &status, UnicodeString& result) const;
 
@@ -405,6 +399,7 @@ namespace message2 {
         const SelectorFactory* lookupSelectorFactory(MessageContext&, const FunctionName&, UErrorCode&) const;
         bool isSelector(const FunctionName& fn) const { return isBuiltInSelector(fn) || isCustomSelector(fn); }
         bool isFormatter(const FunctionName& fn) const { return isBuiltInFormatter(fn) || isCustomFormatter(fn); }
+        void setNotSelectableError(MessageContext&, const InternalValue&, UErrorCode&) const;
         const Formatter* lookupFormatter(const FunctionName&, UErrorCode&) const;
 
         Selector* getSelector(MessageContext&, const FunctionName&, UErrorCode&) const;
