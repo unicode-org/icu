@@ -36,30 +36,6 @@ namespace message2 {
     class StaticErrors;
     class InternalValue;
 
-    // Internal use only
-    // None = null operand
-    // String = fallback value
-    // FormattedPlaceholder = non-error value
-    class InternalValue : public UObject {
-        public:
-        bool isFallback() const { return !fallbackString.isEmpty(); }
-        InternalValue() : fallbackString("") {}
-        // Fallback constructor
-        explicit InternalValue(UnicodeString fb) : fallbackString(fb) {}
-        // Regular value constructor
-        explicit InternalValue(FormattedPlaceholder&& f)
-            : fallbackString(""), val(std::move(f)) {}
-        FormattedPlaceholder value() { return std::move(val); }
-        UnicodeString asFallback() const { return fallbackString; }
-        virtual ~InternalValue();
-        InternalValue& operator=(InternalValue&&);
-        InternalValue(InternalValue&&);
-        private:
-        UnicodeString fallbackString; // Non-empty if fallback
-        // Otherwise, assumed to be a FormattedPlaceholder
-        FormattedPlaceholder val;
-    }; // class InternalValue
-
     /**
      * <p>MessageFormatter is a Technical Preview API implementing MessageFormat 2.0.
      *
