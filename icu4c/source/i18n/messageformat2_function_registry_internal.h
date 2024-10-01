@@ -129,6 +129,7 @@ namespace message2 {
             static Number integer(const Locale& loc);
 
         // These options have their own accessor methods, since they have different default values.
+            int32_t digitSizeOption(const FunctionOptions&, const UnicodeString&) const;
             int32_t maximumFractionDigits(const FunctionOptions& options) const;
             int32_t minimumFractionDigits(const FunctionOptions& options) const;
             int32_t minimumSignificantDigits(const FunctionOptions& options) const;

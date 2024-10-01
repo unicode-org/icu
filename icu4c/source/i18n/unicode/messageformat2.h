@@ -36,6 +36,27 @@ namespace message2 {
     class StaticErrors;
     class InternalValue;
 
+    // Internal use only
+    // None = null operand
+    // String = fallback value
+    // FormattedPlaceholder = non-error value
+    class InternalValue : public UObject {
+        public:
+        bool isFallback() const { return !fallbackString.isEmpty(); }
+        InternalValue() : fallbackString("") {}
+        // Fallback constructor
+        explicit InternalValue(UnicodeString fb) : fallbackString(fb) {}
+        // Regular value constructor
+        explicit InternalValue(FormattedPlaceholder&& f)
+            : fallbackString(""), val(std::move(f)) {}
+        FormattedPlaceholder value() { return std::move(val); }
+        UnicodeString asFallback() const { return fallbackString; }
+        private:
+        UnicodeString fallbackString; // Non-empty if fallback
+        // Otherwise, assumed to be a FormattedPlaceholder
+        FormattedPlaceholder val;
+    }; // class InternalValue
+
     /**
      * <p>MessageFormatter is a Technical Preview API implementing MessageFormat 2.0.
      *
@@ -354,27 +375,27 @@ namespace message2 {
         void resolvePreferences(MessageContext&, UVector&, UVector&, UErrorCode&) const;
 
         // Formatting methods
-
-        [[nodiscard]] FormattedPlaceholder formatLiteral(const UnicodeString&, const data_model::Literal&) const;
+        [[nodiscard]] FormattedPlaceholder formatLiteral(const UnicodeString&, const data_model::Literal&, UErrorCode&) const;
         void formatPattern(MessageContext&, const Environment&, const data_model::Pattern&, UErrorCode&, UnicodeString&) const;
         // Evaluates a function call
         // Dispatches on argument type
-        [[nodiscard]] InternalValue* evalFunctionCall(FormattedPlaceholder&& argument,
-                                                     MessageContext& context,
-                                                     UErrorCode& status) const;
+        [[nodiscard]] InternalValue evalFormatterCall(FormattedPlaceholder&& argument,
+                                                      MessageContext& context,
+                                                      UErrorCode& status) const;
         // Dispatches on function name
-        [[nodiscard]] InternalValue* evalFunctionCall(const FunctionName& functionName,
-                                                     InternalValue* argument,
-                                                     FunctionOptions&& options,
-                                                     MessageContext& context,
-                                                     UErrorCode& status) const;
+        [[nodiscard]] InternalValue evalFormatterCall(const FunctionName& functionName,
+                                                      FormattedPlaceholder&& argument,
+                                                      FunctionOptions&& options,
+                                                      MessageContext& context,
+                                                      UErrorCode& status) const;
+        // Formats an expression that appears as a selector
+        ResolvedSelector formatSelectorExpression(const Environment& env, const data_model::Expression&, MessageContext&, UErrorCode&) const;
         // Formats an expression that appears in a pattern or as the definition of a local variable
         [[nodiscard]] InternalValue* formatExpression(const UnicodeString&,
                                                       const Environment&,
                                                       const data_model::Expression&,
                                                       MessageContext&,
                                                       UErrorCode&) const;
-        [[nodiscard]] FunctionOptions resolveOptions(const Environment& env, const OptionMap&, MessageContext&, UErrorCode&) const;
         [[nodiscard]] InternalValue* formatOperand(const UnicodeString&,
                                                    const Environment&,
                                                    const data_model::Operand&,
@@ -384,6 +405,7 @@ namespace message2 {
                                                         const data_model::VariableName&,
                                                         MessageContext&,
                                                         UErrorCode&) const;
+        [[nodiscard]] FunctionOptions resolveOptions(const Environment& env, const OptionMap&, MessageContext&, UErrorCode&) const;
         void formatSelectors(MessageContext& context, const Environment& env, UErrorCode &status, UnicodeString& result) const;
 
         // Function registry methods
