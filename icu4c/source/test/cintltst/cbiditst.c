@@ -4730,6 +4730,7 @@ checkMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src, const char *dest,
                 );
         testOK = false;
     }
+    memset(getIndexMap, 0, sizeof(getIndexMap));
     for (i = 0; i < srcLen; i++) {
         idx = ubidi_getVisualIndex(pBiDi, i, &rc);
         assertSuccessful("ubidi_getVisualIndex", &rc);

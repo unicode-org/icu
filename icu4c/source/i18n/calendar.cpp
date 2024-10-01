@@ -828,9 +828,9 @@ Calendar::operator=(const Calendar &right)
         fWeekendCease            = right.fWeekendCease;
         fWeekendCeaseMillis      = right.fWeekendCeaseMillis;
         fNextStamp               = right.fNextStamp;
-        uprv_strncpy(validLocale, right.validLocale, sizeof(validLocale));
-        uprv_strncpy(actualLocale, right.actualLocale, sizeof(actualLocale));
+        uprv_strncpy(validLocale, right.validLocale, sizeof(validLocale)-1);
         validLocale[sizeof(validLocale)-1] = 0;
+        uprv_strncpy(actualLocale, right.actualLocale, sizeof(actualLocale)-1);
         actualLocale[sizeof(validLocale)-1] = 0;
     }
 

@@ -744,7 +744,13 @@ trieTestGolden(const char *testName,
         goto cleanup;
     }
     fseek(stream, 0, SEEK_SET);
-    fread(memoryBuffer, 1, fsize, stream);
+    long rsize = fread(memoryBuffer, 1, fsize, stream);
+    if (rsize != fsize) {
+        log_err(
+            "Golden files for '%s' fread %d bytes fail. Only get %d",
+            testName, fsize, rsize);
+    }
+
 
     int32_t testResult = uprv_compareGoldenFiles(
         memoryBuffer, fsize,

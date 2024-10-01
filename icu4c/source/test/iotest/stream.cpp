@@ -76,7 +76,7 @@ static void U_CALLCONV TestStream()
         return;
     }
     ucnv_close(defConv);
-    strncpy(defConvName, ucnv_getDefaultName(), UPRV_LENGTHOF(defConvName));
+    strncpy(defConvName, ucnv_getDefaultName(), UPRV_LENGTHOF(defConvName)-1);
     ucnv_setDefaultName("UTF-8");
 
     static const char * const TESTSTRING = "\x20\x74\x48\x69\x73\xCE\xBC\xE2\x80\x82\x20\x6D\x75\x20\x77\x6F\x72\x6C\x64";

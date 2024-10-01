@@ -71,6 +71,8 @@ jobs:
 
       - name: ICU4C with gcc
         env:
+          CXXFLAGS: -Wextra -Werror -Wno-error=return-local-addr
+          CFLAGS: -Werror
           PREFIX: /tmp/icu-prefix
         run: |
           mkdir build;
