@@ -475,17 +475,25 @@ namespace message2 {
  * a single named function option. It pairs the given name with the `Formattable`
  * value resulting from evaluating the option's value.
  *
- * `ResolvedFunctionOption` is immutable and is not copyable or movable.
+ * `ResolvedFunctionOption` is immutable and movable. It is not copyable.
  *
  * @internal ICU 75 technology preview
  * @deprecated This API is for technology preview only.
  */
 #ifndef U_IN_DOXYGEN
+class FormattedPlaceholder;
+/*
+  TODO: It would be better not to include null operands or fallback values
+  in an options map.
+  Even better would be to handle them differently and not include them in
+  a FormattedPlaceholder (use a type like std::variant<NullOperand, FallbackValue, FormattedPlaceholder>
+  in the formatter)
+*/
 class U_I18N_API ResolvedFunctionOption : public UObject {
   private:
 
     /* const */ UnicodeString name;
-    /* const */ Formattable value;
+    /* const */ LocalPointer<FormattedPlaceholder> value;
     // True iff this option was represented in the syntax by a literal value.
     // This is necessary in order to implement the spec for the `select` option
     // of `:number` and `:integer`.
@@ -493,10 +501,9 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
 
   public:
       const UnicodeString& getName() const { return name; }
-      const Formattable& getValue() const { return value; }
-      bool isLiteral() const { return sourceIsLiteral; }
-      ResolvedFunctionOption(const UnicodeString& n, const Formattable& f, bool s)
-          : name(n), value(f), sourceIsLiteral(s) {}
+      const FormattedPlaceholder* getValue() const { return value.getAlias(); }
+      FormattedPlaceholder* takeValue() { return value.orphan(); }
+      ResolvedFunctionOption(const UnicodeString& n, FormattedPlaceholder&& f, UErrorCode& status);
       ResolvedFunctionOption() {}
       ResolvedFunctionOption(ResolvedFunctionOption&&);
       ResolvedFunctionOption& operator=(ResolvedFunctionOption&& other) noexcept {
@@ -505,115 +512,11 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
           sourceIsLiteral = other.sourceIsLiteral;
           return *this;
     }
+    ResolvedFunctionOption& operator=(const ResolvedFunctionOption& other) = delete;
+    ResolvedFunctionOption(const ResolvedFunctionOption&) = delete;
     virtual ~ResolvedFunctionOption();
 }; // class ResolvedFunctionOption
 #endif
-
-/**
- * Mapping from option names to `message2::Formattable` objects, obtained
- * by calling `getOptions()` on a `FunctionOptions` object.
- *
- * @internal ICU 75 technology preview
- * @deprecated This API is for technology preview only.
- */
-using FunctionOptionsMap = std::map<UnicodeString, message2::Formattable>;
-
-/**
- * Structure encapsulating named options passed to a custom selector or formatter.
- *
- * @internal ICU 75 technology preview
- * @deprecated This API is for technology preview only.
- */
-class U_I18N_API FunctionOptions : public UObject {
- public:
-    /**
-     * Returns a map of all name-value pairs provided as options to this function.
-     * The syntactic order of options is not guaranteed to
-     * be preserved.
-     *
-     * This class is immutable and movable but not copyable.
-     *
-     * @return           A map from strings to `message2::Formattable` objects representing
-     *                   the results of resolving each option value.
-     *
-     * @internal ICU 75 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    FunctionOptionsMap getOptions() const {
-        int32_t len;
-        const ResolvedFunctionOption* resolvedOptions = getResolvedFunctionOptions(len);
-        FunctionOptionsMap result;
-        for (int32_t i = 0; i < len; i++) {
-            const ResolvedFunctionOption& opt = resolvedOptions[i];
-            result[opt.getName()] = opt.getValue();
-        }
-        return result;
-    }
-    /**
-     * Default constructor.
-     * Returns an empty mapping.
-     *
-     * @internal ICU 75 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    FunctionOptions() { options = nullptr; }
-    /**
-     * Destructor.
-     *
-     * @internal ICU 75 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    virtual ~FunctionOptions();
-    /**
-     * Move assignment operator:
-     * The source FunctionOptions will be left in a valid but undefined state.
-     *
-     * @internal ICU 75 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    FunctionOptions& operator=(FunctionOptions&&) noexcept;
-    /**
-     * Move constructor:
-     * The source FunctionOptions will be left in a valid but undefined state.
-     *
-     * @internal ICU 75 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    FunctionOptions(FunctionOptions&&);
-    /**
-     * Copy constructor.
-     *
-     * @internal ICU 75 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    FunctionOptions& operator=(const FunctionOptions&) = delete;
- private:
-    friend class InternalValue;
-    friend class MessageFormatter;
-    friend class StandardFunctions;
-
-    explicit FunctionOptions(UVector&&, UErrorCode&);
-
-    const ResolvedFunctionOption* getResolvedFunctionOptions(int32_t& len) const;
-    UBool getFunctionOption(std::u16string_view, Formattable&) const;
-    UBool wasSetFromLiteral(const UnicodeString&) const;
-    // Returns empty string if option doesn't exist
-    UnicodeString getStringFunctionOption(std::u16string_view) const;
-    int32_t optionsCount() const { return functionOptionsLen; }
-
-    // Named options passed to functions
-    // This is not a Hashtable in order to make it possible for code in a public header file
-    // to construct a std::map from it, on-the-fly. Otherwise, it would be impossible to put
-    // that code in the header because it would have to call internal Hashtable methods.
-    ResolvedFunctionOption* options;
-    int32_t functionOptionsLen = 0;
-
-    /**
-     * The original FunctionOptions isn't usable after this call.
-     * @returns A new, merged FunctionOptions.
-     */
-    FunctionOptions mergeOptions(FunctionOptions&& other, UErrorCode&);
-}; // class FunctionOptions
 
     /**
      * A `FormattedValue` represents the result of formatting a `message2::Formattable`.
@@ -713,6 +616,8 @@ class U_I18N_API FunctionOptions : public UObject {
         number::FormattedNumber numberOutput;
     }; // class FormattedValue
 
+    class FunctionOptions;
+
     /**
      * A `FormattablePlaceholder` encapsulates an input value (a `message2::Formattable`)
      * together with an optional output value (a `message2::FormattedValue`).
@@ -728,30 +633,19 @@ class U_I18N_API FunctionOptions : public UObject {
     class U_I18N_API FormattedPlaceholder : public UObject {
     public:
         /**
-         * Fallback constructor. Constructs a value that represents a formatting error,
-         * without recording an input `Formattable` as the source.
-         *
-         * @param s An error string. (See the MessageFormat specification for details
-         *        on fallback strings.)
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        explicit FormattedPlaceholder(const UnicodeString& s) : fallback(s), type(kFallback) {}
-        /**
          * Constructor for fully formatted placeholders.
          *
          * @param input A `FormattedPlaceholder` containing the fallback string and source
          *        `Formattable` used to construct the formatted value.
          * @param output A `FormattedValue` representing the formatted output of `input`.
          *        Passed by move.
+         * @param errorCode Input/output error code
          *
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        FormattedPlaceholder(const FormattedPlaceholder& input, FormattedValue&& output)
-            : fallback(input.fallback), source(input.source),
-            formatted(std::move(output)), previousOptions(FunctionOptions()), type(kEvaluated) {}
+        FormattedPlaceholder(const FormattedPlaceholder& input, FormattedValue&& output,
+                             UErrorCode& errorCode);
         /**
          * Constructor for fully formatted placeholders with options.
          *
@@ -760,24 +654,26 @@ class U_I18N_API FunctionOptions : public UObject {
          * @param opts Function options that were used to construct `output`. May be the empty map.
          * @param output A `FormattedValue` representing the formatted output of `input`.
          *        Passed by move.
+         * @param errorCode Input/output error code
          *
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        FormattedPlaceholder(const FormattedPlaceholder& input, FunctionOptions&& opts, FormattedValue&& output)
-            : fallback(input.fallback), source(input.source),
-            formatted(std::move(output)), previousOptions(std::move(opts)), type(kEvaluated) {}
+        FormattedPlaceholder(const FormattedPlaceholder& input,
+                             FunctionOptions&& opts,
+                             FormattedValue&& output,
+                             UErrorCode& errorCode);
         /**
          * Constructor for unformatted placeholders.
          *
          * @param input A `Formattable` object.
          * @param fb Fallback string to use if an error occurs while formatting the input.
+         * @param errorCode Input/output error code
          *
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        FormattedPlaceholder(const Formattable& input, const UnicodeString& fb)
-            : fallback(fb), source(input), type(kUnevaluated) {}
+        FormattedPlaceholder(const Formattable& input, const UnicodeString& fb, UErrorCode& status);
         /**
          * Default constructor. Leaves the FormattedPlaceholder in a
          * valid but undefined state.
@@ -785,37 +681,54 @@ class U_I18N_API FunctionOptions : public UObject {
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        FormattedPlaceholder() : type(kNull) {}
+        FormattedPlaceholder();
+        // TODO
+        UBool isNullOperand() const { return type == kNull; }
         /**
-         * Returns the source `Formattable` value for this placeholder.
-         * The result is undefined if this is a null operand.
+         * Returns a pointer to
+         * the source Formattable value for this placeholder.
+         * Sets the error code to failure for a null or fallback placeholder.
          *
          * @return A message2::Formattable value.
          *
-         * @internal ICU 75 technology preview
+         * @internal ICU 77 technology preview
          * @deprecated This API is for technology preview only.
          */
-        const message2::Formattable& asFormattable() const;
+        const message2::Formattable* getSource(UErrorCode&) const;
         /**
-         * Returns true iff this is a fallback placeholder.
+         * Returns a reference to the option map for this placeholder.
          *
-         * @return True if and only if this placeholder was constructed from a fallback string,
-         *         with no `Formattable` source or formatting output.
+         * @return The options map for this placeholder.
          *
-         * @internal ICU 75 technology preview
+         * @internal ICU 77 technology preview
          * @deprecated This API is for technology preview only.
          */
-        bool isFallback() const { return type == kFallback; }
+        const message2::FunctionOptions& getOptions() const;
         /**
-         * Returns true iff this is a null placeholder.
+         * Returns a FormattedPlaceholder with `result` as the result value
+         * and everything else kept the same.
+         * `this` cannot be used after calling this method.
          *
-         * @return True if and only if this placeholder represents the absent argument to a formatter
-         *         that was invoked without an argument.
+         * @param result FormattedValue to use as the result
+         * @return A FormattedPlaceholder
          *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
          */
-        bool isNullOperand() const { return type == kNull; }
+        FormattedPlaceholder withResult(FormattedValue&& result);
+        /**
+         * Returns a FormattedPlaceholder with `result` as the result value
+         * and `options` as the option map
+         * and everything else kept the same.
+         * `this` cannot be used after calling this method.
+         *
+         * @param result FormattedValue to use as the result
+         * @param options FunctionOptionsMap to use as the options
+         * @param errorCode Input/output error code
+         * @return A FormattedPlaceholder
+         *
+         */
+        FormattedPlaceholder withResultAndOptions(FormattedValue&& result,
+                                                  FunctionOptions&& options,
+                                                  UErrorCode& errorCode);
         /**
          * Returns true iff this has formatting output.
          *
@@ -827,15 +740,6 @@ class U_I18N_API FunctionOptions : public UObject {
          */
         bool isEvaluated() const { return (type == kEvaluated); }
         /**
-         * Returns true iff this represents a valid argument to the formatter.
-         *
-         * @return True if and only if this is neither the null argument nor a fallback placeholder.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        bool canFormat() const { return !(isFallback() || isNullOperand()); }
-        /**
          * Gets the fallback value of this placeholder, to be used in its place if an error occurs while
          * formatting it.
          * @return          A reference to this placeholder's fallback string.
@@ -843,16 +747,6 @@ class U_I18N_API FunctionOptions : public UObject {
          * @deprecated This API is for technology preview only.
          */
         const UnicodeString& getFallback() const { return fallback; }
-        /**
-         * Returns the options of this placeholder. The result is the empty map if !isEvaluated().
-         * @return A reference to an option map, capturing the options that were used
-         *         in producing the output of this `FormattedPlaceholder`
-         *         (or empty if there is no output)
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        const FunctionOptions& options() const { return previousOptions; }
-
         /**
          * Returns the formatted output of this placeholder. The result is undefined if !isEvaluated().
          * @return          A fully formatted `FormattedPlaceholder`.
@@ -893,22 +787,123 @@ class U_I18N_API FunctionOptions : public UObject {
          */
         UnicodeString formatToString(const Locale& locale,
                                      UErrorCode& status) const;
-
+        // TODO
+        virtual ~FormattedPlaceholder();
     private:
         friend class MessageFormatter;
 
         enum Type {
-            kFallback,    // Represents the result of formatting that encountered an error
-            kNull,        // Represents the absence of both an output and an input (not necessarily an error)
+            kNull,        // Represents the operand of an expression with no syntactic operand
+                          // (Functions can be nullary in MF2 but the C++ representations must
+                          // take an argument, so this is how that's reconciled)
             kUnevaluated, // `source` should be valid, but there's no result yet
             kEvaluated,   // `formatted` exists
         };
         UnicodeString fallback;
         Formattable source;
         FormattedValue formatted;
-        FunctionOptions previousOptions; // Ignored unless type is kEvaluated
+        void initOptions(UErrorCode&);
+        // Can be null if this was default-constructed
+        FunctionOptions* previousOptions = nullptr; // Ignored unless type is kEvaluated
         Type type;
     }; // class FormattedPlaceholder
+
+/**
+ * Mapping from option names to `message2::Formattable` objects, obtained
+ * by calling `getOptions()` on a `FunctionOptions` object.
+ *
+ * @internal ICU 75 technology preview
+ * @deprecated This API is for technology preview only.
+ */
+using FunctionOptionsMap = std::map<UnicodeString, const message2::FormattedPlaceholder*>;
+
+/**
+ * Structure encapsulating named options passed to a custom selector or formatter.
+ *
+ * @internal ICU 75 technology preview
+ * @deprecated This API is for technology preview only.
+ */
+class U_I18N_API FunctionOptions : public UObject {
+ public:
+    /**
+     * Returns a map of all name-value pairs provided as options to this function.
+     * The syntactic order of options is not guaranteed to
+     * be preserved.
+     *
+     * This class is immutable and movable but not copyable.
+     *
+     * @return           A map from strings to FormattedPlaceholder objects representing
+     *                   the results of resolving each option value.
+     *
+     * @internal ICU 75 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    FunctionOptionsMap getOptions() const {
+        FunctionOptionsMap result;
+        for (int32_t i = 0; i < functionOptionsLen; i++) {
+            const ResolvedFunctionOption& opt = options[i];
+            result[opt.getName()] = opt.getValue();
+        }
+        return result;
+    }
+    /**
+     * Default constructor.
+     * Returns an empty mapping.
+     *
+     * @internal ICU 75 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    FunctionOptions() { options = nullptr; }
+    /**
+     * Destructor.
+     *
+     * @internal ICU 75 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    virtual ~FunctionOptions();
+    /**
+     * Move assignment operator:
+     * The source FunctionOptions will be left in a valid but undefined state.
+     *
+     * @internal ICU 75 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    FunctionOptions& operator=(FunctionOptions&&) noexcept;
+    /**
+     * Move constructor:
+     * The source FunctionOptions will be left in a valid but undefined state.
+     *
+     * @internal ICU 75 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    FunctionOptions(FunctionOptions&&);
+    /**
+     * Copy constructor.
+     *
+     * @internal ICU 75 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    FunctionOptions& operator=(const FunctionOptions&) = delete;
+ private:
+    friend class MessageFormatter;
+    friend class StandardFunctions;
+
+    explicit FunctionOptions(UVector&&, UErrorCode&);
+
+    const ResolvedFunctionOption* getResolvedFunctionOptions(int32_t& len) const;
+    const FormattedPlaceholder* getFunctionOption(const UnicodeString&, UErrorCode&) const;
+    // Returns empty string if option doesn't exist
+    UnicodeString getStringFunctionOption(const UnicodeString&) const;
+    UBool wasSetFromLiteral(const UnicodeString&) const;
+    int32_t optionsCount() const { return functionOptionsLen; }
+
+    // Named options passed to functions
+    // This is not a Hashtable in order to make it possible for code in a public header file
+    // to construct a std::map from it, on-the-fly. Otherwise, it would be impossible to put
+    // that code in the header because it would have to call internal Hashtable methods.
+    ResolvedFunctionOption* options;
+    int32_t functionOptionsLen = 0;
+}; // class FunctionOptions
 
     /**
      * Not yet implemented: The result of a message formatting operation. Based on

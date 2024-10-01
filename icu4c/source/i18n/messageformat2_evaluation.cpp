@@ -32,6 +32,19 @@ ResolvedFunctionOption::ResolvedFunctionOption(ResolvedFunctionOption&& other) {
     sourceIsLiteral = other.sourceIsLiteral;
 }
 
+ResolvedFunctionOption::ResolvedFunctionOption(const UnicodeString& n,
+                                               FormattedPlaceholder&& v,
+                                               UErrorCode& status) {
+    CHECK_ERROR(status);
+
+    name = n;
+    LocalPointer<FormattedPlaceholder>
+        temp(create<FormattedPlaceholder>(std::move(v), status));
+    if (U_SUCCESS(status)) {
+        value.adoptInstead(temp.orphan());
+    }
+}
+
 ResolvedFunctionOption::~ResolvedFunctionOption() {}
 
 
@@ -62,27 +75,31 @@ UBool FunctionOptions::wasSetFromLiteral(const UnicodeString& key) const {
     return false;
 }
 
-UBool FunctionOptions::getFunctionOption(std::u16string_view key, Formattable& option) const {
+const FormattedPlaceholder*
+FunctionOptions::getFunctionOption(const UnicodeString& key,
+                                   UErrorCode& status) const {
     if (options == nullptr) {
         U_ASSERT(functionOptionsLen == 0);
     }
     for (int32_t i = 0; i < functionOptionsLen; i++) {
         const ResolvedFunctionOption& opt = options[i];
         if (opt.getName() == key) {
-            option = opt.getValue();
-            return true;
+            return opt.getValue();
         }
     }
-    return false;
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+    return nullptr;
 }
 
-UnicodeString FunctionOptions::getStringFunctionOption(std::u16string_view key) const {
-    Formattable option;
-    if (getFunctionOption(key, option)) {
-        if (option.getType() == UFMT_STRING) {
-            UErrorCode localErrorCode = U_ZERO_ERROR;
-            UnicodeString val = option.getString(localErrorCode);
-            U_ASSERT(U_SUCCESS(localErrorCode));
+UnicodeString FunctionOptions::getStringFunctionOption(const UnicodeString& key) const {
+    UErrorCode localStatus = U_ZERO_ERROR;
+    const FormattedPlaceholder* option = getFunctionOption(key, localStatus);
+    if (U_SUCCESS(localStatus)) {
+        const Formattable* source = option->getSource(localStatus);
+        // Null operand should never appear as an option value
+        U_ASSERT(U_SUCCESS(localStatus));
+        UnicodeString val = source->getString(localStatus);
+        if (U_SUCCESS(localStatus)) {
             return val;
         }
     }
@@ -111,14 +128,14 @@ FunctionOptions::~FunctionOptions() {
     }
 }
 
-static bool containsOption(const UVector& opts, const ResolvedFunctionOption& opt) {
-    for (int32_t i = 0; i < opts.size(); i++) {
-        if (static_cast<ResolvedFunctionOption*>(opts[i])->getName()
-            == opt.getName()) {
-            return true;
-        }
-    }
-    return false;
+ResolvedSelector::ResolvedSelector(const UnicodeString& fb) : selector(nullptr), fallback(fb) {}
+
+ResolvedSelector::ResolvedSelector(const FunctionName& fn,
+                                   Selector* sel,
+                                   FunctionOptions&& opts,
+                                   FormattedPlaceholder&& val)
+    : selectorName(fn), selector(sel), options(std::move(opts)), value(std::move(val))  {
+    U_ASSERT(sel != nullptr);
 }
 
 // Options in `this` take precedence
@@ -128,31 +145,18 @@ FunctionOptions FunctionOptions::mergeOptions(FunctionOptions&& other,
     UVector mergedOptions(status);
     mergedOptions.setDeleter(uprv_deleteUObject);
 
-    if (U_FAILURE(status)) {
-        return {};
+ResolvedSelector& ResolvedSelector::operator=(ResolvedSelector&& other) noexcept {
+    selectorName = std::move(other.selectorName);
+    if (other.selector.isValid()) {
+        selector.adoptInstead(other.selector.orphan());
+        other.selector.adoptInstead(nullptr);
+    } else {
+        selector.adoptInstead(nullptr);
     }
-
-    // Create a new vector consisting of the options from this `FunctionOptions`
-    for (int32_t i = 0; i < functionOptionsLen; i++) {
-        mergedOptions.adoptElement(create<ResolvedFunctionOption>(std::move(options[i]), status),
-                                 status);
-    }
-
-    // Add each option from `other` that doesn't appear in this `FunctionOptions`
-    for (int i = 0; i < other.functionOptionsLen; i++) {
-        // Note: this is quadratic in the length of `options`
-        if (!containsOption(mergedOptions, other.options[i])) {
-            mergedOptions.adoptElement(create<ResolvedFunctionOption>(std::move(other.options[i]),
-                                                                    status),
-                                     status);
-        }
-    }
-
-    delete[] options;
-    options = nullptr;
-    functionOptionsLen = 0;
-
-    return FunctionOptions(std::move(mergedOptions), status);
+    options = std::move(other.options);
+    value = std::move(other.value);
+    fallback = std::move(other.fallback);
+    return *this;
 }
 
 // PrioritizedVariant

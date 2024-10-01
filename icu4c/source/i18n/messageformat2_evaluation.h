@@ -76,6 +76,43 @@ namespace message2 {
         return 1;
     }
 
+    // Encapsulates a value to be scrutinized by a `match` with its resolved
+    // options and the name of the selector
+    class ResolvedSelector : public UObject {
+    public:
+        ResolvedSelector() {}
+        ResolvedSelector(const FunctionName& fn,
+                         Selector* selector,
+                         FunctionOptions&& options,
+                         FormattedPlaceholder&& value);
+        // Used either for errors, or when selector isn't yet known
+        explicit ResolvedSelector(FormattedPlaceholder&& value);
+        // Used for fallback values
+        explicit ResolvedSelector(const UnicodeString& fb);
+        bool hasSelector() const { return selector.isValid(); }
+        const FormattedPlaceholder& argument() const { return value; }
+        FormattedPlaceholder&& takeArgument() { return std::move(value); }
+        const Selector* getSelector() {
+            U_ASSERT(selector.isValid());
+            return selector.getAlias();
+        }
+        FunctionOptions&& takeOptions() {
+            return std::move(options);
+        }
+        const FunctionName& getSelectorName() const { return selectorName; }
+        virtual ~ResolvedSelector();
+        ResolvedSelector& operator=(ResolvedSelector&&) noexcept;
+        ResolvedSelector(ResolvedSelector&&);
+        bool isFallback() const { return !fallback.isEmpty(); }
+        const UnicodeString& getFallback() const { return fallback; }
+    private:
+        FunctionName selectorName; // For error reporting
+        LocalPointer<Selector> selector;
+        FunctionOptions options;
+        FormattedPlaceholder value;
+        UnicodeString fallback; // Non-empty if this is a fallback
+    }; // class ResolvedSelector
+
     // Closures and environments
     // -------------------------
 
