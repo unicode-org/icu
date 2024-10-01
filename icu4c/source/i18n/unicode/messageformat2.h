@@ -339,11 +339,6 @@ namespace message2 {
         // Do not define default assignment operator
         const MessageFormatter &operator=(const MessageFormatter &) = delete;
 
-/*
-        ResolvedSelector resolveVariables(const Environment& env, const data_model::Operand&, MessageContext&, UErrorCode &) const;
-        ResolvedSelector resolveVariables(const Environment& env, const data_model::Expression&, MessageContext&, UErrorCode &) const;
-*/
-
         // Selection methods
 
         bool isSelectable(const InternalValue&) const;
