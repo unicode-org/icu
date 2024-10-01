@@ -236,7 +236,7 @@ namespace message2 {
           type(kEvaluated) {
         CHECK_ERROR(status);
 
-        LocalPointer temp(create<FunctionOptions>(std::move(opts), status));
+        LocalPointer<FunctionOptions> temp(create<FunctionOptions>(std::move(opts), status));
         CHECK_ERROR(status);
         previousOptions = temp.orphan();
     }
@@ -263,7 +263,7 @@ namespace message2 {
     }
 
     void FormattedPlaceholder::initOptions(UErrorCode& status) {
-        LocalPointer temp(create<FunctionOptions>(FunctionOptions(), status));
+        LocalPointer<FunctionOptions> temp(create<FunctionOptions>(FunctionOptions(), status));
         CHECK_ERROR(status);
         previousOptions = temp.orphan();
     }
