@@ -183,6 +183,9 @@ namespace message2 {
         if (type == kEvaluated) {
             formatted = std::move(other.formatted);
         }
+        if (previousOptions != nullptr) {
+            delete previousOptions;
+        }
         if (other.previousOptions != nullptr) {
             previousOptions = other.previousOptions;
             other.previousOptions = nullptr;
