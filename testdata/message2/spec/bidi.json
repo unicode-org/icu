@@ -1,4 +1,5 @@
 {
+  "$schema": "../schemas/v0/tests.schema.json",
   "scenario": "Bidi support",
   "description": "Tests for correct parsing of messages with bidirectional marks and isolates",
   "defaultTestProperties": {
@@ -113,12 +114,12 @@
         "exp": "1"
     },
     {
-        "description":  " name... excludes U+FFFD and U+061C -- this pases as name -> [bidi] name-start *name-char",
+        "description":  "name... excludes bidi formatting character U+061C -- this parses as name -> [bidi] name-start *name-char",
         "src": ".local $\u061Cfoo = {1} {{ {$\u061Cfoo} }}",
         "exp": " \u20681\u2069 "
     },
     {
-        "description":  " name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName but excludes U+FFFD and U+061C",
+        "description":  "name excludes bidi formatting character U+061C",
         "src": ".local $foo\u061Cbar = {2} {{ }}",
         "expErrors": [{"type": "syntax-error"}]
     },

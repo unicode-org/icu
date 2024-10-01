@@ -2,7 +2,8 @@
   "scenario": "Tests from original ICU4J release",
   "description": "Tests taken from the September 2022 MF2 ICU4J release",
   "defaultTestProperties": {
-    "locale": "en-US"
+    "locale": "en-US",
+    "bidiIsolation": "none"
   },
   "tests": [
     {

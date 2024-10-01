@@ -2,7 +2,8 @@
   "scenario": "Function tests",
   "description": "Tests for ICU-specific formatting behavior.",
   "defaultTestProperties": {
-    "locale": "en-US"
+    "locale": "en-US",
+    "bidiIsolation": "none"
   },
   "tests": [
     {
@@ -111,13 +112,20 @@
     },
     {
       "src": "Expires at {|2024-07-02T19:23:45Z| :datetime timeStyle=long}",
-      "exp": "Expires at 7:23:45 PM GMT",
-      "ignoreCpp": "ICU-22754 Time zones not working yet (bug)"
+      "exp": "Expires at 7:23:45 PM GMT"
     },
     {
       "src": "Expires at {|2024-07-02T19:23:45+03:30| :datetime timeStyle=full}",
-      "exp": "Expires at 7:23:45 PM GMT+03:30",
-      "ignoreCpp": "ICU-22754 Time zones not working yet (bug)"
+      "exp": "Expires at 7:23:45 PM GMT+03:30"
+    },
+    {
+      "comment": "Horibly long, but I really wanted to test multiple declarations with overrides, and you can't join strings in JSON",
+      "src": [
+        ".input {$exp :datetime timeStyle=short}\n",
+        "{{Hello John, or even '{$exp :datetime dateStyle=full}'?}}"
+      ],
+      "exp": "Hello John, or even 'Saturday, August 3, 2024 at 9:43 PM'?",
+      "params": [{"name": "exp", "value": { "date": 1722746637000 }}]
     },
     {
       "comment": "Horibly long, but I really wanted to test multiple declarations with overrides, and you can't join strings in JSON",
@@ -131,8 +139,7 @@
       "exp": "Hello John, you want '9:43 PM', 'August 3, 2024 at 9:43 PM', or '8/3/24, 9:43:57 PM Pacific Daylight Time' or even 'Saturday, August 3, 2024 at 9:43 PM'?",
       "params": [{"name": "exp", "value": { "date": 1722746637000 }},
                  {"name": "user", "value": "John"},
-                 {"name": "tsOver", "value": "full" }],
-      "ignoreCpp": "ICU-22754 ICU4C doesn't implement this kind of function composition yet. See https://github.com/unicode-org/message-format-wg/issues/515"
+                 {"name": "tsOver", "value": "full" }]
     },
     {
       "src": [

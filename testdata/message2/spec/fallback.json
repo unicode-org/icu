@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "$schema": "../schemas/v0/tests.schema.json",
   "scenario": "Fallback",
   "description": "Test cases for fallback behaviour.",
   "defaultTestProperties": {
@@ -11,7 +11,8 @@
     {
       "description": "function with unquoted literal operand",
       "src": "{42 :test:function fails=format}",
-      "exp": "{|42|}"
+      "exp": "{|42|}",
+      "expParts": [{ "type": "fallback", "source": "|42|" }]
     },
     {
       "description": "function with quoted literal operand",
@@ -26,7 +27,8 @@
     {
       "description": "annotated implicit input variable",
       "src": "{$var :number}",
-      "exp": "{$var}"
+      "exp": "{$var}",
+      "expParts": [{ "type": "fallback", "source": "$var" }]
     },
     {
       "description": "local variable with unknown function in declaration",
@@ -46,7 +48,8 @@
     {
       "description": "function with no operand",
       "src": "{:test:undefined}",
-      "exp": "{:test:undefined}"
+      "exp": "{:test:undefined}",
+      "expParts": [{ "type": "fallback", "source": ":test:undefined" }]
     }
   ]
 }

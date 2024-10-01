@@ -2,7 +2,8 @@
   "scenario": "Function tests 2",
   "description": "More tests for ICU-specific formatting behavior.",
   "defaultTestProperties": {
-    "locale": "en-US"
+    "locale": "en-US",
+    "bidiIsolation": "none"
   },
   "tests": [
     {
@@ -112,6 +113,35 @@
       "exp": "Default number: 1.234.567.890.123.456.789,987654!",
       "locale": "ro",
       "params": [{ "name": "val", "value": {"decimal": "1234567890123456789.987654321"} }]
+    },
+    {
+      "src": ".local $x = {42 :number minimumFractionDigits=2} .local $y = {$x :number minimumFractionDigits=5} {{{$x} {$y}}}",
+      "exp": "42.00 42.00000",
+      "locale": "en"
+    },
+    {
+      "src": ".local $x = {42 :number minimumFractionDigits=5} .local $y = {$x :number minimumFractionDigits=2} {{{$x} {$y}}}",
+      "exp": "42.00000 42.00",
+      "locale": "en"
+    },
+    {
+      "src": ".local $x = {42 :number minimumFractionDigits=5} .local $y = {$x :number minimumIntegerDigits=3} {{{$x} {$y}}}",
+      "exp": "42.00000 042.00000",
+      "locale": "en"
+    },
+    {
+      "comment": "Modified from icu4j test",
+      "src": [
+        ".input {$exp :datetime timeStyle=short}\n",
+        ".input {$user :string}\n",
+        ".local $longExp = {$exp :datetime dateStyle=long}\n",
+        ".local $zooExp = {$exp :datetime dateStyle=short timeStyle=$tsOver}\n",
+        "{{Hello John, you want '{$exp}', '{$longExp}', or '{$zooExp}' or even '{$exp :datetime dateStyle=full}'?}}"
+      ],
+      "exp": "Hello John, you want '9:43 PM', 'August 3, 2024 at 9:43 PM', or '8/3/24, 9:43:57 PM Pacific Daylight Time' or even 'Saturday, August 3, 2024 at 9:43 PM'?",
+      "params": [{"name": "exp", "value": { "date": 1722746637000 }},
+                 {"name": "user", "value": "John"},
+                 {"name": "tsOver", "value" : "full" }]
     }
   ]
 }

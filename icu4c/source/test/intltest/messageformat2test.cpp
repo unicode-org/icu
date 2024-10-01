@@ -24,6 +24,7 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(testAPISimple);
     TESTCASE_AUTO(testDataModelAPI);
     TESTCASE_AUTO(testFormatterAPI);
+    TESTCASE_AUTO(testBidiAPI);
     TESTCASE_AUTO(testHighLoneSurrogate);
     TESTCASE_AUTO(testLowLoneSurrogate);
     TESTCASE_AUTO(testLoneSurrogateInQuotedLiteral);
@@ -132,6 +133,86 @@ void TestMessageFormat2::testFormatterAPI() {
                  result, "hello");
 }
 
+void TestMessageFormat2::testBidiAPI() {
+
+    IcuTestErrorCode errorCode(*this, "testBidiAPI");
+    UParseError parseError;
+    UnicodeString result;
+
+    UnicodeString pattern = u"{{{1 :number u:dir=ltr}{2 :number u:dir=rtl}{3 :number}}}";
+    MessageFormatter::Builder mfBuilder(errorCode);
+    mfBuilder.setPattern(pattern, parseError, errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success setting pattern");
+
+    // Bidi off, directionality LTR => no controls
+    mfBuilder.setBidiIsolationStrategy(MessageFormatter::U_MF_BIDI_OFF);
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_LTR);
+    MessageFormatter mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi off and LTR directionality");
+    assertEquals("testBidiAPI: bidi off and LTR directionality", u"123", result);
+
+    // Bidi off, directionality RTL => no controls
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_RTL);
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi off and RTL directionality");
+    assertEquals("testBidiAPI: bidi off and RTL directionality", u"123", result);
+
+    // Bidi off, directionality auto => no controls
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_AUTO);
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi off and auto directionality");
+    assertEquals("testBidiAPI: bidi off and auto directionality", u"123", result);
+
+    // Bidi auto, directionality LTR, style CONTROL => controls
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_LTR);
+    mfBuilder.setBidiIsolationStrategy(MessageFormatter::U_MF_BIDI_AUTO);
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi auto and LTR directionality");
+    assertEquals("testBidiAPI: bidi auto and LTR directionality", u"\u20661\u2069\u20672\u20693", result);
+
+    // Bidi auto, directionality LTR, style HTML => html
+    mfBuilder.setBidiIsolationStyle(MessageFormatter::U_MF_BIDI_STYLE_HTML);
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi auto, LTR directionality and style HTML");
+    assertEquals("testBidiAPI: bidi auto, LTR directionality and style HTML", u"<bdi>1</bdi><bdi>2</bdi>3", result);
+
+    // Bidi auto, directionality RTL => controls
+    mfBuilder.setBidiIsolationStyle(MessageFormatter::U_MF_BIDI_STYLE_CONTROL);
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_RTL);
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi auto, RTL directionality");
+    assertEquals("testBidiAPI: bidi auto, RTL directionality", u"\u20661\u2069\u20672\u2069\u20663\u2069", result);
+
+    // Bidi auto, directionality auto, RTL locale
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_AUTO);
+    mfBuilder.setLocale(Locale("ar"));
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi auto, auto directionality, RTL locale");
+    assertEquals("testBidiAPI: bidi auto, auto directionality, RTL locale", u"\u20661\u2069\u20672\u2069\u20673\u2069", result);
+
+    // Bidi auto, directionality LTR => controls
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_LTR);
+    mfBuilder.setLocale(Locale("en-US"));
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi auto, LTR directionality");
+    assertEquals("testBidiAPI: bidi auto, LTR directionality", u"\u20661\u2069\u20672\u20693", result);
+
+    // Bidi auto, directionality auto, LTR locale -- same as above
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_AUTO);
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi auto, auto directionality, LTR locale");
+    assertEquals("testBidiAPI: bidi auto, auto directionality, LTR locale", u"\u20661\u2069\u20672\u20693", result);
+}
+
 // Example for design doc -- version without null and error checks
 void TestMessageFormat2::testAPISimple() {
     IcuTestErrorCode errorCode1(*this, "testAPI");
@@ -144,6 +225,8 @@ void TestMessageFormat2::testAPISimple() {
     // To be used in the test suite, it should include those checks
     // Null checks and error checks elided
     MessageFormatter::Builder builder(errorCode);
+    builder.setBidiIsolationStrategy(MessageFormatter::U_MF_BIDI_OFF);
+
     MessageFormatter mf = builder.setPattern(u"Hello, {$userName}!", parseError, errorCode)
         .build(errorCode);
 
@@ -202,6 +285,7 @@ void TestMessageFormat2::testAPI() {
                   .setArgument("userName", "John")
                   .setExpected("Hello, John!")
                   .setLocale("en_US")
+                  .setBidiIsolationStrategy(MessageFormatter::U_MF_BIDI_OFF)
                   .build());
     TestUtils::runTestCase(*this, test, errorCode);
 
@@ -274,7 +358,7 @@ void TestMessageFormat2::testAPICustomFunctions() {
     // Set up custom function registry
     MFFunctionRegistry::Builder builder(errorCode);
     MFFunctionRegistry functionRegistry =
-        builder.adoptFormatter(data_model::FunctionName("person"), new PersonNameFormatterFactory(), errorCode)
+        builder.adoptFunction(data_model::FunctionName("person"), new PersonNameFunction(), errorCode)
                .build();
 
     Person* person = new Person(UnicodeString("Mr."), UnicodeString("John"), UnicodeString("Doe"));
@@ -290,6 +374,7 @@ void TestMessageFormat2::testAPICustomFunctions() {
                                    .setPattern("Hello {$name :person formality=informal}",
                                                parseError, errorCode)
                                    .setLocale(locale)
+                                   .setBidiIsolationStrategy(MessageFormatter::U_MF_BIDI_OFF)
                                    .build(errorCode);
     result = mf.formatToString(arguments, errorCode);
     assertEquals("testAPICustomFunctions", U_MF_UNKNOWN_FUNCTION_ERROR, errorCode);
@@ -314,13 +399,13 @@ void TestMessageFormat2::testAPICustomFunctions() {
 
     // By type
     MFFunctionRegistry::Builder builderByType(errorCode);
-    FunctionName personFormatterName("person");
+    FunctionName personFunctionName("person");
     MFFunctionRegistry functionRegistryByType =
-        builderByType.adoptFormatter(personFormatterName,
-                                   new PersonNameFormatterFactory(),
-                                   errorCode)
+        builderByType.adoptFunction(personFunctionName,
+                                    new PersonNameFunction(),
+                                    errorCode)
                      .setDefaultFormatterNameByType("person",
-                                                    personFormatterName,
+                                                    personFunctionName,
                                                     errorCode)
                      .build();
     mfBuilder.setFunctionRegistry(functionRegistryByType);
@@ -332,8 +417,11 @@ void TestMessageFormat2::testAPICustomFunctions() {
     // Expect "Hello John" because in the custom function we registered,
     // "informal" is the default formality and "length" is the default length
     assertEquals("testAPICustomFunctions", "Hello John", result);
+
     delete person;
 }
+
+PersonNameFunction::~PersonNameFunction() {}
 
 // ICU-22890 lone surrogate cause infinity loop
 void TestMessageFormat2::testHighLoneSurrogate() {
@@ -375,6 +463,7 @@ void TestMessageFormat2::testLoneSurrogateInQuotedLiteral() {
     UnicodeString expectedResult({0xdc02, 0});
     icu::message2::MessageFormatter msgfmt2 =
       icu::message2::MessageFormatter::Builder(errorCode)
+      .setBidiIsolationStrategy(MessageFormatter::U_MF_BIDI_OFF)
       .setPattern(literal, pe, errorCode)
       .build(errorCode);
     UnicodeString result = msgfmt2.formatToString({}, errorCode);

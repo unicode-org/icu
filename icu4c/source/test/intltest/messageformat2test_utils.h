@@ -36,6 +36,7 @@ class TestCase : public UMemory {
     /* const */ uint32_t lineNumber;
     /* const */ uint32_t offset;
     /* const */ bool ignoreError;
+    /* const */ MessageFormatter::UMFBidiIsolationStrategy bidiIsolationStrategy;
 
     // Function registry is not owned by the TestCase object
     const MFFunctionRegistry* functionRegistry = nullptr;
@@ -43,6 +44,9 @@ class TestCase : public UMemory {
     public:
     const UnicodeString& getPattern() const { return pattern; }
     const Locale& getLocale() const { return locale; }
+    MessageFormatter::UMFBidiIsolationStrategy getBidiIsolationStrategy() const {
+        return bidiIsolationStrategy;
+    }
     std::map<UnicodeString, Formattable> getArguments() const { return std::move(arguments); }
     const UnicodeString& getTestName() const { return testName; }
     bool expectSuccess() const {
@@ -163,6 +167,10 @@ class TestCase : public UMemory {
             locale = loc;
             return *this;
         }
+        Builder& setBidiIsolationStrategy(MessageFormatter::UMFBidiIsolationStrategy s) {
+            bidiIsolationStrategy = s;
+            return *this;
+        }
         Builder& setExpectedLineNumberAndOffset(uint32_t line, uint32_t o) {
             hasLineNumberAndOffset = true;
             lineNumber = line;
@@ -201,10 +209,20 @@ class TestCase : public UMemory {
         uint32_t lineNumber;
         uint32_t offset;
         bool ignoreError;
+        MessageFormatter::UMFBidiIsolationStrategy bidiIsolationStrategy;
         const MFFunctionRegistry* functionRegistry  = nullptr; // Not owned
 
         public:
-        Builder() : pattern(""), locale(Locale::getDefault()), hasExpectedOutput(false), expected(""), expectedError(U_ZERO_ERROR), arbitraryError(false), expectNoSyntaxError(false), hasLineNumberAndOffset(false), ignoreError(false) {}
+        Builder() : pattern(""),
+                    locale(Locale::getDefault()),
+                    hasExpectedOutput(false),
+                    expected(""),
+                    expectedError(U_ZERO_ERROR),
+                    arbitraryError(false),
+                    expectNoSyntaxError(false),
+                    hasLineNumberAndOffset(false),
+                    ignoreError(false),
+                    bidiIsolationStrategy(MessageFormatter::U_MF_BIDI_AUTO) {}
     };
 
     private:
@@ -222,6 +240,7 @@ class TestCase : public UMemory {
         lineNumber(builder.hasLineNumberAndOffset ? builder.lineNumber : 0),
         offset(builder.hasLineNumberAndOffset ? builder.offset : 0),
         ignoreError(builder.ignoreError),
+        bidiIsolationStrategy(builder.bidiIsolationStrategy),
         functionRegistry(builder.functionRegistry) {
         // If an error is not expected, then the expected
         // output should be present
@@ -240,6 +259,7 @@ class TestUtils {
 
         UParseError parseError;
 	MessageFormatter::Builder mfBuilder(errorCode);
+        mfBuilder.setBidiIsolationStrategy(testCase.getBidiIsolationStrategy());
         mfBuilder.setPattern(testCase.getPattern(), parseError, errorCode).setLocale(testCase.getLocale());
 
         if (testCase.hasCustomRegistry()) {
@@ -294,6 +314,9 @@ class TestUtils {
         }
         if (!testCase.lineNumberAndOffsetMatch(parseError.line, parseError.offset)) {
             failWrongOffset(tmsg, testCase, parseError.line, parseError.offset);
+        }
+        if (testCase.expectSuccess() && !testCase.outputMatches(result)) {
+            failWrongOutput(tmsg, testCase, result);
         }
         if (U_FAILURE(errorCode) && !testCase.expectSuccess()
             && testCase.expectedErrorCode() != U_MF_SYNTAX_ERROR) {

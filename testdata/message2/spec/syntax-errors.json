@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "$schema": "../schemas/v0/tests.schema.json",
   "scenario": "Syntax errors",
   "description": "Strings that produce syntax errors when parsed.",
   "defaultTestProperties": {
@@ -192,7 +192,6 @@
     { "src": "{^.}" },
     { "src": "{^ .}" },
     { "src": "{&}" },
-    { "src": "{\ud800}" },
     { "src": "{\ufdd0}" },
     { "src": "{\ufffe}" },
     { "src": "{!.\\{}" },
