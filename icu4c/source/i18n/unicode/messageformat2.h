@@ -51,6 +51,9 @@ namespace message2 {
             : fallbackString(""), val(std::move(f)) {}
         FormattedPlaceholder value() { return std::move(val); }
         UnicodeString asFallback() const { return fallbackString; }
+        virtual ~InternalValue();
+        InternalValue& operator=(InternalValue&&);
+        InternalValue(InternalValue&&);
         private:
         UnicodeString fallbackString; // Non-empty if fallback
         // Otherwise, assumed to be a FormattedPlaceholder
