@@ -606,8 +606,8 @@ Formatter* StandardFunctions::IntegerFactory::createFormatter(const Locale& loca
 
 StandardFunctions::IntegerFactory::~IntegerFactory() {}
 
-static FormattedPlaceholder notANumber(const FormattedPlaceholder& input, UErrorCode& status) {
-    return FormattedPlaceholder(input, FormattedValue(UnicodeString("NaN")), status);
+static FormattedPlaceholder notANumber(const FormattedPlaceholder& input) {
+    return FormattedPlaceholder(input, FormattedValue(UnicodeString("NaN")));
 }
 
 static double parseNumberLiteral(const UnicodeString& inputStr, UErrorCode& errorCode) {
@@ -788,7 +788,7 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
         default: {
             // Other types can't be parsed as a number
             errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-            return notANumber(arg, errorCode);
+            return notANumber(arg);
         }
         }
     }
@@ -799,7 +799,7 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
                                     std::move(opts),
                                     FormattedValue(std::move(numberResult)));
     }
-    return FormattedPlaceholder(arg, FormattedValue(std::move(numberResult)) errorCode);
+    return FormattedPlaceholder(arg, FormattedValue(std::move(numberResult)));
 }
 
 StandardFunctions::Number::~Number() {}
@@ -857,7 +857,8 @@ void StandardFunctions::Plural::selectKey(FormattedPlaceholder&& toFormat,
                                                                     errorCode);
     CHECK_ERROR(errorCode);
 
-    U_ASSERT(resolvedSelector.isEvaluated() && resolvedSelector.output().isNumber());
+    U_ASSERT(resolvedSelector.isFunctionResult()
+             && resolvedSelector.output().isNumber());
 
     // See  https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md#number-selection
     // 1. Let exact be the JSON string representation of the numeric value of resolvedSelector
@@ -1517,7 +1518,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
             // in the returned FormattedPlaceholder; this is necessary
             // so the date can be re-formatted
             toFormat = FormattedPlaceholder(message2::Formattable::forDate(d),
-                                            toFormat.getFallback(), errorCode);
+                                            toFormat.getFallback());
             df->format(d, result, 0, errorCode);
         }
         df->adoptTimeZone(createTimeZone(dateInfo, errorCode));
@@ -1554,7 +1555,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     if (U_FAILURE(errorCode)) {
         return {};
     }
-    return FormattedPlaceholder(toFormat, std::move(opts), FormattedValue(std::move(result)), errorCode);
+    return FormattedPlaceholder(toFormat, std::move(opts), FormattedValue(std::move(result)));
 }
 
 StandardFunctions::DateTimeFactory::~DateTimeFactory() {}

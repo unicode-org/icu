@@ -178,27 +178,17 @@ namespace message2 {
 
 
     FormattedPlaceholder& FormattedPlaceholder::operator=(FormattedPlaceholder&& other) noexcept {
-        type = other.type;
+        origin = other.origin;
         source = other.source;
-        if (type == kEvaluated) {
-            formatted = std::move(other.formatted);
-        }
-        if (previousOptions != nullptr) {
-            delete previousOptions;
-        }
-        if (other.previousOptions != nullptr) {
-            previousOptions = other.previousOptions;
-            other.previousOptions = nullptr;
-        } else {
-            previousOptions = nullptr;
-        }
+        formatted = std::move(other.formatted);
+        previousOptions = std::move(other.previousOptions);
         fallback = other.fallback;
         return *this;
     }
 
     const Formattable* FormattedPlaceholder::getSource(UErrorCode& errorCode) const {
         if (U_SUCCESS(errorCode)) {
-            if (type != kNull) {
+            if (origin != kNull) {
                 return &source;
             } else {
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -209,7 +199,7 @@ namespace message2 {
 
     FormattedPlaceholder FormattedPlaceholder::withResult(FormattedValue&& result) {
         formatted = std::move(result);
-        type = kEvaluated;
+        origin = kFunctionResult;
         return std::move(*this);
     }
 
@@ -220,70 +210,38 @@ namespace message2 {
             return {};
         }
         formatted = std::move(result);
-        type = kEvaluated;
-        delete previousOptions;
-        previousOptions = create<FunctionOptions>(std::move(opts), status);
-        if (U_FAILURE(status)) {
-            previousOptions = nullptr;
-            return {};
-        }
+        origin = kFunctionResult;
+        previousOptions = std::move(opts);
         return std::move(*this);
     }
 
     FormattedPlaceholder::FormattedPlaceholder(const FormattedPlaceholder& input,
                                                FunctionOptions&& opts,
-                                               FormattedValue&& output,
-                                               UErrorCode& status)
+                                               FormattedValue&& output)
         : fallback(input.fallback),
           source(input.source),
           formatted(std::move(output)),
-          previousOptions(nullptr),
-          type(kEvaluated) {
-        CHECK_ERROR(status);
-
-        LocalPointer<FunctionOptions> temp(create<FunctionOptions>(std::move(opts), status));
-        CHECK_ERROR(status);
-        previousOptions = temp.orphan();
-    }
+          previousOptions(std::move(opts)),
+          origin(kFunctionResult) {}
 
     FormattedPlaceholder::FormattedPlaceholder(const FormattedPlaceholder& input,
-                                               FormattedValue&& output,
-                                               UErrorCode& status)
+                                               FormattedValue&& output)
         : fallback(input.fallback),
           source(input.source),
           formatted(std::move(output)),
-          type(kEvaluated) {
-        initOptions(status);
-    }
+          origin(kFunctionResult) {}
 
     FormattedPlaceholder::FormattedPlaceholder(const Formattable& input,
-                                               const UnicodeString& fb,
-                                               UErrorCode& status)
-        : fallback(fb), source(input), type(kUnevaluated) {
-        initOptions(status);
-    }
+                                               const UnicodeString& fb)
+        : fallback(fb), source(input), origin(kArgumentOrLiteral) {}
 
-    FormattedPlaceholder::FormattedPlaceholder() : type(kNull) {
-        previousOptions = nullptr;
-    }
-
-    void FormattedPlaceholder::initOptions(UErrorCode& status) {
-        LocalPointer<FunctionOptions> temp(create<FunctionOptions>(FunctionOptions(), status));
-        CHECK_ERROR(status);
-        previousOptions = temp.orphan();
-    }
+    FormattedPlaceholder::FormattedPlaceholder() : origin(kNull) {}
 
     const message2::FunctionOptions& FormattedPlaceholder::getOptions() const {
-        U_ASSERT(previousOptions != nullptr);
-        return *previousOptions;
+        return previousOptions;
     }
 
-    FormattedPlaceholder::~FormattedPlaceholder() {
-        if (previousOptions != nullptr) {
-            delete previousOptions;
-            previousOptions = nullptr;
-        }
-    }
+    FormattedPlaceholder::~FormattedPlaceholder() {}
 
     // Default formatters
     // ------------------
@@ -336,8 +294,7 @@ namespace message2 {
             }
             if (asDecimal != nullptr) {
                 return FormattedPlaceholder(input,
-                                            FormattedValue(formatNumberWithDefaults(locale, asDecimal, status)),
-                                            status);
+                                            FormattedValue(formatNumberWithDefaults(locale, asDecimal, status)));
             }
         }
 
@@ -348,27 +305,27 @@ namespace message2 {
             const DateInfo* dateInfo = toFormat.getDate(status);
             U_ASSERT(U_SUCCESS(status));
             formatDateWithDefaults(locale, d, result, status);
-            return FormattedPlaceholder(input, FormattedValue(std::move(result)), status);
+            return FormattedPlaceholder(input, FormattedValue(std::move(result)));
         }
         case UFMT_DOUBLE: {
             double d = toFormat->getDouble(status);
             U_ASSERT(U_SUCCESS(status));
-            return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, d, status)), status);
+            return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, d, status)));
         }
         case UFMT_LONG: {
             int32_t l = toFormat->getLong(status);
             U_ASSERT(U_SUCCESS(status));
-            return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, l, status)), status);
+            return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, l, status)));
         }
         case UFMT_INT64: {
             int64_t i = toFormat->getInt64Value(status);
             U_ASSERT(U_SUCCESS(status));
-            return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, i, status)), status);
+            return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, i, status)));
         }
         case UFMT_STRING: {
             const UnicodeString& s = toFormat->getString(status);
             U_ASSERT(U_SUCCESS(status));
-            return FormattedPlaceholder(input, FormattedValue(UnicodeString(s)), status);
+            return FormattedPlaceholder(input, FormattedValue(UnicodeString(s)));
         }
         default: {
             // No default formatters for other types; use fallback
@@ -389,16 +346,16 @@ namespace message2 {
             return {};
         }
 
-        // Evaluated value: either just return the string, or format the number
+        // Function result: either just return the string, or format the number
         // as a string and return it
-        if (isEvaluated()) {
+        if (isFunctionResult()) {
             if (formatted.isString()) {
                 return formatted.getString();
             } else {
                 return formatted.getNumber().toString(status);
             }
         }
-        // Unevaluated value: first evaluate it fully, then format
+        // Unannotated value: apply default formatters
         UErrorCode savedStatus = status;
         FormattedPlaceholder evaluated = formatWithDefaults(locale, *this, status);
         if (status == U_MF_FORMATTING_ERROR) {

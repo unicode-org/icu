@@ -45,6 +45,12 @@ namespace message2 {
 
     using namespace data_model;
 
+    // InternalValue tracks a value along with, possibly, a function that needs
+    // to be applied to it in the future (once the value is required
+    // (by a .match or pattern));
+    // while FormattedPlaceholder tracks a value and how it was constructed in the
+    // past (by a function, or from a literal or argument).
+
     // InternalValue represents an intermediate value in the message
     // formatter. An InternalValue can either be a fallback value (representing
     // an error that occurred during formatting); a "suspension", meaning a function

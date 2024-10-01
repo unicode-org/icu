@@ -52,7 +52,7 @@ static Formattable evalLiteral(const Literal& lit) {
                 fallbackToUse += DOLLAR;
                 fallbackToUse += var;
             }
-            return (FormattedPlaceholder(*val, fallbackToUse, errorCode));
+            return (FormattedPlaceholder(*val, fallbackToUse));
         }
     }
     return {};
@@ -150,7 +150,7 @@ InternalValue::InternalValue(InternalValue&& other) {
         return InternalValue(std::move(result));
     } else {
         U_ASSERT(rand.isLiteral());
-        return InternalValue(formatLiteral(fallback, rand.asLiteral(), status));
+        return InternalValue(formatLiteral(fallback, rand.asLiteral()));
     }
 }
 

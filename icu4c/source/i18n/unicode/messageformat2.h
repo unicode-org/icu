@@ -360,7 +360,7 @@ namespace message2 {
         void resolvePreferences(MessageContext&, UVector&, UVector&, UErrorCode&) const;
 
         // Formatting methods
-        [[nodiscard]] FormattedPlaceholder formatLiteral(const UnicodeString&, const data_model::Literal&, UErrorCode&) const;
+        [[nodiscard]] FormattedPlaceholder formatLiteral(const UnicodeString&, const data_model::Literal&) const;
         void formatPattern(MessageContext&, const Environment&, const data_model::Pattern&, UErrorCode&, UnicodeString&) const;
         [[nodiscard]] InternalValue eval(MessageContext&, InternalValue, UErrorCode&) const;
         // Dispatches on argument type
