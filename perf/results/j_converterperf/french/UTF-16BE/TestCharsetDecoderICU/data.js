@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727732265787,
+  "lastUpdate": 1727741887013,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27927,6 +27927,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.432558502738655,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "3cd97add1ee482a5b7753103f80173e46997194f",
+          "message": "ICU-22922 migrate download index\n\nSee #3227",
+          "timestamp": "2024-09-30T17:05:04-07:00",
+          "tree_id": "fa00d20589c4c0d83cb031d8efdd85458013adba",
+          "url": "https://github.com/unicode-org/icu/commit/3cd97add1ee482a5b7753103f80173e46997194f"
+        },
+        "date": 1727741715348,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.4385427493217287,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
