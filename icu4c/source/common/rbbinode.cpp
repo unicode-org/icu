@@ -193,13 +193,23 @@ void RBBINode::NRDeleteNode(RBBINode *node) {
 //                  references in preparation for generating the DFA tables.
 //
 //-------------------------------------------------------------------------
-RBBINode *RBBINode::cloneTree() {
+constexpr int kRecursiveDepthLimit = 3500;
+RBBINode *RBBINode::cloneTree(UErrorCode &status, int depth) {
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+    // If the depth of the stack is too deep, we return U_INPUT_TOO_LONG_ERROR
+    // to avoid stack overflow crash.
+    if (depth > kRecursiveDepthLimit) {
+        status = U_INPUT_TOO_LONG_ERROR;
+        return nullptr;
+    }
     RBBINode    *n;
 
     if (fType == RBBINode::varRef) {
         // If the current node is a variable reference, skip over it
         //   and clone the definition of the variable instead.
-        n = fLeftChild->cloneTree();
+        n = fLeftChild->cloneTree(status, depth+1);
     } else if (fType == RBBINode::uset) {
         n = this;
     } else {
@@ -207,12 +217,16 @@ RBBINode *RBBINode::cloneTree() {
         // Check for null pointer.
         if (n != nullptr) {
             if (fLeftChild != nullptr) {
-                n->fLeftChild          = fLeftChild->cloneTree();
-                n->fLeftChild->fParent = n;
+                n->fLeftChild          = fLeftChild->cloneTree(status, depth+1);
+                if (U_SUCCESS(status)) {
+                    n->fLeftChild->fParent = n;
+                }
             }
             if (fRightChild != nullptr) {
-                n->fRightChild          = fRightChild->cloneTree();
-                n->fRightChild->fParent = n;
+                n->fRightChild          = fRightChild->cloneTree(status, depth+1);
+                if (U_SUCCESS(status)) {
+                    n->fRightChild->fParent = n;
+                }
             }
         }
     }
@@ -239,7 +253,6 @@ RBBINode *RBBINode::cloneTree() {
 //                      nested references are handled by cloneTree(), not here.
 //
 //-------------------------------------------------------------------------
-constexpr int kRecursiveDepthLimit = 3500;
 RBBINode *RBBINode::flattenVariables(UErrorCode& status, int depth) {
     if (U_FAILURE(status)) {
         return this;
@@ -251,7 +264,7 @@ RBBINode *RBBINode::flattenVariables(UErrorCode& status, int depth) {
         return this;
     }
     if (fType == varRef) {
-        RBBINode *retNode  = fLeftChild->cloneTree();
+        RBBINode *retNode  = fLeftChild->cloneTree(status, depth+1);
         if (retNode != nullptr) {
             retNode->fRuleRoot = this->fRuleRoot;
             retNode->fChainIn  = this->fChainIn;
@@ -280,7 +293,16 @@ RBBINode *RBBINode::flattenVariables(UErrorCode& status, int depth) {
 //                 the left child of the uset node.
 //
 //-------------------------------------------------------------------------
-void RBBINode::flattenSets() {
+void RBBINode::flattenSets(UErrorCode &status, int depth) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    // If the depth of the stack is too deep, we return U_INPUT_TOO_LONG_ERROR
+    // to avoid stack overflow crash.
+    if (depth > kRecursiveDepthLimit) {
+        status = U_INPUT_TOO_LONG_ERROR;
+        return;
+    }
     U_ASSERT(fType != setRef);
 
     if (fLeftChild != nullptr) {
@@ -288,11 +310,13 @@ void RBBINode::flattenSets() {
             RBBINode *setRefNode = fLeftChild;
             RBBINode *usetNode   = setRefNode->fLeftChild;
             RBBINode *replTree   = usetNode->fLeftChild;
-            fLeftChild           = replTree->cloneTree();
-            fLeftChild->fParent  = this;
+            fLeftChild           = replTree->cloneTree(status, depth+1);
+            if (U_FAILURE(status)) {
+                fLeftChild->fParent  = this;
+            }
             delete setRefNode;
         } else {
-            fLeftChild->flattenSets();
+            fLeftChild->flattenSets(status, depth+1);
         }
     }
 
@@ -301,11 +325,13 @@ void RBBINode::flattenSets() {
             RBBINode *setRefNode = fRightChild;
             RBBINode *usetNode   = setRefNode->fLeftChild;
             RBBINode *replTree   = usetNode->fLeftChild;
-            fRightChild           = replTree->cloneTree();
-            fRightChild->fParent  = this;
+            fRightChild           = replTree->cloneTree(status, depth+1);
+            if (U_FAILURE(status)) {
+                fRightChild->fParent  = this;
+            }
             delete setRefNode;
         } else {
-            fRightChild->flattenSets();
+            fRightChild->flattenSets(status, depth+1);
         }
     }
 }
