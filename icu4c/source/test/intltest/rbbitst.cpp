@@ -4584,7 +4584,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                     UErrorCode status = U_ZERO_ERROR;
                     u_charName(c, U_EXTENDED_CHAR_NAME, cName, sizeof(cName), &status);
 
-                    char buffer[200];
+                    char buffer[280];
                     auto ret = snprintf(buffer, sizeof(buffer),
                              "%4s %3i :  %1s  %1s  %10s  %-*s  %-40s  %-40s",
                              currentLineFlag.c_str(),

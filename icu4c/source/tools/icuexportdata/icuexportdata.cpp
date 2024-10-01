@@ -331,13 +331,13 @@ void dumpGeneralCategoryMask(FILE* f) {
 
 
     fprintf(f, "mask_for = \"General_Category\"\n");
-    uint32_t minValue = u_getIntPropertyMinValue(UCHAR_GENERAL_CATEGORY);
+    int32_t minValue = u_getIntPropertyMinValue(UCHAR_GENERAL_CATEGORY);
     U_ASSERT(minValue >= 0);
-    uint32_t maxValue = u_getIntPropertyMaxValue(UCHAR_GENERAL_CATEGORY);
+    int32_t maxValue = u_getIntPropertyMaxValue(UCHAR_GENERAL_CATEGORY);
     U_ASSERT(maxValue >= 0);
 
     fprintf(f, "values = [\n");
-    for (uint32_t v = minValue; v <= maxValue; v++) {
+    for (int32_t v = minValue; v <= maxValue; v++) {
         dumpValueEntry(uproperty, U_MASK(v), true, f);
 
         // We want to dump these masks "in order", which means they

@@ -1489,7 +1489,7 @@ void NewResourceBundleTest::TestTrace() {
 
     assertEquals("Start position stability coverage", 0x3000, UTRACE_UDATA_START);
 
-    const void* context;
+    const void* context = nullptr;
     utrace_setFunctions(context, nullptr, nullptr, traceData);
     utrace_setLevel(UTRACE_VERBOSE);
 
