@@ -45,6 +45,28 @@ namespace message2 {
 
     using namespace data_model;
 
+    // InternalValue
+    // Encodes an "either a fallback string or a FormattedPlaceholder"
+    class InternalValue : public UObject {
+        public:
+        bool isFallback() const { return !fallbackString.isEmpty(); }
+        InternalValue() : fallbackString("") {}
+        // Fallback constructor
+        explicit InternalValue(UnicodeString fb) : fallbackString(fb) {}
+        // Regular value constructor
+        explicit InternalValue(FormattedPlaceholder&& f)
+            : fallbackString(""), val(std::move(f)) {}
+        FormattedPlaceholder value() { return std::move(val); }
+        UnicodeString asFallback() const { return fallbackString; }
+        virtual ~InternalValue();
+        InternalValue& operator=(InternalValue&&);
+        InternalValue(InternalValue&&);
+        private:
+        UnicodeString fallbackString; // Non-empty if fallback
+        // Otherwise, assumed to be a FormattedPlaceholder
+        FormattedPlaceholder val;
+    }; // class InternalValue
+
     // PrioritizedVariant
 
     // For how this class is used, see the references to (integer, variant) tuples

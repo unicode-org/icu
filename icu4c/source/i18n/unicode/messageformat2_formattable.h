@@ -673,7 +673,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        FormattedPlaceholder(const Formattable& input, const UnicodeString& fb, UErrorCode& status);
+        FormattedPlaceholder(const Formattable& input, const UnicodeString& fb, UErrorCode& errorCode);
         /**
          * Default constructor. Leaves the FormattedPlaceholder in a
          * valid but undefined state.
@@ -682,7 +682,15 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
          * @deprecated This API is for technology preview only.
          */
         FormattedPlaceholder();
-        // TODO
+        /**
+         * Returns true iff this FormattedPlaceholder represents a null operand
+         * (the absence of an operand).
+         *
+         * @return A boolean indicating whether this is a null operand.
+         *
+         * @internal ICU 75 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         UBool isNullOperand() const { return type == kNull; }
         /**
          * Returns a pointer to
