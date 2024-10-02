@@ -356,8 +356,7 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env, const O
         }
         return InternalValue(defaultFormatterName,
                              FunctionOptions(),
-                             std::move(operand),
-                             status);
+                             std::move(operand));
     } else {
         randVal = eval(context, std::move(randVal), status);
         // Don't call the function on error values
@@ -378,8 +377,7 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env, const O
         // Call the formatter function
         return InternalValue(functionName,
                              std::move(resolvedOptions),
-                             std::move(operand),
-                             status);
+                             std::move(operand));
     }
 }
 
@@ -499,7 +497,7 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
         // Return an empty list of matches
         return;
     }
-    auto selectorImpl = getSelector(context, selectorName, status);
+    LocalPointer<Selector> selectorImpl(getSelector(context, selectorName, status));
     if (U_FAILURE(status)) {
         return;
     }
