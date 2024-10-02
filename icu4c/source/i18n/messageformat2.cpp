@@ -192,7 +192,8 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env, const O
 
         // The option is resolved; add it to the vector
         ResolvedFunctionOption resolvedOpt(k, std::move(optVal), status);
-        LocalPointer p(create<ResolvedFunctionOption>(std::move(resolvedOpt), status));
+        LocalPointer<ResolvedFunctionOption>
+            p(create<ResolvedFunctionOption>(std::move(resolvedOpt), status));
         EMPTY_ON_ERROR(status);
         optionsVector->adoptElement(p.orphan(), status);
     }
