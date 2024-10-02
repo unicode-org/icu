@@ -47,7 +47,10 @@ static int  gLastSerial = 0;
 //    Constructor.   Just set the fields to reasonable default values.
 //
 //-------------------------------------------------------------------------
-RBBINode::RBBINode(NodeType t) : UMemory() {
+RBBINode::RBBINode(NodeType t, UErrorCode& status) : UMemory() {
+    if (U_FAILURE(status)) {
+        return;
+    }
 #ifdef RBBI_DEBUG
     fSerialNum    = ++gLastSerial;
 #endif
@@ -65,10 +68,13 @@ RBBINode::RBBINode(NodeType t) : UMemory() {
     fVal          = 0;
     fPrecedence   = precZero;
 
-    UErrorCode     status = U_ZERO_ERROR;
-    fFirstPosSet  = new UVector(status);  // TODO - get a real status from somewhere
+    fFirstPosSet  = new UVector(status);
     fLastPosSet   = new UVector(status);
     fFollowPos    = new UVector(status);
+    if (U_SUCCESS(status) &&
+        (fFirstPosSet == nullptr || fLastPosSet == nullptr || fFollowPos == nullptr)) {
+        status =  U_MEMORY_ALLOCATION_ERROR;
+    }
     if      (t==opCat)    {fPrecedence = precOpCat;}
     else if (t==opOr)     {fPrecedence = precOpOr;}
     else if (t==opStart)  {fPrecedence = precStart;}
@@ -77,7 +83,10 @@ RBBINode::RBBINode(NodeType t) : UMemory() {
 }
 
 
-RBBINode::RBBINode(const RBBINode &other) : UMemory(other) {
+RBBINode::RBBINode(const RBBINode &other, UErrorCode& status) : UMemory(other) {
+    if (U_FAILURE(status)) {
+        return;
+    }
 #ifdef RBBI_DEBUG
     fSerialNum   = ++gLastSerial;
 #endif
@@ -94,10 +103,13 @@ RBBINode::RBBINode(const RBBINode &other) : UMemory(other) {
     fVal         = other.fVal;
     fRuleRoot    = false;
     fChainIn     = other.fChainIn;
-    UErrorCode     status = U_ZERO_ERROR;
     fFirstPosSet = new UVector(status);   // TODO - get a real status from somewhere
     fLastPosSet  = new UVector(status);
     fFollowPos   = new UVector(status);
+    if (U_SUCCESS(status) &&
+        (fFirstPosSet == nullptr || fLastPosSet == nullptr || fFollowPos == nullptr)) {
+        status =  U_MEMORY_ALLOCATION_ERROR;
+    }
 }
 
 
@@ -210,24 +222,37 @@ RBBINode *RBBINode::cloneTree(UErrorCode &status, int depth) {
         // If the current node is a variable reference, skip over it
         //   and clone the definition of the variable instead.
         n = fLeftChild->cloneTree(status, depth+1);
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
     } else if (fType == RBBINode::uset) {
         n = this;
     } else {
-        n = new RBBINode(*this);
+        n = new RBBINode(*this, status);
+        if (U_FAILURE(status)) {
+            delete n;
+            return nullptr;
+        }
         // Check for null pointer.
-        if (n != nullptr) {
-            if (fLeftChild != nullptr) {
-                n->fLeftChild          = fLeftChild->cloneTree(status, depth+1);
-                if (U_SUCCESS(status)) {
-                    n->fLeftChild->fParent = n;
-                }
+        if (n == nullptr) {
+            status =  U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        if (fLeftChild != nullptr) {
+            n->fLeftChild          = fLeftChild->cloneTree(status, depth+1);
+            if (U_FAILURE(status)) {
+                delete n;
+                return nullptr;
             }
-            if (fRightChild != nullptr) {
-                n->fRightChild          = fRightChild->cloneTree(status, depth+1);
-                if (U_SUCCESS(status)) {
-                    n->fRightChild->fParent = n;
-                }
+            n->fLeftChild->fParent = n;
+        }
+        if (fRightChild != nullptr) {
+            n->fRightChild          = fRightChild->cloneTree(status, depth+1);
+            if (U_FAILURE(status)) {
+                delete n;
+                return nullptr;
             }
+            n->fRightChild->fParent = n;
         }
     }
     return n;
@@ -265,20 +290,33 @@ RBBINode *RBBINode::flattenVariables(UErrorCode& status, int depth) {
     }
     if (fType == varRef) {
         RBBINode *retNode  = fLeftChild->cloneTree(status, depth+1);
-        if (retNode != nullptr) {
-            retNode->fRuleRoot = this->fRuleRoot;
-            retNode->fChainIn  = this->fChainIn;
+        if (U_FAILURE(status)) {
+            return this;
         }
+        retNode->fRuleRoot = this->fRuleRoot;
+        retNode->fChainIn  = this->fChainIn;
         delete this;   // TODO: undefined behavior. Fix.
         return retNode;
     }
 
     if (fLeftChild != nullptr) {
         fLeftChild = fLeftChild->flattenVariables(status, depth+1);
+        if (fLeftChild == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        if (U_FAILURE(status)) {
+            return this;
+        }
         fLeftChild->fParent  = this;
     }
     if (fRightChild != nullptr) {
         fRightChild = fRightChild->flattenVariables(status, depth+1);
+        if (fRightChild == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        if (U_FAILURE(status)) {
+            return this;
+        }
         fRightChild->fParent = this;
     }
     return this;
@@ -312,8 +350,10 @@ void RBBINode::flattenSets(UErrorCode &status, int depth) {
             RBBINode *replTree   = usetNode->fLeftChild;
             fLeftChild           = replTree->cloneTree(status, depth+1);
             if (U_FAILURE(status)) {
-                fLeftChild->fParent  = this;
+                delete setRefNode;
+                return;
             }
+            fLeftChild->fParent  = this;
             delete setRefNode;
         } else {
             fLeftChild->flattenSets(status, depth+1);
@@ -327,8 +367,10 @@ void RBBINode::flattenSets(UErrorCode &status, int depth) {
             RBBINode *replTree   = usetNode->fLeftChild;
             fRightChild           = replTree->cloneTree(status, depth+1);
             if (U_FAILURE(status)) {
-                fRightChild->fParent  = this;
+                delete setRefNode;
+                return;
             }
+            fRightChild->fParent  = this;
             delete setRefNode;
         } else {
             fRightChild->flattenSets(status, depth+1);
