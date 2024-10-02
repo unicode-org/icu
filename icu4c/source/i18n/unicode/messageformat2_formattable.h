@@ -865,7 +865,6 @@ class U_I18N_API FunctionOptions : public UObject {
         UnicodeString fallback;
         Formattable source;
         FormattedValue formatted;
-        void initOptions(UErrorCode&);
         FunctionOptions previousOptions; // Ignored unless type is kEvaluated
         Origin origin;
     }; // class FormattedPlaceholder
