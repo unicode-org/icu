@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727741532808,
+  "lastUpdate": 1727902335578,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28197,6 +28197,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 340.25226990224525,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "8437d1d86ba217ddf1ab537fb6bc0a0f1f03dcfd",
+          "message": "ICU-22767 Fix GCC warning and turn warning to errors\n\nSee #3129",
+          "timestamp": "2024-10-02T13:35:03-07:00",
+          "tree_id": "1d834b1619406039cd20cc2806c2f16c4e16473a",
+          "url": "https://github.com/unicode-org/icu/commit/8437d1d86ba217ddf1ab537fb6bc0a0f1f03dcfd"
+        },
+        "date": 1727902155702,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 343.2288879500379,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
