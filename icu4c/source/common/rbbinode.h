@@ -91,8 +91,8 @@ class RBBINode : public UMemory {
         UVector       *fFollowPos;
 
 
-        RBBINode(NodeType t);
-        RBBINode(const RBBINode &other);
+        RBBINode(NodeType t, UErrorCode& status);
+        RBBINode(const RBBINode &other, UErrorCode& status);
         ~RBBINode();
         static void  NRDeleteNode(RBBINode *node);
         
