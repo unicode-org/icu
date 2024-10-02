@@ -146,15 +146,10 @@ InternalValue::InternalValue(InternalValue&& other) {
 }
 
 InternalValue::InternalValue(const FunctionName& name,
-                  FunctionOptions&& options,
-                  FormattedPlaceholder&& rand,
-                  UErrorCode& status) : fallbackString(""), functionName(name) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    resolvedOptions.adoptInstead(create<FunctionOptions>(std::move(options), status));
-    operand = std::move(rand);
-}
+                             FunctionOptions&& options,
+                             FormattedPlaceholder&& rand)
+    : fallbackString(""), functionName(name),
+      resolvedOptions(std::move(options)), operand(std::move(rand)) {}
 
 FormattedPlaceholder InternalValue::takeValue(UErrorCode& status) {
     if (U_FAILURE(status)) {
@@ -182,11 +177,11 @@ FunctionOptions InternalValue::takeOptions(UErrorCode& status) {
     if (U_FAILURE(status)) {
         return {};
     }
-    if (!resolvedOptions.isValid()) {
+    if (!isSuspension()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return {};
     }
-    return std::move(*resolvedOptions.orphan());
+    return std::move(resolvedOptions);
 }
 // Only works if not fully evaluated
 FunctionName InternalValue::getFunctionName(UErrorCode& status) const {

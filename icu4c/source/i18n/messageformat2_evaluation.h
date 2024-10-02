@@ -72,13 +72,11 @@ namespace message2 {
         explicit InternalValue(UnicodeString fb) : fallbackString(fb) {}
         // Fully-evaluated value constructor
         explicit InternalValue(FormattedPlaceholder&& f)
-            : fallbackString(""), functionName(""), resolvedOptions(nullptr),
-              operand(std::move(f)) {}
+            : fallbackString(""), functionName(""), operand(std::move(f)) {}
         // Suspension constructor
         InternalValue(const FunctionName& name,
                       FunctionOptions&& options,
-                      FormattedPlaceholder&& rand,
-                      UErrorCode& status);
+                      FormattedPlaceholder&& rand);
         // Error code is set if this isn't fully evaluated
         FormattedPlaceholder takeValue(UErrorCode& status);
         // Error code is set if this is not a suspension
@@ -94,7 +92,7 @@ namespace message2 {
     private:
         UnicodeString fallbackString; // Non-empty if fallback
         FunctionName functionName; // Non-empty if this is a suspension
-        LocalPointer<FunctionOptions> resolvedOptions; // Valid iff this is a suspension
+        FunctionOptions resolvedOptions; // Ignored unless this is a suspension
         FormattedPlaceholder operand;
     }; // class InternalValue
 
