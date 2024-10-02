@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727902770501,
+  "lastUpdate": 1727904685345,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43131,6 +43131,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.9279,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "5b45e5c64b7487ded927759ad73637bab5184451",
+          "message": "ICU-22934 Limit the number of resursive call\n\nTo avoid stack overflow while building RBBI",
+          "timestamp": "2024-10-02T14:01:59-07:00",
+          "tree_id": "137f563bbbef4216119bbcf474fa37dc6c64d5aa",
+          "url": "https://github.com/unicode-org/icu/commit/5b45e5c64b7487ded927759ad73637bab5184451"
+        },
+        "date": 1727904505735,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.3193,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.0157,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.9428,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
