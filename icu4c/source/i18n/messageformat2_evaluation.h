@@ -47,7 +47,7 @@ namespace message2 {
 
     // InternalValue tracks a value along with, possibly, a function that needs
     // to be applied to it in the future (once the value is required
-    // (by a .match or pattern));
+    // (by a .match or pattern, or another function));
     // while FormattedPlaceholder tracks a value and how it was constructed in the
     // past (by a function, or from a literal or argument).
 
