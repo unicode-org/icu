@@ -1541,10 +1541,6 @@ ulocimp_getSubtags(
 
     bool hasRegion = false;
 
-    if (localeID == nullptr) {
-        localeID = uloc_getDefault();
-    }
-
     _getLanguage(localeID, language, &localeID, status);
     if (U_FAILURE(status)) { return; }
     U_ASSERT(localeID != nullptr);
@@ -1989,6 +1985,10 @@ uloc_getLanguage(const char*    localeID,
          int32_t languageCapacity,
          UErrorCode* err)
 {
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
+
     /* uloc_getLanguage will return a 2 character iso-639 code if one exists. *CWB*/
     return ByteSinkUtil::viaByteSinkToTerminatedChars(
         language, languageCapacity,
@@ -2011,6 +2011,10 @@ uloc_getScript(const char*    localeID,
          int32_t scriptCapacity,
          UErrorCode* err)
 {
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
+
     return ByteSinkUtil::viaByteSinkToTerminatedChars(
         script, scriptCapacity,
         [&](ByteSink& sink, UErrorCode& status) {
@@ -2032,6 +2036,10 @@ uloc_getCountry(const char* localeID,
             int32_t countryCapacity,
             UErrorCode* err)
 {
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
+
     return ByteSinkUtil::viaByteSinkToTerminatedChars(
         country, countryCapacity,
         [&](ByteSink& sink, UErrorCode& status) {
@@ -2053,6 +2061,10 @@ uloc_getVariant(const char* localeID,
                 int32_t variantCapacity,
                 UErrorCode* err)
 {
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
+
     return ByteSinkUtil::viaByteSinkToTerminatedChars(
         variant, variantCapacity,
         [&](ByteSink& sink, UErrorCode& status) {

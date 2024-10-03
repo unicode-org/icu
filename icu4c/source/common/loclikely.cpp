@@ -349,7 +349,9 @@ uloc_isRightToLeft(const char *locale) {
     UErrorCode errorCode = U_ZERO_ERROR;
     icu::CharString lang;
     icu::CharString script;
-    ulocimp_getSubtags(locale, &lang, &script, nullptr, nullptr, nullptr, errorCode);
+    ulocimp_getSubtags(
+        locale == nullptr ? uloc_getDefault() : locale,
+        &lang, &script, nullptr, nullptr, nullptr, errorCode);
     if (U_FAILURE(errorCode) || script.isEmpty()) {
         // Fastpath: We know the likely scripts and their writing direction
         // for some common languages.
@@ -430,7 +432,7 @@ ulocimp_getRegionForSupplementalData(const char *localeID, bool inferRegion,
     icu::CharString rgBuf = GetRegionFromKey(localeID, "rg", status);
     if (U_SUCCESS(status) && rgBuf.isEmpty()) {
         // No valid rg keyword value, try for unicode_region_subtag
-        rgBuf = ulocimp_getRegion(localeID, status);
+        rgBuf = ulocimp_getRegion(localeID == nullptr ? uloc_getDefault() : localeID, status);
         if (U_SUCCESS(status) && rgBuf.isEmpty() && inferRegion) {
             // Second check for sd keyword value
             rgBuf = GetRegionFromKey(localeID, "sd", status);

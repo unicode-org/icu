@@ -377,6 +377,10 @@ _getDisplayNameForComponent(const char *locale,
         return 0;
     }
 
+    if (locale == nullptr) {
+        locale = uloc_getDefault();
+    }
+
     localStatus = U_ZERO_ERROR;
     icu::CharString localeBuffer = (*getter)(locale, localStatus);
     if (U_FAILURE(localStatus)) {
