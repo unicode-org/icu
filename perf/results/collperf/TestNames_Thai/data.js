@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727904903776,
+  "lastUpdate": 1727956855872,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -55455,6 +55455,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2146247.9032,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "8437d1d86ba217ddf1ab537fb6bc0a0f1f03dcfd",
+          "message": "ICU-22767 Fix GCC warning and turn warning to errors\n\nSee #3129",
+          "timestamp": "2024-10-02T13:35:03-07:00",
+          "tree_id": "1d834b1619406039cd20cc2806c2f16c4e16473a",
+          "url": "https://github.com/unicode-org/icu/commit/8437d1d86ba217ddf1ab537fb6bc0a0f1f03dcfd"
+        },
+        "date": 1727956673785,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 383.9454,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 12612351.2634,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2125510.4592,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 11558537.987,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2135972.0925,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
