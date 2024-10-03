@@ -23,29 +23,56 @@ namespace message2 {
 
 using namespace data_model;
 
+// BaseValue
+// ---------
+
+BaseValue::BaseValue(const Locale& loc, const Formattable& source)
+    : locale(loc) {
+    operand = source;
+}
+
+/* static */ BaseValue* BaseValue::create(const Locale& locale,
+                                          const Formattable& source,
+                                          UErrorCode& errorCode) {
+    return message2::create<BaseValue>(BaseValue(locale, source), errorCode);
+}
+
+extern UnicodeString formattableToString(const Locale&, const Formattable&, UErrorCode&);
+
+UnicodeString BaseValue::formatToString(UErrorCode& errorCode) const {
+    return formattableToString(locale, operand, errorCode);
+}
+
+BaseValue& BaseValue::operator=(BaseValue&& other) noexcept {
+    operand = std::move(other.operand);
+    opts = std::move(other.opts);
+    locale = other.locale;
+
+    return *this;
+}
+
+BaseValue::BaseValue(BaseValue&& other) {
+    *this = std::move(other);
+}
+
 // Functions
 // -------------
 
 ResolvedFunctionOption::ResolvedFunctionOption(ResolvedFunctionOption&& other) {
-    name = std::move(other.name);
-    value = std::move(other.value);
-    sourceIsLiteral = other.sourceIsLiteral;
+    *this = std::move(other);
 }
 
 ResolvedFunctionOption::ResolvedFunctionOption(const UnicodeString& n,
-                                               FormattedPlaceholder&& v,
-                                               UErrorCode& status) {
-    CHECK_ERROR(status);
-
-    name = n;
-    LocalPointer<FormattedPlaceholder>
-        temp(create<FormattedPlaceholder>(std::move(v), status));
-    if (U_SUCCESS(status)) {
-        value.adoptInstead(temp.orphan());
-    }
+                                               FunctionValue* f) : name(n), value(f) {
+    U_ASSERT(f != nullptr);
 }
 
-ResolvedFunctionOption::~ResolvedFunctionOption() {}
+ResolvedFunctionOption::~ResolvedFunctionOption() {
+    if (value != nullptr) {
+        delete value;
+        value = nullptr;
+    }
+}
 
 
 const ResolvedFunctionOption* FunctionOptions::getResolvedFunctionOptions(int32_t& len) const {
@@ -75,7 +102,6 @@ UBool FunctionOptions::wasSetFromLiteral(const UnicodeString& key) const {
     return false;
 }
 
-const FormattedPlaceholder*
 FunctionOptions::getFunctionOption(const UnicodeString& key,
                                    UErrorCode& status) const {
     if (options == nullptr) {
@@ -91,22 +117,27 @@ FunctionOptions::getFunctionOption(const UnicodeString& key,
     return nullptr;
 }
 
-UnicodeString FunctionOptions::getStringFunctionOption(const UnicodeString& key) const {
-    UErrorCode localStatus = U_ZERO_ERROR;
-    const FormattedPlaceholder* option = getFunctionOption(key, localStatus);
-    if (U_SUCCESS(localStatus)) {
-        const Formattable* source = option->getSource(localStatus);
-        // Null operand should never appear as an option value
-        U_ASSERT(U_SUCCESS(localStatus));
-        UnicodeString val = source->getString(localStatus);
-        if (U_SUCCESS(localStatus)) {
-            return val;
+
+UnicodeString
+FunctionOptions::getStringFunctionOption(const UnicodeString& k, UErrorCode& errorCode) const {
+    const FunctionValue* option = getFunctionOption(k, errorCode);
+    if (U_SUCCESS(errorCode)) {
+        UnicodeString result = option->formatToString(errorCode);
+        if (U_SUCCESS(errorCode)) {
+            return result;
         }
     }
-    // For anything else, including non-string values, return "".
-    // Alternately, could try to stringify the non-string option.
-    // (Currently, no tests require that.)
     return {};
+}
+
+UnicodeString FunctionOptions::getStringFunctionOption(const UnicodeString& key) const {
+    UErrorCode localStatus = U_ZERO_ERROR;
+
+    UnicodeString result = getStringFunctionOption(key, localStatus);
+    if (U_FAILURE(localStatus)) {
+        return {};
+    }
+    return result;
 }
 
 FunctionOptions& FunctionOptions::operator=(FunctionOptions&& other) noexcept {
@@ -128,16 +159,62 @@ FunctionOptions::~FunctionOptions() {
     }
 }
 
+static bool containsOption(const UVector& opts, const ResolvedFunctionOption& opt) {
+    for (int32_t i = 0; i < opts.size(); i++) {
+        if (static_cast<ResolvedFunctionOption*>(opts[i])->getName()
+            == opt.getName()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Options in `this` take precedence
+// `this` can't be used after mergeOptions is called
+FunctionOptions FunctionOptions::mergeOptions(FunctionOptions&& other,
+                                              UErrorCode& status) {
+    UVector mergedOptions(status);
+    mergedOptions.setDeleter(uprv_deleteUObject);
+
+    if (U_FAILURE(status)) {
+        return {};
+    }
+
+    // Create a new vector consisting of the options from this `FunctionOptions`
+    for (int32_t i = 0; i < functionOptionsLen; i++) {
+        mergedOptions.adoptElement(create<ResolvedFunctionOption>(std::move(options[i]), status),
+                                 status);
+    }
+
+    // Add each option from `other` that doesn't appear in this `FunctionOptions`
+    for (int i = 0; i < other.functionOptionsLen; i++) {
+        // Note: this is quadratic in the length of `options`
+        if (!containsOption(mergedOptions, other.options[i])) {
+            mergedOptions.adoptElement(create<ResolvedFunctionOption>(std::move(other.options[i]),
+                                                                    status),
+                                     status);
+        }
+    }
+
+    delete[] options;
+    options = nullptr;
+    functionOptionsLen = 0;
+
+    return FunctionOptions(std::move(mergedOptions), status);
+}
+
 // InternalValue
 // -------------
 
 
 InternalValue::~InternalValue() {}
 InternalValue& InternalValue::operator=(InternalValue&& other) {
+    isFallbackValue = other.isFallbackValue;
     fallbackString = other.fallbackString;
-    functionName = other.functionName;
-    resolvedOptions = std::move(other.resolvedOptions);
-    operand = std::move(other.operand);
+    if (!isFallbackValue) {
+        U_ASSERT(other.val.isValid());
+        val.adoptInstead(other.val.orphan());
+    }
     return *this;
 }
 
@@ -145,54 +222,28 @@ InternalValue::InternalValue(InternalValue&& other) {
     *this = std::move(other);
 }
 
-InternalValue::InternalValue(const FunctionName& name,
-                             FunctionOptions&& options,
-                             FormattedPlaceholder&& rand)
-    : fallbackString(""), functionName(name),
-      resolvedOptions(std::move(options)), operand(std::move(rand)) {}
+InternalValue::InternalValue(FunctionValue* v, const UnicodeString& fb)
+    : fallbackString(fb), val(v) {
+    U_ASSERT(v != nullptr);
+}
 
-FormattedPlaceholder InternalValue::takeValue(UErrorCode& status) {
+FunctionValue* InternalValue::takeValue(UErrorCode& status) {
     if (U_FAILURE(status)) {
         return {};
     }
-    if (!functionName.isEmpty() || !fallbackString.isEmpty()) {
+    if (isFallback() || isNullOperand()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return {};
     }
-    return std::move(operand);
+    U_ASSERT(val.isValid());
+    return val.orphan();
 }
-// Only works if not fully evaluated
-FormattedPlaceholder InternalValue::takeOperand(UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return {};
+
+bool InternalValue::isSelectable() const {
+    if (isFallbackValue) {
+        return false;
     }
-    if (functionName.isEmpty()) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return {};
-    }
-    return std::move(operand);
-}
-// Only works if not fully evaluated
-FunctionOptions InternalValue::takeOptions(UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return {};
-    }
-    if (!isSuspension()) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return {};
-    }
-    return std::move(resolvedOptions);
-}
-// Only works if not fully evaluated
-FunctionName InternalValue::getFunctionName(UErrorCode& status) const {
-    if (U_FAILURE(status)) {
-        return {};
-    }
-    if (functionName.isEmpty()) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return {};
-    }
-    return functionName;
+    return val->isSelectable();
 }
 
 // PrioritizedVariant

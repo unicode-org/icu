@@ -35,6 +35,7 @@ namespace message2 {
     class MessageContext;
     class StaticErrors;
     class InternalValue;
+    class BaseValue;
 
     /**
      * <p>MessageFormatter is a Technical Preview API implementing MessageFormat 2.0.
@@ -341,7 +342,6 @@ namespace message2 {
 
         // Selection methods
 
-        bool isSelectable(const InternalValue&) const;
         // Takes a vector of FormattedPlaceholders
         void resolveSelectors(MessageContext&, const Environment& env, UErrorCode&, UVector&) const;
         // Takes a vector of vectors of strings (input) and a vector of PrioritizedVariants (output)
@@ -355,7 +355,7 @@ namespace message2 {
         void resolvePreferences(MessageContext&, UVector&, UVector&, UErrorCode&) const;
 
         // Formatting methods
-        [[nodiscard]] FormattedPlaceholder formatLiteral(const UnicodeString&, const data_model::Literal&) const;
+        [[nodiscard]] InternalValue formatLiteral(const UnicodeString&, const data_model::Literal&, UErrorCode&) const;
         void formatPattern(MessageContext&, const Environment&, const data_model::Pattern&, UErrorCode&, UnicodeString&) const;
         [[nodiscard]] InternalValue eval(MessageContext&, InternalValue, UErrorCode&) const;
         // Dispatches on argument type
@@ -374,6 +374,8 @@ namespace message2 {
                                                       MessageContext&,
                                                       UErrorCode&) const;
         [[nodiscard]] FunctionOptions resolveOptions(const Environment& env, const OptionMap&, MessageContext&, UErrorCode&) const;
+        [[nodiscard]] InternalValue formatOperand(const UnicodeString&, const Environment&, const data_model::Operand&, MessageContext&, UErrorCode&) const;
+        [[nodiscard]] InternalValue evalArgument(const UnicodeString&, const data_model::VariableName&, MessageContext&, UErrorCode&) const;
         void formatSelectors(MessageContext& context, const Environment& env, UErrorCode &status, UnicodeString& result) const;
 
         // Function registry methods
@@ -386,20 +388,11 @@ namespace message2 {
         // (a FormatterFactory can have mutable state)
         const MFFunctionRegistry& getCustomMFFunctionRegistry() const;
 
-        bool isCustomFormatter(const FunctionName&) const;
-        FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode& status) const;
-        bool isBuiltInSelector(const FunctionName&) const;
-        bool isBuiltInFormatter(const FunctionName&) const;
-        bool isCustomSelector(const FunctionName&) const;
-        const SelectorFactory* lookupSelectorFactory(MessageContext&, const FunctionName&, UErrorCode&) const;
-        bool isSelector(const FunctionName& fn) const { return isBuiltInSelector(fn) || isCustomSelector(fn); }
-        bool isFormatter(const FunctionName& fn) const { return isBuiltInFormatter(fn) || isCustomFormatter(fn); }
+        bool isCustomFunction(const FunctionName&) const;
+        bool isBuiltInFunction(const FunctionName&) const;
+        bool isFunction(const FunctionName& fn) const { return isBuiltInFunction(fn) || isCustomFunction(fn); }
         void setNotSelectableError(MessageContext&, const InternalValue&, UErrorCode&) const;
-        const Formatter* lookupFormatter(const FunctionName&, UErrorCode&) const;
-
-        Selector* getSelector(MessageContext&, const FunctionName&, UErrorCode&) const;
-        Formatter* getFormatter(const FunctionName&, UErrorCode&) const;
-        bool getDefaultFormatterNameByType(const UnicodeString&, FunctionName&) const;
+        Function* lookupFunction(const FunctionName&, UErrorCode&) const;
 
         // Checking for resolution errors
         void checkDeclarations(MessageContext&, Environment*&, UErrorCode&) const;

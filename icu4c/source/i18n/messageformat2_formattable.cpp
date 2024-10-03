@@ -272,6 +272,15 @@ namespace message2 {
         return df.orphan();
     }
 
+    void formatDateWithDefaults(const Locale& locale, UDate date, UnicodeString& result, UErrorCode& errorCode) {
+        CHECK_ERROR(errorCode);
+
+        LocalPointer<DateFormat> df(defaultDateTimeInstance(locale, errorCode));
+        CHECK_ERROR(errorCode);
+        df->format(date, result, 0, errorCode);
+    }
+
+#if false
     // Called when output is required and the contents are an unevaluated `Formattable`;
     // formats the source `Formattable` to a string with defaults, if it can be
     // formatted with a default formatter
@@ -282,50 +291,59 @@ namespace message2 {
 
         const Formattable* toFormat = input.getSource(status);
         U_ASSERT(U_SUCCESS(status)); // Shouldn't get called on a null argument
+
+        return formattableToString(locale, *toFormat, status);
+    }
+#endif
+
+    UnicodeString formattableToString(const Locale& locale,
+                                             const Formattable& toFormat,
+                                             UErrorCode& status) {
+        EMPTY_ON_ERROR(status);
+
         // Try as decimal number first
-        if (toFormat->isNumeric()) {
+        if (toFormat.isNumeric()) {
             // Note: the ICU Formattable has to be created here since the StringPiece
             // refers to state inside the Formattable; so otherwise we'll have a reference
             // to a temporary object
-            icu::Formattable icuFormattable = toFormat->asICUFormattable(status);
+            icu::Formattable icuFormattable = toFormat.asICUFormattable(status);
             StringPiece asDecimal = icuFormattable.getDecimalNumber(status);
             if (U_FAILURE(status)) {
                 return {};
             }
             if (asDecimal != nullptr) {
-                return FormattedPlaceholder(input,
-                                            FormattedValue(formatNumberWithDefaults(locale, asDecimal, status)));
+                return formatNumberWithDefaults(locale, asDecimal, status).toString(status);
             }
         }
 
-        UFormattableType type = toFormat->getType();
+        UFormattableType type = toFormat.getType();
         switch (type) {
         case UFMT_DATE: {
             UnicodeString result;
             const DateInfo* dateInfo = toFormat.getDate(status);
             U_ASSERT(U_SUCCESS(status));
             formatDateWithDefaults(locale, d, result, status);
-            return FormattedPlaceholder(input, FormattedValue(std::move(result)));
+            return result;
         }
         case UFMT_DOUBLE: {
-            double d = toFormat->getDouble(status);
+            double d = toFormat.getDouble(status);
             U_ASSERT(U_SUCCESS(status));
-            return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, d, status)));
+            return formatNumberWithDefaults(locale, d, status).toString(status);
         }
         case UFMT_LONG: {
-            int32_t l = toFormat->getLong(status);
+            int32_t l = toFormat.getLong(status);
             U_ASSERT(U_SUCCESS(status));
-            return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, l, status)));
+            return formatNumberWithDefaults(locale, l, status).toString(status);
         }
         case UFMT_INT64: {
-            int64_t i = toFormat->getInt64Value(status);
+            int64_t i = toFormat.getInt64Value(status);
             U_ASSERT(U_SUCCESS(status));
-            return FormattedPlaceholder(input, FormattedValue(formatNumberWithDefaults(locale, i, status)));
+            return formatNumberWithDefaults(locale, i, status).toString(status);
         }
         case UFMT_STRING: {
-            const UnicodeString& s = toFormat->getString(status);
+            const UnicodeString& s = toFormat.getString(status);
             U_ASSERT(U_SUCCESS(status));
-            return FormattedPlaceholder(input, FormattedValue(UnicodeString(s)));
+            return s;
         }
         default: {
             // No default formatters for other types; use fallback
@@ -338,6 +356,7 @@ namespace message2 {
         }
     }
 
+#if false
     // Called when string output is required; forces output to be produced
     // if none is present (including formatting number output as a string)
     UnicodeString FormattedPlaceholder::formatToString(const Locale& locale,
@@ -367,6 +386,7 @@ namespace message2 {
         }
         return evaluated.formatToString(locale, status);
     }
+#endif
 
 } // namespace message2
 

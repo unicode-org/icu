@@ -31,10 +31,6 @@ class UVector;
 
 namespace message2 {
 
-    class Formatter;
-    class MessageContext;
-    class Selector;
-
     // Formattable
     // ----------
 
@@ -481,30 +477,31 @@ namespace message2 {
  * @deprecated This API is for technology preview only.
  */
 #ifndef U_IN_DOXYGEN
-class FormattedPlaceholder;
+class FunctionValue;
 class U_I18N_API ResolvedFunctionOption : public UObject {
   private:
 
     /* const */ UnicodeString name;
-    // This is a pointer because FormattedPlaceholder and ResolvedFunctionOption
-    // are mutually recursive
-    /* const */ LocalPointer<FormattedPlaceholder> value;
     // True iff this option was represented in the syntax by a literal value.
     // This is necessary in order to implement the spec for the `select` option
     // of `:number` and `:integer`.
     /* const */ bool sourceIsLiteral;
+    // This is a pointer because FunctionValue is an abstract class,
+    // and is a raw pointer because FunctionValue is forward-declared
+    /* const */ FunctionValue* value;
 
   public:
       const UnicodeString& getName() const { return name; }
-      const FormattedPlaceholder* getValue() const { return value.getAlias(); }
-      FormattedPlaceholder* takeValue() { return value.orphan(); }
-      ResolvedFunctionOption(const UnicodeString& n, FormattedPlaceholder&& f, UErrorCode& status);
+      FunctionValue* getValue() const { return value; }
+      // Adopts `f`
+      ResolvedFunctionOption(const UnicodeString& n, FunctionValue* f);
       ResolvedFunctionOption() {}
       ResolvedFunctionOption(ResolvedFunctionOption&&);
       ResolvedFunctionOption& operator=(ResolvedFunctionOption&& other) noexcept {
           name = std::move(other.name);
           value = std::move(other.value);
           sourceIsLiteral = other.sourceIsLiteral;
+          other.value = nullptr;
           return *this;
     }
     ResolvedFunctionOption& operator=(const ResolvedFunctionOption& other) = delete;
@@ -618,10 +615,12 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
  * @internal ICU 75 technology preview
  * @deprecated This API is for technology preview only.
  */
-using FunctionOptionsMap = std::map<UnicodeString, const message2::FormattedPlaceholder*>;
+using FunctionOptionsMap = std::map<UnicodeString, const message2::FunctionValue*>;
 
 /**
  * Structure encapsulating named options passed to a custom selector or formatter.
+ *
+ * This class is immutable and movable but not copyable.
  *
  * @internal ICU 75 technology preview
  * @deprecated This API is for technology preview only.
@@ -633,8 +632,6 @@ class U_I18N_API FunctionOptions : public UObject {
      * The syntactic order of options is not guaranteed to
      * be preserved.
      *
-     * This class is immutable and movable but not copyable.
-     *
      * @return           A map from strings to FormattedPlaceholder objects representing
      *                   the results of resolving each option value.
      *
@@ -644,7 +641,7 @@ class U_I18N_API FunctionOptions : public UObject {
     FunctionOptionsMap getOptions() const {
         FunctionOptionsMap result;
         for (int32_t i = 0; i < functionOptionsLen; i++) {
-            const ResolvedFunctionOption& opt = options[i];
+            ResolvedFunctionOption& opt = options[i];
             result[opt.getName()] = opt.getValue();
         }
         return result;
@@ -687,6 +684,8 @@ class U_I18N_API FunctionOptions : public UObject {
      * @deprecated This API is for technology preview only.
      */
     FunctionOptions& operator=(const FunctionOptions&) = delete;
+    // TODO
+    FunctionOptions mergeOptions(FunctionOptions&&, UErrorCode&);
  private:
     friend class MessageFormatter;
     friend class StandardFunctions;
@@ -694,10 +693,12 @@ class U_I18N_API FunctionOptions : public UObject {
     explicit FunctionOptions(UVector&&, UErrorCode&);
 
     const ResolvedFunctionOption* getResolvedFunctionOptions(int32_t& len) const;
-    const FormattedPlaceholder* getFunctionOption(const UnicodeString&, UErrorCode&) const;
+    const FunctionValue* getFunctionOption(const UnicodeString&, UErrorCode&) const;
     // Returns empty string if option doesn't exist
     UnicodeString getStringFunctionOption(const UnicodeString&) const;
     UBool wasSetFromLiteral(const UnicodeString&) const;
+    // Sets error code if option doesn't exist
+    UnicodeString getStringFunctionOption(const UnicodeString&, UErrorCode&) const;
     int32_t optionsCount() const { return functionOptionsLen; }
 
     // Named options passed to functions

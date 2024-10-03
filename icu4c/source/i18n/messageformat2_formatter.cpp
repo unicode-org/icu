@@ -125,23 +125,24 @@ namespace message2 {
         // Set up the standard function registry
         MFFunctionRegistry::Builder standardFunctionsBuilder(success);
 
-        FormatterFactory* dateTime = StandardFunctions::DateTimeFactory::dateTime(success);
-        FormatterFactory* date = StandardFunctions::DateTimeFactory::date(success);
-        FormatterFactory* time = StandardFunctions::DateTimeFactory::time(success);
-        FormatterFactory* number = new StandardFunctions::NumberFactory();
-        FormatterFactory* integer = new StandardFunctions::IntegerFactory();
-        standardFunctionsBuilder.adoptFormatter(FunctionName(functions::DATETIME), dateTime, success)
-            .adoptFormatter(FunctionName(functions::DATE), date, success)
-            .adoptFormatter(FunctionName(functions::TIME), time, success)
-            .adoptFormatter(FunctionName(functions::NUMBER), number, success)
-            .adoptFormatter(FunctionName(functions::INTEGER), integer, success)
-            .adoptFormatter(FunctionName(functions::TEST_FUNCTION), new StandardFunctions::TestFormatFactory(), success)
-            .adoptFormatter(FunctionName(functions::TEST_FORMAT), new StandardFunctions::TestFormatFactory(), success)
-            .adoptSelector(FunctionName(functions::NUMBER), new StandardFunctions::PluralFactory(UPLURAL_TYPE_CARDINAL), success)
-            .adoptSelector(FunctionName(functions::INTEGER), new StandardFunctions::PluralFactory(StandardFunctions::PluralFactory::integer()), success)
-            .adoptSelector(FunctionName(functions::STRING), new StandardFunctions::TextFactory(), success)
-            .adoptSelector(FunctionName(functions::TEST_FUNCTION), new StandardFunctions::TestSelectFactory(), success)
-            .adoptSelector(FunctionName(functions::TEST_SELECT), new StandardFunctions::TestSelectFactory(), success);
+        Function* dateTime = StandardFunctions::DateTime::dateTime(locale, success);
+        Function* date = StandardFunctions::DateTime::date(locale, success);
+        Function* time = StandardFunctions::DateTime::time(locale, success);
+        standardFunctionsBuilder.adoptFunction(FunctionName(functions::DATETIME), dateTime, success)
+            .adoptFunction(FunctionName(Functions::DATE), date, success)
+            .adoptFunction(FunctionName(functions::TIME), time, success)
+            .adoptFunction(FunctionName(functions::NUMBER),
+                           StandardFunctions::Number::number(locale, success), success)
+            .adoptFunction(FunctionName(functions::INTEGER),
+                           StandardFunctions::Number::integer(locale, success), success)
+            .adoptFunction(FunctionName(functions::STRING),
+                           StandardFunctions::String::string(locale, success), success)
+            .adoptFunction(FunctionName(functions::TEST_FUNCTION),
+                           StandardFunctions::TestFunction::testFunction(locale, success))
+            .adoptFunction(FunctionName(functions::TEST_FORMAT),
+                           StandardFunctions::TestFunction::testFormat(locale, success))
+            .adoptFunction(FunctionName(functions::TEST_SELECT),
+                           StandardFunctions::TestFunction::testSelect(locale, success));
         CHECK_ERROR(success);
         standardMFFunctionRegistry = standardFunctionsBuilder.build();
         CHECK_ERROR(success);
@@ -221,121 +222,25 @@ namespace message2 {
         cleanup();
     }
 
-    // Selector and formatter lookup
-    // -----------------------------
-
-    // Postcondition: selector != nullptr || U_FAILURE(status)
-    Selector* MessageFormatter::getSelector(MessageContext& context, const FunctionName& functionName, UErrorCode& status) const {
-        NULL_ON_ERROR(status);
-        U_ASSERT(isSelector(functionName));
-
-        const SelectorFactory* selectorFactory = lookupSelectorFactory(context, functionName, status);
-        NULL_ON_ERROR(status);
-        if (selectorFactory == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        // Create a specific instance of the selector
-        auto result = selectorFactory->createSelector(getLocale(), status);
-        NULL_ON_ERROR(status);
-        return result;
-    }
-
-    // Returns an owned pointer
-    Formatter* MessageFormatter::getFormatter(const FunctionName& functionName, UErrorCode& status) const {
-        NULL_ON_ERROR(status);
-
-        // Create the formatter
-
-        // First, look up the formatter factory for this function
-        FormatterFactory* formatterFactory = lookupFormatterFactory(functionName, status);
-        NULL_ON_ERROR(status);
-
-        U_ASSERT(formatterFactory != nullptr);
-
-        // Create a specific instance of the formatter
-        Formatter* formatter = formatterFactory->createFormatter(locale, status);
-        NULL_ON_ERROR(status);
-        if (formatter == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        return formatter;
-    }
-
-    bool MessageFormatter::getDefaultFormatterNameByType(const UnicodeString& type,
-                                                         FunctionName& name) const {
-        if (!hasCustomMFFunctionRegistry()) {
-            return false;
-        }
-        const MFFunctionRegistry& reg = getCustomMFFunctionRegistry();
-        return reg.getDefaultFormatterNameByType(type, name);
-    }
-
     // ---------------------------------------------------
     // Function registry
 
-    bool MessageFormatter::isBuiltInSelector(const FunctionName& functionName) const {
-        return standardMFFunctionRegistry.hasSelector(functionName);
+    bool MessageFormatter::isBuiltInFunction(const FunctionName& functionName) const {
+        return standardMFFunctionRegistry.hasFunction(functionName);
     }
 
-    bool MessageFormatter::isBuiltInFormatter(const FunctionName& functionName) const {
-        return standardMFFunctionRegistry.hasFormatter(functionName);
-    }
-
-    // https://github.com/unicode-org/message-format-wg/issues/409
-    // Unknown function = unknown function error
-    // Formatter used as selector  = selector error
-    // Selector used as formatter = formatting error
-    const SelectorFactory* MessageFormatter::lookupSelectorFactory(MessageContext& context, const FunctionName& functionName, UErrorCode& status) const {
-        DynamicErrors& err = context.getErrors();
-
-        if (isBuiltInSelector(functionName)) {
-            return standardMFFunctionRegistry.getSelector(functionName);
-        }
-        if (isBuiltInFormatter(functionName)) {
-            err.setSelectorError(functionName, status);
-            return nullptr;
-        }
-        if (hasCustomMFFunctionRegistry()) {
-            const MFFunctionRegistry& customMFFunctionRegistry = getCustomMFFunctionRegistry();
-            const SelectorFactory* selectorFactory = customMFFunctionRegistry.getSelector(functionName);
-            if (selectorFactory != nullptr) {
-                return selectorFactory;
-            }
-            if (customMFFunctionRegistry.getFormatter(functionName) != nullptr) {
-                err.setSelectorError(functionName, status);
-                return nullptr;
-            }
-        }
-        // Either there is no custom function registry and the function
-        // isn't built-in, or the function doesn't exist in either the built-in
-        // or custom registry.
-        // Unknown function error
-        err.setUnknownFunction(functionName, status);
-        return nullptr;
-    }
-
-    FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionName& functionName,
-                                                               UErrorCode& status) const {
+    Function* MessageFormatter::lookupFunction(const FunctionName& functionName,
+                                               UErrorCode& status) const {
         NULL_ON_ERROR(status);
 
-        if (isBuiltInFormatter(functionName)) {
-            return standardMFFunctionRegistry.getFormatter(functionName);
-        }
-        if (isBuiltInSelector(functionName)) {
-            status = U_MF_FORMATTING_ERROR;
-            return nullptr;
+        if (isBuiltInFunction(functionName)) {
+            return standardMFFunctionRegistry.getFunction(functionName);
         }
         if (hasCustomMFFunctionRegistry()) {
             const MFFunctionRegistry& customMFFunctionRegistry = getCustomMFFunctionRegistry();
-            FormatterFactory* formatterFactory = customMFFunctionRegistry.getFormatter(functionName);
-            if (formatterFactory != nullptr) {
-                return formatterFactory;
-            }
-            if (customMFFunctionRegistry.getSelector(functionName) != nullptr) {
-                status = U_MF_FORMATTING_ERROR;
-                return nullptr;
+            Function* function = customMFFunctionRegistry.getFunction(functionName);
+            if (function != nullptr) {
+                return function;
             }
         }
         // Either there is no custom function registry and the function
@@ -346,13 +251,8 @@ namespace message2 {
         return nullptr;
     }
 
-    bool MessageFormatter::isCustomFormatter(const FunctionName& fn) const {
-        return hasCustomMFFunctionRegistry() && getCustomMFFunctionRegistry().getFormatter(fn) != nullptr;
-    }
-
-
-    bool MessageFormatter::isCustomSelector(const FunctionName& fn) const {
-        return hasCustomMFFunctionRegistry() && getCustomMFFunctionRegistry().getSelector(fn) != nullptr;
+    bool MessageFormatter::isCustomFunction(const FunctionName& fn) const {
+        return hasCustomMFFunctionRegistry() && getCustomMFFunctionRegistry().getFunction(fn) != nullptr;
     }
 
 } // namespace message2

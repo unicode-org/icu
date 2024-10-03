@@ -65,36 +65,44 @@ namespace message2 {
     // to be until the body of the message is processed.
     class InternalValue : public UObject {
     public:
-        bool isFallback() const { return !fallbackString.isEmpty(); }
-        bool isSuspension() const { return !functionName.isEmpty(); }
-        InternalValue() : fallbackString("") {}
+        bool isFallback() const { return isFallbackValue; }
+        bool isNullOperand() const { return isNull; }
+        bool isSelectable() const;
+        // Null operand constructor
+        InternalValue() : isFallbackValue(false), isNull(true), fallbackString("") {}
         // Fallback constructor
-        explicit InternalValue(UnicodeString fb) : fallbackString(fb) {}
+        explicit InternalValue(const UnicodeString& fb)
+            : isFallbackValue(true), fallbackString(fb) {}
         // Fully-evaluated value constructor
-        explicit InternalValue(FormattedPlaceholder&& f)
-            : fallbackString(""), functionName(""), operand(std::move(f)) {}
-        // Suspension constructor
-        InternalValue(const FunctionName& name,
-                      FunctionOptions&& options,
-                      FormattedPlaceholder&& rand);
-        // Error code is set if this isn't fully evaluated
-        FormattedPlaceholder takeValue(UErrorCode& status);
-        // Error code is set if this is not a suspension
-        FormattedPlaceholder takeOperand(UErrorCode& status);
-        // Error code is set if this is not a suspension
-        FunctionOptions takeOptions(UErrorCode& status);
-        // Error code is set if this is not a suspension
-        FunctionName getFunctionName(UErrorCode& status) const;
+        explicit InternalValue(FunctionValue* v, const UnicodeString& fb);
+        // Error code is set if this is a fallback or null
+        FunctionValue* takeValue(UErrorCode& status);
         UnicodeString asFallback() const { return fallbackString; }
         virtual ~InternalValue();
         InternalValue& operator=(InternalValue&&);
         InternalValue(InternalValue&&);
     private:
-        UnicodeString fallbackString; // Non-empty if fallback
-        FunctionName functionName; // Non-empty if this is a suspension
-        FunctionOptions resolvedOptions; // Ignored unless this is a suspension
-        FormattedPlaceholder operand;
+        bool isFallbackValue = false;
+        bool isNull = false;
+        UnicodeString fallbackString;
+        LocalPointer<FunctionValue> val;
     }; // class InternalValue
+
+// Used for arguments and literals
+    class BaseValue : public FunctionValue {
+        public:
+            static BaseValue* create(const Locale&, const Formattable&, UErrorCode&);
+            // Apply default formatters to the argument value
+            UnicodeString formatToString(UErrorCode&) const override;
+            UBool isSelectable() const override { return true; }
+            BaseValue() {}
+            BaseValue(BaseValue&&);
+            BaseValue& operator=(BaseValue&&) noexcept;
+       private:
+            Locale locale;
+
+            BaseValue(const Locale&, const Formattable&);
+    }; // class BaseValue
 
     // PrioritizedVariant
 
