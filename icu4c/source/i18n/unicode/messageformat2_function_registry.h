@@ -30,81 +30,7 @@ namespace message2 {
 
     using namespace data_model;
 
-    /**
-     * Interface that factory classes for creating formatters must implement.
-     *
-     * @internal ICU 75 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    class U_I18N_API FormatterFactory : public UObject {
-        // TODO: the coding guidelines say that interface classes
-        // shouldn't inherit from UObject, but if I change it so these
-        // classes don't, and the individual formatter factory classes
-        // inherit from public FormatterFactory, public UObject, then
-        // memory leaks ensue
-    public:
-        /**
-         * Constructs a new formatter object. This method is not const;
-         * formatter factories with local state may be defined.
-         *
-         * @param locale Locale to be used by the formatter.
-         * @param status    Input/output error code.
-         * @return The new Formatter, which is non-null if U_SUCCESS(status).
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        virtual Formatter* createFormatter(const Locale& locale, UErrorCode& status) = 0;
-        /**
-         * Destructor.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        virtual ~FormatterFactory();
-        /**
-         * Copy constructor.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        FormatterFactory& operator=(const FormatterFactory&) = delete;
-    }; // class FormatterFactory
-
-    /**
-     * Interface that factory classes for creating selectors must implement.
-     *
-     * @internal ICU 75 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    class U_I18N_API SelectorFactory : public UObject {
-    public:
-        /**
-         * Constructs a new selector object.
-         *
-         * @param locale    Locale to be used by the selector.
-         * @param status    Input/output error code.
-         * @return          The new selector, which is non-null if U_SUCCESS(status).
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        virtual Selector* createSelector(const Locale& locale, UErrorCode& status) const = 0;
-        /**
-         * Destructor.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        virtual ~SelectorFactory();
-        /**
-         * Copy constructor.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        SelectorFactory& operator=(const SelectorFactory&) = delete;
-    }; // class SelectorFactory
+    class Function;
 
     /**
      * Defines mappings from names of formatters and selectors to functions implementing them.
@@ -119,50 +45,23 @@ namespace message2 {
     class U_I18N_API MFFunctionRegistry : public UObject {
     private:
 
-        using FormatterMap = Hashtable; // Map from stringified function names to FormatterFactory*
-        using SelectorMap  = Hashtable; // Map from stringified function names to SelectorFactory*
+        using FunctionMap = Hashtable; // Map from function names to FunctionFactory*
 
     public:
         /**
-         * Looks up a formatter factory by the name of the formatter. The result is non-const,
-         * since formatter factories may have local state. Returns the result by pointer
+         * Looks up a function by the name of the function. The result is non-const,
+         * since functions may have local state. Returns the result by pointer
          * rather than by reference since it can fail.
          *
-         * @param formatterName Name of the desired formatter.
-         * @return A pointer to the `FormatterFactory` registered under `formatterName`, or null
-         *         if no formatter was registered under that name. The pointer is not owned
+         * @param functionName Name of the desired function.
+         * @return A pointer to the Function registered under `functionName`, or null
+         *         if no function was registered under that name. The pointer is not owned
          *         by the caller.
          *
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        FormatterFactory* getFormatter(const FunctionName& formatterName) const;
-        /**
-         * Looks up a selector factory by the name of the selector. (This returns the result by pointer
-         * rather than by reference since `FormatterFactory` is an abstract class.)
-         *
-         * @param selectorName Name of the desired selector.
-         * @return A pointer to the `SelectorFactory` registered under `selectorName`, or null
-         *         if no formatter was registered under that name.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        const SelectorFactory* getSelector(const FunctionName& selectorName) const;
-        /**
-         * Looks up a formatter factory by a type tag. This method gets the name of the default formatter registered
-         * for that type. If no formatter was explicitly registered for this type, it returns false.
-         *
-         * @param formatterType Type tag for the desired `FormattableObject` type to be formatted.
-         * @param name Output parameter; initialized to the name of the default formatter for `formatterType`
-         *        if one has been registered. Its value is undefined otherwise.
-         * @return True if and only if the function registry contains a default formatter for `formatterType`.
-         *         If the return value is false, then the value of `name` is undefined.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        UBool getDefaultFormatterNameByType(const UnicodeString& formatterType, FunctionName& name) const;
+        Function* getFunction(const FunctionName& functionName) const;
         /**
          * The mutable Builder class allows each formatter and selector factory
          * to be initialized separately; calling its `build()` method yields an
@@ -176,9 +75,7 @@ namespace message2 {
         class U_I18N_API Builder : public UObject {
         private:
             // Must use raw pointers to avoid instantiating `LocalPointer` on an internal type
-            FormatterMap* formatters;
-            SelectorMap* selectors;
-            Hashtable* formattersByType;
+            FunctionMap* functions;
 
             // Do not define copy constructor/assignment operator
             Builder& operator=(const Builder&) = delete;
@@ -202,46 +99,20 @@ namespace message2 {
               be re-thought.
               */
             /**
-             * Registers a formatter factory to a given formatter name.
+             * Registers a function to a given name.
              *
-             * @param formatterName Name of the formatter being registered.
-             * @param formatterFactory A pointer to a FormatterFactory object to use
-             *        for creating `formatterName` formatters. This argument is adopted.
+             * @param functionName Name of the formatter being registered.
+             * @param function A pointer to a Function object.
+             *                 This argument is adopted.
              * @param errorCode Input/output error code
              * @return A reference to the builder.
              *
-             * @internal ICU 75 technology preview
+             * @internal ICU 77 technology preview
              * @deprecated This API is for technology preview only.
              */
-            Builder& adoptFormatter(const data_model::FunctionName& formatterName, FormatterFactory* formatterFactory, UErrorCode& errorCode);
-            /**
-             * Registers a formatter factory to a given type tag.
-             * (See `FormattableObject` for details on type tags.)
-             *
-             * @param type Tag for objects to be formatted with this formatter.
-             * @param functionName A reference to the name of the function to use for
-             *        creating formatters for `formatterType` objects.
-             * @param errorCode Input/output error code
-             * @return A reference to the builder.
-             *
-             * @internal ICU 75 technology preview
-             * @deprecated This API is for technology preview only.
-             */
-            Builder& setDefaultFormatterNameByType(const UnicodeString& type, const data_model::FunctionName& functionName, UErrorCode& errorCode);
-
-            /**
-             * Registers a selector factory to a given selector name. Adopts `selectorFactory`.
-             *
-             * @param selectorName Name of the selector being registered.
-             * @param selectorFactory A SelectorFactory object to use for creating `selectorName`
-             *        selectors.
-             * @param errorCode Input/output error code
-             * @return A reference to the builder.
-             *
-             * @internal ICU 75 technology preview
-             * @deprecated This API is for technology preview only.
-             */
-            Builder& adoptSelector(const data_model::FunctionName& selectorName, SelectorFactory* selectorFactory, UErrorCode& errorCode);
+            Builder& adoptFunction(const data_model::FunctionName& functionName,
+                                   Function* function,
+                                   UErrorCode& errorCode);
             /**
              * Creates an immutable `MFFunctionRegistry` object with the selectors and formatters
              * that were previously registered. The builder cannot be used after this call.
@@ -307,112 +178,72 @@ namespace message2 {
         MFFunctionRegistry& operator=(const MFFunctionRegistry&) = delete;
         MFFunctionRegistry(const MFFunctionRegistry&) = delete;
 
-        MFFunctionRegistry(FormatterMap* f, SelectorMap* s, Hashtable* byType);
+        MFFunctionRegistry(FunctionMap* f);
 
         MFFunctionRegistry() {}
 
         // Debugging; should only be called on a function registry with
         // all the standard functions registered
-        void checkFormatter(const char*) const;
-        void checkSelector(const char*) const;
+        void checkFunction(const char*) const;
         void checkStandard() const;
 
-        bool hasFormatter(const data_model::FunctionName& f) const;
-        bool hasSelector(const data_model::FunctionName& s) const;
+        bool hasFunction(const data_model::FunctionName& f) const;
         void cleanup() noexcept;
 
         // Must use raw pointers to avoid instantiating `LocalPointer` on an internal type
-        FormatterMap* formatters = nullptr;
-        SelectorMap* selectors = nullptr;
-        // Mapping from strings (type tags) to FunctionNames
-        Hashtable* formattersByType = nullptr;
+        FunctionMap* functions = nullptr;
     }; // class MFFunctionRegistry
 
-    /**
-     * Interface that formatter classes must implement.
-     *
-     * @internal ICU 75 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    class U_I18N_API Formatter : public UObject {
-    public:
-        /**
-         * Formats the input passed in `context` by setting an output using one of the
-         * `FormattingContext` methods or indicating an error.
-         *
-         * @param toFormat Placeholder, including a source formattable value and possibly
-         *        the output of a previous formatter applied to it; see
-         *        `message2::FormattedPlaceholder` for details. Passed by move.
-         * @param options The named function options. Passed by move
-         * @param status    Input/output error code. Should not be set directly by the
-         *        custom formatter, which should use `FormattingContext::setFormattingWarning()`
-         *        to signal errors. The custom formatter may pass `status` to other ICU functions
-         *        that can signal errors using this mechanism.
-         *
-         * @return The formatted value.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        virtual FormattedPlaceholder format(FormattedPlaceholder&& toFormat,
-                                      FunctionOptions&& options,
-                                      UErrorCode& status) const = 0;
-        /**
-         * Destructor.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        virtual ~Formatter();
-    }; // class Formatter
+    class FunctionValue;
 
     /**
-     * Interface that selector classes must implement.
+     * Interface that function handler classes must implement.
      *
      * @internal ICU 75 technology preview
      * @deprecated This API is for technology preview only.
      */
-    class U_I18N_API Selector : public UObject {
+    class U_I18N_API Function : public UObject {
     public:
-        /**
-         * Compares the input to an array of keys, and returns an array of matching
-         * keys sorted by preference.
-         *
-         * @param toFormat The unnamed function argument; passed by move.
-         * @param options A reference to the named function options.
-         * @param keys An array of strings that are compared to the input
-         *        (`context.getFormattableInput()`) in an implementation-specific way.
-         * @param keysLen The length of `keys`.
-         * @param prefs An array of strings with length `keysLen`. The contents of
-         *        the array is undefined. `selectKey()` should set the contents
-         *        of `prefs` to a subset of `keys`, with the best match placed at the lowest index.
-         * @param prefsLen A reference that `selectKey()` should set to the length of `prefs`,
-         *        which must be less than or equal to `keysLen`.
-         * @param status    Input/output error code. Should not be set directly by the
-         *        custom selector, which should use `FormattingContext::setSelectorError()`
-         *        to signal errors. The custom selector may pass `status` to other ICU functions
-         *        that can signal errors using this mechanism.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        virtual void selectKey(FormattedPlaceholder&& toFormat,
-                               FunctionOptions&& options,
-                               const UnicodeString* keys,
-                               int32_t keysLen,
-                               UnicodeString* prefs,
-                               int32_t& prefsLen,
-                               UErrorCode& status) const = 0;
-        // Note: This takes array arguments because the internal MessageFormat code has to
-        // call this method, and can't include any code that constructs std::vectors.
-        /**
-         * Destructor.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        virtual ~Selector();
-    }; // class Selector
+        // Adopts its argument
+        virtual FunctionValue* call(FunctionValue*, FunctionOptions&&, UErrorCode&) = 0;
+        virtual ~Function();
+    }; // class Function
+
+    class U_I18N_API FunctionValue : public UObject {
+        public:
+            virtual UnicodeString formatToString(UErrorCode& status) const {
+                if (U_SUCCESS(status)) {
+                    status = U_MF_FORMATTING_ERROR;
+                }
+                return {};
+            }
+            virtual const Formattable& getOperand() const { return operand; }
+            // `this` can't be used after calling this method
+            virtual FunctionOptions getResolvedOptions() { return std::move(opts); }
+            // const method is for reading the options attached to another option
+            // (i.e. options don't escape) --
+            // non-const method is for calling mergeOptions() -- i.e. options escape
+            virtual const FunctionOptions& getResolvedOptions() const { return opts; }
+            virtual UBool isSelectable() const { return false; }
+            virtual void selectKeys(const UnicodeString* keys,
+                                    int32_t keysLen,
+                                    UnicodeString* prefs,
+                                    int32_t& prefsLen,
+                                    UErrorCode& status) {
+                (void) keys;
+                (void) keysLen;
+                (void) prefs;
+                (void) prefsLen;
+                if (U_SUCCESS(status)) {
+                    status = U_MF_SELECTOR_ERROR;
+                }
+            }
+            virtual ~FunctionValue();
+         protected:
+            Formattable operand;
+            FunctionOptions opts;
+    }; // class FunctionValue
+
 
 } // namespace message2
 
