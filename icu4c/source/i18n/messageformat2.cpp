@@ -188,6 +188,50 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
     return FunctionOptions(std::move(*optionsVector), status);
 }
 
+[[nodiscard]] InternalValue MessageFormatter::apply(const FunctionName& functionName,
+                                                    InternalValue&& rand,
+                                                    FunctionOptions&& options,
+                                                    MessageContext& context,
+                                                    UErrorCode& status) const {
+    EMPTY_ON_ERROR(status);
+
+    UnicodeString fallbackStr;
+
+    if (rand.isNullOperand()) {
+        fallbackStr = UnicodeString(COLON);
+        fallbackStr += functionName;
+    } else {
+        fallbackStr = rand.asFallback();
+    }
+
+    // Call the function
+    Function* function = lookupFunction(functionName, status);
+    if (U_FAILURE(status)) {
+        status = U_ZERO_ERROR;
+        context.getErrors().setUnknownFunction(functionName, status);
+        return InternalValue::fallback(fallbackStr);
+    }
+    // Calling takeValue() won't error out because we already checked the fallback case
+    LocalPointer<FunctionValue> functionArg(rand.takeValue(status));
+    U_ASSERT(U_SUCCESS(status));
+    LocalPointer<FunctionValue>
+        functionResult(function->call(*functionArg, std::move(options), status));
+    if (status == U_MF_OPERAND_MISMATCH_ERROR) {
+        status = U_ZERO_ERROR;
+        context.getErrors().setOperandMismatchError(functionName, status);
+        return InternalValue::fallback(fallbackStr);
+    }
+    if (status == U_MF_FORMATTING_ERROR) {
+        status = U_ZERO_ERROR;
+        context.getErrors().setFormattingError(functionName, status);
+        return InternalValue::fallback(fallbackStr);
+    }
+    if (U_FAILURE(status)) {
+        return {};
+    }
+    return InternalValue(functionResult.orphan(), fallbackStr);
+}
+
 // Formats an expression using `globalEnv` for the values of variables
 [[nodiscard]] InternalValue MessageFormatter::formatExpression(const UnicodeString& fallback,
                                                                const Environment& globalEnv,
@@ -203,7 +247,34 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
     InternalValue randVal = formatOperand(globalEnv, rand, context, status);
 
     if (!expr.isFunctionCall()) {
-        return randVal;
+        const FunctionValue* contained = randVal.getValue(status);
+        if (U_FAILURE(status)) {
+            // Fallback or null -- no implicit formatter
+            status = U_ZERO_ERROR;
+            return randVal;
+        }
+        const Formattable& toFormat = contained->getOperand();
+        switch (toFormat.getType()) {
+        case UFMT_OBJECT: {
+            const FormattableObject* obj = toFormat.getObject(status);
+            U_ASSERT(U_SUCCESS(status));
+            U_ASSERT(obj != nullptr);
+            const UnicodeString& type = obj->tag();
+            FunctionName functionName;
+            if (!getDefaultFormatterNameByType(type, functionName)) {
+                // No formatter for this type -- follow default behavior
+                return randVal;
+            }
+            return apply(functionName,
+                         std::move(randVal),
+                         FunctionOptions(),
+                         context,
+                         status);
+        }
+        default:
+            // Other types not handled
+            return randVal;
+        }
     } else {
         // Don't call the function on error values
         if (randVal.isFallback()) {
@@ -216,41 +287,8 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
         // Resolve the options
         FunctionOptions resolvedOptions = resolveOptions(globalEnv, options, context, status);
 
-        UnicodeString fallbackStr;
-        if (rand.isNull()) {
-            fallbackStr = UnicodeString(COLON);
-            fallbackStr += functionName;
-        } else {
-            fallbackStr = randVal.asFallback();
-        }
-
-        // Call the function
-        Function* function = lookupFunction(functionName, status);
-        if (U_FAILURE(status)) {
-            status = U_ZERO_ERROR;
-            context.getErrors().setUnknownFunction(functionName, status);
-            return InternalValue::fallback(fallbackStr);
-        }
-        // Calling takeValue() won't error out because we already checked the fallback case
-        // Nullptr represents an absent argument
-        LocalPointer<FunctionValue> functionArg(randVal.takeValue(status));
-        U_ASSERT(U_SUCCESS(status));
-        LocalPointer<FunctionValue> functionResult(
-            function->call(*functionArg, std::move(resolvedOptions), status));
-        if (status == U_MF_OPERAND_MISMATCH_ERROR) {
-            status = U_ZERO_ERROR;
-            context.getErrors().setOperandMismatchError(functionName, status);
-            return InternalValue::fallback(fallbackStr);
-        }
-        if (status == U_MF_FORMATTING_ERROR) {
-            status = U_ZERO_ERROR;
-            context.getErrors().setFormattingError(functionName, status);
-            return InternalValue::fallback(fallbackStr);
-        }
-        if (U_FAILURE(status)) {
-            return {};
-        }
-        return InternalValue(functionResult.orphan(), fallbackStr);
+        return apply(functionName,
+                     std::move(randVal), std::move(resolvedOptions), context, status);
     }
 }
 
