@@ -208,6 +208,7 @@ FunctionOptions FunctionOptions::mergeOptions(FunctionOptions&& other,
 
 
 InternalValue::~InternalValue() {}
+
 InternalValue& InternalValue::operator=(InternalValue&& other) {
     isFallbackValue = other.isFallbackValue;
     fallbackString = other.fallbackString;
@@ -222,6 +223,17 @@ InternalValue::InternalValue(InternalValue&& other) {
     *this = std::move(other);
 }
 
+InternalValue::InternalValue(UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    NullValue* nv = new NullValue();
+    if (nv == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    val.adoptInstead(nv);
+}
+
 InternalValue::InternalValue(FunctionValue* v, const UnicodeString& fb)
     : fallbackString(fb), val(v) {
     U_ASSERT(v != nullptr);
@@ -231,7 +243,7 @@ FunctionValue* InternalValue::takeValue(UErrorCode& status) {
     if (U_FAILURE(status)) {
         return {};
     }
-    if (isFallback() || isNullOperand()) {
+    if (isFallback()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return {};
     }

@@ -97,7 +97,7 @@ static constexpr std::u16string_view YEAR = u"year";
 
         class DateTime : public Function {
         public:
-            FunctionValue* call(FunctionValue* operand,
+            FunctionValue* call(FunctionValue& operand,
                                 FunctionOptions&& options,
                                 UErrorCode& errorCode) override;
             static DateTime* date(const Locale&, UErrorCode&);
@@ -113,7 +113,6 @@ static constexpr std::u16string_view YEAR = u"year";
                 kTime,
                 kDateTime
             } DateTimeType;
-            const Locale& locale;
             const DateTimeFactory::DateTimeType type;
             friend class DateTimeFactory;
             DateTime(const Locale& l, DateTimeFactory::DateTimeType t)
@@ -141,6 +140,7 @@ static constexpr std::u16string_view YEAR = u"year";
                                             std::u16string_view optionName,
                                             UErrorCode& errorCode) const;
 
+            Locale locale;
             const DateTimeType type;
             static DateTime* create(const Locale&, DateTimeType, UErrorCode&);
             DateTime(const Locale& l, DateTimeType t) : locale(l), type(t) {}
@@ -154,7 +154,7 @@ static constexpr std::u16string_view YEAR = u"year";
             static Number* integer(const Locale& loc, UErrorCode& success);
             static Number* number(const Locale& loc, UErrorCode& success);
 
-            FunctionValue* call(FunctionValue* operand,
+            FunctionValue* call(FunctionValue& operand,
                                 FunctionOptions&& options,
                                 UErrorCode& errorCode) override;
             virtual ~Number();
@@ -181,7 +181,7 @@ static constexpr std::u16string_view YEAR = u"year";
             int32_t minimumIntegerDigits(const FunctionOptions& options) const;
 
             bool usePercent(const FunctionOptions& options) const;
-            const Locale& locale;
+            Locale locale;
             const bool isInteger = false;
             const number::LocalizedNumberFormatter icuFormatter;
 
@@ -209,7 +209,7 @@ static constexpr std::u16string_view YEAR = u"year";
 
             Locale locale;
             number::FormattedNumber formattedNumber;
-            NumberValue(const Number&, const Locale&, FunctionValue*, FunctionOptions&&, UErrorCode&);
+            NumberValue(const Number&, FunctionValue&, FunctionOptions&&, UErrorCode&);
         }; // class NumberValue
 
         class DateTimeValue : public FunctionValue {
@@ -220,15 +220,14 @@ static constexpr std::u16string_view YEAR = u"year";
         private:
             friend class DateTime;
 
-            Locale locale;
             UnicodeString formattedDate;
-            DateTimeValue(const Locale&, DateTime::DateTimeType type,
-                          FunctionValue*, FunctionOptions&&, UErrorCode&);
+            DateTimeValue(DateTime::DateTimeType type, const Locale&,
+                          FunctionValue&, FunctionOptions&&, UErrorCode&);
         }; // class DateTimeValue
 
         class String : public Function {
         public:
-            FunctionValue* call(FunctionValue* val,
+            FunctionValue* call(FunctionValue& val,
                                 FunctionOptions&& opts,
                                 UErrorCode& errorCode) override;
             static String* string(const Locale& locale, UErrorCode& status);
@@ -238,7 +237,7 @@ static constexpr std::u16string_view YEAR = u"year";
             friend class StringFactory;
 
             // Formatting `value` to a string might require the locale
-            const Locale& locale;
+            Locale locale;
 
             String(const Locale& l) : locale(l) {}
         };
@@ -310,7 +309,7 @@ static constexpr std::u16string_view YEAR = u"year";
             friend class String;
 
             UnicodeString formattedString;
-            StringValue(const Locale&, FunctionValue*, FunctionOptions&&, UErrorCode&);
+            StringValue(const Locale&, FunctionValue&, FunctionOptions&&, UErrorCode&);
         }; // class StringValue
 
     };

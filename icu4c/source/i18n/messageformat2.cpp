@@ -106,7 +106,7 @@ static UnicodeString reserialize(const UnicodeString& s) {
     }
 
     if (rand.isNull()) {
-        return InternalValue();
+        return InternalValue(status);
     }
     if (rand.isVariable()) {
         // Check if it's local or global
@@ -233,10 +233,10 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
         }
         // Calling takeValue() won't error out because we already checked the fallback case
         // Nullptr represents an absent argument
-        FunctionValue* functionArg = randVal.isNullOperand() ? nullptr : randVal.takeValue(status);
+        LocalPointer<FunctionValue> functionArg(randVal.takeValue(status));
         U_ASSERT(U_SUCCESS(status));
-        auto result = function->call(functionArg,
-                                     std::move(resolvedOptions), status);
+        LocalPointer<FunctionValue> functionResult(
+            function->call(*functionArg, std::move(resolvedOptions), status));
         if (status == U_MF_OPERAND_MISMATCH_ERROR) {
             status = U_ZERO_ERROR;
             context.getErrors().setOperandMismatchError(functionName, status);
@@ -247,7 +247,10 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
             context.getErrors().setFormattingError(functionName, status);
             return InternalValue(fallbackStr);
         }
-        return InternalValue(result, fallbackStr);
+        if (U_FAILURE(status)) {
+            return {};
+        }
+        return InternalValue(functionResult.orphan(), fallbackStr);
     }
 }
 
@@ -270,7 +273,7 @@ void MessageFormatter::formatPattern(MessageContext& context, const Environment&
                   result += RIGHT_CURLY_BRACE;
               } else {
                   // Do final formatting (e.g. formatting numbers as strings)
-                  const FunctionValue* val = partVal.takeValue(status);
+                  LocalPointer<FunctionValue> val(partVal.takeValue(status));
                   // Shouldn't be null or a fallback
                   U_ASSERT(U_SUCCESS(status));
                   result += val->formatToString(status);
@@ -363,8 +366,9 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
 
     // Call the selector
     // Already checked for fallback, so it's safe to call takeValue()
-    rv.takeValue(status)->selectKeys(adoptedKeys.getAlias(), keysLen, adoptedPrefs.getAlias(), prefsLen,
-                                     status);
+    LocalPointer rvVal(rv.takeValue(status));
+    rvVal->selectKeys(adoptedKeys.getAlias(), keysLen, adoptedPrefs.getAlias(), prefsLen,
+                      status);
 
     // Update errors
     if (savedStatus != status) {

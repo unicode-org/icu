@@ -372,11 +372,11 @@ StandardFunctions::Number::create(const Locale& loc, bool isInteger, UErrorCode&
     return result.orphan();
 }
 
-FunctionValue* StandardFunctions::Number::call(FunctionValue* operand,
+FunctionValue* StandardFunctions::Number::call(FunctionValue& operand,
                                                FunctionOptions&& options,
                                                UErrorCode& errorCode) {
     LocalPointer<NumberValue>
-        val(new NumberValue(*this, locale, operand, std::move(options), errorCode));
+        val(new NumberValue(*this, operand, std::move(options), errorCode));
     if (val.isValid()) {
         return val.orphan();
     }
@@ -665,19 +665,19 @@ bool StandardFunctions::Number::usePercent(const FunctionOptions& opts) const {
 }
 
 StandardFunctions::NumberValue::NumberValue(const Number& parent,
-                                            const Locale& loc,
-                                            FunctionValue* arg,
+                                            FunctionValue& arg,
                                             FunctionOptions&& options,
-                                            UErrorCode& errorCode) : locale(loc) {
+                                            UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
     // Must have an argument
-    if (arg == nullptr) {
+    if (arg.isNullOperand()) {
         errorCode = U_MF_OPERAND_MISMATCH_ERROR;
         return;
     }
 
-    opts = options.mergeOptions(arg->getResolvedOptions(), errorCode);
-    operand = arg->getOperand();
+    locale = parent.locale;
+    opts = options.mergeOptions(arg.getResolvedOptions(), errorCode);
+    operand = arg.getOperand();
 
     number::LocalizedNumberFormatter realFormatter;
     realFormatter = formatterForOptions(parent, opts, errorCode);
@@ -887,8 +887,8 @@ StandardFunctions::DateTime::create(const Locale& loc, DateTimeType type, UError
 }
 
 FunctionValue*
-StandardFunctions::DateTime::call(FunctionValue* val, FunctionOptions&& opts, UErrorCode& errorCode) {
-    auto result = new DateTimeValue(locale, type, val, std::move(opts), errorCode);
+StandardFunctions::DateTime::call(FunctionValue& val, FunctionOptions&& opts, UErrorCode& errorCode) {
+    auto result = new DateTimeValue(type, locale, val, std::move(opts), errorCode);
     return result;
 }
 
@@ -921,9 +921,9 @@ UnicodeString StandardFunctions::DateTimeValue::formatToString(UErrorCode& statu
     return formattedDate;
 }
 
-StandardFunctions::DateTimeValue::DateTimeValue(const Locale& loc,
-                                                DateTime::DateTimeType type,
-                                                FunctionValue* val,
+StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
+                                                const Locale& locale,
+                                                FunctionValue& val,
                                                 FunctionOptions&& options,
                                                 UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
@@ -1175,9 +1175,8 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
         return;
     }
 
-    locale = loc;
-    operand = val->getOperand();
-    opts = options.mergeOptions(val->getResolvedOptions(), errorCode);
+    operand = val.getOperand();
+    opts = options.mergeOptions(val.getResolvedOptions(), errorCode);
 
     const Formattable* source = &operand;
 
@@ -1452,7 +1451,7 @@ StandardFunctions::String::string(const Locale& loc, UErrorCode& success) {
 extern UnicodeString formattableToString(const Locale&, const Formattable&, UErrorCode&);
 
 FunctionValue*
-StandardFunctions::String::call(FunctionValue* val, FunctionOptions&& opts, UErrorCode& errorCode) {
+StandardFunctions::String::call(FunctionValue& val, FunctionOptions&& opts, UErrorCode& errorCode) {
     return new StringValue(locale, val, std::move(opts), errorCode);
 }
 
@@ -1463,11 +1462,11 @@ UnicodeString StandardFunctions::StringValue::formatToString(UErrorCode& errorCo
 }
 
 StandardFunctions::StringValue::StringValue(const Locale& locale,
-                                            FunctionValue* val,
+                                            FunctionValue& val,
                                             FunctionOptions&& options,
                                             UErrorCode& status) {
     CHECK_ERROR(status);
-    operand = val->getOperand();
+    operand = val.getOperand();
     opts = std::move(options); // No options
     // Convert to string
     formattedString = formattableToString(locale, operand, status);

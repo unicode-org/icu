@@ -66,16 +66,17 @@ namespace message2 {
     class InternalValue : public UObject {
     public:
         bool isFallback() const { return isFallbackValue; }
-        bool isNullOperand() const { return isNull; }
+        bool isNullOperand() const { return isFallback() ? false : val->isNullOperand(); }
         bool isSelectable() const;
+        InternalValue() : isFallbackValue(true), fallbackString("") {}
         // Null operand constructor
-        InternalValue() : isFallbackValue(false), isNull(true), fallbackString("") {}
+        explicit InternalValue(UErrorCode& status);
         // Fallback constructor
         explicit InternalValue(const UnicodeString& fb)
             : isFallbackValue(true), fallbackString(fb) {}
         // Fully-evaluated value constructor
         explicit InternalValue(FunctionValue* v, const UnicodeString& fb);
-        // Error code is set if this is a fallback or null
+        // Error code is set if this is a fallback
         FunctionValue* takeValue(UErrorCode& status);
         UnicodeString asFallback() const { return fallbackString; }
         virtual ~InternalValue();
@@ -83,7 +84,6 @@ namespace message2 {
         InternalValue(InternalValue&&);
     private:
         bool isFallbackValue = false;
-        bool isNull = false;
         UnicodeString fallbackString;
         LocalPointer<FunctionValue> val;
     }; // class InternalValue
