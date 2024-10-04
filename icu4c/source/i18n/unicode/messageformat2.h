@@ -359,20 +359,15 @@ namespace message2 {
         void formatPattern(MessageContext&, const Environment&, const data_model::Pattern&, UErrorCode&, UnicodeString&) const;
         [[nodiscard]] InternalValue eval(MessageContext&, InternalValue, UErrorCode&) const;
         // Dispatches on argument type
+#if false
+// TODO
         [[nodiscard]] FunctionName getFormatterNameByType(const FormattedPlaceholder& argument,
                                                           UErrorCode& status) const;
-        // Formats a call to a formatting function
-        // Dispatches on function name
-        [[nodiscard]] InternalValue apply(const FunctionName& functionName,
-                                          FormattedPlaceholder&& argument,
-                                          FunctionOptions&& options,
-                                          MessageContext& context,
-                                          UErrorCode& status) const;
-        [[nodiscard]] InternalValue* formatExpression(const UnicodeString&,
-                                                      const Environment&,
-                                                      const data_model::Expression&,
-                                                      MessageContext&,
-                                                      UErrorCode&) const;
+#endif
+        [[nodiscard]] InternalValue formatExpression(const UnicodeString&,
+                                                     const Environment&,
+                                                     const data_model::Expression&,
+                                                     MessageContext&, UErrorCode&) const;
         [[nodiscard]] FunctionOptions resolveOptions(const Environment& env, const OptionMap&, MessageContext&, UErrorCode&) const;
         [[nodiscard]] InternalValue formatOperand(const UnicodeString&, const Environment&, const data_model::Operand&, MessageContext&, UErrorCode&) const;
         [[nodiscard]] InternalValue evalArgument(const UnicodeString&, const data_model::VariableName&, MessageContext&, UErrorCode&) const;
