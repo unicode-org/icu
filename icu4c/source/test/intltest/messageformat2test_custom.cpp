@@ -268,7 +268,7 @@ static bool hasStringOption(const FunctionOptionsMap& opt,
     return getStringOption(opt, k) == v;
 }
 
-FunctionValue* PersonNameFunction::call(FunctionValue* arg,
+FunctionValue* PersonNameFunction::call(FunctionValue& arg,
                                         FunctionOptions&& opts,
                                         UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
@@ -285,13 +285,13 @@ UnicodeString PersonNameValue::formatToString(UErrorCode& status) const {
     return formattedString;
 }
 
-PersonNameValue::PersonNameValue(FunctionValue* arg,
+PersonNameValue::PersonNameValue(FunctionValue& arg,
                                  FunctionOptions&& options,
                                  UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
-    operand = arg->getOperand();
+    operand = arg.getOperand();
     opts = std::move(options); // Tests don't cover composition, so no need to merge options
 
     const Formattable* toFormat = &operand;
@@ -382,7 +382,7 @@ PersonNameValue::~PersonNameValue() {}
     result += postfix;
 }
 
-FunctionValue* GrammarCasesFunction::call(FunctionValue* arg,
+FunctionValue* GrammarCasesFunction::call(FunctionValue& arg,
                                   FunctionOptions&& opts,
                                   UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
@@ -399,14 +399,14 @@ UnicodeString GrammarCasesValue::formatToString(UErrorCode& status) const {
     return formattedString;
 }
 
-GrammarCasesValue::GrammarCasesValue(FunctionValue* val,
+GrammarCasesValue::GrammarCasesValue(FunctionValue& val,
                                      FunctionOptions&& options,
                                      UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
 
-    operand = val->getOperand();
+    operand = val.getOperand();
     opts = std::move(options); // Tests don't cover composition, so no need to merge options
     const Formattable* toFormat = &operand;
 
@@ -505,7 +505,7 @@ GrammarCasesValue::~GrammarCasesValue() {}
   See ICU4J: CustomFormatterListTest.java
 */
 
-FunctionValue* ListFunction::call(FunctionValue* arg,
+FunctionValue* ListFunction::call(FunctionValue& arg,
                                   FunctionOptions&& opts,
                                   UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
@@ -524,14 +524,14 @@ UnicodeString ListValue::formatToString(UErrorCode& errorCode) const {
 }
 
 message2::ListValue::ListValue(const Locale& locale,
-                               FunctionValue* val,
+                               FunctionValue& val,
                                FunctionOptions&& options,
                                UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
 
-    operand = val->getOperand();
+    operand = val.getOperand();
     opts = std::move(options); // Tests don't cover composition, so no need to merge options
 
     const Formattable* toFormat = &operand;
@@ -829,7 +829,7 @@ void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
 }
 #endif
 
-FunctionValue* NounFunction::call(FunctionValue* arg,
+FunctionValue* NounFunction::call(FunctionValue& arg,
                                   FunctionOptions&& opts,
                                   UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
@@ -847,14 +847,14 @@ UnicodeString NounValue::formatToString(UErrorCode& status) const {
     return formattedString;
 }
 
-NounValue::NounValue(FunctionValue* arg,
+NounValue::NounValue(FunctionValue& arg,
                      FunctionOptions&& options,
                      UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
 
-    operand = arg->getOperand();
+    operand = arg.getOperand();
     opts = std::move(options);
 
     const Formattable* toFormat = &operand;
@@ -884,7 +884,7 @@ NounValue::NounValue(FunctionValue* arg,
     }
 }
 
-FunctionValue* AdjectiveFunction::call(FunctionValue* arg,
+FunctionValue* AdjectiveFunction::call(FunctionValue& arg,
                                   FunctionOptions&& opts,
                                   UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
@@ -902,14 +902,14 @@ UnicodeString AdjectiveValue::formatToString(UErrorCode& status) const {
     return formattedString;
 }
 
-AdjectiveValue::AdjectiveValue(FunctionValue* arg,
+AdjectiveValue::AdjectiveValue(FunctionValue& arg,
                                FunctionOptions&& options,
                                UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
 
-    operand = arg->getOperand();
+    operand = arg.getOperand();
     opts = std::move(options);
 
     const Formattable* toFormat = &operand;

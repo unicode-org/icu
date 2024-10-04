@@ -204,8 +204,7 @@ namespace message2 {
      */
     class U_I18N_API Function : public UObject {
     public:
-        // Adopts its argument
-        virtual FunctionValue* call(FunctionValue*, FunctionOptions&&, UErrorCode&) = 0;
+        virtual FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) = 0;
         virtual ~Function();
     }; // class Function
 
@@ -225,6 +224,7 @@ namespace message2 {
             // non-const method is for calling mergeOptions() -- i.e. options escape
             virtual const FunctionOptions& getResolvedOptions() const { return opts; }
             virtual UBool isSelectable() const { return false; }
+            virtual UBool isNullOperand() const { return false; }
             virtual void selectKeys(const UnicodeString* keys,
                                     int32_t keysLen,
                                     UnicodeString* prefs,
@@ -244,6 +244,10 @@ namespace message2 {
             FunctionOptions opts;
     }; // class FunctionValue
 
+    class NullValue : public FunctionValue {
+        public:
+            virtual UBool isNullOperand() const { return true; }
+    }; // class NullValue
 
 } // namespace message2
 

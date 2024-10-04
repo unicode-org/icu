@@ -47,7 +47,7 @@ namespace message2 {
 
         class DateTime : public Function {
         public:
-            FunctionValue* call(FunctionValue* operand,
+            FunctionValue* call(FunctionValue& operand,
                                 FunctionOptions&& options,
                                 UErrorCode& errorCode) override;
             static DateTime* date(const Locale&, UErrorCode&);
@@ -63,7 +63,8 @@ namespace message2 {
                 kTime,
                 kDateTime
             } DateTimeType;
-            const Locale& locale;
+
+            Locale locale;
             const DateTimeType type;
             static DateTime* create(const Locale&, DateTimeType, UErrorCode&);
             DateTime(const Locale& l, DateTimeType t) : locale(l), type(t) {}
@@ -77,7 +78,7 @@ namespace message2 {
             static Number* integer(const Locale& loc, UErrorCode& success);
             static Number* number(const Locale& loc, UErrorCode& success);
 
-            FunctionValue* call(FunctionValue* operand,
+            FunctionValue* call(FunctionValue& operand,
                                 FunctionOptions&& options,
                                 UErrorCode& errorCode) override;
             virtual ~Number();
@@ -104,7 +105,7 @@ namespace message2 {
             int32_t minimumIntegerDigits(const FunctionOptions& options) const;
 
             bool usePercent(const FunctionOptions& options) const;
-            const Locale& locale;
+            Locale locale;
             const bool isInteger = false;
             const number::LocalizedNumberFormatter icuFormatter;
 
@@ -132,7 +133,7 @@ namespace message2 {
 
             Locale locale;
             number::FormattedNumber formattedNumber;
-            NumberValue(const Number&, const Locale&, FunctionValue*, FunctionOptions&&, UErrorCode&);
+            NumberValue(const Number&, FunctionValue&, FunctionOptions&&, UErrorCode&);
         }; // class NumberValue
 
         class DateTimeValue : public FunctionValue {
@@ -143,15 +144,14 @@ namespace message2 {
         private:
             friend class DateTime;
 
-            Locale locale;
             UnicodeString formattedDate;
-            DateTimeValue(const Locale&, DateTime::DateTimeType type,
-                          FunctionValue*, FunctionOptions&&, UErrorCode&);
+            DateTimeValue(DateTime::DateTimeType type, const Locale&,
+                          FunctionValue&, FunctionOptions&&, UErrorCode&);
         }; // class DateTimeValue
 
         class String : public Function {
         public:
-            FunctionValue* call(FunctionValue* val,
+            FunctionValue* call(FunctionValue& val,
                                 FunctionOptions&& opts,
                                 UErrorCode& errorCode) override;
             static String* string(const Locale& locale, UErrorCode& status);
@@ -161,7 +161,7 @@ namespace message2 {
             friend class StringFactory;
 
             // Formatting `value` to a string might require the locale
-            const Locale& locale;
+            Locale locale;
 
             String(const Locale& l) : locale(l) {}
         };
@@ -233,7 +233,7 @@ namespace message2 {
             friend class String;
 
             UnicodeString formattedString;
-            StringValue(const Locale&, FunctionValue*, FunctionOptions&&, UErrorCode&);
+            StringValue(const Locale&, FunctionValue&, FunctionOptions&&, UErrorCode&);
         }; // class StringValue
 
     };

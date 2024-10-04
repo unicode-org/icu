@@ -117,7 +117,7 @@ class Person : public FormattableObject {
 
 class PersonNameFunction : public Function {
     public:
-    FunctionValue* call(FunctionValue*, FunctionOptions&&, UErrorCode&) override;
+    FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) override;
     virtual ~PersonNameFunction();
 };
 
@@ -130,7 +130,7 @@ class PersonNameValue : public FunctionValue {
     friend class PersonNameFunction;
 
     UnicodeString formattedString;
-    PersonNameValue(FunctionValue*, FunctionOptions&&, UErrorCode&);
+    PersonNameValue(FunctionValue&, FunctionOptions&&, UErrorCode&);
 }; // class PersonNameValue
 
 class FormattableProperties : public FormattableObject {
@@ -147,7 +147,7 @@ private:
 
 class GrammarCasesFunction : public Function {
     public:
-    FunctionValue* call(FunctionValue*, FunctionOptions&&, UErrorCode&) override;
+    FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) override;
     static MFFunctionRegistry customRegistry(UErrorCode&);
 };
 
@@ -160,13 +160,13 @@ class GrammarCasesValue : public FunctionValue {
     friend class GrammarCasesFunction;
 
     UnicodeString formattedString;
-    GrammarCasesValue(FunctionValue*, FunctionOptions&&, UErrorCode&);
+    GrammarCasesValue(FunctionValue&, FunctionOptions&&, UErrorCode&);
     void getDativeAndGenitive(const UnicodeString&, UnicodeString& result) const;
 }; // class GrammarCasesValue
 
 class ListFunction : public Function {
     public:
-    FunctionValue* call(FunctionValue*, FunctionOptions&&, UErrorCode&) override;
+    FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) override;
     static MFFunctionRegistry customRegistry(UErrorCode&);
     ListFunction(const Locale& loc) : locale(loc) {}
     virtual ~ListFunction();
@@ -183,7 +183,7 @@ class ListValue : public FunctionValue {
 
     UnicodeString formattedString;
     ListValue(const Locale&,
-              FunctionValue*,
+              FunctionValue&,
               FunctionOptions&&,
               UErrorCode&);
 }; // class ListValue
@@ -197,7 +197,7 @@ class NounValue : public FunctionValue {
     friend class NounFunction;
 
     UnicodeString formattedString;
-    NounValue(FunctionValue*,
+    NounValue(FunctionValue&,
               FunctionOptions&&,
               UErrorCode&);
 }; // class NounValue
@@ -211,7 +211,7 @@ class AdjectiveValue : public FunctionValue {
     friend class AdjectiveFunction;
 
     UnicodeString formattedString;
-    AdjectiveValue(FunctionValue*,
+    AdjectiveValue(FunctionValue&,
                    FunctionOptions&&,
                    UErrorCode&);
 }; // class AdjectiveValue
@@ -239,14 +239,14 @@ class ResourceManager : public Formatter {
 
 class NounFunction : public Function {
     public:
-    FunctionValue* call(FunctionValue*, FunctionOptions&&, UErrorCode&) override;
+    FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) override;
     NounFunction() { }
     virtual ~NounFunction();
 };
 
 class AdjectiveFunction : public Function {
     public:
-    FunctionValue* call(FunctionValue*, FunctionOptions&&, UErrorCode&) override;
+    FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) override;
     AdjectiveFunction() { }
     virtual ~AdjectiveFunction();
 };
