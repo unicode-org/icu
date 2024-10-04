@@ -69,12 +69,8 @@ namespace message2 {
         bool isNullOperand() const { return isFallback() ? false : val->isNullOperand(); }
         bool isSelectable() const;
         InternalValue() : isFallbackValue(true), fallbackString("") {}
-        // Null operand constructor
-        explicit InternalValue(UErrorCode& status);
-        // Fallback constructor
-        explicit InternalValue(const UnicodeString& fb)
-            : isFallbackValue(true), fallbackString(fb) {}
-        // Fully-evaluated value constructor
+        static InternalValue null(UErrorCode& status) { return InternalValue(status); }
+        static InternalValue fallback(const UnicodeString& s) { return InternalValue(s); }
         explicit InternalValue(FunctionValue* v, const UnicodeString& fb);
         // Error code is set if this is a fallback
         FunctionValue* takeValue(UErrorCode& status);
@@ -86,6 +82,11 @@ namespace message2 {
         bool isFallbackValue = false;
         UnicodeString fallbackString;
         LocalPointer<FunctionValue> val;
+        // Null operand constructor
+        explicit InternalValue(UErrorCode& status);
+        // Fallback constructor
+        explicit InternalValue(const UnicodeString& fb)
+            : isFallbackValue(true), fallbackString(fb) {}
     }; // class InternalValue
 
 // Used for arguments and literals
