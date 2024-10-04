@@ -31,17 +31,13 @@ using namespace data_model;
 // ------------------------------------------------------
 // Formatting
 
-// The result of formatting a literal is just itself.
-static Formattable evalLiteral(const Literal& lit) {
-    return Formattable(lit.unquoted());
-}
-
 // Assumes that `var` is a message argument; returns the argument's value.
 [[nodiscard]] InternalValue MessageFormatter::evalArgument(const UnicodeString& fallback,
                                                            const VariableName& var,
                                                            MessageContext& context,
                                                            UErrorCode& errorCode) const {
     if (U_SUCCESS(errorCode)) {
+        // Look up the variable in the global environment
         const Formattable* val = context.getGlobal(var, errorCode);
         if (U_SUCCESS(errorCode)) {
             // Note: the fallback string has to be passed in because in a declaration like:
@@ -52,7 +48,9 @@ static Formattable evalLiteral(const Literal& lit) {
                 fallbackToUse += DOLLAR;
                 fallbackToUse += var;
             }
+            // If it exists, create a BaseValue (FunctionValue) for it
             LocalPointer<BaseValue> result(BaseValue::create(locale, *val, errorCode));
+            // Add fallback and return an InternalValue
             if (U_SUCCESS(errorCode)) {
                 return InternalValue(result.orphan(), fallbackToUse);
             }
@@ -83,24 +81,28 @@ static UnicodeString reserialize(const UnicodeString& s) {
 }
 
 // Returns the contents of the literal
-[[nodiscard]] InternalValue MessageFormatter::formatLiteral(const UnicodeString& fallback,
-                                                            const Literal& lit,
-                                                            UErrorCode& errorCode) const {
+[[nodiscard]] InternalValue MessageFormatter::evalLiteral(const UnicodeString& fallback,
+                                                          const Literal& lit,
+                                                          UErrorCode& errorCode) const {
     // The fallback for a literal is itself, unless another fallback is passed in
     // (same reasoning as evalArgument())
     UnicodeString fallbackToUse = fallback.isEmpty() ? reserialize(lit.unquoted()) : fallback;
-    LocalPointer<BaseValue> val(BaseValue::create(locale, evalLiteral(fallbackToUse, lit), errorCode));
+
+    // Create a BaseValue (FunctionValue) that wraps the literal
+    LocalPointer<BaseValue> val(BaseValue::create(locale,
+                                                  Formattable(lit.unquoted()),
+                                                  errorCode));
     if (U_SUCCESS(errorCode)) {
-        return InternalValue(val.orphan(), lit.quoted());
+        return InternalValue(val.orphan(), fallbackToUse);
     }
     return {};
 }
 
-[[nodiscard]] InternalValue MessageFormatter::formatOperand(const UnicodeString& fallback,
-                                                            const Environment& env,
-                                                            const Operand& rand,
-                                                            MessageContext& context,
-                                                            UErrorCode &status) const {
+[[nodiscard]] InternalValue MessageFormatter::evalOperand(const UnicodeString& fallback,,
+                                                          const Environment& env,
+                                                          const Operand& rand,
+                                                          MessageContext& context,
+                                                          UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return {};
     }
@@ -112,10 +114,9 @@ static UnicodeString reserialize(const UnicodeString& s) {
         // Check if it's local or global
         // Note: there is no name shadowing; this is enforced by the parser
         const VariableName& var = rand.asVariable();
-        // TODO: Currently, this code implements lazy evaluation of locals.
+        // Currently, this code implements lazy evaluation of locals.
         // That is, the environment binds names to a closure, not a resolved value.
-        // Eager vs. lazy evaluation is an open issue:
-        // see https://github.com/unicode-org/message-format-wg/issues/299
+        // The spec does not require either eager or lazy evaluation.
 
         // NFC-normalize the variable name. See
         // https://github.com/unicode-org/message-format-wg/blob/main/spec/syntax.md#names-and-identifiers
@@ -129,7 +130,8 @@ static UnicodeString reserialize(const UnicodeString& s) {
           // The name of this local variable is the fallback for its RHS.
           UnicodeString newFallback(DOLLAR);
           newFallback += var;
-          return formatExpression(newFallback, rhs.getEnv(), rhs.getExpr(), context, status);
+          // Evaluate the expression using the environment from the closure
+          return evalExpression(newFallback, rhs.getEnv(), rhs.getExpr(), context, status);
         }
         // Variable wasn't found in locals -- check if it's global
         InternalValue result = evalArgument(fallback, var, context, status);
@@ -146,7 +148,7 @@ static UnicodeString reserialize(const UnicodeString& s) {
         return result;
     } else {
         U_ASSERT(rand.isLiteral());
-        return formatLiteral(fallback, rand.asLiteral(), status);
+        return evalLiteral(fallback, rand.asLiteral(), status);
     }
 }
 
@@ -168,14 +170,11 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
         const UnicodeString& k = opt.getName();
         const Operand& v = opt.getValue();
 
-        // Options are fully evaluated before calling the function
         // Format the operand
-        InternalValue rhsVal = formatOperand({}, env, v, context, status);
+        InternalValue rhsVal = evalOperand({}, env, v, context, status);
         if (U_FAILURE(status)) {
             return {};
         }
-        // Force evaluation in order to extract a FormattedPlaceholder
-        // from `rhsVal` (which might be a suspension)
         FunctionValue* optVal = rhsVal.takeValue(status);
 
         // The option is resolved; add it to the vector
@@ -233,18 +232,18 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
 }
 
 // Formats an expression using `globalEnv` for the values of variables
-[[nodiscard]] InternalValue MessageFormatter::formatExpression(const UnicodeString& fallback,
-                                                               const Environment& globalEnv,
-                                                               const Expression& expr,
-                                                               MessageContext& context,
-                                                               UErrorCode &status) const {
+[[nodiscard]] InternalValue MessageFormatter::evalExpression(const UnicodeString& fallback,
+                                                             const Environment& globalEnv,
+                                                             const Expression& expr,
+                                                             MessageContext& context,
+                                                             UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return {};
     }
 
     const Operand& rand = expr.getOperand();
-    // Format the operand (formatOperand handles the case of a null operand)
-    InternalValue randVal = formatOperand(globalEnv, rand, context, status);
+    // Evaluate the operand (evalOperand handles the case of a null operand)
+    InternalValue randVal = evalOperand(globalEnv, rand, context, status);
 
     if (!expr.isFunctionCall()) {
         const FunctionValue* contained = randVal.getValue(status);
@@ -293,7 +292,10 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
 }
 
 // Formats each text and expression part of a pattern, appending the results to `result`
-void MessageFormatter::formatPattern(MessageContext& context, const Environment& globalEnv, const Pattern& pat, UErrorCode &status, UnicodeString& result) const {
+void MessageFormatter::formatPattern(MessageContext& context,
+                                     const Environment& globalEnv,
+                                     const Pattern& pat,
+                                     UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
     for (int32_t i = 0; i < pat.numParts(); i++) {
@@ -304,7 +306,7 @@ void MessageFormatter::formatPattern(MessageContext& context, const Environment&
             // Markup is ignored
         } else {
 	      // Format the expression
-	      InternalValue partVal = formatExpression({}, globalEnv, part.contents(), context, status);
+	      InternalValue partVal = evalExpression({}, globalEnv, part.contents(), context, status);
               if (partVal.isFallback()) {
                   result += LEFT_CURLY_BRACE;
                   result += partVal.asFallback();
@@ -344,7 +346,7 @@ void MessageFormatter::resolveSelectors(MessageContext& context, const Environme
     // 2. For each expression exp of the message's selectors
     for (int32_t i = 0; i < dataModel.numSelectors(); i++) {
         // 2i. Let rv be the resolved value of exp.
-        InternalValue rv = formatExpression({}, env, selectors[i], context, status);
+        InternalValue rv = evalExpression({}, env, selectors[i], context, status);
         if (rv.isSelectable()) {
             // 2ii. If selection is supported for rv:
             // (True if this code has been reached)
@@ -404,7 +406,7 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
 
     // Call the selector
     // Already checked for fallback, so it's safe to call takeValue()
-    LocalPointer rvVal(rv.takeValue(status));
+    LocalPointer<FunctionValue> rvVal(rv.takeValue(status));
     rvVal->selectKeys(adoptedKeys.getAlias(), keysLen, adoptedPrefs.getAlias(), prefsLen,
                       status);
 
