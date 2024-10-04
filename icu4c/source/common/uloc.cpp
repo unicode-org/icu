@@ -1786,7 +1786,7 @@ constexpr int32_t I_DEFAULT_LENGTH = UPRV_LENGTHOF(i_default);
  * This is the code underlying uloc_getName and uloc_canonicalize.
  */
 void
-_canonicalize(const char* localeID,
+_canonicalize(std::string_view localeID,
               ByteSink& sink,
               uint32_t options,
               UErrorCode& err) {
@@ -1797,29 +1797,29 @@ _canonicalize(const char* localeID,
     int32_t j, fieldCount=0;
     CharString tempBuffer;  // if localeID has a BCP47 extension, tmpLocaleID points to this
     CharString localeIDWithHyphens;  // if localeID has a BPC47 extension and have _, tmpLocaleID points to this
-    const char* origLocaleID;
-    const char* tmpLocaleID;
-    const char* keywordAssign = nullptr;
-    const char* separatorIndicator = nullptr;
+    std::string_view origLocaleID;
+    std::string_view tmpLocaleID;
+    size_t keywordAssign = std::string_view::npos;
+    size_t separatorIndicator = std::string_view::npos;
 
-    if (localeID != nullptr && _hasBCP47Extension(localeID)) {
-        const char* localeIDPtr = localeID;
+    if (_hasBCP47Extension(localeID)) {
+        std::string_view localeIDPtr = localeID;
 
         // convert all underbars to hyphens, unless the "BCP47 extension" comes at the beginning of the string
-        if (uprv_strchr(localeID, '_') != nullptr && localeID[1] != '-' && localeID[1] != '_') {
-            localeIDWithHyphens.append(localeID, -1, err);
+        if (localeID.size() >= 2 && localeID.find('_') != std::string_view::npos && localeID[1] != '-' && localeID[1] != '_') {
+            localeIDWithHyphens.append(localeID, err);
             if (U_SUCCESS(err)) {
                 for (char* p = localeIDWithHyphens.data(); *p != '\0'; ++p) {
                     if (*p == '_') {
                         *p = '-';
                     }
                 }
-                localeIDPtr = localeIDWithHyphens.data();
+                localeIDPtr = localeIDWithHyphens.toStringPiece();
             }
         }
 
-        tempBuffer = ulocimp_forLanguageTag(localeIDPtr, -1, nullptr, err);
-        tmpLocaleID = U_SUCCESS(err) && !tempBuffer.isEmpty() ? tempBuffer.data() : localeIDPtr;
+        tempBuffer = ulocimp_forLanguageTag(localeIDPtr.data(), static_cast<int32_t>(localeIDPtr.size()), nullptr, err);
+        tmpLocaleID = U_SUCCESS(err) && !tempBuffer.isEmpty() ? static_cast<std::string_view>(tempBuffer.toStringPiece()) : localeIDPtr;
     } else {
         tmpLocaleID=localeID;
     }
@@ -1831,20 +1831,25 @@ _canonicalize(const char* localeID,
     CharString script;
     CharString country;
     CharString variant;
+    const char* end = nullptr;
     ulocimp_getSubtags(
             tmpLocaleID,
             &tag,
             &script,
             &country,
             &variant,
-            &tmpLocaleID,
+            &end,
             err);
     if (U_FAILURE(err)) {
         return;
     }
+    U_ASSERT(end != nullptr);
+    if (end > tmpLocaleID.data()) {
+        tmpLocaleID.remove_prefix(end - tmpLocaleID.data());
+    }
 
-    if (tag.length() == I_DEFAULT_LENGTH &&
-            uprv_strncmp(origLocaleID, i_default, I_DEFAULT_LENGTH) == 0) {
+    if (tag.length() == I_DEFAULT_LENGTH && origLocaleID.length() >= I_DEFAULT_LENGTH &&
+            uprv_strncmp(origLocaleID.data(), i_default, I_DEFAULT_LENGTH) == 0) {
         tag.clear();
         tag.append(uloc_getDefault(), err);
     } else {
@@ -1869,15 +1874,14 @@ _canonicalize(const char* localeID,
     }
 
     /* Copy POSIX-style charset specifier, if any [mr.utf8] */
-    if (!OPTION_SET(options, _ULOC_CANONICALIZE) && *tmpLocaleID == '.') {
+    if (!OPTION_SET(options, _ULOC_CANONICALIZE) && !tmpLocaleID.empty() && tmpLocaleID.front() == '.') {
         tag.append('.', err);
-        ++tmpLocaleID;
-        const char *atPos = nullptr;
+        tmpLocaleID.remove_prefix(1);
         size_t length;
-        if((atPos = uprv_strchr(tmpLocaleID, '@')) != nullptr) {
-            length = atPos - tmpLocaleID;
+        if (size_t atPos = tmpLocaleID.find('@'); atPos != std::string_view::npos) {
+            length = atPos;
         } else {
-            length = uprv_strlen(tmpLocaleID);
+            length = tmpLocaleID.length();
         }
         // The longest charset name we found in IANA charset registry
         // https://www.iana.org/assignments/character-sets/ is
@@ -1889,33 +1893,34 @@ _canonicalize(const char* localeID,
            err = U_ILLEGAL_ARGUMENT_ERROR; /* malformed keyword name */
            return;
         }
-        tag.append(tmpLocaleID, static_cast<int32_t>(length), err);
-        tmpLocaleID += length;
+        if (length > 0) {
+            tag.append(tmpLocaleID.data(), static_cast<int32_t>(length), err);
+            tmpLocaleID.remove_prefix(length);
+        }
     }
 
     /* Scan ahead to next '@' and determine if it is followed by '=' and/or ';'
-       After this, tmpLocaleID either points to '@' or is nullptr */
-    if ((tmpLocaleID=locale_getKeywordsStart(tmpLocaleID))!=nullptr) {
-        keywordAssign = uprv_strchr(tmpLocaleID, '=');
-        separatorIndicator = uprv_strchr(tmpLocaleID, ';');
+       After this, tmpLocaleID either starts at '@' or is empty. */
+    if (const char* start = locale_getKeywordsStart(tmpLocaleID); start != nullptr) {
+        if (start > tmpLocaleID.data()) {
+            tmpLocaleID.remove_prefix(start - tmpLocaleID.data());
+        }
+        keywordAssign = tmpLocaleID.find('=');
+        separatorIndicator = tmpLocaleID.find(';');
+    } else {
+        tmpLocaleID = {};
     }
 
     /* Copy POSIX-style variant, if any [mr@FOO] */
     if (!OPTION_SET(options, _ULOC_CANONICALIZE) &&
-        tmpLocaleID != nullptr && keywordAssign == nullptr) {
-        for (;;) {
-            char c = *tmpLocaleID;
-            if (c == 0) {
-                break;
-            }
-            tag.append(c, err);
-            ++tmpLocaleID;
-        }
+        !tmpLocaleID.empty() && keywordAssign == std::string_view::npos) {
+        tag.append(tmpLocaleID, err);
+        tmpLocaleID = {};
     }
 
     if (OPTION_SET(options, _ULOC_CANONICALIZE)) {
         /* Handle @FOO variant if @ is present and not followed by = */
-        if (tmpLocaleID!=nullptr && keywordAssign==nullptr) {
+        if (!tmpLocaleID.empty() && keywordAssign == std::string_view::npos) {
             /* Add missing '_' if needed */
             if (fieldCount < 2 || (fieldCount < 3 && !script.isEmpty())) {
                 do {
@@ -1925,7 +1930,9 @@ _canonicalize(const char* localeID,
             }
 
             CharStringByteSink s(&tag);
-            _getVariant(tmpLocaleID+1, '@', &s, !variant.isEmpty(), err);
+            std::string_view sub = tmpLocaleID;
+            sub.remove_prefix(1);
+            _getVariant(sub, '@', &s, !variant.isEmpty(), err);
             if (U_FAILURE(err)) { return; }
         }
 
@@ -1933,7 +1940,7 @@ _canonicalize(const char* localeID,
         for (j=0; j<UPRV_LENGTHOF(CANONICALIZE_MAP); j++) {
             StringPiece id(CANONICALIZE_MAP[j].id);
             if (tag == id) {
-                if (id.empty() && tmpLocaleID != nullptr) {
+                if (id.empty() && !tmpLocaleID.empty()) {
                     break; /* Don't remap "" if keywords present */
                 }
                 tag.clear();
@@ -1946,11 +1953,12 @@ _canonicalize(const char* localeID,
     sink.Append(tag.data(), tag.length());
 
     if (!OPTION_SET(options, _ULOC_STRIP_KEYWORDS)) {
-        if (tmpLocaleID!=nullptr && keywordAssign!=nullptr &&
-            (!separatorIndicator || separatorIndicator > keywordAssign)) {
+        if (!tmpLocaleID.empty() && keywordAssign != std::string_view::npos &&
+            (separatorIndicator == std::string_view::npos || separatorIndicator > keywordAssign)) {
             sink.Append("@", 1);
             ++fieldCount;
-            ulocimp_getKeywords(tmpLocaleID+1, '@', sink, true, err);
+            tmpLocaleID.remove_prefix(1);
+            ulocimp_getKeywords(tmpLocaleID, '@', sink, true, err);
         }
     }
 }
