@@ -1545,6 +1545,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        ZWG{
+            "",
+            "",
+        }
         ZWL{
             "",
             "",
@@ -4032,6 +4036,14 @@ structLocale:table(nofallback){
             other{""}
         }
         ZWD{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        ZWG{
             zero{""}
             one{""}
             two{""}
