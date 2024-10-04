@@ -45,24 +45,9 @@ namespace message2 {
 
     using namespace data_model;
 
-    // InternalValue tracks a value along with, possibly, a function that needs
-    // to be applied to it in the future (once the value is required
-    // (by a .match or pattern, or another function));
-    // while FormattedPlaceholder tracks a value and how it was constructed in the
-    // past (by a function, or from a literal or argument).
-
     // InternalValue represents an intermediate value in the message
-    // formatter. An InternalValue can either be a fallback value (representing
-    // an error that occurred during formatting); a "suspension", meaning a function
-    // call that has yet to be fully resolved; or a fully-resolved FormattedPlaceholder.
-    // The "suspension" state is used in implementing selection; in a message like:
-    // .local $x = {1 :number}
-    // .match $x
-    // [...]
-    // $x can't be bound to a fully formatted value; the annotation needs to be
-    // preserved until the .match is evaluated. Moreover, any given function could
-    // be both a formatter and a selector, and it's ambiguous which one it's intended
-    // to be until the body of the message is processed.
+    // formatter.
+// TODO
     class InternalValue : public UObject {
     public:
         bool isFallback() const { return isFallbackValue; }
@@ -74,6 +59,7 @@ namespace message2 {
         explicit InternalValue(FunctionValue* v, const UnicodeString& fb);
         // Error code is set if this is a fallback
         FunctionValue* takeValue(UErrorCode& status);
+        const FunctionValue* getValue(UErrorCode& status) const;
         UnicodeString asFallback() const { return fallbackString; }
         virtual ~InternalValue();
         InternalValue& operator=(InternalValue&&);

@@ -357,17 +357,13 @@ namespace message2 {
         // Formatting methods
         [[nodiscard]] InternalValue formatLiteral(const UnicodeString&, const data_model::Literal&, UErrorCode&) const;
         void formatPattern(MessageContext&, const Environment&, const data_model::Pattern&, UErrorCode&, UnicodeString&) const;
-        [[nodiscard]] InternalValue eval(MessageContext&, InternalValue, UErrorCode&) const;
-        // Dispatches on argument type
-#if false
-// TODO
-        [[nodiscard]] FunctionName getFormatterNameByType(const FormattedPlaceholder& argument,
-                                                          UErrorCode& status) const;
-#endif
+        [[nodiscard]] InternalValue apply(const FunctionName&, InternalValue&&, FunctionOptions&&,
+                                          MessageContext&, UErrorCode&) const;
         [[nodiscard]] InternalValue formatExpression(const UnicodeString&,
                                                      const Environment&,
                                                      const data_model::Expression&,
-                                                     MessageContext&, UErrorCode&) const;
+                                                     MessageContext&,
+                                                     UErrorCode&) const;
         [[nodiscard]] FunctionOptions resolveOptions(const Environment& env, const OptionMap&, MessageContext&, UErrorCode&) const;
         [[nodiscard]] InternalValue formatOperand(const UnicodeString&, const Environment&, const data_model::Operand&, MessageContext&, UErrorCode&) const;
         [[nodiscard]] InternalValue evalArgument(const UnicodeString&, const data_model::VariableName&, MessageContext&, UErrorCode&) const;
@@ -388,6 +384,7 @@ namespace message2 {
         bool isFunction(const FunctionName& fn) const { return isBuiltInFunction(fn) || isCustomFunction(fn); }
         void setNotSelectableError(MessageContext&, const InternalValue&, UErrorCode&) const;
         Function* lookupFunction(const FunctionName&, UErrorCode&) const;
+        bool getDefaultFormatterNameByType(const UnicodeString&, FunctionName&) const;
 
         // Checking for resolution errors
         void checkDeclarations(MessageContext&, Environment*&, UErrorCode&) const;

@@ -251,6 +251,15 @@ namespace message2 {
         return nullptr;
     }
 
+    bool MessageFormatter::getDefaultFormatterNameByType(const UnicodeString& tag,
+                                                         FunctionName& result) const {
+        if (hasCustomMFFunctionRegistry()) {
+            const MFFunctionRegistry& customMFFunctionRegistry = getCustomMFFunctionRegistry();
+            return customMFFunctionRegistry.getDefaultFormatterNameByType(tag, result);
+        }
+        return false;
+    }
+
     bool MessageFormatter::isCustomFunction(const FunctionName& fn) const {
         return hasCustomMFFunctionRegistry() && getCustomMFFunctionRegistry().getFunction(fn) != nullptr;
     }

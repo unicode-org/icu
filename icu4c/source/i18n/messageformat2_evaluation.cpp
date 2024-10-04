@@ -251,6 +251,18 @@ FunctionValue* InternalValue::takeValue(UErrorCode& status) {
     return val.orphan();
 }
 
+const FunctionValue* InternalValue::getValue(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return {};
+    }
+    if (isFallback()) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return {};
+    }
+    U_ASSERT(val.isValid());
+    return val.getAlias();
+}
+
 bool InternalValue::isSelectable() const {
     if (isFallbackValue) {
         return false;

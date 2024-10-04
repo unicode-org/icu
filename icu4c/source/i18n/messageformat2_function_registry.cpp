@@ -51,8 +51,10 @@ FunctionValue::~FunctionValue() {}
 
 MFFunctionRegistry MFFunctionRegistry::Builder::build() {
     U_ASSERT(functions != nullptr);
-    MFFunctionRegistry result = MFFunctionRegistry(functions);
+    U_ASSERT(formattersByType != nullptr);
+    MFFunctionRegistry result = MFFunctionRegistry(functions, formattersByType);
     functions = nullptr;
+    formattersByType = nullptr;
     return result;
 }
 
@@ -66,24 +68,43 @@ MFFunctionRegistry::Builder& MFFunctionRegistry::Builder::adoptFunction(const Fu
     return *this;
 }
 
+MFFunctionRegistry::Builder&
+MFFunctionRegistry::Builder::setDefaultFormatterNameByType(const UnicodeString& type,
+                                                           const FunctionName& functionName,
+                                                           UErrorCode& errorCode) {
+    if (U_SUCCESS(errorCode)) {
+        U_ASSERT(formattersByType != nullptr);
+        FunctionName* f = create<FunctionName>(FunctionName(functionName), errorCode);
+        formattersByType->put(type, f, errorCode);
+     }
+     return *this;
+ }
+
 MFFunctionRegistry::Builder::Builder(UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
 
     functions = new Hashtable();
-    if (functions == nullptr) {
+    formattersByType = new Hashtable();
+    if (functions == nullptr || formattersByType == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     } else {
         formatters->setValueDeleter(uprv_deleteUObject);
         selectors->setValueDeleter(uprv_deleteUObject);
         formattersByType->setValueDeleter(uprv_deleteUObject);
     }
+
     functions->setValueDeleter(uprv_deleteUObject);
+    formattersByType->setValueDeleter(uprv_deleteUObject);
 }
 
 MFFunctionRegistry::Builder::~Builder() {
     if (functions != nullptr) {
         delete functions;
         functions = nullptr;
+    }
+    if (formattersByType != nullptr) {
+        delete formattersByType;
+        formattersByType = nullptr;
     }
 }
 
@@ -92,6 +113,16 @@ MFFunctionRegistry::Builder::~Builder() {
 Function* MFFunctionRegistry::getFunction(const FunctionName& functionName) const {
     U_ASSERT(functions != nullptr);
     return static_cast<Function*>(functions->get(functionName));
+}
+
+UBool MFFunctionRegistry::getDefaultFormatterNameByType(const UnicodeString& type, FunctionName& name) const {
+    U_ASSERT(formattersByType != nullptr);
+    const FunctionName* f = static_cast<FunctionName*>(formattersByType->get(type));
+    if (f != nullptr) {
+        name = *f;
+        return true;
+    }
+    return false;
 }
 
 bool MFFunctionRegistry::hasFunction(const FunctionName& f) const {
@@ -194,8 +225,10 @@ static int64_t getInt64Value(const Locale& locale, const Formattable& value, UEr
 }
 
 // Adopts its argument
-MFFunctionRegistry::MFFunctionRegistry(FunctionMap* f) : functions(f) {
+MFFunctionRegistry::MFFunctionRegistry(FunctionMap* f, Hashtable* byType)
+    : functions(f), formattersByType(byType) {
     U_ASSERT(f != nullptr);
+    U_ASSERT(byType != nullptr);
 }
 
 MFFunctionRegistry& MFFunctionRegistry::operator=(MFFunctionRegistry&& other) noexcept {
@@ -203,6 +236,8 @@ MFFunctionRegistry& MFFunctionRegistry::operator=(MFFunctionRegistry&& other) no
 
     functions = other.functions;
     other.functions = nullptr;
+    formattersByType = other.formattersByType;
+    other.formattersByType = nullptr;
 
     return *this;
 }
@@ -211,6 +246,10 @@ void MFFunctionRegistry::cleanup() noexcept {
     if (functions != nullptr) {
         delete functions;
         functions = nullptr;
+    }
+    if (formattersByType != nullptr) {
+        delete formattersByType;
+        formattersByType = nullptr;
     }
 }
 

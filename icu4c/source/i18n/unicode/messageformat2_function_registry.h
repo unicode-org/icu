@@ -63,6 +63,20 @@ namespace message2 {
          */
         Function* getFunction(const FunctionName& functionName) const;
         /**
+         * Looks up a function by a type tag. This method gets the name of the default formatter registered
+         * for that type. If no formatter was explicitly registered for this type, it returns false.
+         *
+         * @param formatterType Type tag for the desired `FormattableObject` type to be formatted.
+         * @param name Output parameter; initialized to the name of the default formatter for `formatterType`
+         *        if one has been registered. Its value is undefined otherwise.
+         * @return True if and only if the function registry contains a default formatter for `formatterType`.
+         *         If the return value is false, then the value of `name` is undefined.
+         *
+         * @internal ICU 75 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        UBool getDefaultFormatterNameByType(const UnicodeString& formatterType, FunctionName& name) const;
+        /**
          * The mutable Builder class allows each formatter and selector factory
          * to be initialized separately; calling its `build()` method yields an
          * immutable MFFunctionRegistry object.
@@ -76,6 +90,8 @@ namespace message2 {
         private:
             // Must use raw pointers to avoid instantiating `LocalPointer` on an internal type
             FunctionMap* functions;
+            // Mapping from strings (type tags) to FunctionNames
+            Hashtable* formattersByType = nullptr;
 
             // Do not define copy constructor/assignment operator
             Builder& operator=(const Builder&) = delete;
@@ -113,6 +129,22 @@ namespace message2 {
             Builder& adoptFunction(const data_model::FunctionName& functionName,
                                    Function* function,
                                    UErrorCode& errorCode);
+            /**
+             * Registers a formatter factory to a given type tag.
+             * (See `FormattableObject` for details on type tags.)
+             *
+             * @param type Tag for objects to be formatted with this formatter.
+             * @param functionName A reference to the name of the function to use for
+             *        creating formatters for `formatterType` objects.
+             * @param errorCode Input/output error code
+             * @return A reference to the builder.
+             *
+             * @internal ICU 75 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            Builder& setDefaultFormatterNameByType(const UnicodeString& type,
+                                                   const data_model::FunctionName& functionName,
+                                                   UErrorCode& errorCode);
             /**
              * Creates an immutable `MFFunctionRegistry` object with the selectors and formatters
              * that were previously registered. The builder cannot be used after this call.
@@ -178,7 +210,7 @@ namespace message2 {
         MFFunctionRegistry& operator=(const MFFunctionRegistry&) = delete;
         MFFunctionRegistry(const MFFunctionRegistry&) = delete;
 
-        MFFunctionRegistry(FunctionMap* f);
+        MFFunctionRegistry(FunctionMap*, Hashtable*);
 
         MFFunctionRegistry() {}
 
@@ -192,6 +224,8 @@ namespace message2 {
 
         // Must use raw pointers to avoid instantiating `LocalPointer` on an internal type
         FunctionMap* functions = nullptr;
+        // Mapping from strings (type tags) to FunctionNames
+        Hashtable* formattersByType = nullptr;
     }; // class MFFunctionRegistry
 
     class FunctionValue;
