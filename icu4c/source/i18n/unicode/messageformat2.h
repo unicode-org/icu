@@ -355,17 +355,13 @@ namespace message2 {
         void resolvePreferences(MessageContext&, UVector&, UVector&, UErrorCode&) const;
 
         // Formatting methods
-        [[nodiscard]] InternalValue formatLiteral(const UnicodeString&, const data_model::Literal&, UErrorCode&) const;
+        [[nodiscard]] InternalValue evalLiteral(const UnicodeString&, const data_model::Literal&, UErrorCode&) const;
         void formatPattern(MessageContext&, const Environment&, const data_model::Pattern&, UErrorCode&, UnicodeString&) const;
         [[nodiscard]] InternalValue apply(const FunctionName&, InternalValue&&, FunctionOptions&&,
                                           MessageContext&, UErrorCode&) const;
-        [[nodiscard]] InternalValue formatExpression(const UnicodeString&,
-                                                     const Environment&,
-                                                     const data_model::Expression&,
-                                                     MessageContext&,
-                                                     UErrorCode&) const;
+        [[nodiscard]] InternalValue evalExpression(const UnicodeString&, const Environment&, const data_model::Expression&, MessageContext&, UErrorCode&) const;
         [[nodiscard]] FunctionOptions resolveOptions(const Environment& env, const OptionMap&, MessageContext&, UErrorCode&) const;
-        [[nodiscard]] InternalValue formatOperand(const UnicodeString&, const Environment&, const data_model::Operand&, MessageContext&, UErrorCode&) const;
+        [[nodiscard]] InternalValue evalOperand(const UnicodeString&, const Environment&, const data_model::Operand&, MessageContext&, UErrorCode&) const;
         [[nodiscard]] InternalValue evalArgument(const UnicodeString&, const data_model::VariableName&, MessageContext&, UErrorCode&) const;
         void formatSelectors(MessageContext& context, const Environment& env, UErrorCode &status, UnicodeString& result) const;
 
