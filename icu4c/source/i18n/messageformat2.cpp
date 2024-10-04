@@ -107,9 +107,13 @@ static UnicodeString reserialize(const UnicodeString& s) {
         return {};
     }
 
+    // Three cases: absent operand; variable; or literal
+
+    // Absent (null) operand
     if (rand.isNull()) {
         return InternalValue::null(status);
     }
+    // Variable reference
     if (rand.isVariable()) {
         // Check if it's local or global
         // Note: there is no name shadowing; this is enforced by the parser
@@ -145,8 +149,11 @@ static UnicodeString reserialize(const UnicodeString& s) {
             str += var;
             return InternalValue::fallback(str);
         }
+        // Looking up the global variable succeeded; return it
         return result;
-    } else {
+    }
+    // Literal
+    else {
         U_ASSERT(rand.isLiteral());
         return evalLiteral(fallback, rand.asLiteral(), status);
     }
@@ -157,11 +164,13 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
                                                  const OptionMap& options,
                                                  MessageContext& context,
                                                  UErrorCode& status) const {
+    // Create a vector of options
     LocalPointer<UVector> optionsVector(createUVector(status));
     if (U_FAILURE(status)) {
         return {};
     }
     LocalPointer<ResolvedFunctionOption> resolvedOpt;
+    // For each option...
     for (int i = 0; i < options.size(); i++) {
         const Option& opt = options.getOption(i, status);
         if (U_FAILURE(status)) {
@@ -170,11 +179,12 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
         const UnicodeString& k = opt.getName();
         const Operand& v = opt.getValue();
 
-        // Format the operand
+        // ...evaluate its right-hand side...
         InternalValue rhsVal = evalOperand({}, env, v, context, status);
         if (U_FAILURE(status)) {
             return {};
         }
+        // ...giving a FunctionValue.
         FunctionValue* optVal = rhsVal.takeValue(status);
 
         // The option is resolved; add it to the vector
@@ -184,9 +194,12 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
         EMPTY_ON_ERROR(status);
         optionsVector->adoptElement(p.orphan(), status);
     }
+    // Return a new FunctionOptions constructed from the vector of options
     return FunctionOptions(std::move(*optionsVector), status);
 }
 
+// Looks up `functionName` and applies it to an operand and options,
+// handling errors if the function is unbound
 [[nodiscard]] InternalValue MessageFormatter::apply(const FunctionName& functionName,
                                                     InternalValue&& rand,
                                                     FunctionOptions&& options,
@@ -196,6 +209,7 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
 
     UnicodeString fallbackStr;
 
+    // Create the fallback string for this function call
     if (rand.isNullOperand()) {
         fallbackStr = UnicodeString(COLON);
         fallbackStr += functionName;
@@ -203,18 +217,22 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
         fallbackStr = rand.asFallback();
     }
 
-    // Call the function
+    // Look up the function name
     Function* function = lookupFunction(functionName, status);
     if (U_FAILURE(status)) {
+        // Function is unknown -- set error and use the fallback value
         status = U_ZERO_ERROR;
         context.getErrors().setUnknownFunction(functionName, status);
         return InternalValue::fallback(fallbackStr);
     }
-    // Calling takeValue() won't error out because we already checked the fallback case
+    // Value is not a fallback, so we can safely call takeValue()
     LocalPointer<FunctionValue> functionArg(rand.takeValue(status));
     U_ASSERT(U_SUCCESS(status));
+    // Call the function
     LocalPointer<FunctionValue>
         functionResult(function->call(*functionArg, std::move(options), status));
+    // Handle any errors signaled by the function
+    // (and use the fallback value)
     if (status == U_MF_OPERAND_MISMATCH_ERROR) {
         status = U_ZERO_ERROR;
         context.getErrors().setOperandMismatchError(functionName, status);
@@ -228,10 +246,11 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
     if (U_FAILURE(status)) {
         return {};
     }
+    // Success; return the result
     return InternalValue(functionResult.orphan(), fallbackStr);
 }
 
-// Formats an expression using `globalEnv` for the values of variables
+// Evaluates an expression using `globalEnv` for the values of variables
 [[nodiscard]] InternalValue MessageFormatter::evalExpression(const UnicodeString& fallback,
                                                              const Environment& globalEnv,
                                                              const Expression& expr,
@@ -245,6 +264,7 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
     // Evaluate the operand (evalOperand handles the case of a null operand)
     InternalValue randVal = evalOperand(globalEnv, rand, context, status);
 
+    // If there's no function, we check for an implicit formatter
     if (!expr.isFunctionCall()) {
         const FunctionValue* contained = randVal.getValue(status);
         if (U_FAILURE(status)) {
@@ -253,6 +273,7 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
             return randVal;
         }
         const Formattable& toFormat = contained->getOperand();
+        // If it has an object type, there might be an implicit formatter for it...
         switch (toFormat.getType()) {
         case UFMT_OBJECT: {
             const FormattableObject* obj = toFormat.getObject(status);
@@ -264,6 +285,7 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
                 // No formatter for this type -- follow default behavior
                 return randVal;
             }
+            // ... apply the implicit formatter
             return apply(functionName,
                          std::move(randVal),
                          FunctionOptions(),
@@ -271,7 +293,7 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
                          status);
         }
         default:
-            // Other types not handled
+            // No formatters for other types, so just return the evaluated operand
             return randVal;
         }
     } else {
@@ -279,6 +301,7 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
         if (randVal.isFallback()) {
             return randVal;
         }
+        // Get the function name and options from the operator
         const Operator* rator = expr.getOperator(status);
         U_ASSERT(U_SUCCESS(status));
         const FunctionName& functionName = rator->getFunctionName();
@@ -286,6 +309,7 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
         // Resolve the options
         FunctionOptions resolvedOptions = resolveOptions(globalEnv, options, context, status);
 
+        // Call the function with the operand and arguments
         return apply(functionName,
                      std::move(randVal), std::move(resolvedOptions), context, status);
     }
