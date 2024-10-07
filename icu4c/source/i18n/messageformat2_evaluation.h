@@ -95,6 +95,12 @@ namespace message2 {
             BaseValue(const Locale&, const Formattable&);
     }; // class BaseValue
 
+    // A NullValue represents the absence of an argument.
+    class NullValue : public FunctionValue {
+        public:
+            virtual UBool isNullOperand() const { return true; }
+    }; // class NullValue
+
     // PrioritizedVariant
 
     // For how this class is used, see the references to (integer, variant) tuples

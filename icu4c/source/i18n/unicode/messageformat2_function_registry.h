@@ -271,32 +271,136 @@ namespace message2 {
     /**
      * Interface that function handler classes must implement.
      *
-     * @internal ICU 75 technology preview
+     * @internal ICU 77 technology preview
      * @deprecated This API is for technology preview only.
      */
     class U_I18N_API Function : public UObject {
-    public:
-        virtual FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) = 0;
-        virtual ~Function();
+        public:
+            /**
+             * Calls this Function on a FunctionValue operand and its FunctionOptions options,
+             * returning a new pointer to a FunctionValue (which is adopted by the caller).
+             *
+             * @param operand The unnamed argument to the function.
+             * @param options Resolved options for this function.
+             * @param status Input/output error code
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            virtual FunctionValue* call(FunctionValue& operand,
+                                        FunctionOptions&& options,
+                                        UErrorCode& status) = 0;
+            /**
+             * Destructor.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            virtual ~Function();
     }; // class Function
 
+    /**
+     * Type representing argument and return values for custom functions.
+     * It encapsulates an operand and resolved options, and can be extended with
+     * additional state.
+     * Adding a new custom function requires adding a new class that
+     * implements this interface.
+     *
+     * @internal ICU 77 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     class U_I18N_API FunctionValue : public UObject {
         public:
+            /**
+             * Returns the string representation of this value. The default
+             * method signals an error. Must be overridden by classes
+             * implementing values that support formatting.
+             *
+             * @param status Input/output error code
+             * @return A string.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
             virtual UnicodeString formatToString(UErrorCode& status) const {
                 if (U_SUCCESS(status)) {
                     status = U_MF_FORMATTING_ERROR;
                 }
                 return {};
             }
+            /**
+             * Returns the Formattable operand that was used to construct
+             * this value. The operand may be obtained from calling getOperand()
+             * on the input FunctionValue, or it may be constructed separately.
+             *
+             * @return A reference to a message2::Formattable object.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
             virtual const Formattable& getOperand() const { return operand; }
-            // `this` can't be used after calling this method
+            /**
+             * Returns the resolved options that were used to construct this value.
+             * `this` may not be used after calling this method. This overload
+             * is provided so that mergeOptions(), which passes its `this` argument
+             * by move, can be called.
+             *
+             * @return The resolved options for this value.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
             virtual FunctionOptions getResolvedOptions() { return std::move(opts); }
-            // const method is for reading the options attached to another option
-            // (i.e. options don't escape) --
-            // non-const method is for calling mergeOptions() -- i.e. options escape
+            /**
+             * Returns a reference to the resolved options for this value.
+             *
+             * @return A reference to the resolved options for this value.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
             virtual const FunctionOptions& getResolvedOptions() const { return opts; }
+            /**
+             * Returns true if this value supports selection. The default method
+             * returns false. The method must be overridden for values that support
+             * selection.
+             *
+             * @return True iff this value supports selection.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
             virtual UBool isSelectable() const { return false; }
+            /**
+             * Returns true if this value represents a null operand, that is,
+             * the absence of an argument. This method should not be overridden.
+             * It can be called in order to check whether the argument is present.
+             * Some functions may be nullary (they may work with no arguments).
+             *
+             * @return True iff this value represents an absent operand.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
             virtual UBool isNullOperand() const { return false; }
+            /**
+             * Compares this value to an array of keys, and returns an array of matching
+             * keys sorted by preference. The default implementation of this method
+             * signals an error. It should be overridden for value classes that support
+             * selection.
+             *
+             * @param keys An array of strings to compare to the input.
+             * @param keysLen The length of `keys`.
+             * @param prefs An array of strings with length `keysLen`. The contents of
+             *        the array is undefined. `selectKey()` should set the contents
+             *        of `prefs` to a subset of `keys`, with the best match placed at the lowest index.
+             * @param prefsLen A reference that `selectKey()` should set to the length of `prefs`,
+             *        which must be less than or equal to `keysLen`.
+             * @param status    Input/output error code.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
             virtual void selectKeys(const UnicodeString* keys,
                                     int32_t keysLen,
                                     UnicodeString* prefs,
@@ -310,16 +414,29 @@ namespace message2 {
                     status = U_MF_SELECTOR_ERROR;
                 }
             }
+            /**
+             * Destructor.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
             virtual ~FunctionValue();
          protected:
+            /**
+             * Operand used to construct this value.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
             Formattable operand;
+            /**
+             * Resolved options attached to this value.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
             FunctionOptions opts;
     }; // class FunctionValue
-
-    class NullValue : public FunctionValue {
-        public:
-            virtual UBool isNullOperand() const { return true; }
-    }; // class NullValue
 
 } // namespace message2
 

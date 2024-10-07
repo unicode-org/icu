@@ -549,6 +549,18 @@ class U_I18N_API FunctionOptions : public UObject {
         return result;
     }
     /**
+     * Returns a new FunctionOptions object containing all the key-value
+     * pairs from `this` and `other`. When `this` and `other` define options with
+     * the same name, `this` takes preference.
+     * `this` cannot be used after calling this method.
+     *
+     * @return The result of merging `this` and `other`.
+     *
+     * @internal ICU 77 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    FunctionOptions mergeOptions(FunctionOptions&& other, UErrorCode&);
+    /**
      * Default constructor.
      * Returns an empty mapping.
      *
@@ -586,8 +598,7 @@ class U_I18N_API FunctionOptions : public UObject {
      * @deprecated This API is for technology preview only.
      */
     FunctionOptions& operator=(const FunctionOptions&) = delete;
-    // TODO
-    FunctionOptions mergeOptions(FunctionOptions&&, UErrorCode&);
+
  private:
     friend class MessageFormatter;
     friend class StandardFunctions;
