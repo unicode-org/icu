@@ -95,17 +95,15 @@ static constexpr std::u16string_view YEAR = u"year";
         class DateTime;
         class DateTimeValue;
 
-        class DateTime : public Function {
+        class DateTimeFactory : public FunctionFactory {
         public:
-            FunctionValue* call(FunctionValue& operand,
-                                FunctionOptions&& options,
-                                UErrorCode& errorCode) override;
-            static DateTime* date(const Locale&, UErrorCode&);
-            static DateTime* time(const Locale&, UErrorCode&);
-            static DateTime* dateTime(const Locale&, UErrorCode&);
-            virtual ~DateTime();
-
+            Function* createFunction(const Locale& locale, UErrorCode& status) override;
+            static DateTimeFactory* date(UErrorCode&);
+            static DateTimeFactory* time(UErrorCode&);
+            static DateTimeFactory* dateTime(UErrorCode&);
+            virtual ~DateTimeFactory();
         private:
+            friend class DateTime;
             friend class DateTimeValue;
 
             typedef enum DateTimeType {
@@ -140,14 +138,48 @@ static constexpr std::u16string_view YEAR = u"year";
                                             std::u16string_view optionName,
                                             UErrorCode& errorCode) const;
 
+            DateTimeType type;
+
+            static DateTimeFactory* create(const DateTimeType,
+                                           UErrorCode&);
+
+            DateTimeFactory(const DateTimeType t) : type(t) {}
+        }; // class DateTimeFactory
+
+        class DateTime : public Function {
+        public:
+            FunctionValue* call(FunctionValue& operand,
+                                FunctionOptions&& options,
+                                UErrorCode& errorCode) override;
+            virtual ~DateTime();
+
+        private:
+            friend class DateTimeFactory;
+            friend class DateTimeValue;
+
             Locale locale;
-            const DateTimeType type;
-            static DateTime* create(const Locale&, DateTimeType, UErrorCode&);
-            DateTime(const Locale& l, DateTimeType t) : locale(l), type(t) {}
+            const DateTimeFactory::DateTimeType type;
+            static DateTime* create(const Locale&,
+                                    DateTimeFactory::DateTimeType,
+                                    UErrorCode&);
+            DateTime(const Locale& l, DateTimeFactory::DateTimeType t)
+                : locale(l), type(t) {}
             const LocalPointer<icu::DateFormat> icuFormatter;
         };
 
         class NumberValue;
+
+        class NumberFactory : public FunctionFactory {
+        public:
+            Function* createFunction(const Locale& locale, UErrorCode& status) override;
+            static NumberFactory* integer(UErrorCode& success);
+            static NumberFactory* number(UErrorCode& success);
+            virtual ~NumberFactory();
+        private:
+            static NumberFactory* create(bool, UErrorCode&);
+            NumberFactory(bool isInt) : isInteger(isInt) {}
+            bool isInteger;
+        }; // class NumberFactory
 
         class Number : public Function {
         public:
@@ -221,9 +253,17 @@ static constexpr std::u16string_view YEAR = u"year";
             friend class DateTime;
 
             UnicodeString formattedDate;
-            DateTimeValue(DateTime::DateTimeType type, const Locale&,
+            DateTimeValue(const Locale& locale, DateTimeFactory::DateTimeType type,
                           FunctionValue&, FunctionOptions&&, UErrorCode&);
         }; // class DateTimeValue
+
+        class StringFactory : public FunctionFactory {
+        public:
+            Function* createFunction(const Locale& locale, UErrorCode& status) override;
+            static StringFactory* string(UErrorCode& status);
+            virtual ~StringFactory();
+        private:
+        }; // class StringFactory
 
         class String : public Function {
         public:
