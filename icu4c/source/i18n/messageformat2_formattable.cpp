@@ -188,22 +188,6 @@ namespace message2 {
         df->format(date, result, 0, errorCode);
     }
 
-#if false
-    // Called when output is required and the contents are an unevaluated `Formattable`;
-    // formats the source `Formattable` to a string with defaults, if it can be
-    // formatted with a default formatter
-    static FormattedPlaceholder formatWithDefaults(const Locale& locale, const FormattedPlaceholder& input, UErrorCode& status) {
-        if (U_FAILURE(status)) {
-            return {};
-        }
-
-        const Formattable* toFormat = input.getSource(status);
-        U_ASSERT(U_SUCCESS(status)); // Shouldn't get called on a null argument
-
-        return formattableToString(locale, *toFormat, status);
-    }
-#endif
-
     UnicodeString formattableToString(const Locale& locale,
                                              const Formattable& toFormat,
                                              UErrorCode& status) {
@@ -263,38 +247,6 @@ namespace message2 {
         }
         }
     }
-
-#if false
-    // Called when string output is required; forces output to be produced
-    // if none is present (including formatting number output as a string)
-    UnicodeString FormattedPlaceholder::formatToString(const Locale& locale,
-                                                       UErrorCode& status) const {
-        if (U_FAILURE(status)) {
-            return {};
-        }
-
-        // Function result: either just return the string, or format the number
-        // as a string and return it
-        if (isFunctionResult()) {
-            if (formatted.isString()) {
-                return formatted.getString();
-            } else {
-                return formatted.getNumber().toString(status);
-            }
-        }
-        // Unannotated value: apply default formatters
-        UErrorCode savedStatus = status;
-        FormattedPlaceholder evaluated = formatWithDefaults(locale, *this, status);
-        if (status == U_MF_FORMATTING_ERROR) {
-            return {};
-        }
-        // Ignore U_USING_DEFAULT_WARNING
-        if (status == U_USING_DEFAULT_WARNING) {
-            status = savedStatus;
-        }
-        return evaluated.formatToString(locale, status);
-    }
-#endif
 
 } // namespace message2
 

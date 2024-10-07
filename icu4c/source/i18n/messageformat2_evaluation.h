@@ -47,7 +47,9 @@ namespace message2 {
 
     // InternalValue represents an intermediate value in the message
     // formatter.
-// TODO
+    // It can be either a FunctionValue or a "fallback value". A fallback value
+    // is a string that serves as a replacement for expressions whose evaluation
+    // caused an error. Fallback values are not passed to functions.
     class InternalValue : public UObject {
     public:
         bool isFallback() const { return isFallbackValue; }
@@ -75,7 +77,9 @@ namespace message2 {
             : isFallbackValue(true), fallbackString(fb) {}
     }; // class InternalValue
 
-// Used for arguments and literals
+
+    // A BaseValue wraps a literal value or argument value so it can be used
+    // in a context that expects a FunctionValue.
     class BaseValue : public FunctionValue {
         public:
             static BaseValue* create(const Locale&, const Formattable&, UErrorCode&);
