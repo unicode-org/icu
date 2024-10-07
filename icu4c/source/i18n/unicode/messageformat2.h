@@ -379,7 +379,8 @@ namespace message2 {
         bool isBuiltInFunction(const FunctionName&) const;
         bool isFunction(const FunctionName& fn) const { return isBuiltInFunction(fn) || isCustomFunction(fn); }
         void setNotSelectableError(MessageContext&, const InternalValue&, UErrorCode&) const;
-        Function* lookupFunction(const FunctionName&, UErrorCode&) const;
+        // Result is not adopted
+        FunctionFactory* lookupFunctionFactory(const FunctionName&, UErrorCode&) const;
         bool getDefaultFormatterNameByType(const UnicodeString&, FunctionName&) const;
 
         // Checking for resolution errors

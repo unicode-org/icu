@@ -125,24 +125,33 @@ namespace message2 {
         // Set up the standard function registry
         MFFunctionRegistry::Builder standardFunctionsBuilder(success);
 
-        Function* dateTime = StandardFunctions::DateTime::dateTime(locale, success);
-        Function* date = StandardFunctions::DateTime::date(locale, success);
-        Function* time = StandardFunctions::DateTime::time(locale, success);
-        standardFunctionsBuilder.adoptFunction(FunctionName(UnicodeString("datetime")), dateTime, success)
-            .adoptFunction(FunctionName(UnicodeString("date")), date, success)
-            .adoptFunction(FunctionName(UnicodeString("time")), time, success)
-            .adoptFunction(FunctionName(UnicodeString("number")),
-                           StandardFunctions::Number::number(locale, success), success)
-            .adoptFunction(FunctionName(UnicodeString("integer")),
-                           StandardFunctions::Number::integer(locale, success), success)
-            .adoptFunction(FunctionName(UnicodeString("string")),
-                           StandardFunctions::String::string(locale, success), success)
-            .adoptFunction(FunctionName(UnicodeString("test:function")),
-                           StandardFunctions::TestFunction::testFunction(locale, success))
-            .adoptFunction(FunctionName(UnicodeString("test:format")),
-                           StandardFunctions::TestFunction::testFormat(locale, success))
-            .adoptFunction(FunctionName(UnicodeString("test:select")),
-                           StandardFunctions::TestFunction::testSelect(locale, success));
+        LocalPointer<FunctionFactory> dateTime(StandardFunctions::DateTimeFactory::dateTime(success));
+        LocalPointer<FunctionFactory> date(StandardFunctions::DateTimeFactory::date(success));
+        LocalPointer<FunctionFactory> time(StandardFunctions::DateTimeFactory::time(success));
+        LocalPointer<FunctionFactory> number(StandardFunctions::NumberFactory::number(success));
+        LocalPointer<FunctionFactory> integer(StandardFunctions::NumberFactory::integer(success));
+        LocalPointer<FunctionFactory> string(StandardFunctions::StringFactory::string(success));
+        LocalPointer<FunctionFactory> testFunction(StandardFunctions::TestFunctionFactory::testFunction(success));
+        LocalPointer<FunctionFactory> testFormat(StandardFunctions::TestFunctionFactory::testFormat(success));
+        LocalPointer<FunctionFactory> testSelect(StandardFunctions::TestFunctionFactory::testSelect(success));
+
+        CHECK_ERROR(success);
+        standardFunctionsBuilder.adoptFunctionFactory(FunctionName(UnicodeString("datetime")),
+                                                      dateTime.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("date")), date.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("time")), time.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("number")),
+                                  number.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("integer")),
+                                  integer.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("string")),
+                                  string.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("test:function")),
+                                  testFunction.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("test:format")),
+                                  testFormat.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("test:select")),
+                                  testSelect.orphan(), success);
         CHECK_ERROR(success);
         standardMFFunctionRegistry = standardFunctionsBuilder.build();
         CHECK_ERROR(success);
@@ -229,8 +238,9 @@ namespace message2 {
         return standardMFFunctionRegistry.hasFunction(functionName);
     }
 
-    Function* MessageFormatter::lookupFunction(const FunctionName& functionName,
-                                               UErrorCode& status) const {
+    FunctionFactory*
+    MessageFormatter::lookupFunctionFactory(const FunctionName& functionName,
+                                            UErrorCode& status) const {
         NULL_ON_ERROR(status);
 
         if (isBuiltInFunction(functionName)) {
@@ -238,7 +248,7 @@ namespace message2 {
         }
         if (hasCustomMFFunctionRegistry()) {
             const MFFunctionRegistry& customMFFunctionRegistry = getCustomMFFunctionRegistry();
-            Function* function = customMFFunctionRegistry.getFunction(functionName);
+            FunctionFactory* function = customMFFunctionRegistry.getFunction(functionName);
             if (function != nullptr) {
                 return function;
             }

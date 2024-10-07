@@ -43,6 +43,7 @@ namespace message2 {
 
 // Function registry implementation
 
+FunctionFactory::~FunctionFactory() {}
 Function::~Function() {}
 FunctionValue::~FunctionValue() {}
 
@@ -55,9 +56,10 @@ MFFunctionRegistry MFFunctionRegistry::Builder::build() {
     return result;
 }
 
-MFFunctionRegistry::Builder& MFFunctionRegistry::Builder::adoptFunction(const FunctionName& functionName,
-                                                                        Function* function,
-                                                                        UErrorCode& errorCode) {
+MFFunctionRegistry::Builder&
+MFFunctionRegistry::Builder::adoptFunctionFactory(const FunctionName& functionName,
+                                                  FunctionFactory* function,
+                                                  UErrorCode& errorCode) {
     if (U_SUCCESS(errorCode)) {
         U_ASSERT(functions != nullptr);
         functions->put(functionName, function, errorCode);
@@ -107,9 +109,9 @@ MFFunctionRegistry::Builder::~Builder() {
 
 // Returns non-owned pointer. Returns pointer rather than reference because it can fail.
 // Returns non-const because Function is mutable.
-Function* MFFunctionRegistry::getFunction(const FunctionName& functionName) const {
+FunctionFactory* MFFunctionRegistry::getFunction(const FunctionName& functionName) const {
     U_ASSERT(functions != nullptr);
-    return static_cast<Function*>(functions->get(functionName));
+    return static_cast<FunctionFactory*>(functions->get(functionName));
 }
 
 UBool MFFunctionRegistry::getDefaultFormatterNameByType(const UnicodeString& type, FunctionName& name) const {
@@ -258,6 +260,40 @@ MFFunctionRegistry::~MFFunctionRegistry() {
 // Specific function implementations
 
 // --------- Number
+
+/* static */ StandardFunctions::NumberFactory*
+StandardFunctions::NumberFactory::integer(UErrorCode& success) {
+    return NumberFactory::create(true, success);
+}
+
+/* static */ StandardFunctions::NumberFactory*
+StandardFunctions::NumberFactory::number(UErrorCode& success) {
+    return NumberFactory::create(false, success);
+}
+
+/* static */ StandardFunctions::NumberFactory*
+StandardFunctions::NumberFactory::create(bool isInteger,
+                                         UErrorCode& success) {
+    NULL_ON_ERROR(success);
+
+    LocalPointer<NumberFactory> result(new NumberFactory(isInteger));
+    if (!result.isValid()) {
+        success = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result.orphan();
+}
+
+Function*
+StandardFunctions::NumberFactory::createFunction(const Locale& locale, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    Number* result = new Number(locale, isInteger);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
 
 /* static */ StandardFunctions::Number*
 StandardFunctions::Number::integer(const Locale& loc, UErrorCode& success) {
@@ -646,6 +682,7 @@ UnicodeString StandardFunctions::NumberValue::formatToString(UErrorCode& errorCo
     return formattedNumber.toString(errorCode);
 }
 
+StandardFunctions::NumberFactory::~NumberFactory() {}
 StandardFunctions::Number::~Number() {}
 StandardFunctions::NumberValue::~NumberValue() {}
 
@@ -763,23 +800,49 @@ static UnicodeString defaultForOption(const UnicodeString& optionName) {
 }
 */
 
-/* static */ StandardFunctions::DateTime*
-StandardFunctions::DateTime::date(const Locale& loc, UErrorCode& success) {
-    return DateTime::create(loc, DateTimeType::kDate, success);
+/* static */ StandardFunctions::DateTimeFactory*
+StandardFunctions::DateTimeFactory::date(UErrorCode& success) {
+    return DateTimeFactory::create(DateTimeType::kDate, success);
+}
+
+/* static */ StandardFunctions::DateTimeFactory*
+StandardFunctions::DateTimeFactory::time(UErrorCode& success) {
+    return DateTimeFactory::create(DateTimeType::kTime, success);
+}
+
+/* static */ StandardFunctions::DateTimeFactory*
+StandardFunctions::DateTimeFactory::dateTime(UErrorCode& success) {
+    return DateTimeFactory::create(DateTimeType::kDateTime, success);
+}
+
+/* static */ StandardFunctions::DateTimeFactory*
+StandardFunctions::DateTimeFactory::create(DateTimeFactory::DateTimeType type,
+                                           UErrorCode& success) {
+    NULL_ON_ERROR(success);
+
+    LocalPointer<DateTimeFactory> result(new DateTimeFactory(type));
+    if (!result.isValid()) {
+        success = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result.orphan();
+}
+
+Function*
+StandardFunctions::DateTimeFactory::createFunction(const Locale& locale, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    DateTime* result = new DateTime(locale, type);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
 }
 
 /* static */ StandardFunctions::DateTime*
-StandardFunctions::DateTime::time(const Locale& loc, UErrorCode& success) {
-    return DateTime::create(loc, DateTimeType::kTime, success);
-}
-
-/* static */ StandardFunctions::DateTime*
-StandardFunctions::DateTime::dateTime(const Locale& loc, UErrorCode& success) {
-    return DateTime::create(loc, DateTimeType::kDateTime, success);
-}
-
-/* static */ StandardFunctions::DateTime*
-StandardFunctions::DateTime::create(const Locale& loc, DateTimeType type, UErrorCode& success) {
+StandardFunctions::DateTime::create(const Locale& loc,
+                                    DateTimeFactory::DateTimeType type,
+                                    UErrorCode& success) {
     NULL_ON_ERROR(success);
 
     LocalPointer<DateTime> result(new DateTime(loc, type));
@@ -792,7 +855,12 @@ StandardFunctions::DateTime::create(const Locale& loc, DateTimeType type, UError
 
 FunctionValue*
 StandardFunctions::DateTime::call(FunctionValue& val, FunctionOptions&& opts, UErrorCode& errorCode) {
-    auto result = new DateTimeValue(type, locale, val, std::move(opts), errorCode);
+    NULL_ON_ERROR(errorCode);
+
+    auto result = new DateTimeValue(locale, type, val, std::move(opts), errorCode);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
     return result;
 }
 
@@ -825,8 +893,8 @@ UnicodeString StandardFunctions::DateTimeValue::formatToString(UErrorCode& statu
     return formattedDate;
 }
 
-StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
-                                                const Locale& locale,
+StandardFunctions::DateTimeValue::DateTimeValue(const Locale& locale,
+                                                DateTimeFactory::DateTimeType type,
                                                 FunctionValue& val,
                                                 FunctionOptions&& options,
                                                 UErrorCode& errorCode) {
@@ -859,21 +927,23 @@ StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
     bool hasTimeStyleOption = dateStyleOption.length() > 0;
     bool noOptions = opts.optionsCount() == 0;
 
-    bool useStyle = (type == DateTime::DateTimeType::kDateTime
+    using DateTimeType = DateTimeFactory::DateTimeType;
+
+    bool useStyle = (type == DateTimeType::kDateTime
                      && (hasDateStyleOption || hasTimeStyleOption
                          || noOptions))
-        || (type != DateTime::DateTimeType::kDateTime);
+        || (type != DateTimeType::kDateTime);
 
-    bool useDate = type == DateTime::DateTimeType::kDate
-        || (type == DateTime::DateTimeType::kDateTime
+    bool useDate = type == DateTimeType::kDate
+        || (type == DateTimeType::kDateTime
             && hasDateStyleOption);
-    bool useTime = type == DateTime::DateTimeType::kTime
-        || (type == DateTime::DateTimeType::kDateTime
+    bool useTime = type == DateTimeType::kTime
+        || (type == DateTimeType::kDateTime
             && hasTimeStyleOption);
 
     if (useStyle) {
         // Extract style options
-        if (type == DateTime::DateTimeType::kDateTime) {
+        if (type == DateTimeType::kDateTime) {
             // Note that the options-getting has to be repeated across the three cases,
             // since `:datetime` uses "dateStyle"/"timeStyle" and `:date` and `:time`
             // use "style"
@@ -887,7 +957,7 @@ StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
             } else {
                 df.adoptInstead(DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
             }
-        } else if (type == DateTime::DateTimeType::kDate) {
+        } else if (type == DateTimeType::kDate) {
             dateStyle = stringToStyle(opts.getStringFunctionOption(styleName), errorCode);
             df.adoptInstead(DateFormat::createDateInstance(dateStyle, locale));
         } else {
@@ -1074,10 +1144,23 @@ StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
     formattedDate = result;
 }
 
+StandardFunctions::DateTimeFactory::~DateTimeFactory() {}
 StandardFunctions::DateTime::~DateTime() {}
 StandardFunctions::DateTimeValue::~DateTimeValue() {}
 
 // --------- String
+
+/* static */ StandardFunctions::StringFactory*
+StandardFunctions::StringFactory::string(UErrorCode& success) {
+    NULL_ON_ERROR(success);
+
+    LocalPointer<StringFactory> result(new StringFactory());
+    if (!result.isValid()) {
+        success = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result.orphan();
+}
 
 /* static */ StandardFunctions::String*
 StandardFunctions::String::string(const Locale& loc, UErrorCode& success) {
@@ -1089,6 +1172,17 @@ StandardFunctions::String::string(const Locale& loc, UErrorCode& success) {
         return nullptr;
     }
     return result.orphan();
+}
+
+Function*
+StandardFunctions::StringFactory::createFunction(const Locale& locale, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    String* result = new String(locale);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
 }
 
 extern UnicodeString formattableToString(const Locale&, const Formattable&, UErrorCode&);
@@ -1141,6 +1235,7 @@ void StandardFunctions::StringValue::selectKeys(const UnicodeString* keys,
     }
 }
 
+StandardFunctions::StringFactory::~StringFactory() {}
 StandardFunctions::String::~String() {}
 StandardFunctions::StringValue::~StringValue() {}
 

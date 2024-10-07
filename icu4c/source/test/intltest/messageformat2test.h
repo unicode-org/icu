@@ -115,10 +115,20 @@ class Person : public FormattableObject {
     const UnicodeString tagName;
 };
 
+class PersonNameFactory : public FunctionFactory {
+    Function* createFunction(const Locale& locale, UErrorCode& status) override;
+    virtual ~PersonNameFactory();
+};
+
 class PersonNameFunction : public Function {
     public:
     FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) override;
     virtual ~PersonNameFunction();
+    private:
+    friend class PersonNameFactory;
+
+    const Locale locale;
+    PersonNameFunction(const Locale& loc) : locale(loc) {}
 };
 
 class PersonNameValue : public FunctionValue {
@@ -145,6 +155,11 @@ private:
     const UnicodeString tagName;
 };
 
+class GrammarCasesFactory : public FunctionFactory {
+    Function* createFunction(const Locale& locale, UErrorCode& status) override;
+    virtual ~GrammarCasesFactory();
+};
+
 class GrammarCasesFunction : public Function {
     public:
     FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) override;
@@ -163,6 +178,11 @@ class GrammarCasesValue : public FunctionValue {
     GrammarCasesValue(FunctionValue&, FunctionOptions&&, UErrorCode&);
     void getDativeAndGenitive(const UnicodeString&, UnicodeString& result) const;
 }; // class GrammarCasesValue
+
+class ListFactory : public FunctionFactory {
+    Function* createFunction(const Locale& locale, UErrorCode& status) override;
+    virtual ~ListFactory();
+};
 
 class ListFunction : public Function {
     public:
@@ -188,6 +208,11 @@ class ListValue : public FunctionValue {
               UErrorCode&);
 }; // class ListValue
 
+class NounFunctionFactory : public FunctionFactory {
+    Function* createFunction(const Locale& locale, UErrorCode& status) override;
+    virtual ~NounFunctionFactory();
+};
+
 class NounValue : public FunctionValue {
     public:
     UnicodeString formatToString(UErrorCode&) const override;
@@ -201,6 +226,11 @@ class NounValue : public FunctionValue {
               FunctionOptions&&,
               UErrorCode&);
 }; // class NounValue
+
+class AdjectiveFunctionFactory : public FunctionFactory {
+    Function* createFunction(const Locale& locale, UErrorCode& status) override;
+    virtual ~AdjectiveFunctionFactory();
+};
 
 class AdjectiveValue : public FunctionValue {
     public:
