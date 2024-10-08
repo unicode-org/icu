@@ -6,7 +6,7 @@
   },
   "tests": [
     {
-      "src": ".match {$foo :x} * * {{foo}}",
+      "src": ".input {$foo :x} .match $foo * * {{foo}}",
       "expErrors": [
         {
           "type": "variant-key-mismatch"
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "src": ".match {$foo :x} {$bar :x} * {{foo}}",
+      "src": ".input {$foo :x} .input {$bar :x} .match $foo $bar * {{foo}}",
       "expErrors": [
         {
           "type": "variant-key-mismatch"
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "src": ".match {:foo} 1 {{_}}",
+      "src": ".input {$foo :x} .match $foo 1 {{_}}",
       "expErrors": [
         {
           "type": "missing-fallback-variant"
@@ -30,7 +30,7 @@
       ]
     },
     {
-      "src": ".match {:foo} other {{_}}",
+      "src": ".input {$foo :x} .match $foo other {{_}}",
       "expErrors": [
         {
           "type": "missing-fallback-variant"
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "src": ".match {:foo} {:bar} * 1 {{_}} 1 * {{_}}",
+      "src": ".input {$foo :x} .input {$bar :x} .match $foo $bar * 1 {{_}} 1 * {{_}}",
       "expErrors": [
         {
           "type": "missing-fallback-variant"
@@ -46,7 +46,7 @@
       ]
     },
     {
-      "src": ".match {$foo} one {{one}} * {{other}}",
+      "src": ".input {$foo} .match $foo one {{one}} * {{other}}",
       "expErrors": [
         {
           "type": "missing-selector-annotation"
@@ -54,7 +54,7 @@
       ]
     },
     {
-      "src": ".input {$foo} .match {$foo} one {{one}} * {{other}}",
+      "src": ".local $foo = {$bar} .match $foo one {{one}} * {{other}}",
       "expErrors": [
         {
           "type": "missing-selector-annotation"
@@ -62,7 +62,7 @@
       ]
     },
     {
-      "src": ".local $foo = {$bar} .match {$foo} one {{one}} * {{other}}",
+      "src": ".input {$bar} .local $foo = {$bar} .match $foo one {{one}} * {{other}}",
       "expErrors": [
         {
           "type": "missing-selector-annotation"
@@ -166,7 +166,7 @@
       ]
     },
     {
-      "src": ".match {$var :string} * {{The first default}} * {{The second default}}",
+      "src": ".input {$var :string} .match $var * {{The first default}} * {{The second default}}",
       "expErrors": [
         {
           "type": "duplicate-variant"
@@ -174,12 +174,16 @@
       ]
     },
     {
-      "src": ".match {$x :string} {$y :string} * foo {{The first foo variant}} bar * {{The bar variant}} * |foo| {{The second foo variant}} * * {{The default variant}}",
+      "src": ".input {$x :string} .input {$y :string} .match $x $y * foo {{The first foo variant}} bar * {{The bar variant}} * |foo| {{The second foo variant}} * * {{The default variant}}",
       "expErrors": [
         {
           "type": "duplicate-variant"
         }
       ]
+    },
+    {
+      "src": ".local $star = {star :string} .match $star |*| {{Literal star}} * {{The default}}",
+      "exp": "The default"
     }
   ]
 }

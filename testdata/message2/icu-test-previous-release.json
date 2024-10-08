@@ -31,50 +31,50 @@
       "exp": "bar foo"
     },
     {
-      "src": ".match {$foo :number} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :number} .match $foo 1 {{one}} * {{other}}",
       "params": [{ "name": "foo", "value": "1" }],
       "exp": "one",
       "ignoreJava": "See ICU-22809"
     },
     {
-      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
       "params": [{ "name": "foo", "value": "1" }],
       "exp": "one"
     },
     {
-      "src": ".match {$foo :number} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :number} .match $foo 1 {{one}} * {{other}}",
       "params": [{ "name": "foo", "value": 1 }],
       "exp": "one"
     },
     {
       "ignoreJava": "Can't pass null in a map",
       "ignoreCpp": "Same as Java",
-      "src": ".match {$foo} 1 {{one}} * {{other}}",
+      "src": ".match $foo 1 {{one}} * {{other}}",
       "params": [{ "name": "foo", "value": null }],
       "exp": "other"
     },
     {
-      "src": ".match {$foo :number} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :number} .match $foo 1 {{one}} * {{other}}",
       "exp": "other",
       "expErrors": [{ "type":  "unresolved-variable" }]
     },
     {
-      "src": ".local $foo = {$bar} .match {$foo :number} one {{one}} * {{other}}",
+      "src": ".local $foo = {$bar :number} .match $foo one {{one}} * {{other}}",
       "params": [{ "name": "bar", "value": 1 }],
       "exp": "one"
     },
     {
-      "src": ".local $foo = {$bar} .match {$foo :number} one {{one}} * {{other}}",
+      "src": ".local $foo = {$bar :number} .match $foo one {{one}} * {{other}}",
       "params": [{ "name": "bar", "value": 2 }],
       "exp": "other"
     },
     {
-      "src": ".local $bar = {$none} .match {$foo :number} one {{one}} * {{{$bar}}}",
+      "src": ".local $bar = {$none} .input {$foo :number} .match $foo one {{one}} * {{{$bar}}}",
       "params": [{ "name": "foo", "value": 1 }, {"name": "none", "value": "" }],
       "exp": "one"
     },
     {
-      "src": ".local $bar = {$none :number} .match {$foo :string} one {{one}} * {{{$bar}}}",
+      "src": ".local $bar = {$none :number} .input {$foo :string} .match $foo one {{one}} * {{{$bar}}}",
       "params": [{ "name": "foo", "value": 2 }],
       "exp": "{$none}",
       "expErrors": [{ "type": "unresolved-variable" }],
@@ -104,9 +104,7 @@
     },
     {
       "src": "empty { }",
-      "exp": "empty ",
-      "expErrors": [{ "type": "syntax-error" }],
-      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/703"
+      "expErrors": [{ "type": "syntax-error" }]
     },
     {
       "src": "bad {:}",
@@ -115,25 +113,19 @@
     },
     {
       "src": "{bad {$placeholder option}}",
-      "exp": "bad {$placeholder}",
-      "expErrors": [{ "type": "syntax-error"}, { "type": "unresolved-variable" }],
-      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/703"
+      "expErrors": [{ "type": "syntax-error"}, { "type": "unresolved-variable" }]
     },
     {
-      "src": ".match {|foo| :string} *{{foo}}",
+      "src": ".local $f = {|foo| :string} .match $f *{{foo}}",
       "exp": "foo"
     },
     {
-      "src": ".match {$foo :string} * * {{foo}}",
-      "exp": "foo",
-      "expErrors": [{ "type": "variant-key-mismatch" }, { "type": "unresolved-variable" }],
-      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/735"
+      "src": ".input {$foo :string} .match $foo * * {{foo}}",
+      "expErrors": [{ "type": "variant-key-mismatch" }, { "type": "unresolved-variable" }]
     },
     {
-      "src": ".match {$foo :string} {$bar :string} * {{foo}}",
-      "exp": "foo",
-      "expErrors": [{ "type": "variant-key-mismatch" }, { "type": "unresolved-variable" }],
-      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/735"
+      "src": ".input {$foo :string} .input {$bar :string} .match $foo $bar * {{foo}}",
+      "expErrors": [{ "type": "variant-key-mismatch" }, { "type": "unresolved-variable" }]
     }
   ]
 }

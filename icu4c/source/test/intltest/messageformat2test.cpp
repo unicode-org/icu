@@ -182,7 +182,8 @@ void TestMessageFormat2::testAPISimple() {
     argsBuilder["userName"] = message2::Formattable("Maria");
     args = MessageArguments(argsBuilder, errorCode);
 
-    mf = builder.setPattern(".match {$photoCount :number} {$userGender :string}\n\
+    mf = builder.setPattern(".input {$photoCount :number} .input {$userGender :string}\n\
+                      .match $photoCount $userGender\n                    \
                       1 masculine {{{$userName} added a new photo to his album.}}\n \
                       1 feminine {{{$userName} added a new photo to her album.}}\n \
                       1 * {{{$userName} added a new photo to their album.}}\n \
@@ -226,7 +227,8 @@ void TestMessageFormat2::testAPI() {
     TestUtils::runTestCase(*this, test, errorCode);
 
     // Pattern matching - plural
-    UnicodeString pattern = ".match {$photoCount :string} {$userGender :string}\n\
+    UnicodeString pattern = ".input {$photoCount :number} .input {$userGender :string}\n\
+                      .match $photoCount $userGender\n\
                       1 masculine {{{$userName} added a new photo to his album.}}\n \
                       1 feminine {{{$userName} added a new photo to her album.}}\n \
                       1 * {{{$userName} added a new photo to their album.}}\n \
@@ -247,7 +249,8 @@ void TestMessageFormat2::testAPI() {
     TestUtils::runTestCase(*this, test, errorCode);
 
     // Built-in functions
-    pattern = ".match {$photoCount :number} {$userGender :string}\n\
+    pattern = ".input {$photoCount :number} .input {$userGender :string}\n\
+               .match $photoCount $userGender\n \
                       1 masculine {{{$userName} added a new photo to his album.}}\n \
                       1 feminine {{{$userName} added a new photo to her album.}}\n \
                       1 * {{{$userName} added a new photo to their album.}}\n \

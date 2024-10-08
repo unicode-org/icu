@@ -64,7 +64,7 @@ namespace message2 {
         Checker(const MFDataModel& m, StaticErrors& e) : dataModel(m), errors(e) {}
     private:
 
-        void requireAnnotated(const TypeEnvironment&, const Expression&, UErrorCode&);
+        void requireAnnotated(const TypeEnvironment&, const VariableName&, UErrorCode&);
         void addFreeVars(TypeEnvironment& t, const Operand&, UErrorCode&);
         void addFreeVars(TypeEnvironment& t, const Operator&, UErrorCode&);
         void addFreeVars(TypeEnvironment& t, const OptionMap&, UErrorCode&);

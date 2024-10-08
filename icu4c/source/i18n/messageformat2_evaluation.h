@@ -63,38 +63,6 @@ namespace message2 {
         return 1;
     }
 
-    // Encapsulates a value to be scrutinized by a `match` with its resolved
-    // options and the name of the selector
-    class ResolvedSelector : public UObject {
-    public:
-        ResolvedSelector() {}
-        ResolvedSelector(const FunctionName& fn,
-                         Selector* selector,
-                         FunctionOptions&& options,
-                         FormattedPlaceholder&& value);
-        // Used either for errors, or when selector isn't yet known
-        explicit ResolvedSelector(FormattedPlaceholder&& value);
-        bool hasSelector() const { return selector.isValid(); }
-        const FormattedPlaceholder& argument() const { return value; }
-        FormattedPlaceholder&& takeArgument() { return std::move(value); }
-        const Selector* getSelector() {
-            U_ASSERT(selector.isValid());
-            return selector.getAlias();
-        }
-        FunctionOptions&& takeOptions() {
-            return std::move(options);
-        }
-        const FunctionName& getSelectorName() const { return selectorName; }
-        virtual ~ResolvedSelector();
-        ResolvedSelector& operator=(ResolvedSelector&&) noexcept;
-        ResolvedSelector(ResolvedSelector&&);
-    private:
-        FunctionName selectorName; // For error reporting
-        LocalPointer<Selector> selector;
-        FunctionOptions options;
-        FormattedPlaceholder value;
-    }; // class ResolvedSelector
-
     // Closures and environments
     // -------------------------
 
@@ -192,6 +160,44 @@ namespace message2 {
         // Errors accumulated during parsing/formatting
         DynamicErrors errors;
     }; // class MessageContext
+
+    // InternalValue
+    // ----------------
+
+    class InternalValue : public UObject {
+    public:
+        const FunctionName& getFunctionName() const { return name; }
+        bool canSelect() const { return selector != nullptr; }
+        const Selector* getSelector(UErrorCode&) const;
+        FormattedPlaceholder forceFormatting(DynamicErrors& errs,
+                                             UErrorCode& errorCode);
+        void forceSelection(DynamicErrors& errs,
+                            const UnicodeString* keys,
+                            int32_t keysLen,
+                            UnicodeString* prefs,
+                            int32_t& prefsLen,
+                            UErrorCode& errorCode);
+        // Needs to be deep-copyable and movable
+        virtual ~InternalValue();
+        InternalValue(FormattedPlaceholder&&);
+        // Formatter and selector may be null
+        InternalValue(InternalValue*, FunctionOptions&&, const FunctionName&, const Formatter*,
+                      const Selector*);
+        const UnicodeString& getFallback() const;
+        bool isFallback() const;
+        bool hasNullOperand() const;
+        // Can't be used anymore after calling this
+        FormattedPlaceholder takeArgument(UErrorCode& errorCode);
+        InternalValue(InternalValue&& other) { *this = std::move(other); }
+        InternalValue& operator=(InternalValue&& other) noexcept;
+    private:
+        // InternalValue is owned (if present)
+        std::variant<InternalValue*, FormattedPlaceholder> argument;
+        FunctionOptions options;
+        FunctionName name;
+        const Selector* selector; // May be null
+        const Formatter* formatter; // May be null, but one or the other should be non-null unless argument is a FormattedPlaceholder
+    }; // class InternalValue
 
 } // namespace message2
 

@@ -132,9 +132,13 @@ namespace message2 {
             .adoptFormatter(FunctionName(UnicodeString("time")), time, success)
             .adoptFormatter(FunctionName(UnicodeString("number")), number, success)
             .adoptFormatter(FunctionName(UnicodeString("integer")), integer, success)
+            .adoptFormatter(FunctionName(UnicodeString("test:function")), new StandardFunctions::TestFormatFactory(), success)
+            .adoptFormatter(FunctionName(UnicodeString("test:format")), new StandardFunctions::TestFormatFactory(), success)
             .adoptSelector(FunctionName(UnicodeString("number")), new StandardFunctions::PluralFactory(UPLURAL_TYPE_CARDINAL), success)
             .adoptSelector(FunctionName(UnicodeString("integer")), new StandardFunctions::PluralFactory(StandardFunctions::PluralFactory::integer()), success)
-            .adoptSelector(FunctionName(UnicodeString("string")), new StandardFunctions::TextFactory(), success);
+            .adoptSelector(FunctionName(UnicodeString("string")), new StandardFunctions::TextFactory(), success)
+            .adoptSelector(FunctionName(UnicodeString("test:function")), new StandardFunctions::TestSelectFactory(), success)
+            .adoptSelector(FunctionName(UnicodeString("test:select")), new StandardFunctions::TestSelectFactory(), success);
         CHECK_ERROR(success);
         standardMFFunctionRegistry = standardFunctionsBuilder.build();
         CHECK_ERROR(success);
@@ -256,8 +260,11 @@ namespace message2 {
         return formatter;
     }
 
-    bool MessageFormatter::getDefaultFormatterNameByType(const UnicodeString& type, FunctionName& name) const {
-        U_ASSERT(hasCustomMFFunctionRegistry());
+    bool MessageFormatter::getDefaultFormatterNameByType(const UnicodeString& type,
+                                                         FunctionName& name) const {
+        if (!hasCustomMFFunctionRegistry()) {
+            return false;
+        }
         const MFFunctionRegistry& reg = getCustomMFFunctionRegistry();
         return reg.getDefaultFormatterNameByType(type, name);
     }

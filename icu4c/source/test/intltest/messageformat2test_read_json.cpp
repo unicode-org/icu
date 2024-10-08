@@ -300,6 +300,8 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     // Do valid spec tests
     runTestsFromJsonFile(*this, "spec/syntax.json", errorCode);
 
+    runTestsFromJsonFile(*this, "spec/pattern-selection.json", errorCode);
+
     // Do valid function tests
     runTestsFromJsonFile(*this, "spec/functions/date.json", errorCode);
     runTestsFromJsonFile(*this, "spec/functions/datetime.json", errorCode);
