@@ -1267,37 +1267,6 @@ UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *
         const char16_t *fString;
     } badTestCases[] = {
         {"10666", "GraphemeBreakTest.txt", u"\u0020\u0020\u0033"},    // Fake example, for illustration.
-        // The following tests were originally for
-        // Issue 8151, move the Finnish tailoring of the line break of hyphens to root.
-        // However, that ticket has been closed as fixed but these tests still fail, so
-        // ICU-21097 has been created to investigate and address these remaining issues.
-        {"21097",  "LineBreakTest.txt", u"-#"},
-        {"21097",  "LineBreakTest.txt", u"\u002d\u0308\u0023"},
-        {"21097",  "LineBreakTest.txt", u"\u002d\u00a7"},
-        {"21097",  "LineBreakTest.txt", u"\u002d\u0308\u00a7"},
-        {"21097",  "LineBreakTest.txt", u"\u002d\U00050005"},
-        {"21097",  "LineBreakTest.txt", u"\u002d\u0308\U00050005"},
-        {"21097",  "LineBreakTest.txt", u"\u002d\u0e01"},
-        {"21097",  "LineBreakTest.txt", u"\u002d\u0308\u0e01"},
-
-        // The following tests were originally for
-        // Issue ICU-12017 Improve line break around numbers.
-        // However, that ticket has been closed as fixed but these tests still fail, so
-        // ICU-21097 has been created to investigate and address these remaining issues.
-        {"21097", "LineBreakTest.txt", u"\u002C\u0030"},   // ",0"
-        {"21097", "LineBreakTest.txt", u"\u002C\u0308\u0030"},
-        {"21097", "LineBreakTest.txt", u"equals .35 cents"},
-        {"21097", "LineBreakTest.txt", u"a.2 "},
-        {"21097", "LineBreakTest.txt", u"a.2 \u0915"},
-        {"21097", "LineBreakTest.txt", u"a.2 \u672C"},
-        {"21097", "LineBreakTest.txt", u"a.2\u3000\u672C"},
-        {"21097", "LineBreakTest.txt", u"a.2\u3000\u307E"},
-        {"21097", "LineBreakTest.txt", u"a.2\u3000\u0033"},
-        {"21097", "LineBreakTest.txt", u"A.1 \uBABB"},
-        {"21097", "LineBreakTest.txt", u"\uBD24\uC5B4\u002E\u0020\u0041\u002E\u0032\u0020\uBCFC"},
-        {"21097", "LineBreakTest.txt", u"\uBD10\uC694\u002E\u0020\u0041\u002E\u0033\u0020\uBABB"},
-        {"21097", "LineBreakTest.txt", u"\uC694\u002E\u0020\u0041\u002E\u0034\u0020\uBABB"},
-        {"21097", "LineBreakTest.txt", u"a.2\u3000\u300C"},
 
         // ICU-22127 until UAX #29 wordbreak is update for the colon changes in ICU-22112,
         // need to skip some tests in WordBreakTest.txt
