@@ -13,16 +13,6 @@
 
 using namespace icu::message2;
 
-/*
-  TODO: Tests need to be unified in a single format that
-  both ICU4C and ICU4J can use, rather than being embedded in code.
-
-  Tests are included in their current state to give a sense of
-  how much test coverage has been achieved. Most of the testing is
-  of the parser/serializer; the formatter needs to be tested more
-  thoroughly.
-*/
-
 void
 TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
                                   const char* &name, char* /*par*/) {

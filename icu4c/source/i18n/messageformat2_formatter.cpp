@@ -45,7 +45,8 @@ namespace message2 {
 
         // Parse the pattern
         MFDataModel::Builder tree(errorCode);
-        Parser(pat, tree, *errors, normalizedInput).parse(parseError, errorCode);
+        Parser(pat, tree, *errors, normalizedInput, errorCode)
+            .parse(parseError, errorCode);
 
         // Fail on syntax errors
         if (errors->hasSyntaxError()) {

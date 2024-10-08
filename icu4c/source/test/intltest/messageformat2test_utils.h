@@ -294,10 +294,10 @@ class TestUtils {
             }
             // Re-run the formatter
             result = mf.formatToString(MessageArguments(testCase.getArguments(), errorCode), errorCode);
-            if (!testCase.outputMatches(result)) {
-                failWrongOutput(tmsg, testCase, result);
-                return;
-            }
+        }
+        if (!testCase.outputMatches(result)) {
+            failWrongOutput(tmsg, testCase, result);
+            return;
         }
         errorCode.reset();
     }
