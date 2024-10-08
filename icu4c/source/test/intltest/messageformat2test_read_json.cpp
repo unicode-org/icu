@@ -318,12 +318,16 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     // TODO: Delete this file after https://github.com/unicode-org/message-format-wg/pull/904
     // lands and the tests here are updated from the spec repo
     runTestsFromJsonFile(*this, "normalization.json", errorCode);
+    // TODO: https://github.com/unicode-org/message-format-wg/pull/902 will
+    // move the bidi tests into the spec
+    runTestsFromJsonFile(*this, "bidi.json", errorCode);
     runTestsFromJsonFile(*this, "more-functions.json", errorCode);
     runTestsFromJsonFile(*this, "valid-tests.json", errorCode);
     runTestsFromJsonFile(*this, "resolution-errors.json", errorCode);
     runTestsFromJsonFile(*this, "matches-whitespace.json", errorCode);
     runTestsFromJsonFile(*this, "alias-selector-annotations.json", errorCode);
     runTestsFromJsonFile(*this, "runtime-errors.json", errorCode);
+    runTestsFromJsonFile(*this, "more-syntax-errors.json", errorCode);
 
     // Re: the expected output for the first test in this file:
     // Note: the more "correct" fallback output seems like it should be "1.000 3" (ignoring the

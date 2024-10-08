@@ -6,7 +6,7 @@
   },
   "tests": [
     { "src": ".local $one = {1 :string} .local $bar = {bar :string} .match $one $bar one * {{one}} * * {{other}}",
-      "exp": "one" },
+      "exp": "other" },
     { "src": ".local $foo = {foo :string} .local $bar = {bar :string} .match $foo $bar one * {{one}}* * {{other}}",
       "exp": "other" },
     { "src": ".local $foo = {foo :string} .local $bar = {bar :string} .match $foo $bar one *{{one}} * * {{foo}}",
