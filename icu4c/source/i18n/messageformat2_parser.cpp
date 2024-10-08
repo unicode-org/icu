@@ -125,7 +125,13 @@ static bool isContentChar(UChar32 c) {
            || inRange(c, 0xE000, 0x10FFFF);
 }
 
-// See `s` in the MessageFormat 2 grammar
+// See `bidi` in the MF2 grammar
+static bool isBidi(UChar32 c) {
+    return (c == 0x061C || c == 0x200E || c == 0x200F ||
+            inRange(c, 0x2066, 0x2069));
+}
+
+// See `ws` in the MessageFormat 2 grammar
 inline bool isWhitespace(UChar32 c) {
     switch (c) {
     case SPACE:
@@ -153,8 +159,8 @@ static bool isDigit(UChar32 c) { return inRange(c, 0x0030, 0x0039); }
 
 static bool isNameStart(UChar32 c) {
     return isAlpha(c) || c == UNDERSCORE || inRange(c, 0x00C0, 0x00D6) || inRange(c, 0x00D8, 0x00F6) ||
-           inRange(c, 0x00F8, 0x02FF) || inRange(c, 0x0370, 0x037D) || inRange(c, 0x037F, 0x1FFF) ||
-           inRange(c, 0x200C, 0x200D) || inRange(c, 0x2070, 0x218F) || inRange(c, 0x2C00, 0x2FEF) ||
+           inRange(c, 0x00F8, 0x02FF) || inRange(c, 0x0370, 0x037D) || inRange(c, 0x037F, 0x061B) ||
+           inRange(c, 0x061D, 0x200D) || inRange(c, 0x2070, 0x218F) || inRange(c, 0x2C00, 0x2FEF) ||
            inRange(c, 0x3001, 0xD7FF) || inRange(c, 0xF900, 0xFDCF) || inRange(c, 0xFDF0, 0xFFFD) ||
            inRange(c, 0x10000, 0xEFFFF);
 }
@@ -347,7 +353,7 @@ option, or the optional space before an attribute.
   No pre, no post.
   A message may end with whitespace, so `index` may equal `len()` on exit.
 */
-void Parser::parseWhitespaceMaybeRequired(bool required, UErrorCode& errorCode) {
+void Parser::parseRequiredWS(UErrorCode& errorCode) {
     bool sawWhitespace = false;
 
     // The loop exits either when we consume all the input,
@@ -358,7 +364,7 @@ void Parser::parseWhitespaceMaybeRequired(bool required, UErrorCode& errorCode) 
             // If whitespace isn't required -- or if we saw it already --
             // then the caller is responsible for checking this case and
             // setting an error if necessary.
-            if (!required || sawWhitespace) {
+            if (sawWhitespace) {
                 // Not an error.
                 return;
             }
@@ -380,24 +386,51 @@ void Parser::parseWhitespaceMaybeRequired(bool required, UErrorCode& errorCode) 
         }
     }
 
-    if (!sawWhitespace && required) {
+    if (!sawWhitespace) {
         ERROR(errorCode);
     }
 }
 
+void Parser::parseOptionalBidi() {
+    while (true) {
+        if (!inBounds()) {
+            return;
+        }
+        if (isBidi(peek())) {
+            next();
+        } else {
+            break;
+        }
+    }
+}
+
 /*
-  No pre, no post, for the same reason as `parseWhitespaceMaybeRequired()`.
+  No pre, no post, because a message may end with whitespace
+  Matches `s` in the MF2 grammar
 */
 void Parser::parseRequiredWhitespace(UErrorCode& errorCode) {
-    parseWhitespaceMaybeRequired(true, errorCode);
+    parseOptionalBidi();
+    parseRequiredWS(errorCode);
+    parseOptionalWhitespace();
     normalizedInput += SPACE;
 }
 
 /*
   No pre, no post, for the same reason as `parseWhitespaceMaybeRequired()`.
 */
-void Parser::parseOptionalWhitespace(UErrorCode& errorCode) {
-    parseWhitespaceMaybeRequired(false, errorCode);
+void Parser::parseOptionalWhitespace() {
+    while (true) {
+        if (!inBounds()) {
+            return;
+        }
+        auto cp = peek();
+        if (isWhitespace(cp) || isBidi(cp)) {
+            maybeAdvanceLine();
+            next();
+        } else {
+            break;
+        }
+    }
 }
 
 // Consumes a single character, signaling an error if `peek()` != `c`
@@ -442,11 +475,11 @@ void Parser::parseToken(const std::u16string_view& token, UErrorCode& errorCode)
 */
 void Parser::parseTokenWithWhitespace(const std::u16string_view& token, UErrorCode& errorCode) {
     // No need for error check or bounds check before parseOptionalWhitespace
-    parseOptionalWhitespace(errorCode);
+    parseOptionalWhitespace();
     // Establish precondition
     CHECK_BOUNDS(errorCode);
     parseToken(token, errorCode);
-    parseOptionalWhitespace(errorCode);
+    parseOptionalWhitespace();
     // Guarantee postcondition
     CHECK_BOUNDS(errorCode);
 }
@@ -458,12 +491,12 @@ void Parser::parseTokenWithWhitespace(const std::u16string_view& token, UErrorCo
    then consumes optional whitespace again
 */
 void Parser::parseTokenWithWhitespace(UChar32 c, UErrorCode& errorCode) {
-    // No need for error check or bounds check before parseOptionalWhitespace(errorCode)
-    parseOptionalWhitespace(errorCode);
+    // No need for error check or bounds check before parseOptionalWhitespace()
+    parseOptionalWhitespace();
     // Establish precondition
     CHECK_BOUNDS(errorCode);
     parseToken(c, errorCode);
-    parseOptionalWhitespace(errorCode);
+    parseOptionalWhitespace();
     // Guarantee postcondition
     CHECK_BOUNDS(errorCode);
 }
@@ -482,11 +515,17 @@ UnicodeString Parser::parseName(UErrorCode& errorCode) {
 
     U_ASSERT(inBounds());
 
-    if (!isNameStart(peek())) {
+    if (!(isNameStart(peek()) || isBidi(peek()))) {
         ERROR(errorCode);
         return name;
     }
 
+    // name       = [bidi] name-start *name-char [bidi]
+
+    // [bidi]
+    parseOptionalBidi();
+
+    // name-start *name-char
     while (isNameChar(peek())) {
         UChar32 c = peek();
         name += c;
@@ -497,6 +536,10 @@ UnicodeString Parser::parseName(UErrorCode& errorCode) {
             break;
         }
     }
+
+    // [bidi]
+    parseOptionalBidi();
+
     return name;
 }
 
@@ -853,7 +896,7 @@ void Parser::parseAttribute(AttributeAdder<T>& attrAdder, UErrorCode& errorCode)
     // about whether whitespace precedes another
     // attribute, or the '=' sign
     int32_t savedIndex = index;
-    parseOptionalWhitespace(errorCode);
+    parseOptionalWhitespace();
 
     Operand rand;
     if (peek() == EQUALS) {
@@ -1149,7 +1192,7 @@ the comment in `parseOptions()` for details.
       // (the character is either the required space before an annotation, or optional
       // trailing space after the literal or variable). It's still ambiguous which
       // one does apply.
-      parseOptionalWhitespace(status);
+      parseOptionalWhitespace();
       // Restore precondition
       CHECK_BOUNDS(status);
 
@@ -1220,7 +1263,7 @@ Expression Parser::parseExpression(UErrorCode& status) {
     // Parse opening brace
     parseToken(LEFT_CURLY_BRACE, status);
     // Optional whitespace after opening brace
-    parseOptionalWhitespace(status);
+    parseOptionalWhitespace();
 
     Expression::Builder exprBuilder(status);
     // Restore precondition
@@ -1263,7 +1306,7 @@ Expression Parser::parseExpression(UErrorCode& status) {
 
     // Parse optional space
     // (the last [s] in e.g. "{" [s] literal [s annotation] *(s attribute) [s] "}")
-    parseOptionalWhitespace(status);
+    parseOptionalWhitespace();
 
     // Either an operand or operator (or both) must have been set already,
     // so there can't be an error
@@ -1339,7 +1382,7 @@ void Parser::parseInputDeclaration(UErrorCode& status) {
     CHECK_BOUNDS(status);
 
     parseToken(ID_INPUT, status);
-    parseOptionalWhitespace(status);
+    parseOptionalWhitespace();
 
     // Restore precondition before calling parseExpression()
     CHECK_BOUNDS(status);
@@ -1400,7 +1443,7 @@ void Parser::parseDeclarations(UErrorCode& status) {
         // Avoid looping infinitely
         CHECK_ERROR(status);
 
-        parseOptionalWhitespace(status);
+        parseOptionalWhitespace();
         // Restore precondition
         CHECK_BOUNDS(status);
     }
@@ -1510,8 +1553,8 @@ This is addressed using "backtracking" (similarly to `parseOptions()`).
 
     // We've seen at least one whitespace-key pair, so now we can parse
     // *(s key) [s]
-    while (peek() != LEFT_CURLY_BRACE || isWhitespace(peek())) { // Try to recover from errors
-        bool wasWhitespace = isWhitespace(peek());
+    while (peek() != LEFT_CURLY_BRACE || isWhitespace(peek()) || isBidi(peek())) {
+        bool wasWhitespace = isWhitespace(peek()) || isBidi(peek());
         parseRequiredWhitespace(status);
         if (!wasWhitespace) {
             // Avoid infinite loop when parsing something like:
@@ -1569,7 +1612,7 @@ Markup Parser::parseMarkup(UErrorCode& status) {
     // Consume the '{'
     next();
     normalizedInput += LEFT_CURLY_BRACE;
-    parseOptionalWhitespace(status);
+    parseOptionalWhitespace();
     bool closing = false;
     switch (peek()) {
     case NUMBER_SIGN: {
@@ -1596,19 +1639,19 @@ Markup Parser::parseMarkup(UErrorCode& status) {
 
     // Parse the options, which must begin with a ' '
     // if present
-    if (inBounds() && isWhitespace(peek())) {
+    if (inBounds() && (isWhitespace(peek()) || isBidi(peek()))) {
         OptionAdder<Markup::Builder> optionAdder(builder);
         parseOptions(optionAdder, status);
     }
 
     // Parse the attributes, which also must begin
     // with a ' '
-    if (inBounds() && isWhitespace(peek())) {
+    if (inBounds() && (isWhitespace(peek()) || isBidi(peek()))) {
         AttributeAdder<Markup::Builder> attrAdder(builder);
         parseAttributes(attrAdder, status);
     }
 
-    parseOptionalWhitespace(status);
+    parseOptionalWhitespace();
 
     bool standalone = false;
     // Check if this is a standalone or not
@@ -1656,7 +1699,7 @@ std::variant<Expression, Markup> Parser::parsePlaceholder(UErrorCode& status) {
             isMarkup = true;
             break;
         }
-        if (!isWhitespace(c)){
+        if (!(isWhitespace(c) || isBidi(c))) {
             break;
         }
         tempIndex++;
@@ -1740,7 +1783,7 @@ void Parser::parseSelectors(UErrorCode& status) {
     // "Backtracking" is required here. It's not clear if whitespace is
     // (`[s]` selector) or (`[s]` variant)
     while (isWhitespace(peek()) || peek() == LEFT_CURLY_BRACE) {
-        parseOptionalWhitespace(status);
+        parseOptionalWhitespace();
         // Restore precondition
         CHECK_BOUNDS(status);
         if (peek() != LEFT_CURLY_BRACE) {
@@ -1770,9 +1813,9 @@ void Parser::parseSelectors(UErrorCode& status) {
         }                                          \
 
     // Parse variants
-    while (isWhitespace(peek()) || isKeyStart(peek())) {
+    while (isWhitespace(peek()) || isBidi(peek()) || isKeyStart(peek())) {
         // Trailing whitespace is allowed
-        parseOptionalWhitespace(status);
+        parseOptionalWhitespace();
         if (!inBounds()) {
             return;
         }
@@ -1871,7 +1914,7 @@ void Parser::parse(UParseError &parseErrorResult, UErrorCode& status) {
     bool complex = false;
     // First, "look ahead" to determine if this is a simple or complex
     // message. To do that, check the first non-whitespace character.
-    while (inBounds(index) && isWhitespace(peek())) {
+    while (inBounds(index) && (isWhitespace(peek()) || isBidi(peek()))) {
         next();
     }
 
@@ -1891,10 +1934,10 @@ void Parser::parse(UParseError &parseErrorResult, UErrorCode& status) {
     // Message can be empty, so we need to only look ahead
     // if we know it's non-empty
     if (complex) {
-        parseOptionalWhitespace(status);
+        parseOptionalWhitespace();
         parseDeclarations(status);
         parseBody(status);
-        parseOptionalWhitespace(status);
+        parseOptionalWhitespace();
     } else {
         // Simple message
         // For normalization, quote the pattern
