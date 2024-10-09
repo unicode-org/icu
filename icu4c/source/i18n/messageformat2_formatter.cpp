@@ -122,19 +122,23 @@ namespace message2 {
         // Set up the standard function registry
         MFFunctionRegistry::Builder standardFunctionsBuilder(success);
 
-        FormatterFactory* dateTime = StandardFunctions::DateTimeFactory::dateTime(success);
-        FormatterFactory* date = StandardFunctions::DateTimeFactory::date(success);
-        FormatterFactory* time = StandardFunctions::DateTimeFactory::time(success);
-        FormatterFactory* number = new StandardFunctions::NumberFactory();
-        FormatterFactory* integer = new StandardFunctions::IntegerFactory();
-        standardFunctionsBuilder.adoptFormatter(FunctionName(UnicodeString("datetime")), dateTime, success)
-            .adoptFormatter(FunctionName(UnicodeString("date")), date, success)
-            .adoptFormatter(FunctionName(UnicodeString("time")), time, success)
-            .adoptFormatter(FunctionName(UnicodeString("number")), number, success)
-            .adoptFormatter(FunctionName(UnicodeString("integer")), integer, success)
-            .adoptSelector(FunctionName(UnicodeString("number")), new StandardFunctions::PluralFactory(UPLURAL_TYPE_CARDINAL), success)
-            .adoptSelector(FunctionName(UnicodeString("integer")), new StandardFunctions::PluralFactory(StandardFunctions::PluralFactory::integer()), success)
-            .adoptSelector(FunctionName(UnicodeString("string")), new StandardFunctions::TextFactory(), success);
+        LocalPointer<FunctionFactory> dateTime(StandardFunctions::DateTimeFactory::dateTime(success));
+        LocalPointer<FunctionFactory> date(StandardFunctions::DateTimeFactory::date(success));
+        LocalPointer<FunctionFactory> time(StandardFunctions::DateTimeFactory::time(success));
+        LocalPointer<FunctionFactory> number(StandardFunctions::NumberFactory::number(success));
+        LocalPointer<FunctionFactory> integer(StandardFunctions::NumberFactory::integer(success));
+        LocalPointer<FunctionFactory> string(StandardFunctions::StringFactory::string(success));
+        CHECK_ERROR(success);
+        standardFunctionsBuilder.adoptFunctionFactory(FunctionName(UnicodeString("datetime")),
+                                                      dateTime.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("date")), date.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("time")), time.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("number")),
+                                  number.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("integer")),
+                                  integer.orphan(), success)
+            .adoptFunctionFactory(FunctionName(UnicodeString("string")),
+                                  string.orphan(), success);
         CHECK_ERROR(success);
         standardMFFunctionRegistry = standardFunctionsBuilder.build();
         CHECK_ERROR(success);
@@ -214,118 +218,26 @@ namespace message2 {
         cleanup();
     }
 
-    // Selector and formatter lookup
-    // -----------------------------
-
-    // Postcondition: selector != nullptr || U_FAILURE(status)
-    Selector* MessageFormatter::getSelector(MessageContext& context, const FunctionName& functionName, UErrorCode& status) const {
-        NULL_ON_ERROR(status);
-        U_ASSERT(isSelector(functionName));
-
-        const SelectorFactory* selectorFactory = lookupSelectorFactory(context, functionName, status);
-        NULL_ON_ERROR(status);
-        if (selectorFactory == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        // Create a specific instance of the selector
-        auto result = selectorFactory->createSelector(getLocale(), status);
-        NULL_ON_ERROR(status);
-        return result;
-    }
-
-    // Returns an owned pointer
-    Formatter* MessageFormatter::getFormatter(const FunctionName& functionName, UErrorCode& status) const {
-        NULL_ON_ERROR(status);
-
-        // Create the formatter
-
-        // First, look up the formatter factory for this function
-        FormatterFactory* formatterFactory = lookupFormatterFactory(functionName, status);
-        NULL_ON_ERROR(status);
-
-        U_ASSERT(formatterFactory != nullptr);
-
-        // Create a specific instance of the formatter
-        Formatter* formatter = formatterFactory->createFormatter(locale, status);
-        NULL_ON_ERROR(status);
-        if (formatter == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        return formatter;
-    }
-
-    bool MessageFormatter::getDefaultFormatterNameByType(const UnicodeString& type, FunctionName& name) const {
-        U_ASSERT(hasCustomMFFunctionRegistry());
-        const MFFunctionRegistry& reg = getCustomMFFunctionRegistry();
-        return reg.getDefaultFormatterNameByType(type, name);
-    }
-
     // ---------------------------------------------------
     // Function registry
 
-    bool MessageFormatter::isBuiltInSelector(const FunctionName& functionName) const {
-        return standardMFFunctionRegistry.hasSelector(functionName);
+    bool MessageFormatter::isBuiltInFunction(const FunctionName& functionName) const {
+        return standardMFFunctionRegistry.hasFunction(functionName);
     }
 
-    bool MessageFormatter::isBuiltInFormatter(const FunctionName& functionName) const {
-        return standardMFFunctionRegistry.hasFormatter(functionName);
-    }
-
-    // https://github.com/unicode-org/message-format-wg/issues/409
-    // Unknown function = unknown function error
-    // Formatter used as selector  = selector error
-    // Selector used as formatter = formatting error
-    const SelectorFactory* MessageFormatter::lookupSelectorFactory(MessageContext& context, const FunctionName& functionName, UErrorCode& status) const {
-        DynamicErrors& err = context.getErrors();
-
-        if (isBuiltInSelector(functionName)) {
-            return standardMFFunctionRegistry.getSelector(functionName);
-        }
-        if (isBuiltInFormatter(functionName)) {
-            err.setSelectorError(functionName, status);
-            return nullptr;
-        }
-        if (hasCustomMFFunctionRegistry()) {
-            const MFFunctionRegistry& customMFFunctionRegistry = getCustomMFFunctionRegistry();
-            const SelectorFactory* selectorFactory = customMFFunctionRegistry.getSelector(functionName);
-            if (selectorFactory != nullptr) {
-                return selectorFactory;
-            }
-            if (customMFFunctionRegistry.getFormatter(functionName) != nullptr) {
-                err.setSelectorError(functionName, status);
-                return nullptr;
-            }
-        }
-        // Either there is no custom function registry and the function
-        // isn't built-in, or the function doesn't exist in either the built-in
-        // or custom registry.
-        // Unknown function error
-        err.setUnknownFunction(functionName, status);
-        return nullptr;
-    }
-
-    FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionName& functionName,
-                                                               UErrorCode& status) const {
+    FunctionFactory*
+    MessageFormatter::lookupFunctionFactory(const FunctionName& functionName,
+                                            UErrorCode& status) const {
         NULL_ON_ERROR(status);
 
-        if (isBuiltInFormatter(functionName)) {
-            return standardMFFunctionRegistry.getFormatter(functionName);
-        }
-        if (isBuiltInSelector(functionName)) {
-            status = U_MF_FORMATTING_ERROR;
-            return nullptr;
+        if (isBuiltInFunction(functionName)) {
+            return standardMFFunctionRegistry.getFunction(functionName);
         }
         if (hasCustomMFFunctionRegistry()) {
             const MFFunctionRegistry& customMFFunctionRegistry = getCustomMFFunctionRegistry();
-            FormatterFactory* formatterFactory = customMFFunctionRegistry.getFormatter(functionName);
-            if (formatterFactory != nullptr) {
-                return formatterFactory;
-            }
-            if (customMFFunctionRegistry.getSelector(functionName) != nullptr) {
-                status = U_MF_FORMATTING_ERROR;
-                return nullptr;
+            FunctionFactory* function = customMFFunctionRegistry.getFunction(functionName);
+            if (function != nullptr) {
+                return function;
             }
         }
         // Either there is no custom function registry and the function
@@ -336,13 +248,17 @@ namespace message2 {
         return nullptr;
     }
 
-    bool MessageFormatter::isCustomFormatter(const FunctionName& fn) const {
-        return hasCustomMFFunctionRegistry() && getCustomMFFunctionRegistry().getFormatter(fn) != nullptr;
+    bool MessageFormatter::getDefaultFormatterNameByType(const UnicodeString& tag,
+                                                         FunctionName& result) const {
+        if (hasCustomMFFunctionRegistry()) {
+            const MFFunctionRegistry& customMFFunctionRegistry = getCustomMFFunctionRegistry();
+            return customMFFunctionRegistry.getDefaultFormatterNameByType(tag, result);
+        }
+        return false;
     }
 
-
-    bool MessageFormatter::isCustomSelector(const FunctionName& fn) const {
-        return hasCustomMFFunctionRegistry() && getCustomMFFunctionRegistry().getSelector(fn) != nullptr;
+    bool MessageFormatter::isCustomFunction(const FunctionName& fn) const {
+        return hasCustomMFFunctionRegistry() && getCustomMFFunctionRegistry().getFunction(fn) != nullptr;
     }
 
 } // namespace message2
