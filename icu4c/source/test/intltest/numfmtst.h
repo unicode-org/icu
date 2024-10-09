@@ -201,6 +201,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestLenientParse();
 
     void TestDecimal();
+    void TestDecimalFormatParse7E();
     void TestCurrencyFractionDigits();
 
     void TestExponentParse();
