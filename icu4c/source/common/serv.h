@@ -759,6 +759,11 @@ class U_COMMON_API ICUService : public ICUNotifier {
                              const UnicodeString* matchID, 
                              UErrorCode& status) const;
 
+    UVector& getDisplayNamesImpl(UVector& result,
+                             const Locale& locale,
+                             const UnicodeString* matchID,
+                             UErrorCode& status);
+
     /**
      * <p>A convenience override of registerInstance(UObject*, const UnicodeString&, UBool)
      * that defaults visible to true.</p>
