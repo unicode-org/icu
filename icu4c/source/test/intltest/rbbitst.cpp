@@ -1267,11 +1267,6 @@ UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *
         const char16_t *fString;
     } badTestCases[] = {
         {"10666", "GraphemeBreakTest.txt", u"\u0020\u0020\u0033"},    // Fake example, for illustration.
-
-        // ICU-22127 until UAX #29 wordbreak is update for the colon changes in ICU-22112,
-        // need to skip some tests in WordBreakTest.txt
-        {"22127", "WordBreakTest.txt", u"a:"},
-        {"22127", "WordBreakTest.txt", u"A:"},
     };
 
     for (int n=0; n<UPRV_LENGTHOF(badTestCases); n++) {
