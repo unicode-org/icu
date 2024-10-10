@@ -3,12 +3,16 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_NORMALIZATION
+
 #if !UCONFIG_NO_FORMATTING
 
 #if !UCONFIG_NO_MF2
 
+#include "unicode/messageformat2.h"
 #include "messageformat2_allocation.h"
 #include "messageformat2_checker.h"
+#include "messageformat2_evaluation.h"
 #include "messageformat2_macros.h"
 #include "uvector.h" // U_ASSERT
 
@@ -104,6 +108,13 @@ TypeEnvironment::~TypeEnvironment() {}
 
 // ---------------------
 
+UnicodeString Checker::normalizeNFC(const Key& k) const {
+    if (k.isWildcard()) {
+        return UnicodeString("*");
+    }
+    return context.normalizeNFC(k.asLiteral().unquoted());
+}
+
 static bool areDefaultKeys(const Key* keys, int32_t len) {
     U_ASSERT(len > 0);
     for (int32_t i = 0; i < len; i++) {
@@ -185,7 +196,7 @@ void Checker::checkVariants(UErrorCode& status) {
                 // This variant was already checked,
                 // so we know keys1.len == len
                 for (int32_t kk = 0; kk < len; kk++) {
-                    if (!(keys[kk] == keys1[kk])) {
+                    if (!(normalizeNFC(keys[kk]) == normalizeNFC(keys1[kk]))) {
                         allEqual = false;
                         break;
                     }
@@ -312,3 +323,5 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */

@@ -14,6 +14,7 @@
  * \file
  * \brief C++ API: Formats messages using the draft MessageFormat 2.0.
  */
+#if !UCONFIG_NO_NORMALIZATION
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -174,11 +175,15 @@ namespace message2 {
     // The context contains all the information needed to process
     // an entire message: arguments, formatter cache, and error list
 
+    class MessageFormatter;
+
     class MessageContext : public UMemory {
     public:
         MessageContext(const MessageArguments&, const StaticErrors&, UErrorCode&);
 
-        const Formattable* getGlobal(const VariableName&, UErrorCode&) const;
+        const Formattable* getGlobal(const MessageFormatter&,
+                                     const VariableName&,
+                                     UErrorCode&) const;
 
         // If any errors were set, update `status` accordingly
         void checkErrors(UErrorCode& status) const;
@@ -191,6 +196,7 @@ namespace message2 {
         const MessageArguments& arguments; // External message arguments
         // Errors accumulated during parsing/formatting
         DynamicErrors errors;
+
     }; // class MessageContext
 
 } // namespace message2
@@ -200,6 +206,8 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
 
 #endif /* U_SHOW_CPLUSPLUS_API */
 
