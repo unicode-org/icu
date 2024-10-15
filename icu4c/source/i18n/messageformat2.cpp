@@ -14,6 +14,7 @@
 #include "unicode/messageformat2_formattable.h"
 #include "unicode/messageformat2.h"
 #include "unicode/normalizer2.h"
+#include "unicode/ubidi.h"
 #include "unicode/unistr.h"
 #include "messageformat2_allocation.h"
 #include "messageformat2_checker.h"
@@ -198,6 +199,48 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
     return FunctionOptions(std::move(*optionsVector), status);
 }
 
+static UBiDiDirection getBiDiDirection(const Locale& locale,
+                                       const UnicodeString& s) {
+    if (s.isEmpty()) {
+        return locale.isRightToLeft() ? UBIDI_RTL : UBIDI_LTR;
+    }
+    if (s == u"ltr") {
+        return UBIDI_LTR;
+    }
+    if (s == u"rtl") {
+        return UBIDI_RTL;
+    }
+    if (s == u"auto") {
+        return UBIDI_MIXED;
+    }
+    return UBIDI_NEUTRAL;
+}
+
+FunctionContext MessageFormatter::makeFunctionContext(const FunctionOptions& options) const {
+    // Look up "u:locale", "u:dir", and "u:id" in the options
+    UnicodeString localeStr = options.getStringFunctionOption(UnicodeString("u:locale"));
+
+    // Use default locale from context, unless "u:locale" is provided
+    Locale localeToUse;
+    if (localeStr.isEmpty()) {
+        localeToUse = locale;
+    } else {
+        UErrorCode localStatus = U_ZERO_ERROR;
+        std::string u8;
+        Locale l = Locale::forLanguageTag(localeStr.toUTF8String(u8), localStatus);
+        if (U_SUCCESS(localStatus)) {
+            localeToUse = l;
+        } else {
+            localeToUse = locale;
+        }
+    }
+    UBiDiDirection dir = getBiDiDirection(localeToUse,
+                                          options.getStringFunctionOption(UnicodeString("u:dir")));
+    UnicodeString id = options.getStringFunctionOption(UnicodeString("u:id"));
+
+    return FunctionContext(localeToUse, dir, id);
+}
+
 // Looks up `functionName` and applies it to an operand and options,
 // handling errors if the function is unbound
 [[nodiscard]] InternalValue MessageFormatter::apply(const FunctionName& functionName,
@@ -225,13 +268,16 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env,
         context.getErrors().setUnknownFunction(functionName, status);
         return InternalValue::fallback(fallbackStr);
     }
-    LocalPointer<Function> function(functionFactory->createFunction(locale, status));
+    LocalPointer<Function> function(functionFactory->createFunction(status));
     // Value is not a fallback, so we can safely call takeValue()
     LocalPointer<FunctionValue> functionArg(rand.takeValue(status));
     U_ASSERT(U_SUCCESS(status));
     // Call the function
     LocalPointer<FunctionValue>
-        functionResult(function->call(*functionArg, std::move(options), status));
+        functionResult(function->call(makeFunctionContext(options),
+                                      *functionArg,
+                                      std::move(options),
+                                      status));
     // Handle any errors signaled by the function
     // (and use the fallback value)
     if (status == U_MF_OPERAND_MISMATCH_ERROR) {

@@ -9,6 +9,7 @@
 
 #if !UCONFIG_NO_MF2
 
+#include "unicode/ubidi.h"
 #include "messageformat2_allocation.h"
 #include "messageformat2_evaluation.h"
 #include "messageformat2_macros.h"
@@ -36,10 +37,13 @@ BaseValue::BaseValue(const Locale& loc, const Formattable& source)
     return message2::create<BaseValue>(BaseValue(locale, source), errorCode);
 }
 
-extern UnicodeString formattableToString(const Locale&, const Formattable&, UErrorCode&);
+extern UnicodeString formattableToString(const Locale&, const UBiDiDirection, const Formattable&, UErrorCode&);
 
 UnicodeString BaseValue::formatToString(UErrorCode& errorCode) const {
-    return formattableToString(locale, operand, errorCode);
+    return formattableToString(locale,
+                               UBIDI_NEUTRAL,
+                               operand,
+                               errorCode);
 }
 
 BaseValue& BaseValue::operator=(BaseValue&& other) noexcept {

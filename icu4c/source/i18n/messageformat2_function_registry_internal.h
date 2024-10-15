@@ -47,7 +47,7 @@ namespace message2 {
 
         class DateTimeFactory : public FunctionFactory {
         public:
-            Function* createFunction(const Locale& locale, UErrorCode& status) override;
+            Function* createFunction(UErrorCode& status) override;
             static DateTimeFactory* date(UErrorCode&);
             static DateTimeFactory* time(UErrorCode&);
             static DateTimeFactory* dateTime(UErrorCode&);
@@ -72,7 +72,8 @@ namespace message2 {
 
         class DateTime : public Function {
         public:
-            FunctionValue* call(FunctionValue& operand,
+            FunctionValue* call(const FunctionContext& context,
+                                FunctionValue& operand,
                                 FunctionOptions&& options,
                                 UErrorCode& errorCode) override;
             virtual ~DateTime();
@@ -81,13 +82,10 @@ namespace message2 {
             friend class DateTimeFactory;
             friend class DateTimeValue;
 
-            Locale locale;
             const DateTimeFactory::DateTimeType type;
-            static DateTime* create(const Locale&,
-                                    DateTimeFactory::DateTimeType,
+            static DateTime* create(DateTimeFactory::DateTimeType,
                                     UErrorCode&);
-            DateTime(const Locale& l, DateTimeFactory::DateTimeType t)
-                : locale(l), type(t) {}
+            DateTime(DateTimeFactory::DateTimeType t) : type(t) {}
             const LocalPointer<icu::DateFormat> icuFormatter;
         };
 
@@ -95,7 +93,7 @@ namespace message2 {
 
         class NumberFactory : public FunctionFactory {
         public:
-            Function* createFunction(const Locale& locale, UErrorCode& status) override;
+            Function* createFunction(UErrorCode& status) override;
             static NumberFactory* integer(UErrorCode& success);
             static NumberFactory* number(UErrorCode& success);
             virtual ~NumberFactory();
@@ -110,7 +108,8 @@ namespace message2 {
             static Number* integer(const Locale& loc, UErrorCode& success);
             static Number* number(const Locale& loc, UErrorCode& success);
 
-            FunctionValue* call(FunctionValue& operand,
+            FunctionValue* call(const FunctionContext& context,
+                                FunctionValue& operand,
                                 FunctionOptions&& options,
                                 UErrorCode& errorCode) override;
             virtual ~Number();
@@ -126,7 +125,7 @@ namespace message2 {
             } PluralType;
 
             static Number* create(const Locale&, bool, UErrorCode&);
-            Number(const Locale& loc, bool isInt) : locale(loc), isInteger(isInt), icuFormatter(number::NumberFormatter::withLocale(loc)) {}
+            Number(bool isInt) : isInteger(isInt) /*, icuFormatter(number::NumberFormatter::withLocale(loc))*/ {}
 
         // These options have their own accessor methods, since they have different default values.
             int32_t digitSizeOption(const FunctionOptions&, const UnicodeString&) const;
@@ -137,7 +136,6 @@ namespace message2 {
             int32_t minimumIntegerDigits(const FunctionOptions& options) const;
 
             bool usePercent(const FunctionOptions& options) const;
-            Locale locale;
             const bool isInteger = false;
             const number::LocalizedNumberFormatter icuFormatter;
 
@@ -145,6 +143,7 @@ namespace message2 {
         };
 
         static number::LocalizedNumberFormatter formatterForOptions(const Number& number,
+                                                                    const Locale& locale,
                                                                     const FunctionOptions& opts,
                                                                     UErrorCode& status);
 
@@ -165,7 +164,11 @@ namespace message2 {
 
             Locale locale;
             number::FormattedNumber formattedNumber;
-            NumberValue(const Number&, FunctionValue&, FunctionOptions&&, UErrorCode&);
+            NumberValue(const Number&,
+                        const FunctionContext&,
+                        FunctionValue&,
+                        FunctionOptions&&,
+                        UErrorCode&);
         }; // class NumberValue
 
         class DateTimeValue : public FunctionValue {
@@ -177,13 +180,13 @@ namespace message2 {
             friend class DateTime;
 
             UnicodeString formattedDate;
-            DateTimeValue(const Locale& locale, DateTimeFactory::DateTimeType type,
+            DateTimeValue(DateTimeFactory::DateTimeType type, const FunctionContext& context,
                           FunctionValue&, FunctionOptions&&, UErrorCode&);
         }; // class DateTimeValue
 
         class StringFactory : public FunctionFactory {
         public:
-            Function* createFunction(const Locale& locale, UErrorCode& status) override;
+            Function* createFunction(UErrorCode& status) override;
             static StringFactory* string(UErrorCode& status);
             virtual ~StringFactory();
         private:
@@ -191,19 +194,17 @@ namespace message2 {
 
         class String : public Function {
         public:
-            FunctionValue* call(FunctionValue& val,
+            FunctionValue* call(const FunctionContext& context,
+                                FunctionValue& val,
                                 FunctionOptions&& opts,
                                 UErrorCode& errorCode) override;
-            static String* string(const Locale& locale, UErrorCode& status);
+            static String* string(UErrorCode& status);
             virtual ~String();
 
         private:
             friend class StringFactory;
 
-            // Formatting `value` to a string might require the locale
-            Locale locale;
-
-            String(const Locale& l) : locale(l) {}
+            String() {}
         };
 
         // See https://github.com/unicode-org/message-format-wg/blob/main/test/README.md
@@ -273,7 +274,7 @@ namespace message2 {
             friend class String;
 
             UnicodeString formattedString;
-            StringValue(const Locale&, FunctionValue&, FunctionOptions&&, UErrorCode&);
+            StringValue(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&);
         }; // class StringValue
 
     };
