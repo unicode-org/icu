@@ -16,6 +16,7 @@
 
 #include "unicode/messageformat2_data_model_names.h"
 #include "unicode/messageformat2_formattable.h"
+#include "unicode/ubidi.h"
 
 #ifndef U_HIDE_DEPRECATED_API
 
@@ -231,6 +232,54 @@ namespace message2 {
     class Function;
 
     /**
+     * Class implementing data from contextual options.
+     * See https://github.com/unicode-org/message-format-wg/pull/846
+     *
+     * @internal ICU 77 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    class U_I18N_API FunctionContext : public UObject {
+        public:
+            /**
+             * Returns the locale from this context.
+             *
+             * @return Locale the context was created with.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            const Locale& getLocale() const { return locale; }
+            /**
+             * Returns the text direction from this context.
+             *
+             * @return A UBiDiDirection indicating the text direction.
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            UBiDiDirection getDirection() const { return dir; }
+            /**
+             * Returns the ID from this context.
+             *
+             * @return A string to be used in formatting to parts.
+             *         (Formatting to parts is not yet implemented.)
+             *
+             * @internal ICU 77 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            const UnicodeString& getID() const { return id; }
+        private:
+            friend class MessageFormatter;
+
+            Locale locale;
+            UBiDiDirection dir;
+            UnicodeString id;
+
+            FunctionContext(const Locale& loc, UBiDiDirection d, UnicodeString i)
+                : locale(loc), dir(d), id(i) {}
+    }; // class FunctionContext
+
+    /**
      * Interface that function factory classes must implement.
      *
      * @internal ICU 77 technology preview
@@ -242,14 +291,13 @@ namespace message2 {
           * Constructs a new function object. This method is not const;
           * function factories with local state may be defined.
           *
-          * @param locale Locale to be used by the function.
           * @param status    Input/output error code.
           * @return The new Formatter, which is non-null if U_SUCCESS(status).
           *
           * @internal ICU 75 technology preview
           * @deprecated This API is for technology preview only.
           */
-         virtual Function* createFunction(const Locale& locale, UErrorCode& status) = 0;
+         virtual Function* createFunction(UErrorCode& status) = 0;
         /**
           * Destructor.
           *
@@ -280,6 +328,7 @@ namespace message2 {
              * Calls this Function on a FunctionValue operand and its FunctionOptions options,
              * returning a new pointer to a FunctionValue (which is adopted by the caller).
              *
+             * @param context The context of this function, based on its contextual options
              * @param operand The unnamed argument to the function.
              * @param options Resolved options for this function.
              * @param status Input/output error code
@@ -287,7 +336,8 @@ namespace message2 {
              * @internal ICU 77 technology preview
              * @deprecated This API is for technology preview only.
              */
-            virtual FunctionValue* call(FunctionValue& operand,
+            virtual FunctionValue* call(const FunctionContext& context,
+                                        FunctionValue& operand,
                                         FunctionOptions&& options,
                                         UErrorCode& status) = 0;
             /**

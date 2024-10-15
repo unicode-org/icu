@@ -116,19 +116,18 @@ class Person : public FormattableObject {
 };
 
 class PersonNameFactory : public FunctionFactory {
-    Function* createFunction(const Locale& locale, UErrorCode& status) override;
+    Function* createFunction(UErrorCode& status) override;
     virtual ~PersonNameFactory();
 };
 
 class PersonNameFunction : public Function {
     public:
-    FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) override;
+    FunctionValue* call(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&) override;
     virtual ~PersonNameFunction();
     private:
     friend class PersonNameFactory;
 
-    const Locale locale;
-    PersonNameFunction(const Locale& loc) : locale(loc) {}
+    PersonNameFunction() {}
 };
 
 class PersonNameValue : public FunctionValue {
@@ -156,13 +155,13 @@ private:
 };
 
 class GrammarCasesFactory : public FunctionFactory {
-    Function* createFunction(const Locale& locale, UErrorCode& status) override;
+    Function* createFunction(UErrorCode& status) override;
     virtual ~GrammarCasesFactory();
 };
 
 class GrammarCasesFunction : public Function {
     public:
-    FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) override;
+    FunctionValue* call(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&) override;
     static MFFunctionRegistry customRegistry(UErrorCode&);
 };
 
@@ -180,18 +179,16 @@ class GrammarCasesValue : public FunctionValue {
 }; // class GrammarCasesValue
 
 class ListFactory : public FunctionFactory {
-    Function* createFunction(const Locale& locale, UErrorCode& status) override;
+    Function* createFunction(UErrorCode& status) override;
     virtual ~ListFactory();
 };
 
 class ListFunction : public Function {
     public:
-    FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) override;
+    FunctionValue* call(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&) override;
     static MFFunctionRegistry customRegistry(UErrorCode&);
-    ListFunction(const Locale& loc) : locale(loc) {}
+    ListFunction() {}
     virtual ~ListFunction();
-    private:
-    Locale locale;
 };
 
 class ListValue : public FunctionValue {
@@ -209,7 +206,7 @@ class ListValue : public FunctionValue {
 }; // class ListValue
 
 class NounFunctionFactory : public FunctionFactory {
-    Function* createFunction(const Locale& locale, UErrorCode& status) override;
+    Function* createFunction(UErrorCode& status) override;
     virtual ~NounFunctionFactory();
 };
 
@@ -228,7 +225,7 @@ class NounValue : public FunctionValue {
 }; // class NounValue
 
 class AdjectiveFunctionFactory : public FunctionFactory {
-    Function* createFunction(const Locale& locale, UErrorCode& status) override;
+    Function* createFunction(UErrorCode& status) override;
     virtual ~AdjectiveFunctionFactory();
 };
 
@@ -269,14 +266,14 @@ class ResourceManager : public Formatter {
 
 class NounFunction : public Function {
     public:
-    FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) override;
+    FunctionValue* call(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&) override;
     NounFunction() { }
     virtual ~NounFunction();
 };
 
 class AdjectiveFunction : public Function {
     public:
-    FunctionValue* call(FunctionValue&, FunctionOptions&&, UErrorCode&) override;
+    FunctionValue* call(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&) override;
     AdjectiveFunction() { }
     virtual ~AdjectiveFunction();
 };

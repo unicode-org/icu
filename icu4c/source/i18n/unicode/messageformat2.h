@@ -357,6 +357,7 @@ namespace message2 {
         // Formatting methods
         [[nodiscard]] InternalValue evalLiteral(const UnicodeString&, const data_model::Literal&, UErrorCode&) const;
         void formatPattern(MessageContext&, const Environment&, const data_model::Pattern&, UErrorCode&, UnicodeString&) const;
+        FunctionContext makeFunctionContext(const FunctionOptions&) const;
         [[nodiscard]] InternalValue apply(const FunctionName&, InternalValue&&, FunctionOptions&&,
                                           MessageContext&, UErrorCode&) const;
         [[nodiscard]] InternalValue evalExpression(const UnicodeString&, const Environment&, const data_model::Expression&, MessageContext&, UErrorCode&) const;

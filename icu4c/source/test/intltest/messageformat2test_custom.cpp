@@ -277,20 +277,23 @@ static bool hasStringOption(const FunctionOptionsMap& opt,
     return getStringOption(opt, k) == v;
 }
 
-Function* PersonNameFactory::createFunction(const Locale& locale, UErrorCode& errorCode) {
+Function* PersonNameFactory::createFunction(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    PersonNameFunction* result = new PersonNameFunction(locale);
+    PersonNameFunction* result = new PersonNameFunction();
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
 }
 
-FunctionValue* PersonNameFunction::call(FunctionValue& arg,
+FunctionValue* PersonNameFunction::call(const FunctionContext& context,
+                                        FunctionValue& arg,
                                         FunctionOptions&& opts,
                                         UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
+
+    (void) context;
 
     PersonNameValue* v = new PersonNameValue(arg, std::move(opts), errorCode);
     if (U_SUCCESS(errorCode) && v == nullptr) {
@@ -402,10 +405,8 @@ PersonNameValue::~PersonNameValue() {}
     result += postfix;
 }
 
-Function* GrammarCasesFactory::createFunction(const Locale& locale, UErrorCode& errorCode) {
+Function* GrammarCasesFactory::createFunction(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
-
-    (void) locale;
 
     GrammarCasesFunction* result = new GrammarCasesFunction();
     if (result == nullptr) {
@@ -414,10 +415,13 @@ Function* GrammarCasesFactory::createFunction(const Locale& locale, UErrorCode& 
     return result;
 }
 
-FunctionValue* GrammarCasesFunction::call(FunctionValue& arg,
+FunctionValue* GrammarCasesFunction::call(const FunctionContext& context,
+                                          FunctionValue& arg,
                                           FunctionOptions&& opts,
                                           UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
+
+    (void) context;
 
     GrammarCasesValue* v = new GrammarCasesValue(arg, std::move(opts), errorCode);
     if (U_SUCCESS(errorCode) && v == nullptr) {
@@ -538,12 +542,10 @@ GrammarCasesValue::~GrammarCasesValue() {}
   See ICU4J: CustomFormatterListTest.java
 */
 
-Function* ListFactory::createFunction(const Locale& locale, UErrorCode& errorCode) {
+Function* ListFactory::createFunction(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    (void) locale;
-
-    ListFunction* result = new ListFunction(locale);
+    ListFunction* result = new ListFunction();
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -551,12 +553,13 @@ Function* ListFactory::createFunction(const Locale& locale, UErrorCode& errorCod
 }
 
 
-FunctionValue* ListFunction::call(FunctionValue& arg,
+FunctionValue* ListFunction::call(const FunctionContext& context,
+                                  FunctionValue& arg,
                                   FunctionOptions&& opts,
                                   UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    ListValue* v = new ListValue(locale, arg, std::move(opts), errorCode);
+    ListValue* v = new ListValue(context.getLocale(), arg, std::move(opts), errorCode);
     if (U_SUCCESS(errorCode) && v == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -876,10 +879,8 @@ void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
 }
 #endif
 
-Function* NounFunctionFactory::createFunction(const Locale& locale, UErrorCode& errorCode) {
+Function* NounFunctionFactory::createFunction(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
-
-    (void) locale;
 
     NounFunction* result = new NounFunction();
     if (result == nullptr) {
@@ -888,7 +889,8 @@ Function* NounFunctionFactory::createFunction(const Locale& locale, UErrorCode& 
     return result;
 }
 
-FunctionValue* NounFunction::call(FunctionValue& arg,
+FunctionValue* NounFunction::call(const FunctionContext&,
+                                  FunctionValue& arg,
                                   FunctionOptions&& opts,
                                   UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
@@ -943,10 +945,8 @@ NounValue::NounValue(FunctionValue& arg,
     }
 }
 
-Function* AdjectiveFunctionFactory::createFunction(const Locale& locale, UErrorCode& errorCode) {
+Function* AdjectiveFunctionFactory::createFunction(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
-
-    (void) locale;
 
     AdjectiveFunction* result = new AdjectiveFunction();
     if (result == nullptr) {
@@ -955,9 +955,10 @@ Function* AdjectiveFunctionFactory::createFunction(const Locale& locale, UErrorC
     return result;
 }
 
-FunctionValue* AdjectiveFunction::call(FunctionValue& arg,
-                                  FunctionOptions&& opts,
-                                  UErrorCode& errorCode) {
+FunctionValue* AdjectiveFunction::call(const FunctionContext&,
+                                       FunctionValue& arg,
+                                       FunctionOptions&& opts,
+                                       UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
     AdjectiveValue* v = new AdjectiveValue(arg, std::move(opts), errorCode);

@@ -97,7 +97,7 @@ static constexpr std::u16string_view YEAR = u"year";
 
         class DateTimeFactory : public FunctionFactory {
         public:
-            Function* createFunction(const Locale& locale, UErrorCode& status) override;
+            Function* createFunction(UErrorCode& status) override;
             static DateTimeFactory* date(UErrorCode&);
             static DateTimeFactory* time(UErrorCode&);
             static DateTimeFactory* dateTime(UErrorCode&);
@@ -148,7 +148,8 @@ static constexpr std::u16string_view YEAR = u"year";
 
         class DateTime : public Function {
         public:
-            FunctionValue* call(FunctionValue& operand,
+            FunctionValue* call(const FunctionContext& context,
+                                FunctionValue& operand,
                                 FunctionOptions&& options,
                                 UErrorCode& errorCode) override;
             virtual ~DateTime();
@@ -157,13 +158,10 @@ static constexpr std::u16string_view YEAR = u"year";
             friend class DateTimeFactory;
             friend class DateTimeValue;
 
-            Locale locale;
             const DateTimeFactory::DateTimeType type;
-            static DateTime* create(const Locale&,
-                                    DateTimeFactory::DateTimeType,
+            static DateTime* create(DateTimeFactory::DateTimeType,
                                     UErrorCode&);
-            DateTime(const Locale& l, DateTimeFactory::DateTimeType t)
-                : locale(l), type(t) {}
+            DateTime(DateTimeFactory::DateTimeType t) : type(t) {}
             const LocalPointer<icu::DateFormat> icuFormatter;
         };
 
@@ -171,7 +169,7 @@ static constexpr std::u16string_view YEAR = u"year";
 
         class NumberFactory : public FunctionFactory {
         public:
-            Function* createFunction(const Locale& locale, UErrorCode& status) override;
+            Function* createFunction(UErrorCode& status) override;
             static NumberFactory* integer(UErrorCode& success);
             static NumberFactory* number(UErrorCode& success);
             virtual ~NumberFactory();
@@ -186,7 +184,8 @@ static constexpr std::u16string_view YEAR = u"year";
             static Number* integer(const Locale& loc, UErrorCode& success);
             static Number* number(const Locale& loc, UErrorCode& success);
 
-            FunctionValue* call(FunctionValue& operand,
+            FunctionValue* call(const FunctionContext& context,
+                                FunctionValue& operand,
                                 FunctionOptions&& options,
                                 UErrorCode& errorCode) override;
             virtual ~Number();
@@ -202,7 +201,7 @@ static constexpr std::u16string_view YEAR = u"year";
             } PluralType;
 
             static Number* create(const Locale&, bool, UErrorCode&);
-            Number(const Locale& loc, bool isInt) : locale(loc), isInteger(isInt), icuFormatter(number::NumberFormatter::withLocale(loc)) {}
+            Number(bool isInt) : isInteger(isInt) /*, icuFormatter(number::NumberFormatter::withLocale(loc))*/ {}
 
         // These options have their own accessor methods, since they have different default values.
             int32_t digitSizeOption(const FunctionOptions&, const UnicodeString&) const;
@@ -213,7 +212,6 @@ static constexpr std::u16string_view YEAR = u"year";
             int32_t minimumIntegerDigits(const FunctionOptions& options) const;
 
             bool usePercent(const FunctionOptions& options) const;
-            Locale locale;
             const bool isInteger = false;
             const number::LocalizedNumberFormatter icuFormatter;
 
@@ -221,6 +219,7 @@ static constexpr std::u16string_view YEAR = u"year";
         };
 
         static number::LocalizedNumberFormatter formatterForOptions(const Number& number,
+                                                                    const Locale& locale,
                                                                     const FunctionOptions& opts,
                                                                     UErrorCode& status);
 
@@ -241,7 +240,11 @@ static constexpr std::u16string_view YEAR = u"year";
 
             Locale locale;
             number::FormattedNumber formattedNumber;
-            NumberValue(const Number&, FunctionValue&, FunctionOptions&&, UErrorCode&);
+            NumberValue(const Number&,
+                        const FunctionContext&,
+                        FunctionValue&,
+                        FunctionOptions&&,
+                        UErrorCode&);
         }; // class NumberValue
 
         class DateTimeValue : public FunctionValue {
@@ -253,13 +256,13 @@ static constexpr std::u16string_view YEAR = u"year";
             friend class DateTime;
 
             UnicodeString formattedDate;
-            DateTimeValue(const Locale& locale, DateTimeFactory::DateTimeType type,
+            DateTimeValue(DateTimeFactory::DateTimeType type, const FunctionContext& context,
                           FunctionValue&, FunctionOptions&&, UErrorCode&);
         }; // class DateTimeValue
 
         class StringFactory : public FunctionFactory {
         public:
-            Function* createFunction(const Locale& locale, UErrorCode& status) override;
+            Function* createFunction(UErrorCode& status) override;
             static StringFactory* string(UErrorCode& status);
             virtual ~StringFactory();
         private:
@@ -267,19 +270,17 @@ static constexpr std::u16string_view YEAR = u"year";
 
         class String : public Function {
         public:
-            FunctionValue* call(FunctionValue& val,
+            FunctionValue* call(const FunctionContext& context,
+                                FunctionValue& val,
                                 FunctionOptions&& opts,
                                 UErrorCode& errorCode) override;
-            static String* string(const Locale& locale, UErrorCode& status);
+            static String* string(UErrorCode& status);
             virtual ~String();
 
         private:
             friend class StringFactory;
 
-            // Formatting `value` to a string might require the locale
-            Locale locale;
-
-            String(const Locale& l) : locale(l) {}
+            String() {}
         };
 
         // See https://github.com/unicode-org/message-format-wg/blob/main/test/README.md
@@ -349,7 +350,7 @@ static constexpr std::u16string_view YEAR = u"year";
             friend class String;
 
             UnicodeString formattedString;
-            StringValue(const Locale&, FunctionValue&, FunctionOptions&&, UErrorCode&);
+            StringValue(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&);
         }; // class StringValue
 
     };

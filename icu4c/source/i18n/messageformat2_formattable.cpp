@@ -11,8 +11,10 @@
 
 #include "unicode/messageformat2_formattable.h"
 #include "unicode/smpdtfmt.h"
+#include "unicode/ubidi.h"
 #include "messageformat2_allocation.h"
 #include "messageformat2_macros.h"
+#include "ubidiimp.h"
 
 #include "limits.h"
 
@@ -188,9 +190,37 @@ namespace message2 {
         df->format(date, result, 0, errorCode);
     }
 
+    static UnicodeString& handleBiDi(const Locale& locale,
+                                     UBiDiDirection dir,
+                                     UnicodeString& result) {
+        switch (dir) {
+        case UBIDI_LTR:
+            if (locale.isRightToLeft()) {
+                result.insert(0, LRI_CHAR);
+                result.insert(result.length(), PDI_CHAR);
+            }
+            break;
+        case UBIDI_RTL:
+            result.insert(0, RLI_CHAR);
+            result.insert(result.length(), PDI_CHAR);
+            break;
+        case UBIDI_NEUTRAL:
+            // Do nothing
+            break;
+        case UBIDI_MIXED:
+            // mixed = auto
+            result.insert(0, FSI_CHAR);
+            result.insert(result.length(), PDI_CHAR);
+            break;
+        }
+
+        return result;
+    }
+
     UnicodeString formattableToString(const Locale& locale,
-                                             const Formattable& toFormat,
-                                             UErrorCode& status) {
+                                      UBiDiDirection dir,
+                                      const Formattable& toFormat,
+                                      UErrorCode& status) {
         EMPTY_ON_ERROR(status);
 
         // Try as decimal number first
@@ -209,33 +239,37 @@ namespace message2 {
         }
 
         UFormattableType type = toFormat.getType();
+        UnicodeString result;
+
         switch (type) {
         case UFMT_DATE: {
-            UnicodeString result;
             const DateInfo* dateInfo = toFormat.getDate(status);
             U_ASSERT(U_SUCCESS(status));
             formatDateWithDefaults(locale, d, result, status);
-            return result;
+            break;
         }
         case UFMT_DOUBLE: {
             double d = toFormat.getDouble(status);
             U_ASSERT(U_SUCCESS(status));
-            return formatNumberWithDefaults(locale, d, status).toString(status);
+            result = formatNumberWithDefaults(locale, d, status).toString(status);
+            break;
         }
         case UFMT_LONG: {
             int32_t l = toFormat.getLong(status);
             U_ASSERT(U_SUCCESS(status));
-            return formatNumberWithDefaults(locale, l, status).toString(status);
+            result = formatNumberWithDefaults(locale, l, status).toString(status);
+            break;
         }
         case UFMT_INT64: {
             int64_t i = toFormat.getInt64Value(status);
             U_ASSERT(U_SUCCESS(status));
-            return formatNumberWithDefaults(locale, i, status).toString(status);
+            result = formatNumberWithDefaults(locale, i, status).toString(status);
+            break;
         }
         case UFMT_STRING: {
-            const UnicodeString& s = toFormat.getString(status);
+            result = toFormat.getString(status);
             U_ASSERT(U_SUCCESS(status));
-            return s;
+            break;
         }
         default: {
             // No default formatters for other types; use fallback
@@ -246,6 +280,8 @@ namespace message2 {
             return {};
         }
         }
+
+        return handleBiDi(locale, dir, result);
     }
 
 } // namespace message2
