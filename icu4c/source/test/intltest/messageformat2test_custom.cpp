@@ -586,7 +586,7 @@ message2::ListValue::ListValue(const Locale& locale,
         return;
     }
 
-    FunctionOptionsMap opt = options.getOptions();
+    FunctionOptionsMap opt = opts.getOptions();
     UListFormatterType type = UListFormatterType::ULISTFMT_TYPE_AND;
     if (hasStringOption(opt, "type", "OR")) {
         type = UListFormatterType::ULISTFMT_TYPE_OR;
