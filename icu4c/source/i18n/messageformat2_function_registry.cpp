@@ -873,6 +873,9 @@ StandardFunctions::DateTime::call(const FunctionContext& context,
 static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorCode) {
     if (U_SUCCESS(errorCode)) {
         UnicodeString upper = option.toUpper();
+        if (upper.isEmpty()) {
+            return DateFormat::EStyle::kShort;
+        }
         if (upper == UnicodeString("FULL")) {
             return DateFormat::EStyle::kFull;
         }
@@ -885,7 +888,7 @@ static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorC
         if (upper == UnicodeString("SHORT")) {
             return DateFormat::EStyle::kShort;
         }
-        if (upper.isEmpty() || upper == UnicodeString("DEFAULT")) {
+        if (upper == UnicodeString("DEFAULT")) {
             return DateFormat::EStyle::kDefault;
         }
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
