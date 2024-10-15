@@ -4162,7 +4162,15 @@ public class ULocaleTest extends CoreTestFmwk {
                     "und_US",
                     "en_Latn_US",
                     "en"
-                }
+                }, {
+                    "th@x=private",
+                    "th_Thai_TH@x=private",
+                    "th@x=private",
+                }, {
+                    "und@x=private",
+                    "en_Latn_US@x=private",
+                    "en@x=private",
+               }
         };
 
         for (int i = 0; i < full_data.length; i++) {

@@ -3924,6 +3924,13 @@ const char* const basic_maximize_data[][2] = {
     // ICU-22545 & ICU-22742
     "ru_XC",
     "ru_Cyrl_XC"
+  }, {
+    // ICU-22765
+    "und@x=private",
+    "en_Latn_US@x=private",
+  }, {
+    "th@x=private",
+    "th_Thai_TH@x=private",
   }
 };
 
