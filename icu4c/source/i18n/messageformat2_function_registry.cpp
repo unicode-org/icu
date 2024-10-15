@@ -1008,6 +1008,9 @@ StandardFunctions::DateTime::call(const FunctionContext& context,
 static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorCode) {
     if (U_SUCCESS(errorCode)) {
         UnicodeString upper = option.toUpper();
+        if (upper.isEmpty()) {
+            return DateFormat::EStyle::kShort;
+        }
         if (upper == options::FULL_UPPER) {
             return DateFormat::EStyle::kFull;
         }
