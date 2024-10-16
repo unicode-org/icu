@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728426424943,
+  "lastUpdate": 1729117617573,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28257,6 +28257,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.7933113087796224,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "1dcb4bcb2d78f8f7e8a3ce4889a36f7e965a7f7b",
+          "message": "ICU-22765 fix uloc_addLikelySubtags on \"und@x=private\"",
+          "timestamp": "2024-10-16T15:05:03-07:00",
+          "tree_id": "c9d298e0155605979eaa376ac0669148f253a4a3",
+          "url": "https://github.com/unicode-org/icu/commit/1dcb4bcb2d78f8f7e8a3ce4889a36f7e965a7f7b"
+        },
+        "date": 1729117440014,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.785156432321011,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
