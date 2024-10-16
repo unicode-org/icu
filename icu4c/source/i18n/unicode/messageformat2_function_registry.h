@@ -31,7 +31,7 @@ namespace message2 {
 
     using namespace data_model;
 
-    class FunctionFactory;
+    class Function;
 
     /**
      * Defines mappings from names of formatters and selectors to functions implementing them.
@@ -50,19 +50,19 @@ namespace message2 {
 
     public:
         /**
-         * Looks up a function factory by the name of the function. The result is non-const,
+         * Looks up a function by the name of the function. The result is non-const,
          * since functions may have local state. Returns the result by pointer
          * rather than by reference since it can fail.
          *
          * @param functionName Name of the desired function.
-         * @return A pointer to the function factory registered under `functionName`, or null
+         * @return A pointer to the function registered under `functionName`, or null
          *         if no function was registered under that name. The pointer is not owned
          *         by the caller.
          *
-         * @internal ICU 75 technology preview
+         * @internal ICU 77 technology preview
          * @deprecated This API is for technology preview only.
          */
-        FunctionFactory* getFunction(const FunctionName& functionName) const;
+        Function* getFunction(const FunctionName& functionName) const;
         /**
          * Looks up a function by a type tag. This method gets the name of the default formatter registered
          * for that type. If no formatter was explicitly registered for this type, it returns false.
@@ -127,9 +127,9 @@ namespace message2 {
              * @internal ICU 77 technology preview
              * @deprecated This API is for technology preview only.
              */
-            Builder& adoptFunctionFactory(const data_model::FunctionName& functionName,
-                                          FunctionFactory* function,
-                                          UErrorCode& errorCode);
+            Builder& adoptFunction(const data_model::FunctionName& functionName,
+                                   Function* function,
+                                   UErrorCode& errorCode);
             /**
              * Registers a formatter factory to a given type tag.
              * (See `FormattableObject` for details on type tags.)
@@ -278,41 +278,6 @@ namespace message2 {
             FunctionContext(const Locale& loc, UBiDiDirection d, UnicodeString i)
                 : locale(loc), dir(d), id(i) {}
     }; // class FunctionContext
-
-    /**
-     * Interface that function factory classes must implement.
-     *
-     * @internal ICU 77 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    class U_I18N_API FunctionFactory : public UObject {
-     public:
-         /**
-          * Constructs a new function object. This method is not const;
-          * function factories with local state may be defined.
-          *
-          * @param status    Input/output error code.
-          * @return The new Formatter, which is non-null if U_SUCCESS(status).
-          *
-          * @internal ICU 75 technology preview
-          * @deprecated This API is for technology preview only.
-          */
-         virtual Function* createFunction(UErrorCode& status) = 0;
-        /**
-          * Destructor.
-          *
-          * @internal ICU 75 technology preview
-          * @deprecated This API is for technology preview only.
-          */
-         virtual ~FunctionFactory();
-        /**
-         * Copy constructor.
-         *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        FunctionFactory& operator=(const FunctionFactory&) = delete;
-    }; // class FunctionFactory
 
     class FunctionValue;
 

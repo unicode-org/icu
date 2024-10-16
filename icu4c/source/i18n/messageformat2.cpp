@@ -261,14 +261,13 @@ FunctionContext MessageFormatter::makeFunctionContext(const FunctionOptions& opt
     }
 
     // Look up the function name
-    FunctionFactory* functionFactory = lookupFunctionFactory(functionName, status);
+    Function* function = lookupFunction(functionName, status);
     if (U_FAILURE(status)) {
         // Function is unknown -- set error and use the fallback value
         status = U_ZERO_ERROR;
         context.getErrors().setUnknownFunction(functionName, status);
         return InternalValue::fallback(fallbackStr);
     }
-    LocalPointer<Function> function(functionFactory->createFunction(status));
     // Value is not a fallback, so we can safely call takeValue()
     LocalPointer<FunctionValue> functionArg(rand.takeValue(status));
     U_ASSERT(U_SUCCESS(status));
