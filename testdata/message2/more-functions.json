@@ -130,7 +130,7 @@
     },
     {
       "comment": "Modified from icu4j test",
-      "srcs": [
+      "src": [
         ".input {$exp :datetime timeStyle=short}\n",
         ".input {$user :string}\n",
         ".local $longExp = {$exp :datetime dateStyle=long}\n",
