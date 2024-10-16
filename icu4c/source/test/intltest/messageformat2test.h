@@ -63,7 +63,7 @@ private:
     void testCustomFunctionsComplexMessage(IcuTestErrorCode&);
     void testGrammarCasesFormatter(IcuTestErrorCode&);
     void testListFormatter(IcuTestErrorCode&);
-   // void testMessageRefFormatter(IcuTestErrorCode&);
+    void testMessageRefFormatter(IcuTestErrorCode&);
     void testComplexOptions(IcuTestErrorCode&);
 
     // Feature tests
@@ -215,26 +215,31 @@ class AdjectiveValue : public FunctionValue {
                    UErrorCode&);
 }; // class AdjectiveValue
 
-/*
-class ResourceManagerFactory : public FormatterFactory {
-    public:
-    Formatter* createFormatter(const Locale&, UErrorCode&) override;
-};
 
-class ResourceManager : public Formatter {
+class ResourceManager : public Function {
     public:
-    FormattedPlaceholder format(FormattedPlaceholder&&, FunctionOptions&& opts, UErrorCode& errorCode) const override;
+    FunctionValue* call(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&) override;
     static MFFunctionRegistry customRegistry(UErrorCode&);
     static Hashtable* properties(UErrorCode&);
     static UnicodeString propertiesAsString(const Hashtable&);
     static Hashtable* parseProperties(const UnicodeString&, UErrorCode&);
-
-    private:
-    friend class ResourceManagerFactory;
-    ResourceManager(const Locale& loc) : locale(loc) {}
-    const Locale& locale;
+    ResourceManager() {}
+    virtual ~ResourceManager();
 };
-*/
+
+class ResourceManagerValue : public FunctionValue {
+    public:
+    UnicodeString formatToString(UErrorCode&) const override;
+    ResourceManagerValue();
+    virtual ~ResourceManagerValue();
+    private:
+    friend class ResourceManager;
+
+    UnicodeString formattedString;
+    ResourceManagerValue(FunctionValue&,
+                         FunctionOptions&&,
+                         UErrorCode&);
+}; // class ResourceManagerValue
 
 class NounFunction : public Function {
     public:

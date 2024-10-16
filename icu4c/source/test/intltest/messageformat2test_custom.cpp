@@ -244,7 +244,7 @@ void TestMessageFormat2::testCustomFunctions() {
   testCustomFunctionsComplexMessage(errorCode);
   testGrammarCasesFormatter(errorCode);
   testListFormatter(errorCode);
-  // testMessageRefFormatter(errorCode);
+  testMessageRefFormatter(errorCode);
   testComplexOptions(errorCode);
 }
 
@@ -645,7 +645,6 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
   See ICU4J: CustomFormatterMessageRefTest.java
 */
 
-#if false
 /* static */ Hashtable* message2::ResourceManager::properties(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
@@ -679,23 +678,7 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
     return nullptr;
 }
 
-Formatter* ResourceManagerFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-
-    Formatter* result = new ResourceManager(locale);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
 using Arguments = MessageArguments;
-
-// TODO: The next test is commented out because we need to write code
-// to convert an options map to a MessageArguments (mapping FormattedPlaceholder
-// back to Formattable)
 
 static Arguments localToGlobal(const FunctionOptionsMap& opts, UErrorCode& status) {
     if (U_FAILURE(status)) {
@@ -703,23 +686,46 @@ static Arguments localToGlobal(const FunctionOptionsMap& opts, UErrorCode& statu
     }
     std::map<UnicodeString, message2::Formattable> result;
     for (auto iter = opts.cbegin(); iter != opts.cend(); ++iter) {
-        result[iter->first] = iter->second->getSource(status);
+        result[iter->first] = iter->second->getOperand();
     }
     return MessageArguments(result, status);
 }
 
-message2::FormattedPlaceholder ResourceManager::format(FormattedPlaceholder&& arg, FunctionOptions&& options, UErrorCode& errorCode) const {
+FunctionValue* ResourceManager::call(const FunctionContext&,
+                                     FunctionValue& arg,
+                                     FunctionOptions&& options,
+                                     UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    LocalPointer<ResourceManagerValue>
+        result(new ResourceManagerValue(arg, std::move(options), errorCode));
+
+    if (U_SUCCESS(errorCode) && !result.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result.orphan();
+}
+
+UnicodeString message2::ResourceManagerValue::formatToString(UErrorCode&) const {
+    return formattedString;
+}
+
+message2::ResourceManagerValue::ResourceManagerValue(FunctionValue& arg,
+                                                     FunctionOptions&& options,
+                                                     UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
-        return {};
+        return;
     }
 
-    message2::FormattedPlaceholder errorVal = message2::FormattedPlaceholder("msgref");
+    operand = arg.getOperand();
+    opts = std::move(options); // Tests don't cover composition, so no need to merge options
 
-    const Formattable* toFormat = arg.getSource(errorCode);
+    const Formattable* toFormat = &operand;
     // Check for null or fallback
     if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
         errorCode = U_MF_FORMATTING_ERROR;
-        return errorVal;
+        return;
     }
     UnicodeString in;
     switch (toFormat->getType()) {
@@ -729,22 +735,25 @@ message2::FormattedPlaceholder ResourceManager::format(FormattedPlaceholder&& ar
         }
         default: {
             // Ignore non-strings
-            return errorVal;
+            return;
         }
     }
-    FunctionOptionsMap opt = FunctionOptions::getOptions(std::move(options));
-    bool hasProperties = opt.count("resbundle") > 0 && opt["resbundle"].getValue().getType() == UFMT_OBJECT && opt["resbundle"].getValue().getObject(errorCode)->tag() == u"properties";
+    FunctionOptionsMap opt = opts.getOptions();
+    bool hasProperties = opt.count("resbundle") > 0
+        && opt["resbundle"]->getOperand().getType() == UFMT_OBJECT
+        && opt["resbundle"]->getOperand().getObject(errorCode)->tag() == u"properties";
 
     // If properties were provided, look up the given string in the properties,
     // yielding a message
     if (hasProperties) {
-        const FormattableProperties* properties = reinterpret_cast<const FormattableProperties*>(opt["resbundle"].getValue().getObject(errorCode));
+        const FormattableProperties* properties = reinterpret_cast<const FormattableProperties*>
+            (opt["resbundle"]->getOperand().getObject(errorCode));
         U_ASSERT(U_SUCCESS(errorCode));
         UnicodeString* msg = static_cast<UnicodeString*>(properties->properties->get(in));
         if (msg == nullptr) {
             // No message given for this key -- error out
             errorCode = U_MF_FORMATTING_ERROR;
-            return errorVal;
+            return;
         }
 	MessageFormatter::Builder mfBuilder(errorCode);
         UParseError parseErr;
@@ -752,7 +761,7 @@ message2::FormattedPlaceholder ResourceManager::format(FormattedPlaceholder&& ar
 	MessageFormatter mf = mfBuilder.setPattern(*msg, parseErr, errorCode).build(errorCode);
         Arguments arguments = localToGlobal(opt, errorCode);
         if (U_FAILURE(errorCode)) {
-            return errorVal;
+            return;
         }
 
         UErrorCode savedStatus = errorCode;
@@ -763,14 +772,16 @@ message2::FormattedPlaceholder ResourceManager::format(FormattedPlaceholder&& ar
         if (U_FAILURE(errorCode)) {
             errorCode = savedStatus;
         }
-        return arg.withOutput(FormattedValue(std::move(result)), errorCode);
+        formattedString = result;
     } else {
         // Properties must be provided
         errorCode = U_MF_FORMATTING_ERROR;
     }
-    return errorVal;
+    return;
 }
 
+ResourceManager::~ResourceManager() {}
+ResourceManagerValue::~ResourceManagerValue() {}
 
 void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
@@ -783,7 +794,7 @@ void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
         return;
     }
     MFFunctionRegistry reg = MFFunctionRegistry::Builder(errorCode)
-        .adoptFormatter(FunctionName("msgRef"), new ResourceManagerFactory(), errorCode)
+        .adoptFunction(FunctionName("msgRef"), new ResourceManager(), errorCode)
         .build();
     CHECK_ERROR(errorCode);
 
@@ -843,7 +854,6 @@ void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
                                 .build();
     TestUtils::runTestCase(*this, test, errorCode);
 }
-#endif
 
 FunctionValue* NounFunction::call(const FunctionContext&,
                                   FunctionValue& arg,
