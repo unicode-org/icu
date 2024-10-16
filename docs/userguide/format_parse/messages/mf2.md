@@ -27,31 +27,33 @@ It will be a successor to the current [ICU MessageFormat](index.md).
 MessageFormat 2.0 is being developed
 [in a working group](https://github.com/unicode-org/message-format-wg),
 which has created a [draft specification](https://github.com/unicode-org/message-format-wg/tree/main/spec).
+A version of the specification is included in [LDML 45](https://unicode.org/reports/tr35/tr35-messageFormat.html#Contents).
 Also see the 
 [API docs for `MessageFormatter`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/index.html?com/ibm/icu/message2/MessageFormatter.html).*
 
 ## Overview of `MessageFormatter`
 
-In ICU4J, the `MessageFormatter` class is the next iteration of [MessageFormat](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/MessageFormat.html).
-This new version will build on the lessons learned from using MessageFormat for 25 years in various environments, when used directly or as a base for other public APIs.
+The `MessageFormatter` class is the next iteration of MessageFormat, implemented in both [ICU4J](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/MessageFormat.html) and [ICU4C](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1message2_1_1MessageFormatter.html)
+This new version builds on the lessons learned from using MessageFormat for 25 years in various environments, when used directly or as a base for other public APIs.
 
-The effort to design a succesor to `MessageFormat` will result in a specification referred to as MessageFormat 2.0.
+The effort to design a successor to `MessageFormat` is a specification referred to as MessageFormat 2.0.
 The reasoning for this effort is shared in the [“Why MessageFormat needs a successor”](https://github.com/unicode-org/message-format-wg/blob/main/docs/why_mf_next.md) document.
 
-MessageFormat 2.0 will be more modular and easier to port and backport.
-It will also provide extension points via interfaces to allow users to supply new formatters and selectors without having to modify the specification.
+MessageFormat 2.0 is more modular and easier to port and backport.
+It also provides extension points via interfaces to allow users to supply new formatters and selectors without having to modify the specification.
 ICU will eventually include support for new formatters, such as intervals, relative time, lists, measurement units, personal names, and more, as well as the ability for users to supply their own custom implementations.
 These will potentially support use cases like grammatical gender, inflection, markup regimes (such as those require for text-to-speech), and other complex message management needs.
 
 The MessageFormat Working Group, which develops the new data model, semantics, and syntax, is hosted on [GitHub](https://github.com/unicode-org/message-format-wg).
 The current specification for the syntax and data model can be found [here](https://github.com/unicode-org/message-format-wg/blob/main/spec/syntax.md).
 
-This technical preview implements enough functions for `MessageFormater` to be useful in many situations,
-but the final set of functions and the parameters accepted by those functions is not yet finalized.
+This technical preview implements functions according to the LDML 45 version of the specification.
 
-## Examples
+### ICU4J
 
-### Basic usage
+#### Examples
+
+##### Basic usage
 
 ```java
 import static org.junit.Assert.assertEquals;
@@ -81,7 +83,7 @@ public void testMf2() {
 }
 ```
 
-### Placeholder examples
+##### Placeholder examples
 
 | Code to set runtime value for placeholder          | Examples of placeholder in message pattern                                   |
 |----------------------------------------------------|------------------------------------------------------------------------------|
@@ -91,7 +93,7 @@ public void testMf2() {
 | No argument for fixed values known at build time   | `{(123456789.531) :number}`                                                  |
 
 
-### Plural selection message
+#### Plural selection message
 
 ```java
 @Test
@@ -123,12 +125,11 @@ public void testMf2Selection() {
 }
 ```
 
-### Built-in formatter functions
+#### Built-in formatter functions
 
-The tech preview implementation comes with formatters for numbers (`number`), 
-date / time (`datetime`), 
-plural selectors (`plural` and `selectordinal`),
-and general selector (`select`), 
+The tech preview implementation comes with a formatter and selector for numbers (`number`), 
+date / time formatters (`datetime`), 
+and a string selector (`string`),
 very similar to what MessageFormat offers.
 
 The [ICU test code](https://github.com/unicode-org/icu/tree/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/message2)
@@ -136,9 +137,10 @@ covers most features, and has examples of how to make custom placeholder formatt
 you can look for classes that implement `com.ibm.icu.message2.FormatterFactory`
 (they are named `Custom*Test.java`).
 
-## Functions currently implemented
+#### Functions currently implemented
 
-These are the functions implemented right now:
+These are the functions implemented in ICU 75.1. The functions will change
+in a future release to be consistent with the current MF2 specification.
 
 
 <table border="1">
@@ -191,19 +193,19 @@ TBD if this will be merged into <code>plural</code> (with some <code>kind</code>
 <tr><td><code>select</code></td><td>Literal match, same as MessageFormat's <code>select</code>.</td></tr>
 </table>
 
-## Quickstart guide
+#### Quickstart guide
 
 If you don't have ICU set up, here are instructions for doing that using Maven or Gradle:
 
-### Requirements
+##### Requirements
 
 - JDK (version 8 or newer)
 - Maven or Gradle
 - Your preferred IDE or text editor
 
-### Maven
+##### Maven
 
-#### Create a new project
+###### Create a new project
 
 ```
 $ mvn archetype:generate -DgroupId=org.unicode -DartifactId=mf2 -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false
@@ -211,7 +213,7 @@ $ mvn archetype:generate -DgroupId=org.unicode -DartifactId=mf2 -DarchetypeArtif
 $ cd mf2
 ```
 
-#### Add a dependency to ICU4J 72.1 (or newer)
+###### Add a dependency to ICU4J 75.1 (or newer)
 
 In the `pom.xml` find the `<dependencies>` element and add this:
 
@@ -219,24 +221,24 @@ In the `pom.xml` find the `<dependencies>` element and add this:
 <dependency>
     <groupId>com.ibm.icu</groupId>
     <artifactId>icu4j</artifactId>
-    <version>72.1</version>
+    <version>75.1</version>
 </dependency>
 ```
 
-#### Add a bit of code
+###### Add a bit of code
 
 Open the test file (`src/test/java/org/unicode/AppTest.java`)
 and copy / paste the include directives and the `testMf2()` method shown in the previous section.
 
-#### Test it
+###### Test it
 
 ```
 $ mvn test
 ```
 
-### Gradle
+##### Gradle
 
-#### Create a new project
+###### Create a new project
 
 ```
 $ mkdir mf2
@@ -246,25 +248,25 @@ $ cd mf2
 $ gradle init --dsl groovy --test-framework junit --type java-application --package org.unicode --project-name mf2
 ```
 
-#### Add a dependency to ICU4J 72.1 (or newer)
+###### Add a dependency to ICU4J 75.1 (or newer)
 
 In the `app/build.gradle` file, find the `dependencies {...}` section add this:
 
 ```
 implementation 'com.ibm.icu:icu4j:72.1'
 ```
-#### Add a bit of code
+###### Add a bit of code
 
 Open the test file (`src/test/java/org/unicode/AppTest.java`)
 and copy / paste the include directives and the `testMf2()` method shown in the previous section.
 
-#### Test it
+##### Test it
 
 ```
 $ gradle test
 ```
 
-### Experiment from here
+##### Experiment from here
 
 At this point you have a basic application using MessageFormat 2.
 
@@ -276,3 +278,8 @@ You can experiment with more messages using as inspiration:
 
 You should be able to use your preferred IDE (Eclipse, IntelliJ, Visual Studio Code, more), use a different build system, etc.
 
+### ICU4C
+
+Some helpful documentation for ICU4C in MF2 is being developed at [messageformat.dev](https://messageformat.dev/docs/integration/cpp/),
+as well an unofficial [MF2 syntax documentation](https://messageformat.dev/docs/quick-start/)
+and an interactive [playground](https://messageformat.dev/playground/) for testing messages.
