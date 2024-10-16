@@ -1310,7 +1310,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     UnicodeString dateStyleOption = opts.getStringFunctionOption(dateStyleName);
     UnicodeString timeStyleOption = opts.getStringFunctionOption(timeStyleName);
     bool hasDateStyleOption = dateStyleOption.length() > 0;
-    bool hasTimeStyleOption = dateStyleOption.length() > 0;
+    bool hasTimeStyleOption = timeStyleOption.length() > 0;
     bool noOptions = opts.optionsCount() == 0;
 
     using DateTimeType = DateTimeFactory::DateTimeType;
