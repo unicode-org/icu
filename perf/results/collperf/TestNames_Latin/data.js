@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728426597831,
+  "lastUpdate": 1729117920335,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -55671,6 +55671,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1312520.6876,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "1dcb4bcb2d78f8f7e8a3ce4889a36f7e965a7f7b",
+          "message": "ICU-22765 fix uloc_addLikelySubtags on \"und@x=private\"",
+          "timestamp": "2024-10-16T15:05:03-07:00",
+          "tree_id": "c9d298e0155605979eaa376ac0669148f253a4a3",
+          "url": "https://github.com/unicode-org/icu/commit/1dcb4bcb2d78f8f7e8a3ce4889a36f7e965a7f7b"
+        },
+        "date": 1729117739048,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 272.8848,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 2988545.2949,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1299305.726,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 2795287.0613,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1303727.6063,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
