@@ -387,7 +387,11 @@ namespace message2 {
              * @internal ICU 77 technology preview
              * @deprecated This API is for technology preview only.
              */
-            virtual UBool isSelectable() const { return false; }
+            virtual UBool isSelectable() const {
+                // In the future, this function could return a capability
+                // indicating whether this function can format, select, or both.
+                return false;
+            }
             /**
              * Returns true if this value represents a null operand, that is,
              * the absence of an argument. This method should not be overridden.
