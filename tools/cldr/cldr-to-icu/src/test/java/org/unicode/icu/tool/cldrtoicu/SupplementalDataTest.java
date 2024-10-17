@@ -22,7 +22,6 @@ import org.unicode.cldr.api.CldrValue;
 import org.unicode.cldr.tool.LikelySubtags;
 import org.unicode.cldr.util.LanguageTagCanonicalizer;
 import org.unicode.cldr.util.LocaleIDParser;
-import org.unicode.cldr.util.SupplementalDataInfo;
 import org.unicode.icu.tool.cldrtoicu.testing.FakeDataSupplier;
 
 import com.google.common.base.Joiner;
