@@ -125,7 +125,7 @@ namespace message2 {
             UnicodeString formatToString(UErrorCode&) const override;
             void selectKeys(const UnicodeString* keys,
                             int32_t keysLen,
-                            UnicodeString* prefs,
+                            int32_t* prefs,
                             int32_t& prefsLen,
                             UErrorCode& status) override;
             UBool isSelectable() const override { return true; }
@@ -229,7 +229,7 @@ namespace message2 {
             UnicodeString formatToString(UErrorCode&) const override;
             void selectKeys(const UnicodeString* keys,
                             int32_t keysLen,
-                            UnicodeString* prefs,
+                            int32_t* prefs,
                             int32_t& prefsLen,
                             UErrorCode& status) override;
             UBool isSelectable() const override { return true; }

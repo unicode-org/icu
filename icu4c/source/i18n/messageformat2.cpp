@@ -466,12 +466,12 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
     LocalArray<UnicodeString> adoptedKeys(keysArr);
 
     // Create an array to hold the output
-    UnicodeString* prefsArr = new UnicodeString[keysLen];
+    int32_t* prefsArr = new int32_t[keysLen];
     if (prefsArr == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    LocalArray<UnicodeString> adoptedPrefs(prefsArr);
+    LocalArray<int32_t> adoptedPrefs(prefsArr);
     int32_t prefsLen = 0;
 
     // Call the selector
@@ -496,7 +496,8 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
     // Copy the resulting keys (if there was no error)
     keysOut.removeAllElements();
     for (int32_t i = 0; i < prefsLen; i++) {
-        UnicodeString* k = message2::create<UnicodeString>(std::move(prefsArr[i]), status);
+        UnicodeString* k =
+            message2::create<UnicodeString>(std::move(keysArr[prefsArr[i]]), status);
         if (k == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
