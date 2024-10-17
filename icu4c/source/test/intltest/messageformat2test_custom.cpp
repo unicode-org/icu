@@ -277,16 +277,17 @@ static bool hasStringOption(const FunctionOptionsMap& opt,
     return getStringOption(opt, k) == v;
 }
 
-FunctionValue* PersonNameFunction::call(const FunctionContext& context,
-                                        FunctionValue& arg,
-                                        FunctionOptions&& opts,
-                                        UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
+LocalPointer<FunctionValue> PersonNameFunction::call(const FunctionContext& context,
+                                                     FunctionValue& arg,
+                                                     FunctionOptions&& opts,
+                                                     UErrorCode& errorCode) {
     (void) context;
 
-    PersonNameValue* v = new PersonNameValue(arg, std::move(opts), errorCode);
-    if (U_SUCCESS(errorCode) && v == nullptr) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    LocalPointer<FunctionValue> v(new PersonNameValue(arg, std::move(opts), errorCode));
+    if (!v.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return v;
@@ -394,16 +395,19 @@ PersonNameValue::~PersonNameValue() {}
     result += postfix;
 }
 
-FunctionValue* GrammarCasesFunction::call(const FunctionContext& context,
-                                          FunctionValue& arg,
-                                          FunctionOptions&& opts,
-                                          UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
+LocalPointer<FunctionValue>
+GrammarCasesFunction::call(const FunctionContext& context,
+                           FunctionValue& arg,
+                           FunctionOptions&& opts,
+                           UErrorCode& errorCode) {
     (void) context;
 
-    GrammarCasesValue* v = new GrammarCasesValue(arg, std::move(opts), errorCode);
-    if (U_SUCCESS(errorCode) && v == nullptr) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+
+    LocalPointer<FunctionValue> v(new GrammarCasesValue(arg, std::move(opts), errorCode));
+    if (!v.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return v;
@@ -520,14 +524,18 @@ GrammarCasesValue::~GrammarCasesValue() {}
   See ICU4J: CustomFormatterListTest.java
 */
 
-FunctionValue* ListFunction::call(const FunctionContext& context,
-                                  FunctionValue& arg,
-                                  FunctionOptions&& opts,
-                                  UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
+LocalPointer<FunctionValue>
+ListFunction::call(const FunctionContext& context,
+                   FunctionValue& arg,
+                   FunctionOptions&& opts,
+                   UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
 
-    ListValue* v = new ListValue(context.getLocale(), arg, std::move(opts), errorCode);
-    if (U_SUCCESS(errorCode) && v == nullptr) {
+    LocalPointer<FunctionValue>
+        v(new ListValue(context.getLocale(), arg, std::move(opts), errorCode));
+    if (!v.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return v;
@@ -691,20 +699,22 @@ static Arguments localToGlobal(const FunctionOptionsMap& opts, UErrorCode& statu
     return MessageArguments(result, status);
 }
 
-FunctionValue* ResourceManager::call(const FunctionContext&,
-                                     FunctionValue& arg,
-                                     FunctionOptions&& options,
-                                     UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
+LocalPointer<FunctionValue>
+ResourceManager::call(const FunctionContext&,
+                      FunctionValue& arg,
+                      FunctionOptions&& options,
+                      UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
 
-    LocalPointer<ResourceManagerValue>
+    LocalPointer<FunctionValue>
         result(new ResourceManagerValue(arg, std::move(options), errorCode));
 
-    if (U_SUCCESS(errorCode) && !result.isValid()) {
+    if (!result.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
     }
-    return result.orphan();
+    return result;
 }
 
 UnicodeString message2::ResourceManagerValue::formatToString(UErrorCode&) const {
@@ -855,14 +865,18 @@ void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
     TestUtils::runTestCase(*this, test, errorCode);
 }
 
-FunctionValue* NounFunction::call(const FunctionContext&,
-                                  FunctionValue& arg,
-                                  FunctionOptions&& opts,
-                                  UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
+LocalPointer<FunctionValue>
+NounFunction::call(const FunctionContext&,
+                   FunctionValue& arg,
+                   FunctionOptions&& opts,
+                   UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
 
-    NounValue* v = new NounValue(arg, std::move(opts), errorCode);
-    if (U_SUCCESS(errorCode) && v == nullptr) {
+    LocalPointer<FunctionValue>
+        v(new NounValue(arg, std::move(opts), errorCode));
+    if (!v.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return v;
@@ -911,14 +925,18 @@ NounValue::NounValue(FunctionValue& arg,
     }
 }
 
-FunctionValue* AdjectiveFunction::call(const FunctionContext&,
-                                       FunctionValue& arg,
-                                       FunctionOptions&& opts,
-                                       UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
+LocalPointer<FunctionValue>
+AdjectiveFunction::call(const FunctionContext&,
+                        FunctionValue& arg,
+                        FunctionOptions&& opts,
+                        UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
 
-    AdjectiveValue* v = new AdjectiveValue(arg, std::move(opts), errorCode);
-    if (U_SUCCESS(errorCode) && v == nullptr) {
+    LocalPointer<FunctionValue>
+        v(new AdjectiveValue(arg, std::move(opts), errorCode));
+    if (!v.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return v;

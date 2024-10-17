@@ -263,7 +263,6 @@ MFFunctionRegistry::~MFFunctionRegistry() {
 
 // --------- Number
 
-<<<<<<< HEAD
 bool inBounds(const UnicodeString& s, int32_t i) {
     return i < s.length();
 }
@@ -391,14 +390,9 @@ bool isDigitSizeOption(const UnicodeString& s) {
     }
 }
 
-/* static */ StandardFunctions::NumberFactory*
-StandardFunctions::NumberFactory::integer(UErrorCode& success) {
-    return NumberFactory::create(true, success);
-=======
 /* static */ StandardFunctions::Number*
 StandardFunctions::Number::integer(UErrorCode& success) {
     return create(true, success);
->>>>>>> f8905275cc6 (Remove FunctionFactory again)
 }
 
 /* static */ StandardFunctions::Number*
@@ -418,17 +412,20 @@ StandardFunctions::Number::create(bool isInteger, UErrorCode& success) {
     return result.orphan();
 }
 
-FunctionValue* StandardFunctions::Number::call(const FunctionContext& context,
+LocalPointer<FunctionValue> StandardFunctions::Number::call(const FunctionContext& context,
                                                FunctionValue& operand,
                                                FunctionOptions&& options,
                                                UErrorCode& errorCode) {
-    LocalPointer<NumberValue>
-        val(new NumberValue(*this, context, operand, std::move(options), errorCode));
-    if (val.isValid()) {
-        return val.orphan();
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
     }
-    errorCode = U_MEMORY_ALLOCATION_ERROR;
-    return nullptr;
+    LocalPointer<FunctionValue>
+        val(new NumberValue(*this, context, operand, std::move(options), errorCode));
+    if (!val.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return val;
+}
 
 /* static */ number::LocalizedNumberFormatter StandardFunctions::formatterForOptions(const Number& number,
                                                                                      const Locale& locale,
@@ -896,61 +893,9 @@ void StandardFunctions::NumberValue::selectKeys(const UnicodeString* keys,
 
 // --------- DateTime
 
-<<<<<<< HEAD
-/*
-// Date/time options only
-static UnicodeString defaultForOption(std::u16string_view optionName) {
-    if (optionName == options::DATE_STYLE
-        || optionName == options::TIME_STYLE
-        || optionName == options::STYLE) {
-        return UnicodeString(options::SHORT);
-    }
-    return {}; // Empty string is default
-}
-*/
-
-/* static */ StandardFunctions::DateTimeFactory*
-StandardFunctions::DateTimeFactory::date(UErrorCode& success) {
-    return DateTimeFactory::create(DateTimeType::kDate, success);
-}
-
-/* static */ StandardFunctions::DateTimeFactory*
-StandardFunctions::DateTimeFactory::time(UErrorCode& success) {
-    return DateTimeFactory::create(DateTimeType::kTime, success);
-}
-
-/* static */ StandardFunctions::DateTimeFactory*
-StandardFunctions::DateTimeFactory::dateTime(UErrorCode& success) {
-    return DateTimeFactory::create(DateTimeType::kDateTime, success);
-}
-
-/* static */ StandardFunctions::DateTimeFactory*
-StandardFunctions::DateTimeFactory::create(DateTimeFactory::DateTimeType type,
-                                           UErrorCode& success) {
-    NULL_ON_ERROR(success);
-
-    LocalPointer<DateTimeFactory> result(new DateTimeFactory(type));
-    if (!result.isValid()) {
-        success = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    return result.orphan();
-}
-
-Function*
-StandardFunctions::DateTimeFactory::createFunction(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    DateTime* result = new DateTime(type);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-=======
 /* static */ StandardFunctions::DateTime*
 StandardFunctions::DateTime::date(UErrorCode& success) {
     return DateTime::create(DateTimeType::kDate, success);
->>>>>>> f8905275cc6 (Remove FunctionFactory again)
 }
 
 /* static */ StandardFunctions::DateTime*
@@ -976,15 +921,17 @@ StandardFunctions::DateTime::create(DateTime::DateTimeType type,
     return result.orphan();
 }
 
-FunctionValue*
+LocalPointer<FunctionValue>
 StandardFunctions::DateTime::call(const FunctionContext& context,
                                   FunctionValue& val,
                                   FunctionOptions&& opts,
                                   UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    auto result = new DateTimeValue(type, context, val, std::move(opts), errorCode);
-    if (result == nullptr) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    LocalPointer<FunctionValue>
+        result(new DateTimeValue(type, context, val, std::move(opts), errorCode));
+    if (!result.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
@@ -1557,12 +1504,20 @@ extern UnicodeString formattableToString(const Locale&,
                                          const Formattable&,
                                          UErrorCode&);
 
-FunctionValue*
+LocalPointer<FunctionValue>
 StandardFunctions::String::call(const FunctionContext& context,
                                 FunctionValue& val,
                                 FunctionOptions&& opts,
                                 UErrorCode& errorCode) {
-    return new StringValue(context, val, std::move(opts), errorCode);
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    LocalPointer<FunctionValue>
+        result(new StringValue(context, val, std::move(opts), errorCode));
+    if (!result.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
 }
 
 UnicodeString StandardFunctions::StringValue::formatToString(UErrorCode& errorCode) const {

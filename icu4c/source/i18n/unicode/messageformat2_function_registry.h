@@ -291,20 +291,22 @@ namespace message2 {
         public:
             /**
              * Calls this Function on a FunctionValue operand and its FunctionOptions options,
-             * returning a new pointer to a FunctionValue (which is adopted by the caller).
+             * returning a LocalPointer to a FunctionValue.
              *
              * @param context The context of this function, based on its contextual options
              * @param operand The unnamed argument to the function.
              * @param options Resolved options for this function.
              * @param status Input/output error code
+             * @return The function value that is the result of calling this function on
+             *         the arguments.
              *
              * @internal ICU 77 technology preview
              * @deprecated This API is for technology preview only.
              */
-            virtual FunctionValue* call(const FunctionContext& context,
-                                        FunctionValue& operand,
-                                        FunctionOptions&& options,
-                                        UErrorCode& status) = 0;
+            virtual LocalPointer<FunctionValue> call(const FunctionContext& context,
+                                                     FunctionValue& operand,
+                                                     FunctionOptions&& options,
+                                                     UErrorCode& status) = 0;
             /**
              * Destructor.
              *
