@@ -282,17 +282,19 @@ StandardFunctions::Number::create(bool isInteger, UErrorCode& success) {
     return result.orphan();
 }
 
-FunctionValue* StandardFunctions::Number::call(const FunctionContext& context,
+LocalPointer<FunctionValue> StandardFunctions::Number::call(const FunctionContext& context,
                                                FunctionValue& operand,
                                                FunctionOptions&& options,
                                                UErrorCode& errorCode) {
-    LocalPointer<NumberValue>
-        val(new NumberValue(*this, context, operand, std::move(options), errorCode));
-    if (val.isValid()) {
-        return val.orphan();
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
     }
-    errorCode = U_MEMORY_ALLOCATION_ERROR;
-    return nullptr;
+    LocalPointer<FunctionValue>
+        val(new NumberValue(*this, context, operand, std::move(options), errorCode));
+    if (!val.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return val;
 }
 
 /* static */ number::LocalizedNumberFormatter StandardFunctions::formatterForOptions(const Number& number,
@@ -783,15 +785,17 @@ StandardFunctions::DateTime::create(DateTime::DateTimeType type,
     return result.orphan();
 }
 
-FunctionValue*
+LocalPointer<FunctionValue>
 StandardFunctions::DateTime::call(const FunctionContext& context,
                                   FunctionValue& val,
                                   FunctionOptions&& opts,
                                   UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    auto result = new DateTimeValue(type, context, val, std::move(opts), errorCode);
-    if (result == nullptr) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    LocalPointer<FunctionValue>
+        result(new DateTimeValue(type, context, val, std::move(opts), errorCode));
+    if (!result.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
@@ -1103,12 +1107,20 @@ extern UnicodeString formattableToString(const Locale&,
                                          const Formattable&,
                                          UErrorCode&);
 
-FunctionValue*
+LocalPointer<FunctionValue>
 StandardFunctions::String::call(const FunctionContext& context,
                                 FunctionValue& val,
                                 FunctionOptions&& opts,
                                 UErrorCode& errorCode) {
-    return new StringValue(context, val, std::move(opts), errorCode);
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    LocalPointer<FunctionValue>
+        result(new StringValue(context, val, std::move(opts), errorCode));
+    if (!result.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
 }
 
 UnicodeString StandardFunctions::StringValue::formatToString(UErrorCode& errorCode) const {
