@@ -408,9 +408,11 @@ namespace message2 {
              *
              * @param keys An array of strings to compare to the input.
              * @param keysLen The length of `keys`.
-             * @param prefs An array of strings with length `keysLen`. The contents of
+             * @param prefs An array of indices into `keys`.
+             *        The initial contents of
              *        the array is undefined. `selectKey()` should set the contents
-             *        of `prefs` to a subset of `keys`, with the best match placed at the lowest index.
+             *        of `prefs` to a subset of the indices in `keys`,
+             *        with the best match placed at the lowest index in `prefs`.
              * @param prefsLen A reference that `selectKey()` should set to the length of `prefs`,
              *        which must be less than or equal to `keysLen`.
              * @param status    Input/output error code.
@@ -420,7 +422,7 @@ namespace message2 {
              */
             virtual void selectKeys(const UnicodeString* keys,
                                     int32_t keysLen,
-                                    UnicodeString* prefs,
+                                    int32_t* prefs,
                                     int32_t& prefsLen,
                                     UErrorCode& status) {
                 (void) keys;

@@ -808,7 +808,7 @@ StandardFunctions::Number::pluralType(const FunctionOptions& opts) {
 
 void StandardFunctions::NumberValue::selectKeys(const UnicodeString* keys,
                                                 int32_t keysLen,
-                                                UnicodeString* prefs,
+                                                int32_t* prefs,
                                                 int32_t& prefsLen,
                                                 UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
@@ -858,7 +858,7 @@ void StandardFunctions::NumberValue::selectKeys(const UnicodeString* keys,
             // 5i(a). If key and exact consist of the same sequence of Unicode code points, then
             if (exact == keys[i]) {
                 // 5i(a)(a) Append key as the last element of the list resultExact.
-		prefs[prefsLen] = keys[i];
+		prefs[prefsLen] = i;
                 prefsLen++;
                 break;
             }
@@ -879,7 +879,7 @@ void StandardFunctions::NumberValue::selectKeys(const UnicodeString* keys,
         // 5ii(a). If key and keyword consist of the same sequence of Unicode code points, then
         if (keyword == keys[i]) {
             // 5ii(a)(a) Append key as the last element of the list resultKeyword.
-            prefs[prefsLen] = keys[i];
+            prefs[prefsLen] = i;
             prefsLen++;
         }
     }
@@ -1539,7 +1539,7 @@ StandardFunctions::StringValue::StringValue(const FunctionContext& context,
 
 void StandardFunctions::StringValue::selectKeys(const UnicodeString* keys,
                                                 int32_t keysLen,
-                                                UnicodeString* prefs,
+                                                int32_t* prefs,
                                                 int32_t& prefsLen,
                                                 UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
@@ -1556,7 +1556,7 @@ void StandardFunctions::StringValue::selectKeys(const UnicodeString* keys,
 
     for (int32_t i = 0; i < keysLen; i++) {
         if (keys[i] == normalized) {
-	    prefs[0] = keys[i];
+	    prefs[0] = i;
             prefsLen = 1;
             break;
         }
