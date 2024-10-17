@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729117501514,
+  "lastUpdate": 1729184258146,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28467,6 +28467,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.032148642601514794,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "6153f2ef853e5f150f8c2c62179edb84a7f09156",
+          "message": "ICU-22774 Fix URL typo in error message",
+          "timestamp": "2024-10-17T09:38:26-07:00",
+          "tree_id": "04988c264f1549d9a4601a96c68f7e4b6d3aa30e",
+          "url": "https://github.com/unicode-org/icu/commit/6153f2ef853e5f150f8c2c62179edb84a7f09156"
+        },
+        "date": 1729184072647,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.031799052013720415,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
