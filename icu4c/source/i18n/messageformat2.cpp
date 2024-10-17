@@ -227,9 +227,10 @@ FunctionContext MessageFormatter::makeFunctionContext(const FunctionOptions& opt
     } else {
         UErrorCode localStatus = U_ZERO_ERROR;
         int32_t len = localeStr.length();
-        LocalArray<char> temp(new char[len + 1]);
-        localeStr.extract(0, len, temp.getAlias(), len);
-        Locale l = Locale::forLanguageTag(StringPiece(temp.getAlias(), len), localStatus);
+        char* buf = static_cast<char*>(uprv_malloc(len + 1));
+        localeStr.extract(0, len, buf, len);
+        Locale l = Locale::forLanguageTag(StringPiece(buf, len), localStatus);
+        uprv_free(buf);
         if (U_SUCCESS(localStatus)) {
             localeToUse = l;
         } else {
@@ -468,18 +469,18 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
     LocalArray<UnicodeString> adoptedKeys(keysArr);
 
     // Create an array to hold the output
-    int32_t* prefsArr = new int32_t[keysLen];
+    int32_t* prefsArr = static_cast<int32_t*>(uprv_malloc(keysLen * sizeof(int32_t)));
     if (prefsArr == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    LocalArray<int32_t> adoptedPrefs(prefsArr);
+
     int32_t prefsLen = 0;
 
     // Call the selector
     // Already checked for fallback, so it's safe to call takeValue()
     LocalPointer<FunctionValue> rvVal(rv.takeValue(status));
-    rvVal->selectKeys(adoptedKeys.getAlias(), keysLen, adoptedPrefs.getAlias(), prefsLen,
+    rvVal->selectKeys(adoptedKeys.getAlias(), keysLen, prefsArr, prefsLen,
                       status);
 
     // Update errors
@@ -507,6 +508,8 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
         keysOut.adoptElement(k, status);
         CHECK_ERROR(status);
     }
+
+    uprv_free(prefsArr);
 }
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-preferences
