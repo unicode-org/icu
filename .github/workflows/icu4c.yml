@@ -807,7 +807,8 @@ jobs:
       - name: Install hjson dependency
         run: |
           sudo apt-get install python3-pip
-          pip3 install hjson
+          sudo apt install pipx
+          pipx install hjson
       - name: Create data filter file to remove collation rule strings
         run: |
           cat > icu4c/coll-norules.hjson <<EOL
