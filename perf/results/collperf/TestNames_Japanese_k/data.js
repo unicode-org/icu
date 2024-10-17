@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729187536097,
+  "lastUpdate": 1729195429951,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -55725,6 +55725,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5904339.8044,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "ee8a94e0f1de498eb196434887dc05d8c23af211",
+          "message": "ICU-22921 Rename README.md in .github\n\nOn the GitHub site the `.github/README.md` file is rendered instead of the\n`README.md` file in the root.",
+          "timestamp": "2024-10-17T12:44:32-07:00",
+          "tree_id": "7c50479f026d8175d28f65092df22adf8047320f",
+          "url": "https://github.com/unicode-org/icu/commit/ee8a94e0f1de498eb196434887dc05d8c23af211"
+        },
+        "date": 1729195247299,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 231.4752,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20802911.8542,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5367910.9959,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19640410.6173,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5894950.4368,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
