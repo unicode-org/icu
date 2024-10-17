@@ -226,8 +226,10 @@ FunctionContext MessageFormatter::makeFunctionContext(const FunctionOptions& opt
         localeToUse = locale;
     } else {
         UErrorCode localStatus = U_ZERO_ERROR;
-        std::string u8;
-        Locale l = Locale::forLanguageTag(localeStr.toUTF8String(u8), localStatus);
+        int32_t len = localeStr.length();
+        LocalArray<char> temp(new char[len + 1]);
+        localeStr.extract(0, len, temp.getAlias(), len);
+        Locale l = Locale::forLanguageTag(StringPiece(temp.getAlias(), len), localStatus);
         if (U_SUCCESS(localStatus)) {
             localeToUse = l;
         } else {
