@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729195306487,
+  "lastUpdate": 1729206204792,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34701,6 +34701,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 50.6523,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "8772cc49f5d2e53ef0d3970c47e2621752f3dcdc",
+          "message": "ICU-22724 Clean up import statements",
+          "timestamp": "2024-10-17T15:46:38-07:00",
+          "tree_id": "d300e6ec5d7d2fabb7793fb7c12c67b50e4a2ec0",
+          "url": "https://github.com/unicode-org/icu/commit/8772cc49f5d2e53ef0d3970c47e2621752f3dcdc"
+        },
+        "date": 1729206019515,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.2424,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 50.72,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
