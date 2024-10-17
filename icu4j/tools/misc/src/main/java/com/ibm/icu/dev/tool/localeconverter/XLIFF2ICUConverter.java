@@ -20,6 +20,7 @@ import java.util.Date;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -407,7 +408,22 @@ public final class XLIFF2ICUConverter {
 
         String urls = filenameToURL(xmlfileName);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
-        dfactory.setNamespaceAware(true);
+
+        try {
+            // Set secure processing features to avoid XXE attacks
+            dfactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            dfactory.setNamespaceAware(true);
+
+            // Disable access to external DTDs and entities to mitigate XXE attacks
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (ParserConfigurationException e) {
+            System.err.println("ERROR: Parser configuration error: " + e.getMessage());
+            System.exit(-1);
+        }
+
         Document doc = null;
 
         if (xliff10) {

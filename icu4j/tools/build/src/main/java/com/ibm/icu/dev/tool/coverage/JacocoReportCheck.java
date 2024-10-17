@@ -23,6 +23,7 @@ import java.util.TreeSet;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.XMLConstants;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -142,7 +143,16 @@ public class JacocoReportCheck {
     private static Map<String, ReportEntry> parseReport(File reportXmlFile) {
         try {
             Map<String, ReportEntry> entries = new TreeMap<String, ReportEntry>();
-            DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            // Securely configure DocumentBuilderFactory
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            docFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            docFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            docFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            docFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            docFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            docFactory.setNamespaceAware(true);
+
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             docBuilder.setEntityResolver(new EntityResolver() {
                 // Ignores JaCoCo report DTD
                 public InputSource resolveEntity(String publicId, String systemId) {
