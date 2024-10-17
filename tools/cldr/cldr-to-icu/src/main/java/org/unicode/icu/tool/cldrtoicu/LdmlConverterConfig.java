@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.base.Preconditions;
 import org.unicode.cldr.api.CldrDraftStatus;
 import org.unicode.icu.tool.cldrtoicu.LdmlConverter.OutputType;
 
