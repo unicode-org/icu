@@ -15,7 +15,7 @@ on:
 
 jobs:
   enforce-all-checks:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     permissions:
       checks: read
     steps:

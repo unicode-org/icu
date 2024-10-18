@@ -39,7 +39,7 @@ env:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     environment: release-env
 
     permissions:

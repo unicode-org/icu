@@ -25,7 +25,7 @@ jobs:
   #=================================================================
   # locale env tests.
   env-test-locale:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     strategy:
       # "fail-fast: false" let other jobs keep running even if the test break in some locales.
       fail-fast: false
@@ -82,7 +82,7 @@ jobs:
   #=================================================================
   # tz env tests.
   env-test-tz:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     strategy:
       # "fail-fast: false" let other jobs keep running even if the test break in some timezones.
       fail-fast: false
