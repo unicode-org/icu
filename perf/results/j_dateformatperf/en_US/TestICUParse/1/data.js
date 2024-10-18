@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729205616090,
+  "lastUpdate": 1729290935197,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28407,6 +28407,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 369.0270796093291,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "99ca2ad931600f317501a41bca4c8b9afb946de9",
+          "message": "ICU-22946 Pin all -latest runners per ICU-TC 2024-10-17 🗡️",
+          "timestamp": "2024-10-19T00:18:10+02:00",
+          "tree_id": "7340c9636f2caee9bc30ee9f3be65919acaef650",
+          "url": "https://github.com/unicode-org/icu/commit/99ca2ad931600f317501a41bca4c8b9afb946de9"
+        },
+        "date": 1729290752442,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 365.86839201679686,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
