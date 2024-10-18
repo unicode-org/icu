@@ -205,17 +205,13 @@ void Checker::checkVariants(UErrorCode& status) {
     }
 }
 
-void Checker::requireAnnotated(const TypeEnvironment& t, const Expression& selectorExpr, UErrorCode& status) {
+void Checker::requireAnnotated(const TypeEnvironment& t,
+                               const VariableName& selectorVar,
+                               UErrorCode& status) {
     CHECK_ERROR(status);
 
-    if (selectorExpr.isFunctionCall()) {
+    if (t.get(selectorVar) == TypeEnvironment::Type::Annotated) {
         return; // No error
-    }
-    const Operand& rand = selectorExpr.getOperand();
-    if (rand.isVariable()) {
-        if (t.get(rand.asVariable()) == TypeEnvironment::Type::Annotated) {
-            return; // No error
-        }
     }
     // If this code is reached, an error was detected
     errors.addError(StaticErrorType::MissingSelectorAnnotation, status);
@@ -226,7 +222,7 @@ void Checker::checkSelectors(const TypeEnvironment& t, UErrorCode& status) {
 
     // Check each selector; if it's not annotated, emit a
     // "missing selector annotation" error
-    const Expression* selectors = dataModel.getSelectorsInternal();
+    const VariableName* selectors = dataModel.getSelectorsInternal();
     for (int32_t i = 0; i < dataModel.numSelectors(); i++) {
         requireAnnotated(t, selectors[i], status);
     }
