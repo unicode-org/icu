@@ -30,13 +30,13 @@ In addition, ICU4C installs several scripts and makefile fragments that help
 build other code using ICU.
 
 For C++, note that there are [Recommended Build
-Options](icu4c/build#recommended-build-options)
+Options](../icu4c/build#recommended-build-options)
 (both for normal use and for ICU as system-level libraries) which are not
 default simply for compatibility with older ICU-using code.
 
 Starting with ICU 49, the ICU4C Readme has a short section about
 [User-Configurable
-Settings](icu4c/build#user-configurable-settings).
+Settings](../icu4c/build#user-configurable-settings).
 
 ## C++ Makefiles
 

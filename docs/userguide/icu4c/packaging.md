@@ -145,12 +145,12 @@ There are many ways in which ICU data may be reduced. If only certain locales or
 converters will be used, others may be removed. Additionally, data may be
 packaged as individual files or interchangeable archives (.dat files), allowing
 data to be installed and removed without rebuilding ICU. For details, see the
-[ICU Data](../icudata.md) chapter.
+[ICU Data](../icu_data/index.md) chapter.
 
 ## ICU Versions
 
-(This section assumes the reader is familiar with [ICU version numbers](../design#version-numbers-in-icu) as
-covered in the [Design](../design.md) chapter, and filename conventions for
+(This section assumes the reader is familiar with [ICU version numbers](../icu/design#version-numbers-in-icu) as
+covered in the [Design](../icu/design.md) chapter, and filename conventions for
 libraries as described above.)
 
 ### POSIX Library Names
@@ -237,5 +237,5 @@ DLLs will be copied with names such as 'icuuc55.dll'.
 The services which are now known as ICU were written to provide operating
 system-level and application environment-level services. Several operating
 systems include ICU as a standard or optional package.
-See [ICU Binary Compatibility](../design#icu-binary-compatibility) for
+See [ICU Binary Compatibility](../dev/codingguidelines#binary-data-formats) for
 more details.
