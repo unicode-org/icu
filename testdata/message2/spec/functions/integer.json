@@ -27,6 +27,10 @@
         }
       ],
       "exp": "one"
+    },
+    {
+      "src": ".local $x = {1.25 :integer} .local $y = {$x :number} {{{$x}}}",
+      "exp": "1"
     }
   ]
 }

@@ -32,6 +32,62 @@ namespace message2 {
 
     using namespace data_model;
 
+    // InternalValue represents an intermediate value in the message
+    // formatter.
+    // It can be either a FunctionValue or a "fallback value". A fallback value
+    // is a string that serves as a replacement for expressions whose evaluation
+    // caused an error. Fallback values are not passed to functions.
+    class InternalValue : public UObject {
+    public:
+        bool isFallback() const { return isFallbackValue; }
+        bool isNullOperand() const { return isFallback() ? false : val->isNullOperand(); }
+        bool isSelectable() const;
+        InternalValue() : isFallbackValue(true), fallbackString("") {}
+        static InternalValue null(UErrorCode& status) { return InternalValue(status); }
+        static InternalValue fallback(const UnicodeString& s) { return InternalValue(s); }
+        explicit InternalValue(FunctionValue* v, const UnicodeString& fb);
+        // Error code is set if this is a fallback
+        FunctionValue* takeValue(UErrorCode& status);
+        const FunctionValue* getValue(UErrorCode& status) const;
+        UnicodeString asFallback() const { return fallbackString; }
+        virtual ~InternalValue();
+        InternalValue& operator=(InternalValue&&);
+        InternalValue(InternalValue&&);
+    private:
+        bool isFallbackValue = false;
+        UnicodeString fallbackString;
+        LocalPointer<FunctionValue> val;
+        // Null operand constructor
+        explicit InternalValue(UErrorCode& status);
+        // Fallback constructor
+        explicit InternalValue(const UnicodeString& fb)
+            : isFallbackValue(true), fallbackString(fb) {}
+    }; // class InternalValue
+
+
+    // A BaseValue wraps a literal value or argument value so it can be used
+    // in a context that expects a FunctionValue.
+    class BaseValue : public FunctionValue {
+        public:
+            static BaseValue* create(const Locale&, const Formattable&, UErrorCode&);
+            // Apply default formatters to the argument value
+            UnicodeString formatToString(UErrorCode&) const override;
+            UBool isSelectable() const override { return true; }
+            BaseValue() {}
+            BaseValue(BaseValue&&);
+            BaseValue& operator=(BaseValue&&) noexcept;
+       private:
+            Locale locale;
+
+            BaseValue(const Locale&, const Formattable&);
+    }; // class BaseValue
+
+    // A NullValue represents the absence of an argument.
+    class NullValue : public FunctionValue {
+        public:
+            virtual UBool isNullOperand() const { return true; }
+    }; // class NullValue
+
     // PrioritizedVariant
 
     // For how this class is used, see the references to (integer, variant) tuples
@@ -62,38 +118,6 @@ namespace message2 {
         }
         return 1;
     }
-
-    // Encapsulates a value to be scrutinized by a `match` with its resolved
-    // options and the name of the selector
-    class ResolvedSelector : public UObject {
-    public:
-        ResolvedSelector() {}
-        ResolvedSelector(const FunctionName& fn,
-                         Selector* selector,
-                         FunctionOptions&& options,
-                         FormattedPlaceholder&& value);
-        // Used either for errors, or when selector isn't yet known
-        explicit ResolvedSelector(FormattedPlaceholder&& value);
-        bool hasSelector() const { return selector.isValid(); }
-        const FormattedPlaceholder& argument() const { return value; }
-        FormattedPlaceholder&& takeArgument() { return std::move(value); }
-        const Selector* getSelector() {
-            U_ASSERT(selector.isValid());
-            return selector.getAlias();
-        }
-        FunctionOptions&& takeOptions() {
-            return std::move(options);
-        }
-        const FunctionName& getSelectorName() const { return selectorName; }
-        virtual ~ResolvedSelector();
-        ResolvedSelector& operator=(ResolvedSelector&&) noexcept;
-        ResolvedSelector(ResolvedSelector&&);
-    private:
-        FunctionName selectorName; // For error reporting
-        LocalPointer<Selector> selector;
-        FunctionOptions options;
-        FormattedPlaceholder value;
-    }; // class ResolvedSelector
 
     // Closures and environments
     // -------------------------
