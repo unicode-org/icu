@@ -33,14 +33,14 @@ jobs:
 
   # Copyright scan
   copyright-scan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@v4
       - run: perl tools/scripts/cpysearch/cpyscan.pl
 
   # Check source files for valid UTF-8 and for absence of BOM.
   valid-UTF-8-and-no-BOM-check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@v4
       - run: tools/scripts/icu-file-utf8-check.py
@@ -50,7 +50,7 @@ jobs:
   # This job is created according to the cache strategy of reuse from a single job:
   # https://github.com/actions/cache/blob/main/caching-strategies.md#make-cache-read-only--reuse-cache-from-centralized-job
   icu4j-mvn-init-cache:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@v4
@@ -77,7 +77,7 @@ jobs:
   # Verify icu4c release tools buildability.
   icu4c-release-tools:
     needs: icu4j-mvn-init-cache
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@v4
       - name: Restore read-only cache of local Maven repository

@@ -37,7 +37,7 @@ jobs:
   # Keep in sync with deploy workflow in `jekyll-gh-pages.yml`
   test-docs-build:
     name: Test build of User Guide docs
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout
         uses: actions/checkout@v4

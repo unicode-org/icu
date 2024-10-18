@@ -42,7 +42,7 @@ jobs:
 
   # ICU4C docs build using doxygen..
   icu4c-docs-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -65,7 +65,7 @@ jobs:
   #
   # Invokes test/hdrtst to check public headers compliance.
   gcc-debug-build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -85,7 +85,7 @@ jobs:
 
   #gcc 11 with c++ 20
   gcc11-cpp20:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Install GCC-11
@@ -110,7 +110,7 @@ jobs:
   # (FORCE guards make this tool pass but won't compile to working code.
   # See the testtagsguards.sh script for details.)
   clang-release-build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -158,7 +158,7 @@ jobs:
         build_option:
          [ --enable-static, --enable-static --disable-shared ]
          # --disable-shared has a build problem.
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -174,7 +174,7 @@ jobs:
 
   # Out of source build with gcc 10, c++14, and extra warnings; executes icuinfo.
   gcc-10-stdlib17:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -195,7 +195,7 @@ jobs:
 
   # Clang Linux with address sanitizer.
   clang-asan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -209,7 +209,7 @@ jobs:
           LDFLAGS: -fsanitize=address
   # Clang Linux with leak sanitizer.
   clang-lsan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -224,7 +224,7 @@ jobs:
           ASAN_OPTIONS: detect_leaks=1
   # Clang Linux with undefined-behavior sanitizer.
   clang-ubsan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -239,7 +239,7 @@ jobs:
           LDFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
   # Control Flow Integrity.
   clang-cfi:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -258,7 +258,7 @@ jobs:
 
   # Clang Linux with thread sanitizer.
   clang-tsan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -280,7 +280,7 @@ jobs:
   # this check became flaky. The build apparently was not done copying one or another .ucm file before
   # calling makeconv for it, although the Makefile has appropriate dependencies.
   clang-datafilter:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Extract ICU version
@@ -302,7 +302,7 @@ jobs:
 
   # Clang Linux with CPP 17
   clang-cpp17:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Build ICU4C with CPP 17
@@ -313,7 +313,7 @@ jobs:
 
   # Clang Linux with LANG: en_US@calendar=gregorian;hours=h12
   clang-lang-with-extn-tags:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Linux Clang - LANG has extension tags
@@ -324,7 +324,7 @@ jobs:
 
   # Clang Linux 18 with CPP20 and treat warnings as errors
   clang18-cpp20-warning-as-errors:
-      runs-on: ubuntu-latest
+      runs-on: ubuntu-22.04  # Updated in BRS
       strategy:
         fail-fast: false
         matrix:
@@ -349,7 +349,7 @@ jobs:
 
   # MacOS with clang
   macos-clang:
-    runs-on: macos-latest
+    runs-on: macos-14  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: ICU4C with clang on MacOS
@@ -362,7 +362,7 @@ jobs:
 
   # Windows MSVC builds
   windows-msvc:
-    runs-on: windows-2022
+    runs-on: windows-2022  # Updated in BRS
     strategy:
       fail-fast: false
       matrix:
@@ -394,7 +394,7 @@ jobs:
 
   # Windows data filter build
   windows-msvc-datafilter:
-    runs-on: windows-latest
+    runs-on: windows-2022  # Updated in BRS
     timeout-minutes: 30
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -410,7 +410,7 @@ jobs:
 
   # Windows MSVC distribution release
   windows-msvc-dist-release:
-    runs-on: windows-latest
+    runs-on: windows-2022  # Updated in BRS
     permissions:
       contents: write # So that we can upload to release
     timeout-minutes: 30
@@ -482,7 +482,7 @@ jobs:
 
   # Window MSYS2 tests
   windows-msys2-gcc-x86_64:
-    runs-on: windows-latest
+    runs-on: windows-2022  # Updated in BRS
     timeout-minutes: 45
     defaults:
       run:
@@ -519,7 +519,7 @@ jobs:
 
   # Run ICU4C tests with stubdata.
   run-with-stubdata:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -562,7 +562,7 @@ jobs:
 
   # Test U_CHARSET_IS_UTF8
   u-charset-is-utf8-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: |
@@ -572,7 +572,7 @@ jobs:
 
   # Test U_OVERRIDE_CXX_ALLOCATION-is-0-test
   u-override-cxx-allocation-is-0-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: |
@@ -583,7 +583,7 @@ jobs:
 
   # Test LSTM
   lstm-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: |
@@ -594,7 +594,7 @@ jobs:
 
   # Test adaboost
   adaboost-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: |
@@ -605,7 +605,7 @@ jobs:
 
   # Build and run testmap
   testmap:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: |
@@ -618,28 +618,28 @@ jobs:
 
   # Copyright scan
   copyright-scan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: perl tools/scripts/cpysearch/cpyscan.pl
 
   # Check compilation of internal headers.
   internal-header-compilation:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: cd icu4c/source; test/hdrtst/testinternalheaders.sh
 
   # Check source files for valid UTF-8 and for absence of BOM.
   valid-UTF-8-and-no-BOM-check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: tools/scripts/icu-file-utf8-check.py
 
   # Run unit tests with UCONFIG_NO_XXX variations.
   uconfig-unit-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     strategy:
       # "fail-fast: false" lets other jobs keep running even if the test breaks in some other uconfig.
       fail-fast: false
@@ -686,7 +686,7 @@ jobs:
 
   # Run header tests with UCONFIG_NO_XXX variations.
   uconfig-header-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     strategy:
       # "fail-fast: false" lets other jobs keep running even if the test breaks in some other uconfig.
       fail-fast: false
@@ -737,7 +737,7 @@ jobs:
 
   # Build Unicode update tools
   unicode-update-tools:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
     - uses: bazelbuild/setup-bazelisk@b39c379c82683a5f25d34f0d062761f62693e0b2 # v3.0.0
@@ -776,7 +776,7 @@ jobs:
 
 # Build and run ICU4C samples
   icu4c-test-samples:
-      runs-on: ubuntu-latest
+      runs-on: ubuntu-22.04  # Updated in BRS
       steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -801,7 +801,7 @@ jobs:
 
   # https://unicode-org.github.io/icu/processes/release/tasks/integration.html#verify-that-icu4c-tests-pass-without-collation-rule-strings
   icu4c-without-collation-rule-strings:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Install hjson dependency
@@ -841,7 +841,7 @@ jobs:
 
   # https://unicode-org.github.io/icu/processes/release/tasks/healthy-code.html#test-uconfig_no_conversion
   icu4c-uconfig-no-conversion:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Set UCONFIG_NO_CONVERSION and configure ICU4C
@@ -861,7 +861,7 @@ jobs:
 
   # Workflow for ICU Export Data for ICU4X
   icu4c-icuexportdata:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     permissions:
       contents: write # So that we can upload to release
     timeout-minutes: 30

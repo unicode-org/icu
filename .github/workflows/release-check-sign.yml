@@ -13,7 +13,7 @@ env:
 jobs:
   sign_and_checksums:
     if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     environment: release-env
 
     permissions:

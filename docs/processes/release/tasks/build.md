@@ -59,6 +59,10 @@ Also, please look out for this type of message: "\***\*\* WARNING Bad namespace
 not defined inside the "icu" namespace. Consider adding **U_NAMESPACE_BEGIN**
 and **U_NAMESPACE_END** around the class and member definitions.
 
+## Update the runners
+
+In all workflow yaml files, update macos-n, ubuntu-p.q, windows-yyyy to the version currently designated -latest on https://github.com/actions/runner-images?tab=readme-ov-file#available-images.
+
 ## Update the pool bundles
 
 *Obsolete for ICU 64+*: The pool bundles are no longer checked in. Instead,

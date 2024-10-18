@@ -34,7 +34,7 @@ permissions:
 
 jobs:
   clang-valgrind-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Install valgrind
         run: |
@@ -72,7 +72,7 @@ jobs:
               --show-reachable=yes ./icuinfo;
 
   clang-valgrind-intltest:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Updated in BRS
     strategy:
       # "fail-fast: false" lets other jobs keep running even if the test breaks in some other test.
       fail-fast: false
