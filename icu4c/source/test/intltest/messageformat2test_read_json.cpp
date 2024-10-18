@@ -2,6 +2,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_NORMALIZATION
+
 #if !UCONFIG_NO_FORMATTING
 
 #if !UCONFIG_NO_MF2
@@ -309,6 +311,9 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     runTestsFromJsonFile(*this, "spec/functions/time.json", errorCode);
 
     // Other tests (non-spec)
+    // TODO: Delete this file after https://github.com/unicode-org/message-format-wg/pull/904
+    // lands and the tests here are updated from the spec repo
+    runTestsFromJsonFile(*this, "normalization.json", errorCode);
     runTestsFromJsonFile(*this, "more-functions.json", errorCode);
     runTestsFromJsonFile(*this, "valid-tests.json", errorCode);
     runTestsFromJsonFile(*this, "resolution-errors.json", errorCode);
@@ -358,3 +363,5 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
 #endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
