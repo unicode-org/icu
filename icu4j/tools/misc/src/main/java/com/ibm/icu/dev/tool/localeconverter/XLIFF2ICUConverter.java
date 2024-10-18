@@ -20,6 +20,7 @@ import java.util.Date;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -405,133 +406,148 @@ public final class XLIFF2ICUConverter {
 
     private void createRB(String xmlfileName) {
 
-        String urls = filenameToURL(xmlfileName);
-        DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
-        dfactory.setNamespaceAware(true);
-        Document doc = null;
-
-        if (xliff10) {
-            dfactory.setValidating(true);
-            resources = OLD_RESOURCES;
-        } else {
-            try {
-                SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                Schema schema = schemaFactory.newSchema();
-
-                dfactory.setSchema(schema);
-            } catch (SAXException e) {
-                System.err.println("Can't create the schema...");
-                System.exit(-1);
-            } catch (UnsupportedOperationException e) {
-                System.err.println("ERROR:\tOne of the schema operations is not supported with this JVM.");
-                System.err.println("\tIf you are using GNU Java, you should try using the latest Sun JVM.");
-                System.err.println("\n*Here is the stack trace:");
-                e.printStackTrace();
-                System.exit(-1);
-            }
-
-            resources = NEW_RESOURCES;
-        }
-
-        ErrorHandler nullHandler = new ErrorHandler() {
-            @Override
-            public void warning(SAXParseException e) throws SAXException {
-
-            }
-            @Override
-            public void error(SAXParseException e) throws SAXException {
-                System.err.println("The XLIFF document is invalid, please check it first: ");
-                System.err.println("Line "+e.getLineNumber()+", Column "+e.getColumnNumber());
-                System.err.println("Error: " + e.getMessage());
-                System.exit(-1);
-            }
-            @Override
-            public void fatalError(SAXParseException e) throws SAXException {
-                throw e;
-            }
-        };
-
         try {
-            DocumentBuilder docBuilder = dfactory.newDocumentBuilder();
-            docBuilder.setErrorHandler(nullHandler);
-            doc = docBuilder.parse(new InputSource(urls));
+            String urls = filenameToURL(xmlfileName);
+            DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
 
-            NodeList nlist = doc.getElementsByTagName(FILES);
-            if(nlist.getLength()>1){
-                throw new RuntimeException("Multiple <file> elements in the XLIFF file not supported.");
-            }
+            // Set secure processing features to avoid XXE attacks
+            dfactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            dfactory.setNamespaceAware(true);
 
-            // get the value of source-language attribute
-            String sourceLang = getLanguageName(doc, SOURCELANGUAGE);
-            // get the value of target-language attribute
-            String targetLang = getLanguageName(doc, TARGETLANGUAGE);
+            // Disable access to external DTDs and entities to mitigate XXE attacks
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 
-            // get the list of <source> elements
-            NodeList sourceList = doc.getElementsByTagName(SOURCE);
-            // get the list of target elements
-            NodeList targetList = doc.getElementsByTagName(TARGET);
+            Document doc = null;
 
-            // check if the xliff file has source elements in multiple languages
-            // the source-language value should be the same as xml:lang values
-            // of all the source elements.
-            String xmlSrcLang = checkLangAttribute(sourceList, sourceLang);
+            if (xliff10) {
+                dfactory.setValidating(true);
+                resources = OLD_RESOURCES;
+            } else {
+                try {
+                    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                    Schema schema = schemaFactory.newSchema();
 
-            // check if the xliff file has target elements in multiple languages
-            // the target-language value should be the same as xml:lang values
-            // of all the target elements.
-            String xmlTargetLang = checkLangAttribute(targetList, targetLang);
-
-            // Create the Resource linked list which will hold the
-            // source and target bundles after parsing
-            Resource[] set = new Resource[2];
-            set[0] = new ResourceTable();
-            set[1] = new ResourceTable();
-
-            // lenient extraction of source language
-            if(makeSourceRoot == true){
-                set[0].name = ROOT;
-            }else if(sourceLang!=null){
-                set[0].name = sourceLang.replace('-','_');
-            }else{
-                if(xmlSrcLang != null){
-                    set[0].name = xmlSrcLang.replace('-','_');
-                }else{
-                    System.err.println("ERROR: Could not figure out the source language of the file. Please check the XLIFF file.");
+                    dfactory.setSchema(schema);
+                } catch (SAXException e) {
+                    System.err.println("Can't create the schema...");
+                    System.exit(-1);
+                } catch (UnsupportedOperationException e) {
+                    System.err.println("ERROR:\tOne of the schema operations is not supported with this JVM.");
+                    System.err.println("\tIf you are using GNU Java, you should try using the latest Sun JVM.");
+                    System.err.println("\n*Here is the stack trace:");
+                    e.printStackTrace();
                     System.exit(-1);
                 }
+
+                resources = NEW_RESOURCES;
             }
 
-            // lenient extraction of the target language
-            if(targetLang!=null){
-                set[1].name = targetLang.replace('-','_');
-            }else{
-                if(xmlTargetLang!=null){
-                    set[1].name = xmlTargetLang.replace('-','_');
-                }else{
-                    System.err.println("WARNING: Could not figure out the target language of the file. Producing source bundle only.");
+            ErrorHandler nullHandler = new ErrorHandler() {
+                @Override
+                public void warning(SAXParseException e) throws SAXException {
+
                 }
+                @Override
+                public void error(SAXParseException e) throws SAXException {
+                    System.err.println("The XLIFF document is invalid, please check it first: ");
+                    System.err.println("Line "+e.getLineNumber()+", Column "+e.getColumnNumber());
+                    System.err.println("Error: " + e.getMessage());
+                    System.exit(-1);
+                }
+                @Override
+                public void fatalError(SAXParseException e) throws SAXException {
+                    throw e;
+                }
+            };
+
+            try {
+                DocumentBuilder docBuilder = dfactory.newDocumentBuilder();
+                docBuilder.setErrorHandler(nullHandler);
+                doc = docBuilder.parse(new InputSource(urls));
+
+                NodeList nlist = doc.getElementsByTagName(FILES);
+                if(nlist.getLength()>1){
+                    throw new RuntimeException("Multiple <file> elements in the XLIFF file not supported.");
+                }
+
+                // get the value of source-language attribute
+                String sourceLang = getLanguageName(doc, SOURCELANGUAGE);
+                // get the value of target-language attribute
+                String targetLang = getLanguageName(doc, TARGETLANGUAGE);
+
+                // get the list of <source> elements
+                NodeList sourceList = doc.getElementsByTagName(SOURCE);
+                // get the list of target elements
+                NodeList targetList = doc.getElementsByTagName(TARGET);
+
+                // check if the xliff file has source elements in multiple languages
+                // the source-language value should be the same as xml:lang values
+                // of all the source elements.
+                String xmlSrcLang = checkLangAttribute(sourceList, sourceLang);
+
+                // check if the xliff file has target elements in multiple languages
+                // the target-language value should be the same as xml:lang values
+                // of all the target elements.
+                String xmlTargetLang = checkLangAttribute(targetList, targetLang);
+
+                // Create the Resource linked list which will hold the
+                // source and target bundles after parsing
+                Resource[] set = new Resource[2];
+                set[0] = new ResourceTable();
+                set[1] = new ResourceTable();
+
+                // lenient extraction of source language
+                if(makeSourceRoot == true){
+                    set[0].name = ROOT;
+                }else if(sourceLang!=null){
+                    set[0].name = sourceLang.replace('-','_');
+                }else{
+                    if(xmlSrcLang != null){
+                        set[0].name = xmlSrcLang.replace('-','_');
+                    }else{
+                        System.err.println("ERROR: Could not figure out the source language of the file. Please check the XLIFF file.");
+                        System.exit(-1);
+                    }
+                }
+
+                // lenient extraction of the target language
+                if(targetLang!=null){
+                    set[1].name = targetLang.replace('-','_');
+                }else{
+                    if(xmlTargetLang!=null){
+                        set[1].name = xmlTargetLang.replace('-','_');
+                    }else{
+                        System.err.println("WARNING: Could not figure out the target language of the file. Producing source bundle only.");
+                    }
+                }
+
+
+                // check if any <alt-trans> elements are present
+                NodeList altTrans = doc.getElementsByTagName(ALTTRANS);
+                if(altTrans.getLength()>0){
+                    System.err.println("WARNING: <alt-trans> elements in found. Ignoring all <alt-trans> elements.");
+                }
+
+                // get all the group elements
+                NodeList list = doc.getElementsByTagName(GROUPS);
+
+                // process the first group element. The first group element is
+                // the base table that must be parsed recursively
+                parseTable(list.item(0), set);
+
+                // write out the bundle
+                writeResource(set, xmlfileName);
+             }
+            catch (Throwable se) {
+                System.err.println("ERROR: " + se.toString());
+                System.exit(1);
             }
-
-
-            // check if any <alt-trans> elements are present
-            NodeList altTrans = doc.getElementsByTagName(ALTTRANS);
-            if(altTrans.getLength()>0){
-                System.err.println("WARNING: <alt-trans> elements in found. Ignoring all <alt-trans> elements.");
-            }
-
-            // get all the group elements
-            NodeList list = doc.getElementsByTagName(GROUPS);
-
-            // process the first group element. The first group element is
-            // the base table that must be parsed recursively
-            parseTable(list.item(0), set);
-
-            // write out the bundle
-            writeResource(set, xmlfileName);
-         }
-        catch (Throwable se) {
-            System.err.println("ERROR: " + se.toString());
-            System.exit(1);
+        } catch (ParserConfigurationException e) {
+            System.err.println("ERROR: Parser configuration error: " + e.getMessage());
+            System.exit(-1);
         }
     }
 
