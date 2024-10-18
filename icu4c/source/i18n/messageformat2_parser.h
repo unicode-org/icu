@@ -102,9 +102,10 @@ namespace message2 {
         void parseInputDeclaration(UErrorCode&);
 	void parseSelectors(UErrorCode&);
 
-	void parseWhitespaceMaybeRequired(bool, UErrorCode&);
+	void parseRequiredWS(UErrorCode&);
 	void parseRequiredWhitespace(UErrorCode&);
-	void parseOptionalWhitespace(UErrorCode&);
+	void parseOptionalBidi();
+	void parseOptionalWhitespace();
 	void parseToken(UChar32, UErrorCode&);
 	void parseTokenWithWhitespace(UChar32, UErrorCode&);
 	void parseToken(const std::u16string_view&, UErrorCode&);
