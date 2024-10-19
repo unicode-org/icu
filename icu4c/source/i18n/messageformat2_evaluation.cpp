@@ -7,6 +7,7 @@
 
 #if !UCONFIG_NO_MF2
 
+#include "unicode/ubidi.h"
 #include "messageformat2_allocation.h"
 #include "messageformat2_evaluation.h"
 #include "messageformat2_macros.h"
@@ -20,15 +21,59 @@ namespace message2 {
 
 using namespace data_model;
 
+// BaseValue
+// ---------
+
+BaseValue::BaseValue(const Locale& loc, const Formattable& source)
+    : locale(loc) {
+    operand = source;
+}
+
+/* static */ BaseValue* BaseValue::create(const Locale& locale,
+                                          const Formattable& source,
+                                          UErrorCode& errorCode) {
+    return message2::create<BaseValue>(BaseValue(locale, source), errorCode);
+}
+
+extern UnicodeString formattableToString(const Locale&, const UBiDiDirection, const Formattable&, UErrorCode&);
+
+UnicodeString BaseValue::formatToString(UErrorCode& errorCode) const {
+    return formattableToString(locale,
+                               UBIDI_NEUTRAL,
+                               operand,
+                               errorCode);
+}
+
+BaseValue& BaseValue::operator=(BaseValue&& other) noexcept {
+    operand = std::move(other.operand);
+    opts = std::move(other.opts);
+    locale = other.locale;
+
+    return *this;
+}
+
+BaseValue::BaseValue(BaseValue&& other) {
+    *this = std::move(other);
+}
+
 // Functions
 // -------------
 
 ResolvedFunctionOption::ResolvedFunctionOption(ResolvedFunctionOption&& other) {
-    name = std::move(other.name);
-    value = std::move(other.value);
+    *this = std::move(other);
 }
 
-ResolvedFunctionOption::~ResolvedFunctionOption() {}
+ResolvedFunctionOption::ResolvedFunctionOption(const UnicodeString& n,
+                                               FunctionValue* f) : name(n), value(f) {
+    U_ASSERT(f != nullptr);
+}
+
+ResolvedFunctionOption::~ResolvedFunctionOption() {
+    if (value != nullptr) {
+        delete value;
+        value = nullptr;
+    }
+}
 
 
 const ResolvedFunctionOption* FunctionOptions::getResolvedFunctionOptions(int32_t& len) const {
@@ -44,34 +89,43 @@ FunctionOptions::FunctionOptions(UVector&& optionsVector, UErrorCode& status) {
     options = moveVectorToArray<ResolvedFunctionOption>(optionsVector, status);
 }
 
-UBool FunctionOptions::getFunctionOption(const UnicodeString& key, Formattable& option) const {
+const FunctionValue*
+FunctionOptions::getFunctionOption(const UnicodeString& key,
+                                   UErrorCode& status) const {
     if (options == nullptr) {
         U_ASSERT(functionOptionsLen == 0);
     }
     for (int32_t i = 0; i < functionOptionsLen; i++) {
         const ResolvedFunctionOption& opt = options[i];
         if (opt.getName() == key) {
-            option = opt.getValue();
-            return true;
+            return opt.getValue();
         }
     }
-    return false;
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+    return nullptr;
+}
+
+
+UnicodeString
+FunctionOptions::getStringFunctionOption(const UnicodeString& k, UErrorCode& errorCode) const {
+    const FunctionValue* option = getFunctionOption(k, errorCode);
+    if (U_SUCCESS(errorCode)) {
+        UnicodeString result = option->formatToString(errorCode);
+        if (U_SUCCESS(errorCode)) {
+            return result;
+        }
+    }
+    return {};
 }
 
 UnicodeString FunctionOptions::getStringFunctionOption(const UnicodeString& key) const {
-    Formattable option;
-    if (getFunctionOption(key, option)) {
-        if (option.getType() == UFMT_STRING) {
-            UErrorCode localErrorCode = U_ZERO_ERROR;
-            UnicodeString val = option.getString(localErrorCode);
-            U_ASSERT(U_SUCCESS(localErrorCode));
-            return val;
-        }
+    UErrorCode localStatus = U_ZERO_ERROR;
+
+    UnicodeString result = getStringFunctionOption(key, localStatus);
+    if (U_FAILURE(localStatus)) {
+        return {};
     }
-    // For anything else, including non-string values, return "".
-    // Alternately, could try to stringify the non-string option.
-    // (Currently, no tests require that.)
-    return {};
+    return result;
 }
 
 FunctionOptions& FunctionOptions::operator=(FunctionOptions&& other) noexcept {
@@ -89,34 +143,120 @@ FunctionOptions::FunctionOptions(FunctionOptions&& other) {
 FunctionOptions::~FunctionOptions() {
     if (options != nullptr) {
         delete[] options;
+        options = nullptr;
     }
 }
-// ResolvedSelector
-// ----------------
 
-ResolvedSelector::ResolvedSelector(const FunctionName& fn,
-                                   Selector* sel,
-                                   FunctionOptions&& opts,
-                                   FormattedPlaceholder&& val)
-    : selectorName(fn), selector(sel), options(std::move(opts)), value(std::move(val))  {
-    U_ASSERT(sel != nullptr);
+static bool containsOption(const UVector& opts, const ResolvedFunctionOption& opt) {
+    for (int32_t i = 0; i < opts.size(); i++) {
+        if (static_cast<ResolvedFunctionOption*>(opts[i])->getName()
+            == opt.getName()) {
+            return true;
+        }
+    }
+    return false;
 }
 
-ResolvedSelector::ResolvedSelector(FormattedPlaceholder&& val) : value(std::move(val)) {}
+// Options in `this` take precedence
+// `this` can't be used after mergeOptions is called
+FunctionOptions FunctionOptions::mergeOptions(FunctionOptions&& other,
+                                              UErrorCode& status) {
+    UVector mergedOptions(status);
+    mergedOptions.setDeleter(uprv_deleteUObject);
 
-ResolvedSelector& ResolvedSelector::operator=(ResolvedSelector&& other) noexcept {
-    selectorName = std::move(other.selectorName);
-    selector.adoptInstead(other.selector.orphan());
-    options = std::move(other.options);
-    value = std::move(other.value);
+    if (U_FAILURE(status)) {
+        return {};
+    }
+
+    // Create a new vector consisting of the options from this `FunctionOptions`
+    for (int32_t i = 0; i < functionOptionsLen; i++) {
+        mergedOptions.adoptElement(create<ResolvedFunctionOption>(std::move(options[i]), status),
+                                 status);
+    }
+
+    // Add each option from `other` that doesn't appear in this `FunctionOptions`
+    for (int i = 0; i < other.functionOptionsLen; i++) {
+        // Note: this is quadratic in the length of `options`
+        if (!containsOption(mergedOptions, other.options[i])) {
+            mergedOptions.adoptElement(create<ResolvedFunctionOption>(std::move(other.options[i]),
+                                                                    status),
+                                     status);
+        }
+    }
+
+    delete[] options;
+    options = nullptr;
+    functionOptionsLen = 0;
+
+    return FunctionOptions(std::move(mergedOptions), status);
+}
+
+// InternalValue
+// -------------
+
+
+InternalValue::~InternalValue() {}
+
+InternalValue& InternalValue::operator=(InternalValue&& other) {
+    isFallbackValue = other.isFallbackValue;
+    fallbackString = other.fallbackString;
+    if (!isFallbackValue) {
+        U_ASSERT(other.val.isValid());
+        val.adoptInstead(other.val.orphan());
+    }
     return *this;
 }
 
-ResolvedSelector::ResolvedSelector(ResolvedSelector&& other) {
+InternalValue::InternalValue(InternalValue&& other) {
     *this = std::move(other);
 }
 
-ResolvedSelector::~ResolvedSelector() {}
+InternalValue::InternalValue(UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    NullValue* nv = new NullValue();
+    if (nv == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    val.adoptInstead(nv);
+}
+
+InternalValue::InternalValue(FunctionValue* v, const UnicodeString& fb)
+    : fallbackString(fb), val(v) {
+    U_ASSERT(v != nullptr);
+}
+
+FunctionValue* InternalValue::takeValue(UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return {};
+    }
+    if (isFallback()) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return {};
+    }
+    U_ASSERT(val.isValid());
+    return val.orphan();
+}
+
+const FunctionValue* InternalValue::getValue(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return {};
+    }
+    if (isFallback()) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return {};
+    }
+    U_ASSERT(val.isValid());
+    return val.getAlias();
+}
+
+bool InternalValue::isSelectable() const {
+    if (isFallbackValue) {
+        return false;
+    }
+    return val->isSelectable();
+}
 
 // PrioritizedVariant
 // ------------------

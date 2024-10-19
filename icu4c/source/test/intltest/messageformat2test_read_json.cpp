@@ -309,12 +309,14 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     runTestsFromJsonFile(*this, "spec/functions/time.json", errorCode);
 
     // Other tests (non-spec)
+    // TODO: move this into the spec tests when
+    // https://github.com/unicode-org/message-format-wg/pull/846 lands
+    runTestsFromJsonFile(*this, "u-options.json", errorCode);
     runTestsFromJsonFile(*this, "more-functions.json", errorCode);
     runTestsFromJsonFile(*this, "valid-tests.json", errorCode);
     runTestsFromJsonFile(*this, "resolution-errors.json", errorCode);
     runTestsFromJsonFile(*this, "matches-whitespace.json", errorCode);
     runTestsFromJsonFile(*this, "alias-selector-annotations.json", errorCode);
-    runTestsFromJsonFile(*this, "runtime-errors.json", errorCode);
 
     // Re: the expected output for the first test in this file:
     // Note: the more "correct" fallback output seems like it should be "1.000 3" (ignoring the
