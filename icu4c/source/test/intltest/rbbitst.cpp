@@ -1964,7 +1964,7 @@ RBBIWordMonkey::RBBIWordMonkey()
     fSingle_QuoteSet  = new UnicodeSet(u"[\\p{Word_Break = Single_Quote}]",    status);
     fDouble_QuoteSet  = new UnicodeSet(u"[\\p{Word_Break = Double_Quote}]",    status);
     fMidNumLetSet     = new UnicodeSet(u"[\\p{Word_Break = MidNumLet}]",    status);
-    fMidLetterSet     = new UnicodeSet(u"[\\p{Word_Break = MidLetter} - [\\: \\uFE55 \\uFF1A]]",    status);
+    fMidLetterSet     = new UnicodeSet(u"[\\p{Word_Break = MidLetter}]",    status);
     fMidNumSet        = new UnicodeSet(u"[\\p{Word_Break = MidNum}]",       status);
     fNumericSet       = new UnicodeSet(u"[\\p{Word_Break = Numeric}]", status);
     fFormatSet        = new UnicodeSet(u"[\\p{Word_Break = Format}]",       status);

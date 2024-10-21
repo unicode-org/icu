@@ -404,7 +404,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
             fSingle_QuoteSet = new UnicodeSet("[\\p{Word_Break = Single_Quote}]");
             fDouble_QuoteSet = new UnicodeSet("[\\p{Word_Break = Double_Quote}]");
             fMidNumLetSet    = new UnicodeSet("[\\p{Word_Break = MidNumLet}]");
-            fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter} - [\\: \\uFE55 \\uFF1A]]");
+            fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]");
             fMidNumSet       = new UnicodeSet("[\\p{Word_Break = MidNum}]");
             fNumericSet      = new UnicodeSet("[\\p{Word_Break = Numeric}]");
             fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]");
