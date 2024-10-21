@@ -131,6 +131,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     }
     Precision precision;
     if (!properties.currencyUsage.isNull()) {
+        U_ASSERT(useCurrency);
         precision = Precision::constructCurrency(currencyUsage).withCurrency(currency);
     } else if (roundingIncrement != 0.0) {
         if (PatternStringUtils::ignoreRoundingIncrement(roundingIncrement, maxFrac)) {
@@ -278,7 +279,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
         exportedProperties->maximumIntegerDigits = maxInt == -1 ? INT32_MAX : maxInt;
 
         Precision rounding_;
-        if (precision.fType == Precision::PrecisionType::RND_CURRENCY) {
+        if (useCurrency && precision.fType == Precision::PrecisionType::RND_CURRENCY) {
             rounding_ = precision.withCurrency(currency, status);
         } else {
             rounding_ = precision;
