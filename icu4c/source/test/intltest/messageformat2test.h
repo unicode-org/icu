@@ -63,6 +63,7 @@ private:
     void testListFormatter(IcuTestErrorCode&);
     void testMessageRefFormatter(IcuTestErrorCode&);
     void testComplexOptions(IcuTestErrorCode&);
+    void testSingleEvaluation(IcuTestErrorCode&);
 
     // Feature tests
     void testEmptyMessage(message2::TestCase::Builder&, IcuTestErrorCode&);
@@ -114,7 +115,10 @@ class Person : public FormattableObject {
 
 class PersonNameFunction : public Function {
     public:
-    LocalPointer<FunctionValue> call(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&) override;
+    LocalPointer<FunctionValue> call(const FunctionContext&,
+                                     const FunctionValue&,
+                                     const FunctionOptions&,
+                                     UErrorCode&) override;
     virtual ~PersonNameFunction();
     PersonNameFunction() {}
 };
@@ -128,7 +132,7 @@ class PersonNameValue : public FunctionValue {
     friend class PersonNameFunction;
 
     UnicodeString formattedString;
-    PersonNameValue(FunctionValue&, FunctionOptions&&, UErrorCode&);
+    PersonNameValue(const FunctionValue&, const FunctionOptions&, UErrorCode&);
 }; // class PersonNameValue
 
 class FormattableProperties : public FormattableObject {
@@ -145,7 +149,7 @@ private:
 
 class GrammarCasesFunction : public Function {
     public:
-    LocalPointer<FunctionValue> call(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&) override;
+    LocalPointer<FunctionValue> call(const FunctionContext&, const FunctionValue&, const FunctionOptions&, UErrorCode&) override;
     static MFFunctionRegistry customRegistry(UErrorCode&);
 };
 
@@ -158,13 +162,13 @@ class GrammarCasesValue : public FunctionValue {
     friend class GrammarCasesFunction;
 
     UnicodeString formattedString;
-    GrammarCasesValue(FunctionValue&, FunctionOptions&&, UErrorCode&);
+    GrammarCasesValue(const FunctionValue&, const FunctionOptions&, UErrorCode&);
     void getDativeAndGenitive(const UnicodeString&, UnicodeString& result) const;
 }; // class GrammarCasesValue
 
 class ListFunction : public Function {
     public:
-    LocalPointer<FunctionValue> call(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&) override;
+    LocalPointer<FunctionValue> call(const FunctionContext&, const FunctionValue&, const FunctionOptions&, UErrorCode&) override;
     static MFFunctionRegistry customRegistry(UErrorCode&);
     ListFunction() {}
     virtual ~ListFunction();
@@ -179,8 +183,8 @@ class ListValue : public FunctionValue {
 
     UnicodeString formattedString;
     ListValue(const Locale&,
-              FunctionValue&,
-              FunctionOptions&&,
+              const FunctionValue&,
+              const FunctionOptions&,
               UErrorCode&);
 }; // class ListValue
 
@@ -193,8 +197,8 @@ class NounValue : public FunctionValue {
     friend class NounFunction;
 
     UnicodeString formattedString;
-    NounValue(FunctionValue&,
-              FunctionOptions&&,
+    NounValue(const FunctionValue&,
+              const FunctionOptions&,
               UErrorCode&);
 }; // class NounValue
 
@@ -207,15 +211,15 @@ class AdjectiveValue : public FunctionValue {
     friend class AdjectiveFunction;
 
     UnicodeString formattedString;
-    AdjectiveValue(FunctionValue&,
-                   FunctionOptions&&,
+    AdjectiveValue(const FunctionValue&,
+                   const FunctionOptions&,
                    UErrorCode&);
 }; // class AdjectiveValue
 
 
 class ResourceManager : public Function {
     public:
-    LocalPointer<FunctionValue> call(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&) override;
+    LocalPointer<FunctionValue> call(const FunctionContext&, const FunctionValue&, const FunctionOptions&, UErrorCode&) override;
     static MFFunctionRegistry customRegistry(UErrorCode&);
     static Hashtable* properties(UErrorCode&);
     static UnicodeString propertiesAsString(const Hashtable&);
@@ -233,24 +237,48 @@ class ResourceManagerValue : public FunctionValue {
     friend class ResourceManager;
 
     UnicodeString formattedString;
-    ResourceManagerValue(FunctionValue&,
-                         FunctionOptions&&,
+    ResourceManagerValue(const FunctionValue&,
+                         const FunctionOptions&,
                          UErrorCode&);
 }; // class ResourceManagerValue
 
 class NounFunction : public Function {
     public:
-    LocalPointer<FunctionValue> call(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&) override;
+    LocalPointer<FunctionValue> call(const FunctionContext&, const FunctionValue&, const FunctionOptions&, UErrorCode&) override;
     NounFunction() { }
     virtual ~NounFunction();
 };
 
 class AdjectiveFunction : public Function {
     public:
-    LocalPointer<FunctionValue> call(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&) override;
+    LocalPointer<FunctionValue> call(const FunctionContext&, const FunctionValue&, const FunctionOptions&, UErrorCode&) override;
     AdjectiveFunction() { }
     virtual ~AdjectiveFunction();
 };
+
+class CounterFunction : public Function {
+    public:
+    LocalPointer<FunctionValue> call(const FunctionContext&, const FunctionValue&, const FunctionOptions&, UErrorCode&) override;
+    CounterFunction() { }
+    virtual ~CounterFunction();
+    private:
+    int32_t count = 0; // Number of times the function was called
+};
+
+class CounterFunctionValue : public FunctionValue {
+    public:
+    UnicodeString formatToString(UErrorCode&) const override;
+    CounterFunctionValue();
+    virtual ~CounterFunctionValue();
+    private:
+    friend class CounterFunction;
+    int32_t& count;
+
+    CounterFunctionValue(int32_t&,
+                         const FunctionValue&,
+                         const FunctionOptions&,
+                         UErrorCode&);
+}; // class ResourceManagerValue
 
 } // namespace message2
 U_NAMESPACE_END

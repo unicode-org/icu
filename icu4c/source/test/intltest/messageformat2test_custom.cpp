@@ -9,6 +9,7 @@
 #include "plurrule_impl.h"
 
 #include "unicode/listformatter.h"
+#include "unicode/numberformatter.h"
 #include "messageformat2test.h"
 #include "hash.h"
 #include "intltest.h"
@@ -242,6 +243,7 @@ void TestMessageFormat2::testCustomFunctions() {
   testListFormatter(errorCode);
   testMessageRefFormatter(errorCode);
   testComplexOptions(errorCode);
+  testSingleEvaluation(errorCode);
 }
 
 
@@ -274,8 +276,8 @@ static bool hasStringOption(const FunctionOptionsMap& opt,
 }
 
 LocalPointer<FunctionValue> PersonNameFunction::call(const FunctionContext& context,
-                                                     FunctionValue& arg,
-                                                     FunctionOptions&& opts,
+                                                     const FunctionValue& arg,
+                                                     const FunctionOptions& opts,
                                                      UErrorCode& errorCode) {
     (void) context;
 
@@ -294,14 +296,14 @@ UnicodeString PersonNameValue::formatToString(UErrorCode& status) const {
     return formattedString;
 }
 
-PersonNameValue::PersonNameValue(FunctionValue& arg,
-                                 FunctionOptions&& options,
+PersonNameValue::PersonNameValue(const FunctionValue& arg,
+                                 const FunctionOptions& options,
                                  UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
     operand = arg.getOperand();
-    opts = std::move(options); // Tests don't cover composition, so no need to merge options
+    opts = options;
 
     const Formattable* toFormat = &operand;
     if (U_FAILURE(errorCode)) {
@@ -393,8 +395,8 @@ PersonNameValue::~PersonNameValue() {}
 
 LocalPointer<FunctionValue>
 GrammarCasesFunction::call(const FunctionContext& context,
-                           FunctionValue& arg,
-                           FunctionOptions&& opts,
+                           const FunctionValue& arg,
+                           const FunctionOptions& opts,
                            UErrorCode& errorCode) {
     (void) context;
 
@@ -414,15 +416,15 @@ UnicodeString GrammarCasesValue::formatToString(UErrorCode& status) const {
     return formattedString;
 }
 
-GrammarCasesValue::GrammarCasesValue(FunctionValue& val,
-                                     FunctionOptions&& options,
+GrammarCasesValue::GrammarCasesValue(const FunctionValue& val,
+                                     const FunctionOptions& opts,
                                      UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
 
     operand = val.getOperand();
-    opts = std::move(options); // Tests don't cover composition, so no need to merge options
+    // Tests don't cover composition, so no need to merge options
     const Formattable* toFormat = &operand;
 
     UnicodeString result;
@@ -522,8 +524,8 @@ GrammarCasesValue::~GrammarCasesValue() {}
 
 LocalPointer<FunctionValue>
 ListFunction::call(const FunctionContext& context,
-                   FunctionValue& arg,
-                   FunctionOptions&& opts,
+                   const FunctionValue& arg,
+                   const FunctionOptions& opts,
                    UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return LocalPointer<FunctionValue>();
@@ -544,15 +546,15 @@ UnicodeString ListValue::formatToString(UErrorCode& errorCode) const {
 }
 
 message2::ListValue::ListValue(const Locale& locale,
-                               FunctionValue& val,
-                               FunctionOptions&& options,
+                               const FunctionValue& val,
+                               const FunctionOptions& opts,
                                UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
 
     operand = val.getOperand();
-    opts = std::move(options); // Tests don't cover composition, so no need to merge options
+    // Tests don't cover composition, so no need to merge options
 
     const Formattable* toFormat = &operand;
     if (U_FAILURE(errorCode)) {
@@ -697,8 +699,8 @@ static Arguments localToGlobal(const FunctionOptionsMap& opts, UErrorCode& statu
 
 LocalPointer<FunctionValue>
 ResourceManager::call(const FunctionContext&,
-                      FunctionValue& arg,
-                      FunctionOptions&& options,
+                      const FunctionValue& arg,
+                      const FunctionOptions& options,
                       UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return LocalPointer<FunctionValue>();
@@ -717,15 +719,15 @@ UnicodeString message2::ResourceManagerValue::formatToString(UErrorCode&) const 
     return formattedString;
 }
 
-message2::ResourceManagerValue::ResourceManagerValue(FunctionValue& arg,
-                                                     FunctionOptions&& options,
+message2::ResourceManagerValue::ResourceManagerValue(const FunctionValue& arg,
+                                                     const FunctionOptions& opts,
                                                      UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
 
     operand = arg.getOperand();
-    opts = std::move(options); // Tests don't cover composition, so no need to merge options
+    // Tests don't cover composition, so no need to merge options
 
     const Formattable* toFormat = &operand;
     // Check for null or fallback
@@ -863,8 +865,8 @@ void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
 
 LocalPointer<FunctionValue>
 NounFunction::call(const FunctionContext&,
-                   FunctionValue& arg,
-                   FunctionOptions&& opts,
+                   const FunctionValue& arg,
+                   const FunctionOptions& opts,
                    UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return LocalPointer<FunctionValue>();
@@ -884,15 +886,15 @@ UnicodeString NounValue::formatToString(UErrorCode& status) const {
     return formattedString;
 }
 
-NounValue::NounValue(FunctionValue& arg,
-                     FunctionOptions&& options,
+NounValue::NounValue(const FunctionValue& arg,
+                     const FunctionOptions& options,
                      UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
 
     operand = arg.getOperand();
-    opts = std::move(options);
+    opts = options.mergeOptions(arg.getResolvedOptions(), errorCode);
 
     const Formattable* toFormat = &operand;
     FunctionOptionsMap opt = opts.getOptions();
@@ -923,8 +925,8 @@ NounValue::NounValue(FunctionValue& arg,
 
 LocalPointer<FunctionValue>
 AdjectiveFunction::call(const FunctionContext&,
-                        FunctionValue& arg,
-                        FunctionOptions&& opts,
+                        const FunctionValue& arg,
+                        const FunctionOptions& opts,
                         UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return LocalPointer<FunctionValue>();
@@ -944,15 +946,15 @@ UnicodeString AdjectiveValue::formatToString(UErrorCode& status) const {
     return formattedString;
 }
 
-AdjectiveValue::AdjectiveValue(FunctionValue& arg,
-                               FunctionOptions&& options,
+AdjectiveValue::AdjectiveValue(const FunctionValue& arg,
+                               const FunctionOptions& options,
                                UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
 
     operand = arg.getOperand();
-    opts = std::move(options);
+    opts = options.mergeOptions(arg.getResolvedOptions(), errorCode);
 
     const Formattable* toFormat = &operand;
 
@@ -995,6 +997,65 @@ NounFunction::~NounFunction() {}
 AdjectiveFunction::~AdjectiveFunction() {}
 NounValue::~NounValue() {}
 AdjectiveValue::~AdjectiveValue() {}
+
+void TestMessageFormat2::testSingleEvaluation(IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    MFFunctionRegistry customRegistry(MFFunctionRegistry::Builder(errorCode)
+                                      .adoptFunction(FunctionName("counter"),
+                                                     new CounterFunction(),
+                                                     errorCode)
+                                      .build());
+    UnicodeString name = "name";
+    TestCase::Builder testBuilder;
+    testBuilder.setName("testSingleEvaluation");
+    testBuilder.setLocale(Locale("en"));
+    testBuilder.setFunctionRegistry(&customRegistry);
+
+    // Test that the RHS of each declaration is evaluated at most once
+    TestCase test = testBuilder.setPattern(".local $x = {:counter}\
+                                           {{{$x} {$x}}}")
+        .setExpected("1 1")
+        .build();
+    TestUtils::runTestCase(*this, test, errorCode);
+}
+
+LocalPointer<FunctionValue>
+CounterFunction::call(const FunctionContext&,
+                      const FunctionValue& arg,
+                      const FunctionOptions& opts,
+                      UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+
+    LocalPointer<FunctionValue>
+        v(new CounterFunctionValue(count, arg, std::move(opts), errorCode));
+    if (!v.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    count++;
+    return v;
+}
+
+CounterFunctionValue::CounterFunctionValue(int32_t& c,
+                                           const FunctionValue&,
+                                           const FunctionOptions&,
+                                           UErrorCode&) : count(c) {
+    // No operand, no options
+}
+
+UnicodeString CounterFunctionValue::formatToString(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return {};
+    }
+    number::UnlocalizedNumberFormatter nf = number::NumberFormatter::with();
+    number::FormattedNumber formattedNumber = nf.locale("en-US").formatInt(count, status);
+    return formattedNumber.toString(status);
+}
+
+CounterFunction::~CounterFunction() {}
+CounterFunctionValue::~CounterFunctionValue() {}
 
 #endif /* #if !UCONFIG_NO_MF2 */
 

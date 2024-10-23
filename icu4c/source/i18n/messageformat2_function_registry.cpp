@@ -249,14 +249,14 @@ StandardFunctions::Number::create(bool isInteger, UErrorCode& success) {
 }
 
 LocalPointer<FunctionValue> StandardFunctions::Number::call(const FunctionContext& context,
-                                               FunctionValue& operand,
-                                               FunctionOptions&& options,
-                                               UErrorCode& errorCode) {
+                                                            const FunctionValue& operand,
+                                                            const FunctionOptions& options,
+                                                            UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return LocalPointer<FunctionValue>();
     }
     LocalPointer<FunctionValue>
-        val(new NumberValue(*this, context, operand, std::move(options), errorCode));
+        val(new NumberValue(*this, context, operand, options, errorCode));
     if (!val.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -527,8 +527,8 @@ bool StandardFunctions::Number::usePercent(const FunctionOptions& opts) const {
 
 StandardFunctions::NumberValue::NumberValue(const Number& parent,
                                             const FunctionContext& context,
-                                            FunctionValue& arg,
-                                            FunctionOptions&& options,
+                                            const FunctionValue& arg,
+                                            const FunctionOptions& options,
                                             UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
     // Must have an argument
@@ -610,7 +610,7 @@ void StandardFunctions::NumberValue::selectKeys(const UnicodeString* keys,
                                                 int32_t keysLen,
                                                 int32_t* prefs,
                                                 int32_t& prefsLen,
-                                                UErrorCode& errorCode) {
+                                                UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     Number::PluralType type = Number::pluralType(opts);
@@ -723,14 +723,14 @@ StandardFunctions::DateTime::create(DateTime::DateTimeType type,
 
 LocalPointer<FunctionValue>
 StandardFunctions::DateTime::call(const FunctionContext& context,
-                                  FunctionValue& val,
-                                  FunctionOptions&& opts,
+                                  const FunctionValue& val,
+                                  const FunctionOptions& opts,
                                   UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return LocalPointer<FunctionValue>();
     }
     LocalPointer<FunctionValue>
-        result(new DateTimeValue(type, context, val, std::move(opts), errorCode));
+        result(new DateTimeValue(type, context, val, opts, errorCode));
     if (!result.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -771,8 +771,8 @@ UnicodeString StandardFunctions::DateTimeValue::formatToString(UErrorCode& statu
 
 StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
                                                 const FunctionContext& context,
-                                                FunctionValue& val,
-                                                FunctionOptions&& options,
+                                                const FunctionValue& val,
+                                                const FunctionOptions& options,
                                                 UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
 
@@ -1045,14 +1045,14 @@ extern UnicodeString formattableToString(const Locale&,
 
 LocalPointer<FunctionValue>
 StandardFunctions::String::call(const FunctionContext& context,
-                                FunctionValue& val,
-                                FunctionOptions&& opts,
+                                const FunctionValue& val,
+                                const FunctionOptions& opts,
                                 UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return LocalPointer<FunctionValue>();
     }
     LocalPointer<FunctionValue>
-        result(new StringValue(context, val, std::move(opts), errorCode));
+        result(new StringValue(context, val, opts, errorCode));
     if (!result.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -1066,12 +1066,12 @@ UnicodeString StandardFunctions::StringValue::formatToString(UErrorCode& errorCo
 }
 
 StandardFunctions::StringValue::StringValue(const FunctionContext& context,
-                                            FunctionValue& val,
-                                            FunctionOptions&& options,
+                                            const FunctionValue& val,
+                                            const FunctionOptions&,
                                             UErrorCode& status) {
     CHECK_ERROR(status);
     operand = val.getOperand();
-    opts = std::move(options); // No options
+    // No options
     // Convert to string
     formattedString = formattableToString(context.getLocale(), context.getDirection(), operand, status);
 }
@@ -1080,7 +1080,7 @@ void StandardFunctions::StringValue::selectKeys(const UnicodeString* keys,
                                                 int32_t keysLen,
                                                 int32_t* prefs,
                                                 int32_t& prefsLen,
-                                                UErrorCode& errorCode) {
+                                                UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Just compares the key and value as strings
