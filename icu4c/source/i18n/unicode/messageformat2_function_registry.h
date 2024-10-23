@@ -229,8 +229,6 @@ namespace message2 {
         Hashtable* formattersByType = nullptr;
     }; // class MFFunctionRegistry
 
-    class Function;
-
     /**
      * Class implementing data from contextual options.
      * See https://github.com/unicode-org/message-format-wg/pull/846
@@ -304,8 +302,8 @@ namespace message2 {
              * @deprecated This API is for technology preview only.
              */
             virtual LocalPointer<FunctionValue> call(const FunctionContext& context,
-                                                     FunctionValue& operand,
-                                                     FunctionOptions&& options,
+                                                     const FunctionValue& operand,
+                                                     const FunctionOptions& options,
                                                      UErrorCode& status) = 0;
             /**
              * Destructor.
@@ -322,6 +320,12 @@ namespace message2 {
      * additional state.
      * Adding a new custom function requires adding a new class that
      * implements this interface.
+     *
+     * FunctionValues are assumed to be immutable (the call() method on
+     * Function takes a const FunctionValue&, and the formatToString()
+     * and selectKeys() methods are const.) Feedback on whether internal
+     * mutable state in classes implementing FunctionValue is welcomed
+     * during the Technology Preview period.
      *
      * @internal ICU 77 technology preview
      * @deprecated This API is for technology preview only.
@@ -356,18 +360,6 @@ namespace message2 {
              * @deprecated This API is for technology preview only.
              */
             virtual const Formattable& getOperand() const { return operand; }
-            /**
-             * Returns the resolved options that were used to construct this value.
-             * `this` may not be used after calling this method. This overload
-             * is provided so that mergeOptions(), which passes its `this` argument
-             * by move, can be called.
-             *
-             * @return The resolved options for this value.
-             *
-             * @internal ICU 77 technology preview
-             * @deprecated This API is for technology preview only.
-             */
-            virtual FunctionOptions getResolvedOptions() { return std::move(opts); }
             /**
              * Returns a reference to the resolved options for this value.
              *
@@ -428,7 +420,7 @@ namespace message2 {
                                     int32_t keysLen,
                                     int32_t* prefs,
                                     int32_t& prefsLen,
-                                    UErrorCode& status) {
+                                    UErrorCode& status) const {
                 (void) keys;
                 (void) keysLen;
                 (void) prefs;

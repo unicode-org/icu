@@ -52,9 +52,9 @@ namespace message2 {
             static DateTime* dateTime(UErrorCode&);
 
             LocalPointer<FunctionValue> call(const FunctionContext& context,
-                                FunctionValue& operand,
-                                FunctionOptions&& options,
-                                UErrorCode& errorCode) override;
+                                             const FunctionValue& operand,
+                                             const FunctionOptions& options,
+                                             UErrorCode& errorCode) override;
             virtual ~DateTime();
 
         private:
@@ -81,8 +81,8 @@ namespace message2 {
             static Number* number( UErrorCode& success);
 
             LocalPointer<FunctionValue> call(const FunctionContext& context,
-                                FunctionValue& operand,
-                                FunctionOptions&& options,
+                                const FunctionValue& operand,
+                                const FunctionOptions& options,
                                 UErrorCode& errorCode) override;
             virtual ~Number();
 
@@ -127,7 +127,7 @@ namespace message2 {
                             int32_t keysLen,
                             int32_t* prefs,
                             int32_t& prefsLen,
-                            UErrorCode& status) override;
+                            UErrorCode& status) const override;
             UBool isSelectable() const override { return true; }
             NumberValue();
             virtual ~NumberValue();
@@ -138,8 +138,8 @@ namespace message2 {
             number::FormattedNumber formattedNumber;
             NumberValue(const Number&,
                         const FunctionContext&,
-                        FunctionValue&,
-                        FunctionOptions&&,
+                        const FunctionValue&,
+                        const FunctionOptions&,
                         UErrorCode&);
         }; // class NumberValue
 
@@ -153,14 +153,14 @@ namespace message2 {
 
             UnicodeString formattedDate;
             DateTimeValue(DateTime::DateTimeType type, const FunctionContext& context,
-                          FunctionValue&, FunctionOptions&&, UErrorCode&);
+                          const FunctionValue&, const FunctionOptions&, UErrorCode&);
         }; // class DateTimeValue
 
         class String : public Function {
         public:
             LocalPointer<FunctionValue> call(const FunctionContext& context,
-                                FunctionValue& val,
-                                FunctionOptions&& opts,
+                                const FunctionValue& val,
+                                const FunctionOptions& opts,
                                 UErrorCode& errorCode) override;
             static String* string(UErrorCode& status);
             virtual ~String();
@@ -231,14 +231,14 @@ namespace message2 {
                             int32_t keysLen,
                             int32_t* prefs,
                             int32_t& prefsLen,
-                            UErrorCode& status) override;
+                            UErrorCode& status) const override;
             UBool isSelectable() const override { return true; }
             virtual ~StringValue();
         private:
             friend class String;
 
             UnicodeString formattedString;
-            StringValue(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&);
+            StringValue(const FunctionContext&, const FunctionValue&, const FunctionOptions&, UErrorCode&);
         }; // class StringValue
 
     };
