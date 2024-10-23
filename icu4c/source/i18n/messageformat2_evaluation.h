@@ -45,36 +45,86 @@ namespace message2 {
 
     using namespace data_model;
 
+    class Closure;
+    class Environment;
+
     // InternalValue represents an intermediate value in the message
     // formatter.
-    // It can be either a FunctionValue or a "fallback value". A fallback value
+    // It has four possible states:
+    // 1. Fallback Value. A fallback value
     // is a string that serves as a replacement for expressions whose evaluation
     // caused an error. Fallback values are not passed to functions.
+    // 2. Closure, representing the unevaluated right-hand side of a declaration.
+    // 3. Evaluated Value (FunctionValue), representing an evaluated declaration.
+    // 4. Indirection (const InternalValue*), representing a shared reference to another
+    //    InternalValue. Note that all InternalValues are owned by the global
+    //    environment.
+    /*
+      Example:
+
+      .local $x = {$y}
+      .local $z = {1 :number}
+      .local $a = {$z}
+      {{ {$x} {$z} {$a} }}
+
+      If this message is formatted with no arguments,
+      initially, x, z and a are all bound to Closures.
+      When the value of x is demanded by the pattern, the contents of x's value
+      are updated to a Fallback Value (because its RHS contains an unbound variable).
+      When the value of z is demanded, the contents of z's value are updated to
+      an Evaluated Value representing the result of :number on the operand.
+      When the value of a is demanded, the contents of a's value are updated to
+      an Indirection, pointing to z's value.
+
+      Indirections are used so that a FunctionValue can be uniquely owned by an
+      InternalValue. Since all InternalValues are owned by the global Environment,
+      it's safe to use these non-owned pointers.
+     */
     class InternalValue : public UObject {
     public:
-        bool isFallback() const { return isFallbackValue; }
-        bool isNullOperand() const { return isFallback() ? false : val->isNullOperand(); }
+        bool isFallback() const { return std::holds_alternative<UnicodeString>(val); }
+        bool isNullOperand() const;
+        bool isEvaluated() const;
+        bool isClosure() const;
         bool isSelectable() const;
-        InternalValue() : isFallbackValue(true), fallbackString("") {}
-        static InternalValue null(UErrorCode& status) { return InternalValue(status); }
-        static InternalValue fallback(const UnicodeString& s) { return InternalValue(s); }
-        explicit InternalValue(FunctionValue* v, const UnicodeString& fb);
-        // Error code is set if this is a fallback
-        FunctionValue* takeValue(UErrorCode& status);
+
+        Closure& asClosure() {
+            U_ASSERT(isClosure());
+            return **std::get_if<LocalPointer<Closure>>(&val);
+        }
         const FunctionValue* getValue(UErrorCode& status) const;
         UnicodeString asFallback() const { return fallbackString; }
-        virtual ~InternalValue();
+
+        static LocalPointer<InternalValue> null(UErrorCode& status);
+        static LocalPointer<InternalValue> fallback(const UnicodeString& s, UErrorCode& status);
+        // Adopts `c`
+        static InternalValue closure(Closure* c, const UnicodeString& s);
+
+        // Updates the mutable contents of this InternalValue
+        void update(InternalValue&);
+        void update(LocalPointer<FunctionValue>);
+        void update(const UnicodeString&);
+
+        InternalValue() : val(UnicodeString()) {}
+        explicit InternalValue(FunctionValue* v, const UnicodeString& fb);
         InternalValue& operator=(InternalValue&&);
         InternalValue(InternalValue&&);
+        virtual ~InternalValue();
     private:
-        bool isFallbackValue = false;
         UnicodeString fallbackString;
-        LocalPointer<FunctionValue> val;
+        std::variant<UnicodeString, // Fallback value
+                     LocalPointer<Closure>, // Unevaluated thunk
+                     LocalPointer<FunctionValue>, // Evaluated value
+                     const InternalValue*> val; // Indirection to another value -- Not owned
         // Null operand constructor
         explicit InternalValue(UErrorCode& status);
         // Fallback constructor
         explicit InternalValue(const UnicodeString& fb)
-            : isFallbackValue(true), fallbackString(fb) {}
+            : fallbackString(fb), val(fb) {}
+        // Closure (unevaluated) constructor
+        explicit InternalValue(Closure* c, UnicodeString fallbackStr)
+            : fallbackString(fallbackStr), val(LocalPointer<Closure>(c)) {}
+        bool isIndirection() const;
     }; // class InternalValue
 
 
@@ -145,66 +195,106 @@ namespace message2 {
         const Expression& getExpr() const {
             return expr;
         }
-        const Environment& getEnv() const {
+        Environment& getEnv() const {
             return env;
         }
-        Closure(const Expression& expression, const Environment& environment) : expr(expression), env(environment) {}
         Closure(Closure&&) = default;
+        static Closure* create(const Expression&, Environment&, UErrorCode&);
 
         virtual ~Closure();
     private:
+
+        Closure(const Expression& expression, Environment& environment) : expr(expression), env(environment) {}
 
         // An unevaluated expression
         const Expression& expr;
         // The environment mapping names used in this
         // expression to other expressions
-        const Environment& env;
+        Environment& env;
     };
+
+    class NonEmptyEnvironment;
 
     // An environment is represented as a linked chain of
     // non-empty environments, terminating at an empty environment.
     // It's searched using linear search.
     class Environment : public UMemory {
-    public:
-        virtual bool has(const VariableName&) const = 0;
-        virtual const Closure& lookup(const VariableName&) const = 0;
-        static Environment* create(UErrorCode&);
-        static Environment* create(const VariableName&, Closure&&, Environment*, UErrorCode&);
-        virtual ~Environment();
+        public:
+            virtual bool has(const VariableName&) const = 0;
+            virtual InternalValue& lookup(const VariableName&) = 0;
+            virtual InternalValue& bogus() = 0;
+            // For convenience so that InternalValue::getValue() can return a reference
+            // in error cases
+            FunctionValue& bogusFunctionValue() { return bogusFunctionVal; }
+            virtual InternalValue& createFallback(const UnicodeString&, UErrorCode&) = 0;
+            virtual InternalValue& createNull(UErrorCode&) = 0;
+            virtual InternalValue& createUnnamed(InternalValue&&, UErrorCode&) = 0;
+            static Environment* create(UErrorCode&);
+            static Environment* create(const VariableName&, Closure*, const UnicodeString&,
+                                       Environment*, UErrorCode&);
+            virtual ~Environment();
+
+        private:
+            FunctionValue bogusFunctionVal;
     };
 
-    class NonEmptyEnvironment;
+    // The empty environment includes a "bogus" value to use when an
+    // InternalValue& is needed (e.g. error conditions),
+    // and a vector of "unnamed" values, so that the environment can
+    // own all InternalValues (even those arising from expressions
+    // that appear directly in a pattern and are not named).
     class EmptyEnvironment : public Environment {
     public:
-        EmptyEnvironment() = default;
+        EmptyEnvironment(UErrorCode& status);
         virtual ~EmptyEnvironment();
 
     private:
         friend class Environment;
 
         bool has(const VariableName&) const override;
-        const Closure& lookup(const VariableName&) const override;
+        InternalValue& lookup(const VariableName&) override;
+        InternalValue& bogus() override { return bogusValue; }
         static EmptyEnvironment* create(UErrorCode&);
-        static NonEmptyEnvironment* create(const VariableName&, Closure&&, Environment*, UErrorCode&);
+        static NonEmptyEnvironment* create(const VariableName&, InternalValue,
+                                           Environment*, UErrorCode&);
+
+        // Creates a fallback value owned by this Environment
+        InternalValue& createFallback(const UnicodeString&, UErrorCode&) override;
+        // Creates a null operand owned by this Environment
+        InternalValue& createNull(UErrorCode&) override;
+        // Creates an arbitrary value owned by this Environment
+        InternalValue& createUnnamed(InternalValue&&, UErrorCode&) override;
+
+        InternalValue& addUnnamedValue(LocalPointer<InternalValue>, UErrorCode&);
+
+        InternalValue bogusValue; // Used in place of `nullptr` in error conditions
+        UVector unnamedValues;
     };
 
     class NonEmptyEnvironment : public Environment {
+    public:
+        InternalValue* update(const VariableName&, InternalValue&&);
     private:
         friend class Environment;
 
         bool has(const VariableName&) const override;
-        const Closure& lookup(const VariableName&) const override;
+        InternalValue& lookup(const VariableName&) override;
+        InternalValue& bogus() override { return parent->bogus(); }
         static NonEmptyEnvironment* create(const VariableName&, Closure&&, const Environment*, UErrorCode&);
         virtual ~NonEmptyEnvironment();
     private:
         friend class Environment;
 
-        NonEmptyEnvironment(const VariableName& v, Closure&& c, Environment* e) : var(v), rhs(std::move(c)), parent(e) {}
+        NonEmptyEnvironment(const VariableName& v, InternalValue c, Environment* e) : var(v), rhs(std::move(c)), parent(e) {}
+
+        InternalValue& createFallback(const UnicodeString&, UErrorCode&) override;
+        InternalValue& createNull(UErrorCode&) override;
+        InternalValue& createUnnamed(InternalValue&&, UErrorCode&) override;
 
         // Maps VariableName onto Closure*
         // Chain of linked environments
         VariableName var;
-        Closure rhs;
+        InternalValue rhs;
         const LocalPointer<Environment> parent;
     };
 

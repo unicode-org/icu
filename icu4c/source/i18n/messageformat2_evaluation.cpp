@@ -67,15 +67,10 @@ ResolvedFunctionOption::ResolvedFunctionOption(ResolvedFunctionOption&& other) {
 }
 
 ResolvedFunctionOption::ResolvedFunctionOption(const UnicodeString& n,
-                                               FunctionValue* f) : name(n), value(f) {
-    U_ASSERT(f != nullptr);
-}
+                                               const FunctionValue& f) : name(n), value(&f) {}
 
 ResolvedFunctionOption::~ResolvedFunctionOption() {
-    if (value != nullptr) {
-        delete value;
-        value = nullptr;
-    }
+    value = nullptr; // value is not owned
 }
 
 
@@ -114,7 +109,7 @@ FunctionOptions::getFunctionOption(const UnicodeString& key,
     for (int32_t i = 0; i < functionOptionsLen; i++) {
         const ResolvedFunctionOption& opt = options[i];
         if (opt.getName() == key) {
-            return opt.getValue();
+            return &opt.getValue();
         }
     }
     status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -144,16 +139,22 @@ UnicodeString FunctionOptions::getStringFunctionOption(const UnicodeString& key)
     return result;
 }
 
-FunctionOptions& FunctionOptions::operator=(FunctionOptions&& other) noexcept {
-    functionOptionsLen = other.functionOptionsLen;
-    options = other.options;
-    other.functionOptionsLen = 0;
-    other.options = nullptr;
+FunctionOptions& FunctionOptions::operator=(FunctionOptions other) noexcept {
+    swap(*this, other);
     return *this;
 }
 
-FunctionOptions::FunctionOptions(FunctionOptions&& other) {
-    *this = std::move(other);
+FunctionOptions::FunctionOptions(const FunctionOptions& other) {
+    U_ASSERT(!other.bogus);
+    functionOptionsLen = other.functionOptionsLen;
+    options = nullptr;
+    if (functionOptionsLen != 0) {
+        UErrorCode localStatus = U_ZERO_ERROR;
+        options = copyArray<ResolvedFunctionOption>(other.options, functionOptionsLen, localStatus);
+        if (U_FAILURE(localStatus)) {
+            bogus = true;
+        }
+    }
 }
 
 FunctionOptions::~FunctionOptions() {
@@ -174,19 +175,22 @@ static bool containsOption(const UVector& opts, const ResolvedFunctionOption& op
 }
 
 // Options in `this` take precedence
-// `this` can't be used after mergeOptions is called
-FunctionOptions FunctionOptions::mergeOptions(FunctionOptions&& other,
-                                              UErrorCode& status) {
+FunctionOptions FunctionOptions::mergeOptions(const FunctionOptions& other,
+                                              UErrorCode& status) const {
     UVector mergedOptions(status);
     mergedOptions.setDeleter(uprv_deleteUObject);
 
     if (U_FAILURE(status)) {
         return {};
     }
+    if (bogus || other.bogus) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return {};
+    }
 
     // Create a new vector consisting of the options from this `FunctionOptions`
     for (int32_t i = 0; i < functionOptionsLen; i++) {
-        mergedOptions.adoptElement(create<ResolvedFunctionOption>(std::move(options[i]), status),
+        mergedOptions.adoptElement(create<ResolvedFunctionOption>(options[i], status),
                                  status);
     }
 
@@ -194,15 +198,11 @@ FunctionOptions FunctionOptions::mergeOptions(FunctionOptions&& other,
     for (int i = 0; i < other.functionOptionsLen; i++) {
         // Note: this is quadratic in the length of `options`
         if (!containsOption(mergedOptions, other.options[i])) {
-            mergedOptions.adoptElement(create<ResolvedFunctionOption>(std::move(other.options[i]),
-                                                                    status),
+            mergedOptions.adoptElement(create<ResolvedFunctionOption>(other.options[i],
+                                                                      status),
                                      status);
         }
     }
-
-    delete[] options;
-    options = nullptr;
-    functionOptionsLen = 0;
 
     return FunctionOptions(std::move(mergedOptions), status);
 }
@@ -214,12 +214,8 @@ FunctionOptions FunctionOptions::mergeOptions(FunctionOptions&& other,
 InternalValue::~InternalValue() {}
 
 InternalValue& InternalValue::operator=(InternalValue&& other) {
-    isFallbackValue = other.isFallbackValue;
     fallbackString = other.fallbackString;
-    if (!isFallbackValue) {
-        U_ASSERT(other.val.isValid());
-        val.adoptInstead(other.val.orphan());
-    }
+    val = std::move(other.val);
     return *this;
 }
 
@@ -230,48 +226,109 @@ InternalValue::InternalValue(InternalValue&& other) {
 InternalValue::InternalValue(UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
 
-    NullValue* nv = new NullValue();
-    if (nv == nullptr) {
+    LocalPointer<FunctionValue> nv(new NullValue());
+    if (!nv.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    val.adoptInstead(nv);
+    val = std::move(nv);
 }
 
 InternalValue::InternalValue(FunctionValue* v, const UnicodeString& fb)
-    : fallbackString(fb), val(v) {
+    : fallbackString(fb) {
     U_ASSERT(v != nullptr);
-}
-
-FunctionValue* InternalValue::takeValue(UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return {};
-    }
-    if (isFallback()) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return {};
-    }
-    U_ASSERT(val.isValid());
-    return val.orphan();
+    val = LocalPointer<FunctionValue>(v);
 }
 
 const FunctionValue* InternalValue::getValue(UErrorCode& status) const {
     if (U_FAILURE(status)) {
-        return {};
+        return nullptr;
     }
-    if (isFallback()) {
+    // If this is a closure or fallback, error out
+    if (!isEvaluated()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return {};
+        return nullptr;
     }
-    U_ASSERT(val.isValid());
-    return val.getAlias();
+    // Follow the indirection to get the value
+    if (isIndirection()) {
+        const InternalValue* other = *std::get_if<const InternalValue*>(&val);
+        U_ASSERT(other != nullptr);
+        return other->getValue(status);
+    }
+    // Otherwise, return the contained FunctionValue
+    const LocalPointer<FunctionValue>* result = std::get_if<LocalPointer<FunctionValue>>(&val);
+    U_ASSERT(result->isValid());
+    return (*result).getAlias();
 }
 
 bool InternalValue::isSelectable() const {
-    if (isFallbackValue) {
+    UErrorCode localStatus = U_ZERO_ERROR;
+    const FunctionValue* val = getValue(localStatus);
+    if (U_FAILURE(localStatus)) {
         return false;
     }
     return val->isSelectable();
+}
+
+/* static */ LocalPointer<InternalValue> InternalValue::null(UErrorCode& status) {
+    if (U_SUCCESS(status)) {
+        InternalValue* result = new InternalValue(status);
+        if (U_SUCCESS(status)) {
+            return LocalPointer<InternalValue>(result);
+        }
+    }
+    return LocalPointer<InternalValue>();
+}
+
+/* static */ LocalPointer<InternalValue> InternalValue::fallback(const UnicodeString& s,
+                                                                 UErrorCode& status) {
+    if (U_SUCCESS(status)) {
+        InternalValue* result = new InternalValue(s);
+        if (U_SUCCESS(status)) {
+            return LocalPointer<InternalValue>(result);
+        }
+    }
+    return LocalPointer<InternalValue>();
+}
+
+/* static */ InternalValue InternalValue::closure(Closure* c, const UnicodeString& fb) {
+    U_ASSERT(c != nullptr);
+    return InternalValue(c, fb);
+}
+
+bool InternalValue::isClosure() const {
+    return std::holds_alternative<LocalPointer<Closure>>(val);
+}
+
+bool InternalValue::isEvaluated() const {
+    return std::holds_alternative<LocalPointer<FunctionValue>>(val) || isIndirection();
+}
+
+bool InternalValue::isIndirection() const {
+    return std::holds_alternative<const InternalValue*>(val);
+}
+
+bool InternalValue::isNullOperand() const {
+    UErrorCode localStatus = U_ZERO_ERROR;
+    const FunctionValue* val = getValue(localStatus);
+    if (U_FAILURE(localStatus)) {
+        return false;
+    }
+    return val->isNullOperand();
+}
+
+void InternalValue::update(InternalValue& newVal) {
+    fallbackString = newVal.fallbackString;
+    val = &newVal;
+}
+
+void InternalValue::update(LocalPointer<FunctionValue> newVal) {
+    val = std::move(newVal);
+}
+
+void InternalValue::update(const UnicodeString& fb) {
+    fallbackString = fb;
+    val = fb;
 }
 
 // PrioritizedVariant
@@ -288,9 +345,11 @@ PrioritizedVariant::~PrioritizedVariant() {}
 
     // ---------------- Environments and closures
 
-    Environment* Environment::create(const VariableName& var, Closure&& c, Environment* parent, UErrorCode& errorCode) {
+    Environment* Environment::create(const VariableName& var, Closure* c,
+                                     const UnicodeString& fallbackStr,
+                                     Environment* parent, UErrorCode& errorCode) {
         NULL_ON_ERROR(errorCode);
-        Environment* result = new NonEmptyEnvironment(var, std::move(c), parent);
+        Environment* result = new NonEmptyEnvironment(var, InternalValue::closure(c, fallbackStr), parent);
         if (result == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
             return nullptr;
@@ -300,21 +359,20 @@ PrioritizedVariant::~PrioritizedVariant() {}
 
     Environment* Environment::create(UErrorCode& errorCode) {
         NULL_ON_ERROR(errorCode);
-        Environment* result = new EmptyEnvironment();
-        if (result == nullptr) {
+        Environment* result = new EmptyEnvironment(errorCode);
+        if (U_SUCCESS(errorCode) && result == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
             return nullptr;
         }
         return result;
     }
 
-    const Closure& EmptyEnvironment::lookup(const VariableName& v) const {
-        (void) v;
+    InternalValue& EmptyEnvironment::lookup(const VariableName&) {
         U_ASSERT(false);
         UPRV_UNREACHABLE_EXIT;
     }
 
-    const Closure& NonEmptyEnvironment::lookup(const VariableName& v) const {
+    InternalValue& NonEmptyEnvironment::lookup(const VariableName& v) {
         if (v == var) {
             return rhs;
         }
@@ -333,9 +391,74 @@ PrioritizedVariant::~PrioritizedVariant() {}
         return parent->has(v);
     }
 
+    InternalValue& EmptyEnvironment::createNull(UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return bogus();
+        }
+        LocalPointer<InternalValue> val(InternalValue::null(status));
+        return addUnnamedValue(std::move(val), status);
+    }
+
+    InternalValue& EmptyEnvironment::createFallback(const UnicodeString& s, UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return bogus();
+        }
+        LocalPointer<InternalValue> val(InternalValue::fallback(s, status));
+        return addUnnamedValue(std::move(val), status);
+    }
+
+    InternalValue& EmptyEnvironment::createUnnamed(InternalValue&& v, UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return bogus();
+        }
+        LocalPointer<InternalValue> val(new InternalValue(std::move(v)));
+        if (!val.isValid()) {
+            return bogus();
+        }
+        return addUnnamedValue(std::move(val), status);
+    }
+
+    InternalValue& NonEmptyEnvironment::createNull(UErrorCode& status) {
+        return parent->createNull(status);
+    }
+
+    InternalValue& NonEmptyEnvironment::createFallback(const UnicodeString& s, UErrorCode& status) {
+        return parent->createFallback(s, status);
+    }
+
+    InternalValue& NonEmptyEnvironment::createUnnamed(InternalValue&& v, UErrorCode& status) {
+        return parent->createUnnamed(std::move(v), status);
+    }
+
+    InternalValue& EmptyEnvironment::addUnnamedValue(LocalPointer<InternalValue> val,
+                                             UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return bogus();
+        }
+        U_ASSERT(val.isValid());
+        InternalValue* v = val.orphan();
+        unnamedValues.adoptElement(v, status);
+        return *v;
+    }
+
+    EmptyEnvironment::EmptyEnvironment(UErrorCode& status) : unnamedValues(UVector(status)) {
+        unnamedValues.setDeleter(uprv_deleteUObject);
+    }
+
     Environment::~Environment() {}
     NonEmptyEnvironment::~NonEmptyEnvironment() {}
     EmptyEnvironment::~EmptyEnvironment() {}
+
+    /* static */ Closure* Closure::create(const Expression& expr, Environment& env,
+                                          UErrorCode& status) {
+        NULL_ON_ERROR(status);
+
+        Closure* result = new Closure(expr, env);
+        if (result == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return result;
+    }
 
     Closure::~Closure() {}
 

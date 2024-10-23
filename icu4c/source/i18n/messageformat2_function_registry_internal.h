@@ -153,9 +153,9 @@ static constexpr std::u16string_view YEAR = u"year";
             static DateTime* dateTime(UErrorCode&);
 
             LocalPointer<FunctionValue> call(const FunctionContext& context,
-                                FunctionValue& operand,
-                                FunctionOptions&& options,
-                                UErrorCode& errorCode) override;
+                                             const FunctionValue& operand,
+                                             const FunctionOptions& options,
+                                             UErrorCode& errorCode) override;
             virtual ~DateTime();
 
         private:
@@ -182,8 +182,8 @@ static constexpr std::u16string_view YEAR = u"year";
             static Number* number( UErrorCode& success);
 
             LocalPointer<FunctionValue> call(const FunctionContext& context,
-                                FunctionValue& operand,
-                                FunctionOptions&& options,
+                                const FunctionValue& operand,
+                                const FunctionOptions& options,
                                 UErrorCode& errorCode) override;
             virtual ~Number();
 
@@ -228,7 +228,7 @@ static constexpr std::u16string_view YEAR = u"year";
                             int32_t keysLen,
                             int32_t* prefs,
                             int32_t& prefsLen,
-                            UErrorCode& status) override;
+                            UErrorCode& status) const override;
             UBool isSelectable() const override { return true; }
             NumberValue();
             virtual ~NumberValue();
@@ -239,8 +239,8 @@ static constexpr std::u16string_view YEAR = u"year";
             number::FormattedNumber formattedNumber;
             NumberValue(const Number&,
                         const FunctionContext&,
-                        FunctionValue&,
-                        FunctionOptions&&,
+                        const FunctionValue&,
+                        const FunctionOptions&,
                         UErrorCode&);
         }; // class NumberValue
 
@@ -254,14 +254,14 @@ static constexpr std::u16string_view YEAR = u"year";
 
             UnicodeString formattedDate;
             DateTimeValue(DateTime::DateTimeType type, const FunctionContext& context,
-                          FunctionValue&, FunctionOptions&&, UErrorCode&);
+                          const FunctionValue&, const FunctionOptions&, UErrorCode&);
         }; // class DateTimeValue
 
         class String : public Function {
         public:
             LocalPointer<FunctionValue> call(const FunctionContext& context,
-                                FunctionValue& val,
-                                FunctionOptions&& opts,
+                                const FunctionValue& val,
+                                const FunctionOptions& opts,
                                 UErrorCode& errorCode) override;
             static String* string(UErrorCode& status);
             virtual ~String();
@@ -332,14 +332,14 @@ static constexpr std::u16string_view YEAR = u"year";
                             int32_t keysLen,
                             int32_t* prefs,
                             int32_t& prefsLen,
-                            UErrorCode& status) override;
+                            UErrorCode& status) const override;
             UBool isSelectable() const override { return true; }
             virtual ~StringValue();
         private:
             friend class String;
 
             UnicodeString formattedString;
-            StringValue(const FunctionContext&, FunctionValue&, FunctionOptions&&, UErrorCode&);
+            StringValue(const FunctionContext&, const FunctionValue&, const FunctionOptions&, UErrorCode&);
         }; // class StringValue
 
     };

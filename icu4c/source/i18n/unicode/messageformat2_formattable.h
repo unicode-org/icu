@@ -471,7 +471,7 @@ namespace message2 {
  * a single named function option. It pairs the given name with the `Formattable`
  * value resulting from evaluating the option's value.
  *
- * `ResolvedFunctionOption` is immutable and movable. It is not copyable.
+ * `ResolvedFunctionOption` is immutable, movable, and copyable.
  *
  * @internal ICU 75 technology preview
  * @deprecated This API is for technology preview only.
@@ -486,26 +486,19 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
     // This is necessary in order to implement the spec for the `select` option
     // of `:number` and `:integer`.
     /* const */ bool sourceIsLiteral;
-    // This is a pointer because FunctionValue is an abstract class,
-    // and is a raw pointer because FunctionValue is forward-declared
-    /* const */ FunctionValue* value;
+    // owned by the global environment
+    const FunctionValue* value;
 
   public:
       const UnicodeString& getName() const { return name; }
-      FunctionValue* getValue() const { return value; }
+      const FunctionValue& getValue() const { return *value; }
       // Adopts `f`
-      ResolvedFunctionOption(const UnicodeString& n, FunctionValue* f);
+      ResolvedFunctionOption(const UnicodeString& n, const FunctionValue& f);
       ResolvedFunctionOption() {}
       ResolvedFunctionOption(ResolvedFunctionOption&&);
-      ResolvedFunctionOption& operator=(ResolvedFunctionOption&& other) noexcept {
-          name = std::move(other.name);
-          value = std::move(other.value);
-          sourceIsLiteral = other.sourceIsLiteral;
-          other.value = nullptr;
-          return *this;
-    }
-    ResolvedFunctionOption& operator=(const ResolvedFunctionOption& other) = delete;
-    ResolvedFunctionOption(const ResolvedFunctionOption&) = delete;
+      ResolvedFunctionOption& operator=(ResolvedFunctionOption&& other) = default;
+      ResolvedFunctionOption& operator=(const ResolvedFunctionOption& other) = default;
+      ResolvedFunctionOption(const ResolvedFunctionOption&) = default;
     virtual ~ResolvedFunctionOption();
 }; // class ResolvedFunctionOption
 #endif
@@ -522,7 +515,7 @@ using FunctionOptionsMap = std::map<UnicodeString, const message2::FunctionValue
 /**
  * Structure encapsulating named options passed to a custom selector or formatter.
  *
- * This class is immutable and movable but not copyable.
+ * This class is immutable, movable and copyable.
  *
  * @internal ICU 75 technology preview
  * @deprecated This API is for technology preview only.
@@ -544,7 +537,7 @@ class U_I18N_API FunctionOptions : public UObject {
         FunctionOptionsMap result;
         for (int32_t i = 0; i < functionOptionsLen; i++) {
             ResolvedFunctionOption& opt = options[i];
-            result[opt.getName()] = opt.getValue();
+            result[opt.getName()] = &opt.getValue();
         }
         return result;
     }
@@ -552,14 +545,13 @@ class U_I18N_API FunctionOptions : public UObject {
      * Returns a new FunctionOptions object containing all the key-value
      * pairs from `this` and `other`. When `this` and `other` define options with
      * the same name, `this` takes preference.
-     * `this` cannot be used after calling this method.
      *
      * @return The result of merging `this` and `other`.
      *
      * @internal ICU 77 technology preview
      * @deprecated This API is for technology preview only.
      */
-    FunctionOptions mergeOptions(FunctionOptions&& other, UErrorCode&);
+    FunctionOptions mergeOptions(const FunctionOptions& other, UErrorCode&) const;
     /**
      * Default constructor.
      * Returns an empty mapping.
@@ -576,29 +568,37 @@ class U_I18N_API FunctionOptions : public UObject {
      */
     virtual ~FunctionOptions();
     /**
-     * Move assignment operator:
-     * The source FunctionOptions will be left in a valid but undefined state.
+     * Non-member swap function.
+     * @param f1 will get f2's contents
+     * @param f2 will get f1's contents
      *
      * @internal ICU 75 technology preview
      * @deprecated This API is for technology preview only.
      */
-    FunctionOptions& operator=(FunctionOptions&&) noexcept;
+    friend inline void swap(FunctionOptions& f1, FunctionOptions& f2) noexcept {
+        using std::swap;
+
+        if (f1.bogus || f2.bogus) {
+            f1.bogus = f2.bogus = true;
+            return;
+        }
+        swap(f1.options, f2.options);
+        swap(f1.functionOptionsLen, f2.functionOptionsLen);
+    }
     /**
-     * Move constructor:
-     * The source FunctionOptions will be left in a valid but undefined state.
+     * Assignment operator
      *
      * @internal ICU 75 technology preview
      * @deprecated This API is for technology preview only.
      */
-    FunctionOptions(FunctionOptions&&);
+    FunctionOptions& operator=(FunctionOptions) noexcept;
     /**
      * Copy constructor.
      *
      * @internal ICU 75 technology preview
      * @deprecated This API is for technology preview only.
      */
-    FunctionOptions& operator=(const FunctionOptions&) = delete;
-
+    FunctionOptions(const FunctionOptions&);
  private:
     friend class MessageFormatter;
     friend class StandardFunctions;
@@ -614,6 +614,7 @@ class U_I18N_API FunctionOptions : public UObject {
     UnicodeString getStringFunctionOption(const UnicodeString&, UErrorCode&) const;
     int32_t optionsCount() const { return functionOptionsLen; }
 
+    bool bogus = false; // Used in case a copy fails
     // Named options passed to functions
     // This is not a Hashtable in order to make it possible for code in a public header file
     // to construct a std::map from it, on-the-fly. Otherwise, it would be impossible to put

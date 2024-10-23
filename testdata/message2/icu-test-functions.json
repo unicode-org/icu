@@ -123,6 +123,15 @@
       "comment": "Horibly long, but I really wanted to test multiple declarations with overrides, and you can't join strings in JSON",
       "src": [
         ".input {$exp :datetime timeStyle=short}\n",
+        "{{Hello John, or even '{$exp :datetime dateStyle=full}'?}}"
+      ],
+      "exp": "Hello John, or even 'Saturday, August 3, 2024 at 9:43 PM'?",
+      "params": [{"name": "exp", "value": { "date": 1722746637000 }}]
+    },
+    {
+      "comment": "Horibly long, but I really wanted to test multiple declarations with overrides, and you can't join strings in JSON",
+      "src": [
+        ".input {$exp :datetime timeStyle=short}\n",
         ".input {$user :string}\n",
         ".local $longExp = {$exp :datetime dateStyle=long}\n",
         ".local $zooExp = {$exp :datetime dateStyle=short timeStyle=$tsOver}\n",
