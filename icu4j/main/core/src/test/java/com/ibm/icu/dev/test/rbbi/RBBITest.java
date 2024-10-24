@@ -8,6 +8,9 @@
  */
 package com.ibm.icu.dev.test.rbbi;
 
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetSpanner;
+
 import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1076,5 +1079,75 @@ public class RBBITest extends CoreTestFmwk {
             idx = fns.randomStringIndex();
             assertEquals("preceding" + idx, fns.expectedPreceding(idx), bi.preceding(idx));
         }
+    }
+
+    private List<Integer> GetResult(BreakIterator brk) {
+       List<Integer> out = new ArrayList<Integer>();
+       int c = brk.first();
+       do {
+           out.add(c);
+       } while ((c = brk.next()) != BreakIterator.DONE);
+       return out;
+    }
+
+    @Test
+    public void TestDXLineBreaks() {
+       String text = "abcde 一二三四五六七八九十อิสราเอลโชว์คลิป";
+       BreakIterator brk = BreakIterator.getLineInstance(ULocale.forLanguageTag("ja-u-dx-hani-thai"));
+       brk.setText(text);
+       List<Integer> expected = new ArrayList<Integer>(Arrays.asList(
+            0, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 32));
+       List<Integer> actuals = GetResult(brk);
+
+       assertEquals("-u-dx- is not working", expected, actuals);
+
+       brk.setText("aaอออaaaaaอออ    aaaa");
+
+       expected = new ArrayList<Integer>(Arrays.asList(0, 17, 21));
+       actuals = GetResult(brk);
+       assertEquals("-u-dx- is not working", expected, actuals);
+    }
+    @Test
+    public void TestDXWordBreaks() {
+       String text = "abcde 一二三四五六七八九十อิสราเอลโชว์คลิป";
+       BreakIterator brk = BreakIterator.getWordInstance(ULocale.forLanguageTag("ja-u-dx-hani-thai"));
+       brk.setText(text);
+       List<Integer> actuals = GetResult(brk);
+       List<Integer> expected = new ArrayList<Integer>(Arrays.asList(
+            0, 5, 6, 16, 32 ));
+       assertEquals("-u-dx- is not working", expected, actuals);
+
+       brk.setText("aaอออaaaaaอออ    aaaa");
+       actuals = GetResult(brk);
+       expected = new ArrayList<Integer>(Arrays.asList(0, 13, 17, 21));
+       assertEquals("-u-dx- is not working", expected, actuals);
+
+       String [] testCases = {
+           "列列パルス列列パルス列列",
+           "パルス列列パルス列列パルス",
+           "イスラエルとイスラム組織ハマスが戦闘を休止するなか、",
+           "衛星データの分析でつかの間の平穏が訪れていることが分かった。",
+           "パレスチナ自治区ガザやイスラエルでは目立った熱異常は検知されず、",
+           "大規模な衝突は起きていないもようだ。",
+           "イスラエルへのロケットの飛来を知らせる防空警報の発令も途絶え、",
+           "国際機関はガザへの人道支援物資の搬入を急いでいる。"
+       };
+       UnicodeSetSpanner uss = new UnicodeSetSpanner(new UnicodeSet("[:scx=Kana:]"));
+       brk = BreakIterator.getWordInstance(ULocale.forLanguageTag("ja-u-dx-kana"));
+       for (String test : testCases) {
+           String kanaAsA = uss.replaceFrom(test, "A");
+           System.out.println(test);
+           System.out.println(kanaAsA);
+
+           brk.setText(kanaAsA);
+           expected = GetResult(brk);
+
+           brk.setText(test);
+           actuals = GetResult(brk);
+
+           assertEquals("-u-dx- is not working for '" +
+               test + "': ", expected, actuals);
+       }
+
     }
 }
