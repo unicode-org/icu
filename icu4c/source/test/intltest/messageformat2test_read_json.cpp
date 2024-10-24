@@ -38,7 +38,7 @@ static UErrorCode getExpectedRuntimeErrorFromString(const std::string& errorName
         return U_MF_OPERAND_MISMATCH_ERROR;
     }
     if (errorName == "bad-option") {
-        return U_MF_FORMATTING_ERROR;
+        return U_MF_BAD_OPTION_ERROR;
     }
     if (errorName == "unknown-function") {
         return U_MF_UNKNOWN_FUNCTION_ERROR;
@@ -194,10 +194,6 @@ static void runValidTest(TestMessageFormat2& icuTest,
         if (errorType.length() <= 0) {
             errorType = errors[0]["name"];
         }
-        // See TODO(options); ignore these tests for now
-        if (errorType == "bad-option") {
-            return;
-        }
         test.setExpectedError(getExpectedRuntimeErrorFromString(errorType));
         expectedError = true;
     } else if (defaultError.length() > 0) {
@@ -337,10 +333,6 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     // (This applies to the expected output for all the U_DUPLICATE_DECLARATION_ERROR tests)
     runTestsFromJsonFile(*this, "duplicate-declarations.json", errorCode);
 
-    // TODO(options):
-    // Bad options. The spec is unclear about this
-    // -- see https://github.com/unicode-org/message-format-wg/issues/738
-    // The current behavior is to set a U_MF_FORMATTING_ERROR for any invalid options.
     runTestsFromJsonFile(*this, "invalid-options.json", errorCode);
 
     runTestsFromJsonFile(*this, "syntax-errors-end-of-input.json", errorCode);
