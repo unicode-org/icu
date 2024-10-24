@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729801992325,
+  "lastUpdate": 1729812577418,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28557,6 +28557,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 1.8288773980323993,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "698217ef630fb8f2a88f1bbeec778f9fc5bf4d84",
+          "message": "ICU-22922 ICU 76 final release\n\nSee #3252",
+          "timestamp": "2024-10-24T16:18:07-07:00",
+          "tree_id": "3a80c557541c4935af72ee7875c34803def56a89",
+          "url": "https://github.com/unicode-org/icu/commit/698217ef630fb8f2a88f1bbeec778f9fc5bf4d84"
+        },
+        "date": 1729812393300,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 1.8223679360723621,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
