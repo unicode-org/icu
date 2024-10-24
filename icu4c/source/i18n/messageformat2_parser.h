@@ -10,6 +10,7 @@
 
 #include "unicode/messageformat2_data_model.h"
 #include "unicode/parseerr.h"
+#include "unicode/uniset.h"
 
 #include "messageformat2_allocation.h"
 #include "messageformat2_errors.h"
@@ -54,6 +55,26 @@ namespace message2 {
             }
     };
 
+
+    // Initialization of UnicodeSets
+    namespace unisets {
+        enum Key {
+            CONTENT,
+            WHITESPACE,
+            BIDI,
+            ALPHA,
+            DIGIT,
+            NAME_START,
+            NAME_CHAR,
+            TEXT,
+            QUOTED,
+            ESCAPABLE,
+            UNISETS_KEY_COUNT
+        };
+
+        U_I18N_API const UnicodeSet* get(Key key);
+    }
+
     // Parser class (private)
     class Parser : public UMemory {
     public:
@@ -82,14 +103,54 @@ namespace message2 {
 	    UChar   postContext[U_PARSE_CONTEXT_LEN];
 	} MessageParseError;
 
-	Parser(const UnicodeString &input, MFDataModel::Builder& dataModelBuilder, StaticErrors& e, UnicodeString& normalizedInputRef)
-	  : source(input), index(0), errors(e), normalizedInput(normalizedInputRef), dataModel(dataModelBuilder) {
+	Parser(const UnicodeString &input,
+               MFDataModel::Builder& dataModelBuilder,
+               StaticErrors& e,
+               UnicodeString& normalizedInputRef,
+               UErrorCode& status)
+	  : contentChars(unisets::get(unisets::CONTENT)),
+            whitespaceChars(unisets::get(unisets::WHITESPACE)),
+            bidiControlChars(unisets::get(unisets::BIDI)),
+            alphaChars(unisets::get(unisets::ALPHA)),
+            digitChars(unisets::get(unisets::DIGIT)),
+            nameStartChars(unisets::get(unisets::NAME_START)),
+            nameChars(unisets::get(unisets::NAME_CHAR)),
+            textChars(unisets::get(unisets::TEXT)),
+            quotedChars(unisets::get(unisets::QUOTED)),
+            escapableChars(unisets::get(unisets::ESCAPABLE)),
+            source(input), index(0), errors(e), normalizedInput(normalizedInputRef), dataModel(dataModelBuilder) {
+            (void) status;
 	  parseError.line = 0;
 	  parseError.offset = 0;
 	  parseError.lengthBeforeCurrentLine = 0;
 	  parseError.preContext[0] = '\0';
 	  parseError.postContext[0] = '\0';
 	}
+
+        UnicodeSet initContentChars(UErrorCode& status);
+        UnicodeSet initWhitespace(UErrorCode& status);
+        UnicodeSet initBidiControls(UErrorCode& status);
+        UnicodeSet initAlpha(UErrorCode& status);
+        UnicodeSet initDigits(UErrorCode& status);
+        UnicodeSet initNameStartChars(UErrorCode& status);
+        UnicodeSet initNameChars(UErrorCode& status);
+        UnicodeSet initTextChars(UErrorCode& status);
+        UnicodeSet initQuotedChars(UErrorCode& status);
+        UnicodeSet initEscapableChars(UErrorCode& status);
+
+        bool isContentChar(UChar32) const;
+        bool isBidiControl(UChar32) const;
+        bool isWhitespace(UChar32) const;
+        bool isTextChar(UChar32) const;
+        bool isQuotedChar(UChar32) const;
+        bool isEscapableChar(UChar32) const;
+        bool isAlpha(UChar32) const;
+        bool isDigit(UChar32) const;
+        bool isNameStart(UChar32) const;
+        bool isNameChar(UChar32) const;
+        bool isUnquotedStart(UChar32) const;
+        bool isLiteralStart(UChar32) const;
+        bool isKeyStart(UChar32) const;
 
 	static void translateParseError(const MessageParseError&, UParseError&);
 	static void setParseError(MessageParseError&, uint32_t);
@@ -102,9 +163,10 @@ namespace message2 {
         void parseInputDeclaration(UErrorCode&);
 	void parseSelectors(UErrorCode&);
 
-	void parseWhitespaceMaybeRequired(bool, UErrorCode&);
+	void parseRequiredWS(UErrorCode&);
 	void parseRequiredWhitespace(UErrorCode&);
-	void parseOptionalWhitespace(UErrorCode&);
+	void parseOptionalBidi();
+	void parseOptionalWhitespace();
 	void parseToken(UChar32, UErrorCode&);
 	void parseTokenWithWhitespace(UChar32, UErrorCode&);
 	void parseToken(const std::u16string_view&, UErrorCode&);
@@ -149,6 +211,18 @@ namespace message2 {
         bool inBounds(uint32_t i) const { return source.moveIndex32(index, i) < source.length(); }
         bool allConsumed() const { return (int32_t) index == source.length(); }
 
+        // UnicodeSets for checking character ranges
+        const UnicodeSet* contentChars;
+        const UnicodeSet* whitespaceChars;
+        const UnicodeSet* bidiControlChars;
+        const UnicodeSet* alphaChars;
+        const UnicodeSet* digitChars;
+        const UnicodeSet* nameStartChars;
+        const UnicodeSet* nameChars;
+        const UnicodeSet* textChars;
+        const UnicodeSet* quotedChars;
+        const UnicodeSet* escapableChars;
+
 	// The input string
 	const UnicodeString &source;
 	// The current position within the input string -- counting in UChar32
@@ -165,8 +239,8 @@ namespace message2 {
 
 	// The parent builder
 	MFDataModel::Builder &dataModel;
-    }; // class Parser
 
+    }; // class Parser
 } // namespace message2
 
 U_NAMESPACE_END

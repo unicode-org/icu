@@ -309,6 +309,9 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     runTestsFromJsonFile(*this, "spec/functions/time.json", errorCode);
 
     // Other tests (non-spec)
+    // TODO: https://github.com/unicode-org/message-format-wg/pull/902 will
+    // move the bidi tests into the spec
+    runTestsFromJsonFile(*this, "bidi.json", errorCode);
     runTestsFromJsonFile(*this, "more-functions.json", errorCode);
     runTestsFromJsonFile(*this, "valid-tests.json", errorCode);
     runTestsFromJsonFile(*this, "resolution-errors.json", errorCode);
