@@ -1461,30 +1461,30 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-icu-config     install icu-config
-  --enable-debug          build debug libraries and enable the U_DEBUG define default=no
-  --enable-release        build release libraries default=yes
-  --enable-strict         compile with strict compiler options default=yes
+  --disable-icu-config    do not install icu-config
+  --enable-debug          build debug libraries and enable the U_DEBUG define
+  --disable-release       do not build release libraries
+  --disable-strict        do not compile with strict compiler options
   --enable-64bit-libs     (deprecated, use --with-library-bits) build 64-bit libraries default= platform default
-  --enable-shared         build shared libraries default=yes
-  --enable-static         build static libraries default=no
-  --enable-auto-cleanup   enable auto cleanup of libraries default=no
-  --enable-draft          enable draft APIs (and internal APIs) default=yes
-  --enable-renaming       add a version suffix to symbols default=yes
-  --enable-tracing        enable function and data tracing default=no
-  --enable-plugins        enable plugins default=no
-  --disable-dyload        disable dynamic loading default=no
+  --disable-shared        do not build shared libraries
+  --enable-static         build static libraries
+  --enable-auto-cleanup   enable auto cleanup of libraries
+  --disable-draft         do not enable draft APIs (and internal APIs)
+  --disable-renaming      do not add a version suffix to symbols
+  --enable-tracing        enable function and data tracing
+  --enable-plugins        enable plugins
+  --disable-dyload        disable dynamic loading
   --enable-rpath          use rpath when linking default is only if necessary
-  --enable-weak-threads   weakly reference the threading library default=no
-  --enable-extras         build ICU extras default=yes
-  --enable-icuio          build ICU's icuio library default=yes
-  --enable-layoutex         build ICU's Paragraph Layout library default=no.
+  --enable-weak-threads   weakly reference the threading library
+  --disable-extras        do not build ICU extras
+  --disable-icuio         do not build ICU's icuio library
+  --enable-layoutex       build ICU's Paragraph Layout library.
             icu-le-hb must be installed via pkg-config. See http://harfbuzz.org
 
-  --enable-tools         build ICU's tools default=yes
-  --enable-fuzzer        build ICU's fuzzer test targets default=no
-  --enable-tests          build ICU tests default=yes
-  --enable-samples        build ICU samples default=yes
+  --disable-tools         do not build ICU's tools
+  --enable-fuzzer         build ICU's fuzzer test targets
+  --disable-tests         do not build ICU tests
+  --disable-samples       do not build ICU samples
 
 Additionally, the variable FORCE_LIBS may be set before calling configure.
 If set, it will REPLACE any automatic list of libraries.
