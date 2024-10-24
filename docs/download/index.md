@@ -14,29 +14,24 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 If you want to use ICU (as opposed to developing it), it is recommended that you download an official packaged version of the ICU source code. These versions are tested more thoroughly than day-to-day development builds of the system, and they are packaged in zip and tar files for convenient download. Here are several recent releases of ICU that are available:
 
-## Release Candidate
-***2024-09-30: ICU 76 release candidate is now available.***
+## Latest Release
+
+***2024-10-24: ICU 76 is now available.***
 It updates to [Unicode 16](https://www.unicode.org/versions/Unicode16.0.0/) ([blog](https://blog.unicode.org/2024/09/announcing-unicode-standard-version-160.html)), including new characters and scripts, emoji, collation & IDNA changes, and corresponding APIs and implementations. It also updates to [CLDR 46](https://cldr.unicode.org/downloads/cldr-46) ([beta blog](https://blog.unicode.org/2024/09/unicode-cldr-46-beta-available-for.html)) locale data with new locales, significant updates to existing locales, and various additions and corrections. For example, the CLDR and Unicode default sort orders are now very nearly the same.
 
 Most of the java.time (Temporal) types can now be formatted directly. There are some new APIs to make ICU easier to use with modern C++ and Java patterns. The Java and C++ technology preview implementations of the CLDR MessageFormat 2.0 specification have been updated to match recent changes. See [ICU 76](76.md).
 
-Please test this release candidate on your platforms and report bugs and regressions by Monday, 2024-oct-21, via the [icu-support](https://icu.unicode.org/contacts) mailing list, and/or please [find/submit error reports](https://icu.unicode.org/bugs).
-
-Please do not use this release candidate in production.
-
-## Latest Release
-
-***2024-04-17: ICU 75 is now available.*** It updates to [CLDR 45](https://cldr.unicode.org/index/downloads/cldr-45) ([beta blog](https://blog.unicode.org/2024/04/unicode-cldr-v45-beta-available-for.html)) locale data with new locales and various additions and corrections. C++ code now requires C++17 and is being made more robust. The CLDR MessageFormat 2.0 specification is now in [technology preview](https://github.com/unicode-org/message-format-wg?tab=readme-ov-file#messageformat-2-technical-preview), together with a corresponding update of the ICU4J (Java) tech preview and a new ICU4C (C++) tech preview. See [Downloading ICU &gt; ICU 75](https://icu.unicode.org/download/75).
-
 ## Previous Releases
+
+- 2024-04-17: **ICU 75** updates to [CLDR 45](https://cldr.unicode.org/index/downloads/cldr-45) ([beta blog](https://blog.unicode.org/2024/04/unicode-cldr-v45-beta-available-for.html)) locale data with new locales and various additions and corrections. C++ code now requires C++17 and is being made more robust. The CLDR MessageFormat 2.0 specification is now in [technology preview](https://github.com/unicode-org/message-format-wg?tab=readme-ov-file#messageformat-2-technical-preview), together with a corresponding update of the ICU4J (Java) tech preview and a new ICU4C (C++) tech preview. See [Downloading ICU &gt; ICU 75](https://icu.unicode.org/download/75).
 
 - 2023-12-13: **ICU 74.2** released with date/time formatting bug fixes. See [Downloading ICU &gt; ICU 74](https://icu.unicode.org/download/74).
 
-- 2023-10-31: **ICU 74** is now available. It updates to [Unicode 15.1](http://blog.unicode.org/2023/09/announcing-unicode-standard-version-151.html), including new characters, emoji, security mechanisms, and corresponding APIs and implementations. It also updates to [CLDR 44](https://cldr.unicode.org/index/downloads/cldr-44) ([blog](https://blog.unicode.org/2023/10/unicode-cldr-v44-available.html)) locale data with new locales and various additions and corrections. See [Downloading ICU &gt; ICU 74](https://icu.unicode.org/download/74).
+- 2023-10-31: **ICU 74** updates to [Unicode 15.1](http://blog.unicode.org/2023/09/announcing-unicode-standard-version-151.html), including new characters, emoji, security mechanisms, and corresponding APIs and implementations. It also updates to [CLDR 44](https://cldr.unicode.org/index/downloads/cldr-44) ([blog](https://blog.unicode.org/2023/10/unicode-cldr-v44-available.html)) locale data with new locales and various additions and corrections. See [Downloading ICU &gt; ICU 74](https://icu.unicode.org/download/74).
 
-- 2023-06-15: **ICU 73.2** is now available. Maintenance release with changes for GB18030 compliance, English AM/PM spaces, word segmentation around @ sign, etc. See [Downloading ICU &gt; ICU 73](https://icu.unicode.org/download/73).
+- 2023-06-15: **ICU 73.2**: Maintenance release with changes for GB18030 compliance, English AM/PM spaces, word segmentation around @ sign, etc. See [Downloading ICU &gt; ICU 73](https://icu.unicode.org/download/73).
 
-- 2023-04-13: **ICU 73** is now available. It updates to [CLDR 43](https://blog.unicode.org/2023/04/the-unicode-cldr-v43-released.html) locale data with various additions and corrections.
+- 2023-04-13: **ICU 73** updates to [CLDR 43](https://blog.unicode.org/2023/04/the-unicode-cldr-v43-released.html) locale data with various additions and corrections.
   ICU 73 improves Japanese and Korean short-text line breaking, reduces C++ memory use in date formatting, and promotes the Java person name formatter from tech preview to draft.
   For details, see [Downloading ICU &gt; ICU 73](https://icu.unicode.org/download/73).
 
