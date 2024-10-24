@@ -163,6 +163,10 @@ example, even if ICU is built in "files" mode, you must still link against the
     This option builds ICU data as a single (large) static library. This mode is
     more complex to use. If you encounter errors, you may need to build ICU
     multiple times.
+*   `--with-data-packaging=auto`
+    With this option, `configure` will pick `library` unless the options
+    `--enable-static` and `--disable-shared` are also given, in which case
+    it'll pic `static` instead.
 *   `--with-data-packaging=files`
     With this option, ICU outputs separate individual files (.res, .cnv, etc)
     which will be loaded at runtime. Read the rest of this document, especially
