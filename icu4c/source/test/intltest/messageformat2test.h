@@ -91,6 +91,7 @@ private:
 
     void testHighLoneSurrogate(void);
     void testLowLoneSurrogate(void);
+    void testLoneSurrogateInQuotedLiteral(void);
 }; // class TestMessageFormat2
 
 U_NAMESPACE_BEGIN
