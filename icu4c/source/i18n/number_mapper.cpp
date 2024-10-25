@@ -74,9 +74,11 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
             !properties.currencyPluralInfo.fPtr.isNull() ||
             !properties.currencyUsage.isNull() ||
             warehouse.affixProvider.get().hasCurrencySign());
-    CurrencyUnit currency = resolveCurrency(properties, locale, status);
-    UCurrencyUsage currencyUsage = properties.currencyUsage.getOrDefault(UCURR_USAGE_STANDARD);
+    CurrencyUnit currency;
+    UCurrencyUsage currencyUsage;
     if (useCurrency) {
+        currency = resolveCurrency(properties, locale, status);
+        currencyUsage = properties.currencyUsage.getOrDefault(UCURR_USAGE_STANDARD);
         // NOTE: Slicing is OK.
         macros.unit = currency; // NOLINT
     }
