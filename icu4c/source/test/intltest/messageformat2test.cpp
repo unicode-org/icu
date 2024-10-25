@@ -33,6 +33,7 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(testFormatterAPI);
     TESTCASE_AUTO(testHighLoneSurrogate);
     TESTCASE_AUTO(testLowLoneSurrogate);
+    TESTCASE_AUTO(testLoneSurrogateInQuotedLiteral);
     TESTCASE_AUTO(dataDrivenTests);
     TESTCASE_AUTO_END;
 }
@@ -350,7 +351,8 @@ void TestMessageFormat2::testHighLoneSurrogate() {
       .setPattern(loneSurrogate, pe, errorCode)
       .build(errorCode);
     UnicodeString result = msgfmt1.formatToString({}, errorCode);
-    errorCode.expectErrorAndReset(U_MF_SYNTAX_ERROR, "testHighLoneSurrogate");
+    assertEquals("testHighLoneSurrogate", loneSurrogate, result);
+    errorCode.errIfFailureAndReset("testHighLoneSurrogate");
 }
 
 // ICU-22890 lone surrogate cause infinity loop
@@ -364,7 +366,25 @@ void TestMessageFormat2::testLowLoneSurrogate() {
       .setPattern(loneSurrogate, pe, errorCode)
       .build(errorCode);
     UnicodeString result = msgfmt2.formatToString({}, errorCode);
-    errorCode.expectErrorAndReset(U_MF_SYNTAX_ERROR, "testLowLoneSurrogate");
+    assertEquals("testLowLoneSurrogate", loneSurrogate, result);
+    errorCode.errIfFailureAndReset("testLowLoneSurrogate");
+}
+
+void TestMessageFormat2::testLoneSurrogateInQuotedLiteral() {
+    IcuTestErrorCode errorCode(*this, "testLoneSurrogateInQuotedLiteral");
+    UParseError pe = { 0, 0, {0}, {0} };
+    // |\udc02|
+    UnicodeString literal("{|");
+    literal += 0xdc02;
+    literal += "|}";
+    UnicodeString expectedResult({0xdc02, 0});
+    icu::message2::MessageFormatter msgfmt2 =
+      icu::message2::MessageFormatter::Builder(errorCode)
+      .setPattern(literal, pe, errorCode)
+      .build(errorCode);
+    UnicodeString result = msgfmt2.formatToString({}, errorCode);
+    assertEquals("testLoneSurrogateInQuotedLiteral", expectedResult, result);
+    errorCode.errIfFailureAndReset("testLoneSurrogateInQuotedLiteral");
 }
 
 void TestMessageFormat2::dataDrivenTests() {
