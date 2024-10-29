@@ -1655,9 +1655,9 @@ private:
     UnicodeSet  *fLVTSet;
     UnicodeSet  *fHangulSet;
     UnicodeSet  *fExtendedPictSet;
-    UnicodeSet  *fViramaSet;
-    UnicodeSet  *fLinkingConsonantSet;
-    UnicodeSet  *fExtCccZwjSet;
+    UnicodeSet  *fInCBLinkerSet;
+    UnicodeSet  *fInCBConsonantSet;
+    UnicodeSet  *fInCBExtendSet;
     UnicodeSet  *fAnySet;
 
     const UnicodeString *fText;
@@ -1690,11 +1690,9 @@ RBBICharMonkey::RBBICharMonkey() {
     fHangulSet->addAll(*fLVTSet);
 
     fExtendedPictSet  = new UnicodeSet(u"[:Extended_Pictographic:]", status);
-    fViramaSet        = new UnicodeSet(u"[\\p{Gujr}\\p{sc=Telu}\\p{sc=Mlym}\\p{sc=Orya}\\p{sc=Beng}\\p{sc=Deva}&"
-                                        "\\p{Indic_Syllabic_Category=Virama}]", status);
-    fLinkingConsonantSet = new UnicodeSet(u"[\\p{Gujr}\\p{sc=Telu}\\p{sc=Mlym}\\p{sc=Orya}\\p{sc=Beng}\\p{sc=Deva}&"
-                                        "\\p{Indic_Syllabic_Category=Consonant}]", status);
-    fExtCccZwjSet     = new UnicodeSet(u"[[\\p{gcb=Extend}-\\p{ccc=0}] \\p{gcb=ZWJ}]", status);
+    fInCBLinkerSet        = new UnicodeSet(u"[\\p{InCB=Linker}]", status);
+    fInCBConsonantSet = new UnicodeSet(u"[\\p{InCB=Consonant}]", status);
+    fInCBExtendSet     = new UnicodeSet(u"[\\p{InCB=Extend}]", status);
     fAnySet           = new UnicodeSet(0, 0x10ffff);
 
     // Create sets of characters, and add the names of the above character sets.
@@ -1713,9 +1711,9 @@ RBBICharMonkey::RBBICharMonkey() {
     sets.emplace_back(*fHangulSet); classNames.emplace_back("Hangul");
     sets.emplace_back(*fZWJSet); classNames.emplace_back("ZWJ");
     sets.emplace_back(*fExtendedPictSet); classNames.emplace_back("ExtendedPict");
-    sets.emplace_back(*fViramaSet); classNames.emplace_back("Virama");
-    sets.emplace_back(*fLinkingConsonantSet); classNames.emplace_back("LinkingConsonant");
-    sets.emplace_back(*fExtCccZwjSet); classNames.emplace_back("ExtCcccZwj");
+    sets.emplace_back(*fInCBLinkerSet); classNames.emplace_back("InCB=Linker");
+    sets.emplace_back(*fInCBConsonantSet); classNames.emplace_back("InCB=Consonant");
+    sets.emplace_back(*fInCBExtendSet); classNames.emplace_back("InCB=Extend");
     sets.emplace_back(*fAnySet); classNames.emplace_back("Any");
 
     if (U_FAILURE(status)) {
@@ -1838,19 +1836,20 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
             continue;
         }
 
-        //   Note: Viramas are also included in the ExtCccZwj class.
-        if (fLinkingConsonantSet->contains(c2)) {
+        if (fInCBConsonantSet->contains(c2)) {
             int pi = p1;
             bool sawVirama = false;
-            while (pi > 0 && fExtCccZwjSet->contains(fText->char32At(pi))) {
-                if (fViramaSet->contains(fText->char32At(pi))) {
+            while (pi > 0 && (fInCBExtendSet->contains(fText->char32At(pi)) ||
+                              fInCBLinkerSet->contains(fText->char32At(pi)))) {
+                if (fInCBLinkerSet->contains(fText->char32At(pi))) {
                     sawVirama = true;
                 }
                 pi = fText->moveIndex32(pi, -1);
             }
-            if (sawVirama && fLinkingConsonantSet->contains(fText->char32At(pi))) {
-              setAppliedRule(p2, "GB9.3  LinkingConsonant ExtCccZwj* Virama ExtCccZwj* x LinkingConsonant");
-              continue;
+            if (sawVirama && fInCBConsonantSet->contains(fText->char32At(pi))) {
+                setAppliedRule(
+                    p2, R"(GB9c \p{InCB=Consonant} [ \p{InCB=Extend} \p{InCB=Linker} ]* \p{InCB=Linker} [ \p{InCB=Extend} \p{InCB=Linker} ]*	x	\p{InCB=Consonant})");
+                continue;
             }
         }
 
@@ -1903,9 +1902,9 @@ RBBICharMonkey::~RBBICharMonkey() {
     delete fAnySet;
     delete fZWJSet;
     delete fExtendedPictSet;
-    delete fViramaSet;
-    delete fLinkingConsonantSet;
-    delete fExtCccZwjSet;
+    delete fInCBLinkerSet;
+    delete fInCBConsonantSet;
+    delete fInCBExtendSet;
 }
 
 //------------------------------------------------------------------------------------------
