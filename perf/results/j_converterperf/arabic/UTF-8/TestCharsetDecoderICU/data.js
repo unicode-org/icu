@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729816239100,
+  "lastUpdate": 1730309767996,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28407,6 +28407,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.44310726251815,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "d868f13bd82ba4428574ce71937e09c9615dee47",
+          "message": "ICU-22947 Update user guide for MF2\n\nCo-authored-by: Steven R. Loomis <srl295@gmail.com>",
+          "timestamp": "2024-10-30T10:27:48-07:00",
+          "tree_id": "d12309a7b7c2d8dc932ab67bbb59f266c1a7032b",
+          "url": "https://github.com/unicode-org/icu/commit/d868f13bd82ba4428574ce71937e09c9615dee47"
+        },
+        "date": 1730309578990,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.4084500153606665,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
