@@ -274,6 +274,9 @@ class TestUtils {
         if (!testCase.lineNumberAndOffsetMatch(parseError.line, parseError.offset)) {
             failWrongOffset(tmsg, testCase, parseError.line, parseError.offset);
         }
+        if (testCase.expectSuccess() && !testCase.outputMatches(result)) {
+            failWrongOutput(tmsg, testCase, result);
+        }
         if (U_FAILURE(errorCode) && !testCase.expectSuccess()
             && testCase.expectedErrorCode() != U_MF_SYNTAX_ERROR) {
             // Re-run the formatter if there was an error,
