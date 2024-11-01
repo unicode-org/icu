@@ -955,7 +955,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
     @Test
     public void testCLDRUnitAvailability() {
         Set<MeasureUnit> knownUnits = new HashSet<>();
-        Class cMeasureUnit, cTimeUnit;
+        Class<?> cMeasureUnit, cTimeUnit;
         try {
             cMeasureUnit = Class.forName("com.ibm.icu.util.MeasureUnit");
             cTimeUnit = Class.forName("com.ibm.icu.util.TimeUnit");
@@ -1439,7 +1439,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
             if (unit.getType() == "currency") {
                 continue;
             }
-            
+
             if (unit.getIdentifier().equals("portion-per-1e9")) {
             	logKnownIssue("ICU-22781", "Handle concentr/perbillion in ICU");
             	continue;

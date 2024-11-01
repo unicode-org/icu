@@ -8,6 +8,10 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,25 +31,27 @@ import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Pair;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.NoUnit;
+import com.ibm.icu.util.VersionInfo;
 
 /**
  * This is not a real test class. It is only used to
  * generate updated unit tests code based on new CLDR data.
+ * Do not add any other tests here.
  *
- * See https://sites.google.com/site/icusite/processes/release/tasks/standards?pli=1
+ * See https://unicode-org.github.io/icu/processes/release/tasks/updating-measure-unit.html
  * for information on how to update with each new release.
  * @author markdavis
  */
 @RunWith(JUnit4.class)
 public class MeasureUnitGeneratorTest extends CoreTestFmwk {
 
-    static class OrderedPair<F extends Comparable, S extends Comparable> extends Pair<F, S> implements Comparable<OrderedPair<F, S>> {
+    private static class OrderedPair<F extends Comparable<F>, S extends Comparable<S>> extends Pair<F, S> implements Comparable<OrderedPair<F, S>> {
 
-        OrderedPair(F first, S second) {
+        private OrderedPair(F first, S second) {
             super(first, second);
         }
 
-        public static <F extends Comparable, S extends Comparable> OrderedPair<F, S> of(F first, S second) {
+        private static <F extends Comparable<F>, S extends Comparable<S>> OrderedPair<F, S> of(F first, S second) {
             if (first == null || second == null) {
                 throw new IllegalArgumentException("OrderedPair.of requires non null values.");
             }
@@ -264,7 +270,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
 
     // modify certain CLDR unit names before generating functions
     // that create/get the corresponding MeasureUnit objects
-    private static final Map<String,String> CLDR_NAME_REMAP = new HashMap();
+    private static final Map<String,String> CLDR_NAME_REMAP = new HashMap<>();
 
     static {
         TIME_CODES.add("year");
@@ -293,22 +299,40 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         CLDR_NAME_REMAP.put("pound-force-foot",            "pound-foot");
     }
 
+    private static final String ICU_ROOT = findIcuRoot();
+
+    private static String findIcuRoot() {
+        URL x = MeasureUnitGeneratorTest.class.getResource(".");
+        String classFile = x.getFile();
+        int idx = classFile.indexOf("/icu4j/main/common_tests/target/");
+        if (idx != -1) {
+            return classFile.substring(0, idx);
+        } else {
+            return "${icuroot}";
+        }
+    }
+
     @Test
-    public void testZZZ() {
+    public void generateUnitTestsUpdate() throws IOException {
         // various generateXXX calls go here, see
         // docs/processes/release/tasks/updating-measure-unit.md
         // use this test to run each of the following in succession
-        generateConstants("76"); // for MeasureUnit.java, update generated MeasureUnit constants
-        generateBackwardCompatibilityTest("76"); // for MeasureUnitTest.java, create TestCompatible74
-        generateCXXHConstants("76"); // for measunit.h, update generated createXXX methods
-        generateCXXConstants(); // for measunit.cpp, update generated code
-        generateCXXBackwardCompatibilityTest("74"); // for measfmttest.cpp, create TestCompatible74
-        updateJAVAVersions("74"); // for MeasureUnitTest.java, JAVA_VERSIONS
+        if (System.getProperty("generateMeasureUnitUpdate") != null) {
+            final String icuVersion = Integer.toString(VersionInfo.ICU_VERSION.getMajor());
+            System.out.println();
+            System.out.println("WARNING: open the pairs of files listed below and copy code fragments, not full files!");
+            System.out.println("Some kind of diff tool / editor would work best.");
+
+            generateConstants(icuVersion); // update generated MeasureUnit constants
+            generateBackwardCompatibilityTest(icuVersion); // create TestCompatible<icu_ver>
+            generateCXXHConstants(icuVersion); // update generated createXXX methods
+            generateCXXConstants(); // update generated code
+            generateCXXBackwardCompatibilityTest(icuVersion); // create TestCompatible<icu_ver>
+            updateJAVAVersions(icuVersion); // JAVA_VERSIONS
+        }
     }
 
-    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
-    // for MeasureFormat during the release process.
-    static Map<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> getUnitsToPerParts() {
+    private static Map<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> getUnitsToPerParts() {
         TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
         Map<MeasureUnit, Pair<String, String>> unitsToPerStrings =
                 new HashMap<>();
@@ -342,95 +366,96 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         return unitsToPerUnits;
     }
 
-    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
-    // for MeasureFormat during the release process.
-    static void generateCXXHConstants(String thisVersion) {
-        Map<String, MeasureUnit> seen = new HashMap<>();
-        System.out.println("// Start generated createXXX methods");
-        System.out.println();
-        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
-        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
-            String type = entry.getKey();
-            if (type.equals("currency")) {
-                continue;
+    private static void generateCXXHConstants(String thisVersion) throws IOException {
+        String fullOutputPath = "${icuroot}/icu4c/source/i18n/unicode/measunit.h";
+        try (PrintStream out = createAndStartOutputFile(fullOutputPath)) {
+            Map<String, MeasureUnit> seen = new HashMap<>();
+            out.println("// Start generated createXXX methods");
+            out.println();
+            TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
+            for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+                String type = entry.getKey();
+                if (type.equals("currency")) {
+                    continue;
+                }
+                for (MeasureUnit unit : entry.getValue()) {
+                    String code = unit.getSubtype();
+                    String name = toCamelCase(unit);
+                    String javaName = toJAVAName(unit);
+                    checkForDup(seen, name, unit);
+                    if (isDraft(javaName)) {
+                        out.println("#ifndef U_HIDE_DRAFT_API");
+                    }
+                    out.println("    /**");
+                    out.println("     * Returns by pointer, unit of " + type + ": " + code + ".");
+                    out.println("     * Caller owns returned value and must free it.");
+                    out.printf("     * Also see {@link #get%s()}.\n", name);
+                    out.println("     * @param status ICU error code.");
+                    if (isDraft(javaName)) {
+                        out.println("     * @draft ICU " + getVersion(javaName, thisVersion));
+                    } else {
+                        out.println("     * @stable ICU " + getVersion(javaName, thisVersion));
+                    }
+                    out.println("     */");
+                    out.printf("    static MeasureUnit *create%s(UErrorCode &status);\n", name);
+                    out.println();
+                    out.println("    /**");
+                    out.println("     * Returns by value, unit of " + type + ": " + code + ".");
+                    out.printf("     * Also see {@link #create%s()}.\n", name);
+                    String getterVersion = getVersion(javaName, thisVersion);
+                    if (Integer.parseInt(getterVersion) < 64) {
+                        getterVersion = "64";
+                    }
+                    if (isDraft(javaName)) {
+                        out.println("     * @draft ICU " + getterVersion);
+                    } else {
+                        out.println("     * @stable ICU " + getterVersion);
+                    }
+                    out.println("     */");
+                    out.printf("    static MeasureUnit get%s();\n", name);
+                    if (isDraft(javaName)) {
+                        out.println("#endif /* U_HIDE_DRAFT_API */");
+                    }
+                    out.println("");
+                    // Hack: METRIC-TON unit changed its name from "metric-ton" to "tonne"
+                    // In order to preserve the existing APIs for "metric-ton" we need to
+                    // add those APIs manually
+                    if (name.equals("Tonne")) {
+                        addCXXHForMetricTon(out);
+                    }
+                }
             }
-            for (MeasureUnit unit : entry.getValue()) {
-                String code = unit.getSubtype();
-                String name = toCamelCase(unit);
-                String javaName = toJAVAName(unit);
-                checkForDup(seen, name, unit);
-                if (isDraft(javaName)) {
-                    System.out.println("#ifndef U_HIDE_DRAFT_API");
-                }
-                System.out.println("    /**");
-                System.out.println("     * Returns by pointer, unit of " + type + ": " + code + ".");
-                System.out.println("     * Caller owns returned value and must free it.");
-                System.out.printf("     * Also see {@link #get%s()}.\n", name);
-                System.out.println("     * @param status ICU error code.");
-                if (isDraft(javaName)) {
-                    System.out.println("     * @draft ICU " + getVersion(javaName, thisVersion));
-                } else {
-                    System.out.println("     * @stable ICU " + getVersion(javaName, thisVersion));
-                }
-                System.out.println("     */");
-                System.out.printf("    static MeasureUnit *create%s(UErrorCode &status);\n", name);
-                System.out.println();
-                System.out.println("    /**");
-                System.out.println("     * Returns by value, unit of " + type + ": " + code + ".");
-                System.out.printf("     * Also see {@link #create%s()}.\n", name);
-                String getterVersion = getVersion(javaName, thisVersion);
-                if (Integer.parseInt(getterVersion) < 64) {
-                    getterVersion = "64";
-                }
-                if (isDraft(javaName)) {
-                    System.out.println("     * @draft ICU " + getterVersion);
-                } else {
-                    System.out.println("     * @stable ICU " + getterVersion);
-                }
-                System.out.println("     */");
-                System.out.printf("    static MeasureUnit get%s();\n", name);
-                if (isDraft(javaName)) {
-                    System.out.println("#endif /* U_HIDE_DRAFT_API */");
-                }
-                System.out.println("");
-                // Hack: METRIC-TON unit changed its name from "metric-ton" to "tonne"
-                // In order to preserve the existing APIs for "metric-ton" we need to
-                // add those APIs manually
-                if (name.equals("Tonne")) {
-                    addCXXHForMetricTon();
-                }
-            }
+            out.println("// End generated createXXX methods");
         }
-        System.out.println("// End generated createXXX methods");
     }
 
     // Add the headers for "metric-ton"
-    // The tool won't create them any more    
-    private static void addCXXHForMetricTon() {
-        System.out.println("    /**");
-        System.out.println("     * Returns by pointer, unit of mass: metric-ton");
-        System.out.println("     * (renamed to tonne in CLDR 42 / ICU 72).");
-        System.out.println("     * Caller owns returned value and must free it.");
-        System.out.println("     * Note: In ICU 74 this will be deprecated in favor of");
-        System.out.println("     * createTonne(), which is currently draft but will");
-        System.out.println("     * become stable in ICU 74, and which uses the preferred naming.");
-        System.out.println("     * Also see {@link #getMetricTon()} and {@link #createTonne()}.");
-        System.out.println("     * @param status ICU error code.");
-        System.out.println("     * @stable ICU 54");
-        System.out.println("     */");
-        System.out.println("    static MeasureUnit *createMetricTon(UErrorCode &status);");
-        System.out.println("");
-        System.out.println("    /**");
-        System.out.println("     * Returns by value, unit of mass: metric-ton");
-        System.out.println("     * (renamed to tonne in CLDR 42 / ICU 72).");
-        System.out.println("     * Note: In ICU 74 this will be deprecated in favor of");
-        System.out.println("     * getTonne(), which is currently draft but will");
-        System.out.println("     * become stable in ICU 74, and which uses the preferred naming.");
-        System.out.println("     * Also see {@link #createMetricTon()} and {@link #getTonne()}.");
-        System.out.println("     * @stable ICU 64");
-        System.out.println("     */");
-        System.out.println("    static MeasureUnit getMetricTon();");
-        System.out.println("");
+    // The tool won't create them any more
+    private static void addCXXHForMetricTon(PrintStream out) {
+        out.println("    /**");
+        out.println("     * Returns by pointer, unit of mass: metric-ton");
+        out.println("     * (renamed to tonne in CLDR 42 / ICU 72).");
+        out.println("     * Caller owns returned value and must free it.");
+        out.println("     * Note: In ICU 74 this will be deprecated in favor of");
+        out.println("     * createTonne(), which is currently draft but will");
+        out.println("     * become stable in ICU 74, and which uses the preferred naming.");
+        out.println("     * Also see {@link #getMetricTon()} and {@link #createTonne()}.");
+        out.println("     * @param status ICU error code.");
+        out.println("     * @stable ICU 54");
+        out.println("     */");
+        out.println("    static MeasureUnit *createMetricTon(UErrorCode &status);");
+        out.println("");
+        out.println("    /**");
+        out.println("     * Returns by value, unit of mass: metric-ton");
+        out.println("     * (renamed to tonne in CLDR 42 / ICU 72).");
+        out.println("     * Note: In ICU 74 this will be deprecated in favor of");
+        out.println("     * getTonne(), which is currently draft but will");
+        out.println("     * become stable in ICU 74, and which uses the preferred naming.");
+        out.println("     * Also see {@link #createMetricTon()} and {@link #getTonne()}.");
+        out.println("     * @stable ICU 64");
+        out.println("     */");
+        out.println("    static MeasureUnit getMetricTon();");
+        out.println("");
     }
 
     private static void checkForDup(
@@ -442,196 +467,192 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
-    // for MeasureFormat during the release process.
-    static void updateJAVAVersions(String thisVersion) {
-        System.out.println();
-        Map<String, MeasureUnit> seen = new HashMap<>();
-        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
-        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
-            String type = entry.getKey();
-            if (type.equals("currency")) {
-                continue;
-            }
-            for (MeasureUnit unit : entry.getValue()) {
-                String javaName = toJAVAName(unit);
-                checkForDup(seen, javaName, unit);
-                if (!JAVA_VERSION_MAP.containsKey(javaName)) {
-                    System.out.printf("        {\"%s\", \"%s\"},\n", javaName, thisVersion);
+    private static void updateJAVAVersions(String thisVersion) throws IOException {
+        String fullOutputPath = "${icuroot}/icu4j/main/common_tests/src/test/java/com/ibm/icu/dev/test/format/MeasureUnitGeneratorTest.java";
+        try (PrintStream out = createAndStartOutputFile(fullOutputPath)) {
+            out.println();
+            Map<String, MeasureUnit> seen = new HashMap<>();
+            TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
+            for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+                String type = entry.getKey();
+                if (type.equals("currency")) {
+                    continue;
+                }
+                for (MeasureUnit unit : entry.getValue()) {
+                    String javaName = toJAVAName(unit);
+                    checkForDup(seen, javaName, unit);
+                    if (!JAVA_VERSION_MAP.containsKey(javaName)) {
+                        out.printf("        {\"%s\", \"%s\"},\n", javaName, thisVersion);
+                    }
                 }
             }
         }
     }
 
-    static TreeMap<String, List<MeasureUnit>> getAllUnits() {
+
+    private static TreeMap<String, List<MeasureUnit>> getAllUnits() {
+        final Comparator<MeasureUnit> measureUnitComparator =
+                (MeasureUnit o1, MeasureUnit o2) -> o1.getSubtype().compareTo(o2.getSubtype());
         TreeMap<String, List<MeasureUnit>> allUnits = new TreeMap<>();
         for (String type : MeasureUnit.getAvailableTypes()) {
             ArrayList<MeasureUnit> units = new ArrayList<>(MeasureUnit.getAvailable(type));
-            Collections.sort(
-                    units,
-                    new Comparator<MeasureUnit>() {
-
-                        @Override
-                        public int compare(MeasureUnit o1, MeasureUnit o2) {
-                            return o1.getSubtype().compareTo(o2.getSubtype());
-                        }
-
-                    });
+            Collections.sort(units, measureUnitComparator);
             allUnits.put(type, units);
         }
         return allUnits;
     }
 
-    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
-    // for MeasureFormat during the release process.
-    static void generateCXXConstants() {
-        System.out.println("// Start generated code for measunit.cpp");
-        System.out.println("");
-        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
+    private static void generateCXXConstants() throws IOException {
+        String fullOutputPath = "${icuroot}/icu4c/source/i18n/measunit.cpp";
+        try (PrintStream out = createAndStartOutputFile(fullOutputPath)) {
+            out.println("// Start generated code for measunit.cpp");
+            out.println("");
+            TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
 
-        // Hack: for C++, add base unit here, but ignore them when printing the create methods.
-        // Also keep track of the base unit offset to make the C++ default constructor faster.
-        allUnits.put("none", Arrays.asList(new MeasureUnit[] {NoUnit.BASE}));
-        int baseTypeIdx = -1;
-        int baseSubTypeIdx = -1;
+            // Hack: for C++, add base unit here, but ignore them when printing the create methods.
+            // Also keep track of the base unit offset to make the C++ default constructor faster.
+            allUnits.put("none", Arrays.asList(new MeasureUnit[] {NoUnit.BASE}));
+            int baseTypeIdx = -1;
+            int baseSubTypeIdx = -1;
 
-        System.out.println("// Maps from Type ID to offset in gSubTypes.");
-        System.out.println("static const int32_t gOffsets[] = {");
-        int index = 0;
-        int typeCount = 0;
-        int currencyIndex = -1;
-        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
-            System.out.printf("    %d,\n", index);
-            if (entry.getKey() == "currency") {
-                currencyIndex = typeCount;
+            out.println("// Maps from Type ID to offset in gSubTypes.");
+            out.println("static const int32_t gOffsets[] = {");
+            int index = 0;
+            int typeCount = 0;
+            int currencyIndex = -1;
+            for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+                out.printf("    %d,\n", index);
+                if (entry.getKey() == "currency") {
+                    currencyIndex = typeCount;
+                }
+                typeCount++;
+                index += entry.getValue().size();
             }
-            typeCount++;
-            index += entry.getValue().size();
-        }
-        assertTrue("currency present", currencyIndex >= 0);
-        System.out.printf("    %d\n", index);
-        System.out.println("};");
-        System.out.println();
-        System.out.println("static const int32_t kCurrencyOffset = " + currencyIndex + ";");
-        System.out.println();
-        System.out.println("// Must be sorted alphabetically.");
-        System.out.println("static const char * const gTypes[] = {");
-        boolean first = true;
-        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
-            if (!first) {
-                System.out.println(",");
-            }
-            System.out.print("    \"" + entry.getKey() + "\"");
-            first = false;
-        }
-        System.out.println();
-        System.out.println("};");
-        System.out.println();
-        System.out.println("// Must be grouped by type and sorted alphabetically within each type.");
-        System.out.println("static const char * const gSubTypes[] = {");
-        first = true;
-        int offset = 0;
-        int typeIdx = 0;
-        Map<MeasureUnit, Integer> measureUnitToOffset = new HashMap<>();
-        Map<MeasureUnit, Pair<Integer, Integer>> measureUnitToTypeSubType =
-                new HashMap<>();
-        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
-            int subTypeIdx = 0;
-            for (MeasureUnit unit : entry.getValue()) {
+            assertTrue("currency present", currencyIndex >= 0);
+            out.printf("    %d\n", index);
+            out.println("};");
+            out.println();
+            out.println("static const int32_t kCurrencyOffset = " + currencyIndex + ";");
+            out.println();
+            out.println("// Must be sorted alphabetically.");
+            out.println("static const char * const gTypes[] = {");
+            boolean first = true;
+            for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
                 if (!first) {
-                    System.out.println(",");
+                    out.println(",");
                 }
-                if (unit != null) {
-                    System.out.print("    \"" + unit.getSubtype() + "\"");
-                } else {
-                    assertEquals("unit only null for \"none\" type", "none", entry.getKey());
-                    System.out.print("    \"\"");
-                }
+                out.print("    \"" + entry.getKey() + "\"");
                 first = false;
-                measureUnitToOffset.put(unit, offset);
-                measureUnitToTypeSubType.put(unit, Pair.of(typeIdx, subTypeIdx));
-                if (unit == NoUnit.BASE) {
-                    baseTypeIdx = typeIdx;
-                    baseSubTypeIdx = subTypeIdx;
-                }
-                offset++;
-                subTypeIdx++;
             }
-            typeIdx++;
-        }
-        System.out.println();
-        System.out.println("};");
-        System.out.println();
-
-        // Build unit per unit offsets to corresponding type sub types sorted by
-        // unit first and then per unit.
-        TreeMap<OrderedPair<Integer, Integer>, Pair<Integer, Integer>> unitPerUnitOffsetsToTypeSubType
-                = new TreeMap<>();
-        for (Map.Entry<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> entry
-                : getUnitsToPerParts().entrySet()) {
-            Pair<MeasureUnit, MeasureUnit> unitPerUnit = entry.getValue();
-            unitPerUnitOffsetsToTypeSubType.put(
-                    OrderedPair.of(
-                            measureUnitToOffset.get(unitPerUnit.first),
-                            measureUnitToOffset.get(unitPerUnit.second)),
-                    measureUnitToTypeSubType.get(entry.getKey()));
-        }
-
-        // Print out the fast-path for the default constructor
-        System.out.println("// Shortcuts to the base unit in order to make the default constructor fast");
-        System.out.println("static const int32_t kBaseTypeIdx = " + baseTypeIdx + ";");
-        System.out.println("static const int32_t kBaseSubTypeIdx = " + baseSubTypeIdx + ";");
-        System.out.println();
-
-        Map<String, MeasureUnit> seen = new HashMap<>();
-        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
-
-            String type = entry.getKey();
-            if (type.equals("currency") || type.equals("none")) {
-                continue;
-            }
-            for (MeasureUnit unit : entry.getValue()) {
-                String name = toCamelCase(unit);
-                Pair<Integer, Integer> typeSubType = measureUnitToTypeSubType.get(unit);
-                if (typeSubType == null) {
-                    throw new IllegalStateException();
+            out.println();
+            out.println("};");
+            out.println();
+            out.println("// Must be grouped by type and sorted alphabetically within each type.");
+            out.println("static const char * const gSubTypes[] = {");
+            first = true;
+            int offset = 0;
+            int typeIdx = 0;
+            Map<MeasureUnit, Integer> measureUnitToOffset = new HashMap<>();
+            Map<MeasureUnit, Pair<Integer, Integer>> measureUnitToTypeSubType =
+                    new HashMap<>();
+            for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+                int subTypeIdx = 0;
+                for (MeasureUnit unit : entry.getValue()) {
+                    if (!first) {
+                        out.println(",");
+                    }
+                    if (unit != null) {
+                        out.print("    \"" + unit.getSubtype() + "\"");
+                    } else {
+                        assertEquals("unit only null for \"none\" type", "none", entry.getKey());
+                        out.print("    \"\"");
+                    }
+                    first = false;
+                    measureUnitToOffset.put(unit, offset);
+                    measureUnitToTypeSubType.put(unit, Pair.of(typeIdx, subTypeIdx));
+                    if (unit == NoUnit.BASE) {
+                        baseTypeIdx = typeIdx;
+                        baseSubTypeIdx = subTypeIdx;
+                    }
+                    offset++;
+                    subTypeIdx++;
                 }
-                checkForDup(seen, name, unit);
-                System.out.printf("MeasureUnit *MeasureUnit::create%s(UErrorCode &status) {\n", name);
-                System.out.printf("    return MeasureUnit::create(%d, %d, status);\n",
-                        typeSubType.first, typeSubType.second);
-                System.out.println("}");
-                System.out.println();
-                System.out.printf("MeasureUnit MeasureUnit::get%s() {\n", name);
-                System.out.printf("    return MeasureUnit(%d, %d);\n",
-                        typeSubType.first, typeSubType.second);
-                System.out.println("}");
-                System.out.println();
-                // Hack: METRIC-TON unit changed its name from "metric-ton" to "tonne"
-                // In order to preserve the existing APIs for "metric-ton" we need to
-                // add those APIs manually
-                if (name.equals("Tonne")) {
-                    addCXXForMetricTon(typeSubType);
+                typeIdx++;
+            }
+            out.println();
+            out.println("};");
+            out.println();
+
+            // Build unit per unit offsets to corresponding type sub types sorted by
+            // unit first and then per unit.
+            TreeMap<OrderedPair<Integer, Integer>, Pair<Integer, Integer>> unitPerUnitOffsetsToTypeSubType
+                    = new TreeMap<>();
+            for (Map.Entry<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> entry
+                    : getUnitsToPerParts().entrySet()) {
+                Pair<MeasureUnit, MeasureUnit> unitPerUnit = entry.getValue();
+                unitPerUnitOffsetsToTypeSubType.put(
+                        OrderedPair.of(
+                                measureUnitToOffset.get(unitPerUnit.first),
+                                measureUnitToOffset.get(unitPerUnit.second)),
+                        measureUnitToTypeSubType.get(entry.getKey()));
+            }
+
+            // Print out the fast-path for the default constructor
+            out.println("// Shortcuts to the base unit in order to make the default constructor fast");
+            out.println("static const int32_t kBaseTypeIdx = " + baseTypeIdx + ";");
+            out.println("static const int32_t kBaseSubTypeIdx = " + baseSubTypeIdx + ";");
+            out.println();
+
+            Map<String, MeasureUnit> seen = new HashMap<>();
+            for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+
+                String type = entry.getKey();
+                if (type.equals("currency") || type.equals("none")) {
+                    continue;
+                }
+                for (MeasureUnit unit : entry.getValue()) {
+                    String name = toCamelCase(unit);
+                    Pair<Integer, Integer> typeSubType = measureUnitToTypeSubType.get(unit);
+                    if (typeSubType == null) {
+                        throw new IllegalStateException();
+                    }
+                    checkForDup(seen, name, unit);
+                    out.printf("MeasureUnit *MeasureUnit::create%s(UErrorCode &status) {\n", name);
+                    out.printf("    return MeasureUnit::create(%d, %d, status);\n",
+                            typeSubType.first, typeSubType.second);
+                    out.println("}");
+                    out.println();
+                    out.printf("MeasureUnit MeasureUnit::get%s() {\n", name);
+                    out.printf("    return MeasureUnit(%d, %d);\n",
+                            typeSubType.first, typeSubType.second);
+                    out.println("}");
+                    out.println();
+                    // Hack: METRIC-TON unit changed its name from "metric-ton" to "tonne"
+                    // In order to preserve the existing APIs for "metric-ton" we need to
+                    // add those APIs manually
+                    if (name.equals("Tonne")) {
+                        addCXXForMetricTon(typeSubType, out);
+                    }
                 }
             }
+            out.println("// End generated code for measunit.cpp");
         }
-        System.out.println("// End generated code for measunit.cpp");
     }
 
     // Add the API skeletons for "metric-ton"
-    // The tool won't create them any more 
-    private static void addCXXForMetricTon(Pair<Integer, Integer> typeSubType) {
+    // The tool won't create them any more
+    private static void addCXXForMetricTon(Pair<Integer, Integer> typeSubType, PrintStream out) {
         String name = "MetricTon";
-        System.out.printf("MeasureUnit *MeasureUnit::create%s(UErrorCode &status) {\n", name);
-        System.out.printf("    return MeasureUnit::create(%d, %d, status);\n",
+        out.printf("MeasureUnit *MeasureUnit::create%s(UErrorCode &status) {\n", name);
+        out.printf("    return MeasureUnit::create(%d, %d, status);\n",
                         typeSubType.first, typeSubType.second);
-        System.out.println("}");
-        System.out.println();
-        System.out.printf("MeasureUnit MeasureUnit::get%s() {\n", name);
-        System.out.printf("    return MeasureUnit(%d, %d);\n",
+        out.println("}");
+        out.println();
+        out.printf("MeasureUnit MeasureUnit::get%s() {\n", name);
+        out.printf("    return MeasureUnit(%d, %d);\n",
                         typeSubType.first, typeSubType.second);
-        System.out.println("}");
-        System.out.println();
+        out.println("}");
+        out.println();
     }
 
     private static String toCamelCase(MeasureUnit unit) {
@@ -662,61 +683,64 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         return result.toString();
     }
 
-    static boolean isTypeHidden(String type) {
+    private static boolean isTypeHidden(String type) {
         return "currency".equals(type);
     }
 
-    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
-    // for MeasureFormat during the release process.
-    static void generateBackwardCompatibilityTest(String version) {
-        Map<String, MeasureUnit> seen = new HashMap<>();
-        System.out.println();
-        System.out.printf("    public void TestCompatible%s() {\n", version.replace(".", "_"));
-        System.out.println("        MeasureUnit[] units = {");
-        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
-        int count = 0;
-        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
-            if (isTypeHidden(entry.getKey())) {
-                continue;
+    private static void generateBackwardCompatibilityTest(String version) throws IOException {
+        String fullOutputPath = "${icuroot}/icu4j/main/common_tests/src/test/java/com/ibm/icu/dev/test/format/MeasureUnitCompatibilityTest.java";
+        try (PrintStream out = createAndStartOutputFile(fullOutputPath)) {
+            Map<String, MeasureUnit> seen = new HashMap<>();
+            out.println();
+            out.printf("    @Test\n");
+            out.printf("    public void TestCompatible%s() {\n", version.replace(".", "_"));
+            out.println("        MeasureUnit[] units = {");
+            TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
+            int count = 0;
+            for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+                if (isTypeHidden(entry.getKey())) {
+                    continue;
+                }
+                for (MeasureUnit unit : entry.getValue()) {
+                    String javaName = toJAVAName(unit);
+                    checkForDup(seen, javaName, unit);
+                    out.printf("                MeasureUnit.%s,\n", javaName);
+                    count++;
+                }
             }
-            for (MeasureUnit unit : entry.getValue()) {
-                String javaName = toJAVAName(unit);
-                checkForDup(seen, javaName, unit);
-                System.out.printf("                MeasureUnit.%s,\n", javaName);
-                count++;
-            }
+            out.println("        };");
+            out.printf("        assertEquals(\"\",  %d, units.length);\n", count);
+            out.println("    }");
         }
-        System.out.println("        };");
-        System.out.printf("        assertEquals(\"\",  %d, units.length);\n", count);
-        System.out.println("    }");
     }
 
-    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
-    // for MeasureFormat during the release process.
-    static void generateCXXBackwardCompatibilityTest(String version) {
-        System.out.println();
-        Map<String, MeasureUnit> seen = new HashMap<>();
-        System.out.printf("void MeasureFormatTest::TestCompatible%s() {\n", version.replace(".", "_"));
-        System.out.println("    UErrorCode status = U_ZERO_ERROR;");
-        System.out.println("    LocalPointer<MeasureUnit> measureUnit;");
-        System.out.println("    MeasureUnit measureUnitValue;");
-        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
-        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
-            if (isTypeHidden(entry.getKey())) {
-                continue;
+    private static void generateCXXBackwardCompatibilityTest(String version) throws IOException {
+        String fullOutputPath = "${icuroot}/icu4c/source/test/intltest/measfmttest.cpp";
+        try (PrintStream out = createAndStartOutputFile(fullOutputPath)) {
+            out.println();
+            Map<String, MeasureUnit> seen = new HashMap<>();
+            out.printf("void MeasureFormatTest::TestCompatible%s() {\n", version.replace(".", "_"));
+            out.println("    UErrorCode status = U_ZERO_ERROR;");
+            out.println("    LocalPointer<MeasureUnit> measureUnit;");
+            out.println("    MeasureUnit measureUnitValue;");
+            TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
+            for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+                if (isTypeHidden(entry.getKey())) {
+                    continue;
+                }
+                for (MeasureUnit unit : entry.getValue()) {
+                    String camelCase = toCamelCase(unit);
+                    checkForDup(seen, camelCase, unit);
+                    out.printf("    measureUnit.adoptInstead(MeasureUnit::create%s(status));\n", camelCase);
+                    out.printf("    measureUnitValue = MeasureUnit::get%s();\n", camelCase);
+                }
             }
-            for (MeasureUnit unit : entry.getValue()) {
-                String camelCase = toCamelCase(unit);
-                checkForDup(seen, camelCase, unit);
-                System.out.printf("    measureUnit.adoptInstead(MeasureUnit::create%s(status));\n", camelCase);
-                System.out.printf("    measureUnitValue = MeasureUnit::get%s();\n", camelCase);
-            }
+            out.println("    assertSuccess(\"\", status);");
+            out.println("}");
         }
-        System.out.println("    assertSuccess(\"\", status);");
-        System.out.println("}");
     }
 
-    static String toJAVAName(MeasureUnit unit) {
+    private static String toJAVAName(MeasureUnit unit) {
         String code = unit.getSubtype();
         String type = unit.getType();
 
@@ -734,53 +758,54 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         return name;
     }
 
-    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
-    // for MeasureFormat during the release process.
-    static void generateConstants(String thisVersion) {
-        System.out.println("    // Start generated MeasureUnit constants");
-        System.out.println();
-        Map<String, MeasureUnit> seen = new HashMap<>();
-        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
-        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
-            String type = entry.getKey();
-            if (isTypeHidden(type)) {
-                continue;
+    private static void generateConstants(String thisVersion) throws IOException {
+        String fullOutputPath = "${icuroot}/icu4j/main/core/src/main/java/com/ibm/icu/util/MeasureUnit.java";
+        try (PrintStream out = createAndStartOutputFile(fullOutputPath)) {
+            out.println("    // Start generated MeasureUnit constants");
+            out.println();
+            Map<String, MeasureUnit> seen = new HashMap<>();
+            TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
+            for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+                String type = entry.getKey();
+                if (isTypeHidden(type)) {
+                    continue;
+                }
+                for (MeasureUnit unit : entry.getValue()) {
+                    String name = toJAVAName(unit);
+                    String code = unit.getSubtype();
+                    checkForDup(seen, name, unit);
+                    out.println("    /**");
+                    out.println("     * Constant for unit of " + type +
+                            ": " +
+                            code);
+                    // Special case JAVA had old constants for time from before.
+                    if ("duration".equals(type) && TIME_CODES.contains(code)) {
+                        out.println("     * @stable ICU 4.0");
+                    }
+                    else if (isDraft(name)) {
+                        out.println("     * @draft ICU " + getVersion(name, thisVersion));
+                    } else {
+                        out.println("     * @stable ICU " + getVersion(name, thisVersion));
+                    }
+                    out.println("     */");
+                    if ("duration".equals(type) && TIME_CODES.contains(code)) {
+                        out.println("    public static final TimeUnit " + name + " = (TimeUnit) MeasureUnit.internalGetInstance(\"" +
+                                type +
+                                "\", \"" +
+                                code +
+                                "\");");
+                    } else {
+                        out.println("    public static final MeasureUnit " + name + " = MeasureUnit.internalGetInstance(\"" +
+                                type +
+                                "\", \"" +
+                                code +
+                                "\");");
+                    }
+                    out.println();
+                }
             }
-            for (MeasureUnit unit : entry.getValue()) {
-                String name = toJAVAName(unit);
-                String code = unit.getSubtype();
-                checkForDup(seen, name, unit);
-                System.out.println("    /**");
-                System.out.println("     * Constant for unit of " + type +
-                        ": " +
-                        code);
-                // Special case JAVA had old constants for time from before.
-                if ("duration".equals(type) && TIME_CODES.contains(code)) {
-                    System.out.println("     * @stable ICU 4.0");
-                }
-                else if (isDraft(name)) {
-                    System.out.println("     * @draft ICU " + getVersion(name, thisVersion));
-                } else {
-                    System.out.println("     * @stable ICU " + getVersion(name, thisVersion));
-                }
-                System.out.println("     */");
-                if ("duration".equals(type) && TIME_CODES.contains(code)) {
-                    System.out.println("    public static final TimeUnit " + name + " = (TimeUnit) MeasureUnit.internalGetInstance(\"" +
-                            type +
-                            "\", \"" +
-                            code +
-                            "\");");
-                } else {
-                    System.out.println("    public static final MeasureUnit " + name + " = MeasureUnit.internalGetInstance(\"" +
-                            type +
-                            "\", \"" +
-                            code +
-                            "\");");
-                }
-                System.out.println();
-            }
+            out.println("    // End generated MeasureUnit constants");
         }
-        System.out.println("    // End generated MeasureUnit constants");
     }
 
     private static String getVersion(String javaName, String thisVersion) {
@@ -799,4 +824,20 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         return DRAFT_VERSION_SET.contains(version);
     }
 
+    private static PrintStream createAndStartOutputFile(String fullOutputFileName) throws IOException {
+        if (fullOutputFileName.startsWith("${icuroot}")) {
+            fullOutputFileName = fullOutputFileName.replace("${icuroot}", ICU_ROOT);
+        }
+        File outputFile = new File("target", new File(fullOutputFileName).getName());
+        System.out.printf("%nCopy the generated code fragments from / to\n    %s \\\n    %s%n",
+                outputFile.getAbsoluteFile(), fullOutputFileName);
+
+        return new PrintStream(outputFile, "utf-8");
+    }
+
+    /*
+     * This is not a real test class. It is only used to
+     *generate updated unit tests code based on new CLDR data.
+     * Do not add any other tests here.
+     */
 }
