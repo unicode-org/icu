@@ -36,6 +36,10 @@ jobs:
   retain-maven-cache:
     name: Run all tests with Maven
     runs-on: ubuntu-22.04  # Updated in BRS
+    # Only run this on the upstream repo. Otherwise, running in a personal fork will cause
+    # Github to disable the personal fork copy of the workflow
+    # (Github complains about running a scheduled workflow on a repo with > 60 days of inactivity)
+    if: github.ref == 'refs/heads/main' && github.repository == 'unicode-org/unicodetools'
     steps:
       - name: Checkout and setup
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
