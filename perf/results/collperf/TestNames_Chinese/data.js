@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730310544954,
+  "lastUpdate": 1730845551535,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -56265,6 +56265,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2111690.5038,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "8d86ca142e43d55017be8073d3671d6c5a114e1a",
+          "message": "ICU-22941 Revert \"ICU-22112 word break updates for @,colon; colon tailorings for fi,sv\"\n\nThis reverts commit 49d192fefe09fcc38547203487cf4e63d2dad61f.",
+          "timestamp": "2024-11-05T22:59:24+01:00",
+          "tree_id": "d779c4e67ddd19ab2ed1bb4ffe4f55dd5fe8e8ac",
+          "url": "https://github.com/unicode-org/icu/commit/8d86ca142e43d55017be8073d3671d6c5a114e1a"
+        },
+        "date": 1730845363981,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 151.7521,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8703001.7147,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2099424,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7680175.2558,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2098810.2681,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
