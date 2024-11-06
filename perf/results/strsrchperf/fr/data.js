@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730850163830,
+  "lastUpdate": 1730854309224,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35025,6 +35025,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 50.0086,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "376da67f8dafe4aeee20a7a8ab761c683da8a316",
+          "message": "ICU-22953 MF2: Allow unpaired surrogates in text and quoted literals\n\nSee https://github.com/unicode-org/message-format-wg/pull/906/",
+          "timestamp": "2024-11-05T16:03:11-08:00",
+          "tree_id": "b01592b4d2e9f27e871d284a4efa9225270edc85",
+          "url": "https://github.com/unicode-org/icu/commit/376da67f8dafe4aeee20a7a8ab761c683da8a316"
+        },
+        "date": 1730854121472,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.3795,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 49.795,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
