@@ -20,6 +20,7 @@ import java.util.Date;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -408,6 +409,10 @@ public final class XLIFF2ICUConverter {
         String urls = filenameToURL(xmlfileName);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
         dfactory.setNamespaceAware(true);
+        trySettingFeature(dfactory, "http://apache.org/xml/features/disallow-doctype-decl", true);
+        trySettingFeature(dfactory, "http://xml.org/sax/features/external-general-entities", false);
+        trySettingFeature(dfactory, "http://xml.org/sax/features/external-parameter-entities", false);
+        trySettingFeature(dfactory, "http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
         Document doc = null;
 
         if (xliff10) {
@@ -416,6 +421,8 @@ public final class XLIFF2ICUConverter {
         } else {
             try {
                 SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+                schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
                 Schema schema = schemaFactory.newSchema();
 
                 dfactory.setSchema(schema);
@@ -1300,6 +1307,15 @@ public final class XLIFF2ICUConverter {
             buffer.write(bytes, 0, bytes.length);
         } catch(Exception e) {
             System.err.println(e);
+            System.exit(1);
+        }
+    }
+
+    private static void trySettingFeature(DocumentBuilderFactory dfactory, String name, boolean value) {
+        try {
+            dfactory.setFeature(name, value);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
             System.exit(1);
         }
     }

@@ -142,13 +142,20 @@ public class JacocoReportCheck {
     private static Map<String, ReportEntry> parseReport(File reportXmlFile) {
         try {
             Map<String, ReportEntry> entries = new TreeMap<String, ReportEntry>();
-            DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
+            dfactory.setNamespaceAware(true);
+            dfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            dfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            DocumentBuilder docBuilder = dfactory.newDocumentBuilder();
             docBuilder.setEntityResolver(new EntityResolver() {
                 // Ignores JaCoCo report DTD
                 public InputSource resolveEntity(String publicId, String systemId) {
                     return new InputSource(new StringReader(""));
                 }
             });
+
             Document doc = docBuilder.parse(reportXmlFile);
             NodeList nodes = doc.getElementsByTagName("report");
             for (int idx = 0; idx < nodes.getLength(); idx++) {
@@ -384,5 +391,4 @@ public class JacocoReportCheck {
             return method;
         }
     }
-
 }
