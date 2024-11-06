@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730853750373,
+  "lastUpdate": 1730927157936,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -57356,6 +57356,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 11.672740419639972,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "0357501948d2f0ab43c891f446e68f19b07b442d",
+          "message": "ICU-22942 MF2 ICU4C: NFC-normalize names and keys according to spec\n\nIncludes adding !UCONFIG_NO_NORMALIZATION guards to all MF2 files",
+          "timestamp": "2024-11-06T12:48:35-08:00",
+          "tree_id": "40ca7029eda8c2eeb09d0a9333ef64b021dba222",
+          "url": "https://github.com/unicode-org/icu/commit/0357501948d2f0ab43c891f446e68f19b07b442d"
+        },
+        "date": 1730926966163,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 11.589086083473381,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
