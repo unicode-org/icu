@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730854660063,
+  "lastUpdate": 1730927833948,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -62397,6 +62397,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 13.7098,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "0357501948d2f0ab43c891f446e68f19b07b442d",
+          "message": "ICU-22942 MF2 ICU4C: NFC-normalize names and keys according to spec\n\nIncludes adding !UCONFIG_NO_NORMALIZATION guards to all MF2 files",
+          "timestamp": "2024-11-06T12:48:35-08:00",
+          "tree_id": "40ca7029eda8c2eeb09d0a9333ef64b021dba222",
+          "url": "https://github.com/unicode-org/icu/commit/0357501948d2f0ab43c891f446e68f19b07b442d"
+        },
+        "date": 1730927638328,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 16.24,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 11.9288,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 11.9009,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 12.2463,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 13.7069,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 13.6785,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
