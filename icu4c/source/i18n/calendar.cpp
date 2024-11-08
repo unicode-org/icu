@@ -3609,7 +3609,12 @@ int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField, UErrorCo
 #endif
                     if(julianDay+testDate > nextJulianDay) { // is it past Dec 31?  (nextJulianDay is day BEFORE year+1's  Jan 1)
                         // Fire up the calculating engines.. retry YWOY = (year-1)
-                        julianDay = handleComputeMonthStart(year-1, 0, false, status); // jd before Jan 1 of previous year
+                        int32_t prevYear;
+                        if (uprv_add32_overflow(year, -1, &prevYear)) {
+                            status = U_ILLEGAL_ARGUMENT_ERROR;
+                            return 0;
+                        }
+                        julianDay = handleComputeMonthStart(prevYear, 0, false, status); // jd before Jan 1 of previous year
                         if (U_FAILURE(status)) {
                             return 0;
                         }
