@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730927531768,
+  "lastUpdate": 1731028054469,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43887,6 +43887,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.9719,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "fbfbe6c7aa76a0b3cf5618f1a5baf81abd2795f9",
+          "message": "ICU-22917 Output to files, cleanup, update docs",
+          "timestamp": "2024-11-07T16:52:29-08:00",
+          "tree_id": "9035930f860fd65ade8ce62a8bfbe891c4e0e1b7",
+          "url": "https://github.com/unicode-org/icu/commit/fbfbe6c7aa76a0b3cf5618f1a5baf81abd2795f9"
+        },
+        "date": 1731027867280,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.2156,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.0324,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.9725,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
