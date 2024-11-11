@@ -489,11 +489,28 @@ FILE* prepareOutputFile(const char* basename) {
 
 #if !UCONFIG_NO_NORMALIZATION
 
-struct PendingDescriptor {
+class PendingDescriptor {
+public:
     UChar32 scalar;
-    uint32_t descriptor;
+    uint32_t descriptorOrFlags;
+    // If false, we use the above fields only. If true, descriptor only
+    // contains the two highest-bit flags and the rest is computed later
+    // from the fields below.
+    UBool complex;
     UBool supplementary;
+    UBool onlyNonStartersInTrail;
+    uint32_t len;
+    uint32_t offset;
+
+    PendingDescriptor(UChar32 scalar, uint32_t descriptor);
+    PendingDescriptor(UChar32 scalar, uint32_t flags, UBool supplementary, UBool onlyNonStartersInTrail, uint32_t len, uint32_t offset);
 };
+
+PendingDescriptor::PendingDescriptor(UChar32 scalar, uint32_t descriptor)
+ : scalar(scalar), descriptorOrFlags(descriptor), complex(false), supplementary(false), onlyNonStartersInTrail(false), len(0), offset(0) {}
+
+PendingDescriptor::PendingDescriptor(UChar32 scalar, uint32_t flags, UBool supplementary, UBool onlyNonStartersInTrail, uint32_t len, uint32_t offset)
+ : scalar(scalar), descriptorOrFlags(flags), complex(true), supplementary(supplementary), onlyNonStartersInTrail(onlyNonStartersInTrail), len(len), offset(offset) {}
 
 void writeCanonicalCompositions(USet* backwardCombiningStarters) {
     IcuToolErrorCode status("icuexportdata: computeCanonicalCompositions");
@@ -557,21 +574,18 @@ void writeDecompositionTables(const char* basename, const uint16_t* ptr16, size_
     fclose(f);
 }
 
-void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t baseSize32, uint32_t supplementSize16, USet* uset, USet* reference, const std::vector<PendingDescriptor>& pendingTrieInsertions, char16_t passthroughCap) {
-    IcuToolErrorCode status("icuexportdata: writeDecompositionData");
-    FILE* f = prepareOutputFile(basename);
-
-    // Zero is a magic number that means the character decomposes to itself.
-    LocalUMutableCPTriePointer builder(umutablecptrie_open(0, 0, status));
-
+void pendingInsertionsToTrie(const char* basename, UMutableCPTrie* trie, const std::vector<PendingDescriptor>& pendingTrieInsertions, uint32_t baseSize16, uint32_t baseSize32, uint32_t supplementSize16) {
+    IcuToolErrorCode status("icuexportdata: pendingInsertionsToTrie");
     // Iterate backwards to insert lower code points in the trie first in case it matters
     // for trie block allocation.
     for (int32_t i = pendingTrieInsertions.size() - 1; i >= 0; --i) {
         const PendingDescriptor& pending = pendingTrieInsertions[i];
-        uint32_t additional = 0;
-        if (!(pending.descriptor & 0xFFFC0000)) {
-            uint32_t offset = pending.descriptor & 0xFFF;
+        if (pending.complex) {
+            uint32_t additional = 0;
+            uint32_t offset = pending.offset;
+            uint32_t len = pending.len;
             if (!pending.supplementary) {
+                len -= 2;
                 if (offset >= baseSize16) {
                     // This is a offset to supplementary 16-bit data. We have
                     // 16-bit base data and 32-bit base data before. However,
@@ -579,6 +593,7 @@ void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t 
                     additional = baseSize32;
                 }
             } else {
+                len -= 1;
                 if (offset >= baseSize32) {
                     // This is an offset to supplementary 32-bit data. We have 16-bit
                     // base data, 32-bit base data, and 16-bit supplementary data before.
@@ -591,21 +606,55 @@ void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t 
                     additional = baseSize16;
                 }
             }
+            // +1 to make offset always non-zero
+            offset += 1;
             if (offset + additional > 0xFFF) {
                 status.set(U_INTERNAL_PROGRAM_ERROR);
                 handleError(status, __LINE__, basename);
             }
+            if (len > 7) {
+                status.set(U_INTERNAL_PROGRAM_ERROR);
+                handleError(status, __LINE__, basename);
+            }
+            umutablecptrie_set(trie, pending.scalar, pending.descriptorOrFlags | (uint32_t(pending.onlyNonStartersInTrail) << 4) | len | (offset + additional) << 16, status);
+        } else {
+            umutablecptrie_set(trie, pending.scalar, pending.descriptorOrFlags, status);
         }
-        // It turns out it's better to swap the halves compared to the initial
-        // idea in order to put special marker values close to zero so that
-        // an important marker value becomes 1, so it's efficient to compare
-        // "1 or 0". Unfortunately, going through all the code to swap
-        // things is too error prone, so let's do the swapping here in one
-        // place.
-        uint32_t oldTrieValue = pending.descriptor + additional;
-        uint32_t swappedTrieValue = (oldTrieValue >> 16) | (oldTrieValue << 16);
-        umutablecptrie_set(builder.getAlias(), pending.scalar, swappedTrieValue, status);
     }
+}
+
+/// Marker that the decomposition does not round trip via NFC.
+const uint32_t NON_ROUND_TRIP_MASK = (1 << 30);
+
+/// Marker that the first character of the decomposition can combine
+/// backwards.
+const uint32_t BACKWARD_COMBINING_MASK = (1 << 31);
+
+void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t baseSize32, uint32_t supplementSize16, USet* uset, USet* reference, const std::vector<PendingDescriptor>& pendingTrieInsertions, const std::vector<PendingDescriptor>& nfdPendingTrieInsertions, char16_t passthroughCap) {
+    IcuToolErrorCode status("icuexportdata: writeDecompositionData");
+    FILE* f = prepareOutputFile(basename);
+
+    // Zero is a magic number that means the character decomposes to itself.
+    LocalUMutableCPTriePointer builder(umutablecptrie_open(0, 0, status));
+
+    if (uprv_strcmp(basename, "uts46d") != 0) {
+        // Make surrogates decompose to U+FFFD. Don't do this for UTS 46, since this
+        // optimization is only used by the UTF-16 slice mode, and UTS 46 is not
+        // supported in slice modes (which do not support ignorables).
+        // Mark these as potentially backward-combining, to make lead surrogates
+        // for non-BMP characters that are backward-combining count as
+        // backward-combining just in case, though the backward-combiningness
+        // is not actually being looked at today.
+        umutablecptrie_setRange(builder.getAlias(), 0xD800, 0xDFFF, NON_ROUND_TRIP_MASK | BACKWARD_COMBINING_MASK | 0xFFFD, status);
+    }
+
+    // Add a marker value for Hangul syllables
+    umutablecptrie_setRange(builder.getAlias(), 0xAC00, 0xD7A3, 1, status);
+
+    // First put the NFD data in the trie, to be partially overwritten in the NFKD and UTS 46 cases.
+    // This is easier that changing the logic that computes the pending insertions.
+    pendingInsertionsToTrie(basename, builder.getAlias(), nfdPendingTrieInsertions, baseSize16, baseSize32, supplementSize16);
+    pendingInsertionsToTrie(basename, builder.getAlias(), pendingTrieInsertions, baseSize16, baseSize32, supplementSize16);
     LocalUCPTriePointer utrie(umutablecptrie_buildImmutable(
         builder.getAlias(),
         trieType,
@@ -613,6 +662,7 @@ void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t 
         status));
     handleError(status, __LINE__, basename);
 
+    // The ICU4X side has changed enough this whole block of expectation checking might be more appropriate to remove.
     if (reference) {
         if (uset_contains(reference, 0xFF9E) || uset_contains(reference, 0xFF9F) || !uset_contains(reference, 0x0345)) {
             // NFD expectations don't hold. The set must not contain the half-width
@@ -628,13 +678,9 @@ void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t 
         USet* iotaSubscript = uset_openEmpty();
         uset_add(iotaSubscript, 0x0345);
 
-        uint8_t flags = 0;
-
         USet* halfWidthCheck = uset_cloneAsThawed(uset);
         uset_removeAll(halfWidthCheck, reference);
-        if (uset_equals(halfWidthCheck, halfWidthVoicing)) {
-            flags |= 1;
-        } else if (!uset_isEmpty(halfWidthCheck)) {
+        if (!uset_equals(halfWidthCheck, halfWidthVoicing) && !uset_isEmpty(halfWidthCheck)) {
             // The result was neither empty nor contained exactly
             // the two half-width voicing marks. The ICU4X
             // normalizer doesn't know how to deal with this case.
@@ -655,71 +701,13 @@ void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t 
 
         uset_close(iotaSubscript);
         uset_close(halfWidthVoicing);
-
-        fprintf(f, "flags = 0x%X\n", flags);
-        fprintf(f, "cap = 0x%X\n", passthroughCap);
     }
+    fprintf(f, "cap = 0x%X\n", passthroughCap);
     fprintf(f, "[trie]\n");
     usrc_writeUCPTrie(f, "trie", utrie.getAlias(), UPRV_TARGET_SYNTAX_TOML);
     fclose(f);
     handleError(status, __LINE__, basename);
 }
-
-// Special marker for the NFKD form of U+FDFA
-const int32_t FDFA_MARKER = 3;
-
-// Special marker for characters whose decomposition starts with a non-starter
-// and the decomposition isn't the character itself.
-const int32_t SPECIAL_NON_STARTER_DECOMPOSITION_MARKER = 2;
-
-// Special marker for starters that decompose to themselves but that may
-// combine backwards under canonical composition
-const int32_t BACKWARD_COMBINING_STARTER_MARKER = 1;
-
-/// Marker that a complex decomposition isn't round-trippable
-/// under re-composition.
-///
-/// TODO: When taking a data format break, swap this around with
-/// `BACKWARD_COMBINING_STARTER_DECOMPOSITION_MARKER`.
-const uint32_t NON_ROUND_TRIP_MARKER = 1;
-
-/// Marker that a complex decomposition starts with a starter
-/// that can combine backwards.
-///
-/// TODO: When taking a data format break, swap this around with
-/// `NON_ROUND_TRIP_MARKER` to use the same bit as with characters
-/// that decompose to self but can combine backwards.
-const uint32_t BACKWARD_COMBINING_STARTER_DECOMPOSITION_MARKER = 2;
-
-UBool permissibleBmpPair(UBool knownToRoundTrip, UChar32 c, UChar32 second) {
-    if (knownToRoundTrip) {
-        return true;
-    }
-    // Nuktas, Hebrew presentation forms and polytonic Greek with oxia
-    // are special-cased in ICU4X.
-    if (c >= 0xFB1D && c <= 0xFB4E) {
-        // Hebrew presentation forms
-        return true;
-    }
-    if (c >= 0x1F71 && c <= 0x1FFB) {
-        // Polytonic Greek with oxia
-        return true;
-    }
-    if ((second & 0x7F) == 0x3C && second >= 0x0900 && second <= 0x0BFF) {
-        // Nukta
-        return true;
-    }
-    // To avoid more branchiness, 4 characters that decompose to
-    // a BMP starter followed by a BMP non-starter are excluded
-    // from being encoded directly into the trie value and are
-    // handled as complex decompositions instead. These are:
-    // U+0F76 TIBETAN VOWEL SIGN VOCALIC R
-    // U+0F78 TIBETAN VOWEL SIGN VOCALIC L
-    // U+212B ANGSTROM SIGN
-    // U+2ADC FORKING
-    return false;
-}
-
 
 // Find the slice `needle` within `storage` and return its index, failing which,
 // append all elements of `needle` to `storage` and return the index of it at the end.
@@ -749,6 +737,8 @@ size_t findOrAppend(std::vector<T>& storage, const UChar32* needle, size_t needl
 
 
 // Computes data for canonical decompositions
+// See components/normalizer/trie-value-format.md in the ICU4X repo
+// for documentation of the trie value format.
 void computeDecompositions(const char* basename,
                            const USet* backwardCombiningStarters,
                            std::vector<uint16_t>& storage16,
@@ -814,12 +804,23 @@ void computeDecompositions(const char* basename,
             // Surrogate
             continue;
         }
+        if (c == 0xFFFD) {
+            // REPLACEMENT CHARACTER
+            // This character is a starter that decomposes to self,
+            // so without a special case here it would end up as
+            // passthrough-eligible in all normalizations forms.
+            // However, in the potentially-ill-formed UTF-8 case
+            // UTF-8 errors return U+FFFD from the iterator, and
+            // errors need to be treated as ineligible for
+            // passthrough on the slice fast path. By giving
+            // U+FFFD a trie value whose flags make it ineligible
+            // for passthrough avoids a specific U+FFFD branch on
+            // the passthrough fast path.
+            pendingTrieInsertions.push_back({c, NON_ROUND_TRIP_MASK | BACKWARD_COMBINING_MASK});
+            continue;
+        }
         UnicodeString src;
         UnicodeString dst;
-        // True if we're building non-NFD or we're building NFD but
-        // the `c` round trips to NFC.
-        // False if we're building NFD and `c` does not round trip to NFC.
-        UBool nonNfdOrRoundTrips = true;
         src.append(c);
         if (mainNormalizer != nfdNormalizer) {
             UnicodeString inter;
@@ -827,38 +828,11 @@ void computeDecompositions(const char* basename,
             nfdNormalizer->normalize(inter, dst, status);
         } else {
             nfdNormalizer->normalize(src, dst, status);
-            UnicodeString nfc;
-            nfcNormalizer->normalize(dst, nfc, status);
-            nonNfdOrRoundTrips = (src == nfc);
         }
-        if (uts46) {
-            // Work around https://unicode-org.atlassian.net/browse/ICU-22658
-            // TODO: Remove the workaround after data corresponding to
-            // https://www.unicode.org/L2/L2024/24061.htm#179-C36 lands
-            // for Unicode 16.
-            switch (c) {
-                case 0x2F868:
-                    dst.truncate(0);
-                    dst.append(static_cast<UChar32>(0x36FC));
-                    break;
-                case 0x2F874:
-                    dst.truncate(0);
-                    dst.append(static_cast<UChar32>(0x5F53));
-                    break;
-                case 0x2F91F:
-                    dst.truncate(0);
-                    dst.append(static_cast<UChar32>(0x243AB));
-                    break;
-                case 0x2F95F:
-                    dst.truncate(0);
-                    dst.append(static_cast<UChar32>(0x7AEE));
-                    break;
-                case 0x2F9BF:
-                    dst.truncate(0);
-                    dst.append(static_cast<UChar32>(0x45D7));
-                    break;
-            }
-        }
+
+        UnicodeString nfc;
+        nfcNormalizer->normalize(dst, nfc, status);
+        UBool roundTripsViaCanonicalComposition = (src == nfc);
 
         int32_t len = dst.toUTF32(utf32, DECOMPOSITION_BUFFER_SIZE, status);
 
@@ -880,7 +854,7 @@ void computeDecompositions(const char* basename,
             compositionPassthroughBound = c;
             uset_add(decompositionStartsWithNonStarter, c);
             if (src != dst) {
-                if (c == 0x0340 || c == 0x0341 || c == 0x0343 || c == 0x0344 || c == 0x0F73 || c == 0x0F75 || c == 0x0F81 || c == 0xFF9E || c == 0xFF9F) {
+                if (c == 0x0340 || c == 0x0341 || c == 0x0343 || c == 0x0344 || c == 0x0F73 || c == 0x0F75 || c == 0x0F81 || (c == 0xFF9E && utf32[0] == 0x3099) || (c == 0xFF9F && utf32[0] == 0x309A)) {
                     specialNonStarterDecomposition = true;
                 } else {
                     // A character whose decomposition starts with a non-starter and isn't the same as the character itself and isn't already hard-coded into ICU4X.
@@ -893,18 +867,6 @@ void computeDecompositions(const char* basename,
             startsWithBackwardCombiningStarter = true;
             uset_add(decompositionStartsWithBackwardCombiningStarter, c);
         }
-        if (c != BACKWARD_COMBINING_STARTER_MARKER && len == 1 && utf32[0] == BACKWARD_COMBINING_STARTER_MARKER) {
-            status.set(U_INTERNAL_PROGRAM_ERROR);
-            handleError(status, __LINE__, basename);
-        }
-        if (c != SPECIAL_NON_STARTER_DECOMPOSITION_MARKER && len == 1 && utf32[0] == SPECIAL_NON_STARTER_DECOMPOSITION_MARKER) {
-            status.set(U_INTERNAL_PROGRAM_ERROR);
-            handleError(status, __LINE__, basename);
-        }
-        if (c != FDFA_MARKER && len == 1 && utf32[0] == FDFA_MARKER) {
-            status.set(U_INTERNAL_PROGRAM_ERROR);
-            handleError(status, __LINE__, basename);
-        }
         if (mainNormalizer != nfdNormalizer) {
             UnicodeString nfd;
             nfdNormalizer->normalize(src, nfd, status);
@@ -913,24 +875,29 @@ void computeDecompositions(const char* basename,
             }
             decompositionPassthroughBound = c;
             compositionPassthroughBound = c;
-        } else if (firstCombiningClass) {
+        }
+        if (firstCombiningClass) {
             len = 1;
             if (specialNonStarterDecomposition) {
-                utf32[0] = SPECIAL_NON_STARTER_DECOMPOSITION_MARKER; // magic value
+                // Special marker
+                pendingTrieInsertions.push_back({c, NON_ROUND_TRIP_MASK | BACKWARD_COMBINING_MASK | 0xD900 | u_getCombiningClass(c)});
             } else {
                 // Use the surrogate range to store the canonical combining class
-                utf32[0] = 0xD800 | static_cast<UChar32>(firstCombiningClass);
+                // XXX: Should non-started that decompose to self be marked as non-round-trippable in
+                // case such semantics turn out to be more useful for `NON_ROUND_TRIP_MASK`?
+                pendingTrieInsertions.push_back({c, BACKWARD_COMBINING_MASK | 0xD800 | static_cast<uint32_t>(firstCombiningClass)});
             }
+            continue;
         } else {
             if (src == dst) {
                 if (startsWithBackwardCombiningStarter) {
-                    pendingTrieInsertions.push_back({c, BACKWARD_COMBINING_STARTER_MARKER << 16, false});
+                    pendingTrieInsertions.push_back({c, BACKWARD_COMBINING_MASK});
                 }
                 continue;
             }
             decompositionPassthroughBound = c;
             // ICU4X hard-codes ANGSTROM SIGN
-            if (c != 0x212B) {
+            if (c != 0x212B && mainNormalizer == nfdNormalizer) {
                 UnicodeString raw;
                 if (!nfdNormalizer->getRawDecomposition(c, raw)) {
                     // We're always supposed to have a non-recursive decomposition
@@ -978,7 +945,7 @@ void computeDecompositions(const char* basename,
                 }
             }
         }
-        if (!nonNfdOrRoundTrips) {
+        if (!roundTripsViaCanonicalComposition) {
             compositionPassthroughBound = c;
         }
         if (!len) {
@@ -986,7 +953,7 @@ void computeDecompositions(const char* basename,
                 status.set(U_INTERNAL_PROGRAM_ERROR);
                 handleError(status, __LINE__, basename);
             }
-            pendingTrieInsertions.push_back({c, 0xFFFFFFFF, false});
+            pendingTrieInsertions.push_back({c, uint32_t(0xFFFFFFFF)});
         } else if (len == 1 && ((utf32[0] >= 0x1161 && utf32[0] <= 0x1175) || (utf32[0] >= 0x11A8 && utf32[0] <= 0x11C2))) {
             // Singleton decompositions to conjoining jamo.
             if (mainNormalizer == nfdNormalizer) {
@@ -994,16 +961,18 @@ void computeDecompositions(const char* basename,
                 status.set(U_INTERNAL_PROGRAM_ERROR);
                 handleError(status, __LINE__, basename);
             }
-            pendingTrieInsertions.push_back({c, static_cast<uint32_t>(utf32[0]) << 16, false});
+            pendingTrieInsertions.push_back({c, static_cast<uint32_t>(utf32[0]) | NON_ROUND_TRIP_MASK | (startsWithBackwardCombiningStarter ? BACKWARD_COMBINING_MASK : 0)});
         } else if (!startsWithBackwardCombiningStarter && len == 1 && utf32[0] <= 0xFFFF) {
-            pendingTrieInsertions.push_back({c, static_cast<uint32_t>(utf32[0]) << 16, false});
-        } else if (!startsWithBackwardCombiningStarter &&
+            pendingTrieInsertions.push_back({c, static_cast<uint32_t>(utf32[0]) | NON_ROUND_TRIP_MASK | (startsWithBackwardCombiningStarter ? BACKWARD_COMBINING_MASK : 0)});
+        } else if (c != 0x212B && // ANGSTROM SIGN is special to make the Harfbuzz case branch less in the more common case.
+                   !startsWithBackwardCombiningStarter &&
                    len == 2 &&
-                   utf32[0] <= 0xFFFF &&
-                   utf32[1] <= 0xFFFF &&
+                   utf32[0] <= 0x7FFF &&
+                   utf32[1] <= 0x7FFF &&
+                   utf32[0] > 0x1F &&
+                   utf32[1] > 0x1F &&
                    !u_getCombiningClass(utf32[0]) &&
-                   u_getCombiningClass(utf32[1]) &&
-                   permissibleBmpPair(nonNfdOrRoundTrips, c, utf32[1])) {
+                   u_getCombiningClass(utf32[1])) {
             for (int32_t i = 0; i < len; ++i) {
                 if (((utf32[i] == 0x0345) && (uprv_strcmp(basename, "uts46d") == 0)) || utf32[i] == 0xFF9E || utf32[i] == 0xFF9F) {
                     // Assert that iota subscript and half-width voicing marks never occur in these
@@ -1012,7 +981,7 @@ void computeDecompositions(const char* basename,
                     handleError(status, __LINE__, basename);
                 }
             }
-            pendingTrieInsertions.push_back({c, (static_cast<uint32_t>(utf32[0]) << 16) | static_cast<uint32_t>(utf32[1]), false});
+            pendingTrieInsertions.push_back({c, static_cast<uint32_t>(utf32[0]) | (static_cast<uint32_t>(utf32[1]) << 15) | (roundTripsViaCanonicalComposition ? 0 : NON_ROUND_TRIP_MASK)});
         } else {
             UBool supplementary = false;
             UBool nonInitialStarter = false;
@@ -1046,73 +1015,38 @@ void computeDecompositions(const char* basename,
                 if (len > LONGEST_ENCODABLE_LENGTH_16 || !len || len == 1) {
                     if (len == 18 && c == 0xFDFA) {
                         // Special marker for the one character whose decomposition
-                        // is too long.
-                        pendingTrieInsertions.push_back({c, FDFA_MARKER << 16, supplementary});
+                        // is too long. (Too long even if we took the fourth bit into use!)
+                        pendingTrieInsertions.push_back({c, NON_ROUND_TRIP_MASK | 1});
                         continue;
                     } else {
+                        // Note: There's a fourth bit available, but let's error out
+                        // if it's ever needed so that it doesn't get used without
+                        // updating docs.
                         status.set(U_INTERNAL_PROGRAM_ERROR);
                         handleError(status, __LINE__, basename);
                     }
                 }
             } else if (len > LONGEST_ENCODABLE_LENGTH_32 || !len) {
+                // Note: There's a fourth bit available, but let's error out
+                // if it's ever needed so that it doesn't get used without
+                // updating docs.
                 status.set(U_INTERNAL_PROGRAM_ERROR);
                 handleError(status, __LINE__, basename);
             }
-            // Complex decomposition
-            // Format for 16-bit value:
-            // 15..13: length minus two for 16-bit case and length minus one for
-            //         the 32-bit case. Length 8 needs to fit in three bits in
-            //         the 16-bit case, and this way the value is future-proofed
-            //         up to 9 in the 16-bit case. Zero is unused and length one
-            //         in the 16-bit case goes directly into the trie.
-            //     12: 1 if all trailing characters are guaranteed non-starters,
-            //         0 if no guarantees about non-starterness.
-            //         Note: The bit choice is this way around to allow for
-            //         dynamically falling back to not having this but instead
-            //         having one more bit for length by merely choosing
-            //         different masks.
-            //  11..0: Start offset in storage. The offset is to the logical
-            //         sequence of scalars16, scalars32, supplementary_scalars16,
-            //         supplementary_scalars32.
-            uint32_t descriptor = static_cast<uint32_t>(!nonInitialStarter) << 12;
-            if (!supplementary) {
-                descriptor |= (static_cast<uint32_t>(len) - 2) << 13;
-            } else {
-                descriptor |= (static_cast<uint32_t>(len) - 1) << 13;
-            }
-            if (descriptor & 0xFFF) {
-                status.set(U_INTERNAL_PROGRAM_ERROR);
-                handleError(status, __LINE__, basename);
-            }
+
             size_t index = 0;
             if (!supplementary) {
                 index = findOrAppend(storage16, utf32, len);
             } else {
                 index = findOrAppend(storage32, utf32, len);
             }
-            if (index > 0xFFF) {
-                status.set(U_INTERNAL_PROGRAM_ERROR);
-                handleError(status, __LINE__, basename);
-            }
-            descriptor |= static_cast<uint32_t>(index);
-            if (!descriptor || descriptor > 0xFFFF) {
-                // > 0xFFFF should never happen if the code above is correct.
-                // == 0 should not happen due to the nature of the data.
-                status.set(U_INTERNAL_PROGRAM_ERROR);
-                handleError(status, __LINE__, basename);
-            }
-            uint32_t nonRoundTripMarker = 0;
-            if (!nonNfdOrRoundTrips) {
-                nonRoundTripMarker = (NON_ROUND_TRIP_MARKER << 16);
-            }
-            uint32_t canCombineBackwardsMarker = 0;
-            if (startsWithBackwardCombiningStarter) {
-                canCombineBackwardsMarker = (BACKWARD_COMBINING_STARTER_DECOMPOSITION_MARKER << 16);
-            }
-            pendingTrieInsertions.push_back({c, descriptor | nonRoundTripMarker | canCombineBackwardsMarker, supplementary});
+            pendingTrieInsertions.push_back({c, (startsWithBackwardCombiningStarter ? BACKWARD_COMBINING_MASK : 0) | (roundTripsViaCanonicalComposition ? 0 : NON_ROUND_TRIP_MASK), supplementary, !nonInitialStarter, uint32_t(len), uint32_t(index)});
         }
     }
     if (storage16.size() + storage32.size() > 0xFFF) {
+        // We actually have 14 bits available, but let's error out so
+        // that docs can be updated when taking a reserved bit out of
+        // potential future flag usage.
         status.set(U_INTERNAL_PROGRAM_ERROR);
     }
     if (f) {
@@ -1489,9 +1423,9 @@ int exportNorm() {
     uint32_t supplementSize16 = storage16.size() - baseSize16;
     uint32_t supplementSize32 = storage32.size() - baseSize32;
 
-    writeDecompositionData("nfd", baseSize16, baseSize32, supplementSize16, nfdDecompositionStartsWithNonStarter, nullptr, nfdPendingTrieInsertions, static_cast<char16_t>(nfcBound));
-    writeDecompositionData("nfkd", baseSize16, baseSize32, supplementSize16, nfkdDecompositionStartsWithNonStarter, nfdDecompositionStartsWithNonStarter, nfkdPendingTrieInsertions, static_cast<char16_t>(nfkcBound));
-    writeDecompositionData("uts46d", baseSize16, baseSize32, supplementSize16, uts46DecompositionStartsWithNonStarter, nfdDecompositionStartsWithNonStarter, uts46PendingTrieInsertions, static_cast<char16_t>(uts46Bound));
+    writeDecompositionData("nfd", baseSize16, baseSize32, supplementSize16, nfdDecompositionStartsWithNonStarter, nullptr, nfdPendingTrieInsertions, nfdPendingTrieInsertions, static_cast<char16_t>(nfcBound));
+    writeDecompositionData("nfkd", baseSize16, baseSize32, supplementSize16, nfkdDecompositionStartsWithNonStarter, nfdDecompositionStartsWithNonStarter, nfkdPendingTrieInsertions, nfdPendingTrieInsertions, static_cast<char16_t>(nfkcBound));
+    writeDecompositionData("uts46d", baseSize16, baseSize32, supplementSize16, uts46DecompositionStartsWithNonStarter, nfdDecompositionStartsWithNonStarter, uts46PendingTrieInsertions, nfdPendingTrieInsertions, static_cast<char16_t>(uts46Bound));
 
     writeDecompositionTables("nfdex", storage16.data(), baseSize16, storage32.data(), baseSize32);
     writeDecompositionTables("nfkdex", storage16.data() + baseSize16, supplementSize16, storage32.data() + baseSize32, supplementSize32);
