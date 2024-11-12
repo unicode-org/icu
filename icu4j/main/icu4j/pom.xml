@@ -14,6 +14,7 @@
   </parent>
 
   <artifactId>icu4j</artifactId>
+  <name>ICU4J</name>
   <description>International Components for Unicode for Java (ICU4J) is a mature, widely used Java library
     providing Unicode and Globalization support</description>
   <url>${proj.url}</url>

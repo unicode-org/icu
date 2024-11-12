@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>icu4j-charset</artifactId>
+  <name>ICU4J Charset Provider</name>
   <description>icu4j-charset is a supplemental library for icu4j, implementing Java Charset SPI.</description>
   <url>${proj.url}</url>
   <scm>

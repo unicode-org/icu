@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>icu4j-localespi</artifactId>
+  <name>ICU4J Locale Service Provider</name>
   <description>icu4j-localespi is a supplemental library for icu4j, implementing Java Locale SPI.</description>
   <url>${proj.url}</url>
   <scm>
