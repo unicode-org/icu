@@ -3659,9 +3659,9 @@ public class ULocaleTest extends CoreTestFmwk {
                     "zh_Hant_TW",
                     "zh_TW"
                 }, {
-                    "und_Hant_CN",
-                    "zh_Hant_CN",
-                    "zh_Hant_CN"
+                  "und_Hant_CN",
+                  "yue_Hant_CN",
+                  "yue_Hant_CN"
                 }, {
                     "und_Hant_TW",
                     "zh_Hant_TW",
@@ -4174,10 +4174,6 @@ public class ULocaleTest extends CoreTestFmwk {
         };
 
         for (int i = 0; i < full_data.length; i++) {
-			if (full_data[i][0].equals("und_Hant_CN") &&
-            	logKnownIssue("CLDR-17981", "und_Hant_CN changed expected result for Likely Subtags")) {
-    	        continue;
-        	}
             ULocale org = new ULocale(full_data[i][0]);
             ULocale res = ULocale.addLikelySubtags(org);
             String exp = full_data[i][1];
@@ -5726,14 +5722,14 @@ public class ULocaleTest extends CoreTestFmwk {
             assertEquals("addLikelySubtags(" + test.source + ") should be unchanged",
                 l, ULocale.addLikelySubtags(l));
         } else {
-			if ( ( test.source.equals("und-Latn-MU") || test.source.equals("und-Latn-RS") || test.source.equals("und-Latn-SL") 
-					|| test.source.equals("und-Latn-TK") || test.source.equals("und-Latn-ZM") )
-				 && logKnownIssue("CLDR-17981", "und_Hant_CN changed expected result for Likely Subtags") ) {
-    	        return;
-        	}        	
-            assertEquals("addLikelySubtags(" + test.source + ")",
-                test.addLikely, ULocale.addLikelySubtags(l).toLanguageTag());
-        }
+            if ( ( test.source.equals("und-Latn-MU") || test.source.equals("und-Latn-RS") || test.source.equals("und-Latn-SL")
+                || test.source.equals("und-Latn-TK") || test.source.equals("und-Latn-ZM") )
+                && logKnownIssue("CLDR-18002", "Incorrect Likely Subtags for some entries modified in CLDR 46") ) {
+                    return;
+                }
+              assertEquals("addLikelySubtags(" + test.source + ")",
+                  test.addLikely, ULocale.addLikelySubtags(l).toLanguageTag());
+              }
         if (test.removeFavorRegion.equals("FAIL")) {
             assertEquals("minimizeSubtags(" + test.source + ") should be unchanged",
                 l, ULocale.minimizeSubtags(l));

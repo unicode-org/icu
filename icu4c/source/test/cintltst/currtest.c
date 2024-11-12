@@ -116,6 +116,9 @@ static void TestEnumList(void) {
 
     // CLDR 45 and ICU-22726
     expectInList("XCG", UCURR_ALL, true);
+
+    // CLDR 46 and ICU-22935
+    expectInList("ZWG", UCURR_ALL, true);
 }
 
 static void TestEnumListReset(void) {

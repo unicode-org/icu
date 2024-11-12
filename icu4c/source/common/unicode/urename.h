@@ -1820,7 +1820,6 @@
 #define usnum_setMinimumIntegerDigits U_ICU_ENTRY_POINT_RENAME(usnum_setMinimumIntegerDigits)
 #define usnum_setSign U_ICU_ENTRY_POINT_RENAME(usnum_setSign)
 #define usnum_setToInt64 U_ICU_ENTRY_POINT_RENAME(usnum_setToInt64)
-#define usnum_truncateStart U_ICU_ENTRY_POINT_RENAME(usnum_truncateStart)
 #define usnumf_close U_ICU_ENTRY_POINT_RENAME(usnumf_close)
 #define usnumf_format U_ICU_ENTRY_POINT_RENAME(usnumf_format)
 #define usnumf_formatInt64 U_ICU_ENTRY_POINT_RENAME(usnumf_formatInt64)

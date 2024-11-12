@@ -2020,6 +2020,7 @@ static const struct CurrencyList {
     {"ZRN", UCURR_COMMON|UCURR_DEPRECATED},
     {"ZRZ", UCURR_COMMON|UCURR_DEPRECATED},
     {"ZWD", UCURR_COMMON|UCURR_DEPRECATED},
+    {"ZWG", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"ZWL", UCURR_COMMON|UCURR_DEPRECATED},
     {"ZWR", UCURR_COMMON|UCURR_DEPRECATED},
     { nullptr, 0 } // Leave here to denote the end of the list.
