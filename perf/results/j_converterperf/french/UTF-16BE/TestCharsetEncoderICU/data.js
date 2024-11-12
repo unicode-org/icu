@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1731115041923,
+  "lastUpdate": 1731376575732,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28737,6 +28737,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 6.315453449830476,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "700c5e36a1e96a5672eb5a07b36c1fc41fef016b",
+          "message": "ICU-22922 Merge maint/maint-76 to main (#3258)",
+          "timestamp": "2024-11-11T17:33:19-08:00",
+          "tree_id": "9e7e1d3454f4dda644b96341bdd5e21f153fe06c",
+          "url": "https://github.com/unicode-org/icu/commit/700c5e36a1e96a5672eb5a07b36c1fc41fef016b"
+        },
+        "date": 1731376383430,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 6.254006470930254,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
