@@ -1,0 +1,372 @@
+{
+  "scenario": "Match tests",
+  "description": "Tests for various match constructs",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+ "tests": [
+  {
+    "comment": "Testing simple plural",
+    "src": [
+        ".match {$count :number}\n",
+        "one {{{$count} file}}\n",
+        " *  {{{$count} files}}"
+     ],
+     "params": [{"name": "count", "value": 0}],
+     "exp": "0 files"
+  },
+  {
+    "comment": "Testing simple plural",
+    "src": [
+        ".match {$count :number}\n",
+        "one {{{$count} file}}\n",
+        " *  {{{$count} files}}"
+     ],
+     "params": [{"name": "count", "value": 1}],
+     "exp": "1 file"
+  },
+  {
+    "comment": "Testing simple plural",
+    "src": [
+        ".match {$count :number}\n",
+        "one {{{$count} file}}\n",
+        " *  {{{$count} files}}"
+     ],
+     "params": [{"name": "count", "value": 3}],
+     "exp": "3 files"
+  },
+  {
+    "comment": "Testing simple plural",
+    "locale": "fr",
+    "src": [
+        ".match {$count :number}\n",
+        "one {{{$count} file}}\n",
+        " *  {{{$count} files}}"
+     ],
+     "params": [{"name": "count", "value": 0}],
+     "exp": "0 file"
+  },
+  {
+    "comment": "Testing simple plural",
+    "locale": "fr",
+    "src": [
+        ".match {$count :number}\n",
+        "one {{{$count} file}}\n",
+        " *  {{{$count} files}}"
+     ],
+     "params": [{"name": "count", "value": 1}],
+     "exp": "1 file"
+  },
+  {
+    "comment": "Testing simple plural",
+    "locale": "fr",
+    "src": [
+        ".match {$count :number}\n",
+        "one {{{$count} file}}\n",
+        " *  {{{$count} files}}"
+     ],
+     "params": [{"name": "count", "value": 3}],
+     "exp": "3 files"
+  },
+  {
+    "comment": "Testing simple plural, but swap variant order",
+    "src": [
+        ".match {$count :number}\n",
+        " *  {{You deleted {$count} files}}\n",
+        "one {{You deleted {$count} file}}"
+    ],
+    "params": [{"name": "count", "value": 1}],
+    "exp": "You deleted 1 file"
+  },
+  {
+    "comment": "Testing simple plural, but swap variant order",
+    "src": [
+        ".match {$count :number}\n",
+        " *  {{You deleted {$count} files}}\n",
+        "one {{You deleted {$count} file}}"
+    ],
+    "params": [{"name": "count", "value": 3}],
+    "exp": "You deleted 3 files"
+  },
+  {
+    "comment": "Ordinal, with mixed order and exact matches",
+    "src": [
+        ".match {$place :number select=ordinal}\n",
+        "*   {{You finished in the {$place}th place}}\n",
+        "two {{You finished in the {$place}nd place}}\n",
+        "one {{You finished in the {$place}st place}}\n",
+        "1   {{You got the gold medal}}\n",
+        "2   {{You got the silver medal}}\n",
+        "3   {{You got the bronze medal}}\n",
+        "few {{You finished in the {$place}rd place}}"
+    ],
+    "params": [{"name": "place", "value": 1}],
+    "exp": "You got the gold medal"
+  },
+  {
+    "comment": "Ordinal, with mixed order and exact matches",
+    "src": [
+        ".match {$place :number select=ordinal}\n",
+        "*   {{You finished in the {$place}th place}}\n",
+        "two {{You finished in the {$place}nd place}}\n",
+        "one {{You finished in the {$place}st place}}\n",
+        "1   {{You got the gold medal}}\n",
+        "2   {{You got the silver medal}}\n",
+        "3   {{You got the bronze medal}}\n",
+        "few {{You finished in the {$place}rd place}}"
+    ],
+    "params": [{"name": "place", "value": 2}],
+    "exp": "You got the silver medal"
+  },
+  {
+    "comment": "Ordinal, with mixed order and exact matches",
+    "src": [
+        ".match {$place :number select=ordinal}\n",
+        "*   {{You finished in the {$place}th place}}\n",
+        "two {{You finished in the {$place}nd place}}\n",
+        "one {{You finished in the {$place}st place}}\n",
+        "1   {{You got the gold medal}}\n",
+        "2   {{You got the silver medal}}\n",
+        "3   {{You got the bronze medal}}\n",
+        "few {{You finished in the {$place}rd place}}"
+    ],
+    "params": [{"name": "place", "value": 3}],
+    "exp": "You got the bronze medal"
+  },
+  {
+    "comment": "Ordinal, with mixed order and exact matches",
+    "src": [
+        ".match {$place :number select=ordinal}\n",
+        "*   {{You finished in the {$place}th place}}\n",
+        "two {{You finished in the {$place}nd place}}\n",
+        "one {{You finished in the {$place}st place}}\n",
+        "1   {{You got the gold medal}}\n",
+        "2   {{You got the silver medal}}\n",
+        "3   {{You got the bronze medal}}\n",
+        "few {{You finished in the {$place}rd place}}"
+    ],
+    "params": [{"name": "place", "value": 7}],
+    "exp": "You finished in the 7th place"
+  },
+  {
+    "comment": "Ordinal, with mixed order and exact matches",
+    "src": [
+        ".match {$place :number select=ordinal}\n",
+        "*   {{You finished in the {$place}th place}}\n",
+        "two {{You finished in the {$place}nd place}}\n",
+        "one {{You finished in the {$place}st place}}\n",
+        "1   {{You got the gold medal}}\n",
+        "2   {{You got the silver medal}}\n",
+        "3   {{You got the bronze medal}}\n",
+        "few {{You finished in the {$place}rd place}}"
+    ],
+    "params": [{"name": "place", "value": 21}],
+    "exp": "You finished in the 21st place"
+  },
+  {
+    "comment": "Ordinal, with mixed order and exact matches",
+    "src": [
+        ".match {$place :number select=ordinal}\n",
+        "*   {{You finished in the {$place}th place}}\n",
+        "two {{You finished in the {$place}nd place}}\n",
+        "one {{You finished in the {$place}st place}}\n",
+        "1   {{You got the gold medal}}\n",
+        "2   {{You got the silver medal}}\n",
+        "3   {{You got the bronze medal}}\n",
+        "few {{You finished in the {$place}rd place}}"
+    ],
+    "params": [{"name": "place", "value": 22}],
+    "exp": "You finished in the 22nd place"
+  },
+  {
+    "comment": "Ordinal, with mixed order and exact matches",
+    "src": [
+        ".match {$place :number select=ordinal}\n",
+        "*   {{You finished in the {$place}th place}}\n",
+        "two {{You finished in the {$place}nd place}}\n",
+        "one {{You finished in the {$place}st place}}\n",
+        "1   {{You got the gold medal}}\n",
+        "2   {{You got the silver medal}}\n",
+        "3   {{You got the bronze medal}}\n",
+        "few {{You finished in the {$place}rd place}}"
+    ],
+    "params": [{"name": "place", "value": 23}],
+    "exp": "You finished in the 23rd place"
+  },
+  {
+    "comment": "Ordinal, with mixed order and exact matches",
+    "src": [
+        ".match {$place :number select=ordinal}\n",
+        "*   {{You finished in the {$place}th place}}\n",
+        "two {{You finished in the {$place}nd place}}\n",
+        "one {{You finished in the {$place}st place}}\n",
+        "1   {{You got the gold medal}}\n",
+        "2   {{You got the silver medal}}\n",
+        "3   {{You got the bronze medal}}\n",
+        "few {{You finished in the {$place}rd place}}"
+    ],
+    "params": [{"name": "place", "value": 28}],
+    "exp": "You finished in the 28th place"
+  },
+  {
+    "comment": "Plural combinations, mixed order",
+    "src": [
+        ".match {$fileCount :number} {$folderCount :number}\n",
+        "  *   *   {{You found {$fileCount} files in {$folderCount} folders}}\n",
+        "  one one {{You found {$fileCount} file in {$folderCount} folder}}\n",
+        "  one *   {{You found {$fileCount} file in {$folderCount} folders}}\n",
+        "  *   one {{You found {$fileCount} files in {$folderCount} folder}}"
+    ],
+    "params": [{"name": "fileCount", "value": 1},
+               {"name": "folderCount", "value": 1}],
+    "exp": "You found 1 file in 1 folder"
+  },
+  {
+    "comment": "Plural combinations, mixed order",
+    "src": [
+        ".match {$fileCount :number} {$folderCount :number}\n",
+        "  *   *   {{You found {$fileCount} files in {$folderCount} folders}}\n",
+        "  one one {{You found {$fileCount} file in {$folderCount} folder}}\n",
+        "  one *   {{You found {$fileCount} file in {$folderCount} folders}}\n",
+        "  *   one {{You found {$fileCount} files in {$folderCount} folder}}"
+    ],
+    "params": [{"name": "fileCount", "value": 1},
+               {"name": "folderCount", "value": 5}],
+    "exp": "You found 1 file in 5 folders"
+  },
+  {
+    "comment": "Plural combinations, mixed order",
+    "src": [
+        ".match {$fileCount :number} {$folderCount :number}\n",
+        "  *   *   {{You found {$fileCount} files in {$folderCount} folders}}\n",
+        "  one one {{You found {$fileCount} file in {$folderCount} folder}}\n",
+        "  one *   {{You found {$fileCount} file in {$folderCount} folders}}\n",
+        "  *   one {{You found {$fileCount} files in {$folderCount} folder}}"
+    ],
+    "params": [{"name": "fileCount", "value": 7},
+               {"name": "folderCount", "value": 1}],
+    "exp": "You found 7 files in 1 folder"
+  },
+  {
+    "comment": "Plural combinations, mixed order",
+    "src": [
+        ".match {$fileCount :number} {$folderCount :number}\n",
+        "  *   *   {{You found {$fileCount} files in {$folderCount} folders}}\n",
+        "  one one {{You found {$fileCount} file in {$folderCount} folder}}\n",
+        "  one *   {{You found {$fileCount} file in {$folderCount} folders}}\n",
+        "  *   one {{You found {$fileCount} files in {$folderCount} folder}}"
+    ],
+    "params": [{"name": "fileCount", "value": 7},
+               {"name": "folderCount", "value": 3}],
+    "exp": "You found 7 files in 3 folders"
+  },
+  {
+    "comment": "Test that the selection honors the formatting option (`1.00 dollars`)",
+      "src": [
+        ".local $c = {$price :number minimumFractionDigits=$minF}\n",
+        ".match {$c}\n",
+        "  one {{{$c} dollar}}\n",
+        "   *  {{{$c} dollars}}"
+      ],
+      "params": [{ "name": "price", "value": 1 },
+                 { "name": "minF", "value": 0 }],
+      "exp": "1 dollar"
+  },
+  {
+    "comment": "Test that the selection honors the formatting option (`1.00 dollars`)",
+      "src": [
+        ".local $c = {$price :number minimumFractionDigits=$minF}\n",
+        ".match {$c}\n",
+        "  one {{{$c} dollar}}\n",
+        "   *  {{{$c} dollars}}"
+      ],
+      "params": [{ "name": "price", "value": 1},
+                 { "name": "minF", "value": 2 }],
+      "exp": "1.00 dollars"
+  },
+  {
+    "comment": "Test that the selection honors the formatting option (`1.00 dollars`)",
+      "src": [
+        ".local $c = {$price :number maximumFractionDigits=$maxF}\n",
+        ".match {$c}\n",
+        "  one {{{$c} dollar}}\n",
+        "   *  {{{$c} dollars}}"
+      ],
+      "params": [{ "name": "price", "value": 1.25},
+                 { "name": "maxF", "value": 0 }],
+      "exp": "1 dollar"
+  },
+  {
+    "comment": "Test that the selection honors the formatting option (`1.00 dollars`)",
+      "src": [
+        ".local $c = {$price :number maximumFractionDigits=$maxF}\n",
+        ".match {$c}\n",
+        "  one {{{$c} dollar}}\n",
+        "   *  {{{$c} dollars}}"
+      ],
+      "params": [{ "name": "price", "value": 1.25},
+                 { "name": "maxF", "value": 2 }],
+      "exp": "1.25 dollars"
+  },
+  {
+    "comment": "Test that the selection honors the `:integer` over options",
+      "src": [
+        ".local $c = {$price :integer maximumFractionDigits=$maxF}\n",
+        ".match {$c}\n",
+        "  one {{{$c} dollar}}\n",
+        "   *  {{{$c} dollars}}"
+      ],
+      "params": [{ "name": "price", "value": 1},
+                 { "name": "maxF", "value": 0 }],
+      "exp": "1 dollar"
+  },
+  {
+    "comment": "Test that the selection honors the `:integer` over options",
+      "src": [
+        ".local $c = {$price :integer maximumFractionDigits=$maxF}\n",
+        ".match {$c}\n",
+        "  one {{{$c} dollar}}\n",
+        "   *  {{{$c} dollars}}"
+      ],
+      "params": [{ "name": "price", "value": 1},
+                 { "name": "maxF", "value": 2 }],
+      "exp": "1 dollar"
+  },
+  {
+    "comment": "Test that the selection honors the `:integer` over options",
+      "src": [
+        ".local $c = {$price :integer maximumFractionDigits=$maxF}\n",
+        ".match {$c}\n",
+        "  one {{{$c} dollar}}\n",
+        "   *  {{{$c} dollars}}"
+      ],
+      "params": [{ "name": "price", "value": 1.25},
+                 { "name": "maxF", "value": 0 }],
+      "exp": "1 dollar"
+  },
+  {
+    "comment": "Test that the selection honors the `:integer` over options",
+      "src": [
+        ".local $c = {$price :integer maximumFractionDigits=$maxF}\n",
+        ".match {$c}\n",
+        "  one {{{$c} dollar}}\n",
+        "   *  {{{$c} dollars}}"
+      ],
+      "params": [{ "name": "price", "value": 1.25 },
+                 { "name": "maxF", "value": 2 }],
+      "exp": "1 dollar"
+  },
+  {
+    "comment": "Test that the selection honors the `:integer` over options",
+      "src": [
+        ".local $c = {$price :integer maximumFractionDigits=$maxF}\n",
+        ".match {$c}\n",
+        "  one {{{$c} dollar}}\n",
+        "   *  {{{$c} dollars}}"
+      ],
+      "params": [{ "name": "price", "value": 4.12345 },
+                 { "name": "maxF", "value": 4 }],
+      "exp": "4 dollars"
+  }
+ ]
+}

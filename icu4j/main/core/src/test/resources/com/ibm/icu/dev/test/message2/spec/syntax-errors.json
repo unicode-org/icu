@@ -1,0 +1,180 @@
+{
+  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "scenario": "Syntax errors",
+  "description": "Strings that produce syntax errors when parsed.",
+  "defaultTestProperties": {
+    "locale": "en-US",
+    "expErrors": [
+      {
+        "type": "syntax-error"
+      }
+    ]
+  },
+  "tests": [
+    {
+      "src": "."
+    },
+    {
+      "src": "{"
+    },
+    {
+      "src": "}"
+    },
+    {
+      "src": "{}"
+    },
+    {
+      "src": "{{"
+    },
+    {
+      "src": "{{}"
+    },
+    {
+      "src": "{{}}}"
+    },
+    {
+      "src": "{|foo| #markup}"
+    },
+    {
+      "src": "{{missing end brace}"
+    },
+    {
+      "src": "{{missing end braces"
+    },
+    {
+      "src": "{{missing end {$braces"
+    },
+    {
+      "src": "{{extra}} content"
+    },
+    {
+      "src": "empty { } placeholder"
+    },
+    {
+      "src": "missing space {42:func}"
+    },
+    {
+      "src": "missing space {|foo|:func}"
+    },
+    {
+      "src": "missing space {|foo|@bar}"
+    },
+    {
+      "src": "missing space {:func@bar}"
+    },
+    {
+      "src": "missing space {:func @bar@baz}"
+    },
+    {
+      "src": "missing space {:func @bar=42@baz}"
+    },
+    {
+      "src": "missing space {+reserved@bar}"
+    },
+    {
+      "src": "missing space {&private@bar}"
+    },
+    {
+      "src": "bad {:} placeholder"
+    },
+    {
+      "src": "bad {\\u0000placeholder}"
+    },
+    {
+      "src": "no-equal {|42| :number minimumFractionDigits 2}"
+    },
+    {
+      "src": "bad {:placeholder option=}"
+    },
+    {
+      "src": "bad {:placeholder option value}"
+    },
+    {
+      "src": "bad {:placeholder option:value}"
+    },
+    {
+      "src": "bad {:placeholder option}"
+    },
+    {
+      "src": "bad {:placeholder:}"
+    },
+    {
+      "src": "bad {::placeholder}"
+    },
+    {
+      "src": "bad {:placeholder::foo}"
+    },
+    {
+      "src": "bad {:placeholder option:=x}"
+    },
+    {
+      "src": "bad {:placeholder :option=x}"
+    },
+    {
+      "src": "bad {:placeholder option::x=y}"
+    },
+    {
+      "src": "bad {$placeholder option}"
+    },
+    {
+      "src": "bad {:placeholder @attribute=}"
+    },
+    {
+      "src": "bad {:placeholder @attribute=@foo}"
+    },
+    {
+      "src": "{ @misplaced = attribute }"
+    },
+    {
+      "src": "no {placeholder end"
+    },
+    {
+      "src": "no {$placeholder end"
+    },
+    {
+      "src": "no {:placeholder end"
+    },
+    {
+      "src": "no {|placeholder| end"
+    },
+    {
+      "src": "no {|literal} end"
+    },
+    {
+      "src": "no {|literal or placeholder end"
+    },
+    {
+      "src": ".local bar = {|foo|} {{_}}"
+    },
+    {
+      "src": ".local #bar = {|foo|} {{_}}"
+    },
+    {
+      "src": ".local $bar {|foo|} {{_}}"
+    },
+    {
+      "src": ".local $bar = |foo| {{_}}"
+    },
+    {
+      "src": ".match {#foo} * {{foo}}"
+    },
+    {
+      "src": ".match {} * {{foo}}"
+    },
+    {
+      "src": ".match {|foo| :x} {|bar| :x} ** {{foo}}"
+    },
+    {
+      "src": ".match * {{foo}}"
+    },
+    {
+      "src": ".match {|x| :x} * foo"
+    },
+    {
+      "src": ".match {|x| :x} * {{foo}} extra"
+    },
+    {
+      "src": ".match |x| * {{foo}}"
+    }
+  ]
+}

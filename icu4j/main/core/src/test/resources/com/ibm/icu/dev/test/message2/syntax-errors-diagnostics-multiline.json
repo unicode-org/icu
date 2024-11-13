@@ -1,0 +1,50 @@
+{
+  "scenario": "Syntax errors with character and line offsets",
+  "description": "Syntax errors; for ICU4C, the character and line offsets in the parse error are checked",
+  "defaultTestProperties": {
+    "locale": "en-US",
+    "expErrors": [
+      {
+        "type": "syntax-error"
+      }
+    ]
+  },
+  "tests": [
+    {
+        "src": "{{hello wo\nrld",
+        "char": 3,
+        "line": 1,
+        "comment": "Check that the missing closing '}' is reported on the correct line"
+    },
+    {
+        "src": "{{hello wo\nr\nl\ndddd",
+        "char": 4,
+        "line": 3,
+        "comment": "Check that the missing closing '}' is reported on the correct line"
+    },
+    {
+        "src": "{{hello wo\nr\nl\n",
+        "char": 0,
+        "line": 3,
+        "comment": "Offset for end-of-input should be 0 here because the line begins after the '\n', but there is no character after the '\n'"
+    },
+    {
+        "src": "hello {|wo\nrld",
+        "char": 3,
+        "line": 1,
+        "comment": "Quoted literals may include newlines; check that the missing closing '|' is reported on the correct line"
+    },
+    {
+        "src": "hello {|wo\nr\nl\ndddd",
+        "char": 4,
+        "line": 3,
+        "comment": "Quoted literals may include newlines; check that the missing closing '|' is reported on the correct line"
+    },
+    {
+        "src": "hello {|wo\nr\nl\n",
+        "char": 0,
+        "line": 3,
+        "comment": "Offset for end-of-input should be 0 here because the line begins after the '\n', but there is no character after the '\n'"
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "scenario": "Tests from original ICU4J release",
+  "description": "Tests taken from the September 2022 MF2 ICU4J release",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": "hello {|4.2| :number}",
+      "exp": "hello 4.2"
+    },
+    {
+      "locale": "ar-EG",
+      "src": "hello {|4.2| :number}",
+      "exp": "hello \u0664\u066B\u0662"
+    },
+    {
+      "comment": "This is not an error! foo is not used before the local declaration, so the local declaration of $foo shadows the input variable.",
+      "src": ".local $foo = {bar} {{bar {$foo}}}",
+      "exp": "bar bar",
+      "params": [{ "name": "foo", "value": "foo" }]
+    },
+    {
+      "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
+      "params": [{ "name": "bar", "value": 4.2 }],
+      "exp": "bar 4.2"
+    },
+    {
+      "src": ".local $bar = {$baz} .local $foo = {$bar} {{bar {$foo}}}",
+      "params": [{ "name": "baz", "value": "foo" }],
+      "exp": "bar foo"
+    },
+    {
+      "src": ".match {$foo :number} 1 {{one}} * {{other}}",
+      "params": [{ "name": "foo", "value": "1" }],
+      "exp": "one",
+      "ignoreJava": "See ICU-22809"
+    },
+    {
+      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "params": [{ "name": "foo", "value": "1" }],
+      "exp": "one"
+    },
+    {
+      "src": ".match {$foo :number} 1 {{one}} * {{other}}",
+      "params": [{ "name": "foo", "value": 1 }],
+      "exp": "one"
+    },
+    {
+      "ignoreJava": "Can't pass null in a map",
+      "ignoreCpp": "Same as Java",
+      "src": ".match {$foo} 1 {{one}} * {{other}}",
+      "params": [{ "name": "foo", "value": null }],
+      "exp": "other"
+    },
+    {
+      "src": ".match {$foo :number} 1 {{one}} * {{other}}",
+      "exp": "other",
+      "expErrors": [{ "type":  "unresolved-variable" }]
+    },
+    {
+      "src": ".local $foo = {$bar} .match {$foo :number} one {{one}} * {{other}}",
+      "params": [{ "name": "bar", "value": 1 }],
+      "exp": "one"
+    },
+    {
+      "src": ".local $foo = {$bar} .match {$foo :number} one {{one}} * {{other}}",
+      "params": [{ "name": "bar", "value": 2 }],
+      "exp": "other"
+    },
+    {
+      "src": ".local $bar = {$none} .match {$foo :number} one {{one}} * {{{$bar}}}",
+      "params": [{ "name": "foo", "value": 1 }, {"name": "none", "value": "" }],
+      "exp": "one"
+    },
+    {
+      "src": ".local $bar = {$none :number} .match {$foo :string} one {{one}} * {{{$bar}}}",
+      "params": [{ "name": "foo", "value": 2 }],
+      "exp": "{$none}",
+      "expErrors": [{ "type": "unresolved-variable" }],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "{{#tag}}",
+      "exp": "#tag"
+    },
+    {
+      "src": "{#tag}content{/tag}",
+      "exp": "content"
+    },
+    {
+      "src": "{#tag foo=foo bar=$bar}",
+      "params": [{ "name": "bar", "value": "b a r" }],
+      "exp": ""
+    },
+    {
+      "src": "bad {#markup/} test",
+      "exp": "bad  test"
+    },
+    {
+      "src": "no braces {$foo}",
+      "params": [{ "name": "foo", "value": 2 }],
+      "exp": "no braces 2"
+    },
+    {
+      "src": "empty { }",
+      "exp": "empty ",
+      "expErrors": [{ "type": "syntax-error" }],
+      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/703"
+    },
+    {
+      "src": "bad {:}",
+      "exp": "bad {:}",
+      "expErrors": [{ "type": "syntax-error" }, { "type": "unknown-function" }]
+    },
+    {
+      "src": "{bad {$placeholder option}}",
+      "exp": "bad {$placeholder}",
+      "expErrors": [{ "type": "syntax-error"}, { "type": "unresolved-variable" }],
+      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/703"
+    },
+    {
+      "src": ".match {|foo| :string} *{{foo}}",
+      "exp": "foo"
+    },
+    {
+      "src": ".match {$foo :string} * * {{foo}}",
+      "exp": "foo",
+      "expErrors": [{ "type": "variant-key-mismatch" }, { "type": "unresolved-variable" }],
+      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/735"
+    },
+    {
+      "src": ".match {$foo :string} {$bar :string} * {{foo}}",
+      "exp": "foo",
+      "expErrors": [{ "type": "variant-key-mismatch" }, { "type": "unresolved-variable" }],
+      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/735"
+    }
+  ]
+}

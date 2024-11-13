@@ -200,20 +200,5 @@ public class TestUtils {
         URI getPath = cls.getClassLoader().getResource(packageName).toURI();
         Path filePath = Paths.get(getPath);
         Path json = Paths.get(fileName);
-        // First, check the top level of the source directory,
-        // in case we're in a source tarball
-        Path icuTestdataInSourceDir = filePath.resolve("../../../../../../../../../../../testdata/message2/").normalize();
-        Path icuTestdataDir = icuTestdataInSourceDir;
-        if (!Files.isDirectory(icuTestdataInSourceDir)) {
-            // If that doesn't exist, check one directory higher, in case we're
-            // in a checked-out repo
-            Path icuTestdataInRepo = Paths.get("../").resolve(icuTestdataInSourceDir).normalize();
-            if (!Files.isDirectory(icuTestdataInRepo)) {
-                throw new java.io.FileNotFoundException("Test data directory does not exist: tried "
-                                                        + icuTestdataInSourceDir + " and "
-                                                        + icuTestdataInRepo);
-            }
-            icuTestdataDir = icuTestdataInSourceDir;
-        }
-        return icuTestdataDir.resolve(json);
+        return filePath.resolve(json);
     }}

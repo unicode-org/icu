@@ -1,0 +1,25 @@
+{
+  "scenario": "Number literal syntax errors",
+  "description": "Syntax errors with number literals; for ICU4C, the character offset in the parse error is checked",
+  "defaultTestProperties": {
+    "locale": "en-US",
+    "expErrors": [
+      {
+        "type": "syntax-error"
+      }
+    ]
+  },
+  "tests": [
+    { "src": "{00}", "char": 2},
+    { "src": "{042}", "char": 2},
+    { "src": "{1.}", "char": 3},
+    { "src": "{1e}", "char": 3},
+    { "src": "{1E}", "char": 3},
+    { "src": "{1.e}", "char": 3},
+    { "src": "{1.2e}", "char": 5},
+    { "src": "{1.e3}", "char": 3},
+    { "src": "{1e+}", "char": 4},
+    { "src": "{1e-}", "char": 4},
+    { "src": "{1.0e2.0}", "char": 6}
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "scenario": "Data model errors",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": ".match {$foo :x} * * {{foo}}",
+      "expErrors": [
+        {
+          "type": "variant-key-mismatch"
+        }
+      ]
+    },
+    {
+      "src": ".match {$foo :x} {$bar :x} * {{foo}}",
+      "expErrors": [
+        {
+          "type": "variant-key-mismatch"
+        }
+      ]
+    },
+    {
+      "src": ".match {:foo} 1 {{_}}",
+      "expErrors": [
+        {
+          "type": "missing-fallback-variant"
+        }
+      ]
+    },
+    {
+      "src": ".match {:foo} other {{_}}",
+      "expErrors": [
+        {
+          "type": "missing-fallback-variant"
+        }
+      ]
+    },
+    {
+      "src": ".match {:foo} {:bar} * 1 {{_}} 1 * {{_}}",
+      "expErrors": [
+        {
+          "type": "missing-fallback-variant"
+        }
+      ]
+    },
+    {
+      "src": ".match {$foo} one {{one}} * {{other}}",
+      "expErrors": [
+        {
+          "type": "missing-selector-annotation"
+        }
+      ]
+    },
+    {
+      "src": ".input {$foo} .match {$foo} one {{one}} * {{other}}",
+      "expErrors": [
+        {
+          "type": "missing-selector-annotation"
+        }
+      ]
+    },
+    {
+      "src": ".local $foo = {$bar} .match {$foo} one {{one}} * {{other}}",
+      "expErrors": [
+        {
+          "type": "missing-selector-annotation"
+        }
+      ]
+    },
+    {
+      "src": ".input {$foo} .input {$foo} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
+    },
+    {
+      "src": ".input {$foo} .local $foo = {42} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
+    },
+    {
+      "src": ".local $foo = {42} .input {$foo} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
+    },
+    {
+      "src": ".local $foo = {:unknown} .local $foo = {42} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
+    },
+    {
+      "src": ".local $foo = {$bar} .local $bar = {42} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
+    },
+    {
+      "src": ".local $foo = {$foo} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
+    },
+    {
+      "src": ".local $foo = {$bar} .local $bar = {$baz} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
+    },
+    {
+      "src": ".local $foo = {$bar :func} .local $bar = {$baz} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
+    },
+    {
+      "src": ".local $foo = {42 :func opt=$foo} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
+    },
+    {
+      "src": ".local $foo = {42 :func opt=$bar} .local $bar = {42} {{_}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
+    },
+    {
+      "src": "bad {:placeholder option=x option=x}",
+      "expErrors": [
+        {
+          "type": "duplicate-option-name"
+        }
+      ]
+    },
+    {
+      "src": "bad {:placeholder ns:option=x ns:option=y}",
+      "expErrors": [
+        {
+          "type": "duplicate-option-name"
+        }
+      ]
+    },
+    {
+      "src": ".match {$var :string} * {{The first default}} * {{The second default}}",
+      "expErrors": [
+        {
+          "type": "duplicate-variant"
+        }
+      ]
+    },
+    {
+      "src": ".match {$x :string} {$y :string} * foo {{The first foo variant}} bar * {{The bar variant}} * |foo| {{The second foo variant}} * * {{The default variant}}",
+      "expErrors": [
+        {
+          "type": "duplicate-variant"
+        }
+      ]
+    }
+  ]
+}
