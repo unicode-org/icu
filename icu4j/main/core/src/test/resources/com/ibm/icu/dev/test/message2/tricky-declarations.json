@@ -1,0 +1,19 @@
+{
+  "scenario": "Declarations tests",
+  "description": "Tests for interesting combinations of .local and .input",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    { "src": ".input {$var :number minimumFractionDigits=$var2} .input {$var2 :number minimumFractionDigits=5} {{{$var} {$var2}}}",
+      "exp": "1.000 3.00000",
+      "params": [{ "name": "var", "value": 1}, {"name": "var2", "value": 3 }],
+      "expErrors": [{ "type": "duplicate-declaration" }]
+    },
+    { "src": ".local $var = {$var2} .local $var2 = {1} {{{$var} {$var2}}}",
+      "exp": "5 1",
+      "params": [{ "name": "var2", "value": 5 }],
+      "expErrors": [{ "type": "duplicate-declaration" }]
+    }
+  ]
+}

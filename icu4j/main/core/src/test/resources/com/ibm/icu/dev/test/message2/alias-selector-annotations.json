@@ -1,0 +1,18 @@
+{
+  "scenario": "Selector annotations",
+  "description": "Tests for indirectly annotated selectors",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+        "src": ".local $one = {|The one| :string}\n   .match {$one}\n   1 {{Value is one}}\n  * {{Value is not one}}",
+        "exp": "Value is not one"
+    },
+    {
+        "src": ".local $one = {|The one| :string}\n  .local $two = {$one}\n  .match {$two}\n  1 {{Value is one}}\n   * {{Value is not one}}",
+        "exp": "Value is not one"
+    }
+  ]
+}
+

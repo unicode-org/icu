@@ -1,0 +1,51 @@
+{
+  "scenario": "String function",
+  "description": "The built-in formatter for strings.",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": ".match {$foo :string} |1| {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": "1"
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": 1
+        }
+      ],
+      "exp": "one",
+      "ignoreJava": ":string doesn't stringify numbers?"
+    },
+    {
+      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": null
+        }
+      ],
+      "exp": "other",
+      "ignoreCpp": "Can't handle null value for input variable"
+    },
+    {
+      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "exp": "other",
+      "expErrors": [
+        {
+          "type": "unresolved-variable"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    }
+  ]
+}

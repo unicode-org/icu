@@ -1,0 +1,68 @@
+{
+  "scenario": "Datetime function",
+  "description": "The built-in formatter for datetimes.",
+  "defaultTestProperties": {
+    "locale": "en-US",
+    "expErrors": []
+  },
+  "tests": [
+    {
+      "src": "{:datetime}",
+      "exp": "{:datetime}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "{$x :datetime}",
+      "exp": "{$x}",
+      "params": [
+        {
+          "name": "x",
+          "value": true
+        }
+      ],
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "{horse :datetime}",
+      "exp": "{|horse|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ],
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime}"
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime year=numeric month=|2-digit|}"
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime dateStyle=long}"
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime timeStyle=medium}"
+    },
+    {
+      "src": "{$dt :datetime}",
+      "params": [
+        {
+          "type": "datetime",
+          "name": "dt",
+          "value": "2006-01-02T15:04:06"
+        }
+      ]
+    }
+  ]
+}

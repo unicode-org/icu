@@ -1,0 +1,14 @@
+{
+  "scenario": "Resolution errors",
+  "description": "Tests for unknown variables and functions",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    { "src": "{$oops}", "exp": "{$oops}", "expErrors": [{ "type": "unresolved-variable" }], "ignoreJava": "ICU4J doesn't signal unresolved variable errors?"},
+    { "src": ".input {$x :number} {{{$x}}}", "exp": "{$x}", "expErrors": [{ "type": "unresolved-variable" }], "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"},
+    { "src": ".local $foo = {$bar} .match {$foo :number}  one {{one}}  * {{other}}", "exp": "other", "expErrors": [{ "type": "unresolved-variable" }], "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"},
+    { "src": ".local $bar = {$none :number} .match {$foo :string}  one {{one}}  * {{{$bar}}}", "exp": "{$none}", "expErrors": [{ "type": "unresolved-variable" }], "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"},
+    { "src": "The value is {horse :func}.", "exp": "The value is {|horse|}.", "expErrors": [{ "type": "unknown-function" }], "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"}
+  ]
+}

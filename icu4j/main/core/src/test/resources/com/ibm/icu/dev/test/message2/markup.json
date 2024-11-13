@@ -1,0 +1,15 @@
+{
+  "scenario": "Markup",
+  "description": "Tests for valid markup strings",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    { "src": "{#tag/}", "exp": "" },
+    { "src": "{/tag}", "exp": "" },
+    { "src": "{#tag}content{/tag}", "exp": "content" },
+    { "src": "{#tag foo=|foo| bar=$bar}",
+      "params": [{ "name": "bar", "value": "b a r" }],
+      "exp": "" }
+  ]
+}

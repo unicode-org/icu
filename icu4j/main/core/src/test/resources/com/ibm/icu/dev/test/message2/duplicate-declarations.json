@@ -1,0 +1,43 @@
+{
+  "scenario": "Duplicate declaration errors",
+  "description": "Tests that should trigger a duplicate declaration error",
+  "defaultTestProperties": {
+    "locale": "en-US",
+    "expErrors": [
+      {
+        "type": "duplicate-declaration"
+      }
+    ]
+  },
+  "tests": [
+    {
+        "src": ".local $foo = {$foo} .local $foo = {42} {{bar {$foo}}}",
+        "params": [{ "name": "foo", "value": "foo" }],
+        "exp": "bar 42"
+    },
+    {
+        "src": ".local $foo = {42} .local $foo = {42} {{bar {$foo}}}",
+        "params": [{ "name": "foo", "value": "foo" }],
+        "exp": "bar 42"
+    },
+    {
+        "src": ".local $foo = {:unknown} .local $foo = {42} {{bar {$foo}}}",
+        "params": [{ "name": "foo", "value": "foo" }],
+        "exp": "bar 42"
+    },
+    {
+        "src": ".local $x = {42} .local $y = {$x} .local $x = {13} {{{$x} {$y}}}",
+        "exp": "13 42"
+    },
+    {
+        "src": ".local $foo = {$foo} {{bar {$foo}}}",
+        "params": [{ "name": "foo", "value": "foo" }],
+        "exp": "bar foo"
+    },
+    {
+        "src": ".local $foo = {$bar} .local $bar = {$baz} {{bar {$foo}}}",
+        "params": [{ "name": "baz", "value": "foo" }],
+        "exp": "bar {$bar}"
+    }
+  ]
+}

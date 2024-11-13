@@ -1,0 +1,27 @@
+{
+  "scenario": "Runtime errors",
+  "description": "Tests for bad-selector and bad-operand errors",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+        "src": ".match {|horse| :date}\n   1 {{The value is one.}}\n  * {{Formatter used as selector.}}",
+        "exp": "Formatter used as selector.",
+        "expErrors": [{"type": "bad-selector"}],
+        "ignoreJava": "ICU4J doesn't signal runtime errors?"
+    },
+    {
+        "src": ".match {|horse| :number}\n  1 {{The value is one.}}\n  * {{horse is not a number.}}",
+        "exp": "horse is not a number.",
+        "expErrors": [{"type": "bad-selector"}],
+        "ignoreJava": "ICU4J doesn't signal runtime errors?"
+    },
+    {
+        "src": ".local $sel = {|horse| :number}\n  .match {$sel}\n    1 {{The value is one.}}\n   * {{horse is not a number.}}",
+        "exp": "horse is not a number.",
+        "expErrors": [{"type": "bad-selector"}],
+        "ignoreJava": "ICU4J doesn't signal runtime errors?"
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "scenario": "Additional data model errors",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": ".match {$foo :number} {$bar :number}  one{{one}}",
+      "expErrors": [
+        {
+          "type": "variant-key-mismatch"
+        }
+      ]
+    },
+
+    {
+      "src": ".match {$foo :number} {$bar :number}  one {{one}}",
+      "expErrors": [
+        {
+          "type": "variant-key-mismatch"
+        }
+      ]
+    },
+
+    {
+      "src": ".match {$foo :number} {$bar :number}  one  {{one}}",
+      "expErrors": [
+        {
+          "type": "variant-key-mismatch"
+        }
+      ]
+    },
+
+    {
+      "src": ".match {$foo :number}  * * {{foo}}",
+      "expErrors": [
+        {
+          "type": "variant-key-mismatch"
+        }
+      ]
+    },
+
+    {
+      "src": ".match {$one :number}\n  1 2 {{Too many}}\n   * {{Otherwise}}",
+      "expErrors": [
+        {
+          "type": "variant-key-mismatch"
+        }
+      ]
+    },
+
+    {
+      "src": ".match {$one :number} {$two :number}\n  1 2 {{Two keys}}\n  * {{Missing a key}}\n  * * {{Otherwise}}",
+      "expErrors": [
+        {
+          "type": "variant-key-mismatch"
+        }
+      ]
+    },
+
+    {
+      "src": ".match {$foo :x} {$bar :x} * {{foo}}",
+      "expErrors": [
+        {
+          "type": "variant-key-mismatch"
+        }
+      ]
+    },
+
+    {
+      "src": ".match {$one :number}\n   1 {{Value is one}}\n 2 {{Value is two}}",
+      "expErrors": [
+        {
+          "type": "missing-fallback-variant"
+        }
+      ]
+    },
+
+    {
+      "src": ".match {$one :number} {$two :number}\n  1 * {{First is one}}\n  * 1 {{Second is one}}",
+      "expErrors": [
+        {
+          "type": "missing-fallback-variant"
+        }
+      ]
+    },
+
+    {
+      "src": ".match {$one}\n   1 {{Value is one}}\n    * {{Value is not one}}",
+      "expErrors": [
+        {
+          "type": "missing-selector-annotation"
+        }
+      ]
+    },
+
+    {
+      "src": ".local $one = {|The one|}\n   .match {$one}\n  1 {{Value is one}}\n   * {{Value is not one}}",
+      "expErrors": [
+        {
+          "type": "missing-selector-annotation"
+        }
+      ]
+    },
+    {
+      "src": ".input {$foo} .match {$foo} one {{one}} * {{other}}",
+      "expErrors": [
+        {
+          "type": "missing-selector-annotation"
+        }
+      ]
+    },
+
+    {
+      "src": ".local $foo = {$bar} .match {$foo} one {{one}} * {{other}}",
+      "expErrors": [
+        {
+          "type": "missing-selector-annotation"
+        }
+      ]
+    },
+
+    {
+      "src": ".local $x = {|1|} .input {$x :number} {{{$x}}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
+    },
+
+    {
+      "src": ".input {$x :number} .input {$x :string} {{{$x}}}",
+      "expErrors": [
+        {
+          "type": "duplicate-declaration"
+        }
+      ]
+    },
+
+    {
+      "src": "{:foo a=1 b=2 a=1}",
+      "expErrors": [
+        {
+          "type": "duplicate-option-name"
+        }
+      ]
+    },
+
+    {
+      "src": "{:foo a=1 a=1}",
+      "expErrors": [
+        {
+          "type": "duplicate-option-name"
+        }
+      ]
+    },
+
+    {
+      "src": "{:foo a=1 a=2}",
+      "expErrors": [
+        {
+          "type": "duplicate-option-name"
+        }
+      ]
+    },
+
+    {
+      "src": "{|x| :foo a=1 a=2}",
+      "expErrors": [
+        {
+          "type": "duplicate-option-name"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,347 @@
+{
+  "scenario": "Syntax errors with character offsets",
+  "description": "Syntax errors; for ICU4C, the character offset in the parse error is checked",
+  "defaultTestProperties": {
+    "locale": "en-US",
+    "expErrors": [
+      {
+        "type": "syntax-error"
+      }
+    ]
+  },
+  "tests": [
+    { "src": "}{|xyz|", "char": 0 },
+    { "src": "}", "char": 0 },
+    {
+        "src": "{{{%\\y{}}",
+        "char": 5,
+        "comment": "Backslash followed by non-backslash followed by a '{' -- this should be an error immediately after the first backslash"
+    },
+    {
+        "src": "{%abc|\\z}}",
+        "char": 7,
+        "comment": "Reserved chars followed by a '|' that doesn't begin a valid literal -- this should be an error at the first invalid char in the literal"
+    },
+    {
+        "src": "{%\\y{p}}",
+        "char": 3,
+        "comment": "Same pattern, but with a valid reserved-char following the erroneous reserved-escape -- the offset should be the same as with the previous one"
+    },
+    {
+        "src": "{{{%ab|\\z|cd}}",
+        "char": 8,
+        "comment": "Erroneous literal inside a reserved string -- the error should be at the first erroneous literal char"
+    },
+    {
+        "src": "hello {|4.2| %num\\ber}}",
+        "char": 18,
+        "comment": "Single backslash not allowed"
+    },
+    {
+        "src": "hello {|4.2| %num{be\\|r}}",
+        "char": 17,
+        "comment": "Unescaped '{' not allowed"
+    },
+    {
+        "src": "hello {|4.2| %num}be\\|r}}",
+        "char": 23,
+        "comment": "Unescaped '}' -- will be interpreted as the end of the reserved string, and the error will be reported at the index of the next '}'"    },
+    {
+        "src": "hello {|4.2| %num\\{be|r}}",
+        "char": 25,
+        "comment": "Unescaped '|' -- will be interpreted as the beginning of a literal. Error at end of input"
+    },
+    {
+        "src": ".match{|y|}|y|{{{|||}}}",
+        "char": 19,
+        "comment": "No spaces are required here. The error should be in the pattern, not before"
+    },
+    {
+        "src": ".match {|y|}|foo|bar {{{a}}}",
+        "char": 17,
+        "comment": "Missing spaces between keys"
+    },
+    {
+        "src": ".match {|y|} |quux| |foo|bar {{{a}}}",
+        "char": 25,
+        "comment": "Missing spaces between keys"
+    },
+    {
+        "src": ".match {|y|}  |quux| |foo||bar| {{{a}}}",
+        "char": 26,
+        "comment": "Missing spaces between keys"
+    },
+    {
+        "src": ".match {|y|}  |\\q| * %{! {z}",
+        "char": 16,
+        "comment": "Error parsing the first key -- the error should be there, not in the also-erroneous third key"
+    },
+    {
+        "src":  ".match {|y|}  * %{! {z} |\\q|",
+        "char": 16,
+        "comment": "Error parsing the second key -- the error should be there, not in the also-erroneous third key"
+    },
+    {
+        "src": ".match {|y|}  * |\\q| {\\z}",
+        "char": 18,
+        "comment": "Error parsing the last key -- the error should be there, not in the erroneous pattern"
+    },
+    {
+        "src": ".match {|y|} {\\|} {@}  * * * {{a}}",
+        "char": 14,
+        "comment": "Non-expression as scrutinee in pattern -- error should be at the first non-expression, not the later non-expression"
+    },
+    {
+        "src": ".match {|y|}  $foo * {{a}} when * :bar {{b}}",
+        "char": 14,
+        "comment": "Non-key in variant -- error should be there, not in the next erroneous variant"
+    },
+    {
+        "src": "{{ foo {|bar|} \\q baz  ",
+        "char": 16,
+        "comment": "Error should be within the first erroneous `text` or expression"
+    },
+    {
+        "src": "{{{:    }}}",
+        "char": 4,
+        "comment": "':' has to be followed by a function name -- the error should be at the first whitespace character"
+    },
+    {
+        "src": ".local $x = }|foo|}",
+        "char": 12,
+        "comment": "Expression not starting with a '{'"
+    },
+    {
+        "src": ".local $bar {|foo|} {{$bar}}",
+        "char": 12,
+        "comment": "Missing '=' in `.local` declaration"
+    },
+    {
+        "src": ".local bar = {|foo|} {{$bar}}",
+        "char": 7,
+        "comment": "LHS of declaration doesn't start with a '$'"
+    },
+    {
+        "src": ".local $bar = |foo| {{$bar}}",
+        "char": 14,
+        "comment": "`.local` RHS isn't an expression"
+    },
+    {
+        "src": "{{extra}}content",
+        "char": 9,
+        "comment": "Trailing characters that are not whitespace"
+    },
+    {
+        "src": ".match {|x|}  * {{foo}}extra",
+        "char": 28,
+        "comment": "Trailing characters that are not whitespace"
+    },
+    {
+        "src": "empty { }",
+        "char": 8,
+        "comment": "Empty expression"
+    },
+    {
+        "src": ".match {}  * {{foo}}",
+        "char": 8,
+        "comment": "Empty expression"
+    },
+    {
+        "src": "bad {:}",
+        "char": 6,
+        "comment": "':' not preceding a function name"
+    },
+    {
+        "src": "{{no-equal {|42| :number m }}}",
+        "char":  27,
+        "comment": "Missing '=' after option name"
+    },
+    {
+        "src": "{{no-equal {|42| :number minimumFractionDigits 2}}}",
+        "char":  47,
+        "comment": "Missing '=' after option name"
+    },
+    {
+        "src": "bad {:placeholder option value}",
+        "char":  25,
+        "comment": "Missing '=' after option name"
+    },
+    {
+        "src": "hello {|4.2| :number min=2=3}",
+        "char":  26,
+        "comment": "Extra '=' after option name"
+    },
+    {
+        "src": "hello {|4.2| :number min=2max=3}",
+        "char":  26,
+        "comment": "Missing space between options"
+    },
+    {
+        "src": "hello {|4.2| :number min=|a|max=3}",
+        "char": 28,
+        "comment": "Missing whitespace between valid options"
+    },
+    {
+        "src": "hello {|4.2| :number min=|\\a|}",
+        "char": 27,
+        "comment": "Ill-formed RHS of option -- the error should be within the RHS, not after parsing options"
+    },
+    {
+        "src": "no-equal {|42| :number   {}",
+        "char": 25,
+        "comment": "Junk after annotation"
+    },
+    {
+        "src": "bad {:placeholder option=}",
+        "char": 25,
+        "comment": "Missing RHS of option"
+    },
+    {
+        "src": "bad {:placeholder option}",
+        "char": 24,
+        "comment": "Missing RHS of option"
+    },
+    {
+        "src": "bad {$placeholder option}",
+        "char": 18,
+        "comment": "Annotation is not a function or reserved text"
+    },
+    {
+        "src": "no {$placeholder end",
+        "char": 17,
+        "comment": "Annotation is not a function or reserved text"
+    },
+    {
+        "src": ".match  * {{foo}}",
+        "char": 8,
+        "comment": "Missing expression in selectors"
+    },
+    {
+        "src": ".match |x|  * {{foo}}",
+        "char": 7,
+        "comment": "Non-expression in selectors"
+    },
+    {
+        "src": ".match {|x|}  * foo",
+        "char": 19,
+        "comment": "Missing RHS in variant"
+    },
+    {
+        "src": "{$:abc}",
+        "char": 2,
+        "comment": "Variable names can't start with a : or -"
+    },
+    {
+        "src": "{$-abc}",
+        "char": 2,
+        "comment": "Variable names can't start with a : or -"
+    },
+    {
+        "src": "{$bar+foo}",
+        "char": 5,
+        "comment": "Missing space before annotation. Note that {{$bar:foo}} and {{$bar-foo}} are valid, because variable names can contain a ':' or a '-'"
+    },
+    {
+        "src": "{|3.14|:foo}",
+        "char": 7,
+        "comment": "Missing space before annotation."
+    },
+    {
+        "src": "{|3.14|-foo}",
+        "char": 7,
+        "comment": "Missing space before annotation."
+    },
+    {
+        "src": "{|3.14|+foo}",
+        "char": 7,
+        "comment": "Missing space before annotation."
+    },
+    {
+        "src": ".local $foo = {$bar} .match {$foo}  :one {one} * {other}",
+        "char": 36,
+        "comment": "Unquoted literals can't begin with a ':'"
+    },
+    {
+        "src": ".local $foo = {$bar :fun option=:a} {{bar {$foo}}}",
+        "char": 32,
+        "comment": "Unquoted literals can't begin with a ':'"
+    },
+    { "src": "{|foo| {#markup}}", "char": 7, "comment": "Markup in wrong place" },
+    { "src": "{|foo| #markup}", "char": 7, "comment": "Markup in wrong place" },
+    { "src": "{|foo| {#markup/}}", "char": 7, "comment": "Markup in wrong place" },
+    { "src": "{|foo| {/markup}}", "char": 7, "comment": "Markup in wrong place" },
+    { "src": ".input $x = {|1|} {{{$x}}}", "char": 7, "comment": ".input with non-variable-expression" },
+    { "src": ".input $x = {:number} {{{$x}}}", "char": 7, "comment": ".input with non-variable-expression" },
+    { "src": ".input {|1| :number} {{{$x}}}", "char": 7, "comment": ".input with non-variable-expression" },
+    { "src": ".input {:number} {{{$x}}}", "char": 7, "comment": ".input with non-variable-expression" },
+    { "src": ".input {|1|} {{{$x}}}", "char": 7, "comment": ".input with non-variable-expression" },
+    { "src": ".", "char": 1},
+    { "src":  "{", "char": 1},
+    { "src":  "}", "char": 0},
+    { "src":  "{}", "char": 1},
+    { "src":  "{{", "char": 2},
+    { "src":  "{{}", "char": 3},
+    { "src":  "{{}}}", "char": 4},
+    { "src":  "{|foo| #markup}", "char": 7},
+    { "src":  "{{missing end brace}", "char": 20},
+    { "src":  "{{missing end braces", "char": 20},
+    { "src":  "{{missing end {$braces", "char": 22},
+    { "src":  "{{extra}} content", "char": 10},
+    { "src":  "empty { } placeholder", "char": 8},
+    { "src":  "missing space {42:func}", "char": 17},
+    { "src":  "missing space {|foo|:func}", "char": 20},
+    { "src":  "missing space {|foo|@bar}", "char": 20},
+    { "src":  "missing space {:func@bar}", "char": 20},
+    { "src":  "{:func @bar@baz}", "char": 11},
+    { "src":  "{:func @bar=42@baz}", "char": 14},
+    { "src":  "{+reserved@bar}", "char": 10},
+    { "src":  "{&private@bar}", "char": 9},
+    { "src":  "bad {:} placeholder", "char": 6},
+    { "src":  "bad {\\u0000placeholder}", "char": 5},
+    { "src":  "no-equal {|42| :number minimumFractionDigits 2}", "char": 45},
+    { "src":  "bad {:placeholder option=}", "char": 25},
+    { "src":  "bad {:placeholder option value}", "char": 25},
+    { "src":  "bad {:placeholder option:value}", "char": 30},
+    { "src":  "bad {:placeholder option}", "char": 24},
+    { "src":  "bad {:placeholder:}", "char": 18},
+    { "src":  "bad {::placeholder}", "char": 6},
+    { "src":  "bad {:placeholder::foo}", "char": 18},
+    { "src":  "bad {:placeholder option:=x}", "char": 25},
+    { "src":  "bad {:placeholder :option=x}", "char": 18},
+    { "src":  "bad {:placeholder option::x=y}", "char": 25},
+    { "src":  "bad {$placeholder option}", "char": 18},
+    { "src":  "bad {:placeholder @attribute=}", "char": 29},
+    { "src":  "bad {:placeholder @attribute=@foo}", "char": 29},
+    { "src":  "no {placeholder end", "char": 16},
+    { "src":  "no {$placeholder end", "char": 17},
+    { "src":  "no {:placeholder end", "char": 20},
+    { "src":  "no {|placeholder| end", "char": 18},
+    { "src":  "no {|literal} end", "char": 17},
+    { "src":  "no {|literal or placeholder end", "char": 31},
+    { "src":  ".local bar = {|foo|} {{_}}", "char": 7},
+    { "src":  ".local #bar = {|foo|} {{_}}", "char": 7},
+    { "src":  ".local $bar {|foo|} {{_}}", "char": 12},
+    { "src":  ".local $bar = |foo| {{_}}", "char": 14},
+    { "src":  ".match {#foo} * {{foo}}", "char": 8},
+    { "src":  ".match {} * {{foo}}", "char": 8},
+    { "src":  ".match {|foo| :x} {|bar| :x} ** {{foo}}", "char": 30},
+    { "src":  ".match * {{foo}}", "char": 7},
+    { "src":  ".match {|x| :x} * foo", "char": 21},
+    { "src":  ".match {|x| :x} * {{foo}} extra", "char": 31},
+    { "src":  ".match |x| * {{foo}}", "char": 7},
+    { "src": ".match {|foo| :string} o:ne {{one}}  * {{other}}", "char": 24, "comment" : "tests for ':' in unquoted literals (not allowed)" },
+    { "src": ".match {|foo| :string} one: {{one}}  * {{other}}", "char": 26, "comment" : "tests for ':' in unquoted literals (not allowed)" },
+    { "src": ".local $foo = {|42| :number option=a:b} {{bar {$foo}}}", "char": 36, "comment" : "tests for ':' in unquoted literals (not allowed)" },
+    { "src": ".local $foo = {|42| :number option=a:b:c} {{bar {$foo}}}", "char": 36, "comment" : "tests for ':' in unquoted literals (not allowed)" },
+    { "src": "{$bar:foo}", "char": 5, "comment" : "tests for ':' in unquoted literals (not allowed)"},
+    {
+        "src":  ".match {1} {{_}}",
+        "char": 12,
+        "comment": "Disambiguating a wrong .match from an unsupported statement"
+    },
+    {
+        "src": "{{{/p o4.􍅲 = 1}}}",
+        "char": 9
+    }
+  ]
+}
