@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1731536313560,
+  "lastUpdate": 1731541709258,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28767,6 +28767,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 4.838567210177195,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "06a23f8d37ce0c3a985bb676cbc05eb7bd5f3573",
+          "message": "ICU-22965 Fix the problems we had with the maven deploy for ICU 76.1\n\nThe blocker was the missing `<name>` element, which is mandatory\nSee https://central.sonatype.org/publish/requirements/#project-name-description-and-url\n\nThe second problem was that all modules were staged, not just the three we normally publish.",
+          "timestamp": "2024-11-13T15:38:08-08:00",
+          "tree_id": "45d56cf26405e8f80e96a551b3967ac8d8fe67ee",
+          "url": "https://github.com/unicode-org/icu/commit/06a23f8d37ce0c3a985bb676cbc05eb7bd5f3573"
+        },
+        "date": 1731541515782,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 4.845798051827567,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
