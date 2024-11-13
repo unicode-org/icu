@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1731406355819,
+  "lastUpdate": 1731537048540,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -56535,6 +56535,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2049426.9781,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "8b28c3843f20641e2eca54198e208745d5baaffa",
+          "message": "ICU-22927 Duplicate (back) the MF2 test data between icu4c and icu4j\n\nThe C++ and Java implementations are done by two different people different companies.\nWith different time constraints and availability.\nThe spec is still not final (although it is close), and the implementations are\nstill quite a bit behind.\nSharing these test files slows down development, by forcing any C++ and Java changes\nto happen in the same time.\n\nThere are other components that share test files that are not shared yet,\neven if they are more stable. So I don't know why we would force this on MF2 only.\n\nThis is temporary, and the data files will be de-duplicated again at a later time,\nwhen the two implementations are more stable.\nThat de-duplication will include other shared files, and in a slightly different structure\n(we have a doc and a discution on this topic).",
+          "timestamp": "2024-11-13T14:09:42-08:00",
+          "tree_id": "dc23f81678eb878a826f68d4d820761556412d05",
+          "url": "https://github.com/unicode-org/icu/commit/8b28c3843f20641e2eca54198e208745d5baaffa"
+        },
+        "date": 1731536857848,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 206.2976,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8816181.8534,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1993640.8162,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 8269785.5688,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2059583.8002,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
