@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1731406538350,
+  "lastUpdate": 1731537164219,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -81585,6 +81585,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1530.5113,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "8b28c3843f20641e2eca54198e208745d5baaffa",
+          "message": "ICU-22927 Duplicate (back) the MF2 test data between icu4c and icu4j\n\nThe C++ and Java implementations are done by two different people different companies.\nWith different time constraints and availability.\nThe spec is still not final (although it is close), and the implementations are\nstill quite a bit behind.\nSharing these test files slows down development, by forcing any C++ and Java changes\nto happen in the same time.\n\nThere are other components that share test files that are not shared yet,\neven if they are more stable. So I don't know why we would force this on MF2 only.\n\nThis is temporary, and the data files will be de-duplicated again at a later time,\nwhen the two implementations are more stable.\nThat de-duplication will include other shared files, and in a slightly different structure\n(we have a doc and a discution on this topic).",
+          "timestamp": "2024-11-13T14:09:42-08:00",
+          "tree_id": "dc23f81678eb878a826f68d4d820761556412d05",
+          "url": "https://github.com/unicode-org/icu/commit/8b28c3843f20641e2eca54198e208745d5baaffa"
+        },
+        "date": 1731536970663,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77857.519,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177835.2984,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5592,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.6883,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.7274,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8985.2423,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 32820.9515,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1536.0443,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
