@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1731537164219,
+  "lastUpdate": 1731542554974,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -81663,6 +81663,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1536.0443,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "06a23f8d37ce0c3a985bb676cbc05eb7bd5f3573",
+          "message": "ICU-22965 Fix the problems we had with the maven deploy for ICU 76.1\n\nThe blocker was the missing `<name>` element, which is mandatory\nSee https://central.sonatype.org/publish/requirements/#project-name-description-and-url\n\nThe second problem was that all modules were staged, not just the three we normally publish.",
+          "timestamp": "2024-11-13T15:38:08-08:00",
+          "tree_id": "45d56cf26405e8f80e96a551b3967ac8d8fe67ee",
+          "url": "https://github.com/unicode-org/icu/commit/06a23f8d37ce0c3a985bb676cbc05eb7bd5f3573"
+        },
+        "date": 1731542373148,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77797.4796,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177803.8232,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5488,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.6842,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.7252,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 9005.6775,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 32871.3547,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1534.4246,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
