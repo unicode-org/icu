@@ -503,7 +503,7 @@ the position, for those cases:
 The first rule will convert "x", when preceded by a vowel, into "ks". The
 transform will then backup to the position before the vowel and continue. In the
 next pass, the "ak" will match and be invoked. Thus, if the source text is "ax",
-the result will be "ack".
+the result will be "acks".
 
 > :point_right: **Note**: *Although you can move the cursor forward or backward, it is limited in two
 ways: (a) to the text that is matched, (b) within the original substring that is
