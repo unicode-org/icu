@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1731541528482,
+  "lastUpdate": 1732039260373,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28857,6 +28857,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 4.86150797240096,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vignesbr@amazon.com",
+            "name": "Vignesh Subramani",
+            "username": "vignesh28s1995"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "38c046b60cb990646e402afc03f89b4daa4b2e6b",
+          "message": "ICU-22888 Enhance XML Processor Configuration for Tools Directory in ICU4J Package\n\nSee #3243",
+          "timestamp": "2024-11-19T09:54:51-08:00",
+          "tree_id": "c0c5853439a97f95f63ced75b877aebde7d9b05f",
+          "url": "https://github.com/unicode-org/icu/commit/38c046b60cb990646e402afc03f89b4daa4b2e6b"
+        },
+        "date": 1732039076254,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 4.87294002607455,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
