@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1732042657372,
+  "lastUpdate": 1732052515850,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35313,6 +35313,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 53.1327,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "5ceee1660f957d93bbd28f9f6bfc672a9b0ceb18",
+          "message": "ICU-22960 Use `ICUBinary.getRequiredData()` to load BreakIterator data",
+          "timestamp": "2024-11-19T13:28:37-08:00",
+          "tree_id": "85e59561779f117bb784c40c4799285e5f5a8ba2",
+          "url": "https://github.com/unicode-org/icu/commit/5ceee1660f957d93bbd28f9f6bfc672a9b0ceb18"
+        },
+        "date": 1732052311733,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.5509,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 48.793,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
