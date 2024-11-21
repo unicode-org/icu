@@ -843,11 +843,11 @@ jobs:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v2
       - name: Build Solution
-        run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=${{ matrix.config }} /p:Platform=${{ matrix.platform }}
+        run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=${{ matrix.config }} /p:Platform=${{ matrix.platform }} /p:SkipUWP=true
       - name: Run Tests (icucheck.bat)
         run: icu4c/source/allinone/icucheck.bat ${{ matrix.arch }} ${{ matrix.config }}
       - name: Build Sample Solution
-        run: msbuild icu4c/source/samples/all/all.sln /p:Configuration=${{ matrix.config }} /p:Platform=${{ matrix.arch }}
+        run: msbuild icu4c/source/samples/all/all.sln /p:Configuration=${{ matrix.config }} /p:Platform=${{ matrix.arch }} /p:SkipUWP=true
       - name: Test Samples (samplecheck.bat)
         run: icu4c/source/samples/all/samplecheck.bat ${{ matrix.arch }} ${{ matrix.config }}
 
