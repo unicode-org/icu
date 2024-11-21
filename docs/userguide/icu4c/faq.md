@@ -88,8 +88,8 @@ your topic.
 #### What is the ICU binary compatibility policy?
 
 Please see the section on
-[binary compatibility](../design#icu-binary-compatibility)
-in the [design chapter](../design.md).
+[binary compatibility](../icu/design#icu-binary-compatibility)
+in the [design chapter](../icu/design.md).
 
 #### How is ICU licensed?
 
@@ -120,8 +120,8 @@ upgrade-friendly.
 
 *   **API:** ensure that you are not using draft APIs which may have changed in
     a future release. See the section on
-    [API compatibility](../design#icu-api-compatibility) in the
-    [design chapter](../design.md).
+    [API compatibility](../icu/design#icu-api-compatibility) in the
+    [design chapter](../icu/design.md).
 *   **Unicode:** See the release notes for particular versions of Unicode to
     ensure that your code is not affected by property changes or other
     specification changes.
@@ -133,8 +133,8 @@ upgrade-friendly.
     currencies, types of calendars
 *   **Building/Deploying your Application (ICU4C):** ICU4C usually builds with
     symbol renaming (See:
-    [binary compatibility](../design#icu-binary-compatibility)
-    in the [design chapter](../design.md)). Be sure that you build your
+    [binary compatibility](../icu/design#icu-binary-compatibility)
+    in the [design chapter](../icu/design.md)). Be sure that you build your
     application with the updated ICU header files, so that it will link against
     the current ICU. Also, don't hard-code the names of ICU libraries in your
     build scripts and projects. Where possible, link against just the
@@ -268,8 +268,8 @@ ICU4C (ICU) is written in C and C++, and ICU4J is written in Java™.
 
 #### How are the APIs documented for deprecation?
 
-Please read the [ICU API compatibility](../design#icu-api-compatibility)
-section in the [ICU Design](../design.md) chapter.
+Please read the [ICU API compatibility](../icu/design#icu-api-compatibility)
+section in the [ICU Design](../icu/design.md) chapter.
 
 #### What version of Unicode standard does ICU support?
 
@@ -409,7 +409,7 @@ Chapter](../locale/index.md) of this User's Guide.
 
 #### How is ICU versioned?
 
-Please read the [ICU Design](../design.md) chapter of the User's Guide.
+Please read the [ICU Design](../icu/design.md) chapter of the User's Guide.
 
 #### What is the relationship between ICU locale data and system locale data?
 
@@ -445,7 +445,7 @@ puts("callMyFunction() Failed!");
 }
 ```
 
-Please see the [ICU Design](../design.md) chapter for details.
+Please see the [ICU Design](../icu/design.md) chapter for details.
 
 #### With calendar classes, why are months 0-based?
 
