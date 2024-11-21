@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1732223598334,
+  "lastUpdate": 1732227886347,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28947,6 +28947,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 421.3590138163203,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "b54f3f5d918714467e409df41ffd01ec05bfcd9e",
+          "message": "ICU-22870 Remove ja_JP_TRADITIONAL pattern generator tests",
+          "timestamp": "2024-11-21T14:12:05-08:00",
+          "tree_id": "64a4b33898286f8a0c5eb80d0b13b8f698b8bdff",
+          "url": "https://github.com/unicode-org/icu/commit/b54f3f5d918714467e409df41ffd01ec05bfcd9e"
+        },
+        "date": 1732227695911,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 432.0669518445198,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
