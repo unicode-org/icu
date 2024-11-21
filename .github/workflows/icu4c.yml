@@ -383,10 +383,10 @@ jobs:
         uses: microsoft/setup-msbuild@v2
       - name: Build Solution x64
         if: contains(matrix.test_flags, 'arm Release')
-        run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64
+        run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64 /p:SkipUWP=true
       - name: Build Solution
         run: |
-          msbuild icu4c/source/allinone/allinone.sln ${{ matrix.build_flags }}
+          msbuild icu4c/source/allinone/allinone.sln ${{ matrix.build_flags }} /p:SkipUWP=true
       - name: Run ${{ matrix.test_flags }} Tests (icucheck.bat)
         if: contains(matrix.test_flags, 'arm Release') == false
         run: |
@@ -433,9 +433,9 @@ jobs:
       uses: microsoft/setup-msbuild@v2
     - name: Build Solution x64
       if: contains(matrix.win_ver, 'ARM64')
-      run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64
+      run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64 /p:SkipUWP=true
     - name: Build Solution
-      run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=${{ matrix.plat }}
+      run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=${{ matrix.plat }} /p:SkipUWP=true
     - name: Run Tests (icucheck.bat)
       if: contains(matrix.win_ver, 'ARM64') == false
       run: icu4c/source/allinone/icucheck.bat ${{ matrix.arch }} Release
