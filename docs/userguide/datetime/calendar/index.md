@@ -66,8 +66,7 @@ classes.*
 When a calendar object is created, via either `Calendar::create()`, or
 `ucal_open()`, or indirectly within a date formatter, ICU looks up the 'default'
 calendar type for that locale. At present, all locales default to a Gregorian
-calendar, except for the compatibility locales th_TH_TRADITIONAL and
-ja_JP_TRADITIONAL. If the "calendar" keyword is supplied, this value will
+calendar. If the "calendar" keyword is supplied, this value will
 override the default for that locale.
 
 For instance, `Calendar::createInstance("fr_FR", status)` will create a Gregorian calendar,

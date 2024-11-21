@@ -53,7 +53,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
     }
 }
 
-#define MAX_LOCALE   12
+#define MAX_LOCALE   11
 
 /**
  * Test various generic API methods of DateTimePatternGenerator for API coverage.
@@ -93,7 +93,6 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         {"zh", "TW", "", "calendar=roc"},       // 8
         {"ru", "", "", ""},                     // 9
         {"zh", "", "", "calendar=chinese"},     // 10
-        {"ja", "JP", "TRADITIONAL", ""},        // 11
      };
 
     // For Weds, Jan 13, 1999, 23:58:59
@@ -328,28 +327,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("23:58"),                                                 // 16: JJmm
     };
 
-    UnicodeString patternResults_ja_jp_traditional[] = {
-        // ja_JP_TRADITIONAL                 // 11 ja_JP_TRADITIONAL
-        u"AD1999/1",                         // 00: yM
-        u"西暦1999年1月",                     // 01: yMMM
-        u"1999年1月13日",                     // 02: yMd
-        u"西暦1999年1月13日",                  // 03: yMMMd
-        u"1/13",                             // 04: Md
-        u"1月13日",                           // 05: MMMd
-        u"1月13日",                           // 06: MMMMd
-        u"西暦1999/Q1",                       // 07: yQQQ
-        u"午後11:58",                         // 08: hhmm
-        u"23:58",                            // 09: HHmm
-        u"23:58",                            // 10: jjmm
-        u"58:59",                            // 11: mmss
-        u"西暦1999年1月",                     // 12: yyyyMMMM
-        u"1月13日(水)",                       // 13: MMMEd
-        u"13日(水)",                          // 14: Ed
-        u"23:58:59.123",                     // 15: jmmssSSS
-        u"23:58",                            // 16: JJmm
-    };
-
-    UnicodeString* patternResults[] = {
+    UnicodeString* patternResults[MAX_LOCALE] = {
         patternResults_en_US, // 0
         patternResults_en_US_japanese, // 1
         patternResults_de_DE, // 2
@@ -361,7 +339,6 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         patternResults_zh_TW_roc, // 8
         patternResults_ru, // 9
         patternResults_zh_chinese, // 10
-        patternResults_ja_jp_traditional, // 11
     };
 
     UnicodeString patternTests2[] = {
