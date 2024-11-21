@@ -391,11 +391,7 @@ and `Locale::createCanonical`. The latter API exists in both C++ and Java.
     es@collation=traditional, hi__DIRECT => hi@collation=direct, zh_TW_STROKE =>
     zh_TW@collation=stroke, zh__PINYIN => zh@collation=pinyin.
 
-9.  Variants specifying a calendar are remapped to calendar keyword specifiers,
-    as follows: ja_JP_TRADITIONAL => ja_JP@calendar=japanese, th_TH_TRADITIONAL
-    => th_TH@calendar=buddhist.
-
-10. Special case: C => en_US_POSIX.
+9.  Special case: C => en_US_POSIX.
 
 Certain other operations are not performed by either level 1 or level 2
 canonicalization. These are listed here for completeness.

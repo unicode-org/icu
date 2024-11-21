@@ -576,26 +576,6 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         new String[] {"Ed", "26\u65E5\u5468\u4E09"},
         new String[] {"jmmssSSS", "23:58:59.123"},
         new String[] {"JJmm", "23:58"},
-
-        new ULocale("ja_JP_TRADITIONAL"),
-        // TODO: This is different in C++ and Java.
-        new String[] {"yM", "1999/1",},
-        new String[] {"yMMM", "1999年1月"},
-        new String[] {"yMd", "1999/1/13"},
-        new String[] {"yMMMd", "1999年1月13日"},
-        new String[] {"Md", "1/13"},
-        new String[] {"MMMd", "1月13日"},
-        new String[] {"MMMMd", "1月13日"},
-        new String[] {"yQQQ", "1999/Q1"},
-        new String[] {"hhmm", "午後11:58"},
-        new String[] {"HHmm", "23:58"},
-        new String[] {"jjmm", "23:58"},
-        new String[] {"mmss", "58:59"},
-        new String[] {"yyyyMMMM", "1999年1月"},
-        new String[] {"MMMEd", "1月13日(水)"},
-        new String[] {"Ed", "13日(水)"},
-        new String[] {"jmmssSSS", "23:58:59.123"},
-        new String[] {"JJmm", "23:58"}
     };
 
     @Test
