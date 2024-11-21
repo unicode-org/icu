@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1732120391139,
+  "lastUpdate": 1732224242095,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35421,6 +35421,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 50.1457,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "743998dfaf93a534dec60de159f2dbdd69324386",
+          "message": "ICU-22977 Temp fix for MSVC builds: SkipUWP",
+          "timestamp": "2024-11-21T12:59:41-08:00",
+          "tree_id": "59ef95791b077ab58a79e8695730e5b269b0302e",
+          "url": "https://github.com/unicode-org/icu/commit/743998dfaf93a534dec60de159f2dbdd69324386"
+        },
+        "date": 1732224050092,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.2389,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 50.0893,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
