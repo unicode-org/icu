@@ -107,7 +107,7 @@
       <TurnOffAssemblyGeneration>true</TurnOffAssemblyGeneration>
       <IgnoreSpecificDefaultLibraries>vccorlib.lib;msvcrt.lib</IgnoreSpecificDefaultLibraries>
       <!-- The icudt.lib is for U_ICUDATA_ENTRY_POINT -->
-      <AdditionalDependencies>icudt.lib;onecore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
