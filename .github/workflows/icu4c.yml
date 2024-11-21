@@ -362,7 +362,7 @@ jobs:
 
   # Windows MSVC builds
   windows-msvc:
-    runs-on: windows-2022  # Updated in BRS
+    runs-on: windows-2019  # Updated in BRS TODO: Update back to windows-2022 ASAP
     strategy:
       fail-fast: false
       matrix:
@@ -410,7 +410,7 @@ jobs:
 
   # Windows MSVC distribution release
   windows-msvc-dist-release:
-    runs-on: windows-2022  # Updated in BRS
+    runs-on: windows-2019  # Updated in BRS TODO: Update back to windows-2022 ASAP
     permissions:
       contents: write # So that we can upload to release
     timeout-minutes: 30

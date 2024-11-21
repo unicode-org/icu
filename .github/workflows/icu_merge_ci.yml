@@ -827,7 +827,7 @@ jobs:
 
   # Build ICU and tests sample on some windows configurations
   icu4c-windows-msvc-postmerge:
-    runs-on: windows-2022  # Updated in BRS
+    runs-on: windows-2019  # Updated in BRS TODO: Update back to windows-2022 ASAP
     timeout-minutes: 30
     strategy:
       matrix:
