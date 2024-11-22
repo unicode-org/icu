@@ -11,13 +11,15 @@ Contributors license agreement (CLA):
 
 For terms of use and license, see https://www.unicode.org/terms_of_use.html
 
+TODO: We require each pull request to be associated with a Jira issue.
+- For minor changes you can use one of the following per-release tickets:
+- ICU 77 code warnings/version updates: ICU-22920 — Fix compiler warnings. Update versions of code-related dependencies (e.g., dependabot).
+- ICU 77 docs minor fixes: ICU-22921 — User Guide & API docs typos etc., and version updates (e.g., dependabot for User Guide)
+
 TODO: End of lines to delete.
 
 #### Checklist
 - [ ] Required: Issue filed: https://unicode-org.atlassian.net/browse/ICU-NNNNN
-  - For minor changes you can use one of the following per-release tickets:
-  - ICU 77 code warnings/version updates: ICU-22920 — Fix compiler warnings. Update versions of code-related dependencies (e.g., dependabot).
-  - ICU 77 docs minor fixes: ICU-22921 — User Guide & API docs typos etc., and version updates (e.g., dependabot for User Guide)
 - [ ] Required: The PR title must be prefixed with a JIRA Issue number. Example: "ICU-1234 Fix xyz"
 - [ ] Required: The PR description must include the link to the Jira Issue, for example by completing the URL in the first checklist item
 - [ ] Required: Each commit message must be prefixed with a JIRA Issue number. Example: "ICU-1234 Fix xyz"
