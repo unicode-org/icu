@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1732230376609,
+  "lastUpdate": 1732298248051,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29007,6 +29007,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 4.841895219479299,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "e000c5c3cc30104e6dbd74032ed71bbc32a5bfef",
+          "message": "ICU-22127 Remove obsolete WordBreakTest.txt known issues",
+          "timestamp": "2024-11-22T18:40:54+01:00",
+          "tree_id": "8a3a3efd52441553c2e9bfe259b1b6a12c9d3671",
+          "url": "https://github.com/unicode-org/icu/commit/e000c5c3cc30104e6dbd74032ed71bbc32a5bfef"
+        },
+        "date": 1732298055686,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 4.8417876376742015,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
