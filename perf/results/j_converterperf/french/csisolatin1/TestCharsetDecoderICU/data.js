@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1732299918562,
+  "lastUpdate": 1732313770426,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29157,6 +29157,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.2575802904350738,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "2ba362fa3b7cb8b4f4c35b016ec1c490e590b86a",
+          "message": "ICU-22921 Update PR template\n\nSee #3285",
+          "timestamp": "2024-11-22T14:06:21-08:00",
+          "tree_id": "1df6ec5d0bb6a6e664ba1b5607b72c769627d9b0",
+          "url": "https://github.com/unicode-org/icu/commit/2ba362fa3b7cb8b4f4c35b016ec1c490e590b86a"
+        },
+        "date": 1732313575929,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.26376200151810913,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
