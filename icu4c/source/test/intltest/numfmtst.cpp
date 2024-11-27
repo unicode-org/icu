@@ -253,6 +253,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test10997_FormatCurrency);
   TESTCASE_AUTO(Test21556_CurrencyAsDecimal);
   TESTCASE_AUTO(Test22088_Ethiopic);
+  TESTCASE_AUTO(Test22983_LongFraction);
   TESTCASE_AUTO_END;
 }
 
@@ -10160,6 +10161,10 @@ void NumberFormatTest::Test22088_Ethiopic() {
         result.remove();
         assertEquals("Wrong result with UNUM_NUMBERING_SYSTEM and English", u"123", nf3->format(123, result));
     }
+}
+void NumberFormatTest::Test22983_LongFraction() {
+    IcuTestErrorCode status(*this, "Test22983_LongFraction");
+    DecimalFormat df(u"0.0000000000000001", status);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
