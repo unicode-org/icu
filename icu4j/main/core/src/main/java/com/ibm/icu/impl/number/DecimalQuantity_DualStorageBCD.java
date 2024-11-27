@@ -167,7 +167,14 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
 
     @Override
     protected void shiftLeft(int numDigits) {
-        if (!usingBytes && precision + numDigits > 16) {
+        // https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.19
+        // If the promoted type of the left-hand operand is long, then only the
+        // six lowest-order bits of the right-hand operand are used as the shift
+        // distance. It is as if the right-hand operand were subjected to a bitwise
+        // logical AND operator & (§15.22.1) with the mask value 0x3f (0b111111).
+        // The shift distance actually used is therefore always in the range 0 to
+        // 63, inclusive.
+        if (!usingBytes && precision + numDigits >= 16) {
             switchStorage();
         }
         if (usingBytes) {

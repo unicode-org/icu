@@ -1835,6 +1835,11 @@ public class NumberRegressionTests extends CoreTestFmwk {
         }
         Locale.setDefault(savedLocale);
     }
+
+    @Test
+    public void test22983LongFraction() {
+        DecimalFormat format = new DecimalFormat("0.0000000000000001");
+    }
 }
 
 class myformat implements Serializable
