@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1732375252570,
+  "lastUpdate": 1732759480637,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -57237,6 +57237,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16413392.4673,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "e025466e3ac94bcf4a8062b98b68f4c6b7e00990",
+          "message": "ICU-22983 Fix DecimalQuantity::shiftLeft ubsan issue\n\nICU-22983 Add java tests and comments",
+          "timestamp": "2024-11-27T17:33:34-08:00",
+          "tree_id": "4486c19096681a8246d9f1c5851e9c6a2ce45005",
+          "url": "https://github.com/unicode-org/icu/commit/e025466e3ac94bcf4a8062b98b68f4c6b7e00990"
+        },
+        "date": 1732759285025,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 356.6859,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 51838085.0554,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 15021533.4279,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 50331628.5998,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16444320.8781,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
