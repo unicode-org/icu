@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1732375477626,
+  "lastUpdate": 1732759142738,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29277,6 +29277,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 1.8101501499356245,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "e025466e3ac94bcf4a8062b98b68f4c6b7e00990",
+          "message": "ICU-22983 Fix DecimalQuantity::shiftLeft ubsan issue\n\nICU-22983 Add java tests and comments",
+          "timestamp": "2024-11-27T17:33:34-08:00",
+          "tree_id": "4486c19096681a8246d9f1c5851e9c6a2ce45005",
+          "url": "https://github.com/unicode-org/icu/commit/e025466e3ac94bcf4a8062b98b68f4c6b7e00990"
+        },
+        "date": 1732758948941,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 1.824287991861431,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
