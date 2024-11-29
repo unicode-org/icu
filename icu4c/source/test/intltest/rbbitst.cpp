@@ -1593,6 +1593,212 @@ unsigned int RBBIMonkeyKind::maxClassNameSize() {
     return maxSize;
 }
 
+namespace {
+
+class SegmentationRule {
+  public:
+    enum Resolution {
+        BREAK = u'÷',
+        NO_BREAK = u'×',
+    };
+    struct BreakContext {
+        BreakContext(std::size_t index) : indexInRemapped(index) {}
+        std::optional<std::size_t> indexInRemapped;
+        const SegmentationRule *appliedRule = nullptr;
+    };
+
+    SegmentationRule(std::u16string_view name) { UnicodeString(name).toUTF8String(name_); }
+    virtual ~SegmentationRule() = default;
+
+    virtual void apply(UnicodeString &remapped, std::vector<BreakContext> &resolved) const = 0;
+    virtual Resolution resolution() const = 0;
+    const std::string &name() const { return name_; }
+
+    std::chrono::steady_clock::duration timeSpent() const { return timeSpent_; }
+
+  private:
+    std::string name_;
+
+  protected:
+    mutable std::chrono::steady_clock::duration timeSpent_{};
+};
+
+class RemapRule : public SegmentationRule {
+  public:
+    RemapRule(const std::u16string_view name, const std::u16string_view pattern,
+              const std::u16string_view replacement)
+        : SegmentationRule(name), replacement_(replacement) {
+        UParseError parseError;
+        UErrorCode status = U_ZERO_ERROR;
+        pattern_.reset(
+            RegexPattern::compile(pattern, UREGEX_COMMENTS | UREGEX_DOTALL, parseError, status));
+        U_ASSERT(U_SUCCESS(status));
+    }
+
+    virtual void apply(UnicodeString &remapped, std::vector<BreakContext> &resolved) const override {
+        auto const start = std::chrono::steady_clock::now();
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString result;
+        std::size_t i = 0;
+        std::ptrdiff_t offset = 0;
+        std::unique_ptr<RegexMatcher> matcher(pattern_->matcher(remapped, status));
+        while (matcher->find()) {
+            for (;; ++i) {
+                if (!resolved[i].indexInRemapped.has_value()) {
+                    continue;
+                }
+                if (*resolved[i].indexInRemapped > static_cast<std::size_t>(matcher->start64(status))) {
+                    break;
+                }
+                *resolved[i].indexInRemapped += offset;
+            }
+            for (;; ++i) {
+                if (!resolved[i].indexInRemapped.has_value()) {
+                    continue;
+                }
+                if (*resolved[i].indexInRemapped == static_cast<std::size_t>(matcher->end64(status))) {
+                    break;
+                }
+                if (resolved[i].appliedRule != nullptr &&
+                    resolved[i].appliedRule->resolution() == BREAK) {
+                    printf("Replacement rule at remapped indices %d sqq. spans a break",
+                           matcher->start(status));
+                    std::terminate();
+                }
+                resolved[i].appliedRule = this;
+                resolved[i].indexInRemapped = std::nullopt;
+            }
+            matcher->appendReplacement(result, replacement_, status);
+            offset = result.length() - *resolved[i].indexInRemapped;
+        }
+        for (; i < resolved.size(); ++i) {
+            if (!resolved[i].indexInRemapped.has_value()) {
+                continue;
+            }
+            *resolved[i].indexInRemapped += offset;
+        }
+        matcher->appendTail(result);
+        if (resolved.back().indexInRemapped != result.length()) {
+            std::string indices;
+            for (const auto r : resolved) {
+                indices += r.indexInRemapped.has_value() ? std::to_string(*r.indexInRemapped) : "null";
+                indices += ",";
+            }
+            std::string s;
+            puts(("Inconsistent indexInRemapped " + indices + " for new remapped string " +
+                  result.toUTF8String(s))
+                     .c_str());
+            std::terminate();
+        }
+        remapped = result;
+        U_ASSERT(U_SUCCESS(status));
+        timeSpent_ += std::chrono::steady_clock::now() - start;
+    }
+
+    virtual Resolution resolution() const override { return NO_BREAK; }
+
+  private:
+    std::unique_ptr<RegexPattern> pattern_;
+    UnicodeString replacement_;
+};
+
+class RegexRule : public SegmentationRule {
+  public:
+    template <typename T, typename = std::enable_if_t<std::is_constructible_v<T, Resolution>>>
+    RegexRule(const std::u16string_view name, const std::u16string_view before, T resolution,
+              const std::u16string_view after)
+        : SegmentationRule(name), resolution_(static_cast<Resolution>(resolution)) {
+        UParseError parseError;
+        UErrorCode status = U_ZERO_ERROR;
+        before_.reset(
+            RegexPattern::compile(before, UREGEX_COMMENTS | UREGEX_DOTALL, parseError, status));
+        endsWithBefore_.reset(RegexPattern::compile(
+            ".*(" + before + ")", UREGEX_COMMENTS | UREGEX_DOTALL, parseError, status));
+        after_.reset(RegexPattern::compile(after, UREGEX_COMMENTS | UREGEX_DOTALL, parseError, status));
+        U_ASSERT(U_SUCCESS(status));
+    }
+
+    virtual void apply(UnicodeString &remapped, std::vector<BreakContext> &resolved) const override {
+        auto const start = std::chrono::steady_clock::now();
+        UErrorCode status = U_ZERO_ERROR;
+        // The unicodetools implementation simply tries, for each index, to
+        // match the string up to the index against /.*(before)/ (with
+        // `matches`) and the beginning of the string after the index against
+        // /after/ (with `lookingAt`), but that is very slow, especially for
+        // nonempty /before/.  While the old monkeys are not a production
+        // implementation, we still do not want them to be too slow, since we
+        // need to test millions of sample strings.  Instead we search for
+        // /before/ and /after/, and check resulting candidates.  This speeds
+        // things up by a factor of ~40.
+        // We need to be careful about greedy matching: The first position where
+        // the rule matches may be before the end of the first /before/ match.
+        // However, it is both:
+        //   1. within a /before/ match or at its bounds,
+        //   2. at the beginning of an /after/ match.
+        // Further, the /before/ context of the rule matches within the
+        // aforementioned /before/ match.  Note that we need to look for
+        // overlapping matches, thus calls to `find` are always preceded by a
+        // reset via `region`.
+        std::unique_ptr<RegexMatcher> beforeSearch(before_->matcher(remapped, status));
+        std::unique_ptr<RegexMatcher> afterSearch(after_->matcher(remapped, status));
+        beforeSearch->useAnchoringBounds(false);
+        afterSearch->useAnchoringBounds(false);
+        U_ASSERT(U_SUCCESS(status));
+        if (beforeSearch->find() && afterSearch->find()) {
+            for (;;) {
+                if (afterSearch->start(status) < beforeSearch->start(status)) {
+                    afterSearch->region(beforeSearch->start(status), remapped.length(), status);
+                    if (!afterSearch->find()) {
+                        break;
+                    }
+                } else if (afterSearch->start(status) > beforeSearch->end(status)) {
+                    if (beforeSearch->start(status) == remapped.length()) {
+                        break;
+                    }
+                    beforeSearch->region(remapped.moveIndex32(beforeSearch->start(status), 1),
+                                         remapped.length(), status);
+                    if (!beforeSearch->find()) {
+                        break;
+                    }
+                } else {
+                    auto const it = std::find_if(resolved.begin(), resolved.end(), [&](auto r) {
+                        return r.indexInRemapped == afterSearch->start(status);
+                    });
+                    U_ASSERT(it != resolved.end());
+                    U_ASSERT(U_SUCCESS(status));
+                    if (it->appliedRule == nullptr &&
+                        std::unique_ptr<RegexMatcher>(endsWithBefore_->matcher(remapped, status))
+                            ->useAnchoringBounds(false)
+                            .region(beforeSearch->start(status), afterSearch->start(status), status)
+                            .matches(status)) {
+                        it->appliedRule = this;
+                    }
+                    if (afterSearch->start(status) == remapped.length()) {
+                        break;
+                    }
+                    afterSearch->region(remapped.moveIndex32(afterSearch->start(status), 1),
+                                        remapped.length(), status);
+                    if (!afterSearch->find()) {
+                        break;
+                    }
+                }
+                U_ASSERT(U_SUCCESS(status));
+            }
+        }
+        timeSpent_ += std::chrono::steady_clock::now() - start;
+    }
+
+    virtual Resolution resolution() const override { return resolution_; }
+
+  private:
+    std::unique_ptr<RegexPattern> before_;
+    std::unique_ptr<RegexPattern> endsWithBefore_;
+    std::unique_ptr<RegexPattern> after_;
+    const Resolution resolution_;
+};
+
+}  // namespace
+
 //----------------------------------------------------------------------------------------
 //
 //   Random Numbers.  We need a long cycle length since we run overnight tests over
@@ -2604,208 +2810,6 @@ RBBISentMonkey::~RBBISentMonkey() {
     delete fOtherSet;
     delete fExtendSet;
 }
-
-
-
-class SegmentationRule {
-  public:
-    enum Resolution {
-        BREAK = u'÷',
-        NO_BREAK = u'×',
-    };
-    struct BreakContext {
-        BreakContext(std::size_t index) : indexInRemapped(index) {}
-        std::optional<std::size_t> indexInRemapped;
-        const SegmentationRule *appliedRule = nullptr;
-    };
-
-    SegmentationRule(std::u16string_view name) { UnicodeString(name).toUTF8String(name_); }
-    virtual ~SegmentationRule() = default;
-
-    virtual void apply(UnicodeString &remapped, std::vector<BreakContext> &resolved) const = 0;
-    virtual Resolution resolution() const = 0;
-    const std::string &name() const { return name_; }
-
-    std::chrono::steady_clock::duration timeSpent() const { return time_spent_; }
-
-  private:
-    std::string name_;
-  protected:
-    mutable std::chrono::steady_clock::duration time_spent_{};
-};
-
-class RemapRule : public SegmentationRule {
-  public:
-    RemapRule(const std::u16string_view name, const std::u16string_view pattern,
-              const std::u16string_view replacement)
-        : SegmentationRule(name), replacement_(replacement) {
-        UParseError parseError;
-        UErrorCode status = U_ZERO_ERROR;
-        pattern_.reset(RegexPattern::compile(pattern,
-                                             UREGEX_COMMENTS | UREGEX_DOTALL, parseError, status));
-        U_ASSERT(U_SUCCESS(status));
-    }
-
-    virtual void apply(UnicodeString &remapped, std::vector<BreakContext> &resolved) const override {
-        auto const start = std::chrono::steady_clock::now();
-        UErrorCode status = U_ZERO_ERROR;
-        UnicodeString result;
-        std::size_t i = 0;
-        std::ptrdiff_t offset = 0;
-        std::unique_ptr<RegexMatcher> matcher(pattern_->matcher(remapped, status));
-        while (matcher->find()) {
-            for (;; ++i) {
-                if (!resolved[i].indexInRemapped.has_value()) {
-                    continue;
-                }
-                if (*resolved[i].indexInRemapped > static_cast<std::size_t>(matcher->start64(status))) {
-                    break;
-                }
-                *resolved[i].indexInRemapped += offset;
-            }
-            for (;; ++i) {
-                if (!resolved[i].indexInRemapped.has_value()) {
-                    continue;
-                }
-                if (*resolved[i].indexInRemapped == static_cast<std::size_t>(matcher->end64(status))) {
-                    break;
-                }
-                if (resolved[i].appliedRule != nullptr &&
-                    resolved[i].appliedRule->resolution() == BREAK) {
-                    printf("Replacement rule at remapped indices %d sqq. spans a break",
-                           matcher->start(status));
-                    std::terminate();
-                }
-                resolved[i].appliedRule = this;
-                resolved[i].indexInRemapped = std::nullopt;
-            }
-            matcher->appendReplacement(result, replacement_, status);
-            offset = result.length() - *resolved[i].indexInRemapped;
-        }
-        for (; i < resolved.size(); ++i) {
-            if (!resolved[i].indexInRemapped.has_value()) {
-                continue;
-            }
-            *resolved[i].indexInRemapped += offset;
-        }
-        matcher->appendTail(result);
-        if (resolved.back().indexInRemapped != result.length()) {
-            std::string indices;
-            for (const auto r : resolved) {
-                indices += r.indexInRemapped.has_value() ? std::to_string(*r.indexInRemapped) : "null";
-                indices += ",";
-            }
-            std::string s;
-            puts(("Inconsistent indexInRemapped " + indices + " for new remapped string " +
-                  result.toUTF8String(s)).c_str());
-            std::terminate();
-        }
-        remapped = result;
-        U_ASSERT(U_SUCCESS(status));
-        time_spent_ += std::chrono::steady_clock::now() - start;
-    }
-
-    virtual Resolution resolution() const override { return NO_BREAK; }
-
-  private:
-    std::unique_ptr<RegexPattern> pattern_;
-    UnicodeString replacement_;
-};
-
-class RegexRule : public SegmentationRule {
-  public:
-    template<typename T, typename = std::enable_if_t<std::is_constructible_v<T, Resolution>>>
-    RegexRule(const std::u16string_view name, const std::u16string_view before, T resolution,
-              const std::u16string_view after)
-        : SegmentationRule(name), resolution_(static_cast<Resolution>(resolution)) {
-        UParseError parseError;
-        UErrorCode status = U_ZERO_ERROR;
-        before_.reset(
-            RegexPattern::compile(before, UREGEX_COMMENTS | UREGEX_DOTALL, parseError, status));
-        endsWithBefore_.reset(RegexPattern::compile(
-            ".*(" + before + ")", UREGEX_COMMENTS | UREGEX_DOTALL, parseError, status));
-        after_.reset(RegexPattern::compile(after, UREGEX_COMMENTS | UREGEX_DOTALL, parseError, status));
-        U_ASSERT(U_SUCCESS(status));
-    }
-
-    virtual void apply(UnicodeString &remapped, std::vector<BreakContext> &resolved) const override {
-        auto const start = std::chrono::steady_clock::now();
-        UErrorCode status = U_ZERO_ERROR;
-        // The unicodetools implementation simply tries, for each index, to
-        // match the string up to the index against /.*(before)/ (with
-        // `matches`) and the beginning of the string after the index against
-        // /after/ (with `lookingAt`), but that is very slow, especially for
-        // nonempty /before/.  While the old monkeys are not a production
-        // implementation, we still do not want them to be too slow, since we
-        // need to test millions of sample strings.  Instead we search for
-        // /before/ and /after/, and check resulting candidates.  This speeds
-        // things up by a factor of ~40.
-        // We need to be careful about greedy matching: The first position where
-        // the rule matches may be before the end of the first /before/ match.
-        // However, it is both:
-        //   1. within a /before/ match or at its bounds,
-        //   2. at the beginning of an /after/ match.
-        // Further, the /before/ context of the rule matches within the
-        // aforementioned /before/ match.  Note that we need to look for
-        // overlapping matches, thus calls to `find` are always preceded by a
-        // reset via `region`.
-        std::unique_ptr<RegexMatcher> beforeSearch(before_->matcher(remapped, status));
-        std::unique_ptr<RegexMatcher> afterSearch(after_->matcher(remapped, status));
-        beforeSearch->useAnchoringBounds(false);
-        afterSearch->useAnchoringBounds(false);
-        U_ASSERT(U_SUCCESS(status));
-        if (beforeSearch->find() && afterSearch->find()) {
-            for (;;) {
-                if (afterSearch->start(status) < beforeSearch->start(status)) {
-                    afterSearch->region(beforeSearch->start(status), remapped.length(), status);
-                    if (!afterSearch->find()) {
-                        break;
-                    }
-                } else if (afterSearch->start(status) > beforeSearch->end(status)) {
-                    if (beforeSearch->start(status) == remapped.length()) {
-                        break;
-                    }
-                    beforeSearch->region(remapped.moveIndex32(beforeSearch->start(status), 1),
-                                         remapped.length(), status);
-                    if (!beforeSearch->find()) {
-                      break;
-                    }
-                } else {
-                    auto const it = std::find_if(resolved.begin(), resolved.end(), [&](auto r) {
-                        return r.indexInRemapped == afterSearch->start(status);
-                    });
-                    U_ASSERT(it != resolved.end());
-                    U_ASSERT(U_SUCCESS(status));
-                    if (it->appliedRule == nullptr &&
-                        std::unique_ptr<RegexMatcher>(endsWithBefore_->matcher(remapped, status))
-                            ->useAnchoringBounds(false)
-                            .region(beforeSearch->start(status), afterSearch->start(status), status)
-                            .matches(status)) {
-                        it->appliedRule = this;
-                    }
-                    if (afterSearch->start(status) == remapped.length()) {
-                        break;
-                    }
-                    afterSearch->region(remapped.moveIndex32(afterSearch->start(status), 1),
-                                        remapped.length(), status);
-                    if (!afterSearch->find()) {
-                        break;
-                    }
-                }
-                U_ASSERT(U_SUCCESS(status));
-            }
-        }
-        time_spent_ += std::chrono::steady_clock::now() - start;
-    }
-
-    virtual Resolution resolution() const override { return resolution_; }
-
-  private:
-    std::unique_ptr<RegexPattern> before_;
-    std::unique_ptr<RegexPattern> endsWithBefore_;
-    std::unique_ptr<RegexPattern> after_;
-    const Resolution resolution_;
-};
 
 //-------------------------------------------------------------------------------------------
 //
