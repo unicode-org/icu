@@ -1602,8 +1602,8 @@ class SegmentationRule {
         NO_BREAK = u'×',
     };
     struct BreakContext {
-        BreakContext(std::size_t index) : indexInRemapped(index) {}
-        std::optional<std::size_t> indexInRemapped;
+        BreakContext(int32_t index) : indexInRemapped(index) {}
+        std::optional<int32_t> indexInRemapped;
         const SegmentationRule *appliedRule = nullptr;
     };
 
@@ -1639,15 +1639,37 @@ class RemapRule : public SegmentationRule {
         auto const start = std::chrono::steady_clock::now();
         UErrorCode status = U_ZERO_ERROR;
         UnicodeString result;
-        std::size_t i = 0;
-        std::ptrdiff_t offset = 0;
+        int32_t i = 0;
+        int32_t offset = 0;
+        // We find all matches of the `pattern_` and replace them according to
+        // the `replacement_`, producing the new remapped string `result`.
+        // For every position i in the original string,
+        // `resolved[i].indexInRemapped` is nullopt if i lies within a replaced
+        // match, and is set to the new index in `result` otherwise, by adding
+        // the accumulated difference `offset` between match lengths and
+        // replacement lengths.
+        // Consider a 4-codepoint, 6 code unit string s = ⟨ 𒀀, ◌́, ␠, ◌𝅲 ⟩, where
+        // ␠ stands for U+0020 and U+12000 𒀀 and U+1D172 ◌𝅲 each require two code
+        // units, and apply the following two rules:
+        //   1. (?<X>\P{lb=SP}) \p{lb=CM}* → ${X}
+        //   2. \p{lb=CM} → A
+        // The string remapped and the indexInRemapped values change as follows:
+        //   indexInRemapped                   remapped string  rule      final
+        //   (aligned on the initial string)                    applied   offset
+        //      𒀀     ◌́     ␠     ◌𝅲
+        //   0  1  2     3     4  5  6         ⟨ 𒀀, ◌́, ␠, ◌𝅲 ⟩   (none)
+        //   0  -  -     2     3  4  5         ⟨ 𒀀,    ␠, ◌𝅲 ⟩   1              -1
+        //   0  -  -     2     3  -  4         ⟨ 𒀀,    ␠, A ⟩   2              -1
+        //
+        // Note that the last indexInRemapped is always equal to the length of
+        // the remapped string.
         std::unique_ptr<RegexMatcher> matcher(pattern_->matcher(remapped, status));
         while (matcher->find()) {
             for (;; ++i) {
                 if (!resolved[i].indexInRemapped.has_value()) {
                     continue;
                 }
-                if (*resolved[i].indexInRemapped > static_cast<std::size_t>(matcher->start64(status))) {
+                if (*resolved[i].indexInRemapped > matcher->start(status)) {
                     break;
                 }
                 *resolved[i].indexInRemapped += offset;
@@ -1656,22 +1678,37 @@ class RemapRule : public SegmentationRule {
                 if (!resolved[i].indexInRemapped.has_value()) {
                     continue;
                 }
-                if (*resolved[i].indexInRemapped == static_cast<std::size_t>(matcher->end64(status))) {
+                // Note that
+                // `*resolved[i].indexInRemapped > matcher->end(status)` should
+                // never happen with ordinary rules, but could in principle
+                // happen with rules that remap to code point sequences, e.g.,
+                //   1. BC → TYZ
+                //   2. AT → X
+                // applied to ⟨ A, B, C ⟩:
+                //   indexInRemapped  remapped       rule
+                //    A B C
+                //   0 1 2 3          ⟨ A, B, C ⟩     (none)
+                //   0 1 - 4          ⟨ A, T, Y, Z ⟩  1
+                //   0 - - 3          ⟨ X, Y, Z ⟩     2
+                // Where for the application of rule 2, the match ends at
+                // position 2 in remapped, which does not correspond to a
+                // position in the original string.
+                if (*resolved[i].indexInRemapped >= matcher->end(status)) {
                     break;
                 }
                 if (resolved[i].appliedRule != nullptr &&
-                    resolved[i].appliedRule->resolution() == BREAK) {
+                        resolved[i].appliedRule->resolution() == BREAK) {
                     printf("Replacement rule at remapped indices %d sqq. spans a break",
                            matcher->start(status));
                     std::terminate();
                 }
                 resolved[i].appliedRule = this;
-                resolved[i].indexInRemapped = std::nullopt;
+                resolved[i].indexInRemapped.reset();
             }
             matcher->appendReplacement(result, replacement_, status);
             offset = result.length() - *resolved[i].indexInRemapped;
         }
-        for (; i < resolved.size(); ++i) {
+        for (; i < static_cast<int32_t>(resolved.size()); ++i) {
             if (!resolved[i].indexInRemapped.has_value()) {
                 continue;
             }
@@ -1691,7 +1728,10 @@ class RemapRule : public SegmentationRule {
             std::terminate();
         }
         remapped = result;
-        U_ASSERT(U_SUCCESS(status));
+        if (U_FAILURE(status)) {
+            puts(("Failed to apply rule " + name()).c_str());
+            std::terminate();
+        }
         timeSpent_ += std::chrono::steady_clock::now() - start;
     }
 
@@ -1715,7 +1755,10 @@ class RegexRule : public SegmentationRule {
         endsWithBefore_.reset(RegexPattern::compile(
             ".*(" + before + ")", UREGEX_COMMENTS | UREGEX_DOTALL, parseError, status));
         after_.reset(RegexPattern::compile(after, UREGEX_COMMENTS | UREGEX_DOTALL, parseError, status));
-        U_ASSERT(U_SUCCESS(status));
+        if (U_FAILURE(status)) {
+            puts(("Failed to compile regular expressions for rule " + this->name()).c_str());
+            std::terminate();
+        }
     }
 
     virtual void apply(UnicodeString &remapped, std::vector<BreakContext> &resolved) const override {
@@ -1764,7 +1807,13 @@ class RegexRule : public SegmentationRule {
                     auto const it = std::find_if(resolved.begin(), resolved.end(), [&](auto r) {
                         return r.indexInRemapped == afterSearch->start(status);
                     });
-                    U_ASSERT(it != resolved.end());
+                    if (it == resolved.end()) {
+                        puts(("Rule " + name() +
+                              " found a break at a position which does not correspond to an index in "
+                              "the original string")
+                                 .c_str());
+                        std::terminate();
+                    }
                     U_ASSERT(U_SUCCESS(status));
                     if (it->appliedRule == nullptr &&
                         std::unique_ptr<RegexMatcher>(endsWithBefore_->matcher(remapped, status))
@@ -1784,6 +1833,10 @@ class RegexRule : public SegmentationRule {
                 }
                 U_ASSERT(U_SUCCESS(status));
             }
+        }
+        if (U_FAILURE(status)) {
+            puts(("Failed to apply rule " + name()).c_str());
+            std::terminate();
         }
         timeSpent_ += std::chrono::steady_clock::now() - start;
     }
@@ -3035,9 +3088,9 @@ RBBILineMonkey::RBBILineMonkey() :
     const UnicodeSet lbSA(uR"(\p{lb=SA})", status);
     for (auto it = partition.begin(); it != partition.end();) {
         if (lbSA.containsAll(it->second)) {
-          it = partition.erase(it);
+            it = partition.erase(it);
         } else {
-          ++it;
+            ++it;
         }
     }
 
@@ -3079,9 +3132,9 @@ void RBBILineMonkey::setText(const UnicodeString &s) {
 
 int32_t RBBILineMonkey::next(int32_t startPos) {
     for (std::size_t i = startPos + 1; i < resolved.size(); ++i) {
-        if (resolved[i].appliedRule != nullptr && resolved[i].appliedRule->resolution() ==
-            SegmentationRule::BREAK) {
-          return i;
+        if (resolved[i].appliedRule != nullptr &&
+                resolved[i].appliedRule->resolution() == SegmentationRule::BREAK) {
+            return i;
         }
     }
     return -1;
