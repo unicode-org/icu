@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1732758813227,
+  "lastUpdate": 1733334944077,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29367,6 +29367,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1977.8475542041065,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "e59065cc74602649c393e84aaf56f1a9c0d5121f",
+          "message": "ICU-22984 Clean up old monkeys",
+          "timestamp": "2024-12-04T18:38:23+01:00",
+          "tree_id": "a8abf868e0f91a2d69a39965bf1cf17a78ec1931",
+          "url": "https://github.com/unicode-org/icu/commit/e59065cc74602649c393e84aaf56f1a9c0d5121f"
+        },
+        "date": 1733334757369,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1970.4301961948472,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
