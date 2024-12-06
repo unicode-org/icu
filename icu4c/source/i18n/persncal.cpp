@@ -67,7 +67,7 @@ static const int32_t kPersianCalendarLimits[UCAL_FIELD_COUNT][4] = {
 
 namespace { // anonymous
 
-static icu::UnicodeSet *gLeapCorrection = nullptr;
+static const icu::UnicodeSet *gLeapCorrection = nullptr;
 static icu::UInitOnce gCorrectionInitOnce {};
 static int32_t gMinCorrection;
 }  // namespace
@@ -96,7 +96,7 @@ static void U_CALLCONV initLeapCorrection() {
     for (auto year : nonLeapYears) {
         prefab.add(year);
     }
-    gLeapCorrection = prefab.cloneAsThawed();
+    gLeapCorrection = prefab.cloneAsThawed()->freeze();
     ucln_i18n_registerCleanup(UCLN_I18N_PERSIAN_CALENDAR, calendar_persian_cleanup);
 }
 const icu::UnicodeSet* getLeapCorrection() {
