@@ -9,8 +9,8 @@
 
 package com.ibm.icu.util;
 
+import java.util.BitSet;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
@@ -95,22 +95,32 @@ public class PersianCalendar extends Calendar {
     
     private static final int PERSIAN_EPOCH = 1948320;
 
-    private static final int NON_LEAP_YEARS[] = {
-       1502, 1601, 1634, 1667, 1700, 1733, 1766, 1799, 1832, 1865, 1898, 1931, 1964, 1997, 2030, 2059,
-       2063, 2096, 2129, 2158, 2162, 2191, 2195, 2224, 2228, 2257, 2261, 2290, 2294, 2323, 2327, 2356,
-       2360, 2389, 2393, 2422, 2426, 2455, 2459, 2488, 2492, 2521, 2525, 2554, 2558, 2587, 2591, 2620,
-       2624, 2653, 2657, 2686, 2690, 2719, 2723, 2748, 2752, 2756, 2781, 2785, 2789, 2818, 2822, 2847,
-       2851, 2855, 2880, 2884, 2888, 2913, 2917, 2921, 2946, 2950, 2954, 2979, 2983, 2987,
-    };
+    private static final class NonLeapYears {
+       private static final int NON_LEAP_YEARS[] = {
+           1502, 1601, 1634, 1667, 1700, 1733, 1766, 1799, 1832, 1865, 1898, 1931, 1964, 1997, 2030, 2059,
+           2063, 2096, 2129, 2158, 2162, 2191, 2195, 2224, 2228, 2257, 2261, 2290, 2294, 2323, 2327, 2356,
+           2360, 2389, 2393, 2422, 2426, 2455, 2459, 2488, 2492, 2521, 2525, 2554, 2558, 2587, 2591, 2620,
+           2624, 2653, 2657, 2686, 2690, 2719, 2723, 2748, 2752, 2756, 2781, 2785, 2789, 2818, 2822, 2847,
+           2851, 2855, 2880, 2884, 2888, 2913, 2917, 2921, 2946, 2950, 2954, 2979, 2983, 2987,
+        };
+        private int minYear = NON_LEAP_YEARS[0];
+        private int maxYear = NON_LEAP_YEARS[NON_LEAP_YEARS.length - 1];
+        private BitSet offsetYears;
 
-    private static Set<Integer> LEAP_CORRECTION = null;
-    {
-        Set<Integer> prefab = new HashSet<Integer>(NON_LEAP_YEARS.length);
-        for (int nonLeap : NON_LEAP_YEARS) {
-            prefab.add(nonLeap);
+        public NonLeapYears() {
+            offsetYears = new BitSet(maxYear - minYear + 1);
+            for (int nonLeap : NON_LEAP_YEARS) {
+                offsetYears.set(nonLeap - minYear);
+            }
         }
-        LEAP_CORRECTION = prefab;
+
+        public boolean contains(int year) {
+            return minYear <= year && year <= maxYear && offsetYears.get(year - minYear);
+        }
     }
+
+    private static NonLeapYears LEAP_CORRECTION = new NonLeapYears();
+
     //-------------------------------------------------------------------------
     // Constructors...
     //-------------------------------------------------------------------------
@@ -330,10 +340,10 @@ public class PersianCalendar extends Calendar {
      */
     private final static boolean isLeapYear(int year)
     {
-        if (year >= NON_LEAP_YEARS[0] && LEAP_CORRECTION.contains(year)) {
+        if (LEAP_CORRECTION.contains(year)) {
             return false;
         }
-        if (year > NON_LEAP_YEARS[0] && LEAP_CORRECTION.contains(year-1)) {
+        if (LEAP_CORRECTION.contains(year-1)) {
             return true;
         }
         int[] remainder = new int[1];
@@ -426,7 +436,7 @@ public class PersianCalendar extends Calendar {
 
     private static long firstJulianOfYear(int year) {
         long julianDay = 365L * (year - 1L) + floorDivide(8L * year + 21, 33L);
-        if (year > NON_LEAP_YEARS[0] && LEAP_CORRECTION.contains(year-1)) {
+        if (LEAP_CORRECTION.contains(year-1)) {
             julianDay--;
         }
         return julianDay;
@@ -458,7 +468,7 @@ public class PersianCalendar extends Calendar {
         long farvardin1 = firstJulianOfYear(year);
 
         dayOfYear = (int)(daysSinceEpoch - farvardin1); // 0-based
-        if (dayOfYear == 365 && year >= NON_LEAP_YEARS[0] && LEAP_CORRECTION.contains(year)) {
+        if (dayOfYear == 365 && LEAP_CORRECTION.contains(year)) {
             year++;
             dayOfYear = 0;
         }
