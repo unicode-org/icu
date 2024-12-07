@@ -1053,6 +1053,11 @@ static void initDateParsersOnce(UErrorCode& errorCode) {
     dateTimeUTCParser = new SimpleDateFormat(UnicodeString("YYYY-MM-dd'T'HH:mm:ssZ"), errorCode);
     // Handles ISO 8601 datetime with timezone offset; 'zzzz' denotes timezone offset
     dateTimeZoneParser = new SimpleDateFormat(UnicodeString("YYYY-MM-dd'T'HH:mm:sszzzz"), errorCode);
+
+    if (!dateParser || !dateTimeParser || !dateTimeUTCParser || !dateTimeZoneParser) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     ucln_i18n_registerCleanup(UCLN_I18N_MF2_DATE_PARSERS, mf2_date_parsers_cleanup);
 }
 
