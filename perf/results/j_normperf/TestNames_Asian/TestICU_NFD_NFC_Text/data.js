@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733767342006,
+  "lastUpdate": 1733767496308,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -58766,6 +58766,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 11.504187302677577,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "791a052f8ef96805674d2558dcbc8f749f98dc71",
+          "message": "ICU-22921 fix link from gitdev to ci exhaustive tests",
+          "timestamp": "2024-12-09T09:55:54-08:00",
+          "tree_id": "27107866bf117af7485d2f290251ad447190c880",
+          "url": "https://github.com/unicode-org/icu/commit/791a052f8ef96805674d2558dcbc8f749f98dc71"
+        },
+        "date": 1733767253590,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 11.456856175374405,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
