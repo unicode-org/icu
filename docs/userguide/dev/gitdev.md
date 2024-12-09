@@ -596,4 +596,4 @@ every Saturday (at 4:00 AM UTC) and post merging on the maintenance branches.
 They do not run on pull-requests by default as they take 1-2 hours to run.
 
 However, you can manually request the CI builds to run the exhaustive tests.
-See [Continuous Integration / Exhaustive Tests](../userguide/dev/ci.md#exhaustive-tests).
+See [Continuous Integration / Exhaustive Tests](../ci.md#exhaustive-tests).
