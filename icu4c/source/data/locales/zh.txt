@@ -677,8 +677,8 @@ zh{
                 "HHmmss",
                 "HHmm",
                 "GyMMEEEEd",
-                "GyMd",
-                "GyMd",
+                "GyMMMd",
+                "GyMMMd",
                 "GyMd",
             }
             eras{
@@ -744,8 +744,8 @@ zh{
                 "HHmmss",
                 "HHmm",
                 "GyMMEEEEd",
-                "GyMd",
-                "GyMd",
+                "GyMMMd",
+                "GyMMMd",
                 "GyMd",
             }
             eras{
@@ -821,9 +821,9 @@ zh{
                 "HHmmssz",
                 "HHmmss",
                 "HHmm",
-                "GyMEEEEd",
-                "GyMd",
-                "GyMd",
+                "GyMMMEEEEd",
+                "GyMMMd",
+                "GyMMMd",
                 "GyMd",
             }
             availableFormats{
@@ -1022,9 +1022,9 @@ zh{
                 "HHmmssz",
                 "HHmmss",
                 "HHmm",
-                "yMEEEEd",
-                "yMd",
-                "yMd",
+                "yMMMEEEEd",
+                "yMMMd",
+                "yMMMd",
                 "yMd",
             }
             appendItems{
@@ -1417,9 +1417,9 @@ zh{
                 "HHmmssz",
                 "HHmmss",
                 "HHmm",
-                "GyMMEEEEd",
-                "GyMMd",
-                "GyMMd",
+                "GyMMMEEEEd",
+                "GyMMMd",
+                "GyMMMd",
                 "GyMd",
             }
             availableFormats{
@@ -1542,9 +1542,9 @@ zh{
                 "HHmmssz",
                 "HHmmss",
                 "HHmm",
-                "GyMEEEEd",
-                "GyMd",
-                "GyMd",
+                "GyMMMEEEEd",
+                "GyMMMd",
+                "GyMMMd",
                 "GyMMdd",
             }
             availableFormats{

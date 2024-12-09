@@ -13324,6 +13324,11 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        ecy{
+            secondary{
+                scripts{"Cprt"}
+            }
+        }
         ee{
             primary{
                 scripts{"Latn"}
@@ -13983,6 +13988,11 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        gmy{
+            secondary{
+                scripts{"Linb"}
+            }
+        }
         gn{
             primary{
                 scripts{"Latn"}
@@ -14030,11 +14040,7 @@ supplementalData:table(nofallback){
         }
         grc{
             secondary{
-                scripts{
-                    "Cprt",
-                    "Grek",
-                    "Linb",
-                }
+                scripts{"Grek"}
             }
         }
         grt{
@@ -14570,6 +14576,15 @@ supplementalData:table(nofallback){
         kao{
             primary{
                 scripts{"Latn"}
+            }
+        }
+        kaw{
+            secondary{
+                scripts{
+                    "Bali",
+                    "Java",
+                    "Kawi",
+                }
             }
         }
         kbd{
@@ -28522,6 +28537,9 @@ supplementalData:table(nofallback){
             ar{
                 populationShareF:int{46980000}
             }
+            ecy{
+                populationShareF:int{44100000}
+            }
             el{
                 officialStatus{"official"}
                 populationShareF:int{49950000}
@@ -29490,6 +29508,12 @@ supplementalData:table(nofallback){
             fr{
                 populationShareF:int{48900000}
             }
+            gmy{
+                populationShareF:int{0}
+            }
+            grc{
+                populationShareF:int{0}
+            }
             mk{
                 populationShareF:int{48160000}
             }
@@ -29721,6 +29745,9 @@ supplementalData:table(nofallback){
                 literacyShareF:int{49100000}
                 populationShareF:int{48180000}
             }
+            ban_Bali{
+                populationShareF:int{0}
+            }
             bbc{
                 populationShareF:int{47920000}
             }
@@ -29748,6 +29775,9 @@ supplementalData:table(nofallback){
             jv{
                 literacyShareF:int{49100000}
                 populationShareF:int{49340000}
+            }
+            kaw{
+                populationShareF:int{0}
             }
             kge{
                 populationShareF:int{47320000}

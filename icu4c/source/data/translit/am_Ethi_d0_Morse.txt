@@ -20,7 +20,7 @@
 #
 # MINIMAL FILTER: Ethiopic-Morse Code
 #
-:: [[:Zs:]0-9!\?\+/@()\[\]_:;,\.'"$=\-[:Ethiopic:]] ;
+:: [[:Zs:]0-9!\?\+/@()\[\]_:;,\.'"\$=\-[:Ethiopic:]] ;
 ([:Lo:])([:Zs:]+)([:Lo:]) → | $1⁄⁂⁄$2$3 ;  # ⁄⁂⁄ is assumed to be a sufficiently weird enough sequence that won't naturally appear in any normal content
 #
 ########################################################################

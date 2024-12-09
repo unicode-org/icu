@@ -6,7 +6,7 @@
 # Generated from CLDR
 #
 
-::[[:thai:] ก-\u0E3Aเ-๛];
+::[[:Thai:] ก-\u0E3Aเ-๛];
 ::NFD;
 ::Thai-ThaiSemi;
 ::Any-BreakInternal;
