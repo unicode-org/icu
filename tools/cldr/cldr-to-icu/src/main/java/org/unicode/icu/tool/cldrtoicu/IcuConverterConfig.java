@@ -47,6 +47,7 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
         private Optional<String> cldrVersion = Optional.empty();
         private CldrDraftStatus minimumDraftStatus = CldrDraftStatus.CONTRIBUTED;
         private boolean emitReport = false;
+        private boolean parallel = false;
         private final SetMultimap<IcuLocaleDir, String> localeIdsMap = TreeMultimap.create();
         private final Table<IcuLocaleDir, String, String> forcedAliases = TreeBasedTable.create();
         private final Table<IcuLocaleDir, String, String> forcedParents = TreeBasedTable.create();
@@ -111,6 +112,11 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
             return this;
         }
 
+        public Builder setParallel(boolean parallel) {
+            this.parallel = parallel;
+            return this;
+        }
+
         public Builder addLocaleIds(IcuLocaleDir dir, Iterable<String> localeIds) {
             localeIdsMap.putAll(dir, localeIds);
             return this;
@@ -138,6 +144,7 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
     private final IcuVersionInfo versionInfo;
     private final CldrDraftStatus minimumDraftStatus;
     private final boolean emitReport;
+    private final boolean parallel;
     private final ImmutableSet<String> allLocaleIds;
     private final ImmutableSetMultimap<IcuLocaleDir, String> localeIdsMap;
     private final ImmutableTable<IcuLocaleDir, String, String> forcedAliases;
@@ -161,6 +168,7 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
             builder.cldrVersion.orElse(CldrDataSupplier.getCldrVersionString()));
         this.minimumDraftStatus = checkNotNull(builder.minimumDraftStatus);
         this.emitReport = builder.emitReport;
+        this.parallel = builder.parallel;
         // getAllLocaleIds() returns the union of all the specified IDs in the map.
         this.allLocaleIds = ImmutableSet.copyOf(builder.localeIdsMap.values());
         this.localeIdsMap = ImmutableSetMultimap.copyOf(builder.localeIdsMap);
@@ -200,6 +208,11 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
     @Override
     public boolean emitReport() {
         return emitReport;
+    }
+
+    @Override
+    public boolean parallel() {
+        return parallel;
     }
 
     @Override
