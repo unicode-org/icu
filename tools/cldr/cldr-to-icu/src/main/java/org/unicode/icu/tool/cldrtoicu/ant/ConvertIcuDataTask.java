@@ -136,6 +136,10 @@ public final class ConvertIcuDataTask extends Task {
         config.setEmitReport(emit);
     }
 
+    public void setParallel(boolean parallel) {
+        config.setParallel(parallel);
+    }
+
     public static final class LocaleIds extends Task {
         private ImmutableSet<String> ids;
 

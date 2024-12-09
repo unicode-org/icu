@@ -144,6 +144,11 @@ class Cldr2IcuCliOptions {
     private static final String XML_CONFIG_DEFAULT = "${icuDir}/tools/cldr/cldr-to-icu/config.xml";
     String xmlConfig;
 
+    private static final String PARALLEL = "parallel";
+    private static final String PARALLEL_DESC = "Run the generation in parallel (multithreaded), to make it faster.";
+    private static final String PARALLEL_DEFAULT = "false";
+    boolean parallel;
+
     // These must be kept in sync with getOptions().
     private static final Options options = new Options()
             .addOption(Option.builder()
@@ -254,6 +259,10 @@ class Cldr2IcuCliOptions {
                     .argName("path")
                     .desc(descWithDefault(XML_CONFIG_DESC, XML_CONFIG_DEFAULT))
                     .build())
+            .addOption(Option.builder()
+                    .longOpt(PARALLEL)
+                    .desc(descWithDefault(PARALLEL_DESC, PARALLEL_DEFAULT))
+                    .build())
             ;
 
     void processArgs(String[] args) {
@@ -288,6 +297,7 @@ class Cldr2IcuCliOptions {
         emitReport = cli.hasOption(EMIT_REPORT);
         forceDelete = cli.hasOption(FORCE_DELETE);
         xmlConfig = cli.getOptionValue(XML_CONFIG, expandFolders(XML_CONFIG_DEFAULT));
+        parallel = cli.hasOption(PARALLEL);
 
         if (cli.hasOption(OUTPUT_TYPES_LIST)) {
             OutputType[] outTypesToSort = OutputType.values();

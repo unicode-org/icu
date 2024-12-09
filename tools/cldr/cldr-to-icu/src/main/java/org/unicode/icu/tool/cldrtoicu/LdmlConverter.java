@@ -288,22 +288,26 @@ public final class LdmlConverter {
         Path baseDir = config.getOutputDir();
 
         System.out.println("processing standard ldml files");
-        for (String id : config.getAllLocaleIds()) {
+        Stream<String> localeStream = config.getAllLocaleIds().stream();
+        if (config.parallel()) {
+            localeStream = localeStream.parallel();
+        }
+        localeStream.forEach(id -> {
             // Skip "target" IDs that are aliases (they are handled later).
             if (!availableIds.contains(id)) {
-                continue;
+                return;
             }
             // TODO: Remove the following skip when ICU-20997 is fixed
             if (id.contains("VALENCIA") || id.contains("TARASK")) {
                 System.out.println("(skipping " + id + " until ICU-20997 is fixed)");
-                continue;
+                return;
             }
             // Now that former CLDR see locales are in common, there are some language
             // variants that are not at a high enough coverage level to pick up.
             // TODO need a better way of handling this.
              if (id.contains("POLYTON")) {
                 System.out.println("(skipping " + id + ", insufficient coverage level)");
-                continue;
+                return;
             }
 
             IcuData icuData = new IcuData(id, true);
@@ -365,7 +369,7 @@ public final class LdmlConverter {
                     writtenLocaleIds.put(dir, id);
                 }
             }
-        }
+        });
 
         System.out.println("processing alias ldml files");
         for (IcuLocaleDir dir : splitDirs) {

@@ -148,4 +148,9 @@ public interface LdmlConverterConfig {
      * Whether to emit a summary report for debug purposes after conversion is complete.
      */
     boolean emitReport();
+
+    /**
+     * Whether to generate data in parallel (using multithreading).
+     */
+    boolean parallel();
 }

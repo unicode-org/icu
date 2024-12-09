@@ -23,6 +23,7 @@ public class Cldr2Icu {
         convert.setLocaleIdFilter(options.localeIdFilter);
         convert.setIncludePseudoLocales(options.includePseudoLocales);
         convert.setEmitReport(options.emitReport);
+        convert.setParallel(options.parallel);
 
         convert.init();
         convert.execute();
