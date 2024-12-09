@@ -53,6 +53,13 @@ need to be correspondingly updated. See below for more files to be updated and s
 [icu4c/source/data/misc/icuver.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/misc/icuver.txt)
 needs to be updated with the correct version number for ICU and its data.
 
+#### Since ICU 77
+
+The tool takes the `icuVersion` and `icuDataVersion` from the official ICU APIs.
+(from the icu4j listed as a dependency of the tool, usually the one you just built from the `icu4j` folder).
+
+If you need values different than that, you can specify them as the command line parameters (`--icuVersion` and `--icuDataVersion`).
+
 #### Since ICU 68
 
 In
@@ -212,8 +219,18 @@ The command requires a version number string that follows the typical Java / Mav
 
 6. cldr-to-icu build tool has a dependency on the icu4j packages which needs to be updated in [`tools/cldr/cldr-to-icu/pom.xml`](https://github.com/unicode-org/icu/blob/main/tools/cldr/cldr-to-icu/pom.xml). Please update it to match the version that was updated in `icu4j/pom.xml` in the steps above.
 
-    `<version>74.0.1-SNAPSHOT</version>`
+```xml
+version>74.0.1-SNAPSHOT</version>
+```
 
+Since ICU 77 this moved to a property:
+```xml
+<icu4j.version>77.0.1-SNAPSHOT</icu4j.version>
+```
+Which can be easily be set from command line:
+```sh
+mvn versions:set-property -Dproperty=icu4j.version -DnewVersion=77.1 -f $ICU_DIR/tools/cldr/cldr-to-icu
+```
 
 #### Until ICU 73 (inclusive)
 

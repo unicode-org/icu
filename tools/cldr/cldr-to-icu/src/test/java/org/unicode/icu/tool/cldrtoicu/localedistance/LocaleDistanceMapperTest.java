@@ -135,14 +135,15 @@ public class LocaleDistanceMapperTest {
         // LSR values come in (language, script, region) tuples. They are the mapped-to
         // values for the likely subtag mappings, ordered by the DTD order in which the
         // mapping keys were encountered.
-        assertThat(icuData).hasValuesFor("likely/lsrs",
-                "", "", "",
-                "skip", "script", "",
-                "zh", "Hans", "CN",
-                "zh", "Hant", "TW",
-                "en", "Latn", "US",
-                "zh", "Hant", "HK",
-                "zh", "Hant", "MO");
+        assertThat(icuData).hasValuesFor("likely/lsrnum:intvector",
+                "0", // "", "", ""
+                "1", // "skip", "script", ""
+                "1232236233", // "zh", "Hans", "CN"
+                "1254131029", // "zh", "Hant", "TW"
+                "429941505", // "en", "Latn", "US"
+                "1247517541", // "zh", "Hant", "HK"
+                "1249741720" // "zh", "Hant", "MO"
+        );
 
         // It's a bit easier to see how match keys are grouped against the partitions.
         ImmutableSetMultimap<Integer, String> likelyTrie =
@@ -174,11 +175,12 @@ public class LocaleDistanceMapperTest {
 
         // Pairs of expanded paradigm locales (using LSR tuples) in declaration order.
         // This is just the list from the CLDR data with no processing.
-        assertThat(icuData).hasValuesFor("match/paradigms",
-                "en", "Latn", "US",
-                "en", "Latn", "GB",
-                "es", "Latn", "ES",
-                "es", "Latn", "419");
+        assertThat(icuData).hasValuesFor("match/paradigmnum:intvector",
+                "429941505", // "en", "Latn", "US"
+                "420631446", // "en", "Latn", "GB"
+                "429626712", // "es", "Latn", "ES"
+                "419470284" // "es", "Latn", "419"
+        );
 
         // See PartitionInfoTest for a description of the ordering of these strings.
         assertThat(icuData).hasValuesFor("match/partitions",

@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class CleanOutputDirectoryTaskTest {
     // Not using the original field since we want this test to fail if this changes unexpectedly.
     private static final String WAS_GENERATED_LABEL =
-        "Generated using tools/cldr/cldr-to-icu/build-icu-data.xml";
+        "Generated using tools/cldr/cldr-to-icu/";
 
     // Commented version of the label for test data.
     private static final String WAS_GENERATED_LINE = "// " + WAS_GENERATED_LABEL;

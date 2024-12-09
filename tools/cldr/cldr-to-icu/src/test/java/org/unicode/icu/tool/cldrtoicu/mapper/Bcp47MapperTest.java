@@ -28,7 +28,9 @@ public class Bcp47MapperTest {
         RbPath.of("typeAlias", "timezone:alias"),
         RbValue.of("/ICUDATA/timezoneTypes/typeAlias/timezone"),
         RbPath.of("typeMap", "timezone:alias"),
-        RbValue.of("/ICUDATA/timezoneTypes/typeMap/timezone"));
+        RbValue.of("/ICUDATA/timezoneTypes/typeMap/timezone"),
+        RbPath.of("ianaMap", "timezone:alias"),
+        RbValue.of("/ICUDATA/timezoneTypes/ianaMap/timezone"));
 
     @Test
     public void testSimple() {

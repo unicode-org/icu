@@ -11,6 +11,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.partitioningBy;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,9 +29,14 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.ImmutableList;
@@ -38,7 +44,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.io.CharStreams;
 
-// Note: Auto-magical Ant methods are listed as "unused" by IDEs, unless the warning is suppressed.
 public final class CleanOutputDirectoryTask extends Task {
     private static final ImmutableSet<String> ALLOWED_DIRECTORIES =
         Stream
@@ -58,8 +63,7 @@ public final class CleanOutputDirectoryTask extends Task {
     // header without it (since that's the old behaviour).
     // Once there's been an ICU release with this line included in the headers of all data
     // files, we can remove the fallback and just test for this line and nothing else.
-    private static final String WAS_GENERATED_LABEL =
-        "Generated using tools/cldr/cldr-to-icu/build-icu-data.xml";
+    private static final String WAS_GENERATED_LABEL = "Generated using tools/cldr/cldr-to-icu/";
 
     // The number of header lines to check before giving up if we don't find the generated
     // label.
@@ -84,9 +88,8 @@ public final class CleanOutputDirectoryTask extends Task {
     public static final class Retain extends Task {
         private Path path = null;
 
-        // Don't use "Path" for the argument type because that always makes an absolute path (e.g.
-        // relative to the working directory for the Ant task). We want relative paths.
-        @SuppressWarnings("unused")
+        // Don't use "Path" for the argument type because that always makes an absolute path
+        // (e.g. relative to the working directory). We want relative paths.
         public void setPath(String path) {
             Path p = Paths.get(path).normalize();
             checkBuild(!p.isAbsolute() && !p.startsWith(".."), "invalid path: %s", path);
@@ -103,14 +106,12 @@ public final class CleanOutputDirectoryTask extends Task {
         private String name;
         private final Set<Path> retained = new HashSet<>();
 
-        @SuppressWarnings("unused")
         public void setName(String name) {
             checkBuild(ALLOWED_DIRECTORIES.contains(name),
                 "unknown directory name '%s'; allowed values: %s", name, ALLOWED_DIRECTORIES);
             this.name = name;
         }
 
-        @SuppressWarnings("unused")
         public void addConfiguredRetain(Retain retain) {
             retained.add(retain.path);
         }
@@ -121,18 +122,15 @@ public final class CleanOutputDirectoryTask extends Task {
         }
     }
 
-    @SuppressWarnings("unused")
     public void setRoot(String root) {
         // Use String here since on some systems Ant doesn't support automatically converting Path instances.
         this.root = Paths.get(root);
     }
 
-    @SuppressWarnings("unused")
     public void setForceDelete(boolean forceDelete) {
         this.forceDelete = forceDelete;
     }
 
-    @SuppressWarnings("unused")
     public void addConfiguredDir(Dir dir) {
         outputDirs.add(dir);
     }
@@ -255,7 +253,7 @@ public final class CleanOutputDirectoryTask extends Task {
             fileReader.reset();
         }
         boolean isLenientHeaderMatchSoFar = true;
-        for (int n = 0; n < MAX_HEADER_CHECK_LINES ; n++) {
+        for (int n = 0; n < MAX_HEADER_CHECK_LINES; n++) {
             String line = fileReader.readLine();
             // True if we have processed the header, not including the trailing generated label.
             boolean headerIsProcessed = n >= headerLines.size() - 1;
@@ -339,5 +337,78 @@ public final class CleanOutputDirectoryTask extends Task {
         } catch (IOException e) {
             throw new RuntimeException("cannot read resource: " + name, e);
         }
+    }
+
+    private static Retain getRetain(Element elem) {
+        if (!"retain".equals(elem.getTagName())) {
+            return null;
+        }
+        String path = elem.getAttribute("path");
+        Retain retain = new Retain();
+        retain.setPath(path);
+        return retain;
+    }
+
+    private static Dir getDirectory(Element element) {
+        if (!"dir".equals(element.getTagName())) {
+            return null;
+        }
+        String name = element.getAttribute("name");
+        Dir dir = new Dir();
+        dir.setName(name);
+        Node node = element.getFirstChild();
+        while (node != null) {
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element childElement = (Element) node;
+                switch (childElement.getTagName()) {
+                    case "retain":
+                        Retain retain = getRetain(childElement);
+                        dir.addConfiguredRetain(retain);
+                        break;
+                    default:
+                }
+            }
+            node = node.getNextSibling();
+        }
+        return dir;
+    }
+
+    public static CleanOutputDirectoryTask fromXml(String fileName) {
+        try {
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document doc = builder.parse(new File(fileName));
+            Element root = doc.getDocumentElement();
+            if (!"config".equals(root.getTagName())) {
+                System.err.println("The root of the config file should be <config>");
+                return null;
+            }
+
+            NodeList outputDirectories = root.getElementsByTagName("outputDirectories");
+            if (outputDirectories.getLength() != 1) {
+                System.err.println("Exactly one <outputDirectories> element allowed and required");
+                return null;
+            }
+            CleanOutputDirectoryTask cleaner = new CleanOutputDirectoryTask();
+            Node node = outputDirectories.item(0).getFirstChild();
+            while (node != null) {
+                if (node instanceof Element) {
+                    Element childElement = (Element) node;
+                    String nodeName = childElement.getTagName();
+                    switch (nodeName) {
+                        case "dir":
+                            Dir dir = getDirectory(childElement);
+                            cleaner.addConfiguredDir(dir);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                node = node.getNextSibling();
+            }
+            return cleaner;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

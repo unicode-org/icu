@@ -15,6 +15,7 @@ import static com.google.common.collect.Tables.immutableCell;
 import static java.util.stream.Collectors.joining;
 import static org.unicode.cldr.api.CldrPath.parseDistinguishingPath;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -25,8 +26,9 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDraftStatus;
 import org.unicode.cldr.api.CldrPath;
@@ -38,6 +40,10 @@ import org.unicode.icu.tool.cldrtoicu.LdmlConverter.OutputType;
 import org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir;
 import org.unicode.icu.tool.cldrtoicu.PseudoLocales;
 import org.unicode.icu.tool.cldrtoicu.SupplementalData;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
@@ -53,10 +59,9 @@ import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table.Cell;
 
-// Note: Auto-magical Ant methods are listed as "unused" by IDEs, unless the warning is suppressed.
 public final class ConvertIcuDataTask extends Task {
     private static final Splitter LIST_SPLITTER =
-        Splitter.on(CharMatcher.anyOf(",\n")).trimResults(whitespace()).omitEmptyStrings();
+            Splitter.on(CharMatcher.anyOf(",\n")).trimResults(whitespace()).omitEmptyStrings();
 
     private static final CharMatcher DIGIT_OR_UNDERSCORE = inRange('0', '9').or(is('_'));
     private static final CharMatcher UPPER_UNDERSCORE = inRange('A', 'Z').or(DIGIT_OR_UNDERSCORE);
@@ -77,39 +82,32 @@ public final class ConvertIcuDataTask extends Task {
     private boolean includePseudoLocales = false;
     private Predicate<String> idFilter = id -> true;
 
-    @SuppressWarnings("unused")
     public void setOutputDir(String path) {
         // Use String here since on some systems Ant doesn't support automatically converting Path instances.
         config.setOutputDir(Paths.get(path));
     }
 
-    @SuppressWarnings("unused")
     public void setCldrDir(String path) {
         // Use String here since on some systems Ant doesn't support automatically converting Path instances.
         this.cldrPath = checkNotNull(Paths.get(path));
     }
 
-    @SuppressWarnings("unused")
     public void setIcuVersion(String icuVersion) {
         config.setIcuVersion(icuVersion);
     }
 
-    @SuppressWarnings("unused")
     public void setIcuDataVersion(String icuDataVersion) {
         config.setIcuDataVersion(icuDataVersion);
     }
 
-    @SuppressWarnings("unused")
     public void setCldrVersion(String cldrVersion) {
         config.setCldrVersion(cldrVersion);
     }
 
-    @SuppressWarnings("unused")
     public void setMinimalDraftStatus(String status) {
         minimumDraftStatus = resolve(CldrDraftStatus.class, status);
     }
 
-    @SuppressWarnings("unused")
     public void setOutputTypes(String types) {
         ImmutableList<OutputType> typeList =
             LIST_SPLITTER
@@ -121,23 +119,19 @@ public final class ConvertIcuDataTask extends Task {
         }
     }
 
-    @SuppressWarnings("unused")
     public void setSpecialsDir(String path) {
         // Use String here since on some systems Ant doesn't support automatically converting Path instances.
         config.setSpecialsDir(Paths.get(path));
     }
 
-    @SuppressWarnings("unused")
     public void setIncludePseudoLocales(boolean includePseudoLocales) {
         this.includePseudoLocales = includePseudoLocales;
     }
 
-    @SuppressWarnings("unused")
     public void setLocaleIdFilter(String idFilterRegex) {
         this.idFilter = Pattern.compile(idFilterRegex).asPredicate();
     }
 
-    @SuppressWarnings("unused")
     public void setEmitReport(boolean emit) {
         config.setEmitReport(emit);
     }
@@ -145,7 +139,6 @@ public final class ConvertIcuDataTask extends Task {
     public static final class LocaleIds extends Task {
         private ImmutableSet<String> ids;
 
-        @SuppressWarnings("unused")
         public void addText(String localeIds) {
             this.ids = parseLocaleIds(localeIds);
         }
@@ -162,22 +155,18 @@ public final class ConvertIcuDataTask extends Task {
         private final List<ForcedAlias> forcedAliases = new ArrayList<>();
         private LocaleIds localeIds = null;
 
-        @SuppressWarnings("unused")
         public void setDir(String directory) {
             this.dir = resolve(IcuLocaleDir.class, directory);
         }
 
-        @SuppressWarnings("unused")
         public void setInheritLanguageSubtag(String localeIds) {
             this.inheritLanguageSubtag = parseLocaleIds(localeIds);
         }
 
-        @SuppressWarnings("unused")
         public void addConfiguredForcedAlias(ForcedAlias alias) {
             forcedAliases.add(alias);
         }
 
-        @SuppressWarnings("unused")
         public void addConfiguredLocaleIds(LocaleIds localeIds) {
             checkBuild(this.localeIds == null,
                 "Cannot add more that one <localeIds> element for <directory>: %s", dir);
@@ -195,12 +184,10 @@ public final class ConvertIcuDataTask extends Task {
         private String source = "";
         private String target = "";
 
-        @SuppressWarnings("unused")
         public void setSource(String source) {
             this.source = whitespace().trimFrom(source);
         }
 
-        @SuppressWarnings("unused")
         public void setTarget(String target) {
             this.target = whitespace().trimFrom(target);
         }
@@ -217,17 +204,14 @@ public final class ConvertIcuDataTask extends Task {
         private String target = "";
         private ImmutableSet<String> localeIds = ImmutableSet.of();
 
-        @SuppressWarnings("unused")
         public void setTarget(String target) {
             this.target = target.replace('\'', '"');
         }
 
-        @SuppressWarnings("unused")
         public void setSource(String source) {
             this.source = source.replace('\'', '"');
         }
 
-        @SuppressWarnings("unused")
         public void setLocales(String localeIds) {
             this.localeIds = parseLocaleIds(localeIds);
         }
@@ -239,13 +223,11 @@ public final class ConvertIcuDataTask extends Task {
         }
     }
 
-    @SuppressWarnings("unused")
     public void addConfiguredLocaleIds(LocaleIds localeIds) {
         checkBuild(this.localeIds == null, "Cannot add more that one <localeIds> element");
         this.localeIds =  localeIds;
     }
 
-    @SuppressWarnings("unused")
     public void addConfiguredDirectory(Directory filter) {
         checkState(!perDirectoryIds.containsKey(filter.dir),
             "directory %s specified twice", filter.dir);
@@ -289,14 +271,12 @@ public final class ConvertIcuDataTask extends Task {
     }
 
     // Aliases on the outside are applied to all directories.
-    @SuppressWarnings("unused")
     public void addConfiguredForcedAlias(ForcedAlias alias) {
         for (IcuLocaleDir dir : IcuLocaleDir.values()) {
             config.addForcedAlias(dir, alias.source, alias.target);
         }
     }
 
-    @SuppressWarnings("unused")
     public void addConfiguredAltPath(AltPath altPath) {
         // Don't convert to CldrPath here (it triggers a bunch of CLDR data loading for the DTDs).
         // Wait until the "execute()" method since in future we expect to use the configured CLDR
@@ -304,7 +284,6 @@ public final class ConvertIcuDataTask extends Task {
         altPaths.add(altPath);
     }
 
-    @SuppressWarnings("unused")
     public void execute() throws BuildException {
         // Spin up CLDRConfig outside of other inner loops, to
         // avoid static init problems seen in CLDR-14636
@@ -407,5 +386,129 @@ public final class ConvertIcuDataTask extends Task {
             throw new IllegalArgumentException(
                 "invalid enumeration name " + name + "; expected one of; " + validNames);
         }
+    }
+
+    private static AltPath getAltPath(Element elem) {
+        if (!"altPath".equals(elem.getTagName())) {
+            return null;
+        }
+        String source = elem.getAttribute("source");
+        String target = elem.getAttribute("target");
+        String locales = elem.getAttribute("locales");
+        AltPath ap = new AltPath();
+        ap.setSource(source);
+        ap.setTarget(target);
+        ap.setLocales(locales);
+        ap.init();
+        return ap;
+    }
+
+    private static ForcedAlias getForcedAlias(Element elem) {
+        if (!"forcedAlias".equals(elem.getTagName())) {
+            return null;
+        }
+        String source = elem.getAttribute("source");
+        String target = elem.getAttribute("target");
+        ForcedAlias fa = new ForcedAlias();
+        fa.setSource(source);
+        fa.setTarget(target);
+        fa.init();
+        return fa;
+    }
+
+    private static LocaleIds getLocaleIds(Element elem) {
+        if (!"localeIds".equals(elem.getTagName())) {
+            return null;
+        }
+        LocaleIds localeIds = new LocaleIds();
+        String strLocaleIds = elem.getTextContent();
+        localeIds.addText(strLocaleIds);
+        localeIds.init();
+        return localeIds;
+    }
+
+    private static Directory getDirectory(Element element) {
+        if (!"directory".equals(element.getTagName())) {
+            return null;
+        }
+        String dir = element.getAttribute("dir");
+        String inheritLanguageSubtag = element.getAttribute("inheritLanguageSubtag");
+        Directory directory = new Directory();
+        directory.setDir(dir);
+        directory.setInheritLanguageSubtag(inheritLanguageSubtag);
+        Node node = element.getFirstChild();
+        while (node != null) {
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element childElement = (Element) node;
+                switch (childElement.getTagName()) {
+                    case "localeIds":
+                        LocaleIds localeIds = getLocaleIds(childElement);
+                        directory.addConfiguredLocaleIds(localeIds);
+                        break;
+                    case "forcedAlias":
+                        ForcedAlias fa = getForcedAlias(childElement);
+                        directory.addConfiguredForcedAlias(fa);
+                        break;
+                    default:
+                }
+            }
+            node = node.getNextSibling();
+        }
+        if (directory.localeIds == null) {
+            directory.addConfiguredLocaleIds(new LocaleIds());
+        }
+        directory.init();
+        return directory;
+    }
+
+    public static ConvertIcuDataTask fromXml(String fileName) {
+        try {
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document doc = builder.parse(new File(fileName));
+            Element root = doc.getDocumentElement();
+            if (!"config".equals(root.getTagName())) {
+                System.err.println("The root of the config file should be <config>");
+                return null;
+            }
+
+            NodeList convertNodes = root.getElementsByTagName("convert");
+            if (convertNodes.getLength() != 1) {
+                System.err.println("Exactly one <convert> element allowed and required");
+                return null;
+            }
+            ConvertIcuDataTask converter = new ConvertIcuDataTask();
+            Node node = convertNodes.item(0).getFirstChild();
+            while (node != null) {
+                if (node instanceof Element) {
+                    Element childElement = (Element) node;
+                    String nodeName = childElement.getTagName();
+                    switch (nodeName) {
+                        case "localeIds":
+                            LocaleIds localeIds = getLocaleIds(childElement);
+                            converter.addConfiguredLocaleIds(localeIds);
+                            break;
+                        case "directory":
+                            Directory directory = getDirectory(childElement);
+                            converter.addConfiguredDirectory(directory);
+                            break;
+                        case "forcedAlias":
+                            ForcedAlias fa = getForcedAlias(childElement);
+                            converter.addConfiguredForcedAlias(fa);
+                            break;
+                        case "altPath":
+                            AltPath altPath = getAltPath(childElement);
+                            converter.addConfiguredAltPath(altPath);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                node = node.getNextSibling();
+            }
+            return converter;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
