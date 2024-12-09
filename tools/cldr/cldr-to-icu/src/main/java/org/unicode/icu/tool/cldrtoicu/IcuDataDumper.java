@@ -179,7 +179,6 @@ final class IcuDataDumper {
             LineMatch match = LineType.match(line, inBlockComment);
             checkState(match.getType().isValidTransitionFrom(lastType),
                 "invalid state transition: %s --//-> %s", lastType, match.getType());
-            boolean isEndOfWrappedValue = false;
             switch (match.getType()) {
             case COMMENT:
                 if (name != null) {

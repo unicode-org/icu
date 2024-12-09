@@ -12,12 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
 import org.unicode.icu.tool.cldrtoicu.CodeGenerator;
 import org.unicode.icu.tool.cldrtoicu.generator.ResourceFallbackCodeGenerator;
 
-// Note: Auto-magical Ant methods are listed as "unused" by IDEs, unless the warning is suppressed.
 public final class GenerateCodeTask extends Task {
     private Path cldrPath;
     private Path cOutDir;
@@ -40,31 +37,26 @@ public final class GenerateCodeTask extends Task {
         new GeneratedFileDef("common/localefallback_data.h", "src/main/java/com/ibm/icu/impl/LocaleFallbackData.java", new ResourceFallbackCodeGenerator()),
     };
 
-    @SuppressWarnings("unused")
     public void setCldrDir(String path) {
         // Use String here since on some systems Ant doesn't support automatically converting Path instances.
         this.cldrPath = checkNotNull(Paths.get(path));
     }
 
-    @SuppressWarnings("unused")
     public void setCOutDir(String path) {
         // Use String here since on some systems Ant doesn't support automatically converting Path instances.
         this.cOutDir = Paths.get(path);
     }
 
-    @SuppressWarnings("unused")
     public void setJavaOutDir(String path) {
         // Use String here since on some systems Ant doesn't support automatically converting Path instances.
         this.javaOutDir = Paths.get(path);
     }
 
-    @SuppressWarnings("unused")
     public void setAction(String action) {
         // Use String here since on some systems Ant doesn't support automatically converting Path instances.
         this.action = action;
     }
 
-    @SuppressWarnings("unused")
     public void execute() throws BuildException {
         for (GeneratedFileDef task : generatedFileDefs) {
             Path cOutPath = cOutDir.resolve(task.cRelativePath);
@@ -91,5 +83,4 @@ public final class GenerateCodeTask extends Task {
             }
         }
     }
-
 }

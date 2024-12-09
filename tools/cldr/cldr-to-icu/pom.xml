@@ -9,71 +9,60 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Include the parent POM file to add the CLDR API dependency. -->
-    <parent>
-        <groupId>org.unicode.icu</groupId>
-        <artifactId>cldr-lib</artifactId>
-        <version>1.0</version>
-        <relativePath>../lib</relativePath>
-    </parent>
+    <groupId>org.unicode.icu</groupId>
+    <artifactId>cldr-to-icu</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- cldr/tools/ uses JDK 11, and because we depend on it we must
+          use the same version or above -->
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+
+        <icu4j.version>76.1</icu4j.version>
+        <cldr-code.version>47.0-SNAPSHOT</cldr-code.version>
+        <guava.version>32.1.1-jre</guava.version>
+        <truth.version>1.4.4</truth.version>
+        <commons-cli.version>1.9.0</commons-cli.version>
     </properties>
 
     <!-- No need for <groupId> here (it's defined by the parent POM). -->
-    <artifactId>cldr-to-icu</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <configuration>
-                    <mainClass>
-                        org.unicode.icu.tool.cldrtoicu.LdmlConverter
-                    </mainClass>
-                    <systemProperties>
-                        <property>
-                            <key>ICU_DIR</key>
-                            <value>${project.basedir}/../../..</value>
-                        </property>
-                    </systemProperties>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.7.1</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
-                        <configuration>
-                            <archive>
-                                <manifest>
-                                    <mainClass>
-                                        org.unicode.icu.tool.cldrtoicu.LdmlConverter
-                                    </mainClass>
-                                </manifest>
-                            </archive>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>
+                                org.unicode.icu.tool.cldrtoicu.Cldr2Icu
+                            </mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -83,11 +72,16 @@
         <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
-            <version>76.1</version>
-		<!-- Note: see https://github.com/unicode-org/icu/packages/1954682/versions
-			for the icu4j.version tag to use. In general we should just use the latest
-			SNAPSHOT for the ICU version that we want, so this should only need updating
-			when the ICU version changes e.g. from 74.0.1, to 74.1, then to 75.0.1 -->
+            <version>${icu4j.version}</version>
+        <!-- Note: see https://github.com/unicode-org/icu/packages/1954682/versions
+            for the icu4j.version tag to use. In general we should just use the latest
+            SNAPSHOT for the ICU version that we want, so this should only need updating
+            when the ICU version changes e.g. from 74.0.1, to 74.1, then to 75.0.1 -->
+        </dependency>
+        <dependency>
+            <groupId>org.unicode.cldr</groupId>
+            <artifactId>cldr-code</artifactId>
+            <version>${cldr-code.version}</version>
         </dependency>
 
         <!-- Useful common libraries. Note that some of the code in the CLDR library is also
@@ -96,36 +90,21 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>30.0-jre</version>
+            <version>${guava.version}</version>
         </dependency>
-
-        <!-- Ant: Only used for running the conversion tool, not compiling it. -->
         <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant</artifactId>
-            <version>1.10.11</version>
+          <groupId>commons-cli</groupId>
+          <artifactId>commons-cli</artifactId>
+          <version>${commons-cli.version}</version>
         </dependency>
 
         <!-- Testing only dependencies. -->
         <dependency>
             <groupId>com.google.truth</groupId>
             <artifactId>truth</artifactId>
-            <version>1.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.truth.extensions</groupId>
-            <artifactId>truth-java8-extension</artifactId>
-            <version>1.0</version>
+            <version>${truth.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>githubcldr</id>
-            <name>GitHub unicode-org/icu Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/unicode-org/icu</url>
-        </repository>
-    </repositories>
 </project>
