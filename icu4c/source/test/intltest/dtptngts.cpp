@@ -1368,10 +1368,6 @@ void IntlTestDateTimePatternGeneratorAPI::testJjMapping() {
             continue;
         }
         // Now check that shortPattern and jPattern use the same hour cycle
-        if ((uprv_strncmp(localeID, "yue_Hant_CN", 11) == 0) 
-        		&& logKnownIssue("CLDR-17979", "Need timeFormats with h for yue_Hant_CN")) {
-            continue;
-        }
         UnicodeString jPatSkeleton = DateTimePatternGenerator::staticGetSkeleton(jPattern, status);
         UnicodeString shortPatSkeleton = DateTimePatternGenerator::staticGetSkeleton(shortPattern, status);
         if (U_FAILURE(status)) {
