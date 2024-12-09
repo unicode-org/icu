@@ -261,6 +261,6 @@ z → ツ;
 \- → ＝;
 #
 #
-[:nonspacing mark:] → ;
+[:Nonspacing_Mark:] → ;
 ::NFC(NFD);
 

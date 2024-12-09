@@ -807,9 +807,9 @@ zh_Hant{
                 "Bhmmssz",
                 "Bhmmss",
                 "Bhmm",
-                "GyMEEEEd",
-                "GyMd",
-                "GyMd",
+                "GyMMMEEEEd",
+                "GyMMMd",
+                "GyMMMd",
                 "GyMd",
             }
             availableFormats{
@@ -967,9 +967,9 @@ zh_Hant{
                 "Bhmmssz",
                 "Bhmmss",
                 "Bhmm",
-                "yMEEEEd",
-                "yMd",
-                "yMd",
+                "yMMMEEEEd",
+                "yMMMd",
+                "yMMMd",
                 "yMd",
             }
             availableFormats{

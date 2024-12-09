@@ -24,8 +24,8 @@ ko_CN{
                 "HHmmssz",
                 "HHmmss",
                 "HHmm",
-                "yMEEEEd",
-                "yMd",
+                "yMMMMEEEEd",
+                "yMMMMd",
                 "yMd",
                 "yyMd",
             }

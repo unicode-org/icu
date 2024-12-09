@@ -770,9 +770,9 @@ yue{
                 "ahmmssz",
                 "ahmmss",
                 "ahmm",
-                "GyMEEEEd",
-                "GyMd",
-                "GyMd",
+                "GyMMMEEEEd",
+                "GyMMMd",
+                "GyMMMd",
                 "GyMd",
             }
             availableFormats{
@@ -981,9 +981,9 @@ yue{
                 "ahmmssz",
                 "ahmmss",
                 "ahmm",
-                "yMEEEEd",
-                "yMd",
-                "yMd",
+                "yMMMEEEEd",
+                "yMMMd",
+                "yMMMd",
                 "yMd",
             }
             availableFormats{

@@ -259,6 +259,6 @@ y → | i;
 z → ዝ;
 #
 #
-[:nonspacing mark:] → ;
+[:Nonspacing_Mark:] → ;
 ::NFC(NFD);
 
