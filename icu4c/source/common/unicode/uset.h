@@ -32,13 +32,13 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 
-#if U_SHOW_CPLUSPLUS_API
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
 #include <string>
 #include <string_view>
 #include "unicode/char16ptr.h"
 #include "unicode/localpointer.h"
 #include "unicode/utf16.h"
-#endif   // U_SHOW_CPLUSPLUS_API
+#endif
 
 #ifndef USET_DEFINED
 
@@ -346,9 +346,9 @@ uset_openPatternOptions(const UChar* pattern, int32_t patternLength,
 U_CAPI void U_EXPORT2
 uset_close(USet* set);
 
-#if U_SHOW_CPLUSPLUS_API
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
 
-U_NAMESPACE_BEGIN
+namespace U_ICU_NAMESPACE_OR_INTERNAL {
 
 /**
  * \class LocalUSetPointer
@@ -361,7 +361,7 @@ U_NAMESPACE_BEGIN
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUSetPointer, USet, uset_close);
 
-U_NAMESPACE_END
+}  // U_ICU_NAMESPACE_OR_INTERNAL
 
 #endif
 
@@ -1658,7 +1658,7 @@ public:
             int32_t length;
             const UChar *uchars = uset_getString(uset, index, &length);
             // assert uchars != nullptr;
-            return {ConstChar16Ptr(uchars), static_cast<uint32_t>(length)};
+            return {uprv_char16PtrFromUChar(uchars), static_cast<size_t>(length)};
         }
         return {};
     }
@@ -1772,7 +1772,7 @@ public:
             int32_t length;
             const UChar *uchars = uset_getString(uset, index - rangeCount, &length);
             // assert uchars != nullptr;
-            return {ConstChar16Ptr(uchars), static_cast<uint32_t>(length)};
+            return {uprv_char16PtrFromUChar(uchars), static_cast<size_t>(length)};
         } else {
             return {};
         }

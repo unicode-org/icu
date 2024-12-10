@@ -21,7 +21,7 @@
 
 /**
  * \file
- * \brief C++ API: "Smart pointers" for use with and in ICU4C C++ code.
+ * \brief C++ header-only API: "Smart pointers" for use with and in ICU4C C++ code.
  *
  * These classes are inspired by
  * - std::auto_ptr
@@ -40,11 +40,11 @@
 
 #include "unicode/utypes.h"
 
-#if U_SHOW_CPLUSPLUS_API
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
 
 #include <memory>
 
-U_NAMESPACE_BEGIN
+namespace U_ICU_NAMESPACE_OR_INTERNAL {
 
 /**
  * "Smart pointer" base class; do not use directly: use LocalPointer etc.
@@ -603,7 +603,7 @@ public:
 }  // namespace internal
 #endif
 
-U_NAMESPACE_END
+}  // U_ICU_NAMESPACE_OR_INTERNAL
 
-#endif  /* U_SHOW_CPLUSPLUS_API */
+#endif  // U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
 #endif  /* __LOCALPOINTER_H__ */
