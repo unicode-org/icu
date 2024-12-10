@@ -59,7 +59,8 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
      * this falls back through the locale's chain to root
      */
     errorCode=U_ZERO_ERROR;
-    icu::LocalUResourceBundlePointer rb(ures_open(path, locale, &errorCode));
+    U_ICU_NAMESPACE_OR_INTERNAL::LocalUResourceBundlePointer rb(
+        ures_open(path, locale, &errorCode));
 
     if(U_FAILURE(errorCode)) {
         /* total failure, not even root could be opened */

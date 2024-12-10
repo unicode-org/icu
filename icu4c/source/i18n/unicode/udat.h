@@ -1006,9 +1006,8 @@ typedef enum UDateFormatHourCycle {
     UDAT_HOUR_CYCLE_24
 } UDateFormatHourCycle;
 
-#if U_SHOW_CPLUSPLUS_API
-
-U_NAMESPACE_BEGIN
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
+namespace U_ICU_NAMESPACE_OR_INTERNAL {
 
 /**
  * \class LocalUDateFormatPointer
@@ -1021,8 +1020,7 @@ U_NAMESPACE_BEGIN
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUDateFormatPointer, UDateFormat, udat_close);
 
-U_NAMESPACE_END
-
+}
 #endif
 
 /**

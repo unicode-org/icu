@@ -548,7 +548,8 @@ public:
  * @stable ICU 4.4
  */
 #define U_DEFINE_LOCAL_OPEN_POINTER(LocalPointerClassName, Type, closeFunction) \
-    using LocalPointerClassName = internal::LocalOpenPointer<Type, closeFunction>
+    using LocalPointerClassName = \
+        U_ICU_NAMESPACE_OR_INTERNAL::internal::LocalOpenPointer<Type, closeFunction>
 
 #ifndef U_IN_DOXYGEN
 namespace internal {

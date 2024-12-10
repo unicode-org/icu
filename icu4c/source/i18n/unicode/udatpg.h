@@ -185,9 +185,8 @@ udatpg_openEmpty(UErrorCode *pErrorCode);
 U_CAPI void U_EXPORT2
 udatpg_close(UDateTimePatternGenerator *dtpg);
 
-#if U_SHOW_CPLUSPLUS_API
-
-U_NAMESPACE_BEGIN
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
+namespace U_ICU_NAMESPACE_OR_INTERNAL {
 
 /**
  * \class LocalUDateTimePatternGeneratorPointer
@@ -200,8 +199,7 @@ U_NAMESPACE_BEGIN
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUDateTimePatternGeneratorPointer, UDateTimePatternGenerator, udatpg_close);
 
-U_NAMESPACE_END
-
+}
 #endif
 
 /**

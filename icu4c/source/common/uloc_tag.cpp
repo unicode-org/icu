@@ -27,6 +27,9 @@
 #include "ulocimp.h"
 #include "uassert.h"
 
+using U_ICU_NAMESPACE_OR_INTERNAL::LocalPointer;
+using U_ICU_NAMESPACE_OR_INTERNAL::LocalUEnumerationPointer;
+
 namespace {
 
 /* struct holding a single variant */
@@ -354,10 +357,6 @@ const char*
 ultag_getLegacy(const ULanguageTag* langtag);
 #endif
 
-}  // namespace
-
-U_NAMESPACE_BEGIN
-
 /**
  * \class LocalULanguageTagPointer
  * "Smart pointer" class, closes a ULanguageTag via ultag_close().
@@ -369,7 +368,7 @@ U_NAMESPACE_BEGIN
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalULanguageTagPointer, ULanguageTag, ultag_close);
 
-U_NAMESPACE_END
+}  // namespace
 
 /*
 * -------------------------------------------------
@@ -869,7 +868,7 @@ namespace {
 */
 
 bool
-_addVariantToList(VariantListEntry **first, icu::LocalPointer<VariantListEntry> var) {
+_addVariantToList(VariantListEntry **first, LocalPointer<VariantListEntry> var) {
     if (*first == nullptr) {
         var->next = nullptr;
         *first = var.orphan();
@@ -1212,7 +1211,7 @@ _appendVariantsToLanguageTag(std::string_view localeID, icu::ByteSink& sink, boo
                     if (_isVariantSubtag(pVar, -1)) {
                         if (uprv_strcmp(pVar, POSIX_VALUE) || buf.length() != static_cast<int32_t>(uprv_strlen(POSIX_VALUE))) {
                             /* emit the variant to the list */
-                            icu::LocalPointer<VariantListEntry> var(new VariantListEntry, status);
+                            LocalPointer<VariantListEntry> var(new VariantListEntry, status);
                             if (U_FAILURE(status)) {
                                 break;
                             }
@@ -1284,7 +1283,7 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, bool str
     icu::MemoryPool<ExtensionListEntry> extPool;
     icu::MemoryPool<icu::CharString> strPool;
 
-    icu::LocalUEnumerationPointer keywordEnum(uloc_openKeywords(localeID, &status));
+    LocalUEnumerationPointer keywordEnum(uloc_openKeywords(localeID, &status));
     if (U_FAILURE(status) && !hadPosix) {
         return;
     }
@@ -1984,7 +1983,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode& sta
     char *pSubtag, *pNext, *pLastGoodPosition;
     int32_t subtagLen;
     int32_t extlangIdx;
-    icu::LocalPointer<ExtensionListEntry> pExtension;
+    LocalPointer<ExtensionListEntry> pExtension;
     char *pExtValueSubtag, *pExtValueSubtagEnd;
     int32_t i;
     bool privateuseVar = false;
@@ -2011,7 +2010,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode& sta
     *(tagBuf + tagLen) = 0;
 
     /* create a ULanguageTag */
-    icu::LocalULanguageTagPointer t(
+    LocalULanguageTagPointer t(
             static_cast<ULanguageTag*>(uprv_malloc(sizeof(ULanguageTag))));
     if (t.isNull()) {
         uprv_free(tagBuf);
@@ -2197,7 +2196,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode& sta
         if (next & VART) {
             if (_isVariantSubtag(pSubtag, subtagLen) ||
                (privateuseVar && _isPrivateuseVariantSubtag(pSubtag, subtagLen))) {
-                icu::LocalPointer<VariantListEntry> var(new VariantListEntry, status);
+                LocalPointer<VariantListEntry> var(new VariantListEntry, status);
                 if (U_FAILURE(status)) {
                     return nullptr;
                 }
@@ -2609,7 +2608,7 @@ ulocimp_toLanguageTag(const char* localeID,
         int kwdCnt = 0;
         bool done = false;
 
-        icu::LocalUEnumerationPointer kwdEnum(uloc_openKeywords(canonical.data(), &tmpStatus));
+        LocalUEnumerationPointer kwdEnum(uloc_openKeywords(canonical.data(), &tmpStatus));
         if (U_SUCCESS(tmpStatus)) {
             kwdCnt = uenum_count(kwdEnum.getAlias(), &tmpStatus);
             if (kwdCnt == 1) {
@@ -2691,7 +2690,7 @@ ulocimp_forLanguageTag(const char* langtag,
     int32_t i, n;
     bool noRegion = true;
 
-    icu::LocalULanguageTagPointer lt(ultag_parse(langtag, tagLen, parsedLength, status));
+    LocalULanguageTagPointer lt(ultag_parse(langtag, tagLen, parsedLength, status));
     if (U_FAILURE(status)) {
         return;
     }

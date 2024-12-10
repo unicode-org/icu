@@ -1550,9 +1550,8 @@ uspoof_serialize(USpoofChecker *sc,
 
 U_CDECL_END
 
-#if U_SHOW_CPLUSPLUS_API
-
-U_NAMESPACE_BEGIN
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
+namespace U_ICU_NAMESPACE_OR_INTERNAL {
 
 /**
  * \class LocalUSpoofCheckerPointer
@@ -1589,7 +1588,10 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalUSpoofCheckerPointer, USpoofChecker, uspoof_clo
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUSpoofCheckResultPointer, USpoofCheckResult, uspoof_closeCheckResult);
 /** \endcond */
 
-U_NAMESPACE_END
+}
+#endif
+
+#if U_SHOW_CPLUSPLUS_API
 
 /**
  * Limit the acceptable characters to those specified by a Unicode Set.
