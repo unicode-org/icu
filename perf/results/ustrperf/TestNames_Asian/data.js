@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733838567194,
+  "lastUpdate": 1733849430054,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -101949,6 +101949,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 38.8371,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "62b95bb5f95fbf469414add7e1c16a4cc2a1b9a3",
+          "message": "ICU-22908 MF2: Update spec tests and update implementation for recent spec changes\n\nUpdating the spec tests requires two implementation changes:\n* Match on variables rather than expressions --\n  see https://github.com/unicode-org/message-format-wg/pull/877\n* Require attribute values to be literals (if present) --\n  see https://github.com/unicode-org/message-format-wg/pull/894\n\nThis updates the spec tests to commit 6c3704f41a9c24427126429fb43992b03609dfc8\nin https://github.com/unicode-org/message-format-wg/ . Any changes\nfollowing that commit will be addressed in a future PR.",
+          "timestamp": "2024-12-09T09:38:28-08:00",
+          "tree_id": "36407eae7eb7fb7b5ea9cc9f7586abb74077ec9b",
+          "url": "https://github.com/unicode-org/icu/commit/62b95bb5f95fbf469414add7e1c16a4cc2a1b9a3"
+        },
+        "date": 1733849224205,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.9356,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.2499,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 23.71,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 27.201,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.5696,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 34.7087,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.445,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.8348,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 82.4875,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.3072,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.4987,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 38.6903,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
