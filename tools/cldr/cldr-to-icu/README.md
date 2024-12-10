@@ -121,9 +121,9 @@ echo $real_icu_ver
 real_cldr_ver=`mvn help:evaluate -Dexpression=project.version -q -DforceStdout -f $CLDR_DIR/tools`
 echo $real_cldr_ver
 # Set dependency versions
-mvn versions:set-property -Dproperty=icu4j.version     -DnewVersion=$real_icu_ver  -f $ICU_DIR/tools/cldr/cldr-to-icu
-mvn versions:set-property -Dproperty=cldr-code.version -DnewVersion=$real_cldr_ver -f $ICU_DIR/tools/cldr/cldr-to-icu
-mvn versions:set-property -Dproperty=icu4j.version     -DnewVersion=$real_icu_ver  -f $CLDR_DIR/tools
+mvn versions:set-property -DgenerateBackupPoms=false -Dproperty=icu4j.version     -DnewVersion=$real_icu_ver  -f $ICU_DIR/tools/cldr/cldr-to-icu
+mvn versions:set-property -DgenerateBackupPoms=false -Dproperty=cldr-code.version -DnewVersion=$real_cldr_ver -f $ICU_DIR/tools/cldr/cldr-to-icu
+mvn versions:set-property -DgenerateBackupPoms=false -Dproperty=icu4j.version     -DnewVersion=$real_icu_ver  -f $CLDR_DIR/tools
 ```
 
 ## Build everything
