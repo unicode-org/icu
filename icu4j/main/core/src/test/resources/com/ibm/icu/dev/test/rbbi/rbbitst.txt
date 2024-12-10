@@ -2214,3 +2214,7 @@ Bangkok)•</data>
 <data>•« Complex »« chaining » •</data>
 <data>•« .618 »•</data>  # Interaction with the ICU tailoring to break before such numbers.
 
+# A hyphen following non-breaking space that carries an intervening combining
+# mark is treated as word-initial; by LB20a it has no break opportunity after
+# it.  A bug in ICU 76 incorrectly handled that case (ICU-22986).
+<data>• ̄-k•</data>

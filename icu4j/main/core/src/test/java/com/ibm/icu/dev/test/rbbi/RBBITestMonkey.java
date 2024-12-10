@@ -1276,7 +1276,6 @@ public class RBBITestMonkey extends CoreTestFmwk {
                         fLF.contains(fText.codePointAt(breakObliviousPrevPosX2)) ||
                         fNL.contains(fText.codePointAt(breakObliviousPrevPosX2)) ||
                         fSP.contains(fText.codePointAt(breakObliviousPrevPosX2)) ||
-                        fGL.contains(fText.codePointAt(breakObliviousPrevPosX2)) ||
                         fZW.contains(fText.codePointAt(breakObliviousPrevPosX2))) {
                         setAppliedRule(pos, "LB 20a");
                         continue;
@@ -1285,7 +1284,8 @@ public class RBBITestMonkey extends CoreTestFmwk {
                             fCM.contains(fText.codePointAt(breakObliviousPrevPosX2))) {
                         breakObliviousPrevPosX2 = moveIndex32(fText, breakObliviousPrevPosX2, -1);
                     }
-                    if (fCB.contains(fText.codePointAt(breakObliviousPrevPosX2))) {
+                    if (fCB.contains(fText.codePointAt(breakObliviousPrevPosX2)) ||
+                            fGL.contains(fText.codePointAt(breakObliviousPrevPosX2))) {
                         setAppliedRule(pos, "LB 20a");
                         continue;
                     }
