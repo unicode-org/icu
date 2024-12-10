@@ -4448,8 +4448,9 @@ void UnicodeSetTest::TestElementIterator() {
     UnicodeSet set(u"[abcçカ🚴{}{abc}{de}]", errorCode);
     UnicodeString result;
     for (auto el : set) {
+        // UnicodeString us(el);
         // std::string u8;
-        // printf("set.string length %ld \"%s\"\n", (long)el.length(), el.toUTF8String(u8).c_str());
+        // printf("set.string length %ld \"%s\"\n", (long)us.length(), us.toUTF8String(u8).c_str());
         result.append(u" \"").append(el).append(u'"');
     }
     assertEquals(WHERE, uR"( "a" "b" "c" "ç" "カ" "🚴" "" "abc" "de")", result);
@@ -4463,8 +4464,9 @@ void UnicodeSetTest::TestUSetElementIterator() {
     LocalUSetPointer uset(uset_openPattern(u"[abcçカ🚴{}{abc}{de}]", -1, errorCode));
     UnicodeString result;
     for (auto el : USetElements(uset.getAlias())) {
+        // UnicodeString us(el);
         // std::string u8;
-        // printf("uset.string length %ld \"%s\"\n", (long)el.length(), el.toUTF8String(u8).c_str());
+        // printf("uset.string length %ld \"%s\"\n", (long)us.length(), us.toUTF8String(u8).c_str());
         result.append(u" \"").append(el).append(u'"');
     }
     assertEquals(WHERE, uR"( "a" "b" "c" "ç" "カ" "🚴" "" "abc" "de")", result);
