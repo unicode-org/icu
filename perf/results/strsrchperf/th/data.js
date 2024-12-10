@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733786488066,
+  "lastUpdate": 1733837763337,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -36033,6 +36033,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 81.7096,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "3b9c0fc4a5f6115276fc2bb551bcf550221b83ed",
+          "message": "ICU-22922 Integrate CLDR 46.1 beta1 to ICU main, part 3: ICU code/test mods",
+          "timestamp": "2024-12-09T13:08:14-08:00",
+          "tree_id": "b2b1c6a25b4bbe9d15d038cbc17a144e41462ce9",
+          "url": "https://github.com/unicode-org/icu/commit/3b9c0fc4a5f6115276fc2bb551bcf550221b83ed"
+        },
+        "date": 1733837572597,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 37.6599,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 82.4592,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
