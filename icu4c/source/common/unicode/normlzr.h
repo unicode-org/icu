@@ -801,8 +801,8 @@ Normalizer::compare(const UnicodeString &s1, const UnicodeString &s2,
                     uint32_t options,
                     UErrorCode &errorCode) {
   // all argument checking is done in unorm_compare
-  return unorm_compare(toUCharPtr(s1.getBuffer()), s1.length(),
-                       toUCharPtr(s2.getBuffer()), s2.length(),
+  return unorm_compare(U_ICU_NAMESPACE_OR_INTERNAL::toUCharPtr(s1.getBuffer()), s1.length(),
+                       U_ICU_NAMESPACE_OR_INTERNAL::toUCharPtr(s2.getBuffer()), s2.length(),
                        options,
                        &errorCode);
 }

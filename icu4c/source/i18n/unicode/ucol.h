@@ -1572,8 +1572,8 @@ class Predicate {
         return compare(
             ucol_strcoll(
                 collator,
-                toUCharPtr(lhs.getBuffer()), lhs.length(),
-                toUCharPtr(rhs.getBuffer()), rhs.length()),
+                U_ICU_NAMESPACE_OR_INTERNAL::toUCharPtr(lhs.getBuffer()), lhs.length(),
+                U_ICU_NAMESPACE_OR_INTERNAL::toUCharPtr(rhs.getBuffer()), rhs.length()),
             result);
     }
 

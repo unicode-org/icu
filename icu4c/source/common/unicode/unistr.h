@@ -4676,7 +4676,7 @@ UnicodeString::startsWith(const UnicodeString& srcText,
 inline UBool
 UnicodeString::startsWith(ConstChar16Ptr srcChars, int32_t srcLength) const {
   if(srcLength < 0) {
-    srcLength = u_strlen(toUCharPtr(srcChars));
+    srcLength = u_strlen(U_ICU_NAMESPACE_OR_INTERNAL::toUCharPtr(srcChars));
   }
   return doEqualsSubstring(0, srcLength, srcChars, 0, srcLength);
 }
@@ -4684,7 +4684,7 @@ UnicodeString::startsWith(ConstChar16Ptr srcChars, int32_t srcLength) const {
 inline UBool
 UnicodeString::startsWith(const char16_t *srcChars, int32_t srcStart, int32_t srcLength) const {
   if(srcLength < 0) {
-    srcLength = u_strlen(toUCharPtr(srcChars));
+    srcLength = u_strlen(U_ICU_NAMESPACE_OR_INTERNAL::toUCharPtr(srcChars));
   }
   return doEqualsSubstring(0, srcLength, srcChars, srcStart, srcLength);
 }
@@ -4707,7 +4707,7 @@ inline UBool
 UnicodeString::endsWith(ConstChar16Ptr srcChars,
             int32_t srcLength) const {
   if(srcLength < 0) {
-    srcLength = u_strlen(toUCharPtr(srcChars));
+    srcLength = u_strlen(U_ICU_NAMESPACE_OR_INTERNAL::toUCharPtr(srcChars));
   }
   return doEqualsSubstring(length() - srcLength, srcLength, srcChars, 0, srcLength);
 }
@@ -4717,7 +4717,7 @@ UnicodeString::endsWith(const char16_t *srcChars,
             int32_t srcStart,
             int32_t srcLength) const {
   if(srcLength < 0) {
-    srcLength = u_strlen(toUCharPtr(srcChars + srcStart));
+    srcLength = u_strlen(U_ICU_NAMESPACE_OR_INTERNAL::toUCharPtr(srcChars + srcStart));
   }
   return doEqualsSubstring(length() - srcLength, srcLength,
                    srcChars, srcStart, srcLength);
