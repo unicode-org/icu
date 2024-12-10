@@ -304,9 +304,8 @@ ubiditransform_open(UErrorCode *pErrorCode);
 U_CAPI void U_EXPORT2
 ubiditransform_close(UBiDiTransform *pBidiTransform);
 
-#if U_SHOW_CPLUSPLUS_API
-
-U_NAMESPACE_BEGIN
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
+namespace U_ICU_NAMESPACE_OR_INTERNAL {
 
 /**
  * \class LocalUBiDiTransformPointer
@@ -319,8 +318,7 @@ U_NAMESPACE_BEGIN
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUBiDiTransformPointer, UBiDiTransform, ubiditransform_close);
 
-U_NAMESPACE_END
-
+}
 #endif
 
 #endif

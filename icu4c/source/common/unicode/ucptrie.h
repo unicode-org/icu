@@ -623,9 +623,8 @@ U_CDECL_END
 
 #endif  // U_IN_DOXYGEN
 
-#if U_SHOW_CPLUSPLUS_API
-
-U_NAMESPACE_BEGIN
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
+namespace U_ICU_NAMESPACE_OR_INTERNAL {
 
 /**
  * \class LocalUCPTriePointer
@@ -638,8 +637,7 @@ U_NAMESPACE_BEGIN
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUCPTriePointer, UCPTrie, ucptrie_close);
 
-U_NAMESPACE_END
-
-#endif  // U_SHOW_CPLUSPLUS_API
+}
+#endif
 
 #endif

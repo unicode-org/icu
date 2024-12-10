@@ -418,8 +418,8 @@ ufmtval_nextPosition(
     UErrorCode* ec);
 
 
-#if U_SHOW_CPLUSPLUS_API
-U_NAMESPACE_BEGIN
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
+namespace U_ICU_NAMESPACE_OR_INTERNAL {
 
 /**
  * \class LocalUConstrainedFieldPositionPointer
@@ -437,8 +437,8 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalUConstrainedFieldPositionPointer,
     UConstrainedFieldPosition,
     ucfpos_close);
 
-U_NAMESPACE_END
-#endif // U_SHOW_CPLUSPLUS_API
+}
+#endif
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

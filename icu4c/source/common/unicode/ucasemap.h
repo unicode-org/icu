@@ -83,9 +83,8 @@ ucasemap_open(const char *locale, uint32_t options, UErrorCode *pErrorCode);
 U_CAPI void U_EXPORT2
 ucasemap_close(UCaseMap *csm);
 
-#if U_SHOW_CPLUSPLUS_API
-
-U_NAMESPACE_BEGIN
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
+namespace U_ICU_NAMESPACE_OR_INTERNAL {
 
 /**
  * \class LocalUCaseMapPointer
@@ -98,8 +97,7 @@ U_NAMESPACE_BEGIN
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUCaseMapPointer, UCaseMap, ucasemap_close);
 
-U_NAMESPACE_END
-
+}
 #endif
 
 /**
