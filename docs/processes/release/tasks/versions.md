@@ -53,6 +53,8 @@ need to be correspondingly updated. See below for more files to be updated and s
 [icu4c/source/data/misc/icuver.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/misc/icuver.txt)
 needs to be updated with the correct version number for ICU and its data.
 
+### CLDR-to-ICU Conversion
+
 #### Since ICU 77
 
 The tool takes the `icuVersion` and `icuDataVersion` from the official ICU APIs.
@@ -171,7 +173,7 @@ Changing the version for Java starting with ICU 74 requires a few steps:
 2. [icu4j/main/core/src/test/java/com/ibm/icu/dev/test/util/DebugUtilitiesData.java](https://github.com/unicode-org/icu/blob/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/util/DebugUtilitiesData.java)
 
     There is a public string named `ICU4C_VERSION` which should be updated accordingly.
-    'public static final String ICU4C_VERSION="74.0.1";'
+    `public static final String ICU4C_VERSION="74.0.1";`
 
 3. When creating the final release of a major ICU version, 
 or a point release (minor version update on a maintenance branch),
@@ -208,7 +210,7 @@ The command requires a version number string that follows the typical Java / Mav
     This should happen at the same time and along with the work in the previous step for the version number
     when the version number is updated on `main` in the commit after the release/maintanence branch is cut.
     In other words, the above `versions:set-property` step should be executed at the same time
-    `mvn versions:set -DnewVersion=74.0.1-SNAPSHOT` is executed.
+    `mvn versions:set -DnewVersion=74.0.1-SNAPSHOT -DgenerateBackupPoms=false` is executed.
 
 5. Update the following variables in `icu4j/releases_tools/shared.sh`
 
@@ -229,7 +231,7 @@ Since ICU 77 this moved to a property:
 ```
 Which can be easily be set from command line:
 ```sh
-mvn versions:set-property -Dproperty=icu4j.version -DnewVersion=77.1 -f $ICU_DIR/tools/cldr/cldr-to-icu
+mvn versions:set-property -Dproperty=icu4j.version -DnewVersion=77.1 -f $ICU_DIR/tools/cldr/cldr-to-icu -DgenerateBackupPoms=false
 ```
 
 #### Until ICU 73 (inclusive)
@@ -291,7 +293,7 @@ For updating ICU version numbers, follow the steps below.
 3. [icu4j/main/core/src/main/java/com/ibm/icu/util/VersionInfo.java](https://github.com/unicode-org/icu/blob/main/icu4j/main/core/src/main/java/com/ibm/icu/util/VersionInfo.java)
 
     There is a static block starting at line 501 (as of 54.1) in the source file.
-    
+
     Update the `ICU_VERSION` value, where the first three arguments represent the
     major, minor, and patch versions of a semantic version.
     Use the `getInstance(major, 0, 1, 0)` as the version during pre-release development,
