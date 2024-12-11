@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733888691125,
+  "lastUpdate": 1733951112760,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -57939,6 +57939,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16731314.901,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "1b8118049f4e6b8292f6bb4c4358b5c564024a03",
+          "message": "ICU-22940 MF2 ICU4C: Update for bidi support\n\nPer https://github.com/unicode-org/message-format-wg/pull/884",
+          "timestamp": "2024-12-11T12:32:25-08:00",
+          "tree_id": "4e25d5cd6abd4f41365536b547b4facf7dbe2ed3",
+          "url": "https://github.com/unicode-org/icu/commit/1b8118049f4e6b8292f6bb4c4358b5c564024a03"
+        },
+        "date": 1733950918367,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 331.4006,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 36592588.65,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 15078206.2894,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 39024042.4821,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16743145.8831,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
