@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733888405401,
+  "lastUpdate": 1733950712627,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -36177,6 +36177,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 49.2929,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "1b8118049f4e6b8292f6bb4c4358b5c564024a03",
+          "message": "ICU-22940 MF2 ICU4C: Update for bidi support\n\nPer https://github.com/unicode-org/message-format-wg/pull/884",
+          "timestamp": "2024-12-11T12:32:25-08:00",
+          "tree_id": "4e25d5cd6abd4f41365536b547b4facf7dbe2ed3",
+          "url": "https://github.com/unicode-org/icu/commit/1b8118049f4e6b8292f6bb4c4358b5c564024a03"
+        },
+        "date": 1733950513336,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.6518,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 49.1219,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
