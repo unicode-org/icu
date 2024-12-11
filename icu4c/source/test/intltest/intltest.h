@@ -13,16 +13,22 @@
 #ifndef _INTLTEST
 #define _INTLTEST
 
-// The following includes utypes.h, uobject.h and unistr.h
-#include "unicode/fmtable.h"
-#include "unicode/testlog.h"
-#include "unicode/uniset.h"
-
 #include <vector>
 #include <string>
+#include <string_view>
+
+#include "unicode/utypes.h"
+#include "unicode/testlog.h"
+
+#if U_SHOW_CPLUSPLUS_API
+#include "unicode/fmtable.h"
+#include "unicode/uniset.h"
+#include "unicode/unistr.h"
+#endif
 
 U_NAMESPACE_USE
 
+#if U_SHOW_CPLUSPLUS_API
 
 //-----------------------------------------------------------------------------
 //convenience classes to ease porting code that uses the Java
@@ -46,6 +52,8 @@ UnicodeString toString(const Formattable& f); // liu
 UnicodeString toString(int32_t n);
 #endif
 UnicodeString toString(UBool b);
+
+#endif  // U_SHOW_CPLUSPLUS_API
 
 //-----------------------------------------------------------------------------
 
@@ -154,9 +162,9 @@ public:
     virtual void setCaller( IntlTest* callingTest ); // for internal use only
     virtual void setPath( char* path ); // for internal use only
 
-    virtual void log( const UnicodeString &message );
+    virtual void log(std::u16string_view message);
 
-    virtual void logln( const UnicodeString &message ) override;
+    virtual void logln(std::u16string_view message) override;
 
     virtual void logln();
 
@@ -168,7 +176,7 @@ public:
      * @param message optional message string
      * @return true if test should be skipped
      */
-    UBool logKnownIssue( const char *ticket, const UnicodeString &message );
+    UBool logKnownIssue( const char *ticket, std::u16string_view message);
     /**
      * Logs that an issue is known. Can be called multiple times.
      * Usually used this way:
@@ -192,23 +200,23 @@ public:
     UBool skipLSTMTest();
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
-    virtual void info( const UnicodeString &message );
+    virtual void info(std::u16string_view message);
 
-    virtual void infoln( const UnicodeString &message );
+    virtual void infoln(std::u16string_view message);
 
     virtual void infoln();
 
     virtual void err();
 
-    virtual void err( const UnicodeString &message );
+    virtual void err(std::u16string_view message);
 
-    virtual void errln( const UnicodeString &message ) override;
+    virtual void errln(std::u16string_view message) override;
 
-    virtual void dataerr( const UnicodeString &message );
+    virtual void dataerr(std::u16string_view message);
 
-    virtual void dataerrln( const UnicodeString &message ) override;
+    virtual void dataerrln(std::u16string_view message) override;
 
-    void errcheckln(UErrorCode status, const UnicodeString &message );
+    void errcheckln(UErrorCode status, std::u16string_view message);
 
     // convenience functions: sprintf() + errln() etc.
     void log(const char *fmt, ...);
@@ -289,13 +297,20 @@ public:
      * @return true on success, false on failure.
      */
     UBool assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError=false, const char *file=nullptr, int line=0);
-    UBool assertEquals(const char* message, const UnicodeString& expected,
-                       const UnicodeString& actual, UBool possibleDataError=false);
+    UBool assertEquals(const char* message, std::u16string_view expected,
+                       std::u16string_view actual, UBool possibleDataError=false);
     UBool assertEquals(const char* message, const char* expected, const char* actual);
     UBool assertEquals(const char* message, UBool expected, UBool actual);
     UBool assertEquals(const char* message, int32_t expected, int32_t actual);
     UBool assertEquals(const char* message, int64_t expected, int64_t actual);
     UBool assertEquals(const char* message, double expected, double actual);
+
+    // for disambiguation
+    UBool assertEquals(const char* message, const char* expected,
+                       std::u16string_view actual, UBool possibleDataError=false);
+    UBool assertEquals(const char* message, std::u16string_view expected,
+                       const char* actual, UBool possibleDataError=false);
+
     /**
      * Asserts that two doubles are equal to within a positive delta. Returns
      * false if they are not.
@@ -311,27 +326,36 @@ public:
      */
     UBool assertEqualsNear(const char* message, double expected, double actual, double delta);
     UBool assertEquals(const char* message, UErrorCode expected, UErrorCode actual);
+#if U_SHOW_CPLUSPLUS_API
     UBool assertEquals(const char* message, const UnicodeSet& expected, const UnicodeSet& actual);
+#endif
     UBool assertEquals(const char* message,
         const std::vector<std::string>& expected, const std::vector<std::string>& actual);
 
+#if U_SHOW_CPLUSPLUS_API
 #if !UCONFIG_NO_FORMATTING
-    UBool assertEquals(const char* message, const Formattable& expected,
-                       const Formattable& actual, UBool possibleDataError=false);
-    UBool assertEquals(const UnicodeString& message, const Formattable& expected,
-                       const Formattable& actual);
+    UBool assertEqualFormattables(const char* message, const Formattable& expected,
+                                  const Formattable& actual, UBool possibleDataError=false);
+    UBool assertEqualFormattables(std::u16string_view message, const Formattable& expected,
+                                  const Formattable& actual);
+#endif
 #endif
     UBool assertNotEquals(const char* message, int32_t expectedNot, int32_t actual);
-    UBool assertTrue(const UnicodeString& message, UBool condition, UBool quiet=false, UBool possibleDataError=false);
-    UBool assertFalse(const UnicodeString& message, UBool condition, UBool quiet=false, UBool possibleDataError=false);
-    UBool assertSuccess(const UnicodeString& message, UErrorCode ec);
-    UBool assertEquals(const UnicodeString& message, const UnicodeString& expected,
-                       const UnicodeString& actual, UBool possibleDataError=false);
-    UBool assertEquals(const UnicodeString& message, const char* expected, const char* actual);
-    UBool assertEquals(const UnicodeString& message, UBool expected, UBool actual);
-    UBool assertEquals(const UnicodeString& message, int32_t expected, int32_t actual);
-    UBool assertEquals(const UnicodeString& message, int64_t expected, int64_t actual);
-    UBool assertEquals(const UnicodeString& message, double expected, double actual);
+    UBool assertTrue(std::u16string_view message, UBool condition, UBool quiet=false, UBool possibleDataError=false);
+    UBool assertFalse(std::u16string_view message, UBool condition, UBool quiet=false, UBool possibleDataError=false);
+    UBool assertSuccess(std::u16string_view message, UErrorCode ec);
+    UBool assertEquals(std::u16string_view message, std::u16string_view expected,
+                       std::u16string_view actual, UBool possibleDataError=false);
+    UBool assertEquals(std::u16string_view message, const char* expected, const char* actual);
+    UBool assertEquals(std::u16string_view message, UBool expected, UBool actual);
+    UBool assertEquals(std::u16string_view message, int32_t expected, int32_t actual);
+    UBool assertEquals(std::u16string_view message, int64_t expected, int64_t actual);
+    UBool assertEquals(std::u16string_view message, double expected, double actual);
+
+    // for disambiguation
+    UBool assertEquals(std::u16string_view message, const char* expected,
+                       std::u16string_view actual, UBool possibleDataError=false);
+
     /**
      * Asserts that two doubles are equal to within a positive delta. Returns
      * false if they are not.
@@ -345,12 +369,14 @@ public:
      * @param delta - the maximum delta between expected and actual for which
      * both numbers are still considered equal.
      */
-    UBool assertEqualsNear(const UnicodeString& message, double expected, double actual, double delta);
-    UBool assertEquals(const UnicodeString& message, UErrorCode expected, UErrorCode actual);
-    UBool assertEquals(const UnicodeString& message, const UnicodeSet& expected, const UnicodeSet& actual);
-    UBool assertEquals(const UnicodeString& message,
+    UBool assertEqualsNear(std::u16string_view message, double expected, double actual, double delta);
+    UBool assertEquals(std::u16string_view message, UErrorCode expected, UErrorCode actual);
+#if U_SHOW_CPLUSPLUS_API
+    UBool assertEquals(std::u16string_view message, const UnicodeSet& expected, const UnicodeSet& actual);
+#endif
+    UBool assertEquals(std::u16string_view message,
         const std::vector<std::string>& expected, const std::vector<std::string>& actual);
-    UBool assertNotEquals(const UnicodeString& message, int32_t expectedNot, int32_t actual);
+    UBool assertNotEquals(std::u16string_view message, int32_t expectedNot, int32_t actual);
 
     virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ); // override !
 
@@ -392,8 +418,9 @@ private:
 
 protected:
 
-    virtual void LL_message( UnicodeString message, UBool newline );
+    virtual void LL_message(std::u16string_view message, UBool newline);
 
+#if U_SHOW_CPLUSPLUS_API
     // used for collation result reporting, defined here for convenience
 
     static UnicodeString &prettify(const UnicodeString &source, UnicodeString &target);
@@ -404,6 +431,7 @@ protected:
     static inline UnicodeString toHex(int32_t number, int32_t digits=-1) {
         return toHex(static_cast<uint32_t>(number), digits);
     }
+#endif
 
 public:
     static void setICU_DATA();       // Set up ICU_DATA if necessary.
@@ -428,17 +456,24 @@ public:
 
 };
 
-void it_log( UnicodeString message );
-void it_logln( UnicodeString message );
+void it_log(std::u16string_view message);
+void it_logln(std::u16string_view message);
 void it_logln();
-void it_info( UnicodeString message );
-void it_infoln( UnicodeString message );
+void it_info(std::u16string_view message);
+void it_infoln(std::u16string_view message);
 void it_infoln();
 void it_err();
-void it_err( UnicodeString message );
-void it_errln( UnicodeString message );
-void it_dataerr( UnicodeString message );
-void it_dataerrln( UnicodeString message );
+void it_err(std::u16string_view message);
+void it_errln(std::u16string_view message);
+void it_dataerr(std::u16string_view message);
+void it_dataerrln(std::u16string_view message);
+
+void it_logln(const char* message);
+void it_err(const char* message);
+void it_errln(const char* message);
+void it_dataerrln(const char* message);
+
+#if U_SHOW_CPLUSPLUS_API
 
 /**
  * This is a variant of cintltst/ccolltst.c:CharsToUChars().
@@ -449,5 +484,7 @@ extern UnicodeString CharsToUnicodeString(const char* chars);
 
 /* alias for CharsToUnicodeString */
 extern UnicodeString ctou(const char* chars);
+
+#endif
 
 #endif // _INTLTEST

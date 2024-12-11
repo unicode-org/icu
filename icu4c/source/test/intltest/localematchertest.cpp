@@ -457,7 +457,7 @@ void LocaleMatcherTest::testResolvedLocale() {
 
 namespace {
 
-bool toInvariant(const UnicodeString &s, CharString &inv, ErrorCode &errorCode) {
+bool toInvariant(const UnicodeString &s, CharString &inv, IcuTestErrorCode &errorCode) {
     if (errorCode.isSuccess()) {
         inv.clear().appendInvariantChars(s, errorCode);
         return errorCode.isSuccess();
@@ -477,7 +477,7 @@ bool getSuffixAfterPrefix(const UnicodeString &s, int32_t limit,
 
 bool getInvariantSuffixAfterPrefix(const UnicodeString &s, int32_t limit,
                                    const UnicodeString &prefix, CharString &suffix,
-                                   ErrorCode &errorCode) {
+                                   IcuTestErrorCode &errorCode) {
     UnicodeString u_suffix;
     return getSuffixAfterPrefix(s, limit, prefix, u_suffix) &&
         toInvariant(u_suffix, suffix, errorCode);
