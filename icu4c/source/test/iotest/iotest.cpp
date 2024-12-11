@@ -14,6 +14,9 @@
 *   created by: George Rhoten
 */
 
+#include <string.h>
+#include <stdlib.h>
+#include <string_view>
 
 #include "unicode/ustdio.h"
 #include "unicode/uclean.h"
@@ -28,9 +31,6 @@
 #include "unicode/tstdtmod.h"
 #include "putilimp.h"
 
-#include <string.h>
-#include <stdlib.h>
-
 class DataDrivenLogger : public TestLog {
     static const char* fgDataDir;
     static char *fgTestDataPath;
@@ -42,23 +42,26 @@ public:
             fgTestDataPath = nullptr;
         }
     }
-    virtual void errln( const UnicodeString &message ) override {
+    virtual void errln(std::u16string_view message) override {
         char buffer[4000];
-        message.extract(0, message.length(), buffer, sizeof(buffer));
+        UnicodeString us(message);
+        us.extract(0, us.length(), buffer, sizeof(buffer));
         buffer[3999] = 0; /* NUL terminate */
         log_err(buffer);
     }
 
-    virtual void logln( const UnicodeString &message ) override {
+    virtual void logln(std::u16string_view message) override {
         char buffer[4000];
-        message.extract(0, message.length(), buffer, sizeof(buffer));
+        UnicodeString us(message);
+        us.extract(0, us.length(), buffer, sizeof(buffer));
         buffer[3999] = 0; /* NUL terminate */
         log_info(buffer);
     }
 
-    virtual void dataerrln( const UnicodeString &message ) override {
+    virtual void dataerrln(std::u16string_view message) override {
         char buffer[4000];
-        message.extract(0, message.length(), buffer, sizeof(buffer));
+        UnicodeString us(message);
+        us.extract(0, us.length(), buffer, sizeof(buffer));
         buffer[3999] = 0; /* NUL terminate */
         log_data_err(buffer);
     }

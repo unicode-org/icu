@@ -2516,7 +2516,7 @@ void NumberFormatTest::TestPerMill() {
     if (!assertSuccess("setup", ec)) return;
     str.truncate(0);
     assertEquals("0.4857 x ###.###m",
-                 "485.7m", fmt2.format(0.4857, str));
+                 u"485.7m", fmt2.format(0.4857, str));
 }
 
 /**
@@ -2677,8 +2677,8 @@ void NumberFormatTest::TestCases() {
                     Formattable m;
                     fmt->parse(str, m, ec);
                     assertSuccess("parse", ec);
-                    assertEquals(where + "\"" + pat + "\".parse(\"" + str + "\")",
-                                 n, m);
+                    assertEqualFormattables(
+                        where + "\"" + pat + "\".parse(\"" + str + "\")", n, m);
                 }
             }
             // p: <pattern or '-'> <string to parse> <exp. number>
@@ -2691,8 +2691,7 @@ void NumberFormatTest::TestCases() {
                 assertSuccess("parse", ec);
                 fmt->parse(str, n, ec);
                 assertSuccess("parse", ec);
-                assertEquals(where + "\"" + pat + "\".parse(\"" + str + "\")",
-                             exp, n);
+                assertEqualFormattables(where + "\"" + pat + "\".parse(\"" + str + "\")", exp, n);
             }
             break;
         case 8: // fpc:
@@ -2734,8 +2733,8 @@ void NumberFormatTest::TestCases() {
 
                 mfmt->parseObject(str, m, ec);
                 if (assertSuccess("parseCurrency", ec)) {
-                    assertEquals(where + "getCurrencyFormat(" + mloc + ").parse(\"" + str + "\")",
-                                 n, m);
+                    assertEqualFormattables(
+                        where + "getCurrencyFormat(" + mloc + ").parse(\"" + str + "\")", n, m);
                 } else {
                     errln("FAIL: source " + str);
                 }
@@ -3767,7 +3766,7 @@ void NumberFormatTest::TestMismatchedCurrencyFormatFail() {
     df->setLenient(false);
     {
         Formattable result;
-        ErrorCode failStatus;
+        UErrorCode failStatus = U_ZERO_ERROR;
         df->parse(u"1.23\u20AC", result, failStatus);
         assertEquals("Should fail to parse", U_INVALID_FORMAT_ERROR, failStatus);
     }
@@ -6900,7 +6899,7 @@ void NumberFormatTest::TestDecimal() {
             StringPiece num("244444444444444444444444444444444444446.4");
             fmtr->format(num, formattedResult, nullptr, status);
             ASSERT_SUCCESS(status);
-            ASSERT_EQUALS("244,444,444,444,444,444,444,444,444,444,444,444,446.4", formattedResult);
+            ASSERT_EQUALS(u"244,444,444,444,444,444,444,444,444,444,444,444,446.4", formattedResult);
             //std::string ss; std::cout << formattedResult.toUTF8String(ss);
             delete fmtr;
         }
@@ -6921,7 +6920,7 @@ void NumberFormatTest::TestDecimal() {
             ASSERT_SUCCESS(status);
             fmtr->format(dl, formattedResult, nullptr, status);
             ASSERT_SUCCESS(status);
-            ASSERT_EQUALS("1,234,566,666,666,666,666,666,666,666,666,666,666,621,000", formattedResult);
+            ASSERT_EQUALS(u"1,234,566,666,666,666,666,666,666,666,666,666,666,621,000", formattedResult);
 
             status = U_ZERO_ERROR;
             num.set("666.666");
@@ -6931,7 +6930,7 @@ void NumberFormatTest::TestDecimal() {
             formattedResult.remove();
             fmtr->format(dl, formattedResult, pos, status);
             ASSERT_SUCCESS(status);
-            ASSERT_EQUALS("666.666", formattedResult);
+            ASSERT_EQUALS(u"666.666", formattedResult);
             ASSERT_EQUALS(4, pos.getBeginIndex());
             ASSERT_EQUALS(7, pos.getEndIndex());
             delete fmtr;
@@ -8788,7 +8787,7 @@ void NumberFormatTest::Test13391_chakmaParsing() {
     Formattable result;
     df->parse(expected, result, status);
     assertSuccess("Should not fail when parsing in ccp", status);
-    assertEquals("Should parse to 12345 in ccp", 12345, result);
+    assertEqualFormattables("Should parse to 12345 in ccp", 12345, result);
 
     const char16_t* expectedScientific = u"\U00011137.\U00011139E\U00011138";
     UnicodeString actualScientific;
@@ -8802,7 +8801,7 @@ void NumberFormatTest::Test13391_chakmaParsing() {
     Formattable resultScientific;
     df->parse(expectedScientific, resultScientific, status);
     assertSuccess("Should not fail when parsing scientific in ccp", status);
-    assertEquals("Should parse scientific to 130 in ccp", 130, resultScientific);
+    assertEqualFormattables("Should parse scientific to 130 in ccp", 130, resultScientific);
 }
 
 
@@ -9592,7 +9591,7 @@ void NumberFormatTest::Test20037_ScientificIntegerOverflow() {
     StringPiece sp = result.getDecimalNumber(status);
     assertEquals(u"Should snap to zero",
                  u"0",
-                 {sp.data(), sp.length(), US_INV});
+                 UnicodeString(sp.data(), sp.length(), US_INV));
 
     // Test edge case overflow of exponent
     result = Formattable();
@@ -9600,7 +9599,7 @@ void NumberFormatTest::Test20037_ScientificIntegerOverflow() {
     sp = result.getDecimalNumber(status);
     assertEquals(u"Should not overflow and should parse only the first exponent",
                  u"1E-2147483647",
-                 {sp.data(), sp.length(), US_INV});
+                 UnicodeString(sp.data(), sp.length(), US_INV));
 
     // Test edge case overflow of exponent
     result = Formattable();
@@ -9608,7 +9607,7 @@ void NumberFormatTest::Test20037_ScientificIntegerOverflow() {
     sp = result.getDecimalNumber(status);
     assertEquals(u"Should not overflow",
                  u"3E-2147483648",
-                 {sp.data(), sp.length(), US_INV});
+                 UnicodeString(sp.data(), sp.length(), US_INV));
 
     // Test largest parseable exponent
     result = Formattable();
@@ -9616,7 +9615,7 @@ void NumberFormatTest::Test20037_ScientificIntegerOverflow() {
     sp = result.getDecimalNumber(status);
     assertEquals(u"Should not overflow",
                  u"9.876E+2147483646",
-                 {sp.data(), sp.length(), US_INV});
+                 UnicodeString(sp.data(), sp.length(), US_INV));
 
     // Test max value as well
     const char16_t* infinityInputs[] = {
@@ -9632,8 +9631,8 @@ void NumberFormatTest::Test20037_ScientificIntegerOverflow() {
         nf->parse(input, result, status);
         sp = result.getDecimalNumber(status);
         assertEquals(UnicodeString("Should become Infinity: ") + input,
-                    u"Infinity",
-                    {sp.data(), sp.length(), US_INV});
+                     u"Infinity",
+                     UnicodeString(sp.data(), sp.length(), US_INV));
     }
 }
 
