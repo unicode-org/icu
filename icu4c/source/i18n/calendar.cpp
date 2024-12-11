@@ -21,8 +21,8 @@
 *   08/12/97    aliu        Added equivalentTo.  Misc other fixes.
 *   07/28/98    stephen     Sync up with JDK 1.2
 *   09/02/98    stephen     Sync with JDK 1.2 8/31 build (getActualMin/Max)
-*   03/17/99    stephen     Changed adoptTimeZone() - now fAreFieldsSet is
-*                           set to false to force update of time.
+*   03/17/99    stephen     Changed adoptTimeZone() - now kAreFieldsSetMask is
+*                           clear in fFlags to force update of time.
 *******************************************************************************
 */
 
@@ -84,6 +84,34 @@ static UBool calendar_cleanup() {
 U_CDECL_END
 #endif
 
+enum FlagBit {
+  kIsTimeSetBit,
+  kAreFieldsSetBit,
+  kAreAllFieldsSetBit,
+  kAreFieldsVirtuallySetBit,
+  kLenientBit,
+};
+static constexpr uint8_t kIsTimeSetMask = 1 << kIsTimeSetBit;
+static constexpr uint8_t kAreFieldsSetMask = 1 << kAreFieldsSetBit;
+static constexpr uint8_t kAreAllFieldsSetMask = 1 << kAreAllFieldsSetBit;
+static constexpr uint8_t kAreFieldsVirtuallySetMask = 1 << kAreFieldsVirtuallySetBit;
+static constexpr uint8_t kLenientMask = 1 << kLenientBit;
+
+enum Flag2Bit {
+  kRepeatedWallTimeBit,
+  kSkippedWallTimeBit = kRepeatedWallTimeBit + 2,
+  kFirstDayOfWeekBit = kSkippedWallTimeBit + 2,
+  kMinimalDaysInFirstWeekBit = kFirstDayOfWeekBit + 3,
+  kWeekendOnsetBit = kMinimalDaysInFirstWeekBit + 3,
+  kWeekendCeaseBit = kWeekendOnsetBit + 3,
+};
+static constexpr uint16_t kRepeatedWallTimeMask = 3 << kRepeatedWallTimeBit;
+static constexpr uint16_t kSkippedWallTimeMask = 3 << kSkippedWallTimeBit;
+static constexpr uint16_t kFirstDayOfWeekMask = 7 << kFirstDayOfWeekBit;
+static constexpr uint16_t kMinimalDaysInFirstWeekMask = 7 << kMinimalDaysInFirstWeekBit;
+static constexpr uint16_t kWeekendOnsetMask = 7 << kWeekendOnsetBit;
+static constexpr uint16_t kWeekendCeaseMask = 7 << kWeekendCeaseBit;
+
 // ------------------------------------------
 //
 // Registration
@@ -124,8 +152,11 @@ void ucal_dump(const Calendar &cal) {
 void Calendar::dump() const {
     int i;
     fprintf(stderr, "@calendar=%s, timeset=%c, fieldset=%c, allfields=%c, virtualset=%c, t=%.2f",
-        getType(), fIsTimeSet?'y':'n',  fAreFieldsSet?'y':'n',  fAreAllFieldsSet?'y':'n',
-        fAreFieldsVirtuallySet?'y':'n',
+        getType(),
+        (fFlags & kIsTimeSetMask) ? 'y' : 'n',
+        (fFlags & kAreFieldsSetMask) ? 'y' : 'n',
+        (fFlags & kAreAllFieldsSetMask) ? 'y' : 'n',
+        (fFlags & kAreFieldsVirtuallySetMask) ? 'y' : 'n',
         fTime);
 
     // can add more things here: DST, zone, etc.
@@ -696,16 +727,12 @@ static const char gGregorian[] = "gregorian";
 
 Calendar::Calendar(UErrorCode& success)
 :   UObject(),
-fIsTimeSet(false),
-fAreFieldsSet(false),
-fAreAllFieldsSet(false),
-fAreFieldsVirtuallySet(false),
+fFlags(kLenientMask),
 fNextStamp(static_cast<int32_t>(kMinimumUserStamp)),
 fTime(0),
-fLenient(true),
 fZone(nullptr),
-fRepeatedWallTime(UCAL_WALLTIME_LAST),
-fSkippedWallTime(UCAL_WALLTIME_LAST)
+fFlags2((UCAL_WALLTIME_LAST << kRepeatedWallTimeBit) |
+        (UCAL_WALLTIME_LAST << kSkippedWallTimeBit))
 {
     validLocale[0] = 0;
     actualLocale[0] = 0;
@@ -724,16 +751,12 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
 
 Calendar::Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
 :   UObject(),
-fIsTimeSet(false),
-fAreFieldsSet(false),
-fAreAllFieldsSet(false),
-fAreFieldsVirtuallySet(false),
+fFlags(kLenientMask),
 fNextStamp(static_cast<int32_t>(kMinimumUserStamp)),
 fTime(0),
-fLenient(true),
 fZone(nullptr),
-fRepeatedWallTime(UCAL_WALLTIME_LAST),
-fSkippedWallTime(UCAL_WALLTIME_LAST)
+fFlags2((UCAL_WALLTIME_LAST << kRepeatedWallTimeBit) |
+        (UCAL_WALLTIME_LAST << kSkippedWallTimeBit))
 {
     validLocale[0] = 0;
     actualLocale[0] = 0;
@@ -759,16 +782,12 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
 
 Calendar::Calendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& success)
 :   UObject(),
-fIsTimeSet(false),
-fAreFieldsSet(false),
-fAreAllFieldsSet(false),
-fAreFieldsVirtuallySet(false),
+fFlags(kLenientMask),
 fNextStamp(static_cast<int32_t>(kMinimumUserStamp)),
 fTime(0),
-fLenient(true),
 fZone(nullptr),
-fRepeatedWallTime(UCAL_WALLTIME_LAST),
-fSkippedWallTime(UCAL_WALLTIME_LAST)
+fFlags2((UCAL_WALLTIME_LAST << kRepeatedWallTimeBit) |
+        (UCAL_WALLTIME_LAST << kSkippedWallTimeBit))
 {
     validLocale[0] = 0;
     actualLocale[0] = 0;
@@ -806,26 +825,16 @@ Calendar::operator=(const Calendar &right)
 {
     if (this != &right) {
         uprv_arrayCopy(right.fFields, fFields, UCAL_FIELD_COUNT);
-        uprv_arrayCopy(right.fIsSet, fIsSet, UCAL_FIELD_COUNT);
         uprv_arrayCopy(right.fStamp, fStamp, UCAL_FIELD_COUNT);
         fTime                    = right.fTime;
-        fIsTimeSet               = right.fIsTimeSet;
-        fAreAllFieldsSet         = right.fAreAllFieldsSet;
-        fAreFieldsSet            = right.fAreFieldsSet;
-        fAreFieldsVirtuallySet   = right.fAreFieldsVirtuallySet;
-        fLenient                 = right.fLenient;
-        fRepeatedWallTime        = right.fRepeatedWallTime;
-        fSkippedWallTime         = right.fSkippedWallTime;
+        fFlags                   = right.fFlags;
+        fFlags2                  = right.fFlags2;
         delete fZone;
         fZone = nullptr;
         if (right.fZone != nullptr) {
             fZone                = right.fZone->clone();
         }
-        fFirstDayOfWeek          = right.fFirstDayOfWeek;
-        fMinimalDaysInFirstWeek  = right.fMinimalDaysInFirstWeek;
-        fWeekendOnset            = right.fWeekendOnset;
         fWeekendOnsetMillis      = right.fWeekendOnsetMillis;
-        fWeekendCease            = right.fWeekendCease;
         fWeekendCeaseMillis      = right.fWeekendCeaseMillis;
         fNextStamp               = right.fNextStamp;
         uprv_strncpy(validLocale, right.validLocale, sizeof(validLocale)-1);
@@ -1032,14 +1041,9 @@ UBool
 Calendar::isEquivalentTo(const Calendar& other) const
 {
     return typeid(*this) == typeid(other) &&
-        fLenient                == other.fLenient &&
-        fRepeatedWallTime       == other.fRepeatedWallTime &&
-        fSkippedWallTime        == other.fSkippedWallTime &&
-        fFirstDayOfWeek         == other.fFirstDayOfWeek &&
-        fMinimalDaysInFirstWeek == other.fMinimalDaysInFirstWeek &&
-        fWeekendOnset           == other.fWeekendOnset &&
+        (fFlags & kLenientMask) == (other.fFlags & kLenientMask) &&
+        fFlags2                 == other.fFlags2 &&
         fWeekendOnsetMillis     == other.fWeekendOnsetMillis &&
-        fWeekendCease           == other.fWeekendCease &&
         fWeekendCeaseMillis     == other.fWeekendCeaseMillis &&
         *fZone                  == *other.fZone;
 }
@@ -1120,7 +1124,7 @@ Calendar::getTimeInMillis(UErrorCode& status) const
     if(U_FAILURE(status))
         return 0.0;
 
-    if ( ! fIsTimeSet)
+    if (!(fFlags & kIsTimeSetMask))
         const_cast<Calendar*>(this)->updateTime(status);
 
     /* Test for buffer overflows */
@@ -1164,13 +1168,12 @@ Calendar::setTimeInMillis( double millis, UErrorCode& status ) {
     }
 
     fTime = millis;
-    fAreFieldsSet = fAreAllFieldsSet = false;
-    fIsTimeSet = fAreFieldsVirtuallySet = true;
+    fFlags &= ~(kAreFieldsSetMask | kAreAllFieldsSetMask);
+    fFlags |= kIsTimeSetMask | kAreFieldsVirtuallySetMask;
 
     for (int32_t i=0; i<UCAL_FIELD_COUNT; ++i) {
         fFields[i]     = 0;
         fStamp[i]     = kUnset;
-        fIsSet[i]     = false;
     }
 
 
@@ -1203,7 +1206,7 @@ Calendar::set(UCalendarDateFields field, int32_t value)
     if (field < 0 || field >= UCAL_FIELD_COUNT) {
         return;
     }
-    if (fAreFieldsVirtuallySet) {
+    if (fFlags & kAreFieldsVirtuallySetMask) {
         UErrorCode ec = U_ZERO_ERROR;
         computeFields(ec);
     }
@@ -1213,8 +1216,7 @@ Calendar::set(UCalendarDateFields field, int32_t value)
         recalculateStamp();
     }
     fStamp[field]     = fNextStamp++;
-    fIsSet[field]     = true; // Remove later
-    fIsTimeSet = fAreFieldsSet = fAreFieldsVirtuallySet = false;
+    fFlags &= ~(kIsTimeSetMask | kAreFieldsSetMask | kAreFieldsVirtuallySetMask);
 }
 
 // -------------------------------------
@@ -1273,9 +1275,8 @@ Calendar::clear()
     for (int32_t i=0; i<UCAL_FIELD_COUNT; ++i) {
         fFields[i]     = 0; // Must do this; other code depends on it
         fStamp[i]     = kUnset;
-        fIsSet[i]     = false; // Remove later
     }
-    fIsTimeSet = fAreFieldsSet = fAreAllFieldsSet = fAreFieldsVirtuallySet = false;
+    fFlags &= ~(kIsTimeSetMask | kAreFieldsSetMask | kAreFieldsSetMask | kAreFieldsVirtuallySetMask);
     // fTime is not 'cleared' - may be used if no fields are set.
 }
 
@@ -1287,7 +1288,7 @@ Calendar::clear(UCalendarDateFields field)
     if (field < 0 || field >= UCAL_FIELD_COUNT) {
         return;
     }
-    if (fAreFieldsVirtuallySet) {
+    if (fFlags & kAreFieldsVirtuallySetMask) {
         UErrorCode ec = U_ZERO_ERROR;
         computeFields(ec);
     }
@@ -1296,14 +1297,12 @@ Calendar::clear(UCalendarDateFields field)
     if (field == UCAL_MONTH) {
         fFields[UCAL_ORDINAL_MONTH]         = 0;
         fStamp[UCAL_ORDINAL_MONTH]         = kUnset;
-        fIsSet[UCAL_ORDINAL_MONTH]         = false; // Remove later
     }
     if (field == UCAL_ORDINAL_MONTH) {
         fFields[UCAL_MONTH]         = 0;
         fStamp[UCAL_MONTH]         = kUnset;
-        fIsSet[UCAL_MONTH]         = false; // Remove later
     }
-    fIsTimeSet = fAreFieldsSet = fAreAllFieldsSet = fAreFieldsVirtuallySet = false;
+    fFlags &= ~(kIsTimeSetMask | kAreFieldsSetMask | kAreFieldsSetMask | kAreFieldsVirtuallySetMask);
 }
 
 // -------------------------------------
@@ -1314,7 +1313,7 @@ Calendar::isSet(UCalendarDateFields field) const
     if (field < 0 || field >= UCAL_FIELD_COUNT) {
         return false;
     }
-    return fAreFieldsVirtuallySet || (fStamp[field] != kUnset);
+    return (fFlags & kAreFieldsVirtuallySetMask) || (fStamp[field] != kUnset);
 }
 
 
@@ -1338,21 +1337,20 @@ Calendar::complete(UErrorCode& status)
     if (U_FAILURE(status)) {
        return;
     }
-    if (!fIsTimeSet) {
+    if (!(fFlags & kIsTimeSetMask)) {
         updateTime(status);
         /* Test for buffer overflows */
         if(U_FAILURE(status)) {
             return;
         }
     }
-    if (!fAreFieldsSet) {
+    if (!(fFlags & kAreFieldsSetMask)) {
         computeFields(status); // fills in unset fields
         /* Test for buffer overflows */
         if(U_FAILURE(status)) {
             return;
         }
-        fAreFieldsSet         = true;
-        fAreAllFieldsSet     = true;
+        fFlags |= kAreFieldsSetMask | kAreFieldsSetMask;
     }
 }
 
@@ -1434,10 +1432,8 @@ void Calendar::computeFields(UErrorCode &ec)
     for (int32_t i=0; i<UCAL_FIELD_COUNT; ++i) {
         if ((mask & 1) == 0) {
             fStamp[i] = kInternallySet;
-            fIsSet[i] = true; // Remove later
         } else {
             fStamp[i] = kUnset;
-            fIsSet[i] = false; // Remove later
         }
         mask >>= 1;
     }
@@ -1467,7 +1463,7 @@ void Calendar::computeFields(UErrorCode &ec)
     //__FILE__, __LINE__, fFields[UCAL_JULIAN_DAY], localMillis);
 #endif
 
-    computeGregorianAndDOWFields(fFields[UCAL_JULIAN_DAY], ec);
+    computeGregorianFields(fFields[UCAL_JULIAN_DAY], ec);
 
     // Call framework method to have subclass compute its fields.
     // These must include, at a minimum, MONTH, DAY_OF_MONTH,
@@ -1544,12 +1540,28 @@ uint8_t Calendar::julianDayToDayOfWeek(int32_t julian)
 * member variables gregorianXxx.  Also compute the DAY_OF_WEEK and
 * DOW_LOCAL fields.
 */
-void Calendar::computeGregorianAndDOWFields(int32_t julianDay, UErrorCode &ec)
+void Calendar::computeGregorianFields(int32_t julianDay, UErrorCode &ec)
 {
-    computeGregorianFields(julianDay, ec);
     if (U_FAILURE(ec)) {
         return;
     }
+    int32_t gregorianDayOfWeekUnused;
+    int32_t day;
+    if (uprv_add32_overflow(
+            julianDay, -kEpochStartAsJulianDay, &day)) {
+        ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    int32_t gregorianMonth, gregorianDayOfMonth, gregorianDayOfYear;
+    Grego::dayToFields(day, fGregorianYear, gregorianMonth,
+                       gregorianDayOfMonth, gregorianDayOfWeekUnused,
+                       gregorianDayOfYear, ec);
+    if (U_FAILURE(ec)) {
+        return;
+    }
+    fGregorianMonth = static_cast<int8_t>(gregorianMonth);
+    fGregorianDayOfMonth = static_cast<int8_t>(gregorianDayOfMonth);
+    fGregorianDayOfYear = static_cast<int16_t>(gregorianDayOfYear);
 
     // Compute day of week: JD 0 = Monday
     int32_t dow = julianDayToDayOfWeek(julianDay);
@@ -1562,28 +1574,6 @@ void Calendar::computeGregorianAndDOWFields(int32_t julianDay, UErrorCode &ec)
     }
     internalSet(UCAL_DOW_LOCAL,dowLocal);
     fFields[UCAL_DOW_LOCAL] = dowLocal;
-}
-
-/**
-* Compute the Gregorian calendar year, month, and day of month from the
-* Julian day.  These values are not stored in fields, but in member
-* variables gregorianXxx.  They are used for time zone computations and by
-* subclasses that are Gregorian derivatives.  Subclasses may call this
-* method to perform a Gregorian calendar millis->fields computation.
-*/
-void Calendar::computeGregorianFields(int32_t julianDay, UErrorCode& ec) {
-    if (U_FAILURE(ec)) {
-        return;
-    }
-    int32_t gregorianDayOfWeekUnused;
-    if (uprv_add32_overflow(
-            julianDay, -kEpochStartAsJulianDay, &julianDay)) {
-        ec = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-    Grego::dayToFields(julianDay, fGregorianYear, fGregorianMonth,
-                       fGregorianDayOfMonth, gregorianDayOfWeekUnused,
-                       fGregorianDayOfYear, ec);
 }
 
 /**
@@ -2291,7 +2281,7 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
                 if (newWallTime != prevWallTime) {
                     // The result wall time or adjusted wall time was shifted because
                     // the target wall time does not exist on the result date.
-                    switch (fSkippedWallTime) {
+                    switch (getSkippedWallTimeOption()) {
                     case UCAL_WALLTIME_FIRST:
                         if (adjAmount > 0) {
                             setTimeInMillis(t, status);
@@ -2445,7 +2435,7 @@ Calendar::adoptTimeZone(TimeZone* zone)
     fZone = zone;
 
     // if the zone changes, we need to recompute the time fields
-    fAreFieldsSet = false;
+    fFlags &= ~kAreFieldsSetMask;
 }
 
 // -------------------------------------
@@ -2485,7 +2475,11 @@ Calendar::orphanTimeZone()
 void
 Calendar::setLenient(UBool lenient)
 {
-    fLenient = lenient;
+    if (lenient) {
+        fFlags |= kLenientMask;
+    } else {
+        fFlags &= ~kLenientMask;
+    }
 }
 
 // -------------------------------------
@@ -2493,7 +2487,7 @@ Calendar::setLenient(UBool lenient)
 UBool
 Calendar::isLenient() const
 {
-    return fLenient;
+    return (fFlags & kLenientMask) == kLenientMask;
 }
 
 // -------------------------------------
@@ -2502,7 +2496,8 @@ void
 Calendar::setRepeatedWallTimeOption(UCalendarWallTimeOption option)
 {
     if (option == UCAL_WALLTIME_LAST || option == UCAL_WALLTIME_FIRST) {
-        fRepeatedWallTime = option;
+        fFlags2 = (fFlags2 & ~kRepeatedWallTimeMask) |
+            (option << kRepeatedWallTimeBit);
     }
 }
 
@@ -2511,7 +2506,8 @@ Calendar::setRepeatedWallTimeOption(UCalendarWallTimeOption option)
 UCalendarWallTimeOption
 Calendar::getRepeatedWallTimeOption() const
 {
-    return fRepeatedWallTime;
+    return static_cast<UCalendarWallTimeOption>(
+        (fFlags2 & kRepeatedWallTimeMask) >> kRepeatedWallTimeBit);
 }
 
 // -------------------------------------
@@ -2519,7 +2515,8 @@ Calendar::getRepeatedWallTimeOption() const
 void
 Calendar::setSkippedWallTimeOption(UCalendarWallTimeOption option)
 {
-    fSkippedWallTime = option;
+    fFlags2 = (fFlags2 & ~kSkippedWallTimeMask) |
+        (option << kSkippedWallTimeBit);
 }
 
 // -------------------------------------
@@ -2527,17 +2524,20 @@ Calendar::setSkippedWallTimeOption(UCalendarWallTimeOption option)
 UCalendarWallTimeOption
 Calendar::getSkippedWallTimeOption() const
 {
-    return fSkippedWallTime;
+    return static_cast<UCalendarWallTimeOption>(
+        (fFlags2 & kSkippedWallTimeMask) >> kSkippedWallTimeBit);
 }
 
 // -------------------------------------
 
 void
 Calendar::setFirstDayOfWeek(UCalendarDaysOfWeek value) UPRV_NO_SANITIZE_UNDEFINED {
-    if (fFirstDayOfWeek != value &&
+    UErrorCode status = U_ZERO_ERROR;
+    UCalendarDaysOfWeek current = getFirstDayOfWeek(status);
+    if (current != value &&
         value >= UCAL_SUNDAY && value <= UCAL_SATURDAY) {
-            fFirstDayOfWeek = value;
-            fAreFieldsSet = false;
+            fFlags2 = (fFlags2 & ~kFirstDayOfWeekMask) | (value << kFirstDayOfWeekBit);
+            fFlags &= ~kAreFieldsSetMask;
         }
 }
 
@@ -2546,13 +2546,15 @@ Calendar::setFirstDayOfWeek(UCalendarDaysOfWeek value) UPRV_NO_SANITIZE_UNDEFINE
 Calendar::EDaysOfWeek
 Calendar::getFirstDayOfWeek() const
 {
-    return static_cast<Calendar::EDaysOfWeek>(fFirstDayOfWeek);
+    return static_cast<Calendar::EDaysOfWeek>(
+        (fFlags2 & kFirstDayOfWeekMask) >> kFirstDayOfWeekBit);
 }
 
 UCalendarDaysOfWeek
 Calendar::getFirstDayOfWeek(UErrorCode & /*status*/) const
 {
-    return fFirstDayOfWeek;
+    return static_cast<UCalendarDaysOfWeek>(
+        (fFlags2 & kFirstDayOfWeekMask) >> kFirstDayOfWeekBit);
 }
 // -------------------------------------
 
@@ -2567,9 +2569,10 @@ Calendar::setMinimalDaysInFirstWeek(uint8_t value)
     } else if (value > 7) {
         value = 7;
     }
-    if (fMinimalDaysInFirstWeek != value) {
-        fMinimalDaysInFirstWeek = value;
-        fAreFieldsSet = false;
+    if (getMinimalDaysInFirstWeek() != value) {
+        fFlags2 = (fFlags2 & ~kMinimalDaysInFirstWeekMask) |
+            (value << kMinimalDaysInFirstWeekBit);
+        fFlags &= ~kAreFieldsSetMask;
     }
 }
 
@@ -2578,7 +2581,8 @@ Calendar::setMinimalDaysInFirstWeek(uint8_t value)
 uint8_t
 Calendar::getMinimalDaysInFirstWeek() const
 {
-    return fMinimalDaysInFirstWeek;
+    return static_cast<uint8_t>(
+        (fFlags2 & kMinimalDaysInFirstWeekMask) >> kMinimalDaysInFirstWeekBit);
 }
 
 // -------------------------------------
@@ -2594,24 +2598,28 @@ Calendar::getDayOfWeekType(UCalendarDaysOfWeek dayOfWeek, UErrorCode &status) co
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return UCAL_WEEKDAY;
     }
-    if (fWeekendOnset == fWeekendCease) {
-        if (dayOfWeek != fWeekendOnset)
+    UCalendarDaysOfWeek weekendOnset = static_cast<UCalendarDaysOfWeek>(
+        (fFlags2 & kWeekendOnsetMask) >> kWeekendOnsetBit);
+    UCalendarDaysOfWeek weekendCease = static_cast<UCalendarDaysOfWeek>(
+        (fFlags2 & kWeekendCeaseMask) >> kWeekendCeaseBit);
+    if (weekendOnset == weekendCease) {
+        if (dayOfWeek != weekendOnset)
             return UCAL_WEEKDAY;
         return (fWeekendOnsetMillis == 0) ? UCAL_WEEKEND : UCAL_WEEKEND_ONSET;
     }
-    if (fWeekendOnset < fWeekendCease) {
-        if (dayOfWeek < fWeekendOnset || dayOfWeek > fWeekendCease) {
+    if (weekendOnset < weekendCease) {
+        if (dayOfWeek < weekendOnset || dayOfWeek > weekendCease) {
             return UCAL_WEEKDAY;
         }
     } else {
-        if (dayOfWeek > fWeekendCease && dayOfWeek < fWeekendOnset) {
+        if (dayOfWeek > weekendCease && dayOfWeek < weekendOnset) {
             return UCAL_WEEKDAY;
         }
     }
-    if (dayOfWeek == fWeekendOnset) {
+    if (dayOfWeek == weekendOnset) {
         return (fWeekendOnsetMillis == 0) ? UCAL_WEEKEND : UCAL_WEEKEND_ONSET;
     }
-    if (dayOfWeek == fWeekendCease) {
+    if (dayOfWeek == weekendCease) {
         return (fWeekendCeaseMillis >= 86400000) ? UCAL_WEEKEND : UCAL_WEEKEND_CEASE;
     }
     return UCAL_WEEKEND;
@@ -2623,10 +2631,16 @@ Calendar::getWeekendTransition(UCalendarDaysOfWeek dayOfWeek, UErrorCode &status
     if (U_FAILURE(status)) {
         return 0;
     }
-    if (dayOfWeek == fWeekendOnset) {
+    UCalendarDaysOfWeek weekendOnset = static_cast<UCalendarDaysOfWeek>(
+        (fFlags2 & kWeekendOnsetMask) >> kWeekendOnsetBit);
+    if (dayOfWeek == weekendOnset) {
         return fWeekendOnsetMillis;
-    } else if (dayOfWeek == fWeekendCease) {
-        return fWeekendCeaseMillis;
+    } else {
+        UCalendarDaysOfWeek weekendCease = static_cast<UCalendarDaysOfWeek>(
+            (fFlags2 & kWeekendCeaseMask) >> kWeekendCeaseBit);
+        if (dayOfWeek == weekendCease) {
+            return fWeekendCeaseMillis;
+        }
     }
     status = U_ILLEGAL_ARGUMENT_ERROR;
     return 0;
@@ -3190,7 +3204,7 @@ void Calendar::computeTime(UErrorCode& status) {
         // We use the TimeZone object, unless the user has explicitly set the ZONE_OFFSET
         // or DST_OFFSET fields; then we use those fields.
 
-        if (!isLenient() || fSkippedWallTime == UCAL_WALLTIME_NEXT_VALID) {
+        if (!isLenient() || getSkippedWallTimeOption() == UCAL_WALLTIME_NEXT_VALID) {
             // When strict, invalidate a wall time falls into a skipped wall time range.
             // When lenient and skipped wall time option is WALLTIME_NEXT_VALID,
             // the result time will be adjusted to the next valid time (on wall clock).
@@ -3207,7 +3221,7 @@ void Calendar::computeTime(UErrorCode& status) {
                     if (!isLenient()) {
                         status = U_ILLEGAL_ARGUMENT_ERROR;
                     } else {
-                        U_ASSERT(fSkippedWallTime == UCAL_WALLTIME_NEXT_VALID);
+                        U_ASSERT(getSkippedWallTimeOption() == UCAL_WALLTIME_NEXT_VALID);
                         // Adjust time to the next valid wall clock time.
                         // At this point, tmpTime is on or after the zone offset transition causing
                         // the skipped time range.
@@ -3319,8 +3333,8 @@ int32_t Calendar::computeZoneOffset(double millis, double millisInDay, UErrorCod
     UDate wall = millis + millisInDay;
     BasicTimeZone* btz = getBasicTimeZone();
     if (btz) {
-        UTimeZoneLocalOption duplicatedTimeOpt = (fRepeatedWallTime == UCAL_WALLTIME_FIRST) ? UCAL_TZ_LOCAL_FORMER : UCAL_TZ_LOCAL_LATTER;
-        UTimeZoneLocalOption nonExistingTimeOpt = (fSkippedWallTime == UCAL_WALLTIME_FIRST) ? UCAL_TZ_LOCAL_LATTER : UCAL_TZ_LOCAL_FORMER;
+        UTimeZoneLocalOption duplicatedTimeOpt = (getRepeatedWallTimeOption() == UCAL_WALLTIME_FIRST) ? UCAL_TZ_LOCAL_FORMER : UCAL_TZ_LOCAL_LATTER;
+        UTimeZoneLocalOption nonExistingTimeOpt = (getSkippedWallTimeOption() == UCAL_WALLTIME_FIRST) ? UCAL_TZ_LOCAL_LATTER : UCAL_TZ_LOCAL_FORMER;
         btz->getOffsetFromLocal(wall, nonExistingTimeOpt, duplicatedTimeOpt, rawOffset, dstOffset, ec);
     } else {
         const TimeZone& tz = getTimeZone();
@@ -3328,7 +3342,7 @@ int32_t Calendar::computeZoneOffset(double millis, double millisInDay, UErrorCod
         tz.getOffset(wall, true, rawOffset, dstOffset, ec);
 
         UBool sawRecentNegativeShift = false;
-        if (fRepeatedWallTime == UCAL_WALLTIME_FIRST) {
+        if (getRepeatedWallTimeOption() == UCAL_WALLTIME_FIRST) {
             // Check if the given wall time falls into repeated time range
             UDate tgmt = wall - (rawOffset + dstOffset);
 
@@ -3348,7 +3362,7 @@ int32_t Calendar::computeZoneOffset(double millis, double millisInDay, UErrorCod
                 tz.getOffset(wall + offsetDelta, true, rawOffset, dstOffset, ec);
             }
         }
-        if (!sawRecentNegativeShift && fSkippedWallTime == UCAL_WALLTIME_FIRST) {
+        if (!sawRecentNegativeShift && getSkippedWallTimeOption() == UCAL_WALLTIME_FIRST) {
             // When skipped wall time option is WALLTIME_FIRST,
             // recalculate offsets from the resolved time (non-wall).
             // When the given wall time falls into skipped wall time,
@@ -3683,7 +3697,7 @@ int32_t Calendar::getLocalDOW(UErrorCode& status)
     switch (resolveFields(kDOWPrecedence)) {
     case UCAL_DAY_OF_WEEK:
         dowLocal = internalGet(UCAL_DAY_OF_WEEK);
-        if (uprv_add32_overflow(dowLocal, -fFirstDayOfWeek, &dowLocal)) {
+        if (uprv_add32_overflow(dowLocal, -getFirstDayOfWeek(), &dowLocal)) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return 0;
         }
@@ -3980,7 +3994,7 @@ void Calendar::prepareGetActual(UCalendarDateFields field, UBool isMinimum, UErr
         // or year will contain the first day of the week, and that the
         // first week will contain the last DOW.
         {
-            int32_t dow = fFirstDayOfWeek;
+            int32_t dow = getFirstDayOfWeek();
             if (isMinimum) {
                 dow = (dow + 6) % 7; // set to last DOW
                 if (dow < UCAL_SUNDAY) {
@@ -4087,11 +4101,12 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
         return;
     }
 
-    fFirstDayOfWeek = UCAL_SUNDAY;
-    fMinimalDaysInFirstWeek = 1;
-    fWeekendOnset = UCAL_SATURDAY;
+    fFlags2 = (fFlags2 & ~kFirstDayOfWeekMask) | (UCAL_SUNDAY << kFirstDayOfWeekBit);
+    fFlags2 = (fFlags2 & ~kMinimalDaysInFirstWeekMask) |
+        (1 << kMinimalDaysInFirstWeekBit);
+    fFlags2 = (fFlags2 & ~kWeekendOnsetMask) | (UCAL_SATURDAY << kWeekendOnsetBit);
+    fFlags2 = (fFlags2 & ~kWeekendCeaseMask) | (UCAL_SUNDAY << kWeekendCeaseBit);
     fWeekendOnsetMillis = 0;
-    fWeekendCease = UCAL_SUNDAY;
     fWeekendCeaseMillis = 86400000; // 24*60*60*1000
 
     // Since week and weekend data is territory based instead of language based,
@@ -4173,11 +4188,13 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
                 && 1 <= weekDataArr[1] && weekDataArr[1] <= 7
                 && 1 <= weekDataArr[2] && weekDataArr[2] <= 7
                 && 1 <= weekDataArr[4] && weekDataArr[4] <= 7) {
-            fFirstDayOfWeek = static_cast<UCalendarDaysOfWeek>(weekDataArr[0]);
-            fMinimalDaysInFirstWeek = static_cast<uint8_t>(weekDataArr[1]);
-            fWeekendOnset = static_cast<UCalendarDaysOfWeek>(weekDataArr[2]);
+            setFirstDayOfWeek(static_cast<UCalendarDaysOfWeek>(weekDataArr[0]));
+            setMinimalDaysInFirstWeek(static_cast<uint8_t>(weekDataArr[1]));
+            fFlags2 = (fFlags2 & ~kWeekendOnsetMask) |
+                (static_cast<UCalendarDaysOfWeek>(weekDataArr[2]) << kWeekendOnsetBit);
             fWeekendOnsetMillis = weekDataArr[3];
-            fWeekendCease = static_cast<UCalendarDaysOfWeek>(weekDataArr[4]);
+            fFlags2 = (fFlags2 & ~kWeekendCeaseMask) |
+                (static_cast<UCalendarDaysOfWeek>(weekDataArr[4]) << kWeekendCeaseBit);
             fWeekendCeaseMillis = weekDataArr[5];
         } else {
             status = U_INVALID_FORMAT_ERROR;
@@ -4189,21 +4206,25 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
         char fwExt[ULOC_FULLNAME_CAPACITY] = "";
         desiredLocale.getKeywordValue("fw", fwExt, ULOC_FULLNAME_CAPACITY, fwStatus);
         if (U_SUCCESS(fwStatus)) {
+            UCalendarDaysOfWeek firstDayOfWeek = static_cast<UCalendarDaysOfWeek>(
+                (fFlags2 & kFirstDayOfWeekMask) >> kFirstDayOfWeekBit);
             if (uprv_strcmp(fwExt, "sun") == 0) {
-                fFirstDayOfWeek = UCAL_SUNDAY;
+                firstDayOfWeek = UCAL_SUNDAY;
             } else if (uprv_strcmp(fwExt, "mon") == 0) {
-                fFirstDayOfWeek = UCAL_MONDAY;
+                firstDayOfWeek = UCAL_MONDAY;
             } else if (uprv_strcmp(fwExt, "tue") == 0) {
-                fFirstDayOfWeek = UCAL_TUESDAY;
+                firstDayOfWeek = UCAL_TUESDAY;
             } else if (uprv_strcmp(fwExt, "wed") == 0) {
-                fFirstDayOfWeek = UCAL_WEDNESDAY;
+                firstDayOfWeek = UCAL_WEDNESDAY;
             } else if (uprv_strcmp(fwExt, "thu") == 0) {
-                fFirstDayOfWeek = UCAL_THURSDAY;
+                firstDayOfWeek = UCAL_THURSDAY;
             } else if (uprv_strcmp(fwExt, "fri") == 0) {
-                fFirstDayOfWeek = UCAL_FRIDAY;
+                firstDayOfWeek = UCAL_FRIDAY;
             } else if (uprv_strcmp(fwExt, "sat") == 0) {
-                fFirstDayOfWeek = UCAL_SATURDAY;
+                firstDayOfWeek = UCAL_SATURDAY;
             }
+            fFlags2 = (fFlags2 & ~kFirstDayOfWeekMask) |
+                (firstDayOfWeek << kFirstDayOfWeekBit);
         }
     }
     ures_close(weekData);
@@ -4225,11 +4246,12 @@ Calendar::updateTime(UErrorCode& status)
     // If we are lenient, we need to recompute the fields to normalize
     // the values.  Also, if we haven't set all the fields yet (i.e.,
     // in a newly-created object), we need to fill in the fields. [LIU]
-    if (isLenient() || ! fAreAllFieldsSet)
-        fAreFieldsSet = false;
+    if (isLenient() || !(fFlags & kAreAllFieldsSetMask)) {
+        fFlags &= ~kAreFieldsSetMask;
+    }
 
-    fIsTimeSet = true;
-    fAreFieldsVirtuallySet = false;
+    fFlags |= kIsTimeSetMask;
+    fFlags &= ~kAreFieldsVirtuallySetMask;
 }
 
 Locale

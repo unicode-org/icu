@@ -1882,41 +1882,10 @@ private:
     int32_t getActualHelper(UCalendarDateFields field, int32_t startValue, int32_t endValue, UErrorCode &status) const;
 
 
+private:
+    uint8_t    fFlags;
+
 protected:
-    /**
-     * The flag which indicates if the current time is set in the calendar.
-     * @stable ICU 2.0
-     */
-    UBool      fIsTimeSet;
-
-    /**
-     * True if the fields are in sync with the currently set time of this Calendar.
-     * If false, then the next attempt to get the value of a field will
-     * force a recomputation of all fields from the current value of the time
-     * field.
-     * <P>
-     * This should really be named areFieldsInSync, but the old name is retained
-     * for backward compatibility.
-     * @stable ICU 2.0
-     */
-    UBool      fAreFieldsSet;
-
-    /**
-     * True if all of the fields have been set.  This is initially false, and set to
-     * true by computeFields().
-     * @stable ICU 2.0
-     */
-    UBool      fAreAllFieldsSet;
-
-    /**
-     * True if all fields have been virtually set, but have not yet been
-     * computed.  This occurs only in setTimeInMillis().  A calendar set
-     * to this state will compute all fields from the time if it becomes
-     * necessary, but otherwise will delay such computation.
-     * @stable ICU 3.0
-     */
-    UBool fAreFieldsVirtuallySet;
-
     /**
      * Get the current time without recomputing.
      *
@@ -1939,14 +1908,6 @@ protected:
      * @stable ICU 2.0
      */
     int32_t     fFields[UCAL_FIELD_COUNT];
-
-#ifndef U_FORCE_HIDE_DEPRECATED_API
-    /**
-     * The flags which tell if a specified time field for the calendar is set.
-     * @deprecated ICU 2.8 use (fStamp[n]!=kUnset)
-     */
-    UBool      fIsSet[UCAL_FIELD_COUNT];
-#endif  // U_FORCE_HIDE_DEPRECATED_API
 
     /** Special values of stamp[]
      * @stable ICU 2.0
@@ -2192,28 +2153,12 @@ private:
     UDate        fTime;
 
     /**
-     * @see   #setLenient
-     */
-    UBool      fLenient;
-
-    /**
      * Time zone affects the time calculation done by Calendar. Calendar subclasses use
      * the time zone data to produce the local time. Always set; never nullptr.
      */
     TimeZone*   fZone;
 
-    /**
-     * Option for repeated wall time
-     * @see #setRepeatedWallTimeOption
-     */
-    UCalendarWallTimeOption fRepeatedWallTime;
-
-    /**
-     * Option for skipped wall time
-     * @see #setSkippedWallTimeOption
-     */
-    UCalendarWallTimeOption fSkippedWallTime;
-
+    uint16_t    fFlags2;
     /**
      * Both firstDayOfWeek and minimalDaysInFirstWeek are locale-dependent. They are
      * used to figure out the week count for a specific date for a given locale. These
@@ -2222,11 +2167,7 @@ private:
      * out the week count for a specific date for a given locale. These must be set when
      * a Calendar is constructed.
      */
-    UCalendarDaysOfWeek fFirstDayOfWeek;
-    uint8_t     fMinimalDaysInFirstWeek;
-    UCalendarDaysOfWeek fWeekendOnset;
     int32_t fWeekendOnsetMillis;
-    UCalendarDaysOfWeek fWeekendCease;
     int32_t fWeekendCeaseMillis;
 
     /**
@@ -2264,21 +2205,21 @@ private:
      * returned by getGregorianMonth().
      * @see #computeGregorianFields
      */
-    int32_t fGregorianMonth;
+    int8_t fGregorianMonth;
 
     /**
      * The Gregorian day of the year, as computed by
      * computeGregorianFields() and returned by getGregorianDayOfYear().
      * @see #computeGregorianFields
      */
-    int32_t fGregorianDayOfYear;
+    int16_t fGregorianDayOfYear;
 
     /**
      * The Gregorian day of the month, as computed by
      * computeGregorianFields() and returned by getGregorianDayOfMonth().
      * @see #computeGregorianFields
      */
-    int32_t fGregorianDayOfMonth;
+    int8_t fGregorianDayOfMonth;
 
     /* calculations */
 
@@ -2288,20 +2229,7 @@ private:
      * member variables gregorianXxx.  Also compute the DAY_OF_WEEK and
      * DOW_LOCAL fields.
      */
-    void computeGregorianAndDOWFields(int32_t julianDay, UErrorCode &ec);
-
-protected:
-
-    /**
-     * Compute the Gregorian calendar year, month, and day of month from the
-     * Julian day.  These values are not stored in fields, but in member
-     * variables gregorianXxx.  They are used for time zone computations and by
-     * subclasses that are Gregorian derivatives.  Subclasses may call this
-     * method to perform a Gregorian calendar millis->fields computation.
-     */
     void computeGregorianFields(int32_t julianDay, UErrorCode &ec);
-
-private:
 
     /**
      * Compute the fields WEEK_OF_YEAR, YEAR_WOY, WEEK_OF_MONTH,
@@ -2563,7 +2491,6 @@ Calendar::internalSet(UCalendarDateFields field, int32_t value)
 {
     fFields[field] = value;
     fStamp[field] = kInternallySet;
-    fIsSet[field]     = true; // Remove later
 }
 
 /**

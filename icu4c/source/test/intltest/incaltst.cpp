@@ -126,6 +126,8 @@ void
 IntlCalendarTest::TestTypes()
 {
   Calendar *c = nullptr;
+  printf("sizeof(Calendar)=%ld\n", sizeof(Calendar));
+  printf("UCAL_FIELD_COUNT=%d\n", UCAL_FIELD_COUNT);
   UErrorCode status = U_ZERO_ERROR;
   int j;
   const char *locs [40] = { "en_US_VALLEYGIRL",     
