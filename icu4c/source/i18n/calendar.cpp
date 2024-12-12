@@ -187,7 +187,7 @@ U_CFUNC void ucal_dump(UCalendar* cal) {
 #endif
 
 /* Max value for stamp allowable before recalculation */
-#define STAMP_MAX 10000
+#define STAMP_MAX 254
 
 static const char * const gCalTypes[] = {
     "gregorian",
@@ -824,8 +824,8 @@ Calendar &
 Calendar::operator=(const Calendar &right)
 {
     if (this != &right) {
-        uprv_arrayCopy(right.fFields, fFields, UCAL_FIELD_COUNT);
-        uprv_arrayCopy(right.fStamp, fStamp, UCAL_FIELD_COUNT);
+        uprv_memcpy(fFields, right.fFields, sizeof(fFields));
+        uprv_memcpy(fStamp, right.fStamp, sizeof(fStamp));
         fTime                    = right.fTime;
         fFlags                   = right.fFlags;
         fFlags2                  = right.fFlags2;

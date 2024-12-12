@@ -1924,7 +1924,7 @@ protected:
      * MINIMUM_USER_SET to Integer.MAX_VALUE are legal user set values.
      * @stable ICU 2.0
      */
-    int32_t        fStamp[UCAL_FIELD_COUNT];
+    uint8_t        fStamp[UCAL_FIELD_COUNT];
 
     /**
      * Subclasses may override this method to compute several fields
@@ -2139,7 +2139,7 @@ private:
     /**
      * The next available value for fStamp[]
      */
-    int32_t fNextStamp;// = MINIMUM_USER_STAMP;
+    uint8_t fNextStamp;// = MINIMUM_USER_STAMP;
 
     /**
      * Recalculates the time stamp array (fStamp).
