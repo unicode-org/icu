@@ -237,7 +237,7 @@ typedef HANDLE MemoryMap;
         pData->map = (char *)data + length;
         pData->pHeader=(const DataHeader *)data;
         pData->mapAddr = data;
-#if U_PLATFORM == U_PF_IPHONE
+#if U_PLATFORM == U_PF_IPHONE || U_PLATFORM == U_PF_ANDROID
         posix_madvise(data, length, POSIX_MADV_RANDOM);
 #endif
         return true;
