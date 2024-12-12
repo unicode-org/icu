@@ -126,6 +126,37 @@ the UTF-8 signature byte sequence ("BOM").~~
 
 ## Clean up import statements
 
+### From command line
+
+This can be done from command line using the
+[Google Java Format](https://github.com/google/google-java-format) tool.
+
+**WARNING:** requires JDK 17 or newer (December 2024)
+
+Download the latest Google Java Format from Maven Central:
+```sh
+mvn dependency:copy -Dartifact=com.google.googlejavaformat:google-java-format:LATEST:jar:all-deps \
+    -DoutputDirectory=/tmp \
+    -Dmdep.stripVersion=true \
+    -q -ntp
+```
+
+Cleanup all Java files (only imports, nothing else):
+```sh
+find . -type f -name '*.java' | xargs java -jar /tmp/google-java-format-all-deps.jar -i --aosp --fix-imports-only --skip-sorting-imports
+```
+
+Remove the Google Java Format artifact from the temporary folder:
+```sh
+rm /tmp/google-java-format-all-deps.jar
+```
+
+You can (of course) download it from
+[GitHub Releases](https://github.com/google/google-java-format/releases). \
+Or save it in a personal tools folder and keep it around.
+
+### From Eclipse
+
 The Eclipse IDE provides a feature which allow you to organize import statements
 for multiple files. Right click on projects/source folders/files, you can select
 \[Source\] - \[Organize Imports\] which resolve all wildcard imports and sort
