@@ -1918,6 +1918,7 @@ protected:
         kMinimumUserStamp
     };
 
+private:
     /**
      * Pseudo-time-stamps which specify when each field was set. There
      * are two special values, UNSET and INTERNALLY_SET. Values from
@@ -1926,6 +1927,7 @@ protected:
      */
     uint8_t        fStamp[UCAL_FIELD_COUNT];
 
+protected:
     /**
      * Subclasses may override this method to compute several fields
      * specific to each calendar system.  These are:
