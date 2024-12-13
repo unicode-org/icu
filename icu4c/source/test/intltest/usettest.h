@@ -106,13 +106,9 @@ private:
     void TestPatternCodePointComplement();
 
     void TestCodePointIterator();
-    void TestUSetCodePointIterator();
     void TestRangeIterator();
-    void TestUSetRangeIterator();
     void TestStringIterator();
-    void TestUSetStringIterator();
     void TestElementIterator();
-    void TestUSetElementIterator();
 
 private:
 

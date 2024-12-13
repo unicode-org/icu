@@ -571,9 +571,18 @@
     <ClCompile Include="uchar_type_build_test.cpp">
       <Filter>configuration</Filter>
     </ClCompile>
-    <ClCompile Include="messageformat2test.cpp" />
-    <ClCompile Include="messageformat2test_custom.cpp" />
-    <ClCompile Include="messageformat2test_read_json.cpp" />
+    <ClCompile Include="messageformat2test.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="messageformat2test_custom.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="messageformat2test_read_json.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="usetheaderonlytest.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">
