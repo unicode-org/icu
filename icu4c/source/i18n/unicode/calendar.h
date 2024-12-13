@@ -2282,14 +2282,6 @@ private:
 
     /* calculations */
 
-    /**
-     * Compute the Gregorian calendar year, month, and day of month from
-     * the given Julian day.  These values are not stored in fields, but in
-     * member variables gregorianXxx.  Also compute the DAY_OF_WEEK and
-     * DOW_LOCAL fields.
-     */
-    void computeGregorianAndDOWFields(int32_t julianDay, UErrorCode &ec);
-
 protected:
 
     /**

@@ -1467,7 +1467,7 @@ void Calendar::computeFields(UErrorCode &ec)
     //__FILE__, __LINE__, fFields[UCAL_JULIAN_DAY], localMillis);
 #endif
 
-    computeGregorianAndDOWFields(fFields[UCAL_JULIAN_DAY], ec);
+    computeGregorianFields(fFields[UCAL_JULIAN_DAY], ec);
 
     // Call framework method to have subclass compute its fields.
     // These must include, at a minimum, MONTH, DAY_OF_MONTH,
@@ -1539,32 +1539,6 @@ uint8_t Calendar::julianDayToDayOfWeek(int32_t julian)
 }
 
 /**
-* Compute the Gregorian calendar year, month, and day of month from
-* the given Julian day.  These values are not stored in fields, but in
-* member variables gregorianXxx.  Also compute the DAY_OF_WEEK and
-* DOW_LOCAL fields.
-*/
-void Calendar::computeGregorianAndDOWFields(int32_t julianDay, UErrorCode &ec)
-{
-    computeGregorianFields(julianDay, ec);
-    if (U_FAILURE(ec)) {
-        return;
-    }
-
-    // Compute day of week: JD 0 = Monday
-    int32_t dow = julianDayToDayOfWeek(julianDay);
-    internalSet(UCAL_DAY_OF_WEEK,dow);
-
-    // Calculate 1-based localized day of week
-    int32_t dowLocal = dow - getFirstDayOfWeek() + 1;
-    if (dowLocal < 1) {
-        dowLocal += 7;
-    }
-    internalSet(UCAL_DOW_LOCAL,dowLocal);
-    fFields[UCAL_DOW_LOCAL] = dowLocal;
-}
-
-/**
 * Compute the Gregorian calendar year, month, and day of month from the
 * Julian day.  These values are not stored in fields, but in member
 * variables gregorianXxx.  They are used for time zone computations and by
@@ -1610,8 +1584,19 @@ void Calendar::computeWeekFields(UErrorCode &ec) {
     if(U_FAILURE(ec)) {
         return;
     }
+
+    // Compute day of week: JD 0 = Monday
+    int32_t dayOfWeek = julianDayToDayOfWeek(fFields[UCAL_JULIAN_DAY]);
+    internalSet(UCAL_DAY_OF_WEEK, dayOfWeek);
+    int32_t firstDayOfWeek = getFirstDayOfWeek();
+    // Calculate 1-based localized day of week
+    int32_t dowLocal = dayOfWeek - firstDayOfWeek + 1;
+    if (dowLocal < 1) {
+        dowLocal += 7;
+    }
+    internalSet(UCAL_DOW_LOCAL,dowLocal);
+
     int32_t eyear = fFields[UCAL_EXTENDED_YEAR];
-    int32_t dayOfWeek = fFields[UCAL_DAY_OF_WEEK];
     int32_t dayOfYear = fFields[UCAL_DAY_OF_YEAR];
 
     // WEEK_OF_YEAR start
@@ -1624,10 +1609,11 @@ void Calendar::computeWeekFields(UErrorCode &ec) {
     // first week of the next year.  ASSUME that the year length is less than
     // 7000 days.
     int32_t yearOfWeekOfYear = eyear;
-    int32_t relDow = (dayOfWeek + 7 - getFirstDayOfWeek()) % 7; // 0..6
-    int32_t relDowJan1 = (dayOfWeek - dayOfYear + 7001 - getFirstDayOfWeek()) % 7; // 0..6
+    int32_t relDow = (dayOfWeek + 7 - firstDayOfWeek) % 7; // 0..6
+    int32_t relDowJan1 = (dayOfWeek - dayOfYear + 7001 - firstDayOfWeek) % 7; // 0..6
     int32_t woy = (dayOfYear - 1 + relDowJan1) / 7; // 0..53
-    if ((7 - relDowJan1) >= getMinimalDaysInFirstWeek()) {
+    int32_t minimalDaysInFirstWeek = getMinimalDaysInFirstWeek();
+    if ((7 - relDowJan1) >= minimalDaysInFirstWeek) {
         ++woy;
     }
 
@@ -1655,7 +1641,7 @@ void Calendar::computeWeekFields(UErrorCode &ec) {
             if (lastRelDow < 0) {
                 lastRelDow += 7;
             }
-            if (((6 - lastRelDow) >= getMinimalDaysInFirstWeek()) &&
+            if (((6 - lastRelDow) >= minimalDaysInFirstWeek) &&
                 ((dayOfYear + 7 - relDow) > lastDoy)) {
                     woy = 1;
                     yearOfWeekOfYear++;
