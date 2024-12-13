@@ -219,7 +219,9 @@ int32_t ChineseCalendar::handleGetExtendedYear(UErrorCode& status) {
     }
 
     int32_t year;
-    if (newestStamp(UCAL_ERA, UCAL_YEAR, kUnset) <= fStamp[UCAL_EXTENDED_YEAR]) {
+    // if UCAL_EXTENDED_YEAR is not older than UCAL_ERA nor UCAL_YEAR
+    if (newerField(UCAL_EXTENDED_YEAR, newerField(UCAL_ERA, UCAL_YEAR)) ==
+        UCAL_EXTENDED_YEAR) {
         year = internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
     } else {
         // adjust to the instance specific epoch

@@ -1186,14 +1186,10 @@ int32_t GregorianCalendar::handleGetExtendedYear(UErrorCode& status) {
     int32_t year = kEpochYear;
 
     // year field to use
-    int32_t yearField = UCAL_EXTENDED_YEAR;
-
     // There are three separate fields which could be used to
     // derive the proper year.  Use the one most recently set.
-    if (fStamp[yearField] < fStamp[UCAL_YEAR])
-        yearField = UCAL_YEAR;
-    if (fStamp[yearField] < fStamp[UCAL_YEAR_WOY])
-        yearField = UCAL_YEAR_WOY;
+    UCalendarDateFields yearField = newerField(
+        newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR), UCAL_YEAR_WOY);
 
     // based on the "best" year field, get the year
     switch(yearField) {
