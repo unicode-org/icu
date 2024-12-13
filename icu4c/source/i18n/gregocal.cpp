@@ -1188,7 +1188,7 @@ int32_t GregorianCalendar::handleGetExtendedYear(UErrorCode& status) {
     // year field to use
     // There are three separate fields which could be used to
     // derive the proper year.  Use the one most recently set.
-    UCalendarDateFields yearField = newerField(newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR),UCAL_EXTENDED_YEAR);
+    UCalendarDateFields yearField = newerField(newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR), UCAL_YEAR_WOY);
 
     // based on the "best" year field, get the year
     switch(yearField) {
