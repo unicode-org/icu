@@ -74,7 +74,7 @@ namespace message2 {
             UNISETS_KEY_COUNT
         };
 
-        U_I18N_API const UnicodeSet* get(Key key);
+    U_I18N_API const UnicodeSet* get(Key key, UErrorCode& status);
     }
 
     // Parser class (private)
@@ -110,16 +110,16 @@ namespace message2 {
                StaticErrors& e,
                UnicodeString& normalizedInputRef,
                UErrorCode& status)
-	  : contentChars(unisets::get(unisets::CONTENT)),
-            whitespaceChars(unisets::get(unisets::WHITESPACE)),
-            bidiControlChars(unisets::get(unisets::BIDI)),
-            alphaChars(unisets::get(unisets::ALPHA)),
-            digitChars(unisets::get(unisets::DIGIT)),
-            nameStartChars(unisets::get(unisets::NAME_START)),
-            nameChars(unisets::get(unisets::NAME_CHAR)),
-            textChars(unisets::get(unisets::TEXT)),
-            quotedChars(unisets::get(unisets::QUOTED)),
-            escapableChars(unisets::get(unisets::ESCAPABLE)),
+            : contentChars(unisets::get(unisets::CONTENT, status)),
+              whitespaceChars(unisets::get(unisets::WHITESPACE, status)),
+              bidiControlChars(unisets::get(unisets::BIDI, status)),
+              alphaChars(unisets::get(unisets::ALPHA, status)),
+              digitChars(unisets::get(unisets::DIGIT, status)),
+              nameStartChars(unisets::get(unisets::NAME_START, status)),
+              nameChars(unisets::get(unisets::NAME_CHAR, status)),
+              textChars(unisets::get(unisets::TEXT, status)),
+              quotedChars(unisets::get(unisets::QUOTED, status)),
+              escapableChars(unisets::get(unisets::ESCAPABLE, status)),
             source(input), index(0), errors(e), normalizedInput(normalizedInputRef), dataModel(dataModelBuilder) {
             (void) status;
 	  parseError.line = 0;
@@ -128,17 +128,6 @@ namespace message2 {
 	  parseError.preContext[0] = '\0';
 	  parseError.postContext[0] = '\0';
 	}
-
-        UnicodeSet initContentChars(UErrorCode& status);
-        UnicodeSet initWhitespace(UErrorCode& status);
-        UnicodeSet initBidiControls(UErrorCode& status);
-        UnicodeSet initAlpha(UErrorCode& status);
-        UnicodeSet initDigits(UErrorCode& status);
-        UnicodeSet initNameStartChars(UErrorCode& status);
-        UnicodeSet initNameChars(UErrorCode& status);
-        UnicodeSet initTextChars(UErrorCode& status);
-        UnicodeSet initQuotedChars(UErrorCode& status);
-        UnicodeSet initEscapableChars(UErrorCode& status);
 
         bool isContentChar(UChar32) const;
         bool isBidiControl(UChar32) const;
