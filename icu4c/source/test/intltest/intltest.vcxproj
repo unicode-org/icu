@@ -242,6 +242,7 @@
     <ClCompile Include="units_router_test.cpp" />
     <ClCompile Include="units_test.cpp" />
     <ClCompile Include="uchar_type_build_test.cpp" />
+    <ClCompile Include="usetheaderonlytest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colldata.h" />

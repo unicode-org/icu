@@ -35,6 +35,7 @@
 #include "usettest.h"
 
 extern IntlTest *createBytesTrieTest();
+extern IntlTest *createUSetHeaderOnlyTest();
 extern IntlTest *createLocaleMatcherTest();
 static IntlTest *createLocalPointerTest();
 extern IntlTest *createUCharsTrieTest();
@@ -82,6 +83,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
     TESTCASE_AUTO_CLASS(LocaleBuilderTest);
     TESTCASE_AUTO_CREATE_CLASS(LocaleMatcherTest);
     TESTCASE_AUTO_CREATE_CLASS(UHashTest);
+    TESTCASE_AUTO_CREATE_CLASS(USetHeaderOnlyTest);
     TESTCASE_AUTO_END;
 }
 
