@@ -499,8 +499,8 @@ public class RBBITest extends CoreTestFmwk {
 
     static class T13512Thread extends Thread {
         private String fText;
-        public List fBoundaries;
-        public List fExpectedBoundaries;
+        public List<Integer> fBoundaries;
+        public List<Integer> fExpectedBoundaries;
 
         T13512Thread(String text) {
             fText = text;

@@ -13,7 +13,6 @@ import java.text.ParsePosition;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -777,7 +776,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
      * @return
      */
     public String replaceZoneString(String pattern, String newZone) {
-        final List itemList = formatParser.set(pattern).getItems();
+        final List<Object> itemList = formatParser.set(pattern).getItems();
         boolean changed = false;
         for (int i = 0; i < itemList.size(); ++i) {
             Object item = itemList.get(i);
@@ -795,8 +794,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
     }
 
     public boolean containsZone(String pattern) {
-        for (Iterator it = formatParser.set(pattern).getItems().iterator(); it.hasNext();) {
-            Object item = it.next();
+        for (Object item : formatParser.set(pattern).getItems()) {
             if (item instanceof VariableField) {
                 VariableField variableField = (VariableField) item;
                 if (variableField.getType() == DateTimePatternGenerator.ZONE) {
@@ -829,8 +827,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         int count = 0;
         DateOrder result = new DateOrder();
 
-        for (Iterator it = formatParser.set(pattern).getItems().iterator(); it.hasNext();) {
-            Object item = it.next();
+        for (Object item : formatParser.set(pattern).getItems()) {
             if (!(item instanceof String)) {
                 // the first character of the variable field determines the type,
                 // according to CLDR.

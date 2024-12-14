@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.junit.Test;
@@ -187,7 +186,7 @@ public class TestLocaleValidity extends CoreTestFmwk {
         final LinkedHashSet<String> foundKeys = new LinkedHashSet<String>();
         check(tests, foundKeys, Datasubtype.regular, Datasubtype.unknown);
 
-        LinkedHashSet<String> missing = new LinkedHashSet(KeyTypeData.getBcp47Keys());
+        LinkedHashSet<String> missing = new LinkedHashSet<>(KeyTypeData.getBcp47Keys());
         missing.removeAll(foundKeys);
         if (!assertEquals("Missing keys", Collections.EMPTY_SET, missing)) {
             // print out template for missing cases for adding
@@ -313,9 +312,9 @@ public class TestLocaleValidity extends CoreTestFmwk {
 
     private static void showAll() {
         Map<Datatype, Map<Datasubtype, ValiditySet>> data = ValidIdentifiers.getData();
-        for (Entry<Datatype, Map<Datasubtype, ValiditySet>> e1 : data.entrySet()) {
+        for (Map.Entry<Datatype, Map<Datasubtype, ValiditySet>> e1 : data.entrySet()) {
             System.out.println(e1.getKey());
-            for (Entry<Datasubtype, ValiditySet> e2 : e1.getValue().entrySet()) {
+            for (Map.Entry<Datasubtype, ValiditySet> e2 : e1.getValue().entrySet()) {
                 System.out.println("\t" + e2.getKey());
                 System.out.println("\t\t" + e2.getValue());
             }

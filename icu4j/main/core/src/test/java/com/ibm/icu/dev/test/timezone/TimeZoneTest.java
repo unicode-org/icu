@@ -1390,7 +1390,7 @@ public class TimeZoneTest extends CoreTestFmwk
         TimeZone tz = TimeZone.getTimeZone(tzid);
         int offset = tz.getOffset(new Date().getTime());
         logln(tzid + ":\t" + offset);
-        List list = Arrays.asList(TimeZone.getAvailableIDs());
+        List<String> list = Arrays.asList(TimeZone.getAvailableIDs());
         if(!list.contains(tzid)){
             errln("Could create the time zone but it is not in getAvailableIDs");
         }

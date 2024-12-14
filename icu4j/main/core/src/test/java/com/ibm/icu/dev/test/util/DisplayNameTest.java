@@ -42,9 +42,9 @@ public class DisplayNameTest extends CoreTestFmwk {
         public String get(ULocale locale, String code, Object context);
     }
 
-    Map[] codeToName = new Map[10];
+    Map<String, String>[] codeToName = new Map[10];
     {
-        for (int k = 0; k < codeToName.length; ++k) codeToName[k] = new HashMap();
+        for (int k = 0; k < codeToName.length; ++k) codeToName[k] = new HashMap<>();
     }
 
     static final Object[] zoneFormats = {0, 1, 2, 3, 4, 5, 6, 7};
@@ -82,9 +82,9 @@ public class DisplayNameTest extends CoreTestFmwk {
      * @return
      */
     private String[] getRealZoneIDs() {
-        Set temp = new TreeSet(Arrays.asList(TimeZone.getAvailableIDs()));
+        Set<String> temp = new TreeSet<>(Arrays.asList(TimeZone.getAvailableIDs()));
         temp.removeAll(getAliasMap().keySet());
-        return (String[])temp.toArray(new String[temp.size()]);
+        return temp.toArray(new String[temp.size()]);
     }
 
     @Ignore
@@ -141,12 +141,12 @@ public class DisplayNameTest extends CoreTestFmwk {
 
     }
 
-    Map zoneData = new HashMap();
+    Map<ULocale, Map<String, String[]>> zoneData = new HashMap<>();
 
     private String getZoneString(ULocale locale, String olsonID, int item) {
-        Map data = (Map)zoneData.get(locale);
+        Map<String, String[]> data = zoneData.get(locale);
         if (data == null) {
-            data = new HashMap();
+            data = new HashMap<>();
             if (SHOW_ALL) System.out.println();
             if (SHOW_ALL) System.out.println("zones for " + locale);
             ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(locale);
@@ -156,7 +156,7 @@ public class DisplayNameTest extends CoreTestFmwk {
                 //ICUResourceBundle stringSet = table.getWithFallback(String.valueOf(i));
                 String key = stringSet.getString(0);
                 if (SHOW_ALL) System.out.println("key: " + key);
-                ArrayList list = new ArrayList();
+                ArrayList<String> list = new ArrayList<>();
                 for (int j = 1; j < stringSet.getSize(); ++j) {
                     String entry = stringSet.getString(j);
                     if (SHOW_ALL) System.out.println("  entry: " + entry);
@@ -337,8 +337,8 @@ public class DisplayNameTest extends CoreTestFmwk {
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(locale);
         ICUResourceBundle table = bundle.getWithFallback(tableName);
         // copy into array
-        ArrayList stuff = new ArrayList();
-        for (Enumeration keys = table.getKeys(); keys.hasMoreElements();) {
+        ArrayList<String> stuff = new ArrayList<>();
+        for (Enumeration<String> keys = table.getKeys(); keys.hasMoreElements();) {
             stuff.add(keys.nextElement());
         }
         String[] result = new String[stuff.size()];
@@ -359,18 +359,13 @@ public class DisplayNameTest extends CoreTestFmwk {
         return result;
     }
 
-    Map bogusZones = null;
-
-    private Map getAliasMap() {
-        if (bogusZones == null) {
-            bogusZones = new TreeMap();
-            for (int i = 0; i < zonesAliases.length; ++i) {
-                bogusZones.put(zonesAliases[i][0], zonesAliases[i][1]);
-            }
+    private Map<String, String> getAliasMap() {
+        Map<String, String> bogusZones = new TreeMap<>();
+        for (int i = 0; i < zonesAliases.length; ++i) {
+            bogusZones.put(zonesAliases[i][0], zonesAliases[i][1]);
         }
         return bogusZones;
     }
-
 
     private void check(String type, ULocale locale,
       String[] codes, Object[] contextList, DisplayNameGetter getter) {

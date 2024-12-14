@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.Random;
 import java.util.Set;
@@ -71,7 +70,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk
      * uses the default collator for the locale as the comparator to
      * sort the display names, and null for the matchID.
      */
-    public static SortedMap getDisplayNames(ICUService service, ULocale locale) {
+    public static SortedMap<String, String> getDisplayNames(ICUService service, ULocale locale) {
         Collator col;
         try {
             col = Collator.getInstance(locale.toLocale());
@@ -206,7 +205,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk
 
     static class UnregisterFactoryThread extends TestThread {
         private Random r;
-        List factories;
+        List<Factory> factories;
 
         UnregisterFactoryThread(String name, ICUService service, long delay) {
             super("UNREG " + name, service, delay);
@@ -257,11 +256,11 @@ public class ICUServiceThreadTest extends CoreTestFmwk
 
         @Override
         protected void iterate() {
-            Set ids = service.getVisibleIDs();
-            Iterator iter = ids.iterator();
+            Set<String> ids = service.getVisibleIDs();
+            Iterator<String> iter = ids.iterator();
             int n = 10;
             while (--n >= 0 && iter.hasNext()) {
-                String id = (String)iter.next();
+                String id = iter.next();
                 Object result = service.get(id);
                 TestFmwk.logln("iter: " + n + " id: " + id + " result: " + result);
             }
@@ -279,11 +278,11 @@ public class ICUServiceThreadTest extends CoreTestFmwk
 
         @Override
         protected void iterate() {
-            Map names = getDisplayNames(service,locale);
-            Iterator iter = names.entrySet().iterator();
+            Map<String, String> names = getDisplayNames(service,locale);
+            Iterator<Map.Entry<String, String>> iter = names.entrySet().iterator();
             int n = 10;
             while (--n >= 0 && iter.hasNext()) {
-                Entry e = (Entry)iter.next();
+                Map.Entry<String, String> e = iter.next();
                 String dname = (String)e.getKey();
                 String id = (String)e.getValue();
                 Object result = service.get(id);
@@ -342,23 +341,22 @@ public class ICUServiceThreadTest extends CoreTestFmwk
     }
 
     // return a collection of unique factories, might be fewer than requested
-    Collection getFactoryCollection(int requested) {
-        Set locales = new HashSet();
+    Collection<Factory> getFactoryCollection(int requested) {
+        Set<String> locales = new HashSet<>();
         for (int i = 0; i < requested; ++i) {
             locales.add(getCLV());
         }
-        List factories = new ArrayList(locales.size());
-        Iterator iter = locales.iterator();
-        while (iter.hasNext()) {
-            factories.add(new TestFactory((String)iter.next()));
+        List<Factory> factories = new ArrayList<>(locales.size());
+        Iterator<String> iter = locales.iterator();
+        for (String locale : locales) {
+            factories.add(new TestFactory(locale));
         }
         return factories;
     }
 
-    void registerFactories(ICUService service, Collection c) {
-        Iterator iter = c.iterator();
-        while (iter.hasNext()) {
-            service.registerFactory((Factory)iter.next());
+    void registerFactories(ICUService service, Collection<Factory> c) {
+        for (Factory factory : c) {
+            service.registerFactory(factory);
         }
     }
 
@@ -429,13 +427,13 @@ public class ICUServiceThreadTest extends CoreTestFmwk
         ICUService service = new ICULocaleService();
         if (PRINTSTATS) service.stats();    // Enable the stats collection
 
-        Collection fc = getFactoryCollection(50);
+        Collection<Factory> fc = getFactoryCollection(50);
         registerFactories(service, fc);
 
-        Factory[] factories = (Factory[])fc.toArray(new Factory[fc.size()]);
-        Comparator comp = new Comparator() {
+        Factory[] factories = fc.toArray(new Factory[fc.size()]);
+        Comparator<Factory> comp = new Comparator<Factory>() {
                 @Override
-                public int compare(Object lhs, Object rhs) {
+                public int compare(Factory lhs, Factory rhs) {
                     return lhs.toString().compareTo(rhs.toString());
                 }
             };
