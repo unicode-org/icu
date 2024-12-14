@@ -48,7 +48,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
         }
 
         @Parameterized.Parameters
-        public static Collection testData() {
+        public static Collection<Object[]> testData() {
             return Arrays.asList(new Object[][] { { new ULocale("en"), UScript.LATIN },
                     { new ULocale("en_US"), UScript.LATIN },
                     { new ULocale("sr"), UScript.CYRILLIC },
@@ -126,7 +126,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
         }
 
         @Parameterized.Parameters
-        public static Collection testData() {
+        public static Collection<Object[]> testData() {
             return Arrays.asList(new Object[][] {
                     { "ja", new int[] { UScript.KATAKANA, UScript.HIRAGANA, UScript.HAN }, Locale.JAPANESE },
                     { "ko_KR", new int[] { UScript.HANGUL, UScript.HAN }, Locale.KOREA },
@@ -175,7 +175,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
         }
 
         @Parameterized.Parameters
-        public static Collection testData() {
+        public static Collection<Object[]> testData() {
             return Arrays.asList(new Object[][] {
                     /* test locale */
                     { "en", UScript.LATIN },
@@ -269,7 +269,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
         }
 
         @Parameterized.Parameters
-        public static Collection testData() {
+        public static Collection<Object[]> testData() {
             return Arrays.asList(new Object[][] {
                     { UScript.CYRILLIC, "Cyrillic" },
                     { UScript.DESERET, "Deseret" },
@@ -302,7 +302,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
         }
 
         @Parameterized.Parameters
-        public static Collection testData() {
+        public static Collection<Object[]> testData() {
             return Arrays.asList(new Object[][] {
                     { UScript.HAN, "Hani" },
                     { UScript.HANGUL, "Hang" },
@@ -338,7 +338,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
         }
 
         @Parameterized.Parameters
-        public static Collection testData() {
+        public static Collection<int[]> testData() {
             return Arrays.asList(new int[][] {
                     { 0x0000FF9D, UScript.KATAKANA },
                     { 0x0000FFBE, UScript.HANGUL },

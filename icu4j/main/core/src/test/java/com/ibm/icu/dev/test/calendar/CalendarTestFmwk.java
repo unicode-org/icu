@@ -241,7 +241,7 @@ public class CalendarTestFmwk extends CoreTestFmwk {
 
         // Keep a record of minima and maxima that we actually see.
         // These are kept in an array of arrays of hashes.
-        Map[][] limits = new Map[fieldsToTest.length][2];
+        Map<Integer, Object>[][] limits = new Map[fieldsToTest.length][2];
         Object nub = new Object(); // Meaningless placeholder
 
         // This test can run for a long time; show progress.
@@ -273,10 +273,10 @@ public class CalendarTestFmwk extends CoreTestFmwk {
 
                 // Fetch the hash for this field and keep track of the
                 // minima and maxima.
-                Map[] h = limits[j];
+                Map<Integer, Object>[] h = limits[j];
                 if (h[0] == null) {
-                    h[0] = new HashMap();
-                    h[1] = new HashMap();
+                    h[0] = new HashMap<>();
+                    h[1] = new HashMap<>();
                 }
                 h[0].put(minActual, nub);
                 h[1].put(maxActual, nub);
@@ -311,7 +311,7 @@ public class CalendarTestFmwk extends CoreTestFmwk {
             int f = fieldsToTest[j];
             buf.setLength(0);
             buf.append(FIELD_NAME[f]);
-            Map[] h = limits[j];
+            Map<Integer, Object>[] h = limits[j];
             boolean fullRangeSeen = true;
             for (int k=0; k<2; ++k) {
                 int rangeLow = (k==0) ?

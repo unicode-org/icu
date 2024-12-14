@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
@@ -46,7 +45,7 @@ public class UnicodeMapTest extends TestFmwk {
 
     @Test
     public void TestIterations() {
-        UnicodeMap<Double> foo = new UnicodeMap();
+        UnicodeMap<Double> foo = new UnicodeMap<>();
         checkToString(foo, "");
         foo.put(3, 6d).put(5, 10d);
         checkToString(foo, "0003=6.0\n0005=10.0\n");
@@ -64,7 +63,7 @@ public class UnicodeMapTest extends TestFmwk {
 
     public void checkToString(UnicodeMap<Double> foo, String expected) {
         StringJoiner joiner = new StringJoiner("\n");
-        for (UnicodeMap.EntryRange range : foo.entryRanges()) {
+        for (UnicodeMap.EntryRange<Double> range : foo.entryRanges()) {
             joiner.add(range.toString());
         }
         assertEquals("EntryRange<T>", expected, joiner.toString() + (foo.size() == 0 ? "" : "\n"));
@@ -73,30 +72,30 @@ public class UnicodeMapTest extends TestFmwk {
 
     @Test
     public void TestRemove() {
-        UnicodeMap<Double> foo = new UnicodeMap()
-        .putAll(0x20, 0x29, -2d)
-        .put("abc", 3d)
-        .put("xy", 2d)
-        .put("mark", 4d)
-        .freeze();
-        UnicodeMap<Double> fii = new UnicodeMap()
-        .putAll(0x21, 0x25, -2d)
-        .putAll(0x26, 0x28, -3d)
-        .put("abc", 3d)
-        .put("mark", 999d)
-        .freeze();
+        UnicodeMap<Double> foo = new UnicodeMap<Double>()
+                .putAll(0x20, 0x29, -2d)
+                .put("abc", 3d)
+                .put("xy", 2d)
+                .put("mark", 4d)
+                .freeze();
+        UnicodeMap<Double> fii = new UnicodeMap<Double>()
+                .putAll(0x21, 0x25, -2d)
+                .putAll(0x26, 0x28, -3d)
+                .put("abc", 3d)
+                .put("mark", 999d)
+                .freeze();
 
-        UnicodeMap<Double> afterFiiRemoval = new UnicodeMap()
-        .put(0x20, -2d)
-        .putAll(0x26, 0x29, -2d)
-        .put("xy", 2d)
-        .put("mark", 4d)
-        .freeze();
+        UnicodeMap<Double> afterFiiRemoval = new UnicodeMap<Double>()
+                .put(0x20, -2d)
+                .putAll(0x26, 0x29, -2d)
+                .put("xy", 2d)
+                .put("mark", 4d)
+                .freeze();
 
-        UnicodeMap<Double> afterFiiRetained = new UnicodeMap()
-        .putAll(0x21, 0x25, -2d)
-        .put("abc", 3d)
-        .freeze();
+        UnicodeMap<Double> afterFiiRetained = new UnicodeMap<Double>()
+                .putAll(0x21, 0x25, -2d)
+                .put("abc", 3d)
+                .freeze();
 
         UnicodeMap<Double> test = new UnicodeMap<Double>().putAll(foo)
                 .removeAll(fii);
@@ -117,7 +116,7 @@ public class UnicodeMapTest extends TestFmwk {
         me.remove(0x10FFFF);
 
         int iterations = 100000;
-        SortedMap<String,Integer> test = new TreeMap();
+        SortedMap<String,Integer> test = new TreeMap<>();
 
         Random rand = new Random(0);
         String other;
@@ -178,17 +177,16 @@ public class UnicodeMapTest extends TestFmwk {
         return test;
     }
 
-    Set temp = new HashSet();
     /**
      * @param me
      * @param stayWithMe
      */
     private void checkEquals(UnicodeMap<Integer> me, SortedMap<String, Integer> stayWithMe) {
-        temp.clear();
-        for (Entry<String, Integer> e : me.entrySet()) {
+        Set<Map.Entry<String, Integer>> temp = new HashSet<>();
+        for (Map.Entry<String, Integer> e : me.entrySet()) {
             temp.add(e);
         }
-        Set<Entry<String, Integer>> entrySet = stayWithMe.entrySet();
+        Set<Map.Entry<String, Integer>> entrySet = stayWithMe.entrySet();
         if (!entrySet.equals(temp)) {
             logln(me.entrySet().toString());
             logln(me.toString());
@@ -260,8 +258,8 @@ public class UnicodeMapTest extends TestFmwk {
     @Test
     public void TestModify() {
         Random random = new Random(0);
-        UnicodeMap unicodeMap = new UnicodeMap();
-        HashMap hashMap = new HashMap();
+        UnicodeMap<String> unicodeMap = new UnicodeMap<>();
+        HashMap<Integer, String> hashMap = new HashMap<>();
         String[] values = {null, "the", "quick", "brown", "fox"};
         for (int count = 1; count <= MODIFY_TEST_ITERATIONS; ++count) {
             String value = values[random.nextInt(values.length)];
@@ -291,10 +289,10 @@ public class UnicodeMapTest extends TestFmwk {
         }
     }
 
-    private boolean hasSameValues(UnicodeMap unicodeMap, HashMap hashMap) {
+    private boolean hasSameValues(UnicodeMap<String> unicodeMap, HashMap<Integer, String> hashMap) {
         for (int i = 0; i < MODIFY_TEST_LIMIT; ++i) {
-            Object unicodeMapValue = unicodeMap.getValue(i);
-            Object hashMapValue = hashMap.get(i);
+            String unicodeMapValue = unicodeMap.getValue(i);
+            String hashMapValue = hashMap.get(i);
             if (unicodeMapValue != hashMapValue) {
                 return false;
             }
@@ -304,7 +302,7 @@ public class UnicodeMapTest extends TestFmwk {
 
     @Test
     public void TestCloneAsThawed11721 () {
-        UnicodeMap<Integer> test = new UnicodeMap().put("abc", 3).freeze();
+        UnicodeMap<Integer> test = new UnicodeMap<Integer>().put("abc", 3).freeze();
         UnicodeMap<Integer> copy = test.cloneAsThawed();
         copy.put("def", 4);
         assertEquals("original-abc", (Integer) 3, test.get("abc"));
@@ -326,7 +324,7 @@ public class UnicodeMapTest extends TestFmwk {
         // do random change to both, then compare
         random.setSeed(12345); // reproducible results
         logln("Comparing against HashMap");
-        UnicodeMap<String> map1 = new UnicodeMap();
+        UnicodeMap<String> map1 = new UnicodeMap<>();
         Map<Integer, String> map2 = new HashMap<Integer, String>();
         for (int counter = 0; counter < ITERATIONS; ++counter) {
             int start = random.nextInt(LIMIT);
@@ -349,7 +347,7 @@ public class UnicodeMapTest extends TestFmwk {
     @Test
     public void TestUnicodeMapGeneralCategory() {
         logln("Setting General Category");
-        UnicodeMap<String> map1 = new UnicodeMap();
+        UnicodeMap<String> map1 = new UnicodeMap<>();
         Map<Integer, String> map2 = new HashMap<Integer, String>();
         //Map<Integer, String> map3 = new TreeMap<Integer, String>();
         map1 = new UnicodeMap<String>();
@@ -396,11 +394,11 @@ public class UnicodeMapTest extends TestFmwk {
 
     @Test
     public void TestAUnicodeMap2() {
-        UnicodeMap foo = new UnicodeMap();
+        UnicodeMap<String> foo = new UnicodeMap<>();
         @SuppressWarnings("unused")
         int hash = foo.hashCode(); // make sure doesn't NPE
         @SuppressWarnings("unused")
-        Set fii = foo.stringKeys(); // make sure doesn't NPE
+        Set<String> fii = foo.stringKeys(); // make sure doesn't NPE
     }
 
     @Test
@@ -413,13 +411,13 @@ public class UnicodeMapTest extends TestFmwk {
                 ;
         Map<Character, UnicodeSet> target = new HashMap<Character, UnicodeSet>();
         foo1.addInverseTo(target);
-        UnicodeMap<Character> reverse = new UnicodeMap().putAllInverse(target);
+        UnicodeMap<Character> reverse = new UnicodeMap<Character>().putAllInverse(target);
         assertEquals("", foo1, reverse);
     }
 
     private void checkNext(UnicodeMap<String> map1, Map<Integer,String> map2, int limit) {
         logln("Comparing nextRange");
-        Map localMap = new TreeMap();
+        Map<Integer, String> localMap = new TreeMap<>();
         UnicodeMapIterator<String> mi = new UnicodeMapIterator<String>(map1);
         while (mi.nextRange()) {
             logln(Utility.hex(mi.codepoint) + ".." + Utility.hex(mi.codepointEnd) + " => " + mi.value);
@@ -432,7 +430,7 @@ public class UnicodeMapTest extends TestFmwk {
 
         logln("Comparing next");
         mi.reset();
-        localMap = new TreeMap();
+        localMap = new TreeMap<>();
 //        String lastValue = null;
         while (mi.next()) {
 //            if (!UnicodeMap.areEqual(lastValue, mi.value)) {
@@ -460,11 +458,11 @@ public class UnicodeMapTest extends TestFmwk {
         }
     }
 
-    void checkMap(Map m1, Map m2) {
+    void checkMap(Map<Integer, String> m1, Map<Integer, String> m2) {
         if (m1.equals(m2)) return;
         StringBuilder buffer = new StringBuilder();
-        Set m1entries = m1.entrySet();
-        Set m2entries = m2.entrySet();
+        Set<Map.Entry<Integer, String>> m1entries = m1.entrySet();
+        Set<Map.Entry<Integer, String>> m2entries = m2.entrySet();
         getEntries("\r\nIn First, and not Second", m1entries, m2entries, buffer, 20);
         getEntries("\r\nIn Second, and not First", m2entries, m1entries, buffer, 20);
         errln(buffer.toString());
@@ -482,7 +480,7 @@ public class UnicodeMapTest extends TestFmwk {
             if (result != 0) return result;
             return compare2(a.getValue(), b.getValue());
         }
-        private <T extends Comparable> int compare2(T o1, T o2) {
+        private <T extends Comparable<T>> int compare2(T o1, T o2) {
             if (o1 == o2) return 0;
             if (o1 == null) return -1;
             if (o2 == null) return 1;
@@ -495,7 +493,7 @@ public class UnicodeMapTest extends TestFmwk {
         m1_m2.addAll(m1entries);
         m1_m2.removeAll(m2entries);
         buffer.append(title + ": " + m1_m2.size() + "\r\n");
-        for (Entry<Integer, String> entry : m1_m2) {
+        for (Map.Entry<Integer, String> entry : m1_m2) {
             if (limit-- < 0) return;
             buffer.append(entry.getKey()).append(" => ")
              .append(entry.getValue()).append("\r\n");

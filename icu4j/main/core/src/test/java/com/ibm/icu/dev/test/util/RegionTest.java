@@ -13,6 +13,7 @@
 
 package com.ibm.icu.dev.test.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -611,7 +612,7 @@ public class RegionTest extends CoreTestFmwk {
             try {
                 Region grouping = Region.getInstance(groupingCode);
                 Set<Region> actualChildren = grouping.getContainedRegions();
-                List<String> actualChildIDs = new java.util.ArrayList();
+                List<String> actualChildIDs = new ArrayList<>();
                 for (Region childRegion : actualChildren) {
                     actualChildIDs.add(childRegion.toString());
                 }

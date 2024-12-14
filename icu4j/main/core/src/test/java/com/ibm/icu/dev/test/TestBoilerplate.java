@@ -129,12 +129,12 @@ public abstract class TestBoilerplate<T> extends TestFmwk {
      * @return clone
      */
     protected T _clone(T a) throws Exception {
-        Class aClass = a.getClass();
+        Class<?> aClass = a.getClass();
         try {
             Method cloner = aClass.getMethod("clone", (Class[])null);
             return (T) cloner.invoke(a,(Object[])null);
         } catch (NoSuchMethodException e) {
-            Constructor constructor = aClass.getConstructor(new Class[] {aClass});
+            Constructor<?> constructor = aClass.getConstructor(new Class[] {aClass});
             return (T) constructor.newInstance(new Object[]{a});
         }
     }
@@ -150,26 +150,25 @@ public abstract class TestBoilerplate<T> extends TestFmwk {
         return false;
     }
 
-    public static boolean verifySetsIdentical(AbstractTestLog here, Set values1, Set values2) {
+    public static <T> boolean verifySetsIdentical(AbstractTestLog here, Set<T> values1, Set<T> values2) {
         if (values1.equals(values2)) return true;
-        Set temp;
+        Set<T> temp;
         TestFmwk.errln("Values differ:");
         TestFmwk.errln("UnicodeMap - HashMap");
-        temp = new TreeSet(values1);
+        temp = new TreeSet<>(values1);
         temp.removeAll(values2);
         TestFmwk.errln(show(temp));
         TestFmwk.errln("HashMap - UnicodeMap");
-        temp = new TreeSet(values2);
+        temp = new TreeSet<>(values2);
         temp.removeAll(values1);
         TestFmwk.errln(show(temp));
         return false;
     }
-    
-    public static String show(Map m) {
+
+    public static <K, V> String show(Map<K, V> m) {
         StringBuilder buffer = new StringBuilder();
-        for (Iterator it = m.keySet().iterator(); it.hasNext();) {
-            Object key = it.next();
-            buffer.append(key + "=>" + m.get(key) + "\r\n");
+        for (Map.Entry<K, V> e : m.entrySet()) {
+            buffer.append(e.getKey() + "=>" + e.getValue() + "\r\n");
         }
         return buffer.toString();
     }
@@ -184,11 +183,11 @@ public abstract class TestBoilerplate<T> extends TestFmwk {
         }
         return result;
     }
-    
-    public static String show(Collection c) {
+
+    public static <T> String show(Collection<T> c) {
         StringBuilder buffer = new StringBuilder();
-        for (Iterator it = c.iterator(); it.hasNext();) {
-            buffer.append(it.next() + "\r\n");
+        for (T item : c) {
+            buffer.append(item + "\r\n");
         }
         return buffer.toString();
     }

@@ -87,8 +87,8 @@ public class TextTrieMapTest extends CoreTestFmwk {
 
     @Test
     public void TestCaseSensitive() {
-        Iterator itr = null;
-        TextTrieMap map = new TextTrieMap(false);
+        Iterator<Object> itr = null;
+        TextTrieMap<Object> map = new TextTrieMap<>(false);
         for (int i = 0; i < TESTDATA.length; i++) {
             map.put((String)TESTDATA[i][0], TESTDATA[i][1]);
         }
@@ -147,8 +147,8 @@ public class TextTrieMapTest extends CoreTestFmwk {
 
     @Test
     public void TestCaseInsensitive() {
-        Iterator itr = null;
-        TextTrieMap map = new TextTrieMap(true);
+        Iterator<Object> itr = null;
+        TextTrieMap<Object> map = new TextTrieMap<>(true);
         for (int i = 0; i < TESTDATA.length; i++) {
             map.put((String)TESTDATA[i][0], TESTDATA[i][1]);
         }
@@ -214,7 +214,7 @@ public class TextTrieMapTest extends CoreTestFmwk {
         return o1.equals(o2);
     }
 
-    private void checkResult(String memo, Iterator itr, Object expected) {
+    private void checkResult(String memo, Iterator<Object> itr, Object expected) {
         if (itr == null) {
             if (expected != null) {
                 String expectedStr = (expected instanceof Object[])

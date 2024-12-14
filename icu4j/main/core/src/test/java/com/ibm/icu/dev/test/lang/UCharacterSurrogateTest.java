@@ -263,7 +263,7 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
                 }
             }
 
-            void fail(String s, int start, int limit, Class exc) {
+            void fail(String s, int start, int limit, Class<? extends RuntimeException> exc) {
                 try {
                     UCharacter.codePointCount(s, start, limit);
                     errln("unexpected success " + str(s, start, limit));
@@ -350,7 +350,7 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
             }
 
             void fail(char[] text, int start, int count, int index, int offset,
-                    Class exc) {
+                    Class<? extends RuntimeException> exc) {
                 try {
                     UCharacter.offsetByCodePoints(text, start, count, index,
                             offset);
@@ -365,7 +365,7 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
                 }
             }
 
-            void fail(String text, int index, int offset, Class exc) {
+            void fail(String text, int index, int offset, Class<? extends RuntimeException> exc) {
                 try {
                     UCharacter.offsetByCodePoints(text, index, offset);
                     errln("unexpected success "

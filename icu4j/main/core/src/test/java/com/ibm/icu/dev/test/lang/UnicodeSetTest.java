@@ -781,8 +781,8 @@ public class UnicodeSetTest extends CoreTestFmwk {
             //    Ram also add a similar test to UtilityTest.java
             logln("Testing addAll(Collection) ... ");
             String[] array = {"a", "b", "c", "de"};
-            List list = Arrays.asList(array);
-            Set aset = new HashSet(list);
+            List<String> list = Arrays.asList(array);
+            Set<String> aset = new HashSet<>(list);
             logln(" *** The source set's size is: " + aset.size());
 
             set.clear();
@@ -794,16 +794,16 @@ public class UnicodeSetTest extends CoreTestFmwk {
                 logln("OK: After addAll, the UnicodeSet size got " + set.size());
             }
 
-            List list2 = new ArrayList();
+            List<String> list2 = new ArrayList<>();
             set.addAllTo(list2);
 
             //verify the result
             log(" *** The elements are: ");
             String s = set.toPattern(true);
             logln(s);
-            Iterator myiter = list2.iterator();
+            Iterator<String> myiter = list2.iterator();
             while(myiter.hasNext()) {
-                log(myiter.next().toString() + "  ");
+                log(myiter.next() + "  ");
             }
             logln("");  // a new line
         }
@@ -859,8 +859,8 @@ public class UnicodeSetTest extends CoreTestFmwk {
         String[] choices = {"a", "b", "cd", "ef"};
         int limit = 1 << choices.length;
 
-        SortedSet iset = new TreeSet();
-        SortedSet jset = new TreeSet();
+        SortedSet<String> iset = new TreeSet<>();
+        SortedSet<String> jset = new TreeSet<>();
 
         for (int i = 0; i < limit; ++i) {
             pick(i, choices, iset);
@@ -882,8 +882,8 @@ public class UnicodeSetTest extends CoreTestFmwk {
 
     public void SetSpeed2(int size) {
 
-        SortedSet iset = new TreeSet();
-        SortedSet jset = new TreeSet();
+        SortedSet<Integer> iset = new TreeSet<>();
+        SortedSet<Integer> jset = new TreeSet<>();
 
         for (int i = 0; i < size*2; i += 2) { // only even values
             iset.add(i);
@@ -907,12 +907,12 @@ public class UnicodeSetTest extends CoreTestFmwk {
         CheckSpeed(jset, iset, "when a, b are disjoint", iterations);
     }
 
-    void CheckSpeed(SortedSet iset, SortedSet jset, String message, int iterations) {
+    void CheckSpeed(SortedSet<Integer> iset, SortedSet<Integer> jset, String message, int iterations) {
         CheckSpeed2(iset, jset, message, iterations);
         CheckSpeed3(iset, jset, message, iterations);
     }
 
-    void CheckSpeed2(SortedSet iset, SortedSet jset, String message, int iterations) {
+    void CheckSpeed2(SortedSet<Integer> iset, SortedSet<Integer> jset, String message, int iterations) {
         boolean x;
         boolean y;
 
@@ -939,7 +939,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                 + ", Utility: " + utime + ", u:j: " + nf.format(utime/jtime));
     }
 
-    void CheckSpeed3(SortedSet iset, SortedSet jset, String message, int iterations) {
+    void CheckSpeed3(SortedSet<Integer> iset, SortedSet<Integer> jset, String message, int iterations) {
         boolean x;
         boolean y;
 
@@ -967,7 +967,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                 + ", Utility: " + utime + ", u:j: " + nf.format(utime/jtime));
     }
 
-    void pick(int bits, Object[] examples, SortedSet output) {
+    void pick(int bits, String[] examples, SortedSet<String> output) {
         output.clear();
         for (int k = 0; k < 32; ++k) {
             if (((1<<k) & bits) != 0) output.add(examples[k]);
@@ -984,8 +984,8 @@ public class UnicodeSetTest extends CoreTestFmwk {
         "contains",
         "any", };
 
-    boolean dumbHasRelation(Collection A, int filter, Collection B) {
-        Collection ab = new TreeSet(A);
+    boolean dumbHasRelation(Collection<String> A, int filter, Collection<String> B) {
+        Collection<String> ab = new TreeSet<>(A);
         ab.retainAll(B);
         if (ab.size() > 0 && (filter & SortedSetRelation.A_AND_B) == 0) return false;
 
@@ -999,7 +999,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         return true;
     }
 
-    void checkSetRelation(SortedSet a, SortedSet b, String message) {
+    void checkSetRelation(SortedSet<String> a, SortedSet<String> b, String message) {
         for (int i = 0; i < 8; ++i) {
 
             boolean hasRelation = SortedSetRelation.hasRelation(a, i, b);
@@ -1768,16 +1768,16 @@ public class UnicodeSetTest extends CoreTestFmwk {
         set1.addAllTo(list1);
         assertEquals("iteration test", oldList, list1);
 
-        list1 = set1.addAllTo(new ArrayList<String>());
+        list1 = set1.addAllTo(new ArrayList<>());
         assertEquals("addAllTo", oldList, list1);
 
-        ArrayList<String> list2 = set2.addAllTo(new ArrayList<String>());
-        ArrayList<String> list3 = set3.addAllTo(new ArrayList<String>());
+        ArrayList<String> list2 = set2.addAllTo(new ArrayList<>());
+        ArrayList<String> list3 = set3.addAllTo(new ArrayList<>());
 
         // put them into different order, to check that order doesn't matter
-        TreeSet sorted1 = set1.addAllTo(new TreeSet<String>());
-        TreeSet sorted2 = set2.addAllTo(new TreeSet<String>());
-        TreeSet sorted3 = set3.addAllTo(new TreeSet<String>());
+        TreeSet<String> sorted1 = set1.addAllTo(new TreeSet<>());
+        TreeSet<String> sorted2 = set2.addAllTo(new TreeSet<>());
+        TreeSet<String> sorted3 = set3.addAllTo(new TreeSet<>());
 
         //containsAll(Collection<String> collection)
         assertTrue("containsAll", set1.containsAll(list1));
@@ -1837,7 +1837,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         List<UnicodeSet> goalLongest = Arrays.asList(set1, set3, set2);
         List<UnicodeSet> goalLex = Arrays.asList(set1, set2, set3);
 
-        List<UnicodeSet> sorted = new ArrayList(new TreeSet<>(unsorted));
+        List<UnicodeSet> sorted = new ArrayList<>(new TreeSet<>(unsorted));
         assertNotEquals("compareTo-shorter-first", unsorted, sorted);
         assertEquals("compareTo-shorter-first", goalShortest, sorted);
 
@@ -1848,7 +1848,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                 return o1.compareTo(o2, ComparisonStyle.LONGER_FIRST);
             }});
         sorted1.addAll(unsorted);
-        sorted = new ArrayList(sorted1);
+        sorted = new ArrayList<>(sorted1);
         assertNotEquals("compareTo-longer-first", unsorted, sorted);
         assertEquals("compareTo-longer-first", goalLongest, sorted);
 
@@ -1859,7 +1859,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                 return o1.compareTo(o2, ComparisonStyle.LEXICOGRAPHIC);
             }});
         sorted1.addAll(unsorted);
-        sorted = new ArrayList(sorted1);
+        sorted = new ArrayList<>(sorted1);
         assertNotEquals("compareTo-lex", unsorted, sorted);
         assertEquals("compareTo-lex", goalLex, sorted);
 
@@ -1931,8 +1931,8 @@ public class UnicodeSetTest extends CoreTestFmwk {
         UnicodeSet t = new UnicodeSet(3,5, 7,7);
         assertEquals("new constructor", w, t);
         // check to make sure right exceptions are thrown
-        Class expected = IllegalArgumentException.class;
-        Class actual;
+        Class<? extends RuntimeException> expected = IllegalArgumentException.class;
+        Class<? extends RuntimeException> actual;
 
         try {
             actual = null;
@@ -2022,7 +2022,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                     case 0: test.add(0); break;
                     case 1: test.add(0,1); break;
                     case 2: test.add("a"); break;
-                    case 3: List a = new ArrayList(); a.add("a"); test.addAll(a); break;
+                    case 3: List<String> a = new ArrayList<>(); a.add("a"); test.addAll(a); break;
                     case 4: test.addAll("ab"); break;
                     case 5: test.addAll(new UnicodeSet("[ab]")); break;
                     case 6: test.applyIntPropertyValue(0,0); break;
@@ -2135,7 +2135,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
     //    }
 
     public class TokenSymbolTable implements SymbolTable {
-        HashMap contents = new HashMap();
+        HashMap<String, char[]> contents = new HashMap<>();
 
         /**
          * (Non-SymbolTable API) Add the given variable and value to
@@ -2163,8 +2163,8 @@ public class UnicodeSetTest extends CoreTestFmwk {
         @Override
         public char[] lookup(String s) {
             logln("TokenSymbolTable: lookup \"" + s + "\" => \"" +
-                    new String((char[]) contents.get(s)) + "\"");
-            return (char[])contents.get(s);
+                    new String(contents.get(s)) + "\"");
+            return contents.get(s);
         }
 
         /* (non-Javadoc)

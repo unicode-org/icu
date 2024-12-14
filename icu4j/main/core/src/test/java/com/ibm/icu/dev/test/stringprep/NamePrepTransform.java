@@ -185,7 +185,7 @@ public class NamePrepTransform {
 
         boolean initialize(String id, String rule, int direction) {
             try {
-                Class cls = Class.forName("com.ibm.icu.text.Transliterator");
+                Class<?> cls = Class.forName("com.ibm.icu.text.Transliterator");
                 Method createMethod = cls.getMethod("createFromRules", String.class, String.class, Integer.TYPE);
                 translitInstance = createMethod.invoke(null, id, rule, direction);
                 translitMethod = cls.getMethod("transliterate", String.class);

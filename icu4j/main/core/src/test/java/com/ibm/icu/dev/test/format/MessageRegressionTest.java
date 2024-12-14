@@ -677,19 +677,17 @@ public class MessageRegressionTest extends CoreTestFmwk {
         try {
             logln("Apply with pattern : " + pattern1);
             messageFormatter.applyPattern(pattern1);
-            HashMap paramsMap = new HashMap();
+            HashMap<String, Object> paramsMap = new HashMap<>();
             paramsMap.put("arg0", 7);
             String tempBuffer = messageFormatter.format(paramsMap);
             if (!tempBuffer.equals("Impossible {arg1} has occurred -- status code is 7 and message is {arg2}."))
                 errln("Tests arguments < substitution failed");
             logln("Formatted with 7 : " + tempBuffer);
             ParsePosition status = new ParsePosition(0);
-            Map objs = messageFormatter.parseToMap(tempBuffer, status);
+            Map<String, Object> objs = messageFormatter.parseToMap(tempBuffer, status);
             if (objs.get("arg1") != null || objs.get("arg2") != null)
                 errln("Parse failed with more than expected arguments");
-            for (Iterator keyIter = objs.keySet().iterator();
-                 keyIter.hasNext();) {
-                String key = (String) keyIter.next();
+            for (String key : objs.keySet()) {
                 if (objs.get(key) != null && !objs.get(key).toString().equals(paramsMap.get(key).toString())) {
                     errln("Parse failed on object " + objs.get(key) + " with argument name : " + key );
                 }
@@ -721,7 +719,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
         }
         MessageFormat fmt = new MessageFormat("There are {numberOfApples} apples growing on the {whatKindOfTree} tree.");
         String str = new String("There is one apple growing on the peach tree.");
-        Map objs = fmt.parseToMap(str, pos);
+        Map<String, Object> objs = fmt.parseToMap(str, pos);
         logln("unparsable string , should fail at " + pos.getErrorIndex());
         if (pos.getErrorIndex() == -1)
             errln("Bug 4052223 failed : parsing string " + str);
@@ -773,14 +771,14 @@ public class MessageRegressionTest extends CoreTestFmwk {
             String pattern = patterns[i];
             mf.applyPattern(pattern);
             try {
-                Map objs = mf.parseToMap(null, new ParsePosition(0));
+                Map<String, Object> objs = mf.parseToMap(null, new ParsePosition(0));
                 logln("pattern: \"" + pattern + "\"");
                 log(" parsedObjects: ");
                 if (objs != null) {
                     log("{");
-                    for (Iterator keyIter = objs.keySet().iterator();
+                    for (Iterator<String> keyIter = objs.keySet().iterator();
                          keyIter.hasNext();) {
-                        String key = (String)keyIter.next();
+                        String key = keyIter.next();
                         if (objs.get(key) != null) {
                             err("\"" + objs.get(key).toString() + "\"");
                         } else {
@@ -802,9 +800,9 @@ public class MessageRegressionTest extends CoreTestFmwk {
         }
     }{ // Taken from Test4114739().
         MessageFormat mf = new MessageFormat("<{arg}>");
-        Map objs1 = null;
-        Map objs2 = new HashMap();
-        Map objs3 = new HashMap();
+        Map<String, Object> objs1 = null;
+        Map<String, Object> objs2 = new HashMap<>();
+        Map<String, Object> objs3 = new HashMap<>();
         objs3.put("arg", null);
         try {
             logln("pattern: \"" + mf.toPattern() + "\"");
@@ -821,14 +819,14 @@ public class MessageRegressionTest extends CoreTestFmwk {
         String argName = "something_stupid";
         MessageFormat mf = new MessageFormat("{"+ argName + "}, {" + argName + "}, {" + argName + "}");
         String forParsing = "x, y, z";
-        Map objs = mf.parseToMap(forParsing, new ParsePosition(0));
+        Map<String, Object> objs = mf.parseToMap(forParsing, new ParsePosition(0));
         logln("pattern: \"" + mf.toPattern() + "\"");
         logln("text for parsing: \"" + forParsing + "\"");
         if (!objs.get(argName).toString().equals("z"))
             errln("argument0: \"" + objs.get(argName) + "\"");
         mf.setLocale(Locale.US);
         mf.applyPattern("{" + argName + ",number,#.##}, {" + argName + ",number,#.#}");
-        Map oldobjs = new HashMap();
+        Map<String, Object> oldobjs = new HashMap<>();
         oldobjs.put(argName, 3.1415d);
         String result = mf.format( oldobjs );
         logln("pattern: \"" + mf.toPattern() + "\"");
@@ -836,7 +834,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
         // result now equals "3.14, 3.1"
         if (!result.equals("3.14, 3.1"))
             errln("result = " + result);
-        Map newobjs = mf.parseToMap(result, new ParsePosition(0));
+        Map<String, Object> newobjs = mf.parseToMap(result, new ParsePosition(0));
         // newobjs now equals {Double.valueOf(3.1)}
         if (((Number)newobjs.get(argName)).doubleValue() != 3.1) // was (Double) [alan]
             errln( "newobjs.get(argName) = " + newobjs.get(argName));
@@ -850,14 +848,14 @@ public class MessageRegressionTest extends CoreTestFmwk {
         ChoiceFormat fileform = new ChoiceFormat(filelimits, filepart);
         form1.setFormat(1, fileform);
         form2.setFormat(0, fileform);
-        Map testArgs = new HashMap();
+        Map<String, Object> testArgs = new HashMap<>();
         testArgs.put("diskName", "MyDisk");
         testArgs.put("numberOfFiles", 12373L);
         logln(form1.format(testArgs));
         logln(form2.format(testArgs));
     }{ // Taken from test4293229().
         MessageFormat format = new MessageFormat("'''{'myNamedArgument}'' '''{myNamedArgument}'''");
-        Map args = new HashMap();
+        Map<String, Object> args = new HashMap<>();
         String expected = "'{myNamedArgument}' '{myNamedArgument}'";
         String result = format.format(args);
         if (!result.equals(expected)) {

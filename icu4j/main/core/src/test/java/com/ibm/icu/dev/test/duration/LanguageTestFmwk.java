@@ -63,7 +63,7 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
 
     private PrintWriter pw;
 
-    private static final Map datacache = new HashMap(); // String->TestData
+    private static final Map<String, TestData> datacache = new HashMap<>(); // String->TestData
 
     private static final long[] approxDurations = {
         36525L*24*60*60*10, 3045*24*60*60*10L, 7*24*60*60*1000L, 24*60*60*1000L,
@@ -79,7 +79,7 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
         if (locale.equals("testFullPluralizedForms")) {
             Thread.dumpStack();
         }
-        TestData data = (TestData) datacache.get(locale);
+        TestData data = datacache.get(locale);
         if (data == null) {
             try {
                 InputStream is = LanguageTestFmwk.class
@@ -604,14 +604,13 @@ class FileTestData extends LanguageTestFmwk.TestData {
 
             String[] stringArray;
 
-            void wrapup(List /* of String */list, Element element) {
+            void wrapup(List<String> list, Element element) {
                 if (list == null)
                     return;
 
                 switch (element.mode) {
                 case EMode.mString:
-                    stringArray = (String[]) list.toArray(new String[list
-                            .size()]);
+                    stringArray = list.toArray(new String[list.size()]);
                     break;
 
                 case EMode.mInt:
@@ -668,7 +667,7 @@ class FileTestData extends LanguageTestFmwk.TestData {
         }
         Wrapup w = new Wrapup();
 
-        List /* of String */list = null;
+        List<String> list = null;
         Element element = null;
         String line = null;
         while (null != (line = br.readLine())) {
@@ -678,7 +677,7 @@ class FileTestData extends LanguageTestFmwk.TestData {
             if (line.charAt(0) == '=') {
                 w.wrapup(list, element);
 
-                list = new ArrayList();
+                list = new ArrayList<>();
                 element = Element.forString(line.substring(1));
             } else if (line.equals("null")) {
                 list.add(null);

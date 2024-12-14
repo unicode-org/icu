@@ -418,7 +418,7 @@ public class ListFormatterTest extends CoreTestFmwk {
                 String expected = (String) cas[2];
                 for (String locale : locales) {
                     ULocale uloc = new ULocale(locale);
-                    List inputs = Arrays.asList(cas).subList(3, cas.length);
+                    List<Object> inputs = Arrays.asList(cas).subList(3, cas.length);
                     ListFormatter fmt = ListFormatter.getInstance(uloc, type, width);
                     String message = "TestContextual uloc="
                         + uloc + " type="

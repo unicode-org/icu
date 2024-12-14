@@ -10,9 +10,7 @@ package com.ibm.icu.dev.test.util;
 
 import java.text.Collator;
 import java.util.EventListener;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 
@@ -60,13 +58,11 @@ public class ICUServiceTestSample {
         }
 
         private void display() {
-            Map names = HelloService.getDisplayNames(ULocale.US);
+            Map<String, String> names = HelloService.getDisplayNames(ULocale.US);
             System.out.println("displaying " + names.size() + " names.");
-            Iterator iter = names.entrySet().iterator();
-            while (iter.hasNext()) {
-                Entry entry = (Entry)iter.next();
-                String displayName = (String)entry.getKey();
-                HelloService service = HelloService.get((String)entry.getValue());
+            for (Map.Entry<String, String> entry : names.entrySet()) {
+                String displayName = entry.getKey();
+                HelloService service = HelloService.get(entry.getValue());
                 System.out.println(displayName + " says " + service.hello());
                 try {
                     Thread.sleep(50);
@@ -184,11 +180,11 @@ public class ICUServiceTestSample {
             return (HelloService)registry().get(id);
         }
     
-        public static Set getVisibleIDs() {
+        public static Set<String> getVisibleIDs() {
             return registry().getVisibleIDs();
         }
     
-        public static Map getDisplayNames(ULocale locale) {
+        public static Map<String, String> getDisplayNames(ULocale locale) {
             return getDisplayNames(registry(), locale);
         }
     
@@ -210,7 +206,7 @@ public class ICUServiceTestSample {
          * uses the default collator for the locale as the comparator to
          * sort the display names, and null for the matchID.
          */
-        public static SortedMap getDisplayNames(ICUService service, ULocale locale) {
+        public static SortedMap<String, String> getDisplayNames(ICUService service, ULocale locale) {
             Collator col = Collator.getInstance(locale.toLocale());
             return service.getDisplayNames(locale, col, null);
         }

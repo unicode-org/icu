@@ -70,7 +70,7 @@ public class ModuleTest {
         Iterator<TestData> tIter = m.getTestDataIterator();
         while (tIter.hasNext()) {
             TestData t = tIter.next();
-            for (Iterator siter = t.getSettingsIterator(); siter.hasNext();) {
+            for (Iterator<DataMap> siter = t.getSettingsIterator(); siter.hasNext();) {
                 DataMap settings = (DataMap) siter.next();
                 list.add(new TestDataPair(t, settings));
             }

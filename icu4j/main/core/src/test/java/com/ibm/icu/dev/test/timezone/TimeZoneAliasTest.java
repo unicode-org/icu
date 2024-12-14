@@ -48,8 +48,8 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
     @Test
     public void TestAliases() {
         Zone.Seconds seconds = new Zone.Seconds();
-        for (Iterator it = Zone.getZoneSet().iterator(); it.hasNext(); ) {
-            Zone zone = (Zone)it.next();
+        for (Iterator<Zone> it = Zone.getZoneSet().iterator(); it.hasNext(); ) {
+            Zone zone = it.next();
             String id = zone.id;
             if (id.indexOf('/') < 0 && (id.endsWith("ST") || id.endsWith("DT"))) {
                 if (zone.minRecentOffset != zone.maxRecentOffset) {
@@ -59,14 +59,12 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
                         + " != " + Zone.formatHours(zone.maxRecentOffset));
                 }
             }
-            Set aliases = zone.getPurportedAliases();
-            Set aliasesSet = new TreeSet(aliases);
+            Set<String> aliases = zone.getPurportedAliases();
+            Set<String> aliasesSet = new TreeSet<>(aliases);
             aliasesSet.add(id); // for comparison
-            Iterator aliasIterator = aliases.iterator();
-            while (aliasIterator.hasNext()) {
-                String otherId = (String)aliasIterator.next();
+            for (String otherId : aliases) {
                 Zone otherZone = Zone.make(otherId);
-                Set otherAliases = otherZone.getPurportedAliases();
+                Set<String> otherAliases = otherZone.getPurportedAliases();
                 otherAliases.add(otherId); // for comparison
                 if (!aliasesSet.equals(otherAliases)) {
                     errln(
@@ -92,8 +90,7 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
     public void TestDifferences() {
         Zone last = null;
         Zone.Seconds diffDate = new Zone.Seconds();
-        for (Iterator it = Zone.getZoneSet().iterator(); it.hasNext();) {
-            Zone testZone = (Zone)it.next();
+        for (Zone testZone : Zone.getZoneSet()) {
             if (last != null) {
                 String common = testZone + "\tvs " + last + ":\t";
                 int diff = testZone.findOffsetOrdering(last, diffDate);
@@ -115,8 +112,7 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
      */
     public static void TestGenerateZones() {
         int count = 1;
-        for (Iterator it = Zone.getUniqueZoneSet().iterator(); it.hasNext();) {
-            Zone zone = (Zone)it.next();
+        for (Zone zone : Zone.getUniqueZoneSet()) {
             System.out.println(zone.toString(count++));
         }
     }
@@ -129,13 +125,13 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
         CollectionJoiner(String separator) {
             this.separator = separator;
         }
-        String join(Collection c) {
+        String join(Collection<String> c) {
             StringBuffer result = new StringBuffer();
             boolean isFirst = true;
-            for (Iterator it = c.iterator(); it.hasNext(); ) {
+            for (String item : c) {
                 if (!isFirst) result.append(separator);
                 else isFirst = false;
-                result.append(it.next().toString());
+                result.append(item);
             }
             return result.toString();
         }
@@ -152,7 +148,7 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
      * avoid expensive comparisons.
      * @author Davis
      */
-    static class Zone implements Comparable {
+    static class Zone implements Comparable<Zone> {
         // class fields
       // static private final BagFormatter bf = new BagFormatter().setSeparator(", ");
         private static final CollectionJoiner bf = new CollectionJoiner(", ");
@@ -169,10 +165,10 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
         static private final long recentLimit = getDate((currentYear-1),6,1).getTime();
         static private final long startDate = getDate(1905,0,1).getTime();
 
-        static private final Map idToZone = new HashMap();
-        static private final Set zoneSet = new TreeSet();
-        static private final Set uniqueZoneSet = new TreeSet();
-        static private final Map idToRealAliases = new HashMap();
+        static private final Map<String, Zone> idToZone = new HashMap<>();
+        static private final Set<Zone> zoneSet = new TreeSet<>();
+        static private final Set<Zone> uniqueZoneSet = new TreeSet<>();
+        static private final Map<String, Set<String>> idToRealAliases = new HashMap<>();
 
         // build everything once.
         static {
@@ -183,8 +179,7 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
             Zone last = null;
             Zone.Seconds diffDate = new Zone.Seconds();
             String lastUnique = "";
-            for (Iterator it = Zone.getZoneSet().iterator(); it.hasNext();) {
-                Zone testZone = (Zone)it.next();
+            for (Zone testZone : Zone.getZoneSet()) {
                 if (last == null) {
                     uniqueZoneSet.add(testZone);
                     lastUnique = testZone.id;
@@ -194,9 +189,9 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
                         uniqueZoneSet.add(testZone);
                         lastUnique = testZone.id;
                     } else {
-                        Set aliases = (Set)idToRealAliases.get(lastUnique);
+                        Set<String> aliases = idToRealAliases.get(lastUnique);
                         if (aliases == null) {
-                            aliases = new TreeSet();
+                            aliases = new TreeSet<>();
                             idToRealAliases.put(lastUnique, aliases);
                         }
                         aliases.add(testZone.id);
@@ -206,16 +201,16 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
             }
         }
 
-        static public Set getZoneSet() {
+        static public Set<Zone> getZoneSet() {
             return zoneSet;
         }
 
-        public static Set getUniqueZoneSet() {
+        public static Set<Zone> getUniqueZoneSet() {
             return uniqueZoneSet;
         }
 
         static public Zone make(String id) {
-            Zone result = (Zone)idToZone.get(id);
+            Zone result = idToZone.get(id);
             if (result != null) return result;
             result = new Zone(id);
             idToZone.put(id, result);
@@ -344,7 +339,7 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
         private Seconds diffDateReturn = new Seconds();
 
         @Override
-        public int compareTo(Object o) {
+        public int compareTo(Zone o) {
             Zone other = (Zone)o;
             // first order by max and min offsets
             // min will usually correspond to standard time, max to daylight
@@ -364,8 +359,8 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
             return id.compareTo(other.id);
         }
 
-        public Set getPurportedAliases() {
-            return new TreeSet(purportedAliases); // clone for safety
+        public Set<String> getPurportedAliases() {
+            return new TreeSet<>(purportedAliases); // clone for safety
         }
 
         public boolean isPurportedAlias(String zoneID) {
@@ -377,13 +372,13 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
         }
 
         public String getPurportedAliasesAsString() {
-            Set s = getPurportedAliases();
+            Set<String> s = getPurportedAliases();
             if (s.size() == 0) return "";
             return " " + bf.join(s);
         }
 
         public String getRealAliasesAsString() {
-            Set s = (Set)idToRealAliases.get(id);
+            Set<String> s = idToRealAliases.get(id);
             if (s == null) return "";
             return " *" + bf.join(s);
         }

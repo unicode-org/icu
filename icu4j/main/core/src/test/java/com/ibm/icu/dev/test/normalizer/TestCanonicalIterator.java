@@ -9,9 +9,9 @@
 package com.ibm.icu.dev.test.normalizer;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.StringJoiner;
 import java.util.TreeSet;
 
 import org.junit.Test;
@@ -135,12 +135,12 @@ public class TestCanonicalIterator extends CoreTestFmwk {
         // check permute
         // NOTE: we use a TreeSet below to sort the output, which is not guaranteed to be sorted!
 
-        Set results = new TreeSet();
+        Set<String> results = new TreeSet<>();
         CanonicalIterator.permute("ABC", false, results);
         expectEqual("Simple permutation ", "", collectionToString(results), "ABC, ACB, BAC, BCA, CAB, CBA");
 
         // try samples
-        SortedSet set = new TreeSet();
+        SortedSet<String> set = new TreeSet<>();
         for (int i = 0; i < testArray.length; ++i) {
             //logln("Results for: " + name.transliterate(testArray[i]));
             CanonicalIterator it = new CanonicalIterator(testArray[i][0]);
@@ -263,12 +263,10 @@ public class TestCanonicalIterator extends CoreTestFmwk {
         }
     }
 
-    static String collectionToString(Collection col) {
-        StringBuffer result = new StringBuffer();
-        Iterator it = col.iterator();
-        while (it.hasNext()) {
-            if (result.length() != 0) result.append(", ");
-            result.append(it.next().toString());
+    static String collectionToString(Collection<String> col) {
+        StringJoiner result = new StringJoiner(", ");
+        for (String item : col) {
+            result.add(item);
         }
         return result.toString();
     }

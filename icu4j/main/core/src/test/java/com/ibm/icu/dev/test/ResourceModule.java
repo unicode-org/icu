@@ -103,9 +103,9 @@ class ResourceModule implements TestDataModule {
         return new UResourceTestData(defaultHeader, testData.get(testName));
     }
 
-    public Iterator getTestDataIterator() {
-        return new IteratorAdapter(testData){
-            protected Object prepareNext(UResourceBundle nextRes) throws DataModuleFormatError {
+    public Iterator<TestData> getTestDataIterator() {
+        return new IteratorAdapter<TestData>(testData){
+            protected TestData prepareNext(UResourceBundle nextRes) throws DataModuleFormatError {
                 return new UResourceTestData(defaultHeader, nextRes);
             }
         };
@@ -116,11 +116,12 @@ class ResourceModule implements TestDataModule {
      * and return various data-driven test object for next() call
      * 
      * @author Raymond Yang
+     * @param <T>
      */
-    private abstract static class IteratorAdapter implements Iterator{
+    private abstract static class IteratorAdapter<T> implements Iterator<T>{
         private UResourceBundle res;
         private UResourceBundleIterator itr;
-        private Object preparedNextElement = null;
+        private T preparedNextElement = null;
         // fix a strange behavior for UResourceBundleIterator for 
         // UResourceBundle.STRING. It support hasNext(), but does 
         // not support next() now. 
@@ -178,9 +179,9 @@ class ResourceModule implements TestDataModule {
             }
         }
 
-        public Object next(){
+        public T next(){
             if (hasNext()) {
-                Object t = preparedNextElement;
+                T t = preparedNextElement;
                 preparedNextElement = null;
                 return t;
             } else {
@@ -190,7 +191,7 @@ class ResourceModule implements TestDataModule {
         /**
          * To prepare data-driven test object for next() call, should not return null
          */
-        abstract protected Object prepareNext(UResourceBundle nextRes) throws DataModuleFormatError;
+        abstract protected T prepareNext(UResourceBundle nextRes) throws DataModuleFormatError;
     }
     
     
@@ -327,21 +328,21 @@ class ResourceModule implements TestDataModule {
             return info == null ? null : new UTableResource(info);
         }
 
-        public Iterator getSettingsIterator() {
+        public Iterator<DataMap> getSettingsIterator() {
             assert_is (settings.getType() == UResourceBundle.ARRAY);
-            return new IteratorAdapter(settings){
-                protected Object prepareNext(UResourceBundle nextRes) throws DataModuleFormatError {
+            return new IteratorAdapter<DataMap>(settings){
+                protected DataMap prepareNext(UResourceBundle nextRes) throws DataModuleFormatError {
                     return new UTableResource(nextRes);
                 }
             };
         }
 
-        public Iterator getDataIterator() {
+        public Iterator<DataMap> getDataIterator() {
             // unfortunately,
             assert_is (data.getType() == UResourceBundle.ARRAY 
                  || data.getType() == UResourceBundle.STRING);
-            return new IteratorAdapter(data){
-                protected Object prepareNext(UResourceBundle nextRes) throws DataModuleFormatError {
+            return new IteratorAdapter<DataMap>(data){
+                protected DataMap prepareNext(UResourceBundle nextRes) throws DataModuleFormatError {
                     return new UArrayResource(header, nextRes);
                 }
             };
@@ -370,7 +371,7 @@ class ResourceModule implements TestDataModule {
     }
     
     private static class UArrayResource implements DataMap{
-        private Map theMap; 
+        private Map<String, Object> theMap; 
         UArrayResource(UResourceBundle theHeader, UResourceBundle theData) throws DataModuleFormatError{
             assert_is (theHeader != null && theData != null);
             String[] header;
@@ -378,7 +379,7 @@ class ResourceModule implements TestDataModule {
             header = getStringArrayHelper(theHeader);
             if (theData.getSize() != header.length) 
                 throw new DataModuleFormatError("The count of Header and Data is mismatch.");
-            theMap = new HashMap();
+            theMap = new HashMap<>();
             for (int i = 0; i < header.length; i++) {
                 if(theData.getType()==UResourceBundle.ARRAY){
                     theMap.put(header[i], theData.get(i));

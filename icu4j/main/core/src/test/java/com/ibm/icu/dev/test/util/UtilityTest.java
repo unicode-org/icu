@@ -195,8 +195,8 @@ public class UtilityTest extends CoreTestFmwk {
     @Test
     public void TestUnicodeSet(){
         String[] array = new String[]{"a", "b", "c", "{de}"};
-        List list = Arrays.asList(array);
-        Set aset = new HashSet(list);
+        List<String> list = Arrays.asList(array);
+        Set<String> aset = new HashSet<>(list);
         logln(" *** The source set's size is: " + aset.size());
     //The size reads 4
         UnicodeSet set = new UnicodeSet();

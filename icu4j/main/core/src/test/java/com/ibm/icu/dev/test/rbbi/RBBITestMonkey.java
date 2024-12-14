@@ -55,14 +55,14 @@ public class RBBITestMonkey extends CoreTestFmwk {
     //
     abstract static class RBBIMonkeyKind {
         RBBIMonkeyKind() {
-            fSets = new  ArrayList();
-            fClassNames = new ArrayList();
-            fAppliedRules = new ArrayList();
+            fSets = new  ArrayList<>();
+            fClassNames = new ArrayList<>();
+            fAppliedRules = new ArrayList<>();
         }
 
         // Return a List of UnicodeSets, representing the character classes used
         //   for this type of iterator.
-        abstract  List  charClasses();
+        abstract  List<UnicodeSet>  charClasses();
 
         // Set the test text on which subsequent calls to next() will operate
         abstract  void   setText(StringBuffer text);
@@ -207,7 +207,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
         }
 
         @Override
-        List charClasses() {
+        List<UnicodeSet> charClasses() {
             return fSets;
         }
 
@@ -476,7 +476,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
 
 
         @Override
-        List  charClasses() {
+        List<UnicodeSet> charClasses() {
             return fSets;
         }
 
@@ -1762,7 +1762,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
 
 
         @Override
-        List  charClasses() {
+        List<UnicodeSet> charClasses() {
             return fSets;
         }
     }
@@ -1845,7 +1845,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
 
 
         @Override
-        List  charClasses() {
+        List<UnicodeSet> charClasses() {
             return fSets;
         }
 
@@ -2203,7 +2203,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
         int              TESTSTRINGLEN = 500;
         StringBuffer     testText         = new StringBuffer();
         int              numCharClasses;
-        List             chClasses;
+        List<UnicodeSet> chClasses;
         @SuppressWarnings("unused")
         int              expectedCount    = 0;
         boolean[]        expectedBreaks   = new boolean[TESTSTRINGLEN*2 + 1];
