@@ -335,6 +335,7 @@ public: // package
     void TestAddOverflow();
     void TestRollWeekOfYear();
     void Test22633ChineseOverflow();
+    void Test22962ChineseOverflow();
     void Test22633IndianOverflow();
     void Test22633IslamicUmalquraOverflow();
     void Test22633PersianOverflow();

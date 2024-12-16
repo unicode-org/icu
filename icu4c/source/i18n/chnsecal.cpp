@@ -1045,7 +1045,12 @@ void ChineseCalendar::offsetMonth(int32_t newMoon, int32_t dayOfMonth, int32_t d
     }
 
     // Find the target dayOfMonth
-    int32_t jd = newMoon + kEpochStartAsJulianDay - 1 + dayOfMonth;
+    int32_t jd;
+    if (uprv_add32_overflow(newMoon, kEpochStartAsJulianDay - 1, &jd) ||
+        uprv_add32_overflow(jd, dayOfMonth, &jd)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
 
     // Pin the dayOfMonth.  In this calendar all months are 29 or 30 days
     // so pinning just means handling dayOfMonth 30.
