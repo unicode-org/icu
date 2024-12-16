@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734255174579,
+  "lastUpdate": 1734385237675,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29637,6 +29637,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.4528701432348803,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "81d047524ccbec4fb1a1b5e630227e64e24a25f1",
+          "message": "ICU-22991 Remove protected direct access to fStamp",
+          "timestamp": "2024-12-16T13:17:40-08:00",
+          "tree_id": "f3af7d19b3339d05dd498d2f343f06c133b1b546",
+          "url": "https://github.com/unicode-org/icu/commit/81d047524ccbec4fb1a1b5e630227e64e24a25f1"
+        },
+        "date": 1734385037577,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.360871458937689,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
