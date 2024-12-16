@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734254770864,
+  "lastUpdate": 1734384875036,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -59336,6 +59336,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 11.455644672266253,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "81d047524ccbec4fb1a1b5e630227e64e24a25f1",
+          "message": "ICU-22991 Remove protected direct access to fStamp",
+          "timestamp": "2024-12-16T13:17:40-08:00",
+          "tree_id": "f3af7d19b3339d05dd498d2f343f06c133b1b546",
+          "url": "https://github.com/unicode-org/icu/commit/81d047524ccbec4fb1a1b5e630227e64e24a25f1"
+        },
+        "date": 1734384676845,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 11.55776571992468,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
