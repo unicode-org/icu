@@ -32,7 +32,7 @@ public class CoverageTest extends CoreTestFmwk {
     @Test
     @Parameters(method="generateClassList")
     public void testSerialization(String className) throws ClassNotFoundException, IOException {
-        Class c = Class.forName(className);
+        Class<?> c = Class.forName(className);
         int m = c.getModifiers();
 
         Handler classHandler = SerializableTestUtility.getHandler(className);

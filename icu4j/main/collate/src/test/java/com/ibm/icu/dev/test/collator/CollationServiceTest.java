@@ -131,9 +131,9 @@ public class CollationServiceTest extends TestFmwk {
         class CollatorInfo {
             ULocale locale;
             Collator collator;
-            Map displayNames; // locale -> string
+            Map<ULocale, String> displayNames; // locale -> string
 
-            CollatorInfo(ULocale locale, Collator collator, Map displayNames) {
+            CollatorInfo(ULocale locale, Collator collator, Map<ULocale, String> displayNames) {
                 this.locale = locale;
                 this.collator = collator;
                 this.displayNames = displayNames;
@@ -142,7 +142,7 @@ public class CollationServiceTest extends TestFmwk {
             String getDisplayName(ULocale displayLocale) {
                 String name = null;
                 if (displayNames != null) {
-                    name = (String)displayNames.get(displayLocale);
+                    name = displayNames.get(displayLocale);
                 }
                 if (name == null) {
                     name = locale.getDisplayName(displayLocale);
@@ -152,11 +152,11 @@ public class CollationServiceTest extends TestFmwk {
         }
 
         class TestFactory extends CollatorFactory {
-            private Map map;
-            private Set ids;
+            private Map<ULocale, CollatorInfo> map;
+            private Set<String> ids;
 
             TestFactory(CollatorInfo[] info) {
-                map = new HashMap();
+                map = new HashMap<>();
                 for (int i = 0; i < info.length; ++i) {
                     CollatorInfo ci = info[i];
                     map.put(ci.locale, ci);
@@ -165,7 +165,7 @@ public class CollationServiceTest extends TestFmwk {
 
             @Override
             public Collator createCollator(ULocale loc) {
-                CollatorInfo ci = (CollatorInfo)map.get(loc);
+                CollatorInfo ci = map.get(loc);
                 if (ci != null) {
                     return ci.collator;
                 }
@@ -174,7 +174,7 @@ public class CollationServiceTest extends TestFmwk {
 
             @Override
             public String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
-                CollatorInfo ci = (CollatorInfo)map.get(objectLocale);
+                CollatorInfo ci = map.get(objectLocale);
                 if (ci != null) {
                     return ci.getDisplayName(displayLocale);
                 }
@@ -182,12 +182,12 @@ public class CollationServiceTest extends TestFmwk {
             }
 
             @Override
-            public Set getSupportedLocaleIDs() {
+            public Set<String> getSupportedLocaleIDs() {
                 if (ids == null) {
-                    HashSet set = new HashSet();
-                    Iterator iter = map.keySet().iterator();
+                    HashSet<String> set = new HashSet<>();
+                    Iterator<ULocale> iter = map.keySet().iterator();
                     while (iter.hasNext()) {
-                        ULocale locale = (ULocale)iter.next();
+                        ULocale locale = iter.next();
                         String id = locale.toString();
                         set.add(id);
                     }
@@ -212,7 +212,7 @@ public class CollationServiceTest extends TestFmwk {
             // use CollatorFactory getDisplayName(ULocale, ULocale) for coverage
 
             @Override
-            public Set getSupportedLocaleIDs() {
+            public Set<String> getSupportedLocaleIDs() {
                 return delegate.getSupportedLocaleIDs();
             }
         }
@@ -220,7 +220,7 @@ public class CollationServiceTest extends TestFmwk {
         ULocale fu_FU = new ULocale("fu_FU");
         ULocale fu_FU_FOO = new ULocale("fu_FU_FOO");
 
-        Map fuFUNames = new HashMap();
+        Map<ULocale, String> fuFUNames = new HashMap<>();
         fuFUNames.put(fu_FU, "ze leetle bunny Fu-Fu");
         fuFUNames.put(fu_FU_FOO, "zee leetel bunny Foo-Foo");
         fuFUNames.put(ULocale.US, "little bunny Foo Foo");

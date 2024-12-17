@@ -407,9 +407,9 @@ public class ULocaleTest extends CoreTestFmwk {
      */
     void checkObject(String requestedLocale, Object obj,
             String expReqValid, String expValidActual) {
-        Class[] getLocaleParams = new Class[] { ULocale.Type.class };
+        Class<?>[] getLocaleParams = new Class<?>[] { ULocale.Type.class };
         try {
-            Class cls = obj.getClass();
+            Class<?> cls = obj.getClass();
             Method getLocale = cls.getMethod("getLocale", getLocaleParams);
             ULocale valid = (ULocale) getLocale.invoke(obj, new Object[] {
                     ULocale.VALID_LOCALE });
@@ -1490,12 +1490,12 @@ public class ULocaleTest extends CoreTestFmwk {
             logln("Testing locale " + localeID + " ...");
             ULocale loc = new ULocale(localeID);
 
-            Iterator it = loc.getKeywords();
-            Iterator it2 = ULocale.getKeywords(localeID);
+            Iterator<String> it = loc.getKeywords();
+            Iterator<String> it2 = ULocale.getKeywords(localeID);
             //it and it2 are not equal here. No way to verify their equivalence yet.
             while(it.hasNext()) {
-                String key = (String)it.next();
-                String key2 = (String)it2.next();
+                String key = it.next();
+                String key2 = it2.next();
                 if (!key.equals(key2)) {
                     errln("FAIL: static and non-static getKeywords returned different results.");
                 }
@@ -1678,7 +1678,8 @@ public class ULocaleTest extends CoreTestFmwk {
     }
 
     //Hashtables for storing expected display of keys/types of locale in English and Chinese
-    private static Map[] h = new Map[2];
+    @SuppressWarnings("unchecked")
+    private static Map<String, String>[] h = new Map[2];
 
     private static final String ACCEPT_LANGUAGE_TESTS[][]  =  {
         /*#      result  fallback? */

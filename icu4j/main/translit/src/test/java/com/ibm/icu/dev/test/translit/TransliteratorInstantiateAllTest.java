@@ -29,11 +29,11 @@ public class TransliteratorInstantiateAllTest extends TestFmwk {
     }
 
     @Parameterized.Parameters
-    public static Collection testData() {
+    public static Collection<String> testData() {
         ArrayList<String> allTranslitIDs = new ArrayList<String>();
 
-        for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
-            String id = (String) e.nextElement();
+        for (Enumeration<String> e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
+            String id = e.nextElement();
             allTranslitIDs.add(id);
         }
 

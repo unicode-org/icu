@@ -5900,7 +5900,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
 
         // We require that the upper bounds all be 999 inclusive.
         // The lower bound may be either -1, 0, or 1.
-        Set<String> methodsWithLowerBound1 = new HashSet();
+        Set<String> methodsWithLowerBound1 = new HashSet<>();
         methodsWithLowerBound1.add("fixedSignificantDigits");
         methodsWithLowerBound1.add("minSignificantDigits");
         methodsWithLowerBound1.add("maxSignificantDigits");
@@ -5914,7 +5914,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         // maxFraction
         // minMaxFraction
         // zeroFillTo
-        Set<String> methodsWithLowerBoundN1 = new HashSet();
+        Set<String> methodsWithLowerBoundN1 = new HashSet<>();
         methodsWithLowerBoundN1.add("truncateAt");
 
         // Some of the methods require an object to be called upon.

@@ -7,8 +7,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ibm.icu.message2.MessageFormatter;
-
 /**
  * Convenience class that provides the same functionality as
  * <code>Map.of</code> introduced in JDK 11, which can't be used yet for ICU4J.

@@ -3181,7 +3181,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         double expected = 12345;
         DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
         DecimalFormat fmt = new DecimalFormat("#.#", sym);
-        ArrayList errors = new ArrayList();
+        ArrayList<String> errors = new ArrayList<>();
 
         ParseThreadJB5358[] threads = new ParseThreadJB5358[numThreads];
         for (int i = 0; i < numThreads; i++) {
@@ -3198,7 +3198,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         if (errors.size() != 0) {
             StringBuffer errBuf = new StringBuffer();
             for (int i = 0; i < errors.size(); i++) {
-                errBuf.append((String)errors.get(i));
+                errBuf.append(errors.get(i));
                 errBuf.append("\n");
             }
             errln("FAIL: " + errBuf);
@@ -3209,9 +3209,9 @@ public class NumberFormatTest extends CoreTestFmwk {
         private final DecimalFormat decfmt;
         private final String numstr;
         private final double expect;
-        private final ArrayList errors;
+        private final ArrayList<String> errors;
 
-        public ParseThreadJB5358(DecimalFormat decfmt, String numstr, double expect, ArrayList errors) {
+        public ParseThreadJB5358(DecimalFormat decfmt, String numstr, double expect, ArrayList<String> errors) {
             this.decfmt = decfmt;
             this.numstr = numstr;
             this.expect = expect;
@@ -4793,7 +4793,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         while (iterator.getIndex() != iterator.getEndIndex()) {
             int start = iterator.getRunStart();
             int end = iterator.getRunLimit();
-            Iterator it = iterator.getAttributes().keySet().iterator();
+            Iterator<AttributedCharacterIterator.Attribute> it = iterator.getAttributes().keySet().iterator();
             AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it.next();
             // For positions with both INTEGER and GROUPING attributes, we want the GROUPING attribute.
             if (it.hasNext() && attribute.equals(NumberFormat.Field.INTEGER)) {

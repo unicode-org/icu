@@ -1072,7 +1072,7 @@ public class CollationRegressionTest extends TestFmwk {
         String text = "T\u00f6ne"; // o-umlaut
 
         CollationElementIterator iter = coll.getCollationElementIterator(text);
-        List elements = new ArrayList();
+        List<Integer> elements = new ArrayList<>();
         int elem;
 
         // Iterate forward and collect all of the elements into a Vector
@@ -1084,7 +1084,7 @@ public class CollationRegressionTest extends TestFmwk {
         iter.reset();
         int index = elements.size() - 1;
         while ((elem = iter.previous()) != CollationElementIterator.NULLORDER) {
-            int expect = ((Integer)elements.get(index)).intValue();
+            int expect = (elements.get(index)).intValue();
 
             if (elem != expect) {
                 errln("Mismatch at index " + index

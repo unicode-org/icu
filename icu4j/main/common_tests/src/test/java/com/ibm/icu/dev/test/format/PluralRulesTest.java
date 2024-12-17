@@ -29,7 +29,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
@@ -168,8 +167,8 @@ public class PluralRulesTest extends CoreTestFmwk {
                 { "a:n in 3 .. 10 , 13 .. 19 ,", ParseException.class }, };
         for (Object[] shouldFailTest : shouldFail) {
             String rules = (String) shouldFailTest[0];
-            Class exception = shouldFailTest.length < 2 ? null : (Class) shouldFailTest[1];
-            Class actualException = null;
+            Class<?> exception = shouldFailTest.length < 2 ? null : (Class<?>) shouldFailTest[1];
+            Class<?> actualException = null;
             try {
                 PluralRules.parseDescription(rules);
             } catch (Exception e) {
@@ -279,8 +278,8 @@ public class PluralRulesTest extends CoreTestFmwk {
 
         // Collect actual (oldSamples) and expected (expectedSamplesList) into the
         // same concrete collection for comparison purposes.
-        ArrayList<DecimalQuantity> oldSamplesList = new ArrayList(oldSamples);
-        ArrayList<DecimalQuantity> expectedSamplesList = new ArrayList(Arrays.asList(expected));
+        ArrayList<DecimalQuantity> oldSamplesList = new ArrayList<>(oldSamples);
+        ArrayList<DecimalQuantity> expectedSamplesList = new ArrayList<>(Arrays.asList(expected));
 
         if (!assertEquals("getOldSamples; " + keyword + "; " + description, expectedSamplesList,
                 oldSamplesList)) {
@@ -329,7 +328,7 @@ public class PluralRulesTest extends CoreTestFmwk {
             "a:2,3,5,6,7,13,15,16,17", "a: n in 2..6,3..7", "a:2,3,4,5,6,7", };
 
     private String[] getTargetStrings(String targets) {
-        List list = new ArrayList(50);
+        List<String> list = new ArrayList<>(50);
         String[] valSets = Utility.split(targets, ';');
         for (int i = 0; i < valSets.length; ++i) {
             String[] temp = Utility.split(valSets[i], ':');
@@ -459,7 +458,7 @@ public class PluralRulesTest extends CoreTestFmwk {
                 keywordToRule.put(keyword, singleRule);
             }
 
-            Map<DecimalQuantity, String> collisionTest = new LinkedHashMap();
+            Map<DecimalQuantity, String> collisionTest = new LinkedHashMap<>();
 
             // get all of the sample ranges from all of the samples
             Stream<DecimalQuantitySamplesRange> ranges = samples.stream()
@@ -474,7 +473,7 @@ public class PluralRulesTest extends CoreTestFmwk {
 
             items.forEach(item -> {
                 collisionTest.clear();
-                for (Entry<String, PluralRules> entry : keywordToRule.entrySet()) {
+                for (Map.Entry<String, PluralRules> entry : keywordToRule.entrySet()) {
                     PluralRules rule = entry.getValue();
                     String foundKeyword = rule.select(item);
                     if (foundKeyword.equals("other")) {
@@ -724,7 +723,7 @@ public class PluralRulesTest extends CoreTestFmwk {
     @Test
     public void testAvailableULocales() {
         ULocale[] locales = factory.getAvailableULocales();
-        Set localeSet = new HashSet();
+        Set<ULocale> localeSet = new HashSet<>();
         localeSet.addAll(Arrays.asList(locales));
 
         assertEquals("locales are unique in list", locales.length, localeSet.size());
@@ -1072,7 +1071,7 @@ public class PluralRulesTest extends CoreTestFmwk {
                 }
                 Collection<DecimalQuantity> values;
                 if (valueList == null || valueList.length() == 0) {
-                    values = Collections.EMPTY_SET;
+                    values = Collections.emptySet();
                 } else if ("null".equals(valueList)) {
                     values = null;
                 } else {
@@ -1186,7 +1185,7 @@ public class PluralRulesTest extends CoreTestFmwk {
 
     @Test
     public void TestKeywords() {
-        Set<String> possibleKeywords = new LinkedHashSet(Arrays.asList("zero", "one", "two", "few", "many", "other"));
+        Set<String> possibleKeywords = new LinkedHashSet<>(Arrays.asList("zero", "one", "two", "few", "many", "other"));
         DecimalQuantity ONE_INTEGER = DecimalQuantity_DualStorageBCD.fromExponentString("1");
         Object[][][] tests = {
                 // format is locale, explicits, then triples of keyword, status, unique value.
@@ -1205,7 +1204,7 @@ public class PluralRulesTest extends CoreTestFmwk {
             // NumberType numberType = (NumberType) test[1];
             Set<DecimalQuantity> explicits = (Set<DecimalQuantity>) test[0][1];
             PluralRules pluralRules = factory.forLocale(locale);
-            LinkedHashSet<String> remaining = new LinkedHashSet(possibleKeywords);
+            LinkedHashSet<String> remaining = new LinkedHashSet<>(possibleKeywords);
             for (int i = 1; i < test.length; ++i) {
                 Object[] row = test[i];
                 String keyword = (String) row[0];
@@ -1536,7 +1535,7 @@ public class PluralRulesTest extends CoreTestFmwk {
             setsToRules.put(set, pr);
             data.put(pr, locale);
         }
-        for (Entry<Set<StandardPluralCategories>, Set<PluralRules>> entry1 : setsToRules.keyValuesSet()) {
+        for (Map.Entry<Set<StandardPluralCategories>, Set<PluralRules>> entry1 : setsToRules.keyValuesSet()) {
             Set<StandardPluralCategories> set = entry1.getKey();
             Set<PluralRules> rules = entry1.getValue();
             System.out.println("\n        // " + set);

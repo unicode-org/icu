@@ -66,7 +66,7 @@ import com.ibm.icu.util.VTimeZone;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class SerializableTestUtility {
-    private static Class serializable;
+    private static Class<?> serializable;
     static {
         try {
             serializable = Class.forName("java.io.Serializable");
@@ -772,7 +772,7 @@ public class SerializableTestUtility {
         }
     }
 
-    private static HashMap map = new HashMap();
+    private static HashMap<String, Handler> map = new HashMap<>();
 
     static {
         map.put("com.ibm.icu.util.TimeZone", new TimeZoneHandler());
@@ -914,7 +914,7 @@ public class SerializableTestUtility {
     }
 
     static List<String> getSerializationClassList(Object caller) throws IOException {
-        List<String> classList = new ArrayList();
+        List<String> classList = new ArrayList<>();
         Enumeration<URL> urlEnum = caller.getClass().getClassLoader().getResources("com/ibm/icu");
         while (urlEnum.hasMoreElements()) {
             URL url = urlEnum.nextElement();
@@ -951,7 +951,7 @@ public class SerializableTestUtility {
             if (className.startsWith("com.ibm.icu.dev.")) {
                 return;
             }
-            Class c;
+            Class<?> c;
             try {
                 c = Class.forName(className);
             } catch (ClassNotFoundException e) {

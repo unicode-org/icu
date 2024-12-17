@@ -34,7 +34,7 @@ import com.ibm.icu.impl.URLHandler;
  */
 public class SerializableChecker implements URLHandler.URLVisitor
 {
-    private static Class serializable;
+    private static Class<?> serializable;
     //private static Class throwable;
 
     private String path = null;
@@ -90,7 +90,7 @@ public class SerializableChecker implements URLHandler.URLVisitor
             }
 
             try {
-                Class c = Class.forName(className);
+                Class<?> c = Class.forName(className);
                 int   m = c.getModifiers();
 
                 if (serializable.isAssignableFrom(c) /*&&
@@ -172,10 +172,10 @@ public class SerializableChecker implements URLHandler.URLVisitor
 
     public static void main(String[] args)
     {
-        List argList = Arrays.asList(args);
+        List<String> argList = Arrays.asList(args);
         String path = null;
 
-        for (Iterator it = argList.iterator(); it.hasNext(); /*anything?*/) {
+        for (Iterator<String> it = argList.iterator(); it.hasNext(); /*anything?*/) {
             String arg = (String) it.next();
 
             if (arg.equals("-w")) {

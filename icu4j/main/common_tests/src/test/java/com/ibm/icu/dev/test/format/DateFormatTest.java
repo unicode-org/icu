@@ -3533,7 +3533,7 @@ public class DateFormatTest extends CoreTestFmwk {
             int patidx = 0;
 
             while (true) {
-                Map map = acit.getAttributes();
+                Map<AttributedCharacterIterator.Attribute, Object> map = acit.getAttributes();
                 int limit = acit.getRunLimit();
                 if (map.isEmpty()) {
                     // Must be pattern literal - '~'
@@ -3544,10 +3544,10 @@ public class DateFormatTest extends CoreTestFmwk {
                         acit.next();
                     }
                 } else {
-                    Set keySet = map.keySet();
+                    Set<AttributedCharacterIterator.Attribute> keySet = map.keySet();
                     if (keySet.size() == 1) {
                         // Check the attribute
-                        Iterator keyIterator = keySet.iterator();
+                        Iterator<AttributedCharacterIterator.Attribute> keyIterator = keySet.iterator();
                         DateFormat.Field attr = (DateFormat.Field)keyIterator.next();
                         if (!DATEFORMAT_FIELDS[patidx].equals(attr)) {
                             errln("FAIL: The attribute at " + acit.getIndex() + " in patterns[" + i + "" +
@@ -3577,7 +3577,7 @@ public class DateFormatTest extends CoreTestFmwk {
 
         ChineseDateFormat cdf = new ChineseDateFormat("y'x'G-Ml-d", ULocale.US);
         acit = cdf.formatToCharacterIterator(nonLeapMonthDate);
-        Set keys = acit.getAllAttributeKeys();
+        Set<AttributedCharacterIterator.Attribute> keys = acit.getAllAttributeKeys();
         if (keys.contains(ChineseDateFormat.Field.IS_LEAP_MONTH)) {
             errln("FAIL: separate IS_LEAP_MONTH field should not be present for a Chinese calendar non-leap date"
                     + cdf.format(nonLeapMonthDate));
@@ -4744,7 +4744,7 @@ public class DateFormatTest extends CoreTestFmwk {
     @Test
     public void TestDotAndAtLeniency() {
         for (ULocale locale : Arrays.asList(ULocale.ENGLISH, ULocale.FRENCH)) {
-            List<Object[]> tests = new ArrayList();
+            List<Object[]> tests = new ArrayList<>();
 
             for (int dateStyle = DateFormat.FULL; dateStyle <= DateFormat.SHORT; ++dateStyle) {
                 DateFormat dateFormat = DateFormat.getDateInstance(dateStyle, locale);

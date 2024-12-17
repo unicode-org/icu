@@ -86,10 +86,10 @@ public class DataDrivenFormatTest extends CoreTestFmwk {
         DateFormat basicFmt = new SimpleDateFormat("EEE MMM dd yyyy / YYYY'-W'ww-ee");
 
         int n = 0;
-        for (Iterator iter = testData.getDataIterator(); iter.hasNext();) {
+        for (Iterator<DataMap> iter = testData.getDataIterator(); iter.hasNext();) {
             ++n;
             long now = System.currentTimeMillis();
-            DataMap currentCase = (DataMap) iter.next();
+            DataMap currentCase = iter.next();
             String caseString = "["+testData.getName()+"#"+n+(fmt?"format":"parse")+"]";
             
             String locale = currentCase.getString("locale");

@@ -6,7 +6,6 @@ package com.ibm.icu.dev.test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -120,7 +119,7 @@ public class UnicodeKnownIssues {
             return false;
         }
         logFn.accept("\n " + knownIssues.size() + " Known Issues:");
-        for (Entry<String, List<String>> entry : knownIssues.entrySet()) {
+        for (Map.Entry<String, List<String>> entry : knownIssues.entrySet()) {
             String ticketLink = entry.getKey();
             if (UNICODE_JIRA_PATTERN.matcher(ticketLink) != null) {
                 logFn.accept(ticketLink + " <" + UNICODE_JIRA_BROWSE + ticketLink + ">");

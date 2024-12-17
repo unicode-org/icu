@@ -21,7 +21,6 @@ import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;
-import com.ibm.icu.math.BigDecimal;
 
 /* ------------------------------------------------------------------ */
 /* Decimal diagnostic tests mfc */

@@ -184,9 +184,9 @@ public class RegexUtilitiesTest extends TestFmwk {
                 String result;
                 if (test.endsWith(".txt")) {
                     java.io.InputStream is = RegexUtilitiesTest.class.getResourceAsStream(test);
-                    List lines;
+                    List<String> lines;
                     try {
-                        lines = UnicodeRegex.appendLines(new ArrayList(), is, "UTF-8");
+                        lines = UnicodeRegex.appendLines(new ArrayList<>(), is, "UTF-8");
                     } finally {
                         is.close();
                     }

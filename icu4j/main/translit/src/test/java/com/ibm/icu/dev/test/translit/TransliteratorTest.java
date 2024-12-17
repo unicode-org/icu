@@ -139,8 +139,8 @@ public class TransliteratorTest extends TestFmwk {
         checkRegistry("foo3", "::[a-z]; ::NFC; [:letter:] a > b;"); // check compound
         checkRegistry("foo2", "::NFC; [:letter:] a > b;"); // check compound
         checkRegistry("foo1", "[:letter:] a > b;");
-        for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
-            String id = (String) e.nextElement();
+        for (Enumeration<String> e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
+            String id = e.nextElement();
             checkRegistry(id);
         }
         // Need to remove these test-specific transliterators in order not to interfere with other tests.
@@ -1538,25 +1538,25 @@ public class TransliteratorTest extends TestFmwk {
 
     @Test
     public void TestSTV() {
-        Enumeration es = Transliterator.getAvailableSources();
+        Enumeration<String> es = Transliterator.getAvailableSources();
         for (int i=0; es.hasMoreElements(); ++i) {
-            String source = (String) es.nextElement();
+            String source = es.nextElement();
             logln("" + i + ": " + source);
             if (source.length() == 0) {
                 errln("FAIL: empty source");
                 continue;
             }
-            Enumeration et = Transliterator.getAvailableTargets(source);
+            Enumeration<String> et = Transliterator.getAvailableTargets(source);
             for (int j=0; et.hasMoreElements(); ++j) {
-                String target = (String) et.nextElement();
+                String target = et.nextElement();
                 logln(" " + j + ": " + target);
                 if (target.length() == 0) {
                     errln("FAIL: empty target");
                     continue;
                 }
-                Enumeration ev = Transliterator.getAvailableVariants(source, target);
+                Enumeration<String> ev = Transliterator.getAvailableVariants(source, target);
                 for (int k=0; ev.hasMoreElements(); ++k) {
-                    String variant = (String) ev.nextElement();
+                    String variant = ev.nextElement();
                     if (variant.length() == 0) {
                         logln("  " + k + ": <empty>");
                     } else {
@@ -1599,25 +1599,25 @@ public class TransliteratorTest extends TestFmwk {
         }
 
         // Make sure getAvailable API reflects removal
-        for (Enumeration e = Transliterator.getAvailableIDs();
+        for (Enumeration<String> e = Transliterator.getAvailableIDs();
         e.hasMoreElements(); ) {
-            String id = (String) e.nextElement();
+            String id = e.nextElement();
             for (int i=0; i<3; ++i) {
                 if (id.equals(FULL_IDS[i])) {
                     errln("FAIL: unregister(" + id + ") failed");
                 }
             }
         }
-        for (Enumeration e = Transliterator.getAvailableTargets("Any");
+        for (Enumeration<String> e = Transliterator.getAvailableTargets("Any");
         e.hasMoreElements(); ) {
-            String t = (String) e.nextElement();
+            String t = e.nextElement();
             if (t.equals(IDS[0])) {
                 errln("FAIL: unregister(Any-" + t + ") failed");
             }
         }
-        for (Enumeration e = Transliterator.getAvailableSources();
+        for (Enumeration<String> e = Transliterator.getAvailableSources();
         e.hasMoreElements(); ) {
-            String s = (String) e.nextElement();
+            String s = e.nextElement();
             for (int i=0; i<3; ++i) {
                 if (SOURCES[i] == null) continue;
                 if (s.equals(SOURCES[i])) {
@@ -2545,8 +2545,8 @@ public class TransliteratorTest extends TestFmwk {
     @Test
     public void TestScriptAllCodepoints(){
         int code;
-        HashSet  scriptIdsChecked   = new HashSet();
-        HashSet  scriptAbbrsChecked = new HashSet();
+        HashSet<String> scriptIdsChecked = new HashSet<>();
+        HashSet<String> scriptAbbrsChecked = new HashSet<>();
         for( int i =0; i <= 0x10ffff; i++){
             code = UScript.getScript(i);
             if(code==UScript.INVALID_CODE){
@@ -2683,7 +2683,7 @@ public class TransliteratorTest extends TestFmwk {
 
     static class DummyFactory implements Transliterator.Factory {
         static DummyFactory singleton = new DummyFactory();
-        static HashMap m = new HashMap();
+        static HashMap<String, Transliterator> m = new HashMap<>();
 
         // Since Transliterators are immutable, we don't have to clone on set & get
         static void add(String ID, Transliterator t) {
@@ -2693,7 +2693,7 @@ public class TransliteratorTest extends TestFmwk {
         }
         @Override
         public Transliterator getInstance(String ID) {
-            return (Transliterator) m.get(ID);
+            return m.get(ID);
         }
     }
 
@@ -2896,7 +2896,7 @@ public class TransliteratorTest extends TestFmwk {
 
     static class TestUserFunctionFactory implements Transliterator.Factory {
         static TestUserFunctionFactory singleton = new TestUserFunctionFactory();
-        static HashMap m = new HashMap();
+        static HashMap<CaseInsensitiveString, Transliterator> m = new HashMap<>();
 
         static void add(String ID, Transliterator t) {
             m.put(new CaseInsensitiveString(ID), t);
@@ -2905,13 +2905,13 @@ public class TransliteratorTest extends TestFmwk {
 
         @Override
         public Transliterator getInstance(String ID) {
-            return (Transliterator) m.get(new CaseInsensitiveString(ID));
+            return m.get(new CaseInsensitiveString(ID));
         }
 
         static void unregister() {
-            Iterator ids = m.keySet().iterator();
+            Iterator<CaseInsensitiveString> ids = m.keySet().iterator();
             while (ids.hasNext()) {
-                CaseInsensitiveString id = (CaseInsensitiveString) ids.next();
+                CaseInsensitiveString id = ids.next();
                 Transliterator.unregister(id.getString());
                 ids.remove(); // removes pair from m
             }

@@ -459,7 +459,7 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
     /**
      * compares two vectors regardless of the order of their elements
      */
-    private static boolean compare(List vector1, List vector2) {
+    private static boolean compare(List<FieldContainer> vector1, List<FieldContainer> vector2) {
         return vector1.size() == vector2.size() && vector1.containsAll(vector2);
     }
 
@@ -478,7 +478,7 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
             int start = iterator.getRunStart();
             int end = iterator.getRunLimit();
 
-            Iterator it = iterator.getAttributes().keySet().iterator();
+            Iterator<AttributedCharacterIterator.Attribute> it = iterator.getAttributes().keySet().iterator();
             while (it.hasNext()) {
                 AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it
                         .next();

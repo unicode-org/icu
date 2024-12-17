@@ -110,8 +110,8 @@ public class TestConversion extends TestFmwk {
         String testName = td.getName().toString();
 
         // Iterate through and get each of the test case to process
-        for (Iterator iter = td.getDataIterator(); iter.hasNext();) {
-            DataMap testcase = (DataMap) iter.next();
+        for (Iterator<DataMap> iter = td.getDataIterator(); iter.hasNext();) {
+            DataMap testcase = iter.next();
 
             if (testName.equalsIgnoreCase("toUnicode")) {
                 TestToUnicode(testcase, testToUnicode);

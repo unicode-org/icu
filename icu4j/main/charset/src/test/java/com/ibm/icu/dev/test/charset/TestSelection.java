@@ -127,7 +127,7 @@ public class TestSelection extends TestFmwk {
     /* This test is to provide better code coverage for CharsetSelector */
     @Test
     public void TestCharsetSelectorCodeCoverage() {
-        List emptyList = new ArrayList();
+        List<String> emptyList = new ArrayList<>();
         UnicodeSet nonEmptySet = new UnicodeSet();
 
         nonEmptySet.add(0x0001, 0x0FFF);
