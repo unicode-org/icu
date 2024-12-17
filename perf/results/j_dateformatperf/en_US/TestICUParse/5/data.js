@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734384977254,
+  "lastUpdate": 1734402400732,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29457,6 +29457,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 319.0893692025831,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "a7291c4e515d0fb76204b2dc3bd1683803c1bb01",
+          "message": "ICU-22962 Fix int32 overflow in Chinese Calendar",
+          "timestamp": "2024-12-16T18:02:05-08:00",
+          "tree_id": "d153a54620e821d8d7b43e2e6310895cb316bce4",
+          "url": "https://github.com/unicode-org/icu/commit/a7291c4e515d0fb76204b2dc3bd1683803c1bb01"
+        },
+        "date": 1734402199284,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 326.1310505465561,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
