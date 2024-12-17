@@ -66,12 +66,12 @@ public class IncrementalProgressTest extends TestFmwk {
 
     @Test
     public void TestIncrementalProgress() {
-        Enumeration targets = Transliterator.getAvailableTargets(this.lang);
+        Enumeration<String> targets = Transliterator.getAvailableTargets(this.lang);
         while(targets.hasMoreElements()) {
-            String target = (String) targets.nextElement();
-            Enumeration variants = Transliterator.getAvailableVariants(this.lang, target);
+            String target = targets.nextElement();
+            Enumeration<String> variants = Transliterator.getAvailableVariants(this.lang, target);
             while(variants.hasMoreElements()) {
-                String variant = (String) variants.nextElement();
+                String variant = variants.nextElement();
                 String id = this.lang + "-" + target + "/" + variant;
                 logln("id: " + id);
 

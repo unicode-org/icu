@@ -2256,7 +2256,7 @@ public class CollationMiscTest extends TestFmwk {
             }
         }
 
-        Set foundValues = new TreeSet(Arrays.asList(values));
+        Set<String> foundValues = new TreeSet<>(Arrays.asList(values));
 
         for (int i = 0; i < locales.length; ++i) {
           for (int j = 0; j < values.length; ++j) {

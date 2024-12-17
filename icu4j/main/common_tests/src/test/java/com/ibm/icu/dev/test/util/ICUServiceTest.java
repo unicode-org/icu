@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 
@@ -71,7 +70,7 @@ public class ICUServiceTest extends CoreTestFmwk
      * the locale as the comparator to sort the display names, and null for
      * the matchID.
      */
-    public SortedMap getDisplayNames(ICUService service) {
+    public SortedMap<String, String> getDisplayNames(ICUService service) {
         ULocale locale = ULocale.getDefault();
         Collator col = Collator.getInstance(locale.toLocale());
         return service.getDisplayNames(locale, col, null);
@@ -82,7 +81,7 @@ public class ICUServiceTest extends CoreTestFmwk
      * uses the default collator for the locale as the comparator to
      * sort the display names, and null for the matchID.
      */
-    public SortedMap getDisplayNames(ICUService service, ULocale locale) {
+    public SortedMap<String, String> getDisplayNames(ICUService service, ULocale locale) {
         Collator col = Collator.getInstance(locale.toLocale());
         return service.getDisplayNames(locale, col, null);
     }
@@ -91,7 +90,7 @@ public class ICUServiceTest extends CoreTestFmwk
      * uses the default collator for the locale as the comparator to
      * sort the display names.
      */
-    public SortedMap getDisplayNames(ICUService service, ULocale locale, String matchID) {
+    public SortedMap<String, String> getDisplayNames(ICUService service, ULocale locale, String matchID) {
         Collator col = Collator.getInstance(locale.toLocale());
         return service.getDisplayNames(locale, col, matchID);
     }
@@ -136,7 +135,7 @@ public class ICUServiceTest extends CoreTestFmwk
     confirmIdentical("3) en_US_BAR -> en_US", result, singleton0);
 
     // get a list of the factories, should be two
-    List factories = service.factories();
+    List<Factory> factories = service.factories();
     confirmIdentical("4) factory size", factories.size(), 2);
 
     // register a new object with yet another locale
@@ -194,7 +193,7 @@ public class ICUServiceTest extends CoreTestFmwk
     confirmIdentical("17) get invisible", result, singleton4);
 
     // should not be able to locate invisible services
-    Set ids = service.getVisibleIDs();
+    Set<String> ids = service.getVisibleIDs();
     confirmBoolean("18) find invisible", !ids.contains("en_US_BAR"));
 
     service.reset();
@@ -207,7 +206,7 @@ public class ICUServiceTest extends CoreTestFmwk
             }
 
             @Override
-            public void updateVisibleIDs(Map unusedResult) {
+            public void updateVisibleIDs(Map<String, Factory> unusedResult) {
             }
 
             @Override
@@ -249,13 +248,13 @@ public class ICUServiceTest extends CoreTestFmwk
 
     // iterate over the visual ids returned by the multiple factory
     {
-        Set vids = service.getVisibleIDs();
-        Iterator iter = vids.iterator();
+        Set<String> vids = service.getVisibleIDs();
+        Iterator<String> iter = vids.iterator();
         int count = 0;
         while (iter.hasNext()) {
-        ++count;
-                String id = (String)iter.next();
-        logln("  " + id + " --> " + service.get(id));
+            ++count;
+            String id = (String)iter.next();
+            logln("  " + id + " --> " + service.get(id));
         }
         // four visible ids
         confirmIdentical("25) visible ids", count, 4);
@@ -263,13 +262,13 @@ public class ICUServiceTest extends CoreTestFmwk
 
     // iterate over the display names
     {
-        Map dids = getDisplayNames(service, ULocale.GERMANY);
-        Iterator iter = dids.entrySet().iterator();
+        Map<String, String> dids = getDisplayNames(service, ULocale.GERMANY);
+        Iterator<Map.Entry<String, String>> iter = dids.entrySet().iterator();
         int count = 0;
         while (iter.hasNext()) {
-        ++count;
-        Entry e = (Entry)iter.next();
-        logln("  " + e.getKey() + " -- > " + e.getValue());
+            ++count;
+            Map.Entry<String, String> e = iter.next();
+            logln("  " + e.getKey() + " -- > " + e.getValue());
         }
         // four display names, in german
         confirmIdentical("26) display names", count, 4);
@@ -294,13 +293,13 @@ public class ICUServiceTest extends CoreTestFmwk
     // this time, we have seven display names
         // Rad dude's surfer gal 'replaces' later's surfer gal
     {
-        Map dids = getDisplayNames(service);
-        Iterator iter = dids.entrySet().iterator();
+        Map<String, String> dids = getDisplayNames(service);
+        Iterator<Map.Entry<String, String>> iter = dids.entrySet().iterator();
         int count = 0;
         while (iter.hasNext()) {
-        ++count;
-        Entry e = (Entry)iter.next();
-        logln("  " + e.getKey() + " --> " + e.getValue());
+            ++count;
+            Map.Entry<String, String> e = iter.next();
+            logln("  " + e.getKey() + " --> " + e.getValue());
         }
         // seven display names, in spanish
         confirmIdentical("29) display names", count, 7);
@@ -372,11 +371,11 @@ public class ICUServiceTest extends CoreTestFmwk
         */
 
     {
-        Set xids = service.getVisibleIDs();
-        Iterator iter = xids.iterator();
+        Set<String> xids = service.getVisibleIDs();
+        Iterator<String> iter = xids.iterator();
         while (iter.hasNext()) {
-        String xid = (String)iter.next();
-        logln(xid + "?  " + service.get(xid));
+            String xid = (String)iter.next();
+            logln(xid + "?  " + service.get(xid));
         }
 
         logln("valleygirl?  " + service.get("en_US_VALLEY_GIRL"));
@@ -426,26 +425,26 @@ public class ICUServiceTest extends CoreTestFmwk
         // list the display names in reverse order
         {
             logln("display names in reverse order: " +
-                  service.getDisplayNames(ULocale.US, new Comparator() {
-                          @Override
+                    service.getDisplayNames(ULocale.US, new Comparator<Object>() {
+                        @Override
                         public int compare(Object lhs, Object rhs) {
-                              return -String.CASE_INSENSITIVE_ORDER.compare((String)lhs, (String)rhs);
-                          }
-                      }));
+                            return -String.CASE_INSENSITIVE_ORDER.compare((String)lhs, (String)rhs);
+                        }
+                    }));
         }
 
     // get all the display names of these resources
     // this should be fast since the display names were cached.
     {
-            logln("service display names for de_DE");
-        Map names = getDisplayNames(service, new ULocale("de_DE"));
+        logln("service display names for de_DE");
+        Map<String, String> names = getDisplayNames(service, new ULocale("de_DE"));
         StringBuffer buf = new StringBuffer("{");
-        Iterator iter = names.entrySet().iterator();
+        Iterator<Map.Entry<String, String>> iter = names.entrySet().iterator();
         while (iter.hasNext()) {
-        Entry e = (Entry)iter.next();
-        String name = (String)e.getKey();
-        String id = (String)e.getValue();
-        buf.append("\n   " + name + " --> " + id);
+            Map.Entry<String, String> e = iter.next();
+            String name = e.getKey();
+            String id = e.getValue();
+            buf.append("\n   " + name + " --> " + id);
         }
         buf.append("\n}");
         logln(buf.toString());
@@ -466,12 +465,12 @@ public class ICUServiceTest extends CoreTestFmwk
             for (int i = 0; i < idNames.length; ++i) {
                 String idName = idNames[i];
                 buf.append("\n  --- " + idName + " ---");
-                Map names = getDisplayNames(service, new ULocale(idName));
-                Iterator iter = names.entrySet().iterator();
+                Map<String, String> names = getDisplayNames(service, new ULocale(idName));
+                Iterator<Map.Entry<String, String>> iter = names.entrySet().iterator();
                 while (iter.hasNext()) {
-                    Entry e = (Entry)iter.next();
-                    String name = (String)e.getKey();
-                    String id = (String)e.getValue();
+                    Map.Entry<String, String> e = iter.next();
+                    String name = e.getKey();
+                    String id = e.getValue();
                     buf.append("\n    " + name + " --> " + id);
                 }
         }
@@ -550,13 +549,13 @@ public class ICUServiceTest extends CoreTestFmwk
     }
 
     static class TestLocaleKeyFactory extends LocaleKeyFactory {
-    protected final Set ids;
+    protected final Set<String> ids;
     protected final String factoryID;
 
     public TestLocaleKeyFactory(String[] ids, String factoryID) {
             super(VISIBLE, factoryID);
 
-        this.ids = Collections.unmodifiableSet(new HashSet(Arrays.asList(ids)));
+        this.ids = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(ids)));
             this.factoryID = factoryID + ": ";
     }
 
@@ -566,7 +565,7 @@ public class ICUServiceTest extends CoreTestFmwk
     }
 
     @Override
-    protected Set getSupportedIDs() {
+    protected Set<String> getSupportedIDs() {
             return ids;
     }
     }
@@ -626,19 +625,19 @@ public class ICUServiceTest extends CoreTestFmwk
     public static String valley = californio + "_VALLEY";
     public static String surfer = californio + "_SURFER";
     public static String geek = californio + "_GEEK";
-        public static Set supportedIDs;
+        public static Set<String> supportedIDs;
         static {
-            HashSet result = new HashSet();
+            HashSet<String> result = new HashSet<>();
             result.addAll(ICUResourceBundle.getAvailableLocaleNameSet());
-        result.add(californio);
-        result.add(valley);
-        result.add(surfer);
-        result.add(geek);
+            result.add(californio);
+            result.add(valley);
+            result.add(surfer);
+            result.add(geek);
             supportedIDs = Collections.unmodifiableSet(result);
         }
 
     @Override
-    public Set getSupportedIDs() {
+    public Set<String> getSupportedIDs() {
             return supportedIDs;
     }
 
@@ -745,15 +744,13 @@ public class ICUServiceTest extends CoreTestFmwk
     target = service.get("za_PPP");
     confirmEqual("test with ja locale", "japanese", target);
 
-    Set ids = service.getVisibleIDs();
-    for (Iterator iter = ids.iterator(); iter.hasNext();) {
-        logln("id: " + iter.next());
+    for (String id : service.getVisibleIDs()) {
+        logln("id: " + id);
     }
 
     ULocale.setDefault(loc);
-    ids = service.getVisibleIDs();
-    for (Iterator iter = ids.iterator(); iter.hasNext();) {
-        logln("id: " + iter.next());
+    for (String id : service.getVisibleIDs()) {
+        logln("id: " + id);
     }
 
     target = service.get("za_PPP");
@@ -772,8 +769,8 @@ public class ICUServiceTest extends CoreTestFmwk
 
         {
             int n = 0;
-            List factories = service.factories();
-            Iterator iter = factories.iterator();
+            List<Factory> factories = service.factories();
+            Iterator<Factory> iter = factories.iterator();
             while (iter.hasNext()) {
                 logln("[" + n++ + "] " + iter.next());
             }
@@ -783,14 +780,14 @@ public class ICUServiceTest extends CoreTestFmwk
         // since we're using locale keys, we should get all and only the es locales
         // hmmm, the default toString function doesn't print in sorted order for TreeMap
         {
-            SortedMap map = service.getDisplayNames(ULocale.US,
-                            new Comparator() {
-                                @Override
-                                public int compare(Object lhs, Object rhs) {
+            SortedMap<String, String> map = service.getDisplayNames(ULocale.US,
+                    new Comparator<Object>() {
+                            @Override
+                            public int compare(Object lhs, Object rhs) {
                                 return -String.CASE_INSENSITIVE_ORDER.compare((String)lhs, (String)rhs);
-                                }
-                            },
-                            "es");
+                            }
+                    },
+                    "es");
 
             logln("es display names in reverse order " + map);
         }
@@ -817,7 +814,7 @@ public class ICUServiceTest extends CoreTestFmwk
             }
 
             @Override
-            public void updateVisibleIDs(Map result) {
+            public void updateVisibleIDs(Map<String, Factory> result) {
                 result.put("greeting", this);
             }
 
@@ -950,13 +947,13 @@ public class ICUServiceTest extends CoreTestFmwk
     logln("obj: " + lkf.create(lkey, null));
     logln(lkf.getDisplayName("foo", null));
     logln(lkf.getDisplayName("bar", null));
-    lkf.updateVisibleIDs(new HashMap());
+    lkf.updateVisibleIDs(new HashMap<>());
 
     LocaleKeyFactory invisibleLKF = new LKFSubclass(false);
     logln("obj: " + invisibleLKF.create(lkey, null));
     logln(invisibleLKF.getDisplayName("foo", null));
     logln(invisibleLKF.getDisplayName("bar", null));
-    invisibleLKF.updateVisibleIDs(new HashMap());
+    invisibleLKF.updateVisibleIDs(new HashMap<>());
 
     // ResourceBundleFactory
     ICUResourceBundleFactory rbf = new ICUResourceBundleFactory();
@@ -1027,8 +1024,8 @@ public class ICUServiceTest extends CoreTestFmwk
     }
 
     @Override
-    protected Set getSupportedIDs() {
-            return Collections.EMPTY_SET;
+    protected Set<String> getSupportedIDs() {
+        return Collections.emptySet();
     }
     }
 }

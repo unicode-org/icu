@@ -799,7 +799,7 @@ public class CurrencyTest extends CoreTestFmwk {
         };
 
         String[] ALL = Currency.getKeywordValuesForLocale("currency", ULocale.getDefault(), false);
-        HashSet ALLSET = new HashSet();
+        HashSet<String> ALLSET = new HashSet<>();
         for (int i = 0; i < ALL.length; i++) {
             ALLSET.add(ALL[i]);
         }

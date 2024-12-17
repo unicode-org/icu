@@ -67,8 +67,8 @@ public class FormatHandler
      * of ICU4J to another. To guard against this, we store the following canned
      * data into the test objects we create.
      */
-    static HashMap cannedMonthNames      = new HashMap();
-    static HashMap cannedShortMonthNames = new HashMap();
+    static HashMap<String, String[]> cannedMonthNames = new HashMap<>();
+    static HashMap<String, String[]> cannedShortMonthNames = new HashMap<>();
 
     static String en_CA_MonthNames[] = {
         "January",
@@ -742,7 +742,7 @@ public class FormatHandler
      * of ICU4J to another. To guard against this, we store the following canned
      * data into the test objects we create.
      */
-    static HashMap cannedDecimalFormatSymbols = new HashMap();
+    static HashMap<String, String[]> cannedDecimalFormatSymbols = new HashMap<>();
 
     static String en_CA_StringSymbols[] = {
         "$",
@@ -1582,7 +1582,7 @@ public class FormatHandler
             "%%lenient-parse:\n" +
                 "& ':' = '.' = ' ' = '-';\n";
 
-            HashMap cannedData = new HashMap();
+            HashMap<String, String> cannedData = new HashMap<>();
 
         {
             cannedData.put("en_CA/SpelloutRules",      en_SpelloutRules);
@@ -1880,7 +1880,7 @@ public class FormatHandler
 
     public static class DateFormatHandler implements SerializableTestUtility.Handler
     {
-        static HashMap cannedPatterns = new HashMap();
+        static HashMap<String, String> cannedPatterns = new HashMap<>();
         static Date fixedDate;
 
         {

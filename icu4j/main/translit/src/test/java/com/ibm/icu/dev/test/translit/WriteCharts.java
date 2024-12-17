@@ -58,11 +58,11 @@ public class WriteCharts {
     }
     
     public static String[] getAllScripts() {
-        Set set = new TreeSet();
+        Set<String> set = new TreeSet<>();
         int scripts[];
-        Enumeration sources = Transliterator.getAvailableSources();
+        Enumeration<String> sources = Transliterator.getAvailableSources();
         while(sources.hasMoreElements()) {
-            String source = (String) sources.nextElement();
+            String source = sources.nextElement();
             scripts = UScript.getCode(source);
             if (scripts == null) {
                 System.out.println("[Skipping " + source + "]");
@@ -70,9 +70,9 @@ public class WriteCharts {
             }
             int sourceScript = scripts[0];
             System.out.println("Source: " + source + ";\tScripts: " + showScripts(scripts));
-            Enumeration targets = Transliterator.getAvailableTargets(source);
+            Enumeration<String> targets = Transliterator.getAvailableTargets(source);
             while(targets.hasMoreElements()) {
-                String target = (String) targets.nextElement();
+                String target = targets.nextElement();
                 scripts = UScript.getCode(target);
                 if (scripts == null
                         || priority(scripts[0]) < priority(sourceScript)) {
@@ -81,9 +81,9 @@ public class WriteCharts {
                     continue;
                 }
                 System.out.println("\tTarget: " + target + ";\tScripts: " + showScripts(scripts));
-                Enumeration variants = Transliterator.getAvailableVariants(source, target);
+                Enumeration<String> variants = Transliterator.getAvailableVariants(source, target);
                 while(variants.hasMoreElements()) {
-                    String variant = (String) variants.nextElement();
+                    String variant = variants.nextElement();
                     String id = source + "-" + target;
                     if (variant.length() != 0) {
                         id += "/" + variant;
@@ -167,7 +167,7 @@ public class WriteCharts {
         UnicodeSet leftOverSet = new UnicodeSet(targetSet);
         UnicodeSet privateUse = new UnicodeSet("[:private use:]");
             
-        Map map = new TreeMap();
+        Map<String, String> map = new TreeMap<>();
         
         UnicodeSet targetSetPlusAnyways = new UnicodeSet(targetSet);
         targetSetPlusAnyways.addAll(okAnyway);
@@ -315,7 +315,7 @@ public class WriteCharts {
             out.println("<h2>Round Trip</h2>");
             out.println(tableHeader);
             
-            Iterator it = map.keySet().iterator();
+            Iterator<String> it = map.keySet().iterator();
             char lastGroup = 0;
             int count = 0;
             int column = 0;
