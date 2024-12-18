@@ -1516,6 +1516,32 @@ Bangkok)•</data>
 #
 ####################################################################################
 
+# -u-dx (exclude script)
+#<locale th
+
+
+#<line>
+
+<locale sss@dx=thai>
+<line>
+# Should no longer break at the dictionary points - it's not Thai language
+# Short Test
+<data>•โอํน •อะไป •จู่วาม •โล่น•</data>
+<data>•โอํน •อะไป •จู่วาม •โล่น •เปี่ยร •อะลู่วาง •แมะ, •ปาย •อัน •แบ็จ •อะโจํน •ซา •เมาะ. •อัน •ฮะบืน •ตะ •เวี่ยะ •ตะ •งี่ยาน, •อัน •ฮะบืน •อีว •อะปายฮ.•</data>
+<word>
+# Should no longer break at the dictionary points - it's not the Thai language
+<data>•โอํน<200> •อะไป<200> •จู่วาม<200> •โล่น<200> •เปี่ยร<200> •อะลู่วาง<200> •แมะ<200>,• •ปาย<200> •อัน<200> •แบ็จ<200> •อะโจํน<200> •ซา<200> •เมาะ<200>.• •อัน<200> •ฮะบืน<200> •ตะ<200> •เวี่ยะ<200> •ตะ<200> •งี่ยาน<200>,• •อัน<200> •ฮะบืน<200> •อีว<200> •อะปายฮ<200>.•</data>
+
+
+<locale sss@dx=zyyy>
+<line>
+# Should no longer break at the dictionary points - it's not Thai language
+<data>•โอํน •อะไป •จู่วาม •โล่น •เปี่ยร •อะลู่วาง •แมะ, •ปาย •อัน •แบ็จ •อะโจํน •ซา •เมาะ. •อัน •ฮะบืน •ตะ •เวี่ยะ •ตะ •งี่ยาน, •อัน •ฮะบืน •อีว •อะปายฮ.•</data>
+<word>
+# Should no longer break at the dictionary points - it's not the Thai language
+<data>•โอํน<200> •อะไป<200> •จู่วาม<200> •โล่น<200> •เปี่ยร<200> •อะลู่วาง<200> •แมะ<200>,• •ปาย<200> •อัน<200> •แบ็จ<200> •อะโจํน<200> •ซา<200> •เมาะ<200>.• •อัน<200> •ฮะบืน<200> •ตะ<200> •เวี่ยะ<200> •ตะ<200> •งี่ยาน<200>,• •อัน<200> •ฮะบืน<200> •อีว<200> •อะปายฮ<200>.•</data>
+
+
 # Japanese line break tailoring test
 
 <locale ja>
@@ -2213,4 +2239,3 @@ Bangkok)•</data>
 <data>•Anmerkung: •„White“ •bzw. •‚白•人‘ •– •in •der •Amtlichen •Statistik•</data>
 <data>•« Complex »« chaining » •</data>
 <data>•« .618 »•</data>  # Interaction with the ICU tailoring to break before such numbers.
-

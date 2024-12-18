@@ -55,7 +55,7 @@ U_NAMESPACE_BEGIN
 // -------------------------------------
 
 BreakIterator*
-BreakIterator::buildInstance(const Locale& loc, const char *type, UErrorCode &status)
+BreakIterator::buildInstance(const Locale& loc, const char *type, bool checkDX, UErrorCode &status)
 {
     char fnbuff[256];
     char ext[4]={'\0'};
@@ -116,8 +116,22 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UErrorCode &st
         return nullptr;
     }
 
-    // Create a RuleBasedBreakIterator
-    result = new RuleBasedBreakIterator(file, uprv_strstr(type, "phrase") != nullptr, status);
+    {
+        const char* dxs = nullptr;
+        CharString dxsValue; // keep on the stack till we no longer need dxs.
+        // If it is word or line instance, try to get the value for dx
+        if (checkDX) {
+            UErrorCode dxsStatus = U_ZERO_ERROR;
+            CharStringByteSink dxsSink(&dxsValue);
+            loc.getKeywordValue("dx", dxsSink, dxsStatus);
+            if (U_SUCCESS(dxsStatus) && dxsValue.length() > 0) {
+                dxs = dxsValue.data();
+            }
+        }
+
+        // Create a RuleBasedBreakIterator
+        result = new RuleBasedBreakIterator(file, uprv_strstr(type, "phrase") != nullptr, dxs, status);
+    }
 
     // If there is a result, set the valid locale and actual locale, and the kind
     if (U_SUCCESS(status) && result != nullptr) {
@@ -421,14 +435,14 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
     case UBRK_CHARACTER:
         {
             UTRACE_ENTRY(UTRACE_UBRK_CREATE_CHARACTER);
-            result = BreakIterator::buildInstance(loc, "grapheme", status);
+            result = BreakIterator::buildInstance(loc, "grapheme", false, status);
             UTRACE_EXIT_STATUS(status);
         }
         break;
     case UBRK_WORD:
         {
             UTRACE_ENTRY(UTRACE_UBRK_CREATE_WORD);
-            result = BreakIterator::buildInstance(loc, "word", status);
+            result = BreakIterator::buildInstance(loc, "word", true, status);
             UTRACE_EXIT_STATUS(status);
         }
         break;
@@ -451,7 +465,7 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
                     uprv_strcat(lb_lw, value.data());
                 }
             }
-            result = BreakIterator::buildInstance(loc, lb_lw, status);
+            result = BreakIterator::buildInstance(loc, lb_lw, true, status);
 
             UTRACE_DATA1(UTRACE_INFO, "lb_lw=%s", lb_lw);
             UTRACE_EXIT_STATUS(status);
@@ -460,7 +474,7 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
     case UBRK_SENTENCE:
         {
             UTRACE_ENTRY(UTRACE_UBRK_CREATE_SENTENCE);
-            result = BreakIterator::buildInstance(loc, "sentence", status);
+            result = BreakIterator::buildInstance(loc, "sentence", false, status);
 #if !UCONFIG_NO_FILTERED_BREAK_ITERATION
             char ssKeyValue[kKeyValueLenMax] = {0};
             UErrorCode kvStatus = U_ZERO_ERROR;
@@ -479,7 +493,7 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
     case UBRK_TITLE:
         {
             UTRACE_ENTRY(UTRACE_UBRK_CREATE_TITLE);
-            result = BreakIterator::buildInstance(loc, "title", status);
+            result = BreakIterator::buildInstance(loc, "title", false, status);
             UTRACE_EXIT_STATUS(status);
         }
         break;

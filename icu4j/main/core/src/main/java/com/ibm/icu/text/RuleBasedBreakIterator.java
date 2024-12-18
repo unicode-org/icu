@@ -20,7 +20,7 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.text.CharacterIterator;
 import java.util.MissingResourceException;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Objects;
 
 import com.ibm.icu.impl.CharacterIteration;
 import com.ibm.icu.impl.ICUBinary;
@@ -39,6 +39,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.CodePointTrie;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * Rule Based Break Iterator
@@ -95,15 +96,70 @@ public class RuleBasedBreakIterator extends BreakIterator {
      *
      * @param bytes a buffer supplying the compiled binary rules.
      * @param phraseBreaking a flag indicating if phrase breaking is required.
+     * @param dxValues Dictionary break script exclusions.
      * @throws IOException if there is an error while reading the rules from the buffer.
      * @see    #compileRules(String, OutputStream)
      * @internal
      */
     /* package-potected */ static RuleBasedBreakIterator getInstanceFromCompiledRules(
-            ByteBuffer bytes, boolean phraseBreaking) throws IOException {
+            ByteBuffer bytes, boolean phraseBreaking, String dxValues) throws IOException {
         RuleBasedBreakIterator instance = getInstanceFromCompiledRules(bytes);
         instance.fPhraseBreaking = phraseBreaking;
+        instance.fDX = makeExcludedDictionaryBreakUnicodeSet(dxValues);
         return instance;
+    }
+
+    /**
+     * Crate a UnicodeSet for the Dictionary Break Script Exclusions.
+     * @param dxValues Dictionary break script exclusions, a string of Script code joined by "-".
+     * @internal
+     */
+    private static UnicodeSet makeExcludedDictionaryBreakUnicodeSet(
+        String dxs) {
+        if (dxs == null) {
+            return null;
+        }
+        if (dxs.equals("zyyy")) {
+            // The code Zyyy (Common) can be specified to exclude all scripts,
+            // if and only if it is the only SCRIPT_CODE value specified.
+            // If it is not the only script code, Zyyy has the normal meaning:
+            // excluding Script_Extension=Common.
+            return UnicodeSet.ALL_CODE_POINTS;
+        }
+        if (dxs.length() % 5 != 4) {
+            throw new IllegalArgumentException("Incorrect value for dx key: " + dxs);
+        }
+        // Change from "thai" to "[[:scx=thai:]]" or "thai-arab" to "[[:scx=thai:][:scx=arab:]]"
+        StringBuilder builder = new StringBuilder("[");
+        int items = 1 + (dxs.length() / 5);
+        for (int i = 0; i < items; i++) {
+            if (i > 0 && dxs.charAt(i*5-1) != '-') {
+                throw new IllegalArgumentException("Incorrect value for dx key: " + dxs);
+            }
+            // Dictionary-based break iterators will ignore each character whose
+            // Script_Extension value set intersects with the DX value set.
+            builder.append("[:scx=").append(dxs.substring(i*5, i*5+4)).append(":]");
+        }
+        builder.append("]");
+        // The UnicodeSet constructor will catch malformed dx values below.
+        // For example, if the locale is "en-u-dx-abc-defgh", dxs is "abc-defgh"
+        // and builder.toString() return "[[:scx=abc-:][:scx=efgh:]]" and causes
+        // UnicodeSet constructor to throw IllegalArgumentException
+        return (new UnicodeSet(builder.toString())).freeze();
+    }
+
+    /**
+     * Check should the character be excluded from dictionary-based text break.
+     */
+    private boolean excludedFromDictionaryBreak(int c) {
+        return hasDictionaryExclusion() && fDX.contains(c);
+    }
+
+    /**
+     * Check do we need to consider dictionary exclusion.
+     */
+    private boolean hasDictionaryExclusion() {
+        return fDX != null;
     }
 
     /**
@@ -173,6 +229,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         result.fLookAheadMatches = new int[fRData.fFTable.fLookAheadResultsSize];
         result.fBreakCache = result.new BreakCache(fBreakCache);
         result.fDictionaryCache = result.new DictionaryCache(fDictionaryCache);
+        result.fDX = fDX; // fDX could be shared w/ other instance
         return result;
     }
 
@@ -197,6 +254,9 @@ public class RuleBasedBreakIterator extends BreakIterator {
             }
             if (fRData != null && other.fRData != null &&
                     (!fRData.fRuleSource.equals(other.fRData.fRuleSource))) {
+                return false;
+            }
+            if (!Objects.equals(fDX, other.fDX)) {
                 return false;
             }
             if (fText == null && other.fText == null) {
@@ -298,6 +358,10 @@ public class RuleBasedBreakIterator extends BreakIterator {
      */
     private boolean            fPhraseBreaking = false;
 
+    /**
+     * UnicodeSet for Dictionary break script exclusions.
+     */
+    protected UnicodeSet       fDX = null;
 
     /**
      * Counter for the number of characters encountered with the "dictionary"
@@ -879,7 +943,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 category = (short) trie.get(c);
 
                 // Check for categories that require word dictionary handling.
-                if (category >= dictStart) {
+                if (category >= dictStart && !excludedFromDictionaryBreak(c)) {
                     fDictionaryCharCount++;
                 }
 
@@ -1224,9 +1288,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 // Ask the language object if there are any breaks. It will add them to the cache and
                 // leave the text pointer on the other side of its range, ready to search for the next one.
                 if (lbe != null) {
-                    foundBreakCount += lbe.findBreaks(fText, rangeStart, rangeEnd, fBreaks, fPhraseBreaking);
+                    foundBreakCount += lbe.findBreaks(fText, current, rangeEnd, fBreaks, fPhraseBreaking);
                 }
-
                 // Reload the loop variables for the next go-round
                 c = CharacterIteration.current32(fText);
                 category = (short)fRData.fTrie.get(c);

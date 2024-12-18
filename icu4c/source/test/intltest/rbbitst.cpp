@@ -112,6 +112,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestLineBreaks);
     TESTCASE_AUTO(TestSentBreaks);
     TESTCASE_AUTO(TestExtended);
+    TESTCASE_AUTO(TestDXLineBreaks);
+    TESTCASE_AUTO(TestDXWordBreaks);
 #endif
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_FILE_IO
     TESTCASE_AUTO(TestMonkey);
@@ -3534,6 +3536,99 @@ void RBBITest::TestLineBreaks()
         testBreakBoundPreceding(this, ustr, bi, expected, expectedcount);
     }
     delete bi;
+#endif
+}
+
+void RBBITest::TestDXLineBreaks()
+{
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+    UnicodeString text(u"abcde 一二三四五六七八九十อิสราเอลโชว์คลิป");
+    std::vector<int32_t> expected{ 0, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 32 };
+    Locale        locale("ja-u-dx-hani-thai");
+    UErrorCode    status = U_ZERO_ERROR;
+    std::unique_ptr<BreakIterator> bi(BreakIterator::createLineInstance(locale, status));
+    TEST_ASSERT_SUCCESS(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    bi->setText(text);
+    int32_t c = bi->first();
+    std::vector<int32_t> actuals;
+    do {
+      actuals.push_back(c);
+    } while ((c = bi->next()) != BreakIterator::DONE );
+
+    assertEquals(WHERE,
+                 static_cast<int32_t>(expected.size()),
+                 static_cast<int32_t>(actuals.size()));
+    if (expected.size() == actuals.size()) {
+        for (size_t i = 0; i < expected.size(); i++) {
+            assertEquals(WHERE, expected[i], actuals[i]);
+        }
+    }
+
+    bi->setText(UnicodeString(u"aaอออaaaaaอออ    aaaa"));
+    c = bi->first();
+    actuals.clear();
+    do {
+      actuals.push_back(c);
+    } while ((c = bi->next()) != BreakIterator::DONE );
+    std::vector<int32_t> expected2{ 0, 17, 21 };
+    assertEquals(WHERE,
+                 static_cast<int32_t>(expected2.size()),
+                 static_cast<int32_t>(actuals.size()));
+    if (expected2.size() == actuals.size()) {
+        for (size_t i = 0; i < expected2.size(); i++) {
+            assertEquals(WHERE, expected2[i], actuals[i]);
+        }
+    }
+
+#endif
+}
+
+void RBBITest::TestDXWordBreaks()
+{
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+    UnicodeString text(u"abcde 一二三四五六七八九十อิสราเอลโชว์คลิป");
+    Locale        locale("ja-u-dx-hani-thai");
+    std::vector<int32_t> expected{ 0, 5, 6, 16, 32 };
+    UErrorCode    status = U_ZERO_ERROR;
+    std::unique_ptr<BreakIterator> bi(BreakIterator::createWordInstance(locale, status));
+    TEST_ASSERT_SUCCESS(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    bi->setText(text);
+    int32_t c = bi->first();
+    std::vector<int32_t> actuals;
+    do {
+      actuals.push_back(c);
+    } while ((c = bi->next()) != BreakIterator::DONE );
+
+    assertEquals(WHERE,
+                 static_cast<int32_t>(expected.size()),
+                 static_cast<int32_t>(actuals.size()));
+    if (expected.size() == actuals.size()) {
+        for (size_t i = 0; i < expected.size(); i++) {
+            assertEquals(WHERE, expected[i], actuals[i]);
+        }
+    }
+
+    bi->setText(UnicodeString(u"aaอออaaaaaอออ    aaaa"));
+    c = bi->first();
+    actuals.clear();
+    do {
+      actuals.push_back(c);
+    } while ((c = bi->next()) != BreakIterator::DONE );
+    std::vector<int32_t> expected2{ 0, 13, 17, 21 };
+    assertEquals(WHERE,
+                 static_cast<int32_t>(expected2.size()),
+                 static_cast<int32_t>(actuals.size()));
+    if (expected2.size() == actuals.size()) {
+        for (size_t i = 0; i < expected2.size(); i++) {
+            assertEquals(WHERE, expected2[i], actuals[i]);
+        }
+    }
 #endif
 }
 

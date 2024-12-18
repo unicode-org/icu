@@ -17,6 +17,7 @@
 #define RBBI_H
 
 #include "unicode/utypes.h"
+#include "unicode/uniset.h"
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -42,6 +43,7 @@ struct RBBIDataHeader;
 class  RBBIDataWrapper;
 class  UnhandledEngine;
 class  UStack;
+class  UnicodeSet;
 
 
 #ifndef U_HIDE_INTERNAL_API
@@ -221,6 +223,12 @@ private:
      */
     UBool fIsPhraseBreaking = false;
 
+    /**
+     * A UnicodeSet for Dictionary Break Exclusion.
+     */
+    UnicodeSet* fDX = nullptr;
+private:
+
     //=======================================================================
     // constructors
     //=======================================================================
@@ -246,11 +254,12 @@ private:
      *        which will be responsible for closing it when it is no longer needed.
      * @param status Information on any errors encountered.
      * @param isPhraseBreaking true if phrase based breaking is required, otherwise false.
+     * @param dxs nullptr or a string to denote "Dictionary break script exclusions".
      * @see udata_open
      * @see #getBinaryRules
      * @internal (private)
      */
-    RuleBasedBreakIterator(UDataMemory* image, UBool isPhraseBreaking, UErrorCode &status);
+    RuleBasedBreakIterator(UDataMemory* image, UBool isPhraseBreaking, const char* dxs, UErrorCode &status);
 
     /** @internal */
     friend class RBBIRuleBuilder;
@@ -763,6 +772,12 @@ private:
      * expanded functions. (Both the 8 and 16 bit access functions have the same type
      * signature)
      */
+
+    /*
+     * Check should the character be excluded from dictionary-based text break.
+     * @internal (private)
+     */
+    bool excludedFromDictionaryBreak(int32_t c);
 
     typedef uint16_t (*PTrieFunc)(const UCPTrie *, UChar32);
 
