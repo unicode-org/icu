@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734402289310,
+  "lastUpdate": 1734481249223,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29667,6 +29667,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2013.6677674663683,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "ba012a74a11405a502b6890e710bfb58cef7a2c7",
+          "message": "ICU-22920 Fix raw type warnings in icu4j tests: charset, common_tests, translit",
+          "timestamp": "2024-12-17T16:14:38-08:00",
+          "tree_id": "f2e42d5f6bfb8076f3787dc7d069f5d2a8256398",
+          "url": "https://github.com/unicode-org/icu/commit/ba012a74a11405a502b6890e710bfb58cef7a2c7"
+        },
+        "date": 1734481065096,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1937.9488229650099,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
