@@ -589,7 +589,7 @@ compareKeywordStructs(const void * /*context*/, const void *left, const void *ri
 }  // namespace
 
 U_EXPORT CharString
-ulocimp_getKeywords(const char* localeID,
+ulocimp_getKeywords(std::string_view localeID,
                     char prev,
                     bool valuesToo,
                     UErrorCode& status)
@@ -606,7 +606,7 @@ ulocimp_getKeywords(const char* localeID,
 }
 
 U_EXPORT void
-ulocimp_getKeywords(const char* localeID,
+ulocimp_getKeywords(std::string_view localeID,
                     char prev,
                     ByteSink& sink,
                     bool valuesToo,
@@ -618,9 +618,8 @@ ulocimp_getKeywords(const char* localeID,
 
     int32_t maxKeywords = ULOC_MAX_NO_KEYWORDS;
     int32_t numKeywords = 0;
-    const char* pos = localeID;
-    const char* equalSign = nullptr;
-    const char* semicolon = nullptr;
+    size_t equalSign = std::string_view::npos;
+    size_t semicolon = std::string_view::npos;
     int32_t i = 0, j, n;
 
     if(prev == '@') { /* start of keyword definition */
@@ -628,40 +627,40 @@ ulocimp_getKeywords(const char* localeID,
         do {
             bool duplicate = false;
             /* skip leading spaces */
-            while(*pos == ' ') {
-                pos++;
+            while (localeID.front() == ' ') {
+                localeID.remove_prefix(1);
             }
-            if (!*pos) { /* handle trailing "; " */
+            if (localeID.empty()) { /* handle trailing "; " */
                 break;
             }
             if(numKeywords == maxKeywords) {
                 status = U_INTERNAL_PROGRAM_ERROR;
                 return;
             }
-            equalSign = uprv_strchr(pos, '=');
-            semicolon = uprv_strchr(pos, ';');
+            equalSign = localeID.find('=');
+            semicolon = localeID.find(';');
             /* lack of '=' [foo@currency] is illegal */
             /* ';' before '=' [foo@currency;collation=pinyin] is illegal */
-            if(!equalSign || (semicolon && semicolon<equalSign)) {
+            if (equalSign == std::string_view::npos ||
+                (semicolon != std::string_view::npos && semicolon < equalSign)) {
+                status = U_INVALID_FORMAT_ERROR;
+                return;
+            }
+            /* zero-length keyword is an error. */
+            if (equalSign == 0) {
                 status = U_INVALID_FORMAT_ERROR;
                 return;
             }
             /* need to normalize both keyword and keyword name */
-            if(equalSign - pos >= ULOC_KEYWORD_BUFFER_LEN) {
+            if (equalSign >= ULOC_KEYWORD_BUFFER_LEN) {
                 /* keyword name too long for internal buffer */
                 status = U_INTERNAL_PROGRAM_ERROR;
                 return;
             }
-            for(i = 0, n = 0; i < equalSign - pos; ++i) {
-                if (pos[i] != ' ') {
-                    keywordList[numKeywords].keyword[n++] = uprv_tolower(pos[i]);
+            for (i = 0, n = 0; static_cast<size_t>(i) < equalSign; ++i) {
+                if (localeID[i] != ' ') {
+                    keywordList[numKeywords].keyword[n++] = uprv_tolower(localeID[i]);
                 }
-            }
-
-            /* zero-length keyword is an error. */
-            if (n == 0) {
-                status = U_INVALID_FORMAT_ERROR;
-                return;
             }
 
             keywordList[numKeywords].keyword[n] = 0;
@@ -669,33 +668,31 @@ ulocimp_getKeywords(const char* localeID,
             /* now grab the value part. First we skip the '=' */
             equalSign++;
             /* then we leading spaces */
-            while(*equalSign == ' ') {
+            while (equalSign < localeID.length() && localeID[equalSign] == ' ') {
                 equalSign++;
             }
 
             /* Premature end or zero-length value */
-            if (!*equalSign || equalSign == semicolon) {
+            if (equalSign == localeID.length() || equalSign == semicolon) {
                 status = U_INVALID_FORMAT_ERROR;
                 return;
             }
 
-            keywordList[numKeywords].valueStart = equalSign;
+            keywordList[numKeywords].valueStart = localeID.data() + equalSign;
 
-            pos = semicolon;
-            i = 0;
-            if(pos) {
-                while(*(pos - i - 1) == ' ') {
-                    i++;
-                }
-                keywordList[numKeywords].valueLen = static_cast<int32_t>(pos - equalSign - i);
-                pos++;
+            std::string_view value = localeID;
+            if (semicolon != std::string_view::npos) {
+                value.remove_suffix(value.length() - semicolon);
+                localeID.remove_prefix(semicolon + 1);
             } else {
-                i = static_cast<int32_t>(uprv_strlen(equalSign));
-                while(i && equalSign[i-1] == ' ') {
-                    i--;
-                }
-                keywordList[numKeywords].valueLen = i;
+                localeID = {};
             }
+            value.remove_prefix(equalSign);
+            if (size_t last = value.find_last_not_of(' '); last != std::string_view::npos) {
+                value.remove_suffix(value.length() - last - 1);
+            }
+            keywordList[numKeywords].valueLen = static_cast<int32_t>(value.length());
+
             /* If this is a duplicate keyword, then ignore it */
             for (j=0; j<numKeywords; ++j) {
                 if (uprv_strcmp(keywordList[j].keyword, keywordList[numKeywords].keyword) == 0) {
@@ -706,7 +703,7 @@ ulocimp_getKeywords(const char* localeID,
             if (!duplicate) {
                 ++numKeywords;
             }
-        } while(pos);
+        } while (!localeID.empty());
 
         /* now we have a list of keywords */
         /* we need to sort it */
