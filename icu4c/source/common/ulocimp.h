@@ -68,13 +68,13 @@ U_EXPORT std::optional<std::string_view>
 ulocimp_toLegacyTypeWithFallback(std::string_view keyword, std::string_view value);
 
 U_EXPORT icu::CharString
-ulocimp_getKeywords(const char* localeID,
+ulocimp_getKeywords(std::string_view localeID,
                     char prev,
                     bool valuesToo,
                     UErrorCode& status);
 
 U_EXPORT void
-ulocimp_getKeywords(const char* localeID,
+ulocimp_getKeywords(std::string_view localeID,
                     char prev,
                     icu::ByteSink& sink,
                     bool valuesToo,
