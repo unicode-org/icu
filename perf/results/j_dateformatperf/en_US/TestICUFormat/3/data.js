@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734660100099,
+  "lastUpdate": 1734664152197,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29547,6 +29547,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 249.17701128393827,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "7d60bb844e8718dc342197a06a5c0c90fe7ca77e",
+          "message": "ICU-22986 GL takes CM",
+          "timestamp": "2024-12-20T03:54:59+01:00",
+          "tree_id": "af0a5d7c35273546b4c3e93af1a45a89c7b6fd7b",
+          "url": "https://github.com/unicode-org/icu/commit/7d60bb844e8718dc342197a06a5c0c90fe7ca77e"
+        },
+        "date": 1734663960082,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 230.69159287752868,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
