@@ -3607,7 +3607,12 @@ int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField, UErrorCo
                     fprintf(stderr, "%s:%d - y=%d, y-1=%d doy%d, njd%d (C.F. %d)\n",
                         __FILE__, __LINE__, year, year-1, testDate, julianDay+testDate, nextJulianDay);
 #endif
-                    if(julianDay+testDate > nextJulianDay) { // is it past Dec 31?  (nextJulianDay is day BEFORE year+1's  Jan 1)
+                    if (uprv_add32_overflow(julianDay, testDate, &testDate)) {
+                        status = U_ILLEGAL_ARGUMENT_ERROR;
+                        return 0;
+                    }
+
+                    if(testDate > nextJulianDay) { // is it past Dec 31?  (nextJulianDay is day BEFORE year+1's  Jan 1)
                         // Fire up the calculating engines.. retry YWOY = (year-1)
                         int32_t prevYear;
                         if (uprv_add32_overflow(year, -1, &prevYear)) {
