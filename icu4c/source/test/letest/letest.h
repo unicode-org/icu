@@ -17,11 +17,7 @@
 #define __LETEST_H
 
 
-#ifdef USING_ICULEHB
 #include "layout/LETypes.h"
-#else
-#include "LETypes.h"
-#endif
 #include "unicode/ctest.h"
 
 #include <stdlib.h>
@@ -50,7 +46,5 @@ struct TestResult
 #ifndef __cplusplus
 typedef struct TestResult TestResult;
 #endif
-
-U_CFUNC void addCTests(TestNode **root);
 
 #endif

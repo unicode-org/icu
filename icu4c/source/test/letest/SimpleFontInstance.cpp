@@ -19,10 +19,6 @@
 #include "layout/LETypes.h"
 #include "layout/LEFontInstance.h"
 
-#ifndef USING_ICULEHB
-#include "layout/CanonShaping.h"
-#endif
-
 #include "SimpleFontInstance.h"
 
 SimpleFontInstance::SimpleFontInstance(float pointSize, LEErrorCode &status)
@@ -41,18 +37,9 @@ SimpleFontInstance::~SimpleFontInstance()
     // nothing to do...
 }
 
-const void *SimpleFontInstance::getFontTable(LETag tableTag, size_t &length) const
+const void *SimpleFontInstance::getFontTable(LETag /*tableTag*/, size_t &length) const
 {
   length = -1; // unknown for this test.
-#ifndef USING_ICULEHB
-    if (tableTag == LE_GSUB_TABLE_TAG) {
-        return CanonShaping::glyphSubstitutionTable;
-    }
-    
-    if (tableTag == LE_GDEF_TABLE_TAG) {
-        return CanonShaping::glyphDefinitionTable;
-    }
-#endif
     return nullptr;
 }
 

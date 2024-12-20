@@ -36,7 +36,6 @@ LIBS = $(LIBICULX) $(LIBICUUC) $(LIBICUI18N) $(LIBCTESTFW) $(LIBICUTOOLUTIL) $(D
 
 COMMONOBJECTS = letsutil.o cmaps.o FontTableCache.o SimpleFontInstance.o PortableFontInstance.o
 TESTOBJECTS   = letest.o
-CTESTOBJECTS  = cfonts.o xmlreader.o cletest.o
 GENOBJECTS    = gendata.o
 
 OBJECTS = $(COMMONOBJECTS) $(TESTOBJECTS) $(GENOBJECTS)
@@ -67,7 +66,7 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(COMMONOBJECTS) $(TESTOBJECTS) $(CTESTOBJECTS) $(GENOBJECTS) $(TARGET)
+	$(RMV) $(COMMONOBJECTS) $(TESTOBJECTS) $(GENOBJECTS) $(TARGET)
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -83,7 +82,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(TESTTARGET) : $(COMMONOBJECTS) $(TESTOBJECTS) $(CTESTOBJECTS)
+$(TESTTARGET) : $(COMMONOBJECTS) $(TESTOBJECTS)
 	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS)
 	$(POST_BUILD_STEP)
 

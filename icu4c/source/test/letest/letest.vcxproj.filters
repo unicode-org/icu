@@ -15,12 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cfonts.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cletest.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cmaps.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,14 +33,8 @@
     <ClCompile Include="SimpleFontInstance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xmlreader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cfonts.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cmaps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,9 +54,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SimpleFontInstance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="xmlreader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
