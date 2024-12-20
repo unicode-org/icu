@@ -22,10 +22,6 @@
 #include "layout/LayoutEngine.h"
 #include "layout/LELanguages.h"
 
-#ifndef USING_ICULEHB
-#include "OpenTypeLayoutEngine.h"
-#endif
-
 #include "letest.h"
 #include "letsutil.h"
 
@@ -45,17 +41,6 @@ char *getCString(const UnicodeString *uString)
     cString[cLength] = '\0';
 
     return cString;
-}
-
-char *getCString(const LEUnicode16 *uChars)
-{
-    if (uChars == nullptr) {
-        return nullptr;
-    }
-
-    const UnicodeString ustring(uChars);
-
-    return getCString(&ustring);
 }
 
 char *getUTF8String(const UnicodeString *uString)
@@ -104,14 +89,6 @@ le_int32 getLanguageCode(const char *lang)
         return -1;
     }
 
-#ifndef USING_ICULEHB
-    LETag langTag = (LETag) ((lang[0] << 24) + (lang[1] << 16) + (lang[2] << 8) + 0x20);
-    for (le_int32 i = 0; i < languageCodeCount; i += 1) {
-        if (langTag == OpenTypeLayoutEngine::languageTags[i]) {
-            return i;
-        }
-    }
-#else
     if (!strcmp(lang, "JAN")) return janLanguageCode;
     if (!strcmp(lang, "KOR")) return korLanguageCode;
     if (!strcmp(lang, "ZHT")) return zhtLanguageCode;
@@ -119,9 +96,6 @@ le_int32 getLanguageCode(const char *lang)
     if (!strcmp(lang, "HIN")) return hinLanguageCode;
     if (!strcmp(lang, "MAR")) return marLanguageCode;
     if (!strcmp(lang, "ROM")) return romLanguageCode;
-#endif
-
 
     return -1;
 }
-

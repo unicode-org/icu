@@ -220,18 +220,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cfonts.cpp" />
-    <ClCompile Include="cletest.c" />
     <ClCompile Include="cmaps.cpp" />
     <ClCompile Include="FontTableCache.cpp" />
     <ClCompile Include="letest.cpp" />
     <ClCompile Include="letsutil.cpp" />
     <ClCompile Include="PortableFontInstance.cpp" />
     <ClCompile Include="SimpleFontInstance.cpp" />
-    <ClCompile Include="xmlreader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cfonts.h" />
     <ClInclude Include="cmaps.h" />
     <ClInclude Include="FontTableCache.h" />
     <ClInclude Include="letest.h" />
@@ -239,7 +235,6 @@
     <ClInclude Include="PortableFontInstance.h" />
     <ClInclude Include="sfnt.h" />
     <ClInclude Include="SimpleFontInstance.h" />
-    <ClInclude Include="xmlreader.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\layout\layout.vcxproj">
