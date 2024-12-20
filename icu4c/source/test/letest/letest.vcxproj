@@ -220,20 +220,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cmaps.cpp" />
-    <ClCompile Include="FontTableCache.cpp" />
     <ClCompile Include="letest.cpp" />
-    <ClCompile Include="letsutil.cpp" />
-    <ClCompile Include="PortableFontInstance.cpp" />
     <ClCompile Include="SimpleFontInstance.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cmaps.h" />
-    <ClInclude Include="FontTableCache.h" />
     <ClInclude Include="letest.h" />
-    <ClInclude Include="letsutil.h" />
-    <ClInclude Include="PortableFontInstance.h" />
-    <ClInclude Include="sfnt.h" />
     <ClInclude Include="SimpleFontInstance.h" />
   </ItemGroup>
   <ItemGroup>
