@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734481327831,
+  "lastUpdate": 1734660075653,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29877,6 +29877,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1960.2669499544816,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "e3bc073737b226f8bd47302f32f83a3993f7792a",
+          "message": "ICU-22954 header-only-test USet C++ iterators",
+          "timestamp": "2024-12-19T17:40:33-08:00",
+          "tree_id": "db3105a748dd6431aac6d9c112953e1aac11c790",
+          "url": "https://github.com/unicode-org/icu/commit/e3bc073737b226f8bd47302f32f83a3993f7792a"
+        },
+        "date": 1734659875307,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1968.5744708859734,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
