@@ -125,7 +125,6 @@ PersianCalendar* PersianCalendar::clone() const {
 PersianCalendar::PersianCalendar(const Locale& aLocale, UErrorCode& success)
   :   Calendar(TimeZone::forLocaleOrDefault(aLocale), aLocale, success)
 {
-    setTimeInMillis(getNow(), success); // Call this again now that the vtable is set up properly.
 }
 
 PersianCalendar::PersianCalendar(const PersianCalendar& other) : Calendar(other) {
