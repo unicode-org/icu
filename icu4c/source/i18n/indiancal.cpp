@@ -41,7 +41,6 @@ IndianCalendar* IndianCalendar::clone() const {
 IndianCalendar::IndianCalendar(const Locale& aLocale, UErrorCode& success)
   :   Calendar(TimeZone::forLocaleOrDefault(aLocale), aLocale, success)
 {
-  setTimeInMillis(getNow(), success); // Call this again now that the vtable is set up properly.
 }
 
 IndianCalendar::IndianCalendar(const IndianCalendar& other) : Calendar(other) {
