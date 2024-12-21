@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734664246330,
+  "lastUpdate": 1734741091557,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29787,6 +29787,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 1.5498948966106285,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "4c9ef1a31bc41cd4af5880bb04761c9893c770dc",
+          "message": "ICU-22962 Fix int overflow in Calendar::handleComputeJulianDay",
+          "timestamp": "2024-12-20T16:12:58-08:00",
+          "tree_id": "551f06322df6c947afa8885fe71c4dbbf8183ef4",
+          "url": "https://github.com/unicode-org/icu/commit/4c9ef1a31bc41cd4af5880bb04761c9893c770dc"
+        },
+        "date": 1734740898425,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 1.5449750211119464,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
