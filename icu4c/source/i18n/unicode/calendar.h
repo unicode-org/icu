@@ -1882,10 +1882,9 @@ private:
     int32_t getActualHelper(UCalendarDateFields field, int32_t startValue, int32_t endValue, UErrorCode &status) const;
 
 
-protected:
+private:
     /**
      * The flag which indicates if the current time is set in the calendar.
-     * @stable ICU 2.0
      */
     UBool      fIsTimeSet;
 
@@ -1897,14 +1896,12 @@ protected:
      * <P>
      * This should really be named areFieldsInSync, but the old name is retained
      * for backward compatibility.
-     * @stable ICU 2.0
      */
     UBool      fAreFieldsSet;
 
     /**
      * True if all of the fields have been set.  This is initially false, and set to
      * true by computeFields().
-     * @stable ICU 2.0
      */
     UBool      fAreAllFieldsSet;
 
@@ -1913,10 +1910,10 @@ protected:
      * computed.  This occurs only in setTimeInMillis().  A calendar set
      * to this state will compute all fields from the time if it becomes
      * necessary, but otherwise will delay such computation.
-     * @stable ICU 3.0
      */
     UBool fAreFieldsVirtuallySet;
 
+protected:
     /**
      * Get the current time without recomputing.
      *
@@ -1940,14 +1937,13 @@ protected:
      */
     int32_t     fFields[UCAL_FIELD_COUNT];
 
-#ifndef U_FORCE_HIDE_DEPRECATED_API
+private:
     /**
      * The flags which tell if a specified time field for the calendar is set.
-     * @deprecated ICU 2.8 use (fStamp[n]!=kUnset)
      */
     UBool      fIsSet[UCAL_FIELD_COUNT];
-#endif  // U_FORCE_HIDE_DEPRECATED_API
 
+protected:
     /** Special values of stamp[]
      * @stable ICU 2.0
      */
@@ -1957,14 +1953,15 @@ protected:
         kMinimumUserStamp
     };
 
+private:
     /**
      * Pseudo-time-stamps which specify when each field was set. There
      * are two special values, UNSET and INTERNALLY_SET. Values from
      * MINIMUM_USER_SET to Integer.MAX_VALUE are legal user set values.
-     * @stable ICU 2.0
      */
     int32_t        fStamp[UCAL_FIELD_COUNT];
 
+protected:
     /**
      * Subclasses may override this method to compute several fields
      * specific to each calendar system.  These are:
