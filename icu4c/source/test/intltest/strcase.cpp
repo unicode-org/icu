@@ -531,6 +531,8 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
 
 void
 StringCaseTest::TestCasing() {
+    // Crashes on Cygwin since ICU-22954 PR #3295, see ICU-22999.
+#if U_PLATFORM != U_PF_CYGWIN
     UErrorCode status = U_ZERO_ERROR;
 #if !UCONFIG_NO_BREAK_ITERATION
     LocalUBreakIteratorPointer iter;
@@ -615,6 +617,7 @@ StringCaseTest::TestCasing() {
     if(result!=UNICODE_STRING_SIMPLE("Stra\\u00dfe").unescape()) {
         dataerrln("UnicodeString::toTitle(nullptr) failed.");
     }
+#endif
 #endif
 }
 
