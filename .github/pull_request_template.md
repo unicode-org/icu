@@ -20,7 +20,6 @@ TODO: Fill out the checklist below.
 #### Checklist
 - [ ] Required: Issue filed: ICU-NNNNN
 - [ ] Required: The PR title must be prefixed with a JIRA Issue number. Example: "ICU-1234 Fix xyz"
-- [ ] Required: The PR description must include the link to the Jira Issue, for example by completing the URL in the first checklist item
 - [ ] Required: Each commit message must be prefixed with a JIRA Issue number. Example: "ICU-1234 Fix xyz"
 - [ ] Issue accepted (done by Technical Committee after discussion)
 - [ ] Tests included, if applicable
