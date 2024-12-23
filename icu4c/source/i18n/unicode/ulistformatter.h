@@ -220,8 +220,9 @@ U_CAPI void U_EXPORT2
 ulistfmt_closeResult(UFormattedList* uresult);
 
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalUListFormatterPointer
@@ -245,7 +246,8 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalUListFormatterPointer, UListFormatter, ulistfmt
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUFormattedListPointer, UFormattedList, ulistfmt_closeResult);
 
-}
+U_NAMESPACE_END
+
 #endif
 
 /**

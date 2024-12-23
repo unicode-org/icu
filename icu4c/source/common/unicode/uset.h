@@ -347,6 +347,7 @@ U_CAPI void U_EXPORT2
 uset_close(USet* set);
 
 #if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
+
 namespace U_ICU_NAMESPACE_OR_INTERNAL {
 
 /**
@@ -360,7 +361,8 @@ namespace U_ICU_NAMESPACE_OR_INTERNAL {
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUSetPointer, USet, uset_close);
 
-}
+}  // U_ICU_NAMESPACE_OR_INTERNAL
+
 #endif
 
 /**

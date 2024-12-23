@@ -418,8 +418,9 @@ udata_setFileAccess(UDataFileAccess access, UErrorCode *status);
 
 U_CDECL_END
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalUDataMemoryPointer
@@ -432,7 +433,8 @@ namespace U_ICU_NAMESPACE_OR_INTERNAL {
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUDataMemoryPointer, UDataMemory, udata_close);
 
-}
-#endif
+U_NAMESPACE_END
+
+#endif  // U_SHOW_CPLUSPLUS_API
 
 #endif

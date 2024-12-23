@@ -97,8 +97,9 @@ ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
 U_CAPI void U_EXPORT2
 ucnvsel_close(UConverterSelector *sel);
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalUConverterSelectorPointer
@@ -111,7 +112,8 @@ namespace U_ICU_NAMESPACE_OR_INTERNAL {
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUConverterSelectorPointer, UConverterSelector, ucnvsel_close);
 
-}
+U_NAMESPACE_END
+
 #endif
 
 /**

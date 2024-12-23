@@ -787,8 +787,9 @@ ucal_open(const UChar*   zoneID,
 U_CAPI void U_EXPORT2 
 ucal_close(UCalendar *cal);
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalUCalendarPointer
@@ -801,7 +802,8 @@ namespace U_ICU_NAMESPACE_OR_INTERNAL {
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUCalendarPointer, UCalendar, ucal_close);
 
-}
+U_NAMESPACE_END
+
 #endif
 
 /**

@@ -426,8 +426,8 @@ U_CAPI void U_EXPORT2
 unumrf_closeResult(UFormattedNumberRange* uresult);
 
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalUNumberRangeFormatterPointer
@@ -464,8 +464,8 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalUNumberRangeFormatterPointer, UNumberRangeForma
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUFormattedNumberRangePointer, UFormattedNumberRange, unumrf_closeResult);
 
-}
-#endif
+U_NAMESPACE_END
+#endif // U_SHOW_CPLUSPLUS_API
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 #endif //__UNUMBERRANGEFORMATTER_H__

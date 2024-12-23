@@ -182,8 +182,9 @@ U_CAPI void U_EXPORT2
 udtitvfmt_closeResult(UFormattedDateInterval* uresult);
 
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalUDateIntervalFormatPointer
@@ -207,7 +208,8 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalUDateIntervalFormatPointer, UDateIntervalFormat
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUFormattedDateIntervalPointer, UFormattedDateInterval, udtitvfmt_closeResult);
 
-}
+U_NAMESPACE_END
+
 #endif
 
 

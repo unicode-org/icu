@@ -204,8 +204,9 @@ ulocale_getUnicodeKeywordValue(
     const ULocale* locale, const char* keyword, int32_t keywordLength,
     char* valueBuffer, int32_t valueBufferCapacity, UErrorCode *err);
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalULocalePointer
@@ -218,7 +219,8 @@ namespace U_ICU_NAMESPACE_OR_INTERNAL {
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalULocalePointer, ULocale, ulocale_close);
 
-}
-#endif
+U_NAMESPACE_END
+
+#endif  /* U_SHOW_CPLUSPLUS_API */
 
 #endif /*_ULOCALE */

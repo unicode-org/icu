@@ -233,8 +233,7 @@ LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
             CharString cbundleID;
             cbundleID.appendInvariantChars(bundleID, status);
             const char* path = cbundleID.isEmpty() ? nullptr : cbundleID.data();
-            U_ICU_NAMESPACE_OR_INTERNAL::LocalUEnumerationPointer uenum(
-                ures_openAvailableLocales(path, &status));
+            icu::LocalUEnumerationPointer uenum(ures_openAvailableLocales(path, &status));
             for (;;) {
                 const char16_t* id = uenum_unext(uenum.getAlias(), nullptr, &status);
                 if (id == nullptr) {

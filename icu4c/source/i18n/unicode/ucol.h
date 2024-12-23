@@ -537,8 +537,9 @@ ucol_getContractionsAndExpansions( const UCollator *coll,
 U_CAPI void U_EXPORT2 
 ucol_close(UCollator *coll);
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalUCollatorPointer
@@ -551,7 +552,8 @@ namespace U_ICU_NAMESPACE_OR_INTERNAL {
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUCollatorPointer, UCollator, ucol_close);
 
-}
+U_NAMESPACE_END
+
 #endif
 
 /**

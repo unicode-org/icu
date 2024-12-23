@@ -415,8 +415,9 @@ ulocbld_buildLanguageTag(ULocaleBuilder* builder, char* language,
 U_CAPI UBool U_EXPORT2
 ulocbld_copyErrorTo(const ULocaleBuilder* builder, UErrorCode *outErrorCode);
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalULocaleBuilderPointer
@@ -429,7 +430,8 @@ namespace U_ICU_NAMESPACE_OR_INTERNAL {
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalULocaleBuilderPointer, ULocaleBuilder, ulocbld_close);
 
-}
-#endif
+U_NAMESPACE_END
+
+#endif  /* U_SHOW_CPLUSPLUS_API */
 
 #endif  // __ULOCBUILDER_H__

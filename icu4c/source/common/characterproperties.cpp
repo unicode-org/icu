@@ -24,7 +24,7 @@
 #include "umutex.h"
 #include "uprops.h"
 
-using U_ICU_NAMESPACE_OR_INTERNAL::LocalPointer;
+using icu::LocalPointer;
 #if !UCONFIG_NO_NORMALIZATION
 using icu::Normalizer2Factory;
 using icu::Normalizer2Impl;
@@ -340,7 +340,7 @@ UnicodeSet *makeSet(UProperty property, UErrorCode &errorCode) {
 UCPMap *makeMap(UProperty property, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return nullptr; }
     uint32_t nullValue = property == UCHAR_SCRIPT ? USCRIPT_UNKNOWN : 0;
-    U_ICU_NAMESPACE_OR_INTERNAL::LocalUMutableCPTriePointer mutableTrie(
+    icu::LocalUMutableCPTriePointer mutableTrie(
         umutablecptrie_open(nullValue, nullValue, &errorCode));
     const UnicodeSet *inclusions =
         icu::CharacterProperties::getInclusionsForProperty(property, errorCode);
