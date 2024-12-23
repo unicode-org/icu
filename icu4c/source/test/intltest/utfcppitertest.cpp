@@ -6,6 +6,12 @@
 
 #include <string_view>
 
+// Test header-only ICU C++ APIs. Do not use other ICU C++ APIs.
+// Non-default configuration:
+#define U_SHOW_CPLUSPLUS_API 0
+// Default configuration:
+// #define U_SHOW_CPLUSPLUS_HEADER_API 1
+
 #include "unicode/utypes.h"
 #include "unicode/utf16cppiter.h"
 #include "intltest.h"

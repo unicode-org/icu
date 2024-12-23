@@ -11,15 +11,17 @@
 
 #include "unicode/utypes.h"
 
-#if U_SHOW_CPLUSPLUS_API
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
 
 #include "unicode/utf16.h"
 #include "unicode/uversion.h"
 
 /**
  * \file
- * \brief C++ API: C++ iterators over Unicode 16-bit strings (=UTF-16 if well-formed).
+ * \brief C++ header-only API: C++ iterators over Unicode 16-bit strings (=UTF-16 if well-formed).
  */
+
+#ifndef U_HIDE_DRAFT_API
 
 namespace U_HEADER_ONLY_NAMESPACE {
 
@@ -44,7 +46,7 @@ enum U16IllFormedBehavior {
  *
  * TODO: check doxygen syntax for template parameters
  * @param Unit16 char16_t or uint16_t or (on Windows) wchar_t
- * @draft ICU 76
+ * @draft ICU 77
  */
 template<typename Unit16>
 class U16OneSeq {
@@ -108,7 +110,7 @@ private:
  * TODO: check doxygen syntax for template parameters
  * @param Unit16 char16_t or uint16_t or (on Windows) wchar_t
  * @param U16IllFormedBehavior TODO
- * @draft ICU 76
+ * @draft ICU 77
  */
 template<typename Unit16, U16IllFormedBehavior behavior>
 class U16Iterator {
@@ -161,7 +163,7 @@ private:
 
 // TODO: Non-validating iterator over the code points in a Unicode 16-bit string.
 // Assumes well-formed UTF-16. Otherwise the behavior is undefined.
-// TODO: all @draft ICU 76
+// TODO: all @draft ICU 77
 // template<typename Unit16>
 // class U16UnsafeIterator
 // TODO: only p, no start, no limit
@@ -170,5 +172,6 @@ private:
 
 }  // namespace U_HEADER_ONLY_NAMESPACE
 
-#endif  // U_SHOW_CPLUSPLUS_API
+#endif  // U_HIDE_DRAFT_API
+#endif  // U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
 #endif  // __UTF16CPPITER_H__
