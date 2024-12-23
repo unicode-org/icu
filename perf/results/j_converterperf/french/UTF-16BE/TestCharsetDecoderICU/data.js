@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734988649577,
+  "lastUpdate": 1734996216299,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29697,6 +29697,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.4158828204576057,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "841e88bc8cc3c470f7743f6557beb98814b1aea3",
+          "message": "ICU-22991 Remove unused private fIsSet\n\nThis field is removed in Java 24 years ago. Save 24 bytes per Calendar\nobject.",
+          "timestamp": "2024-12-23T14:58:56-08:00",
+          "tree_id": "d305e3bc0a49ff5bbc1c0037895c0f2c33756f90",
+          "url": "https://github.com/unicode-org/icu/commit/841e88bc8cc3c470f7743f6557beb98814b1aea3"
+        },
+        "date": 1734996013804,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.412782187674959,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
