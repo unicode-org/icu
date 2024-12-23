@@ -846,6 +846,8 @@ StringTest::TestCStr() {
 }
 
 void StringTest::TestCharStrAppendNumber() {
+    // Crashes on Cygwin since ICU-22954 PR #3295, see ICU-22999.
+#if U_PLATFORM != U_PF_CYGWIN
     IcuTestErrorCode errorCode(*this, "TestCharStrAppendNumber()");
 
     CharString testString;
@@ -873,6 +875,7 @@ void StringTest::TestCharStrAppendNumber() {
     testString.clear();
     testString.appendNumber(0, errorCode);
     assertEquals("TestAppendNumber when appending zero", "0", testString.data());
+#endif
 }
 
 void
