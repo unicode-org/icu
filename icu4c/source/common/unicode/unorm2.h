@@ -268,8 +268,9 @@ unorm2_openFiltered(const UNormalizer2 *norm2, const USet *filterSet, UErrorCode
 U_CAPI void U_EXPORT2
 unorm2_close(UNormalizer2 *norm2);
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalUNormalizer2Pointer
@@ -282,7 +283,8 @@ namespace U_ICU_NAMESPACE_OR_INTERNAL {
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUNormalizer2Pointer, UNormalizer2, unorm2_close);
 
-}
+U_NAMESPACE_END
+
 #endif
 
 /**

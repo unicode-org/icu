@@ -37,9 +37,6 @@
 #include "ureslocs.h"
 #include "ustr_imp.h"
 
-using U_ICU_NAMESPACE_OR_INTERNAL::LocalUEnumerationPointer;
-using U_ICU_NAMESPACE_OR_INTERNAL::LocalUResourceBundlePointer;
-
 // C++ API ----------------------------------------------------------------- ***
 
 U_NAMESPACE_BEGIN
@@ -316,7 +313,7 @@ _getStringOrCopyKey(const char *path, const char *locale,
 
     if(itemKey==nullptr) {
         /* top-level item: normal resource bundle access */
-        LocalUResourceBundlePointer rb(ures_open(path, locale, &errorCode));
+        icu::LocalUResourceBundlePointer rb(ures_open(path, locale, &errorCode));
 
         if(U_SUCCESS(errorCode)) {
             s=ures_getStringByKey(rb.getAlias(), tableKey, &length, &errorCode);
@@ -542,9 +539,9 @@ uloc_getDisplayName(const char *locale,
     {
         UErrorCode status = U_ZERO_ERROR;
 
-        LocalUResourceBundlePointer locbundle(
+        icu::LocalUResourceBundlePointer locbundle(
                 ures_open(U_ICUDATA_LANG, displayLocale, &status));
-        LocalUResourceBundlePointer dspbundle(
+        icu::LocalUResourceBundlePointer dspbundle(
                 ures_getByKeyWithFallback(locbundle.getAlias(), _kLocaleDisplayPattern, nullptr, &status));
 
         separator=ures_getStringByKeyWithFallback(dspbundle.getAlias(), _kSeparator, &sepLen, &status);
@@ -616,7 +613,7 @@ uloc_getDisplayName(const char *locale,
         int32_t langPos=0; /* position in output of language substitution */
         int32_t restLen=0; /* length of 'everything else' substitution */
         int32_t restPos=0; /* position in output of 'everything else' substitution */
-        LocalUEnumerationPointer kenum; /* keyword enumeration */
+        icu::LocalUEnumerationPointer kenum; /* keyword enumeration */
 
         /* prefix of pattern, extremely likely to be empty */
         if(sub0Pos) {
@@ -858,11 +855,11 @@ uloc_getDisplayKeywordValue(   const char* locale,
         int32_t dispNameLen = 0;
         const char16_t *dispName = nullptr;
 
-        LocalUResourceBundlePointer bundle(
+        icu::LocalUResourceBundlePointer bundle(
                 ures_open(U_ICUDATA_CURR, displayLocale, status));
-        LocalUResourceBundlePointer currencies(
+        icu::LocalUResourceBundlePointer currencies(
                 ures_getByKey(bundle.getAlias(), _kCurrencies, nullptr, status));
-        LocalUResourceBundlePointer currency(
+        icu::LocalUResourceBundlePointer currency(
                 ures_getByKeyWithFallback(currencies.getAlias(), keywordValue.data(), nullptr, status));
 
         dispName = ures_getStringByIndex(currency.getAlias(), UCURRENCY_DISPLAY_NAME_INDEX, &dispNameLen, status);

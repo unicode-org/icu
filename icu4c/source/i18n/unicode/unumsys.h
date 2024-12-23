@@ -89,8 +89,8 @@ unumsys_openByName(const char *name, UErrorCode *status);
 U_CAPI void U_EXPORT2
 unumsys_close(UNumberingSystem *unumsys);
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalUNumberingSystemPointer
@@ -102,7 +102,7 @@ namespace U_ICU_NAMESPACE_OR_INTERNAL {
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUNumberingSystemPointer, UNumberingSystem, unumsys_close);
 
-}
+U_NAMESPACE_END
 #endif
 
 /**

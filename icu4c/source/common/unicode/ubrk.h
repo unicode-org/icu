@@ -356,8 +356,9 @@ ubrk_clone(const UBreakIterator *bi,
 U_CAPI void U_EXPORT2
 ubrk_close(UBreakIterator *bi);
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalUBreakIteratorPointer
@@ -370,7 +371,8 @@ namespace U_ICU_NAMESPACE_OR_INTERNAL {
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUBreakIteratorPointer, UBreakIterator, ubrk_close);
 
-}
+U_NAMESPACE_END
+
 #endif
 
 /**

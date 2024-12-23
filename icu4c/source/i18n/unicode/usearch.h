@@ -360,8 +360,9 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
  */
 U_CAPI void U_EXPORT2 usearch_close(UStringSearch *searchiter);
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalUStringSearchPointer
@@ -374,7 +375,8 @@ namespace U_ICU_NAMESPACE_OR_INTERNAL {
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUStringSearchPointer, UStringSearch, usearch_close);
 
-}
+U_NAMESPACE_END
+
 #endif
 
 /* get and set methods -------------------------------------------------- */
