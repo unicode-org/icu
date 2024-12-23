@@ -4,6 +4,7 @@
 // usetheaderonlytest.cpp
 // created: 2024dec11 Markus W. Scherer
 
+#include <memory>
 #include <string>
 
 // Test header-only ICU C++ APIs. Do not use other ICU C++ APIs.
@@ -57,16 +58,17 @@ std::u16string cpString(UChar32 c) {
 void USetHeaderOnlyTest::TestUSetCodePointIterator() {
     IcuTestErrorCode errorCode(*this, "TestUSetCodePointIterator");
     using U_HEADER_NESTED_NAMESPACE::USetCodePoints;
-    LocalUSetPointer uset(uset_openPattern(u"[abcçカ🚴]", -1, errorCode));
+    std::unique_ptr<USet, decltype(&uset_close)> uset(
+        uset_openPattern(u"[abcçカ🚴]", -1, errorCode), &uset_close);
     std::u16string result;
-    for (UChar32 c : USetCodePoints(uset.getAlias())) {
+    for (UChar32 c : USetCodePoints(uset.get())) {
         // Commented-out sample code for pasting into the API docs.
         // printf("uset.codePoint U+%04lx\n", (long)c);
         result.append(u" ").append(cpString(c));
     }
     assertEquals(WHERE, u" a b c ç カ 🚴", result);
 
-    USetCodePoints range1(uset.getAlias());
+    USetCodePoints range1(uset.get());
     auto range2(range1);  // copy constructor
     auto iter = range1.begin();
     auto limit = range2.end();
@@ -89,16 +91,17 @@ void USetHeaderOnlyTest::TestUSetRangeIterator() {
     IcuTestErrorCode errorCode(*this, "TestUSetRangeIterator");
     using U_HEADER_NESTED_NAMESPACE::USetRanges;
     using U_HEADER_NESTED_NAMESPACE::CodePointRange;
-    LocalUSetPointer uset(uset_openPattern(u"[abcçカ🚴]", -1, errorCode));
+    std::unique_ptr<USet, decltype(&uset_close)> uset(
+        uset_openPattern(u"[abcçカ🚴]", -1, errorCode), &uset_close);
     std::u16string result;
-    for (auto [start, end] : USetRanges(uset.getAlias())) {
+    for (auto [start, end] : USetRanges(uset.get())) {
         // Commented-out sample code for pasting into the API docs.
         // printf("uset.range U+%04lx..U+%04lx\n", (long)start, (long)end);
         result.append(u" ").append(cpString(start)).append(u"-").append(cpString(end));
     }
     assertEquals(WHERE, u" a-c ç-ç カ-カ 🚴-🚴", result);
     result.clear();
-    for (auto range : USetRanges(uset.getAlias())) {
+    for (auto range : USetRanges(uset.get())) {
         for (UChar32 c : range) {
             // Commented-out sample code for pasting into the API docs.
             // printf("uset.range.c U+%04lx\n", (long)c);
@@ -108,7 +111,7 @@ void USetHeaderOnlyTest::TestUSetRangeIterator() {
     }
     assertEquals(WHERE, u" a b c | ç | カ | 🚴 |", result);
 
-    USetRanges range1(uset.getAlias());
+    USetRanges range1(uset.get());
     auto range2(range1);  // copy constructor
     auto iter = range1.begin();
     auto limit = range2.end();
@@ -155,9 +158,10 @@ void USetHeaderOnlyTest::TestUSetRangeIterator() {
 void USetHeaderOnlyTest::TestUSetStringIterator() {
     IcuTestErrorCode errorCode(*this, "TestUSetStringIterator");
     using U_HEADER_NESTED_NAMESPACE::USetStrings;
-    LocalUSetPointer uset(uset_openPattern(u"[abcçカ🚴{}{abc}{de}]", -1, errorCode));
+    std::unique_ptr<USet, decltype(&uset_close)> uset(
+        uset_openPattern(u"[abcçカ🚴{}{abc}{de}]", -1, errorCode), &uset_close);
     std::u16string result;
-    for (auto s : USetStrings(uset.getAlias())) {
+    for (auto s : USetStrings(uset.get())) {
         // Commented-out sample code for pasting into the API docs.
         // Needs U_SHOW_CPLUSPLUS_API=1 for UnicodeString.
         // UnicodeString us(s);
@@ -167,7 +171,7 @@ void USetHeaderOnlyTest::TestUSetStringIterator() {
     }
     assertEquals(WHERE, uR"( "" "abc" "de")", result);
 
-    USetStrings range1(uset.getAlias());
+    USetStrings range1(uset.get());
     auto range2(range1);  // copy constructor
     auto iter = range1.begin();
     auto limit = range2.end();
@@ -185,9 +189,10 @@ void USetHeaderOnlyTest::TestUSetStringIterator() {
 void USetHeaderOnlyTest::TestUSetElementIterator() {
     IcuTestErrorCode errorCode(*this, "TestUSetElementIterator");
     using U_HEADER_NESTED_NAMESPACE::USetElements;
-    LocalUSetPointer uset(uset_openPattern(u"[abcçカ🚴{}{abc}{de}]", -1, errorCode));
+    std::unique_ptr<USet, decltype(&uset_close)> uset(
+        uset_openPattern(u"[abcçカ🚴{}{abc}{de}]", -1, errorCode), &uset_close);
     std::u16string result;
-    for (auto el : USetElements(uset.getAlias())) {
+    for (auto el : USetElements(uset.get())) {
         // Commented-out sample code for pasting into the API docs.
         // Needs U_SHOW_CPLUSPLUS_API=1 for UnicodeString.
         // UnicodeString us(el);
@@ -197,7 +202,7 @@ void USetHeaderOnlyTest::TestUSetElementIterator() {
     }
     assertEquals(WHERE, uR"( "a" "b" "c" "ç" "カ" "🚴" "" "abc" "de")", result);
 
-    USetElements range1(uset.getAlias());
+    USetElements range1(uset.get());
     auto range2(range1);  // copy constructor
     auto iter = range1.begin();
     auto limit = range2.end();
