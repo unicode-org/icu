@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734982221621,
+  "lastUpdate": 1734987925549,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30027,6 +30027,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 314.03992419983445,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "e515c84645663eee00bf668653e252b73e5cbbed",
+          "message": "ICU-22991 Remove unnecessary overload in Calendar",
+          "timestamp": "2024-12-23T12:52:11-08:00",
+          "tree_id": "c444b21b860657c718bb2cb10075175d5918475a",
+          "url": "https://github.com/unicode-org/icu/commit/e515c84645663eee00bf668653e252b73e5cbbed"
+        },
+        "date": 1734987726572,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 308.10029038375114,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
