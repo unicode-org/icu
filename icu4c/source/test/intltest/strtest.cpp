@@ -730,6 +730,8 @@ StringTest::TestSTLCompatibility() {
 
 void
 StringTest::TestCharString() {
+    // Crashes on Cygwin since ICU-22954 PR #3295, see ICU-22999.
+#if U_PLATFORM != U_PF_CYGWIN
     IcuTestErrorCode errorCode(*this, "TestCharString()");
     char expected[400];
     static const char longStr[] =
@@ -831,6 +833,7 @@ StringTest::TestCharString() {
         s.extract(buffer, 2, errorCode);
         assertEquals("abc.extract(2) overflow", U_BUFFER_OVERFLOW_ERROR, errorCode.reset());
     }
+#endif
 }
 
 void
