@@ -1937,12 +1937,6 @@ protected:
      */
     int32_t     fFields[UCAL_FIELD_COUNT];
 
-private:
-    /**
-     * The flags which tell if a specified time field for the calendar is set.
-     */
-    UBool      fIsSet[UCAL_FIELD_COUNT];
-
 protected:
     /** Special values of stamp[]
      * @stable ICU 2.0
@@ -2552,7 +2546,6 @@ Calendar::internalSet(UCalendarDateFields field, int32_t value)
 {
     fFields[field] = value;
     fStamp[field] = kInternallySet;
-    fIsSet[field]     = true; // Remove later
 }
 
 /**

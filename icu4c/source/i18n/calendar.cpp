@@ -806,7 +806,6 @@ Calendar::operator=(const Calendar &right)
 {
     if (this != &right) {
         uprv_arrayCopy(right.fFields, fFields, UCAL_FIELD_COUNT);
-        uprv_arrayCopy(right.fIsSet, fIsSet, UCAL_FIELD_COUNT);
         uprv_arrayCopy(right.fStamp, fStamp, UCAL_FIELD_COUNT);
         fTime                    = right.fTime;
         fIsTimeSet               = right.fIsTimeSet;
@@ -1170,7 +1169,6 @@ Calendar::setTimeInMillis( double millis, UErrorCode& status ) {
     for (int32_t i=0; i<UCAL_FIELD_COUNT; ++i) {
         fFields[i]     = 0;
         fStamp[i]     = kUnset;
-        fIsSet[i]     = false;
     }
 
 
@@ -1213,7 +1211,6 @@ Calendar::set(UCalendarDateFields field, int32_t value)
         recalculateStamp();
     }
     fStamp[field]     = fNextStamp++;
-    fIsSet[field]     = true; // Remove later
     fIsTimeSet = fAreFieldsSet = fAreFieldsVirtuallySet = false;
 }
 
@@ -1273,7 +1270,6 @@ Calendar::clear()
     for (int32_t i=0; i<UCAL_FIELD_COUNT; ++i) {
         fFields[i]     = 0; // Must do this; other code depends on it
         fStamp[i]     = kUnset;
-        fIsSet[i]     = false; // Remove later
     }
     fIsTimeSet = fAreFieldsSet = fAreAllFieldsSet = fAreFieldsVirtuallySet = false;
     // fTime is not 'cleared' - may be used if no fields are set.
@@ -1296,12 +1292,10 @@ Calendar::clear(UCalendarDateFields field)
     if (field == UCAL_MONTH) {
         fFields[UCAL_ORDINAL_MONTH]         = 0;
         fStamp[UCAL_ORDINAL_MONTH]         = kUnset;
-        fIsSet[UCAL_ORDINAL_MONTH]         = false; // Remove later
     }
     if (field == UCAL_ORDINAL_MONTH) {
         fFields[UCAL_MONTH]         = 0;
         fStamp[UCAL_MONTH]         = kUnset;
-        fIsSet[UCAL_MONTH]         = false; // Remove later
     }
     fIsTimeSet = fAreFieldsSet = fAreAllFieldsSet = fAreFieldsVirtuallySet = false;
 }
@@ -1434,10 +1428,8 @@ void Calendar::computeFields(UErrorCode &ec)
     for (int32_t i=0; i<UCAL_FIELD_COUNT; ++i) {
         if ((mask & 1) == 0) {
             fStamp[i] = kInternallySet;
-            fIsSet[i] = true; // Remove later
         } else {
             fStamp[i] = kUnset;
-            fIsSet[i] = false; // Remove later
         }
         mask >>= 1;
     }
