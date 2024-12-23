@@ -346,9 +346,9 @@ uset_openPatternOptions(const UChar* pattern, int32_t patternLength,
 U_CAPI void U_EXPORT2
 uset_close(USet* set);
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
+#if U_SHOW_CPLUSPLUS_API
 
-namespace U_ICU_NAMESPACE_OR_INTERNAL {
+U_NAMESPACE_BEGIN
 
 /**
  * \class LocalUSetPointer
@@ -361,7 +361,7 @@ namespace U_ICU_NAMESPACE_OR_INTERNAL {
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUSetPointer, USet, uset_close);
 
-}  // U_ICU_NAMESPACE_OR_INTERNAL
+U_NAMESPACE_END
 
 #endif
 
