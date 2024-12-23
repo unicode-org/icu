@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734988157210,
+  "lastUpdate": 1734995722809,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -59726,6 +59726,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 8.863322525479832,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "841e88bc8cc3c470f7743f6557beb98814b1aea3",
+          "message": "ICU-22991 Remove unused private fIsSet\n\nThis field is removed in Java 24 years ago. Save 24 bytes per Calendar\nobject.",
+          "timestamp": "2024-12-23T14:58:56-08:00",
+          "tree_id": "d305e3bc0a49ff5bbc1c0037895c0f2c33756f90",
+          "url": "https://github.com/unicode-org/icu/commit/841e88bc8cc3c470f7743f6557beb98814b1aea3"
+        },
+        "date": 1734995521785,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 9.139227123329778,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
