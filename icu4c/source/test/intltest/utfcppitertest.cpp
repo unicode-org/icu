@@ -51,16 +51,16 @@ void U16IteratorTest::testExperiment() {
     std::u16string_view good(u"abçカ🚴"sv);
     const char16_t *goodLimit = good.data() + good.length();
     U16Iterator<char16_t, U16_BEHAVIOR_NEGATIVE> goodIter(good.data(), good.data(), goodLimit);
-    assertEquals("goodIter[0] * codePoint()", u'a', (*goodIter).codePoint());
+    assertEquals("goodIter[0] * codePoint", u'a', (*goodIter).codePoint);
     ++goodIter;  // pre-increment
-    assertEquals("goodIter[1] * codePoint()", u'b', (*goodIter).codePoint());
+    assertEquals("goodIter[1] * codePoint", u'b', (*goodIter).codePoint);
     ++goodIter;
-    assertEquals("goodIter[2] * codePoint()", u'ç', (*goodIter++).codePoint());  // post-increment
-    assertEquals("goodIter[3] * codePoint()", u'カ', (*goodIter).codePoint());
+    assertEquals("goodIter[2] * codePoint", u'ç', (*goodIter++).codePoint);  // post-increment
+    assertEquals("goodIter[3] * codePoint", u'カ', (*goodIter).codePoint);
     ++goodIter;
     const U16OneSeq<char16_t> &seq = *goodIter++;
-    assertEquals("goodIter[4] * codePoint()", U'🚴', seq.codePoint());
-    assertEquals("goodIter[4] * length()", 2, seq.length());
+    assertEquals("goodIter[4] * codePoint", U'🚴', seq.codePoint);
+    assertEquals("goodIter[4] * length", 2, seq.length);
     assertTrue("goodIter[4] * stringView()", seq.stringView() == u"🚴"sv);
     U16Iterator<char16_t, U16_BEHAVIOR_NEGATIVE> goodEndIter(good.data(), goodLimit, goodLimit);
     assertTrue("goodIter == goodEndIter", goodIter == goodEndIter);

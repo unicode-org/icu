@@ -41,6 +41,8 @@ enum U16IllFormedBehavior {
     U16_BEHAVIOR_SURROGATE
 };
 
+// TODO: Consider a template parameter for UChar32 vs. char32_t vs. uint32_t.
+
 /**
  * A code unit sequence for one code point returned by U16Iterator.
  *
@@ -49,59 +51,18 @@ enum U16IllFormedBehavior {
  * @draft ICU 77
  */
 template<typename Unit16>
-class U16OneSeq {
-public:
-    U16OneSeq(const U16OneSeq &other) = default;
-
-    const Unit16 *data() { return p; }
-    int32_t length() const { return len; }
+struct U16OneSeq {
+    // Order of fields with padding and access frequency in mind.
+    UChar32 codePoint = 0;
+    uint8_t length = 0;
+    bool isWellFormed = false;
+    const Unit16 *data;
 
     std::basic_string_view<Unit16> stringView() const {
-        return std::basic_string_view<Unit16>(p, len);
+        return std::basic_string_view<Unit16>(data, length);
     }
 
-    bool isWellFormed() const { return ok; }
-
-    UChar32 codePoint() const { return c; }
-
-    // TODO: std::optional<UChar32> maybeCodePoint() const ? (nullopt if !ok)
-
-private:
-    // TODO: Why can't we just use Unit16 here?
-    // error: declaration of 'Unit16' shadows template parameter
-    template<typename SomeOtherUnit16, U16IllFormedBehavior behavior>
-    friend class U16Iterator;
-
-    U16OneSeq(const Unit16 *p) : p(p) {}
-
-    void fwd1() { p += len; }
-
-    void readOneForward(const Unit16 *limit) {
-        if (p == limit) {
-            len = 0;
-            return;
-        }
-        // see U16_NEXT_OR_FFFD()
-        c = *p;
-        len = 1;
-        ok = true;
-        if (U16_IS_SURROGATE(c)) {
-            uint16_t c2;
-            if (U16_IS_SURROGATE_LEAD(c) && (p + 1) != limit && U16_IS_TRAIL(c2 = p[1])) {
-                c = U16_GET_SUPPLEMENTARY(c, c2);
-                len = 2;
-            } else {
-                // TODO: U16IllFormedBehavior
-                c = 0xfffd;
-                ok = false;
-            }
-        }
-    }
-
-    const Unit16 *p;
-    UChar32 c = 0;
-    int8_t len = 0;
-    bool ok = false;
+    // TODO: std::optional<UChar32> maybeCodePoint() const ? (nullopt if !isWellFormed)
 };
 
 /**
@@ -117,53 +78,68 @@ class U16Iterator {
 public:
     // TODO: make private, make friends
     U16Iterator(const Unit16 *start, const Unit16 *p, const Unit16 *limit) :
-            start(start), limit(limit), seq(p) {
-        seq.readOneForward(limit);
-    }
+            start(start), p(p), limit(limit) {}
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
 
     U16Iterator(const U16Iterator &other) = default;
 
-    bool operator==(const U16Iterator &other) const { return seq.p == other.seq.p; }
+    bool operator==(const U16Iterator &other) const { return p == other.p; }
     bool operator!=(const U16Iterator &other) const { return !operator==(other); }
 
-    const U16OneSeq<Unit16> &operator*() const {
-        return seq;
+    const U16OneSeq<Unit16> operator*() const {
+        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // Similar to U16_NEXT_OR_FFFD().
+        UChar32 c = *p;
+        if (!U16_IS_SURROGATE(c)) {
+            return {c, 1, true, p};
+        } else {
+            uint16_t c2;
+            if (U16_IS_SURROGATE_LEAD(c) && (p + 1) != limit && U16_IS_TRAIL(c2 = p[1])) {
+                c = U16_GET_SUPPLEMENTARY(c, c2);
+                return {c, 2, true, p};
+            } else {
+                // TODO: U16IllFormedBehavior
+                return {0xfffd, 1, false, p};
+            }
+        }
     }
 
     U16Iterator &operator++() {  // pre-increment
-        // TODO: think about switching directions etc.
-        // Assume that readOneForward() was called and set seq.len.
-        // Skip the current code point, then read the next one.
-        seq.fwd1();
-        seq.readOneForward(limit);
+        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // Similar to U16_FWD_1().
+        if (U16_IS_LEAD(*p++) && p != limit && U16_IS_TRAIL(*p)) {
+            ++p;
+        }
         return *this;
     }
 
     U16Iterator operator++(int) {  // post-increment
+        // TODO: assert p != limit -- more precisely: start <= p < limit
         U16Iterator result(*this);
-        // TODO: think about switching directions etc.
-        // Assume that readOneForward() was called and set seq.len.
-        // Skip the current code point, then read the next one.
-        seq.fwd1();
-        seq.readOneForward(limit);
+        // More similar to U16_NEXT_OR_FFFD() than U16_FWD_1() to try to help the compiler
+        // amortize work between operator*() and operator++(int) in typical *it++ usage.
+        // Otherwise this is slightly less efficient because it tests a lead surrogate twice.
+        UChar32 c = *p++;
+        if (U16_IS_SURROGATE(c) &&
+                U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(*p)) {
+            ++p;
+        }
         return result;
     }
 
 private:
     // In a validating iterator, we need start & limit so that when we read a code point
     // (forward or backward) we can test if there are enough code units.
-    const Unit16 *start;
-    const Unit16 *limit;
-    U16OneSeq<Unit16> seq;
+    const Unit16 *const start;
+    const Unit16 *p;
+    const Unit16 *const limit;
 };
 
 // ------------------------------------------------------------------------- ***
 
 // TODO: Non-validating iterator over the code points in a Unicode 16-bit string.
 // Assumes well-formed UTF-16. Otherwise the behavior is undefined.
-// TODO: all @draft ICU 77
 // template<typename Unit16>
 // class U16UnsafeIterator
 // TODO: only p, no start, no limit
