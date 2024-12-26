@@ -7,12 +7,11 @@
 #ifndef __UTF16CPPITER_H__
 #define __UTF16CPPITER_H__
 
-#include <string_view>
-
 #include "unicode/utypes.h"
 
 #if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
 
+#include <string_view>
 #include "unicode/utf16.h"
 #include "unicode/uversion.h"
 
