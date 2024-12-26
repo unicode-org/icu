@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734995561632,
+  "lastUpdate": 1735240548985,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29967,6 +29967,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 561.8433159103176,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "d9d09db2a7167eea2b5749836ef32cdd45303fdd",
+          "message": "ICU-22921 remove redundant PR checklist item",
+          "timestamp": "2024-12-26T11:07:30-08:00",
+          "tree_id": "4bcfaffbc9403161ac33493d352c7605fd45dd46",
+          "url": "https://github.com/unicode-org/icu/commit/d9d09db2a7167eea2b5749836ef32cdd45303fdd"
+        },
+        "date": 1735240353658,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 558.1682653018626,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
