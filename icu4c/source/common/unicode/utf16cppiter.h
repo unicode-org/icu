@@ -86,7 +86,7 @@ public:
     bool operator==(const U16Iterator &other) const { return p == other.p; }
     bool operator!=(const U16Iterator &other) const { return !operator==(other); }
 
-    const U16OneSeq<Unit16> operator*() const {
+    U16OneSeq<Unit16> operator*() const {
         // TODO: assert p != limit -- more precisely: start <= p < limit
         // Similar to U16_NEXT_OR_FFFD().
         UChar32 c = *p;
@@ -98,8 +98,7 @@ public:
                 c = U16_GET_SUPPLEMENTARY(c, c2);
                 return {c, 2, true, p};
             } else {
-                // TODO: U16IllFormedBehavior
-                return {0xfffd, 1, false, p};
+                return {sub(c), 1, false, p};
             }
         }
     }
@@ -128,6 +127,15 @@ public:
     }
 
 private:
+    // Handle ill-formed UTF-16: One unpaired surrogate.
+    UChar32 sub(UChar32 surrogate) const {
+        switch (behavior) {
+            case U16_BEHAVIOR_NEGATIVE: return U_SENTINEL;
+            case U16_BEHAVIOR_FFFD: return 0xfffd;
+            case U16_BEHAVIOR_SURROGATE: return surrogate;
+        }
+    }
+
     // In a validating iterator, we need start & limit so that when we read a code point
     // (forward or backward) we can test if there are enough code units.
     const Unit16 *const start;
