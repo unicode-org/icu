@@ -143,6 +143,39 @@ private:
     const Unit16 *const limit;
 };
 
+/**
+ * A C++ "range" for iterating over all of the code points of a 16-bit Unicode string.
+ *
+ * @return a code point iterator.
+ * @draft ICU 77
+ */
+template<typename Unit16, U16IllFormedBehavior behavior>
+class U16StringCodePoints {
+public:
+    /**
+     * Constructs a C++ "range" object over the code points in the string.
+     * @draft ICU 77
+     */
+    U16StringCodePoints(std::basic_string_view<Unit16> s) : s(s) {}
+
+    /** @draft ICU 77 */
+    U16StringCodePoints(const U16StringCodePoints &other) = default;
+
+    /** @draft ICU 77 */
+    U16Iterator<Unit16, behavior> begin() const {
+        return {s.data(), s.data(), s.data() + s.length()};
+    }
+
+    /** @draft ICU 77 */
+    U16Iterator<Unit16, behavior> end() const {
+        const Unit16 *limit = s.data() + s.length();
+        return {s.data(), limit, limit};
+    }
+
+private:
+    std::basic_string_view<Unit16> s;
+};
+
 // ------------------------------------------------------------------------- ***
 
 // TODO: Non-validating iterator over the code points in a Unicode 16-bit string.

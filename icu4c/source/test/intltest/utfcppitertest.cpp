@@ -25,6 +25,7 @@ using U_HEADER_ONLY_NAMESPACE::U16_BEHAVIOR_FFFD;
 using U_HEADER_ONLY_NAMESPACE::U16_BEHAVIOR_SURROGATE;
 using U_HEADER_ONLY_NAMESPACE::U16Iterator;
 using U_HEADER_ONLY_NAMESPACE::U16OneSeq;
+using U_HEADER_ONLY_NAMESPACE::U16StringCodePoints;
 
 class U16IteratorTest : public IntlTest {
 public:
@@ -57,8 +58,8 @@ void U16IteratorTest::runIndexedTest(int32_t index, UBool exec, const char *&nam
 void U16IteratorTest::testGood() {
     IcuTestErrorCode errorCode(*this, "testGood");
     std::u16string_view good(u"abçカ🚴"sv);
-    const char16_t *limit = good.data() + good.length();
-    U16Iterator<char16_t, U16_BEHAVIOR_NEGATIVE> iter(good.data(), good.data(), limit);
+    U16StringCodePoints<char16_t, U16_BEHAVIOR_NEGATIVE> range(good);
+    auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint);
     ++iter;  // pre-increment
     U16OneSeq<char16_t> seq = *iter;
@@ -75,16 +76,15 @@ void U16IteratorTest::testGood() {
     assertEquals("iter[4] * length", 2, seq.length);
     assertTrue("iter[4] * isWellFormed", seq.isWellFormed);
     assertTrue("iter[4] * stringView()", seq.stringView() == u"🚴"sv);
-    U16Iterator<char16_t, U16_BEHAVIOR_NEGATIVE> endIter(good.data(), limit, limit);
-    assertTrue("iter == endIter", iter == endIter);
+    assertTrue("iter == endIter", iter == range.end());
 }
 
 void U16IteratorTest::testNegative() {
     IcuTestErrorCode errorCode(*this, "testNegative");
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
-    const char16_t *limit = bad.data() + bad.length();
-    U16Iterator<char16_t, U16_BEHAVIOR_NEGATIVE> iter(bad.data(), bad.data(), limit);
+    U16StringCodePoints<char16_t, U16_BEHAVIOR_NEGATIVE> range(bad);
+    auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint);
     ++iter;  // pre-increment
     U16OneSeq<char16_t> seq = *iter;
@@ -100,16 +100,15 @@ void U16IteratorTest::testNegative() {
     assertEquals("iter[3] * codePoint", -1, seq.codePoint);
     assertFalse("iter[3] * isWellFormed", seq.isWellFormed);
     assertEquals("iter[4] * stringView()", u"ç", (*iter++).stringView());  // post-increment
-    U16Iterator<char16_t, U16_BEHAVIOR_NEGATIVE> endIter(bad.data(), limit, limit);
-    assertTrue("iter == endIter", iter == endIter);
+    assertTrue("iter == endIter", iter == range.end());
 }
 
 void U16IteratorTest::testFFFD() {
     IcuTestErrorCode errorCode(*this, "testFFFD");
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
-    const char16_t *limit = bad.data() + bad.length();
-    U16Iterator<char16_t, U16_BEHAVIOR_FFFD> iter(bad.data(), bad.data(), limit);
+    U16StringCodePoints<char16_t, U16_BEHAVIOR_FFFD> range(bad);
+    auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint);
     ++iter;  // pre-increment
     U16OneSeq<char16_t> seq = *iter;
@@ -125,16 +124,15 @@ void U16IteratorTest::testFFFD() {
     assertEquals("iter[3] * codePoint", 0xfffd, seq.codePoint);
     assertFalse("iter[3] * isWellFormed", seq.isWellFormed);
     assertEquals("iter[4] * stringView()", u"ç", (*iter++).stringView());  // post-increment
-    U16Iterator<char16_t, U16_BEHAVIOR_FFFD> endIter(bad.data(), limit, limit);
-    assertTrue("iter == endIter", iter == endIter);
+    assertTrue("iter == endIter", iter == range.end());
 }
 
 void U16IteratorTest::testSurrogate() {
     IcuTestErrorCode errorCode(*this, "testSurrogate");
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
-    const char16_t *limit = bad.data() + bad.length();
-    U16Iterator<char16_t, U16_BEHAVIOR_SURROGATE> iter(bad.data(), bad.data(), limit);
+    U16StringCodePoints<char16_t, U16_BEHAVIOR_SURROGATE> range(bad);
+    auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint);
     ++iter;  // pre-increment
     U16OneSeq<char16_t> seq = *iter;
@@ -150,6 +148,5 @@ void U16IteratorTest::testSurrogate() {
     assertEquals("iter[3] * codePoint", 0xdc05, seq.codePoint);
     assertFalse("iter[3] * isWellFormed", seq.isWellFormed);
     assertEquals("iter[4] * stringView()", u"ç", (*iter++).stringView());  // post-increment
-    U16Iterator<char16_t, U16_BEHAVIOR_SURROGATE> endIter(bad.data(), limit, limit);
-    assertTrue("iter == endIter", iter == endIter);
+    assertTrue("iter == endIter", iter == range.end());
 }
