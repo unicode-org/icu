@@ -7,13 +7,37 @@
 #ifndef __UTF16CPPITER_H__
 #define __UTF16CPPITER_H__
 
+// TODO: For experimentation outside of ICU, comment out this include.
+// Experimentally conditional code below checks for UTYPES_H and
+// otherwise uses copies of bits of ICU.
 #include "unicode/utypes.h"
 
-#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
+#if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API || !defined(UTYPES_H)
 
 #include <string_view>
+#ifdef UTYPES_H
 #include "unicode/utf16.h"
 #include "unicode/uversion.h"
+#else
+// TODO: Remove checks for UTYPES_H and replacement definitions.
+// unicode/utypes.h etc.
+#include <inttypes.h>
+typedef int32_t UChar32;
+constexpr UChar32 U_SENTINEL = -1;
+// unicode/uversion.h
+#define U_HEADER_ONLY_NAMESPACE header
+namespace header {}
+// unicode/utf.h
+#define U_IS_SURROGATE(c) (((c)&0xfffff800)==0xd800)
+// unicode/utf16.h
+#define U16_IS_LEAD(c) (((c)&0xfffffc00)==0xd800)
+#define U16_IS_TRAIL(c) (((c)&0xfffffc00)==0xdc00)
+#define U16_IS_SURROGATE(c) U_IS_SURROGATE(c)
+#define U16_IS_SURROGATE_LEAD(c) (((c)&0x400)==0)
+#define U16_SURROGATE_OFFSET ((0xd800<<10UL)+0xdc00-0x10000)
+#define U16_GET_SUPPLEMENTARY(lead, trail) \
+    (((UChar32)(lead)<<10UL)+(UChar32)(trail)-U16_SURROGATE_OFFSET)
+#endif
 
 /**
  * \file
