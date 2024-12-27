@@ -127,16 +127,42 @@ public:
 
     U16Iterator &operator++() {  // pre-increment
         // TODO: assert p != limit -- more precisely: start <= p < limit
-        // Similar to U16_FWD_1().
-        if (U16_IS_LEAD(*p++) && p != limit && U16_IS_TRAIL(*p)) {
-            ++p;
-        }
+        inc();
         return *this;
     }
 
     U16Iterator operator++(int) {  // post-increment
         // TODO: assert p != limit -- more precisely: start <= p < limit
         U16Iterator result(*this);
+        inc();
+        return result;
+    }
+
+    // Fused/optimized *iter++
+    U16OneSeq<Unit16, CP32> readAndInc() {
+        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // Very similar to U16_NEXT_OR_FFFD().
+        const Unit16 *p0 = p;
+        CP32 c = *p++;
+        if (!U16_IS_SURROGATE(c)) {
+            return {c, 1, true, p0};
+        } else {
+            uint16_t c2;
+            if (U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(c2 = *p)) {
+                ++p;
+                c = U16_GET_SUPPLEMENTARY(c, c2);
+                return {c, 2, true, p0};
+            } else {
+                return {sub(c), 1, false, p0};
+            }
+        }
+    }
+
+    // TODO: operator--()
+    // TODO: maybe fused decAndRead()?
+
+private:
+    void inc() {
         // More similar to U16_NEXT_OR_FFFD() than U16_FWD_1() to try to help the compiler
         // amortize work between operator*() and operator++(int) in typical *it++ usage.
         // Otherwise this is slightly less efficient because it tests a lead surrogate twice.
@@ -145,14 +171,8 @@ public:
                 U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(*p)) {
             ++p;
         }
-        return result;
     }
 
-    // TODO: operator--()
-    // TODO: maybe fused readAndInc()?
-    // TODO: maybe fused decAndRead()?
-
-private:
     // Handle ill-formed UTF-16: One unpaired surrogate.
     CP32 sub(CP32 surrogate) const {
         switch (behavior) {
@@ -228,6 +248,17 @@ int32_t loopIterPlusPlus(std::u16string_view s) {
    auto limit = range.end();
    while (iter != limit) {
        sum += (*iter++).codePoint;
+   }
+   return sum;
+}
+
+int32_t loopReadAndInc(std::u16string_view s) {
+   header::U16StringCodePoints<char16_t, UChar32, header::U16_BEHAVIOR_NEGATIVE> range(s);
+   int32_t sum = 0;
+   auto iter = range.begin();
+   auto limit = range.end();
+   while (iter != limit) {
+       sum += iter.readAndInc().codePoint;
    }
    return sum;
 }
