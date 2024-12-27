@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1735240436670,
+  "lastUpdate": 1735267775865,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30057,6 +30057,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 344.16141928206264,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "ff31805f5617141fd0713b3f6fac486eb9570c85",
+          "message": "ICU-22991 Change fIsTimeSet fAreFieldsSet fAreAllFieldsSet fAreFieldsVirtuallySet fIsSet fStamp to private\n\nhttps://docs.google.com/document/d/1RqP3s7Y1YLahqopNcuadl3DT-DMIZ7ASXZbSy7M2mFE/edit?tab=t.0#heading=h.lok0fhe381qa",
+          "timestamp": "2024-12-23T12:51:13-08:00",
+          "tree_id": "d9beadb0d8f324afe3662f31c71b50afba127c08",
+          "url": "https://github.com/unicode-org/icu/commit/ff31805f5617141fd0713b3f6fac486eb9570c85"
+        },
+        "date": 1735267573678,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 331.2952945611408,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
