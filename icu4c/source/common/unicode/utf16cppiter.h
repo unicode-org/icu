@@ -210,6 +210,29 @@ private:
 // class U16UnsafeIterator
 // TODO: only p, no start, no limit
 
+// TODO: remove experimental sample code
+#ifndef UTYPES_H
+int32_t rangeLoop(std::u16string_view s) {
+   header::U16StringCodePoints<char16_t, UChar32, header::U16_BEHAVIOR_NEGATIVE> range(s);
+   int32_t sum = 0;
+   for (auto seq : range) {
+       sum += seq.codePoint;
+   }
+   return sum;
+}
+
+int32_t loopIterPlusPlus(std::u16string_view s) {
+   header::U16StringCodePoints<char16_t, UChar32, header::U16_BEHAVIOR_NEGATIVE> range(s);
+   int32_t sum = 0;
+   auto iter = range.begin();
+   auto limit = range.end();
+   while (iter != limit) {
+       sum += (*iter++).codePoint;
+   }
+   return sum;
+}
+#endif
+
 }  // namespace U_HEADER_ONLY_NAMESPACE
 
 #endif  // U_HIDE_DRAFT_API
