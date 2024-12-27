@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1735241031248,
+  "lastUpdate": 1735268538326,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -58695,6 +58695,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2100568.9967,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "ff31805f5617141fd0713b3f6fac486eb9570c85",
+          "message": "ICU-22991 Change fIsTimeSet fAreFieldsSet fAreAllFieldsSet fAreFieldsVirtuallySet fIsSet fStamp to private\n\nhttps://docs.google.com/document/d/1RqP3s7Y1YLahqopNcuadl3DT-DMIZ7ASXZbSy7M2mFE/edit?tab=t.0#heading=h.lok0fhe381qa",
+          "timestamp": "2024-12-23T12:51:13-08:00",
+          "tree_id": "d9beadb0d8f324afe3662f31c71b50afba127c08",
+          "url": "https://github.com/unicode-org/icu/commit/ff31805f5617141fd0713b3f6fac486eb9570c85"
+        },
+        "date": 1735268334574,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 151.8135,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8785688.7716,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2108962.2768,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7796649.3667,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2110434.9205,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
