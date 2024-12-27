@@ -79,15 +79,13 @@ Format::Format()
 
 Format::~Format()
 {
-    delete actualLocale;
-    delete validLocale;
 }
 
 // -------------------------------------
 // copy constructor
 
 Format::Format(const Format &that)
-    : UObject(that)
+    : UObject(that), DataLocaleInformation(that)
 {
     *this = that;
 }
@@ -99,10 +97,7 @@ Format&
 Format::operator=(const Format& that)
 {
     if (this != &that) {
-        UErrorCode status = U_ZERO_ERROR;
-        U_LOCALE_BASED(locBased, *this);
-        locBased.setLocaleIDs(that.validLocale, that.actualLocale, status);
-        U_ASSERT(U_SUCCESS(status));
+        DataLocaleInformation::operator=(that);
     }
     return *this;
 }
@@ -196,24 +191,6 @@ void Format::syntaxError(const UnicodeString& pattern,
     pattern.extract(start,stop-start,parseError.postContext,0);
     //null terminate the buffer
     parseError.postContext[stop-start]= 0;
-}
-
-Locale
-Format::getLocale(ULocDataLocaleType type, UErrorCode& status) const {
-    return LocaleBased::getLocale(validLocale, actualLocale, type, status);
-}
-
-const char *
-Format::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
-    return LocaleBased::getLocaleID(validLocale,actualLocale, type, status);
-}
-
-void
-Format::setLocaleIDs(const char* valid, const char* actual) {
-    U_LOCALE_BASED(locBased, *this);
-    UErrorCode status = U_ZERO_ERROR;
-    locBased.setLocaleIDs(valid, actual, status);
-    U_ASSERT(U_SUCCESS(status));
 }
 
 U_NAMESPACE_END

@@ -105,7 +105,7 @@ class CharString;
  * and in the sample program icu/source/samples/break/break.cpp
  *
  */
-class U_COMMON_API BreakIterator : public UObject {
+class U_COMMON_API BreakIterator : public UObject , public DataLocaleInformation  {
 public:
     /**
      *  destructor
@@ -584,7 +584,7 @@ public:
      * actual locale.
      * @stable ICU 2.8
      */
-    Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
+    Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const override;
 
 #ifndef U_HIDE_INTERNAL_API
     /** Get the locale for this break iterator object. You can choose between valid and actual locale.
@@ -648,8 +648,6 @@ protected:
 private:
 
     /** @internal (private) */
-    CharString* actualLocale = nullptr;
-    CharString* validLocale = nullptr;
     CharString* requestLocale = nullptr;
 };
 
