@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1735270566518,
+  "lastUpdate": 1735272689544,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -45693,6 +45693,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.9782,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "4c9ef1a31bc41cd4af5880bb04761c9893c770dc",
+          "message": "ICU-22962 Fix int overflow in Calendar::handleComputeJulianDay",
+          "timestamp": "2024-12-20T16:12:58-08:00",
+          "tree_id": "551f06322df6c947afa8885fe71c4dbbf8183ef4",
+          "url": "https://github.com/unicode-org/icu/commit/4c9ef1a31bc41cd4af5880bb04761c9893c770dc"
+        },
+        "date": 1735272485535,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.2211,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.0288,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.9794,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
