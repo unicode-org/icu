@@ -55,6 +55,7 @@ void U_CALLCONV locale_available_init(); /**< @internal */
 
 class StringEnumeration;
 class UnicodeString;
+class CharString;
 
 /**
  * A <code>Locale</code> object represents a specific geographical, political,
@@ -1289,6 +1290,63 @@ inline UBool
 Locale::isBogus() const {
     return fIsBogus;
 }
+
+/**
+ * <code>DataLocaleInformation</code> is an abstract base class for objects
+ * that perform getLocale operations to query locale data resolution.
+ */
+class U_COMMON_API DataLocaleInformation : public UMemory {
+public:
+    DataLocaleInformation() = default;
+
+    /**
+     * Initializes a DataLocaleInformation object from another
+     * DataLocaleInformation object.
+     *
+     * @param other The DataLocaleInformation object being copied in.
+     */
+    DataLocaleInformation(const DataLocaleInformation& other);
+
+    virtual ~DataLocaleInformation();
+
+    /**
+     * Set the locale meta-data for the service object wrapped by this
+     * object.  If either parameter is zero, it is ignored.
+     * @param valid the ID of the valid locale
+     * @param actual the ID of the actual locale
+     */
+    virtual void setLocaleIDs(const char* valid, const char* actual);
+
+    /** Get the locale for this object. You can choose between valid and actual locale.
+     *  @param type type of the locale we're looking for (valid or actual)
+     *  @param status error code for the operation
+     *  @return the locale
+     */
+    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
+
+#ifndef U_HIDE_INTERNAL_API
+    /** Get the locale for this object. You can choose between valid and actual locale.
+     *  @param type type of the locale we're looking for (valid or actual)
+     *  @param status error code for the operation
+     *  @return the locale
+     *  @internal
+     */
+    const char* getLocaleID(ULocDataLocaleType type, UErrorCode &status) const;
+#endif  /* U_HIDE_INTERNAL_API */
+
+    /**
+     * Replaces the entire contents of *this with the specified value.
+     *
+     * @param other The DataLocaleInformation object being copied in.
+     * @return      *this
+     */
+    DataLocaleInformation& operator=(const DataLocaleInformation& other);
+
+
+private:
+    CharString* validLocale = nullptr;
+    CharString* actualLocale = nullptr;
+};
 
 U_NAMESPACE_END
 

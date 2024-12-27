@@ -318,7 +318,7 @@ DateFormatSymbols::DateFormatSymbols(const char *type, UErrorCode& status)
 }
 
 DateFormatSymbols::DateFormatSymbols(const DateFormatSymbols& other)
-    : UObject(other)
+    : UObject(other), DataLocaleInformation(other)
 {
     copyData(other);
 }
@@ -400,10 +400,6 @@ DateFormatSymbols::createZoneStrings(const UnicodeString *const * otherStrings)
  */
 void
 DateFormatSymbols::copyData(const DateFormatSymbols& other) {
-    UErrorCode status = U_ZERO_ERROR;
-    U_LOCALE_BASED(locBased, *this);
-    locBased.setLocaleIDs(other.validLocale, other.actualLocale, status);
-    U_ASSERT(U_SUCCESS(status));
     assignArray(fEras, fErasCount, other.fEras, other.fErasCount);
     assignArray(fEraNames, fEraNamesCount, other.fEraNames, other.fEraNamesCount);
     assignArray(fNarrowEras, fNarrowErasCount, other.fNarrowEras, other.fNarrowErasCount);
@@ -487,6 +483,7 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
 DateFormatSymbols& DateFormatSymbols::operator=(const DateFormatSymbols& other)
 {
     if (this == &other) { return *this; }  // self-assignment: no-op
+    DataLocaleInformation::operator=(other);
     dispose();
     copyData(other);
 
@@ -496,8 +493,6 @@ DateFormatSymbols& DateFormatSymbols::operator=(const DateFormatSymbols& other)
 DateFormatSymbols::~DateFormatSymbols()
 {
     dispose();
-    delete actualLocale;
-    delete validLocale;
 }
 
 void DateFormatSymbols::dispose()
@@ -537,10 +532,6 @@ void DateFormatSymbols::dispose()
     delete[] fStandaloneWideDayPeriods;
     delete[] fStandaloneNarrowDayPeriods;
 
-    delete actualLocale;
-    actualLocale = nullptr;
-    delete validLocale;
-    validLocale = nullptr;
     disposeZoneStrings();
 }
 
@@ -2302,12 +2293,11 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         }
     }
 
-    U_LOCALE_BASED(locBased, *this);
     // if we make it to here, the resource data is cool, and we can get everything out
     // of it that we need except for the time-zone and localized-pattern data, which
     // are stored in a separate file
-    locBased.setLocaleIDs(ures_getLocaleByType(cb.getAlias(), ULOC_VALID_LOCALE, &status),
-                          ures_getLocaleByType(cb.getAlias(), ULOC_ACTUAL_LOCALE, &status), status);
+    setLocaleIDs(ures_getLocaleByType(cb.getAlias(), ULOC_VALID_LOCALE, &status),
+                 ures_getLocaleByType(cb.getAlias(), ULOC_ACTUAL_LOCALE, &status));
 
     // Load eras
     initField(&fEras, fErasCount, calendarSink, buildResourcePath(path, gErasTag, gNamesAbbrTag, status), status);
@@ -2529,11 +2519,6 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
             fLocalPatternChars.setTo(true, gPatternChars, PATTERN_CHARS_LEN);
         }
     }
-}
-
-Locale
-DateFormatSymbols::getLocale(ULocDataLocaleType type, UErrorCode& status) const {
-    return LocaleBased::getLocale(validLocale, actualLocale, type, status);
 }
 
 U_NAMESPACE_END

@@ -96,7 +96,7 @@ class CharString;
  * subclasses, such code will not necessarily work and will not be
  * guaranteed to work stably from release to release.
  */
-class U_I18N_API Format : public UObject {
+class U_I18N_API Format : public UObject, public DataLocaleInformation {
 public:
 
     /** Destructor
@@ -245,28 +245,6 @@ public:
                      Formattable& result,
                      UErrorCode& status) const;
 
-    /** Get the locale for this format object. You can choose between valid and actual locale.
-     *  @param type type of the locale we're looking for (valid or actual) 
-     *  @param status error code for the operation
-     *  @return the locale
-     *  @stable ICU 2.8
-     */
-    Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
-
-#ifndef U_HIDE_INTERNAL_API
-    /** Get the locale for this format object. You can choose between valid and actual locale.
-     *  @param type type of the locale we're looking for (valid or actual) 
-     *  @param status error code for the operation
-     *  @return the locale
-     *  @internal
-     */
-    const char* getLocaleID(ULocDataLocaleType type, UErrorCode &status) const;
-#endif  /* U_HIDE_INTERNAL_API */
-
- protected:
-    /** @stable ICU 2.8 */
-    void setLocaleIDs(const char* valid, const char* actual);
-
 protected:
     /**
      * Default constructor for subclass use only.  Does nothing.
@@ -296,10 +274,6 @@ protected:
     static void syntaxError(const UnicodeString& pattern,
                             int32_t pos,
                             UParseError& parseError);
-
- private:
-    CharString* actualLocale = nullptr;
-    CharString* validLocale = nullptr;
 };
 
 U_NAMESPACE_END
