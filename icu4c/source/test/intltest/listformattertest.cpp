@@ -618,7 +618,7 @@ void ListFormatterTest::DoTheRealListStyleTesting(
         UListFormatterType type,
         UListFormatterWidth width,
         const char* expected,
-        IcuTestErrorCode status) {
+        IcuTestErrorCode& status) {
 
     LocalPointer<ListFormatter> formatter(
             ListFormatter::createInstance(locale, type, width, status));
