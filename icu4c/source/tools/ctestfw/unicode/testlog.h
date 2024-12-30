@@ -13,7 +13,6 @@
 #ifndef U_TESTFW_TESTLOG
 #define U_TESTFW_TESTLOG
 
-#include <string>
 #include <string_view>
 #include "unicode/utypes.h"
 #include "unicode/testtype.h"
@@ -35,14 +34,16 @@ public:
 // unit tests that work without U_SHOW_CPLUSPLUS_API.
 // So instead we *copy* the ErrorCode API.
 
+U_NAMESPACE_BEGIN
+class UnicodeString;
+U_NAMESPACE_END
+
 class T_CTEST_EXPORT_API IcuTestErrorCode {
 public:
     IcuTestErrorCode(const IcuTestErrorCode&) = delete;
     IcuTestErrorCode& operator=(const IcuTestErrorCode&) = delete;
 
-    IcuTestErrorCode(TestLog &callingTestClass, const char *callingTestName)
-            : errorCode(U_ZERO_ERROR),
-              testClass(callingTestClass), testName(callingTestName), scopeMessage() {}
+    IcuTestErrorCode(TestLog &callingTestClass, const char *callingTestName);
     virtual ~IcuTestErrorCode();
 
     // ErrorCode API
@@ -75,7 +76,14 @@ private:
     UErrorCode errorCode;
     TestLog &testClass;
     const char *const testName;
-    std::u16string scopeMessage;
+
+    // It's not possible to use a UnicodeString member directly here because
+    // that won't work without U_SHOW_CPLUSPLUS_API, but it's also not possible
+    // to use a std::u16string member because for unknown reasons that leads to
+    // a crash in the icu4c-windows-cygwin-gcc CI job. As a workaround, the
+    // UnicodeString class is forward declared to make it possible to use a
+    // reference here and then heap allocate the object in the constructor.
+    UnicodeString& scopeMessage;
 
     void errlog(UBool dataErr, std::u16string_view mainMessage, const char* extraMessage) const;
 };
