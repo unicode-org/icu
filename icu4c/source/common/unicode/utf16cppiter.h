@@ -34,6 +34,7 @@ namespace header {}
 #define U16_IS_TRAIL(c) (((c)&0xfffffc00)==0xdc00)
 #define U16_IS_SURROGATE(c) U_IS_SURROGATE(c)
 #define U16_IS_SURROGATE_LEAD(c) (((c)&0x400)==0)
+#define U16_IS_SURROGATE_TRAIL(c) (((c)&0x400)!=0)
 #define U16_SURROGATE_OFFSET ((0xd800<<10UL)+0xdc00-0x10000)
 #define U16_GET_SUPPLEMENTARY(lead, trail) \
     (((UChar32)(lead)<<10UL)+(UChar32)(trail)-U16_SURROGATE_OFFSET)
@@ -85,93 +86,43 @@ struct U16OneSeq {
 };
 
 /**
- * Validating, bidirectional iterator over the code points in a Unicode 16-bit string.
- *
- * TODO: check doxygen syntax for template parameters
- * @param Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
- * @param CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *             should be signed if U16_BEHAVIOR_NEGATIVE
- * @param U16IllFormedBehavior TODO
- * @draft ICU 77
+ * Internal base class for public U16Iterator & U16ReverseIterator.
+ * Not intended for public subclassing.
+ * @internal
  */
 template<typename Unit16, typename CP32, U16IllFormedBehavior behavior>
-class U16Iterator {
-public:
-    // TODO: make private, make friends
-    U16Iterator(const Unit16 *start, const Unit16 *p, const Unit16 *limit) :
+class U16IteratorBase {
+protected:
+    // @internal
+    U16IteratorBase(const Unit16 *start, const Unit16 *p, const Unit16 *limit) :
             start(start), current(p), limit(limit) {}
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
 
-    U16Iterator(const U16Iterator &other) = default;
+    // @internal
+    bool operator==(const U16IteratorBase &other) const { return current == other.current; }
+    // @internal
+    bool operator!=(const U16IteratorBase &other) const { return !operator==(other); }
 
-    bool operator==(const U16Iterator &other) const { return current == other.current; }
-    bool operator!=(const U16Iterator &other) const { return !operator==(other); }
-
-    U16OneSeq<Unit16, CP32> operator*() const {
-        // Call the same function in both operator*() and operator++() so that an
-        // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        const Unit16 *p = current;
-        return readAndInc(p);
-    }
-
-    U16Iterator &operator++() {  // pre-increment
-        // Call the same function in both operator*() and operator++() so that an
-        // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        readAndInc(current);
-        return *this;
-    }
-
-    U16Iterator operator++(int) {  // post-increment
-        // Call the same function in both operator*() and operator++() so that an
-        // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        U16Iterator result(*this);
-        readAndInc(current);
-        return result;
-    }
-
-    U16Iterator &operator--() {  // pre-decrement
-        return dec();
-    }
-
-    U16Iterator operator--(int) {  // post-decrement
-        U16Iterator result(*this);
-        dec();
-        return result;
-    }
-
-    // Explicitly fused/optimized *iter++
-    U16OneSeq<Unit16, CP32> readAndInc() {
-        return readAndInc(current);
-    }
-
-    // Same as pre-increment operator++() but slightly faster if used by itself.
-    // operator++() should be used together with operator*() for best compiler optimization.
-    U16Iterator &inc() {
+    // @internal
+    void inc() {
         // TODO: assert current != limit -- more precisely: start <= current < limit
         // Very similar to U16_FWD_1().
         if (U16_IS_LEAD(*current++) && current != limit && U16_IS_TRAIL(*current)) {
             ++current;
         }
-        return *this;
     }
 
-    // Explicitly fused/optimized *--iter
-    U16OneSeq<Unit16, CP32> decAndRead() {
-        return decAndRead(current);
-    }
-
-    // Same as pre-decrement operator--(), for API symmetry.
-    U16Iterator &dec() {
+    // @internal
+    void dec() {
         // TODO: assert current != limit -- more precisely: start <= current < limit
         // Very similar to U16_BACK_1().
         if (U16_IS_TRAIL(*(--current)) && current != start && U16_IS_LEAD(*(current - 1))) {
             --current;
         }
-        return *this;
     }
 
-private:
+    // @internal
     U16OneSeq<Unit16, CP32> readAndInc(const Unit16 *&p) const {
         // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_NEXT_OR_FFFD().
@@ -191,6 +142,7 @@ private:
         }
     }
 
+    // @internal
     U16OneSeq<Unit16, CP32> decAndRead(const Unit16 *&p) const {
         // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_PREV_OR_FFFD().
@@ -210,6 +162,7 @@ private:
     }
 
     // Handle ill-formed UTF-16: One unpaired surrogate.
+    // @internal
     CP32 sub(CP32 surrogate) const {
         switch (behavior) {
             case U16_BEHAVIOR_NEGATIVE: return U_SENTINEL;
@@ -220,9 +173,139 @@ private:
 
     // In a validating iterator, we need start & limit so that when we read a code point
     // (forward or backward) we can test if there are enough code units.
+    // @internal
     const Unit16 *const start;
+    // @internal
     const Unit16 *current;
+    // @internal
     const Unit16 *const limit;
+};
+
+/**
+ * Validating bidirectional iterator over the code points in a Unicode 16-bit string.
+ *
+ * TODO: check doxygen syntax for template parameters
+ * @param Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @param CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *             should be signed if U16_BEHAVIOR_NEGATIVE
+ * @param U16IllFormedBehavior TODO
+ * @draft ICU 77
+ */
+template<typename Unit16, typename CP32, U16IllFormedBehavior behavior>
+class U16Iterator : private U16IteratorBase<Unit16, CP32, behavior> {
+    // FYI: We need to qualify all accesses to super class members because of private inheritance.
+    using Super = U16IteratorBase<Unit16, CP32, behavior>;
+public:
+    // TODO: make private, make friends
+    U16Iterator(const Unit16 *start, const Unit16 *p, const Unit16 *limit) :
+            Super(start, p, limit) {}
+
+    U16Iterator(const U16Iterator &other) = default;
+
+    bool operator==(const U16Iterator &other) const { return Super::operator==(other); }
+    bool operator!=(const U16Iterator &other) const { return !Super::operator==(other); }
+
+    U16OneSeq<Unit16, CP32> operator*() const {
+        // Call the same function in both operator*() and operator++() so that an
+        // optimizing compiler can easily eliminate redundant work when alternating between the two.
+        const Unit16 *p = Super::current;
+        return Super::readAndInc(p);
+    }
+
+    U16Iterator &operator++() {  // pre-increment
+        // Call the same function in both operator*() and operator++() so that an
+        // optimizing compiler can easily eliminate redundant work when alternating between the two.
+        Super::readAndInc(Super::current);
+        return *this;
+    }
+
+    U16Iterator operator++(int) {  // post-increment
+        // Call the same function in both operator*() and operator++() so that an
+        // optimizing compiler can easily eliminate redundant work when alternating between the two.
+        U16Iterator result(*this);
+        Super::readAndInc(Super::current);
+        return result;
+    }
+
+    U16Iterator &operator--() {  // pre-decrement
+        return Super::dec();
+    }
+
+    U16Iterator operator--(int) {  // post-decrement
+        U16Iterator result(*this);
+        Super::dec();
+        return result;
+    }
+
+    // Same as pre-increment operator++() but slightly faster if used by itself.
+    // operator++() should be used together with operator*() for best compiler optimization.
+    U16Iterator &inc() {
+        Super::inc();
+        return *this;
+    }
+
+    // Same as pre-decrement operator--(), for API symmetry.
+    U16Iterator &dec() {
+        Super::dec();
+        return *this;
+    }
+
+    // Explicitly fused/optimized *iter++
+    U16OneSeq<Unit16, CP32> readAndInc() {
+        return Super::readAndInc(Super::current);
+    }
+
+    // Explicitly fused/optimized *--iter
+    U16OneSeq<Unit16, CP32> decAndRead() {
+        return Super::decAndRead(Super::current);
+    }
+};
+
+/**
+ * Validating reverse iterator over the code points in a Unicode 16-bit string.
+ * Not bidirectional, but optimized for reverse iteration.
+ *
+ * TODO: check doxygen syntax for template parameters
+ * @param Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @param CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *             should be signed if U16_BEHAVIOR_NEGATIVE
+ * @param U16IllFormedBehavior TODO
+ * @draft ICU 77
+ */
+template<typename Unit16, typename CP32, U16IllFormedBehavior behavior>
+class U16ReverseIterator : private U16IteratorBase<Unit16, CP32, behavior> {
+    using Super = U16IteratorBase<Unit16, CP32, behavior>;
+public:
+    // TODO: make private, make friends
+    U16ReverseIterator(const Unit16 *start, const Unit16 *p, const Unit16 *limit) :
+            Super(start, p, limit) {}
+
+    U16ReverseIterator(const U16ReverseIterator &other) = default;
+
+    bool operator==(const U16ReverseIterator &other) const { return Super::operator==(other); }
+    bool operator!=(const U16ReverseIterator &other) const { return !Super::operator==(other); }
+
+    U16OneSeq<Unit16, CP32> operator*() const {
+        // Call the same function in both operator*() and operator++() so that an
+        // optimizing compiler can easily eliminate redundant work when alternating between the two.
+        const Unit16 *p = Super::current;
+        return Super::decAndRead(p);
+    }
+
+    U16ReverseIterator &operator++() {  // pre-increment
+        // Call the same function in both operator*() and operator++() so that an
+        // optimizing compiler can easily eliminate redundant work when alternating between the two.
+        Super::decAndRead(Super::current);
+        return *this;
+    }
+
+    U16ReverseIterator operator++(int) {  // post-increment
+        // Call the same function in both operator*() and operator++() so that an
+        // optimizing compiler can easily eliminate redundant work when alternating between the two.
+        U16ReverseIterator result(*this);
+        Super::decAndRead(Super::current);
+        return result;
+    }
 };
 
 /**
@@ -252,6 +335,17 @@ public:
     U16Iterator<Unit16, CP32, behavior> end() const {
         const Unit16 *limit = s.data() + s.length();
         return {s.data(), limit, limit};
+    }
+
+    /** @draft ICU 77 */
+    U16ReverseIterator<Unit16, CP32, behavior> rbegin() const {
+        const Unit16 *limit = s.data() + s.length();
+        return {s.data(), limit, limit};
+    }
+
+    /** @draft ICU 77 */
+    U16ReverseIterator<Unit16, CP32, behavior> rend() const {
+        return {s.data(), s.data(), s.data() + s.length()};
     }
 
 private:
@@ -295,6 +389,15 @@ int32_t loopReadAndInc(std::u16string_view s) {
    auto limit = range.end();
    while (iter != limit) {
        sum += iter.readAndInc().codePoint;
+   }
+   return sum;
+}
+
+int32_t reverseLoop(std::u16string_view s) {
+   header::U16StringCodePoints<char16_t, UChar32, header::U16_BEHAVIOR_NEGATIVE> range(s);
+   int32_t sum = 0;
+   for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
+       sum += (*iter).codePoint;
    }
    return sum;
 }
