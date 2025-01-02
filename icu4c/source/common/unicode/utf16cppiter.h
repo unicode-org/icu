@@ -85,7 +85,7 @@ struct U16OneSeq {
 };
 
 /**
- * Validating iterator over the code points in a Unicode 16-bit string.
+ * Validating, bidirectional iterator over the code points in a Unicode 16-bit string.
  *
  * TODO: check doxygen syntax for template parameters
  * @param Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
@@ -130,6 +130,16 @@ public:
         return result;
     }
 
+    U16Iterator &operator--() {  // pre-decrement
+        return dec();
+    }
+
+    U16Iterator operator--(int) {  // post-decrement
+        U16Iterator result(*this);
+        dec();
+        return result;
+    }
+
     // Explicitly fused/optimized *iter++
     U16OneSeq<Unit16, CP32> readAndInc() {
         return readAndInc(current);
@@ -146,8 +156,20 @@ public:
         return *this;
     }
 
-    // TODO: operator--()
-    // TODO: maybe fused decAndRead()?
+    // Explicitly fused/optimized *--iter
+    U16OneSeq<Unit16, CP32> decAndRead() {
+        return decAndRead(current);
+    }
+
+    // Same as pre-decrement operator--(), for API symmetry.
+    U16Iterator &dec() {
+        // TODO: assert current != limit -- more precisely: start <= current < limit
+        // Very similar to U16_BACK_1().
+        if (U16_IS_TRAIL(*(--current)) && current != start && U16_IS_LEAD(*(current - 1))) {
+            --current;
+        }
+        return *this;
+    }
 
 private:
     U16OneSeq<Unit16, CP32> readAndInc(const Unit16 *&p) const {
@@ -165,6 +187,24 @@ private:
                 return {c, 2, true, p0};
             } else {
                 return {sub(c), 1, false, p0};
+            }
+        }
+    }
+
+    U16OneSeq<Unit16, CP32> decAndRead(const Unit16 *&p) const {
+        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // Very similar to U16_PREV_OR_FFFD().
+        CP32 c = *--p;
+        if (!U16_IS_SURROGATE(c)) {
+            return {c, 1, true, p};
+        } else {
+            uint16_t c2;
+            if (U16_IS_SURROGATE_TRAIL(c) && p != start && U16_IS_LEAD(c2 = *(p - 1))) {
+                --p;
+                c = U16_GET_SUPPLEMENTARY(c2, c);
+                return {c, 2, true, p};
+            } else {
+                return {sub(c), 1, false, p};
             }
         }
     }
