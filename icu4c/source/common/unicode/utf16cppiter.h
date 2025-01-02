@@ -99,47 +99,58 @@ class U16Iterator {
 public:
     // TODO: make private, make friends
     U16Iterator(const Unit16 *start, const Unit16 *p, const Unit16 *limit) :
-            start(start), p(p), limit(limit) {}
+            start(start), current(p), limit(limit) {}
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
 
     U16Iterator(const U16Iterator &other) = default;
 
-    bool operator==(const U16Iterator &other) const { return p == other.p; }
+    bool operator==(const U16Iterator &other) const { return current == other.current; }
     bool operator!=(const U16Iterator &other) const { return !operator==(other); }
 
     U16OneSeq<Unit16, CP32> operator*() const {
-        // TODO: assert p != limit -- more precisely: start <= p < limit
-        // Similar to U16_NEXT_OR_FFFD().
-        CP32 c = *p;
-        if (!U16_IS_SURROGATE(c)) {
-            return {c, 1, true, p};
-        } else {
-            uint16_t c2;
-            if (U16_IS_SURROGATE_LEAD(c) && (p + 1) != limit && U16_IS_TRAIL(c2 = p[1])) {
-                c = U16_GET_SUPPLEMENTARY(c, c2);
-                return {c, 2, true, p};
-            } else {
-                return {sub(c), 1, false, p};
-            }
-        }
+        // Call the same function in both operator*() and operator++() so that an
+        // optimizing compiler can easily eliminate redundant work when alternating between the two.
+        const Unit16 *p = current;
+        return readAndInc(p);
     }
 
     U16Iterator &operator++() {  // pre-increment
-        // TODO: assert p != limit -- more precisely: start <= p < limit
-        inc();
+        // Call the same function in both operator*() and operator++() so that an
+        // optimizing compiler can easily eliminate redundant work when alternating between the two.
+        readAndInc(current);
         return *this;
     }
 
     U16Iterator operator++(int) {  // post-increment
-        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // Call the same function in both operator*() and operator++() so that an
+        // optimizing compiler can easily eliminate redundant work when alternating between the two.
         U16Iterator result(*this);
-        inc();
+        readAndInc(current);
         return result;
     }
 
-    // Fused/optimized *iter++
+    // Explicitly fused/optimized *iter++
     U16OneSeq<Unit16, CP32> readAndInc() {
+        return readAndInc(current);
+    }
+
+    // Same as pre-increment operator++() but slightly faster if used by itself.
+    // operator++() should be used together with operator*() for best compiler optimization.
+    U16Iterator &inc() {
+        // TODO: assert current != limit -- more precisely: start <= current < limit
+        // Very similar to U16_FWD_1().
+        if (U16_IS_LEAD(*current++) && current != limit && U16_IS_TRAIL(*current)) {
+            ++current;
+        }
+        return *this;
+    }
+
+    // TODO: operator--()
+    // TODO: maybe fused decAndRead()?
+
+private:
+    U16OneSeq<Unit16, CP32> readAndInc(const Unit16 *&p) const {
         // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_NEXT_OR_FFFD().
         const Unit16 *p0 = p;
@@ -158,21 +169,6 @@ public:
         }
     }
 
-    // TODO: operator--()
-    // TODO: maybe fused decAndRead()?
-
-private:
-    void inc() {
-        // More similar to U16_NEXT_OR_FFFD() than U16_FWD_1() to try to help the compiler
-        // amortize work between operator*() and operator++(int) in typical *it++ usage.
-        // Otherwise this is slightly less efficient because it tests a lead surrogate twice.
-        CP32 c = *p++;
-        if (U16_IS_SURROGATE(c) &&
-                U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(*p)) {
-            ++p;
-        }
-    }
-
     // Handle ill-formed UTF-16: One unpaired surrogate.
     CP32 sub(CP32 surrogate) const {
         switch (behavior) {
@@ -185,7 +181,7 @@ private:
     // In a validating iterator, we need start & limit so that when we read a code point
     // (forward or backward) we can test if there are enough code units.
     const Unit16 *const start;
-    const Unit16 *p;
+    const Unit16 *current;
     const Unit16 *const limit;
 };
 
