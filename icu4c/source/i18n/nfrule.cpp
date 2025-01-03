@@ -19,7 +19,6 @@
 
 #if U_HAVE_RBNF
 
-#include <limits>
 #include "unicode/localpointer.h"
 #include "unicode/rbnf.h"
 #include "unicode/tblcoll.h"
@@ -286,18 +285,17 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
             // into "tempValue", skip periods, commas, and spaces,
             // stop on a slash or > sign (or at the end of the string),
             // and throw an exception on any other character
-            int64_t ll_10 = 10;
             while (p < descriptorLength) {
                 c = descriptor.charAt(p);
                 if (c >= gZero && c <= gNine) {
-                    int32_t single_digit = static_cast<int32_t>(c - gZero);
-                    if ((val > 0 && val > (std::numeric_limits<int64_t>::max() - single_digit) / 10) ||
-                        (val < 0 && val < (std::numeric_limits<int64_t>::min() - single_digit) / 10)) {
+                    int64_t digit = static_cast<int64_t>(c - gZero);
+                    if ((val > 0 && val > (INT64_MAX - digit) / 10) ||
+                        (val < 0 && val < (INT64_MIN - digit) / 10)) {
                         // out of int64_t range
                         status = U_PARSE_ERROR;
                         return;
                     }
-                    val = val * ll_10 + single_digit;
+                    val = val * 10 + digit;
                 }
                 else if (c == gSlash || c == gGreaterThan) {
                     break;
@@ -322,11 +320,17 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
             if (c == gSlash) {
                 val = 0;
                 ++p;
-                ll_10 = 10;
                 while (p < descriptorLength) {
                     c = descriptor.charAt(p);
                     if (c >= gZero && c <= gNine) {
-                        val = val * ll_10 + static_cast<int32_t>(c - gZero);
+                        int64_t digit = static_cast<int64_t>(c - gZero);
+                        if ((val > 0 && val > (INT64_MAX - digit) / 10) ||
+                            (val < 0 && val < (INT64_MIN - digit) / 10)) {
+                            // out of int64_t range
+                            status = U_PARSE_ERROR;
+                            return;
+                        }
+                        val = val * 10 + digit;
                     }
                     else if (c == gGreaterThan) {
                         break;
