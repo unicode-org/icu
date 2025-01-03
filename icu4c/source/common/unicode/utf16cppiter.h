@@ -64,10 +64,9 @@ enum U16IllFormedBehavior {
  * A code unit sequence for one code point returned by U16Iterator.
  * TODO: Share with UTF-8?
  *
- * TODO: check doxygen syntax for template parameters
- * @param Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
- * @param CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *             should be signed if U16_BEHAVIOR_NEGATIVE
+ * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if U16_BEHAVIOR_NEGATIVE
  * @draft ICU 77
  */
 template<typename Unit16, typename CP32>
@@ -184,11 +183,10 @@ protected:
 /**
  * Validating bidirectional iterator over the code points in a Unicode 16-bit string.
  *
- * TODO: check doxygen syntax for template parameters
- * @param Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
- * @param CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *             should be signed if U16_BEHAVIOR_NEGATIVE
- * @param U16IllFormedBehavior TODO
+ * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if U16_BEHAVIOR_NEGATIVE
+ * @tparam U16IllFormedBehavior TODO
  * @draft ICU 77
  */
 template<typename Unit16, typename CP32, U16IllFormedBehavior behavior>
@@ -265,11 +263,10 @@ public:
  * Validating reverse iterator over the code points in a Unicode 16-bit string.
  * Not bidirectional, but optimized for reverse iteration.
  *
- * TODO: check doxygen syntax for template parameters
- * @param Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
- * @param CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *             should be signed if U16_BEHAVIOR_NEGATIVE
- * @param U16IllFormedBehavior TODO
+ * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if U16_BEHAVIOR_NEGATIVE
+ * @tparam U16IllFormedBehavior TODO
  * @draft ICU 77
  */
 template<typename Unit16, typename CP32, U16IllFormedBehavior behavior>
@@ -311,7 +308,10 @@ public:
 /**
  * A C++ "range" for iterating over all of the code points of a 16-bit Unicode string.
  *
- * @return a code point iterator.
+ * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if U16_BEHAVIOR_NEGATIVE
+ * @tparam U16IllFormedBehavior TODO
  * @draft ICU 77
  */
 template<typename Unit16, typename CP32, U16IllFormedBehavior behavior>
