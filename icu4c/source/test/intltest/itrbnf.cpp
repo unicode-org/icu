@@ -82,6 +82,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(30, TestDFRounding);
         TESTCASE(31, TestMemoryLeak22899);
         TESTCASE(32, TestInfiniteRecursion);
+        TESTCASE(33, TestParseRuleDescriptorOverflow23002);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2613,6 +2614,18 @@ IntlTestRBNF::TestNumberingSystem() {
         rbnf.setDefaultRuleSet(u"%ethiopic", err);
         assertEquals("Wrong result with Ethiopic rule set", u"፻፳፫", rbnf.format(123, result, err));
     }
+}
+
+void
+IntlTestRBNF::TestParseRuleDescriptorOverflow23002() {
+    UParseError perror;
+    UErrorCode status = U_ZERO_ERROR;
+    // Test int64 overflow inside parseRuleDescriptor
+    UnicodeString testStr(u"0110110/300113001103000113001103000110i/3013033:");
+    icu::RuleBasedNumberFormat rbfmt(
+        testStr,
+        Locale("as"), perror, status);
+    assertEquals("number too large", U_PARSE_ERROR, status);
 }
 
 void
