@@ -707,8 +707,6 @@ fZone(nullptr),
 fRepeatedWallTime(UCAL_WALLTIME_LAST),
 fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
-    validLocale[0] = 0;
-    actualLocale[0] = 0;
     clear();
     if (U_FAILURE(success)) {
         return;
@@ -722,7 +720,7 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
 
 // -------------------------------------
 
-Calendar::Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
+Calendar::Calendar(TimeZone* adoptZone, const Locale& aLocale, UErrorCode& success)
 :   UObject(),
 fIsTimeSet(false),
 fAreFieldsSet(false),
@@ -735,13 +733,11 @@ fZone(nullptr),
 fRepeatedWallTime(UCAL_WALLTIME_LAST),
 fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
-    validLocale[0] = 0;
-    actualLocale[0] = 0;
+    LocalPointer<TimeZone> zone(adoptZone, success);
     if (U_FAILURE(success)) {
-        delete zone;
         return;
     }
-    if (zone == nullptr) {
+    if (zone.isNull()) {
 #if defined (U_DEBUG_CAL)
         fprintf(stderr, "%s:%d: ILLEGAL ARG because timezone cannot be 0\n",
             __FILE__, __LINE__);
@@ -751,7 +747,7 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
     }
 
     clear();
-    fZone = zone;
+    fZone = zone.orphan();
     setWeekData(aLocale, nullptr, success);
 }
 
@@ -770,8 +766,6 @@ fZone(nullptr),
 fRepeatedWallTime(UCAL_WALLTIME_LAST),
 fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
-    validLocale[0] = 0;
-    actualLocale[0] = 0;
     if (U_FAILURE(success)) {
         return;
     }
@@ -779,6 +773,7 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
     fZone = zone.clone();
     if (fZone == nullptr) {
         success = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
     setWeekData(aLocale, nullptr, success);
 }
@@ -788,6 +783,8 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
 Calendar::~Calendar()
 {
     delete fZone;
+    delete actualLocale;
+    delete validLocale;
 }
 
 // -------------------------------------
@@ -827,10 +824,10 @@ Calendar::operator=(const Calendar &right)
         fWeekendCease            = right.fWeekendCease;
         fWeekendCeaseMillis      = right.fWeekendCeaseMillis;
         fNextStamp               = right.fNextStamp;
-        uprv_strncpy(validLocale, right.validLocale, sizeof(validLocale)-1);
-        validLocale[sizeof(validLocale)-1] = 0;
-        uprv_strncpy(actualLocale, right.actualLocale, sizeof(actualLocale)-1);
-        actualLocale[sizeof(validLocale)-1] = 0;
+        UErrorCode status = U_ZERO_ERROR;
+        U_LOCALE_BASED(locBased, *this);
+        locBased.setLocaleIDs(right.validLocale, right.actualLocale, status);
+        U_ASSERT(U_SUCCESS(status));
     }
 
     return *this;
@@ -4129,7 +4126,7 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
     if (U_SUCCESS(status)) {
         U_LOCALE_BASED(locBased,*this);
         locBased.setLocaleIDs(ures_getLocaleByType(monthNames.getAlias(), ULOC_VALID_LOCALE, &status),
-                              ures_getLocaleByType(monthNames.getAlias(), ULOC_ACTUAL_LOCALE, &status));
+                              ures_getLocaleByType(monthNames.getAlias(), ULOC_ACTUAL_LOCALE, &status), status);
     } else {
         status = U_USING_FALLBACK_WARNING;
         return;
@@ -4217,14 +4214,12 @@ Calendar::updateTime(UErrorCode& status)
 
 Locale
 Calendar::getLocale(ULocDataLocaleType type, UErrorCode& status) const {
-    U_LOCALE_BASED(locBased, *this);
-    return locBased.getLocale(type, status);
+    return LocaleBased::getLocale(validLocale, actualLocale, type, status);
 }
 
 const char *
 Calendar::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
-    U_LOCALE_BASED(locBased, *this);
-    return locBased.getLocaleID(type, status);
+    return LocaleBased::getLocaleID(validLocale, actualLocale, type, status);
 }
 
 void
