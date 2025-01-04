@@ -55,6 +55,241 @@ class ICUServiceFactory;
 typedef int32_t UFieldResolutionTable[12][8];
 
 class BasicTimeZone;
+
+class U_I18N_API WeekSystem {
+ public:
+    /**
+     * Gets what the first day of the week is; e.g., Sunday in US, Monday in France.
+     *
+     * @param status error code
+     * @return   The first day of the week.
+     */
+    virtual UCalendarDaysOfWeek getFirstDayOfWeek(UErrorCode &status) const = 0;
+
+    /**
+     * Gets what the minimal days required in the first week of the year are; e.g., if
+     * the first week is defined as one that contains the first day of the first month
+     * of a year, getMinimalDaysInFirstWeek returns 1. If the minimal days required must
+     * be a full week, getMinimalDaysInFirstWeek returns 7.
+     *
+     * @return   The minimal days required in the first week of the year.
+     */
+    virtual uint8_t getMinimalDaysInFirstWeek() const = 0;
+
+    /**
+     * Returns whether the given day of the week is a weekday, a weekend day,
+     * or a day that transitions from one to the other, for the locale and
+     * calendar system associated with this Calendar (the locale's region is
+     * often the most determinant factor). If a transition occurs at midnight,
+     * then the days before and after the transition will have the
+     * type UCAL_WEEKDAY or UCAL_WEEKEND. If a transition occurs at a time
+     * other than midnight, then the day of the transition will have
+     * the type UCAL_WEEKEND_ONSET or UCAL_WEEKEND_CEASE. In this case, the
+     * method getWeekendTransition() will return the point of
+     * transition.
+     * @param dayOfWeek The day of the week whose type is desired (UCAL_SUNDAY..UCAL_SATURDAY).
+     * @param status The error code for the operation.
+     * @return The UCalendarWeekdayType for the day of the week.
+     */
+    virtual UCalendarWeekdayType getDayOfWeekType(UCalendarDaysOfWeek dayOfWeek, UErrorCode &status) const = 0;
+
+    /**
+     * Returns the time during the day at which the weekend begins or ends in
+     * this calendar system.  If getDayOfWeekType() returns UCAL_WEEKEND_ONSET
+     * for the specified dayOfWeek, return the time at which the weekend begins.
+     * If getDayOfWeekType() returns UCAL_WEEKEND_CEASE for the specified dayOfWeek,
+     * return the time at which the weekend ends. If getDayOfWeekType() returns
+     * some other UCalendarWeekdayType for the specified dayOfWeek, is it an error condition
+     * (U_ILLEGAL_ARGUMENT_ERROR).
+     * @param dayOfWeek The day of the week for which the weekend transition time is
+     * desired (UCAL_SUNDAY..UCAL_SATURDAY).
+     * @param status The error code for the operation.
+     * @return The milliseconds after midnight at which the weekend begins or ends.
+     */
+    virtual int32_t getWeekendTransition(UCalendarDaysOfWeek dayOfWeek, UErrorCode &status) const = 0;
+
+    /**
+     * Returns true if the given UDate is in the weekend in
+     * this calendar system.
+     * @param date The UDate in question.
+     * @param status The error code for the operation.
+     * @return true if the given UDate is in the weekend in
+     * this calendar system, false otherwise.
+     */
+    virtual UBool isWeekend(UDate date, UErrorCode &status) const = 0;
+};
+
+class U_I18N_API CalendarLimits {
+ public:
+   /**
+     * Gets the minimum value for the given time field. e.g., for Gregorian
+     * DAY_OF_MONTH, 1.
+     *
+     * @param field  The given time field.
+     * @return       The minimum value for the given time field.
+     */
+    virtual int32_t getMinimum(UCalendarDateFields field) const = 0;
+
+    /**
+     * Gets the maximum value for the given time field. e.g. for Gregorian DAY_OF_MONTH,
+     * 31.
+     *
+     * @param field  The given time field.
+     * @return       The maximum value for the given time field.
+     */
+    virtual int32_t getMaximum(UCalendarDateFields field) const = 0;
+
+    /**
+     * Gets the highest minimum value for the given field if varies. Otherwise same as
+     * getMinimum(). For Gregorian, no difference.
+     *
+     * @param field  The given time field.
+     * @return       The highest minimum value for the given time field.
+     */
+    virtual int32_t getGreatestMinimum(UCalendarDateFields field) const = 0;
+
+    /**
+     * Gets the lowest maximum value for the given field if varies. Otherwise same as
+     * getMaximum(). e.g., for Gregorian DAY_OF_MONTH, 28.
+     *
+     * @param field  The given time field.
+     * @return       The lowest maximum value for the given time field.
+     */
+    virtual int32_t getLeastMaximum(UCalendarDateFields field) const = 0;
+
+    /**
+     * Return the minimum value that this field could have, given the current date.
+     * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
+     *
+     * The version of this function on Calendar uses an iterative algorithm to determine the
+     * actual minimum value for the field.  There is almost always a more efficient way to
+     * accomplish this (in most cases, you can simply return getMinimum()).  GregorianCalendar
+     * overrides this function with a more efficient implementation.
+     *
+     * @param field    the field to determine the minimum of
+     * @param status   Fill-in parameter which receives the status of this operation.
+     * @return         the minimum of the given field for the current date of this Calendar
+     */
+    virtual int32_t getActualMinimum(UCalendarDateFields field, UErrorCode& status) const = 0;
+
+        /**
+     * Return the maximum value that this field could have, given the current date.
+     * For example, with the date "Feb 3, 1997" and the DAY_OF_MONTH field, the actual
+     * maximum would be 28; for "Feb 3, 1996" it s 29.  Similarly for a Hebrew calendar,
+     * for some years the actual maximum for MONTH is 12, and for others 13.
+     *
+     * The version of this function on Calendar uses an iterative algorithm to determine the
+     * actual maximum value for the field.  There is almost always a more efficient way to
+     * accomplish this (in most cases, you can simply return getMaximum()).  GregorianCalendar
+     * overrides this function with a more efficient implementation.
+     *
+     * @param field    the field to determine the maximum of
+     * @param status   Fill-in parameter which receives the status of this operation.
+     * @return         the maximum of the given field for the current date of this Calendar
+     */
+    virtual int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const = 0;
+
+};
+
+class U_I18N_API DateFields {
+ public:
+    /**
+     * Gets the value for a given time field.
+     *
+     * @param field  The given time field.
+     * @param status Fill-in parameter which receives the status of the operation.
+     * @return       The value for the given time field, or zero if the field is unset,
+     *               and set() has been called for any other field.
+     */
+    virtual int32_t get(UCalendarDateFields field, UErrorCode& status) const  = 0;
+
+    /**
+     * Returns true if this Calendar's current date-time is in the weekend in
+     * this calendar system.
+     * @return true if this Calendar's current date-time is in the weekend in
+     * this calendar system, false otherwise.
+     */
+    virtual UBool isWeekend() const = 0;
+
+    /**
+     * Returns true if the date is in a leap year. Recalculate the current time
+     * field values if the time value has been changed by a call to * setTime().
+     * This method is semantically const, but may alter the object in memory.
+     * A "leap year" is a year that contains more days than other years (for
+     * solar or lunar calendars) or more months than other years (for lunisolar
+     * calendars like Hebrew or Chinese), as defined in the ECMAScript Temporal
+     * proposal.
+     *
+     * @param status        ICU Error Code
+     * @return       True if the date in the fields is in a Temporal proposal
+     *               defined leap year. False otherwise.
+     */
+    virtual bool inTemporalLeapYear(UErrorCode& status) const = 0;
+
+    /**
+     * Gets The Temporal monthCode value corresponding to the month for the date.
+     * The value is a string identifier that starts with the literal grapheme
+     * "M" followed by two graphemes representing the zero-padded month number
+     * of the current month in a normal (non-leap) year and suffixed by an
+     * optional literal grapheme "L" if this is a leap month in a lunisolar
+     * calendar. The 25 possible values are "M01" .. "M13" and "M01L" .. "M12L".
+     * For the Hebrew calendar, the values are "M01" .. "M12" for non-leap year, and
+     * "M01" .. "M05", "M05L", "M06" .. "M12" for leap year.
+     * For the Chinese calendar, the values are "M01" .. "M12" for non-leap year and
+     * in leap year with another monthCode in "M01L" .. "M12L".
+     * For Coptic and Ethiopian calendar, the Temporal monthCode values for any
+     * years are "M01" to "M13".
+     *
+     * @param status        ICU Error Code
+     * @return       One of 25 possible strings in {"M01".."M13", "M01L".."M12L"}.
+     */
+    virtual const char* getTemporalMonthCode(UErrorCode& status) const = 0;
+
+    /**
+     * Queries if the current date for this Calendar is in Daylight Savings Time.
+     *
+     * @param status Fill-in parameter which receives the status of this operation.
+     * @return   True if the current date for this Calendar is in Daylight Savings Time,
+     *           false, otherwise.
+     */
+    virtual UBool inDaylightTime(UErrorCode& status) const = 0;
+
+    /**
+     * Gets this Calendar's time as milliseconds. May involve recalculation of time due
+     * to previous calls to set time field values. The time specified is non-local UTC
+     * (GMT) time. Although this method is const, this object may actually be changed
+     * (semantically const).
+     *
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid or restricted by
+     *                leniency, this will be set to an error status.
+     * @return        The current time in UTC (GMT) time, or zero if the operation
+     *                failed.
+     * @stable ICU 2.0
+     */
+    virtual UDate getTime(UErrorCode& status) const = 0;
+};
+
+class U_I18N_API InternalCenturyInfo {
+ public:
+    /**
+     * @return true if this calendar has a default century (i.e. 03 -> 2003)
+     * @internal
+     */
+    virtual UBool haveDefaultCentury() const = 0;
+
+    /**
+     * @return the start of the default century, as a UDate
+     * @internal
+     */
+    virtual UDate defaultCenturyStart() const = 0;
+    /**
+     * @return the beginning year of the default century, as a year
+     * @internal
+     */
+    virtual int32_t defaultCenturyStartYear() const = 0;
+};
+
 /**
  * `Calendar` is an abstract base class for converting between
  * a `UDate` object and a set of integer fields such as
@@ -186,7 +421,11 @@ class BasicTimeZone;
  *
  * @stable ICU 2.0
  */
-class U_I18N_API Calendar : public UObject {
+class U_I18N_API Calendar : public UObject,
+  public InternalCenturyInfo, 
+  public WeekSystem,
+  public CalendarLimits,
+  public DateFields {
 public:
 #ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
@@ -2412,23 +2651,6 @@ private:
     friend class DefaultCalendarFactory;
 #endif /* !UCONFIG_NO_SERVICE */
 
-    /**
-     * @return true if this calendar has a default century (i.e. 03 -> 2003)
-     * @internal
-     */
-    virtual UBool haveDefaultCentury() const = 0;
-
-    /**
-     * @return the start of the default century, as a UDate
-     * @internal
-     */
-    virtual UDate defaultCenturyStart() const = 0;
-    /**
-     * @return the beginning year of the default century, as a year
-     * @internal
-     */
-    virtual int32_t defaultCenturyStartYear() const = 0;
-
     /** Get the locale for this calendar object. You can choose between valid and actual locale.
      *  @param type type of the locale we're looking for (valid or actual)
      *  @param status error code for the operation
@@ -2506,6 +2728,213 @@ public:
             int32_t typeBufferSize,
             UErrorCode &status);
 #endif  /* U_HIDE_INTERNAL_API */
+};
+
+class U_I18N_API DateFieldsBuilder : public UObject {
+  public:
+    DateFieldsBuilder(const Locale& locale, UErrorCode &status);
+    virtual ~DateFieldsBuilder();
+
+    DateFieldsBuilder& adoptCalendar (Calendar *value, UErrorCode &status);
+    DateFieldsBuilder& setTimeZone(const TimeZone& value, UErrorCode &status);
+    DateFieldsBuilder& adoptTimeZone (TimeZone *value, UErrorCode &status);
+
+    /**
+     * Sets this Calendar's current time with the given UDate. The time specified should
+     * be in non-local UTC (GMT) time.
+     *
+     * @param date  The given UDate in UTC (GMT) time.
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                set in the time field is invalid or restricted by
+     *                leniency, this will be set to an error status.
+     */
+    DateFieldsBuilder& setTime(UDate value, UErrorCode &status);
+
+    /**
+     * UDate Arithmetic function. Adds the specified (signed) amount of time to the given
+     * time field, based on the calendar's rules. For example, to subtract 5 days from
+     * the current time of the calendar, call add(Calendar::DATE, -5). When adding on
+     * the month or Calendar::MONTH field, other fields like date might conflict and
+     * need to be changed. For instance, adding 1 month on the date 01/31/96 will result
+     * in 02/29/96.
+     * Adding a positive value always means moving forward in time, so for the Gregorian calendar,
+     * starting with 100 BC and adding +1 to year results in 99 BC (even though this actually reduces
+     * the numeric value of the field itself).
+     *
+     * @param field   Specifies which date field to modify.
+     * @param amount  The amount of time to be added to the field, in the natural unit
+     *                for that field (e.g., days for the day fields, hours for the hour
+     *                field.)
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid or restricted by
+     *                leniency, this will be set to an error status.
+     */
+    DateFieldsBuilder& add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
+
+    /**
+     * Time Field Rolling function. Rolls by the given amount on the given
+     * time field. For example, to roll the current date up by one day, call
+     * roll(Calendar::DATE, +1, status). When rolling on the month or
+     * Calendar::MONTH field, other fields like date might conflict and, need to be
+     * changed. For instance, rolling the month up on the date 01/31/96 will result in
+     * 02/29/96. Rolling by a positive value always means rolling forward in time (unless
+     * the limit of the field is reached, in which case it may pin or wrap), so for
+     * Gregorian calendar, starting with 100 BC and rolling the year by + 1 results in 99 BC.
+     * When eras have a definite beginning and end (as in the Chinese calendar, or as in
+     * most eras in the Japanese calendar) then rolling the year past either limit of the
+     * era will cause the year to wrap around. When eras only have a limit at one end,
+     * then attempting to roll the year past that limit will result in pinning the year
+     * at that limit. Note that for most calendars in which era 0 years move forward in
+     * time (such as Buddhist, Hebrew, or Islamic), it is possible for add or roll to
+     * result in negative years for era 0 (that is the only way to represent years before
+     * the calendar epoch).
+     * When rolling on the hour-in-day or Calendar::HOUR_OF_DAY field, it will roll the
+     * hour value in the range between 0 and 23, which is zero-based.
+     * <P>
+     * The only difference between roll() and add() is that roll() does not change
+     * the value of more significant fields when it reaches the minimum or maximum
+     * of its range, whereas add() does.
+     *
+     * @param field   The time field.
+     * @param amount  Indicates amount to roll.
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid, this will be set to
+     *                an error status.
+     */
+    DateFieldsBuilder& roll(UCalendarDateFields field, int32_t amount, UErrorCode& status);
+
+    /**
+     * Specifies whether or not date/time interpretation is to be lenient. With lenient
+     * interpretation, a date such as "February 942, 1996" will be treated as being
+     * equivalent to the 941st day after February 1, 1996. With strict interpretation,
+     * such dates will cause an error when computing time from the time field values
+     * representing the dates.
+     *
+     * @param lenient  True specifies date/time interpretation to be lenient.
+     */
+    DateFieldsBuilder& setLenient(UBool lenient, UErrorCode& status);
+
+    /**
+     * Sets the behavior for handling wall time repeating multiple times
+     * at negative time zone offset transitions. For example, 1:30 AM on
+     * November 6, 2011 in US Eastern time (America/New_York) occurs twice;
+     * 1:30 AM EDT, then 1:30 AM EST one hour later. When <code>UCAL_WALLTIME_FIRST</code>
+     * is used, the wall time 1:30AM in this example will be interpreted as 1:30 AM EDT
+     * (first occurrence). When <code>UCAL_WALLTIME_LAST</code> is used, it will be
+     * interpreted as 1:30 AM EST (last occurrence). The default value is
+     * <code>UCAL_WALLTIME_LAST</code>.
+     * <p>
+     * <b>Note:</b>When <code>UCAL_WALLTIME_NEXT_VALID</code> is not a valid
+     * option for this. When the argument is neither <code>UCAL_WALLTIME_FIRST</code>
+     * nor <code>UCAL_WALLTIME_LAST</code>, this method has no effect and will keep
+     * the current setting.
+     *
+     * @param option the behavior for handling repeating wall time, either
+     * <code>UCAL_WALLTIME_FIRST</code> or <code>UCAL_WALLTIME_LAST</code>.
+     * @see #getRepeatedWallTimeOption
+     */
+    DateFieldsBuilder& setRepeatedWallTimeOption(UCalendarWallTimeOption option,  UErrorCode& status);
+
+    /**
+     * Sets the behavior for handling skipped wall time at positive time zone offset
+     * transitions. For example, 2:30 AM on March 13, 2011 in US Eastern time (America/New_York)
+     * does not exist because the wall time jump from 1:59 AM EST to 3:00 AM EDT. When
+     * <code>UCAL_WALLTIME_FIRST</code> is used, 2:30 AM is interpreted as 30 minutes before 3:00 AM
+     * EDT, therefore, it will be resolved as 1:30 AM EST. When <code>UCAL_WALLTIME_LAST</code>
+     * is used, 2:30 AM is interpreted as 31 minutes after 1:59 AM EST, therefore, it will be
+     * resolved as 3:30 AM EDT. When <code>UCAL_WALLTIME_NEXT_VALID</code> is used, 2:30 AM will
+     * be resolved as next valid wall time, that is 3:00 AM EDT. The default value is
+     * <code>UCAL_WALLTIME_LAST</code>.
+     * <p>
+     * <b>Note:</b>This option is effective only when this calendar is lenient.
+     * When the calendar is strict, such non-existing wall time will cause an error.
+     *
+     * @param option the behavior for handling skipped wall time at positive time zone
+     * offset transitions, one of <code>UCAL_WALLTIME_FIRST</code>, <code>UCAL_WALLTIME_LAST</code> and
+     * <code>UCAL_WALLTIME_NEXT_VALID</code>.
+     * @see #getSkippedWallTimeOption
+     */
+    DateFieldsBuilder& setSkippedWallTimeOption(UCalendarWallTimeOption option,  UErrorCode& status);
+
+    /**
+     * Sets what the first day of the week is; e.g., Sunday in US, Monday in France.
+     *
+     * @param value  The given first day of the week.
+     */
+    DateFieldsBuilder& setFirstDayOfWeek(UCalendarDaysOfWeek value, UErrorCode& status);
+
+    /**
+     * Sets what the minimal days required in the first week of the year are; For
+     * example, if the first week is defined as one that contains the first day of the
+     * first month of a year, call the method with value 1. If it must be a full week,
+     * use value 7.
+     *
+     * @param value  The given minimal days required in the first week of the year.
+     */
+    DateFieldsBuilder&  setMinimalDaysInFirstWeek(uint8_t value, UErrorCode& status);
+
+    /**
+     * Sets the given time field with the given value.
+     *
+     * @param field  The given time field.
+     * @param value  The value to be set for the given time field.
+     */
+    DateFieldsBuilder& set(UCalendarDateFields field, int32_t value, UErrorCode& status);
+
+    /**
+     * Clears the values of all the time fields, making them both unset and assigning
+     * them a value of zero. The field values will be determined during the next
+     * resolving of time into time fields.
+     */
+    DateFieldsBuilder& clear(UErrorCode& status);
+
+    /**
+     * Clears the value in the given time field, both making it unset and assigning it a
+     * value of zero. This field value will be determined during the next resolving of
+     * time into time fields. Clearing UCAL_ORDINAL_MONTH or UCAL_MONTH will
+     * clear both fields.
+     *
+     * @param field  The time field to be cleared.
+     */
+    DateFieldsBuilder&  clear(UCalendarDateFields field, UErrorCode& status);
+
+   /**
+     * Sets The Temporal monthCode which is a string identifier that starts
+     * with the literal grapheme "M" followed by two graphemes representing
+     * the zero-padded month number of the current month in a normal
+     * (non-leap) year and suffixed by an optional literal grapheme "L" if this
+     * is a leap month in a lunisolar calendar. The 25 possible values are
+     * "M01" .. "M13" and "M01L" .. "M12L". For Hebrew calendar, the values are
+     * "M01" .. "M12" for non-leap years, and "M01" .. "M05", "M05L", "M06"
+     * .. "M12" for leap year.
+     * For the Chinese calendar, the values are "M01" .. "M12" for non-leap year and
+     * in leap year with another monthCode in "M01L" .. "M12L".
+     * For Coptic and Ethiopian calendar, the Temporal monthCode values for any
+     * years are "M01" to "M13".
+     *
+     * @param temporalMonth  The value to be set for temporal monthCode.
+     * @param status        ICU Error Code
+     */
+    DateFieldsBuilder& setTemporalMonthCode(const char* temporalMonth, UErrorCode& status);
+
+    /**
+     * Sets the GregorianCalendar change date. This is the point when the switch from
+     * Julian dates to Gregorian dates occurred. Default is 00:00:00 local time, October
+     * 15, 1582. Previous to this time and date will be Julian dates.
+     *
+     * @param date     The given Gregorian cutover date.
+     * @param status  Output param set to success/failure code on exit.
+     */
+    DateFieldsBuilder& setGregorianChange(UDate date, UErrorCode& status);
+
+    WeekSystem* buildWeekSystem(UErrorCode& status) const;
+
+    CalendarLimits* buildCalendarLimits(UErrorCode& status) const;
+
+    DateFields* buildDateFields(UErrorCode& status) const;
+
+  private:
+    LocalPointer<Calendar> fCalendar;
 };
 
 // -------------------------------------
