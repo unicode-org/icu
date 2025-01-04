@@ -70,6 +70,15 @@ CharString &CharString::copyFrom(const CharString &s, UErrorCode &errorCode) {
     return *this;
 }
 
+CharString &CharString::copyFrom(StringPiece s, UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return *this;
+    }
+    len = 0;
+    append(s, errorCode);
+    return *this;
+}
+
 int32_t CharString::lastIndexOf(char c) const {
     for(int32_t i=len; i>0;) {
         if(buffer[--i]==c) {

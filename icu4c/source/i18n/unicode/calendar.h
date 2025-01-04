@@ -55,6 +55,7 @@ class ICUServiceFactory;
 typedef int32_t UFieldResolutionTable[12][8];
 
 class BasicTimeZone;
+class CharString;
 /**
  * `Calendar` is an abstract base class for converting between
  * a `UDate` object and a set of integer fields such as
@@ -2348,8 +2349,8 @@ private:
 #endif  /* U_HIDE_INTERNAL_API */
 
  private:
-    char validLocale[ULOC_FULLNAME_CAPACITY];
-    char actualLocale[ULOC_FULLNAME_CAPACITY];
+    CharString* validLocale = nullptr;
+    CharString* actualLocale = nullptr;
 
  public:
 #if !UCONFIG_NO_SERVICE

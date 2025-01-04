@@ -74,6 +74,7 @@ public:
      * use a UErrorCode where memory allocations might be needed.
      */
     CharString &copyFrom(const CharString &other, UErrorCode &errorCode);
+    CharString &copyFrom(StringPiece s, UErrorCode &errorCode);
 
     UBool isEmpty() const { return len==0; }
     int32_t length() const { return len; }
