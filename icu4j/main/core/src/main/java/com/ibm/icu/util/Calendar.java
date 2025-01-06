@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -1355,9 +1356,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * Pseudo-time-stamps which specify when each field was set. There
      * are two special values, UNSET and INTERNALLY_SET. Values from
-     * MINIMUM_USER_SET to Integer.MAX_VALUE are legal user set values.
+     * MINIMUM_USER_SET to STAMP_MAX are legal user set values.
      */
-    private transient int           stamp[];
+    private transient byte           stamp[];
 
     /**
      * The currently set time for this calendar, expressed in milliseconds after
@@ -1507,10 +1508,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * The next available value for <code>stamp[]</code>, an internal array.
      * @serial
      */
-    private transient int             nextStamp = MINIMUM_USER_STAMP;
+    private transient byte             nextStamp = MINIMUM_USER_STAMP;
 
     /* Max value for stamp allowable before recalculation */
-    private static int STAMP_MAX = 10000;
+    private static byte STAMP_MAX = Byte.MAX_VALUE;
 
     // the internal serial version which says which version was written
     // - 0 (default) for version up to JDK 1.1.5
@@ -1684,7 +1685,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     private void recalculateStamp() {
         int index;
-        int currentValue;
+        byte currentValue;
         int j, i;
 
         nextStamp = 1;
@@ -1721,7 +1722,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             throw new IllegalStateException("Invalid fields[]");
         }
         ///CLOVER:ON
-        stamp = new int[fields.length];
+        stamp = new byte[fields.length];
         int mask = (1 << ERA) |
                 (1 << YEAR) |
                 (1 << MONTH) |
@@ -2054,9 +2055,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         areFieldsSet = areAllFieldsSet = false;
         isTimeSet = areFieldsVirtuallySet = true;
 
-        for (int i=0; i<fields.length; ++i) {
-            fields[i] = stamp[i] = 0; // UNSET == 0
-        }
+        Arrays.fill(fields, 0);
+        Arrays.fill(stamp, (byte)0);
+        nextStamp = MINIMUM_USER_STAMP;
 
     }
 
@@ -2455,9 +2456,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      */
     public final void clear()
     {
-        for (int i=0; i<fields.length; ++i) {
-            fields[i] = stamp[i] = 0; // UNSET == 0
-        }
+        Arrays.fill(fields, 0);
+        Arrays.fill(stamp, (byte)0);
+        nextStamp = MINIMUM_USER_STAMP;
         isTimeSet = areFieldsSet = areAllFieldsSet = areFieldsVirtuallySet = false;
     }
 
@@ -4904,7 +4905,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             Calendar other = (Calendar) super.clone();
 
             other.fields = new int[fields.length];
-            other.stamp = new int[fields.length];
+            other.stamp = new byte[fields.length];
             System.arraycopy(this.fields, 0, other.fields, 0, fields.length);
             System.arraycopy(this.stamp, 0, other.stamp, 0, fields.length);
 
