@@ -1881,38 +1881,6 @@ private:
      */
     int32_t getActualHelper(UCalendarDateFields field, int32_t startValue, int32_t endValue, UErrorCode &status) const;
 
-
-private:
-    /**
-     * The flag which indicates if the current time is set in the calendar.
-     */
-    UBool      fIsTimeSet;
-
-    /**
-     * True if the fields are in sync with the currently set time of this Calendar.
-     * If false, then the next attempt to get the value of a field will
-     * force a recomputation of all fields from the current value of the time
-     * field.
-     * <P>
-     * This should really be named areFieldsInSync, but the old name is retained
-     * for backward compatibility.
-     */
-    UBool      fAreFieldsSet;
-
-    /**
-     * True if all of the fields have been set.  This is initially false, and set to
-     * true by computeFields().
-     */
-    UBool      fAreAllFieldsSet;
-
-    /**
-     * True if all fields have been virtually set, but have not yet been
-     * computed.  This occurs only in setTimeInMillis().  A calendar set
-     * to this state will compute all fields from the time if it becomes
-     * necessary, but otherwise will delay such computation.
-     */
-    UBool fAreFieldsVirtuallySet;
-
 protected:
     /**
      * Get the current time without recomputing.
@@ -1951,9 +1919,9 @@ private:
     /**
      * Pseudo-time-stamps which specify when each field was set. There
      * are two special values, UNSET and INTERNALLY_SET. Values from
-     * MINIMUM_USER_SET to Integer.MAX_VALUE are legal user set values.
+     * MINIMUM_USER_SET to STAMP_MAX are legal user set values.
      */
-    int32_t        fStamp[UCAL_FIELD_COUNT];
+    int8_t        fStamp[UCAL_FIELD_COUNT];
 
 protected:
     /**
@@ -2169,7 +2137,7 @@ private:
     /**
      * The next available value for fStamp[]
      */
-    int32_t fNextStamp;// = MINIMUM_USER_STAMP;
+    int8_t fNextStamp = kMinimumUserStamp;
 
     /**
      * Recalculates the time stamp array (fStamp).
@@ -2180,30 +2148,60 @@ private:
     /**
      * The current time set for the calendar.
      */
-    UDate        fTime;
-
-    /**
-     * @see   #setLenient
-     */
-    UBool      fLenient;
+    UDate        fTime = 0;
 
     /**
      * Time zone affects the time calculation done by Calendar. Calendar subclasses use
      * the time zone data to produce the local time. Always set; never nullptr.
      */
-    TimeZone*   fZone;
+    TimeZone*   fZone = nullptr;
+
+    /**
+     * The flag which indicates if the current time is set in the calendar.
+     */
+    bool      fIsTimeSet:1;
+
+    /**
+     * True if the fields are in sync with the currently set time of this Calendar.
+     * If false, then the next attempt to get the value of a field will
+     * force a recomputation of all fields from the current value of the time
+     * field.
+     * <P>
+     * This should really be named areFieldsInSync, but the old name is retained
+     * for backward compatibility.
+     */
+    bool      fAreFieldsSet:1;
+
+    /**
+     * True if all of the fields have been set.  This is initially false, and set to
+     * true by computeFields().
+     */
+    bool      fAreAllFieldsSet:1;
+
+    /**
+     * True if all fields have been virtually set, but have not yet been
+     * computed.  This occurs only in setTimeInMillis().  A calendar set
+     * to this state will compute all fields from the time if it becomes
+     * necessary, but otherwise will delay such computation.
+     */
+    bool      fAreFieldsVirtuallySet:1;
+
+    /**
+     * @see   #setLenient
+     */
+    bool      fLenient:1;
 
     /**
      * Option for repeated wall time
      * @see #setRepeatedWallTimeOption
      */
-    UCalendarWallTimeOption fRepeatedWallTime;
+    UCalendarWallTimeOption fRepeatedWallTime:3; // Somehow MSVC need 3 bits for UCalendarWallTimeOption
 
     /**
      * Option for skipped wall time
      * @see #setSkippedWallTimeOption
      */
-    UCalendarWallTimeOption fSkippedWallTime;
+    UCalendarWallTimeOption fSkippedWallTime:3; // Somehow MSVC need 3 bits for UCalendarWallTimeOption
 
     /**
      * Both firstDayOfWeek and minimalDaysInFirstWeek are locale-dependent. They are
@@ -2213,11 +2211,14 @@ private:
      * out the week count for a specific date for a given locale. These must be set when
      * a Calendar is constructed.
      */
-    UCalendarDaysOfWeek fFirstDayOfWeek;
-    uint8_t     fMinimalDaysInFirstWeek;
-    UCalendarDaysOfWeek fWeekendOnset;
+    UCalendarDaysOfWeek fFirstDayOfWeek:4; // Somehow MSVC need 4 bits for
+                                           // UCalendarDaysOfWeek
+    UCalendarDaysOfWeek fWeekendOnset:4; // Somehow MSVC need 4 bits for
+                                         // UCalendarDaysOfWeek
+    UCalendarDaysOfWeek fWeekendCease:4; // Somehow MSVC need 4 bits for
+                                         // UCalendarDaysOfWeek
+    uint8_t fMinimalDaysInFirstWeek;
     int32_t fWeekendOnsetMillis;
-    UCalendarDaysOfWeek fWeekendCease;
     int32_t fWeekendCeaseMillis;
 
     /**

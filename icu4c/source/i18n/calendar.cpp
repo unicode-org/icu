@@ -156,7 +156,7 @@ U_CFUNC void ucal_dump(UCalendar* cal) {
 #endif
 
 /* Max value for stamp allowable before recalculation */
-#define STAMP_MAX 10000
+#define STAMP_MAX 127
 
 static const char * const gCalTypes[] = {
     "gregorian",
@@ -700,10 +700,7 @@ fIsTimeSet(false),
 fAreFieldsSet(false),
 fAreAllFieldsSet(false),
 fAreFieldsVirtuallySet(false),
-fNextStamp(static_cast<int32_t>(kMinimumUserStamp)),
-fTime(0),
 fLenient(true),
-fZone(nullptr),
 fRepeatedWallTime(UCAL_WALLTIME_LAST),
 fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
@@ -728,10 +725,7 @@ fIsTimeSet(false),
 fAreFieldsSet(false),
 fAreAllFieldsSet(false),
 fAreFieldsVirtuallySet(false),
-fNextStamp(static_cast<int32_t>(kMinimumUserStamp)),
-fTime(0),
 fLenient(true),
-fZone(nullptr),
 fRepeatedWallTime(UCAL_WALLTIME_LAST),
 fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
@@ -763,10 +757,7 @@ fIsTimeSet(false),
 fAreFieldsSet(false),
 fAreAllFieldsSet(false),
 fAreFieldsVirtuallySet(false),
-fNextStamp(static_cast<int32_t>(kMinimumUserStamp)),
-fTime(0),
 fLenient(true),
-fZone(nullptr),
 fRepeatedWallTime(UCAL_WALLTIME_LAST),
 fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
@@ -795,7 +786,6 @@ Calendar::~Calendar()
 Calendar::Calendar(const Calendar &source)
 :   UObject(source)
 {
-    fZone = nullptr;
     *this = source;
 }
 
@@ -1166,12 +1156,9 @@ Calendar::setTimeInMillis( double millis, UErrorCode& status ) {
     fAreFieldsSet = fAreAllFieldsSet = false;
     fIsTimeSet = fAreFieldsVirtuallySet = true;
 
-    for (int32_t i=0; i<UCAL_FIELD_COUNT; ++i) {
-        fFields[i]     = 0;
-        fStamp[i]     = kUnset;
-    }
-
-
+    uprv_memset(fFields, 0, sizeof(fFields));
+    uprv_memset(fStamp, kUnset, sizeof(fStamp));
+    fNextStamp = kMinimumUserStamp;
 }
 
 // -------------------------------------
@@ -1206,7 +1193,7 @@ Calendar::set(UCalendarDateFields field, int32_t value)
         computeFields(ec);
     }
     fFields[field]     = value;
-    /* Ensure that the fNextStamp value doesn't go pass max value for int32_t */
+    /* Ensure that the fNextStamp value doesn't go pass max value for int8_t */
     if (fNextStamp == STAMP_MAX) {
         recalculateStamp();
     }
@@ -1267,10 +1254,9 @@ void Calendar::setRelatedYear(int32_t year)
 void
 Calendar::clear()
 {
-    for (int32_t i=0; i<UCAL_FIELD_COUNT; ++i) {
-        fFields[i]     = 0; // Must do this; other code depends on it
-        fStamp[i]     = kUnset;
-    }
+    uprv_memset(fFields, 0, sizeof(fFields));
+    uprv_memset(fStamp, kUnset, sizeof(fStamp));
+    fNextStamp = kMinimumUserStamp;
     fIsTimeSet = fAreFieldsSet = fAreAllFieldsSet = fAreFieldsVirtuallySet = false;
     // fTime is not 'cleared' - may be used if no fields are set.
 }
@@ -4233,7 +4219,7 @@ Calendar::recalculateStamp() {
     int32_t currentValue;
     int32_t j, i;
 
-    fNextStamp = 1;
+    fNextStamp = kInternallySet;
 
     for (j = 0; j < UCAL_FIELD_COUNT; j++) {
         currentValue = STAMP_MAX;
