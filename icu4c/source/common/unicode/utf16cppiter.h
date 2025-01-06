@@ -104,24 +104,6 @@ protected:
     bool operator!=(const U16IteratorBase &other) const { return !operator==(other); }
 
     // @internal
-    void inc() {
-        // TODO: assert current != limit -- more precisely: start <= current < limit
-        // Very similar to U16_FWD_1().
-        if (U16_IS_LEAD(*current++) && current != limit && U16_IS_TRAIL(*current)) {
-            ++current;
-        }
-    }
-
-    // @internal
-    void dec() {
-        // TODO: assert current != limit -- more precisely: start <= current < limit
-        // Very similar to U16_BACK_1().
-        if (U16_IS_TRAIL(*(--current)) && current != start && U16_IS_LEAD(*(current - 1))) {
-            --current;
-        }
-    }
-
-    // @internal
     U16OneSeq<Unit16, CP32> readAndInc(const Unit16 *&p) const {
         // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_NEXT_OR_FFFD().
@@ -233,29 +215,6 @@ public:
         U16Iterator result(*this);
         Super::dec();
         return result;
-    }
-
-    // Same as pre-increment operator++() but slightly faster if used by itself.
-    // operator++() should be used together with operator*() for best compiler optimization.
-    U16Iterator &inc() {
-        Super::inc();
-        return *this;
-    }
-
-    // Same as pre-decrement operator--(), for API symmetry.
-    U16Iterator &dec() {
-        Super::dec();
-        return *this;
-    }
-
-    // Explicitly fused/optimized *iter++
-    U16OneSeq<Unit16, CP32> readAndInc() {
-        return Super::readAndInc(Super::current);
-    }
-
-    // Explicitly fused/optimized *--iter
-    U16OneSeq<Unit16, CP32> decAndRead() {
-        return Super::decAndRead(Super::current);
     }
 };
 
@@ -378,17 +337,6 @@ int32_t loopIterPlusPlus(std::u16string_view s) {
    auto limit = range.end();
    while (iter != limit) {
        sum += (*iter++).codePoint;
-   }
-   return sum;
-}
-
-int32_t loopReadAndInc(std::u16string_view s) {
-   header::U16StringCodePoints<char16_t, UChar32, header::U16_BEHAVIOR_NEGATIVE> range(s);
-   int32_t sum = 0;
-   auto iter = range.begin();
-   auto limit = range.end();
-   while (iter != limit) {
-       sum += iter.readAndInc().codePoint;
    }
    return sum;
 }
