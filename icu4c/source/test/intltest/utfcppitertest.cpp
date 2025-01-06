@@ -21,7 +21,6 @@
 using namespace std::string_view_literals;
 
 using U_HEADER_ONLY_NAMESPACE::U16Iterator;
-using U_HEADER_ONLY_NAMESPACE::U16OneSeq;
 using U_HEADER_ONLY_NAMESPACE::U16StringCodePoints;
 
 class U16IteratorTest : public IntlTest {

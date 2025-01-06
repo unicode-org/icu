@@ -58,24 +58,25 @@ typedef enum UIllFormedBehavior {
 namespace U_HEADER_ONLY_NAMESPACE {
 
 /**
- * A code unit sequence for one code point returned by U16Iterator.
- * TODO: Share with UTF-8?
+ * Result of decoding a minimal Unicode code unit sequence.
  *
- * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam Unit Code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @draft ICU 77
  */
-template<typename Unit16, typename CP32>
-struct U16OneSeq {
+template<typename Unit, typename CP32>
+struct CodeUnits {
     // Order of fields with padding and access frequency in mind.
     CP32 codePoint = 0;
     uint8_t length = 0;
     bool isWellFormed = false;
-    const Unit16 *data;
+    const Unit *data;
 
-    std::basic_string_view<Unit16> stringView() const {
-        return std::basic_string_view<Unit16>(data, length);
+    std::basic_string_view<Unit> stringView() const {
+        return std::basic_string_view<Unit>(data, length);
     }
 
     // TODO: std::optional<CP32> maybeCodePoint() const ? (nullopt if !isWellFormed)
@@ -84,6 +85,11 @@ struct U16OneSeq {
 /**
  * Internal base class for public U16Iterator & U16ReverseIterator.
  * Not intended for public subclassing.
+ *
+ * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if U_BEHAVIOR_NEGATIVE
+ * @tparam UIllFormedBehavior TODO
  * @internal
  */
 template<typename Unit16, typename CP32, UIllFormedBehavior behavior>
@@ -101,7 +107,7 @@ protected:
     bool operator!=(const U16IteratorBase &other) const { return !operator==(other); }
 
     // @internal
-    U16OneSeq<Unit16, CP32> readAndInc(const Unit16 *&p) const {
+    CodeUnits<Unit16, CP32> readAndInc(const Unit16 *&p) const {
         // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_NEXT_OR_FFFD().
         const Unit16 *p0 = p;
@@ -121,7 +127,7 @@ protected:
     }
 
     // @internal
-    U16OneSeq<Unit16, CP32> decAndRead(const Unit16 *&p) const {
+    CodeUnits<Unit16, CP32> decAndRead(const Unit16 *&p) const {
         // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_PREV_OR_FFFD().
         CP32 c = *--p;
@@ -182,7 +188,7 @@ public:
     bool operator==(const U16Iterator &other) const { return Super::operator==(other); }
     bool operator!=(const U16Iterator &other) const { return !Super::operator==(other); }
 
-    U16OneSeq<Unit16, CP32> operator*() const {
+    CodeUnits<Unit16, CP32> operator*() const {
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         const Unit16 *p = Super::current;
@@ -238,7 +244,7 @@ public:
     bool operator==(const U16ReverseIterator &other) const { return Super::operator==(other); }
     bool operator!=(const U16ReverseIterator &other) const { return !Super::operator==(other); }
 
-    U16OneSeq<Unit16, CP32> operator*() const {
+    CodeUnits<Unit16, CP32> operator*() const {
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         const Unit16 *p = Super::current;
