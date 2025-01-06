@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1735950486850,
+  "lastUpdate": 1736203360588,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30027,6 +30027,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.04760695785972832,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "4c3622f218ba5310b6e880b07b163c1879eeb176",
+          "message": "ICU-23000 Replace CharString for LocaleBased\n\nSee #3321",
+          "timestamp": "2025-01-06T14:09:30-08:00",
+          "tree_id": "e01f3a37afa0ce4159b3c2d0dac24faac18d9f74",
+          "url": "https://github.com/unicode-org/icu/commit/4c3622f218ba5310b6e880b07b163c1879eeb176"
+        },
+        "date": 1736203157248,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.04776164654543122,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
