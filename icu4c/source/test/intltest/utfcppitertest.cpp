@@ -56,22 +56,22 @@ void U16IteratorTest::testGood() {
     std::u16string_view good(u"abçカ🚴"sv);
     U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     auto iter = range.begin();
-    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint);
+    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     ++iter;  // pre-increment
-    auto seq = *iter;
-    assertEquals("iter[1] * codePoint", u'b', seq.codePoint);
-    assertEquals("iter[1] * length", 1, seq.length);
-    assertTrue("iter[1] * isWellFormed", seq.isWellFormed);
-    assertTrue("iter[1] * stringView()", seq.stringView() == u"b"sv);
+    auto units = *iter;
+    assertEquals("iter[1] * codePoint", u'b', units.codePoint());
+    assertEquals("iter[1] * length", 1, units.length());
+    assertTrue("iter[1] * wellFormed", units.wellFormed());
+    assertTrue("iter[1] * stringView()", units.stringView() == u"b"sv);
     ++iter;
-    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint);  // post-increment
-    assertEquals("iter[3] * codePoint", u'カ', (*iter).codePoint);
+    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
+    assertEquals("iter[3] * codePoint", u'カ', (*iter).codePoint());
     ++iter;
-    seq = *iter++;
-    assertEquals("iter[4] * codePoint", U'🚴', seq.codePoint);
-    assertEquals("iter[4] * length", 2, seq.length);
-    assertTrue("iter[4] * isWellFormed", seq.isWellFormed);
-    assertTrue("iter[4] * stringView()", seq.stringView() == u"🚴"sv);
+    units = *iter++;
+    assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
+    assertEquals("iter[4] * length", 2, units.length());
+    assertTrue("iter[4] * wellFormed", units.wellFormed());
+    assertTrue("iter[4] * stringView()", units.stringView() == u"🚴"sv);
     assertTrue("iter == endIter", iter == range.end());
 }
 
@@ -81,20 +81,20 @@ void U16IteratorTest::testNegative() {
     std::u16string_view bad(badChars, 5);
     U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(bad);
     auto iter = range.begin();
-    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint);
+    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     ++iter;  // pre-increment
-    auto seq = *iter;
-    assertEquals("iter[1] * codePoint", -1, seq.codePoint);
-    assertEquals("iter[1] * length", 1, seq.length);
-    assertFalse("iter[1] * isWellFormed", seq.isWellFormed);
-    auto sv = seq.stringView();
+    auto units = *iter;
+    assertEquals("iter[1] * codePoint", -1, units.codePoint());
+    assertEquals("iter[1] * length", 1, units.length());
+    assertFalse("iter[1] * wellFormed", units.wellFormed());
+    auto sv = units.stringView();
     assertEquals("iter[1] * stringView().length()", 1, sv.length());
     assertEquals("iter[1] * stringView()[0]", 0xd900, sv[0]);
     ++iter;
-    assertEquals("iter[2] * codePoint", u'b', (*iter++).codePoint);  // post-increment
-    seq = *iter++;  // post-increment
-    assertEquals("iter[3] * codePoint", -1, seq.codePoint);
-    assertFalse("iter[3] * isWellFormed", seq.isWellFormed);
+    assertEquals("iter[2] * codePoint", u'b', (*iter++).codePoint());  // post-increment
+    units = *iter++;  // post-increment
+    assertEquals("iter[3] * codePoint", -1, units.codePoint());
+    assertFalse("iter[3] * wellFormed", units.wellFormed());
     assertEquals("iter[4] * stringView()", u"ç", (*iter++).stringView());  // post-increment
     assertTrue("iter == endIter", iter == range.end());
 }
@@ -105,20 +105,20 @@ void U16IteratorTest::testFFFD() {
     std::u16string_view bad(badChars, 5);
     U16StringCodePoints<char16_t, char32_t, U_BEHAVIOR_FFFD> range(bad);
     auto iter = range.begin();
-    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint);
+    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     ++iter;  // pre-increment
-    auto seq = *iter;
-    assertEquals("iter[1] * codePoint", 0xfffd, seq.codePoint);
-    assertEquals("iter[1] * length", 1, seq.length);
-    assertFalse("iter[1] * isWellFormed", seq.isWellFormed);
-    auto sv = seq.stringView();
+    auto units = *iter;
+    assertEquals("iter[1] * codePoint", 0xfffd, units.codePoint());
+    assertEquals("iter[1] * length", 1, units.length());
+    assertFalse("iter[1] * wellFormed", units.wellFormed());
+    auto sv = units.stringView();
     assertEquals("iter[1] * stringView().length()", 1, sv.length());
     assertEquals("iter[1] * stringView()[0]", 0xd900, sv[0]);
     ++iter;
-    assertEquals("iter[2] * codePoint", u'b', (*iter++).codePoint);  // post-increment
-    seq = *iter++;  // post-increment
-    assertEquals("iter[3] * codePoint", 0xfffd, seq.codePoint);
-    assertFalse("iter[3] * isWellFormed", seq.isWellFormed);
+    assertEquals("iter[2] * codePoint", u'b', (*iter++).codePoint());  // post-increment
+    units = *iter++;  // post-increment
+    assertEquals("iter[3] * codePoint", 0xfffd, units.codePoint());
+    assertFalse("iter[3] * wellFormed", units.wellFormed());
     assertEquals("iter[4] * stringView()", u"ç", (*iter++).stringView());  // post-increment
     assertTrue("iter == endIter", iter == range.end());
 }
@@ -129,20 +129,20 @@ void U16IteratorTest::testSurrogate() {
     std::u16string_view bad(badChars, 5);
     U16StringCodePoints<char16_t, uint32_t, U_BEHAVIOR_SURROGATE> range(bad);
     auto iter = range.begin();
-    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint);
+    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     ++iter;  // pre-increment
-    auto seq = *iter;
-    assertEquals("iter[1] * codePoint", 0xd900, seq.codePoint);
-    assertEquals("iter[1] * length", 1, seq.length);
-    assertFalse("iter[1] * isWellFormed", seq.isWellFormed);
-    auto sv = seq.stringView();
+    auto units = *iter;
+    assertEquals("iter[1] * codePoint", 0xd900, units.codePoint());
+    assertEquals("iter[1] * length", 1, units.length());
+    assertFalse("iter[1] * wellFormed", units.wellFormed());
+    auto sv = units.stringView();
     assertEquals("iter[1] * stringView().length()", 1, sv.length());
     assertEquals("iter[1] * stringView()[0]", 0xd900, sv[0]);
     ++iter;
-    assertEquals("iter[2] * codePoint", u'b', (*iter++).codePoint);  // post-increment
-    seq = *iter++;  // post-increment
-    assertEquals("iter[3] * codePoint", 0xdc05, seq.codePoint);
-    assertFalse("iter[3] * isWellFormed", seq.isWellFormed);
+    assertEquals("iter[2] * codePoint", u'b', (*iter++).codePoint());  // post-increment
+    units = *iter++;  // post-increment
+    assertEquals("iter[3] * codePoint", 0xdc05, units.codePoint());
+    assertFalse("iter[3] * wellFormed", units.wellFormed());
     assertEquals("iter[4] * stringView()", u"ç", (*iter++).stringView());  // post-increment
     assertTrue("iter == endIter", iter == range.end());
 }

@@ -68,18 +68,35 @@ namespace U_HEADER_ONLY_NAMESPACE {
  * @draft ICU 77
  */
 template<typename Unit, typename CP32>
-struct CodeUnits {
-    // Order of fields with padding and access frequency in mind.
-    CP32 codePoint = 0;
-    uint8_t length = 0;
-    bool isWellFormed = false;
-    const Unit *data;
+class CodeUnits {
+public:
+    // @internal
+    CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed, const Unit *data) :
+            c(codePoint), len(length), ok(wellFormed), p(data) {}
+
+    CodeUnits(const CodeUnits &other) = default;
+    CodeUnits &operator=(const CodeUnits &other) = default;
+
+    UChar32 codePoint() const { return c; }
+
+    bool wellFormed() const { return ok; }
+
+    const Unit *data() const { return p; }
+
+    int32_t length() const { return len; }
 
     std::basic_string_view<Unit> stringView() const {
-        return std::basic_string_view<Unit>(data, length);
+        return std::basic_string_view<Unit>(p, len);
     }
 
-    // TODO: std::optional<CP32> maybeCodePoint() const ? (nullopt if !isWellFormed)
+    // TODO: std::optional<CP32> maybeCodePoint() const ? (nullopt if ill-formed)
+
+private:
+    // Order of fields with padding and access frequency in mind.
+    CP32 c;
+    uint8_t len;
+    bool ok;
+    const Unit *p;
 };
 
 /**
@@ -327,8 +344,8 @@ private:
 int32_t rangeLoop(std::u16string_view s) {
    header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
-   for (auto seq : range) {
-       sum += seq.codePoint;
+   for (auto units : range) {
+       sum += units.codePoint();
    }
    return sum;
 }
@@ -339,7 +356,7 @@ int32_t loopIterPlusPlus(std::u16string_view s) {
    auto iter = range.begin();
    auto limit = range.end();
    while (iter != limit) {
-       sum += (*iter++).codePoint;
+       sum += (*iter++).codePoint();
    }
    return sum;
 }
@@ -348,7 +365,7 @@ int32_t reverseLoop(std::u16string_view s) {
    header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
-       sum += (*iter).codePoint;
+       sum += (*iter).codePoint();
    }
    return sum;
 }
