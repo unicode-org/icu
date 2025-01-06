@@ -20,9 +20,6 @@
 // https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv
 using namespace std::string_view_literals;
 
-using U_HEADER_ONLY_NAMESPACE::U16_BEHAVIOR_NEGATIVE;
-using U_HEADER_ONLY_NAMESPACE::U16_BEHAVIOR_FFFD;
-using U_HEADER_ONLY_NAMESPACE::U16_BEHAVIOR_SURROGATE;
 using U_HEADER_ONLY_NAMESPACE::U16Iterator;
 using U_HEADER_ONLY_NAMESPACE::U16OneSeq;
 using U_HEADER_ONLY_NAMESPACE::U16StringCodePoints;
@@ -58,7 +55,7 @@ void U16IteratorTest::runIndexedTest(int32_t index, UBool exec, const char *&nam
 void U16IteratorTest::testGood() {
     IcuTestErrorCode errorCode(*this, "testGood");
     std::u16string_view good(u"abçカ🚴"sv);
-    U16StringCodePoints<char16_t, UChar32, U16_BEHAVIOR_NEGATIVE> range(good);
+    U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint);
     ++iter;  // pre-increment
@@ -83,7 +80,7 @@ void U16IteratorTest::testNegative() {
     IcuTestErrorCode errorCode(*this, "testNegative");
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
-    U16StringCodePoints<char16_t, UChar32, U16_BEHAVIOR_NEGATIVE> range(bad);
+    U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint);
     ++iter;  // pre-increment
@@ -107,7 +104,7 @@ void U16IteratorTest::testFFFD() {
     IcuTestErrorCode errorCode(*this, "testFFFD");
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
-    U16StringCodePoints<char16_t, char32_t, U16_BEHAVIOR_FFFD> range(bad);
+    U16StringCodePoints<char16_t, char32_t, U_BEHAVIOR_FFFD> range(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint);
     ++iter;  // pre-increment
@@ -131,7 +128,7 @@ void U16IteratorTest::testSurrogate() {
     IcuTestErrorCode errorCode(*this, "testSurrogate");
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
-    U16StringCodePoints<char16_t, uint32_t, U16_BEHAVIOR_SURROGATE> range(bad);
+    U16StringCodePoints<char16_t, uint32_t, U_BEHAVIOR_SURROGATE> range(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint);
     ++iter;  // pre-increment

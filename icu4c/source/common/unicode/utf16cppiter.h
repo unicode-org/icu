@@ -47,18 +47,15 @@ namespace header {}
 
 #ifndef U_HIDE_DRAFT_API
 
-namespace U_HEADER_ONLY_NAMESPACE {
+// Some defined behaviors for handling ill-formed Unicode strings.
+// TODO: For 8-bit strings, the SURROGATE option does not have an equivalent -- static_assert.
+typedef enum UIllFormedBehavior {
+    U_BEHAVIOR_NEGATIVE,
+    U_BEHAVIOR_FFFD,
+    U_BEHAVIOR_SURROGATE
+} UIllFormedBehavior;
 
-// Some defined behaviors for handling ill-formed 16-bit strings.
-// TODO: Maybe share with 8-bit strings, but the SURROGATE option does not have an equivalent there.
-//
-// TODO: A possible alternative to an enum might be some kind of function template
-// which would be fully customizable.
-enum U16IllFormedBehavior {
-    U16_BEHAVIOR_NEGATIVE,
-    U16_BEHAVIOR_FFFD,
-    U16_BEHAVIOR_SURROGATE
-};
+namespace U_HEADER_ONLY_NAMESPACE {
 
 /**
  * A code unit sequence for one code point returned by U16Iterator.
@@ -66,7 +63,7 @@ enum U16IllFormedBehavior {
  *
  * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U16_BEHAVIOR_NEGATIVE
+ *              should be signed if U_BEHAVIOR_NEGATIVE
  * @draft ICU 77
  */
 template<typename Unit16, typename CP32>
@@ -89,7 +86,7 @@ struct U16OneSeq {
  * Not intended for public subclassing.
  * @internal
  */
-template<typename Unit16, typename CP32, U16IllFormedBehavior behavior>
+template<typename Unit16, typename CP32, UIllFormedBehavior behavior>
 class U16IteratorBase {
 protected:
     // @internal
@@ -146,9 +143,9 @@ protected:
     // @internal
     CP32 sub(CP32 surrogate) const {
         switch (behavior) {
-            case U16_BEHAVIOR_NEGATIVE: return U_SENTINEL;
-            case U16_BEHAVIOR_FFFD: return 0xfffd;
-            case U16_BEHAVIOR_SURROGATE: return surrogate;
+            case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
+            case U_BEHAVIOR_FFFD: return 0xfffd;
+            case U_BEHAVIOR_SURROGATE: return surrogate;
         }
     }
 
@@ -167,11 +164,11 @@ protected:
  *
  * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U16_BEHAVIOR_NEGATIVE
- * @tparam U16IllFormedBehavior TODO
+ *              should be signed if U_BEHAVIOR_NEGATIVE
+ * @tparam UIllFormedBehavior TODO
  * @draft ICU 77
  */
-template<typename Unit16, typename CP32, U16IllFormedBehavior behavior>
+template<typename Unit16, typename CP32, UIllFormedBehavior behavior>
 class U16Iterator : private U16IteratorBase<Unit16, CP32, behavior> {
     // FYI: We need to qualify all accesses to super class members because of private inheritance.
     using Super = U16IteratorBase<Unit16, CP32, behavior>;
@@ -224,11 +221,11 @@ public:
  *
  * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U16_BEHAVIOR_NEGATIVE
- * @tparam U16IllFormedBehavior TODO
+ *              should be signed if U_BEHAVIOR_NEGATIVE
+ * @tparam UIllFormedBehavior TODO
  * @draft ICU 77
  */
-template<typename Unit16, typename CP32, U16IllFormedBehavior behavior>
+template<typename Unit16, typename CP32, UIllFormedBehavior behavior>
 class U16ReverseIterator : private U16IteratorBase<Unit16, CP32, behavior> {
     using Super = U16IteratorBase<Unit16, CP32, behavior>;
 public:
@@ -269,11 +266,11 @@ public:
  *
  * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U16_BEHAVIOR_NEGATIVE
- * @tparam U16IllFormedBehavior TODO
+ *              should be signed if U_BEHAVIOR_NEGATIVE
+ * @tparam UIllFormedBehavior TODO
  * @draft ICU 77
  */
-template<typename Unit16, typename CP32, U16IllFormedBehavior behavior>
+template<typename Unit16, typename CP32, UIllFormedBehavior behavior>
 class U16StringCodePoints {
 public:
     /**
@@ -322,7 +319,7 @@ private:
 // TODO: remove experimental sample code
 #ifndef UTYPES_H
 int32_t rangeLoop(std::u16string_view s) {
-   header::U16StringCodePoints<char16_t, UChar32, header::U16_BEHAVIOR_NEGATIVE> range(s);
+   header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    for (auto seq : range) {
        sum += seq.codePoint;
@@ -331,7 +328,7 @@ int32_t rangeLoop(std::u16string_view s) {
 }
 
 int32_t loopIterPlusPlus(std::u16string_view s) {
-   header::U16StringCodePoints<char16_t, UChar32, header::U16_BEHAVIOR_NEGATIVE> range(s);
+   header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    auto iter = range.begin();
    auto limit = range.end();
@@ -342,7 +339,7 @@ int32_t loopIterPlusPlus(std::u16string_view s) {
 }
 
 int32_t reverseLoop(std::u16string_view s) {
-   header::U16StringCodePoints<char16_t, UChar32, header::U16_BEHAVIOR_NEGATIVE> range(s);
+   header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
        sum += (*iter).codePoint;
