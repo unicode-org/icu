@@ -170,6 +170,15 @@ protected:
     bool operator!=(const U16IteratorBase &other) const { return !operator==(other); }
 
     // @internal
+    void dec() {
+        // TODO: assert current != limit -- more precisely: start <= current < limit
+        // Very similar to U16_BACK_1().
+        if (U16_IS_TRAIL(*(--current)) && current != start && U16_IS_LEAD(*(current - 1))) {
+            --current;
+        }
+    }
+
+    // @internal
     CodeUnits<Unit16, CP32> readAndInc(const Unit16 *&p) const {
         // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_NEXT_OR_FFFD().
@@ -409,6 +418,14 @@ protected:
     bool operator==(const U16UnsafeIteratorBase &other) const { return current == other.current; }
     // @internal
     bool operator!=(const U16UnsafeIteratorBase &other) const { return !operator==(other); }
+
+    // @internal
+    void dec() {
+        // Very similar to U16_BACK_1_UNSAFE().
+        if (U16_IS_TRAIL(*(--current))) {
+            --current;
+        }
+    }
 
     // @internal
     UnsafeCodeUnits<Unit16, CP32> readAndInc(const Unit16 *&p) const {
