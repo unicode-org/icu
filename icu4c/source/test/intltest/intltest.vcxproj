@@ -223,7 +223,7 @@
     <ClCompile Include="sfwdchit.cpp" />
     <ClCompile Include="strcase.cpp" />
     <ClCompile Include="ustrtest.cpp" />
-    <ClCompile Include="utfcppitertest.cpp" />
+    <ClCompile Include="utfitertest.cpp" />
     <ClCompile Include="utxttest.cpp" />
     <ClCompile Include="cpdtrtst.cpp" />
     <ClCompile Include="ittrans.cpp" />

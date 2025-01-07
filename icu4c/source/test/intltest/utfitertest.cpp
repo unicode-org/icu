@@ -1,7 +1,7 @@
 // © 2024 and later: Unicode, Inc. and others.
 // License & terms of use: https://www.unicode.org/copyright.html
 
-// utfcppitertest.cpp
+// utfitertest.cpp
 // created: 2024aug12 Markus W. Scherer
 
 #include <string_view>
@@ -13,7 +13,7 @@
 // #define U_SHOW_CPLUSPLUS_HEADER_API 1
 
 #include "unicode/utypes.h"
-#include "unicode/utf16cppiter.h"
+#include "unicode/utfiter.h"
 #include "intltest.h"
 
 // Makes u"literal"sv std::u16string_view literals possible.
