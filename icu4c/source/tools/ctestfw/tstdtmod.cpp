@@ -11,7 +11,6 @@
 #include <stdarg.h>
 
 #include "unicode/tstdtmod.h"
-#include "unicode/unistr.h"
 #include "cmemory.h"
 #include <stdio.h>
 #include "cstr.h"
@@ -21,7 +20,7 @@ TestLog::~TestLog() {}
 
 IcuTestErrorCode::IcuTestErrorCode(TestLog &callingTestClass, const char *callingTestName)
     : errorCode(U_ZERO_ERROR),
-      testClass(callingTestClass), testName(callingTestName), scopeMessage(*new UnicodeString) {
+      testClass(callingTestClass), testName(callingTestName), scopeMessage() {
 }
 
 IcuTestErrorCode::~IcuTestErrorCode() {
@@ -29,7 +28,6 @@ IcuTestErrorCode::~IcuTestErrorCode() {
     if(isFailure()) {
         errlog(false, u"destructor: expected success", nullptr);
     }
-    delete &scopeMessage;
 }
 
 UErrorCode IcuTestErrorCode::reset() {
@@ -126,7 +124,8 @@ UBool IcuTestErrorCode::expectErrorAndReset(UErrorCode expectedError, const char
 }
 
 void IcuTestErrorCode::setScope(const char* message) {
-    scopeMessage.remove().append({ message, -1, US_INV });
+    UnicodeString us(message, -1, US_INV);
+    scopeMessage = us;
 }
 
 void IcuTestErrorCode::setScope(std::u16string_view message) {
@@ -142,7 +141,7 @@ void IcuTestErrorCode::errlog(UBool dataErr, std::u16string_view mainMessage, co
     msg.append(u' ').append(mainMessage);
     msg.append(u" but got error: ").append(UnicodeString(errorName(), -1, US_INV));
 
-    if (!scopeMessage.isEmpty()) {
+    if (!scopeMessage.empty()) {
         msg.append(u" scope: ").append(scopeMessage);
     }
 
