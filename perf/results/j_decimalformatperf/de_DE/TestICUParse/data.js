@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1736202975773,
+  "lastUpdate": 1736218234574,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30117,6 +30117,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 283.30371619485135,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "6091406a3a41d0717ae6cba44a458daaf70f2925",
+          "message": "ICU-22991 Reduce fStamp to 8 bits\n\nSee #3323",
+          "timestamp": "2025-01-06T18:38:17-08:00",
+          "tree_id": "9ba968e6c7e1a31efe7448053747bfe1e15fe9cd",
+          "url": "https://github.com/unicode-org/icu/commit/6091406a3a41d0717ae6cba44a458daaf70f2925"
+        },
+        "date": 1736218029600,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 271.56539012796463,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
