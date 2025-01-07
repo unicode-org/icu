@@ -105,7 +105,7 @@ final class NFRuleSet {
         this.owner = owner;
         String description = descriptions[index];
 
-        if (description.length() == 0) {
+        if (description.isEmpty()) {
             throw new IllegalArgumentException("Empty rule set description");
         }
 
@@ -119,12 +119,12 @@ final class NFRuleSet {
                 throw new IllegalArgumentException("Rule set name doesn't end in colon");
             }
             else {
-                String name = description.substring(0, pos);
-                this.isParseable = !name.endsWith("@noparse");
+                String ruleName = description.substring(0, pos);
+                this.isParseable = !ruleName.endsWith("@noparse");
                 if (!this.isParseable) {
-                    name = name.substring(0,name.length()-8); // Remove the @noparse from the name
+                    ruleName = ruleName.substring(0, ruleName.length() - 8); // Remove the @noparse from the name
                 }
-                this.name = name;
+                this.name = ruleName;
 
                 //noinspection StatementWithEmptyBody
                 while (pos < description.length() && PatternProps.isWhiteSpace(description.charAt(++pos))) {
@@ -140,7 +140,7 @@ final class NFRuleSet {
             isParseable = true;
         }
 
-        if (description.length() == 0) {
+        if (description.isEmpty()) {
             throw new IllegalArgumentException("Empty rule set description");
         }
 

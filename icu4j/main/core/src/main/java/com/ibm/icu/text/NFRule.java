@@ -162,6 +162,7 @@ final class NFRule {
             // then it's really shorthand for two rules (with one exception)
             NFRule rule2 = null;
             StringBuilder sbuf = new StringBuilder();
+            int orElseOp = description.indexOf('|');
 
             // we'll actually only split the rule into two rules if its
             // base value is an even multiple of its divisor (or it's one
@@ -203,11 +204,15 @@ final class NFRule {
                 rule2.radix = rule1.radix;
                 rule2.exponent = rule1.exponent;
 
-                // rule2's rule text omits the stuff in brackets: initialize
-                // its rule text and substitutions accordingly
-                sbuf.append(description.substring(0, brack1));
+                // By default, rule2's rule text omits the stuff in brackets,
+                // unless it contains a | between the brackets.
+                // Initialize its rule text and substitutions accordingly
+                sbuf.append(description, 0, brack1);
+                if (orElseOp >= 0) {
+                    sbuf.append(description, orElseOp + 1, brack2);
+                }
                 if (brack2 + 1 < description.length()) {
-                    sbuf.append(description.substring(brack2 + 1));
+                    sbuf.append(description, brack2 + 1, description.length());
                 }
                 rule2.extractSubstitutions(owner, sbuf.toString(), predecessor);
             }
@@ -216,8 +221,13 @@ final class NFRule {
             // the brackets themselves: initialize _its_ rule text and
             // substitutions accordingly
             sbuf.setLength(0);
-            sbuf.append(description.substring(0, brack1));
-            sbuf.append(description.substring(brack1 + 1, brack2));
+            sbuf.append(description, 0, brack1);
+            if (orElseOp >= 0) {
+                sbuf.append(description, brack1 + 1, orElseOp);
+            }
+            else {
+                sbuf.append(description, brack1 + 1, brack2);
+            }
             if (brack2 + 1 < description.length()) {
                 sbuf.append(description.substring(brack2 + 1));
             }
@@ -394,7 +404,7 @@ final class NFRule {
         // finally, if the rule body begins with an apostrophe, strip it off
         // (this is generally used to put whitespace at the beginning of
         // a rule's rule text)
-        if (description.length() > 0 && description.charAt(0) == '\'') {
+        if (!description.isEmpty() && description.charAt(0) == '\'') {
             description = description.substring(1);
         }
 

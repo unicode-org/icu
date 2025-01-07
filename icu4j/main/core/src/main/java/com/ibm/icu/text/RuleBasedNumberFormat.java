@@ -32,11 +32,12 @@ import com.ibm.icu.util.UResourceBundleIterator;
 
 
 /**
- * <p>A class that formats numbers according to a set of rules. This number formatter is
- * typically used for spelling out numeric values in words (e.g., 25,3476 as
- * &quot;twenty-five thousand three hundred seventy-six&quot; or &quot;vingt-cinq mille trois
+ * The RuleBasedNumberFormat class formats numbers according to a set of rules.
+ *
+ * <p>This number formatter is typically used for spelling out numeric values in words (e.g., 25,3476
+ * as &quot;twenty-five thousand three hundred seventy-six&quot; or &quot;vingt-cinq mille trois
  * cents soixante-seize&quot; or
- * &quot;funfundzwanzigtausenddreihundertsechsundsiebzig&quot;), but can also be used for
+ * &quot;f&uuml;nfundzwanzigtausenddreihundertsechsundsiebzig&quot;), but can also be used for
  * other complicated formatting tasks, such as formatting a number of seconds as hours,
  * minutes and seconds (e.g., 3,730 as &quot;1:02:10&quot;).</p>
  *
@@ -44,11 +45,11 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * spells out a value in words (123 is &quot;one hundred twenty-three&quot;); ordinal, which
  * appends an ordinal suffix to the end of a numeral (123 is &quot;123rd&quot;); and
  * duration, which shows a duration in seconds as hours, minutes, and seconds (123 is
- * &quot;2:03&quot;).&nbsp; The client can also define more specialized <tt>RuleBasedNumberFormat</tt>s
+ * &quot;2:03&quot;).&nbsp; The client can also define more specialized <code>RuleBasedNumberFormat</code>s
  * by supplying programmer-defined rule sets.</p>
  *
- * <p>The behavior of a <tt>RuleBasedNumberFormat</tt> is specified by a textual description
- * that is either passed to the constructor as a <tt>String</tt> or loaded from a resource
+ * <p>The behavior of a <code>RuleBasedNumberFormat</code> is specified by a textual description
+ * that is either passed to the constructor as a <code>String</code> or loaded from a resource
  * bundle. In its simplest form, the description consists of a semicolon-delimited list of <em>rules.</em>
  * Each rule has a string of output text and a value or range of values it is applicable to.
  * In a typical spellout rule set, the first twenty rules are the words for the numbers from
@@ -60,8 +61,9 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * <p>For larger numbers, we can use the preceding set of rules to format the ones place, and
  * we only have to supply the words for the multiples of 10:</p>
  *
- * <pre>20: twenty[-&gt;&gt;];
- * 30: thirty{-&gt;&gt;];
+ * <pre>
+ * 20: twenty[-&gt;&gt;];
+ * 30: thirty[-&gt;&gt;];
  * 40: forty[-&gt;&gt;];
  * 50: fifty[-&gt;&gt;];
  * 60: sixty[-&gt;&gt;];
@@ -81,7 +83,8 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * <p>For even larger numbers, we can actually look up several parts of the number in the
  * list:</p>
  *
- * <pre>100: &lt;&lt; hundred[ &gt;&gt;];</pre>
+ * <pre>
+ * 100: &lt;&lt; hundred[ &gt;&gt;];</pre>
  *
  * <p>The &quot;&lt;&lt;&quot; represents a new kind of substitution. The &lt;&lt; isolates
  * the hundreds digit (and any digits to its left), formats it using this same rule set, and
@@ -99,13 +102,15 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *
  * <p>This rule covers values up to 999, at which point we add another rule:</p>
  *
- * <pre>1000: &lt;&lt; thousand[ &gt;&gt;];</pre>
+ * <pre>
+ * 1000: &lt;&lt; thousand[ &gt;&gt;];</pre>
  *
  * <p>Again, the meanings of the brackets and substitution tokens shift because the rule's
  * base value is a higher power of 10, changing the rule's divisor. This rule can actually be
  * used all the way up to 999,999. This allows us to finish out the rules as follows:</p>
  *
- * <pre>1,000,000: &lt;&lt; million[ &gt;&gt;];
+ * <pre>
+ * 1,000,000: &lt;&lt; million[ &gt;&gt;];
  * 1,000,000,000: &lt;&lt; billion[ &gt;&gt;];
  * 1,000,000,000,000: &lt;&lt; trillion[ &gt;&gt;];
  * 1,000,000,000,000,000: OUT OF RANGE!;</pre>
@@ -121,34 +126,28 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * <p>To see how these rules actually work in practice, consider the following example:
  * Formatting 25,430 with this rule set would work like this:</p>
  *
- * <table border="0" width="630">
+ * <table style="border-collapse: collapse;">
  *   <tr>
- *     <td style="width: 21;"></td>
  *     <td style="width: 257; vertical-align: top;"><strong>&lt;&lt; thousand &gt;&gt;</strong></td>
  *     <td style="width: 340; vertical-align: top;">[the rule whose base value is 1,000 is applicable to 25,340]</td>
  *   </tr>
  *   <tr>
- *     <td style="width: 21;"></td>
  *     <td style="width: 257; vertical-align: top;"><strong>twenty-&gt;&gt;</strong> thousand &gt;&gt;</td>
  *     <td style="width: 340; vertical-align: top;">[25,340 over 1,000 is 25. The rule for 20 applies.]</td>
  *   </tr>
  *   <tr>
- *     <td style="width: 21;"></td>
  *     <td style="width: 257; vertical-align: top;">twenty-<strong>five</strong> thousand &gt;&gt;</td>
  *     <td style="width: 340; vertical-align: top;">[25 mod 10 is 5. The rule for 5 is &quot;five.&quot;</td>
  *   </tr>
  *   <tr>
- *     <td style="width: 21;"></td>
  *     <td style="width: 257; vertical-align: top;">twenty-five thousand <strong>&lt;&lt; hundred &gt;&gt;</strong></td>
  *     <td style="width: 340; vertical-align: top;">[25,340 mod 1,000 is 340. The rule for 100 applies.]</td>
  *   </tr>
  *   <tr>
- *     <td style="width: 21;"></td>
  *     <td style="width: 257; vertical-align: top;">twenty-five thousand <strong>three</strong> hundred &gt;&gt;</td>
  *     <td style="width: 340; vertical-align: top;">[340 over 100 is 3. The rule for 3 is &quot;three.&quot;]</td>
  *   </tr>
  *   <tr>
- *     <td style="width: 21;"></td>
  *     <td style="width: 257; vertical-align: top;">twenty-five thousand three hundred <strong>forty</strong></td>
  *     <td style="width: 340; vertical-align: top;">[340 mod 100 is 40. The rule for 40 applies. Since 40 divides
  *     evenly by 10, the hyphen and substitution in the brackets are omitted.]</td>
@@ -187,20 +186,20 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *
  * <hr>
  *
- * <p>The description of a <tt>RuleBasedNumberFormat</tt>'s behavior consists of one or more <em>rule
+ * <p>The description of a <code>RuleBasedNumberFormat</code>'s behavior consists of one or more <em>rule
  * sets.</em> Each rule set consists of a name, a colon, and a list of <em>rules.</em> A rule
  * set name must begin with a % sign. Rule sets with names that begin with a single % sign
  * are <em>public:</em> the caller can specify that they be used to format and parse numbers.
  * Rule sets with names that begin with %% are <em>private:</em> they exist only for the use
  * of other rule sets. If a formatter only has one rule set, the name may be omitted.</p>
  *
- * <p>The user can also specify a special &quot;rule set&quot; named <tt>%%lenient-parse</tt>.
- * The body of <tt>%%lenient-parse</tt> isn't a set of number-formatting rules, but a <tt>RuleBasedCollator</tt>
+ * <p>The user can also specify a special &quot;rule set&quot; named <code>%%lenient-parse</code>.
+ * The body of <code>%%lenient-parse</code> isn't a set of number-formatting rules, but a <code>RuleBasedCollator</code>
  * description which is used to define equivalences for lenient parsing. For more information
- * on the syntax, see <tt>RuleBasedCollator</tt>. For more information on lenient parsing,
- * see <tt>setLenientParse()</tt>. <em>Note:</em> symbols that have syntactic meaning
+ * on the syntax, see <code>RuleBasedCollator</code>. For more information on lenient parsing,
+ * see <code>setLenientParse()</code>. <em>Note:</em> symbols that have syntactic meaning
  * in collation rules, such as '&amp;', have no particular meaning when appearing outside
- * of the <tt>lenient-parse</tt> rule set.</p>
+ * of the <code>lenient-parse</code> rule set.</p>
  *
  * <p>The body of a rule set consists of an ordered, semicolon-delimited list of <em>rules.</em>
  * Internally, every rule has a base value, a divisor, rule text, and zero, one, or two <em>substitutions.</em>
@@ -210,48 +209,46 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * <p>A rule descriptor can take one of the following forms (text in <em>italics</em> is the
  * name of a token):</p>
  *
- * <table border="0" width="100%">
+ * <table style="border-collapse: collapse;">
  *   <tr>
- *     <td style="width: 5%; vertical-align: top;"></td>
- *     <td style="width: 8%; vertical-align: top;"><em>bv</em>:</td>
- *     <td valign="top"><em>bv</em> specifies the rule's base value. <em>bv</em> is a decimal
+ *     <th style="padding-left: 1em; padding-right: 1em;">Descriptor</th>
+ *     <th>Description</th>
+ *   </tr>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;"><em>bv</em>:</td>
+ *     <td style="vertical-align: top;"><em>bv</em> specifies the rule's base value. <em>bv</em> is a decimal
  *     number expressed using ASCII digits. <em>bv</em> may contain spaces, period, and commas,
  *     which are ignored. The rule's divisor is the highest power of 10 less than or equal to
  *     the base value.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 5%; vertical-align: top;"></td>
- *     <td style="width: 8%; vertical-align: top;"><em>bv</em>/<em>rad</em>:</td>
- *     <td valign="top"><em>bv</em> specifies the rule's base value. The rule's divisor is the
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;"><em>bv</em>/<em>rad</em>:</td>
+ *     <td style="vertical-align: top;"><em>bv</em> specifies the rule's base value. The rule's divisor is the
  *     highest power of <em>rad</em> less than or equal to the base value.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 5%; vertical-align: top;"></td>
- *     <td style="width: 8%; vertical-align: top;"><em>bv</em>&gt;:</td>
- *     <td valign="top"><em>bv</em> specifies the rule's base value. To calculate the divisor,
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;"><em>bv</em>&gt;:</td>
+ *     <td style="vertical-align: top;"><em>bv</em> specifies the rule's base value. To calculate the divisor,
  *     let the radix be 10, and the exponent be the highest exponent of the radix that yields a
  *     result less than or equal to the base value. Every &gt; character after the base value
  *     decreases the exponent by 1. If the exponent is positive or 0, the divisor is the radix
  *     raised to the power of the exponent; otherwise, the divisor is 1.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 5%; vertical-align: top;"></td>
- *     <td style="width: 8%; vertical-align: top;"><em>bv</em>/<em>rad</em>&gt;:</td>
- *     <td valign="top"><em>bv</em> specifies the rule's base value. To calculate the divisor,
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;"><em>bv</em>/<em>rad</em>&gt;:</td>
+ *     <td style="vertical-align: top;"><em>bv</em> specifies the rule's base value. To calculate the divisor,
  *     let the radix be <em>rad</em>, and the exponent be the highest exponent of the radix that
  *     yields a result less than or equal to the base value. Every &gt; character after the radix
  *     decreases the exponent by 1. If the exponent is positive or 0, the divisor is the radix
  *     raised to the power of the exponent; otherwise, the divisor is 1.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 5%; vertical-align: top;"></td>
- *     <td style="width: 8%; vertical-align: top;">-x:</td>
- *     <td valign="top">The rule is a negative-number rule.</td>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;">-x:</td>
+ *     <td style="vertical-align: top;">The rule is a negative-number rule.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 5%; vertical-align: top;"></td>
- *     <td style="width: 8%; vertical-align: top;">x.x:</td>
- *     <td valign="top">The rule is an <em>improper fraction rule</em>. If the full stop in
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;">x.x:</td>
+ *     <td style="vertical-align: top;">The rule is an <em>improper fraction rule</em>. If the full stop in
  *     the middle of the rule name is replaced with the decimal point
  *     that is used in the language or DecimalFormatSymbols, then that rule will
  *     have precedence when formatting and parsing this rule. For example, some
@@ -260,10 +257,9 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     handle the decimal point that matches the language's natural spelling of
  *     the punctuation of either the full stop or comma.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 5%; vertical-align: top;"></td>
- *     <td style="width: 8%; vertical-align: top;">0.x:</td>
- *     <td valign="top">The rule is a <em>proper fraction rule</em>. If the full stop in
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;">0.x:</td>
+ *     <td style="vertical-align: top;">The rule is a <em>proper fraction rule</em>. If the full stop in
  *     the middle of the rule name is replaced with the decimal point
  *     that is used in the language or DecimalFormatSymbols, then that rule will
  *     have precedence when formatting and parsing this rule. For example, some
@@ -272,10 +268,9 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     handle the decimal point that matches the language's natural spelling of
  *     the punctuation of either the full stop or comma</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 5%; vertical-align: top;"></td>
- *     <td style="width: 8%; vertical-align: top;">x.0:</td>
- *     <td valign="top">The rule is a <em>default rule</em>. If the full stop in
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;">x.0:</td>
+ *     <td style="vertical-align: top;">The rule is a <em>default rule</em>. If the full stop in
  *     the middle of the rule name is replaced with the decimal point
  *     that is used in the language or DecimalFormatSymbols, then that rule will
  *     have precedence when formatting and parsing this rule. For example, some
@@ -284,19 +279,16 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     handle the decimal point that matches the language's natural spelling of
  *     the punctuation of either the full stop or comma</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 5%; vertical-align: top;"></td>
- *     <td style="width: 8%; vertical-align: top;">Inf:</td>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;">Inf:</td>
  *     <td style="vertical-align: top;">The rule for infinity.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 5%; vertical-align: top;"></td>
- *     <td style="width: 8%; vertical-align: top;">NaN:</td>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;">NaN:</td>
  *     <td style="vertical-align: top;">The rule for an IEEE 754 NaN (not a number).</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 5%; vertical-align: top;"></td>
- *     <td style="width: 8%; vertical-align: top;"><em>nothing</em></td>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;"><em>nothing</em></td>
  *     <td style="vertical-align: top;">If the rule's rule descriptor is left out, the base value is one plus the
  *     preceding rule's base value (or zero if this is the first rule in the list) in a normal
  *     rule set.&nbsp; In a fraction rule set, the base value is the same as the preceding rule's
@@ -313,8 +305,8 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * algorithms: If the rule set is a regular rule set, do the following:
  *
  * <ul>
- *   <li>If the rule set includes a default rule (and the number was passed in as a <tt>double</tt>),
- *     use the default rule.&nbsp; (If the number being formatted was passed in as a <tt>long</tt>,
+ *   <li>If the rule set includes a default rule (and the number was passed in as a <code>double</code>),
+ *     use the default rule.&nbsp; (If the number being formatted was passed in as a <code>long</code>,
  *     the default rule is ignored.)</li>
  *   <li>If the number is negative, use the negative-number rule.</li>
  *   <li>If the number has a fractional part and is greater than 1, use the improper fraction
@@ -361,49 +353,43 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *
  * <p>The meanings of the substitution token characters are as follows:</p>
  *
- * <table border="0" width="100%">
+ * <table style="border-collapse: collapse;">
  *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;">&gt;&gt;</td>
- *     <td style="width: 165; vertical-align: top;">in normal rule</td>
+ *     <th>Syntax</th>
+ *     <th>Usage</th>
+ *     <th>Description</th>
+ *   </tr>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="white-space: nowrap;" rowspan="4">&gt;&gt;</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in normal rule</td>
  *     <td>Divide the number by the rule's divisor and format the remainder</td>
  *   </tr>
  *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in negative-number rule</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in negative-number rule</td>
  *     <td>Find the absolute value of the number and format the result</td>
  *   </tr>
  *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in fraction or default rule</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in fraction or default rule</td>
  *     <td>Isolate the number's fractional part and format it.</td>
  *   </tr>
  *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in rule in fraction rule set</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in rule in fraction rule set</td>
  *     <td>Not allowed.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;">&gt;&gt;&gt;</td>
- *     <td style="width: 165; vertical-align: top;">in normal rule</td>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="white-space: nowrap;" rowspan="2">&gt;&gt;&gt;</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in normal rule</td>
  *     <td>Divide the number by the rule's divisor and format the remainder,
  *       but bypass the normal rule-selection process and just use the
  *       rule that precedes this one in this rule list.</td>
  *   </tr>
  *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in all other rules</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in all other rules</td>
  *     <td>Not allowed.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;">&lt;&lt;</td>
- *     <td style="width: 165; vertical-align: top;">in normal rule</td>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="white-space: nowrap;" rowspan="4">&lt;&lt;</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in normal rule</td>
  *     <td>Divide the number by the rule's divisor, perform floor() on the quotient,
  *         and format the resulting value.<br>
  *         If there is a DecimalFormat pattern between the &lt; characters and the
@@ -416,83 +402,93 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     </td>
  *   </tr>
  *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in negative-number rule</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in negative-number rule</td>
  *     <td>Not allowed.</td>
  *   </tr>
  *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in fraction or default rule</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in fraction or default rule</td>
  *     <td>Isolate the number's integral part and format it.</td>
  *   </tr>
  *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in rule in fraction rule set</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in rule in fraction rule set</td>
  *     <td>Multiply the number by the rule's base value and format the result.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;">==</td>
- *     <td style="width: 165; vertical-align: top;">in all rule sets</td>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="white-space: nowrap;">==</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in all rule sets</td>
  *     <td>Format the number unchanged</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;">[]</td>
- *     <td style="width: 165; vertical-align: top;">in normal rule</td>
- *     <td>Omit the optional text if the number is an even multiple of the rule's divisor</td>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="white-space: nowrap;" rowspan="6">[]<br/>[|]</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in normal rule</td>
+ *     <td>
+ *       <ul>
+ *         <li>When the number is not an even multiple of the rule's divisor, use the text and rules between the beginning square bracket,
+ *         and the end square bracket or the | symbol.</li>
+ *         <li>When the number is an even multiple of the rule's divisor, and no | symbol is used, omit the text.</li>
+ *         <li>When the number is an even multiple of the rule's divisor, and | symbol is used, use the text and rules between the | symbol,
+ *         and the end square bracket.</li>
+ *       </ul>
+ *     </td>
  *   </tr>
  *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in negative-number rule</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in improper-fraction rule</td>
+ *     <td>This syntax is the same as specifying both an x.x rule and a 0.x rule.
+ *       <ul>
+ *         <li>When the number is not between 0 and 1, use the text and rules between the beginning square bracket,
+ *         and the end square bracket or the | symbol.</li>
+ *         <li>When the number is between 0 and 1, and no | symbol is used, omit the text.</li>
+ *         <li>When the number is between 0 and 1, and | symbol is used, use the text and rules between the | symbol,
+ *         and the end square bracket.</li>
+ *       </ul>
+ *     </td>
+ *   </tr>
+ *   <tr>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in default rule</td>
+ *     <td>This syntax is the same as specifying both an x.x rule and an x.0 rule.
+ *       <ul>
+ *         <li>When the number is not an integer, use the text and rules between the beginning square bracket,
+ *         and the end square bracket or the | symbol.</li>
+ *         <li>When the number is an integer, and no | symbol is used, omit the text.</li>
+ *         <li>When the number is an integer, and | symbol is used, use the text and rules between the | symbol,
+ *         and the end square bracket.</li>
+ *       </ul>
+ *     </td>
+ *   </tr>
+ *   <tr>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in rule in fraction rule set</td>
+ *     <td>
+ *       <ul>
+ *         <li>When multiplying the number by the rule's base value does not yield 1, use the text and rules between the beginning square bracket,
+ *         and the end square bracket or the | symbol.</li>
+ *         <li>When multiplying the number by the rule's base value yields 1, and no | symbol is used, omit the text.</li>
+ *         <li>When multiplying the number by the rule's base value yields 1, and | symbol is used, use the text and rules between the | symbol,
+ *         and the end square bracket.</li>
+ *       </ul>
+ *     </td>
+ *   </tr>
+ *   <tr>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in proper-fraction rule</td>
  *     <td>Not allowed.</td>
  *   </tr>
  *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in improper-fraction rule</td>
- *     <td>Omit the optional text if the number is between 0 and 1 (same as specifying both an
- *     x.x rule and a 0.x rule)</td>
- *   </tr>
- *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in default rule</td>
- *     <td>Omit the optional text if the number is an integer (same as specifying both an x.x
- *     rule and an x.0 rule)</td>
- *   </tr>
- *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in proper-fraction rule</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in negative-number rule</td>
  *     <td>Not allowed.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 37;"></td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in rule in fraction rule set</td>
- *     <td>Omit the optional text if multiplying the number by the rule's base value yields 1.</td>
- *   </tr>
- *   <tr>
- *     <td style="width: 37;">$(cardinal,<i>plural syntax</i>)$</td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in all rule sets</td>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="white-space: nowrap;">$(cardinal,<i>plural syntax</i>)$</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in all rule sets</td>
  *     <td>This provides the ability to choose a word based on the number divided by the radix to the power of the
  *     exponent of the base value for the specified locale, which is normally equivalent to the &lt;&lt; value.
- *     This uses the cardinal plural rules from PluralFormat. All strings used in the plural format are treated
+ *     This uses the cardinal plural rules from {@link PluralFormat}. All strings used in the plural format are treated
  *     as the same base value for parsing.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 37;">$(ordinal,<i>plural syntax</i>)$</td>
- *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in all rule sets</td>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="white-space: nowrap;">$(ordinal,<i>plural syntax</i>)$</td>
+ *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in all rule sets</td>
  *     <td>This provides the ability to choose a word based on the number divided by the radix to the power of the
  *     exponent of the base value for the specified locale, which is normally equivalent to the &lt;&lt; value.
- *     This uses the ordinal plural rules from PluralFormat. All strings used in the plural format are treated
+ *     This uses the ordinal plural rules from {@link PluralFormat}. All strings used in the plural format are treated
  *     as the same base value for parsing.</td>
  *   </tr>
  * </table>
@@ -500,22 +496,23 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * <p>The substitution descriptor (i.e., the text between the token characters) may take one
  * of three forms:</p>
  *
- * <table border="0" width="100%">
+ * <table style="border-collapse: collapse;">
  *   <tr>
- *     <td style="width: 42;"></td>
- *     <td style="width: 166; vertical-align: top;">a rule set name</td>
+ *     <th>Descriptor</th>
+ *     <th>Description</th>
+ *   </tr>
+ *   <tr>
+ *     <td style="vertical-align: top;">a rule set name</td>
  *     <td>Perform the mathematical operation on the number, and format the result using the
  *     named rule set.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 42;"></td>
- *     <td style="width: 166; vertical-align: top;">a DecimalFormat pattern</td>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;">a DecimalFormat pattern</td>
  *     <td>Perform the mathematical operation on the number, and format the result using a
  *     DecimalFormat with the specified pattern.&nbsp; The pattern must begin with 0 or #.</td>
  *   </tr>
- *   <tr>
- *     <td style="width: 42;"></td>
- *     <td style="width: 166; vertical-align: top;">nothing</td>
+ *   <tr style="border-top: 1px solid black;">
+ *     <td style="vertical-align: top;">nothing</td>
  *     <td>Perform the mathematical operation on the number, and format the result using the rule
  *     set containing the current rule, except:<ul>
  *       <li>You can't have an empty substitution descriptor with a == substitution.</li>
@@ -553,7 +550,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     //-----------------------------------------------------------------------
 
     // Generated by serialver from JDK 1.4.1_01
-    static final long serialVersionUID = -7664252765575395068L;
+    private static final long serialVersionUID = -7664252765575395068L;
 
     /**
      * Selector code that tells the constructor to create a spellout formatter
@@ -1164,7 +1161,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     /**
      * Formats the specified number according to the specified rule set.
      * (If the specified rule set specifies a default ["x.0"] rule, this function
-     * ignores it.  Convert the number to a double first if you ned it.)  This
+     * ignores it.  Convert the number to a double first if you need it.)  This
      * function preserves all the precision in the long-- it doesn't convert it
      * to a double.
      * @param number The number to format.
@@ -1210,7 +1207,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * Formats the specified number using the formatter's default rule set.
      * (The default rule set is the last public rule set defined in the description.)
      * (If the specified rule set specifies a default ["x.0"] rule, this function
-     * ignores it.  Convert the number to a double first if you ned it.)  This
+     * ignores it.  Convert the number to a double first if you need it.)  This
      * function preserves all the precision in the long-- it doesn't convert it
      * to a double.
      * @param number The number to format.
@@ -1305,7 +1302,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     public Number parse(String text, ParsePosition parsePosition) {
 
         // parsePosition tells us where to start parsing.  We copy the
-        // text in the string from here to the end inro a new string,
+        // text in the string from here to the end into a new string,
         // and create a new ParsePosition and result variable to use
         // for the duration of the parse operation
         String workingText = text.substring(parsePosition.getIndex());
@@ -1334,10 +1331,9 @@ public class RuleBasedNumberFormat extends NumberFormat {
                 result = tempResult;
                 highWaterMark.setIndex(workingPos.getIndex());
             }
-            // commented out because this API on ParsePosition doesn't exist in 1.1.x
-            //            if (workingPos.getErrorIndex() > highWaterMark.getErrorIndex()) {
-            //                highWaterMark.setErrorIndex(workingPos.getErrorIndex());
-            //            }
+            if (workingPos.getErrorIndex() > highWaterMark.getErrorIndex()) {
+                highWaterMark.setErrorIndex(workingPos.getErrorIndex());
+            }
 
             // if we manage to use up all the characters in the string,
             // we don't have to try any more rule sets
@@ -1350,13 +1346,12 @@ public class RuleBasedNumberFormat extends NumberFormat {
             workingPos.setIndex(0);
         }
 
-        // add the high water mark to our original parse position and
+        // add the high watermark to our original parse position and
         // return the result
         parsePosition.setIndex(parsePosition.getIndex() + highWaterMark.getIndex());
-        // commented out because this API on ParsePosition doesn't exist in 1.1.x
-        //        if (highWaterMark.getIndex() == 0) {
-        //            parsePosition.setErrorIndex(parsePosition.getIndex() + highWaterMark.getErrorIndex());
-        //        }
+        if (highWaterMark.getIndex() == 0) {
+            parsePosition.setErrorIndex(parsePosition.getIndex() + highWaterMark.getErrorIndex());
+        }
         return result;
     }
 
@@ -1668,7 +1663,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param specialName the name of the special rule text to extract
      * @return the special rule text, or null if the rule was not found
      */
-    private String extractSpecial(StringBuilder description, String specialName) {
+    private static String extractSpecial(StringBuilder description, String specialName) {
         String result = null;
         int lp = description.indexOf(specialName);
         if (lp != -1) {
@@ -1701,7 +1696,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     }
 
     /**
-     * This function parses the description and uses it to build all of
+     * This function parses the description and uses it to build all of the
      * internal data structures that the formatter uses to do formatting
      * @param description The description of the formatter's desired behavior.
      * This is either passed in by the caller or loaded out of a resource
@@ -1747,7 +1742,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         // divide up the descriptions into individual rule-set descriptions
         // and store them in a temporary array.  At each step, we also
-        // new up a rule set, but all this does is initialize its name
+        // create a rule set, but all this does is initialize its name
         // and remove it from its description.  We can't actually parse
         // the rest of the descriptions and finish initializing everything
         // because we have to know the names and locations of all the rule
@@ -1806,8 +1801,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
             defaultRuleSet = ruleSets[ruleSets.length - 1];
         }
 
-        // finally, we can go back through the temporary descriptions
-        // list and finish setting up the substructure
+        // Now that we know all the rule names, we can go back through
+        // the temporary descriptions list and finish setting up the substructure
         for (int i = 0; i < ruleSets.length; i++) {
             ruleSets[i].parseRules(ruleSetDescriptions[i]);
         }
@@ -1902,18 +1897,14 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         // iterate through the characters...
         int start = 0;
+        char ch;
         while (start < descriptionLength) {
-            // seek to the first non-whitespace character...
+            // Seek to the first non-whitespace character...
+            // If the first non-whitespace character is semicolon, skip it and continue
             while (start < descriptionLength
-                   && PatternProps.isWhiteSpace(description.charAt(start)))
+                   && (PatternProps.isWhiteSpace(ch = description.charAt(start)) || ch == ';'))
             {
                 ++start;
-            }
-
-            //if the first non-whitespace character is semicolon, skip it and continue
-            if (start < descriptionLength && description.charAt(start) == ';') {
-                start += 1;
-                continue;
             }
 
             // locate the next semicolon in the text and copy the text from
@@ -1922,20 +1913,18 @@ public class RuleBasedNumberFormat extends NumberFormat {
             if (p == -1) {
                 // or if we don't find a semicolon, just copy the rest of
                 // the string into the result
-                result.append(description.substring(start));
+                result.append(description, start, descriptionLength);
                 break;
             }
             else if (p < descriptionLength) {
-                result.append(description.substring(start, p + 1));
-                start = p + 1;
+                int end = p + 1;
+                result.append(description, start, end);
+                start = end;
             }
-            else {
-                // when we get here, we've seeked off the end of the string, and
-                // we terminate the loop (we continue until *start* is -1 rather
-                // than until *p* is -1, because otherwise we'd miss the last
-                // rule in the description)
-                break;
-            }
+            // when we get here from the else, we've seeked off the end of the string, and
+            // we terminate the loop (we continue until *start* is -1 rather
+            // than until *p* is -1, because otherwise we'd miss the last
+            // rule in the description)
         }
         return result;
     }

@@ -64,6 +64,7 @@ NFRule::~NFRule()
 
 static const char16_t gLeftBracket = 0x005b;
 static const char16_t gRightBracket = 0x005d;
+static const char16_t gVerticalLine = 0x007C;
 static const char16_t gColon = 0x003a;
 static const char16_t gZero = 0x0030;
 static const char16_t gNine = 0x0039;
@@ -146,6 +147,7 @@ NFRule::makeRules(UnicodeString& description,
         // then it's really shorthand for two rules (with one exception)
         LocalPointer<NFRule> rule2;
         UnicodeString sbuf;
+        int32_t orElseOp = description.indexOf(gVerticalLine);
 
         // we'll actually only split the rule into two rules if its
         // base value is an even multiple of its divisor (or it's one
@@ -193,9 +195,13 @@ NFRule::makeRules(UnicodeString& description,
             rule2->radix = rule1->radix;
             rule2->exponent = rule1->exponent;
 
-            // rule2's rule text omits the stuff in brackets: initialize
-            // its rule text and substitutions accordingly
+            // By default, rule2's rule text omits the stuff in brackets,
+            // unless it contains a | between the brackets.
+            // Initialize its rule text and substitutions accordingly.
             sbuf.append(description, 0, brack1);
+            if (orElseOp >= 0) {
+                sbuf.append(description, orElseOp + 1, brack2 - orElseOp - 1);
+            }
             if (brack2 + 1 < description.length()) {
                 sbuf.append(description, brack2 + 1, description.length() - brack2 - 1);
             }
@@ -206,7 +212,12 @@ NFRule::makeRules(UnicodeString& description,
         // the brackets themselves: initialize _its_ rule text and
         // substitutions accordingly
         sbuf.setTo(description, 0, brack1);
-        sbuf.append(description, brack1 + 1, brack2 - brack1 - 1);
+        if (orElseOp >= 0) {
+            sbuf.append(description, brack1 + 1, orElseOp - brack1 - 1);
+        }
+        else {
+            sbuf.append(description, brack1 + 1, brack2 - brack1 - 1);
+        }
         if (brack2 + 1 < description.length()) {
             sbuf.append(description, brack2 + 1, description.length() - brack2 - 1);
         }
@@ -404,7 +415,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
     // finally, if the rule body begins with an apostrophe, strip it off
     // (this is generally used to put whitespace at the beginning of
     // a rule's rule text)
-    if (description.length() > 0 && description.charAt(0) == gTick) {
+    if (!description.isEmpty() && description.charAt(0) == gTick) {
         description.removeBetween(0, 1);
     }
 
