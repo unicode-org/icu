@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1736221044389,
+  "lastUpdate": 1736233953820,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30237,6 +30237,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 565.4804890411892,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "a8d9f471ea1bc589755ebf0be181dadab167b3f9",
+          "message": "ICU-22713 Delete layout/DataDrivenTest.",
+          "timestamp": "2025-01-07T15:53:53+09:00",
+          "tree_id": "9a9cace98bc56b9083695a78ba5bb8f0daaae9f1",
+          "url": "https://github.com/unicode-org/icu/commit/a8d9f471ea1bc589755ebf0be181dadab167b3f9"
+        },
+        "date": 1736233747135,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 557.4695682879153,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
