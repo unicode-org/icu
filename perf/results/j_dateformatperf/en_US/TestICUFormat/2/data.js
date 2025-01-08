@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1736299738907,
+  "lastUpdate": 1736369031883,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30087,6 +30087,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 208.3406118116971,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "9eafd8ca3e61e9e92a8d23f8d107b90100bdf1df",
+          "message": "ICU-22991 Reduce Calendar object size\n\nSee #3327",
+          "timestamp": "2025-01-08T12:26:35-08:00",
+          "tree_id": "78be348067a549432af254a4222778527d677832",
+          "url": "https://github.com/unicode-org/icu/commit/9eafd8ca3e61e9e92a8d23f8d107b90100bdf1df"
+        },
+        "date": 1736368820725,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 206.3648351919746,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
