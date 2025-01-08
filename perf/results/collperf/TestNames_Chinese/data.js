@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1736233784825,
+  "lastUpdate": 1736300412466,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -59181,6 +59181,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2096430.6782,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "6f93c07a45e7fb1944fa0179591b36413312d16e",
+          "message": "ICU-22954 Revert to using std::u16string instead of UnicodeString.\n\nIt seems as if icu4c-windows-cygwin-gcc only crashes if the constructor\nis defined inline, so with the exception of the constructor this commit\nreverts the code to commit 320220ef694123393a5c5d6eb6a1c7536fc57aba.",
+          "timestamp": "2025-01-08T10:13:20+09:00",
+          "tree_id": "c8e42739f0c048259ca1d8c39ac65b788980667a",
+          "url": "https://github.com/unicode-org/icu/commit/6f93c07a45e7fb1944fa0179591b36413312d16e"
+        },
+        "date": 1736300205312,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 147.5222,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8756175.4793,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2121587.04,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7743651.5983,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2114862.5028,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
