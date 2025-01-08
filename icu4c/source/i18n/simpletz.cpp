@@ -518,7 +518,8 @@ SimpleTimeZone::getOffsetFromLocal(UDate date, UTimeZoneLocalOption nonExistingT
     }
 
     rawOffsetGMT = getRawOffset();
-    int32_t year, month, dom, dow, millis;
+    int32_t year, millis;
+    int8_t month, dom, dow;
     double dday = ClockMath::floorDivide(date, U_MILLIS_PER_DAY, &millis);
     if (dday > INT32_MAX || dday < INT32_MIN) {
         status = U_ILLEGAL_ARGUMENT_ERROR;

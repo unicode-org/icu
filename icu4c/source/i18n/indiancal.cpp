@@ -142,18 +142,6 @@ static double gregorianToJD(int32_t year, int32_t month, int32_t date) {
    return Grego::fieldsToDay(year, month, date) + kEpochStartAsJulianDay - 0.5;
 }
 
-/*
- * Returns the Gregorian Date corresponding to a given Julian Day
- * Month is 0 based.
- * @param jd The Julian Day
- */
-static int32_t* jdToGregorian(double jd, int32_t gregorianDate[3], UErrorCode& status) {
-   int32_t gdow;
-   Grego::dayToFields(jd - kEpochStartAsJulianDay,
-                      gregorianDate[0], gregorianDate[1], gregorianDate[2], gdow, status);
-   return gregorianDate;
-}
-
    
 //-------------------------------------------------------------------------
 // Functions for converting from field values to milliseconds....
@@ -265,10 +253,9 @@ int32_t IndianCalendar::handleGetExtendedYear(UErrorCode& status) {
 void IndianCalendar::handleComputeFields(int32_t julianDay, UErrorCode&  status) {
     double jdAtStartOfGregYear;
     int32_t leapMonth, IndianYear, yday, IndianMonth, IndianDayOfMonth, mday;
-    int32_t gregorianYear;      // Stores gregorian date corresponding to Julian day;
-    int32_t gd[3];
+    // Stores gregorian date corresponding to Julian day;
+    int32_t gregorianYear = Grego::dayToYear(julianDay - kEpochStartAsJulianDay, status);
 
-    gregorianYear = jdToGregorian(julianDay, gd, status)[0];          // Gregorian date for Julian day
     if (U_FAILURE(status)) return;
     IndianYear = gregorianYear - INDIAN_ERA_START;            // Year in Saka era
     jdAtStartOfGregYear = gregorianToJD(gregorianYear, 0, 1); // JD at start of Gregorian year

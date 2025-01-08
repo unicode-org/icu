@@ -730,7 +730,8 @@ void TimeZone::getOffset(UDate date, UBool local, int32_t& rawOffset,
     // (with 7 args) twice when local == true and DST is
     // detected in the initial call.
     for (int32_t pass=0; ; ++pass) {
-        int32_t year, month, dom, dow, millis;
+        int32_t year, millis;
+        int8_t month, dom, dow;
         double day = ClockMath::floorDivide(date, U_MILLIS_PER_DAY, &millis);
 
         // out of the range

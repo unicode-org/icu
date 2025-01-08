@@ -1524,14 +1524,13 @@ void Calendar::computeGregorianFields(int32_t julianDay, UErrorCode& ec) {
     if (U_FAILURE(ec)) {
         return;
     }
-    int32_t gregorianDayOfWeekUnused;
     if (uprv_add32_overflow(
             julianDay, -kEpochStartAsJulianDay, &julianDay)) {
         ec = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
     Grego::dayToFields(julianDay, fGregorianYear, fGregorianMonth,
-                       fGregorianDayOfMonth, gregorianDayOfWeekUnused,
+                       fGregorianDayOfMonth,
                        fGregorianDayOfYear, ec);
 }
 
