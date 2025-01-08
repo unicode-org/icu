@@ -61,18 +61,19 @@ namespace U_HEADER_ONLY_NAMESPACE {
  * Result of validating and decoding a minimal Unicode code unit sequence.
  * Returned from validating Unicode string code point iterators.
  *
- * @tparam Unit Code unit type:
+ * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @draft ICU 77
  */
-template<typename Unit, typename CP32>
+template<typename UnitIter, typename CP32>
 class CodeUnits {
+    using Unit = typename std::iterator_traits<UnitIter>::value_type;
 public:
     // @internal
-    CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed, const Unit *data) :
+    CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed, UnitIter data) :
             c(codePoint), len(length), ok(wellFormed), p(data) {}
 
     CodeUnits(const CodeUnits &other) = default;
@@ -82,22 +83,24 @@ public:
 
     bool wellFormed() const { return ok; }
 
-    const Unit *data() const { return p; }
+    UnitIter data() const { return p; }
 
     int32_t length() const { return len; }
 
-    std::basic_string_view<Unit> stringView() const {
+    template<typename Iter = UnitIter>
+    std::enable_if_t<
+        std::is_pointer_v<Iter>,
+        std::basic_string_view<Unit>>
+    stringView() const {
         return std::basic_string_view<Unit>(p, len);
     }
-
-    // TODO: std::optional<CP32> maybeCodePoint() const ? (nullopt if ill-formed)
 
 private:
     // Order of fields with padding and access frequency in mind.
     CP32 c;
     uint8_t len;
     bool ok;
-    const Unit *p;
+    UnitIter p;
 };
 
 /**
@@ -144,17 +147,18 @@ private:
  * Internal base class for public U16Iterator & U16ReverseIterator.
  * Not intended for public subclassing.
  *
- * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam UIllFormedBehavior TODO
  * @internal
  */
-template<typename Unit16, typename CP32, UIllFormedBehavior behavior>
+template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
 class U16IteratorBase {
 protected:
     // @internal
-    U16IteratorBase(const Unit16 *start, const Unit16 *p, const Unit16 *limit) :
+    U16IteratorBase(UnitIter start, UnitIter p, UnitIter limit) :
             start(start), current(p), limit(limit) {}
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
@@ -179,10 +183,10 @@ protected:
     }
 
     // @internal
-    CodeUnits<Unit16, CP32> readAndInc(const Unit16 *&p) const {
+    CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p) const {
         // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_NEXT_OR_FFFD().
-        const Unit16 *p0 = p;
+        UnitIter p0 = p;
         CP32 c = *p++;
         if (!U16_IS_SURROGATE(c)) {
             return {c, 1, true, p0};
@@ -199,16 +203,17 @@ protected:
     }
 
     // @internal
-    CodeUnits<Unit16, CP32> decAndRead(const Unit16 *&p) const {
+    CodeUnits<UnitIter, CP32> decAndRead(UnitIter &p) const {
         // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_PREV_OR_FFFD().
         CP32 c = *--p;
         if (!U16_IS_SURROGATE(c)) {
             return {c, 1, true, p};
         } else {
+            UnitIter p1;
             uint16_t c2;
-            if (U16_IS_SURROGATE_TRAIL(c) && p != start && U16_IS_LEAD(c2 = *(p - 1))) {
-                --p;
+            if (U16_IS_SURROGATE_TRAIL(c) && p != start && (p1 = p--, U16_IS_LEAD(c2 = *p1))) {
+                p = p1;
                 c = U16_GET_SUPPLEMENTARY(c2, c);
                 return {c, 2, true, p};
             } else {
@@ -230,29 +235,30 @@ protected:
     // In a validating iterator, we need start & limit so that when we read a code point
     // (forward or backward) we can test if there are enough code units.
     // @internal
-    const Unit16 *const start;
+    const UnitIter start;
     // @internal
-    const Unit16 *current;
+    UnitIter current;
     // @internal
-    const Unit16 *const limit;
+    const UnitIter limit;
 };
 
 /**
  * Validating bidirectional iterator over the code points in a Unicode 16-bit string.
  *
- * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam UIllFormedBehavior TODO
  * @draft ICU 77
  */
-template<typename Unit16, typename CP32, UIllFormedBehavior behavior>
-class U16Iterator : private U16IteratorBase<Unit16, CP32, behavior> {
+template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
+class U16Iterator : private U16IteratorBase<UnitIter, CP32, behavior> {
     // FYI: We need to qualify all accesses to super class members because of private inheritance.
-    using Super = U16IteratorBase<Unit16, CP32, behavior>;
+    using Super = U16IteratorBase<UnitIter, CP32, behavior>;
 public:
     // TODO: make private, make friends
-    U16Iterator(const Unit16 *start, const Unit16 *p, const Unit16 *limit) :
+    U16Iterator(UnitIter start, UnitIter p, UnitIter limit) :
             Super(start, p, limit) {}
 
     U16Iterator(const U16Iterator &other) = default;
@@ -261,10 +267,10 @@ public:
     bool operator==(const U16Iterator &other) const { return Super::operator==(other); }
     bool operator!=(const U16Iterator &other) const { return !Super::operator==(other); }
 
-    CodeUnits<Unit16, CP32> operator*() const {
+    CodeUnits<UnitIter, CP32> operator*() const {
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        const Unit16 *p = Super::current;
+        UnitIter p = Super::current;
         return Super::readAndInc(p);
     }
 
@@ -298,18 +304,19 @@ public:
  * Validating reverse iterator over the code points in a Unicode 16-bit string.
  * Not bidirectional, but optimized for reverse iteration.
  *
- * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam UIllFormedBehavior TODO
  * @draft ICU 77
  */
-template<typename Unit16, typename CP32, UIllFormedBehavior behavior>
-class U16ReverseIterator : private U16IteratorBase<Unit16, CP32, behavior> {
-    using Super = U16IteratorBase<Unit16, CP32, behavior>;
+template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
+class U16ReverseIterator : private U16IteratorBase<UnitIter, CP32, behavior> {
+    using Super = U16IteratorBase<UnitIter, CP32, behavior>;
 public:
     // TODO: make private, make friends
-    U16ReverseIterator(const Unit16 *start, const Unit16 *p, const Unit16 *limit) :
+    U16ReverseIterator(UnitIter start, UnitIter p, UnitIter limit) :
             Super(start, p, limit) {}
 
     U16ReverseIterator(const U16ReverseIterator &other) = default;
@@ -318,10 +325,10 @@ public:
     bool operator==(const U16ReverseIterator &other) const { return Super::operator==(other); }
     bool operator!=(const U16ReverseIterator &other) const { return !Super::operator==(other); }
 
-    CodeUnits<Unit16, CP32> operator*() const {
+    CodeUnits<UnitIter, CP32> operator*() const {
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        const Unit16 *p = Super::current;
+        UnitIter p = Super::current;
         return Super::decAndRead(p);
     }
 
@@ -366,24 +373,24 @@ public:
     U16StringCodePoints &operator=(const U16StringCodePoints &other) = default;
 
     /** @draft ICU 77 */
-    U16Iterator<Unit16, CP32, behavior> begin() const {
+    U16Iterator<const Unit16 *, CP32, behavior> begin() const {
         return {s.data(), s.data(), s.data() + s.length()};
     }
 
     /** @draft ICU 77 */
-    U16Iterator<Unit16, CP32, behavior> end() const {
+    U16Iterator<const Unit16 *, CP32, behavior> end() const {
         const Unit16 *limit = s.data() + s.length();
         return {s.data(), limit, limit};
     }
 
     /** @draft ICU 77 */
-    U16ReverseIterator<Unit16, CP32, behavior> rbegin() const {
+    U16ReverseIterator<const Unit16 *, CP32, behavior> rbegin() const {
         const Unit16 *limit = s.data() + s.length();
         return {s.data(), limit, limit};
     }
 
     /** @draft ICU 77 */
-    U16ReverseIterator<Unit16, CP32, behavior> rend() const {
+    U16ReverseIterator<const Unit16 *, CP32, behavior> rend() const {
         return {s.data(), s.data(), s.data() + s.length()};
     }
 
