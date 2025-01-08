@@ -339,12 +339,10 @@ int64_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
-        double m = month;
-        if (uprv_add32_overflow(eyear, ClockMath::floorDivide(m, 12.0, &m), &eyear)) {
+        if (uprv_add32_overflow(eyear, ClockMath::floorDivide(month, 12, &month), &eyear)) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return 0;
         }
-        month = static_cast<int32_t>(m);
     }
 
     const Setting setting = getSetting(status);
