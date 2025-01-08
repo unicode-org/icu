@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1736369298200,
+  "lastUpdate": 1736374601984,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30147,6 +30147,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 3.702619987183771,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "ba5cf31f770058ad1d3a3502de7a084a2cfd0862",
+          "message": "ICU-22921 Add windows script doing jar extraction",
+          "timestamp": "2025-01-08T13:54:42-08:00",
+          "tree_id": "fb90faadccd5c115f582cfe13efa65a4ad88ddde",
+          "url": "https://github.com/unicode-org/icu/commit/ba5cf31f770058ad1d3a3502de7a084a2cfd0862"
+        },
+        "date": 1736374393505,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 3.706091957916359,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
