@@ -568,9 +568,8 @@ UBool OlsonTimeZone::useDaylightTime() const {
         return finalZone->useDaylightTime();
     }
 
-    int32_t year, month, dom, dow, doy, mid;
     UErrorCode status = U_ZERO_ERROR;
-    Grego::timeToFields(current, year, month, dom, dow, doy, mid, status);
+    int32_t year = Grego::timeToYear(current, status);
     U_ASSERT(U_SUCCESS(status));
     if (U_FAILURE(status)) return false; // If error, just return false.
 

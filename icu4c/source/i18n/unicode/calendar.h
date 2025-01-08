@@ -2257,21 +2257,21 @@ private:
      * returned by getGregorianMonth().
      * @see #computeGregorianFields
      */
-    int32_t fGregorianMonth;
-
-    /**
-     * The Gregorian day of the year, as computed by
-     * computeGregorianFields() and returned by getGregorianDayOfYear().
-     * @see #computeGregorianFields
-     */
-    int32_t fGregorianDayOfYear;
+    int8_t fGregorianMonth;
 
     /**
      * The Gregorian day of the month, as computed by
      * computeGregorianFields() and returned by getGregorianDayOfMonth().
      * @see #computeGregorianFields
      */
-    int32_t fGregorianDayOfMonth;
+    int8_t fGregorianDayOfMonth;
+
+    /**
+     * The Gregorian day of the year, as computed by
+     * computeGregorianFields() and returned by getGregorianDayOfYear().
+     * @see #computeGregorianFields
+     */
+    int16_t fGregorianDayOfYear;
 
     /* calculations */
 

@@ -369,13 +369,9 @@ int64_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
         isLeapMonth = internalGet(UCAL_IS_LEAP_MONTH) != 0;
     }
 
-    int32_t unusedMonth;
-    int32_t unusedDayOfWeek;
-    int32_t unusedDayOfMonth;
-    int32_t unusedDayOfYear;
-    Grego::dayToFields(newMoon, gyear, unusedMonth, unusedDayOfWeek, unusedDayOfMonth, unusedDayOfYear, status);
+    int32_t newMonthYear = Grego::dayToYear(newMoon, status);
 
-    struct MonthInfo monthInfo = computeMonthInfo(setting, gyear, newMoon, status);
+    struct MonthInfo monthInfo = computeMonthInfo(setting, newMonthYear, newMoon, status);
     if (U_FAILURE(status)) {
        return 0;
     }
