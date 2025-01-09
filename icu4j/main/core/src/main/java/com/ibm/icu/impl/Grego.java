@@ -107,48 +107,55 @@ public class Grego {
      * @return the day of week
      */
     public static int dayOfWeek(long day) {
-        long[] remainder = new long[1];
-        floorDivide(day + 5 /* Calendar.THURSDAY */, 7, remainder);
-        int dayOfWeek = (int)remainder[0];
+        Pair<Long, Integer> result = floorDivideAndRemainer(day + 5 /* Calendar.THURSDAY */, 7);
+        int dayOfWeek = result.second;
         dayOfWeek = (dayOfWeek == 0) ? 7 : dayOfWeek;
         return dayOfWeek;
+    }
+
+    public static Pair<Integer, Integer> dayToYear(long day) {
+        // Convert from 1970 CE epoch to 1 CE epoch (Gregorian calendar)
+        day += JULIAN_1970_CE - JULIAN_1_CE;
+        Pair<Long, Integer> n400 = floorDivideAndRemainer(day, 146097);
+        Pair<Long, Integer> n100 = floorDivideAndRemainer(n400.second, 36524);
+        Pair<Long, Integer> n4 = floorDivideAndRemainer(n100.second, 1461);
+        Pair<Long, Integer> n1 = floorDivideAndRemainer(n4.second, 365);
+
+        int year = (int)(400 * n400.first + 100 * n100.first + 4 * n4.first + n1.first);
+        int dayOfYear = n1.second;
+        if (n100.first == 4 || n1.first == 4) {
+            dayOfYear = 365;    // Dec 31 at end of 4- or 400-yr cycle
+        }
+        else {
+            ++year;
+        }
+        dayOfYear++; // 1-based day of year
+        return new Pair<Integer, Integer>(year, dayOfYear);
     }
 
     public static int[] dayToFields(long day, int[] fields) {
         if (fields == null || fields.length < 5) {
             fields = new int[5];
         }
+        Pair<Integer, Integer> result = dayToYear(day);
+        int year = result.first;
+        int dayOfYear = result.second;
         // Convert from 1970 CE epoch to 1 CE epoch (Gregorian calendar)
         day += JULIAN_1970_CE - JULIAN_1_CE;
 
-        long[] rem = new long[1];
-        long n400 = floorDivide(day, 146097, rem);
-        long n100 = floorDivide(rem[0], 36524, rem);
-        long n4 = floorDivide(rem[0], 1461, rem);
-        long n1 = floorDivide(rem[0], 365, rem);
-
-        int year = (int)(400 * n400 + 100 * n100 + 4 * n4 + n1);
-        int dayOfYear = (int)rem[0];
-        if (n100 == 4 || n1 == 4) {
-            dayOfYear = 365;    // Dec 31 at end of 4- or 400-yr cycle
-        }
-        else {
-            ++year;
-        }
 
         boolean isLeap = isLeapYear(year);
         int correction = 0;
         int march1 = isLeap ? 60 : 59;  // zero-based DOY for March 1
-        if (dayOfYear >= march1) {
+        if (dayOfYear > march1) {
             correction = isLeap ? 1 : 2;
         }
-        int month = (12 * (dayOfYear + correction) + 6) / 367;  // zero-based month
-        int dayOfMonth = dayOfYear - DAYS_BEFORE[isLeap ? month + 12 : month] + 1; // one-based DOM
+        int month = (12 * (dayOfYear - 1 + correction) + 6) / 367;  // zero-based month
+        int dayOfMonth = dayOfYear - DAYS_BEFORE[isLeap ? month + 12 : month]; // one-based DOM
         int dayOfWeek = (int)((day + 2) % 7);  // day 0 is Monday(2)
         if (dayOfWeek < 1 /* Sunday */) {
             dayOfWeek += 7;
         }
-        dayOfYear++; // 1-based day of year
 
         fields[0] = year;
         fields[1] = month;
@@ -173,11 +180,14 @@ public class Grego {
         if (fields == null || fields.length < 6) {
             fields = new int[6];
         }
-        long[] remainder = new long[1];
-        long day = floorDivide(time, 24*60*60*1000 /* milliseconds per day */, remainder);
-        dayToFields(day, fields);
-        fields[5] = (int)remainder[0];
+        Pair<Long, Integer> result = floorDivideAndRemainer(time, 24*60*60*1000 /* milliseconds per day */);
+        dayToFields(result.first, fields);
+        fields[5] = result.second;
         return fields;
+    }
+
+    public static int timeToYear(long time) {
+        return dayToYear(floorDivideAndRemainer(time, 24*60*60*1000 /* milliseconds per day */).first).first;
     }
 
     public static long floorDivide(long numerator, long denominator) {
@@ -188,14 +198,12 @@ public class Grego {
             ((numerator + 1) / denominator) - 1;
     }
 
-    private static long floorDivide(long numerator, long denominator, long[] remainder) {
+    private static Pair<Long, Integer> floorDivideAndRemainer(long numerator, int denominator) {
         if (numerator >= 0) {
-            remainder[0] = numerator % denominator;
-            return numerator / denominator;
+            return new Pair<Long, Integer>(floorDivide(numerator, denominator), (int)(numerator % denominator));
         }
-        long quotient = ((numerator + 1) / denominator) - 1;
-        remainder[0] = numerator - (quotient * denominator);
-        return quotient;
+        long quotient = floorDivide(numerator, denominator);
+        return new Pair<Long, Integer>(quotient, (int)(numerator - (quotient * denominator)));
     }
 
     /*

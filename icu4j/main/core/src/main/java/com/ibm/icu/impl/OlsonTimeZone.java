@@ -234,10 +234,8 @@ public class OlsonTimeZone extends BasicTimeZone {
                 }
             }
 
-            int[] fields = Grego.timeToFields(current, null);
-
-            finalStartYear = fields[0];
-            finalStartMillis = Grego.fieldsToDay(fields[0], 0, 1);
+            finalStartYear = Grego.timeToYear(current);
+            finalStartMillis = Grego.fieldsToDay(finalStartYear, 0, 1);
 
             if (bDst) {
                 // we probably do not need to set start year of final rule
@@ -314,11 +312,11 @@ public class OlsonTimeZone extends BasicTimeZone {
             return (finalZone != null && finalZone.useDaylightTime());
         }
 
-        int[] fields = Grego.timeToFields(current, null);
+        int year = Grego.timeToYear(current);
 
         // Find start of this year, and start of next year
-        long start = Grego.fieldsToDay(fields[0], 0, 1) * SECONDS_PER_DAY;
-        long limit = Grego.fieldsToDay(fields[0] + 1, 0, 1) * SECONDS_PER_DAY;
+        long start = Grego.fieldsToDay(year, 0, 1) * SECONDS_PER_DAY;
+        long limit = Grego.fieldsToDay(year + 1, 0, 1) * SECONDS_PER_DAY;
 
         // Return true if DST is observed at any time during the current
         // year.

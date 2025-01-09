@@ -823,14 +823,13 @@ public class VTimeZone extends BasicTimeZone {
                             DateTimeRule.UTC_TIME);
                 } else {
                     // Update the end year
-                    int fields[] = Grego.timeToFields(start.getTime(), null);
                     newRule = new AnnualTimeZoneRule(
                             finalRule.getName(),
                             finalRule.getRawOffset(),
                             finalRule.getDSTSavings(),
                             finalRule.getRule(),
                             finalRule.getStartYear(),
-                            fields[0]);
+                            Grego.timeToYear(start.getTime()));
                 }
                 rules.set(finalRuleIdx, newRule);
             }
