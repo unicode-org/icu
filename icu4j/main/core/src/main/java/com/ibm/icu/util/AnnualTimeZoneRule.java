@@ -191,8 +191,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
      */
     @Override
     public Date getNextStart(long base, int prevRawOffset, int prevDSTSavings, boolean inclusive) {
-        int[] fields = Grego.timeToFields(base, null);
-        int year = fields[0];
+        int year = Grego.timeToYear(base);
         if (year < startYear) {
             return getFirstStart(prevRawOffset, prevDSTSavings);
         }
@@ -209,8 +208,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
      */
     @Override
     public Date getPreviousStart(long base, int prevRawOffset, int prevDSTSavings, boolean inclusive) {
-        int[] fields = Grego.timeToFields(base, null);
-        int year = fields[0];
+        int year = Grego.timeToYear(base);
         if (year > endYear) {
             return getFinalStart(prevRawOffset, prevDSTSavings);
         }

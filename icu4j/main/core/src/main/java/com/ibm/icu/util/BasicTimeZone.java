@@ -342,12 +342,10 @@ public abstract class BasicTimeZone extends TimeZone {
                     filteredRules.add(ar);
                 } else {
                     // Calculate the transition year
-                    int[] dfields = new int[6];
-                    Grego.timeToFields(tzt.getTime(), dfields);
                     // Recreate the rule
                     AnnualTimeZoneRule newar = new AnnualTimeZoneRule(ar.getName(),
                             ar.getRawOffset(), ar.getDSTSavings(),
-                            ar.getRule(), dfields[0], ar.getEndYear());
+                            ar.getRule(), Grego.timeToYear(tzt.getTime()), ar.getEndYear());
                     filteredRules.add(newar);
                 }
                 // Check if this is a final rule
