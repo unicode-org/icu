@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1736385873968,
+  "lastUpdate": 1736476225337,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -85485,6 +85485,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1401.745,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "f8aa68b0c1c9584633e7a61157185f1a2c275f58",
+          "message": "ICU-22940 MF2 ICU4C: Error checking improvements in parser\n\nImprove checking for OOM errors when allocating UnicodeSets,\nper post-merge comments on https://github.com/unicode-org/icu/pull/3236",
+          "timestamp": "2025-01-09T18:00:43-08:00",
+          "tree_id": "662fc065b6121e0851a29a92ae8a401bc1878851",
+          "url": "https://github.com/unicode-org/icu/commit/f8aa68b0c1c9584633e7a61157185f1a2c275f58"
+        },
+        "date": 1736476012945,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77878.1735,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 166686.6853,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5391,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.3812,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.3071,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8320.7825,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 30605.2719,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1405.066,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
