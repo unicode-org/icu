@@ -1393,8 +1393,8 @@ public:
 private:
     friend class USetCodePoints;
 
-    USetCodePointIterator(const USet *uset, int32_t rangeIndex, int32_t rangeCount)
-            : uset(uset), rangeIndex(rangeIndex), rangeCount(rangeCount),
+    USetCodePointIterator(const USet *pUset, int32_t nRangeIndex, int32_t nRangeCount)
+            : uset(pUset), rangeIndex(nRangeIndex), rangeCount(nRangeCount),
                 c(U_SENTINEL), end(U_SENTINEL) {
         // Fetch the first range.
         operator++();
@@ -1430,7 +1430,7 @@ public:
      * Constructs a C++ "range" object over the code points of the USet.
      * @draft ICU 76
      */
-    USetCodePoints(const USet *uset) : uset(uset), rangeCount(uset_getRangeCount(uset)) {}
+    USetCodePoints(const USet *pUset) : uset(pUset), rangeCount(uset_getRangeCount(pUset)) {}
 
     /** @draft ICU 76 */
     USetCodePoints(const USetCodePoints &other) = default;
@@ -1461,7 +1461,7 @@ struct CodePointRange {
     /** @draft ICU 76 */
     struct iterator {
         /** @draft ICU 76 */
-        iterator(UChar32 c) : c(c) {}
+        iterator(UChar32 aC) : c(aC) {}
 
         /** @draft ICU 76 */
         bool operator==(const iterator &other) const { return c == other.c; }
@@ -1574,8 +1574,8 @@ public:
 private:
     friend class USetRanges;
 
-    USetRangeIterator(const USet *uset, int32_t rangeIndex, int32_t rangeCount)
-            : uset(uset), rangeIndex(rangeIndex), rangeCount(rangeCount) {}
+    USetRangeIterator(const USet *pUset, int32_t nRangeIndex, int32_t nRangeCount)
+            : uset(pUset), rangeIndex(nRangeIndex), rangeCount(nRangeCount) {}
 
     const USet *uset;
     int32_t rangeIndex;
@@ -1611,7 +1611,7 @@ public:
      * Constructs a C++ "range" object over the code point ranges of the USet.
      * @draft ICU 76
      */
-    USetRanges(const USet *uset) : uset(uset), rangeCount(uset_getRangeCount(uset)) {}
+    USetRanges(const USet *pUset) : uset(pUset), rangeCount(uset_getRangeCount(pUset)) {}
 
     /** @draft ICU 76 */
     USetRanges(const USetRanges &other) = default;
@@ -1685,8 +1685,8 @@ public:
 private:
     friend class USetStrings;
 
-    USetStringIterator(const USet *uset, int32_t index, int32_t count)
-            : uset(uset), index(index), count(count) {}
+    USetStringIterator(const USet *pUset, int32_t nIndex, int32_t nCount)
+            : uset(pUset), index(nIndex), count(nCount) {}
 
     const USet *uset;
     int32_t index;
@@ -1719,7 +1719,7 @@ public:
      * Constructs a C++ "range" object over the strings of the USet.
      * @draft ICU 76
      */
-    USetStrings(const USet *uset) : uset(uset), count(uset_getStringCount(uset)) {}
+    USetStrings(const USet *pUset) : uset(pUset), count(uset_getStringCount(pUset)) {}
 
     /** @draft ICU 76 */
     USetStrings(const USetStrings &other) = default;
@@ -1816,8 +1816,8 @@ public:
 private:
     friend class USetElements;
 
-    USetElementIterator(const USet *uset, int32_t index, int32_t rangeCount, int32_t totalCount)
-            : uset(uset), index(index), rangeCount(rangeCount), totalCount(totalCount),
+    USetElementIterator(const USet *pUset, int32_t nIndex, int32_t nRangeCount, int32_t nTotalCount)
+            : uset(pUset), index(nIndex), rangeCount(nRangeCount), totalCount(nTotalCount),
                 c(U_SENTINEL), end(U_SENTINEL) {
         if (index < rangeCount) {
             // Fetch the first range.
@@ -1874,9 +1874,9 @@ public:
      * Constructs a C++ "range" object over all of the elements of the USet.
      * @draft ICU 77
      */
-    USetElements(const USet *uset)
-        : uset(uset), rangeCount(uset_getRangeCount(uset)),
-            stringCount(uset_getStringCount(uset)) {}
+    USetElements(const USet *pUset)
+        : uset(pUset), rangeCount(uset_getRangeCount(pUset)),
+            stringCount(uset_getStringCount(pUset)) {}
 
     /** @draft ICU 77 */
     USetElements(const USetElements &other) = default;
