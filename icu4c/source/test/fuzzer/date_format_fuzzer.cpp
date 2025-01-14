@@ -90,5 +90,11 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
         icu::DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale2));
     df.reset(
         icu::DateFormat::createDateTimeInstance(dateStyle2, timeStyle2, locale2));
+
+    UDateFormat* udf = udat_open(UDAT_PATTERN, UDAT_PATTERN, str.c_str(), nullptr, 0,
+                                 skeleton.getBuffer(), skeleton.length(), &status);
+    if (udf && U_SUCCESS(status)) {
+        udat_close(udf);
+    }
     return EXIT_SUCCESS;
 }
