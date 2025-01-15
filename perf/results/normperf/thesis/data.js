@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1736483401833,
+  "lastUpdate": 1736900055267,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -65757,6 +65757,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 2.887,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "13a5e29644616f5c4e4a68380f6637dc7ee53c0d",
+          "message": "ICU-22929 Improve fuzzer to find leak from udat_open\n\nTry to find out what cause ICU-23008. Use ICU-22929 as bug number\nto improve fuzzer to find the problem.\nAccording to ICU-23008 bug report, the leak of DecimalFormatSymbols\ncan be reach by udat_open when the style is UDAT_PATTERN",
+          "timestamp": "2025-01-14T15:41:06-08:00",
+          "tree_id": "bb0233e2a5aaf7516dce3290fb48883cf9abb811",
+          "url": "https://github.com/unicode-org/icu/commit/13a5e29644616f5c4e4a68380f6637dc7ee53c0d"
+        },
+        "date": 1736899840522,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 2.9858,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 2.9711,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 2.9804,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 2.8914,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 2.8574,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 2.8519,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
