@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1736899542749,
+  "lastUpdate": 1736961721786,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -37185,6 +37185,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 55.4494,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "committer": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "distinct": true,
+          "id": "2d6a4185c355059462f1c210fab5c34c929f9d79",
+          "message": "ICU-22979 Support inverse rule for [] span in RBNF",
+          "timestamp": "2025-01-15T08:56:08-08:00",
+          "tree_id": "9b6cd5f7ba50610cad80f1a8919bb0d87126e9b3",
+          "url": "https://github.com/unicode-org/icu/commit/2d6a4185c355059462f1c210fab5c34c929f9d79"
+        },
+        "date": 1736961506186,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 26.098,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 56.3099,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
