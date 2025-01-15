@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1736962081663,
+  "lastUpdate": 1736980999449,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -85797,6 +85797,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1409.7466,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "mark@unicode.org",
+            "name": "Mark Davis",
+            "username": "macchiati"
+          },
+          "distinct": true,
+          "id": "2c5e021f6d33bb5d3c091a4abf61ab5ccf15f93b",
+          "message": "ICU-22921 Add howto guide to try MF 2.0 final candidate draft impls\n\nSee #3334",
+          "timestamp": "2025-01-15T14:22:57-08:00",
+          "tree_id": "a3d93fb42f4d491cfcff91eefb7f2a92f9360097",
+          "url": "https://github.com/unicode-org/icu/commit/2c5e021f6d33bb5d3c091a4abf61ab5ccf15f93b"
+        },
+        "date": 1736980784411,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77879.5799,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 166673.6113,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5396,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.3828,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.3062,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8360.2739,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 30766.9192,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1401.8174,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
