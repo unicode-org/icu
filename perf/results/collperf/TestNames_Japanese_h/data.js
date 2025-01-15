@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1736483073953,
+  "lastUpdate": 1736899736612,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -59505,6 +59505,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5519051.016,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "13a5e29644616f5c4e4a68380f6637dc7ee53c0d",
+          "message": "ICU-22929 Improve fuzzer to find leak from udat_open\n\nTry to find out what cause ICU-23008. Use ICU-22929 as bug number\nto improve fuzzer to find the problem.\nAccording to ICU-23008 bug report, the leak of DecimalFormatSymbols\ncan be reach by udat_open when the style is UDAT_PATTERN",
+          "timestamp": "2025-01-14T15:41:06-08:00",
+          "tree_id": "bb0233e2a5aaf7516dce3290fb48883cf9abb811",
+          "url": "https://github.com/unicode-org/icu/commit/13a5e29644616f5c4e4a68380f6637dc7ee53c0d"
+        },
+        "date": 1736899522607,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 210.6037,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20985334.3475,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5343027.3966,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19839554.6312,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5800771.1987,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
