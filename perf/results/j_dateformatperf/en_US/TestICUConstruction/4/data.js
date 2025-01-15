@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1736961365974,
+  "lastUpdate": 1736980238712,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30447,6 +30447,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1899.2434059146947,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "mark@unicode.org",
+            "name": "Mark Davis",
+            "username": "macchiati"
+          },
+          "distinct": true,
+          "id": "2c5e021f6d33bb5d3c091a4abf61ab5ccf15f93b",
+          "message": "ICU-22921 Add howto guide to try MF 2.0 final candidate draft impls\n\nSee #3334",
+          "timestamp": "2025-01-15T14:22:57-08:00",
+          "tree_id": "a3d93fb42f4d491cfcff91eefb7f2a92f9360097",
+          "url": "https://github.com/unicode-org/icu/commit/2c5e021f6d33bb5d3c091a4abf61ab5ccf15f93b"
+        },
+        "date": 1736980036967,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1926.1830128067484,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
