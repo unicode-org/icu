@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1736980284230,
+  "lastUpdate": 1737446993755,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30417,6 +30417,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 1.5264031295799476,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "20001722@protonmail.com",
+            "name": "Taichi Haradaguchi",
+            "username": "th1722"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "384c54ce66eeb933a523103b01c322840164428a",
+          "message": "ICU-22966 Fix -Wshadow warnings in unicode/uset.h\n\nFix -Wshadow warnings displayed\nwhen compiling ICU4C 76.1 or later.\n\nCo-authored-by: Xisco Fauli <xiscofauli@libreoffice.org>",
+          "timestamp": "2025-01-21T16:53:06+09:00",
+          "tree_id": "e1300791aa835bba8a0936adf70ceba0a8c07447",
+          "url": "https://github.com/unicode-org/icu/commit/384c54ce66eeb933a523103b01c322840164428a"
+        },
+        "date": 1737446775573,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 1.5075896356770255,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
