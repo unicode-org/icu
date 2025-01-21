@@ -87,10 +87,11 @@ MFFunctionRegistry::Builder::Builder(UErrorCode& errorCode) {
     formattersByType = new Hashtable();
     if (!(formatters != nullptr && selectors != nullptr && formattersByType != nullptr)) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        formatters->setValueDeleter(uprv_deleteUObject);
+        selectors->setValueDeleter(uprv_deleteUObject);
+        formattersByType->setValueDeleter(uprv_deleteUObject);
     }
-    formatters->setValueDeleter(uprv_deleteUObject);
-    selectors->setValueDeleter(uprv_deleteUObject);
-    formattersByType->setValueDeleter(uprv_deleteUObject);
 }
 
 MFFunctionRegistry::Builder::~Builder() {
