@@ -14,6 +14,7 @@ import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.StringTrieBuilder;
 
+
 public class MeasureUnitImpl {
 
     /**
@@ -24,6 +25,12 @@ public class MeasureUnitImpl {
      * The complexity, either SINGLE, COMPOUND, or MIXED.
      */
     private MeasureUnit.Complexity complexity = MeasureUnit.Complexity.SINGLE;
+    /**
+     * The constant denominator.
+     * 
+     * NOTE: when it is 0, it means there is no constant denominator.
+     */
+    private long constantDenominator = 0;
     /**
      * The list of single units. These may be summed or multiplied, based on the
      * value of the complexity field.
@@ -67,6 +74,7 @@ public class MeasureUnitImpl {
         MeasureUnitImpl result = new MeasureUnitImpl();
         result.complexity = this.complexity;
         result.identifier = this.identifier;
+        result.constantDenominator = this.constantDenominator;
         for (SingleUnitImpl singleUnit : this.singleUnits) {
             result.singleUnits.add(singleUnit.copy());
         }
@@ -235,6 +243,20 @@ public class MeasureUnitImpl {
     }
 
     /**
+     * Get the constant denominator.
+     */
+    public long getConstantDenominator() {
+        return constantDenominator;
+    }
+
+    /**
+     * Set the constant denominator.
+     */
+    public void setConstantDenominator(long constantDenominator) {
+        this.constantDenominator = constantDenominator;
+    }
+
+    /**
      * Normalizes the MeasureUnitImpl and generates the identifier string in place.
      */
     public void serialize() {
@@ -244,7 +266,6 @@ public class MeasureUnitImpl {
             return;
         }
 
-
         if (this.complexity == MeasureUnit.Complexity.COMPOUND) {
             // Note: don't sort a MIXED unit
             Collections.sort(this.getSingleUnits(), new SingleUnitComparator());
@@ -253,12 +274,17 @@ public class MeasureUnitImpl {
         StringBuilder result = new StringBuilder();
         boolean beforePer = true;
         boolean firstTimeNegativeDimension = false;
-        for (SingleUnitImpl singleUnit :
-                this.getSingleUnits()) {
+        for (SingleUnitImpl singleUnit : this.getSingleUnits()) {
             if (beforePer && singleUnit.getDimensionality() < 0) {
                 beforePer = false;
                 firstTimeNegativeDimension = true;
             } else if (singleUnit.getDimensionality() < 0) {
+                firstTimeNegativeDimension = false;
+            }
+
+            if (firstTimeNegativeDimension && this.constantDenominator > 0) {
+                result.append("-per-");
+                result.append(this.constantDenominator);
                 firstTimeNegativeDimension = false;
             }
 
@@ -281,6 +307,11 @@ public class MeasureUnitImpl {
             }
 
             result.append(singleUnit.getNeutralIdentifier());
+        }
+
+        if (this.constantDenominator > 0) {
+            result.append("-per-");
+            result.append(this.constantDenominator);
         }
 
         this.identifier = result.toString();
@@ -405,6 +436,28 @@ public class MeasureUnitImpl {
     }
 
     public static class UnitsParser {
+
+        /**
+         * Contains a single unit or a constant.
+         * 
+         * @throws IllegalArgumentException when both singleUnit and constant are
+         *                                  existing.
+         * @param singleUnit the single unit
+         * @param constant   the constant
+         */
+        private class SingleUnitOrConstant {
+            SingleUnitImpl singleUnit;
+            Long constant;
+
+            SingleUnitOrConstant(SingleUnitImpl singleUnit, Long constant) {
+                if (singleUnit != null && constant != null) {
+                    throw new IllegalArgumentException("It is a SingleUnit Or a Constant, not both");
+                }
+                this.singleUnit = singleUnit;
+                this.constant = constant;
+            }
+        }
+
         // This used only to not build the trie each time we use the parser
         private volatile static CharsTrie savedTrie = null;
 
@@ -417,14 +470,19 @@ public class MeasureUnitImpl {
         // are in the denominator. Until we find an "-and-", at which point the
         // identifier is invalid pending TODO(CLDR-13701).
         private boolean fAfterPer = false;
+
+        // Set to true when we just parsed a "-per-" or a "per-".
+        // This is used to ensure that the unit constant (such as "per-100-kilometer")
+        // can be parsed when it occurs after a "-per-" or a "per-".
+        private boolean fJustAfterPer = false;
+
         // If an "-and-" was parsed prior to finding the "single
-        //     * unit", sawAnd is set to true. If not, it is left as is.
+        // * unit", sawAnd is set to true. If not, it is left as is.
         private boolean fSawAnd = false;
 
         // Cache the MeasurePrefix values array to make getPrefixFromTrieIndex()
         // more efficient
-        private static MeasureUnit.MeasurePrefix[] measurePrefixValues =
-            MeasureUnit.MeasurePrefix.values();
+        private static MeasureUnit.MeasurePrefix[] measurePrefixValues = MeasureUnit.MeasurePrefix.values();
 
         private UnitsParser(String identifier) {
             this.fSource = identifier;
@@ -514,7 +572,15 @@ public class MeasureUnitImpl {
 
             while (hasNext()) {
                 fSawAnd = false;
-                SingleUnitImpl singleUnit = nextSingleUnit();
+                SingleUnitOrConstant nextSingleUnitPair = nextSingleUnit();
+
+                if (nextSingleUnitPair.singleUnit == null) {
+                    result.setConstantDenominator(nextSingleUnitPair.constant);
+                    result.setComplexity(MeasureUnit.Complexity.COMPOUND);
+                    continue;
+                }
+
+                SingleUnitImpl singleUnit = nextSingleUnitPair.singleUnit;
 
                 boolean added = result.appendSingleUnit(singleUnit);
                 if (fSawAnd && !added) {
@@ -526,10 +592,11 @@ public class MeasureUnitImpl {
                     // same identifier. It doesn't fail for other compound units
                     // (COMPOUND_PART_TIMES). Consequently we take care of that
                     // here.
-                    MeasureUnit.Complexity complexity =
-                            fSawAnd ? MeasureUnit.Complexity.MIXED : MeasureUnit.Complexity.COMPOUND;
+                    MeasureUnit.Complexity complexity = fSawAnd ? MeasureUnit.Complexity.MIXED
+                            : MeasureUnit.Complexity.COMPOUND;
                     if (result.getSingleUnits().size() == 2) {
-                        // After appending two singleUnits, the complexity will be MeasureUnit.Complexity.COMPOUND
+                        // After appending two singleUnits, the complexity will be
+                        // MeasureUnit.Complexity.COMPOUND
                         assert result.getComplexity() == MeasureUnit.Complexity.COMPOUND;
                         result.setComplexity(complexity);
                     } else if (result.getComplexity() != complexity) {
@@ -538,7 +605,23 @@ public class MeasureUnitImpl {
                 }
             }
 
+            if (result.getSingleUnits().size() == 0) {
+                throw new IllegalArgumentException("Error in parsing a unit identifier.");
+            }
+
             return result;
+        }
+
+        /**
+         * Token states definitions.
+         */
+        enum TokenState {
+            // No tokens seen yet (will accept power, SI or binary prefix, or simple unit)
+            NO_TOKENS_SEEN,
+            // Power token seen (will not accept another power token)
+            POWER_TOKEN_SEEN,
+            // SI or binary prefix token seen (will not accept a power, or SI or binary prefix token)
+            PREFIX_TOKEN_SEEN
         }
 
         /**
@@ -548,27 +631,30 @@ public class MeasureUnitImpl {
          * dimensionality.
          * <p>
          *
-         * @throws IllegalArgumentException if we parse both compound units and "-and-", since mixed
-         *                                  compound units are not yet supported - TODO(CLDR-13701).
+         * @throws IllegalArgumentException if we parse both compound units and "-and-",
+         *                                  since mixed
+         *                                  compound units are not yet supported -
+         *                                  TODO(CLDR-13701).
          */
-        private SingleUnitImpl nextSingleUnit() {
+        private SingleUnitOrConstant nextSingleUnit() {
             SingleUnitImpl result = new SingleUnitImpl();
 
-            // state:
-            // 0 = no tokens seen yet (will accept power, SI or binary prefix, or simple unit)
-            // 1 = power token seen (will not accept another power token)
-            // 2 = SI or binary prefix token seen (will not accept a power, or SI or binary prefix token)
-            int state = 0;
+            TokenState state = TokenState.NO_TOKENS_SEEN;
 
             boolean atStart = fIndex == 0;
             Token token = nextToken();
+            fJustAfterPer = false;
 
             if (atStart) {
+                if (token.getType() == Token.Type.TYPE_UNIT_CONSTANT) {
+                    throw new IllegalArgumentException("Unit constant cannot be the first token");
+                }
                 // Identifiers optionally start with "per-".
                 if (token.getType() == Token.Type.TYPE_INITIAL_COMPOUND_PART) {
                     assert token.getInitialCompoundPart() == InitialCompoundPart.INITIAL_COMPOUND_PART_PER;
 
                     fAfterPer = true;
+                    fJustAfterPer = true;
                     result.setDimensionality(-1);
 
                     token = nextToken();
@@ -589,6 +675,7 @@ public class MeasureUnitImpl {
                         }
 
                         fAfterPer = true;
+                        fJustAfterPer = true;
                         result.setDimensionality(-1);
                         break;
 
@@ -610,30 +697,39 @@ public class MeasureUnitImpl {
                 token = nextToken();
             }
 
+            // Treat unit constant
+            if (token.getType() == Token.Type.TYPE_UNIT_CONSTANT) {
+                if (!fJustAfterPer) {
+                    throw new IllegalArgumentException("Unit constant cannot be the first token");
+                }
+
+                return new SingleUnitOrConstant(null, token.getConstantDenominator());
+            }
+
             // Read tokens until we have a complete SingleUnit or we reach the end.
             while (true) {
                 switch (token.getType()) {
                     case TYPE_POWER_PART:
-                        if (state > 0) {
+                        if (state != TokenState.NO_TOKENS_SEEN) {
                             throw new IllegalArgumentException();
                         }
 
                         result.setDimensionality(result.getDimensionality() * token.getPower());
-                        state = 1;
+                        state = TokenState.POWER_TOKEN_SEEN;
                         break;
 
                     case TYPE_PREFIX:
-                        if (state > 1) {
+                        if (state == TokenState.PREFIX_TOKEN_SEEN) {
                             throw new IllegalArgumentException();
                         }
 
                         result.setPrefix(token.getPrefix());
-                        state = 2;
+                        state = TokenState.PREFIX_TOKEN_SEEN;
                         break;
 
                     case TYPE_SIMPLE_UNIT:
                         result.setSimpleUnit(token.getSimpleUnitIndex(), UnitsData.getSimpleUnits());
-                        return result;
+                        return new SingleUnitOrConstant(result, null);
 
                     default:
                         throw new IllegalArgumentException();
@@ -653,52 +749,82 @@ public class MeasureUnitImpl {
 
         private Token nextToken() {
             trie.reset();
-            int match = -1;
-            // Saves the position in the fSource string for the end of the most
-            // recent matching token.
-            int previ = -1;
+            int matchingValue = -1;
+            // Saves the position in the `fSource` string at the end of the most
+            // recently matched token.
+            int prevIndex = -1;
+
+            int savedIndex = fIndex;
 
             // Find the longest token that matches a value in the trie:
             while (fIndex < fSource.length()) {
                 BytesTrie.Result result = trie.next(fSource.charAt(fIndex++));
                 if (result == BytesTrie.Result.NO_MATCH) {
                     break;
-                } else if (result == BytesTrie.Result.NO_VALUE) {
+                }
+
+                if (result == BytesTrie.Result.NO_VALUE) {
                     continue;
                 }
 
-                match = trie.getValue();
-                previ = fIndex;
+                matchingValue = trie.getValue();
+                prevIndex = fIndex;
 
                 if (result == BytesTrie.Result.FINAL_VALUE) {
                     break;
                 }
 
                 if (result != BytesTrie.Result.INTERMEDIATE_VALUE) {
-                    throw new IllegalArgumentException("result must has an intermediate value");
+                    throw new IllegalArgumentException("Result must have an intermediate value");
                 }
-
-                // continue;
             }
 
+            if (matchingValue < 0) {
+                if (fJustAfterPer) {
+                    // We've just parsed a "per-", so we can expect a unit constant.
+                    int hyphenIndex = fSource.indexOf('-', savedIndex);
 
-            if (match < 0) {
-                throw new IllegalArgumentException("Encountered unknown token starting at index " + previ);
+                    // extract the unit constant from the string
+                    String unitConstant = (hyphenIndex == -1) ? fSource.substring(savedIndex)
+                            : fSource.substring(savedIndex, hyphenIndex);
+                    fIndex = (hyphenIndex == -1) ? fSource.length() : hyphenIndex;
+
+                    return Token.tokenWithConstant(unitConstant);
+
+                } else {
+                    throw new IllegalArgumentException("Encountered unknown token starting at index " + prevIndex);
+                }
             } else {
-                fIndex = previ;
+                fIndex = prevIndex;
             }
 
-            return new Token(match);
+            return new Token(matchingValue);
         }
 
         static class Token {
 
-            private final int fMatch;
+            private final long fMatch;
             private final Type type;
 
-            public Token(int fMatch) {
+            public Token(long fMatch) {
                 this.fMatch = fMatch;
                 type = calculateType(fMatch);
+            }
+
+            private Token(long fMatch, Type type) {
+                this.fMatch = fMatch;
+                this.type = type;
+            }
+
+            public static Token tokenWithConstant(String constantStr) {
+                BigDecimal unitConstantValue = new BigDecimal(constantStr);
+                if (unitConstantValue.scale() <= 0 && unitConstantValue.compareTo(BigDecimal.ZERO) >= 0
+                        && unitConstantValue.compareTo(BigDecimal.valueOf(Long.MAX_VALUE)) <= 0) {
+                    return new Token(unitConstantValue.longValueExact(), Type.TYPE_UNIT_CONSTANT);
+                } else {
+                    throw new IllegalArgumentException(
+                            "The unit constant value is not a valid non-negative long integer.");
+                }
             }
 
             public Type getType() {
@@ -707,41 +833,56 @@ public class MeasureUnitImpl {
 
             public MeasureUnit.MeasurePrefix getPrefix() {
                 assert this.type == Type.TYPE_PREFIX;
-                return getPrefixFromTrieIndex(this.fMatch);
+                assert this.fMatch <= Integer.MAX_VALUE;
+
+                int trieIndex = (int) this.fMatch;
+                return getPrefixFromTrieIndex(trieIndex);
+            }
+
+            // Valid only for tokens with type TYPE_UNIT_CONSTANT.
+            public long getConstantDenominator() {
+                assert this.type == Type.TYPE_UNIT_CONSTANT;
+                return this.fMatch;
             }
 
             // Valid only for tokens with type TYPE_COMPOUND_PART.
             public int getMatch() {
                 assert getType() == Type.TYPE_COMPOUND_PART;
-                return fMatch;
+                assert this.fMatch <= Integer.MAX_VALUE;
+
+                int matchIndex = (int) this.fMatch;
+                return matchIndex;
             }
 
             // Even if there is only one InitialCompoundPart value, we have this
             // function for the simplicity of code consistency.
             public InitialCompoundPart getInitialCompoundPart() {
-                assert (this.type == Type.TYPE_INITIAL_COMPOUND_PART
-                        &&
-                        fMatch == InitialCompoundPart.INITIAL_COMPOUND_PART_PER.getTrieIndex());
-                return InitialCompoundPart.getInitialCompoundPartFromTrieIndex(fMatch);
+                assert this.type == Type.TYPE_INITIAL_COMPOUND_PART;
+                assert fMatch == InitialCompoundPart.INITIAL_COMPOUND_PART_PER.getTrieIndex();
+                assert fMatch <= Integer.MAX_VALUE;
+                int trieIndex = (int) fMatch;
+                return InitialCompoundPart.getInitialCompoundPartFromTrieIndex(trieIndex);
             }
 
             public int getPower() {
                 assert this.type == Type.TYPE_POWER_PART;
-                return PowerPart.getPowerFromTrieIndex(this.fMatch);
+                assert this.fMatch <= Integer.MAX_VALUE;
+                int trieIndex = (int) this.fMatch;
+                return PowerPart.getPowerFromTrieIndex(trieIndex);
             }
 
             public int getSimpleUnitIndex() {
                 assert this.type == Type.TYPE_SIMPLE_UNIT;
-                return this.fMatch - UnitsData.Constants.kSimpleUnitOffset;
+                assert this.fMatch <= Integer.MAX_VALUE;
+                return ((int) this.fMatch) - UnitsData.Constants.kSimpleUnitOffset;
             }
 
-            // Calling calculateType() is invalid, resulting in an assertion failure, if Token
-            // value isn't positive.
-            private Type calculateType(int fMatch) {
+            // It is invalid to call calculateType() with a non-positive Token value,
+            // as it will result in an assertion failure.
+            private Type calculateType(long fMatch) {
                 if (fMatch <= 0) {
                     throw new AssertionError("fMatch must have a positive value");
                 }
-
                 if (fMatch < UnitsData.Constants.kCompoundPartOffset) {
                     return Type.TYPE_PREFIX;
                 }
@@ -767,6 +908,7 @@ public class MeasureUnitImpl {
                 TYPE_INITIAL_COMPOUND_PART,
                 TYPE_POWER_PART,
                 TYPE_SIMPLE_UNIT,
+                TYPE_UNIT_CONSTANT,
             }
         }
     }
