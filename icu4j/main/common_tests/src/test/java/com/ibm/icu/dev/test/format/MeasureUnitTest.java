@@ -18,6 +18,7 @@ import java.lang.reflect.Field;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,6 +50,7 @@ import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.TimeUnit;
 import com.ibm.icu.util.TimeUnitAmount;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.MeasureUnit.Complexity;
 
 /**
  * This file contains regular unit tests.
@@ -1145,10 +1147,12 @@ public class MeasureUnitTest extends CoreTestFmwk {
             }
             System.out.println("MeasureFormatHandler.hasSameBehavior fails:");
             if (!getLocaleEqual) {
-                System.out.println("- getLocale equality fails: old a1: " + a1.getLocale().getName() + "; test b1: " + b1.getLocale().getName());
+                System.out.println("- getLocale equality fails: old a1: " + a1.getLocale().getName() + "; test b1: "
+                        + b1.getLocale().getName());
             }
             if (!getWidthEqual) {
-                System.out.println("- getWidth equality fails: old a1: " + a1.getWidth().name() + "; test b1: " + b1.getWidth().name());
+                System.out.println("- getWidth equality fails: old a1: " + a1.getWidth().name() + "; test b1: "
+                        + b1.getWidth().name());
             }
             if (!numFmtHasSameBehavior) {
                 System.out.println("- getNumberFormat hasSameBehavior fails");
@@ -1312,6 +1316,83 @@ public class MeasureUnitTest extends CoreTestFmwk {
     }
 
     @Test
+    public void TestAcceptableConstantDenominator() {
+        class ConstantDenominatorTestCase {
+            String identifier;
+            long expectedConstantDenominator;
+
+            ConstantDenominatorTestCase(String identifier, long expectedConstantDenominator) {
+                this.identifier = identifier;
+                this.expectedConstantDenominator = expectedConstantDenominator;
+            }
+        }
+
+        List<ConstantDenominatorTestCase> testCases = Arrays.asList(
+                new ConstantDenominatorTestCase("meter-per-1000", 1000),
+                new ConstantDenominatorTestCase("liter-per-1000-kiloliter", 1000),
+                new ConstantDenominatorTestCase("liter-per-kilometer", 0),
+                new ConstantDenominatorTestCase("second-per-1000-minute", 1000),
+                new ConstantDenominatorTestCase("gram-per-1000-kilogram", 1000),
+                new ConstantDenominatorTestCase("meter-per-100", 100),
+                // Test for constant denominators that are powers of 10
+                new ConstantDenominatorTestCase("portion-per-1", 1),
+                new ConstantDenominatorTestCase("portion-per-10", 10),
+                new ConstantDenominatorTestCase("portion-per-100", 100),
+                new ConstantDenominatorTestCase("portion-per-1000", 1000),
+                new ConstantDenominatorTestCase("portion-per-10000", 10000),
+                new ConstantDenominatorTestCase("portion-per-100000", 100000),
+                new ConstantDenominatorTestCase("portion-per-1000000", 1000000),
+                new ConstantDenominatorTestCase("portion-per-10000000", 10000000),
+                new ConstantDenominatorTestCase("portion-per-100000000", 100000000),
+                new ConstantDenominatorTestCase("portion-per-1000000000", 1000000000),
+                new ConstantDenominatorTestCase("portion-per-10000000000", 10000000000L),
+                new ConstantDenominatorTestCase("portion-per-100000000000", 100000000000L),
+                new ConstantDenominatorTestCase("portion-per-1000000000000", 1000000000000L),
+                new ConstantDenominatorTestCase("portion-per-10000000000000", 10000000000000L),
+                new ConstantDenominatorTestCase("portion-per-100000000000000", 100000000000000L),
+                new ConstantDenominatorTestCase("portion-per-1000000000000000", 1000000000000000L),
+                new ConstantDenominatorTestCase("portion-per-10000000000000000", 10000000000000000L),
+                new ConstantDenominatorTestCase("portion-per-100000000000000000", 100000000000000000L),
+                new ConstantDenominatorTestCase("portion-per-1000000000000000000", 1000000000000000000L),
+                // Test for constant denominators that are represented as scientific notation
+                // numbers.
+                new ConstantDenominatorTestCase("portion-per-1e9", 1000000000L),
+                new ConstantDenominatorTestCase("portion-per-1E9", 1000000000L),
+                new ConstantDenominatorTestCase("portion-per-10e9", 10000000000L),
+                new ConstantDenominatorTestCase("portion-per-10E9", 10000000000L),
+                new ConstantDenominatorTestCase("portion-per-1e10", 10000000000L),
+                new ConstantDenominatorTestCase("portion-per-1E10", 10000000000L),
+                new ConstantDenominatorTestCase("portion-per-1e3-kilometer", 1000),
+                // Test for constant denominators that are randomely selected.
+                new ConstantDenominatorTestCase("liter-per-12345-kilometer", 12345),
+                new ConstantDenominatorTestCase("per-1000-kilometer", 1000),
+                new ConstantDenominatorTestCase("liter-per-1000-kiloliter", 1000),
+                // Test for constant denominators that gives 0.
+                        new ConstantDenominatorTestCase("meter", 0),
+                new ConstantDenominatorTestCase("meter-per-second", 0),
+                new ConstantDenominatorTestCase("meter-per-square-second", 0),
+                // NOTE: The following constant denominator should be 0. However, since
+                // `100-kilometer` is treated as a unit in CLDR,
+                // the unit does not have a constant denominator.
+                // This issue should be addressed in CLDR.
+                new ConstantDenominatorTestCase("meter-per-100-kilometer", 0),
+                // NOTE: the following CLDR identifier should be invalid, but because
+                // `100-kilometer` is considered a unit in CLDR,
+                // one `100` will be considered as a unit constant denominator and the other
+                // `100` will be considered part of the unit.
+                // This issue should be addressed in CLDR.
+                new ConstantDenominatorTestCase("meter-per-100-100-kilometer", 100));
+
+        for (ConstantDenominatorTestCase testCase : testCases) {
+            MeasureUnit unit = MeasureUnit.forIdentifier(testCase.identifier);
+            assertEquals("Constant denominator for " + testCase.identifier, testCase.expectedConstantDenominator,
+                    unit.getConstantDenominator());
+            assertTrue("Complexity for " + testCase.identifier,
+                    unit.getComplexity() == Complexity.COMPOUND || unit.getComplexity() == Complexity.SINGLE);
+        }
+    }
+
+    @Test
     public void TestInvalidIdentifiers() {
         final String inputs[] = {
                 "kilo",
@@ -1348,6 +1429,19 @@ public class MeasureUnitTest extends CoreTestFmwk {
 
                 // Compound units not supported in mixed units yet. TODO(CLDR-13701).
                 "kilonewton-meter-and-newton-meter",
+
+                // Invalid units because of invalid constant denominator
+                "meter-per--20--second",
+                "meter-per-1000-1e9-second",
+                "meter-per-1e20-second",
+                "per-1000",
+                "meter-per-1000-1000",
+                "meter-per-1000-second-1000-kilometer",
+                "1000-meter",
+                "meter-1000",
+                "meter-per-1000-1000",
+                "meter-per-1000-second-1000-kilometer",
+                "per-1000-and-per-1000",
         };
 
         for (String input : inputs) {
