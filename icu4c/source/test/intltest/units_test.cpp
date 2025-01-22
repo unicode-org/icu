@@ -12,6 +12,8 @@
 #include "cmemory.h"
 #include "filestrm.h"
 #include "intltest.h"
+#include "long-conversion-string-to-long.h"
+#include "double-conversion-string-to-double.h"
 #include "number_decimalquantity.h"
 #include "putilimp.h"
 #include "unicode/ctest.h"
@@ -50,6 +52,7 @@ class UnitsTest : public IntlTest {
     void testComplexUnitsConverter();
     void testComplexUnitsConverterSorting();
     void testUnitPreferencesWithCLDRTests();
+    void testStringToLong();
     void testConverter();
 };
 
@@ -67,6 +70,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testComplexUnitsConverter);
     TESTCASE_AUTO(testComplexUnitsConverterSorting);
     TESTCASE_AUTO(testUnitPreferencesWithCLDRTests);
+    TESTCASE_AUTO(testStringToLong);
     TESTCASE_AUTO(testConverter);
     TESTCASE_AUTO_END;
 }
@@ -1155,6 +1159,76 @@ void UnitsTest::testUnitPreferencesWithCLDRTests() {
     if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
         return;
     }
+}
+
+void UnitsTest::testStringToLong() {
+    IcuTestErrorCode status(*this, "UnitsTest::testStringToLong");
+
+    // struct TestCase {
+    //     const char *input;
+    //     int64_t expected;
+    // } testCases[]{
+    //     {"0", 0},
+    //     {"1", 1},
+    //     {"-1", -1},
+    //     {"1234567890123456789", 1234567890123456789},
+    //     {"-1234567890123456789", -1234567890123456789},
+    //     {"9223372036854775807", 9223372036854775807},
+    //     {"-9223372036854775808", -9223372036854775807 - 1},
+    //     {"9223372036854775808", 9223372036854775807},
+    //     {"-9223372036854775809", -9223372036854775807 - 1},
+    //     {"92233720368547758070", 9223372036854775807},
+    //     {"-92233720368547758080", -9223372036854775807 - 1},
+    //     {"922337203685477580700", 9223372036854775807},
+    //     {"-922337203685477580800", -9223372036854775807 - 1},
+    //     {"9223372036854775807000", 9223372036854775807},
+    //     {"-9223372036854775808000", -9223372036854775807 - 1},
+    //     {"92233720368547758070000", 9223372036854775807},
+    //     {"-92233720368547758080000", -9223372036854775807 - 1},
+    //     {"922337203685477580700000", 9223372036854775807},
+    //     {"-922337203685477580800000", -9223372036854775807 - 1},
+    //     {"9223372036854775807000000", 9223372036854775807},
+    //     {"-9223372036854775808000000", -9223372036854775807 - 1},
+    //     {"92233720368547758070000000", 9223372036854775807},
+    //     {"-92233720368547758080000000", -9223372036854775807 - 1},
+    //     {"922337203685477580700000000", 9223372036854775807},
+    //     {"-922337203685477580800000000", -9223372036854775807 - 1},
+    //     {"9223372036854775807000000000", 9223372036854775807},
+    //     {"-9223372036854775808000000000", -9223372036854775807 - 1},
+    //     {"1e3", 1000},
+    //     {"-1e3", -1000},
+    //     {"1e6", 1000000},
+    //     {"-1e6", -1000000},
+    //     {"1e9", 1000000000},
+    //     {"-1e9", -1000000000},
+    //     {"1e12", 1000000000000},
+    //     {"-1e12", -1000000000000},
+    //     {"1e15", 1000000000000000},
+    //     {"-1e15", -1000000000000000},
+    //     {"1e18", 1000000000000000000},
+    //     {"-1e18", -1000000000000000000},
+    //     {"9.223372036854776e18", 9223372036854775807},
+    //     {"-9.223372036854776e18", -9223372036854775807 - 1},
+    //     {"1e19", 9223372036854775807},
+    //     {"-1e19", -9223372036854775807 - 1},
+    // };
+
+    // icu::double_conversion::StringToDoubleConverter dtoa(icu::double_conversion::StringToDoubleConverter::Flags::NO_FLAGS,
+    //                                                       9,9,"SD", "sd");
+
+    // icu::long_conversion::StringToLongConverter converter;
+
+    // for (const auto &testCase : testCases) {
+    //     int64_t result = 0;
+    //     UErrorCode parseStatus = U_ZERO_ERROR;
+    //     result = converter.stringToLong(testCase.input, parseStatus);
+    //     if (U_FAILURE(parseStatus)) {
+    //         errln("Failed to parse \"%s\": %s", testCase.input, u_errorName(parseStatus));
+    //         continue;
+    //     }
+    //     assertEquals(UnicodeString("StringToLong(\"") + testCase.input + "\")", testCase.expected,
+    //                  result);
+    // }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
