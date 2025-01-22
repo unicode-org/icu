@@ -89,6 +89,7 @@ islamcal.cpp
 iso8601cal.cpp
 japancal.cpp
 listformatter.cpp
+long-conversion-string-to-long.cpp
 measfmt.cpp
 measunit.cpp
 measunit_extra.cpp
