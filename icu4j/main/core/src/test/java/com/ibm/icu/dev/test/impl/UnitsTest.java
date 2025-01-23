@@ -27,6 +27,7 @@ import com.ibm.icu.impl.units.UnitsRouter;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.MeasureUnit.Complexity;
 
 public class UnitsTest {
 
@@ -815,6 +816,48 @@ public class UnitsTest {
             } else {
                 fail(t.name + ": failed to find preferences");
             }
+        }
+    }
+
+    @Test
+    public void testWithConstantDenominator() {
+        class TestCase {
+            String unitIdentifier;
+            long constantDenominator;
+            Complexity expectedComplexity;
+
+            TestCase(String unitIdentifier, long constantDenominator, Complexity expectedComplexity) {
+                this.unitIdentifier = unitIdentifier;
+                this.constantDenominator = constantDenominator;
+                this.expectedComplexity = expectedComplexity;
+            }
+        }
+
+        TestCase[] testCases = {
+                new TestCase("meter-per-second", 100, Complexity.COMPOUND),
+                new TestCase("meter-per-100-second", 0, Complexity.COMPOUND),
+                new TestCase("portion", 100, Complexity.COMPOUND),
+                new TestCase("portion-per-100", 0, Complexity.SINGLE),
+        };
+
+        for (TestCase testCase : testCases) {
+            MeasureUnit unit = MeasureUnit.forIdentifier(testCase.unitIdentifier);
+            unit = unit.withConstantDenominator(testCase.constantDenominator);
+
+            long actualDenominator = unit.getConstantDenominator();
+            Complexity actualComplexity = unit.getComplexity();
+
+            assertEquals(testCase.constantDenominator, actualDenominator);
+            assertEquals(testCase.expectedComplexity, actualComplexity);
+        }
+
+        // Test invalid withConstantDenominator
+        MeasureUnit unit = MeasureUnit.forIdentifier("meter-per-second");
+        try {
+            unit = unit.withConstantDenominator(-1);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            // Expected exception
         }
     }
 }
