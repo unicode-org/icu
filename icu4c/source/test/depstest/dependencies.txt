@@ -970,6 +970,11 @@ group: double_conversion
   deps
     platform
 
+group: long_conversion
+    long-conversion-string-to-long.o
+  deps
+    platform
+
 group: number_representation
     number_decimalquantity.o string_segment.o number_utils.o
     # TODO(ICU-21058) Move formatted_string_builder to its own unit.

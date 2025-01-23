@@ -168,6 +168,7 @@
     <ClCompile Include="iso8601cal.cpp" />
     <ClCompile Include="japancal.cpp" />
     <ClCompile Include="listformatter.cpp" />
+    <ClCompile Include="long-conversion-string-to-long.cpp" />
     <ClCompile Include="ulistformatter.cpp" />
     <ClCompile Include="measfmt.cpp" />
     <ClCompile Include="measunit.cpp" />
@@ -398,6 +399,7 @@
     <ClInclude Include="islamcal.h" />
     <ClInclude Include="iso8601cal.h" />
     <ClInclude Include="japancal.h" />
+    <ClInclude Include="long-conversion-string-to-long.h" />
     <ClInclude Include="measunit_impl.h" />
     <ClInclude Include="msgfmt_impl.h" />
     <ClInclude Include="nfrlist.h" />
