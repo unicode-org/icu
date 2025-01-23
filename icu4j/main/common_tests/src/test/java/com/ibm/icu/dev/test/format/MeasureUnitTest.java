@@ -1430,8 +1430,8 @@ public class MeasureUnitTest extends CoreTestFmwk {
                 // Compound units not supported in mixed units yet. TODO(CLDR-13701).
                 "kilonewton-meter-and-newton-meter",
 
-                // Invalid units because of invalid constant denominator
-                "meter-per--20--second",
+                // Invalid units due to invalid constant denominator
+                "meter-per--20-second",
                 "meter-per-1000-1e9-second",
                 "meter-per-1e20-second",
                 "per-1000",
@@ -1442,7 +1442,8 @@ public class MeasureUnitTest extends CoreTestFmwk {
                 "meter-per-1000-1000",
                 "meter-per-1000-second-1000-kilometer",
                 "per-1000-and-per-1000",
-        };
+                "liter-per-kilometer-100",
+            };
 
         for (String input : inputs) {
             try {
