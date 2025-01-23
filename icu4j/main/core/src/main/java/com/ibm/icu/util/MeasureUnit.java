@@ -555,6 +555,10 @@ public class MeasureUnit implements Serializable {
      * @draft ICU 77
      */
     public MeasureUnit withConstantDenominator(long denominator) {
+        if (denominator < 0) {
+            throw new IllegalArgumentException("Denominator cannot be negative");
+        }
+
         if (this.getComplexity() != Complexity.COMPOUND && this.getComplexity() != Complexity.SINGLE) {
             throw new UnsupportedOperationException(
                     "Constant denominator can only be applied to COMPOUND & SINGLE units");
@@ -563,7 +567,7 @@ public class MeasureUnit implements Serializable {
         MeasureUnitImpl measureUnitImpl = getCopyOfMeasureUnitImpl();
         measureUnitImpl.setConstantDenominator(denominator);
 
-        measureUnitImpl.setComplexity(denominator == 0 && measureUnitImpl.getSingleUnits().size() == 1
+        measureUnitImpl.setComplexity(denominator == 0 && measureUnitImpl.getSingleUnits().size() < 2
                 ? Complexity.SINGLE
                 : Complexity.COMPOUND);
 
