@@ -1123,6 +1123,7 @@ group: units_extra
     measunit_extra.o
   deps
     units bytestriebuilder bytestrie resourcebundle uclean_i18n
+    double_conversion
 
 group: units
     measunit.o currunit.o

@@ -5450,7 +5450,7 @@ void MeasureFormatTest::TestUnitPerUnitResolution() {
             actual,
             pos,
             status);
-    assertEquals("", "50 psi", actual);
+    assertEquals("TestUnitPerUnitResolution", "50 psi", actual);
 }
 
 void MeasureFormatTest::TestIndividualPluralFallback() {
@@ -5708,6 +5708,19 @@ void MeasureFormatTest::TestInvalidIdentifiers() {
 
         // Compound units not supported in mixed units yet. TODO(CLDR-13701).
         "kilonewton-meter-and-newton-meter",
+
+        // Invalid identifiers with constants.
+        "meter-per--20--second",
+        "meter-per-1000-1e9-second",
+        "meter-per-1e20-second",
+        "per-1000",
+        "meter-per-1000-1000",
+        "meter-per-1000-second-1000-kilometer",
+        "1000-meter",
+        "meter-1000",
+        "meter-per-1000-1000",
+        "meter-per-1000-second-1000-kilometer",
+        "per-1000-and-per-1000",
     };
 
     for (const auto& input : inputs) {

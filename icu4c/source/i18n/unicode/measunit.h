@@ -552,6 +552,44 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     UMeasurePrefix getPrefix(UErrorCode& status) const;
 
+#ifndef U_HIDE_DRAFT_API
+
+    /**
+     * Creates a new MeasureUnit with a specified constant denominator.
+     *
+     * This method is applicable only to COMPOUND and SINGLE units. If invoked on a
+     * MIXED unit, an error will be set in the status.
+     *
+     * NOTE: If the constant denominator is set to 0, it means that you are removing
+     * the constant denominator.
+     *
+     * @param denominator The constant denominator to set.
+     * @param status Set if this is not a COMPOUND or SINGLE unit or if another error occurs.
+     * @return A new MeasureUnit with the specified constant denominator.
+     * @draft ICU 77
+     */
+    MeasureUnit withConstantDenominator(uint64_t denominator, UErrorCode &status) const;
+
+    /**
+     * Retrieves the constant denominator for this COMPOUND unit.
+     *
+     * Examples:
+     * - For the unit "liter-per-1000-kiloliter", the constant denominator is 1000.
+     * - For the unit "liter-per-kilometer", the constant denominator is zero.
+     *
+     * This method is applicable only to COMPOUND and SINGLE units. If invoked on
+     * a MIXED unit, an error will be set in the status.
+     *
+     * NOTE: If no constant denominator exists, the method returns 0.
+     *
+     * @param status Set if this is not a COMPOUND or SINGLE unit or if another error occurs.
+     * @return The value of the constant denominator.
+     * @draft ICU 77
+     */
+    uint64_t getConstantDenominator(UErrorCode &status) const;
+
+#endif /* U_HIDE_DRAFT_API */
+
     /**
      * Creates a MeasureUnit which is this SINGLE unit augmented with the specified dimensionality
      * (power). For example, if dimensionality is 2, the unit will be squared.
@@ -591,7 +629,9 @@ class U_I18N_API MeasureUnit: public UObject {
      * NOTE: Only works on SINGLE and COMPOUND units. If this is a MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
-     * @param status Set if this is a MIXED unit or if another error occurs.
+     * NOTE: An Error will be returned for units that have a constant denominator.
+     *
+     * @param status Set if this is a MIXED unit, has a constant denominator or if another error occurs.
      * @return The reciprocal of the target unit.
      * @stable ICU 67
      */
@@ -626,6 +666,10 @@ class U_I18N_API MeasureUnit: public UObject {
      *   and "second".
      *
      * If this is a SINGLE unit, an array of length 1 will be returned.
+     *
+     * NOTE: For units with a constant denominator, the returned single units will
+     * not include the constant denominator. To obtain the constant denominator,
+     * retrieve it from the original unit.
      *
      * @param status Set if an error occurs.
      * @return A pair with the list of units as a LocalArray and the number of units in the list.
