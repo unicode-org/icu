@@ -1,3 +1,12 @@
+// © 2025 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
+
 package com.ibm.icu.dev.test.util;
 
 import static org.junit.Assert.assertTrue;
