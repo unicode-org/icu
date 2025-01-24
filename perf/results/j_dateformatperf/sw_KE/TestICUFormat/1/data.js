@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1737679850249,
+  "lastUpdate": 1737681686937,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30447,6 +30447,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 246.3854916244617,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "ba4d4d3ac27f3d2e40f5b6a2a51ec93f8661fff2",
+          "message": "ICU-22781 Adding support for constant denominators (C++)\n\nSee #3337",
+          "timestamp": "2025-01-24T02:06:43+01:00",
+          "tree_id": "188d54ae5d36c6942c084a3b96d5d9fa3a8c5453",
+          "url": "https://github.com/unicode-org/icu/commit/ba4d4d3ac27f3d2e40f5b6a2a51ec93f8661fff2"
+        },
+        "date": 1737681469599,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 249.00681583396613,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
