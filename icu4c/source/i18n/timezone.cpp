@@ -1058,7 +1058,7 @@ TimeZone::countEquivalentIDs(const UnicodeString& id) {
 
 // ---------------------------------------
 
-const UnicodeString U_EXPORT2
+UnicodeString U_EXPORT2
 TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
     U_DEBUG_TZ_MSG(("gEI(%d)\n", index));
     UnicodeString result;

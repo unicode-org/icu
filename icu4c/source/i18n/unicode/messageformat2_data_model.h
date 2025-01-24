@@ -2330,7 +2330,7 @@ namespace message2 {
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        const std::vector<VariableName> getSelectors() const {
+        std::vector<VariableName> getSelectors() const {
             if (std::holds_alternative<Pattern>(body)) {
                 return {};
             }
