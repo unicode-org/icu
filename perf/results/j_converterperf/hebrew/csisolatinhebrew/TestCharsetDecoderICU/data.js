@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1737656146764,
+  "lastUpdate": 1737680132532,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30357,6 +30357,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.008071165527511474,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "242bf9655f8ba3edc3ebb134a6e92bdf0771c122",
+          "message": "ICU-22781 Add a test case for unit constant behaviour",
+          "timestamp": "2025-01-24T01:34:43+01:00",
+          "tree_id": "20149bf279eaa2a8e29d9df2b804e2ea88920c66",
+          "url": "https://github.com/unicode-org/icu/commit/242bf9655f8ba3edc3ebb134a6e92bdf0771c122"
+        },
+        "date": 1737679917677,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.008010740353650014,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
