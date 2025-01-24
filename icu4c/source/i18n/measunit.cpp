@@ -2400,6 +2400,7 @@ MeasureUnitImpl MeasureUnitImpl::copy(UErrorCode &status) const {
     MeasureUnitImpl result;
     result.complexity = complexity;
     result.identifier.append(identifier, status);
+    result.constantDenominator = constantDenominator;
     for (int32_t i = 0; i < singleUnits.length(); i++) {
         SingleUnitImpl *item = result.singleUnits.emplaceBack(*singleUnits[i]);
         if (!item) {
