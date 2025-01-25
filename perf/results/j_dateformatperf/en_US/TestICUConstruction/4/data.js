@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1737763387095,
+  "lastUpdate": 1737766906180,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30687,6 +30687,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1967.4464096922707,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "d70b252cdc3c5df088ff8e44bc29e95ae28be570",
+          "message": "ICU-22781 Add support for converting units with constant denominators (C++)\n\nSee #3347",
+          "timestamp": "2025-01-25T01:45:49+01:00",
+          "tree_id": "be02ec10ece4b7d683584e07bc268ea4b1005032",
+          "url": "https://github.com/unicode-org/icu/commit/d70b252cdc3c5df088ff8e44bc29e95ae28be570"
+        },
+        "date": 1737766687137,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1932.4376900280029,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
