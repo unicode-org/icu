@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1737761361764,
+  "lastUpdate": 1737765053307,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -59883,6 +59883,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 128089.7298,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "4df4eb419b81ecedfb55f65dfdc23953cc083a4d",
+          "message": "ICU-22781 Add support for constant denominators in unit conversion\n\nImplement handling of constant denominators in unit conversion:\n- Add divide method to Factor class in UnitsConverter\n- Update ConversionRates to apply constant denominator during conversion\n- Add comprehensive test cases for units with constant denominators",
+          "timestamp": "2025-01-25T00:54:37+01:00",
+          "tree_id": "c1c51c9974748fbe2496faadc08488859cd2ace6",
+          "url": "https://github.com/unicode-org/icu/commit/4df4eb419b81ecedfb55f65dfdc23953cc083a4d"
+        },
+        "date": 1737764834031,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 541.1514,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 616763.7171,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 87134.9128,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 550607.988,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 127808.1296,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
