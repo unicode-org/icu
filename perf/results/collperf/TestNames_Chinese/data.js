@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1737767622644,
+  "lastUpdate": 1737769707971,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -60099,6 +60099,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2110433.3912,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "4fc1b7e7f6cff7a6eabecdfbfcaf3f8c10bd5ad1",
+          "message": "ICU-22991 Simplified Grego code\n\nUse timeToFields instead of dayToFields\n\nICU-22991 Revert back gregoimp interface change",
+          "timestamp": "2025-01-24T17:13:51-08:00",
+          "tree_id": "181211306b3f3146a4feaa64606b611006c45682",
+          "url": "https://github.com/unicode-org/icu/commit/4fc1b7e7f6cff7a6eabecdfbfcaf3f8c10bd5ad1"
+        },
+        "date": 1737769491354,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 156.1094,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8802286.5604,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2104473.8251,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7720838.8935,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2118042.507,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
