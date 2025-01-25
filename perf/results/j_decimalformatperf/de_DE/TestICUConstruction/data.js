@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1737766760468,
+  "lastUpdate": 1737768875623,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30807,6 +30807,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 508.4831439333325,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "4fc1b7e7f6cff7a6eabecdfbfcaf3f8c10bd5ad1",
+          "message": "ICU-22991 Simplified Grego code\n\nUse timeToFields instead of dayToFields\n\nICU-22991 Revert back gregoimp interface change",
+          "timestamp": "2025-01-24T17:13:51-08:00",
+          "tree_id": "181211306b3f3146a4feaa64606b611006c45682",
+          "url": "https://github.com/unicode-org/icu/commit/4fc1b7e7f6cff7a6eabecdfbfcaf3f8c10bd5ad1"
+        },
+        "date": 1737768662205,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 426.6013430207318,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
