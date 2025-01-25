@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1737761120698,
+  "lastUpdate": 1737764814205,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -37437,6 +37437,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 51.4406,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "4df4eb419b81ecedfb55f65dfdc23953cc083a4d",
+          "message": "ICU-22781 Add support for constant denominators in unit conversion\n\nImplement handling of constant denominators in unit conversion:\n- Add divide method to Factor class in UnitsConverter\n- Update ConversionRates to apply constant denominator during conversion\n- Add comprehensive test cases for units with constant denominators",
+          "timestamp": "2025-01-25T00:54:37+01:00",
+          "tree_id": "c1c51c9974748fbe2496faadc08488859cd2ace6",
+          "url": "https://github.com/unicode-org/icu/commit/4df4eb419b81ecedfb55f65dfdc23953cc083a4d"
+        },
+        "date": 1737764605194,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.7141,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 51.4869,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
