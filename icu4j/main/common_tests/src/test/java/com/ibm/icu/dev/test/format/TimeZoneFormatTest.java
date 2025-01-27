@@ -951,6 +951,14 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 "\u65E5\u672C\u6A19\u6E96\u6642",   // "日本標準時"
                 TimeType.UNKNOWN
             },
+            {
+                "en",
+                "Etc/Unknown",
+                dateJan,
+                Style.GENERIC_LONG,
+                null, // not "Unknown City Time"
+                TimeType.UNKNOWN
+            },
         };
 
         for (Object[] testCase : TESTDATA) {
