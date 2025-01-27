@@ -27,6 +27,11 @@ template<typename Unit>
 class FwdIter {
 public:
     typedef Unit value_type;
+    typedef Unit &reference;
+    typedef Unit *pointer;
+    typedef size_t difference_type;
+    // https://en.cppreference.com/w/cpp/named_req/ForwardIterator#Multi-pass_guarantee
+    typedef std::forward_iterator_tag iterator_category;
 
     FwdIter(const Unit *data) : p(data) {}
 
