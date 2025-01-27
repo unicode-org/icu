@@ -1494,104 +1494,6 @@ void RBBITest::checkUnicodeTestCase(const char *testFileName, int lineNumber,
 
 
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
-//---------------------------------------------------------------------------------------
-//
-//   class RBBIMonkeyKind
-//
-//      Monkey Test for Break Iteration
-//      Abstract interface class.   Concrete derived classes independently
-//      implement the break rules for different iterator types.
-//
-//      The Monkey Test itself uses doesn't know which type of break iterator it is
-//      testing, but works purely in terms of the interface defined here.
-//
-//---------------------------------------------------------------------------------------
-class RBBIMonkeyKind {
-public:
-    // Return a UVector of UnicodeSets, representing the character classes used
-    //   for this type of iterator.
-    virtual const std::vector<UnicodeSet>& charClasses() = 0;
-
-    // Set the test text on which subsequent calls to next() will operate
-    virtual  void      setText(const UnicodeString &s) = 0;
-
-    // Find the next break position, starting from the prev break position, or from zero.
-    // Return -1 after reaching end of string.
-    virtual  int32_t   next(int32_t i) = 0;
-
-    // Name of each character class, parallel with charClasses. Used for debugging output
-    // of characters.
-    virtual  std::vector<std::string>&     characterClassNames();
-
-    void setAppliedRule(int32_t position, const char* value);
-
-    std::string getAppliedRule(int32_t position);
-
-    virtual ~RBBIMonkeyKind();
-    UErrorCode deferredStatus;
-
-    std::string classNameFromCodepoint(const UChar32 c);
-    unsigned int maxClassNameSize();
-
- protected:
-     RBBIMonkeyKind();
-     std::vector<std::string> classNames;
-     std::vector<std::string> appliedRules;
-
-    // Clear `appliedRules` and fill it with empty strings in the size of test text.
-    void prepareAppliedRules(int32_t size );
-
- private:
-
-};
-
-RBBIMonkeyKind::RBBIMonkeyKind() {
-    deferredStatus = U_ZERO_ERROR;
-}
-
-RBBIMonkeyKind::~RBBIMonkeyKind() {
-}
-
-std::vector<std::string>& RBBIMonkeyKind::characterClassNames() {
-    return classNames;
-}
-
-void RBBIMonkeyKind::prepareAppliedRules(int32_t size) {
-    // Remove all the information in the `appliedRules`.
-    appliedRules.clear();
-    appliedRules.resize(size + 1);
-}
-
-void RBBIMonkeyKind::setAppliedRule(int32_t position, const char* value) {
-    appliedRules[position] = value;
-}
-
-std::string RBBIMonkeyKind::getAppliedRule(int32_t position){
-    return appliedRules[position];
-}
-
-std::string RBBIMonkeyKind::classNameFromCodepoint(const UChar32 c) {
-    // Simply iterate through charClasses to find character's class
-    for (std::size_t aClassNum = 0; aClassNum < charClasses().size(); aClassNum++) {
-        const UnicodeSet& classSet = charClasses()[aClassNum];
-        if (classSet.contains(c)) {
-            return classNames[aClassNum];
-        }
-    }
-    U_ASSERT(false);  // This should not happen.
-    return "bad class name";
-}
-
-unsigned int RBBIMonkeyKind::maxClassNameSize() {
-    unsigned int maxSize = 0;
-    for (std::size_t aClassNum = 0; aClassNum < charClasses().size(); aClassNum++) {
-        auto aClassNumSize = static_cast<unsigned int>(classNames[aClassNum].size());
-        if (aClassNumSize > maxSize) {
-            maxSize = aClassNumSize;
-        }
-    }
-    return maxSize;
-}
 
 namespace {
 
@@ -1888,6 +1790,105 @@ class RegexRule : public SegmentationRule {
 };
 
 }  // namespace
+
+//---------------------------------------------------------------------------------------
+//
+//   class RBBIMonkeyKind
+//
+//      Monkey Test for Break Iteration
+//      Abstract interface class.   Concrete derived classes independently
+//      implement the break rules for different iterator types.
+//
+//      The Monkey Test itself uses doesn't know which type of break iterator it is
+//      testing, but works purely in terms of the interface defined here.
+//
+//---------------------------------------------------------------------------------------
+class RBBIMonkeyKind {
+public:
+    // Return a UVector of UnicodeSets, representing the character classes used
+    //   for this type of iterator.
+    virtual const std::vector<UnicodeSet>& charClasses() = 0;
+
+    // Set the test text on which subsequent calls to next() will operate
+    virtual  void      setText(const UnicodeString &s) = 0;
+
+    // Find the next break position, starting from the prev break position, or from zero.
+    // Return -1 after reaching end of string.
+    virtual  int32_t   next(int32_t i) = 0;
+
+    // Name of each character class, parallel with charClasses. Used for debugging output
+    // of characters.
+    virtual  std::vector<std::string>&     characterClassNames();
+
+    void setAppliedRule(int32_t position, const char* value);
+
+    std::string getAppliedRule(int32_t position);
+
+    virtual ~RBBIMonkeyKind();
+    UErrorCode deferredStatus;
+
+    std::string classNameFromCodepoint(const UChar32 c);
+    unsigned int maxClassNameSize();
+
+ protected:
+     RBBIMonkeyKind();
+     std::vector<std::string> classNames;
+     std::vector<std::string> appliedRules;
+
+    // Clear `appliedRules` and fill it with empty strings in the size of test text.
+    void prepareAppliedRules(int32_t size );
+
+ private:
+
+};
+
+RBBIMonkeyKind::RBBIMonkeyKind() {
+    deferredStatus = U_ZERO_ERROR;
+}
+
+RBBIMonkeyKind::~RBBIMonkeyKind() {
+}
+
+std::vector<std::string>& RBBIMonkeyKind::characterClassNames() {
+    return classNames;
+}
+
+void RBBIMonkeyKind::prepareAppliedRules(int32_t size) {
+    // Remove all the information in the `appliedRules`.
+    appliedRules.clear();
+    appliedRules.resize(size + 1);
+}
+
+void RBBIMonkeyKind::setAppliedRule(int32_t position, const char* value) {
+    appliedRules[position] = value;
+}
+
+std::string RBBIMonkeyKind::getAppliedRule(int32_t position){
+    return appliedRules[position];
+}
+
+std::string RBBIMonkeyKind::classNameFromCodepoint(const UChar32 c) {
+    // Simply iterate through charClasses to find character's class
+    for (std::size_t aClassNum = 0; aClassNum < charClasses().size(); aClassNum++) {
+        const UnicodeSet& classSet = charClasses()[aClassNum];
+        if (classSet.contains(c)) {
+            return classNames[aClassNum];
+        }
+    }
+    U_ASSERT(false);  // This should not happen.
+    return "bad class name";
+}
+
+unsigned int RBBIMonkeyKind::maxClassNameSize() {
+    unsigned int maxSize = 0;
+    for (std::size_t aClassNum = 0; aClassNum < charClasses().size(); aClassNum++) {
+        auto aClassNumSize = static_cast<unsigned int>(classNames[aClassNum].size());
+        if (aClassNumSize > maxSize) {
+            maxSize = aClassNumSize;
+        }
+    }
+    return maxSize;
+}
 
 //----------------------------------------------------------------------------------------
 //
