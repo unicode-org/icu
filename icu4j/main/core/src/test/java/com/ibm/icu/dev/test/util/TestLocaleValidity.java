@@ -56,7 +56,7 @@ public class TestLocaleValidity extends CoreTestFmwk {
                 {"OK", "en-u-ca-buddhist"},
                 {"OK", "en-u-ca-islamic-umalqura"}, // additive
                 {"OK", "en-u-cf-account"},
-                {"OK", "en-u-co-big5han"},
+                {"{u, co-big5han}", "en-u-co-big5han"}, // deprecated in 47
                 {"OK", "en-u-cu-adp"},
                 {"OK", "en-u-fw-fri"},
                 {"OK", "en-u-dx-thai"},
@@ -106,7 +106,7 @@ public class TestLocaleValidity extends CoreTestFmwk {
 
                 // really long case
 
-                {"OK", "en-u-ca-buddhist-ca-islamic-umalqura-cf-account-co-big5han-cu-adp-fw-fri-hc-h11-ka-noignore-kb-false-kc-false-kf-false-kk-false-kn-false-kr-latn-digit-symbol-ks-identic-kv-currency-nu-ahom-sd-usny-tz-adalv-va-posix"},
+                {"OK", "en-u-ca-buddhist-ca-islamic-umalqura-cf-account-co-pinyin-cu-adp-fw-fri-hc-h11-ka-noignore-kb-false-kc-false-kf-false-kk-false-kn-false-kr-latn-digit-symbol-ks-identic-kv-currency-nu-ahom-sd-usny-tz-adalv-va-posix"},
 
                 // root is canonicalized to the root locale (ICU-20273)
                 {"OK", "root"},
