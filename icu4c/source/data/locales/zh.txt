@@ -1,6 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
+// Generated using tools/cldr/cldr-to-icu/
 zh{
     AuxExemplarCharacters{
         "[丐 丛 丫 乒 乓 乞 乳 亢 亩 亭 仂 仆 仑 仓 仗 伞 伪 伶 伺 佃 佣 侄 侈 侍 侣 侥 侮 俏 俐 俘 俭 俯 俺 倔 倘 倡 债 偎"

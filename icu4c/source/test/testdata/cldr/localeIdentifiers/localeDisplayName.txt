@@ -1,5 +1,5 @@
 # Test data for locale display name generation
-#  Copyright © 1991-2024 Unicode, Inc.
+#  Copyright © 1991-2025 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
 #  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
@@ -61,13 +61,11 @@ en-u-ca-persian; English (Persian Calendar)
 en-u-ca-roc; English (Minguo Calendar)
 en-u-cf-account; English (Accounting Currency Format)
 en-u-cf-standard; English (Standard Currency Format)
-en-u-co-big5han; English (Traditional Chinese Sort Order - Big5)
 en-u-co-compat; English (Previous Sort Order, for compatibility)
 en-u-co-dict; English (Dictionary Sort Order)
 en-u-co-ducet; English (Default Unicode Sort Order)
 en-u-co-emoji; English (Emoji Sort Order)
 en-u-co-eor; English (European Ordering Rules)
-en-u-co-gb2312; English (Simplified Chinese Sort Order - GB2312)
 en-u-co-phonebk; English (Phonebook Sort Order)
 en-u-co-phonetic; English (Phonetic Sort Order)
 en-u-co-pinyin; English (Pinyin Sort Order)
@@ -1310,6 +1308,32 @@ nl-Latn-BE; flamšćina (łaćonsce)
 zh-Hans-fonipa; chinšćina [zjednorjena] (FONIPA)
 
 
+@locale=ht
+@languageDisplay=standard
+
+en-MM; anglais (Myanmar [Birmanie])
+es; espagnol
+es-419; espagnol (Amérique latine)
+es-Cyrl-MX; espagnol (cyrillique, Mexique)
+hi-Latn; hindi (latin)
+nl-BE; néerlandais (Belgique)
+nl-Latn-BE; néerlandais (latin, Belgique)
+zh-Hans-fonipa; chinois (simplifié, alphabet phonétique international)
+
+
+@locale=ht
+@languageDisplay=dialect
+
+en-MM; anglais (Myanmar [Birmanie])
+es; espagnol
+es-419; espagnol d’Amérique latine
+es-Cyrl-MX; espagnol du Mexique (cyrillique)
+hi-Latn; hindi (latin)
+nl-BE; flamand
+nl-Latn-BE; flamand (latin)
+zh-Hans-fonipa; chinois simplifié (alphabet phonétique international)
+
+
 @locale=hu
 @languageDisplay=standard
 
@@ -2342,7 +2366,7 @@ zh-Hans-fonipa; zh (Hans, FONIPA)
 
 en-MM; en (MM)
 es; es
-es-419; es_419
+es-419; es (419)
 es-Cyrl-MX; es (Cyrl, MX)
 hi-Latn; hi (Latn)
 nl-BE; nl (BE)
