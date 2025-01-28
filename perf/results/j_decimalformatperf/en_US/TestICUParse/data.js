@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738019183897,
+  "lastUpdate": 1738079413228,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31047,6 +31047,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 303.3546468944963,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "036919214c207c72b10df58382e7d04dd5759892",
+          "message": "ICU-22781 Fix and Add unit tests for withConstantDenominator in MeasureUnit\n\nSee #3342",
+          "timestamp": "2025-01-24T01:30:21+01:00",
+          "tree_id": "717998e3f71538a291297c0a6dac98e08da060a2",
+          "url": "https://github.com/unicode-org/icu/commit/036919214c207c72b10df58382e7d04dd5759892"
+        },
+        "date": 1738079203744,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 312.2552596582814,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
