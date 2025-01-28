@@ -57,26 +57,62 @@ public class RBBITestMonkey extends CoreTestFmwk {
     //
     abstract static class RBBIMonkeyKind {
         RBBIMonkeyKind() {
-            fSets = new  ArrayList<>();
-            fClassNames = new ArrayList<>();
+            sets = new  ArrayList<>();
+            classNames = new ArrayList<>();
             fAppliedRules = new ArrayList<>();
+            dictionarySet = new UnicodeSet();
         }
 
         // Return a List of UnicodeSets, representing the character classes used
         //   for this type of iterator.
-        abstract  List<UnicodeSet>  charClasses();
+        List<UnicodeSet>  charClasses() {
+            return sets;
+        }
 
         // Set the test text on which subsequent calls to next() will operate
-        abstract  void   setText(StringBuffer text);
+        void setText(StringBuffer s) {
+            text = s;
+            prepareAppliedRules(s.length());
+            StringBuilder remapped = new StringBuilder(s.toString());
+            resolved = new BreakContext[s.length() + 1];
+            for (int i = 0; i < resolved.length; ++i) {
+                resolved[i] = new BreakContext(i);
+            }
+            for (final SegmentationRule rule : rules) {
+                rule.apply(remapped, resolved);
+            }
+            for (int i = 0; i < resolved.length; ++i) {
+                if (i > 0 && i < s.length() &&
+                        UTF16.isLeadSurrogate(s.charAt(i-1)) && UTF16.isTrailSurrogate(s.charAt(i))) {
+                    continue;
+                }
+                if (resolved[i].appliedRule == null) {
+                    throw new IllegalArgumentException("Failed to resolve at " + i);
+                }
+                setAppliedRule(i, resolved[i].appliedRule.name());
+            }
+        }
 
         // Find the next break position, starting from the specified position.
         // Return -1 after reaching end of string.
-        abstract   int   next(int i);
+        int   next(int startPos) {
+            for (int i = startPos + 1; i < resolved.length; ++i) {
+                if (resolved[i].appliedRule != null &&
+                        resolved[i].appliedRule.resolution() == Resolution.BREAK) {
+                    return i;
+                }
+            }
+            return -1;
+        }
 
         // Name of each character class, parallel with charClasses. Used for debugging output
         // of characters.
         List<String> characterClassNames() {
-            return fClassNames;
+            return classNames;
+        }
+
+        UnicodeSet getDictionarySet() {
+            return dictionarySet;
         }
 
         void setAppliedRule(int position, String value) {
@@ -92,7 +128,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
             for (int aClassNum = 0; aClassNum < charClasses().size(); aClassNum++) {
                 UnicodeSet classSet = (UnicodeSet)charClasses().get(aClassNum);
                 if (classSet.contains(c)) {
-                    return fClassNames.get(aClassNum);
+                    return classNames.get(aClassNum);
                 }
             }
             return "bad class name";
@@ -101,8 +137,8 @@ public class RBBITestMonkey extends CoreTestFmwk {
         int maxClassNameSize() {
             int maxSize = 0;
             for (int aClassNum = 0; aClassNum < charClasses().size(); aClassNum++) {
-                if (fClassNames.get(aClassNum).length() > maxSize) {
-                    maxSize = fClassNames.get(aClassNum).length();
+                if (classNames.get(aClassNum).length() > maxSize) {
+                    maxSize = classNames.get(aClassNum).length();
                 }
             }
             return maxSize;
@@ -118,246 +154,91 @@ public class RBBITestMonkey extends CoreTestFmwk {
             }
         }
 
+        static class NamedSet {
+            String name;
+            UnicodeSet set;
+            NamedSet(String name, UnicodeSet set) {
+                this.name = name;
+                this.set = set;
+            }
+            NamedSet(String name, String pattern) {
+                this(name, new UnicodeSet(pattern));
+            }
+        };
+
         // A Character Property, one of the constants defined in class UProperty.
         //   The value of this property will be displayed for the characters
         //    near any test failure.
         int   fCharProperty;
 
-        List<UnicodeSet> fSets;
-        ArrayList<String> fClassNames;
-        ArrayList<String> fAppliedRules;
+        List<UnicodeSet> sets;
+        ArrayList<String> classNames;
+        List<SegmentationRule> rules;
+        UnicodeSet dictionarySet;
+        private ArrayList<String> fAppliedRules;
+        private StringBuffer text;
+        private SegmentationRule.BreakContext[] resolved;
     }
 
     /**
      * Monkey test subclass for testing Character (Grapheme Cluster) boundaries.
-     * Note: As of Unicode 6.1, fPrependSet is empty, so don't add it to fSets
      */
     static class RBBICharMonkey extends RBBIMonkeyKind {
-        UnicodeSet                fCRLFSet;
-        UnicodeSet                fControlSet;
-        UnicodeSet                fExtendSet;
-        UnicodeSet                fRegionalIndicatorSet;
-        UnicodeSet                fPrependSet;
-        UnicodeSet                fSpacingSet;
-        UnicodeSet                fLSet;
-        UnicodeSet                fVSet;
-        UnicodeSet                fTSet;
-        UnicodeSet                fLVSet;
-        UnicodeSet                fLVTSet;
-        UnicodeSet                fHangulSet;
-        UnicodeSet                fZWJSet;
-        UnicodeSet                fExtendedPictSet;
-        UnicodeSet                fInCBLinkerSet;
-        UnicodeSet                fInCBConsonantSet;
-        UnicodeSet                fInCBExtendSet;
-        UnicodeSet                fAnySet;
-
-
-        StringBuffer              fText;
-
         RBBICharMonkey() {
-            fText       = null;
             fCharProperty = UProperty.GRAPHEME_CLUSTER_BREAK;
-            fCRLFSet    = new UnicodeSet("[\\r\\n]");
-            fControlSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Control}]");
-            fExtendSet  = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Extend}]");
-            fZWJSet     = new UnicodeSet("[\\p{Grapheme_Cluster_Break = ZWJ}]");
-            fRegionalIndicatorSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Regional_Indicator}]");
-            fPrependSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Prepend}]");
-            fSpacingSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = SpacingMark}]");
-            fLSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = L}]");
-            fVSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = V}]");
-            fTSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = T}]");
-            fLVSet      = new UnicodeSet("[\\p{Grapheme_Cluster_Break = LV}]");
-            fLVTSet     = new UnicodeSet("[\\p{Grapheme_Cluster_Break = LVT}]");
-            fHangulSet  = new UnicodeSet();
-            fHangulSet.addAll(fLSet);
-            fHangulSet.addAll(fVSet);
-            fHangulSet.addAll(fTSet);
-            fHangulSet.addAll(fLVSet);
-            fHangulSet.addAll(fLVTSet);
+            List<NamedSet> partition = new ArrayList<>();
+            rules = new ArrayList<>();
 
-            fExtendedPictSet  = new UnicodeSet("[:Extended_Pictographic:]");
-            fInCBLinkerSet    = new UnicodeSet("[\\p{InCB=Linker}]");
-            fInCBConsonantSet = new UnicodeSet("[\\p{InCB=Consonant}]");
-            fInCBExtendSet    = new UnicodeSet("[\\p{InCB=Extend}]");
-            fAnySet           = new UnicodeSet("[\\u0000-\\U0010ffff]");
+            // These two could be part of the rules.
+            rules.add(new RegexRule("GB1 sot ÷ Any", "^", Resolution.BREAK, ""));
+            // Note that /$/ matches ( BK | CR | LF | NL ) eot, so we use (?!.) instead.
+            // The generated rules use the same (?!.).
+            rules.add(new RegexRule("GB2 Any ÷ eot", "", Resolution.BREAK, "(?!.)"));
 
+            // --- NOLI ME TANGERE ---
+            // Generated by GenerateBreakTest.java in the Unicode tools.
+            partition.add(new NamedSet("CR", new UnicodeSet("[\\p{Grapheme_Cluster_Break=CR}]")));
+            partition.add(new NamedSet("LF", new UnicodeSet("[\\p{Grapheme_Cluster_Break=LF}]")));
+            partition.add(new NamedSet("Control", new UnicodeSet("[\\p{Grapheme_Cluster_Break=Control}]")));
+            partition.add(new NamedSet("Extend_ConjunctLinker", new UnicodeSet("[\\p{Grapheme_Cluster_Break=Extend}&\\p{Indic_Conjunct_Break=Linker}]")));
+            partition.add(new NamedSet("Extend_ConjunctExtendermConjunctLinker", new UnicodeSet("[\\p{Grapheme_Cluster_Break=Extend}&[\\p{Indic_Conjunct_Break=Linker}\\p{Indic_Conjunct_Break=Extend}]-\\p{Indic_Conjunct_Break=Linker}]")));
+            partition.add(new NamedSet("ExtendmConjunctLinkermConjunctExtender", new UnicodeSet("[\\p{Grapheme_Cluster_Break=Extend}-\\p{Indic_Conjunct_Break=Linker}-[\\p{Indic_Conjunct_Break=Linker}\\p{Indic_Conjunct_Break=Extend}]]")));
+            partition.add(new NamedSet("ZWJ", new UnicodeSet("[\\p{Grapheme_Cluster_Break=ZWJ}]")));
+            partition.add(new NamedSet("RI", new UnicodeSet("[\\p{Grapheme_Cluster_Break=Regional_Indicator}]")));
+            partition.add(new NamedSet("Prepend", new UnicodeSet("[\\p{Grapheme_Cluster_Break=Prepend}]")));
+            partition.add(new NamedSet("SpacingMark", new UnicodeSet("[\\p{Grapheme_Cluster_Break=SpacingMark}]")));
+            partition.add(new NamedSet("L", new UnicodeSet("[\\p{Grapheme_Cluster_Break=L}]")));
+            partition.add(new NamedSet("V", new UnicodeSet("[\\p{Grapheme_Cluster_Break=V}]")));
+            partition.add(new NamedSet("T", new UnicodeSet("[\\p{Grapheme_Cluster_Break=T}]")));
+            partition.add(new NamedSet("LV", new UnicodeSet("[\\p{Grapheme_Cluster_Break=LV}]")));
+            partition.add(new NamedSet("LVT", new UnicodeSet("[\\p{Grapheme_Cluster_Break=LVT}]")));
+            partition.add(new NamedSet("LinkingConsonant", new UnicodeSet("[\\p{Indic_Conjunct_Break=Consonant}]")));
+            partition.add(new NamedSet("ExtPict", new UnicodeSet("[\\p{Extended_Pictographic}]")));
+            partition.add(new NamedSet("XXmLinkingConsonantmExtPict", new UnicodeSet("[\\p{Grapheme_Cluster_Break=Other}-\\p{Indic_Conjunct_Break=Consonant}-\\p{Extended_Pictographic}]")));
 
-            fSets.add(fCRLFSet);               fClassNames.add("CRLF");
-            fSets.add(fControlSet);            fClassNames.add("Control");
-            fSets.add(fExtendSet);             fClassNames.add("Extended");
-            fSets.add(fRegionalIndicatorSet);  fClassNames.add("RegionalIndicator");
-            if (!fPrependSet.isEmpty()) {
-                fSets.add(fPrependSet);        fClassNames.add("Prepend");
+            rules.add(new RegexRule("$CR × $LF", "\\p{Grapheme_Cluster_Break=CR}", Resolution.NO_BREAK, "\\p{Grapheme_Cluster_Break=LF}"));
+            rules.add(new RegexRule("( $Control | $CR | $LF ) ÷", "( \\p{Grapheme_Cluster_Break=Control} | \\p{Grapheme_Cluster_Break=CR} | \\p{Grapheme_Cluster_Break=LF} )", Resolution.BREAK, ""));
+            rules.add(new RegexRule("÷ ( $Control | $CR | $LF )", "", Resolution.BREAK, "( \\p{Grapheme_Cluster_Break=Control} | \\p{Grapheme_Cluster_Break=CR} | \\p{Grapheme_Cluster_Break=LF} )"));
+            rules.add(new RegexRule("$L × ( $L | $V | $LV | $LVT )", "\\p{Grapheme_Cluster_Break=L}", Resolution.NO_BREAK, "( \\p{Grapheme_Cluster_Break=L} | \\p{Grapheme_Cluster_Break=V} | \\p{Grapheme_Cluster_Break=LV} | \\p{Grapheme_Cluster_Break=LVT} )"));
+            rules.add(new RegexRule("( $LV | $V ) × ( $V | $T )", "( \\p{Grapheme_Cluster_Break=LV} | \\p{Grapheme_Cluster_Break=V} )", Resolution.NO_BREAK, "( \\p{Grapheme_Cluster_Break=V} | \\p{Grapheme_Cluster_Break=T} )"));
+            rules.add(new RegexRule("( $LVT | $T) × $T", "( \\p{Grapheme_Cluster_Break=LVT} | \\p{Grapheme_Cluster_Break=T})", Resolution.NO_BREAK, "\\p{Grapheme_Cluster_Break=T}"));
+            rules.add(new RegexRule("× ($Extend | $ZWJ)", "", Resolution.NO_BREAK, "(\\p{Grapheme_Cluster_Break=Extend} | \\p{Grapheme_Cluster_Break=ZWJ})"));
+            rules.add(new RegexRule("× $SpacingMark", "", Resolution.NO_BREAK, "\\p{Grapheme_Cluster_Break=SpacingMark}"));
+            rules.add(new RegexRule("$Prepend ×", "\\p{Grapheme_Cluster_Break=Prepend}", Resolution.NO_BREAK, ""));
+            rules.add(new RegexRule("$LinkingConsonant $ConjunctExtender* $ConjunctLinker $ConjunctExtender* × $LinkingConsonant", "\\p{Indic_Conjunct_Break=Consonant} [\\p{Indic_Conjunct_Break=Linker}\\p{Indic_Conjunct_Break=Extend}]* \\p{Indic_Conjunct_Break=Linker} [\\p{Indic_Conjunct_Break=Linker}\\p{Indic_Conjunct_Break=Extend}]*", Resolution.NO_BREAK, "\\p{Indic_Conjunct_Break=Consonant}"));
+            rules.add(new RegexRule("$ExtPict $Extend* $ZWJ × $ExtPict", "\\p{Extended_Pictographic} \\p{Grapheme_Cluster_Break=Extend}* \\p{Grapheme_Cluster_Break=ZWJ}", Resolution.NO_BREAK, "\\p{Extended_Pictographic}"));
+            rules.add(new RegexRule("^ ($RI $RI)* $RI × $RI", "^ (\\p{Grapheme_Cluster_Break=Regional_Indicator} \\p{Grapheme_Cluster_Break=Regional_Indicator})* \\p{Grapheme_Cluster_Break=Regional_Indicator}", Resolution.NO_BREAK, "\\p{Grapheme_Cluster_Break=Regional_Indicator}"));
+            rules.add(new RegexRule("[^$RI] ($RI $RI)* $RI × $RI", "[^\\p{Grapheme_Cluster_Break=Regional_Indicator}] (\\p{Grapheme_Cluster_Break=Regional_Indicator} \\p{Grapheme_Cluster_Break=Regional_Indicator})* \\p{Grapheme_Cluster_Break=Regional_Indicator}", Resolution.NO_BREAK, "\\p{Grapheme_Cluster_Break=Regional_Indicator}"));
+            // --- End of generated code. ---
+
+            // TODO(egg): This could just as well be part of the rules…
+            rules.add(new RegexRule("(ALL ÷ / ÷ ALL)", "", Resolution.BREAK, ""));
+
+            for (final NamedSet part : partition) {
+                sets.add(part.set);
+                classNames.add(part.name);
             }
-            fSets.add(fSpacingSet);            fClassNames.add("Spacing");
-            fSets.add(fHangulSet);             fClassNames.add("Hangul");
-            fSets.add(fAnySet);                fClassNames.add("Any");
-            fSets.add(fZWJSet);                fClassNames.add("ZWJ");
-            fSets.add(fExtendedPictSet);       fClassNames.add("ExtendedPict");
-            fSets.add(fInCBLinkerSet);         fClassNames.add("InCB=Linker");
-            fSets.add(fInCBConsonantSet);      fClassNames.add("InCB=Consonant");
-            fSets.add(fInCBExtendSet);         fClassNames.add("InCB=Extend");
         }
-
-
-        @Override
-        void setText(StringBuffer s) {
-            fText = s;
-            prepareAppliedRules(s.length());
-        }
-
-        @Override
-        List<UnicodeSet> charClasses() {
-            return fSets;
-        }
-
-        @Override
-        int next(int prevPos) {
-            int    /*p0,*/ p1, p2, p3;    // Indices of the significant code points around the
-            //   break position being tested.  The candidate break
-            //   location is before p2.
-
-            int     breakPos = -1;
-
-            int   c0, c1, c2, c3;     // The code points at p0, p1, p2 & p3.
-            int   cBase;              // for (X Extend*) patterns, the X character.
-
-            // Previous break at end of string.  return DONE.
-            if (prevPos >= fText.length()) {
-                return -1;
-            }
-            /* p0 = */ p1 = p2 = p3 = prevPos;
-            c3 =  UTF16.charAt(fText, prevPos);
-            c0 = c1 = c2 = cBase = 0;
-
-            // Loop runs once per "significant" character position in the input text.
-            for (;;) {
-                // Move all of the positions forward in the input string.
-                /* p0 = p1;*/  c0 = c1;
-                p1 = p2;  c1 = c2;
-                p2 = p3;  c2 = c3;
-
-                // Advance p3 by one codepoint
-                p3 = moveIndex32(fText, p3, 1);
-                c3 = (p3>=fText.length())? -1: UTF16.charAt(fText, p3);
-
-                if (p1 == p2) {
-                    // Still warming up the loop.  (won't work with zero length strings, but we don't care)
-                    continue;
-                }
-                if (p2 == fText.length()) {
-                    setAppliedRule(p2, "End of String");
-                    break;
-                }
-
-                //     No Extend or Format characters may appear between the CR and LF,
-                //     which requires the additional check for p2 immediately following p1.
-                //
-                if (c1==0x0D && c2==0x0A && p1==(p2-1)) {
-                    setAppliedRule(p2, "GB 3   CR x LF");
-                    continue;
-                }
-
-                if (fControlSet.contains(c1) ||
-                        c1 == 0x0D ||
-                        c1 == 0x0A)  {
-                    setAppliedRule(p2, "GB 4   ( Control | CR | LF ) <break>");
-                    break;
-                }
-
-                if (fControlSet.contains(c2) ||
-                        c2 == 0x0D ||
-                        c2 == 0x0A)  {
-                    setAppliedRule(p2, "GB 5   <break>  ( Control | CR | LF )");
-                    break;
-                }
-
-
-                if (fLSet.contains(c1) &&
-                        (fLSet.contains(c2)  ||
-                                fVSet.contains(c2)  ||
-                                fLVSet.contains(c2) ||
-                                fLVTSet.contains(c2))) {
-                    setAppliedRule(p2, "GB 6   L x ( L | V | LV | LVT )");
-                    continue;
-                }
-
-                if ((fLVSet.contains(c1) || fVSet.contains(c1)) &&
-                        (fVSet.contains(c2) || fTSet.contains(c2)))  {
-                    setAppliedRule(p2, "GB 7   ( LV | V )  x  ( V | T )");
-                    continue;
-                }
-
-                if ((fLVTSet.contains(c1) || fTSet.contains(c1)) &&
-                        fTSet.contains(c2))  {
-                    setAppliedRule(p2, "GB 8   ( LVT | T)  x T");
-                    continue;
-                }
-
-                if (fExtendSet.contains(c2) || fZWJSet.contains(c2))  {
-                    if (!fExtendSet.contains(c1)) {
-                        cBase = c1;
-                    }
-                    setAppliedRule(p2, "GB 9   x (Extend | ZWJ)");
-                    continue;
-                }
-
-                if (fSpacingSet.contains(c2)) {
-                    setAppliedRule(p2, "GB 9a  x  SpacingMark");
-                    continue;
-                }
-
-                if (fPrependSet.contains(c1)) {
-                    setAppliedRule(p2, "GB 9b  Prepend x");
-                    continue;
-                }
-
-                //   Note: Viramas are also included in the ExtCccZwj class.
-                if (fInCBConsonantSet.contains(c2)) {
-                    int pi = p1;
-                    boolean sawVirama = false;
-                    while (pi > 0 && (fInCBExtendSet.contains(fText.codePointAt(pi)) ||
-                                      fInCBLinkerSet.contains(fText.codePointAt(pi)))) {
-                        if (fInCBLinkerSet.contains(fText.codePointAt(pi))) {
-                            sawVirama = true;
-                        }
-                        pi = fText.offsetByCodePoints(pi, -1);
-                    }
-                    if (sawVirama && fInCBConsonantSet.contains(fText.codePointAt(pi))) {
-                        setAppliedRule(p2, "GB9c \\p{InCB=Consonant} [ \\p{InCB=Extend} \\p{InCB=Linker} ]* \\p{InCB=Linker} [ \\p{InCB=Extend} \\p{InCB=Linker} ]* × \\p{InCB=Consonant})");
-                        continue;
-                    }
-                }
-
-                if (fExtendedPictSet.contains(cBase) && fZWJSet.contains(c1) && fExtendedPictSet.contains(c2) ) {
-                    setAppliedRule(p2, "GB 11  Extended_Pictographic Extend * ZWJ x Extended_Pictographic");
-                    continue;
-                }
-
-                //                  Note: The first if condition is a little tricky. We only need to force
-                //                      a break if there are three or more contiguous RIs. If there are
-                //                      only two, a break following will occur via other rules, and will include
-                //                      any trailing extend characters, which is needed behavior.
-                if (fRegionalIndicatorSet.contains(c0) && fRegionalIndicatorSet.contains(c1)
-                        && fRegionalIndicatorSet.contains(c2)) {
-                    setAppliedRule(p2, "GB 12-13 Regional_Indicator x Regional_Indicator");
-                    break;
-                }
-                if (fRegionalIndicatorSet.contains(c1) && fRegionalIndicatorSet.contains(c2)) {
-                    setAppliedRule(p2, "GB 12-13 Regional_Indicator x Regional_Indicator");
-                    continue;
-                }
-
-                setAppliedRule(p2, "GB 999 Any <break> Any");
-                break;
-            }
-
-            breakPos = p2;
-            return breakPos;
-        }
-
     }
 
     /**
@@ -368,336 +249,86 @@ public class RBBITestMonkey extends CoreTestFmwk {
      *
      */
     static class RBBIWordMonkey extends RBBIMonkeyKind {
-        StringBuffer              fText;
-
-        UnicodeSet                fCRSet;
-        UnicodeSet                fLFSet;
-        UnicodeSet                fNewlineSet;
-        UnicodeSet                fRegionalIndicatorSet;
-        UnicodeSet                fKatakanaSet;
-        UnicodeSet                fHebrew_LetterSet;
-        UnicodeSet                fALetterSet;
-        UnicodeSet                fSingle_QuoteSet;
-        UnicodeSet                fDouble_QuoteSet;
-        UnicodeSet                fMidNumLetSet;
-        UnicodeSet                fMidLetterSet;
-        UnicodeSet                fMidNumSet;
-        UnicodeSet                fNumericSet;
-        UnicodeSet                fFormatSet;
-        UnicodeSet                fExtendSet;
-        UnicodeSet                fExtendNumLetSet;
-        UnicodeSet                fWSegSpaceSet;
-        UnicodeSet                fOtherSet;
-        UnicodeSet                fDictionarySet;
-        UnicodeSet                fZWJSet;
-        UnicodeSet                fExtendedPictSet;
-
         RBBIWordMonkey() {
             fCharProperty    = UProperty.WORD_BREAK;
+            dictionarySet = new UnicodeSet("[[\uac00-\ud7a3][:Han:][:Hiragana:]]");
+            dictionarySet.addAll(new UnicodeSet("[\\p{Word_Break = Katakana}]"));
+            dictionarySet.addAll(new UnicodeSet("[\\p{LineBreak = Complex_Context}]"));
+            List<NamedSet> partition = new ArrayList<>();
+            rules = new ArrayList<>();
 
-            fCRSet           = new UnicodeSet("[\\p{Word_Break = CR}]");
-            fLFSet           = new UnicodeSet("[\\p{Word_Break = LF}]");
-            fNewlineSet      = new UnicodeSet("[\\p{Word_Break = Newline}]");
-            fRegionalIndicatorSet = new UnicodeSet("[\\p{Word_Break = Regional_Indicator}]");
-            fKatakanaSet     = new UnicodeSet("[\\p{Word_Break = Katakana}]");
-            fHebrew_LetterSet = new UnicodeSet("[\\p{Word_Break = Hebrew_Letter}]");
-            fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}]");
-            fSingle_QuoteSet = new UnicodeSet("[\\p{Word_Break = Single_Quote}]");
-            fDouble_QuoteSet = new UnicodeSet("[\\p{Word_Break = Double_Quote}]");
-            fMidNumLetSet    = new UnicodeSet("[\\p{Word_Break = MidNumLet}]");
-            fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]");
-            fMidNumSet       = new UnicodeSet("[\\p{Word_Break = MidNum}]");
-            fNumericSet      = new UnicodeSet("[\\p{Word_Break = Numeric}]");
-            fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]");
-            fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]");
-            // There are some sc=Hani characters with WB=Extend.
-            // The break rules need to pick one or the other because
-            // Extend overlapping with something else is messy.
-            // For Unicode 13, we chose to keep U+16FF0 & U+16FF1
-            // in $Han (for $dictionary) and out of $Extend.
-            fExtendSet       = new UnicodeSet("[\\p{Word_Break = Extend}-[:Hani:]]");
-            fWSegSpaceSet    = new UnicodeSet("[\\p{Word_Break = WSegSpace}]");
-            fZWJSet          = new UnicodeSet("[\\p{Word_Break = ZWJ}]");
-            fExtendedPictSet = new UnicodeSet("[:Extended_Pictographic:]");
+            // These two could be part of the rules.
+            rules.add(new RegexRule("WB1 sot ÷ Any", "^", Resolution.BREAK, ""));
+            // Note that /$/ matches ( BK | CR | LF | NL ) eot, so we use (?!.) instead.
+            // The generated rules use the same (?!.).
+            rules.add(new RegexRule("WB2 Any ÷ eot", "", Resolution.BREAK, "(?!.)"));
 
-            fDictionarySet = new UnicodeSet("[[\\uac00-\\ud7a3][:Han:][:Hiragana:]]");
-            fDictionarySet.addAll(fKatakanaSet);
-            fDictionarySet.addAll(new UnicodeSet("[\\p{LineBreak = Complex_Context}]"));
+            // --- NOLI ME TANGERE ---
+            // Generated by GenerateBreakTest.java in the Unicode tools.
+            partition.add(new NamedSet("CR", new UnicodeSet("[\\p{Word_Break=CR}]")));
+            partition.add(new NamedSet("LF", new UnicodeSet("[\\p{Word_Break=LF}]")));
+            partition.add(new NamedSet("Newline", new UnicodeSet("[\\p{Word_Break=Newline}]")));
+            partition.add(new NamedSet("Extend", new UnicodeSet("[\\p{Word_Break=Extend}]")));
+            partition.add(new NamedSet("Format", new UnicodeSet("[[\\p{Word_Break=Format}]]")));
+            partition.add(new NamedSet("Katakana", new UnicodeSet("[\\p{Word_Break=Katakana}]")));
+            partition.add(new NamedSet("ALetter_ExtPict", new UnicodeSet("[\\p{Word_Break=ALetter}&\\p{Extended_Pictographic}]")));
+            partition.add(new NamedSet("ALettermExtPict", new UnicodeSet("[\\p{Word_Break=ALetter}-\\p{Extended_Pictographic}]")));
+            partition.add(new NamedSet("MidLetter", new UnicodeSet("[\\p{Word_Break=MidLetter}]")));
+            partition.add(new NamedSet("MidNum", new UnicodeSet("[\\p{Word_Break=MidNum}]")));
+            partition.add(new NamedSet("MidNumLet", new UnicodeSet("[\\p{Word_Break=MidNumLet}]")));
+            partition.add(new NamedSet("Numeric", new UnicodeSet("[\\p{Word_Break=Numeric}]")));
+            partition.add(new NamedSet("ExtendNumLet", new UnicodeSet("[\\p{Word_Break=ExtendNumLet}]")));
+            partition.add(new NamedSet("RI", new UnicodeSet("[\\p{Word_Break=Regional_Indicator}]")));
+            partition.add(new NamedSet("Hebrew_Letter", new UnicodeSet("[\\p{Word_Break=Hebrew_Letter}]")));
+            partition.add(new NamedSet("Double_Quote", new UnicodeSet("[\\p{Word_Break=Double_Quote}]")));
+            partition.add(new NamedSet("Single_Quote", new UnicodeSet("[\\p{Word_Break=Single_Quote}]")));
+            partition.add(new NamedSet("ZWJ", new UnicodeSet("[\\p{Word_Break=ZWJ}]")));
+            partition.add(new NamedSet("ExtPictmALetter", new UnicodeSet("[\\p{Extended_Pictographic}-\\p{Word_Break=ALetter}]")));
+            partition.add(new NamedSet("WSegSpace", new UnicodeSet("[\\p{Word_Break=WSegSpace}]")));
+            partition.add(new NamedSet("XXmExtPict", new UnicodeSet("[\\p{Word_Break=Other}-\\p{Extended_Pictographic}]")));
 
-            fALetterSet.removeAll(fDictionarySet);
+            rules.add(new RegexRule("$CR × $LF", "\\p{Word_Break=CR}", Resolution.NO_BREAK, "\\p{Word_Break=LF}"));
+            rules.add(new RegexRule("($Newline | $CR | $LF) ÷", "(\\p{Word_Break=Newline} | \\p{Word_Break=CR} | \\p{Word_Break=LF})", Resolution.BREAK, ""));
+            rules.add(new RegexRule("÷ ($Newline | $CR | $LF)", "", Resolution.BREAK, "(\\p{Word_Break=Newline} | \\p{Word_Break=CR} | \\p{Word_Break=LF})"));
+            rules.add(new RegexRule("$ZWJ × $ExtPict", "\\p{Word_Break=ZWJ}", Resolution.NO_BREAK, "\\p{Extended_Pictographic}"));
+            rules.add(new RegexRule("$WSegSpace × $WSegSpace", "\\p{Word_Break=WSegSpace}", Resolution.NO_BREAK, "\\p{Word_Break=WSegSpace}"));
+            rules.add(new RemapRule("(?<X>[^$CR $LF $Newline]) ($Extend | $Format | $ZWJ)* → ${X}", "(?<X>[^\\p{Word_Break=CR} \\p{Word_Break=LF} \\p{Word_Break=Newline}]) (\\p{Word_Break=Extend} | [\\p{Word_Break=Format}] | \\p{Word_Break=ZWJ})*", "${X}"));
+            rules.add(new RegexRule("$AHLetter × $AHLetter", "[\\p{Word_Break=ALetter} \\p{Word_Break=Hebrew_Letter}]", Resolution.NO_BREAK, "[\\p{Word_Break=ALetter} \\p{Word_Break=Hebrew_Letter}]"));
+            rules.add(new RegexRule("$AHLetter × ($MidLetter | $MidNumLetQ) $AHLetter", "[\\p{Word_Break=ALetter} \\p{Word_Break=Hebrew_Letter}]", Resolution.NO_BREAK, "(\\p{Word_Break=MidLetter} | [\\p{Word_Break=MidNumLet} \\p{Word_Break=Single_Quote}]) [\\p{Word_Break=ALetter} \\p{Word_Break=Hebrew_Letter}]"));
+            rules.add(new RegexRule("$AHLetter ($MidLetter | $MidNumLetQ) × $AHLetter", "[\\p{Word_Break=ALetter} \\p{Word_Break=Hebrew_Letter}] (\\p{Word_Break=MidLetter} | [\\p{Word_Break=MidNumLet} \\p{Word_Break=Single_Quote}])", Resolution.NO_BREAK, "[\\p{Word_Break=ALetter} \\p{Word_Break=Hebrew_Letter}]"));
+            rules.add(new RegexRule("$Hebrew_Letter × $Single_Quote", "\\p{Word_Break=Hebrew_Letter}", Resolution.NO_BREAK, "\\p{Word_Break=Single_Quote}"));
+            rules.add(new RegexRule("$Hebrew_Letter × $Double_Quote $Hebrew_Letter", "\\p{Word_Break=Hebrew_Letter}", Resolution.NO_BREAK, "\\p{Word_Break=Double_Quote} \\p{Word_Break=Hebrew_Letter}"));
+            rules.add(new RegexRule("$Hebrew_Letter $Double_Quote × $Hebrew_Letter", "\\p{Word_Break=Hebrew_Letter} \\p{Word_Break=Double_Quote}", Resolution.NO_BREAK, "\\p{Word_Break=Hebrew_Letter}"));
+            rules.add(new RegexRule("$Numeric × $Numeric", "\\p{Word_Break=Numeric}", Resolution.NO_BREAK, "\\p{Word_Break=Numeric}"));
+            rules.add(new RegexRule("$AHLetter × $Numeric", "[\\p{Word_Break=ALetter} \\p{Word_Break=Hebrew_Letter}]", Resolution.NO_BREAK, "\\p{Word_Break=Numeric}"));
+            rules.add(new RegexRule("$Numeric × $AHLetter", "\\p{Word_Break=Numeric}", Resolution.NO_BREAK, "[\\p{Word_Break=ALetter} \\p{Word_Break=Hebrew_Letter}]"));
+            rules.add(new RegexRule("$Numeric ($MidNum | $MidNumLetQ) × $Numeric", "\\p{Word_Break=Numeric} (\\p{Word_Break=MidNum} | [\\p{Word_Break=MidNumLet} \\p{Word_Break=Single_Quote}])", Resolution.NO_BREAK, "\\p{Word_Break=Numeric}"));
+            rules.add(new RegexRule("$Numeric × ($MidNum | $MidNumLetQ) $Numeric", "\\p{Word_Break=Numeric}", Resolution.NO_BREAK, "(\\p{Word_Break=MidNum} | [\\p{Word_Break=MidNumLet} \\p{Word_Break=Single_Quote}]) \\p{Word_Break=Numeric}"));
+            rules.add(new RegexRule("$Katakana × $Katakana", "\\p{Word_Break=Katakana}", Resolution.NO_BREAK, "\\p{Word_Break=Katakana}"));
+            rules.add(new RegexRule("($AHLetter | $Numeric | $Katakana | $ExtendNumLet) × $ExtendNumLet", "([\\p{Word_Break=ALetter} \\p{Word_Break=Hebrew_Letter}] | \\p{Word_Break=Numeric} | \\p{Word_Break=Katakana} | \\p{Word_Break=ExtendNumLet})", Resolution.NO_BREAK, "\\p{Word_Break=ExtendNumLet}"));
+            rules.add(new RegexRule("$ExtendNumLet × ($AHLetter | $Numeric | $Katakana)", "\\p{Word_Break=ExtendNumLet}", Resolution.NO_BREAK, "([\\p{Word_Break=ALetter} \\p{Word_Break=Hebrew_Letter}] | \\p{Word_Break=Numeric} | \\p{Word_Break=Katakana})"));
+            rules.add(new RegexRule("^ ($RI $RI)* $RI × $RI", "^ (\\p{Word_Break=Regional_Indicator} \\p{Word_Break=Regional_Indicator})* \\p{Word_Break=Regional_Indicator}", Resolution.NO_BREAK, "\\p{Word_Break=Regional_Indicator}"));
+            rules.add(new RegexRule("[^$RI] ($RI $RI)* $RI × $RI", "[^\\p{Word_Break=Regional_Indicator}] (\\p{Word_Break=Regional_Indicator} \\p{Word_Break=Regional_Indicator})* \\p{Word_Break=Regional_Indicator}", Resolution.NO_BREAK, "\\p{Word_Break=Regional_Indicator}"));
+            // --- End of generated code. ---
 
-            fOtherSet        = new UnicodeSet();
-            fOtherSet.complement();
-            fOtherSet.removeAll(fCRSet);
-            fOtherSet.removeAll(fLFSet);
-            fOtherSet.removeAll(fNewlineSet);
-            fOtherSet.removeAll(fALetterSet);
-            fOtherSet.removeAll(fSingle_QuoteSet);
-            fOtherSet.removeAll(fDouble_QuoteSet);
-            fOtherSet.removeAll(fKatakanaSet);
-            fOtherSet.removeAll(fHebrew_LetterSet);
-            fOtherSet.removeAll(fMidLetterSet);
-            fOtherSet.removeAll(fMidNumSet);
-            fOtherSet.removeAll(fNumericSet);
-            fOtherSet.removeAll(fFormatSet);
-            fOtherSet.removeAll(fExtendSet);
-            fOtherSet.removeAll(fExtendNumLetSet);
-            fOtherSet.removeAll(fWSegSpaceSet);
-            fOtherSet.removeAll(fRegionalIndicatorSet);
-            fOtherSet.removeAll(fZWJSet);
-            fOtherSet.removeAll(fExtendedPictSet);
+            // TODO(egg): This could just as well be part of the rules…
+            rules.add(new RegexRule("(ALL ÷ / ÷ ALL)", "", Resolution.BREAK, ""));
 
-            // Inhibit dictionary characters from being tested at all.
-            // remove surrogates so as to not generate higher CJK characters
-            fOtherSet.removeAll(new UnicodeSet("[[\\p{LineBreak = Complex_Context}][:Line_Break=Surrogate:]]"));
-            fOtherSet.removeAll(fDictionarySet);
-
-            fSets.add(fCRSet);                    fClassNames.add("CR");
-            fSets.add(fLFSet);                    fClassNames.add("LF");
-            fSets.add(fNewlineSet);               fClassNames.add("Newline");
-            fSets.add(fRegionalIndicatorSet);     fClassNames.add("RegionalIndicator");
-            fSets.add(fHebrew_LetterSet);         fClassNames.add("Hebrew");
-            fSets.add(fALetterSet);               fClassNames.add("ALetter");
-            //fSets.add(fKatakanaSet);  // Omit Katakana from fSets, which omits Katakana characters
-            // from the test data. They are all in the dictionary set,
-            // which this (old, to be retired) monkey test cannot handle.
-            fSets.add(fSingle_QuoteSet);          fClassNames.add("Single Quote");
-            fSets.add(fDouble_QuoteSet);          fClassNames.add("Double Quote");
-            fSets.add(fMidLetterSet);             fClassNames.add("MidLetter");
-            fSets.add(fMidNumLetSet);             fClassNames.add("MidNumLet");
-            fSets.add(fMidNumSet);                fClassNames.add("MidNum");
-            fSets.add(fNumericSet);               fClassNames.add("Numeric");
-            fSets.add(fFormatSet);                fClassNames.add("Format");
-            fSets.add(fExtendSet);                fClassNames.add("Extend");
-            fSets.add(fExtendNumLetSet);          fClassNames.add("ExtendNumLet");
-            fSets.add(fWSegSpaceSet);             fClassNames.add("WSegSpace");
-            fSets.add(fZWJSet);                   fClassNames.add("ZWJ");
-            fSets.add(fExtendedPictSet);          fClassNames.add("ExtendedPict");
-            fSets.add(fOtherSet);                 fClassNames.add("Other");
-        }
-
-
-        @Override
-        List<UnicodeSet> charClasses() {
-            return fSets;
-        }
-
-        @Override
-        void   setText(StringBuffer s) {
-            fText = s;
-            prepareAppliedRules(s.length());
-        }
-
-        @Override
-        int   next(int prevPos) {
-            int    /*p0,*/ p1, p2, p3;      // Indices of the significant code points around the
-            //   break position being tested.  The candidate break
-            //   location is before p2.
-            int     breakPos = -1;
-
-            int c0, c1, c2, c3;   // The code points at p0, p1, p2 & p3.
-
-            // Previous break at end of string.  return DONE.
-            if (prevPos >= fText.length()) {
-                return -1;
+            for (final NamedSet part : partition) {
+                sets.add(part.set);
+                classNames.add(part.name);
             }
-            /*p0 =*/ p1 = p2 = p3 = prevPos;
-            c3 = UTF16.charAt(fText, prevPos);
-            c0 = c1 = c2 = 0;
-
-
-
-            // Loop runs once per "significant" character position in the input text.
-            for (;;) {
-                // Move all of the positions forward in the input string.
-                /*p0 = p1;*/  c0 = c1;
-                p1 = p2;  c1 = c2;
-                p2 = p3;  c2 = c3;
-
-                // Advance p3 by    X(Extend | Format)*   Rule 4
-                //    But do not advance over Extend & Format following a new line. (Unicode 5.1 change)
-                do {
-                    p3 = moveIndex32(fText, p3, 1);
-                    c3 = -1;
-                    if (p3>=fText.length()) {
-                        break;
-                    }
-                    c3 = UTF16.charAt(fText, p3);
-                    if (fCRSet.contains(c2) || fLFSet.contains(c2) || fNewlineSet.contains(c2)) {
-                        break;
-                    }
-                }
-                while (setContains(fFormatSet, c3) || setContains(fExtendSet, c3) || setContains(fZWJSet, c3));
-
-                if (p1 == p2) {
-                    // Still warming up the loop.  (won't work with zero length strings, but we don't care)
-                    continue;
-                }
-                if (p2 == fText.length()) {
-                    // Reached end of string.  Always a break position.
-                    break;
-                }
-
-                //     No Extend or Format characters may appear between the CR and LF,
-                //     which requires the additional check for p2 immediately following p1.
-                //
-                if (c1==0x0D && c2==0x0A) {
-                    setAppliedRule(p2, "WB 3   CR x LF");
-                    continue;
-                }
-
-                //
-                if (fCRSet.contains(c1) || fLFSet.contains(c1) || fNewlineSet.contains(c1)) {
-                    setAppliedRule(p2, "WB 3a  Break before and after newlines (including CR and LF)");
-                    break;
-                }
-                if (fCRSet.contains(c2) || fLFSet.contains(c2) || fNewlineSet.contains(c2)) {
-                    setAppliedRule(p2, "WB 3a  Break before and after newlines (including CR and LF)");
-                    break;
-                }
-
-                //              Not ignoring extend chars, so peek into input text to
-                //              get the potential ZWJ, the character immediately preceding c2.
-                if (fZWJSet.contains(fText.codePointBefore(p2)) && fExtendedPictSet.contains(c2)) {
-                    setAppliedRule(p2, "WB 3c  ZWJ x Extended_Pictographic");
-                    continue;
-                }
-
-                if (fWSegSpaceSet.contains(fText.codePointBefore(p2)) && fWSegSpaceSet.contains(c2)) {
-                    setAppliedRule(p2, "WB 3d  Keep horizontal whitespace together");
-                    continue;
-                }
-
-                if ((fALetterSet.contains(c1) || fHebrew_LetterSet.contains(c1)) &&
-                        (fALetterSet.contains(c2) || fHebrew_LetterSet.contains(c2)))  {
-                    setAppliedRule(p2, "WB 4   (ALetter | Hebrew_Letter) x (ALetter | Hebrew_Letter)");
-                    continue;
-                }
-
-                if ( (fALetterSet.contains(c1) || fHebrew_LetterSet.contains(c1))   &&
-                        (fMidLetterSet.contains(c2) || fMidNumLetSet.contains(c2) || fSingle_QuoteSet.contains(c2)) &&
-                        (setContains(fALetterSet, c3) || setContains(fHebrew_LetterSet, c3))) {
-                    setAppliedRule(p2, "WB 6   (ALetter | Hebrew_Letter)  x  (MidLetter | MidNumLet | Single_Quote) (ALetter | Hebrew_Letter)");
-                    continue;
-                }
-
-                if ((fALetterSet.contains(c0) || fHebrew_LetterSet.contains(c0)) &&
-                        (fMidLetterSet.contains(c1) || fMidNumLetSet.contains(c1) || fSingle_QuoteSet.contains(c1)) &&
-                        (fALetterSet.contains(c2) || fHebrew_LetterSet.contains(c2))) {
-                    setAppliedRule(p2, "WB 7   (ALetter | Hebrew_Letter) (MidLetter | MidNumLet | Single_Quote)  x  (ALetter | Hebrew_Letter)");
-                    continue;
-                }
-
-                if (fHebrew_LetterSet.contains(c1) && fSingle_QuoteSet.contains(c2)) {
-                    setAppliedRule(p2, "WB 7a  Hebrew_Letter x Single_Quote");
-                    continue;
-                }
-
-                if (fHebrew_LetterSet.contains(c1) && fDouble_QuoteSet.contains(c2) && setContains(fHebrew_LetterSet,c3)) {
-                    setAppliedRule(p2, "WB 7b  Hebrew_Letter x Single_Quote");
-                    continue;
-                }
-
-                if (fHebrew_LetterSet.contains(c0) && fDouble_QuoteSet.contains(c1) && fHebrew_LetterSet.contains(c2)) {
-                    setAppliedRule(p2, "WB 7c  Hebrew_Letter Double_Quote x Hebrew_Letter");
-                    continue;
-                }
-
-                if (fNumericSet.contains(c1) &&
-                        fNumericSet.contains(c2))  {
-                    setAppliedRule(p2, "WB 8   Numeric x Numeric");
-                    continue;
-                }
-
-                if ((fALetterSet.contains(c1) || fHebrew_LetterSet.contains(c1)) &&
-                        fNumericSet.contains(c2))  {
-                    setAppliedRule(p2, "WB 9   (ALetter | Hebrew_Letter) x Numeric");
-                    continue;
-                }
-
-                if (fNumericSet.contains(c1) &&
-                        (fALetterSet.contains(c2) || fHebrew_LetterSet.contains(c2)))  {
-                    setAppliedRule(p2, "WB 10  Numeric x (ALetter | Hebrew_Letter)");
-                    continue;
-                }
-
-                if (fNumericSet.contains(c0) &&
-                        (fMidNumSet.contains(c1) || fMidNumLetSet.contains(c1) || fSingle_QuoteSet.contains(c1))  &&
-                        fNumericSet.contains(c2)) {
-                    setAppliedRule(p2, "WB 11  Numeric (MidNum | MidNumLet | Single_Quote)  x  Numeric");
-                    continue;
-                }
-
-                if (fNumericSet.contains(c1) &&
-                        (fMidNumSet.contains(c2) || fMidNumLetSet.contains(c2) || fSingle_QuoteSet.contains(c2))  &&
-                        setContains(fNumericSet, c3)) {
-                    setAppliedRule(p2, "WB 12  Numeric x (MidNum | MidNumLet | SingleQuote) Numeric");
-                    continue;
-                }
-
-                //            Note: matches UAX 29 rules, but doesn't come into play for ICU because
-                //                  all Katakana are handled by the dictionary breaker.
-                if (fKatakanaSet.contains(c1) &&
-                        fKatakanaSet.contains(c2))  {
-                    setAppliedRule(p2, "WB 13  Katakana x Katakana");
-                    continue;
-                }
-
-                if ((fALetterSet.contains(c1) || fHebrew_LetterSet.contains(c1) ||fNumericSet.contains(c1) ||
-                        fKatakanaSet.contains(c1) || fExtendNumLetSet.contains(c1)) &&
-                        fExtendNumLetSet.contains(c2)) {
-                    setAppliedRule(p2, "WB 13a (ALetter | Hebrew_Letter | Numeric | KataKana | ExtendNumLet) x ExtendNumLet");
-                    continue;
-                }
-
-                if (fExtendNumLetSet.contains(c1) &&
-                        (fALetterSet.contains(c2) || fHebrew_LetterSet.contains(c2) ||
-                                fNumericSet.contains(c2) || fKatakanaSet.contains(c2)))  {
-                    setAppliedRule(p2, "WB 13b ExtendNumLet x (ALetter | Hebrew_Letter | Numeric | Katakana)");
-                    continue;
-                }
-
-
-                if (fRegionalIndicatorSet.contains(c0) && fRegionalIndicatorSet.contains(c1)) {
-                    setAppliedRule(p2, "WB 15-17 Group pairs of Regional Indicators.");
-                    break;
-                }
-                if (fRegionalIndicatorSet.contains(c1) && fRegionalIndicatorSet.contains(c2)) {
-                    setAppliedRule(p2, "WB 15-17 Group pairs of Regional Indicators.");
-                    continue;
-                }
-
-                setAppliedRule(p2, "WB 999");
-                break;
-            }
-
-            breakPos = p2;
-            return breakPos;
         }
     }
 
 
     static class RBBILineMonkey extends RBBIMonkeyKind {
-        List<SegmentationRule> rules;
-        SegmentationRule.BreakContext[] resolved;
-
-        StringBuffer  fText;
-
         RBBILineMonkey()
         {
             fCharProperty  = UProperty.LINE_BREAK;
+            
+            dictionarySet = new UnicodeSet("\\p{lb=SA}");
 
-            class NamedSet {
-                String name;
-                UnicodeSet set;
-                NamedSet(String name, UnicodeSet set) {
-                    this.name = name;
-                    this.set = set;
-                }
-                NamedSet(String name, String pattern) {
-                    this(name, new UnicodeSet(pattern));
-                }
-            };
             List<NamedSet> partition = new ArrayList<>();
             rules = new ArrayList<>();
 
@@ -868,49 +499,10 @@ public class RBBITestMonkey extends CoreTestFmwk {
             // TODO(egg): This could just as well be part of the rules…
             rules.add(new RegexRule("(ALL ÷ / ÷ ALL)", "", Resolution.BREAK, ""));
 
-            final UnicodeSet lbSA = new UnicodeSet("\\p{lb=SA}");
             for (final NamedSet part : partition) {
-                if (lbSA.containsAll(part.set)) {
-                    continue;
-                }
-                fSets.add(part.set);
-                fClassNames.add(part.name);
+                sets.add(part.set);
+                classNames.add(part.name);
             }
-        }
-
-        @Override
-        void setText(StringBuffer s) {
-            fText       = s;
-            prepareAppliedRules(s.length());
-            StringBuilder remapped = new StringBuilder(s.toString());
-            resolved = new BreakContext[s.length() + 1];
-            for (int i = 0; i < resolved.length; ++i) {
-                resolved[i] = new BreakContext(i);
-            }
-            for (final SegmentationRule rule : rules) {
-                rule.apply(remapped, resolved);
-            }
-            for (int i = 0; i < resolved.length; ++i) {
-                if (resolved[i].appliedRule == null) {
-                    throw new IllegalArgumentException("Failed to resolve at " + i);
-                }
-                setAppliedRule(i, resolved[i].appliedRule.name());
-            }
-        }
-
-        @Override
-        int next(int startPos) {
-            for (int i = startPos + 1; i < resolved.length; ++i) {
-                if (resolved[i].appliedRule.resolution() == Resolution.BREAK) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        @Override
-        List<UnicodeSet> charClasses() {
-            return fSets;
         }
     }
 
@@ -923,282 +515,55 @@ public class RBBITestMonkey extends CoreTestFmwk {
      *
      */
     static class RBBISentenceMonkey extends RBBIMonkeyKind {
-        StringBuffer         fText;
-
-        UnicodeSet           fSepSet;
-        UnicodeSet           fFormatSet;
-        UnicodeSet           fSpSet;
-        UnicodeSet           fLowerSet;
-        UnicodeSet           fUpperSet;
-        UnicodeSet           fOLetterSet;
-        UnicodeSet           fNumericSet;
-        UnicodeSet           fATermSet;
-        UnicodeSet           fSContinueSet;
-        UnicodeSet           fSTermSet;
-        UnicodeSet           fCloseSet;
-        UnicodeSet           fOtherSet;
-        UnicodeSet           fExtendSet;
 
         RBBISentenceMonkey() {
             fCharProperty  = UProperty.SENTENCE_BREAK;
+            List<NamedSet> partition = new ArrayList<>();
+            rules = new ArrayList<>();
 
-            //  Separator Set Note:  Beginning with Unicode 5.1, CR and LF were removed from the separator
-            //                       set and made into character classes of their own.  For the monkey impl,
-            //                       they remain in SEP, since Sep always appears with CR and LF in the rules.
-            fSepSet          = new UnicodeSet("[\\p{Sentence_Break = Sep} \\u000a \\u000d]");
-            fFormatSet       = new UnicodeSet("[\\p{Sentence_Break = Format}]");
-            fSpSet           = new UnicodeSet("[\\p{Sentence_Break = Sp}]");
-            fLowerSet        = new UnicodeSet("[\\p{Sentence_Break = Lower}]");
-            fUpperSet        = new UnicodeSet("[\\p{Sentence_Break = Upper}]");
-            fOLetterSet      = new UnicodeSet("[\\p{Sentence_Break = OLetter}]");
-            fNumericSet      = new UnicodeSet("[\\p{Sentence_Break = Numeric}]");
-            fATermSet        = new UnicodeSet("[\\p{Sentence_Break = ATerm}]");
-            fSContinueSet    = new UnicodeSet("[\\p{Sentence_Break = SContinue}]");
-            fSTermSet        = new UnicodeSet("[\\p{Sentence_Break = STerm}]");
-            fCloseSet        = new UnicodeSet("[\\p{Sentence_Break = Close}]");
-            fExtendSet       = new UnicodeSet("[\\p{Sentence_Break = Extend}]");
-            fOtherSet        = new UnicodeSet();
+            // These two could be part of the rules.
+            rules.add(new RegexRule("WB1 sot ÷ Any", "^", Resolution.BREAK, ""));
+            // Note that /$/ matches ( BK | CR | LF | NL ) eot, so we use (?!.) instead.
+            // The generated rules use the same (?!.).
+            rules.add(new RegexRule("WB2 Any ÷ eot", "", Resolution.BREAK, "(?!.)"));
 
+            // --- NOLI ME TANGERE ---
+            // Generated by GenerateBreakTest.java in the Unicode tools.
+            partition.add(new NamedSet("CR", new UnicodeSet("[\\p{Sentence_Break=CR}]")));
+            partition.add(new NamedSet("LF", new UnicodeSet("[\\p{Sentence_Break=LF}]")));
+            partition.add(new NamedSet("Extend", new UnicodeSet("[\\p{Sentence_Break=Extend}]")));
+            partition.add(new NamedSet("Format", new UnicodeSet("[\\p{Sentence_Break=Format}]")));
+            partition.add(new NamedSet("Sep", new UnicodeSet("[\\p{Sentence_Break=Sep}]")));
+            partition.add(new NamedSet("Sp", new UnicodeSet("[\\p{Sentence_Break=Sp}]")));
+            partition.add(new NamedSet("Lower", new UnicodeSet("[\\p{Sentence_Break=Lower}]")));
+            partition.add(new NamedSet("Upper", new UnicodeSet("[\\p{Sentence_Break=Upper}]")));
+            partition.add(new NamedSet("OLetter", new UnicodeSet("[\\p{Sentence_Break=OLetter}]")));
+            partition.add(new NamedSet("Numeric", new UnicodeSet("[\\p{Sentence_Break=Numeric}]")));
+            partition.add(new NamedSet("ATerm", new UnicodeSet("[\\p{Sentence_Break=ATerm}]")));
+            partition.add(new NamedSet("STerm", new UnicodeSet("[\\p{Sentence_Break=STerm}]")));
+            partition.add(new NamedSet("Close", new UnicodeSet("[\\p{Sentence_Break=Close}]")));
+            partition.add(new NamedSet("SContinue", new UnicodeSet("[\\p{Sentence_Break=SContinue}]")));
+            partition.add(new NamedSet("XX", new UnicodeSet("[\\p{Sentence_Break=Other}]")));
 
-            fOtherSet.complement();
-            fOtherSet.removeAll(fSepSet);
-            fOtherSet.removeAll(fFormatSet);
-            fOtherSet.removeAll(fSpSet);
-            fOtherSet.removeAll(fLowerSet);
-            fOtherSet.removeAll(fUpperSet);
-            fOtherSet.removeAll(fOLetterSet);
-            fOtherSet.removeAll(fNumericSet);
-            fOtherSet.removeAll(fATermSet);
-            fOtherSet.removeAll(fSContinueSet);
-            fOtherSet.removeAll(fSTermSet);
-            fOtherSet.removeAll(fCloseSet);
-            fOtherSet.removeAll(fExtendSet);
+            rules.add(new RegexRule("$CR × $LF", "\\p{Sentence_Break=CR}", Resolution.NO_BREAK, "\\p{Sentence_Break=LF}"));
+            rules.add(new RegexRule("$ParaSep ÷", "[\\p{Sentence_Break=Sep} \\p{Sentence_Break=CR} \\p{Sentence_Break=LF}]", Resolution.BREAK, ""));
+            rules.add(new RemapRule("(?<X>[^$ParaSep]) ( $Extend | $Format )* → ${X}", "(?<X>[^[\\p{Sentence_Break=Sep} \\p{Sentence_Break=CR} \\p{Sentence_Break=LF}]]) ( \\p{Sentence_Break=Extend} | \\p{Sentence_Break=Format} )*", "${X}"));
+            rules.add(new RegexRule("$ATerm × $Numeric", "\\p{Sentence_Break=ATerm}", Resolution.NO_BREAK, "\\p{Sentence_Break=Numeric}"));
+            rules.add(new RegexRule("($Upper | $Lower) $ATerm × $Upper", "(\\p{Sentence_Break=Upper} | \\p{Sentence_Break=Lower}) \\p{Sentence_Break=ATerm}", Resolution.NO_BREAK, "\\p{Sentence_Break=Upper}"));
+            rules.add(new RegexRule("$ATerm $Close* $Sp* × [^ $OLetter $Upper $Lower $ParaSep $SATerm]* $Lower", "\\p{Sentence_Break=ATerm} \\p{Sentence_Break=Close}* \\p{Sentence_Break=Sp}*", Resolution.NO_BREAK, "[^ \\p{Sentence_Break=OLetter} \\p{Sentence_Break=Upper} \\p{Sentence_Break=Lower} [\\p{Sentence_Break=Sep} \\p{Sentence_Break=CR} \\p{Sentence_Break=LF}] [\\p{Sentence_Break=STerm} \\p{Sentence_Break=ATerm}]]* \\p{Sentence_Break=Lower}"));
+            rules.add(new RegexRule("$SATerm $Close* $Sp* × ($SContinue | $SATerm)", "[\\p{Sentence_Break=STerm} \\p{Sentence_Break=ATerm}] \\p{Sentence_Break=Close}* \\p{Sentence_Break=Sp}*", Resolution.NO_BREAK, "(\\p{Sentence_Break=SContinue} | [\\p{Sentence_Break=STerm} \\p{Sentence_Break=ATerm}])"));
+            rules.add(new RegexRule("$SATerm $Close* × ( $Close | $Sp | $ParaSep )", "[\\p{Sentence_Break=STerm} \\p{Sentence_Break=ATerm}] \\p{Sentence_Break=Close}*", Resolution.NO_BREAK, "( \\p{Sentence_Break=Close} | \\p{Sentence_Break=Sp} | [\\p{Sentence_Break=Sep} \\p{Sentence_Break=CR} \\p{Sentence_Break=LF}] )"));
+            rules.add(new RegexRule("$SATerm $Close* $Sp* × ( $Sp | $ParaSep )", "[\\p{Sentence_Break=STerm} \\p{Sentence_Break=ATerm}] \\p{Sentence_Break=Close}* \\p{Sentence_Break=Sp}*", Resolution.NO_BREAK, "( \\p{Sentence_Break=Sp} | [\\p{Sentence_Break=Sep} \\p{Sentence_Break=CR} \\p{Sentence_Break=LF}] )"));
+            rules.add(new RegexRule("$SATerm $Close* $Sp* $ParaSep? ÷", "[\\p{Sentence_Break=STerm} \\p{Sentence_Break=ATerm}] \\p{Sentence_Break=Close}* \\p{Sentence_Break=Sp}* [\\p{Sentence_Break=Sep} \\p{Sentence_Break=CR} \\p{Sentence_Break=LF}]?", Resolution.BREAK, ""));
+            rules.add(new RegexRule("× $Any", "", Resolution.NO_BREAK, "."));
+            // --- End of generated code. ---
 
-            fSets.add(fSepSet);         fClassNames.add("Sep");
-            fSets.add(fFormatSet);      fClassNames.add("Format");
-
-            fSets.add(fSpSet);          fClassNames.add("Sp");
-            fSets.add(fLowerSet);       fClassNames.add("Lower");
-            fSets.add(fUpperSet);       fClassNames.add("Upper");
-            fSets.add(fOLetterSet);     fClassNames.add("OLetter");
-            fSets.add(fNumericSet);     fClassNames.add("Numeric");
-            fSets.add(fATermSet);       fClassNames.add("ATerm");
-            fSets.add(fSContinueSet);   fClassNames.add("SContinue");
-            fSets.add(fSTermSet);       fClassNames.add("STerm");
-            fSets.add(fCloseSet);       fClassNames.add("Close");
-            fSets.add(fOtherSet);       fClassNames.add("Other");
-            fSets.add(fExtendSet);      fClassNames.add("Extend");
+            for (final NamedSet part : partition) {
+                sets.add(part.set);
+                classNames.add(part.name);
+            }
         }
 
-
-        @Override
-        List<UnicodeSet> charClasses() {
-            return fSets;
-        }
-
-        @Override
-        void   setText(StringBuffer s) {
-            fText = s;
-            prepareAppliedRules(s.length());
-        }
-
-
-        //      moveBack()   Find the "significant" code point preceding the index i.
-        //      Skips over ($Extend | $Format)*
-        //
-        private int moveBack(int i) {
-
-            if (i <= 0) {
-                return -1;
-            }
-
-            int      c;
-            int      j = i;
-            do {
-                j = moveIndex32(fText, j, -1);
-                c = UTF16.charAt(fText, j);
-            }
-            while (j>0 &&(fFormatSet.contains(c) || fExtendSet.contains(c)));
-            return j;
-        }
-
-
-        int moveForward(int i) {
-            if (i>=fText.length()) {
-                return fText.length();
-            }
-            int   c;
-            int   j = i;
-            do {
-                j = moveIndex32(fText, j, 1);
-                c = cAt(j);
-            }
-            while (c>=0 && (fFormatSet.contains(c) || fExtendSet.contains(c)));
-            return j;
-
-        }
-
-        int cAt(int pos) {
-            if (pos<0 || pos>=fText.length()) {
-                return -1;
-            }
-            return UTF16.charAt(fText, pos);
-        }
-
-        @Override
-        int   next(int prevPos) {
-            int    /*p0,*/ p1, p2, p3;      // Indices of the significant code points around the
-            //   break position being tested.  The candidate break
-            //   location is before p2.
-            int     breakPos = -1;
-
-            int c0, c1, c2, c3;         // The code points at p0, p1, p2 & p3.
-            int c;
-
-            // Prev break at end of string.  return DONE.
-            if (prevPos >= fText.length()) {
-                return -1;
-            }
-            /*p0 =*/ p1 = p2 = p3 = prevPos;
-            c3 = UTF16.charAt(fText, prevPos);
-            c0 = c1 = c2 = 0;
-
-            // Loop runs once per "significant" character position in the input text.
-            for (;;) {
-                // Move all of the positions forward in the input string.
-                /*p0 = p1;*/  c0 = c1;
-                p1 = p2;  c1 = c2;
-                p2 = p3;  c2 = c3;
-
-                // Advance p3 by  X(Extend | Format)*   Rule 4
-                p3 = moveForward(p3);
-                c3 = cAt(p3);
-
-                if (c1==0x0d && c2==0x0a && p2==(p1+1)) {
-                    setAppliedRule(p2, "SB3   CR x LF");
-                    continue;
-                }
-
-                if (fSepSet.contains(c1)) {
-                    p2 = p1+1;   // Separators don't combine with Extend or Format
-                    setAppliedRule(p2, "SB4   Sep  <break>");
-                    break;
-                }
-
-                if (p2 >= fText.length()) {
-                    // Reached end of string.  Always a break position.
-                    setAppliedRule(p2, "SB4   Sep  <break>");
-                    break;
-                }
-
-                if (p2 == prevPos) {
-                    // Still warming up the loop.  (won't work with zero length strings, but we don't care)
-                    setAppliedRule(p2, "SB4   Sep  <break>");
-                    continue;
-                }
-
-                if (fATermSet.contains(c1) &&  fNumericSet.contains(c2))  {
-                    setAppliedRule(p2, "SB6   ATerm x Numeric");
-                    continue;
-                }
-
-                if ((fUpperSet.contains(c0) || fLowerSet.contains(c0)) &&
-                        fATermSet.contains(c1) && fUpperSet.contains(c2)) {
-                    setAppliedRule(p2, "SB7   (Upper | Lower) ATerm  x  Uppper");
-                    continue;
-                }
-
-                //           Note:  Sterm | ATerm are added to the negated part of the expression by a
-                //                  note to the Unicode 5.0 documents.
-                int p8 = p1;
-                while (p8>0 && fSpSet.contains(cAt(p8))) {
-                    p8 = moveBack(p8);
-                }
-                while (p8>0 && fCloseSet.contains(cAt(p8))) {
-                    p8 = moveBack(p8);
-                }
-                if (fATermSet.contains(cAt(p8))) {
-                    p8=p2;
-                    for (;;) {
-                        c = cAt(p8);
-                        if (c==-1 || fOLetterSet.contains(c) || fUpperSet.contains(c) ||
-                                fLowerSet.contains(c) || fSepSet.contains(c) ||
-                                fATermSet.contains(c) || fSTermSet.contains(c))
-                        {
-                            setAppliedRule(p2, "SB8   ATerm Close* Sp*  x  (not (OLettter | Upper | Lower | Sep))* Lower");
-                            break;
-                        }
-                        p8 = moveForward(p8);
-                    }
-                    if (p8<fText.length() && fLowerSet.contains(cAt(p8))) {
-                        setAppliedRule(p2, "SB8   ATerm Close* Sp*  x  (not (OLettter | Upper | Lower | Sep))* Lower");
-                        continue;
-                    }
-                }
-
-                if (fSContinueSet.contains(c2) || fSTermSet.contains(c2) || fATermSet.contains(c2)) {
-                    p8 = p1;
-                    while (setContains(fSpSet, cAt(p8))) {
-                        p8 = moveBack(p8);
-                    }
-                    while (setContains(fCloseSet, cAt(p8))) {
-                        p8 = moveBack(p8);
-                    }
-                    c = cAt(p8);
-                    if (setContains(fSTermSet, c) || setContains(fATermSet, c)) {
-                        setAppliedRule(p2, "SB8a  (STerm | ATerm) Close* Sp* x (SContinue | Sterm | ATerm)");
-                        continue;
-                    }
-                }
-
-
-                int p9 = p1;
-                while (p9>0 && fCloseSet.contains(cAt(p9))) {
-                    p9 = moveBack(p9);
-                }
-                c = cAt(p9);
-                if ((fSTermSet.contains(c) || fATermSet.contains(c))) {
-                    if (fCloseSet.contains(c2) || fSpSet.contains(c2) || fSepSet.contains(c2)) {
-                        setAppliedRule(p2, "SB9   (STerm | ATerm) Close*  x  (Close | Sp | Sep | CR | LF)");
-                        continue;
-                    }
-                }
-
-                int p10 = p1;
-                while (p10>0 && fSpSet.contains(cAt(p10))) {
-                    p10 = moveBack(p10);
-                }
-                while (p10>0 && fCloseSet.contains(cAt(p10))) {
-                    p10 = moveBack(p10);
-                }
-                if (fSTermSet.contains(cAt(p10)) || fATermSet.contains(cAt(p10))) {
-                    if (fSpSet.contains(c2) || fSepSet.contains(c2)) {
-                        setAppliedRule(p2, "SB10  (Sterm | ATerm) Close* Sp*  x  (Sp | Sep | CR | LF)");
-                        continue;
-                    }
-                }
-
-                int p11 = p1;
-                if (p11>0 && fSepSet.contains(cAt(p11))) {
-                    p11 = moveBack(p11);
-                }
-                while (p11>0 && fSpSet.contains(cAt(p11))) {
-                    p11 = moveBack(p11);
-                }
-                while (p11>0 && fCloseSet.contains(cAt(p11))) {
-                    p11 = moveBack(p11);
-                }
-                if (fSTermSet.contains(cAt(p11)) || fATermSet.contains(cAt(p11))) {
-                    setAppliedRule(p2, "SB11  (STerm | ATerm) Close* Sp*   <break>");
-                    break;
-                }
-
-                setAppliedRule(p2, "SB12  Any x Any");
-                continue;
-            }
-            breakPos = p2;
-            return breakPos;
-        }
     }
 
 
@@ -1433,6 +798,9 @@ public class RBBITestMonkey extends CoreTestFmwk {
                 int        c         = classSet.charAt(charIdx);
                 if (c < 0) {   // TODO:  deal with sets containing strings.
                     errln("c < 0");
+                }
+                if (mk.getDictionarySet().contains(c)) {
+                    continue;
                 }
                 // Do not emit surrogates on Java 8, as the behaviour of regular expressions that
                 // match surrogates differs there.
