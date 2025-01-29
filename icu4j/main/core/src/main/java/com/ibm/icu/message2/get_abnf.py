@@ -53,7 +53,9 @@ def _get_abnf_from_java(abnf_rules: dict[str, str], file_name: str):
           context = (context[0], context[1] + '\n        / ' + match_continuation.group(1))
           # print(f'CONTINUTATION:     / {context[1]}')
         else:
+          # print(f'DEFAULT:     {context[0]} ::: {context[1]}')
           context = _save_rule(abnf_rules, context)
+    context = _save_rule(abnf_rules, context)
 
 def get_abnf_from_abnf(abnf_rules: dict[str, str], file_name: str):
   with open(file_name, 'r', encoding='utf-8') as file:
@@ -69,6 +71,7 @@ def get_abnf_from_abnf(abnf_rules: dict[str, str], file_name: str):
         match = _ENTRY_DEF.match(line)
         if match:
           rule_name = match.group(1)
+          # print(f'SEARCHING: {rule_name}')
           if rule_name in abnf_rules:
             print(f'{rule_name} = {abnf_rules[rule_name]}')
             del abnf_rules[rule_name]
@@ -87,9 +90,10 @@ def main():
       if file.endswith('.java'):
         _get_abnf_from_java(abnf_rules, os.path.join(root, file))
   get_abnf_from_abnf(abnf_rules, 'message.abnf')
-  print('; ================================================')
-  for name, defn in abnf_rules.items():
-    print(f'{name} = {defn}')
+  if len(abnf_rules):
+    print('; ================================================')
+    for name, defn in abnf_rules.items():
+      print(f'{name} = {defn}')
 
 if __name__ == '__main__':
   main()

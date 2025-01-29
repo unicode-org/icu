@@ -1,18 +1,18 @@
 message = simple-message / complex-message
 
-simple-message = [simple-start pattern]
-simple-start = simple-start-char / text-escape / placeholder
-pattern = *(text-char / text-escape / placeholder)
+simple-message = o [simple-start pattern]
+simple-start = simple-start-char / escaped-char / placeholder
+pattern = *(text-char / escaped-char / placeholder)
 placeholder = expression / markup
 
 complex-message = o *(declaration o) complex-body o
-# TODO: declaration = input-declaration / local-declaration
-# TODO: complex-body = quoted-pattern / matcher
+declaration = input-declaration / local-declaration
+complex-body = quoted-pattern / matcher
 
-input-declaration = input [s] variable-expression
-local-declaration = local s variable [s] "=" [s] expression
+input-declaration = input o variable-expression
+local-declaration = local s variable o "=" o expression
 
-# TODO: quoted-pattern = "{{" pattern "}}"
+quoted-pattern = "{{" pattern "}}"
 
 matcher = match-statement s variant *(o variant)
 match-statement = match 1*(s selector)
@@ -35,19 +35,19 @@ markup = "{" o "#" identifier *(s option) *(s attribute) o ["/"] "}"  ; open and
 function = ":" identifier *(s option)
 option = identifier o "=" o (literal / variable)
 
-attribute = "@" identifier [o "=" o (literal / variable)]
+attribute = "@" identifier [o "=" o literal]
 
 variable = "$" name
 
-literal = quoted / unquoted
-# TODO: quoted-literal = "|" *(quoted-char / escaped-char) "|"
-# TODO: unquoted-literal = name / number-literal
+literal = quoted-literal / unquoted-literal
+quoted-literal = "|" *(quoted-char / escaped-char) "|"
+unquoted-literal = name / number-literal
 ; number-literal matches JSON number (https://www.rfc-editor.org/rfc/rfc8259#section-6)
 number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
 
 ; Keywords; Note that these are case-sensitive
-# TODO: input = %s".input"
-# TODO: local = %s".local"
+input = %s".input"
+local = %s".local"
 match = %s".match"
 
 ; Names and identifiers
@@ -55,7 +55,7 @@ match = %s".match"
 ; name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName but excludes U+FFFD and U+061C
 identifier = [namespace ":"] name
 namespace = name
-name = name-start *name-char
+name = [bidi] name-start *name-char [bidi]
 name-start = ALPHA / "_"
         / %xC0-D6 / %xD8-F6 / %xF8-2FF
         / %x370-37D / %x37F-61B / %x61D-1FFF / %x200C-200D
@@ -66,8 +66,8 @@ name-char = name-start / DIGIT / "-" / "."
 
 ; Restrictions on characters in various contexts
 # TODO: simple-start-char = content-char / "@" / "|"
-text-char = content-char / s / "." / "@" / "|"
-quoted-char = content-char / s / "." / "@" / "{" / "}"
+text-char = content-char / ws / "." / "@" / "|"
+quoted-char = content-char / ws / "." / "@" / "{" / "}"
 content-char = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
         / %x0B-0C        ; omit CR (%x0D)
         / %x0E-1F        ; omit SP (%x20)
@@ -79,7 +79,7 @@ content-char = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
         / %x3001-10FFFF  ; allowing surrogates is intentional
 
 ; Character escapes
-# TODO: escaped-char = backslash ( backslash / "{" / "|" / "}" )
+escaped-char = backslash ( backslash / "{" / "|" / "}" )
 backslash = %x5C ; U+005C REVERSE SOLIDUS "\"
 
 ; Required whitespace
@@ -94,5 +94,3 @@ bidi = %x061C / %x200E / %x200F / %x2066-2069
 
 ; Whitespace characters
 ws = SP / HTAB / CR / LF / %x3000
-; ================================================
-quoted = "|" *(quoted-char / quoted-escape) "|"

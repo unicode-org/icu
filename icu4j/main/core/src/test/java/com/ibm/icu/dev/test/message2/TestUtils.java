@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ibm.icu.message2.MFFunctionRegistry;
 import com.ibm.icu.message2.MessageFormatter;
+import com.ibm.icu.message2.MessageFormatter.ErrorHandlingBehavior;
 
 /** Utility class, has no test methods. */
 @Ignore("Utility class, has no test methods.")
@@ -152,6 +153,9 @@ public class TestUtils {
         // all constructors work properly.
         MessageFormatter.Builder mfBuilder =
                 MessageFormatter.builder().setPattern(pattern.toString());
+        if (expectsErrors(defaults, unit)) {
+            mfBuilder.setErrorHandlingBehavior(ErrorHandlingBehavior.STRICT);
+        }
         if (unit.locale != null && !unit.locale.isEmpty()) {
             mfBuilder.setLocale(Locale.forLanguageTag(unit.locale));
         } else if (defaults.getLocale() != null) {

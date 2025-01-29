@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-import com.ibm.icu.message2.MFDataModel.Function;
 import com.ibm.icu.message2.MFDataModel.Attribute;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.message2.MFDataModel.Declaration;

@@ -28,7 +28,7 @@ class StringUtils {
                 || (cp >= 0x3001 && cp <= 0x10FFFF); //allowing surrogates is intentional
     }
 
-    // abnf: text-char = content-char / s / "." / "@" / "|"
+    // abnf: text-char = content-char / ws / "." / "@" / "|"
     static boolean isTextChar(int cp) {
         return isContentChar(cp) || isWhitespace(cp) || cp == '.' || cp == '@' || cp == '|';
     }
@@ -94,7 +94,7 @@ class StringUtils {
                 || (cp >= 0x203F && cp <= 0x2040);
     }
 
-    // abnf: quoted-char = content-char / s / "." / "@" / "{" / "}"
+    // abnf: quoted-char = content-char / ws / "." / "@" / "{" / "}"
     static boolean isQuotedChar(int cp) {
         return isContentChar(cp)
                 || isWhitespace(cp)
