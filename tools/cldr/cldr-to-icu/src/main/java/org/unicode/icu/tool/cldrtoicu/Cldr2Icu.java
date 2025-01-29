@@ -53,7 +53,9 @@ public class Cldr2Icu {
 
     private void clean() {
         outputDirectories();
-        generateCode("clean");
+        if (!options.dontGenCode) {
+            generateCode("clean");
+        }
     }
 
     private void generate() {
