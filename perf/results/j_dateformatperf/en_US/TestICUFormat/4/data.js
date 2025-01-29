@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738085175245,
+  "lastUpdate": 1738111990194,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30747,6 +30747,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 236.88203738385621,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "7153a3db526736d654293135ea75e3745c0e805d",
+          "message": "ICU-23006 Fix Chinese Calendar getActualMaximize\n\nSee #3348",
+          "timestamp": "2025-01-28T16:34:26-08:00",
+          "tree_id": "354124b8ec638ef7fa34163d5ea7bf2f4c9d8669",
+          "url": "https://github.com/unicode-org/icu/commit/7153a3db526736d654293135ea75e3745c0e805d"
+        },
+        "date": 1738111772555,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 244.09305631325645,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
