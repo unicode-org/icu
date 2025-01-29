@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738142799962,
+  "lastUpdate": 1738157545201,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31017,6 +31017,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.5535765237600927,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "8a11097b2ea0b54445f0b7201109ba172d845e44",
+          "message": "ICU-22984 Generate the C++ UAX29 monkeys",
+          "timestamp": "2025-01-29T10:02:44+01:00",
+          "tree_id": "e75393221265e3770d977936458113b662c7599d",
+          "url": "https://github.com/unicode-org/icu/commit/8a11097b2ea0b54445f0b7201109ba172d845e44"
+        },
+        "date": 1738157326735,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5549105416841441,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
