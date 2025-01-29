@@ -1,0 +1,96 @@
+message = simple-message / complex-message
+
+simple-message = o [simple-start pattern]
+simple-start = simple-start-char / escaped-char / placeholder
+pattern = *(text-char / escaped-char / placeholder)
+placeholder = expression / markup
+
+complex-message = o *(declaration o) complex-body o
+declaration = input-declaration / local-declaration
+complex-body = quoted-pattern / matcher
+
+input-declaration = input o variable-expression
+local-declaration = local s variable o "=" o expression
+
+quoted-pattern = "{{" pattern "}}"
+
+matcher = match-statement s variant *(o variant)
+match-statement = match 1*(s selector)
+selector = variable
+variant = key *(s key) o quoted-pattern
+key = literal / "*"
+
+; Expressions
+expression = literal-expression
+        / variable-expression
+        / function-expression
+literal-expression = "{" o literal [s function] *(s attribute) o "}"
+variable-expression = "{" o variable [s function] *(s attribute) o "}"
+function-expression = "{" o function *(s attribute) o "}"
+
+markup = "{" o "#" identifier *(s option) *(s attribute) o ["/"] "}"  ; open and standalone
+        / "{" o "/" identifier *(s option) *(s attribute) o "}"  ; close
+
+; Expression and literal parts
+function = ":" identifier *(s option)
+option = identifier o "=" o (literal / variable)
+
+attribute = "@" identifier [o "=" o literal]
+
+variable = "$" name
+
+literal = quoted-literal / unquoted-literal
+quoted-literal = "|" *(quoted-char / escaped-char) "|"
+unquoted-literal = name / number-literal
+; number-literal matches JSON number (https://www.rfc-editor.org/rfc/rfc8259#section-6)
+number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
+
+; Keywords; Note that these are case-sensitive
+input = %s".input"
+local = %s".local"
+match = %s".match"
+
+; Names and identifiers
+; identifier matches https://www.w3.org/TR/REC-xml-names/#NT-QName
+; name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName but excludes U+FFFD and U+061C
+identifier = [namespace ":"] name
+namespace = name
+name = [bidi] name-start *name-char [bidi]
+name-start = ALPHA / "_"
+        / %xC0-D6 / %xD8-F6 / %xF8-2FF
+        / %x370-37D / %x37F-61B / %x61D-1FFF / %x200C-200D
+        / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
+        / %xF900-FDCF / %xFDF0-FFFC / %x10000-EFFFF
+name-char = name-start / DIGIT / "-" / "."
+        / %xB7 / %x300-36F / %x203F-2040
+
+; Restrictions on characters in various contexts
+simple-start-char = content-char / "@" / "|"
+text-char = content-char / ws / "." / "@" / "|"
+quoted-char = content-char / ws / "." / "@" / "{" / "}"
+content-char = %x01-08        ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
+        / %x0B-0C        ; omit CR (%x0D)
+        / %x0E-1F        ; omit SP (%x20)
+        / %x21-2D        ; omit . (%x2E)
+        / %x2F-3F        ; omit @ (%x40)
+        / %x41-5B        ; omit \ (%x5C)
+        / %x5D-7A        ; omit { | } (%x7B-7D)
+        / %x7E-2FFF      ; omit IDEOGRAPHIC SPACE (%x3000)
+        / %x3001-10FFFF  ; allowing surrogates is intentional
+
+; Character escapes
+escaped-char = backslash ( backslash / "{" / "|" / "}" )
+backslash = %x5C ; U+005C REVERSE SOLIDUS "\"
+
+; Required whitespace
+s = *bidi ws o
+
+; Optional whitespace
+o = *(ws / bidi)
+
+; Bidirectional marks and isolates
+; ALM / LRM / RLM / LRI, RLI, FSI & PDI
+bidi = %x061C / %x200E / %x200F / %x2066-2069
+
+; Whitespace characters
+ws = SP / HTAB / CR / LF / %x3000

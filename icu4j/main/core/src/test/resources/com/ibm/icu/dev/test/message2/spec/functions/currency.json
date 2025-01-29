@@ -1,0 +1,61 @@
+{
+  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "scenario": "Currency function",
+  "description": "The built-in formatter and selector for currencies.",
+  "defaultTestProperties": {
+    "bidiIsolation": "none",
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": "{:currency}",
+      "expErrors": [{ "type": "bad-operand" }]
+    },
+    {
+      "src": "{foo :currency}",
+      "expErrors": [{ "type": "bad-operand" }]
+    },
+    {
+      "src": "{42 :currency}",
+      "expErrors": [{ "type": "bad-operand" }]
+    },
+    {
+      "src": ".local $n = {42 :number} {{{$n :currency}}}",
+      "expErrors": [{ "type": "bad-operand" }]
+    },
+    {
+      "src": "{42 :currency currency=EUR}",
+      "expErrors": false
+    },
+    {
+      "src": ".local $n = {42 :number} {{{$n :currency currency=EUR}}}",
+      "expErrors": false
+    },
+    {
+      "src": ".local $n = {42 :integer} {{{$n :currency currency=EUR}}}",
+      "expErrors": false
+    },
+    {
+      "src": ".local $n = {42 :currency currency=EUR} {{{$n :currency}}}",
+      "expErrors": false
+    },
+    {
+      "src": "{42 :currency currency=EUR fractionDigits=auto}",
+      "expErrors": false
+    },
+    {
+      "src": "{42 :currency currency=EUR fractionDigits=2}",
+      "expErrors": false
+    },
+    {
+      "src": "{$x :currency currency=EUR}",
+      "params": [{ "name": "x", "value": 41 }],
+      "expErrors": false
+    },
+    {
+      "src": ".local $n = {42 :currency currency=EUR} .match $n * {{other}}",
+      "exp": "other",
+      "expErrors": false
+    }
+  ]
+}

@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.ibm.icu.message2.MFDataModel.Annotation;
+import com.ibm.icu.message2.MFDataModel.Function;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.message2.MFDataModel.Declaration;
 import com.ibm.icu.message2.MFDataModel.Expression;
-import com.ibm.icu.message2.MFDataModel.FunctionAnnotation;
+import com.ibm.icu.message2.MFDataModel.Function;
 import com.ibm.icu.message2.MFDataModel.FunctionExpression;
 import com.ibm.icu.message2.MFDataModel.InputDeclaration;
 import com.ibm.icu.message2.MFDataModel.Literal;
@@ -163,14 +163,14 @@ class MFDataModelFormatter {
             } else if (fph.getInput() instanceof MFDataModel.VariableExpression) {
                 MFDataModel.VariableExpression ve = (MFDataModel.VariableExpression) fph.getInput();
                 argument = resolveLiteralOrVariable(ve.arg, variables, arguments);
-                if (ve.annotation instanceof FunctionAnnotation) {
-                    functionName = ((FunctionAnnotation) ve.annotation).name;
+                if (ve.function instanceof Function) {
+                    functionName = ((Function) ve.function).name;
                 }
             } else if (fph.getInput() instanceof LiteralExpression) {
                 LiteralExpression le = (LiteralExpression) fph.getInput();
                 argument = le.arg;
-                if (le.annotation instanceof FunctionAnnotation) {
-                    functionName = ((FunctionAnnotation) le.annotation).name;
+                if (le.function instanceof Function) {
+                    functionName = ((Function) le.function).name;
                 }
             }
             SelectorFactory funcFactory = standardFunctions.getSelector(functionName);
@@ -477,7 +477,7 @@ class MFDataModelFormatter {
     private FormattedPlaceholder formatExpression(
             Expression expression, Map<String, Object> variables, Map<String, Object> arguments) {
 
-        Annotation annotation = null; // function name
+        Function function = null; // function name
         String functionName = null;
         Object toFormat = null;
         Map<String, Object> options = new HashMap<>();
@@ -486,7 +486,7 @@ class MFDataModelFormatter {
         if (expression instanceof MFDataModel.VariableExpression) {
             MFDataModel.VariableExpression varPart = (MFDataModel.VariableExpression) expression;
             fallbackString = "{$" + varPart.arg.name + "}";
-            annotation = varPart.annotation; // function name & options
+            function = varPart.function; // function name & options
             Object resolved = resolveLiteralOrVariable(varPart.arg, variables, arguments);
             if (resolved instanceof FormattedPlaceholder) {
                 Object input = ((FormattedPlaceholder) resolved).getInput();
@@ -504,11 +504,11 @@ class MFDataModelFormatter {
         } else if (expression
                 instanceof MFDataModel.FunctionExpression) { // Function without arguments
             MFDataModel.FunctionExpression fe = (FunctionExpression) expression;
-            fallbackString = "{:" + fe.annotation.name + "}";
-            annotation = fe.annotation;
+            fallbackString = "{:" + fe.function.name + "}";
+            function = fe.function;
         } else if (expression instanceof MFDataModel.LiteralExpression) {
             MFDataModel.LiteralExpression le = (LiteralExpression) expression;
-            annotation = le.annotation;
+            function = le.function;
             fallbackString = "{|" + le.arg.value + "|}";
             toFormat = resolveLiteralOrVariable(le.arg, variables, arguments);
         } else if (expression instanceof MFDataModel.Markup) {
@@ -523,8 +523,8 @@ class MFDataModelFormatter {
             }
         }
 
-        if (annotation instanceof FunctionAnnotation) {
-            FunctionAnnotation fa = (FunctionAnnotation) annotation;
+        if (function instanceof Function) {
+            Function fa = (Function) function;
             if (functionName != null && !functionName.equals(fa.name)) {
                 fatalFormattingError(
                         "invalid function overrides, '" + functionName + "' <> '" + fa.name + "'");

@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringJoiner;
 
-import com.ibm.icu.message2.MFDataModel.Annotation;
+import com.ibm.icu.message2.MFDataModel.Function;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.message2.MFDataModel.Declaration;
 import com.ibm.icu.message2.MFDataModel.Expression;
-import com.ibm.icu.message2.MFDataModel.FunctionAnnotation;
+import com.ibm.icu.message2.MFDataModel.Function;
 import com.ibm.icu.message2.MFDataModel.FunctionExpression;
 import com.ibm.icu.message2.MFDataModel.InputDeclaration;
 import com.ibm.icu.message2.MFDataModel.Literal;
@@ -141,14 +141,14 @@ class MFDataModelValidator {
             throws MFParseException {
         String argName = null;
         boolean wasLiteral = false;
-        Annotation annotation = null;
+        Function function = null;
         if (expression instanceof Literal) {
             // ...{foo}... or ...{|foo|}... or ...{123}...
             // does not declare anything
         } else if (expression instanceof LiteralExpression) {
             LiteralExpression le = (LiteralExpression) expression;
             argName = le.arg.value;
-            annotation = le.annotation;
+            function = le.function;
             wasLiteral = true;
         } else if (expression instanceof VariableExpression) {
             VariableExpression ve = (VariableExpression) expression;
@@ -156,15 +156,15 @@ class MFDataModelValidator {
             // .input {$foo :number} => declares `foo`, if already declared is an error
             // .local $a={$foo} => declares `a`, but only used `foo`, does not declare it
             argName = ve.arg.name;
-            annotation = ve.annotation;
+            function = ve.function;
         } else if (expression instanceof FunctionExpression) {
             // ...{$foo :bar opt1=|str| opt2=$x opt3=$y}...
             FunctionExpression fe = (FunctionExpression) expression;
-            annotation = fe.annotation;
+            function = fe.function;
         }
 
-        if (annotation instanceof FunctionAnnotation) {
-            FunctionAnnotation fa = (FunctionAnnotation) annotation;
+        if (function instanceof Function) {
+            Function fa = (Function) function;
             if (fa.options != null) {
                 for (Option opt : fa.options.values()) {
                     LiteralOrVariableRef val = opt.value;

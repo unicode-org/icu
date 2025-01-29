@@ -1,0 +1,77 @@
+{
+  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "scenario": "Math function",
+  "description": "The built-in formatter and selector for addition and subtraction.",
+  "defaultTestProperties": {
+    "bidiIsolation": "none",
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": "{:math add=13}",
+      "expErrors": [{ "type": "bad-operand" }]
+    },
+    {
+      "src": "{foo :math add=13}",
+      "expErrors": [{ "type": "bad-operand" }]
+    },
+    {
+      "src": "{42 :math}",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "src": "{42 :math add=foo}",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "src": "{42 :math subtract=foo}",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "src": "{42 :math foo=13}",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "src": "{42 :math add=13 subtract=13}",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "src": "{41 :math add=1}",
+      "exp": "42"
+    },
+    {
+      "src": "{52 :math subtract=10}",
+      "exp": "42"
+    },
+    {
+      "src": "{41 :math add=1 foo=13}",
+      "exp": "42"
+    },
+    {
+      "src": ".local $x = {41 :integer signDisplay=always} {{{$x :math add=1}}}",
+      "exp": "+42"
+    },
+    {
+      "src": ".local $x = {52 :number signDisplay=always} {{{$x :math subtract=10}}}",
+      "exp": "+42"
+    },
+    {
+      "src": "{$x :math add=1}",
+      "params": [{ "name": "x", "value": 41 }],
+      "exp": "42"
+    },
+    {
+      "src": "{$x :math subtract=10}",
+      "params": [{ "name": "x", "value": 52 }],
+      "exp": "42"
+    },
+    {
+      "src": ".local $x = {1 :math add=1} .match $x 1 {{=1}} 2 {{=2}} * {{other}}",
+      "exp": "=2"
+    },
+    {
+      "src": ".local $x = {10 :integer} .local $y = {$x :math subtract=6} .match $y 10 {{=10}} 4 {{=4}} * {{other}}",
+      "exp": "=4"
+    }
+  ]
+}

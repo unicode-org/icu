@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-import com.ibm.icu.message2.MFDataModel.Annotation;
+import com.ibm.icu.message2.MFDataModel.Function;
 import com.ibm.icu.message2.MFDataModel.Attribute;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.message2.MFDataModel.Declaration;
 import com.ibm.icu.message2.MFDataModel.Expression;
-import com.ibm.icu.message2.MFDataModel.FunctionAnnotation;
+import com.ibm.icu.message2.MFDataModel.Function;
 import com.ibm.icu.message2.MFDataModel.FunctionExpression;
 import com.ibm.icu.message2.MFDataModel.InputDeclaration;
 import com.ibm.icu.message2.MFDataModel.Literal;
@@ -160,7 +160,7 @@ public class MFSerializer {
 
     private void functionExpressionToString(FunctionExpression fe) {
         result.append('{');
-        annotationToString(fe.annotation);
+        functionToString(fe.function);
         attributesToString(fe.attributes);
         result.append('}');
     }
@@ -180,17 +180,17 @@ public class MFSerializer {
         }
     }
 
-    private void annotationToString(Annotation annotation) {
-        if (annotation == null) {
+    private void functionToString(Function function) {
+        if (function == null) {
             return;
         }
-        if (annotation instanceof FunctionAnnotation) {
+        if (function instanceof Function) {
             addSpaceIfNeeded();
             result.append(":");
-            result.append(((FunctionAnnotation) annotation).name);
-            optionsToString(((FunctionAnnotation) annotation).options);
+            result.append(((Function) function).name);
+            optionsToString(((Function) function).options);
         } else {
-            errorType("Annotation", annotation);
+            errorType("Function", function);
         }
     }
 
@@ -201,7 +201,7 @@ public class MFSerializer {
         result.append('{');
         literalOrVariableRefToString(ve.arg);
         needSpace = true;
-        annotationToString(ve.annotation);
+        functionToString(ve.function);
         attributesToString(ve.attributes);
         result.append('}');
         needSpace = false;
@@ -259,7 +259,7 @@ public class MFSerializer {
         result.append('{');
         literalOrVariableRefToString(le.arg);
         needSpace = true;
-        annotationToString(le.annotation);
+        functionToString(le.function);
         attributesToString(le.attributes);
         result.append('}');
     }
