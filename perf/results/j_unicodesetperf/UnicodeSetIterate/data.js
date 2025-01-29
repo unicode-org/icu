@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738111605561,
+  "lastUpdate": 1738142108732,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31047,6 +31047,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetIterate",
             "value": 0.919997541138279,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "8dfcbb5d092d9806e765f8ff58af610e1ad8b6ed",
+          "message": "ICU-22984 Generate the Java UAX29 monkeys",
+          "timestamp": "2025-01-29T10:03:26+01:00",
+          "tree_id": "1949b8891f7abfea94688714a096aa51d8a690ad",
+          "url": "https://github.com/unicode-org/icu/commit/8dfcbb5d092d9806e765f8ff58af610e1ad8b6ed"
+        },
+        "date": 1738141890068,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetIterate",
+            "value": 0.9204337810627666,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
