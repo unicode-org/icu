@@ -456,7 +456,12 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 2.8
      */
     protected int handleGetMonthLength(int extendedYear, int month) {
-        int thisStart = handleComputeMonthStart(extendedYear, month, true) -
+        int isLeapMonth = internalGet(IS_LEAP_MONTH);
+        return handleGetMonthLengthWithLeap(extendedYear, month, isLeapMonth);
+    }
+
+    private int handleGetMonthLengthWithLeap(int extendedYear, int month, int isLeap) {
+        int thisStart = handleComputeMonthStartWithLeap(extendedYear, month, isLeap) -
             EPOCH_JULIAN_DAY + 1; // Julian day -> local days
         int nextStart = newMoonNear(thisStart + SYNODIC_GAP, true);
         return nextStart - thisStart;
@@ -971,6 +976,14 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 2.8
      */
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
+        int isLeapMonth = 0;
+        if (useMonth) {
+            isLeapMonth = internalGet(IS_LEAP_MONTH);
+        }
+        return handleComputeMonthStartWithLeap(eyear, month, isLeapMonth);
+    }
+
+    private int handleComputeMonthStartWithLeap(int eyear, int month, int isLeapMonth) {
 
         // If the month is out of range, adjust it into range, and
         // modify the extended year value accordingly.
@@ -990,9 +1003,6 @@ public class ChineseCalendar extends Calendar {
         int saveMonth = internalGet(MONTH);
         int saveOrdinalMonth = internalGet(ORDINAL_MONTH);
         int saveIsLeapMonth = internalGet(IS_LEAP_MONTH);
-
-        // Ignore IS_LEAP_MONTH field if useMonth is false
-        int isLeapMonth = useMonth ? saveIsLeapMonth : 0;
 
         computeGregorianFields(julianDay);
         
@@ -1159,6 +1169,21 @@ public class ChineseCalendar extends Calendar {
             return internalGet(MONTH, defaultValue);
         }
         return internalGetMonth();
+    }
+
+    public int getActualMaximum(int field) {
+        if (field == DAY_OF_MONTH) {
+            Calendar cal = (Calendar) clone();
+            cal.setLenient(true);
+            cal.prepareGetActual(field, false);
+            int eyear = cal.get(EXTENDED_YEAR);
+            int month = cal.get(MONTH);
+            int isLeap = cal.get(IS_LEAP_MONTH);
+
+            return handleGetMonthLengthWithLeap(eyear, month, isLeap);
+        }
+        return super.getActualMaximum(field);
+
     }
 
     /*

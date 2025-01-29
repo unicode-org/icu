@@ -203,16 +203,21 @@ void Grego::timeToFields(UDate time, int32_t& year, int8_t& month,
 void Grego::timeToFields(UDate time, int32_t& year, int8_t& month,
                         int8_t& dom, int8_t& dow, int16_t& doy, int32_t& mid, UErrorCode& status) {
     if (U_FAILURE(status)) return;
-    double millisInDay;
-    double day = ClockMath::floorDivide(static_cast<double>(time), static_cast<double>(U_MILLIS_PER_DAY), &millisInDay);
-    mid = static_cast<int32_t>(millisInDay);
+    double day = ClockMath::floorDivide(time, U_MILLIS_PER_DAY, &mid);
+    if (day > INT32_MAX || day < INT32_MIN) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
     dayToFields(day, year, month, dom, dow, doy, status);
 }
 
 int32_t Grego::timeToYear(UDate time, UErrorCode& status) {
     if (U_FAILURE(status)) return 0;
-    double millisInDay;
-    int32_t day = ClockMath::floorDivide(static_cast<double>(time), static_cast<double>(U_MILLIS_PER_DAY), &millisInDay);
+    double day = ClockMath::floorDivide(time, double(U_MILLIS_PER_DAY));
+    if (day > INT32_MAX || day < INT32_MIN) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
     return Grego::dayToYear(day, status);
 }
 

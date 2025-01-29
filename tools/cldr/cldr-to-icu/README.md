@@ -160,7 +160,7 @@ You can run it with `--help` for all the options supported.
 
 * Outputting a subset of the supplemental data into a specified directory:
   ```sh
-  java -jar target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar --outDir=/tmp/cldr --outputTypes=plurals,dayPeriods --dontGenCode=true
+  java -jar target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar --outDir=/tmp/cldr --outputTypes=plurals,dayPeriods --dontGenCode
   ```
   Note: Output types can be listed with mixedCase, lower_underscore or UPPER_UNDERSCORE.
   Pass `-DoutputTypes=help` to see the full list.
@@ -168,9 +168,9 @@ You can run it with `--help` for all the options supported.
 
 * Outputting only a subset of locale IDs (and all the supplemental data):
   ```sh
-  java -jar target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar --outDir=/tmp/cldr --outputTypes=plurals,dayPeriods --dontGenCode=true
+  java -jar target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar --outDir=/tmp/cldr --outputTypes=plurals,dayPeriods --dontGenCode
 
-  java -jar target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar --outDir=/tmp/cldr --localeIdFilter='(zh|yue).*' --dontGenCode=true
+  java -jar target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar --outDir=/tmp/cldr --localeIdFilter='(zh|yue).*' --dontGenCode
   ```
 
 * Overriding the default CLDR version string (which normally matches the CLDR library code):

@@ -361,6 +361,24 @@ void UnitsTest::testConverter() {
         {"dot-per-inch", "pixel-per-inch", 1.0, 1.0},
         {"dot", "pixel", 1.0, 1.0},
 
+        // Test with constants
+        {"meter-per-10", "foot", 1.0, 0.328084},
+        {"meter", "foot-per-10", 1.0, 32.8084},
+        {"meter", "foot-per-100", 1.0, 328.084},
+        {"portion", "portion-per-1000", 1.0, 1000},
+        {"portion", "portion-per-10000", 1.0, 10000},
+        {"portion", "portion-per-100000", 1.0, 100000},
+        {"portion", "portion-per-1000000", 1.0, 1000000},
+        {"portion-per-10", "portion", 1.0, 0.1},
+        {"portion-per-100", "portion", 1.0, 0.01},
+        {"portion-per-1000", "portion", 1.0, 0.001},
+        {"portion-per-10000", "portion", 1.0, 0.0001},
+        {"portion-per-100000", "portion", 1.0, 0.00001},
+        {"portion-per-1000000", "portion", 1.0, 0.000001},
+        {"mile-per-hour", "meter-per-second", 1.0, 0.44704},
+        {"mile-per-100-hour", "meter-per-100-second", 1.0, 0.44704},
+        {"mile-per-hour", "meter-per-100-second", 1.0, 44.704},
+        {"mile-per-100-hour", "meter-per-second", 1.0, 0.0044704},
     };
 
     for (const auto &testCase : testCases) {

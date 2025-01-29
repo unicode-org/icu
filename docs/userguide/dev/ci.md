@@ -29,7 +29,7 @@ ICU4J's unit tests in JUnit).
 
 ICU uses Continuous Integration systems to run these tests automatically for each new code contribution,
 and upon each update to a future contribution under development
-(that is: for each [successful Pull Request merge, and upon a new push of new git commits to a Pull Request](../gitdev.md)).
+(that is: for each [successful Pull Request merge, and upon a new push of new git commits to a Pull Request](./gitdev.md)).
 ICU has GitHub Actions configured to run Continuous Integration testing.
 
 Continuous Integration systems can also be used to regularly and automatically run other tasks besides testing.

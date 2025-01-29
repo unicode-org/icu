@@ -6157,6 +6157,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @stable ICU 2.0
      */
     protected int handleGetMonthLength(int extendedYear, int month) {
+      System.out.printf("handleGetMonthLength(ey=%d, m=%d)",  extendedYear, month);
         return handleComputeMonthStart(extendedYear, month+1, true) -
                 handleComputeMonthStart(extendedYear, month, true);
     }
