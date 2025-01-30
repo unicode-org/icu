@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738177705572,
+  "lastUpdate": 1738265028725,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30987,6 +30987,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.8035735032736944,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "arthur.j.odwyer@gmail.com",
+            "name": "Arthur O'Dwyer",
+            "username": "Quuxplusone"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "fb64693c281b97b2c7ce9619fda32f03a9e18235",
+          "message": "ICU-22920 Avoid \"return by const value\" antipattern\n\nReturning a const-qualified prvalue doesn't do anything useful, but it does\nturn an assignment such as `v = rb.getLocale();` from a move-assignment\ninto a copy-assignment (because it's forbidden to move-from a const value,\neven if it's a const prvalue). Each affected site was diagnosed mechanically\nby my fork of Clang. E.g.:\n\n    warning: 'const' type qualifier on return type is a bad idea [-Wqual-class-return-type]\n      391 | const Locale ResourceBundle::getLocale(ULocDataLocaleType type, UErrorCode &status) const\n          | ^~~~~",
+          "timestamp": "2025-01-30T10:58:25-08:00",
+          "tree_id": "3d86f61476e5d32d6d1e78fb971161bd0ca08746",
+          "url": "https://github.com/unicode-org/icu/commit/fb64693c281b97b2c7ce9619fda32f03a9e18235"
+        },
+        "date": 1738264807637,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.8046371152087195,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
