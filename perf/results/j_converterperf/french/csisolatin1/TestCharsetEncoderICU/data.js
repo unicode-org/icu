@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738274874492,
+  "lastUpdate": 1738280388098,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31227,6 +31227,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.4329206731226616,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "fxing@qnx.com",
+            "name": "Felix Xing",
+            "username": "fxing-qnx"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "cb4344073b08101aacd5620fde1c832c41d71e3d",
+          "message": "ICU-23026 skip test for QNX",
+          "timestamp": "2025-01-30T15:20:26-08:00",
+          "tree_id": "a4b5aff68f6510ee24978b70f91664d2fee39d06",
+          "url": "https://github.com/unicode-org/icu/commit/cb4344073b08101aacd5620fde1c832c41d71e3d"
+        },
+        "date": 1738280149690,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.4338136630605486,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
