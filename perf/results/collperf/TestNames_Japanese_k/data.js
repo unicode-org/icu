@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738275332298,
+  "lastUpdate": 1738280952293,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -60477,6 +60477,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5799430.488,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "fxing@qnx.com",
+            "name": "Felix Xing",
+            "username": "fxing-qnx"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "cb4344073b08101aacd5620fde1c832c41d71e3d",
+          "message": "ICU-23026 skip test for QNX",
+          "timestamp": "2025-01-30T15:20:26-08:00",
+          "tree_id": "a4b5aff68f6510ee24978b70f91664d2fee39d06",
+          "url": "https://github.com/unicode-org/icu/commit/cb4344073b08101aacd5620fde1c832c41d71e3d"
+        },
+        "date": 1738280696036,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 241.0408,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21239390.1049,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5392628.0567,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20003257.36,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5876216.7607,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
