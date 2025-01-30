@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738178619368,
+  "lastUpdate": 1738265917954,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -106365,6 +106365,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.4013,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "arthur.j.odwyer@gmail.com",
+            "name": "Arthur O'Dwyer",
+            "username": "Quuxplusone"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "fb64693c281b97b2c7ce9619fda32f03a9e18235",
+          "message": "ICU-22920 Avoid \"return by const value\" antipattern\n\nReturning a const-qualified prvalue doesn't do anything useful, but it does\nturn an assignment such as `v = rb.getLocale();` from a move-assignment\ninto a copy-assignment (because it's forbidden to move-from a const value,\neven if it's a const prvalue). Each affected site was diagnosed mechanically\nby my fork of Clang. E.g.:\n\n    warning: 'const' type qualifier on return type is a bad idea [-Wqual-class-return-type]\n      391 | const Locale ResourceBundle::getLocale(ULocDataLocaleType type, UErrorCode &status) const\n          | ^~~~~",
+          "timestamp": "2025-01-30T10:58:25-08:00",
+          "tree_id": "3d86f61476e5d32d6d1e78fb971161bd0ca08746",
+          "url": "https://github.com/unicode-org/icu/commit/fb64693c281b97b2c7ce9619fda32f03a9e18235"
+        },
+        "date": 1738265694188,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.9788,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.1131,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.5108,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 28.6225,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 39.1618,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 35.9458,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 26.9043,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.9311,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 83.8743,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.5465,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 37.2183,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.2832,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
