@@ -426,16 +426,19 @@ class U_I18N_API MeasureUnit: public UObject {
     MeasureUnit(MeasureUnit &&other) noexcept;
 
     /**
-     * Construct a MeasureUnit from a CLDR Core Unit Identifier, defined in UTS
-     * 35. (Core unit identifiers and mixed unit identifiers are supported, long
-     * unit identifiers are not.) Validates and canonicalizes the identifier.
+     * Constructs a MeasureUnit from a CLDR Core Unit Identifier, as defined in UTS 35.
+     * This method supports core unit identifiers and mixed unit identifiers.
+     * It validates and canonicalizes the given identifier.
      *
+     *
+     * Example usage:
      * <pre>
-     * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond")
+     * MeasureUnit example = MeasureUnit::forIdentifier("meter-per-second", status);
      * </pre>
      *
-     * @param identifier The CLDR Unit Identifier.
-     * @param status Set if the identifier is invalid.
+     * @param identifier the CLDR Unit Identifier
+     * @param status Set error if the identifier is invalid.
+     * @return the corresponding MeasureUnit
      * @stable ICU 67
      */
     static MeasureUnit forIdentifier(StringPiece identifier, UErrorCode& status);
