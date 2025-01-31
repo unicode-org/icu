@@ -34,6 +34,7 @@ public class TestUtils {
     static final Gson GSON = new GsonBuilder()
         .setDateFormat("yyyy-MM-dd HH:mm:ss")
         .registerTypeAdapter(Sources.class, new StringToListAdapter())
+        .registerTypeAdapter(ExpErrors.class, new ExpectedErrorAdapter())
         .create();
 
     // ======= Legacy TestCase utilities, no json-compatible ========
@@ -129,8 +130,8 @@ public class TestUtils {
     }
 
     static boolean expectsErrors(DefaultTestProperties defaults, Unit unit) {
-        return (unit.expErrors != null && !unit.expErrors.isEmpty())
-            || (defaults.getExpErrors().length > 0);
+        return (unit.expErrors != null && unit.expErrors.expectErrors())
+            || (defaults.getExpErrors().expectErrors());
     }
 
     static void runTestCase(DefaultTestProperties defaults, Unit unit) {
