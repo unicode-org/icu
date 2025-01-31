@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738280640030,
+  "lastUpdate": 1738334552266,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31197,6 +31197,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.366787019589059,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "ede201c305b79a6bc340e5bab7e1f65702b2ea15",
+          "message": "ICU-22994 Use C++ typeid() instead of Calendar::getType() for calendar type comparison\n\nSee #3310",
+          "timestamp": "2025-01-31T15:19:55+01:00",
+          "tree_id": "31a25cfaf79ea46687652208456c641a11ea2ebb",
+          "url": "https://github.com/unicode-org/icu/commit/ede201c305b79a6bc340e5bab7e1f65702b2ea15"
+        },
+        "date": 1738334307622,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.5164892114558772,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
