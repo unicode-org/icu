@@ -83,9 +83,10 @@ public:
 
     bool wellFormed() const { return ok; }
 
+    // TODO: disable for single-pass input iterator
     UnitIter data() const { return p; }
 
-    int32_t length() const { return len; }
+    uint8_t length() const { return len; }
 
     template<typename Iter = UnitIter>
     std::enable_if_t<
@@ -103,6 +104,7 @@ private:
     UnitIter p;
 };
 
+// TODO: switch unsafe code to UnitIter as well
 /**
  * Result of decoding a minimal Unicode code unit sequence which must be well-formed.
  * Returned from non-validating Unicode string code point iterators.
@@ -126,10 +128,12 @@ public:
 
     UChar32 codePoint() const { return c; }
 
+    // TODO: disable for single-pass input iterator
     const Unit *data() const { return p; }
 
-    int32_t length() const { return len; }
+    uint8_t length() const { return len; }
 
+    // TODO: disable unless pointer
     std::basic_string_view<Unit> stringView() const {
         return std::basic_string_view<Unit>(p, len);
     }
@@ -174,11 +178,23 @@ protected:
     bool operator!=(const U16IteratorBase &other) const { return !operator==(other); }
 
     // @internal
-    void dec() {
+    void inc() {
         // TODO: assert current != limit -- more precisely: start <= current < limit
+        // Very similar to U16_FWD_1().
+        CP32 c = *current;
+        ++current;
+        if (U16_IS_LEAD(c) && current != limit && U16_IS_TRAIL(*current)) {
+            ++current;
+        }
+    }
+
+    // @internal
+    void dec() {
+        // TODO: assert p != start -- more precisely: start < p <= limit
         // Very similar to U16_BACK_1().
-        if (U16_IS_TRAIL(*(--current)) && current != start && U16_IS_LEAD(*(current - 1))) {
-            --current;
+        UnitIter p1;
+        if (U16_IS_TRAIL(*--current) && current != start && (p1 = current, U16_IS_LEAD(*--p1))) {
+            current = p1;
         }
     }
 
@@ -187,7 +203,8 @@ protected:
         // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_NEXT_OR_FFFD().
         UnitIter p0 = p;
-        CP32 c = *p++;
+        CP32 c = *p;
+        ++p;
         if (!U16_IS_SURROGATE(c)) {
             return {c, 1, true, p0};
         } else {
@@ -204,7 +221,7 @@ protected:
 
     // @internal
     CodeUnits<UnitIter, CP32> decAndRead(UnitIter &p) const {
-        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // TODO: assert p != start -- more precisely: start < p <= limit
         // Very similar to U16_PREV_OR_FFFD().
         CP32 c = *--p;
         if (!U16_IS_SURROGATE(c)) {
@@ -212,7 +229,7 @@ protected:
         } else {
             UnitIter p1;
             uint16_t c2;
-            if (U16_IS_SURROGATE_TRAIL(c) && p != start && (p1 = p--, U16_IS_LEAD(c2 = *p1))) {
+            if (U16_IS_SURROGATE_TRAIL(c) && p != start && (p1 = p, U16_IS_LEAD(c2 = *--p1))) {
                 p = p1;
                 c = U16_GET_SUPPLEMENTARY(c2, c);
                 return {c, 2, true, p};
@@ -257,9 +274,13 @@ class U16Iterator : private U16IteratorBase<UnitIter, CP32, behavior> {
     // FYI: We need to qualify all accesses to super class members because of private inheritance.
     using Super = U16IteratorBase<UnitIter, CP32, behavior>;
 public:
-    // TODO: make private, make friends
+    // TODO: Should these Iterators define value_type etc.?
+    //       What about iterator_category depending on the UnitIter??
+
     U16Iterator(UnitIter start, UnitIter p, UnitIter limit) :
-            Super(start, p, limit) {}
+            Super(start, p, limit), units(0, 0, false, p) {}
+    // Constructs an iterator start or limit sentinel.
+    U16Iterator(UnitIter p) : Super(p, p, p), units(0, 0, false, p) {}
 
     U16Iterator(const U16Iterator &other) = default;
     U16Iterator &operator=(const U16Iterator &other) = default;
@@ -267,37 +288,75 @@ public:
     bool operator==(const U16Iterator &other) const { return Super::operator==(other); }
     bool operator!=(const U16Iterator &other) const { return !Super::operator==(other); }
 
-    CodeUnits<UnitIter, CP32> operator*() const {
-        // Call the same function in both operator*() and operator++() so that an
-        // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        UnitIter p = Super::current;
-        return Super::readAndInc(p);
+    CodeUnits<UnitIter, CP32> operator*() {
+        if (state == 0) {
+            units = Super::readAndInc(Super::current);
+            state = units.length();
+        }
+        return units;
     }
 
+    // TODO: For each operator*() also add operator->() to satisfy LegacyInputIterator?
+    // https://en.cppreference.com/w/cpp/named_req/InputIterator
+    // https://en.cppreference.com/w/cpp/language/operators
+    // const CodeUnits<UnitIter, CP32> *operator->() const { return &units; }
+
     U16Iterator &operator++() {  // pre-increment
-        // Call the same function in both operator*() and operator++() so that an
-        // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        Super::readAndInc(Super::current);
+        if (state > 0) {
+            // operator*() called readAndInc() so current is already ahead.
+            state = 0;
+        } else if (state == 0) {
+            Super::inc();
+        } else /* state < 0 */ {
+            // operator--() called decAndRead() so we know how far to skip; max 2 for UTF-16.
+            ++Super::current;
+            if (++state != 0) {
+                ++Super::current;
+                state = 0;
+            }
+        }
         return *this;
     }
 
+    // TODO: disable for single-pass input iterator? or return proxy like std::istreambuf_iterator?
     U16Iterator operator++(int) {  // post-increment
-        // Call the same function in both operator*() and operator++() so that an
-        // optimizing compiler can easily eliminate redundant work when alternating between the two.
         U16Iterator result(*this);
-        Super::readAndInc(Super::current);
+        operator++();
         return result;
     }
 
     U16Iterator &operator--() {  // pre-decrement
-        return Super::dec();
+        if (state > 0) {
+            // operator*() called readAndInc() so current is ahead of the logical position.
+            --Super::current;
+            if (--state != 0) {
+                --Super::current;
+                state = 0;
+            }
+        }
+        units = Super::decAndRead(Super::current);
+        state = -units.length();
+        return *this;
     }
 
     U16Iterator operator--(int) {  // post-decrement
         U16Iterator result(*this);
-        Super::dec();
+        operator--();
         return result;
     }
+
+private:
+    // Keep state so that we call readAndInc() only once for both operator*() and ++
+    // so that we can use a single-pass input iterator for UnitIter.
+    CodeUnits<UnitIter, CP32> units;
+    // >0: units = readAndInc(), current = units limit, state = units.len
+    //     which means that current is ahead of its logical position
+    //  0: initial state
+    // <0: units = decAndRead(), current = units start, state = -units.len
+    // TODO: could also set state = -1 & use units.len when needed, but less consistent
+    // TODO: could insert state into hidden CodeUnits field to avoid padding,
+    //       but mostly irrelevant when inlined?
+    int8_t state = 0;
 };
 
 /**
@@ -315,9 +374,10 @@ template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
 class U16ReverseIterator : private U16IteratorBase<UnitIter, CP32, behavior> {
     using Super = U16IteratorBase<UnitIter, CP32, behavior>;
 public:
-    // TODO: make private, make friends
     U16ReverseIterator(UnitIter start, UnitIter p, UnitIter limit) :
             Super(start, p, limit) {}
+    // Constructs an iterator start or limit sentinel.
+    U16ReverseIterator(UnitIter p) : Super(p, p, p) {}
 
     U16ReverseIterator(const U16ReverseIterator &other) = default;
     U16ReverseIterator &operator=(const U16ReverseIterator &other) = default;
@@ -429,7 +489,7 @@ protected:
     // @internal
     void dec() {
         // Very similar to U16_BACK_1_UNSAFE().
-        if (U16_IS_TRAIL(*(--current))) {
+        if (U16_IS_TRAIL(*--current)) {
             --current;
         }
     }
@@ -438,11 +498,13 @@ protected:
     UnsafeCodeUnits<Unit16, CP32> readAndInc(const Unit16 *&p) const {
         // Very similar to U16_NEXT_UNSAFE().
         const Unit16 *p0 = p;
-        CP32 c = *p++;
+        CP32 c = *p;
+        ++p;
         if (!U16_IS_LEAD(c)) {
             return {c, 1, p0};
         } else {
-            c = U16_GET_SUPPLEMENTARY(c, *p++);
+            c = U16_GET_SUPPLEMENTARY(c, *p);
+            ++p;
             return {c, 2, p0};
         }
     }
@@ -463,6 +525,7 @@ protected:
     const Unit16 *current;
 };
 
+// TODO: make this one work single-pass as well
 /**
  * Non-validating bidirectional iterator over the code points in a UTF-16 string.
  * The string must be well-formed.
@@ -477,7 +540,6 @@ class U16UnsafeIterator : private U16UnsafeIteratorBase<Unit16, CP32> {
     // FYI: We need to qualify all accesses to super class members because of private inheritance.
     using Super = U16UnsafeIteratorBase<Unit16, CP32>;
 public:
-    // TODO: make private, make friends
     U16UnsafeIterator(const Unit16 *p) : Super(p) {}
 
     U16UnsafeIterator(const U16UnsafeIterator &other) = default;
@@ -500,6 +562,7 @@ public:
         return *this;
     }
 
+    // TODO: disable for single-pass input iterator? or return proxy like std::istreambuf_iterator?
     U16UnsafeIterator operator++(int) {  // post-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
@@ -509,7 +572,8 @@ public:
     }
 
     U16UnsafeIterator &operator--() {  // pre-decrement
-        return Super::dec();
+        Super::dec();
+        return *this;
     }
 
     U16UnsafeIterator operator--(int) {  // post-decrement
@@ -533,7 +597,6 @@ template<typename Unit16, typename CP32>
 class U16UnsafeReverseIterator : private U16UnsafeIteratorBase<Unit16, CP32> {
     using Super = U16UnsafeIteratorBase<Unit16, CP32>;
 public:
-    // TODO: make private, make friends
     U16UnsafeReverseIterator(const Unit16 *p) : Super(p) {}
 
     U16UnsafeReverseIterator(const U16UnsafeReverseIterator &other) = default;
@@ -633,6 +696,17 @@ int32_t loopIterPlusPlus(std::u16string_view s) {
    auto limit = range.end();
    while (iter != limit) {
        sum += (*iter++).codePoint();
+   }
+   return sum;
+}
+
+int32_t backwardLoop(std::u16string_view s) {
+   header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+   int32_t sum = 0;
+   auto start = range.begin();
+   auto iter = range.end();
+   while (start != iter) {
+       sum += (*--iter).codePoint();
    }
    return sum;
 }

@@ -23,6 +23,58 @@ using namespace std::string_view_literals;
 using U_HEADER_ONLY_NAMESPACE::U16Iterator;
 using U_HEADER_ONLY_NAMESPACE::U16StringCodePoints;
 
+// Shared state for one or more copies of single-pass iterators.
+// Similar to https://en.cppreference.com/w/cpp/iterator/istreambuf_iterator
+// but the iterators only implement LegacyIterator (* and ++) without post-increment.
+template<typename Unit>
+class SinglePassSource {
+public:
+    SinglePassSource(std::basic_string_view<Unit> s) : p(s.data()), limit(s.data() + s.length()) {}
+
+private:
+    template<typename U>
+    friend class SinglePassIter;
+
+    const Unit *p;  // incremented by iterators
+    const Unit *limit;
+};
+
+template<typename Unit>
+class SinglePassIter {
+public:
+    typedef Unit value_type;
+    typedef Unit &reference;
+    typedef Unit *pointer;
+    typedef size_t difference_type;
+    // This is a LegacyIterator but there is no specific category for that,
+    // so we claim it to be a LegacyInputIterator. It *is* single-pass.
+    typedef std::input_iterator_tag iterator_category;
+
+    SinglePassIter(SinglePassSource<Unit> &src) : src(&src) {}
+    // limit sentinel
+    SinglePassIter() : src(nullptr) {}
+
+    bool operator==(const SinglePassIter &other) const {
+        bool done = isDone();
+        bool otherDone = other.isDone();
+        return done ? otherDone : (!otherDone && src->p == other.src->p);
+    }
+    bool operator!=(const SinglePassIter &other) const { return !operator==(other); }
+
+    Unit operator*() const { return *(src->p); }
+    SinglePassIter &operator++() {  // pre-increment
+        ++(src->p);
+        return *this;
+    }
+    // *no* post-increment
+
+private:
+    bool isDone() const { return src == nullptr || src->p == src->limit; }
+
+    SinglePassSource<Unit> *src;
+};
+
+// TODO: still needed once we test with both SinglePassIter and a bidirectional iter?
 template<typename Unit>
 class FwdIter {
 public:
@@ -63,6 +115,7 @@ public:
     void testNegative();
     void testFFFD();
     void testSurrogate();
+    void testSinglePassIter();
     void testFwdIter();
 };
 
@@ -79,12 +132,12 @@ void U16IteratorTest::runIndexedTest(int32_t index, UBool exec, const char *&nam
     TESTCASE_AUTO(testNegative);
     TESTCASE_AUTO(testFFFD);
     TESTCASE_AUTO(testSurrogate);
+    TESTCASE_AUTO(testSinglePassIter);
     TESTCASE_AUTO(testFwdIter);
     TESTCASE_AUTO_END;
 }
 
 void U16IteratorTest::testGood() {
-    IcuTestErrorCode errorCode(*this, "testGood");
     std::u16string_view good(u"abçカ🚴"sv);
     U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     auto iter = range.begin();
@@ -108,7 +161,6 @@ void U16IteratorTest::testGood() {
 }
 
 void U16IteratorTest::testNegative() {
-    IcuTestErrorCode errorCode(*this, "testNegative");
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
     U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(bad);
@@ -133,7 +185,6 @@ void U16IteratorTest::testNegative() {
 }
 
 void U16IteratorTest::testFFFD() {
-    IcuTestErrorCode errorCode(*this, "testFFFD");
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
     U16StringCodePoints<char16_t, char32_t, U_BEHAVIOR_FFFD> range(bad);
@@ -157,7 +208,6 @@ void U16IteratorTest::testFFFD() {
 }
 
 void U16IteratorTest::testSurrogate() {
-    IcuTestErrorCode errorCode(*this, "testSurrogate");
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
     U16StringCodePoints<char16_t, uint32_t, U_BEHAVIOR_SURROGATE> range(bad);
@@ -180,15 +230,43 @@ void U16IteratorTest::testSurrogate() {
     assertTrue("iter == endIter", iter == range.end());
 }
 
+void U16IteratorTest::testSinglePassIter() {
+    SinglePassSource<char16_t> good(u"abçカ🚴"sv);
+    SinglePassIter<char16_t> goodBegin(good);
+    SinglePassIter<char16_t> goodLimit{};
+    U16Iterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
+        goodBegin, goodBegin, goodLimit);
+    U16Iterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    auto iter = rangeBegin;
+    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
+    ++iter;  // pre-increment
+    auto units = *iter;
+    assertEquals("iter[1] * codePoint", u'b', units.codePoint());
+    assertEquals("iter[1] * length", 1, units.length());
+    assertTrue("iter[1] * wellFormed", units.wellFormed());
+    // No units.stringView() when the unit iterator is not a pointer.
+    // No data() for a single-pass unit iterator. (Or not one that works as expected.)
+    ++iter;
+    // No post-increment for a single-pass unit iterator. (Or not one that works as expected.)
+    assertEquals("iter[2] * codePoint", u'ç', (*iter).codePoint());
+    ++iter;
+    assertEquals("iter[3] * codePoint", u'カ', (*iter).codePoint());
+    ++iter;
+    units = *iter;
+    ++iter;
+    assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
+    assertEquals("iter[4] * length", 2, units.length());
+    assertTrue("iter[4] * wellFormed", units.wellFormed());
+    assertTrue("iter == endIter", iter == rangeLimit);
+}
+
 void U16IteratorTest::testFwdIter() {
-    IcuTestErrorCode errorCode(*this, "testFwdIter");
     std::u16string_view good(u"abçカ🚴"sv);
     FwdIter<char16_t> goodBegin(good.data());
     FwdIter<char16_t> goodLimit(good.data() + good.length());
     U16Iterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
         goodBegin, goodBegin, goodLimit);
-    U16Iterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(
-        goodBegin, goodLimit, goodLimit);
+    U16Iterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
     // TODO: U16StringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
@@ -212,3 +290,5 @@ void U16IteratorTest::testFwdIter() {
     assertTrue("iter[4] * data()[1]", *data == u"🚴"[1]);
     assertTrue("iter == endIter", iter == rangeLimit);
 }
+
+// TODO: test back & forth with bidirectional iterator (not random access, not contiguous)
