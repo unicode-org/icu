@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738280954893,
+  "lastUpdate": 1738334886411,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -60585,6 +60585,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 127256.1091,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "ede201c305b79a6bc340e5bab7e1f65702b2ea15",
+          "message": "ICU-22994 Use C++ typeid() instead of Calendar::getType() for calendar type comparison\n\nSee #3310",
+          "timestamp": "2025-01-31T15:19:55+01:00",
+          "tree_id": "31a25cfaf79ea46687652208456c641a11ea2ebb",
+          "url": "https://github.com/unicode-org/icu/commit/ede201c305b79a6bc340e5bab7e1f65702b2ea15"
+        },
+        "date": 1738334664672,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 543.848,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 599923.6567,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 87337.5099,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 537095.0074,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 127497.1334,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
