@@ -3,6 +3,8 @@
 
 package com.ibm.icu.message2;
 
+import com.ibm.icu.text.Normalizer2;
+
 class StringUtils {
 
     /*
@@ -126,5 +128,11 @@ class StringUtils {
     // abnf: function = ":" identifier *(s option)
     static boolean isFunctionSigil(int cp) {
         return cp == ':';
+    }
+
+    final private static Normalizer2 NFC_NORMALIZER = Normalizer2.getNFCInstance();
+
+    static String toNfc(CharSequence value) {
+        return value == null ? null : NFC_NORMALIZER.normalize(value);
     }
 }

@@ -247,7 +247,7 @@ public class MFParser {
 
     // abnf: literal-expression = "{" o literal [s function] *(s attribute) o "}"
     private MFDataModel.Expression getLiteralExpression() throws MFParseException {
-        MFDataModel.Literal literal = getLiteral();
+        MFDataModel.Literal literal = getLiteral(false);
         checkCondition(literal != null, "Literal expression expected.");
 
         MFDataModel.Function function = null;
@@ -345,7 +345,7 @@ public class MFParser {
             if (cp == '=') {
                 input.readCodePoint();
                 skipOptionalWhitespaces();
-                literalOrVariable = getLiteral();
+                literalOrVariable = getLiteral(false);
                 checkCondition(literalOrVariable != null, "Attributes must have a value after `=`");
             } else {
                 // was not equal, attribute without a value, put the "spaces" back.
@@ -428,22 +428,22 @@ public class MFParser {
         if (cp == '$') {
             return getVariableRef();
         }
-        return getLiteral();
+        return getLiteral(false);
     }
 
     // abnf: literal = quoted-literal / unquoted-literal
-    private MFDataModel.Literal getLiteral() throws MFParseException {
+    private MFDataModel.Literal getLiteral(boolean normalize) throws MFParseException {
         int cp = input.readCodePoint();
         switch (cp) {
             case '|': // quoted-literal
                 // abnf: quoted-literal = "|" *(quoted-char / escaped-char) "|"
                 input.backup(1);
-                MFDataModel.Literal ql = getQuotedLiteral();
+                MFDataModel.Literal ql = getQuotedLiteral(normalize);
                 return ql;
             default: // unquoted-literal
                 // abnf: unquoted-literal = name / number-literal
                 input.backup(1);
-                MFDataModel.Literal unql = getUnQuotedLiteral();
+                MFDataModel.Literal unql = getUnQuotedLiteral(normalize);
                 return unql;
         }
     }
@@ -460,7 +460,7 @@ public class MFParser {
         return new MFDataModel.VariableRef(name);
     }
 
-    private MFDataModel.Literal getQuotedLiteral() throws MFParseException {
+    private MFDataModel.Literal getQuotedLiteral(boolean normalize) throws MFParseException {
         StringBuilder result = new StringBuilder();
         int cp = input.readCodePoint();
         checkCondition(cp == '|', "expected starting '|'");
@@ -483,13 +483,13 @@ public class MFParser {
 
         checkCondition(cp == '|', "expected ending '|'");
 
-        return new MFDataModel.Literal(result.toString());
+        return new MFDataModel.Literal(normalize ? StringUtils.toNfc(result) : result.toString());
     }
 
-    private MFDataModel.Literal getUnQuotedLiteral() throws MFParseException {
+    private MFDataModel.Literal getUnQuotedLiteral(boolean normalize) throws MFParseException {
         String name = getName();
         if (name != null) {
-            return new MFDataModel.Literal(name);
+            return new MFDataModel.Literal(normalize ? StringUtils.toNfc(name) : name);
         }
         return getNumberLiteral();
     }
@@ -529,7 +529,7 @@ public class MFParser {
                 return skipCount;
             }
             if (!StringUtils.isWhitespace(cp) && !StringUtils.isBidi(cp)) {
-                input.backup(1);
+                input.backup(Character.isBmpCodePoint(cp) ? 1 : 2);
                 return skipCount;
             }
             skipCount++;
@@ -697,7 +697,7 @@ public class MFParser {
             input.backup(skipCount);
             return null;
         }
-        return getLiteral();
+        return getLiteral(true);
     }
 
     private static class MatchDeclaration implements MFDataModel.Declaration {
@@ -793,7 +793,7 @@ public class MFParser {
             }
         }
         skipOneOptionalBidi();
-        return result.toString();
+        return StringUtils.toNfc(result.toString());
     }
 
     private void checkCondition(boolean condition, String message) throws MFParseException {

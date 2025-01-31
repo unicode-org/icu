@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.number.FormattedNumber;
@@ -17,6 +18,7 @@ import com.ibm.icu.number.Notation;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
+import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.number.Scale;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
@@ -24,6 +26,7 @@ import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.PluralType;
+import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.MeasureUnit;
 
@@ -38,6 +41,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         switch (kind) {
             case "number": // $FALL-THROUGH$
             case "integer":
+            case "currency":
                 break;
             default:
                 // Default to number
@@ -272,6 +276,9 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         }
     }
 
+    // Currency ISO code
+    private final static Pattern CURRENCY_ISO_CODE = Pattern.compile("^[A-Z][A-Z][A-Z]$", Pattern.CASE_INSENSITIVE);
+
     private static LocalizedNumberFormatter formatterForOptions(
             Locale locale, Map<String, Object> fixedOptions, String kind) {
         UnlocalizedNumberFormatter nf;
@@ -390,6 +397,49 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
 
         if (kind.equals("integer")) {
             nf = nf.precision(Precision.integer());
+        }
+        if (kind.equals("currency")) {
+            strOption = OptUtils.getString(fixedOptions, "currency", null);
+            if (strOption != null) {
+                if (CURRENCY_ISO_CODE.matcher(strOption).find()) {
+                    nf = nf.unit(Currency.getInstance(strOption));
+                } else {
+                    // TODO ICU 77.1
+                    // The option exists but it is not iso code.
+                    // Fail with _Bad Operand_? Ignore?
+                }
+            }
+            strOption = OptUtils.getString(fixedOptions, "currencySign", "standard");
+            switch (strOption) {
+                case "accounting":
+                case "standard":
+                    break;
+            }
+            strOption = OptUtils.getString(fixedOptions, "currencyDisplay", "symbol");
+            UnitWidth width;
+            switch (strOption) {
+                case "narrowSymbol":
+                    width = UnitWidth.NARROW;
+                    break;
+                case "symbol":
+                    width = UnitWidth.SHORT;
+                    break;
+                case "name":
+                    width = UnitWidth.FULL_NAME;
+                    break;
+                case "code":
+                    width = UnitWidth.ISO_CODE;
+                    break;
+                case "formalSymbol":
+                    width = UnitWidth.FORMAL;
+                    break;
+                case "never":
+                    width = UnitWidth.HIDDEN;
+                    break;
+                default:
+                    width = UnitWidth.SHORT;
+            }
+            nf = nf.unitWidth(width);
         }
 
         return nf.locale(locale);

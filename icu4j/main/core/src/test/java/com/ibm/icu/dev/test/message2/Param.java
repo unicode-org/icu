@@ -16,4 +16,11 @@ class Param {
         this.name = name;
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Param { name:'").append(name).append("' value:'").append(value).append("' }");
+        return builder.toString();
+    }
 }

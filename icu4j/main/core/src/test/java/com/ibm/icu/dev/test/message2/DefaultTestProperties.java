@@ -12,10 +12,16 @@ class DefaultTestProperties {
     // Unused fields ignored
     private final String locale;
     private final ExpErrors expErrors;
+    private final String bidiIsolation;
 
-    DefaultTestProperties(String locale, ExpErrors expErrors) {
+    DefaultTestProperties() {
+        this("en-US", new ExpErrors(false), "default");
+    }
+
+    DefaultTestProperties(String locale, ExpErrors expErrors, String bidiIsolation) {
         this.locale = locale;
         this.expErrors = expErrors;
+        this.bidiIsolation = bidiIsolation;
     }
 
     String getLocale() {
@@ -24,5 +30,9 @@ class DefaultTestProperties {
 
     ExpErrors getExpErrors() {
         return expErrors == null ? NO_ERRORS : expErrors;
+    }
+
+    String getBidiIsolation() {
+        return this.bidiIsolation;
     }
 }

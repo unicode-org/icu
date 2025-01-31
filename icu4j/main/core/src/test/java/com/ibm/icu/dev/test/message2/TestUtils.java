@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -164,6 +165,9 @@ public class TestUtils {
         } else {
             mfBuilder.setLocale(Locale.US);
         }
+        if (defaults.getBidiIsolation() != null) {
+//            mfBuilder.setBidiIsolation(true); // TODO ICU 77.1
+        }
 
         try {
             MessageFormatter mf = mfBuilder.build();
@@ -176,7 +180,8 @@ public class TestUtils {
             if (expectsErrors(defaults, unit)) {
                 fail(reportCase(unit)
                         + "\nExpected error, but it didn't happen.\n"
-                        + "Result: '" + result + "'");
+                        + "Result: '" + result + "'\n"
+                        + "Params: " + Arrays.toString(params));
             } else {
                 if (unit.exp != null) {
                     assertEquals(reportCase(unit), unit.exp, result);
