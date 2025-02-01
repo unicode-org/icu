@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738346737207,
+  "lastUpdate": 1738369208320,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31107,6 +31107,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.04785773533596432,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "manishsmail@gmail.com",
+            "name": "Manish Goregaokar",
+            "username": "Manishearth"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "bf675e3ba1482dc3201415b7aa7650acf6a59b73",
+          "message": "ICU-23033 Regenerate scx value array",
+          "timestamp": "2025-01-31T15:48:20-08:00",
+          "tree_id": "5aa136484261f96b0dfed2c334bca32c11efb90e",
+          "url": "https://github.com/unicode-org/icu/commit/bf675e3ba1482dc3201415b7aa7650acf6a59b73"
+        },
+        "date": 1738368981478,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.047739808228351624,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
