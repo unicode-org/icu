@@ -1158,6 +1158,7 @@ class LocaleFallbackData {
         t.put("en_NZ", "en_001");
         t.put("en_PG", "en_001");
         t.put("en_PK", "en_001");
+        t.put("en_PL", "en_150");
         t.put("en_PN", "en_001");
         t.put("en_PT", "en_150");
         t.put("en_PW", "en_001");

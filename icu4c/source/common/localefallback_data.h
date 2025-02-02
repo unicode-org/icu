@@ -1169,33 +1169,33 @@ const char parentLocaleChars[] =
     "en_ID\0en_IE\0en_IL\0en_IM\0en_IN\0en_IO\0en_IT\0en_JE\0en_JM\0"
     "en_KE\0en_KI\0en_KN\0en_KY\0en_LC\0en_LR\0en_LS\0en_MG\0en_MO\0"
     "en_MS\0en_MT\0en_MU\0en_MV\0en_MW\0en_MY\0en_NA\0en_NF\0en_NG\0"
-    "en_NL\0en_NO\0en_NR\0en_NU\0en_NZ\0en_PG\0en_PK\0en_PN\0en_PT\0"
-    "en_PW\0en_RO\0en_RW\0en_SB\0en_SC\0en_SD\0en_SE\0en_SG\0en_SH\0"
-    "en_SI\0en_SK\0en_SL\0en_SS\0en_SX\0en_SZ\0en_Shaw\0en_TC\0en_TK\0"
-    "en_TO\0en_TT\0en_TV\0en_TZ\0en_UG\0en_VC\0en_VG\0en_VU\0en_WS\0"
-    "en_ZA\0en_ZM\0en_ZW\0es_419\0es_AR\0es_BO\0es_BR\0es_BZ\0es_CL\0"
-    "es_CO\0es_CR\0es_CU\0es_DO\0es_EC\0es_GT\0es_HN\0es_JP\0es_MX\0"
-    "es_NI\0es_PA\0es_PE\0es_PR\0es_PY\0es_SV\0es_US\0es_UY\0es_VE\0"
-    "ff_Adlm\0ff_Arab\0fr_HT\0ha_Arab\0hi_Latn\0ht\0iu_Latn\0kaa_Latn\0"
-    "kk_Arab\0kok_Latn\0ks_Deva\0ku_Arab\0kxv_Deva\0kxv_Orya\0kxv_Telu\0"
-    "ky_Arab\0ky_Latn\0ml_Arab\0mn_Mong\0mni_Mtei\0ms_Arab\0nb\0nn\0"
-    "no\0no_NO\0pa_Arab\0pt_AO\0pt_CH\0pt_CV\0pt_FR\0pt_GQ\0pt_GW\0"
-    "pt_LU\0pt_MO\0pt_MZ\0pt_PT\0pt_ST\0pt_TL\0root\0sat_Deva\0sd_Deva\0"
-    "sd_Khoj\0sd_Sind\0shi_Latn\0so_Arab\0sr_Latn\0sw_Arab\0tg_Arab\0"
-    "ug_Cyrl\0uz_Arab\0uz_Cyrl\0vai_Latn\0wo_Arab\0yo_Arab\0yue_Hans\0"
-    "zh_Hant\0zh_Hant_HK\0zh_Hant_MO\0";
+    "en_NL\0en_NO\0en_NR\0en_NU\0en_NZ\0en_PG\0en_PK\0en_PL\0en_PN\0"
+    "en_PT\0en_PW\0en_RO\0en_RW\0en_SB\0en_SC\0en_SD\0en_SE\0en_SG\0"
+    "en_SH\0en_SI\0en_SK\0en_SL\0en_SS\0en_SX\0en_SZ\0en_Shaw\0en_TC\0"
+    "en_TK\0en_TO\0en_TT\0en_TV\0en_TZ\0en_UG\0en_VC\0en_VG\0en_VU\0"
+    "en_WS\0en_ZA\0en_ZM\0en_ZW\0es_419\0es_AR\0es_BO\0es_BR\0es_BZ\0"
+    "es_CL\0es_CO\0es_CR\0es_CU\0es_DO\0es_EC\0es_GT\0es_HN\0es_JP\0"
+    "es_MX\0es_NI\0es_PA\0es_PE\0es_PR\0es_PY\0es_SV\0es_US\0es_UY\0"
+    "es_VE\0ff_Adlm\0ff_Arab\0fr_HT\0ha_Arab\0hi_Latn\0ht\0iu_Latn\0"
+    "kaa_Latn\0kk_Arab\0kok_Latn\0ks_Deva\0ku_Arab\0kxv_Deva\0kxv_Orya\0"
+    "kxv_Telu\0ky_Arab\0ky_Latn\0ml_Arab\0mn_Mong\0mni_Mtei\0ms_Arab\0"
+    "nb\0nn\0no\0no_NO\0pa_Arab\0pt_AO\0pt_CH\0pt_CV\0pt_FR\0pt_GQ\0"
+    "pt_GW\0pt_LU\0pt_MO\0pt_MZ\0pt_PT\0pt_ST\0pt_TL\0root\0sat_Deva\0"
+    "sd_Deva\0sd_Khoj\0sd_Sind\0shi_Latn\0so_Arab\0sr_Latn\0sw_Arab\0"
+    "tg_Arab\0ug_Cyrl\0uz_Arab\0uz_Cyrl\0vai_Latn\0wo_Arab\0yo_Arab\0"
+    "yue_Hans\0zh_Hant\0zh_Hant_HK\0zh_Hant_MO\0";
 
 const int32_t parentLocaleTable[] = {
-    0, 1140,  // az_Arab -> root
-    8, 1140,  // az_Cyrl -> root
-    16, 1140,  // bal_Latn -> root
-    25, 1140,  // blt_Latn -> root
-    34, 1140,  // bm_Nkoo -> root
-    42, 1140,  // bs_Cyrl -> root
-    50, 1140,  // byn_Latn -> root
-    59, 1140,  // cu_Glag -> root
-    67, 1140,  // dje_Arab -> root
-    76, 1140,  // dyo_Arab -> root
+    0, 1146,  // az_Arab -> root
+    8, 1146,  // az_Cyrl -> root
+    16, 1146,  // bal_Latn -> root
+    25, 1146,  // blt_Latn -> root
+    34, 1146,  // bm_Nkoo -> root
+    42, 1146,  // bs_Cyrl -> root
+    50, 1146,  // byn_Latn -> root
+    59, 1146,  // cu_Glag -> root
+    67, 1146,  // dje_Arab -> root
+    76, 1146,  // dyo_Arab -> root
     92, 85,  // en_150 -> en_001
     99, 85,  // en_AG -> en_001
     105, 85,  // en_AI -> en_001
@@ -1218,7 +1218,7 @@ const int32_t parentLocaleTable[] = {
     207, 85,  // en_DG -> en_001
     213, 92,  // en_DK -> en_150
     219, 85,  // en_DM -> en_001
-    225, 1140,  // en_Dsrt -> root
+    225, 1146,  // en_Dsrt -> root
     233, 85,  // en_ER -> en_001
     239, 92,  // en_ES -> en_150
     245, 92,  // en_FI -> en_150
@@ -1270,114 +1270,115 @@ const int32_t parentLocaleTable[] = {
     521, 85,  // en_NZ -> en_001
     527, 85,  // en_PG -> en_001
     533, 85,  // en_PK -> en_001
-    539, 85,  // en_PN -> en_001
-    545, 92,  // en_PT -> en_150
-    551, 85,  // en_PW -> en_001
-    557, 92,  // en_RO -> en_150
-    563, 85,  // en_RW -> en_001
-    569, 85,  // en_SB -> en_001
-    575, 85,  // en_SC -> en_001
-    581, 85,  // en_SD -> en_001
-    587, 92,  // en_SE -> en_150
-    593, 85,  // en_SG -> en_001
-    599, 85,  // en_SH -> en_001
-    605, 92,  // en_SI -> en_150
-    611, 92,  // en_SK -> en_150
-    617, 85,  // en_SL -> en_001
-    623, 85,  // en_SS -> en_001
-    629, 85,  // en_SX -> en_001
-    635, 85,  // en_SZ -> en_001
-    641, 1140,  // en_Shaw -> root
-    649, 85,  // en_TC -> en_001
-    655, 85,  // en_TK -> en_001
-    661, 85,  // en_TO -> en_001
-    667, 85,  // en_TT -> en_001
-    673, 85,  // en_TV -> en_001
-    679, 85,  // en_TZ -> en_001
-    685, 85,  // en_UG -> en_001
-    691, 85,  // en_VC -> en_001
-    697, 85,  // en_VG -> en_001
-    703, 85,  // en_VU -> en_001
-    709, 85,  // en_WS -> en_001
-    715, 85,  // en_ZA -> en_001
-    721, 85,  // en_ZM -> en_001
-    727, 85,  // en_ZW -> en_001
-    740, 733,  // es_AR -> es_419
-    746, 733,  // es_BO -> es_419
-    752, 733,  // es_BR -> es_419
-    758, 733,  // es_BZ -> es_419
-    764, 733,  // es_CL -> es_419
-    770, 733,  // es_CO -> es_419
-    776, 733,  // es_CR -> es_419
-    782, 733,  // es_CU -> es_419
-    788, 733,  // es_DO -> es_419
-    794, 733,  // es_EC -> es_419
-    800, 733,  // es_GT -> es_419
-    806, 733,  // es_HN -> es_419
-    812, 733,  // es_JP -> es_419
-    818, 733,  // es_MX -> es_419
-    824, 733,  // es_NI -> es_419
-    830, 733,  // es_PA -> es_419
-    836, 733,  // es_PE -> es_419
-    842, 733,  // es_PR -> es_419
-    848, 733,  // es_PY -> es_419
-    854, 733,  // es_SV -> es_419
-    860, 733,  // es_US -> es_419
-    866, 733,  // es_UY -> es_419
-    872, 733,  // es_VE -> es_419
-    878, 1140,  // ff_Adlm -> root
-    886, 1140,  // ff_Arab -> root
-    900, 1140,  // ha_Arab -> root
-    908, 359,  // hi_Latn -> en_IN
-    916, 894,  // ht -> fr_HT
-    919, 1140,  // iu_Latn -> root
-    927, 1140,  // kaa_Latn -> root
-    936, 1140,  // kk_Arab -> root
-    944, 1140,  // kok_Latn -> root
-    953, 1140,  // ks_Deva -> root
-    961, 1140,  // ku_Arab -> root
-    969, 1140,  // kxv_Deva -> root
-    978, 1140,  // kxv_Orya -> root
-    987, 1140,  // kxv_Telu -> root
-    996, 1140,  // ky_Arab -> root
-    1004, 1140,  // ky_Latn -> root
-    1012, 1140,  // ml_Arab -> root
-    1020, 1140,  // mn_Mong -> root
-    1028, 1140,  // mni_Mtei -> root
-    1037, 1140,  // ms_Arab -> root
-    1045, 1051,  // nb -> no
-    1048, 1051,  // nn -> no
-    1054, 1051,  // no_NO -> no
-    1060, 1140,  // pa_Arab -> root
-    1068, 1122,  // pt_AO -> pt_PT
-    1074, 1122,  // pt_CH -> pt_PT
-    1080, 1122,  // pt_CV -> pt_PT
-    1086, 1122,  // pt_FR -> pt_PT
-    1092, 1122,  // pt_GQ -> pt_PT
-    1098, 1122,  // pt_GW -> pt_PT
-    1104, 1122,  // pt_LU -> pt_PT
-    1110, 1122,  // pt_MO -> pt_PT
-    1116, 1122,  // pt_MZ -> pt_PT
-    1128, 1122,  // pt_ST -> pt_PT
-    1134, 1122,  // pt_TL -> pt_PT
-    1145, 1140,  // sat_Deva -> root
-    1154, 1140,  // sd_Deva -> root
-    1162, 1140,  // sd_Khoj -> root
-    1170, 1140,  // sd_Sind -> root
-    1178, 1140,  // shi_Latn -> root
-    1187, 1140,  // so_Arab -> root
-    1195, 1140,  // sr_Latn -> root
-    1203, 1140,  // sw_Arab -> root
-    1211, 1140,  // tg_Arab -> root
-    1219, 1140,  // ug_Cyrl -> root
-    1227, 1140,  // uz_Arab -> root
-    1235, 1140,  // uz_Cyrl -> root
-    1243, 1140,  // vai_Latn -> root
-    1252, 1140,  // wo_Arab -> root
-    1260, 1140,  // yo_Arab -> root
-    1268, 1140,  // yue_Hans -> root
-    1277, 1140,  // zh_Hant -> root
-    1296, 1285,  // zh_Hant_MO -> zh_Hant_HK
+    539, 92,  // en_PL -> en_150
+    545, 85,  // en_PN -> en_001
+    551, 92,  // en_PT -> en_150
+    557, 85,  // en_PW -> en_001
+    563, 92,  // en_RO -> en_150
+    569, 85,  // en_RW -> en_001
+    575, 85,  // en_SB -> en_001
+    581, 85,  // en_SC -> en_001
+    587, 85,  // en_SD -> en_001
+    593, 92,  // en_SE -> en_150
+    599, 85,  // en_SG -> en_001
+    605, 85,  // en_SH -> en_001
+    611, 92,  // en_SI -> en_150
+    617, 92,  // en_SK -> en_150
+    623, 85,  // en_SL -> en_001
+    629, 85,  // en_SS -> en_001
+    635, 85,  // en_SX -> en_001
+    641, 85,  // en_SZ -> en_001
+    647, 1146,  // en_Shaw -> root
+    655, 85,  // en_TC -> en_001
+    661, 85,  // en_TK -> en_001
+    667, 85,  // en_TO -> en_001
+    673, 85,  // en_TT -> en_001
+    679, 85,  // en_TV -> en_001
+    685, 85,  // en_TZ -> en_001
+    691, 85,  // en_UG -> en_001
+    697, 85,  // en_VC -> en_001
+    703, 85,  // en_VG -> en_001
+    709, 85,  // en_VU -> en_001
+    715, 85,  // en_WS -> en_001
+    721, 85,  // en_ZA -> en_001
+    727, 85,  // en_ZM -> en_001
+    733, 85,  // en_ZW -> en_001
+    746, 739,  // es_AR -> es_419
+    752, 739,  // es_BO -> es_419
+    758, 739,  // es_BR -> es_419
+    764, 739,  // es_BZ -> es_419
+    770, 739,  // es_CL -> es_419
+    776, 739,  // es_CO -> es_419
+    782, 739,  // es_CR -> es_419
+    788, 739,  // es_CU -> es_419
+    794, 739,  // es_DO -> es_419
+    800, 739,  // es_EC -> es_419
+    806, 739,  // es_GT -> es_419
+    812, 739,  // es_HN -> es_419
+    818, 739,  // es_JP -> es_419
+    824, 739,  // es_MX -> es_419
+    830, 739,  // es_NI -> es_419
+    836, 739,  // es_PA -> es_419
+    842, 739,  // es_PE -> es_419
+    848, 739,  // es_PR -> es_419
+    854, 739,  // es_PY -> es_419
+    860, 739,  // es_SV -> es_419
+    866, 739,  // es_US -> es_419
+    872, 739,  // es_UY -> es_419
+    878, 739,  // es_VE -> es_419
+    884, 1146,  // ff_Adlm -> root
+    892, 1146,  // ff_Arab -> root
+    906, 1146,  // ha_Arab -> root
+    914, 359,  // hi_Latn -> en_IN
+    922, 900,  // ht -> fr_HT
+    925, 1146,  // iu_Latn -> root
+    933, 1146,  // kaa_Latn -> root
+    942, 1146,  // kk_Arab -> root
+    950, 1146,  // kok_Latn -> root
+    959, 1146,  // ks_Deva -> root
+    967, 1146,  // ku_Arab -> root
+    975, 1146,  // kxv_Deva -> root
+    984, 1146,  // kxv_Orya -> root
+    993, 1146,  // kxv_Telu -> root
+    1002, 1146,  // ky_Arab -> root
+    1010, 1146,  // ky_Latn -> root
+    1018, 1146,  // ml_Arab -> root
+    1026, 1146,  // mn_Mong -> root
+    1034, 1146,  // mni_Mtei -> root
+    1043, 1146,  // ms_Arab -> root
+    1051, 1057,  // nb -> no
+    1054, 1057,  // nn -> no
+    1060, 1057,  // no_NO -> no
+    1066, 1146,  // pa_Arab -> root
+    1074, 1128,  // pt_AO -> pt_PT
+    1080, 1128,  // pt_CH -> pt_PT
+    1086, 1128,  // pt_CV -> pt_PT
+    1092, 1128,  // pt_FR -> pt_PT
+    1098, 1128,  // pt_GQ -> pt_PT
+    1104, 1128,  // pt_GW -> pt_PT
+    1110, 1128,  // pt_LU -> pt_PT
+    1116, 1128,  // pt_MO -> pt_PT
+    1122, 1128,  // pt_MZ -> pt_PT
+    1134, 1128,  // pt_ST -> pt_PT
+    1140, 1128,  // pt_TL -> pt_PT
+    1151, 1146,  // sat_Deva -> root
+    1160, 1146,  // sd_Deva -> root
+    1168, 1146,  // sd_Khoj -> root
+    1176, 1146,  // sd_Sind -> root
+    1184, 1146,  // shi_Latn -> root
+    1193, 1146,  // so_Arab -> root
+    1201, 1146,  // sr_Latn -> root
+    1209, 1146,  // sw_Arab -> root
+    1217, 1146,  // tg_Arab -> root
+    1225, 1146,  // ug_Cyrl -> root
+    1233, 1146,  // uz_Arab -> root
+    1241, 1146,  // uz_Cyrl -> root
+    1249, 1146,  // vai_Latn -> root
+    1258, 1146,  // wo_Arab -> root
+    1266, 1146,  // yo_Arab -> root
+    1274, 1146,  // yue_Hans -> root
+    1283, 1146,  // zh_Hant -> root
+    1302, 1291,  // zh_Hant_MO -> zh_Hant_HK
 };
 
 
