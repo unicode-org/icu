@@ -20622,6 +20622,7 @@ supplementalData:table(nofallback){
             "en_IT",
             "en_NL",
             "en_NO",
+            "en_PL",
             "en_PT",
             "en_RO",
             "en_SE",
@@ -34940,6 +34941,15 @@ supplementalData:table(nofallback){
             }
             preferred{"h"}
         }
+        GS{
+            allowed{
+                "H",
+                "h",
+                "hb",
+                "hB",
+            }
+            preferred{"H"}
+        }
         GT{
             allowed{
                 "h",
@@ -36250,15 +36260,6 @@ supplementalData:table(nofallback){
             }
             preferred{"h"}
         }
-        en_GS{
-            allowed{
-                "h",
-                "hb",
-                "H",
-                "hB",
-            }
-            preferred{"h"}
-        }
         en_HK{
             allowed{
                 "h",
@@ -36278,15 +36279,6 @@ supplementalData:table(nofallback){
             preferred{"H"}
         }
         en_MY{
-            allowed{
-                "h",
-                "hb",
-                "H",
-                "hB",
-            }
-            preferred{"h"}
-        }
-        en_PL{
             allowed{
                 "h",
                 "hb",
