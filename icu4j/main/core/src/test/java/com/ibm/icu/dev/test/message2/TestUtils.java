@@ -181,7 +181,8 @@ public class TestUtils {
                 fail(reportCase(unit)
                         + "\nExpected error, but it didn't happen.\n"
                         + "Result: '" + result + "'\n"
-                        + "Params: " + Arrays.toString(params));
+                        + "Params: " + Arrays.toString(params) + "\n"
+                        + "Errors expected: " + unit.expErrors);
             } else {
                 if (unit.exp != null) {
                     assertEquals(reportCase(unit), unit.exp, result);

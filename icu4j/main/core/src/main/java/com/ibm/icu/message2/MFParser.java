@@ -827,8 +827,7 @@ public class MFParser {
     private String peekWithRegExp(Pattern pattern) {
         StringView sv = new StringView(input.buffer, input.getPosition());
         Matcher m = pattern.matcher(sv);
-        boolean found = m.find();
-        if (found) {
+        if (m.find()) {
             input.skip(m.group().length());
             return m.group();
         }

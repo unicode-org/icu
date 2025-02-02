@@ -37,12 +37,12 @@ public class CoreTest extends CoreTestFmwk {
             "spec/syntax-errors.json", // FAILS 1 / 134
             "spec/syntax.json", // FAILS 2 / 107
             "spec/fallback.json", // new
-//            "spec/functions/currency.json", // new // FAILS 4 / 12 // TODO 77.1: error for :currency without currency code
+            "spec/functions/currency.json", // new // FAILS 4 / 12 // TODO 77.1: error for :currency without currency code
             "spec/functions/date.json", // FAILS 1 / 7
             "spec/functions/datetime.json", // FAILS 1 / 8
             "spec/functions/integer.json", // FAILS 1 / 6
 //            "spec/functions/math.json", // new // FAILS 9 / 16
-            "spec/functions/number.json", // FAILS 10 / 23
+            "spec/functions/number.json",
             "spec/functions/string.json", // FAILS 2 / 9
             "spec/functions/time.json", // FAILS 1 / 6
 //            "spec/pattern-selection.json", // new // FAILS 15 / 22

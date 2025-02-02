@@ -535,6 +535,8 @@ class MFDataModelFormatter {
             }
             return new FormattedPlaceholder(expression, new PlainStringFormattedValue(fallbackString));
         }
+        // TODO 77: hack. How do we pass the error handling policy to formatters?
+        options.put("icu:impl:errorPolicy", this.errorHandlingBehavior.name());
         Formatter ff = funcFactory.createFormatter(locale, options);
         String res = ff.formatToString(toFormat, arguments.getMap());
         if (res == null) {
@@ -585,6 +587,10 @@ class MFDataModelFormatter {
                     FormattedPlaceholder fmt = formatExpression(value, variables, arguments);
                     // If it works, all good
                     variables.put(StringUtils.toNfc(name), fmt);
+                } catch (IllegalArgumentException e) {
+                    if (this.errorHandlingBehavior == ErrorHandlingBehavior.STRICT) {
+                        throw(e); 
+                    }
                 } catch (Exception e) {
                     // It's OK to ignore the failure in this context, see comment above.
                 }

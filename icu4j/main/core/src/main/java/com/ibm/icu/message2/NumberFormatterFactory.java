@@ -112,6 +112,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
          */
         @Override
         public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
+            boolean reportErrors = OptUtils.reportErrors(variableOptions);
             LocalizedNumberFormatter realFormatter;
             if (variableOptions.isEmpty()) {
                 realFormatter = this.icuFormatter;
@@ -124,9 +125,9 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 realFormatter = formatterForOptions(locale, mergedOptions, kind);
             }
 
-            Integer offset = OptUtils.getInteger(variableOptions, "icu:offset");
+            Integer offset = OptUtils.getInteger(variableOptions, reportErrors, "icu:offset");
             if (offset == null && fixedOptions != null) {
-                offset = OptUtils.getInteger(fixedOptions, "icu:offset");
+                offset = OptUtils.getInteger(fixedOptions, reportErrors, "icu:offset");
             }
             if (offset == null) {
                 offset = 0;
@@ -153,7 +154,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 // The behavior is not in the spec, will be in the registry.
                 // We can return "NaN", or try to parse the string as a number
                 String strValue = Objects.toString(toFormat);
-                Number nrValue = OptUtils.asNumber(strValue);
+                Number nrValue = OptUtils.asNumber(reportErrors, "argument", strValue);
                 if (nrValue != null) {
                     result = realFormatter.format(nrValue.doubleValue() - offset);
                 } else {
@@ -239,9 +240,10 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 return true;
             }
 
-            Integer offset = OptUtils.getInteger(variableOptions, "icu:offset");
+            boolean reportErrors = OptUtils.reportErrors(fixedOptions);
+            Integer offset = OptUtils.getInteger(variableOptions, reportErrors, "icu:offset");
             if (offset == null && fixedOptions != null) {
-                offset = OptUtils.getInteger(fixedOptions, "icu:offset");
+                offset = OptUtils.getInteger(fixedOptions, reportErrors, "icu:offset");
             }
             if (offset == null) {
                 offset = 0;
@@ -281,6 +283,8 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
 
     private static LocalizedNumberFormatter formatterForOptions(
             Locale locale, Map<String, Object> fixedOptions, String kind) {
+        boolean reportErrors = OptUtils.reportErrors(fixedOptions);
+
         UnlocalizedNumberFormatter nf;
         String skeleton = OptUtils.getString(fixedOptions, "icu:skeleton");
         if (skeleton != null) {
@@ -324,15 +328,15 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 nf = nf.unit(MeasureUnit.PERCENT).scale(Scale.powerOfTen(2));
             }
 
-            option = OptUtils.getInteger(fixedOptions, "minimumFractionDigits");
+            option = OptUtils.getInteger(fixedOptions, reportErrors, "minimumFractionDigits");
             if (option != null) {
                 nf = nf.precision(Precision.minFraction(option));
             }
-            option = OptUtils.getInteger(fixedOptions, "maximumFractionDigits");
+            option = OptUtils.getInteger(fixedOptions, reportErrors, "maximumFractionDigits");
             if (option != null) {
                 nf = nf.precision(Precision.maxFraction(option));
             }
-            option = OptUtils.getInteger(fixedOptions, "minimumSignificantDigits");
+            option = OptUtils.getInteger(fixedOptions, reportErrors, "minimumSignificantDigits");
             if (option != null) {
                 nf = nf.precision(Precision.minSignificantDigits(option));
             }
@@ -347,11 +351,11 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         }
 
         // The options below apply to both `:number` and `:integer`
-        option = OptUtils.getInteger(fixedOptions, "minimumIntegerDigits");
+        option = OptUtils.getInteger(fixedOptions, reportErrors, "minimumIntegerDigits");
         if (option != null) {
             // TODO! Ask Shane. nf.integerWidth(null) ?
         }
-        option = OptUtils.getInteger(fixedOptions, "maximumSignificantDigits");
+        option = OptUtils.getInteger(fixedOptions, reportErrors, "maximumSignificantDigits");
         if (option != null) {
             nf = nf.precision(Precision.maxSignificantDigits(option));
         }
