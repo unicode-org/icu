@@ -284,7 +284,13 @@ ICU_DATA_BUILD_VERBOSE=
 # Three main targets: tools, core data, and test data.
 # Keep track of whether they are built via timestamp files.
 
-$(TOOLS_TS): "$(ICUTOOLS)\genrb\$(CFGTOOLS)\genrb.exe" "$(ICUTOOLS)\gencnval\$(CFGTOOLS)\gencnval.exe" "$(ICUTOOLS)\gencfu\$(CFGTOOLS)\gencfu.exe" "$(ICUTOOLS)\icupkg\$(CFGTOOLS)\icupkg.exe" "$(ICUTOOLS)\makeconv\$(CFGTOOLS)\makeconv.exe" "$(ICUPBIN)\pkgdata.exe"
+GENRB_DIR=$(ICUTOOLS)\genrb\$(CFGTOOLS)
+GENCNVAL_DIR=$(ICUTOOLS)\gencnval\$(CFGTOOLS)
+GENCFU_DIR=$(ICUTOOLS)\gencfu\$(CFGTOOLS)
+ICUPKG_DIR=$(ICUTOOLS)\icupkg\$(CFGTOOLS)
+MAKECONV_DIR=$(ICUTOOLS)\makeconv\$(CFGTOOLS)
+
+$(TOOLS_TS): "$(GENRB_DIR)\genrb.exe" "$(GENCNVAL_DIR)\gencnval.exe" "$(GENCFU_DIR)\gencfu.exe" "$(ICUPKG_DIR)\icupkg.exe" "$(MAKECONV_DIR)\makeconv.exe" "$(ICUPBIN)\pkgdata.exe"
 	@echo "timestamp" > $(TOOLS_TS)
 
 # On Unix, Python generates at configure time a list of Makefile rules.
