@@ -1456,6 +1456,32 @@ public class MeasureUnitTest extends CoreTestFmwk {
     }
 
     @Test
+    public void TestGetIdentifierForConstantDenominator() {
+        String testCases[][] = {
+                { "meter-per-1000", "meter-per-1000" },
+                { "meter-per-1000-kilometer", "meter-per-1000-kilometer" },
+                { "meter-per-1000000", "meter-per-1e6" },
+                { "meter-per-1000000-kilometer", "meter-per-1e6-kilometer" },
+                { "meter-per-1000000000", "meter-per-1e9" },
+                { "meter-per-1000000000-kilometer", "meter-per-1e9-kilometer" },
+                { "meter-per-1000000000000", "meter-per-1e12" },
+                { "meter-per-1000000000000-kilometer", "meter-per-1e12-kilometer" },
+                { "meter-per-1000000000000000", "meter-per-1e15" },
+                { "meter-per-1e15-kilometer", "meter-per-1e15-kilometer" },
+                { "meter-per-1000000000000000000", "meter-per-1e18" },
+                { "meter-per-1e18-kilometer", "meter-per-1e18-kilometer" },
+                { "meter-per-1000000000000001", "meter-per-1000000000000001" },
+                { "meter-per-1000000000000001-kilometer", "meter-per-1000000000000001-kilometer" },
+        };
+
+        for (String[] testCase : testCases) {
+            MeasureUnit unit = MeasureUnit.forIdentifier(testCase[0]);
+            String actual = unit.getIdentifier();
+            assertEquals(testCase[0], testCase[1], actual);
+        }
+    }
+
+    @Test
     public void TestIdentifierDetails() {
         MeasureUnit joule = MeasureUnit.forIdentifier("joule");
         assertEquals("Initial joule", "joule", joule.getIdentifier());
