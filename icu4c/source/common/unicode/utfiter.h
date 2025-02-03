@@ -66,7 +66,7 @@ namespace U_HEADER_ONLY_NAMESPACE {
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
- * @draft ICU 77
+ * @draft ICU 78
  */
 template<typename UnitIter, typename CP32>
 class CodeUnits {
@@ -114,7 +114,7 @@ private:
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
- * @draft ICU 77
+ * @draft ICU 78
  */
 template<typename Unit, typename CP32>
 class UnsafeCodeUnits {
@@ -267,7 +267,7 @@ protected:
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam UIllFormedBehavior TODO
- * @draft ICU 77
+ * @draft ICU 78
  */
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
 class U16Iterator : private U16IteratorBase<UnitIter, CP32, behavior> {
@@ -388,7 +388,7 @@ private:
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam UIllFormedBehavior TODO
- * @draft ICU 77
+ * @draft ICU 78
  */
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
 class U16ReverseIterator : private U16IteratorBase<UnitIter, CP32, behavior> {
@@ -435,41 +435,41 @@ public:
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam UIllFormedBehavior TODO
- * @draft ICU 77
+ * @draft ICU 78
  */
 template<typename Unit16, typename CP32, UIllFormedBehavior behavior>
 class U16StringCodePoints {
 public:
     /**
      * Constructs a C++ "range" object over the code points in the string.
-     * @draft ICU 77
+     * @draft ICU 78
      */
     U16StringCodePoints(std::basic_string_view<Unit16> s) : s(s) {}
 
-    /** @draft ICU 77 */
+    /** @draft ICU 78 */
     U16StringCodePoints(const U16StringCodePoints &other) = default;
 
-    /** @draft ICU 77 */
+    /** @draft ICU 78 */
     U16StringCodePoints &operator=(const U16StringCodePoints &other) = default;
 
-    /** @draft ICU 77 */
+    /** @draft ICU 78 */
     U16Iterator<const Unit16 *, CP32, behavior> begin() const {
         return {s.data(), s.data(), s.data() + s.length()};
     }
 
-    /** @draft ICU 77 */
+    /** @draft ICU 78 */
     U16Iterator<const Unit16 *, CP32, behavior> end() const {
         const Unit16 *limit = s.data() + s.length();
         return {s.data(), limit, limit};
     }
 
-    /** @draft ICU 77 */
+    /** @draft ICU 78 */
     U16ReverseIterator<const Unit16 *, CP32, behavior> rbegin() const {
         const Unit16 *limit = s.data() + s.length();
         return {s.data(), limit, limit};
     }
 
-    /** @draft ICU 77 */
+    /** @draft ICU 78 */
     U16ReverseIterator<const Unit16 *, CP32, behavior> rend() const {
         return {s.data(), s.data(), s.data() + s.length()};
     }
@@ -553,7 +553,7 @@ protected:
  * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
- * @draft ICU 77
+ * @draft ICU 78
  */
 template<typename Unit16, typename CP32>
 class U16UnsafeIterator : private U16UnsafeIteratorBase<Unit16, CP32> {
@@ -611,7 +611,7 @@ public:
  * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
- * @draft ICU 77
+ * @draft ICU 78
  */
 template<typename Unit16, typename CP32>
 class U16UnsafeReverseIterator : private U16UnsafeIteratorBase<Unit16, CP32> {
@@ -655,37 +655,37 @@ public:
  * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
- * @draft ICU 77
+ * @draft ICU 78
  */
 template<typename Unit16, typename CP32>
 class U16UnsafeStringCodePoints {
 public:
     /**
      * Constructs a C++ "range" object over the code points in the string.
-     * @draft ICU 77
+     * @draft ICU 78
      */
     U16UnsafeStringCodePoints(std::basic_string_view<Unit16> s) : s(s) {}
 
-    /** @draft ICU 77 */
+    /** @draft ICU 78 */
     U16UnsafeStringCodePoints(const U16UnsafeStringCodePoints &other) = default;
     U16UnsafeStringCodePoints &operator=(const U16UnsafeStringCodePoints &other) = default;
 
-    /** @draft ICU 77 */
+    /** @draft ICU 78 */
     U16UnsafeIterator<Unit16, CP32> begin() const {
         return {s.data()};
     }
 
-    /** @draft ICU 77 */
+    /** @draft ICU 78 */
     U16UnsafeIterator<Unit16, CP32> end() const {
         return {s.data() + s.length()};
     }
 
-    /** @draft ICU 77 */
+    /** @draft ICU 78 */
     U16UnsafeReverseIterator<Unit16, CP32> rbegin() const {
         return {s.data() + s.length()};
     }
 
-    /** @draft ICU 77 */
+    /** @draft ICU 78 */
     U16UnsafeReverseIterator<Unit16, CP32> rend() const {
         return {s.data()};
     }
