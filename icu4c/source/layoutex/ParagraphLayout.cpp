@@ -30,6 +30,14 @@
 
 U_NAMESPACE_BEGIN
 
+#ifndef FALSE
+#define FALSE false
+#endif
+
+#ifndef TRUE
+#define TRUE true
+#endif
+
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
 /* Leave this copyright notice here! It needs to go somewhere in this library. */
