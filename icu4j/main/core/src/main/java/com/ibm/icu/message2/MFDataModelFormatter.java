@@ -73,6 +73,7 @@ class MFDataModelFormatter {
                         .setFormatter("number", new NumberFormatterFactory("number"))
                         .setFormatter("integer", new NumberFormatterFactory("integer"))
                         .setFormatter("currency", new NumberFormatterFactory("currency"))
+                        .setFormatter("math", new NumberFormatterFactory("math"))
                         .setDefaultFormatterNameForType(Integer.class, "number")
                         .setDefaultFormatterNameForType(Double.class, "number")
                         .setDefaultFormatterNameForType(Number.class, "number")
@@ -86,6 +87,7 @@ class MFDataModelFormatter {
                         // Register the standard selectors
                         .setSelector("number", new NumberFormatterFactory("number"))
                         .setSelector("integer", new NumberFormatterFactory("integer"))
+                        .setSelector("math", new NumberFormatterFactory("math"))
                         .setSelector("string", new TextSelectorFactory())
                         .setSelector("icu:gender", new TextSelectorFactory())
                         .build();

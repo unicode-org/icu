@@ -12,7 +12,6 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.message2.MFDataModel.VariableExpression;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.Notation;
@@ -43,6 +42,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
             case "number": // $FALL-THROUGH$
             case "integer":
             case "currency":
+            case "math":
                 break;
             default:
                 // Default to number
@@ -132,21 +132,28 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 offset = 0;
             }
 
+            double mathOperand = 0;
+            if ("math".equals(kind)) {
+                ResolvedMathOptions resolvedMathOptions = ResolvedMathOptions.of(fixedOptions);
+                mathOperand = resolvedMathOptions.operand;
+            }
+            
             FormattedValue result = null;
             if (toFormat == null) {
                 // This is also what MessageFormat does.
                 throw new NullPointerException("Argument to format can't be null");
             } else if (toFormat instanceof Double) {
-                result = realFormatter.format((double) toFormat - offset);
+                result = realFormatter.format((double) toFormat - offset + mathOperand);
             } else if (toFormat instanceof Long) {
-                result = realFormatter.format((long) toFormat - offset);
+                result = realFormatter.format((long) toFormat - offset + mathOperand);
             } else if (toFormat instanceof Integer) {
-                result = realFormatter.format((int) toFormat - offset);
+                result = realFormatter.format((int) toFormat - offset + mathOperand);
             } else if (toFormat instanceof BigDecimal) {
                 BigDecimal bd = (BigDecimal) toFormat;
-                result = realFormatter.format(bd.subtract(BigDecimal.valueOf(offset)));
+                result = realFormatter.format(
+                        bd.subtract(BigDecimal.valueOf(offset)).add(BigDecimal.valueOf(mathOperand)));
             } else if (toFormat instanceof Number) {
-                result = realFormatter.format(((Number) toFormat).doubleValue() - offset);
+                result = realFormatter.format(((Number) toFormat).doubleValue() - offset + mathOperand);
             } else if (toFormat instanceof CurrencyAmount) {
                 result = realFormatter.format((CurrencyAmount) toFormat);
             } else {
@@ -155,7 +162,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 String strValue = Objects.toString(toFormat);
                 Number nrValue = OptUtils.asNumber(reportErrors, "argument", strValue);
                 if (nrValue != null) {
-                    result = realFormatter.format(nrValue.doubleValue() - offset);
+                    result = realFormatter.format(nrValue.doubleValue() - offset + mathOperand);
                 } else {
                     result = new PlainStringFormattedValue("{|" + strValue + "|}");
                 }
@@ -450,4 +457,42 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
 
         return nf.locale(locale);
     }
+
+
+    private static class ResolvedMathOptions {
+        final Double operand;
+        final boolean reportErrors;
+
+        ResolvedMathOptions(Double operand, boolean reportErrors) {
+            this.operand = operand;
+            this.reportErrors = reportErrors;
+        }
+
+        static ResolvedMathOptions of(Map<String, Object> options) {
+            boolean reportErrors = OptUtils.reportErrors(options);
+
+            Double operand = null;
+            String addOption = OptUtils.getString(options, "add", null);
+            String subtractOption = OptUtils.getString(options, "subtract");
+
+            if (addOption == null) {
+                if (subtractOption == null) { // both null
+                    throw new IllegalArgumentException(
+                            "bad-option: :math function needs an `add` or `subtract` option.");
+                } else {
+                    operand = -OptUtils.asNumber(reportErrors, "subtract", subtractOption).doubleValue();
+                }
+            } else {
+                if (subtractOption == null) {
+                    operand = OptUtils.asNumber(reportErrors, "add", addOption).doubleValue();
+                } else { // both set
+                    throw new IllegalArgumentException(
+                            "bad-option: :math function can't have both `add` and `subtract` options.");
+                }
+            }
+
+            return new ResolvedMathOptions(operand, reportErrors); 
+        }
+    }
+
 }
