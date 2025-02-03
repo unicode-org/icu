@@ -181,7 +181,7 @@ protected:
     void inc() {
         // TODO: assert current != limit -- more precisely: start <= current < limit
         // Very similar to U16_FWD_1().
-        CP32 c = *current;
+        auto c = *current;
         ++current;
         if (U16_IS_LEAD(c) && current != limit && U16_IS_TRAIL(*current)) {
             ++current;
@@ -300,6 +300,7 @@ public:
     // https://en.cppreference.com/w/cpp/named_req/InputIterator
     // https://en.cppreference.com/w/cpp/language/operators
     // const CodeUnits<UnitIter, CP32> *operator->() const { return &units; }
+    // TODO: Adding operator->() locks us into storing the CodeUnits inside the iterator, right?
 
     U16Iterator &operator++() {  // pre-increment
         if (state > 0) {
@@ -319,6 +320,7 @@ public:
     }
 
     // TODO: disable for single-pass input iterator? or return proxy like std::istreambuf_iterator?
+    // If we return a proxy, then add operator->() to that, too?
     U16Iterator operator++(int) {  // post-increment
         if (state > 0) {
             // operator*() called readAndInc() so current is already ahead.
