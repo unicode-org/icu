@@ -320,9 +320,27 @@ public:
 
     // TODO: disable for single-pass input iterator? or return proxy like std::istreambuf_iterator?
     U16Iterator operator++(int) {  // post-increment
-        U16Iterator result(*this);
-        operator++();
-        return result;
+        if (state > 0) {
+            // operator*() called readAndInc() so current is already ahead.
+            U16Iterator result(*this);
+            state = 0;
+            return result;
+        } else if (state == 0) {
+            units = Super::readAndInc(Super::current);
+            U16Iterator result(*this);
+            result.state = units.length();
+            // keep this->state == 0
+            return result;
+        } else /* state < 0 */ {
+            // operator--() called decAndRead() so we know how far to skip; max 2 for UTF-16.
+            U16Iterator result(*this);
+            ++Super::current;
+            if (++state != 0) {
+                ++Super::current;
+                state = 0;
+            }
+            return result;
+        }
     }
 
     U16Iterator &operator--() {  // pre-decrement
