@@ -31,6 +31,7 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
 {
     int32_t ln = 0;
     char buffer[1024];
+    char *bufferp = buffer;
     while(l != NULL)
     {
         if(l->str)
@@ -43,7 +44,7 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
                     buffer[uprv_strlen(buffer)-1] = '\0';
                 }
                 if(buffer[0] == '"') {
-                    uprv_strcpy(buffer, buffer+1);
+                    bufferp = buffer+1;
                 }
             } else if(quote > 0) { /* add quotes */
                 if(l->str[0] != '"') {
@@ -54,7 +55,7 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
                     uprv_strcat(buffer, "\"");
                 }
             }
-            T_FileStream_write(s, buffer, (int32_t)uprv_strlen(buffer));
+            T_FileStream_write(s, bufferp, (int32_t)uprv_strlen(bufferp));
 
             ln += (int32_t)uprv_strlen(l->str);
         }
@@ -75,7 +76,8 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
 
 const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim, int32_t quote)
 {
-    char buffer[1024];
+    char buffer[1026]; /* 1026 instead of 1024 because quotes may be added */
+    char *bufferp = buffer;
     while(l != NULL)
     {
         if(l->str)
@@ -93,7 +95,7 @@ const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim, int
                     buffer[uprv_strlen(buffer)-1] = '\0';
                 }
                 if(buffer[0] == '"') {
-                    uprv_strcpy(buffer, buffer+1);
+                    bufferp = buffer+1;
                 }
             } else if(quote > 0) { /* add quotes */
                 if(l->str[0] != '"') {
@@ -104,7 +106,7 @@ const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim, int
                     uprv_strcat(buffer, "\"");
                 }
             }
-            T_FileStream_write(s, buffer, (int32_t)uprv_strlen(buffer));
+            T_FileStream_write(s, bufferp, (int32_t)uprv_strlen(bufferp));
         }
 
         if(l->next && delim)
