@@ -256,6 +256,46 @@ public class MeasureUnitImpl {
         this.constantDenominator = constantDenominator;
     }
 
+    private int countCharacter(String str, char ch) {
+        int count = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == ch) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Internal function that returns a string of the constants in the correct
+     * format.
+     * 
+     * Example:
+     * 1000 --> "-per-1000"
+     * 1000000 --> "-per-1e6"
+     * 
+     * NOTE: this function is only used when the constant denominator is greater
+     * than 0.
+     */
+    private String getConstantsString(long constantDenominator) {
+        assert constantDenominator > 0;
+        StringBuilder constantString = new StringBuilder();
+        constantString.append(constantDenominator);
+        String result = constantString.toString();
+
+        if (constantDenominator <= 1000) {
+            return result;
+        }
+
+        // Check if the constant denominator is a power of 10
+        int zeroCount = countCharacter(result, '0');
+        if (zeroCount == result.length() - 1 && result.charAt(0) == '1') {
+            return "1e" + zeroCount;
+        }
+
+        return result;
+    }
+
     /**
      * Normalizes the MeasureUnitImpl and generates the identifier string in place.
      */
@@ -274,6 +314,7 @@ public class MeasureUnitImpl {
         StringBuilder result = new StringBuilder();
         boolean beforePer = true;
         boolean firstTimeNegativeDimension = false;
+        boolean isConstantDenominatorAdded = false;
         for (SingleUnitImpl singleUnit : this.getSingleUnits()) {
             if (beforePer && singleUnit.getDimensionality() < 0) {
                 beforePer = false;
@@ -284,8 +325,9 @@ public class MeasureUnitImpl {
 
             if (firstTimeNegativeDimension && this.constantDenominator > 0) {
                 result.append("-per-");
-                result.append(this.constantDenominator);
+                result.append(getConstantsString(this.constantDenominator));
                 firstTimeNegativeDimension = false;
+                isConstantDenominatorAdded = true;
             }
 
             if (this.getComplexity() == MeasureUnit.Complexity.MIXED) {
@@ -309,9 +351,9 @@ public class MeasureUnitImpl {
             result.append(singleUnit.getNeutralIdentifier());
         }
 
-        if (this.constantDenominator > 0) {
+        if (this.constantDenominator > 0 && !isConstantDenominatorAdded) {
             result.append("-per-");
-            result.append(this.constantDenominator);
+            result.append(getConstantsString(this.constantDenominator));
         }
 
         this.identifier = result.toString();
