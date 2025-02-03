@@ -85,7 +85,6 @@ public class MFParser {
     // abnf: simple-start = simple-start-char / escaped-char / placeholder
     private MFDataModel.Pattern getPattern() throws MFParseException {
         MFDataModel.Pattern pattern = new MFDataModel.Pattern();
-        skipOptionalWhitespaces();
         while (true) {
             MFDataModel.PatternPart part = getPatternPart();
             if (part == null) {
@@ -261,7 +260,11 @@ public class MFParser {
             }
         }
 
+        hasWhitespace = StringUtils.isWhitespace(input.peekChar());
         List<MFDataModel.Attribute> attributes = getAttributes();
+        if (!hasWhitespace && !attributes.isEmpty()) {
+            error("syntax-error: missing space before attributes");
+        }
 
         // Literal without a function, for example {|hello|} or {123}
         return new MFDataModel.LiteralExpression(literal, function, attributes);
@@ -279,6 +282,7 @@ public class MFParser {
     // abnf: function-expression = "{" o function *(s attribute) o "}"
     private MFDataModel.Expression getFunctionExpression() throws MFParseException {
         MFDataModel.Function function = getFunction(false);
+        // TODO 77 require spaces
         List<MFDataModel.Attribute> attributes = getAttributes();
 
         if (function instanceof MFDataModel.Function) {

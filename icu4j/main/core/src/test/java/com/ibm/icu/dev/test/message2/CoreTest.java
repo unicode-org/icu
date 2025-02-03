@@ -28,26 +28,26 @@ public class CoreTest extends CoreTestFmwk {
             "markup.json",
             "matches-whitespace.json",
             "more-data-model-errors.json",
-            "more-functions.json", // FAILS 1 / 18
+            "more-functions.json",
             "normalization.json", // new
             "resolution-errors.json",
             "runtime-errors.json",
 //            "spec/bidi.json", // new // FAILS 16 / 27
-            "spec/data-model-errors.json", // FAILS 1 / 23
-            "spec/syntax-errors.json", // FAILS 1 / 134
-            "spec/syntax.json", // FAILS 2 / 107
+            "spec/data-model-errors.json",
+            "spec/syntax-errors.json",
+            "spec/syntax.json",
             "spec/fallback.json", // new
-            "spec/functions/currency.json", // new // FAILS 4 / 12 // TODO 77.1: error for :currency without currency code
-            "spec/functions/date.json", // FAILS 1 / 7
-            "spec/functions/datetime.json", // FAILS 1 / 8
+            "spec/functions/currency.json", // new // FAILS 3 / 12 // TODO 77.1: error for :currency without currency code
+            "spec/functions/date.json",
+            "spec/functions/datetime.json",
             "spec/functions/integer.json", // FAILS 1 / 6
 //            "spec/functions/math.json", // new // FAILS 9 / 16
             "spec/functions/number.json",
             "spec/functions/string.json", // FAILS 2 / 9
-            "spec/functions/time.json", // FAILS 1 / 6
-//            "spec/pattern-selection.json", // new // FAILS 15 / 22
+            "spec/functions/time.json",
+            "spec/pattern-selection.json", // new
 //            "spec/u-options.json", // new // FAILS 10 / 11
-            "syntax-errors-diagnostics.json", // FAILS 1 / 123
+            "syntax-errors-diagnostics.json",
             "syntax-errors-diagnostics-multiline.json",
             "syntax-errors-end-of-input.json",
             "syntax-errors-reserved.json",

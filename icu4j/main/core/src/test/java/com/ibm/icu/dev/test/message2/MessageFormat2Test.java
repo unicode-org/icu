@@ -205,7 +205,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
             return new TemperatureFormatterImpl(nf, this);
         }
 
-        static private class TemperatureFormatterImpl implements Formatter {
+        private static class TemperatureFormatterImpl implements Formatter {
             private final TemperatureFormatterFactory formatterFactory;
             private final LocalizedNumberFormatter nf;
             private final Map<String, LocalizedNumberFormatter> cachedFormatters =

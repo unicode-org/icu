@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.message2.MFDataModel.VariableExpression;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.Notation;
@@ -83,7 +84,6 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         private final Map<String, Object> fixedOptions;
         private final LocalizedNumberFormatter icuFormatter;
         private final String kind;
-        final boolean advanced;
 
         NumberFormatterImpl(Locale locale, Map<String, Object> fixedOptions, String kind) {
             this.locale = locale;
@@ -91,7 +91,6 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
             String skeleton = OptUtils.getString(fixedOptions, "icu:skeleton");
             boolean fancy = skeleton != null;
             this.icuFormatter = formatterForOptions(locale, fixedOptions, kind);
-            this.advanced = fancy;
             this.kind = kind;
         }
 
@@ -112,7 +111,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
          */
         @Override
         public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
-            boolean reportErrors = OptUtils.reportErrors(variableOptions);
+            boolean reportErrors = OptUtils.reportErrors(fixedOptions) || OptUtils.reportErrors(variableOptions);
             LocalizedNumberFormatter realFormatter;
             if (variableOptions.isEmpty()) {
                 realFormatter = this.icuFormatter;
@@ -257,6 +256,8 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
 
             if (value instanceof Number) {
                 valToCheck = ((Number) value).doubleValue();
+            } else if (value instanceof CharSequence) {
+                return value.equals(key);
             } else {
                 return false;
             }
@@ -279,7 +280,8 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
     }
 
     // Currency ISO code
-    private final static Pattern CURRENCY_ISO_CODE = Pattern.compile("^[A-Z][A-Z][A-Z]$", Pattern.CASE_INSENSITIVE);
+    private final static Pattern CURRENCY_ISO_CODE =
+            Pattern.compile("^[A-Z][A-Z][A-Z]$", Pattern.CASE_INSENSITIVE);
 
     private static LocalizedNumberFormatter formatterForOptions(
             Locale locale, Map<String, Object> fixedOptions, String kind) {

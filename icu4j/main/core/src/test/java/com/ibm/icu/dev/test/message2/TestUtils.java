@@ -38,6 +38,14 @@ public class TestUtils {
         .registerTypeAdapter(ExpErrors.class, new ExpectedErrorAdapter())
         .create();
 
+    private static final MFFunctionRegistry TEST_REGISTRY = MFFunctionRegistry.builder()
+            .setFormatter("test:function", new TestFunctionFactory("function"))
+            .setFormatter("test:format", new TestFunctionFactory("format"))
+            .setFormatter("test:select", new TestFunctionFactory("select"))
+            .setSelector("test:function", new TestFunctionFactory("function"))
+            .setSelector("test:select", new TestFunctionFactory("select"))
+            .build();
+    
     // ======= Legacy TestCase utilities, no json-compatible ========
 
     static void runTestCase(TestCase testCase) {
@@ -140,7 +148,7 @@ public class TestUtils {
     }
 
     static void runTestCase(DefaultTestProperties defaults, Unit unit, Param[] params) {
-        if (unit.ignoreJava != null) {
+        if (unit == null || unit.ignoreJava != null) {
             return;
         }
 
@@ -153,8 +161,10 @@ public class TestUtils {
 
         // We can call the "complete" constructor with null values, but we want to test that
         // all constructors work properly.
-        MessageFormatter.Builder mfBuilder =
-                MessageFormatter.builder().setPattern(pattern.toString());
+        MessageFormatter.Builder mfBuilder = MessageFormatter.builder()
+                .setPattern(pattern.toString())
+                .setFunctionRegistry(TEST_REGISTRY);
+
         if (expectsErrors(defaults, unit)) {
             mfBuilder.setErrorHandlingBehavior(ErrorHandlingBehavior.STRICT);
         }
@@ -212,4 +222,5 @@ public class TestUtils {
         Path filePath = Paths.get(getPath);
         Path json = Paths.get(fileName);
         return filePath.resolve(json);
-    }}
+    }
+}

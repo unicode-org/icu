@@ -40,6 +40,7 @@ public class StringToListAdapter extends TypeAdapter<Sources> {
         }
         throw new IOException();
     }
+
     public void write(JsonWriter writer, Sources value) throws IOException {
         writer.beginArray();
         for (String s : value.sources) {

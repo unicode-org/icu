@@ -374,7 +374,7 @@ public class MessageFormatter {
          *
          * <p>The default value is {@code ErrorHandlingBehavior.BEST_EFFORT}, trying to fallback.</p>
          *
-         * @param the error handling behavior to use.
+         * @param errorHandlingBehavior the error handling behavior to use.
          * @return the builder, for fluent use.
          *
          * @internal ICU 76 technology preview

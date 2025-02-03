@@ -93,4 +93,8 @@ class OptUtils {
         String reportErrors = getString(options, "icu:impl:errorPolicy");
         return "STRICT".equals(reportErrors);
     }
+
+    static boolean reportErrors(Map<String, Object> fixedOptions, Map<String, Object> variableOptions) {
+        return reportErrors(fixedOptions) || reportErrors(variableOptions);
+    }
 }
