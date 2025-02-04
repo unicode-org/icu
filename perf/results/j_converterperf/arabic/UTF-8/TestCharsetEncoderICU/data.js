@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738605224349,
+  "lastUpdate": 1738628507435,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31227,6 +31227,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.3169601482854496,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "bc7ccb0589f952d45ad9c853af3d1d10780a34ab",
+          "message": "ICU-22781 Fix &Improve MeasureUnit identifier generation for constant denominators (Java)\n\nSee #3363",
+          "timestamp": "2025-02-04T00:59:13+01:00",
+          "tree_id": "ee7091d1c3ffa05fd45a6060d6ef40ee2aeaf175",
+          "url": "https://github.com/unicode-org/icu/commit/bc7ccb0589f952d45ad9c853af3d1d10780a34ab"
+        },
+        "date": 1738628288858,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.278028236183866,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
