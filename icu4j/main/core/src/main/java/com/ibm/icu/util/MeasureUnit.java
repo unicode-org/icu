@@ -411,18 +411,23 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
-     * Construct a MeasureUnit from a CLDR Core Unit Identifier, defined in UTS
-     * 35. (Core unit identifiers and mixed unit identifiers are supported, long
-     * unit identifiers are not.) Validates and canonicalizes the identifier.
+     * Constructs a MeasureUnit from a CLDR Core Unit Identifier, as defined in UTS
+     * 35.
+     * This method supports core unit identifiers and mixed unit identifiers.
+     * It validates and canonicalizes the given identifier.
      *
-     * Note: dimensionless <code>MeasureUnit</code> is <code>null</code>
+     * Note: A dimensionless <code>MeasureUnit</code> is represented as
+     * <code>null</code>.
      *
+     * Example usage:
+     * 
      * <pre>
-     * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond")
+     * MeasureUnit example = MeasureUnit.forIdentifier("meter-per-second);
      * </pre>
      *
-     * @param identifier CLDR Unit Identifier
-     * @throws IllegalArgumentException if the identifier is invalid.
+     * @param identifier the CLDR Unit Identifier
+     * @return the corresponding MeasureUnit
+     * @throws IllegalArgumentException if the identifier is invalid
      * @stable ICU 68
      */
     public static MeasureUnit forIdentifier(String identifier) {
