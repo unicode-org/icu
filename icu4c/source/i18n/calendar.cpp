@@ -3804,7 +3804,12 @@ int32_t Calendar::handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t w
 
 int32_t Calendar::handleGetMonthLength(int32_t extendedYear, int32_t month, UErrorCode& status) const
 {
-    return handleComputeMonthStart(extendedYear, month+1, true, status) -
+    int32_t nextMonth;
+    if (uprv_add32_overflow(month, 1, &nextMonth)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    return handleComputeMonthStart(extendedYear, nextMonth, true, status) -
         handleComputeMonthStart(extendedYear, month, true, status);
 }
 
