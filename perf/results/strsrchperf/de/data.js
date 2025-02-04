@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738628621719,
+  "lastUpdate": 1738663007309,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -38265,6 +38265,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 55.3626,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "a262e87aa6bcc812cae8750f2a3e11e50ea1b2a1",
+          "message": "ICU-23032 Change appendNumber method to accept long instead of int\n\nSee #3365",
+          "timestamp": "2025-02-04T00:58:25+01:00",
+          "tree_id": "8ccee3932d2e0edd287785d23616438375b32ec3",
+          "url": "https://github.com/unicode-org/icu/commit/a262e87aa6bcc812cae8750f2a3e11e50ea1b2a1"
+        },
+        "date": 1738662774077,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 26.9012,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 55.1155,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
