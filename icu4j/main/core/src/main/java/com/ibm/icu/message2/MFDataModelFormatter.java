@@ -11,11 +11,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.ibm.icu.message2.MFDataModel.Annotation;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.message2.MFDataModel.Declaration;
 import com.ibm.icu.message2.MFDataModel.Expression;
-import com.ibm.icu.message2.MFDataModel.FunctionAnnotation;
+import com.ibm.icu.message2.MFDataModel.Function;
 import com.ibm.icu.message2.MFDataModel.FunctionExpression;
 import com.ibm.icu.message2.MFDataModel.InputDeclaration;
 import com.ibm.icu.message2.MFDataModel.Literal;
@@ -73,10 +72,12 @@ class MFDataModelFormatter {
                         // Number formatting
                         .setFormatter("number", new NumberFormatterFactory("number"))
                         .setFormatter("integer", new NumberFormatterFactory("integer"))
+                        .setFormatter("currency", new NumberFormatterFactory("currency"))
+                        .setFormatter("math", new NumberFormatterFactory("math"))
                         .setDefaultFormatterNameForType(Integer.class, "number")
                         .setDefaultFormatterNameForType(Double.class, "number")
                         .setDefaultFormatterNameForType(Number.class, "number")
-                        .setDefaultFormatterNameForType(CurrencyAmount.class, "number")
+                        .setDefaultFormatterNameForType(CurrencyAmount.class, "currency")
 
                         // Format that returns "to string"
                         .setFormatter("string", new IdentityFormatterFactory())
@@ -86,18 +87,17 @@ class MFDataModelFormatter {
                         // Register the standard selectors
                         .setSelector("number", new NumberFormatterFactory("number"))
                         .setSelector("integer", new NumberFormatterFactory("integer"))
+                        .setSelector("math", new NumberFormatterFactory("math"))
                         .setSelector("string", new TextSelectorFactory())
                         .setSelector("icu:gender", new TextSelectorFactory())
                         .build();
     }
 
-    String format(Map<String, Object> arguments) {
+    String format(Map<String, Object> xarguments) {
         MFDataModel.Pattern patternToRender = null;
-        if (arguments == null) {
-            arguments = new HashMap<>();
-        }
+        MapWithNfcKeys arguments = new MapWithNfcKeys(xarguments);
 
-        Map<String, Object> variables;
+        MapWithNfcKeys variables;
         if (dm instanceof MFDataModel.PatternMessage) {
             MFDataModel.PatternMessage pm = (MFDataModel.PatternMessage) dm;
             variables = resolveDeclarations(pm.declarations, arguments);
@@ -137,7 +137,7 @@ class MFDataModelFormatter {
     }
 
     private Pattern findBestMatchingPattern(
-            SelectMessage sm, Map<String, Object> variables, Map<String, Object> arguments) {
+            SelectMessage sm, MapWithNfcKeys variables, MapWithNfcKeys arguments) {
         Pattern patternToRender = null;
 
         // ====================================
@@ -154,7 +154,7 @@ class MFDataModelFormatter {
             FormattedPlaceholder fph = formatExpression(sel, variables, arguments);
             String functionName = null;
             Object argument = null;
-            Map<String, Object> options = new HashMap<>();
+            MapWithNfcKeys options = new MapWithNfcKeys();
             if (fph.getInput() instanceof ResolvedExpression) {
                 ResolvedExpression re = (ResolvedExpression) fph.getInput();
                 argument = re.argument;
@@ -163,14 +163,14 @@ class MFDataModelFormatter {
             } else if (fph.getInput() instanceof MFDataModel.VariableExpression) {
                 MFDataModel.VariableExpression ve = (MFDataModel.VariableExpression) fph.getInput();
                 argument = resolveLiteralOrVariable(ve.arg, variables, arguments);
-                if (ve.annotation instanceof FunctionAnnotation) {
-                    functionName = ((FunctionAnnotation) ve.annotation).name;
+                if (ve.function instanceof Function) {
+                    functionName = ((Function) ve.function).name;
                 }
             } else if (fph.getInput() instanceof LiteralExpression) {
                 LiteralExpression le = (LiteralExpression) fph.getInput();
                 argument = le.arg;
-                if (le.annotation instanceof FunctionAnnotation) {
-                    functionName = ((FunctionAnnotation) le.annotation).name;
+                if (le.function instanceof Function) {
+                    functionName = ((Function) le.function).name;
                 }
             }
             SelectorFactory funcFactory = standardFunctions.getSelector(functionName);
@@ -179,7 +179,7 @@ class MFDataModelFormatter {
             }
             // spec: If selection is supported for `rv`:
             if (funcFactory != null) {
-                Selector selectorFunction = funcFactory.createSelector(locale, options);
+                Selector selectorFunction = funcFactory.createSelector(locale, options.getMap());
                 ResolvedSelector rs = new ResolvedSelector(argument, options, selectorFunction);
                 // spec: Append `rv` as the last element of the list `res`.
                 res.add(rs);
@@ -386,18 +386,18 @@ class MFDataModelFormatter {
      */
     @SuppressWarnings("static-method")
     private List<String> matchSelectorKeys(ResolvedSelector rv, List<String> keys) {
-        return rv.selectorFunction.matches(rv.argument, keys, rv.options);
+        return rv.selectorFunction.matches(rv.argument, keys, rv.options.getMap());
     }
 
     private static class ResolvedSelector {
         final Object argument;
-        final Map<String, Object> options;
+        final MapWithNfcKeys options;
         final Selector selectorFunction;
 
         public ResolvedSelector(
-                Object argument, Map<String, Object> options, Selector selectorFunction) {
+                Object argument, MapWithNfcKeys options, Selector selectorFunction) {
             this.argument = argument;
-            this.options = new HashMap<>(options);
+            this.options = new MapWithNfcKeys(options);
             this.selectorFunction = selectorFunction;
         }
     }
@@ -435,8 +435,8 @@ class MFDataModelFormatter {
 
     private static Object resolveLiteralOrVariable(
             LiteralOrVariableRef value,
-            Map<String, Object> localVars,
-            Map<String, Object> arguments) {
+            MapWithNfcKeys localVars,
+            MapWithNfcKeys arguments) {
         if (value instanceof Literal) {
             String val = ((Literal) value).value;
             // "The resolution of a text or literal MUST resolve to a string."
@@ -449,18 +449,18 @@ class MFDataModelFormatter {
                 val = localVars.get(varName);
             }
             if (val == null) {
-                val = arguments.get(varName);
+                val = arguments.get(StringUtils.toNfc(varName));
             }
             return val;
         }
         return value;
     }
 
-    private static Map<String, Object> convertOptions(
+    private static MapWithNfcKeys convertOptions(
             Map<String, Option> options,
-            Map<String, Object> localVars,
-            Map<String, Object> arguments) {
-        Map<String, Object> result = new HashMap<>();
+            MapWithNfcKeys localVars,
+            MapWithNfcKeys arguments) {
+        MapWithNfcKeys result = new MapWithNfcKeys();
         for (Option option : options.values()) {
             result.put(option.name, resolveLiteralOrVariable(option.value, localVars, arguments));
         }
@@ -475,9 +475,9 @@ class MFDataModelFormatter {
      * @param arguments the arguments passed at runtime to be formatted (`mf.format(arguments)`)
      */
     private FormattedPlaceholder formatExpression(
-            Expression expression, Map<String, Object> variables, Map<String, Object> arguments) {
+            Expression expression, MapWithNfcKeys variables, MapWithNfcKeys arguments) {
 
-        Annotation annotation = null; // function name
+        Function function = null; // function name
         String functionName = null;
         Object toFormat = null;
         Map<String, Object> options = new HashMap<>();
@@ -486,7 +486,7 @@ class MFDataModelFormatter {
         if (expression instanceof MFDataModel.VariableExpression) {
             MFDataModel.VariableExpression varPart = (MFDataModel.VariableExpression) expression;
             fallbackString = "{$" + varPart.arg.name + "}";
-            annotation = varPart.annotation; // function name & options
+            function = varPart.function; // function name & options
             Object resolved = resolveLiteralOrVariable(varPart.arg, variables, arguments);
             if (resolved instanceof FormattedPlaceholder) {
                 Object input = ((FormattedPlaceholder) resolved).getInput();
@@ -504,11 +504,11 @@ class MFDataModelFormatter {
         } else if (expression
                 instanceof MFDataModel.FunctionExpression) { // Function without arguments
             MFDataModel.FunctionExpression fe = (FunctionExpression) expression;
-            fallbackString = "{:" + fe.annotation.name + "}";
-            annotation = fe.annotation;
+            fallbackString = "{:" + fe.function.name + "}";
+            function = fe.function;
         } else if (expression instanceof MFDataModel.LiteralExpression) {
             MFDataModel.LiteralExpression le = (LiteralExpression) expression;
-            annotation = le.annotation;
+            function = le.function;
             fallbackString = "{|" + le.arg.value + "|}";
             toFormat = resolveLiteralOrVariable(le.arg, variables, arguments);
         } else if (expression instanceof MFDataModel.Markup) {
@@ -523,15 +523,11 @@ class MFDataModelFormatter {
             }
         }
 
-        if (annotation instanceof FunctionAnnotation) {
-            FunctionAnnotation fa = (FunctionAnnotation) annotation;
-            if (functionName != null && !functionName.equals(fa.name)) {
-                fatalFormattingError(
-                        "invalid function overrides, '" + functionName + "' <> '" + fa.name + "'");
-            }
+        if (function instanceof Function) {
+            Function fa = (Function) function;
             functionName = fa.name;
-            Map<String, Object> newOptions = convertOptions(fa.options, variables, arguments);
-            options.putAll(newOptions);
+            MapWithNfcKeys newOptions = convertOptions(fa.options, variables, arguments);
+            options.putAll(newOptions.getMap());
         }
 
         FormatterFactory funcFactory = getFormattingFunctionFactoryByName(toFormat, functionName);
@@ -541,8 +537,10 @@ class MFDataModelFormatter {
             }
             return new FormattedPlaceholder(expression, new PlainStringFormattedValue(fallbackString));
         }
+        // TODO 77: hack. How do we pass the error handling policy to formatters?
+        options.put("icu:impl:errorPolicy", this.errorHandlingBehavior.name());
         Formatter ff = funcFactory.createFormatter(locale, options);
-        String res = ff.formatToString(toFormat, arguments);
+        String res = ff.formatToString(toFormat, arguments.getMap());
         if (res == null) {
             if (errorHandlingBehavior == ErrorHandlingBehavior.STRICT) {
                 fatalFormattingError("unable to format string at " + fallbackString);
@@ -562,14 +560,14 @@ class MFDataModelFormatter {
         public ResolvedExpression(
                 Object argument, String functionName, Map<String, Object> options) {
             this.argument = argument;
-            this.functionName = functionName;
+            this.functionName = StringUtils.toNfc(functionName);
             this.options = options;
         }
     }
 
-    private Map<String, Object> resolveDeclarations(
-            List<MFDataModel.Declaration> declarations, Map<String, Object> arguments) {
-        Map<String, Object> variables = new HashMap<>();
+    private MapWithNfcKeys resolveDeclarations(
+            List<MFDataModel.Declaration> declarations, MapWithNfcKeys arguments) {
+        MapWithNfcKeys variables = new MapWithNfcKeys();
         String name;
         Expression value;
         if (declarations != null) {
@@ -590,7 +588,11 @@ class MFDataModelFormatter {
                     // {{ Hello {$user}! }}
                     FormattedPlaceholder fmt = formatExpression(value, variables, arguments);
                     // If it works, all good
-                    variables.put(name, fmt);
+                    variables.put(StringUtils.toNfc(name), fmt);
+                } catch (IllegalArgumentException e) {
+                    if (this.errorHandlingBehavior == ErrorHandlingBehavior.STRICT) {
+                        throw(e); 
+                    }
                 } catch (Exception e) {
                     // It's OK to ignore the failure in this context, see comment above.
                 }
@@ -606,6 +608,53 @@ class MFDataModelFormatter {
         public IntVarTuple(int integer, Variant variant) {
             this.integer = integer;
             this.variant = variant;
+        }
+    }
+
+    /*
+     * I considered extending a HashMap.
+     * But then we would need to override all the methods that use keys:
+     * compute, computeIfAbsent, computeIfPresent, containsKey, getOrDefault,
+     * merge, put, putIfAbsent, removing, replacing, and so on.
+     * If we don't and some refactoring in the code above starts using one of
+     * the methods that was not overridden then it will bypass the normalization
+     * and will create a map with mixed keys (some not normalized).
+     */
+    private static class MapWithNfcKeys {
+        private final Map<String, Object> theMap = new HashMap<>();
+
+        Map<String, Object> getMap() {
+            return theMap;
+        }
+
+        MapWithNfcKeys() {
+            super();
+        }
+
+        MapWithNfcKeys(MapWithNfcKeys org) {
+            super();
+            theMap.putAll(org.getMap());
+        }
+
+        MapWithNfcKeys(Map<String, Object> orgMap) {
+            super();
+            if (orgMap != null) {
+                for (Map.Entry<String, Object> e : orgMap.entrySet()) {
+                    this.put(StringUtils.toNfc(e.getKey()), e.getValue());
+                }
+            }
+        }
+
+        public Object put(String key, Object value) {
+            return theMap.put(StringUtils.toNfc(key), value);
+        }
+
+        public void putAll(Map<? extends String, ? extends Object> m) {
+            theMap.putAll(m);
+        }
+
+        public Object get(String key) {
+            return theMap.get(key);
         }
     }
 }

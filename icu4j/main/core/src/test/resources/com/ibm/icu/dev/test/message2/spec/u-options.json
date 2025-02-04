@@ -1,0 +1,148 @@
+{
+  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "scenario": "u: Options",
+  "description": "Common options affecting the function context",
+  "defaultTestProperties": {
+    "bidiIsolation": "default",
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": "{#tag u:id=x}content{/ns:tag u:id=x}",
+      "exp": "content",
+      "expParts": [
+        {
+          "type": "markup",
+          "kind": "open",
+          "id": "x",
+          "name": "tag"
+        },
+        {
+          "type": "literal",
+          "value": "content"
+        },
+        {
+          "type": "markup",
+          "kind": "close",
+          "id": "x",
+          "name": "ns:tag"
+        }
+      ]
+    },
+    {
+      "src": "{#tag u:dir=rtl u:locale=ar}content{/ns:tag}",
+      "exp": "content",
+      "expErrors": [{ "type": "bad-option" }, { "type": "bad-option" }],
+      "expParts": [
+        {
+          "type": "markup",
+          "kind": "open",
+          "name": "tag"
+        },
+        {
+          "type": "literal",
+          "value": "content"
+        },
+        {
+          "type": "markup",
+          "kind": "close",
+          "name": "ns:tag"
+        }
+      ]
+    },
+    {
+      "src": "hello {4.2 :number u:locale=fr}",
+      "exp": "hello 4,2"
+    },
+    {
+      "src": "hello {world :string u:dir=ltr u:id=foo}",
+      "exp": "hello \u2066world\u2069",
+      "expParts": [
+        {
+          "type": "literal",
+          "value": "hello "
+        },
+        { "type": "bidiIsolation", "value": "\u2066" },
+        {
+          "type": "string",
+          "source": "|world|",
+          "dir": "ltr",
+          "id": "foo",
+          "value": "world"
+        },
+        { "type": "bidiIsolation", "value": "\u2069" }
+
+      ]
+    },
+    {
+      "src": "hello {world :string u:dir=rtl}",
+      "exp": "hello \u2067world\u2069",
+      "expParts": [
+        { "type": "literal", "value": "hello " },
+        { "type": "bidiIsolation", "value": "\u2067" },
+        {
+          "type": "string",
+          "source": "|world|",
+          "dir": "rtl",
+          "locale": "en-US",
+          "value": "world"
+        },
+        { "type": "bidiIsolation", "value": "\u2069" }
+      ]
+    },
+    {
+      "src": "hello {world :string u:dir=auto}",
+      "exp": "hello \u2068world\u2069",
+      "expParts": [
+        { "type": "literal", "value": "hello " },
+        { "type": "bidiIsolation", "value": "\u2068" },
+        {
+          "type": "string",
+          "source": "|world|",
+          "locale": "en-US",
+          "value": "world"
+        },
+        { "type": "bidiIsolation", "value": "\u2069" }
+      ]
+    },
+    {
+      "src": ".local $world = {world :string u:dir=ltr u:id=foo} {{hello {$world}}}",
+      "exp": "hello \u2066world\u2069",
+      "expParts": [
+        {
+          "type": "literal",
+          "value": "hello "
+        },
+        { "type": "bidiIsolation", "value": "\u2066" },
+        {
+          "type": "string",
+          "source": "|world|",
+          "dir": "ltr",
+          "id": "foo",
+          "value": "world"
+        },
+        { "type": "bidiIsolation", "value": "\u2069" }
+      ]
+    },
+    {
+      "locale": "ar",
+      "src": "أهلاً {بالعالم :string u:dir=rtl}",
+      "exp": "أهلاً \u2067بالعالم\u2069"
+    },
+    {
+      "locale": "ar",
+      "src": "أهلاً {بالعالم :string u:dir=auto}",
+      "exp": "أهلاً \u2068بالعالم\u2069"
+    },
+    {
+      "locale": "ar",
+      "src": "أهلاً {world :string u:dir=ltr}",
+      "exp": "أهلاً \u2066world\u2069"
+    },
+    {
+      "locale": "ar",
+      "src": "أهلاً {بالعالم :string}",
+      "exp": "أهلاً \u2068بالعالم\u2069"
+    }
+  ]
+}

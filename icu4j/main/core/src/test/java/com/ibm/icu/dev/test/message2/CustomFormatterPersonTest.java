@@ -146,11 +146,13 @@ public class CustomFormatterPersonTest extends CoreTestFmwk {
         Person malePerson = new Person("Mr.", "John", "Doe");
         Person unknownPerson = new Person("Mr./Ms.", "Anonymous", "Doe");
         String message = ""
+                + ".input {$hostGender :string}\n"
+                + ".input {$guestCount :number}\n"
                 + ".local $hostName = {$host :person length=long}\n"
                 + ".local $guestName = {$guest :person length=long}\n"
                 + ".local $guestsOther = {$guestCount :number icu:offset=1}\n"
               //  + "\n"
-                + ".match {$hostGender :icu:gender} {$guestCount :number}\n"
+                + ".match $hostGender $guestCount\n"
               //  + "\n"
                 + " female 0 {{{$hostName} does not give a party.}}\n"
                 + " female 1 {{{$hostName} invites {$guestName} to her party.}}\n"
