@@ -54,6 +54,8 @@ public:
     // limit sentinel
     SinglePassIter() : src(nullptr) {}
 
+    // TODO: try to delete the copy constructor/assignment?
+
     bool operator==(const SinglePassIter &other) const {
         bool done = isDone();
         bool otherDone = other.isDone();

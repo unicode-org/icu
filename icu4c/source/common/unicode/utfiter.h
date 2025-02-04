@@ -83,8 +83,13 @@ public:
 
     bool wellFormed() const { return ok; }
 
-    // TODO: disable for single-pass input iterator
-    UnitIter data() const { return p; }
+    // disable for single-pass input iterator
+    template<typename Iter = UnitIter>
+    std::enable_if_t<
+        std::is_base_of_v<std::forward_iterator_tag,
+                          typename std::iterator_traits<Iter>::iterator_category>,
+        UnitIter>
+    data() const { return p; }
 
     uint8_t length() const { return len; }
 
