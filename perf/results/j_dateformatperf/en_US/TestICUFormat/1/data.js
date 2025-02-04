@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738662635828,
+  "lastUpdate": 1738713584002,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31347,6 +31347,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 258.4062335220702,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "0112e4292e5293c6211471a131552469ad6f9595",
+          "message": "ICU-22962 Fix int32_t overflow issue when month is large",
+          "timestamp": "2025-02-04T15:39:32-08:00",
+          "tree_id": "6cd05ba6b5af3741616dad5c1effdb8563179897",
+          "url": "https://github.com/unicode-org/icu/commit/0112e4292e5293c6211471a131552469ad6f9595"
+        },
+        "date": 1738713289921,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 250.40863072028645,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
