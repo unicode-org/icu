@@ -25,10 +25,12 @@
 #include "unicode/ustring.h"
 #include "unicode/utext.h"
 #include "cmemory.h"
+#include "dictbe.h"
 #if !UCONFIG_NO_BREAK_ITERATION
 #include "unicode/filteredbrk.h"
 #include <stdio.h> // for snprintf
 #endif
+#include <unicode/uscript.h>
 /**
  * API Test the RuleBasedBreakIterator class
  */
@@ -1438,6 +1440,56 @@ void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
 #endif
 }
 
+
+
+/** helper function for testing*/
+const char *RBBIAPITest::forLangTag(char buf[ULOC_FULLNAME_CAPACITY], const char *locale) {
+    if(!locale) return locale;
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t parsedLength;
+    uloc_forLanguageTag(locale, buf, ULOC_FULLNAME_CAPACITY, &parsedLength, &status);
+    // verify no err
+    assertFalse(u_errorName(status), U_FAILURE(status));
+    return buf;
+}
+
+void RBBIAPITest::TestSuppressDictionary() {
+    char buf[ULOC_FULLNAME_CAPACITY];
+
+    // sanity checks of our internal function
+    {
+        const char *t = forLangTag(buf, "en");
+        assertEquals(WHERE, "en", t);
+    }
+    {
+        const char *t = forLangTag(buf, "en-u-dx-Thai");
+        assertEquals(WHERE, "en@dx=thai", t);
+    }
+    {
+        const char *t = forLangTag(buf, "sss-u-dx-Thai-Laoo");
+        assertEquals(WHERE, "sss@dx=thai-laoo", t);
+    }
+
+    assertFalse(WHERE, DictionaryBreakEngine::suppressScriptBreak(nullptr, USCRIPT_COMMON));
+    assertTrue(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "en-u-dx-Thai"), USCRIPT_THAI));
+    assertFalse(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "en-u-dx-Thai"), USCRIPT_HANGUL));
+    assertTrue(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "en-u-dx-Zyyy"), USCRIPT_COMMON));
+    assertTrue(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "en-u-dx-Zyyy"), USCRIPT_THAI));
+    assertTrue(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "en-u-dx-Zyyy"), USCRIPT_HANGUL));
+    assertTrue(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "en-u-dx-Thai-Laoo"), USCRIPT_THAI));
+    assertTrue(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "en-u-dx-Thai-Laoo"), USCRIPT_LAO));
+    assertFalse(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "en-u-dx-Thai-Laoo"), USCRIPT_HANGUL));
+    assertTrue(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "en-u-dx-Laoo-Zyyy"), USCRIPT_THAI));
+    assertTrue(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "en-u-dx-Zyyy-Laoo"), USCRIPT_THAI));
+    assertTrue(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "en-u-dx-Zyyy-Laoo-tz-gblon"), USCRIPT_THAI));
+    assertTrue(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "en-u-dx-Zyyy-Laoo"), USCRIPT_COMMON));
+
+    // try where there's no -u-dx
+    assertFalse(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "tlh"), USCRIPT_MYANMAR));
+    assertFalse(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "tlh-t-k0-plqdkbd"), USCRIPT_MYANMAR));
+    assertFalse(WHERE, DictionaryBreakEngine::suppressScriptBreak(forLangTag(buf, "tlh-u-tz-gblon-"), USCRIPT_MYANMAR));
+}
+
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
@@ -1469,6 +1521,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 #if !UCONFIG_NO_BREAK_ITERATION
     TESTCASE_AUTO(TestFilteredBreakIteratorBuilder);
 #endif
+    TESTCASE_AUTO(TestSuppressDictionary);
     TESTCASE_AUTO_END;
 }
 
