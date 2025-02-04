@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738605681434,
+  "lastUpdate": 1738628939207,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -60855,6 +60855,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1315174.0388,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "bc7ccb0589f952d45ad9c853af3d1d10780a34ab",
+          "message": "ICU-22781 Fix &Improve MeasureUnit identifier generation for constant denominators (Java)\n\nSee #3363",
+          "timestamp": "2025-02-04T00:59:13+01:00",
+          "tree_id": "ee7091d1c3ffa05fd45a6060d6ef40ee2aeaf175",
+          "url": "https://github.com/unicode-org/icu/commit/bc7ccb0589f952d45ad9c853af3d1d10780a34ab"
+        },
+        "date": 1738628718451,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 284.0501,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 2971813.3316,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1305061.738,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 2774426.6417,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1301132.7709,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
