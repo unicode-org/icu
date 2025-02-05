@@ -167,6 +167,10 @@ class NumberFormatterImpl {
         return unit != null && "permille".equals(unit.getSubtype());
     }
 
+    private static boolean unitHasConstant(MeasureUnit unit) {
+        return unit != null && unit.getConstantDenominator() != 0;
+    }
+
     /**
      * Synthesizes the MacroProps into a MicroPropsGenerator. All information, including the locale, is
      * encoded into the MicroPropsGenerator, except for the quantity itself, which is left abstract and
@@ -191,6 +195,7 @@ class NumberFormatterImpl {
         boolean isBaseUnit = unitIsBaseUnit(macros.unit);
         boolean isPercent = unitIsPercent(macros.unit);
         boolean isPermille = unitIsPermille(macros.unit);
+        boolean isHasConstant = unitHasConstant(macros.unit);
         boolean isCompactNotation = (macros.notation instanceof CompactNotation);
         boolean isAccounting = macros.sign == SignDisplay.ACCOUNTING
                 || macros.sign == SignDisplay.ACCOUNTING_ALWAYS

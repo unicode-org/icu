@@ -860,6 +860,11 @@ public class LongNameHandler
         MeasureUnitImpl fullUnit = unit.getCopyOfMeasureUnitImpl();
         unit = null;
         MeasureUnit perUnit = null;
+        if (fullUnit.getConstantDenominator() != 0) {
+            MeasureUnitImpl constantUnit = new MeasureUnitImpl();
+            constantUnit.setConstantDenominator(fullUnit.getConstantDenominator());
+            perUnit = constantUnit.build();
+        }
         // TODO(icu-units#28): lots of inefficiency in the handling of
         // MeasureUnit/MeasureUnitImpl:
         for (SingleUnitImpl subUnit : fullUnit.getSingleUnits()) {
@@ -879,6 +884,7 @@ public class LongNameHandler
                 }
             }
         }
+
         MeasureUnitImpl unitImpl = unit == null ? null : unit.getCopyOfMeasureUnitImpl();
         MeasureUnitImpl perUnitImpl = perUnit == null ? null : perUnit.getCopyOfMeasureUnitImpl();
 
@@ -994,7 +1000,9 @@ public class LongNameHandler
             // identifier might also be empty for MeasureUnit().
             productUnit.serialize();
         }
-        if (productUnit.getIdentifier().length() == 0) {
+
+        long constantDenominator = productUnit.getConstantDenominator();
+        if (productUnit.getIdentifier().length() == 0 && constantDenominator == 0) {
             // MeasureUnit(): no units: return empty strings.
             return;
         }

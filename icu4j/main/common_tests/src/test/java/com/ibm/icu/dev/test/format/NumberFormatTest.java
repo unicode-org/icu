@@ -51,6 +51,10 @@ import com.ibm.icu.impl.data.TokenIterator;
 import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
+import com.ibm.icu.number.LocalizedNumberFormatter;
+import com.ibm.icu.number.NumberFormatter;
+import com.ibm.icu.number.UnlocalizedNumberFormatter;
+import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.CompactDecimalFormat;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormat;
@@ -66,6 +70,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
+import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
@@ -7056,4 +7061,12 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         }
     }
+
+
+    @Test
+    public void TestArbitraryConstantFormatting() {
+        MeasureUnit meter1000 = MeasureUnit.forIdentifier("meter-per-1000");
+        LocalizedNumberFormatter formatter3 = NumberFormatter.withLocale(ULocale.ENGLISH).unit(meter1000).unitWidth(UnitWidth.FULL_NAME);
+        String formatted3 = formatter3.format(1L).toString();
+        assertEquals("meter-per-1000", "1 meter per ", formatted3);    }
 }
