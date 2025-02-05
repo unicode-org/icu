@@ -152,7 +152,7 @@ CharString &CharString::append(const char *s, int32_t sLength, UErrorCode &error
     return *this;
 }
 
-CharString &CharString::appendNumber(int32_t number, UErrorCode &status) {
+CharString &CharString::appendNumber(int64_t number, UErrorCode &status) {
     if (number < 0) {
         this->append('-', status);
         if (U_FAILURE(status)) {

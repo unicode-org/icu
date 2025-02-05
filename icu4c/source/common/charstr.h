@@ -136,7 +136,7 @@ public:
     }
     CharString &append(const char *s, int32_t sLength, UErrorCode &status);
 
-    CharString &appendNumber(int32_t number, UErrorCode &status);
+    CharString &appendNumber(int64_t number, UErrorCode &status);
 
     /**
      * Returns a writable buffer for appending and writes the buffer's capacity to
