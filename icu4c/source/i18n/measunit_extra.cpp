@@ -42,7 +42,7 @@ using icu::double_conversion::StringToDoubleConverter;
 
 // TODO: This is a temporary solution to avoid the problem in msvc-x86, which considers the `LONG_MAX` as
 // a maximum of 32-bit signed integer.
-#define INTERNAL_LONG_MAX 0x7FFFFFFFFFFFFFFFL
+const uint64_t INTERNAL_LONG_MAX = 0x7FFFFFFFFFFFFFFFL;
 
 // TODO: Propose a new error code for this?
 constexpr UErrorCode kUnitIdentifierSyntaxError = U_ILLEGAL_ARGUMENT_ERROR;
