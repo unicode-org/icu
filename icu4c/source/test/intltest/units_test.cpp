@@ -53,6 +53,7 @@ class UnitsTest : public IntlTest {
     void testUnitPreferencesWithCLDRTests();
     void testUnitsConstantsDenomenator();
     void testMeasureUnit_withConstantDenominator();
+    void testUnitsConstantsDenomenator_getIdentifier();
     void testConverter();
 };
 
@@ -72,6 +73,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testUnitPreferencesWithCLDRTests);
     TESTCASE_AUTO(testUnitsConstantsDenomenator);
     TESTCASE_AUTO(testMeasureUnit_withConstantDenominator);
+    TESTCASE_AUTO(testUnitsConstantsDenomenator_getIdentifier);
     TESTCASE_AUTO(testConverter);
     TESTCASE_AUTO_END;
 }
@@ -1340,6 +1342,41 @@ void UnitsTest::testMeasureUnit_withConstantDenominator() {
     unit = unit.withConstantDenominator(denominator, status);
     assertTrue("There is a failure caused by withConstantDenominator(\"portion\")", status.isFailure());
     status.reset();
+}
+
+void UnitsTest::testUnitsConstantsDenomenator_getIdentifier() {
+    IcuTestErrorCode status(*this, "UnitTests::testUnitsConstantsDenomenator_getIdentifier");
+
+    // Test Cases
+    struct TestCase {
+        const char *source;
+        const char *expectedIdentifier;
+    } testCases[]{
+        {"meter-per-1000", "meter-per-1000"},
+        {"meter-per-1000-kilometer", "meter-per-1000-kilometer"},
+        {"meter-per-1000000", "meter-per-1e6"},
+        {"meter-per-1000000-kilometer", "meter-per-1e6-kilometer"},
+        {"meter-per-1000000000", "meter-per-1e9"},
+        {"meter-per-1000000000-kilometer", "meter-per-1e9-kilometer"},
+        {"meter-per-1000000000000", "meter-per-1e12"},
+        {"meter-per-1000000000000-kilometer", "meter-per-1e12-kilometer"},
+        {"meter-per-1000000000000000", "meter-per-1e15"},
+        {"meter-per-1e15-kilometer", "meter-per-1e15-kilometer"},
+        {"meter-per-1000000000000000000", "meter-per-1e18"},
+        {"meter-per-1e18-kilometer", "meter-per-1e18-kilometer"},
+        {"meter-per-1000000000000001", "meter-per-1000000000000001"},
+        {"meter-per-1000000000000001-kilometer", "meter-per-1000000000000001-kilometer"},
+    };
+
+    for (const auto &testCase : testCases) {
+        MeasureUnit unit = MeasureUnit::forIdentifier(testCase.source, status);
+        if (status.errIfFailureAndReset("forIdentifier(\"%s\")", testCase.source)) {
+            continue;
+        }
+
+        auto actualIdentifier = unit.getIdentifier();
+        assertEquals(" getIdentifier(\"%s\")", testCase.expectedIdentifier, actualIdentifier);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
