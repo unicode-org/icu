@@ -105,21 +105,19 @@ typedef enum UMeasurePrefix {
      */
     UMEASURE_PREFIX_YOTTA = UMEASURE_PREFIX_ONE + 24,
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * SI prefix: ronna, 10^27.
      *
-     * @draft ICU 75
+     * @stable ICU 75
      */
     UMEASURE_PREFIX_RONNA = UMEASURE_PREFIX_ONE + 27,
 
     /**
      * SI prefix: quetta, 10^30.
      *
-     * @draft ICU 75
+     * @stable ICU 75
      */
     UMEASURE_PREFIX_QUETTA = UMEASURE_PREFIX_ONE + 30,
-#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_INTERNAL_API
     /**
@@ -268,21 +266,19 @@ typedef enum UMeasurePrefix {
      */
     UMEASURE_PREFIX_YOCTO = UMEASURE_PREFIX_ONE + -24,
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * SI prefix: ronto, 10^-27.
      *
-     * @draft ICU 75
+     * @stable ICU 75
      */
     UMEASURE_PREFIX_RONTO = UMEASURE_PREFIX_ONE + -27,
 
     /**
      * SI prefix: quecto, 10^-30.
      *
-     * @draft ICU 75
+     * @stable ICU 75
      */
     UMEASURE_PREFIX_QUECTO = UMEASURE_PREFIX_ONE + -30,
-#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_INTERNAL_API
     /**
