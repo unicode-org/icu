@@ -329,6 +329,7 @@ public: // package
     void TestCalendarRollOrdinalMonth();
     void TestLimitsOrdinalMonth();
     void TestActualLimitsOrdinalMonth();
+    void TestMaxActualLimitsWithoutGet23006();
     void TestDangiOverflowIsLeapMonthBetween22507();
 
     void TestFWWithISO8601();
@@ -351,6 +352,7 @@ public: // package
     void Test22730JapaneseOverflow();
     void Test22730CopticOverflow();
     void Test22962ComputeJulianDayOverflow();
+    void Test22962MonthAddOneOverflow();
 
     void Test22750Roll();
 

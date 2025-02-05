@@ -569,11 +569,11 @@ public class LocaleMatcherTest extends CoreTestFmwk {
     @Test
     public void testAsymmetry() {
         LocaleMatcher matcher;
-        matcher = new LocaleMatcher("mul, nl");
-        assertEquals("nl", matcher.getBestMatch("af").toString()); // af => nl
+        matcher = new LocaleMatcher("mul, de");
+        assertEquals("de", matcher.getBestMatch("gsw").toString()); // gsw => de
 
-        matcher = new LocaleMatcher("mul, af");
-        assertEquals("mul", matcher.getBestMatch("nl").toString()); // but nl !=> af
+        matcher = new LocaleMatcher("mul, gsw");
+        assertEquals("mul", matcher.getBestMatch("de").toString()); // but de !=> gsw
     }
 
 
