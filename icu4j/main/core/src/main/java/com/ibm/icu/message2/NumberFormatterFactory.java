@@ -86,6 +86,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         private final String kind;
 
         NumberFormatterImpl(Locale locale, Map<String, Object> fixedOptions, String kind) {
+            locale = OptUtils.getBestLocale(fixedOptions, locale);
             this.locale = locale;
             this.fixedOptions = new HashMap<>(fixedOptions);
             String skeleton = OptUtils.getString(fixedOptions, "icu:skeleton");
@@ -137,12 +138,14 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 ResolvedMathOptions resolvedMathOptions = ResolvedMathOptions.of(fixedOptions);
                 mathOperand = resolvedMathOptions.operand;
             }
-            
+
+            boolean isInt = kind.equals("integer");
             FormattedValue result = null;
             if (toFormat == null) {
                 // This is also what MessageFormat does.
                 throw new NullPointerException("Argument to format can't be null");
             } else if (toFormat instanceof Double) {
+                if (isInt) toFormat = Math.floor((double) toFormat);
                 result = realFormatter.format((double) toFormat - offset + mathOperand);
             } else if (toFormat instanceof Long) {
                 result = realFormatter.format((long) toFormat - offset + mathOperand);
@@ -150,9 +153,11 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 result = realFormatter.format((int) toFormat - offset + mathOperand);
             } else if (toFormat instanceof BigDecimal) {
                 BigDecimal bd = (BigDecimal) toFormat;
+                if (isInt) toFormat = bd.longValue();
                 result = realFormatter.format(
                         bd.subtract(BigDecimal.valueOf(offset)).add(BigDecimal.valueOf(mathOperand)));
             } else if (toFormat instanceof Number) {
+                if (isInt) toFormat = Math.floor(((Number) toFormat).doubleValue());
                 result = realFormatter.format(((Number) toFormat).doubleValue() - offset + mathOperand);
             } else if (toFormat instanceof CurrencyAmount) {
                 result = realFormatter.format((CurrencyAmount) toFormat);
@@ -162,12 +167,14 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 String strValue = Objects.toString(toFormat);
                 Number nrValue = OptUtils.asNumber(reportErrors, "argument", strValue);
                 if (nrValue != null) {
+                    if (isInt) toFormat = Math.floor(nrValue.doubleValue());
                     result = realFormatter.format(nrValue.doubleValue() - offset + mathOperand);
                 } else {
                     result = new PlainStringFormattedValue("{|" + strValue + "|}");
                 }
             }
-            return new FormattedPlaceholder(toFormat, result);
+            Directionality dir = OptUtils.getBestDirectionality(variableOptions, locale);
+            return new FormattedPlaceholder(toFormat, result, dir, false);
         }
     }
 

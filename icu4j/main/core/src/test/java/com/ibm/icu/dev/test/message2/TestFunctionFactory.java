@@ -15,8 +15,6 @@ import com.ibm.icu.message2.FormatterFactory;
 import com.ibm.icu.message2.PlainStringFormattedValue;
 import com.ibm.icu.message2.Selector;
 import com.ibm.icu.message2.SelectorFactory;
-import com.ibm.icu.number.LocalizedNumberFormatter;
-import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.FormattedValue;
 
 /**

@@ -12,7 +12,7 @@
     {
       "locale": "ar-EG",
       "src": "hello {|4.2| :number}",
-      "exp": "hello \u0664\u066B\u0662"
+      "exp": "hello \u2067\u0664\u066B\u0662\u2069"
     },
     {
       "comment": "This is not an error! foo is not used before the local declaration, so the local declaration of $foo shadows the input variable.",

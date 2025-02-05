@@ -93,22 +93,28 @@ class MFDataModelFormatter {
                         .build();
     }
 
-    String format(Map<String, Object> xarguments) {
+    // Bidi controls. Here for readability only
+    private static final char LRI = '\u2066'; // LEFT-TO-RIGHT ISOLATE (LRI)
+    private static final char RLI = '\u2067'; // RIGHT-TO-LEFT ISOLATE (RLI)
+    private static final char FSI = '\u2068'; // FIRST STRONG ISOLATE (FSI)
+    private static final char PDI = '\u2069'; // POP DIRECTIONAL ISOLATE (PDI)
+    
+    String format(Map<String, Object> arguments) {
         MFDataModel.Pattern patternToRender = null;
-        MapWithNfcKeys arguments = new MapWithNfcKeys(xarguments);
+        MapWithNfcKeys nfcArguments = new MapWithNfcKeys(arguments);
 
         MapWithNfcKeys variables;
         if (dm instanceof MFDataModel.PatternMessage) {
             MFDataModel.PatternMessage pm = (MFDataModel.PatternMessage) dm;
-            variables = resolveDeclarations(pm.declarations, arguments);
+            variables = resolveDeclarations(pm.declarations, nfcArguments);
             if (pm.pattern == null) {
                 fatalFormattingError("The PatternMessage is null.");
             }
             patternToRender = pm.pattern;
         } else if (dm instanceof MFDataModel.SelectMessage) {
             MFDataModel.SelectMessage sm = (MFDataModel.SelectMessage) dm;
-            variables = resolveDeclarations(sm.declarations, arguments);
-            patternToRender = findBestMatchingPattern(sm, variables, arguments);
+            variables = resolveDeclarations(sm.declarations, nfcArguments);
+            patternToRender = findBestMatchingPattern(sm, variables, nfcArguments);
             if (patternToRender == null) {
                 fatalFormattingError("Cannor find a match for the selector.");
             }
@@ -118,6 +124,7 @@ class MFDataModelFormatter {
             return "ERROR!";
         }
 
+        Directionality msgdir = Directionality.LTR;
         StringBuilder result = new StringBuilder();
         for (MFDataModel.PatternPart part : patternToRender.parts) {
             if (part instanceof MFDataModel.StringPart) {
@@ -125,10 +132,27 @@ class MFDataModelFormatter {
                 result.append(strPart.value);
             } else if (part instanceof MFDataModel.Expression) {
                 FormattedPlaceholder formattedExpression =
-                        formatExpression((Expression) part, variables, arguments);
-                result.append(formattedExpression.getFormattedValue().toString());
+                        formatExpression((Expression) part, variables, nfcArguments);
+                String fmt = formattedExpression.getFormattedValue().toString();
+                Directionality dir = formattedExpression.getDirectionality();
+                boolean isolate = formattedExpression.getIsolate();
+                switch (dir) {
+                    case LTR:
+                        if (msgdir == Directionality.LTR && !isolate) {
+                            result.append(fmt);
+                        } else {
+                            result.append(LRI).append(fmt).append(PDI);
+                        }
+                        break;
+                    case RTL:
+                        result.append(RLI).append(fmt).append(PDI);
+                        break;
+                    default:
+                        result.append(FSI).append(fmt).append(PDI);
+                        break;
+                }
             } else if (part instanceof MFDataModel.Markup) {
-                // Ignore
+                // Ignore, we don't output markup to string
             } else {
                 fatalFormattingError("Unknown part type: " + part);
             }
@@ -540,7 +564,8 @@ class MFDataModelFormatter {
         // TODO 77: hack. How do we pass the error handling policy to formatters?
         options.put("icu:impl:errorPolicy", this.errorHandlingBehavior.name());
         Formatter ff = funcFactory.createFormatter(locale, options);
-        String res = ff.formatToString(toFormat, arguments.getMap());
+        FormattedPlaceholder resultToWrap = ff.format(toFormat, arguments.getMap());
+        String res = resultToWrap == null ? null : resultToWrap.toString();
         if (res == null) {
             if (errorHandlingBehavior == ErrorHandlingBehavior.STRICT) {
                 fatalFormattingError("unable to format string at " + fallbackString);
@@ -548,8 +573,16 @@ class MFDataModelFormatter {
             res = fallbackString;
         }
 
+        if (resultToWrap != null) {
+            toFormat = resultToWrap.getInput();
+        }
         ResolvedExpression resExpression = new ResolvedExpression(toFormat, functionName, options);
-        return new FormattedPlaceholder(resExpression, new PlainStringFormattedValue(res));
+        if (resultToWrap == null) {
+            return new FormattedPlaceholder(resExpression, new PlainStringFormattedValue(res));
+        }
+        // We wrap the result in a ResolvedExpression, but also propagate the direction info
+        return new FormattedPlaceholder(resExpression, new PlainStringFormattedValue(res),
+                resultToWrap.getDirectionality(), resultToWrap.getIsolate());
     }
 
     static class ResolvedExpression implements Expression {

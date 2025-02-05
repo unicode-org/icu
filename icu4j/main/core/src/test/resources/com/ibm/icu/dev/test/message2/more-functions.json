@@ -14,13 +14,13 @@
     {
       "src": "Format {|3.1416| :number} number",
       "locale": "ar-AR-u-nu-latn",
-      "exp": "Format 3.1416 number",
+      "exp": "Format \u20673.1416\u2069 number",
       "comment": "From ICU4J tests, with explicit formatter added"
     },
     {
       "src": "Format {|3.1416| :number} number",
       "locale": "ar-AR-u-nu-arab",
-      "exp": "Format ٣٫١٤١٦ number",
+      "exp": "Format \u2067٣٫١٤١٦\u2069 number",
       "comment": "From ICU4J tests, with explicit formatter added"
     },
     {

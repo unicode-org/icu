@@ -32,7 +32,7 @@ public class CoreTest extends CoreTestFmwk {
 //            "normalization.json", // new
 //            "resolution-errors.json",
 //            "runtime-errors.json",
-////            "spec/bidi.json", // new // FAILS 16 / 27
+//            "spec/bidi.json", // new // FAILS 9 / 27
 //            "spec/data-model-errors.json",
 //            "spec/syntax-errors.json",
 //            "spec/syntax.json",
@@ -41,12 +41,12 @@ public class CoreTest extends CoreTestFmwk {
 //            "spec/functions/date.json",
 //            "spec/functions/datetime.json",
 //            "spec/functions/integer.json", // FAILS 1 / 6
-            "spec/functions/math.json", // new // FAILS 2 / 16
+//            "spec/functions/math.json", // new // FAILS 2 / 16
 //            "spec/functions/number.json",
-//            "spec/functions/string.json", // FAILS 2 / 9
+            "spec/functions/string.json", // FAILS 2 / 9
 //            "spec/functions/time.json",
 //            "spec/pattern-selection.json", // new
-////            "spec/u-options.json", // new // FAILS 10 / 11
+//            "spec/u-options.json", // new // FAILS 10 / 11
 //            "syntax-errors-diagnostics.json",
 //            "syntax-errors-diagnostics-multiline.json",
 //            "syntax-errors-end-of-input.json",

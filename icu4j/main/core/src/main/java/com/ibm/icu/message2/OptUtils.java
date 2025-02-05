@@ -3,9 +3,12 @@
 
 package com.ibm.icu.message2;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.ibm.icu.util.ULocale;
 
 class OptUtils {
     // abnf: ; number-literal matches JSON number (https://www.rfc-editor.org/rfc/rfc8259#section-6)
@@ -96,5 +99,62 @@ class OptUtils {
 
     static boolean reportErrors(Map<String, Object> fixedOptions, Map<String, Object> variableOptions) {
         return reportErrors(fixedOptions) || reportErrors(variableOptions);
+    }
+
+    static Locale getBestLocale(Map<String, Object> options, Locale defaultValue) {
+        Locale result = null;
+        String localeOverride = getString(options, "u:locale");
+        if (localeOverride != null) {
+            try {
+                result = Locale.forLanguageTag(localeOverride.replace('_', '-'));
+            } catch (Exception e) {
+                if (reportErrors(options)) {
+                    throw new IllegalArgumentException("bad-operand: u:locale must be a valid BCP 47 language tag");                
+                }
+            }
+        }
+        if (result == null) {
+            if (defaultValue == null) {
+                result = Locale.getDefault();
+            } else {
+                result = defaultValue;
+            }
+        }
+        return result;
+    }
+
+    static Directionality getBestDirectionality(Map<String, Object> options, Locale locale) {
+        Directionality result = getDirectionality(options);
+        return result == Directionality.UNKNOWN ? Directionality.of(ULocale.forLocale(locale)) : result;
+    }
+
+    static Directionality getDirectionality(Map<String, Object> options) {
+        String value = getString(options, "u:dir");
+        if (value == null) {
+            return Directionality.UNKNOWN;
+        }
+        Directionality result;
+        switch (value) {
+            case "rtl":
+                result = Directionality.RTL;
+                break;
+            case "ltr":
+                result = Directionality.LTR;
+                break;
+            case "auto":
+                result = Directionality.AUTO;
+                break;
+            case "inherit":
+                result = Directionality.INHERIT;
+                break;
+            default:
+                result = Directionality.UNKNOWN;
+                break;
+        }
+        return result;
+    }
+
+    static String getUId(Map<String, Object> options) {
+        return getString(options, "u:id");
     }
 }

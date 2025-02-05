@@ -515,61 +515,56 @@ public class MFParser {
      * ; Required whitespace
      * abnf: s = *bidi ws o
      */
-    private int skipRequiredWhitespaces() throws MFParseException { // AICI
-        int count = skipWhitespacesX(); // AICI
+    private int skipRequiredWhitespaces() throws MFParseException {
+        int position = input.getPosition();
+        skipOptionalBidi();
+        int count = skipWhitespaces();
         checkCondition(count > 0, "Space expected");
+        skipOptionalWhitespaces();
         return count;
+    }
+
+    private int skipOptionalBidi() {
+        int skipCount = 0;
+        while (true) {
+            int cp = input.peekChar();
+            if (StringUtils.isBidi(cp)) {
+                skipCount++;
+                input.readCodePoint();
+            } else {
+                return skipCount;
+            }
+        }
     }
 
     /*
      * ; Optional whitespace
      * abnf: o = *(ws / bidi)
      */
-    private int skipOptionalWhitespaces() { // AICI
+    private int skipOptionalWhitespaces() {
         int skipCount = 0;
         while (true) {
-            int cp = input.readCodePoint();
-            if (cp == EOF) {
+            int cp = input.peekChar();
+            if (StringUtils.isWhitespace(cp) || StringUtils.isBidi(cp)) {
+                input.readCodePoint();
+                skipCount++;
+            } else {
                 return skipCount;
             }
-            if (!StringUtils.isWhitespace(cp) && !StringUtils.isBidi(cp)) {
-                input.backup(Character.isBmpCodePoint(cp) ? 1 : 2);
-                return skipCount;
-            }
-            skipCount++;
         }
     }
 
-    /*
-     * Optional bidi (*bidi)
-     */
-    private int skipBidi() { // AICI
+    // abnf: ws = SP / HTAB / CR / LF / %x3000
+    private int skipWhitespaces() {
         int skipCount = 0;
         while (true) {
-            int cp = input.readCodePoint();
-            if (cp == EOF) {
+            int cp = input.peekChar();
+            if (StringUtils.isWhitespace(cp)) {
+                skipCount++;
+                input.readCodePoint();
+            } else {
                 return skipCount;
             }
-            if (!StringUtils.isBidi(cp)) {
-                input.backup(1);
-                return skipCount;
-            }
-            skipCount++;
-        }
-    }
-
-    private int skipWhitespacesX() { // AICI
-        int skipCount = 0;
-        while (true) {
-            int cp = input.readCodePoint();
-            if (cp == EOF) {
-                return skipCount;
-            }
-            if (!StringUtils.isWhitespace(cp)) {
-                input.backup(1);
-                return skipCount;
-            }
-            skipCount++;
         }
     }
     
