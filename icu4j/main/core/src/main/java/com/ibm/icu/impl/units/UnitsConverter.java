@@ -21,6 +21,15 @@ public class UnitsConverter {
     private String specialSource;
     private String specialTarget;
 
+    private UnitsConverter(BigDecimal conversionRate, boolean reciprocal, BigDecimal offset, String specialSource,
+            String specialTarget) {
+        this.conversionRate = conversionRate;
+        this.reciprocal = reciprocal;
+        this.offset = offset;
+        this.specialSource = specialSource;
+        this.specialTarget = specialTarget;
+    }
+
     /**
      * Constructor of <code>UnitsConverter</code>.
      * NOTE:
@@ -130,6 +139,11 @@ public class UnitsConverter {
         }
 
         return true;
+    }
+
+    public UnitsConverter clone() {
+        return new UnitsConverter(this.conversionRate, this.reciprocal, this.offset, this.specialSource,
+                this.specialTarget);
     }
 
     // Convert inputValue (source) to base then to target
