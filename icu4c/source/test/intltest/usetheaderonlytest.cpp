@@ -15,6 +15,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
+// for commented-out sample code: #include "unicode/ustring.h"
 #include "unicode/utf.h"
 #include "unicode/utf16.h"
 #include "intltest.h"
@@ -62,9 +63,9 @@ void USetHeaderOnlyTest::TestUSetCodePointIterator() {
         uset_openPattern(u"[abcçカ🚴]", -1, errorCode), &uset_close);
     std::u16string result;
     for (UChar32 c : USetCodePoints(uset.get())) {
+        result.append(u" ").append(cpString(c));
         // Commented-out sample code for pasting into the API docs.
         // printf("uset.codePoint U+%04lx\n", (long)c);
-        result.append(u" ").append(cpString(c));
     }
     assertEquals(WHERE, u" a b c ç カ 🚴", result);
 
@@ -95,17 +96,17 @@ void USetHeaderOnlyTest::TestUSetRangeIterator() {
         uset_openPattern(u"[abcçカ🚴]", -1, errorCode), &uset_close);
     std::u16string result;
     for (auto [start, end] : USetRanges(uset.get())) {
+        result.append(u" ").append(cpString(start)).append(u"-").append(cpString(end));
         // Commented-out sample code for pasting into the API docs.
         // printf("uset.range U+%04lx..U+%04lx\n", (long)start, (long)end);
-        result.append(u" ").append(cpString(start)).append(u"-").append(cpString(end));
     }
     assertEquals(WHERE, u" a-c ç-ç カ-カ 🚴-🚴", result);
     result.clear();
     for (auto range : USetRanges(uset.get())) {
         for (UChar32 c : range) {
+            result.append(u" ").append(cpString(c));
             // Commented-out sample code for pasting into the API docs.
             // printf("uset.range.c U+%04lx\n", (long)c);
-            result.append(u" ").append(cpString(c));
         }
         result.append(u" |");
     }
@@ -162,12 +163,13 @@ void USetHeaderOnlyTest::TestUSetStringIterator() {
         uset_openPattern(u"[abcçカ🚴{}{abc}{de}]", -1, errorCode), &uset_close);
     std::u16string result;
     for (auto s : USetStrings(uset.get())) {
-        // Commented-out sample code for pasting into the API docs.
-        // Needs U_SHOW_CPLUSPLUS_API=1 for UnicodeString.
-        // UnicodeString us(s);
-        // std::string u8;
-        // printf("uset.string length %ld \"%s\"\n", (long)s.length(), us.toUTF8String(u8).c_str());
         result.append(u" \"").append(s).append(u"\"");
+        // Commented-out sample code for pasting into the API docs.
+        // int32_t len32 = s.length();
+        // char utf8[200];
+        // u_strToUTF8WithSub(utf8, int32_t{sizeof(utf8) - 1}, nullptr,
+        //                    s.data(), len32, 0xFFFD, nullptr, errorCode);
+        // printf("uset.string length %ld \"%s\"\n", long{len32}, utf8);
     }
     assertEquals(WHERE, uR"( "" "abc" "de")", result);
 
@@ -193,12 +195,13 @@ void USetHeaderOnlyTest::TestUSetElementIterator() {
         uset_openPattern(u"[abcçカ🚴{}{abc}{de}]", -1, errorCode), &uset_close);
     std::u16string result;
     for (auto el : USetElements(uset.get())) {
-        // Commented-out sample code for pasting into the API docs.
-        // Needs U_SHOW_CPLUSPLUS_API=1 for UnicodeString.
-        // UnicodeString us(el);
-        // std::string u8;
-        // printf("uset.string length %ld \"%s\"\n", (long)us.length(), us.toUTF8String(u8).c_str());
         result.append(u" \"").append(el).append(u"\"");
+        // Commented-out sample code for pasting into the API docs.
+        // int32_t len32 = el.length();
+        // char utf8[200];
+        // u_strToUTF8WithSub(utf8, int32_t{sizeof(utf8) - 1}, nullptr,
+        //                    el.data(), len32, 0xFFFD, nullptr, errorCode);
+        // printf("uset.element length %ld \"%s\"\n", long{len32}, utf8);
     }
     assertEquals(WHERE, uR"( "a" "b" "c" "ç" "カ" "🚴" "" "abc" "de")", result);
 

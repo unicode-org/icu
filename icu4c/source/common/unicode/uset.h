@@ -1700,9 +1700,11 @@ private:
  * using U_HEADER_NESTED_NAMESPACE::USetStrings;
  * LocalUSetPointer uset(uset_openPattern(u"[abcçカ🚴{}{abc}{de}]", -1, &errorCode));
  * for (auto s : USetStrings(uset.getAlias())) {
- *     UnicodeString us(s);
- *     std::string u8;
- *     printf("uset.string length %ld \"%s\"\n", (long)s.length(), us.toUTF8String(u8).c_str());
+ *     int32_t len32 = s.length();
+ *     char utf8[200];
+ *     u_strToUTF8WithSub(utf8, int32_t{sizeof(utf8) - 1}, nullptr,
+ *                        s.data(), len32, 0xFFFD, nullptr, errorCode);
+ *     printf("uset.string length %ld \"%s\"\n", long{len32}, utf8);
  * }
  * \endcode
  *
@@ -1854,9 +1856,11 @@ private:
  * using U_HEADER_NESTED_NAMESPACE::USetElements;
  * LocalUSetPointer uset(uset_openPattern(u"[abcçカ🚴{}{abc}{de}]", -1, &errorCode));
  * for (auto el : USetElements(uset.getAlias())) {
- *     UnicodeString us(el);
- *     std::string u8;
- *     printf("uset.string length %ld \"%s\"\n", (long)us.length(), us.toUTF8String(u8).c_str());
+ *     int32_t len32 = el.length();
+ *     char utf8[200];
+ *     u_strToUTF8WithSub(utf8, int32_t{sizeof(utf8) - 1}, nullptr,
+ *                        el.data(), len32, 0xFFFD, nullptr, errorCode);
+ *     printf("uset.element length %ld \"%s\"\n", long{len32}, utf8);
  * }
  * \endcode
  *
