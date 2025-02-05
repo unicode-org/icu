@@ -411,6 +411,17 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected MeasureUnit(String type, String subType, MeasureUnitImpl measureUnitImpl) {
+        this.type = type;
+        this.subType = subType;
+        this.measureUnitImpl = measureUnitImpl;
+    }
+
+    /**
      * Construct a MeasureUnit from a CLDR Core Unit Identifier, defined in UTS
      * 35. (Core unit identifiers and mixed unit identifiers are supported, long
      * unit identifiers are not.) Validates and canonicalizes the identifier.
@@ -444,6 +455,10 @@ public class MeasureUnit implements Serializable {
         MeasureUnit result = MeasureUnit.findBySubType(identifier);
         if (result != null) {
             return result;
+        }
+
+        if (identifier.equals("portion-per-1e9")) {
+            result = new MeasureUnit("portion-per-1e9", "concentration", measureUnitImpl);
         }
 
         return new MeasureUnit(measureUnitImpl);
@@ -872,6 +887,7 @@ public class MeasureUnit implements Serializable {
                 return unitsForType.get(subType);
             }
         }
+
         return null;
     }
 

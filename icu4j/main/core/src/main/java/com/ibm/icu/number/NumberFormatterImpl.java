@@ -167,6 +167,10 @@ class NumberFormatterImpl {
         return unit != null && "permille".equals(unit.getSubtype());
     }
 
+    private static boolean unitIsPortionPer1e9(MeasureUnit unit) {
+        return unit != null && "portion-per-1e9".equals(unit.getIdentifier());
+    }
+
     /**
      * Synthesizes the MacroProps into a MicroPropsGenerator. All information, including the locale, is
      * encoded into the MicroPropsGenerator, except for the quantity itself, which is left abstract and
@@ -191,6 +195,7 @@ class NumberFormatterImpl {
         boolean isBaseUnit = unitIsBaseUnit(macros.unit);
         boolean isPercent = unitIsPercent(macros.unit);
         boolean isPermille = unitIsPermille(macros.unit);
+        boolean isPortionPer1e9 = unitIsPortionPer1e9(macros.unit);
         boolean isCompactNotation = (macros.notation instanceof CompactNotation);
         boolean isAccounting = macros.sign == SignDisplay.ACCOUNTING
                 || macros.sign == SignDisplay.ACCOUNTING_ALWAYS
