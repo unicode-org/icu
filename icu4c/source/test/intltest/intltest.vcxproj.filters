@@ -580,6 +580,9 @@
     <ClCompile Include="messageformat2test_read_json.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="ucolheaderonlytest.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
     <ClCompile Include="usetheaderonlytest.cpp">
       <Filter>misc</Filter>
     </ClCompile>

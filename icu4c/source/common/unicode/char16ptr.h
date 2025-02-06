@@ -283,6 +283,32 @@ inline const char16_t *uprv_char16PtrFromUChar(const T *p) {
 #endif
     }
 }
+#if !U_CHAR16_IS_TYPEDEF && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION < 180000)
+/** @internal */
+inline const char16_t *uprv_char16PtrFromUint16(const uint16_t *p) {
+#if U_SHOW_CPLUSPLUS_API
+    return ConstChar16Ptr(p).get();
+#else
+#ifdef U_ALIASING_BARRIER
+    U_ALIASING_BARRIER(p);
+#endif
+    return reinterpret_cast<const char16_t *>(p);
+#endif
+}
+#endif
+#if U_SIZEOF_WCHAR_T==2
+/** @internal */
+inline const char16_t *uprv_char16PtrFromWchar(const wchar_t *p) {
+#if U_SHOW_CPLUSPLUS_API
+    return ConstChar16Ptr(p).get();
+#else
+#ifdef U_ALIASING_BARRIER
+    U_ALIASING_BARRIER(p);
+#endif
+    return reinterpret_cast<const char16_t *>(p);
+#endif
+}
+#endif
 #endif
 
 /**

@@ -35,6 +35,9 @@
 #include "usettest.h"
 
 extern IntlTest *createBytesTrieTest();
+#if !UCONFIG_NO_COLLATION
+extern IntlTest *createUColHeaderOnlyTest();
+#endif
 extern IntlTest *createUSetHeaderOnlyTest();
 extern IntlTest *createLocaleMatcherTest();
 static IntlTest *createLocalPointerTest();
@@ -83,6 +86,9 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
     TESTCASE_AUTO_CLASS(LocaleBuilderTest);
     TESTCASE_AUTO_CREATE_CLASS(LocaleMatcherTest);
     TESTCASE_AUTO_CREATE_CLASS(UHashTest);
+#if !UCONFIG_NO_COLLATION
+    TESTCASE_AUTO_CREATE_CLASS(UColHeaderOnlyTest);
+#endif
     TESTCASE_AUTO_CREATE_CLASS(USetHeaderOnlyTest);
     TESTCASE_AUTO_END;
 }
