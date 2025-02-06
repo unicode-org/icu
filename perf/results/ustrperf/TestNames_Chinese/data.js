@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738797951892,
+  "lastUpdate": 1738842266856,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -107709,6 +107709,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.5577,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "697f7c0e0073f0424f83259bae184e5b56b2a792",
+          "message": "ICU-22781 Fix &Improve MeasureUnit identifier generation for constant denominators (C++)\n\nSee #3364",
+          "timestamp": "2025-02-06T12:06:58+01:00",
+          "tree_id": "b13ee2c4ed888ce0498603c25a9e8fa6e1854837",
+          "url": "https://github.com/unicode-org/icu/commit/697f7c0e0073f0424f83259bae184e5b56b2a792"
+        },
+        "date": 1738842043357,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.874,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.2371,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.6018,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 26.1287,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 36.6607,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.733,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 26.8116,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.2115,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 77.4048,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.5846,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 37.0211,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.4108,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
