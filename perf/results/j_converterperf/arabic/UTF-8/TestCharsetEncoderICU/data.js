@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738841176741,
+  "lastUpdate": 1738857997432,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31407,6 +31407,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.3170389071001387,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "362a4aa94b6c38f9ef4b7c13f3ff78ef3f6fd59b",
+          "message": "ICU-23032 Update MeasureUnit documentation for `forIdentifier` method\n\nSee #3360",
+          "timestamp": "2025-02-06T16:37:58+01:00",
+          "tree_id": "2b4670b1e6b3346b8ba7b15f395afdc642de9179",
+          "url": "https://github.com/unicode-org/icu/commit/362a4aa94b6c38f9ef4b7c13f3ff78ef3f6fd59b"
+        },
+        "date": 1738857420425,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.2741807400038745,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
