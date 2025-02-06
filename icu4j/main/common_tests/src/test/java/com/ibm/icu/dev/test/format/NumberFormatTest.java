@@ -51,6 +51,9 @@ import com.ibm.icu.impl.data.TokenIterator;
 import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
+import com.ibm.icu.number.LocalizedNumberFormatter;
+import com.ibm.icu.number.NumberFormatter;
+import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.CompactDecimalFormat;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormat;
@@ -66,6 +69,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
+import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
@@ -7055,5 +7059,65 @@ public class NumberFormatTest extends CoreTestFmwk {
             }
 
         }
+    }
+
+    @Test
+    public void TestArbitraryConstantFormatting() {
+
+        class TestData {
+            String unitIdentifier;
+            Integer inputValue;
+            String expectedOutput;
+            UnitWidth width;
+            ULocale locale;
+
+            public TestData(String unitIdentifier, Integer inputValue, UnitWidth width, ULocale locale,
+                    String expectedOutput) {
+                this.unitIdentifier = unitIdentifier;
+                this.inputValue = inputValue;
+                this.expectedOutput = expectedOutput;
+                this.width = width;
+                this.locale = locale;
+            }
+        }
+
+        TestData[] testData = {
+                new TestData("meter-per-kelvin-second", 2, UnitWidth.FULL_NAME, ULocale.ENGLISH,
+                        "2 meters per second-kelvin"),
+                new TestData("meter-per-100-kelvin-second", 3, UnitWidth.FULL_NAME, ULocale.ENGLISH,
+                        "3 meters per 100-second-kelvin"),
+                new TestData("meter-per-kelvin-second", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH,
+                        "1 meter per second-kelvin"),
+                new TestData("meter-per-1000", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH, "1 meter per 1000"),
+                new TestData("meter-per-1000-second", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH,
+                        "1 meter per 1000-second"),
+                new TestData("meter-per-1000-second-kelvin", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH,
+                        "1 meter per 1000-second-kelvin"),
+                new TestData("meter-per-1-second-kelvin-per-kilogram", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH,
+                        "1 meter per 1-kilogram-second-kelvin"),
+                new TestData("meter-second-per-kilogram-kelvin", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH,
+                        "1 meter-second per kilogram-kelvin"),
+                new TestData("meter-second-per-1000-kilogram-kelvin", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH,
+                        "1 meter-second per 1000-kilogram-kelvin"),
+                new TestData("meter-second-per-1000-kilogram-kelvin", 1, UnitWidth.SHORT, ULocale.ENGLISH,
+                        "1 m⋅sec/1000⋅kg⋅K"),
+                new TestData("meter-second-per-1000-kilogram-kelvin", 1, UnitWidth.FULL_NAME, ULocale.GERMAN,
+                        "1 Meter⋅Sekunde pro 1000⋅Kilogramm⋅Kelvin"),
+                new TestData("meter-second-per-1000-kilogram-kelvin", 1, UnitWidth.SHORT, ULocale.GERMAN,
+                        "1 m⋅Sek./1000⋅kg⋅K"),
+        };
+
+        for (TestData testCase : testData) {
+            MeasureUnit unit = MeasureUnit.forIdentifier(testCase.unitIdentifier);
+            LocalizedNumberFormatter formatter = NumberFormatter.withLocale(testCase.locale).unit(unit)
+                    .unitWidth(testCase.width);
+
+            String formatted = formatter.format(testCase.inputValue).toString();
+            assertEquals(
+                    "Unit: " + testCase.unitIdentifier + ", Width: " + testCase.width + ", Input: "
+                            + testCase.inputValue,
+                    testCase.expectedOutput, formatted);
+        }
+
     }
 }
