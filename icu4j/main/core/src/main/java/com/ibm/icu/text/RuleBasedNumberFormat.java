@@ -419,7 +419,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     <td>Format the number unchanged</td>
  *   </tr>
  *   <tr style="border-top: 1px solid black;">
- *     <td style="white-space: nowrap;" rowspan="6">[]<br/>[|]</td>
+ *     <td style="white-space: nowrap;" rowspan="6">[]<br>[|]</td>
  *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in normal rule</td>
  *     <td>
  *       <ul>

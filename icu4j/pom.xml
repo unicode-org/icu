@@ -388,17 +388,9 @@
             <maxmemory>256m</maxmemory>
             <minmemory>256m</minmemory>
             <!-- <verbose>true</verbose> -->
-            <additionalJOptions>
-              <additionalJOption>-J-Djcitesourcepath=${icu4j.api.doc.root.dir}/samples/src/main/java${path.separator}${icu4j.api.doc.root.dir}/demos/src/main/java${path.separator}${icu4j.api.doc.root.dir}/main/core/src/main/java</additionalJOption>
-              <additionalJOption>-J-Dfile.encoding=UTF-8</additionalJOption>
-              <additionalJOption>-J-Djciteverbose=true</additionalJOption>
-            </additionalJOptions>
             <taglets>
               <taglet>
                 <tagletClass>com.ibm.icu.dev.tool.docs.ICUTaglet</tagletClass>
-              </taglet>
-              <taglet>
-                <tagletClass>ch.arrenbrecht.jcite.JCiteTaglet</tagletClass>
               </taglet>
             </taglets>
             <tagletArtifacts>
@@ -407,23 +399,6 @@
                 <groupId>com.ibm.icu</groupId>
                 <artifactId>tools_build</artifactId>
                 <version>${project.version}</version>
-              </tagletArtifact>
-              <!-- Include code fragments from a .java file. -->
-              <tagletArtifact>
-                <groupId>org.mcraig</groupId>
-                <artifactId>jcite</artifactId>
-                <version>1.13.0</version>
-              </tagletArtifact>
-              <!-- Dependencies for org.mcraig:jcite -->
-              <tagletArtifact>
-                <groupId>commons-discovery</groupId>
-                <artifactId>commons-discovery</artifactId>
-                <version>0.5</version>
-              </tagletArtifact>
-              <tagletArtifact>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <version>1.2</version>
               </tagletArtifact>
             </tagletArtifacts>
             <tags>
