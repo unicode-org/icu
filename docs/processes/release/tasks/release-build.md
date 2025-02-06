@@ -36,7 +36,6 @@ compiled with Java system libraries from JRE 7.*</span>
 *   Java Runtime Environment 7 (used as bootclasspath for cross-compilation)
 *   Apache Ant 1.10.x (the latest available version)
     \[<http://ant.apache.org/>\]
-*   JCite 1.13.0 \[<https://arrenbrecht.ch/jcite/>\]
 
 ### Other Prerequisites only for GA
 
@@ -56,9 +55,6 @@ compiled with Java system libraries from JRE 7.*</span>
 ### Configuration
 
 *   Set environment variable `JAVA_HOME` to point to the JDK directory.
-*   Set environment variable `JCITE_DIR` to specify JCite binary location (see[
-    Building ICU4J API Reference Document with
-    JCite](../../../setup/java/ant/index.md))
 *   See `build.properties` to check version strings are properly set.
     *   `api.report.version` / `api.report.prev.version` are used for locating
         API signature files and should be integer numbers.
@@ -150,7 +146,6 @@ compiled with Java system libraries from JRE 7.*</span>
       [echo] [WARNING] Insufficient Build Configuration for ICU4J Release
       [echo] JDK Tools Version: 1.8.0_152
       [echo] JRE 7 System Library Path: Not Defined!
-      [echo] JCite Library Path: /home/yoshito/java-libs/jcite-1.13.0/build/jcite.jar:/home/yoshito/java-libs/jcite-1.13.0/lib/commons-discovery-0.4.jar:/home/yoshito/java-libs/jcite-1.13.0/lib/commons-logging-1.1.jar:/home/yoshito/java-libs/jcite-1.13.0/lib/java2html.jar`
       [echo] ################################################################
 
    BUILD SUCCESSFUL

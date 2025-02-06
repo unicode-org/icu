@@ -198,41 +198,9 @@ Coding examples help users to understand the usage of each API. Whenever
 possible, it is encouraged to embed a code snippet illustrating the usage of an
 API along with the functional specification.
 
-#### Embedding Coding Examples in ICU4J - JCite
-
-Since ICU4J 49M2, the ICU4J ant build target "doc" utilizes an external tool
-called [JCite](https://arrenbrecht.ch/jcite/). The tool allows us to cite a
-fragment of existing source code into JavaDoc comment using a tag. To embed a
-code snippet with the tag. For example,
-`{@.jcite com.ibm.icu.samples.util.timezone.BasicTimeZoneExample:---getNextTransitionExample}`
-will be replaced a fragment of code marked by comment lines
-`// ---getNextTransisionExample` in `BasicTimeZoneExample.java` in package
-`com.ibm.icu.samples.util.timezone`. When embedding code snippet using JCite, we
-recommend to follow next guidelines
-
-* A sample code should be placed in `<icu4j_root>/samples/src` directory,
-  although you can cite any source fragment from source files in
-  `<icu4j_root>/demos/src`, `<icu4j_root\>/main/core/*/src`,
-  `<icu4j_root>/main/test/*/src`.
-* A sample code should use package name -
-  `com.ibm.icu.samples.<subpackage>.<facility>`. `<subpackage>` is corresponding
-  to the target ICU API class's package, that is, one of lang/math/text/util.
-  `<facility>` is a name of facility, which is usually the base class of the
-  service. For example, use package `com.ibm.icu.samples.text.dateformat` for
-  samples related to ICU's date format service,
-  `com.ibm.icu.samples.util.timezone` for samples related to time zone service.
-* A sample code should be self-contained as much as possible (use only JDK and
-  ICU public APIs if possible). This allows readers to cut & paste a code
-  snippet to try it out easily.
-* The citing comment should start with three consecutive hyphen followed by
-  lower camel case token - for example, "`// ---compareToExample`"
-* Keep in mind that the JCite tag `{@.jcite ...}` is not resolved without JCite.
-  It is encouraged to avoid placing code snippet within a sentence. Instead,
-  you should place a code snippet using JCite in an independent paragraph.
-
 #### Embedding Coding Examples in ICU4C
 
-Also since ICU4C 49M2, ICU4C docs (using the [\\snippet command](http://www.doxygen.nl/manual/commands.html#cmdsnippet)
+Since ICU4C 49M2, ICU4C docs (using the [\\snippet command](http://www.doxygen.nl/manual/commands.html#cmdsnippet)
 which is new in Doxygen 1.7.5) can cite a fragment of existing sample or test code.
 
 Example in `ucnv.h`:
