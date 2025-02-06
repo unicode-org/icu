@@ -300,7 +300,7 @@ public class MeasureUnitImpl {
      * Normalizes the MeasureUnitImpl and generates the identifier string in place.
      */
     public void serialize() {
-        if (this.getSingleUnits().size() == 0) {
+        if (this.getSingleUnits().size() == 0 && this.constantDenominator == 0) {
             // Dimensionless, constructed by the default constructor: no appending
             // to this.result, we wish it to contain the zero-length string.
             return;

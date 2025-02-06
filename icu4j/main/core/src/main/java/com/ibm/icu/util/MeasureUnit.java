@@ -716,6 +716,13 @@ public class MeasureUnit implements Serializable {
             implCopy.appendSingleUnit(singleUnit);
         }
 
+        if (this.getConstantDenominator() != 0 && other.getConstantDenominator() != 0) {
+            throw new UnsupportedOperationException(
+                    "Cannot multiply units that both of them have a constant denominator");
+        }
+
+        implCopy.setConstantDenominator(this.getConstantDenominator() + other.getConstantDenominator());
+
         return implCopy.build();
     }
 
