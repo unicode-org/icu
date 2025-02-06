@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738841476375,
+  "lastUpdate": 1738857985209,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -38337,6 +38337,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 52.1206,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "362a4aa94b6c38f9ef4b7c13f3ff78ef3f6fd59b",
+          "message": "ICU-23032 Update MeasureUnit documentation for `forIdentifier` method\n\nSee #3360",
+          "timestamp": "2025-02-06T16:37:58+01:00",
+          "tree_id": "2b4670b1e6b3346b8ba7b15f395afdc642de9179",
+          "url": "https://github.com/unicode-org/icu/commit/362a4aa94b6c38f9ef4b7c13f3ff78ef3f6fd59b"
+        },
+        "date": 1738857758840,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.8837,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 51.9599,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
