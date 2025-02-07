@@ -305,11 +305,15 @@ MFFunctionRegistry::~MFFunctionRegistry() {
             }
         }
 
-        int32_t maxSignificantDigits = number.maximumSignificantDigits(opts);
+        int32_t maxSignificantDigits = number.maximumSignificantDigits(opts, status);
         if (!isInteger) {
-            int32_t minFractionDigits = number.minimumFractionDigits(opts);
-            int32_t maxFractionDigits = number.maximumFractionDigits(opts);
-            int32_t minSignificantDigits = number.minimumSignificantDigits(opts);
+            int32_t minFractionDigits = number.minimumFractionDigits(opts, status);
+            int32_t maxFractionDigits = number.maximumFractionDigits(opts, status);
+            int32_t minSignificantDigits = number.minimumSignificantDigits(opts, status);
+            if (U_FAILURE(status)) {
+                status = U_MF_BAD_OPTION_ERROR;
+                return nf.locale(number.locale);
+            }
             Precision p = Precision::unlimited();
             bool precisionOptions = false;
 
@@ -346,8 +350,14 @@ MFFunctionRegistry::~MFFunctionRegistry() {
         }
 
         // All other options apply to both `:number` and `:integer`
-        int32_t minIntegerDigits = number.minimumIntegerDigits(opts);
-        nf = nf.integerWidth(IntegerWidth::zeroFillTo(minIntegerDigits));
+        int32_t minIntegerDigits = number.minimumIntegerDigits(opts, status);
+        if (U_FAILURE(status)) {
+            status = U_MF_BAD_OPTION_ERROR;
+            return nf.locale(number.locale);
+        }
+        if (minIntegerDigits != -1) {
+            nf = nf.integerWidth(IntegerWidth::zeroFillTo(minIntegerDigits));
+        }
 
         // signDisplay
         UnicodeString sd = opts.getStringFunctionOption(UnicodeString("signDisplay"));
@@ -481,68 +491,53 @@ static FormattedPlaceholder tryParsingNumberLiteral(const number::LocalizedNumbe
     return FormattedPlaceholder(input, FormattedValue(std::move(result)));
 }
 
-int32_t StandardFunctions::Number::maximumFractionDigits(const FunctionOptions& opts) const {
+int32_t StandardFunctions::Number::digitSizeOption(const FunctionOptions& opts,
+                                                   const UnicodeString& optionName,
+                                                   int32_t defaultVal,
+                                                   UErrorCode& status) const {
+    Formattable opt;
+
+    if (opts.getFunctionOption(optionName, opt)) {
+        int32_t result = static_cast<int32_t>(getInt64Value(locale, opt, status));
+        // Option value must be a non-negative integer
+        if (U_SUCCESS(status) && result < 0) {
+            status = U_MF_BAD_OPTION_ERROR;
+        }
+        return result;
+    }
+    return defaultVal;
+}
+
+int32_t StandardFunctions::Number::maximumFractionDigits(const FunctionOptions& opts, UErrorCode& status) const {
     Formattable opt;
 
     if (isInteger) {
         return 0;
     }
 
-    if (opts.getFunctionOption(UnicodeString("maximumFractionDigits"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        int64_t val = getInt64Value(locale, opt, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return static_cast<int32_t>(val);
-        }
-    }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::maxFraction()
-    // is an error.
-    return -1;
+    return digitSizeOption(opts, UnicodeString("maximumFractionDigits"), -1, status);
 }
 
-int32_t StandardFunctions::Number::minimumFractionDigits(const FunctionOptions& opts) const {
+int32_t StandardFunctions::Number::minimumFractionDigits(const FunctionOptions& opts, UErrorCode& status) const {
+    Formattable opt;
+
+    if (isInteger) {
+        return 0;
+    }
+    return digitSizeOption(opts, UnicodeString("minimumFractionDigits"), -1, status);
+}
+
+int32_t StandardFunctions::Number::minimumIntegerDigits(const FunctionOptions& opts, UErrorCode& status) const {
+    Formattable opt;
+
+    return digitSizeOption(opts, UnicodeString("minimumIntegerDigits"), -1, status);
+}
+
+int32_t StandardFunctions::Number::minimumSignificantDigits(const FunctionOptions& opts, UErrorCode& status) const {
     Formattable opt;
 
     if (!isInteger) {
-        if (opts.getFunctionOption(UnicodeString("minimumFractionDigits"), opt)) {
-            UErrorCode localErrorCode = U_ZERO_ERROR;
-            int64_t val = getInt64Value(locale, opt, localErrorCode);
-            if (U_SUCCESS(localErrorCode)) {
-                return static_cast<int32_t>(val);
-            }
-        }
-    }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::minFraction()
-    // is an error.
-    return -1;
-}
-
-int32_t StandardFunctions::Number::minimumIntegerDigits(const FunctionOptions& opts) const {
-    Formattable opt;
-
-    if (opts.getFunctionOption(UnicodeString("minimumIntegerDigits"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        int64_t val = getInt64Value(locale, opt, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return static_cast<int32_t>(val);
-        }
-    }
-    return 0;
-}
-
-int32_t StandardFunctions::Number::minimumSignificantDigits(const FunctionOptions& opts) const {
-    Formattable opt;
-
-    if (!isInteger) {
-        if (opts.getFunctionOption(UnicodeString("minimumSignificantDigits"), opt)) {
-            UErrorCode localErrorCode = U_ZERO_ERROR;
-            int64_t val = getInt64Value(locale, opt, localErrorCode);
-            if (U_SUCCESS(localErrorCode)) {
-                return static_cast<int32_t>(val);
-            }
-        }
+        return digitSizeOption(opts, UnicodeString("minimumSignificantDigits"), -1, status);
     }
     // Returning -1 indicates that the option wasn't provided or was a non-integer.
     // The caller needs to check for that case, since passing -1 to Precision::minSignificantDigits()
@@ -550,20 +545,13 @@ int32_t StandardFunctions::Number::minimumSignificantDigits(const FunctionOption
     return -1;
 }
 
-int32_t StandardFunctions::Number::maximumSignificantDigits(const FunctionOptions& opts) const {
+int32_t StandardFunctions::Number::maximumSignificantDigits(const FunctionOptions& opts, UErrorCode& status) const {
     Formattable opt;
 
-    if (opts.getFunctionOption(UnicodeString("maximumSignificantDigits"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        int64_t val = getInt64Value(locale, opt, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return static_cast<int32_t>(val);
-        }
-    }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::maxSignificantDigits()
+    // Returning 0 indicates that the option wasn't provided.
+    // The caller needs to check for that case, since passing 0 to Precision::maxSignificantDigits()
     // is an error.
-    return -1; // Not a valid value for Precision; has to be checked
+    return digitSizeOption(opts, UnicodeString("maximumSignificantDigits"), -1, status);
 }
 
 bool StandardFunctions::Number::usePercent(const FunctionOptions& opts) const {
@@ -596,6 +584,9 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
 
     number::LocalizedNumberFormatter realFormatter;
     realFormatter = formatterForOptions(*this, opts, errorCode);
+    if (U_FAILURE(errorCode)) {
+        return {};
+    }
 
     number::FormattedNumber numberResult;
     if (U_SUCCESS(errorCode)) {
@@ -970,6 +961,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     bool hasDateStyleOption = opts.getFunctionOption(dateStyleName, opt);
     bool hasTimeStyleOption = opts.getFunctionOption(timeStyleName, opt);
     bool noOptions = opts.optionsCount() == 0;
+    bool fieldOptions = false;
 
     bool useStyle = (type == DateTimeFactory::DateTimeType::DateTime
                      && (hasDateStyleOption || hasTimeStyleOption
@@ -1007,114 +999,128 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
             timeStyle = stringToStyle(getFunctionOption(toFormat, opts, styleName), errorCode);
             df.adoptInstead(DateFormat::createTimeInstance(timeStyle, locale));
         }
-    } else {
-        // Build up a skeleton based on the field options, then use that to
-        // create the date formatter
+    }
+    // Build up a skeleton based on the field options, then use that to
+    // create the date formatter
 
-        UnicodeString skeleton;
-        #define ADD_PATTERN(s) skeleton += UnicodeString(s)
-        if (U_SUCCESS(errorCode)) {
-            // Year
-            UnicodeString year = getFunctionOption(toFormat, opts, UnicodeString("year"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useDate = true;
-                if (year == UnicodeString("2-digit")) {
-                    ADD_PATTERN("YY");
-                } else if (year == UnicodeString("numeric")) {
-                    ADD_PATTERN("YYYY");
-                }
-            }
-            // Month
-            UnicodeString month = getFunctionOption(toFormat, opts, UnicodeString("month"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useDate = true;
-                /* numeric, 2-digit, long, short, narrow */
-                if (month == UnicodeString("long")) {
-                    ADD_PATTERN("MMMM");
-                } else if (month == UnicodeString("short")) {
-                    ADD_PATTERN("MMM");
-                } else if (month == UnicodeString("narrow")) {
-                    ADD_PATTERN("MMMMM");
-                } else if (month == UnicodeString("numeric")) {
-                    ADD_PATTERN("M");
-                } else if (month == UnicodeString("2-digit")) {
-                    ADD_PATTERN("MM");
-                }
-            }
-            // Weekday
-            UnicodeString weekday = getFunctionOption(toFormat, opts, UnicodeString("weekday"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useDate = true;
-                if (weekday == UnicodeString("long")) {
-                    ADD_PATTERN("EEEE");
-                } else if (weekday == UnicodeString("short")) {
-                    ADD_PATTERN("EEEEE");
-                } else if (weekday == UnicodeString("narrow")) {
-                    ADD_PATTERN("EEEEE");
-                }
-            }
-            // Day
-            UnicodeString day = getFunctionOption(toFormat, opts, UnicodeString("day"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useDate = true;
-                if (day == UnicodeString("numeric")) {
-                    ADD_PATTERN("d");
-                } else if (day == UnicodeString("2-digit")) {
-                    ADD_PATTERN("dd");
-                }
-            }
-            // Hour
-            UnicodeString hour = getFunctionOption(toFormat, opts, UnicodeString("hour"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useTime = true;
-                if (hour == UnicodeString("numeric")) {
-                    ADD_PATTERN("h");
-                } else if (hour == UnicodeString("2-digit")) {
-                    ADD_PATTERN("hh");
-                }
-            }
-            // Minute
-            UnicodeString minute = getFunctionOption(toFormat, opts, UnicodeString("minute"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useTime = true;
-                if (minute == UnicodeString("numeric")) {
-                    ADD_PATTERN("m");
-                } else if (minute == UnicodeString("2-digit")) {
-                    ADD_PATTERN("mm");
-                }
-            }
-            // Second
-            UnicodeString second = getFunctionOption(toFormat, opts, UnicodeString("second"), errorCode);
-            if (U_FAILURE(errorCode)) {
-                errorCode = U_ZERO_ERROR;
-            } else {
-                useTime = true;
-                if (second == UnicodeString("numeric")) {
-                    ADD_PATTERN("s");
-                } else if (second == UnicodeString("2-digit")) {
-                    ADD_PATTERN("ss");
-                }
+    UnicodeString skeleton;
+#define ADD_PATTERN(s) skeleton += UnicodeString(s)
+    if (U_SUCCESS(errorCode)) {
+        // Year
+        UnicodeString year = getFunctionOption(toFormat, opts, UnicodeString("year"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useDate = true;
+            if (year == UnicodeString("2-digit")) {
+                ADD_PATTERN("YY");
+            } else if (year == UnicodeString("numeric")) {
+                ADD_PATTERN("YYYY");
             }
         }
-        /*
-          TODO
-          fractionalSecondDigits
-          hourCycle
-          timeZoneName
-          era
-         */
+        // Month
+        UnicodeString month = getFunctionOption(toFormat, opts, UnicodeString("month"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useDate = true;
+            /* numeric, 2-digit, long, short, narrow */
+            if (month == UnicodeString("long")) {
+                ADD_PATTERN("MMMM");
+            } else if (month == UnicodeString("short")) {
+                ADD_PATTERN("MMM");
+            } else if (month == UnicodeString("narrow")) {
+                ADD_PATTERN("MMMMM");
+            } else if (month == UnicodeString("numeric")) {
+                ADD_PATTERN("M");
+            } else if (month == UnicodeString("2-digit")) {
+                ADD_PATTERN("MM");
+            }
+        }
+        // Weekday
+        UnicodeString weekday = getFunctionOption(toFormat, opts, UnicodeString("weekday"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useDate = true;
+            if (weekday == UnicodeString("long")) {
+                ADD_PATTERN("EEEE");
+            } else if (weekday == UnicodeString("short")) {
+                ADD_PATTERN("EEEEE");
+            } else if (weekday == UnicodeString("narrow")) {
+                ADD_PATTERN("EEEEE");
+                }
+        }
+        // Day
+        UnicodeString day = getFunctionOption(toFormat, opts, UnicodeString("day"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useDate = true;
+            if (day == UnicodeString("numeric")) {
+                ADD_PATTERN("d");
+            } else if (day == UnicodeString("2-digit")) {
+                ADD_PATTERN("dd");
+            }
+        }
+        // Hour
+        UnicodeString hour = getFunctionOption(toFormat, opts, UnicodeString("hour"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useTime = true;
+            if (hour == UnicodeString("numeric")) {
+                ADD_PATTERN("h");
+            } else if (hour == UnicodeString("2-digit")) {
+                ADD_PATTERN("hh");
+            }
+        }
+        // Minute
+        UnicodeString minute = getFunctionOption(toFormat, opts, UnicodeString("minute"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useTime = true;
+            if (minute == UnicodeString("numeric")) {
+                ADD_PATTERN("m");
+            } else if (minute == UnicodeString("2-digit")) {
+                ADD_PATTERN("mm");
+            }
+        }
+        // Second
+        UnicodeString second = getFunctionOption(toFormat, opts, UnicodeString("second"), errorCode);
+        if (U_FAILURE(errorCode)) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            fieldOptions = true;
+            useTime = true;
+            if (second == UnicodeString("numeric")) {
+                ADD_PATTERN("s");
+            } else if (second == UnicodeString("2-digit")) {
+                ADD_PATTERN("ss");
+            }
+        }
+    }
+    /*
+      TODO
+      fractionalSecondDigits
+      hourCycle
+      timeZoneName
+      era
+    */
+    if ((fieldOptions && (hasDateStyleOption || hasTimeStyleOption))
+        && type == DateTimeFactory::DateTimeType::DateTime) {
+        // Can't have both field and style options
+        errorCode = U_MF_BAD_OPTION_ERROR;
+        return {};
+    }
+    if (!useStyle) {
         df.adoptInstead(DateFormat::createInstanceForSkeleton(skeleton, errorCode));
     }
 
