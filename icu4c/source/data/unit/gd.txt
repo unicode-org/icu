@@ -250,6 +250,13 @@ gd{
                 other{"{0} sna deich mìltean"}
                 two{"{0} sna deich mìltean"}
             }
+            portion-per-1e9{
+                dnam{"pàirt sa bhillean"}
+                few{"{0} pàirtean sa bhillean"}
+                one{"{0} phàirt sa bhillean"}
+                other{"{0} pàirt sa bhillean"}
+                two{"{0} phàirt sa bhillean"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1513,6 +1520,12 @@ gd{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                few{"{0}ppb"}
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+                two{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -2668,6 +2681,9 @@ gd{
             }
             permyriad{
                 dnam{"sna deich mìltean"}
+            }
+            portion-per-1e9{
+                dnam{"pàirt/billean"}
             }
         }
         consumption{

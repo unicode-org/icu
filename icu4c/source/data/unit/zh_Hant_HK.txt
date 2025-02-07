@@ -264,6 +264,9 @@ zh_Hant_HK{
             permillion{
                 other{"{0} ppm"}
             }
+            portion-per-1e9{
+                dnam{"濃度/十億"}
+            }
         }
         consumption{
             liter-per-100-kilometer{

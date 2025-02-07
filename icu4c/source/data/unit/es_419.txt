@@ -10,6 +10,13 @@ es_419{
                 other{"{0} unidades de fuerza gravitacional"}
             }
         }
+        concentr{
+            portion-per-1e9{
+                dnam{"partes por mil millones"}
+                one{"{0} parte por mil millones"}
+                other{"{0} partes por mil millones"}
+            }
+        }
         electric{
             ampere{
                 dnam{"amperes"}

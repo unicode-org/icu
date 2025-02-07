@@ -136,6 +136,10 @@ ms{
                 dnam{"permyriad"}
                 other{"{0} permyriad"}
             }
+            portion-per-1e9{
+                dnam{"bahagian per bilion"}
+                other{"{0} bahagian per bilion"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1111,6 +1115,9 @@ ms{
             }
             permille{
                 dnam{"per seribu"}
+            }
+            portion-per-1e9{
+                dnam{"bahagian/bilion"}
             }
         }
         consumption{

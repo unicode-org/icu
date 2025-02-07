@@ -188,6 +188,11 @@ fil{
                 one{"{0} permyriad"}
                 other{"{0} permyriad"}
             }
+            portion-per-1e9{
+                dnam{"parts per billion"}
+                one{"{0} part per billion"}
+                other{"{0} parts per billion"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1035,6 +1040,10 @@ fil{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1509,6 +1518,9 @@ fil{
             }
             permyriad{
                 dnam{"permyriad"}
+            }
+            portion-per-1e9{
+                dnam{"parts/billion"}
             }
         }
         consumption{

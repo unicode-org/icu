@@ -67,6 +67,9 @@ yo{
             permille{
                 other{"{0} ìdákan nínú ẹgbẹ̀rún"}
             }
+            portion-per-1e9{
+                dnam{"ẹ̀yà nínú ìdá blíọ̀nù"}
+            }
         }
         consumption{
             mile-per-gallon-imperial{

@@ -347,6 +347,18 @@ da{
             permyriad{
                 gender{"common"}
             }
+            portion-per-1e9{
+                case{
+                    genitive{
+                        one{"{0} milliardtedels"}
+                        other{"{0} milliardtedeles"}
+                    }
+                }
+                dnam{"milliardtedele"}
+                gender{"common"}
+                one{"{0} milliardtedel"}
+                other{"{0} milliardtedele"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -2190,6 +2202,9 @@ da{
             permyriad{
                 one{"{0} ‱"}
                 other{"{0} ‱"}
+            }
+            portion-per-1e9{
+                dnam{"dele/milliard"}
             }
         }
         consumption{
