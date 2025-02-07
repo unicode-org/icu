@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738956587557,
+  "lastUpdate": 1738959713934,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31527,6 +31527,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 871.9275369635648,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "5d7f0b8100e063683d6feb312640e503f4c5bfa4",
+          "message": "ICU-23041 Hard-code the code citations and remove jcite",
+          "timestamp": "2025-02-06T13:27:28-08:00",
+          "tree_id": "7100d735b7684c0c83aa33509c39ac8c93cde18c",
+          "url": "https://github.com/unicode-org/icu/commit/5d7f0b8100e063683d6feb312640e503f4c5bfa4"
+        },
+        "date": 1738959478309,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 875.7436019377059,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
