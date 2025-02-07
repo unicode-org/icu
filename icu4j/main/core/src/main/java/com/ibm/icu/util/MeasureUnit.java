@@ -1201,6 +1201,12 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit PERMYRIAD = MeasureUnit.internalGetInstance("concentr", "permyriad");
 
     /**
+     * Constant for unit of concentr: portion-per-1e9
+     * @draft ICU 77
+     */
+    public static final MeasureUnit PORTION_PER_1E9 = MeasureUnit.internalGetInstance("concentr", "portion-per-1e9");
+
+    /**
      * Constant for unit of consumption: liter-per-100-kilometer
      * @stable ICU 56
      */

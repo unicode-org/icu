@@ -1195,6 +1195,24 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getPermyriad();
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns by pointer, unit of concentr: portion-per-1e9.
+     * Caller owns returned value and must free it.
+     * Also see {@link #getPortionPer1E9()}.
+     * @param status ICU error code.
+     * @draft ICU 77
+     */
+    static MeasureUnit *createPortionPer1E9(UErrorCode &status);
+
+    /**
+     * Returns by value, unit of concentr: portion-per-1e9.
+     * Also see {@link #createPortionPer1E9()}.
+     * @draft ICU 77
+     */
+    static MeasureUnit getPortionPer1E9();
+#endif /* U_HIDE_DRAFT_API */
+
     /**
      * Returns by pointer, unit of consumption: liter-per-100-kilometer.
      * Caller owns returned value and must free it.
