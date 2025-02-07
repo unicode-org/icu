@@ -288,6 +288,9 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestBug20321UnicodeLocaleKey);
     TESTCASE(TestUsingDefaultWarning);
     TESTCASE(TestBug21449InfiniteLoop);
+    TESTCASE(TestBug23031VaPosix);
+    TESTCASE(TestBug23031VaPosixManyExtensions);
+    TESTCASE(TestBug23031VaPosixManyVariants);
     TESTCASE(TestExcessivelyLongIDs);
 #if !UCONFIG_NO_FORMATTING
     TESTCASE(TestUldnNameVariants);
@@ -7445,6 +7448,63 @@ static void TestBug21449InfiniteLoop(void) {
     // The issue causes an infinite loop to occur when looking up a non-existent resource for the invalid locale ID,
     // so the test is considered passed if the call to the API below returns anything at all.
     uloc_getDisplayLanguage(invalidLocaleId, invalidLocaleId, NULL, 0, &status);
+}
+
+// Test case for ICU-23031
+static void TestBug23031VaPosix(void) {
+    static const char tag[] = "en-US-u-va-posIX";
+    static const char expected[] = "POSIX";
+
+    UErrorCode status = U_ZERO_ERROR;
+    char actual[32];
+    int32_t len = uloc_getVariant(tag, actual, UPRV_LENGTHOF(actual), &status);
+    if (U_FAILURE(status)) {
+        log_err("ERROR: in uloc_getVariant  %s\n", myErrorName(status));
+    }
+    if (len < 1) {
+        log_err("FAIL: uloc_getVariant() returned %d\n", len);
+    }
+    if (uprv_strcmp(actual, expected) != 0) {
+        log_err("FAIL: uloc_getVariant() Wanted %s, got %s\n", expected, actual);
+    }
+}
+
+// Test case for ICU-23031
+static void TestBug23031VaPosixManyExtensions(void) {
+    static const char tag[] = "en-US-u-co-search-va-posIX-kc";
+    static const char expected[] = "POSIX";
+
+    UErrorCode status = U_ZERO_ERROR;
+    char actual[32];
+    int32_t len = uloc_getVariant(tag, actual, UPRV_LENGTHOF(actual), &status);
+    if (U_FAILURE(status)) {
+        log_err("ERROR: in uloc_getVariant  %s\n", myErrorName(status));
+    }
+    if (len < 1) {
+        log_err("FAIL: uloc_getVariant() returned %d\n", len);
+    }
+    if (uprv_strcmp(actual, expected) != 0) {
+        log_err("FAIL: uloc_getVariant() Wanted %s, got %s\n", expected, actual);
+    }
+}
+
+// Test case for ICU-23031
+static void TestBug23031VaPosixManyVariants(void) {
+    static const char tag[] = "en-US-fonIPA-u-va-posIX";
+    static const char expected[] = "FONIPA_POSIX";
+
+    UErrorCode status = U_ZERO_ERROR;
+    char actual[32];
+    int32_t len = uloc_getVariant(tag, actual, UPRV_LENGTHOF(actual), &status);
+    if (U_FAILURE(status)) {
+        log_err("ERROR: in uloc_getVariant  %s\n", myErrorName(status));
+    }
+    if (len < 1) {
+        log_err("FAIL: uloc_getVariant() returned %d\n", len);
+    }
+    if (uprv_strcmp(actual, expected) != 0) {
+        log_err("FAIL: uloc_getVariant() Wanted %s, got %s\n", expected, actual);
+    }
 }
 
 // rdar://79296849 and https://unicode-org.atlassian.net/browse/ICU-21639
