@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738967992688,
+  "lastUpdate": 1738969245591,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31767,6 +31767,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1918.747738965724,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "CVlad.2006@gmail.com",
+            "name": "Vladyslav Yeremeichuk",
+            "username": "nightelf3"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "624a26030bc9e7a63bb058ad83baff531e8e0bc6",
+          "message": "ICU-22950 Do not initialize currency redundantly\n\nresolveCurrency() slows down simple number formatting requests like:\nfor (int i = 0; i < 9999; i++) u_snprintf_u(buff, 100, u\"%d\", i);\nSince we don't use currency here, we can skip its initialization.",
+          "timestamp": "2025-02-07T14:45:43-08:00",
+          "tree_id": "2c6700ac44f6ffaf095b08e1804447c0e6ec4be7",
+          "url": "https://github.com/unicode-org/icu/commit/624a26030bc9e7a63bb058ad83baff531e8e0bc6"
+        },
+        "date": 1738969011916,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1946.501167050531,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
