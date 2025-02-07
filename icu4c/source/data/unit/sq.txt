@@ -197,6 +197,11 @@ sq{
                 one{"{0} përdhjetëmijë"}
                 other{"{0} përdhjetëmijë"}
             }
+            portion-per-1e9{
+                dnam{"pjesë për miliard"}
+                one{"{0} pjesë për miliard"}
+                other{"{0} pjesë për miliard"}
+            }
         }
         consumption{
             liter-per-100-kilometer{

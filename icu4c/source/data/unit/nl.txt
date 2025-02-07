@@ -223,6 +223,9 @@ nl{
                 one{"{0} basispunt"}
                 other{"{0} basispunten"}
             }
+            portion-per-1e9{
+                gender{"common"}
+            }
         }
         consumption{
             liter-per-100-kilometer{

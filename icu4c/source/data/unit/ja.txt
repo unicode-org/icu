@@ -738,6 +738,9 @@ ja{
             permyriad{
                 dnam{"‱"}
             }
+            portion-per-1e9{
+                other{"{0}ppb"}
+            }
         }
         consumption{
             liter-per-100-kilometer{

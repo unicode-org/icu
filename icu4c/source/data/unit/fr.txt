@@ -239,6 +239,12 @@ fr{
                 one{"{0} pour dix mille"}
                 other{"{0} pour dix mille"}
             }
+            portion-per-1e9{
+                dnam{"parts par milliard"}
+                gender{"feminine"}
+                one{"{0} part par milliard"}
+                other{"{0} parts par milliard"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1319,6 +1325,10 @@ fr{
             permyriad{
                 one{"{0}‱"}
                 other{"{0}‱"}
+            }
+            portion-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
             }
         }
         consumption{

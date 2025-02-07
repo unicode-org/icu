@@ -498,6 +498,30 @@ sr_Latn{
             permyriad{
                 gender{"inanimate"}
             }
+            portion-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} dela na milijardu"}
+                        one{"{0} deo na milijardu"}
+                        other{"{0} delova na milijardu"}
+                    }
+                    genitive{
+                        few{"{0} dela na milijardu"}
+                        one{"{0} dela na milijardu"}
+                        other{"{0} delova na milijardu"}
+                    }
+                    instrumental{
+                        few{"{0} dela na milijardu"}
+                        one{"{0} delom na milijardu"}
+                        other{"{0} delova na milijardu"}
+                    }
+                }
+                dnam{"delovi na milijardu"}
+                few{"{0} dela na milijardu"}
+                gender{"inanimate"}
+                one{"{0} deo na milijardu"}
+                other{"{0} delova na milijardu"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -3000,6 +3024,9 @@ sr_Latn{
             }
             permille{
                 dnam{"promil"}
+            }
+            portion-per-1e9{
+                dnam{"delovi/milijarda"}
             }
         }
         consumption{

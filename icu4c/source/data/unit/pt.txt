@@ -224,6 +224,12 @@ pt{
                 one{"{0} ponto base"}
                 other{"{0} pontos base"}
             }
+            portion-per-1e9{
+                dnam{"partes por bilhão"}
+                gender{"feminine"}
+                one{"{0} parte por bilhão"}
+                other{"{0} partes por bilhão"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1583,6 +1589,9 @@ pt{
             }
             permyriad{
                 dnam{"ponto base"}
+            }
+            portion-per-1e9{
+                dnam{"partes/bilhão"}
             }
         }
         consumption{

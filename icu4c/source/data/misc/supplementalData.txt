@@ -11941,6 +11941,7 @@ supplementalData:table(nofallback){
                 "volume-sai",
                 "volume-to-jp",
                 "volume-koku",
+                "concentr-portion-per-1e9",
                 "mass-fun",
                 "duration-night",
                 "speed-light-speed",

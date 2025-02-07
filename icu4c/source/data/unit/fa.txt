@@ -109,6 +109,11 @@ fa{
                 one{"{0} ده‌هزارم"}
                 other{"{0} ده‌هزارم"}
             }
+            portion-per-1e9{
+                dnam{"بخش در بیلیون"}
+                one{"{0} بخش در بیلیون"}
+                other{"{0} بخش در بیلیون"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -626,6 +631,9 @@ fa{
             permillion{
                 one{"{0}ppm"}
                 other{"{0}ppm"}
+            }
+            portion-per-1e9{
+                dnam{"بخش در بیلیون"}
             }
         }
         consumption{
@@ -1353,6 +1361,9 @@ fa{
             }
             permyriad{
                 dnam{"ده‌هزارم"}
+            }
+            portion-per-1e9{
+                dnam{"بخش در بیلیون"}
             }
         }
         consumption{

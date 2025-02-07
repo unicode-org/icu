@@ -656,6 +656,30 @@ sr{
             permyriad{
                 gender{"inanimate"}
             }
+            portion-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} дела на милијарду"}
+                        one{"{0} део на милијарду"}
+                        other{"{0} делова на милијарду"}
+                    }
+                    genitive{
+                        few{"{0} дела на милијарду"}
+                        one{"{0} дела на милијарду"}
+                        other{"{0} делова на милијарду"}
+                    }
+                    instrumental{
+                        few{"{0} дела на милијарду"}
+                        one{"{0} делом на милијарду"}
+                        other{"{0} делова на милијарду"}
+                    }
+                }
+                dnam{"делови на милијарду"}
+                few{"{0} дела на милијарду"}
+                gender{"inanimate"}
+                one{"{0} део на милијарду"}
+                other{"{0} делова на милијарду"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -3529,6 +3553,9 @@ sr{
             }
             permille{
                 dnam{"промил"}
+            }
+            portion-per-1e9{
+                dnam{"делови/милијарда"}
             }
         }
         consumption{
