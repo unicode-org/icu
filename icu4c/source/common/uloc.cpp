@@ -1341,7 +1341,7 @@ _getVariant(std::string_view localeID,
             ByteSink* sink,
             bool needSeparator,
             UErrorCode& status) {
-    if (U_FAILURE(status)) return 0;
+    if (U_FAILURE(status) || localeID.empty()) return 0;
 
     // Reasonable upper limit for variants
     // There are no strict limitation of the syntax of variant in the legacy
@@ -1357,27 +1357,43 @@ _getVariant(std::string_view localeID,
     size_t index = 0;
     if (_isIDSeparator(prev)) {
         /* get a variant string after a '-' or '_' */
-        for (; index < localeID.size() && !_isTerminator(localeID[index]); index++) {
-            if (index >= MAX_VARIANTS_LENGTH) { // same as length > MAX_VARIANTS_LENGTH
+        for (std::string_view sub = localeID;;) {
+            size_t next = sub.find_first_of(".@_-");
+            // For historical reasons, a trailing separator is included in the variant.
+            bool finished = next == std::string_view::npos || next + 1 == sub.length();
+            size_t limit = finished ? sub.length() : next;
+            index += limit;
+            if (index > MAX_VARIANTS_LENGTH) {
                 status = U_ILLEGAL_ARGUMENT_ERROR;
                 return 0;
             }
-            if (needSeparator) {
-                if (sink != nullptr) {
-                    sink->Append("_", 1);
-                }
-                needSeparator = false;
-            }
-            if (sink != nullptr) {
-                char c = uprv_toupper(localeID[index]);
-                if (c == '-') c = '_';
-                sink->Append(&c, 1);
-            }
-        }
-    }
 
-    if (index > 0) {
-        return index;
+            if (sink != nullptr) {
+                if (needSeparator) {
+                    sink->Append("_", 1);
+                } else {
+                    needSeparator = true;
+                }
+
+                int32_t length = static_cast<int32_t>(limit);
+                int32_t minCapacity = uprv_min(length, MAX_VARIANTS_LENGTH);
+                char scratch[MAX_VARIANTS_LENGTH];
+                int32_t capacity = 0;
+                char* buffer = sink->GetAppendBuffer(
+                        minCapacity, minCapacity, scratch, UPRV_LENGTHOF(scratch), &capacity);
+
+                for (size_t i = 0; i < limit; ++i) {
+                    buffer[i] = uprv_toupper(sub[i]);
+                }
+                sink->Append(buffer, length);
+            }
+
+            if (finished) { return index; }
+            sub.remove_prefix(next);
+            if (_isTerminator(sub.front()) || _isBCP47Extension(sub)) { return index; }
+            sub.remove_prefix(1);
+            index++;
+        }
     }
 
     size_t skip = 0;
@@ -1574,6 +1590,8 @@ ulocimp_getSubtags(
 
     if ((variant == nullptr && pEnd == nullptr) || localeID.empty()) { return; }
 
+    bool hasVariant = false;
+
     if (_isIDSeparator(localeID.front()) && !_isBCP47Extension(localeID)) {
         std::string_view sub = localeID;
         /* If there was no country ID, skip a possible extra IDSeparator */
@@ -1581,7 +1599,38 @@ ulocimp_getSubtags(
         sub.remove_prefix(skip);
         size_t len = _getVariant(sub, localeID[0], variant, false, status);
         if (U_FAILURE(status)) { return; }
-        if (len > 0 && pEnd != nullptr) { *pEnd = localeID.data() + skip + len; }
+        if (len > 0) {
+            hasVariant = true;
+            localeID.remove_prefix(skip + len);
+            if (pEnd != nullptr) { *pEnd = localeID.data(); }
+        }
+    }
+
+    if ((variant == nullptr && pEnd == nullptr) || localeID.empty()) { return; }
+
+    if (_isBCP47Extension(localeID)) {
+        localeID.remove_prefix(2);
+        constexpr char vaposix[] = "-va-posix";
+        constexpr size_t length = sizeof vaposix - 1;
+        for (size_t next;; localeID.remove_prefix(next)) {
+            next = localeID.find('-', 1);
+            if (next == std::string_view::npos) { break; }
+            next = localeID.find('-', next + 1);
+            bool finished = next == std::string_view::npos;
+            std::string_view sub = localeID;
+            if (!finished) { sub.remove_suffix(sub.length() - next); }
+
+            if (sub.length() == length && uprv_strnicmp(sub.data(), vaposix, length) == 0) {
+                if (variant != nullptr) {
+                    if (hasVariant) { variant->Append("_", 1); }
+                    constexpr char posix[] = "POSIX";
+                    variant->Append(posix, sizeof posix - 1);
+                }
+                if (pEnd != nullptr) { *pEnd = localeID.data() + length; }
+            }
+
+            if (finished) { break; }
+        }
     }
 }
 
