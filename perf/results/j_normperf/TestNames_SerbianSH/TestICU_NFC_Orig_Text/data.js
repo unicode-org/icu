@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738963236871,
+  "lastUpdate": 1738968027865,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31617,6 +31617,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 1.5288747575769925,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "bbaa68419b5c79d81fd19fedb561362d07da4d3f",
+          "message": "ICU-22411 Fixed a ISO currency data file download problem in the currency update checking tool",
+          "timestamp": "2025-02-07T14:33:27-08:00",
+          "tree_id": "a7869c17182332b7650e2a1ddd6fa54f14d3aff2",
+          "url": "https://github.com/unicode-org/icu/commit/bbaa68419b5c79d81fd19fedb561362d07da4d3f"
+        },
+        "date": 1738967808291,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 1.5240726263221822,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
