@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738960450869,
+  "lastUpdate": 1738964088506,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -61557,6 +61557,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16571257.4781,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "eburkov@rvision.ru",
+            "name": "Burkov Egor",
+            "username": "wooffie"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "40c325322e3c3d013de4ac3b5d114f1d77f9cace",
+          "message": "ICU-23035 Fix bound check at `u_strToPunycode`",
+          "timestamp": "2025-02-07T13:03:27-08:00",
+          "tree_id": "384757ad0f87c813b8f49243382b40eddd58dbd3",
+          "url": "https://github.com/unicode-org/icu/commit/40c325322e3c3d013de4ac3b5d114f1d77f9cace"
+        },
+        "date": 1738963863612,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 354.9745,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 52793643.3491,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 15146895.225,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 52623022.8081,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16413033.814,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
