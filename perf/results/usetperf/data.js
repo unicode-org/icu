@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738960519844,
+  "lastUpdate": 1738964065567,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -88839,6 +88839,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1409.584,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "eburkov@rvision.ru",
+            "name": "Burkov Egor",
+            "username": "wooffie"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "40c325322e3c3d013de4ac3b5d114f1d77f9cace",
+          "message": "ICU-23035 Fix bound check at `u_strToPunycode`",
+          "timestamp": "2025-02-07T13:03:27-08:00",
+          "tree_id": "384757ad0f87c813b8f49243382b40eddd58dbd3",
+          "url": "https://github.com/unicode-org/icu/commit/40c325322e3c3d013de4ac3b5d114f1d77f9cace"
+        },
+        "date": 1738963834132,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77862.0006,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177857.1769,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5392,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.0761,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.7262,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8587.7101,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 32336.4018,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1466.1689,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
