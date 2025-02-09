@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739073754002,
+  "lastUpdate": 1739081621816,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31707,6 +31707,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.00919578742730761,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "5ae7f068b1e2706f266582372dcf0d5c37575d32",
+          "message": "ICU-23042 CLDR-to-ICU, generate rbnf data for Gujarati",
+          "timestamp": "2025-02-08T21:55:43-08:00",
+          "tree_id": "434b80fcfaeb4318a0d27a5d43fb01165a83085e",
+          "url": "https://github.com/unicode-org/icu/commit/5ae7f068b1e2706f266582372dcf0d5c37575d32"
+        },
+        "date": 1739081388676,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.009208975134715714,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
