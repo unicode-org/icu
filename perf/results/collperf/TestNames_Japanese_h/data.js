@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738970055819,
+  "lastUpdate": 1739074227279,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -61881,6 +61881,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5581312.2911,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "distinct": true,
+          "id": "7b8110f0039fe137425f7b6acd7f5f9217cc32ed",
+          "message": "ICU-22907 MF2: Finish updating spec tests and implement required test functions\n\nImplement :test:format, :test:select, and :test:function, which are\nrequired by the new `pattern-selection.json` tests.\n\nChange the internal value representation in the formatter in order to\nsupport some of the test cases (binding the results of selectors to a\nvariable).",
+          "timestamp": "2025-02-08T21:42:03-06:00",
+          "tree_id": "e279380f11d64ba536830ca86c1ef6b767145473",
+          "url": "https://github.com/unicode-org/icu/commit/7b8110f0039fe137425f7b6acd7f5f9217cc32ed"
+        },
+        "date": 1739073992210,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 209.0512,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20442135.7906,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5306295.6463,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20745849.6094,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5739138.8276,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
