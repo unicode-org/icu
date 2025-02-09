@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1738969689442,
+  "lastUpdate": 1739074007374,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31917,6 +31917,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.5289484422748598,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "distinct": true,
+          "id": "7b8110f0039fe137425f7b6acd7f5f9217cc32ed",
+          "message": "ICU-22907 MF2: Finish updating spec tests and implement required test functions\n\nImplement :test:format, :test:select, and :test:function, which are\nrequired by the new `pattern-selection.json` tests.\n\nChange the internal value representation in the formatter in order to\nsupport some of the test cases (binding the results of selectors to a\nvariable).",
+          "timestamp": "2025-02-08T21:42:03-06:00",
+          "tree_id": "e279380f11d64ba536830ca86c1ef6b767145473",
+          "url": "https://github.com/unicode-org/icu/commit/7b8110f0039fe137425f7b6acd7f5f9217cc32ed"
+        },
+        "date": 1739073762651,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.2091642380745573,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
