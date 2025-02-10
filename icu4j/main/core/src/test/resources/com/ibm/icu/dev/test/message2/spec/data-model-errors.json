@@ -182,9 +182,8 @@
       ]
     },
     {
-      // "https://github.com/unicode-org/message-format-wg/issues/995"
       "src": ".local $star = {star :string} .match $star |*| {{Literal star}} * {{The default}}",
-      "expErrors": [{ "type": "duplicate-variant" }]
+      "exp": "The default"
     }
   ]
 }

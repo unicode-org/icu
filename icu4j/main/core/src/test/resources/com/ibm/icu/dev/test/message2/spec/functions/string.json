@@ -22,7 +22,17 @@
       "params": [
         {
           "name": "foo",
-          "value": null
+          "value": "1"
+        }
+      ],
+      "exp": "one"
+    },
+    {
+      "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
+      "params": [
+        {
+          "name": "foo",
+          "value": "2"
         }
       ],
       "exp": "other"

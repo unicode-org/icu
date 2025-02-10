@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.Notation;
@@ -230,10 +231,10 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 return -1;
             }
             // * sorts last
-            if ("*".equals(o1)) {
+            if (CatchallKey.AS_KEY_STRING.equals(o1)) {
                 return 1;
             }
-            if ("*".equals(o2)) {
+            if (CatchallKey.AS_KEY_STRING.equals(o2)) {
                 return -1;
             }
             // Numbers sort first
@@ -249,7 +250,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         }
 
         private boolean matches(Object value, String key, Map<String, Object> variableOptions) {
-            if ("*".equals(key)) {
+            if (CatchallKey.AS_KEY_STRING.equals(key)) {
                 return true;
             }
 
@@ -287,7 +288,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
             FormattedNumber formatted = icuFormatter.format(valToCheck.doubleValue() - offset);
             String match = rules.select(formatted);
             if (match.equals("other")) {
-                match = "*";
+                match = CatchallKey.AS_KEY_STRING;
             }
             return match.equals(key);
         }

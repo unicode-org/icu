@@ -237,7 +237,7 @@ class MFDataModelFormatter {
                 LiteralOrCatchallKey key = var.keys.get(i);
                 // spec: If `key` is not the catch-all key `'*'`:
                 if (key instanceof CatchallKey) {
-                    keys.add("*");
+                    keys.add(CatchallKey.AS_KEY_STRING);
                 } else if (key instanceof Literal) {
                     // spec: Assert that `key` is a _literal_.
                     // spec: Let `ks` be the resolved value of `key`.
@@ -388,8 +388,8 @@ class MFDataModelFormatter {
         for (int i = 0; i < v1.size(); i++) {
             LiteralOrCatchallKey k1 = v1.get(i);
             LiteralOrCatchallKey k2 = v2.get(i);
-            String s1 = k1 instanceof Literal ? ((Literal) k1).value : "*";
-            String s2 = k2 instanceof Literal ? ((Literal) k2).value : "*";
+            String s1 = k1 instanceof Literal ? ((Literal) k1).value : CatchallKey.AS_KEY_STRING;
+            String s2 = k2 instanceof Literal ? ((Literal) k2).value : CatchallKey.AS_KEY_STRING;
             int cmp = s1.compareTo(s2);
             if (cmp != 0) {
                 return cmp;

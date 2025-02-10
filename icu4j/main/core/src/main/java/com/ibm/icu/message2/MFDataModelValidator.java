@@ -69,7 +69,7 @@ class MFDataModelValidator {
             for (LiteralOrCatchallKey key : variant.keys) {
                 if (key instanceof CatchallKey) {
                     catchAllCount++;
-                    fakeKey.add("*");
+                    fakeKey.add(CatchallKey.AS_KEY_STRING);
                 } else if (key instanceof Literal) {
                     fakeKey.add(((Literal) key).value);
                 }

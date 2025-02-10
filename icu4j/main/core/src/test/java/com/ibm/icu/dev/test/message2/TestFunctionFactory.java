@@ -215,7 +215,7 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
             }
         }
 
-        if (dblToFormat == null) {
+        if (dblToFormat == null || parsedOptions.failsFormat) {
             if (parsedOptions.reportErrors) {
                 throw new NullPointerException("Argument to format can't be null");
             }

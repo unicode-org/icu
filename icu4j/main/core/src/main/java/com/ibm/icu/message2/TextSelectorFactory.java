@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import com.ibm.icu.message2.MFDataModel.CatchallKey;
+
 /**
  * Creates a {@link Selector} doing literal selection, similar to <code>{exp, select}</code>
  * in {@link com.ibm.icu.text.MessageFormat}.
@@ -45,7 +47,7 @@ class TextSelectorFactory implements SelectorFactory {
 
         @SuppressWarnings("static-method")
         private boolean matches(Object value, String key) {
-            if ("*".equals(key)) {
+            if (CatchallKey.AS_KEY_STRING.equals(key)) {
                 return true;
             }
             return key.equals(Objects.toString(value));

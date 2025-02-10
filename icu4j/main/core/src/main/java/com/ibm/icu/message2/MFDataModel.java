@@ -165,6 +165,7 @@ public class MFDataModel {
      */
     @Deprecated
     public static class CatchallKey implements LiteralOrCatchallKey {
+        final static String AS_KEY_STRING = "<<::CatchallKey::>>";
         // String value; // Always '*' in MF2
     }
 

@@ -55,7 +55,7 @@
     {
       "src": ".local $n = {42 :currency currency=EUR} .match $n * {{other}}",
       "exp": "other",
-      "expErrors": false
+      "expErrors": [{ "type": "bad-selector" }]
     }
   ]
 }
