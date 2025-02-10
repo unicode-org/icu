@@ -115,10 +115,10 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
             boolean reportErrors = OptUtils.reportErrors(fixedOptions) || OptUtils.reportErrors(variableOptions);
             LocalizedNumberFormatter realFormatter;
+            Map<String, Object> mergedOptions = new HashMap<>(fixedOptions);
             if (variableOptions.isEmpty()) {
                 realFormatter = this.icuFormatter;
             } else {
-                Map<String, Object> mergedOptions = new HashMap<>(fixedOptions);
                 mergedOptions.putAll(variableOptions);
                 // This is really wasteful, as we don't use the existing
                 // formatter if even one option is variable.
@@ -140,6 +140,16 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 mathOperand = resolvedMathOptions.operand;
             }
 
+            if (kind.equals("currency")) {
+                String currencyCode = getCurrency(mergedOptions);
+                if (currencyCode == null && !(toFormat instanceof CurrencyAmount)) {
+                    // Error, we need a currency code, either from the message,
+                    // with the {... :currency currency=<iso_code>}, or from the thing to format
+                    throw new IllegalArgumentException(
+                            "bad-option: the `currency` must be an ISO 4217 code.");
+                }
+            }
+            
             boolean isInt = kind.equals("integer");
             FormattedValue result = null;
             if (toFormat == null) {
@@ -341,9 +351,6 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
             nf = nf.notation(notation);
 
             strOption = OptUtils.getString(fixedOptions, "style", "decimal");
-            if (strOption.equals("percent")) {
-                nf = nf.unit(MeasureUnit.PERCENT).scale(Scale.powerOfTen(2));
-            }
 
             option = OptUtils.getInteger(fixedOptions, reportErrors, "minimumFractionDigits");
             if (option != null) {
@@ -420,15 +427,9 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
             nf = nf.precision(Precision.integer());
         }
         if (kind.equals("currency")) {
-            strOption = OptUtils.getString(fixedOptions, "currency", null);
+            strOption = getCurrency(fixedOptions);
             if (strOption != null) {
-                if (CURRENCY_ISO_CODE.matcher(strOption).find()) {
-                    nf = nf.unit(Currency.getInstance(strOption));
-                } else {
-                    // TODO ICU 77.1
-                    // The option exists but it is not iso code.
-                    // Fail with _Bad Operand_? Ignore?
-                }
+                nf = nf.unit(Currency.getInstance(strOption));
             }
             strOption = OptUtils.getString(fixedOptions, "currencySign", "standard");
             switch (strOption) {
@@ -466,7 +467,21 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         return nf.locale(locale);
     }
 
-
+    static String getCurrency(Map<String, Object> options) {
+        String value = OptUtils.getString(options, "currency", null);
+        if (value != null) {
+            if (CURRENCY_ISO_CODE.matcher(value).find()) {
+                return value;
+            } else {
+                if (OptUtils.reportErrors(options)) {
+                    throw new IllegalArgumentException(
+                            "bad-option: the `currency` must be an ISO 4217 code.");
+                }
+            }
+        }
+        return null;
+    }
+    
     private static class ResolvedMathOptions {
         final Double operand;
         final boolean reportErrors;

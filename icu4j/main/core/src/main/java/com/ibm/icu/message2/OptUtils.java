@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
 class OptUtils {
@@ -91,7 +92,7 @@ class OptUtils {
     static String getString(Map<String, Object> options, String key) {
         return getString(options, key, null);
     }
-
+    
     static boolean reportErrors(Map<String, Object> options) {
         String reportErrors = getString(options, "icu:impl:errorPolicy");
         return "STRICT".equals(reportErrors);
