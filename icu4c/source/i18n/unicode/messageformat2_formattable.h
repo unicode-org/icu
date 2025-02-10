@@ -551,6 +551,7 @@ class U_I18N_API FunctionOptions : public UObject {
      */
     FunctionOptions& operator=(const FunctionOptions&) = delete;
  private:
+    friend class InternalValue;
     friend class MessageFormatter;
     friend class StandardFunctions;
 
@@ -568,12 +569,10 @@ class U_I18N_API FunctionOptions : public UObject {
     // that code in the header because it would have to call internal Hashtable methods.
     ResolvedFunctionOption* options;
     int32_t functionOptionsLen = 0;
+
+    // Returns a new FunctionOptions
+    FunctionOptions mergeOptions(FunctionOptions&& other, UErrorCode&);
 }; // class FunctionOptions
-
-
-    // TODO doc comments
-    // Encapsulates either a formatted string or formatted number;
-    // more output types could be added in the future.
 
     /**
      * A `FormattedValue` represents the result of formatting a `message2::Formattable`.

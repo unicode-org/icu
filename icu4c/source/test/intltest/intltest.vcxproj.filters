@@ -568,6 +568,9 @@
     <ClCompile Include="units_test.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="cplusplus_header_api_build_test.cpp">
+      <Filter>configuration</Filter>
+    </ClCompile>
     <ClCompile Include="uchar_type_build_test.cpp">
       <Filter>configuration</Filter>
     </ClCompile>
@@ -579,6 +582,9 @@
     </ClCompile>
     <ClCompile Include="messageformat2test_read_json.cpp">
       <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="ucolheaderonlytest.cpp">
+      <Filter>misc</Filter>
     </ClCompile>
     <ClCompile Include="usetheaderonlytest.cpp">
       <Filter>misc</Filter>
