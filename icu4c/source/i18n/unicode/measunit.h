@@ -3895,6 +3895,9 @@ private:
     // is in use instead of fTypeId and fSubTypeId.
     int8_t fTypeId;
 
+    bool isComplexitySet = false;
+    UMeasureUnitComplexity fComplexity;
+
     MeasureUnit(int32_t typeId, int32_t subTypeId);
     MeasureUnit(MeasureUnitImpl&& impl);
     void setTo(int32_t typeId, int32_t subTypeId);

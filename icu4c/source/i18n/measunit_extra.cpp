@@ -1399,8 +1399,15 @@ MeasureUnit MeasureUnit::forIdentifier(StringPiece identifier, UErrorCode &statu
 }
 
 UMeasureUnitComplexity MeasureUnit::getComplexity(UErrorCode &status) const {
+    if (isComplexitySet) {
+        return fComplexity;
+    }
     MeasureUnitImpl temp;
-    return MeasureUnitImpl::forMeasureUnit(*this, temp, status).complexity;
+    MeasureUnitImpl::forMeasureUnit(*this, temp, status);
+
+    fComplexity = temp.complexity;
+    isComplexitySet = true;
+    return fComplexity;
 }
 
 UMeasurePrefix MeasureUnit::getPrefix(UErrorCode &status) const {
