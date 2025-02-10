@@ -49,6 +49,8 @@ public class MeasureUnit implements Serializable {
     // i.e. from synchronized static methods. Beware of non-static methods.
     private static final Map<String, Map<String, MeasureUnit>> cache = new HashMap<>();
     private static boolean cacheIsPopulated = false;
+    private Complexity complexity;
+    private boolean isComplexitySet = false;
 
     /**
      * If type set to null, measureUnitImpl is in use instead of type and subType.
@@ -448,6 +450,8 @@ public class MeasureUnit implements Serializable {
         String identifier = measureUnitImpl.getIdentifier();
         MeasureUnit result = MeasureUnit.findBySubType(identifier);
         if (result != null) {
+            result.complexity = measureUnitImpl.getComplexity();
+            result.isComplexitySet = true;
             return result;
         }
 
@@ -458,6 +462,8 @@ public class MeasureUnit implements Serializable {
         type = null;
         subType = null;
         this.measureUnitImpl = measureUnitImpl.copy();
+        this.complexity = measureUnitImpl.getComplexity();
+        this.isComplexitySet = true;
     }
 
     /**
@@ -496,8 +502,14 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 68
      */
     public Complexity getComplexity() {
+        if (isComplexitySet) {
+            return complexity;
+        }
+
         if (measureUnitImpl == null) {
-            return MeasureUnitImpl.forIdentifier(getIdentifier()).getComplexity();
+            complexity = MeasureUnitImpl.forIdentifier(getIdentifier()).getComplexity();
+            isComplexitySet = true;
+            return complexity;
         }
 
         return measureUnitImpl.getComplexity();
