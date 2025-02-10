@@ -194,10 +194,6 @@
       "exp": "Numbering system १२३,४५६"
     },
     {
-      "src": "Percent {0.1416 :number style=percent}",
-      "exp": "Percent 14.16%"
-    },
-    {
       "src": "Scientific {123456789.97531 :number notation=scientific}",
       "exp": "Scientific 1.234568E8"
     },

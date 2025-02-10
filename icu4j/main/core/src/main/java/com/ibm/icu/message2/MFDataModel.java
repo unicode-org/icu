@@ -167,6 +167,10 @@ public class MFDataModel {
     public static class CatchallKey implements LiteralOrCatchallKey {
         final static String AS_KEY_STRING = "<<::CatchallKey::>>";
         // String value; // Always '*' in MF2
+
+        public static boolean isCatchAll(String key) {
+            return AS_KEY_STRING.equals(key);
+        }
     }
 
     // Patterns

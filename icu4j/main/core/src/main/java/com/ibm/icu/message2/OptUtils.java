@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
 class OptUtils {

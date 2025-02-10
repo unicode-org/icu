@@ -12,6 +12,7 @@ import java.util.Map;
 import com.ibm.icu.message2.FormattedPlaceholder;
 import com.ibm.icu.message2.Formatter;
 import com.ibm.icu.message2.FormatterFactory;
+import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.message2.PlainStringFormattedValue;
 import com.ibm.icu.message2.Selector;
 import com.ibm.icu.message2.SelectorFactory;
@@ -81,7 +82,7 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
             FormattedPlaceholder foo = TestFunctionFactory.formatImpl(value, parsedOptions);
             List<String> result = new ArrayList<>();
             for (String key : keys) {
-                if ("*".equals(key) || key.equals(foo.getFormattedValue().toString())) {
+                if (CatchallKey.isCatchAll(key) || key.equals(foo.getFormattedValue().toString())) {
                     result.add(key);
                 } else {
                     result.add(NO_MATCH);
@@ -215,9 +216,14 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
             }
         }
 
-        if (dblToFormat == null || parsedOptions.failsFormat) {
+        if (parsedOptions.failsFormat) {
             if (parsedOptions.reportErrors) {
-                throw new NullPointerException("Argument to format can't be null");
+                throw new NullPointerException("Expected the test to always fail.");
+            }
+        }
+        if (dblToFormat == null) {
+            if (parsedOptions.reportErrors) {
+                throw new NullPointerException("unresolved-variable: argument to format can't be null");
             }
             result = new PlainStringFormattedValue("{|" + toFormat + "|}");
         } else {

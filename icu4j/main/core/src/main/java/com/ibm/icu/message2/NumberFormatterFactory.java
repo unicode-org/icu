@@ -21,7 +21,6 @@ import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.number.Precision;
-import com.ibm.icu.number.Scale;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.NumberingSystem;
@@ -29,7 +28,6 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
-import com.ibm.icu.util.MeasureUnit;
 
 /**
  * Creates a {@link Formatter} doing numeric formatting, similar to <code>{exp, number}</code>
@@ -241,10 +239,10 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 return -1;
             }
             // * sorts last
-            if (CatchallKey.AS_KEY_STRING.equals(o1)) {
+            if (CatchallKey.isCatchAll(o1)) {
                 return 1;
             }
-            if (CatchallKey.AS_KEY_STRING.equals(o2)) {
+            if (CatchallKey.isCatchAll(o2)) {
                 return -1;
             }
             // Numbers sort first
@@ -260,7 +258,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         }
 
         private boolean matches(Object value, String key, Map<String, Object> variableOptions) {
-            if (CatchallKey.AS_KEY_STRING.equals(key)) {
+            if (CatchallKey.isCatchAll(key)) {
                 return true;
             }
 

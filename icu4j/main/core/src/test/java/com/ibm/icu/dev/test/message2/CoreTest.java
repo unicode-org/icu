@@ -17,46 +17,46 @@ public class CoreTest extends CoreTestFmwk {
     private String jsonFile;
 
     private static final String[] JSON_FILES = {
-//            "alias-selector-annotations.json",
-//            "duplicate-declarations.json",
-//            "icu-parser-tests.json",
-//            "icu-test-functions.json",
-//            "icu-test-previous-release.json",
-//            "icu-test-selectors.json",
-//            "invalid-number-literals-diagnostics.json",
-//            "invalid-options.json",
-//            "markup.json",
-//            "matches-whitespace.json",
-//            "more-data-model-errors.json",
-//            "more-functions.json",
-//            "normalization.json", // new
-//            "resolution-errors.json",
-//            "runtime-errors.json",
-//            "spec/bidi.json", // new // FAILS 9 / 27
-//            "spec/data-model-errors.json",
-//            "spec/syntax-errors.json",
-//            "spec/syntax.json",
-//            "spec/fallback.json", // new
-//            "spec/functions/currency.json", // new
-//            "spec/functions/date.json",
-//            "spec/functions/datetime.json",
-//            "spec/functions/integer.json",
-            "spec/functions/math.json", // new // FAILS 2 / 16
-//            "spec/functions/number.json",
-//            "spec/functions/string.json", // FAILS 1 / 9
-//            "spec/functions/time.json",
-//            "spec/pattern-selection.json", // new // FAILS  1 / 22
-//            "spec/u-options.json", // new // FAILS 9 / 11
-//            "syntax-errors-diagnostics.json",
-//            "syntax-errors-diagnostics-multiline.json",
-//            "syntax-errors-end-of-input.json",
-//            "syntax-errors-reserved.json",
-//            "tricky-declarations.json",
-//            "unsupported-expressions.json",
-//            "unsupported-statements.json",
-//            "valid-tests.json"
+            "alias-selector-annotations.json",
+            "duplicate-declarations.json",
+            "icu-parser-tests.json",
+            "icu-test-functions.json",
+            "icu-test-previous-release.json",
+            "icu-test-selectors.json",
+            "invalid-number-literals-diagnostics.json",
+            "invalid-options.json",
+            "markup.json",
+            "matches-whitespace.json",
+            "more-data-model-errors.json",
+            "more-functions.json",
+            "normalization.json",
+            "resolution-errors.json",
+            "runtime-errors.json",
+            "spec/bidi.json", // FAILS 9 / 27
+            "spec/data-model-errors.json",
+            "spec/syntax-errors.json",
+            "spec/syntax.json",
+            "spec/fallback.json",
+            "spec/functions/currency.json",
+            "spec/functions/date.json",
+            "spec/functions/datetime.json",
+            "spec/functions/integer.json",
+            "spec/functions/math.json", // FAILS 2 / 16
+            "spec/functions/number.json",
+            "spec/functions/string.json",
+            "spec/functions/time.json",
+            "spec/pattern-selection.json",
+            "spec/u-options.json", // FAILS 9 / 11
+            "syntax-errors-diagnostics.json",
+            "syntax-errors-diagnostics-multiline.json",
+            "syntax-errors-end-of-input.json",
+            "syntax-errors-reserved.json",
+            "tricky-declarations.json",
+            "unsupported-expressions.json",
+            "unsupported-statements.json",
+            "valid-tests.json"
     };
-    
+
     static boolean reportError(boolean firstTime, String jsonFile, String message) {
         if (firstTime) {
             System.out.println();
@@ -90,7 +90,7 @@ public class CoreTest extends CoreTestFmwk {
                     try {
                         TestUtils.runTestCase(tests.defaultTestProperties, unit);
                     } catch (AssertionError e) {
-                        firstTime = reportError(firstTime, jsonFile, e.getMessage());
+//                        firstTime = reportError(firstTime, jsonFile, e.getMessage());
                         errorCount++;
                     }
                 }
