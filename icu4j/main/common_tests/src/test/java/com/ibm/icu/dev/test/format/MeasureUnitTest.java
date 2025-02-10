@@ -1344,8 +1344,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
                 new ConstantDenominatorTestCase("portion-per-1000000", 1000000),
                 new ConstantDenominatorTestCase("portion-per-10000000", 10000000),
                 new ConstantDenominatorTestCase("portion-per-100000000", 100000000),
-                new ConstantDenominatorTestCase("portion-per-1000000000", 1000000000),
-                new ConstantDenominatorTestCase("portion-per-10000000000", 10000000000L),
+                        new ConstantDenominatorTestCase("portion-per-10000000000", 10000000000L),
                 new ConstantDenominatorTestCase("portion-per-100000000000", 100000000000L),
                 new ConstantDenominatorTestCase("portion-per-1000000000000", 1000000000000L),
                 new ConstantDenominatorTestCase("portion-per-10000000000000", 10000000000000L),
@@ -1356,8 +1355,6 @@ public class MeasureUnitTest extends CoreTestFmwk {
                 new ConstantDenominatorTestCase("portion-per-1000000000000000000", 1000000000000000000L),
                 // Test for constant denominators that are represented as scientific notation
                 // numbers.
-                new ConstantDenominatorTestCase("portion-per-1e9", 1000000000L),
-                new ConstantDenominatorTestCase("portion-per-1E9", 1000000000L),
                 new ConstantDenominatorTestCase("portion-per-10e9", 10000000000L),
                 new ConstantDenominatorTestCase("portion-per-10E9", 10000000000L),
                 new ConstantDenominatorTestCase("portion-per-1e10", 10000000000L),
@@ -1371,7 +1368,14 @@ public class MeasureUnitTest extends CoreTestFmwk {
                         new ConstantDenominatorTestCase("meter", 0),
                 new ConstantDenominatorTestCase("meter-per-second", 0),
                 new ConstantDenominatorTestCase("meter-per-square-second", 0),
-                // NOTE: The following constant denominator should be 0. However, since
+                // NOTE: The following constant denominator should be 1e9. However, since
+                // `portion-per-1e9` is treated as a unit in CLDR,
+                // the unit does not have a constant denominator.
+                // This issue should be addressed in CLDR & ICU.
+                new ConstantDenominatorTestCase("portion-per-1000000000", 0),
+                new ConstantDenominatorTestCase("portion-per-1e9", 0),
+                new ConstantDenominatorTestCase("portion-per-1E9", 0),
+                // NOTE: The following constant denominator should be 100. However, since
                 // `100-kilometer` is treated as a unit in CLDR,
                 // the unit does not have a constant denominator.
                 // This issue should be addressed in CLDR.
@@ -1382,6 +1386,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
                 // `100` will be considered part of the unit.
                 // This issue should be addressed in CLDR.
                 new ConstantDenominatorTestCase("meter-per-100-100-kilometer", 100));
+
 
         for (ConstantDenominatorTestCase testCase : testCases) {
             MeasureUnit unit = MeasureUnit.forIdentifier(testCase.identifier);

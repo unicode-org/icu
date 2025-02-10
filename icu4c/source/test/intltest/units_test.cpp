@@ -1214,7 +1214,6 @@ void UnitsTest::testUnitsConstantsDenomenator() {
         {"portion-per-1000000", 1000000},
         {"portion-per-10000000", 10000000},
         {"portion-per-100000000", 100000000},
-        {"portion-per-1000000000", 1000000000},
         {"portion-per-10000000000", 10000000000},
         {"portion-per-100000000000", 100000000000},
         {"portion-per-1000000000000", 1000000000000},
@@ -1250,10 +1249,18 @@ void UnitsTest::testUnitsConstantsDenomenator() {
         {"meter", 0},
         {"meter-per-second", 0},
         {"meter-per-square-second", 0},
-        // NOTE: The following constant denominator should be 0. However, since
+
+        // NOTE: The following constant denominator should be 1e9. However, since
+        // `portion-per-1e9` is treated as a unit in CLDR,
+        // the unit does not have a constant denominator.
+        // This issue should be addressed in CLDR & ICU.
+        {"portion-per-1000000000", 0},
+        {"portion-per-1e9", 0},
+        {"portion-per-1E9", 0},
+        // NOTE: The following constant denominator should be 100. However, since
         // `100-kilometer` is treated as a unit in CLDR,
         // the unit does not have a constant denominator.
-        // This issue should be addressed in CLDR.
+        // This issue should be addressed in CLDR & ICU.
         {"meter-per-100-kilometer", 0},
         // NOTE: the following CLDR identifier should be invalid, but because
         // `100-kilometer` is considered a unit in CLDR,
