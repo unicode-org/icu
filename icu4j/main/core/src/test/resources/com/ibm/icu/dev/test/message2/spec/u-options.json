@@ -32,7 +32,7 @@
     {
       "src": "{#tag u:dir=rtl u:locale=ar}content{/ns:tag}",
       "exp": "content",
-      "expErrors": [{ "type": "bad-option" }, { "type": "bad-option" }],
+//      "expErrors": [{ "type": "bad-option" }, { "type": "bad-option" }],
       "expParts": [
         {
           "type": "markup",

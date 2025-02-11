@@ -19,7 +19,8 @@ import com.ibm.icu.message2.SelectorFactory;
 import com.ibm.icu.text.FormattedValue;
 
 /**
- * Locale-independent functions for formatting and selection. 
+ * Locale-independent functions for formatting and selection.
+ * Implements the functionality required by `:test:function`, `:test:format`, and `:test:select`.  
  * Used only for testing (see test/README.md in the MF2 repository).
  */
 public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
@@ -115,7 +116,7 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
             return o1.compareTo(o2);
         }
     }
-    
+
     private static class ParsedOptions {
         final boolean reportErrors;
         final boolean failsFormat;
@@ -138,7 +139,7 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
             if (options == null) {
                 return new ParsedOptions(reportErrors, failsFormat, failsSelect, decimalPlaces);
             }
-            
+
             String option = getStringOption(options, "icu:impl:errorPolicy", null);
             reportErrors= "STRICT".equals(option);
 
@@ -178,7 +179,7 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
                 default:
                     // "All other _options_ and their values are ignored." (spec, `test/README.md`)
                     // 1. Emit "bad-option" _Resolution Error_.
-                    // 1. Use a _fallback value_ as the _resolved value_ of the _expression_.                    
+                    // 1. Use a _fallback value_ as the _resolved value_ of the _expression_.
                     if (reportErrors) {
                         throw new InvalidParameterException("bad-option");
                     }

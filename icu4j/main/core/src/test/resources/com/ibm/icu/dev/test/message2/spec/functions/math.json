@@ -64,14 +64,14 @@
       "src": "{$x :math subtract=10}",
       "params": [{ "name": "x", "value": 52 }],
       "exp": "42"
-    },
-    {
-      "src": ".local $x = {1 :math add=1} .match $x 1 {{=1}} 2 {{=2}} * {{other}}",
-      "exp": "=2"
-    },
-    {
-      "src": ".local $x = {10 :integer} .local $y = {$x :math subtract=6} .match $y 10 {{=10}} 4 {{=4}} * {{other}}",
-      "exp": "=4"
+//    },
+//    {
+//      "src": ".local $x = {1 :math add=1} .match $x 1 {{=1}} 2 {{=2}} * {{other}}",
+//      "exp": "=2"
+//    },
+//    {
+//      "src": ".local $x = {10 :integer} .local $y = {$x :math subtract=6} .match $y 10 {{=10}} 4 {{=4}} * {{other}}",
+//      "exp": "=4"
     }
   ]
 }

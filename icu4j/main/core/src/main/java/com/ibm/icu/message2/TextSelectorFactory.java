@@ -3,7 +3,6 @@
 
 package com.ibm.icu.message2;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -36,7 +35,7 @@ class TextSelectorFactory implements SelectorFactory {
             List<String> result = new ArrayList<>();
             if (value == null) {
                 if (OptUtils.reportErrors(variableOptions)) {
-                    throw new InvalidParameterException("unresolved-variable: argument to match on can't be null");
+                    throw new IllegalArgumentException("unresolved-variable: argument to match on can't be null");
                 }
                 return result;
             }

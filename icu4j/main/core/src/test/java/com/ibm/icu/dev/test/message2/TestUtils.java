@@ -46,7 +46,7 @@ public class TestUtils {
             .setSelector("test:function", new TestFunctionFactory("function"))
             .setSelector("test:select", new TestFunctionFactory("select"))
             .build();
-    
+
     // ======= Legacy TestCase utilities, no json-compatible ========
 
     static void runTestCase(TestCase testCase) {

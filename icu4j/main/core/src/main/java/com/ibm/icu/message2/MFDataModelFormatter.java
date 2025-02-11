@@ -39,6 +39,12 @@ import com.ibm.icu.util.CurrencyAmount;
  */
 // TODO: move this in the MessageFormatter?
 class MFDataModelFormatter {
+    // Bidi controls. For code readability only.
+    private static final char LRI = '\u2066'; // LEFT-TO-RIGHT ISOLATE (LRI)
+    private static final char RLI = '\u2067'; // RIGHT-TO-LEFT ISOLATE (RLI)
+    private static final char FSI = '\u2068'; // FIRST STRONG ISOLATE (FSI)
+    private static final char PDI = '\u2069'; // POP DIRECTIONAL ISOLATE (PDI)
+
     private final Locale locale;
     private final ErrorHandlingBehavior errorHandlingBehavior;
     private final BidiIsolation bidiIsolation;
@@ -97,12 +103,6 @@ class MFDataModelFormatter {
                         .setSelector("icu:gender", new TextSelectorFactory())
                         .build();
     }
-
-    // Bidi controls. Here for readability only
-    private static final char LRI = '\u2066'; // LEFT-TO-RIGHT ISOLATE (LRI)
-    private static final char RLI = '\u2067'; // RIGHT-TO-LEFT ISOLATE (RLI)
-    private static final char FSI = '\u2068'; // FIRST STRONG ISOLATE (FSI)
-    private static final char PDI = '\u2069'; // POP DIRECTIONAL ISOLATE (PDI)
 
     String format(Map<String, Object> arguments) {
         MFDataModel.Pattern patternToRender = null;
@@ -663,8 +663,8 @@ class MFDataModelFormatter {
     /*
      * I considered extending a HashMap.
      * But then we would need to override all the methods that use keys:
-     * compute, computeIfAbsent, computeIfPresent, containsKey, getOrDefault,
-     * merge, put, putIfAbsent, removing, replacing, and so on.
+     * `compute`, `computeIfAbsent`, `computeIfPresent`, `containsKey`, `getOrDefault`,
+     * `merge`, `put`, `putIfAbsent`, `remove`, `replace`, and so on.
      * If we don't and some refactoring in the code above starts using one of
      * the methods that was not overridden then it will bypass the normalization
      * and will create a map with mixed keys (some not normalized).
