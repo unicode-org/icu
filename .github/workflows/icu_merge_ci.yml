@@ -45,7 +45,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Cache local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -71,7 +71,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -335,7 +335,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -392,7 +392,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -451,7 +451,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -515,7 +515,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -649,7 +649,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -727,7 +727,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
