@@ -1192,6 +1192,7 @@ void UnitsTest::testUnitsConstantsDenomenator() {
     } testCases[]{
         {"meter-per-1000", 1000},
         {"liter-per-1000-kiloliter", 1000},
+        {"meter-per-100-kilometer", 100}, // Failing: ICU-23045
         {"liter-per-kilometer", 0},
         {"second-per-1000-minute", 1000},
         {"gram-per-1000-kilogram", 1000},
@@ -1205,6 +1206,7 @@ void UnitsTest::testUnitsConstantsDenomenator() {
         {"portion-per-7", 7},
         {"portion-per-8", 8},
         {"portion-per-9", 9},
+
         // Test for constant denominators that are powers of 10
         {"portion-per-10", 10},
         {"portion-per-100", 100},
@@ -1214,16 +1216,18 @@ void UnitsTest::testUnitsConstantsDenomenator() {
         {"portion-per-1000000", 1000000},
         {"portion-per-10000000", 10000000},
         {"portion-per-100000000", 100000000},
-        // ICU-22781: {"portion-per-1000000000", 1000000000},
-        // ICU-22781: {"portion-per-10000000000", 10000000000},
-        // ICU-22781: {"portion-per-100000000000", 100000000000},
-        // ICU-22781: {"portion-per-1000000000000", 1000000000000},
-        // ICU-22781: {"portion-per-10000000000000", 10000000000000},
-        // ICU-22781: {"portion-per-100000000000000", 100000000000000},
-        // ICU-22781: {"portion-per-1000000000000000", 1000000000000000},
-        // ICU-22781: {"portion-per-10000000000000000", 10000000000000000},
-        // ICU-22781: {"portion-per-100000000000000000", 100000000000000000},
-        // ICU-22781: {"portion-per-1000000000000000000", 1000000000000000000},
+        {"portion-per-1000000000", 1000000000}, // Failing: ICU-23045
+        {"portion-per-10000000000", 10000000000},
+        {"portion-per-100000000000", 100000000000},
+        {"portion-per-1000000000000", 1000000000000},
+        {"portion-per-10000000000000", 10000000000000},
+        {"portion-per-100000000000000", 100000000000000},
+        {"portion-per-1000000000000000", 1000000000000000},
+        {"portion-per-10000000000000000", 10000000000000000},
+        {"portion-per-100000000000000000", 100000000000000000},
+        {"portion-per-1000000000000000000", 1000000000000000000},
+        {"portion-per-1e3-kilometer", 1000},
+
         // Test for constant denominators that are represented as scientific notation
         // numbers.
         {"portion-per-1e1", 10},
@@ -1238,32 +1242,33 @@ void UnitsTest::testUnitsConstantsDenomenator() {
         {"portion-per-1E5", 100000},
         {"portion-per-1e6", 1000000},
         {"portion-per-1E6", 1000000},
-        // ICU-22781: {"portion-per-1e10", 10000000000},
-        // ICU-22781: {"portion-per-1E10", 10000000000},
-        // ICU-22781: {"portion-per-1e18", 1000000000000000000},
-        // ICU-22781: {"portion-per-1E18", 1000000000000000000},
+        {"portion-per-1e9", 1000000000}, // Failing: ICU-23045
+        {"portion-per-1E9", 1000000000}, // Failing: ICU-23045
+        {"portion-per-1e10", 10000000000},
+        {"portion-per-1E10", 10000000000},
+        {"portion-per-1e18", 1000000000000000000},
+        {"portion-per-1E18", 1000000000000000000},
+
         // Test for constant denominators that are randomly selected.
-        // ICU-22781: {"liter-per-12345-kilometer", 12345},
-        // ICU-22781: {"per-1000-kilometer", 1000},
-        // ICU-22781: {"liter-per-1000-kiloliter", 1000},
+        {"liter-per-12345-kilometer", 12345},
+        {"per-1000-kilometer", 1000},
+        {"liter-per-1000-kiloliter", 1000},
+
         // Test for constant denominators that give 0.
         {"meter", 0},
         {"meter-per-second", 0},
         {"meter-per-square-second", 0},
-        // NOTE: The following constant denominator should be 0. However, since
-        // `100-kilometer` is treated as a unit in CLDR,
-        // the unit does not have a constant denominator.
-        // This issue should be addressed in CLDR.
-        {"meter-per-100-kilometer", 0},
-        // NOTE: the following CLDR identifier should be invalid, but because
-        // `100-kilometer` is considered a unit in CLDR,
-        // one `100` will be considered as a unit constant denominator and the other
-        // `100` will be considered part of the unit.
-        // This issue should be addressed in CLDR.
-        {"meter-per-100-100-kilometer", 100},
     };
 
     for (const auto &testCase : testCases) {
+        if (uprv_strcmp(testCase.source, "portion-per-1000000000") == 0 ||
+            uprv_strcmp(testCase.source, "portion-per-1e9") == 0 ||
+            uprv_strcmp(testCase.source, "portion-per-1E9") == 0 ||
+            uprv_strcmp(testCase.source, "meter-per-100-kilometer") == 0) {
+            logKnownIssue("ICU-23045", "Incorrect constant denominator for certain unit identifiers");
+            continue;
+        }
+
         MeasureUnit unit = MeasureUnit::forIdentifier(testCase.source, status);
         if (status.errIfFailureAndReset("forIdentifier(\"%s\")", testCase.source)) {
             continue;
