@@ -1775,9 +1775,6 @@ _canonicalize(const char* localeID,
         tempBuffer = ulocimp_forLanguageTag(localeIDPtr, -1, nullptr, err);
         tmpLocaleID = U_SUCCESS(err) && !tempBuffer.isEmpty() ? tempBuffer.data() : localeIDPtr;
     } else {
-        if (localeID==nullptr) {
-           localeID=uloc_getDefault();
-        }
         tmpLocaleID=localeID;
     }
 
@@ -2077,6 +2074,9 @@ uloc_getName(const char* localeID,
              int32_t nameCapacity,
              UErrorCode* err)
 {
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
     return ByteSinkUtil::viaByteSinkToTerminatedChars(
         name, nameCapacity,
         [&](ByteSink& sink, UErrorCode& status) {
@@ -2110,6 +2110,9 @@ uloc_getBaseName(const char* localeID,
                  int32_t nameCapacity,
                  UErrorCode* err)
 {
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
     return ByteSinkUtil::viaByteSinkToTerminatedChars(
         name, nameCapacity,
         [&](ByteSink& sink, UErrorCode& status) {
@@ -2143,6 +2146,9 @@ uloc_canonicalize(const char* localeID,
                   int32_t nameCapacity,
                   UErrorCode* err)
 {
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
     return ByteSinkUtil::viaByteSinkToTerminatedChars(
         name, nameCapacity,
         [&](ByteSink& sink, UErrorCode& status) {
