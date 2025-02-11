@@ -2091,7 +2091,7 @@ uloc_getName(const char* localeID,
 }
 
 U_EXPORT CharString
-ulocimp_getName(const char* localeID,
+ulocimp_getName(std::string_view localeID,
                 UErrorCode& err)
 {
     return ByteSinkUtil::viaByteSinkToCharString(
@@ -2102,7 +2102,7 @@ ulocimp_getName(const char* localeID,
 }
 
 U_EXPORT void
-ulocimp_getName(const char* localeID,
+ulocimp_getName(std::string_view localeID,
                 ByteSink& sink,
                 UErrorCode& err)
 {
@@ -2127,7 +2127,7 @@ uloc_getBaseName(const char* localeID,
 }
 
 U_EXPORT CharString
-ulocimp_getBaseName(const char* localeID,
+ulocimp_getBaseName(std::string_view localeID,
                     UErrorCode& err)
 {
     return ByteSinkUtil::viaByteSinkToCharString(
@@ -2138,7 +2138,7 @@ ulocimp_getBaseName(const char* localeID,
 }
 
 U_EXPORT void
-ulocimp_getBaseName(const char* localeID,
+ulocimp_getBaseName(std::string_view localeID,
                     ByteSink& sink,
                     UErrorCode& err)
 {
@@ -2163,7 +2163,7 @@ uloc_canonicalize(const char* localeID,
 }
 
 U_EXPORT CharString
-ulocimp_canonicalize(const char* localeID,
+ulocimp_canonicalize(std::string_view localeID,
                      UErrorCode& err)
 {
     return ByteSinkUtil::viaByteSinkToCharString(
@@ -2174,7 +2174,7 @@ ulocimp_canonicalize(const char* localeID,
 }
 
 U_EXPORT void
-ulocimp_canonicalize(const char* localeID,
+ulocimp_canonicalize(std::string_view localeID,
                      ByteSink& sink,
                      UErrorCode& err)
 {
