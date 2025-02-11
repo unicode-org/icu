@@ -6116,9 +6116,15 @@ void MeasureFormatTest::TestInvalidIdentifiers() {
         "meter-per-1000-1000",
         "meter-per-1000-second-1000-kilometer",
         "per-1000-and-per-1000",
+        "meter-per-100-100-kilometer", // Failing ICU-23045
     };
 
     for (const auto& input : inputs) {
+        if (uprv_strcmp(input, "meter-per-100-100-kilometer") == 0) {
+            logKnownIssue("ICU-23045", "Incorrect constant denominator for certain unit identifiers "
+                                       "leads to incorrect unit identifiers.");
+            continue;
+        }
         status.setScope(input);
         MeasureUnit::forIdentifier(input, status);
         status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
