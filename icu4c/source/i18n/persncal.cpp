@@ -205,7 +205,8 @@ int32_t PersianCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mont
 /**
  * Return the number of days in the given Persian year
  */
-int32_t PersianCalendar::handleGetYearLength(int32_t extendedYear) const {
+int32_t PersianCalendar::handleGetYearLength(int32_t extendedYear, UErrorCode& status) const {
+    if (U_FAILURE(status)) return 0;
     return isLeapYear(extendedYear) ? 366 : 365;
 }
     

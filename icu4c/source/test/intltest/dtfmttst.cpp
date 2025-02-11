@@ -137,6 +137,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestHCInLocale);
     TESTCASE_AUTO(TestBogusLocale);
     TESTCASE_AUTO(TestLongLocale);
+    TESTCASE_AUTO(TestChineseCalendar23043);
 
     TESTCASE_AUTO_END;
 }
@@ -5930,6 +5931,16 @@ void DateFormatTest::TestHCInLocale() {
         }
         i++;
     }
+}
+void DateFormatTest::TestChineseCalendar23043() {
+  IcuTestErrorCode status(*this, "TestChineseCalendar23043");
+  Locale l("zh@calendar=chinese");
+  SimpleDateFormat sdf(u"r年MMMd", l, status);
+  sdf.adoptTimeZone(TimeZone::createTimeZone(u"Europe/Moscow"));
+  UDate d = 3363150585600000;
+  UnicodeString appendTo;
+  sdf.format(d, appendTo, nullptr, status);
+  status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

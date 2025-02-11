@@ -128,7 +128,8 @@ int32_t IndianCalendar::handleGetMonthLength(int32_t eyear, int32_t month, UErro
  *
  * @param eyear The year in Saka Era.
  */
-int32_t IndianCalendar::handleGetYearLength(int32_t eyear) const {
+int32_t IndianCalendar::handleGetYearLength(int32_t eyear, UErrorCode& status) const {
+    if (U_FAILURE(status)) return 0;
     return isGregorianLeap(eyear + INDIAN_ERA_START) ? 366 : 365;
 }
 /*
