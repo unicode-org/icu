@@ -103,6 +103,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void toDecimalNumber();
     void microPropsInternals();
     void formatUnitsAliases();
+    void formatArbitraryConstant();
     void TestPortionFormat();
     void testIssue22378();
 

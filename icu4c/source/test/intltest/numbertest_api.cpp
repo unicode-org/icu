@@ -133,6 +133,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(toDecimalNumber);
         TESTCASE_AUTO(microPropsInternals);
         TESTCASE_AUTO(formatUnitsAliases);
+        TESTCASE_AUTO(formatArbitraryConstant);
         TESTCASE_AUTO(TestPortionFormat);
         TESTCASE_AUTO(testIssue22378);
     TESTCASE_AUTO_END;
@@ -6083,6 +6084,56 @@ void NumberFormatterApiTest::formatUnitsAliases() {
                                          .toString(status);
 
         assertEquals("test unit aliases", testCase.expectedFormat, actualFormat);
+    }
+}
+
+void NumberFormatterApiTest::formatArbitraryConstant() {
+    IcuTestErrorCode status(*this, "formatArbitraryConstant");
+
+    struct TestCase {
+        const char *unitIdentifier;
+        int32_t inputValue;
+        UNumberUnitWidth width;
+        Locale locale;
+        const UnicodeString expectedOutput;
+    } testCases[]{
+        {"meter-per-kelvin-second", 2, UNUM_UNIT_WIDTH_FULL_NAME, Locale::getEnglish(),
+         "2 meters per second-kelvin"},
+        {"meter-per-100-kelvin-second", 3, UNUM_UNIT_WIDTH_FULL_NAME, Locale::getEnglish(),
+         u"3 meters per 100-second-kelvin"},
+        {"meter-per-1000", 1, UNUM_UNIT_WIDTH_FULL_NAME, Locale::getEnglish(), u"1 meter per 1000"},
+        {"meter-per-1000-second", 1, UNUM_UNIT_WIDTH_FULL_NAME, Locale::getEnglish(),
+         u"1 meter per 1000-second"},
+        {"meter-per-1000-second-kelvin", 1, UNUM_UNIT_WIDTH_FULL_NAME, Locale::getEnglish(),
+         u"1 meter per 1000-second-kelvin"},
+        {"meter-per-1-second-kelvin-per-kilogram", 1, UNUM_UNIT_WIDTH_FULL_NAME, Locale::getEnglish(),
+         u"1 meter per 1-kilogram-second-kelvin"},
+        {"meter-second-per-kilogram-kelvin", 1, UNUM_UNIT_WIDTH_FULL_NAME, Locale::getEnglish(),
+         u"1 meter-second per kilogram-kelvin"},
+        {"meter-second-per-1000-kilogram-kelvin", 1, UNUM_UNIT_WIDTH_FULL_NAME, Locale::getEnglish(),
+         u"1 meter-second per 1000-kilogram-kelvin"},
+        {"meter-second-per-1000-kilogram-kelvin", 1, UNUM_UNIT_WIDTH_SHORT, Locale::getEnglish(),
+         u"1 m⋅sec/1000⋅kg⋅K"},
+        {"meter-second-per-1000-kilogram-kelvin", 1, UNUM_UNIT_WIDTH_FULL_NAME, Locale::getGerman(),
+         u"1 Meter⋅Sekunde pro 1000⋅Kilogramm⋅Kelvin"},
+        {"meter-second-per-1000-kilogram-kelvin", 1, UNUM_UNIT_WIDTH_SHORT, Locale::getGerman(),
+         u"1 m⋅Sek./1000⋅kg⋅K"},
+    };
+
+    for (auto testCase : testCases) {
+        auto unit = MeasureUnit::forIdentifier(testCase.unitIdentifier, status);
+        UnicodeString actualFormat = NumberFormatter::withLocale(testCase.locale)
+                                         .unit(unit)
+                                         .unitWidth(testCase.width)
+                                         .formatDouble(testCase.inputValue, status)
+                                         .toString(status);
+
+        if (status.errIfFailureAndReset()) {
+            continue;
+        }
+
+        assertEquals(UnicodeString("test arbitrary constant \"") + testCase.unitIdentifier + "\"",
+                     testCase.expectedOutput, actualFormat);
     }
 }
 

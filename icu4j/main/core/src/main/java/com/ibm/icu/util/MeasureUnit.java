@@ -716,12 +716,22 @@ public class MeasureUnit implements Serializable {
             implCopy.appendSingleUnit(singleUnit);
         }
 
-        if (this.getConstantDenominator() != 0 && other.getConstantDenominator() != 0) {
+        long thisConstantDenominator = this.getConstantDenominator();
+        long otherConstantDenominator = other.getConstantDenominator();
+
+        // TODO: we can also multiply the constant denominators instead of throwing an
+        // exception.
+        if (thisConstantDenominator != 0 && otherConstantDenominator != 0) {
+            // There is only `one` constant denominator in a compound unit.
+            // Therefore, we cannot multiply units that both of them have a constant
+            // denominator.
             throw new UnsupportedOperationException(
                     "Cannot multiply units that both of them have a constant denominator");
         }
 
-        implCopy.setConstantDenominator(this.getConstantDenominator() + other.getConstantDenominator());
+        // Because either one of the constant denominators is zero, we can use the
+        // maximum of them.
+        implCopy.setConstantDenominator(Math.max(thisConstantDenominator, otherConstantDenominator));
 
         return implCopy.build();
     }
