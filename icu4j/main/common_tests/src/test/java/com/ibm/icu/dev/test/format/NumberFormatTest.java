@@ -7123,60 +7123,49 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestPortionFormat() {
-        MeasureUnit unit = MeasureUnit.forIdentifier("portion-per-1e9");
-        LocalizedNumberFormatter formatter = NumberFormatter.withLocale(ULocale.ENGLISH).unit(unit)
-                .unitWidth(UnitWidth.FULL_NAME);
-        String formatted1 = formatter.format(1).toString();
-        assertEquals("1 portion per 1e9", "1 part per billion", formatted1);
-
-        String formatted2 = formatter.format(2).toString();
-        assertEquals("1000 portion per 1e9", "2 parts per billion", formatted2);
-
-        String formatted3 = formatter.format(1000000).toString();
-        assertEquals("1000000 portion per 1e9", "1,000,000 parts per billion", formatted3);
-
-        String formatted4 = formatter.format(1000000000).toString();
-        assertEquals("1000000000 portion per 1e9", "1,000,000,000 parts per billion", formatted4);
-    }
-
-    @Test
-    public void TestArbitraryPortionFormat() {
-        class TestData {
+        class TestCase {
             String unitIdentifier;
-            Integer inputValue;
+            String locale;
+            double inputValue;
+            String expectedOutput;
 
-            TestData(String unitIdentifier, Integer inputValue) {
+            TestCase(String unitIdentifier, String locale, double inputValue, String expectedOutput) {
                 this.unitIdentifier = unitIdentifier;
+                this.locale = locale;
                 this.inputValue = inputValue;
+                this.expectedOutput = expectedOutput;
             }
         }
 
-        TestData[] testData = {
-                new TestData("portion-per-1e1", 1),
-                new TestData("portion-per-1e2", 1),
-                new TestData("portion-per-1e3", 1),
-                new TestData("portion-per-1e4", 1),
-                new TestData("portion-per-1e5", 1),
-                new TestData("portion-per-1e6", 1),
-                new TestData("portion-per-1e7", 1),
-                new TestData("portion-per-1e8", 1),
+        TestCase[] testCases = {
+                        new TestCase("portion-per-1e9", "en-US", 1, "1 part per billion"),
+                new TestCase("portion-per-1e9", "en-US", 2, "2 parts per billion"),
+                new TestCase("portion-per-1e9", "en-US", 1000000, "1,000,000 parts per billion"),
+                new TestCase("portion-per-1e9", "de-DE", 1000000, "1.000.000 Milliardstel"),
+                new TestCase("portion-per-1e1", "en-US", 1, "UNKNOWN"),
+                new TestCase("portion-per-1e2", "en-US", 1, "UNKNOWN"),
+                new TestCase("portion-per-1e3", "en-US", 1, "UNKNOWN"),
+                new TestCase("portion-per-1e4", "en-US", 1, "UNKNOWN"),
+                new TestCase("portion-per-1e5", "en-US", 1, "UNKNOWN"),
+                new TestCase("portion-per-1e6", "en-US", 1, "UNKNOWN"),
+                new TestCase("portion-per-1e7", "en-US", 1, "UNKNOWN"),
+                new TestCase("portion-per-1e8", "en-US", 1, "UNKNOWN"),
         };
 
-        for (TestData testCase : testData) {
-            try {
-                MeasureUnit unit = MeasureUnit.forIdentifier(testCase.unitIdentifier);
-                LocalizedNumberFormatter formatter = NumberFormatter.withLocale(ULocale.ENGLISH).unit(unit)
-                        .unitWidth(UnitWidth.FULL_NAME);
-                formatter.format(testCase.inputValue);
-                // NOTE: All these test cases should pass, but because CLDR data is missing for
-                // `portion`, an error is thrown.
-                // See: CLDR-18274
-                fail("Expected IllegalArgumentException for unit: " + testCase.unitIdentifier
-                        + ", input: " + testCase.inputValue);
-
-            } catch (Exception e) {
-                // Expected
+        for (TestCase testCase : testCases) {
+            if (testCase.unitIdentifier.compareTo("portion-per-1e9") != 0) {
+                logKnownIssue("CLDR-18274", "The data for portion-per-XYZ is not determined yet.");
+                continue;
             }
+            MeasureUnit unit = MeasureUnit.forIdentifier(testCase.unitIdentifier);
+            LocalizedNumberFormatter formatter = NumberFormatter.withLocale(ULocale.forLanguageTag(testCase.locale))
+                    .unit(unit)
+                    .unitWidth(UnitWidth.FULL_NAME);
+            String formatted = formatter.format(testCase.inputValue).toString();
+            assertEquals(
+                    "Unit: " + testCase.unitIdentifier + ", Locale: " + testCase.locale + ", Input: "
+                            + testCase.inputValue,
+                    testCase.expectedOutput, formatted);
         }
     }
 }
