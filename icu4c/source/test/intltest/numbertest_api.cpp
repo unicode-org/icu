@@ -133,6 +133,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(toDecimalNumber);
         TESTCASE_AUTO(microPropsInternals);
         TESTCASE_AUTO(formatUnitsAliases);
+        TESTCASE_AUTO(TestPortionFormat);
         TESTCASE_AUTO(testIssue22378);
     TESTCASE_AUTO_END;
 }
@@ -6082,6 +6083,44 @@ void NumberFormatterApiTest::formatUnitsAliases() {
                                          .toString(status);
 
         assertEquals("test unit aliases", testCase.expectedFormat, actualFormat);
+    }
+}
+
+void NumberFormatterApiTest::TestPortionFormat() {
+    IcuTestErrorCode status(*this, "TestPortionFormat");
+
+    struct TestCase {
+        const char *unitIdentifier;
+        const char *locale;
+        double inputValue;
+        UnicodeString expectedOutput;
+    } testCases[]{
+        {"portion-per-1e9", "en-US", 1, "1 part per billion"},
+        {"portion-per-1e9", "en-US", 2, "2 parts per billion"},
+        {"portion-per-1e9", "en-US", 1000000, "1,000,000 parts per billion"},
+        {"portion-per-1e9", "de-DE", 1000000, "1.000.000 Milliardstel"},
+        {"portion-per-1e1", "en-US", 1, "UNKNOWN"},
+        {"portion-per-1e2", "en-US", 1, "UNKNOWN"},
+        {"portion-per-1e3", "en-US", 1, "UNKNOWN"},
+        {"portion-per-1e4", "en-US", 1, "UNKNOWN"},
+        {"portion-per-1e5", "en-US", 1, "UNKNOWN"},
+        {"portion-per-1e6", "en-US", 1, "UNKNOWN"},
+        {"portion-per-1e7", "en-US", 1, "UNKNOWN"},
+        {"portion-per-1e8", "en-US", 1, "UNKNOWN"},
+    };
+
+    for (auto testCase : testCases) {
+        if (uprv_strcmp(testCase.unitIdentifier, "portion-per-1e9") != 0) {
+            logKnownIssue("CLDR-18274", "The data for portion-per-XYZ is not determined yet.");
+            continue;
+        }
+        MeasureUnit unit = MeasureUnit::forIdentifier(testCase.unitIdentifier, status);
+        LocalizedNumberFormatter lnf =
+            NumberFormatter::withLocale(Locale::forLanguageTag(testCase.locale, status))
+                .unit(unit)
+                .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME);
+        UnicodeString actualOutput = lnf.formatDouble(testCase.inputValue, status).toString(status);
+        assertEquals("test portion format", testCase.expectedOutput, actualOutput);
     }
 }
 
