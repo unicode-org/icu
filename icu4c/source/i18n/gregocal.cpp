@@ -574,7 +574,8 @@ int32_t GregorianCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mo
     return isLeapYear(extendedYear) ? kLeapMonthLength[month] : kMonthLength[month];
 }
 
-int32_t GregorianCalendar::handleGetYearLength(int32_t eyear) const {
+int32_t GregorianCalendar::handleGetYearLength(int32_t eyear, UErrorCode& status) const {
+    if (U_FAILURE(status)) return 0;
     return isLeapYear(eyear) ? 366 : 365;
 }
 
@@ -844,13 +845,14 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
         }
         if (month == UCAL_JANUARY) {
             if (woy >= 52) {
-                isoDoy += handleGetYearLength(isoYear);
+                isoDoy += handleGetYearLength(isoYear, status);
             }
         } else {
             if (woy == 1) {
-                isoDoy -= handleGetYearLength(isoYear - 1);
+                isoDoy -= handleGetYearLength(isoYear - 1, status);
             }
         }
+        if (U_FAILURE(status)) return;
         if (uprv_add32_overflow(woy, amount, &woy)) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
@@ -863,7 +865,8 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
             // days at the end of the year are going to fall into
             // week 1 of the next year, we drop the last week by
             // subtracting 7 from the last day of the year.
-            int32_t lastDoy = handleGetYearLength(isoYear);
+            int32_t lastDoy = handleGetYearLength(isoYear, status);
+            if (U_FAILURE(status)) return;
             int32_t lastRelDow = (lastDoy - isoDoy + internalGet(UCAL_DAY_OF_WEEK) -
                 getFirstDayOfWeek()) % 7;
             if (lastRelDow < 0) lastRelDow += 7;

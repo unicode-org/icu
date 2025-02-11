@@ -796,6 +796,9 @@ struct MonthInfo computeMonthInfo(
         solsticeBefore = solsticeAfter;
         solsticeAfter = winterSolstice(setting, gyear + 1, status);
     }
+    if (!(solsticeBefore <= days && days < solsticeAfter)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
     if (U_FAILURE(status)) {
         return output;
     }
