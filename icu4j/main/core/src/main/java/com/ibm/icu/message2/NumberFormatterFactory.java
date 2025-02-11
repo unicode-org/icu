@@ -132,7 +132,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 offset = 0;
             }
 
-            double mathOperand = 0;
+            Double mathOperand = null;
             if ("math".equals(kind)) {
                 ResolvedMathOptions resolvedMathOptions = ResolvedMathOptions.of(fixedOptions);
                 mathOperand = resolvedMathOptions.operand;
@@ -155,19 +155,38 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 throw new NullPointerException("Argument to format can't be null");
             } else if (toFormat instanceof Double) {
                 if (isInt) toFormat = Math.floor((double) toFormat);
-                result = realFormatter.format((double) toFormat - offset + mathOperand);
+                double toFormatAdjusted =(double) toFormat - offset;
+                if (mathOperand != null) {
+                    toFormatAdjusted += mathOperand;
+                }
+                result = realFormatter.format(toFormatAdjusted);
             } else if (toFormat instanceof Long) {
-                result = realFormatter.format((long) toFormat - offset + mathOperand);
+                if (mathOperand != null) {
+                    result = realFormatter.format((long) toFormat - offset + mathOperand);
+                } else {
+                    result = realFormatter.format((long) toFormat - offset);
+                }
             } else if (toFormat instanceof Integer) {
-                result = realFormatter.format((int) toFormat - offset + mathOperand);
+                if (mathOperand != null) {
+                    result = realFormatter.format((int) toFormat - offset + mathOperand);
+                } else {
+                    result = realFormatter.format((int) toFormat - offset);
+                }
             } else if (toFormat instanceof BigDecimal) {
                 BigDecimal bd = (BigDecimal) toFormat;
                 if (isInt) toFormat = bd.longValue();
-                result = realFormatter.format(
-                        bd.subtract(BigDecimal.valueOf(offset)).add(BigDecimal.valueOf(mathOperand)));
+                bd = bd.subtract(BigDecimal.valueOf(offset));
+                if (mathOperand != null) {
+                    bd = bd.add(BigDecimal.valueOf(mathOperand));
+                }
+                result = realFormatter.format(bd);
             } else if (toFormat instanceof Number) {
                 if (isInt) toFormat = Math.floor(((Number) toFormat).doubleValue());
-                result = realFormatter.format(((Number) toFormat).doubleValue() - offset + mathOperand);
+                double toFormatAdjusted = ((Number) toFormat).doubleValue() - offset;
+                if (mathOperand != null) {
+                    toFormatAdjusted += mathOperand;
+                }
+                result = realFormatter.format(toFormatAdjusted);
             } else if (toFormat instanceof CurrencyAmount) {
                 result = realFormatter.format((CurrencyAmount) toFormat);
             } else {
@@ -177,7 +196,11 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 Number nrValue = OptUtils.asNumber(reportErrors, "argument", strValue);
                 if (nrValue != null) {
                     if (isInt) toFormat = Math.floor(nrValue.doubleValue());
-                    result = realFormatter.format(nrValue.doubleValue() - offset + mathOperand);
+                    double toFormatAdjusted = nrValue.doubleValue() - offset;
+                    if (mathOperand != null) {
+                        toFormatAdjusted += mathOperand;
+                    }
+                    result = realFormatter.format(toFormatAdjusted);
                 } else {
                     result = new PlainStringFormattedValue("{|" + strValue + "|}");
                 }
