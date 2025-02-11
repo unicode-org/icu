@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739314820736,
+  "lastUpdate": 1739317263124,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31917,6 +31917,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 862.2450881191359,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "59af52bb6f967bc5061bc3f6a91063de88e4aa78",
+          "message": "ICU-23043 Propogate error in Calendar.",
+          "timestamp": "2025-02-11T15:14:27-08:00",
+          "tree_id": "7bd5c92a3dfe97c76709975ad43f72aa69636fcd",
+          "url": "https://github.com/unicode-org/icu/commit/59af52bb6f967bc5061bc3f6a91063de88e4aa78"
+        },
+        "date": 1739317029722,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 862.7703363620185,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
