@@ -740,13 +740,13 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-    - uses: bazelbuild/setup-bazelisk@b39c379c82683a5f25d34f0d062761f62693e0b2 # v3.0.0
+    - uses: bazel-contrib/setup-bazel@0.13.0
     - name: Get CI Linux runner VM version
       id: linux-version
       run: |
         echo "LINUX_VERSION=$(grep -F VERSION_ID /etc/os-release | cut -d'"' -f2)" >> $GITHUB_OUTPUT
     - name: Mount bazel cache
-      uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+      uses: actions/cache@v4.2.0
       with:
         path: "~/.cache/bazel"
         key: bazel-${{ runner.os }}-${{ steps.linux-version.outputs.LINUX_VERSION }}
