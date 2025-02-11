@@ -32,7 +32,7 @@ public class CoreTest extends CoreTestFmwk {
             "normalization.json",
             "resolution-errors.json",
             "runtime-errors.json",
-            "spec/bidi.json", // FAILS 9 / 27
+            "spec/bidi.json",
             "spec/data-model-errors.json",
             "spec/syntax-errors.json",
             "spec/syntax.json",
@@ -46,7 +46,7 @@ public class CoreTest extends CoreTestFmwk {
             "spec/functions/string.json",
             "spec/functions/time.json",
             "spec/pattern-selection.json",
-            "spec/u-options.json", // FAILS 9 / 11
+            "spec/u-options.json", // FAILS 7 / 11
             "syntax-errors-diagnostics.json",
             "syntax-errors-diagnostics-multiline.json",
             "syntax-errors-end-of-input.json",
@@ -68,7 +68,7 @@ public class CoreTest extends CoreTestFmwk {
         System.out.println("----------");
         return false;
     }
-    
+
     @Test
     public void test() throws Exception {
         for (String jsonFile : JSON_FILES) {
@@ -90,7 +90,7 @@ public class CoreTest extends CoreTestFmwk {
                     try {
                         TestUtils.runTestCase(tests.defaultTestProperties, unit);
                     } catch (AssertionError e) {
-//                        firstTime = reportError(firstTime, jsonFile, e.getMessage());
+                        firstTime = reportError(firstTime, jsonFile, e.getMessage());
                         errorCount++;
                     }
                 }

@@ -15,7 +15,7 @@ class DefaultTestProperties {
     private final String bidiIsolation;
 
     DefaultTestProperties() {
-        this("en-US", new ExpErrors(false), "default");
+        this("en-US", new ExpErrors(false), "none");
     }
 
     DefaultTestProperties(String locale, ExpErrors expErrors, String bidiIsolation) {

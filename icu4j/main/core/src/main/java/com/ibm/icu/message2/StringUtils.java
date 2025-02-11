@@ -56,7 +56,7 @@ class StringUtils {
     static boolean isBidi(int cp) {
         return cp == 0x061C || cp == 0x200E || cp == 0x200F || (cp >= 0x2066 && cp <= 0x2069);
     }
-    
+
     /*
      * abnf: name-start = ALPHA / "_"
      * abnf:            / %xC0-D6 / %xD8-F6 / %xF8-2FF

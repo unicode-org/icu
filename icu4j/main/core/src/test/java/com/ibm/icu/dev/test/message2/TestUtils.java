@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ibm.icu.message2.MFFunctionRegistry;
 import com.ibm.icu.message2.MessageFormatter;
+import com.ibm.icu.message2.MessageFormatter.BidiIsolation;
 import com.ibm.icu.message2.MessageFormatter.ErrorHandlingBehavior;
 
 /** Utility class, has no test methods. */
@@ -176,7 +177,16 @@ public class TestUtils {
             mfBuilder.setLocale(Locale.US);
         }
         if (defaults.getBidiIsolation() != null) {
-//            mfBuilder.setBidiIsolation(true); // TODO ICU 77
+            switch (defaults.getBidiIsolation()) {
+                case "none":
+                    mfBuilder.setBidiIsolation(BidiIsolation.NONE);
+                    break;
+                case "default":
+                    mfBuilder.setBidiIsolation(BidiIsolation.DEFAULT);
+                    break;
+                default:
+                    // Nothing
+            }
         }
 
         try {

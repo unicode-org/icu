@@ -26,7 +26,7 @@ import java.util.Set;
  *     </li>
  * </ul>
  *
- * <p><b>NOTE:</b> all function and selector names are normalized to NFC. 
+ * <p><b>NOTE:</b> all function and selector names are normalized to NFC.
  *
  * @internal ICU 72 technology preview
  * @deprecated This API is for technology preview only.

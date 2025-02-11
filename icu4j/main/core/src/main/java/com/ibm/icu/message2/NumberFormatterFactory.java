@@ -147,7 +147,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                             "bad-option: the `currency` must be an ISO 4217 code.");
                 }
             }
-            
+
             boolean isInt = kind.equals("integer");
             FormattedValue result = null;
             if (toFormat == null) {
@@ -479,7 +479,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         }
         return null;
     }
-    
+
     private static class ResolvedMathOptions {
         final Double operand;
         final boolean reportErrors;
@@ -512,7 +512,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 }
             }
 
-            return new ResolvedMathOptions(operand, reportErrors); 
+            return new ResolvedMathOptions(operand, reportErrors);
         }
     }
 

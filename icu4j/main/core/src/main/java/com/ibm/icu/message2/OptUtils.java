@@ -91,7 +91,7 @@ class OptUtils {
     static String getString(Map<String, Object> options, String key) {
         return getString(options, key, null);
     }
-    
+
     static boolean reportErrors(Map<String, Object> options) {
         String reportErrors = getString(options, "icu:impl:errorPolicy");
         return "STRICT".equals(reportErrors);
@@ -109,7 +109,7 @@ class OptUtils {
                 result = Locale.forLanguageTag(localeOverride.replace('_', '-'));
             } catch (Exception e) {
                 if (reportErrors(options)) {
-                    throw new IllegalArgumentException("bad-operand: u:locale must be a valid BCP 47 language tag");                
+                    throw new IllegalArgumentException("bad-operand: u:locale must be a valid BCP 47 language tag");
                 }
             }
         }

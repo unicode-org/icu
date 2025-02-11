@@ -566,7 +566,7 @@ public class MFParser {
             }
         }
     }
-    
+
     private int skipOneOptionalBidi() {
         int c = input.peekChar();
         if (StringUtils.isBidi(c)) {

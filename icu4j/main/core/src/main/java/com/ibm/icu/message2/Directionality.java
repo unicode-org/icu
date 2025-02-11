@@ -8,7 +8,7 @@ import com.ibm.icu.util.ULocale;
 /**
  * Encodes info about the direction of the message.
  *
- * <p>It is used to implement the @code u:dir} functionality. 
+ * <p>It is used to implement the @code u:dir} functionality.</p>
  *
  * @internal ICU 77 technology preview
  * @deprecated This API is for technology preview only.

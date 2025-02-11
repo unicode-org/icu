@@ -28,6 +28,7 @@ import com.ibm.icu.message2.MFDataModel.SelectMessage;
 import com.ibm.icu.message2.MFDataModel.StringPart;
 import com.ibm.icu.message2.MFDataModel.VariableRef;
 import com.ibm.icu.message2.MFDataModel.Variant;
+import com.ibm.icu.message2.MessageFormatter.BidiIsolation;
 import com.ibm.icu.message2.MessageFormatter.ErrorHandlingBehavior;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.CurrencyAmount;
@@ -40,6 +41,7 @@ import com.ibm.icu.util.CurrencyAmount;
 class MFDataModelFormatter {
     private final Locale locale;
     private final ErrorHandlingBehavior errorHandlingBehavior;
+    private final BidiIsolation bidiIsolation;
     private final MFDataModel.Message dm;
 
     private final MFFunctionRegistry standardFunctions;
@@ -50,10 +52,13 @@ class MFDataModelFormatter {
             MFDataModel.Message dm,
             Locale locale,
             ErrorHandlingBehavior errorHandlingBehavior,
+            BidiIsolation bidiIsolation,
             MFFunctionRegistry customFunctionRegistry) {
         this.locale = locale;
         this.errorHandlingBehavior = errorHandlingBehavior == null
                 ? ErrorHandlingBehavior.BEST_EFFORT : errorHandlingBehavior;
+        this.bidiIsolation = bidiIsolation == null
+                ? BidiIsolation.NONE : bidiIsolation;
         this.dm = dm;
         this.customFunctions =
                 customFunctionRegistry == null ? EMPTY_REGISTY : customFunctionRegistry;
@@ -98,7 +103,7 @@ class MFDataModelFormatter {
     private static final char RLI = '\u2067'; // RIGHT-TO-LEFT ISOLATE (RLI)
     private static final char FSI = '\u2068'; // FIRST STRONG ISOLATE (FSI)
     private static final char PDI = '\u2069'; // POP DIRECTIONAL ISOLATE (PDI)
-    
+
     String format(Map<String, Object> arguments) {
         MFDataModel.Pattern patternToRender = null;
         MapWithNfcKeys nfcArguments = new MapWithNfcKeys(arguments);
@@ -133,23 +138,10 @@ class MFDataModelFormatter {
             } else if (part instanceof MFDataModel.Expression) {
                 FormattedPlaceholder formattedExpression =
                         formatExpression((Expression) part, variables, nfcArguments);
-                String fmt = formattedExpression.getFormattedValue().toString();
-                Directionality dir = formattedExpression.getDirectionality();
-                boolean isolate = formattedExpression.getIsolate();
-                switch (dir) {
-                    case LTR:
-                        if (msgdir == Directionality.LTR && !isolate) {
-                            result.append(fmt);
-                        } else {
-                            result.append(LRI).append(fmt).append(PDI);
-                        }
-                        break;
-                    case RTL:
-                        result.append(RLI).append(fmt).append(PDI);
-                        break;
-                    default:
-                        result.append(FSI).append(fmt).append(PDI);
-                        break;
+                if (this.bidiIsolation == BidiIsolation.DEFAULT) {
+                    implementBiDiDefault(result, msgdir, formattedExpression);
+                } else {
+                    result.append(formattedExpression.getFormattedValue().toString());
                 }
             } else if (part instanceof MFDataModel.Markup) {
                 // Ignore, we don't output markup to string
@@ -158,6 +150,27 @@ class MFDataModelFormatter {
             }
         }
         return result.toString();
+    }
+
+    private void implementBiDiDefault(StringBuilder result, Directionality msgdir, FormattedPlaceholder formattedExpression) {
+        String fmt = formattedExpression.getFormattedValue().toString();
+        Directionality dir = formattedExpression.getDirectionality();
+        boolean isolate = formattedExpression.getIsolate();
+        switch (dir) {
+            case LTR:
+                if (msgdir == Directionality.LTR && !isolate) {
+                    result.append(fmt);
+                } else {
+                    result.append(LRI).append(fmt).append(PDI);
+                }
+                break;
+            case RTL:
+                result.append(RLI).append(fmt).append(PDI);
+                break;
+            default:
+                result.append(FSI).append(fmt).append(PDI);
+                break;
+        }
     }
 
     private Pattern findBestMatchingPattern(
@@ -627,7 +640,7 @@ class MFDataModelFormatter {
                     variables.put(StringUtils.toNfc(name), fmt);
                 } catch (IllegalArgumentException e) {
                     if (this.errorHandlingBehavior == ErrorHandlingBehavior.STRICT) {
-                        throw(e); 
+                        throw(e);
                     }
                 } catch (Exception e) {
                     // It's OK to ignore the failure in this context, see comment above.
