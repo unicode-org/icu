@@ -25,6 +25,7 @@ public class FormattedPlaceholder {
      *
      * @param inputValue the original value to be formatted.
      * @param formattedValue the result of formatting the placeholder.
+     * @param directionality the directionality of the formatted placeholder.
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for ICU internal use only.
@@ -81,7 +82,12 @@ public class FormattedPlaceholder {
     }
 
     /**
-     * TODO 77 document
+     * Retrieve the directionality of the formatted the placeholder.
+     *
+     * @return the directionality.
+     *
+     * @internal ICU 77 technology preview
+     * @deprecated This API is for ICU internal use only.
      */
     @Deprecated
     public Directionality getDirectionality() {
@@ -89,7 +95,12 @@ public class FormattedPlaceholder {
     }
 
     /**
-     * TODO 77 document
+     * Retrieve the BiDi isolate setting of the formatted the placeholder.
+     *
+     * @return the BiDi isolate setting.
+     *
+     * @internal ICU 77 technology preview
+     * @deprecated This API is for ICU internal use only.
      */
     @Deprecated
     public boolean getIsolate() {

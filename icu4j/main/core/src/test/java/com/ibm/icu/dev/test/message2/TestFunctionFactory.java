@@ -76,7 +76,7 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
         public List<String> matches(Object value, List<String> keys, Map<String, Object> variableOptions) {
 //            ParsedOptions parsedOptions = ParsedOptions.of(variableOptions);
             if (parsedOptions.failsSelect) {
-                throw new InvalidParameterException("TODO 77: ALWAYS FAIL");
+                throw new InvalidParameterException("Expected the test to always fail.");
             }
 
             FormattedPlaceholder foo = TestFunctionFactory.formatImpl(value, parsedOptions);
@@ -218,7 +218,7 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
 
         if (parsedOptions.failsFormat) {
             if (parsedOptions.reportErrors) {
-                throw new NullPointerException("Expected the test to always fail.");
+                throw new InvalidParameterException("Expected the test to always fail.");
             }
         }
         if (dblToFormat == null) {

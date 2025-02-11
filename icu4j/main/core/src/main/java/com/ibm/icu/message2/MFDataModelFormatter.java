@@ -561,7 +561,10 @@ class MFDataModelFormatter {
             }
             return new FormattedPlaceholder(expression, new PlainStringFormattedValue(fallbackString));
         }
-        // TODO 77: hack. How do we pass the error handling policy to formatters?
+        // TODO 78: hack.
+        // How do we pass the error handling policy to formatters?
+        // I am afraid a clean solution for this would require some changes in the public APIs
+        // And it is too late for that.
         options.put("icu:impl:errorPolicy", this.errorHandlingBehavior.name());
         Formatter ff = funcFactory.createFormatter(locale, options);
         FormattedPlaceholder resultToWrap = ff.format(toFormat, arguments.getMap());

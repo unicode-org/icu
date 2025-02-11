@@ -176,7 +176,7 @@ public class TestUtils {
             mfBuilder.setLocale(Locale.US);
         }
         if (defaults.getBidiIsolation() != null) {
-//            mfBuilder.setBidiIsolation(true); // TODO ICU 77.1
+//            mfBuilder.setBidiIsolation(true); // TODO ICU 77
         }
 
         try {

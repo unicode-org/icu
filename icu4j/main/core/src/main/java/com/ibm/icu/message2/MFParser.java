@@ -282,7 +282,6 @@ public class MFParser {
     // abnf: function-expression = "{" o function *(s attribute) o "}"
     private MFDataModel.Expression getFunctionExpression() throws MFParseException {
         MFDataModel.Function function = getFunction(false);
-        // TODO 77 require spaces
         List<MFDataModel.Attribute> attributes = getAttributes();
 
         if (function instanceof MFDataModel.Function) {
