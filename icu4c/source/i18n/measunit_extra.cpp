@@ -1322,7 +1322,7 @@ void MeasureUnitImpl::serialize(UErrorCode &status) {
         return;
     }
 
-    if (this->singleUnits.length() == 0) {
+    if (this->singleUnits.length() == 0 && this->constantDenominator == 0) {
         // Dimensionless, constructed by the default constructor.
         return;
     }
@@ -1497,9 +1497,25 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
     for (int32_t i = 0; i < otherImpl.singleUnits.length(); i++) {
         impl.appendSingleUnit(*otherImpl.singleUnits[i], status);
     }
-    if (impl.singleUnits.length() > 1) {
+
+    uint64_t currentConstatDenominator = this->getConstantDenominator(status);
+    uint64_t otherConstantDenominator = other.getConstantDenominator(status);
+
+    // TODO: we can also multiply the constant denominators instead of returning an error.
+    if (currentConstatDenominator != 0 && otherConstantDenominator != 0) {
+        // There is only `one` constant denominator in a compound unit.
+        // Therefore, we Cannot multiply units that both of them have a constant denominator
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return {};
+    }
+
+    // Because either one of the constant denominators is zero, we can use the maximum of them.
+    impl.constantDenominator = uprv_max(currentConstatDenominator, otherConstantDenominator);
+
+    if (impl.singleUnits.length() > 1 || impl.constantDenominator > 0) {
         impl.complexity = UMEASURE_UNIT_COMPOUND;
     }
+
     return std::move(impl).build(status);
 }
 
