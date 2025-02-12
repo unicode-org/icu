@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739377794284,
+  "lastUpdate": 1739399451068,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -62367,6 +62367,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2170452.9291,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "e20b71af507e7bcecb2bcdd2076c225e72d12af4",
+          "message": "ICU-22781 Add CLDR-18274 failing comments to portion unit formatting tests\n\nSee #3393",
+          "timestamp": "2025-02-12T23:12:13+01:00",
+          "tree_id": "998a7bebb10d372512a1434d366e15527cd2f9ad",
+          "url": "https://github.com/unicode-org/icu/commit/e20b71af507e7bcecb2bcdd2076c225e72d12af4"
+        },
+        "date": 1739399215735,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 151.2368,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8731583.5045,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2115755.3638,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7771004.9435,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2158057.7704,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
