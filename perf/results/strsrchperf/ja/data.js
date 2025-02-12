@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739377512257,
+  "lastUpdate": 1739399136440,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -39237,6 +39237,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 57.2826,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "e20b71af507e7bcecb2bcdd2076c225e72d12af4",
+          "message": "ICU-22781 Add CLDR-18274 failing comments to portion unit formatting tests\n\nSee #3393",
+          "timestamp": "2025-02-12T23:12:13+01:00",
+          "tree_id": "998a7bebb10d372512a1434d366e15527cd2f9ad",
+          "url": "https://github.com/unicode-org/icu/commit/e20b71af507e7bcecb2bcdd2076c225e72d12af4"
+        },
+        "date": 1739398909542,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 28.0098,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 58.3261,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
