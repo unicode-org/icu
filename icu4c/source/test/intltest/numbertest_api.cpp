@@ -6150,14 +6150,14 @@ void NumberFormatterApiTest::TestPortionFormat() {
         {"portion-per-1e9", "en-US", 2, "2 parts per billion"},
         {"portion-per-1e9", "en-US", 1000000, "1,000,000 parts per billion"},
         {"portion-per-1e9", "de-DE", 1000000, "1.000.000 Milliardstel"},
-        {"portion-per-1e1", "en-US", 1, "UNKNOWN"},
-        {"portion-per-1e2", "en-US", 1, "UNKNOWN"},
-        {"portion-per-1e3", "en-US", 1, "UNKNOWN"},
-        {"portion-per-1e4", "en-US", 1, "UNKNOWN"},
-        {"portion-per-1e5", "en-US", 1, "UNKNOWN"},
-        {"portion-per-1e6", "en-US", 1, "UNKNOWN"},
-        {"portion-per-1e7", "en-US", 1, "UNKNOWN"},
-        {"portion-per-1e8", "en-US", 1, "UNKNOWN"},
+        {"portion-per-1e1", "en-US", 1, "UNKNOWN"}, // Failing CLDR-18274
+        {"portion-per-1e2", "en-US", 1, "UNKNOWN"}, // Failing CLDR-18274
+        {"portion-per-1e3", "en-US", 1, "UNKNOWN"}, // Failing CLDR-18274
+        {"portion-per-1e4", "en-US", 1, "UNKNOWN"}, // Failing CLDR-18274
+        {"portion-per-1e5", "en-US", 1, "UNKNOWN"}, // Failing CLDR-18274
+        {"portion-per-1e6", "en-US", 1, "UNKNOWN"}, // Failing CLDR-18274
+        {"portion-per-1e7", "en-US", 1, "UNKNOWN"}, // Failing CLDR-18274
+        {"portion-per-1e8", "en-US", 1, "UNKNOWN"}, // Failing CLDR-18274
     };
 
     for (auto testCase : testCases) {

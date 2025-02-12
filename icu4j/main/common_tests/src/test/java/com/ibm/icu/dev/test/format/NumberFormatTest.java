@@ -7138,18 +7138,18 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
 
         TestCase[] testCases = {
-                        new TestCase("portion-per-1e9", "en-US", 1, "1 part per billion"),
+                new TestCase("portion-per-1e9", "en-US", 1, "1 part per billion"),
                 new TestCase("portion-per-1e9", "en-US", 2, "2 parts per billion"),
                 new TestCase("portion-per-1e9", "en-US", 1000000, "1,000,000 parts per billion"),
                 new TestCase("portion-per-1e9", "de-DE", 1000000, "1.000.000 Milliardstel"),
-                new TestCase("portion-per-1e1", "en-US", 1, "UNKNOWN"),
-                new TestCase("portion-per-1e2", "en-US", 1, "UNKNOWN"),
-                new TestCase("portion-per-1e3", "en-US", 1, "UNKNOWN"),
-                new TestCase("portion-per-1e4", "en-US", 1, "UNKNOWN"),
-                new TestCase("portion-per-1e5", "en-US", 1, "UNKNOWN"),
-                new TestCase("portion-per-1e6", "en-US", 1, "UNKNOWN"),
-                new TestCase("portion-per-1e7", "en-US", 1, "UNKNOWN"),
-                new TestCase("portion-per-1e8", "en-US", 1, "UNKNOWN"),
+                new TestCase("portion-per-1e1", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
+                new TestCase("portion-per-1e2", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
+                new TestCase("portion-per-1e3", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
+                new TestCase("portion-per-1e4", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
+                new TestCase("portion-per-1e5", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
+                new TestCase("portion-per-1e6", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
+                new TestCase("portion-per-1e7", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
+                new TestCase("portion-per-1e8", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
         };
 
         for (TestCase testCase : testCases) {
