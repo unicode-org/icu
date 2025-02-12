@@ -110,11 +110,50 @@ These instructions have not yet verified Eclipse's handling of the import of the
 
 ### VS Code
 
-VS Code's support of Maven projects is not as robust as IntelliJ's when it comes to the non-standard file layout for sources and tests.
-The Maven support comes from the standard Java extension (which depends on the standard Maven extension) from the extension marketplace.
-Source and test code files are not recognized properly, and it is not clear how to execute the tests.
+VS Code's support of Maven projects has not been as robust as IntelliJ's when it comes to multi-module Maven projects such as what ICU4J has.
+This situation has gotten better recently, and workable solutions are documented below..
 
-However, a workaround exists for those who want to use VS Code as their preferred editor and still execute commands to recompile or run tests.
+The Maven extension that is mostly likely to top search result comes from [the Extension Pack for Java extension](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack) that is maintained by the maintainers of VS Code itself. However, this extension and its dependencies do not work together satisfactorily for the ICU4J codebase.
+Source and test code files are not recognized properly, and it is not clear how to execute the tests.
+This may improve in the future.
+
+For now (Jan 2025), there are a couple of different options for running Maven build commands for ICU4J in VS Code.
+
+#### Install the Java extension from Oracle
+
+Oracle's [Java extension for VS Code](https://marketplace.visualstudio.com/items?itemName=Oracle.oracle-java) includes support for Maven projects, including multi-module Maven projects.
+
+You can view the Java extension's view of the Maven project through the "Projects" tab of the workspace explorer accordion widget.
+The project will display the list of Maven sub-modules.
+Within a submodule, click on "Source Pakcages" to view the Java class packages.
+From there, you can navigate to specific classes according to the package structure.
+
+> :point_right: **Note**: This extension will use the version of Java according to the location of Java that you have defined in your `JAVA_HOME` system environment variable.
+
+> :point_right: **Note**: You will also need the Maven command (`mvn`) in your `PATH` system environment variable for the extension to work.
+
+![](open-sources-uniset.png)
+
+To run all of the tests in a Maven submodule, right-click on the module and selecting "Test Project".
+
+![](run-tests-main-core.png)
+
+To run all of the tests in a single test class, open the test class, and click on the triangular play button on level with the class declaration line. You can right click on that button to run in debug mode and enable other options.
+
+Every individual test will have a similar button on level with the test signature to run only that one test.
+
+![](test-class-run-all-tests.png)
+
+The output for a test run invocation will appear in the Debug Console tab of the bottom panel.
+
+> :point_right: **Note**: In the Test Results tab, if the the formatting of the output that is provided per test is not formatted correctly, it may be related to formatting in the Maven CLI command's output (ex: allowing ANSI color code escape characters, which some system's Maven installtions enable by default).
+
+![](test-class-run-tests-result.png)
+
+#### Run Maven shell commands with a command palette
+
+If none of the Java/Maven extensions for VS Code work with your instance of VS Code,
+there is still a way to execute commands to recompile or run tests.
 The workaround relies on invoking the Maven commands in a shell, and using a VS Code extension to create shortcuts within the IDE to invoke those commands.
 
 The extension is [Command Runner](https://marketplace.visualstudio.com/items?itemName=edonet.vscode-command-runner).
