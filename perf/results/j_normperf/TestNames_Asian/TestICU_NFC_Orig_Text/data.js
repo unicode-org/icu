@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739341667638,
+  "lastUpdate": 1739370365108,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32037,6 +32037,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 3.9422103637594987,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "030c79fe8805ce6a410b0bf0974297aec41d64c5",
+          "message": "ICU-22781 Enhance portion unit formatting tests in NumberFormatTest\n\n- Expanded test cases for portion unit formatting\n- Added support for different locales (en-US, de-DE)\n- Improved test coverage for portion unit formatting\n- Added handling for known CLDR data limitations",
+          "timestamp": "2025-02-11T23:38:54+01:00",
+          "tree_id": "5805025e409be28ba0534a211282104b1edbd2d9",
+          "url": "https://github.com/unicode-org/icu/commit/030c79fe8805ce6a410b0bf0974297aec41d64c5"
+        },
+        "date": 1739370115691,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 3.833258212935927,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
