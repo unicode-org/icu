@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739370261067,
+  "lastUpdate": 1739376737935,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32157,6 +32157,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetIterate",
             "value": 0.9216218579014063,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "42e3b43c7863bb5c4da2bfa952766af40c46c7b9",
+          "message": "ICU-22781 Add test for portion format with parts per billion (C++)\n\nSee #3389",
+          "timestamp": "2025-02-11T23:37:53+01:00",
+          "tree_id": "52be9bc484f37e4cf9e4134e3fb0c9a9df076d8e",
+          "url": "https://github.com/unicode-org/icu/commit/42e3b43c7863bb5c4da2bfa952766af40c46c7b9"
+        },
+        "date": 1739376499313,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetIterate",
+            "value": 0.9212119371397294,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
