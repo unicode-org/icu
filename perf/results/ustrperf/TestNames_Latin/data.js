@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739410529875,
+  "lastUpdate": 1739435290096,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -110301,6 +110301,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.9283,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "83726260ef3f42063984fbf693ea3ad34bd387fa",
+          "message": "ICU-23031 Reinstate special case for \"-u-va-posix\" lost by ICU-22520.\n\nInside of locimp_forLanguageTag() in _appendKeywords() in uloc_tag.cpp\nthere's a hardcoded special case for \"-u-va-posix\" which appends the\n\"_POSIX\" variant but this was missed during the refactoring made for\nICU-22520 (there isn't any test case that covers this).\n\nSo the call to locimp_forLanguageTag() did more than previously\nunderstood, but we still don't want to have to call that for every\nlanguage tag that has BCP-47 extensions just in order to get to this\nspecial case. Instead, add a special case also to ulocimp_getSubtags().\n\nFor this to work nicely, the loop in _getVariant() that copies variants\nneeds to be refactored so that it easily can break when encountering the\nstart of any BCP-47 extension (which also has the welcome side-effect of\nmaking it more efficient, being able to append an entire variant at once\nto the output sink).\n\nThis was broken by commit 678d5c127373d699ac4f1be55f8c017aeb0493d5.",
+          "timestamp": "2025-02-13T08:50:17+01:00",
+          "tree_id": "2bef03ba62a8a1ec809ad75e8573269ef26bfd0a",
+          "url": "https://github.com/unicode-org/icu/commit/83726260ef3f42063984fbf693ea3ad34bd387fa"
+        },
+        "date": 1739435056723,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 20.187,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.653,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.0389,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 33.1609,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 44.1588,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 37.1143,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 29.0469,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.9421,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 100.5109,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.2613,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.4198,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.0005,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
