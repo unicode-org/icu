@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739468824835,
+  "lastUpdate": 1739473318689,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32457,6 +32457,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 3.0277247159670795,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "acc69ceb55bbceb737ffa897b2294c19e566ac9a",
+          "message": "ICU-23044 MF2, ICU4J, bring the implementation close to the spec at LDML 47",
+          "timestamp": "2025-02-13T10:47:57-08:00",
+          "tree_id": "8ae5d3d7380cfed3347edbe6d54de3e2f7010321",
+          "url": "https://github.com/unicode-org/icu/commit/acc69ceb55bbceb737ffa897b2294c19e566ac9a"
+        },
+        "date": 1739473085273,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.23158814222253,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
