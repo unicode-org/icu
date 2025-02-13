@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739459818726,
+  "lastUpdate": 1739462506663,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32127,6 +32127,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 483.64867434509443,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "david.w.barts@gmail.com",
+            "name": "David Barts",
+            "username": "DavidBarts"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "b81956ebcc96d99a4aa0c134c7b6c4225b976570",
+          "message": "ICU-22808 Correct a factually incorrect doc comment.",
+          "timestamp": "2025-02-12T16:37:33-08:00",
+          "tree_id": "78325f4bc4079e794a1cb7ee833bb1ed1e0d1899",
+          "url": "https://github.com/unicode-org/icu/commit/b81956ebcc96d99a4aa0c134c7b6c4225b976570"
+        },
+        "date": 1739462274445,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 497.5015618947534,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
