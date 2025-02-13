@@ -328,7 +328,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
     public void testSpecialPluralWithDecimals() {
         String message;
         message = ".local $amount = {$count :number}\n"
-                + ".match {$amount :number}\n"
+                + ".match $amount\n"
                 + "  1 {{I have {$amount} dollar.}}\n"
                 + "  * {{I have {$amount} dollars.}}";
         TestUtils.runTestCase(new TestCase.Builder()
@@ -338,7 +338,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 .expected("I have 1 dollar.")
                 .build());
         message = ".local $amount = {$count :number minimumFractionDigits=2}\n"
-                + ".match {$amount :number minimumFractionDigits=2}\n"
+                + ".match $amount\n"
                 + "  one {{I have {$amount} dollar.}}\n"
                 + "  *   {{I have {$amount} dollars.}}";
         TestUtils.runTestCase(new TestCase.Builder()
@@ -367,7 +367,8 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
 
     @Test
     public void testSimpleSelection() {
-        String message = ".match {$count :number}\n"
+        String message = ".input {$count :number}\n"
+                + ".match $count\n"
                 + " 1 {{You have one notification.}}\n"
                 + " * {{You have {$count} notifications.}}";
 
@@ -386,7 +387,9 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
     @Test
     public void testComplexSelection() {
         String message = ""
-                + ".match {$photoCount :number} {$userGender :string}\n"
+                + ".input {$photoCount :number}\n"
+                + ".input {$userGender :string}\n"
+                + ".match $photoCount $userGender\n"
                 + " 1 masculine {{{$userName} added a new photo to his album.}}\n"
                 + " 1 feminine {{{$userName} added a new photo to her album.}}\n"
                 + " 1 * {{{$userName} added a new photo to their album.}}\n"
@@ -437,8 +440,9 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
     @Test
     public void testLocaleVariableWithSelect() {
         String message = ""
+                + ".input {$count :number}\n"
                 + ".local $exp = {$expDate :date year=numeric month=short day=numeric weekday=short}\n"
-                + ".match {$count :number}\n"
+                + ".match $count\n"
                 + " 1 {{Your ticket expires on {$exp}.}}\n"
                 + " * {{Your {$count} tickets expire on {$exp}.}}";
 

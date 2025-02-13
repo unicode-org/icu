@@ -74,7 +74,8 @@ public class Mf2IcuTest extends CoreTestFmwk {
     @Test
     public void testSelectFormatToPattern() {
         String pattern = ""
-                + ".match {$userGender :string}\n"
+                + ".input {$userGender :string}\n"
+                + ".match $userGender\n"
                 + "  female {{{$userName} est all\u00E9e \u00E0 Paris.}}"
                 + "   *     {{{$userName} est all\u00E9 \u00E0 Paris.}}"
                 ;

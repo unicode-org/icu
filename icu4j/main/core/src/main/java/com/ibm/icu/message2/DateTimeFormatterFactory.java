@@ -59,6 +59,10 @@ class DateTimeFormatterFactory implements FormatterFactory {
      */
     @Override
     public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
+        locale = OptUtils.getBestLocale(fixedOptions, locale);
+        Directionality dir = OptUtils.getBestDirectionality(fixedOptions, locale);
+
+        boolean reportErrors = OptUtils.reportErrors(fixedOptions);
         int dateStyle = DateFormat.NONE;
         int timeStyle = DateFormat.NONE;
         switch (kind) {
@@ -98,7 +102,7 @@ class DateTimeFormatterFactory implements FormatterFactory {
             }
             if (!skeleton.isEmpty()) {
                 DateFormat df = DateFormat.getInstanceForSkeleton(skeleton, locale);
-                return new DateTimeFormatter(locale, df);
+                return new DateTimeFormatter(locale, df, reportErrors);
             }
 
             // No skeletons, custom or otherwise, match fallback to short / short as per spec.
@@ -119,7 +123,7 @@ class DateTimeFormatterFactory implements FormatterFactory {
         }
 
         DateFormat df = DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
-        return new DateTimeFormatter(locale, df);
+        return new DateTimeFormatter(locale, df, reportErrors);
     }
 
     private static int getDateTimeStyle(Map<String, Object> options, String key) {
@@ -329,10 +333,12 @@ class DateTimeFormatterFactory implements FormatterFactory {
     private static class DateTimeFormatter implements Formatter {
         private final DateFormat icuFormatter;
         private final Locale locale;
+        private final boolean reportErrors;
 
-        private DateTimeFormatter(Locale locale, DateFormat df) {
+        private DateTimeFormatter(Locale locale, DateFormat df, boolean reportErrors) {
             this.locale = locale;
             this.icuFormatter = df;
+            this.reportErrors = reportErrors;
         }
 
         /**
@@ -348,6 +354,9 @@ class DateTimeFormatterFactory implements FormatterFactory {
                 toFormat = parseIso8601(toFormat.toString());
                 // We were unable to parse the input as iso date
                 if (toFormat instanceof CharSequence) {
+                    if (reportErrors) {
+                        throw new IllegalArgumentException("bad-operand: argument must be ISO 8601");
+                    }
                     return new FormattedPlaceholder(
                             toFormat, new PlainStringFormattedValue("{|" + toFormat + "|}"));
                 }

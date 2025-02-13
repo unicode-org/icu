@@ -16,17 +16,24 @@ class IdentityFormatterFactory implements FormatterFactory {
      */
     @Override
     public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
-        return new IdentityFormatterImpl();
+        return new IdentityFormatterImpl(OptUtils.getDirectionality(fixedOptions));
     }
 
     private static class IdentityFormatterImpl implements Formatter {
+        private final Directionality directionality;
+
+        public IdentityFormatterImpl(Directionality directionality) {
+            this.directionality = directionality == null ? Directionality.INHERIT : directionality;
+        }
+
         /**
          * {@inheritDoc}
          */
         @Override
         public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
             return new FormattedPlaceholder(
-                    toFormat, new PlainStringFormattedValue(Objects.toString(toFormat)));
+                    toFormat, new PlainStringFormattedValue(Objects.toString(toFormat)),
+                    directionality, true);
         }
 
         /**

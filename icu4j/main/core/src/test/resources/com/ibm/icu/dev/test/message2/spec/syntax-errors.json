@@ -123,6 +123,9 @@
       "src": "bad {:placeholder @attribute=@foo}"
     },
     {
+      "src": "bad {:placeholder @attribute=$foo}"
+    },
+    {
       "src": "{ @misplaced = attribute }"
     },
     {
@@ -155,26 +158,90 @@
     {
       "src": ".local $bar = |foo| {{_}}"
     },
-    {
-      "src": ".match {#foo} * {{foo}}"
-    },
-    {
-      "src": ".match {} * {{foo}}"
-    },
-    {
-      "src": ".match {|foo| :x} {|bar| :x} ** {{foo}}"
-    },
-    {
-      "src": ".match * {{foo}}"
-    },
-    {
-      "src": ".match {|x| :x} * foo"
-    },
-    {
-      "src": ".match {|x| :x} * {{foo}} extra"
-    },
-    {
-      "src": ".match |x| * {{foo}}"
-    }
+    { "src": ".match {{foo}}" },
+    { "src": ".match * {{foo}}" },
+    { "src": ".match x * {{foo}}" },
+    { "src": ".match |x| * {{foo}}" },
+    { "src": ".match :x * {{foo}}" },
+    { "src": ".match {$foo} * {{foo}}" },
+    { "src": ".match {#foo} * {{foo}}" },
+    { "src": ".input {$x :x} .match {$x} * {{foo}}" },
+    { "src": ".input {$x :x} .match$x * {{foo}}" },
+    { "src": ".input {$x :x} .match $x* {{foo}}" },
+    { "src": ".input {$x :x} .match $x|x| {{foo}} * {{foo}}" },
+    { "src": ".input {$x :x} .local $y = {y :y} .match $x$y * * {{foo}}" },
+    { "src": ".input {$x :x} .local $y = {y :y} .match $x $y ** {{foo}}" },
+    { "src": ".input {$x :x} .match $x" },
+    { "src": ".input {$x :x} .match $x *" },
+    { "src": ".input {$x :x} .match $x * foo" },
+    { "src": ".input {$x :x} .match $x * {{foo}} extra" },
+    { "src": ".n{a}{{}}" },
+    { "src": "{^}" },
+    { "src": "{!}" },
+    { "src": ".n .{a}{{}}" },
+    { "src": ".n. {a}{{}}" },
+    { "src": ".n.{a}{b}{{}}" },
+    { "src": "{!.}" },
+    { "src": "{! .}" },
+    { "src": "{%}" },
+    { "src": "{*}" },
+    { "src": "{+}" },
+    { "src": "{<}" },
+    { "src": "{>}" },
+    { "src": "{?}" },
+    { "src": "{~}" },
+    { "src": "{^.}" },
+    { "src": "{^ .}" },
+    { "src": "{&}" },
+    { "src": "{!.\\{}" },
+    { "src": "{!. \\{}" },
+    { "src": "{!|a|}" },
+    { "src": "foo {+reserved}" },
+    { "src": "foo {&private}" },
+    { "src": "foo {?reserved @a @b=c}" },
+    { "src": ".foo {42} {{bar}}" },
+    { "src": ".foo{42}{{bar}}" },
+    { "src": ".foo |}lit{| {42}{{bar}}" },
+    { "src": ".i {1} {{}}" },
+    { "src": ".l $y = {|bar|} {{}}" },
+    { "src": ".l $x.y = {|bar|} {{}}" },
+    { "src": "hello {|4.2| %number}" },
+    { "src": "hello {|4.2| %n|um|ber}"  },
+    { "src": "{+42}"  },
+    { "src": "hello {|4.2| &num|be|r}"  },
+    { "src": "hello {|4.2| ^num|be|r}"  },
+    { "src": "hello {|4.2| +num|be|r}"  },
+    { "src": "hello {|4.2| ?num|be||r|s}"  },
+    { "src": "hello {|foo| !number}"  },
+    { "src": "hello {|foo| *number}"  },
+    { "src": "hello {?number}"  },
+    { "src": "{<tag}"  },
+    { "src": ".local $bar = {$none ~plural} .match {foo :string}  * {{{$bar}}}"  },
+    { "src": "hello {|4.2| %num\\\\ber}"  },
+    { "src": "hello {|4.2| %num\\{be\\|r}"  },
+    { "src": "hello {|4.2| %num\\\\\\}ber}"  },
+    { "src": "hello {|4.2| !}"  },
+    { "src": "hello {|4.2| %}"  },
+    { "src": "hello {|4.2| *}"  },
+    { "src": "hello {|4.2| ^abc|123||5|\\\\}"  },
+    { "src": "hello {|4.2| ^ abc|123||5|\\\\}"  },
+    { "src": "hello {|4.2| ^ abc|123||5|\\\\ \\|def |3.14||2|}"  },
+    { "src": "hello {|4.2| ? }"  },
+    { "src": "hello {|4.2| %xyzz }"  },
+    { "src": "hello {|4.2| >xyzz   }"  },
+    { "src": "hello {$foo ~xyzz }"  },
+    { "src": "hello {$x   <xyzz   }"  },
+    { "src": "{>xyzz }"  },
+    { "src": "{  !xyzz   }"  },
+    { "src": "{~xyzz }"  },
+    { "src": "{ <xyzz   }"  },
+    { "src": "hello {|4.2| !xy z z }"  },
+    { "src": "hello {|4.2| *num \\\\ b er}"  },
+    { "src": "hello {|4.2| %num \\\\ b |3.14| r    }"  },
+    { "src": "hello {|4.2|    +num xx \\\\ b |3.14| r  }"  },
+    { "src": "hello {$foo    +num x \\\\ abcde |3.14| r  }"  },
+    { "src": "hello {$foo    >num x \\\\ abcde |aaa||3.14||42| r  }"  },
+    { "src": "hello {$foo    >num x \\\\ abcde |aaa||3.14| |42| r  }"  },
+    { "src" : ".input{ $n ~ }{{{$n}}}" }
   ]
 }
