@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739400461329,
+  "lastUpdate": 1739409401183,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32157,6 +32157,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.012001122638231967,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "59719f09d9660020dbbf3a33531c7cb8234e2662",
+          "message": "ICU-22934 Fix typo in PR#3230\n\nICU-22934 Fix error handling while new return nullptr\n\nICU-22934 Simplfied\n\nICU-22934 more\n\nICU-22934 fix leak",
+          "timestamp": "2025-02-12T16:56:20-08:00",
+          "tree_id": "534c1eea9079a61e6582c694b080aab5967f8bd7",
+          "url": "https://github.com/unicode-org/icu/commit/59719f09d9660020dbbf3a33531c7cb8234e2662"
+        },
+        "date": 1739409159071,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.012017803396115889,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
