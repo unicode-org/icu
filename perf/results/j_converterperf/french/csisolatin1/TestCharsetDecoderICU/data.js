@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739409469624,
+  "lastUpdate": 1739434334782,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32127,6 +32127,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.2573608076190504,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "83726260ef3f42063984fbf693ea3ad34bd387fa",
+          "message": "ICU-23031 Reinstate special case for \"-u-va-posix\" lost by ICU-22520.\n\nInside of locimp_forLanguageTag() in _appendKeywords() in uloc_tag.cpp\nthere's a hardcoded special case for \"-u-va-posix\" which appends the\n\"_POSIX\" variant but this was missed during the refactoring made for\nICU-22520 (there isn't any test case that covers this).\n\nSo the call to locimp_forLanguageTag() did more than previously\nunderstood, but we still don't want to have to call that for every\nlanguage tag that has BCP-47 extensions just in order to get to this\nspecial case. Instead, add a special case also to ulocimp_getSubtags().\n\nFor this to work nicely, the loop in _getVariant() that copies variants\nneeds to be refactored so that it easily can break when encountering the\nstart of any BCP-47 extension (which also has the welcome side-effect of\nmaking it more efficient, being able to append an entire variant at once\nto the output sink).\n\nThis was broken by commit 678d5c127373d699ac4f1be55f8c017aeb0493d5.",
+          "timestamp": "2025-02-13T08:50:17+01:00",
+          "tree_id": "2bef03ba62a8a1ec809ad75e8573269ef26bfd0a",
+          "url": "https://github.com/unicode-org/icu/commit/83726260ef3f42063984fbf693ea3ad34bd387fa"
+        },
+        "date": 1739434100491,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.2588778676177059,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
