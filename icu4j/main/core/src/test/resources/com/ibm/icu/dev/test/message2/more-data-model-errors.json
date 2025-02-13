@@ -5,7 +5,7 @@
   },
   "tests": [
     {
-      "src": ".match {$foo :number} {$bar :number}  one{{one}}",
+      "src": ".input {$foo :number} .input {$bar :number} .match $foo $bar one{{one}}",
       "expErrors": [
         {
           "type": "variant-key-mismatch"
@@ -14,7 +14,7 @@
     },
 
     {
-      "src": ".match {$foo :number} {$bar :number}  one {{one}}",
+      "src": ".input {$foo :number} .input {$bar :number} .match $foo $bar one {{one}}",
       "expErrors": [
         {
           "type": "variant-key-mismatch"
@@ -23,7 +23,7 @@
     },
 
     {
-      "src": ".match {$foo :number} {$bar :number}  one  {{one}}",
+      "src": ".input {$foo :number} .input {$bar :number} .match $foo $bar one  {{one}}",
       "expErrors": [
         {
           "type": "variant-key-mismatch"
@@ -32,7 +32,7 @@
     },
 
     {
-      "src": ".match {$foo :number}  * * {{foo}}",
+      "src": ".input {$foo :number} .match $foo  * * {{foo}}",
       "expErrors": [
         {
           "type": "variant-key-mismatch"
@@ -41,7 +41,7 @@
     },
 
     {
-      "src": ".match {$one :number}\n  1 2 {{Too many}}\n   * {{Otherwise}}",
+      "src": ".input {$one :number} .match $one\n  1 2 {{Too many}}\n   * {{Otherwise}}",
       "expErrors": [
         {
           "type": "variant-key-mismatch"
@@ -50,7 +50,7 @@
     },
 
     {
-      "src": ".match {$one :number} {$two :number}\n  1 2 {{Two keys}}\n  * {{Missing a key}}\n  * * {{Otherwise}}",
+      "src": ".input {$one :number} .input {$two :number} .match $one $two \n  1 2 {{Two keys}}\n  * {{Missing a key}}\n  * * {{Otherwise}}",
       "expErrors": [
         {
           "type": "variant-key-mismatch"
@@ -59,7 +59,7 @@
     },
 
     {
-      "src": ".match {$foo :x} {$bar :x} * {{foo}}",
+      "src": ".input {$foo :x} .input {$bar :X} .match $foo $bar * {{foo}}",
       "expErrors": [
         {
           "type": "variant-key-mismatch"
@@ -68,7 +68,7 @@
     },
 
     {
-      "src": ".match {$one :number}\n   1 {{Value is one}}\n 2 {{Value is two}}",
+      "src": ".input {$one :number} .match $one\n   1 {{Value is one}}\n 2 {{Value is two}}",
       "expErrors": [
         {
           "type": "missing-fallback-variant"
@@ -77,7 +77,7 @@
     },
 
     {
-      "src": ".match {$one :number} {$two :number}\n  1 * {{First is one}}\n  * 1 {{Second is one}}",
+      "src": ".input {$one :number} .input {$two :number} .match $one $two\n  1 * {{First is one}}\n  * 1 {{Second is one}}",
       "expErrors": [
         {
           "type": "missing-fallback-variant"
@@ -86,7 +86,7 @@
     },
 
     {
-      "src": ".match {$one}\n   1 {{Value is one}}\n    * {{Value is not one}}",
+      "src": ".match $one\n   1 {{Value is one}}\n    * {{Value is not one}}",
       "expErrors": [
         {
           "type": "missing-selector-annotation"
@@ -95,7 +95,7 @@
     },
 
     {
-      "src": ".local $one = {|The one|}\n   .match {$one}\n  1 {{Value is one}}\n   * {{Value is not one}}",
+      "src": ".local $one = {|The one|}\n   .match $one\n  1 {{Value is one}}\n   * {{Value is not one}}",
       "expErrors": [
         {
           "type": "missing-selector-annotation"
@@ -103,7 +103,7 @@
       ]
     },
     {
-      "src": ".input {$foo} .match {$foo} one {{one}} * {{other}}",
+      "src": ".input {$foo} .match $foo one {{one}} * {{other}}",
       "expErrors": [
         {
           "type": "missing-selector-annotation"
@@ -112,7 +112,7 @@
     },
 
     {
-      "src": ".local $foo = {$bar} .match {$foo} one {{one}} * {{other}}",
+      "src": ".local $foo = {$bar} .match $foo one {{one}} * {{other}}",
       "expErrors": [
         {
           "type": "missing-selector-annotation"

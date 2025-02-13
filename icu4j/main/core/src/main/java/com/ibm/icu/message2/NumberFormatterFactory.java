@@ -9,23 +9,25 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.Notation;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
+import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.number.Precision;
-import com.ibm.icu.number.Scale;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.PluralType;
+import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
-import com.ibm.icu.util.MeasureUnit;
 
 /**
  * Creates a {@link Formatter} doing numeric formatting, similar to <code>{exp, number}</code>
@@ -38,6 +40,8 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         switch (kind) {
             case "number": // $FALL-THROUGH$
             case "integer":
+            case "currency":
+            case "math":
                 break;
             default:
                 // Default to number
@@ -79,15 +83,13 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         private final Map<String, Object> fixedOptions;
         private final LocalizedNumberFormatter icuFormatter;
         private final String kind;
-        final boolean advanced;
 
         NumberFormatterImpl(Locale locale, Map<String, Object> fixedOptions, String kind) {
-            this.locale = locale;
+            this.locale = OptUtils.getBestLocale(fixedOptions, locale);
             this.fixedOptions = new HashMap<>(fixedOptions);
             String skeleton = OptUtils.getString(fixedOptions, "icu:skeleton");
             boolean fancy = skeleton != null;
-            this.icuFormatter = formatterForOptions(locale, fixedOptions, kind);
-            this.advanced = fancy;
+            this.icuFormatter = formatterForOptions(this.locale, fixedOptions, kind);
             this.kind = kind;
         }
 
@@ -108,11 +110,12 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
          */
         @Override
         public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
+            boolean reportErrors = OptUtils.reportErrors(fixedOptions) || OptUtils.reportErrors(variableOptions);
             LocalizedNumberFormatter realFormatter;
+            Map<String, Object> mergedOptions = new HashMap<>(fixedOptions);
             if (variableOptions.isEmpty()) {
                 realFormatter = this.icuFormatter;
             } else {
-                Map<String, Object> mergedOptions = new HashMap<>(fixedOptions);
                 mergedOptions.putAll(variableOptions);
                 // This is really wasteful, as we don't use the existing
                 // formatter if even one option is variable.
@@ -120,57 +123,105 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 realFormatter = formatterForOptions(locale, mergedOptions, kind);
             }
 
-            Integer offset = OptUtils.getInteger(variableOptions, "icu:offset");
+            Integer offset = OptUtils.getInteger(variableOptions, reportErrors, "icu:offset");
             if (offset == null && fixedOptions != null) {
-                offset = OptUtils.getInteger(fixedOptions, "icu:offset");
+                offset = OptUtils.getInteger(fixedOptions, reportErrors, "icu:offset");
             }
             if (offset == null) {
                 offset = 0;
             }
 
+            Double mathOperand = null;
+            if ("math".equals(kind)) {
+                ResolvedMathOptions resolvedMathOptions = ResolvedMathOptions.of(fixedOptions);
+                mathOperand = resolvedMathOptions.operand;
+            }
+
+            if (kind.equals("currency")) {
+                String currencyCode = getCurrency(mergedOptions);
+                if (currencyCode == null && !(toFormat instanceof CurrencyAmount)) {
+                    // Error, we need a currency code, either from the message,
+                    // with the {... :currency currency=<iso_code>}, or from the thing to format
+                    throw new IllegalArgumentException(
+                            "bad-option: the `currency` must be an ISO 4217 code.");
+                }
+            }
+
+            boolean isInt = kind.equals("integer");
             FormattedValue result = null;
             if (toFormat == null) {
                 // This is also what MessageFormat does.
                 throw new NullPointerException("Argument to format can't be null");
             } else if (toFormat instanceof Double) {
-                result = realFormatter.format((double) toFormat - offset);
+                if (isInt) toFormat = Math.floor((double) toFormat);
+                double toFormatAdjusted =(double) toFormat - offset;
+                if (mathOperand != null) {
+                    toFormatAdjusted += mathOperand;
+                }
+                result = realFormatter.format(toFormatAdjusted);
             } else if (toFormat instanceof Long) {
-                result = realFormatter.format((long) toFormat - offset);
+                if (mathOperand != null) {
+                    result = realFormatter.format((long) toFormat - offset + mathOperand);
+                } else {
+                    result = realFormatter.format((long) toFormat - offset);
+                }
             } else if (toFormat instanceof Integer) {
-                result = realFormatter.format((int) toFormat - offset);
+                if (mathOperand != null) {
+                    result = realFormatter.format((int) toFormat - offset + mathOperand);
+                } else {
+                    result = realFormatter.format((int) toFormat - offset);
+                }
             } else if (toFormat instanceof BigDecimal) {
                 BigDecimal bd = (BigDecimal) toFormat;
-                result = realFormatter.format(bd.subtract(BigDecimal.valueOf(offset)));
+                if (isInt) toFormat = bd.longValue();
+                bd = bd.subtract(BigDecimal.valueOf(offset));
+                if (mathOperand != null) {
+                    bd = bd.add(BigDecimal.valueOf(mathOperand));
+                }
+                result = realFormatter.format(bd);
             } else if (toFormat instanceof Number) {
-                result = realFormatter.format(((Number) toFormat).doubleValue() - offset);
+                if (isInt) toFormat = Math.floor(((Number) toFormat).doubleValue());
+                double toFormatAdjusted = ((Number) toFormat).doubleValue() - offset;
+                if (mathOperand != null) {
+                    toFormatAdjusted += mathOperand;
+                }
+                result = realFormatter.format(toFormatAdjusted);
             } else if (toFormat instanceof CurrencyAmount) {
                 result = realFormatter.format((CurrencyAmount) toFormat);
             } else {
                 // The behavior is not in the spec, will be in the registry.
                 // We can return "NaN", or try to parse the string as a number
                 String strValue = Objects.toString(toFormat);
-                Number nrValue = OptUtils.asNumber(strValue);
+                Number nrValue = OptUtils.asNumber(reportErrors, "argument", strValue);
                 if (nrValue != null) {
-                    result = realFormatter.format(nrValue.doubleValue() - offset);
+                    if (isInt) toFormat = Math.floor(nrValue.doubleValue());
+                    double toFormatAdjusted = nrValue.doubleValue() - offset;
+                    if (mathOperand != null) {
+                        toFormatAdjusted += mathOperand;
+                    }
+                    result = realFormatter.format(toFormatAdjusted);
                 } else {
                     result = new PlainStringFormattedValue("{|" + strValue + "|}");
                 }
             }
-            return new FormattedPlaceholder(toFormat, result);
+            Directionality dir = OptUtils.getBestDirectionality(variableOptions, locale);
+            return new FormattedPlaceholder(toFormat, result, dir, false);
         }
     }
 
     private static class PluralSelectorImpl implements Selector {
         private static final String NO_MATCH = "\uFFFDNO_MATCH\uFFFE"; // Unlikely to show in a key
         private final PluralRules rules;
-        private Map<String, Object> fixedOptions;
-        private LocalizedNumberFormatter icuFormatter;
+        private final Map<String, Object> fixedOptions;
+        private final LocalizedNumberFormatter icuFormatter;
+        private final String kind;
 
         private PluralSelectorImpl(
                 Locale locale, PluralRules rules, Map<String, Object> fixedOptions, String kind) {
             this.rules = rules;
             this.fixedOptions = fixedOptions;
             this.icuFormatter = formatterForOptions(locale, fixedOptions, kind);
+            this.kind = kind;
         }
 
         /**
@@ -210,10 +261,10 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 return -1;
             }
             // * sorts last
-            if ("*".equals(o1)) {
+            if (CatchallKey.isCatchAll(o1)) {
                 return 1;
             }
-            if ("*".equals(o2)) {
+            if (CatchallKey.isCatchAll(o2)) {
                 return -1;
             }
             // Numbers sort first
@@ -229,13 +280,14 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         }
 
         private boolean matches(Object value, String key, Map<String, Object> variableOptions) {
-            if ("*".equals(key)) {
+            if (CatchallKey.isCatchAll(key)) {
                 return true;
             }
 
-            Integer offset = OptUtils.getInteger(variableOptions, "icu:offset");
+            boolean reportErrors = OptUtils.reportErrors(fixedOptions);
+            Integer offset = OptUtils.getInteger(variableOptions, reportErrors, "icu:offset");
             if (offset == null && fixedOptions != null) {
-                offset = OptUtils.getInteger(fixedOptions, "icu:offset");
+                offset = OptUtils.getInteger(fixedOptions, reportErrors, "icu:offset");
             }
             if (offset == null) {
                 offset = 0;
@@ -249,8 +301,13 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
 
             if (value instanceof Number) {
                 valToCheck = ((Number) value).doubleValue();
+            } else if (value instanceof CharSequence) {
+                return value.equals(key);
             } else {
                 return false;
+            }
+            if ("integer".equals(kind)) {
+                valToCheck = valToCheck.longValue();
             }
 
             Number keyNrVal = OptUtils.asNumber(key);
@@ -261,14 +318,20 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
             FormattedNumber formatted = icuFormatter.format(valToCheck.doubleValue() - offset);
             String match = rules.select(formatted);
             if (match.equals("other")) {
-                match = "*";
+                match = CatchallKey.AS_KEY_STRING;
             }
             return match.equals(key);
         }
     }
 
+    // Currency ISO code
+    private final static Pattern CURRENCY_ISO_CODE =
+            Pattern.compile("^[A-Z][A-Z][A-Z]$", Pattern.CASE_INSENSITIVE);
+
     private static LocalizedNumberFormatter formatterForOptions(
             Locale locale, Map<String, Object> fixedOptions, String kind) {
+        boolean reportErrors = OptUtils.reportErrors(fixedOptions);
+
         UnlocalizedNumberFormatter nf;
         String skeleton = OptUtils.getString(fixedOptions, "icu:skeleton");
         if (skeleton != null) {
@@ -308,19 +371,16 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
             nf = nf.notation(notation);
 
             strOption = OptUtils.getString(fixedOptions, "style", "decimal");
-            if (strOption.equals("percent")) {
-                nf = nf.unit(MeasureUnit.PERCENT).scale(Scale.powerOfTen(2));
-            }
 
-            option = OptUtils.getInteger(fixedOptions, "minimumFractionDigits");
+            option = OptUtils.getInteger(fixedOptions, reportErrors, "minimumFractionDigits");
             if (option != null) {
                 nf = nf.precision(Precision.minFraction(option));
             }
-            option = OptUtils.getInteger(fixedOptions, "maximumFractionDigits");
+            option = OptUtils.getInteger(fixedOptions, reportErrors, "maximumFractionDigits");
             if (option != null) {
                 nf = nf.precision(Precision.maxFraction(option));
             }
-            option = OptUtils.getInteger(fixedOptions, "minimumSignificantDigits");
+            option = OptUtils.getInteger(fixedOptions, reportErrors, "minimumSignificantDigits");
             if (option != null) {
                 nf = nf.precision(Precision.minSignificantDigits(option));
             }
@@ -335,11 +395,11 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         }
 
         // The options below apply to both `:number` and `:integer`
-        option = OptUtils.getInteger(fixedOptions, "minimumIntegerDigits");
+        option = OptUtils.getInteger(fixedOptions, reportErrors, "minimumIntegerDigits");
         if (option != null) {
             // TODO! Ask Shane. nf.integerWidth(null) ?
         }
-        option = OptUtils.getInteger(fixedOptions, "maximumSignificantDigits");
+        option = OptUtils.getInteger(fixedOptions, reportErrors, "maximumSignificantDigits");
         if (option != null) {
             nf = nf.precision(Precision.maxSignificantDigits(option));
         }
@@ -386,7 +446,96 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         if (kind.equals("integer")) {
             nf = nf.precision(Precision.integer());
         }
+        if (kind.equals("currency")) {
+            strOption = getCurrency(fixedOptions);
+            if (strOption != null) {
+                nf = nf.unit(Currency.getInstance(strOption));
+            }
+            strOption = OptUtils.getString(fixedOptions, "currencySign", "standard");
+            switch (strOption) {
+                case "accounting":
+                case "standard":
+                    break;
+            }
+            strOption = OptUtils.getString(fixedOptions, "currencyDisplay", "symbol");
+            UnitWidth width;
+            switch (strOption) {
+                case "narrowSymbol":
+                    width = UnitWidth.NARROW;
+                    break;
+                case "symbol":
+                    width = UnitWidth.SHORT;
+                    break;
+                case "name":
+                    width = UnitWidth.FULL_NAME;
+                    break;
+                case "code":
+                    width = UnitWidth.ISO_CODE;
+                    break;
+                case "formalSymbol":
+                    width = UnitWidth.FORMAL;
+                    break;
+                case "never":
+                    width = UnitWidth.HIDDEN;
+                    break;
+                default:
+                    width = UnitWidth.SHORT;
+            }
+            nf = nf.unitWidth(width);
+        }
 
         return nf.locale(locale);
     }
+
+    static String getCurrency(Map<String, Object> options) {
+        String value = OptUtils.getString(options, "currency", null);
+        if (value != null) {
+            if (CURRENCY_ISO_CODE.matcher(value).find()) {
+                return value;
+            } else {
+                if (OptUtils.reportErrors(options)) {
+                    throw new IllegalArgumentException(
+                            "bad-option: the `currency` must be an ISO 4217 code.");
+                }
+            }
+        }
+        return null;
+    }
+
+    private static class ResolvedMathOptions {
+        final Double operand;
+        final boolean reportErrors;
+
+        ResolvedMathOptions(Double operand, boolean reportErrors) {
+            this.operand = operand;
+            this.reportErrors = reportErrors;
+        }
+
+        static ResolvedMathOptions of(Map<String, Object> options) {
+            boolean reportErrors = OptUtils.reportErrors(options);
+
+            Double operand = null;
+            String addOption = OptUtils.getString(options, "add", null);
+            String subtractOption = OptUtils.getString(options, "subtract");
+
+            if (addOption == null) {
+                if (subtractOption == null) { // both null
+                    throw new IllegalArgumentException(
+                            "bad-option: :math function needs an `add` or `subtract` option.");
+                } else {
+                    operand = -OptUtils.asNumber(reportErrors, "subtract", subtractOption).doubleValue();
+                }
+            } else {
+                if (subtractOption == null) {
+                    operand = OptUtils.asNumber(reportErrors, "add", addOption).doubleValue();
+                } else { // both set
+                    throw new IllegalArgumentException(
+                            "bad-option: :math function can't have both `add` and `subtract` options.");
+                }
+            }
+
+            return new ResolvedMathOptions(operand, reportErrors);
+        }
+    }
+
 }

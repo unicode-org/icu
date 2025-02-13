@@ -3,6 +3,7 @@
   "scenario": "Syntax",
   "description": "Test cases that do not depend on any registry definitions.",
   "defaultTestProperties": {
+    "bidiIsolation": "none",
     "locale": "en-US"
   },
   "tests": [
@@ -25,6 +26,11 @@
       "description": "message -> simple-message -> simple-start pattern -> escaped-char",
       "src": "\\\\",
       "exp": "\\"
+    },
+    {
+      "description": "message -> simple-message -> simple-start pattern -> 1*escaped-char",
+      "src": "\\\\\\{\\|\\}",
+      "exp": "\\{|}"
     },
     {
       "description": "message -> simple-message -> simple-start pattern -> simple-start-char pattern -> ... -> simple-start-char *text-char placeholder",
@@ -68,8 +74,7 @@
           "type": "unresolved-variable"
         }
       ],
-      "exp": "hello {$place}",
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "exp": "hello {$place}"
     },
     {
       "description": "message -> simple-message -> simple-start pattern -> placeholder -> expression -> literal-expression -> \"{\" literal \"}\"",
@@ -80,50 +85,43 @@
       "description": "... -> literal-expression -> \"{\" literal s annotation \"}\" -> \"{\" literal s function \"}\" -> \"{\" literal s \":\" identifier \"}\" -> \"{\" literal s \":\" name \"}\"",
       "src": "{a :f}",
       "exp": "{|a|}",
-      "expErrors": [{ "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "... -> \"{\" literal s \":\" namespace \":\" name \"}\"",
       "src": "{a :u:f}",
       "exp": "{|a|}",
-      "expErrors": [{ "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "message -> simple-message -> simple-start pattern -> placeholder -> expression -> variable-expression -> \"{\" variable \"}\"",
       "src": "{$x}",
       "exp": "{$x}",
-      "expErrors": [{ "type": "unresolved-variable" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unresolved-variable" }]
     },
     {
       "description": "... -> variable-expression -> \"{\" variable s annotation \"}\" -> \"{\" variable s function \"}\" -> \"{\" variable s \":\" identifier \"}\" -> \"{\" variable s \":\" name \"}\"",
       "src": "{$x :f}",
       "exp": "{$x}",
-      "expErrors": [{ "type": "unresolved-variable" }, { "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unresolved-variable" }, { "type": "unknown-function" }]
     },
     {
       "description": "... -> \"{\" variable s \":\" namespace \":\" name \"}\"",
       "src": "{$x :u:f}",
       "exp": "{$x}",
-      "expErrors": [{ "type": "unresolved-variable" }, { "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unresolved-variable" }, { "type": "unknown-function" }]
     },
     {
       "description": "... -> annotation-expression -> function -> \"{\" \":\" namespace \":\" name \"}\"",
       "src": "{:u:f}",
       "exp": "{:u:f}",
-      "expErrors": [{ "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "... -> annotation-expression -> function -> \"{\" \":\" name \"}\"",
       "src": "{:f}",
       "exp": "{:f}",
-      "expErrors": [{ "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "message -> complex-message -> complex-body -> quoted-pattern -> \"{{\" pattern \"}}\" -> \"{{\"\"}}\"",
@@ -173,11 +171,10 @@
       "exp": ""
     },
     {
-      "description": "message -> complex-message -> complex-body -> matcher -> match-statement variant -> match selector key quoted-pattern -> \".match\" expression literal quoted-pattern",
-      "src": ".match{a :f}a{{}}*{{}}",
+      "description": "message -> complex-message -> complex-body -> ... -> matcher -> match-statement variant -> match selector key quoted-pattern -> \".match\" variable literal quoted-pattern",
+      "src": ".local $a={a :f}.match $a a{{}}*{{}}",
       "exp": "",
-      "expErrors": [ { "type": "unknown-function" } ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
     },
     {
       "description": "... input-declaration -> input s variable-expression ...",
@@ -200,39 +197,56 @@
       "exp": ""
     },
     {
+      "description": "input-declaration-like content in complex-message",
+      "src": "{{.input {$x}}}",
+      "params": [{ "name": "x", "value": "X" }],
+      "exp": ".input X"
+    },
+    {
+      "description": "local-declaration-like content in complex-message with leading whitespace",
+      "src": "{{ .local $x = {$y}}}",
+      "params": [{ "name": "y", "value": "Y" }],
+      "exp": " .local $x = Y"
+    },
+    {
       "description": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector selector variant -> match selector selector variant key s key quoted-pattern",
-      "src": ".match{a :f}{b :f}a b{{}}* *{{}}",
+      "src": ".local $a={a :f}.local $b={b :f}.match $a $b a b{{}}* *{{}}",
       "exp": "",
-      "expErrors": [ { "type": "unknown-function" } ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [
+        { "type": "unknown-function" },
+        { "type": "bad-selector" },
+        { "type": "unknown-function" },
+        { "type": "bad-selector" }
+      ]
     },
     {
       "description": "... matcher -> match-statement [s] variant -> match 1*([s] selector) variant -> match selector variant variant ...",
-      "src": ".match{a :f}a{{}}b{{}}*{{}}",
+      "src": ".local $a={a :f}.match $a a{{}}b{{}}*{{}}",
       "exp": "",
-      "expErrors": [ { "type": "unknown-function" } ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
     },
     {
       "description": "... variant -> key s quoted-pattern -> ...",
-      "src": ".match{a :f}a {{}}*{{}}",
+      "src": ".local $a={a :f}.match $a a {{}}*{{}}",
       "exp": "",
-      "expErrors": [ { "type": "unknown-function" } ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
     },
     {
       "description": "... variant -> key s key s quoted-pattern -> ...",
-      "src": ".match{a :f}{b :f}a b {{}}* *{{}}",
+      "src": ".local $a={a :f}.local $b={b :f}.match $a $b a b {{}}* *{{}}",
       "exp": "",
-      "expErrors": [ { "type": "unknown-function" } ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [
+        { "type": "unknown-function" },
+        { "type": "bad-selector" },
+        { "type": "unknown-function" },
+        { "type": "bad-selector" }
+      ]
     },
     {
       "description": "... key -> \"*\" ...",
-      "src": ".match{a :f}*{{}}",
+      "src": ".local $a={a :f}.match $a *{{}}",
       "exp": "",
-      "expErrors": [ { "type": "unknown-function" } ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-selector" }]
     },
     {
       "description": "simple-message -> simple-start pattern -> placeholder -> expression -> literal-expression -> \"{\" s literal \"}\"",
@@ -253,43 +267,37 @@
       "description": "simple-message -> simple-start pattern -> placeholder -> expression -> variable-expression -> \"{\" s variable \"}\"",
       "src": "{ $x}",
       "exp": "{$x}",
-      "expErrors": [{ "type": "unresolved-variable" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unresolved-variable" }]
     },
     {
       "description": "... variable-expression -> \"{\" variable s attribute \"}\" -> \"{\" variable s \"@\" identifier \"}\"",
       "src": "{$x @c}",
       "exp": "{$x}",
-      "expErrors": [{ "type": "unresolved-variable" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unresolved-variable" }]
     },
     {
       "description": "... -> variable-expression -> \"{\" variable s \"}\"",
       "src": "{$x }",
       "exp": "{$x}",
-      "expErrors": [{ "type": "unresolved-variable" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unresolved-variable" }]
     },
     {
       "description": "simple-message -> simple-start pattern -> placeholder -> expression -> annotation-expression -> \"{\" s annotation \"}\"",
       "src": "{ :f}",
       "exp": "{:f}",
-      "expErrors": [{ "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "... annotation-expression -> \"{\" annotation s attribute \"}\" -> \"{\" annotation s \"@\" identifier \"}\"",
       "src": "{:f @c}",
       "exp": "{:f}",
-      "expErrors": [{ "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "... -> annotation-expression -> \"{\" annotation s \"}\"",
       "src": "{:f }",
       "exp": "{:f}",
-      "expErrors": [{ "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "message -> simple-message -> simple-start pattern -> placeholder -> markup -> \"{\" s \"#\" identifier \"}\"", 
@@ -360,29 +368,25 @@
       "description": "... annotation-expression -> function -> \":\" identifier option",
       "src": "{:f k=v}",
       "exp": "{:f}",
-      "expErrors": [{ "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "... option -> identifier s \"=\" literal",
       "src": "{:f k =v}",
       "exp": "{:f}",
-      "expErrors": [{ "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "... option -> identifier \"=\" s literal",
       "src": "{:f k= v}",
       "exp": "{:f}",
-      "expErrors": [{ "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "... option -> identifier s \"=\" s literal",
       "src": "{:f k = v}",
       "exp": "{:f}",
-      "expErrors": [{ "type": "unknown-function" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "... attribute -> \"@\" identifier \"=\" literal ...",
@@ -405,8 +409,8 @@
       "exp": "a"
     },
     {
-      "description": "... attribute -> \"@\" identifier s \"=\" s variable ...",
-      "src": "{42 @foo=$bar}",
+      "description": "... attribute -> \"@\" identifier s \"=\" s quoted-literal ...",
+      "src": "{42 @foo=|bar|}",
       "exp": "42",
       "expParts": [
         {
@@ -432,9 +436,9 @@
       "exp": "\\"
     },
     {
-      "description": "... quoted-literal -> \"|\" quoted-char escaped-char \"|\"",
-      "src": "{|a\\\\|}",
-      "exp": "a\\"
+      "description": "... quoted-literal -> \"|\" quoted-char 1*escaped-char \"|\"",
+      "src": "{|a\\\\\\{\\|\\}|}",
+      "exp": "a\\{|}"
     },
     {
       "description": "... unquoted-literal -> number-literal -> %x30",
@@ -694,6 +698,43 @@
     {
       "src": "{{trailing whitespace}} \n",
       "exp": "trailing whitespace"
+    },
+    {
+      "description": "NFC: text is not normalized",
+      "src": "\u1E0A\u0323",
+      "exp": "\u1E0A\u0323"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is",
+      "src": ".local $\u0044\u0323\u0307 = {foo} {{{$\u1E0c\u0307}}}",
+      "exp": "foo"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is normalized, use isn't",
+      "src": ".local $\u1E0c\u0307 = {foo} {{{$\u0044\u0323\u0307}}}",
+      "exp": "foo"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is normalized, use isn't",
+      "src": ".input {$\u1E0c\u0307} {{{$\u0044\u0323\u0307}}}",
+      "params": [{"name": "\u1E0c\u0307", "value": "foo"}],
+      "exp": "foo"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is",
+      "src": ".input {$\u0044\u0323\u0307} {{{$\u1E0c\u0307}}}",
+      "params": [{"name": "\u0044\u0323\u0307", "value": "foo"}],
+      "exp": "foo"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is; reordering",
+      "src": ".local $\u0044\u0307\u0323 = {foo} {{{$\u1E0c\u0307}}}",
+      "exp": "foo"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is; special case mapping",
+      "src": ".local $\u0041\u030A\u0301 = {foo} {{{$\u01FA}}}",
+      "exp": "foo"
     }
   ]
 }

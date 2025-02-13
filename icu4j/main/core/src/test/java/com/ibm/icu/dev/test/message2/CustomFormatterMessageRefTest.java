@@ -79,9 +79,9 @@ public class CustomFormatterMessageRefTest extends CoreTestFmwk {
 
     @BeforeClass
     public static void beforeClass() {
-        PROPERTIES.put("firefox", ".match {$gcase :string} genitive {{Firefoxin}} * {{Firefox}}");
-        PROPERTIES.put("chrome", ".match {$gcase :string} genitive {{Chromen}} * {{Chrome}}");
-        PROPERTIES.put("safari", ".match {$gcase :string} genitive {{Safarin}} * {{Safari}}");
+        PROPERTIES.put("firefox", ".input {$gcase :string} .match $gcase genitive {{Firefoxin}} * {{Firefox}}");
+        PROPERTIES.put("chrome", ".input {$gcase :string} .match $gcase genitive {{Chromen}} * {{Chrome}}");
+        PROPERTIES.put("safari", ".input {$gcase :string} .match $gcase genitive {{Safarin}} * {{Safari}}");
     }
 
     @Test
