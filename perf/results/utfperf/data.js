@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739462995525,
+  "lastUpdate": 1739469262731,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -48885,6 +48885,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.9732,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "ecd22c10d0d49cdce14c132ff60eb326b8932991",
+          "message": "ICU-22185 Add docs for using VS Code to develop in ICU4J",
+          "timestamp": "2025-02-13T09:38:10-08:00",
+          "tree_id": "8550a7c80e7de8387a05fc4f30db3b7be4caf7d5",
+          "url": "https://github.com/unicode-org/icu/commit/ecd22c10d0d49cdce14c132ff60eb326b8932991"
+        },
+        "date": 1739469031653,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 10.0654,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.8133,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.9181,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
