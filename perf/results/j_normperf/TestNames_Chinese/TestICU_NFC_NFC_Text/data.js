@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739462556705,
+  "lastUpdate": 1739468709538,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32277,6 +32277,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 4.8131494510740085,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "ecd22c10d0d49cdce14c132ff60eb326b8932991",
+          "message": "ICU-22185 Add docs for using VS Code to develop in ICU4J",
+          "timestamp": "2025-02-13T09:38:10-08:00",
+          "tree_id": "8550a7c80e7de8387a05fc4f30db3b7be4caf7d5",
+          "url": "https://github.com/unicode-org/icu/commit/ecd22c10d0d49cdce14c132ff60eb326b8932991"
+        },
+        "date": 1739468477417,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 4.8061306197438,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
