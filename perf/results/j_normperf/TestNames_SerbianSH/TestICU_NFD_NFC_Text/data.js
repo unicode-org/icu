@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739564527717,
+  "lastUpdate": 1739564570138,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -64646,6 +64646,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 9.539776987964961,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "7da5e90a3d67655fceab846117ead3e17408520b",
+          "message": "ICU-22901 Update Locale::init() to use StringPiece.",
+          "timestamp": "2025-02-14T20:52:40+01:00",
+          "tree_id": "fdd1249e0042f1841c2fd4289553032047107ecf",
+          "url": "https://github.com/unicode-org/icu/commit/7da5e90a3d67655fceab846117ead3e17408520b"
+        },
+        "date": 1739564327593,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 9.685213898619836,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
