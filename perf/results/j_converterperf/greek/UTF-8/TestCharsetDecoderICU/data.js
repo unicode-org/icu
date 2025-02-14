@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739564786082,
+  "lastUpdate": 1739567218286,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32607,6 +32607,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.5307397017840996,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "61b2dbc98047d04115021542ec0f4df5002033fb",
+          "message": "ICU-22901 Replace fixed size buffer with CharString.",
+          "timestamp": "2025-02-14T21:42:22+01:00",
+          "tree_id": "01157ea7d8c1ac7a4bc138ba73fbf8240647412a",
+          "url": "https://github.com/unicode-org/icu/commit/61b2dbc98047d04115021542ec0f4df5002033fb"
+        },
+        "date": 1739566976520,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.4017385881034383,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
