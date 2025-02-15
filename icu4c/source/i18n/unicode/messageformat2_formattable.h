@@ -389,7 +389,7 @@ namespace message2 {
          * @internal ICU 75 technology preview
          * @deprecated This API is for technology preview only.
          */
-        Formattable(const Formattable* arr, int32_t len) : contents(std::pair(arr, len)) {}
+        Formattable(const Formattable* arr, int32_t len) : contents(std::make_pair(arr, len)) {}
         /**
          * Object constructor.
          *
