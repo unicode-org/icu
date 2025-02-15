@@ -774,14 +774,12 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
 Calendar::~Calendar()
 {
     delete fZone;
-    delete actualLocale;
-    delete validLocale;
 }
 
 // -------------------------------------
 
 Calendar::Calendar(const Calendar &source)
-:   UObject(source)
+:   UObject(source), DataLocaleInformation(source)
 {
     *this = source;
 }
@@ -792,6 +790,7 @@ Calendar &
 Calendar::operator=(const Calendar &right)
 {
     if (this != &right) {
+        DataLocaleInformation::operator=(right);
         uprv_arrayCopy(right.fFields, fFields, UCAL_FIELD_COUNT);
         uprv_arrayCopy(right.fStamp, fStamp, UCAL_FIELD_COUNT);
         fTime                    = right.fTime;
@@ -814,10 +813,6 @@ Calendar::operator=(const Calendar &right)
         fWeekendCease            = right.fWeekendCease;
         fWeekendCeaseMillis      = right.fWeekendCeaseMillis;
         fNextStamp               = right.fNextStamp;
-        UErrorCode status = U_ZERO_ERROR;
-        U_LOCALE_BASED(locBased, *this);
-        locBased.setLocaleIDs(right.validLocale, right.actualLocale, status);
-        U_ASSERT(U_SUCCESS(status));
     }
 
     return *this;
@@ -4115,9 +4110,8 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
     }
 
     if (U_SUCCESS(status)) {
-        U_LOCALE_BASED(locBased,*this);
-        locBased.setLocaleIDs(ures_getLocaleByType(monthNames.getAlias(), ULOC_VALID_LOCALE, &status),
-                              ures_getLocaleByType(monthNames.getAlias(), ULOC_ACTUAL_LOCALE, &status), status);
+        setLocaleIDs(ures_getLocaleByType(monthNames.getAlias(), ULOC_VALID_LOCALE, &status),
+                     ures_getLocaleByType(monthNames.getAlias(), ULOC_ACTUAL_LOCALE, &status));
     } else {
         status = U_USING_FALLBACK_WARNING;
         return;
@@ -4201,16 +4195,6 @@ Calendar::updateTime(UErrorCode& status)
 
     fIsTimeSet = true;
     fAreFieldsVirtuallySet = false;
-}
-
-Locale
-Calendar::getLocale(ULocDataLocaleType type, UErrorCode& status) const {
-    return LocaleBased::getLocale(validLocale, actualLocale, type, status);
-}
-
-const char *
-Calendar::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
-    return LocaleBased::getLocaleID(validLocale, actualLocale, type, status);
 }
 
 void
