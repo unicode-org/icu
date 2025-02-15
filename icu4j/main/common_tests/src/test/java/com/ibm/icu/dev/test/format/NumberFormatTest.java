@@ -5512,6 +5512,22 @@ public class NumberFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    public void Test22303() throws ParseException {
+        ULocale locale = new ULocale("en-US");
+        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
+        symbols.setInfinity("infinity");
+        symbols.setNaN("notanumber");
+        DecimalFormat df = new DecimalFormat("0.00", symbols);
+        df.setDecimalPatternMatchRequired(true);
+        Number result = df.parse("infinity");
+        assertEquals("Should parse to +INF even though decimal is required", Double.POSITIVE_INFINITY, result);
+        result = df.parse("notanumber");
+        assertEquals("Should parse to NaN even though decimal is required", Double.NaN, result);
+        result = df.parse("-infinity");
+        assertEquals("Should parse to -INF even though decimal is required", Double.NEGATIVE_INFINITY, result);
+    }
+
+    @Test
     public void Test12962() {
         String pat = "**0.00";
         DecimalFormat df = new DecimalFormat(pat);

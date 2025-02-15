@@ -23,8 +23,9 @@ public class RequireDecimalSeparatorValidator extends ValidationMatcher {
 
     @Override
     public void postProcess(ParsedNumber result) {
+        boolean parseIsInfNaN = 0 != (result.flags & ParsedNumber.FLAG_INFINITY) || 0 != (result.flags & ParsedNumber.FLAG_NAN);
         boolean parseHasDecimalSeparator = 0 != (result.flags & ParsedNumber.FLAG_HAS_DECIMAL_SEPARATOR);
-        if (parseHasDecimalSeparator != patternHasDecimalSeparator) {
+        if (!parseIsInfNaN && parseHasDecimalSeparator != patternHasDecimalSeparator) {
             result.flags |= ParsedNumber.FLAG_FAIL;
         }
     }
