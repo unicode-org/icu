@@ -1,0 +1,2 @@
+add_executable(thaitest thaitest.cpp)
+target_link_libraries(thaitest icu_defaults)
