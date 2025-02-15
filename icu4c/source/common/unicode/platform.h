@@ -728,12 +728,12 @@
     /*
      * Notes:
      * C++11 and C11 require support for UTF-16 literals
-     * Doesn't work on Mac C11 (see workaround in ptypes.h)
-     * or Cygwin less than 3.5.
+     * Doesn't work on Mac C11 (see workaround in ptypes.h),
+     * MS Visual Studio or Cygwin less than 3.5.
      */
 #   if defined(__cplusplus)
 #       define U_HAVE_CHAR16_T 1
-#   elif U_PLATFORM_IS_DARWIN_BASED || (U_PLATFORM == U_PF_CYGWIN && CYGWIN_VERSION_DLL_MAJOR < 3005)
+#   elif U_PLATFORM_IS_DARWIN_BASED || (U_PLATFORM == U_PF_CYGWIN && CYGWIN_VERSION_DLL_MAJOR < 3005) || defined(_MSC_VER)
 #       define U_HAVE_CHAR16_T 0
 #   else
         // conformant C11
