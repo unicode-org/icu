@@ -64,6 +64,7 @@ isFileModTimeLater(const char *filePath, const char *checkAgainst, UBool isDir) 
                     newpath.append(dirEntry->d_name, -1, status);
                     if (U_FAILURE(status)) {
                         fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, u_errorName(status));
+                        closedir(pDir);
                         return false;
                     }
 
