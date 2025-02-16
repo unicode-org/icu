@@ -571,7 +571,7 @@ public class DateIntervalFormat extends UFormat {
      * getInstance(String skeleton, ULocale locale)
      *
      * <!-- From: com.ibm.icu.samples.text.dateintervalformat.DateIntervalFormatSample:dtitvfmtPreDefinedExample -->
-     * <p>Example code:<p>
+     * <p>Example code:</p>
      *
      * <pre>
      * import java.util.Date;
@@ -698,7 +698,7 @@ public class DateIntervalFormat extends UFormat {
      * getInstance(String skeleton, ULocale locale, DateIntervalInfo dtitvinf)
      *
      * <!-- From: com.ibm.icu.samples.text.dateintervalformat.DateIntervalFormatSample:dtitvfmtCustomizedExample -->
-     * <p>Example code:<p>
+     * <p>Example code:</p>
      *
      * <pre>
      * final Date date[] = {
@@ -724,7 +724,7 @@ public class DateIntervalFormat extends UFormat {
      * dtitvinf.setFallbackIntervalPattern("{0} ~~~ {1}");
      * // Get the DateIntervalFormat with the custom pattern
      * for (String skeleton:skeletons){
-     *     for (int i=0;i<2;i++) {
+     *     for (int i=0;i&lt;2;i++) {
      *         System.out.printf("%-15s%-35s%-35s", skeleton,date[i].toString(), date[i+1].toString());
      *         DateIntervalFormat dtitvfmtEn = DateIntervalFormat.getInstance(skeleton,ULocale.ENGLISH,dtitvinf);
      *         DateIntervalFormat dtitvfmtJa = DateIntervalFormat.getInstance(skeleton,ULocale.JAPANESE,dtitvinf);
