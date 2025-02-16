@@ -545,7 +545,7 @@ public class MeasureUnit implements Serializable {
     /**
      * Creates a new MeasureUnit with a specified constant denominator.
      * <p>
-     * This method is applicable only to COMPOUND & SINGLE units. If invoked on a
+     * This method is applicable only to COMPOUND &amp; SINGLE units. If invoked on a
      * MIXED unit, an exception will be thrown.
      * For further details, refer to {@link Complexity}.
      * <p>
@@ -590,7 +590,7 @@ public class MeasureUnit implements Serializable {
      * zero.</li>
      * </ul>
      * <p>
-     * This method is applicable only to COMPOUND & SINGLE units. If invoked on a
+     * This method is applicable only to COMPOUND &amp; SINGLE units. If invoked on a
      * MIXED unit, an exception will be thrown.
      * For further details, refer to {@link Complexity}.
      * <p>

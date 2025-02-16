@@ -145,7 +145,7 @@ import com.ibm.icu.util.ULocale;
  * SpoofChecker sc = new SpoofChecker.Builder()
  *     .setAllowedChars(SpoofChecker.RECOMMENDED.cloneAsThawed().addAll(SpoofChecker.INCLUSION))
  *     .setRestrictionLevel(SpoofChecker.RestrictionLevel.MODERATELY_RESTRICTIVE)
- *     .setChecks(SpoofChecker.ALL_CHECKS &~ SpoofChecker.CONFUSABLE)
+ *     .setChecks(SpoofChecker.ALL_CHECKS &amp;~ SpoofChecker.CONFUSABLE)
  *     .build();
  * boolean result = sc.failsChecks("pаypаl");  // with Cyrillic 'а' characters
  * System.out.println(result);  // true
@@ -166,7 +166,7 @@ import com.ibm.icu.util.ULocale;
  * SpoofChecker sc = new SpoofChecker.Builder()
  *     .setAllowedChars(SpoofChecker.RECOMMENDED.cloneAsThawed().addAll(SpoofChecker.INCLUSION))
  *     .setRestrictionLevel(SpoofChecker.RestrictionLevel.MODERATELY_RESTRICTIVE)
- *     .setChecks(SpoofChecker.ALL_CHECKS &~ SpoofChecker.CONFUSABLE)
+ *     .setChecks(SpoofChecker.ALL_CHECKS &amp;~ SpoofChecker.CONFUSABLE)
  *     .build();
  * SpoofChecker.CheckResult checkResult = new SpoofChecker.CheckResult();
  * boolean result = sc.failsChecks("pаypаl", checkResult);

@@ -51,7 +51,7 @@ import java.util.Map;
  * &#064;Test
  * public void test() {
  *     final Locale enGb = Locale.forLanguageTag("en-GB");
- *     Map<String, Object> arguments = new HashMap<>();
+ *     Map&lt;String, Object&gt; arguments = new HashMap&lt;&gt;();
  *     arguments.put("name", "John");
  *     arguments.put("exp", new Date(2023 - 1900, 2, 27, 19, 42, 51));  // March 27, 2023, 7:42:51 PM
  *
@@ -101,7 +101,7 @@ import java.util.Map;
  *            + " 1 {{You have one notification.}}\n"
  *            + " * {{You have {$count} notifications.}}\n";
  *    final Locale enGb = Locale.forLanguageTag("en-GB");
- *    Map<String, Object> arguments = new HashMap<>();
+ *    Map&lt;String, Object&gt; arguments = new HashMap&lt;&gt;();
  *
  *    MessageFormatter mf2 = MessageFormatter.builder()
  *        .setPattern(message)
@@ -311,7 +311,7 @@ public class MessageFormatter {
      * depending on this setting.</p>
      *
      * <p>Used in conjunction with the
-     * {@link MessageFormatter.Builder#setErrorHandlingBehavior(ErrorHandlingBehavior)} method.</p>
+     * {@link MessageFormatter.Builder#setErrorHandlingBehavior(MessageFormatter.ErrorHandlingBehavior)} method.</p>
      *
      * @internal ICU 76 technology preview
      * @deprecated This API is for technology preview only.
@@ -343,7 +343,7 @@ public class MessageFormatter {
      * described in the MessageFormat 2 specification.</p>
      *
      * <p>Used in conjunction with the
-     * {@link MessageFormatter.Builder#setBidiIsolation(BidiIsolation)} method.</p>
+     * {@link MessageFormatter.Builder#setBidiIsolation(MessageFormatter.BidiIsolation)} method.</p>
      *
      * @internal ICU 77 technology preview
      * @deprecated This API is for technology preview only.

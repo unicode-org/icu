@@ -50,12 +50,12 @@ public abstract class BasicTimeZone extends TimeZone {
      * wallTimeFmt.setTimeZone(btz);
      *
      * long start = 1104537600000L;    // 2005-01-01 0:00 UTC
-     * for (int i = 0; i < 5; i++) {   // Up to 5 transitions
+     * for (int i = 0; i &lt; 5; i++) {   // Up to 5 transitions
      *     TimeZoneTransition trans = btz.getNextTransition(start, false /* not including start time *<code>/</code>);
      *
      *     // Display the transition time and offset information
      *     long transTime = trans.getTime();
-     *     System.out.println(wallTimeFmt.format(new Date(transTime - 1)) + " -> " + wallTimeFmt.format(new Date(transTime)));
+     *     System.out.println(wallTimeFmt.format(new Date(transTime - 1)) + " -&gt; " + wallTimeFmt.format(new Date(transTime)));
      *     System.out.println(" - Before (Offset/Save): " + trans.getFrom().getRawOffset() + "/" + trans.getFrom().getDSTSavings());
      *     System.out.println(" - After  (Offset/Save): " + trans.getTo().getRawOffset() + "/" + trans.getTo().getDSTSavings());
      *
@@ -92,12 +92,12 @@ public abstract class BasicTimeZone extends TimeZone {
      * wallTimeFmt.setTimeZone(btz);
      *
      * long start = 1262304000000L;    // 2010-01-01 0:00 UTC
-     * for (int i = 0; i < 5; i++) {   // Up to 5 transitions
+     * for (int i = 0; i &lt; 5; i++) {   // Up to 5 transitions
      *     TimeZoneTransition trans = btz.getPreviousTransition(start, false /* not including start time *<code>/</code>);
      *
      *     // Display the transition time and offset information
      *     long transTime = trans.getTime();
-     *     System.out.println(wallTimeFmt.format(new Date(transTime - 1)) + " -> " + wallTimeFmt.format(new Date(transTime)));
+     *     System.out.println(wallTimeFmt.format(new Date(transTime - 1)) + " -&gt; " + wallTimeFmt.format(new Date(transTime)));
      *     System.out.println(" - Before (Offset/Save): " + trans.getFrom().getRawOffset() + "/" + trans.getFrom().getDSTSavings());
      *     System.out.println(" - After  (Offset/Save): " + trans.getTo().getRawOffset() + "/" + trans.getTo().getDSTSavings());
      *
@@ -136,7 +136,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("Etc/GMT"));
      *
      * // Compare these time zones every 10 years since year 1970 up to year 2009
-     * for (int startYear = 1970; startYear <= 2000; startYear += 10) {
+     * for (int startYear = 1970; startYear &lt;= 2000; startYear += 10) {
      *     long start, end;
      *
      *     cal.set(startYear, Calendar.JANUARY, 1, 0, 0, 0);
@@ -323,7 +323,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * long since = 1104537600000L;    // 2005-01-01 0:00 UTC
      * TimeZoneRule[] rules = btz.getTimeZoneRules(since);
      * System.out.println("Rule(initial): " + rules[0]);
-     * for (int i = 1; i < rules.length; i++) {
+     * for (int i = 1; i &lt; rules.length; i++) {
      *     System.out.println("Rule: " + rules[i]);
      * }
      * </pre>

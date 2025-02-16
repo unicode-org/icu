@@ -26,6 +26,7 @@ public class FormattedPlaceholder {
      * @param inputValue the original value to be formatted.
      * @param formattedValue the result of formatting the placeholder.
      * @param directionality the directionality of the formatted placeholder.
+     * @param isolate true if the placeholder should be considered a bidi isolate. 
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for ICU internal use only.
