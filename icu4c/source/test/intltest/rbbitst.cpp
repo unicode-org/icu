@@ -2594,17 +2594,6 @@ void RBBITest::TestWordBreaks()
         UnicodeString ustr = CharsToUnicodeString(strlist[loop]);
         // RBBICharMonkey monkey;
         RBBIWordMonkey monkey;
-        if (monkey.dictionarySet().containsSome(ustr)) {
-            // Some of these twenty-year-old random examples depend on the
-            // monkey tests not looking across dictionary/non-dictionary
-            // boundaries for context when applying the rules.
-            // The monkeys are not designed to work with dictionary characters,
-            // so this behaviour is out of scope for testing against the
-            // monkeys.
-            logKnownIssue("ICU-22984");
-            continue;
-        }
-
         int expected[50];
         int expectedcount = 0;
 
@@ -3141,7 +3130,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
             expectedBreaks[breakPos] = 1;
             expectedCount++;
             U_ASSERT(expectedCount<testText.length());
-	    (void)expectedCount;  // Used by U_ASSERT().
+        (void)expectedCount;  // Used by U_ASSERT().
         }
 
         // Find the break positions using forward iteration
