@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739567018151,
+  "lastUpdate": 1739916364569,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32187,6 +32187,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 140.23463676340535,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "3b2bd4b19dbcdb4cf1b0d94a1c4968d586b639ab",
+          "message": "ICU-22921 Fix some javadoc issues",
+          "timestamp": "2025-02-18T13:58:16-08:00",
+          "tree_id": "ff9583c6061446db4dd4027eb77fd4afddcdd53f",
+          "url": "https://github.com/unicode-org/icu/commit/3b2bd4b19dbcdb4cf1b0d94a1c4968d586b639ab"
+        },
+        "date": 1739916129212,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 141.66434951890798,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
