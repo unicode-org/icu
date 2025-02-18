@@ -4167,12 +4167,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * See https://www.unicode.org/reports/tr39/#Identifier_Status_and_Type.
      *
      * @see UProperty#IDENTIFIER_STATUS
-     * @draft ICU 75
+     * @stable ICU 75
      */
     public enum IdentifierStatus {
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         RESTRICTED,
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         ALLOWED,
     }
 
@@ -4181,32 +4181,32 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * See https://www.unicode.org/reports/tr39/#Identifier_Status_and_Type.
      *
      * @see UProperty#IDENTIFIER_TYPE
-     * @draft ICU 75
+     * @stable ICU 75
      */
     public enum IdentifierType {
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         NOT_CHARACTER,
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         DEPRECATED,
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         DEFAULT_IGNORABLE,
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         NOT_NFKC,
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         NOT_XID,
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         EXCLUSION,
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         OBSOLETE,
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         TECHNICAL,
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         UNCOMMON_USE,
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         LIMITED_USE,
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         INCLUSION,
-        /** @draft ICU 75 */
+        /** @stable ICU 75 */
         RECOMMENDED,
     }
 
@@ -4716,7 +4716,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param c code point
      * @param type Identifier_Type to check
      * @return true if type is in Identifier_Type(c)
-     * @draft ICU 75
+     * @stable ICU 75
      */
     public static final boolean hasIdentifierType(int c, IdentifierType type) {
         return UCharacterProperty.INSTANCE.hasIDType(c, type);
@@ -4740,7 +4740,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param c code point
      * @param types output set
      * @return number of values in c's Identifier_Type
-     * @draft ICU 75
+     * @stable ICU 75
      */
     public static final int getIdentifierTypes(int c, EnumSet<IdentifierType> types) {
         return UCharacterProperty.INSTANCE.getIDTypes(c, types);
