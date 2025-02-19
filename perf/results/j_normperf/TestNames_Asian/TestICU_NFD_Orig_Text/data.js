@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739916352026,
+  "lastUpdate": 1739925393040,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32487,6 +32487,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 11.55617574068071,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "cwcornelius@gmail.com",
+            "name": "sven-oly",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "66c6771a03487d3e7ec50af000d8df89381cc237",
+          "message": "ICU-22922 Update ICU4J status\n\nSee #3398",
+          "timestamp": "2025-02-18T16:23:49-08:00",
+          "tree_id": "61be24823c6e0adf32e10fa935be9b7f609b8a42",
+          "url": "https://github.com/unicode-org/icu/commit/66c6771a03487d3e7ec50af000d8df89381cc237"
+        },
+        "date": 1739925159712,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 11.740227375729322,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
