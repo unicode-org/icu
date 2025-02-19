@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739992839590,
+  "lastUpdate": 1740005767082,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -39669,6 +39669,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 52.8423,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "215131c1a4f41953f2024cf93b261b0dea180596",
+          "message": "ICU-22984 Remove some obnoxious tests from 2003",
+          "timestamp": "2025-02-19T23:30:34+01:00",
+          "tree_id": "f04500f6c151e9c0938c00570f6fa2ae12c50d8b",
+          "url": "https://github.com/unicode-org/icu/commit/215131c1a4f41953f2024cf93b261b0dea180596"
+        },
+        "date": 1740005518867,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 36.172,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 52.892,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
