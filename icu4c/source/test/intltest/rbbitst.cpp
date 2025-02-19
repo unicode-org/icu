@@ -2532,6 +2532,14 @@ static void testBreakBoundPreceding(RBBITest *test, UnicodeString ustr,
 }
 #endif
 
+// The following tests test random strings chosen in 2003, see
+// https://github.com/unicode-org/icu/commit/469c2d5b76138869c3c78eb49affe04970600e0e.
+// Presumably they were interesting failures found by the monkey tests at the time.
+// They are made redundant by any reasonably long run of the monkey tests, but are mostly harmless.
+// However, if the expansion of dictionary-based segmentation happens to encompass the randomly
+// chosen characters, the offending tests should be removed: only rule-based segmentation is in
+// scope for these tests.
+
 void RBBITest::TestWordBreaks()
 {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
@@ -2540,20 +2548,11 @@ void RBBITest::TestWordBreaks()
     UErrorCode    status = U_ZERO_ERROR;
     // BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
     BreakIterator *bi = BreakIterator::createWordInstance(locale, status);
-    // Replaced any C+J characters in a row with a random sequence of characters
-    // of the same length to make our C+J segmentation not get in the way.
     static const char *strlist[] =
     {
-    "\\U000e0032\\u0097\\u0f94\\uc2d8\\u05f4\\U000e0031\\u060d",
     "\\U000e0037\\u2666\\u1202\\u003a\\U000e0031\\u064d\\u0bea\\u091c\\U000e0040\\u003b",
-    "\\u0589\\u3e99\\U0001d7f3\\U000e0074\\u1810\\u200e\\U000e004b\\u0027\\U000e0061\\u003a",
-    "\\u398c\\U000104a5\\U0001d173\\u102d\\u002e\\uca3b\\u002e\\u002c\\u5622",
-    "\\uac00\\u3588\\u009c\\u0953\\u194b",
     "\\u200e\\U000e0072\\u0a4b\\U000e003f\\ufd2b\\u2027\\u002e\\u002e",
-    "\\u0602\\u2019\\ua191\\U000e0063\\u0a4c\\u003a\\ub4b5\\u003a\\u827f\\u002e",
-    "\\u2f1f\\u1634\\u05f8\\u0944\\u04f2\\u0cdf\\u1f9c\\u05f4\\u002e",
     "\\U000e0042\\u002e\\u0fb8\\u09ef\\u0ed1\\u2044",
-    "\\u003b\\u024a\\u102e\\U000e0071\\u0600",
     "\\u2027\\U000e0067\\u0a47\\u00b7",
     "\\u1fcd\\u002c\\u07aa\\u0027\\u11b0",
     "\\u002c\\U000e003c\\U0001d7f4\\u003a\\u0c6f\\u0027",
@@ -2564,25 +2563,12 @@ void RBBITest::TestWordBreaks()
     "\\U0001d7f2\\U000e007\\u0004\\u0589",
     "\\U000e0022\\u003a\\u10b3\\u003a\\ua21b\\u002e\\U000e0058\\u1732\\U000e002b",
     "\\U0001d7f2\\U000e007d\\u0004\\u0589",
-    "\\u82ab\\u17e8\\u0736\\u2019\\U0001d64d",
-    "\\ub55c\\u0a68\\U000e0037\\u0cd6\\u002c\\ub959",
-    "\\U000e0065\\u302c\\uc986\\u09ee\\U000e0068",
-    "\\u0be8\\u002e\\u0c68\\u066e\\u136d\\ufc99\\u59e7",
     "\\u0233\\U000e0020\\u0a69\\u0d6a",
-    "\\u206f\\u0741\\ub3ab\\u2019\\ubcac\\u2019",
     "\\u18f4\\U000e0049\\u20e7\\u2027",
-    "\\ub315\\U0001d7e5\\U000e0073\\u0c47\\u06f2\\u0c6a\\u0037\\u10fe",
-    "\\ua183\\u102d\\u0bec\\u003a",
     "\\u17e8\\u06e7\\u002e\\u096d\\u003b",
     "\\u003a\\u0e57\\u0fad\\u002e",
-    "\\u002e\\U000e004c\\U0001d7ea\\u05bb\\ud0fd\\u02de",
-    "\\u32e6\\U0001d7f6\\u0fa1\\u206a\\U000e003c\\u0cec\\u003a",
     "\\U000e005d\\u2044\\u0731\\u0650\\u0061",
     "\\u003a\\u0664\\u00b7\\u1fba",
-    "\\u003b\\u0027\\u00b7\\u47a3",
-    "\\u2027\\U000e0067\\u0a42\\u00b7\\u4edf\\uc26c\\u003a\\u4186\\u041b",
-    "\\u0027\\u003a\\U0001d70f\\U0001d7df\\ubf4a\\U0001d7f5\\U0001d177\\u003a\\u0e51\\u1058\\U000e0058\\u00b7\\u0673",
-    "\\uc30d\\u002e\\U000e002c\\u0c48\\u003a\\ub5a1\\u0661\\u002c",
     };
     int loop;
     if (U_FAILURE(status)) {
@@ -2594,16 +2580,6 @@ void RBBITest::TestWordBreaks()
         UnicodeString ustr = CharsToUnicodeString(strlist[loop]);
         // RBBICharMonkey monkey;
         RBBIWordMonkey monkey;
-        if (monkey.dictionarySet().containsSome(ustr)) {
-            // Some of these twenty-year-old random examples depend on the
-            // monkey tests not looking across dictionary/non-dictionary
-            // boundaries for context when applying the rules.
-            // The monkeys are not designed to work with dictionary characters,
-            // so this behaviour is out of scope for testing against the
-            // monkeys.
-            logKnownIssue("ICU-22984");
-            continue;
-        }
 
         int expected[50];
         int expectedcount = 0;
