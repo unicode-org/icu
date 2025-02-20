@@ -41,6 +41,7 @@
 #include "putilimp.h"
 #include "uassert.h"
 #include "uresdata.h"
+#include <cstddef>
 
 using namespace icu;
 
@@ -2460,6 +2461,10 @@ ures_getValueWithFallback(const UResourceBundle *bundle, const char *path,
         if (U_FAILURE(errorCode)) {
             return;
         }
+    }
+    if (rb == nullptr){
+        errorCode = U_INTERNAL_PROGRAM_ERROR;
+        return;
     }
     value.setData(rb->getResData());
     value.setValidLocaleDataEntry(rb->fValidLocaleDataEntry);
