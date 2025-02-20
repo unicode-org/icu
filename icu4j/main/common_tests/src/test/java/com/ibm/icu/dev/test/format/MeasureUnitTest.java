@@ -46,11 +46,11 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.MeasureUnit.Complexity;
 import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.TimeUnit;
 import com.ibm.icu.util.TimeUnitAmount;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.MeasureUnit.Complexity;
 
 /**
  * This file contains regular unit tests.

@@ -26,8 +26,8 @@ import com.ibm.icu.impl.units.UnitsData;
 import com.ibm.icu.impl.units.UnitsRouter;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.MeasureUnit.Complexity;
+import com.ibm.icu.util.ULocale;
 
 public class UnitsTest {
 
