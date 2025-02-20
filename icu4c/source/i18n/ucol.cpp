@@ -551,8 +551,7 @@ ucol_getUCAVersion(const UCollator* coll, UVersionInfo info) {
 U_CAPI const char16_t * U_EXPORT2
 ucol_getRules(const UCollator *coll, int32_t *length) {
     const RuleBasedCollator *rbc = RuleBasedCollator::rbcFromUCollator(coll);
-    // OK to crash if coll==nullptr: We do not want to check "this" pointers.
-    if(rbc != nullptr || coll == nullptr) {
+    if(rbc != nullptr) {
         const UnicodeString &rules = rbc->getRules();
         U_ASSERT(rules.getBuffer()[rules.length()] == 0);
         *length = rules.length();
@@ -567,7 +566,7 @@ U_CAPI int32_t U_EXPORT2
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, char16_t *buffer, int32_t bufferLen) {
     UnicodeString rules;
     const RuleBasedCollator *rbc = RuleBasedCollator::rbcFromUCollator(coll);
-    if(rbc != nullptr || coll == nullptr) {
+    if(rbc != nullptr) {
         rbc->getRules(delta, rules);
     }
     if(buffer != nullptr && bufferLen > 0) {
