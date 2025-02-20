@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740010703600,
+  "lastUpdate": 1740013572914,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32367,6 +32367,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 192.95485753599382,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "cwcornelius@gmail.com",
+            "name": "sven-oly",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "cfc208f5460d3f5e510830f0813f9bc1fb5f7a20",
+          "message": "ICU-22922 ICU4C RC APIChangeReport updates",
+          "timestamp": "2025-02-19T16:50:14-08:00",
+          "tree_id": "18d47e762808cd1c45da7489b6b74138cc614374",
+          "url": "https://github.com/unicode-org/icu/commit/cfc208f5460d3f5e510830f0813f9bc1fb5f7a20"
+        },
+        "date": 1740013340096,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 193.0070146262718,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
