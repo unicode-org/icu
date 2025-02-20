@@ -5,12 +5,10 @@ package com.ibm.icu.dev.test.rbbi;
 
 import java.text.ParsePosition;
 
-import javax.swing.RowFilter.Entry;
-
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSet.EntryRange;
-import com.ibm.icu.text.UTF16;
 
 /**
  * A segmentation rule expressed as in UAXes #14 and #29.

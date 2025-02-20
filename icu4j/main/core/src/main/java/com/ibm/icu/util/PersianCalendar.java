@@ -12,7 +12,6 @@ package com.ibm.icu.util;
 import java.util.BitSet;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Set;
 
 import com.ibm.icu.util.ULocale.Category;
 
