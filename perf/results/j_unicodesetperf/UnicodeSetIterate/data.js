@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740085361518,
+  "lastUpdate": 1740162199021,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32757,6 +32757,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetIterate",
             "value": 0.920765214455801,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "6cc161813649b80724062c796ce136319e4fd1a5",
+          "message": "ICU-22922 ICU4C produce search doxygen doc by default",
+          "timestamp": "2025-02-21T10:09:51-08:00",
+          "tree_id": "5bf91fefa6ae8afec5a2d3a43aa89b87d81a01de",
+          "url": "https://github.com/unicode-org/icu/commit/6cc161813649b80724062c796ce136319e4fd1a5"
+        },
+        "date": 1740161954894,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetIterate",
+            "value": 0.9210666273697382,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
