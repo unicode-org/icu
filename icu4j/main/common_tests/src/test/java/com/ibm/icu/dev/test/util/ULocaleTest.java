@@ -5723,10 +5723,9 @@ public class ULocaleTest extends CoreTestFmwk {
             assertEquals("addLikelySubtags(" + test.source + ") should be unchanged",
                 l, ULocale.addLikelySubtags(l));
         } else {
-            if ( ( test.source.equals("und-Latn-MU") || test.source.equals("und-Latn-RS") || test.source.equals("und-Latn-SL")
-                || test.source.equals("und-Latn-TK") || test.source.equals("und-Latn-ZM") )
-                && logKnownIssue("CLDR-18002", "Incorrect Likely Subtags for some entries modified in CLDR 46") ) {
-                    return;
+            if (test.source.equals("und-Latn-RS")
+                && logKnownIssue("ICU-23052", "addLikelySubtags(und-Latn-RS) bug") ) {
+              return;
                 }
               assertEquals("addLikelySubtags(" + test.source + ")",
                   test.addLikely, ULocale.addLikelySubtags(l).toLanguageTag());

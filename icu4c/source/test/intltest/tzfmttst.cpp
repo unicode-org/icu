@@ -338,10 +338,6 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip() {
                         } else {
                             // Specific or generic: raw offset must be preserved.
                             if (inRaw != outRaw) {
-                            	if ((strcmp(LOCALES[locidx].getName(), "tg") == 0 || strcmp(LOCALES[locidx].getName(), "tg_TJ") == 0) 
-                            		&& logKnownIssue("ICU-22857", "Time zone round test fails for tg/tg_TJ")) {
-                            		continue;
-                            	}
                                 errln(UnicodeString("Raw offset round trip failed; tz=") + *tzid
                                     + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
                                     + ", time=" + DATES[datidx] + ", str=" + tzstr
@@ -533,9 +529,9 @@ TimeZoneFormatTest::TestTimeRoundTrip() {
 
 // TimeZoneFormatTest::RunTimeRoundTripTests()
 //    This function loops, running time zone format round trip test cases until there are no more, then returns.
-//    Threading: multiple invocations of this function are started in parallel 
+//    Threading: multiple invocations of this function are started in parallel
 //               by TimeZoneFormatTest::TestTimeRoundTrip()
-//    
+//
 void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
     UErrorCode status = U_ZERO_ERROR;
     UBool REALLY_VERBOSE = false;
@@ -577,7 +573,7 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
 
         UnicodeString pattern(BASEPATTERN);
         pattern.append(" ").append(PATTERNS[patidx]);
-        logln("    Thread %d, Locale %s, Pattern %s", 
+        logln("    Thread %d, Locale %s, Pattern %s",
                 threadNumber, gLocaleData->locales[locidx].getName(), CStr(pattern)());
 
         SimpleDateFormat *sdf = new SimpleDateFormat(pattern, gLocaleData->locales[locidx], status);
@@ -1088,7 +1084,7 @@ TimeZoneFormatTest::TestFormat() {
     const FormatTestData DATA[] = {
         {
             "en",
-            "America/Los_Angeles", 
+            "America/Los_Angeles",
             dateJan,
             UTZFMT_STYLE_GENERIC_LOCATION,
             "Los Angeles Time",
@@ -1187,7 +1183,7 @@ TimeZoneFormatTest::TestFormatTZDBNames() {
     const FormatTestData DATA[] = {
         {
             "en",
-            "America/Chicago", 
+            "America/Chicago",
             dateJan,
             UTZFMT_STYLE_SPECIFIC_SHORT,
             "CST",
@@ -1195,7 +1191,7 @@ TimeZoneFormatTest::TestFormatTZDBNames() {
         },
         {
             "en",
-            "Asia/Shanghai", 
+            "Asia/Shanghai",
             dateJan,
             UTZFMT_STYLE_SPECIFIC_SHORT,
             "CST",
@@ -1203,7 +1199,7 @@ TimeZoneFormatTest::TestFormatTZDBNames() {
         },
         {
             "zh_Hans",
-            "Asia/Shanghai", 
+            "Asia/Shanghai",
             dateJan,
             UTZFMT_STYLE_SPECIFIC_SHORT,
             "CST",
