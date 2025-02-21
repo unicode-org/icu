@@ -14,6 +14,17 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 If you want to use ICU (as opposed to developing it), it is recommended that you download an official packaged version of the ICU source code. These versions are tested more thoroughly than day-to-day development builds of the system, and they are packaged in zip and tar files for convenient download. Here are several recent releases of ICU that are available:
 
+## Release Candidate
+
+***2025-02-21: ICU 77rc is now available.***
+It updates to [CLDR 47](https://cldr.unicode.org/downloads/cldr-47)
+locale data with new locales, and various additions and corrections.
+
+ICU 77 is mostly focused on bug fixes, segmentation conformance, and other refinements.
+The technology preview implementations of the CLDR MessageFormat 2.0 specification have been updated to incorporate some, but not yet all, of the CLDR 47 changes. (Java more than C++)
+
+See [ICU 77](77.md).
+
 ## Latest Release
 
 ***2024-10-24: ICU 76 is now available.***
