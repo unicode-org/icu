@@ -53,7 +53,7 @@ jobs:
           ./runConfigureICU Linux --disable-renaming;
            # Fail if 'warning:' appears in doxygen's output, but ignore warnings from file Doxyfile.
            # Regex note: (?! ... ) is a negative lookahead. Succeed if the pattern is not present.
-          set +o pipefail && make doc 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file .?Doxyfile)' doxygen.log )
+          set +o pipefail && make doc-searchengine 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file .?Doxyfile)' doxygen.log )
 
   # gcc debug build.
   # Includes dependency checker.
