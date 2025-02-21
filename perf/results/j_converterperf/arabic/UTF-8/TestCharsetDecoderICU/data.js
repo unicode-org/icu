@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740168980933,
+  "lastUpdate": 1740173844553,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32547,6 +32547,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.4509791032737358,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "950ddc299b62c922e396c922dcbe61077e1ccc97",
+          "message": "ICU-22922 ICU 77rc download page\n\nSee #3407",
+          "timestamp": "2025-02-21T13:30:33-08:00",
+          "tree_id": "b366a50debe07fa711e2e59381158b8da61ff1fd",
+          "url": "https://github.com/unicode-org/icu/commit/950ddc299b62c922e396c922dcbe61077e1ccc97"
+        },
+        "date": 1740173609522,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.4457716128665465,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
