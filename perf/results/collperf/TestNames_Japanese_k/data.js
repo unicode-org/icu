@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740174600480,
+  "lastUpdate": 1740414950697,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -63555,6 +63555,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5835729.4013,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "cwcornelius@gmail.com",
+            "name": "sven-oly",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "1b48d262c277ea8968eb3c44fdb66671c3e1d759",
+          "message": "ICU-22922 Scrubbing closed issues\n\nSee #3399",
+          "timestamp": "2025-02-21T11:24:10-08:00",
+          "tree_id": "d48928d1a75c7dcd015ac85ef4f1feee97485c83",
+          "url": "https://github.com/unicode-org/icu/commit/1b48d262c277ea8968eb3c44fdb66671c3e1d759"
+        },
+        "date": 1740414702936,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 228.7699,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20831954.4792,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5308264.9609,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19789629.1075,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5898879.3923,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
