@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740418542597,
+  "lastUpdate": 1740432033118,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -63609,6 +63609,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12707554.4248,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "60a0d9fcd8a61a511dbdd2272709313b7ef1af89",
+          "message": "ICU-23055 Update PR template to reflect v78 tickets after ICU 77rc cut",
+          "timestamp": "2025-02-24T22:01:46+01:00",
+          "tree_id": "b7e99596e67b241fbbcd4c5cac40504203f8701b",
+          "url": "https://github.com/unicode-org/icu/commit/60a0d9fcd8a61a511dbdd2272709313b7ef1af89"
+        },
+        "date": 1740431786056,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 225.595,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 55313936.8693,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12125890.9052,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 52007855.3094,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12608929.6193,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
