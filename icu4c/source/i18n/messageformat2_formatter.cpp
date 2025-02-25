@@ -144,7 +144,7 @@ namespace message2 {
             .adoptFunction(FunctionName(UnicodeString("integer")),
                                   integer.orphan(), success)
             .adoptFunction(FunctionName(UnicodeString("string")),
-                                  string.orphan(), success);
+                                  string.orphan(), success)
             .adoptFunction(FunctionName(UnicodeString("test:function")),
                                   testFunction.orphan(), success)
             .adoptFunction(FunctionName(UnicodeString("test:format")),
