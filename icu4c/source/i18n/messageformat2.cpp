@@ -690,7 +690,7 @@ UnicodeString MessageFormatter::formatToString(const MessageArguments& arguments
             formatPattern(context, *globalEnv, dataModel.getPattern(), status, result);
         } else {
             // Check for errors/warnings -- if so, then the result of pattern selection is the fallback value
-            // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
+            // See https://www.unicode.org/reports/tr35/tr35-messageFormat.html#pattern-selection
             const DynamicErrors& err = context.getErrors();
             if (err.hasSyntaxError() || err.hasDataModelError()) {
                 result += REPLACEMENT;
