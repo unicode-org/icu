@@ -22,7 +22,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 ## Overview
 
 ICU is designed for use in multi-threaded environments. Guidelines for
-developers using ICU are in the [ICU Design](../../design.md) section of the
+developers using ICU are in the [ICU Design](../../icu/design.md) section of the
 user guide.
 
 Within the ICU implementation, access to shared or global data sometimes must be

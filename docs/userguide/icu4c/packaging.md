@@ -75,7 +75,7 @@ with -DU_STATIC_IMPLEMENTATION. Also see [How To Use ICU](../icu/howtouseicu.md)
 
 ### Reduce the number of libraries used
 
-ICU consists of a number of different libraries. The library dependency chart in the [Design](../design#library-dependencies-c)
+ICU consists of a number of different libraries. The library dependency chart in the [Design](../icu/design#library-dependencies-c)
 chapter can be used to understand and
 determine the exact set of libraries needed.
 
@@ -149,8 +149,8 @@ data to be installed and removed without rebuilding ICU. For details, see the
 
 ## ICU Versions
 
-(This section assumes the reader is familiar with [ICU version numbers](../design#version-numbers-in-icu) as
-covered in the [Design](../design.md) chapter, and filename conventions for
+(This section assumes the reader is familiar with [ICU version numbers](../icu/design#version-numbers-in-icu) as
+covered in the [Design](../icu/design.md) chapter, and filename conventions for
 libraries as described above.)
 
 ### POSIX Library Names
@@ -237,5 +237,5 @@ DLLs will be copied with names such as 'icuuc55.dll'.
 The services which are now known as ICU were written to provide operating
 system-level and application environment-level services. Several operating
 systems include ICU as a standard or optional package.
-See [ICU Binary Compatibility](../design#icu-binary-compatibility) for
+See [ICU Binary Compatibility](../icu/design#icu-binary-compatibility) for
 more details.
