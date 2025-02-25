@@ -33,6 +33,11 @@ namespace message2 {
     class StandardFunctions {
         friend class MessageFormatter;
 
+        public:
+        // Used for normalizing variable names and keys for comparison
+        static UnicodeString normalizeNFC(const UnicodeString&);
+
+        private:
         static UnicodeString getStringOption(const FunctionOptions& opts,
                                              const UnicodeString& optionName,
                                              UErrorCode& errorCode);

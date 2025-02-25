@@ -355,9 +355,7 @@ namespace message2 {
 
         // Formatting methods
 
-        // Used for normalizing variable names and keys for comparison
-        UnicodeString normalizeNFC(const UnicodeString&) const;
-        [[nodiscard]] FormattedPlaceholder formatLiteral(const data_model::Literal&) const;
+        [[nodiscard]] FormattedPlaceholder formatLiteral(const UnicodeString&, const data_model::Literal&) const;
         void formatPattern(MessageContext&, const Environment&, const data_model::Pattern&, UErrorCode&, UnicodeString&) const;
         // Evaluates a function call
         // Dispatches on argument type
@@ -371,13 +369,21 @@ namespace message2 {
                                                      MessageContext& context,
                                                      UErrorCode& status) const;
         // Formats an expression that appears in a pattern or as the definition of a local variable
-        [[nodiscard]] InternalValue* formatExpression(const Environment&,
-                                                     const data_model::Expression&,
-                                                     MessageContext&,
-                                                     UErrorCode&) const;
+        [[nodiscard]] InternalValue* formatExpression(const UnicodeString&,
+                                                      const Environment&,
+                                                      const data_model::Expression&,
+                                                      MessageContext&,
+                                                      UErrorCode&) const;
         [[nodiscard]] FunctionOptions resolveOptions(const Environment& env, const OptionMap&, MessageContext&, UErrorCode&) const;
-        [[nodiscard]] InternalValue* formatOperand(const Environment&, const data_model::Operand&, MessageContext&, UErrorCode&) const;
-        [[nodiscard]] FormattedPlaceholder evalArgument(const data_model::VariableName&, MessageContext&, UErrorCode&) const;
+        [[nodiscard]] InternalValue* formatOperand(const UnicodeString&,
+                                                   const Environment&,
+                                                   const data_model::Operand&,
+                                                   MessageContext&,
+                                                   UErrorCode&) const;
+        [[nodiscard]] FormattedPlaceholder evalArgument(const UnicodeString&,
+                                                        const data_model::VariableName&,
+                                                        MessageContext&,
+                                                        UErrorCode&) const;
         void formatSelectors(MessageContext& context, const Environment& env, UErrorCode &status, UnicodeString& result) const;
 
         // Function registry methods
@@ -451,9 +457,6 @@ namespace message2 {
         // formatting methods return best-effort output.
         // The default is false.
         bool signalErrors = false;
-
-        // Used for implementing normalizeNFC()
-        const Normalizer2* nfcNormalizer = nullptr;
 
     }; // class MessageFormatter
 

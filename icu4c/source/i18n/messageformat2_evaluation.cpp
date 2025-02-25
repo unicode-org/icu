@@ -211,10 +211,9 @@ PrioritizedVariant::~PrioritizedVariant() {}
         errors.checkErrors(status);
     }
 
-    const Formattable* MessageContext::getGlobal(const MessageFormatter& context,
-                                                 const VariableName& v,
+    const Formattable* MessageContext::getGlobal(const VariableName& v,
                                                  UErrorCode& errorCode) const {
-       return arguments.getArgument(context, v, errorCode);
+       return arguments.getArgument(v, errorCode);
     }
 
     MessageContext::MessageContext(const MessageArguments& args,
@@ -354,6 +353,10 @@ PrioritizedVariant::~PrioritizedVariant() {}
 
         if (U_FAILURE(errorCode)) {
             return {};
+        }
+
+        if (arg.isFallback()) {
+            return arg;
         }
 
         // The fallback for a nullary function call is the function name
