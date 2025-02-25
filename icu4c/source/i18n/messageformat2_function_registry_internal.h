@@ -231,6 +231,7 @@ static constexpr std::u16string_view YEAR = u"year";
                             UErrorCode& status) const override;
             UBool isSelectable() const override { return true; }
             NumberValue();
+            const UnicodeString& getFunctionName() const override { return functionName; }
             virtual ~NumberValue();
         private:
             friend class Number;
@@ -246,8 +247,9 @@ static constexpr std::u16string_view YEAR = u"year";
 
         class DateTimeValue : public FunctionValue {
         public:
-            UnicodeString formatToString(UErrorCode&) const;
+            UnicodeString formatToString(UErrorCode&) const override;
             DateTimeValue();
+            const UnicodeString& getFunctionName() const override { return functionName; }
             virtual ~DateTimeValue();
         private:
             friend class DateTime;
@@ -273,42 +275,7 @@ static constexpr std::u16string_view YEAR = u"year";
         };
 
         // See https://github.com/unicode-org/message-format-wg/blob/main/test/README.md
-        class TestFormat : public Function {
-        public:
-            LocalPointer<FunctionValue> call(const FunctionContext& context,
-                                             const FunctionValue& operand,
-                                             const FunctionOptions& options,
-                                             UErrorCode& errorCode) override;
-            virtual ~TestFormat();
-        };
-
-        class TestFormatValue : public FunctionValue {
-        public:
-            UnicodeString formatToString(UErrorCode&) const override;
-            TestFormatValue();
-            virtual ~TestFormatValue();
-        };
-
-        class TestSelect : public Function {
-        public:
-            LocalPointer<FunctionValue> call(const FunctionContext& context,
-                                             const FunctionValue& operand,
-                                             const FunctionOptions& options,
-                                             UErrorCode& errorCode) override;
-            virtual ~TestSelect();
-        };
-
-        class TestSelectValue : public FunctionValue {
-        public:
-            void selectKeys(const UnicodeString* keys,
-                            int32_t keysLen,
-                            int32_t* prefs,
-                            int32_t& prefsLen,
-                            UErrorCode& status) const override;
-            UBool isSelectable() const override { return true; }
-            TestSelectValue();
-            virtual ~TestSelectValue();
-        };
+        class TestFunctionValue;
 
         class TestFunction : public Function {
         public:
@@ -321,19 +288,49 @@ static constexpr std::u16string_view YEAR = u"year";
                                              const FunctionOptions& options,
                                              UErrorCode& errorCode) override;
             virtual ~TestFunction();
+        private:
+            friend class TestFunctionValue;
+
+            TestFunction(bool, bool);
+            void testFunctionParameters(const FunctionValue&,
+                                        const FunctionOptions&,
+                                        int32_t&,
+                                        bool&,
+                                        bool&,
+                                        double&,
+                                        UErrorCode&) const;
+            bool canFormat; // True iff this was invoked as test:function or test:format
+            bool canSelect; // True iff this was involved as test:function or test:select
         };
 
         class TestFunctionValue : public FunctionValue {
         public:
             UnicodeString formatToString(UErrorCode&) const override;
-            void selectKeys(const UnicodeString* keys,
-                            int32_t keysLen,
-                            int32_t* prefs,
-                            int32_t& prefsLen,
-                            UErrorCode& status) const override;
-            UBool isSelectable() const override { return true; }
+            void selectKeys(const UnicodeString*,
+                            int32_t,
+                            int32_t*,
+                            int32_t&,
+                            UErrorCode&) const override;
+            UBool isSelectable() const override { return canSelect; }
             TestFunctionValue();
+            const UnicodeString& getFunctionName() const override { return functionName; }
             virtual ~TestFunctionValue();
+        private:
+            friend class TestFunction;
+
+            TestFunctionValue(const TestFunction&,
+                              const FunctionContext&,
+                              const FunctionValue&,
+                              const FunctionOptions&,
+                              UErrorCode&);
+
+            UnicodeString formattedString;
+            bool canFormat;
+            bool canSelect;
+            int32_t decimalPlaces;
+            bool failsFormat; // Different from "canFormat" -- derived from "fails" option
+            bool failsSelect; // Different from "canSelect" -- derived from "fails" option
+            double input;
         };
 
         class StringValue : public FunctionValue {

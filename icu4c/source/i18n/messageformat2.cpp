@@ -118,6 +118,66 @@ static UnicodeString reserialize(const UnicodeString& s) {
     return {};
 }
 
+[[nodiscard]] InternalValue& MessageFormatter::evalVariableReference(const UnicodeString& fallback,
+                                                                     Environment& env,
+                                                                     const VariableName& var,
+                                                                     MessageContext& context,
+                                                                     UErrorCode &status) const {
+    // Check if it's local or global
+    // Note: there is no name shadowing; this is enforced by the parser
+
+    // This code implements lazy call-by-need evaluation of locals.
+    // That is, the environment binds names to a closure, not a resolved value.
+    // The spec does not require either eager or lazy evaluation.
+
+    // NFC-normalize the variable name. See
+    // https://github.com/unicode-org/message-format-wg/blob/main/spec/syntax.md#names-and-identifiers
+    const VariableName normalized = StandardFunctions::normalizeNFC(var);
+
+    // Look up the variable in the environment
+    if (env.has(normalized)) {
+        // `var` is a local -- look it up
+        InternalValue& rhs = env.lookup(normalized);
+        // Evaluate the expression using the environment from the closure
+        // The name of this local variable is the fallback for its RHS.
+        UnicodeString newFallback(DOLLAR);
+        newFallback += var;
+
+        if (!rhs.isEvaluated()) {
+            Closure& c = rhs.asClosure();
+            InternalValue& result = evalExpression(newFallback,
+                                                   c.getEnv(),
+                                                   c.getExpr(),
+                                                   context,
+                                                   status);
+            // Overwrite the closure with the result of evaluation
+            if (result.isFallback()) {
+                rhs.update(result.asFallback());
+            } else {
+                U_ASSERT(result.isEvaluated());
+                // Create an indirection to the result returned
+                // by evalExpression()
+                rhs.update(result);
+            }
+            return rhs;
+        }
+        // If it's already evaluated, just return the value
+        return rhs;
+    }
+    // Variable wasn't found in locals -- check if it's global
+    InternalValue result = evalArgument(fallback, normalized, context, status);
+    if (status == U_ILLEGAL_ARGUMENT_ERROR) {
+        status = U_ZERO_ERROR;
+        // Unbound variable -- set a resolution error
+        context.getErrors().setUnresolvedVariable(var, status);
+        // Use fallback per
+        // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
+        return env.createFallback(varFallback(var), status);
+    }
+    // Looking up the global variable succeeded; return it
+    return env.createUnnamed(std::move(result), status);
+}
+
 // InternalValues are passed as references into a global environment object
 // that is live for the duration of one formatter call.
 // They are mutable references so that they can be updated with a new value
@@ -141,60 +201,7 @@ static UnicodeString reserialize(const UnicodeString& s) {
     }
     // Variable reference
     if (rand.isVariable()) {
-        // Check if it's local or global
-        // Note: there is no name shadowing; this is enforced by the parser
-        const VariableName& var = rand.asVariable();
-
-        // This code implements lazy call-by-need evaluation of locals.
-        // That is, the environment binds names to a closure, not a resolved value.
-        // The spec does not require either eager or lazy evaluation.
-
-        // NFC-normalize the variable name. See
-        // https://github.com/unicode-org/message-format-wg/blob/main/spec/syntax.md#names-and-identifiers
-        const VariableName normalized = StandardFunctions::normalizeNFC(var);
-
-        // Look up the variable in the environment
-        if (env.has(normalized)) {
-            // `var` is a local -- look it up
-            InternalValue& rhs = env.lookup(var);
-            // Evaluate the expression using the environment from the closure
-            // The name of this local variable is the fallback for its RHS.
-            UnicodeString newFallback(DOLLAR);
-            newFallback += var;
-
-            if (!rhs.isEvaluated()) {
-                Closure& c = rhs.asClosure();
-                InternalValue& result = evalExpression(newFallback,
-                                                       c.getEnv(),
-                                                       c.getExpr(),
-                                                       context,
-                                                       status);
-                // Overwrite the closure with the result of evaluation
-                if (result.isFallback()) {
-                    rhs.update(result.asFallback());
-                } else {
-                    U_ASSERT(result.isEvaluated());
-                    // Create an indirection to the result returned
-                    // by evalExpression()
-                    rhs.update(result);
-                }
-                return rhs;
-            }
-            // If it's already evaluated, just return the value
-            return rhs;
-        }
-        // Variable wasn't found in locals -- check if it's global
-        InternalValue result = evalArgument(fallback, var, context, status);
-        if (status == U_ILLEGAL_ARGUMENT_ERROR) {
-            status = U_ZERO_ERROR;
-            // Unbound variable -- set a resolution error
-            context.getErrors().setUnresolvedVariable(var, status);
-            // Use fallback per
-            // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
-            return env.createFallback(varFallback(var), status);
-        }
-        // Looking up the global variable succeeded; return it
-        return env.createUnnamed(std::move(result), status);
+        return evalVariableReference(fallback, env, rand.asVariable(), context, status);
     }
     // Literal
     else {
@@ -462,7 +469,7 @@ void MessageFormatter::resolveSelectors(MessageContext& context, Environment& en
     // 2. For each expression exp of the message's selectors
     for (int32_t i = 0; i < dataModel.numSelectors(); i++) {
         // 2i. Let rv be the resolved value of exp.
-        InternalValue& rv = evalExpression({}, env, selectors[i], context, status);
+        InternalValue& rv = evalVariableReference({}, env, selectors[i], context, status);
         if (rv.isSelectable()) {
             // 2ii. If selection is supported for rv:
             // (True if this code has been reached)
@@ -782,6 +789,9 @@ void MessageFormatter::formatSelectors(MessageContext& context,
 // state within the factory objects that represent custom formatters.
 UnicodeString MessageFormatter::formatToString(const MessageArguments& arguments, UErrorCode &status) {
     EMPTY_ON_ERROR(status);
+
+    // Create a new environment that will store closures for all local variables
+    Environment* env = Environment::create(status);
 
     // Create a new context with the given arguments and the `errors` structure
     MessageContext context(arguments, *errors, status);

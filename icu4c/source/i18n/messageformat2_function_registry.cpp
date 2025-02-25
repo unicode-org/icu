@@ -720,6 +720,7 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
     locale = context.getLocale();
     opts = options.mergeOptions(arg.getResolvedOptions(), errorCode);
     operand = arg.getOperand();
+    functionName = UnicodeString(parent.isInteger ? "integer" : "number");
 
     number::LocalizedNumberFormatter realFormatter;
     realFormatter = formatterForOptions(parent, locale, opts, errorCode);
@@ -769,7 +770,7 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
     }
 
     // Need to set the integer value if invoked as :integer
-    if (isInteger) {
+    if (parent.isInteger) {
         operand = Formattable(integerValue);
     }
 }
@@ -973,6 +974,7 @@ StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
                                                 const FunctionOptions& options,
                                                 UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
+    using DateTimeType = DateTime::DateTimeType;
 
     DateTimeFactory* result = new DateTimeFactory(DateTimeType::Date);
     if (result == nullptr) {
@@ -1224,6 +1226,17 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     const Locale& locale = context.getLocale();
     operand = val.getOperand();
     opts = options.mergeOptions(val.getResolvedOptions(), errorCode);
+    switch(type) {
+        case DateTimeType::kDateTime:
+            functionName = UnicodeString("dateTime");
+            break;
+        case DateTimeType::kDate:
+            functionName = UnicodeString("date");
+            break;
+        case DateTimeType::kTime:
+            functionName = UnicodeString("time");
+            break;
+    }
 
     const Formattable* source = &operand;
 
@@ -1242,8 +1255,6 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     bool hasDateStyleOption = dateStyleOption.length() > 0;
     bool hasTimeStyleOption = timeStyleOption.length() > 0;
     bool noOptions = opts.optionsCount() == 0;
-
-    using DateTimeType = DateTime::DateTimeType;
 
     bool useStyle = (type == DateTimeType::kDateTime
                      && (hasDateStyleOption || hasTimeStyleOption
@@ -1530,6 +1541,7 @@ StandardFunctions::StringValue::StringValue(const FunctionContext& context,
                                             UErrorCode& status) {
     CHECK_ERROR(status);
     operand = val.getOperand();
+    functionName = UnicodeString("string");
     // No options
     // Convert to string
     formattedString = formattableToString(context.getLocale(), context.getDirection(), operand, status);
@@ -1550,7 +1562,7 @@ void StandardFunctions::StringValue::selectKeys(const UnicodeString* keys,
         return;
     }
     // Normalize result
-    UnicodeString normalized = normalizeNFC(formattedValue);
+    UnicodeString normalized = normalizeNFC(formattedString);
 
     for (int32_t i = 0; i < keysLen; i++) {
         if (keys[i] == normalized) {
@@ -1564,23 +1576,26 @@ void StandardFunctions::StringValue::selectKeys(const UnicodeString* keys,
 StandardFunctions::String::~String() {}
 StandardFunctions::StringValue::~StringValue() {}
 
-// ------------ TestFormatFactory
+// ------------ TestFunction
 
-Formatter* StandardFunctions::TestFormatFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
+StandardFunctions::TestFunction::~TestFunction() {}
+StandardFunctions::TestFunctionValue::~TestFunctionValue() {}
 
-    // Results are not locale-dependent
-    (void) locale;
 
-    Formatter* result = new TestFormat();
-    if (result == nullptr) {
+LocalPointer<FunctionValue> StandardFunctions::TestFunction::call(const FunctionContext& context,
+                                                                  const FunctionValue& operand,
+                                                                  const FunctionOptions& options,
+                                                                  UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    LocalPointer<FunctionValue>
+        val(new TestFunctionValue(*this, context, operand, options, errorCode));
+    if (!val.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
-    return result;
+    return val;
 }
-
-StandardFunctions::TestFormatFactory::~TestFormatFactory() {}
-StandardFunctions::TestFormat::~TestFormat() {}
 
 // Extract numeric value from a Formattable or, if it's a string,
 // parse it as a number according to the MF2 `number-literal` grammar production
@@ -1609,7 +1624,9 @@ double formattableToNumber(const Formattable& arg, UErrorCode& status) {
         }
         case UFMT_STRING: {
             // Try to parse the string as a number
-            result = parseNumberLiteral(arg, status);
+            const UnicodeString& s = arg.getString(status);
+            U_ASSERT(U_SUCCESS(status));
+            result = parseNumberLiteral(s, status);
             if (U_FAILURE(status)) {
                 status = U_MF_OPERAND_MISMATCH_ERROR;
             }
@@ -1624,14 +1641,53 @@ double formattableToNumber(const Formattable& arg, UErrorCode& status) {
     return result;
 }
 
+static bool isTestFunction(const UnicodeString& s) {
+    return (s == u"test:format"
+            || s == u"test:select"
+            || s == u"test:function");
+}
 
-/* static */ void StandardFunctions::TestFormat::testFunctionParameters(const FormattedPlaceholder& arg,
-                                                                        const FunctionOptions& options,
-                                                                        int32_t& decimalPlaces,
-                                                                        bool& failsFormat,
-                                                                        bool& failsSelect,
-                                                                        double& input,
-                                                                        UErrorCode& status) {
+static void setFailsFromFunctionValue(const FunctionValue& optionValue,
+                                      bool& failsFormat,
+                                      bool& failsSelect,
+                                      UErrorCode& status) {
+    UnicodeString failsString = optionValue.getOperand().getString(status);
+    if (U_SUCCESS(status)) {
+        // 9i. If its value resolves to the string 'always', then
+        if (failsString == u"always") {
+            // 9ia. Set FailsFormat to be true
+            failsFormat = true;
+            // 9ib. Set FailsSelect to be true.
+            failsSelect = true;
+        }
+        // 9ii. Else if its value resolves to the string "format", then
+        else if (failsString == u"format") {
+            // 9ia. Set FailsFormat to be true
+            failsFormat = true;
+        }
+        // 9iii. Else if its value resolves to the string "select", then
+        else if (failsString == u"select") {
+            // 9iiia. Set FailsSelect to be true.
+            failsSelect = true;
+        }
+        // 9iv. Else if its value does not resolve to the string "never", then
+        else if (failsString != u"never") {
+            // 9iv(a). Emit "bad-option" Resolution Error.
+            status = U_MF_BAD_OPTION;
+        }
+    } else {
+        // 9iv. again
+        status = U_MF_BAD_OPTION;
+    }
+}
+
+/* static */ void StandardFunctions::TestFunction::testFunctionParameters(const FunctionValue& arg,
+                                                                          const FunctionOptions& options,
+                                                                          int32_t& decimalPlaces,
+                                                                          bool& failsFormat,
+                                                                          bool& failsSelect,
+                                                                          double& input,
+                                                                          UErrorCode& status) const {
     CHECK_ERROR(status);
 
     // 1. Let DecimalPlaces be 0.
@@ -1646,22 +1702,59 @@ double formattableToNumber(const Formattable& arg, UErrorCode& status) {
     // 4. Let arg be the resolved value of the expression operand.
     // (already true)
 
-    // Step 5 omitted because composition isn't fully implemented yet
-    // 6. Else if arg is a numerical value or a string matching the number-literal production, then
-    input = formattableToNumber(arg.asFormattable(), status);
-    if (U_FAILURE(status)) {
-        // 7. Else,
-        // 7i. Emit "bad-input" Resolution Error.
-        status = U_MF_OPERAND_MISMATCH_ERROR;
-        // 7ii. Use a fallback value as the resolved value of the expression.
-        // Further steps of this algorithm are not followed.
+    // 5. If arg is the resolved value of an expression with a :test:function, :test:select, or :test:format annotation for which resolution has succeeded, then
+    if (isTestFunction(arg.getFunctionName())) {
+        // 5i. Let Input be the Input value of arg.
+        input = formattableToNumber(arg.getOperand(), status);
+        if (U_FAILURE(status)) {
+            status = U_MF_OPERAND_MISMATCH_ERROR;
+            return;
+        }
+        const FunctionOptions& opts = arg.getResolvedOptions();
+        // 5ii. Set DecimalPlaces to be DecimalPlaces value of arg.
+        const FunctionValue* decimalPlacesFunctionValue = opts.getFunctionOption(UnicodeString("decimalPlaces"), status);
+        if (U_SUCCESS(status)) {
+            decimalPlaces = formattableToNumber(decimalPlacesFunctionValue->getOperand(), status);
+            if (U_FAILURE(status)) {
+                status = U_MF_OPERAND_MISMATCH_ERROR;
+                return;
+            }
+        } else {
+            // Option was not provided -- not an error
+            status = U_ZERO_ERROR;
+        }
+        // 5iii. Set FailsFormat to be FailsFormat value of arg.
+        const FunctionValue* failsFormatFunctionValue = opts.getFunctionOption(UnicodeString("fails"), status);
+        if (U_SUCCESS(status)) {
+            setFailsFromFunctionValue(*failsFormatFunctionValue, failsFormat, failsSelect, status);
+            if (U_FAILURE(status)) {
+                status = U_MF_BAD_OPTION;
+                return;
+            }
+        } else {
+            // Option was not provided -- not an error
+            status = U_ZERO_ERROR;
+        }
+        // 5iv. Set FailsSelect to be FailsSelect value of arg.
+        // (Done in previous step)
+    } else {
+        // 6. Else if arg is a numerical value or a string matching the number-literal production, then
+        input = formattableToNumber(arg.getOperand(), status);
+        if (U_FAILURE(status)) {
+            // 7. Else,
+            // 7i. Emit "bad-input" Resolution Error.
+            status = U_MF_OPERAND_MISMATCH_ERROR;
+            // 7ii. Use a fallback value as the resolved value of the expression.
+            // Further steps of this algorithm are not followed.
+        }
     }
+
+    const FunctionValue* decimalPlacesOpt = options.getFunctionOption(UnicodeString("decimalPlaces"), status);
     // 8. If the decimalPlaces option is set, then
-    Formattable opt;
     if (options.getFunctionOption(options::DECIMAL_PLACES, opt)) {
         // 8i. If its value resolves to a numerical integer value 0 or 1
         // or their corresponding string representations '0' or '1', then
-        double decimalPlacesInput = formattableToNumber(opt, status);
+        double decimalPlacesInput = formattableToNumber(decimalPlacesOpt->getOperand(), status);
         if (U_SUCCESS(status)) {
             if (decimalPlacesInput == 0 || decimalPlacesInput == 1) {
                 // 8ia. Set DecimalPlaces to be the numerical value of the option.
@@ -1674,68 +1767,53 @@ double formattableToNumber(const Formattable& arg, UErrorCode& status) {
             status = U_MF_BAD_OPTION;
             // 8iib. Use a fallback value as the resolved value of the expression.
         }
+    } else {
+        // Option was not provided -- not an error
+        status = U_ZERO_ERROR;
     }
+
+    const FunctionValue* failsOpt = options.getFunctionOption(UnicodeString("fails"), status);
     // 9. If the fails option is set, then
-    Formattable failsOpt;
-    if (options.getFunctionOption(options::FAILS, failsOpt)) {
-        UnicodeString failsString = failsOpt.getString(status);
-        if (U_SUCCESS(status)) {
-            // 9i. If its value resolves to the string 'always', then
-            if (failsString == u"always") {
-                // 9ia. Set FailsFormat to be true
-                failsFormat = true;
-                // 9ib. Set FailsSelect to be true.
-                failsSelect = true;
-            }
-            // 9ii. Else if its value resolves to the string "format", then
-            else if (failsString == u"format") {
-                // 9ia. Set FailsFormat to be true
-                failsFormat = true;
-            }
-            // 9iii. Else if its value resolves to the string "select", then
-            else if (failsString == u"select") {
-                // 9iiia. Set FailsSelect to be true.
-                failsSelect = true;
-            }
-            // 9iv. Else if its value does not resolve to the string "never", then
-            else if (failsString != u"never") {
-                // 9iv(a). Emit "bad-option" Resolution Error.
-                status = U_MF_BAD_OPTION;
-            }
-        } else {
-            // 9iv. again
-            status = U_MF_BAD_OPTION;
-        }
+    if (U_SUCCESS(status)) {
+        setFailsFromFunctionValue(*failsOpt, failsFormat, failsSelect, status);
+    } else {
+        // Option was not provided -- not an error
+        status = U_ZERO_ERROR;
     }
 }
 
-FormattedPlaceholder StandardFunctions::TestFormat::format(FormattedPlaceholder&& arg,
-                                                           FunctionOptions&& options,
-                                                           UErrorCode& status) const{
+StandardFunctions::TestFunctionValue::TestFunctionValue(const TestFunction& parent,
+                                                        const FunctionContext&,
+                                                        const FunctionValue& arg,
+                                                        const FunctionOptions& options,
+                                                        UErrorCode& status) {
+    parent.testFunctionParameters(arg, options, decimalPlaces,
+                                  failsFormat, failsSelect, input, status);
+    opts = options.mergeOptions(arg.getResolvedOptions(), status);
+    operand = arg.getOperand();
+    canFormat = parent.canFormat;
+    canSelect = parent.canSelect;
+    functionName = UnicodeString(canFormat && canSelect ?
+                                 "test:function"
+                                 : canFormat ? "test:format"
+                                 : "test:select");
 
-    int32_t decimalPlaces;
-    bool failsFormat;
-    bool failsSelect;
-    double input;
-
-    testFunctionParameters(arg, options, decimalPlaces,
-                           failsFormat, failsSelect, input, status);
     if (U_FAILURE(status)) {
-        return FormattedPlaceholder(arg.getFallback());
+        return;
     }
 
     // If FailsFormat is true, attempting to format the placeholder to any
     // formatting target will fail.
     if (failsFormat) {
         status = U_MF_FORMATTING_ERROR;
-        return FormattedPlaceholder(arg.getFallback());
+        return;
     }
-    UnicodeString result;
+
     // When :test:function is used as a formatter, a placeholder resolving to a value
     // with a :test:function expression is formatted as a concatenation of the following parts:
     // 1. If Input is less than 0, the character - U+002D Hyphen-Minus.
     if (input < 0) {
-        result += HYPHEN;
+        formattedString += HYPHEN;
     }
     // 2. The truncated absolute integer value of Input, i.e. floor(abs(Input)), formatted as a
     // sequence of decimal digit characters (U+0030...U+0039).
@@ -1751,59 +1829,40 @@ FormattedPlaceholder StandardFunctions::TestFormat::format(FormattedPlaceholder&
                                                               &ignore,
                                                               &ignoreLen,
                                                               &ignorePoint);
-    result += UnicodeString(buffer);
+    formattedString += UnicodeString(buffer);
     // 3. If DecimalPlaces is 1, then
     if (decimalPlaces == 1) {
         // 3i. The character . U+002E Full Stop.
-        result += u".";
+        formattedString += u".";
         // 3ii. The single decimal digit character representing the value
         // floor((abs(Input) - floor(abs(Input))) * 10)
         int32_t val = floor((abs(input) - floor(abs(input)) * 10));
-        result += digitToChar(val, status);
+        formattedString += digitToChar(val, status);
         U_ASSERT(U_SUCCESS(status));
     }
-    return FormattedPlaceholder(result);
 }
 
-// ------------ TestSelectFactory
-
-StandardFunctions::TestSelectFactory::~TestSelectFactory() {}
-StandardFunctions::TestSelect::~TestSelect() {}
-
-Selector* StandardFunctions::TestSelectFactory::createSelector(const Locale& locale,
-                                                               UErrorCode& errorCode) const {
-    NULL_ON_ERROR(errorCode);
-
-    // Results are not locale-dependent
-    (void) locale;
-
-    Selector* result = new TestSelect();
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
+UnicodeString StandardFunctions::TestFunctionValue::formatToString(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return {};
     }
-    return result;
+    if (!canFormat || failsFormat) {
+        status = U_MF_FORMATTING_ERROR;
+        return {};
+    }
+    return formattedString;
 }
 
-void StandardFunctions::TestSelect::selectKey(FormattedPlaceholder&& val,
-                                              FunctionOptions&& options,
-                                              const UnicodeString* keys,
-                                              int32_t keysLen,
-                                              UnicodeString* prefs,
-                                              int32_t& prefsLen,
-                                              UErrorCode& status) const {
-    int32_t decimalPlaces;
-    bool failsFormat;
-    bool failsSelect;
-    double input;
-
-    TestFormat::testFunctionParameters(val, options, decimalPlaces,
-                                       failsFormat, failsSelect, input, status);
-
+void StandardFunctions::TestFunctionValue::selectKeys(const UnicodeString* keys,
+                                                      int32_t keysLen,
+                                                      int32_t* prefs,
+                                                      int32_t& prefsLen,
+                                                      UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return;
     }
 
-    if (failsSelect) {
+    if (!canSelect || failsSelect) {
         status = U_MF_SELECTOR_ERROR;
         return;
     }
@@ -1825,10 +1884,26 @@ void StandardFunctions::TestSelect::selectKey(FormattedPlaceholder&& val,
     for (int32_t i = 0; i < keysLen; i++) {
         if ((keys[i] == u"1" && include1)
             || (keys[i] == u"1.0" && include1point0)) {
-            prefs[prefsLen] = keys[i];
+            prefs[prefsLen] = i;
             prefsLen++;
         }
     }
+}
+
+StandardFunctions::TestFunction::TestFunction(bool format, bool select) : canFormat(format), canSelect(select) {
+    U_ASSERT(format || select);
+}
+
+/* static */ StandardFunctions::TestFunction* StandardFunctions::TestFunction::testFunction(UErrorCode& status) {
+    return create<TestFunction>(TestFunction(true, true), status);
+}
+
+/* static */ StandardFunctions::TestFunction* StandardFunctions::TestFunction::testFormat(UErrorCode& status) {
+    return create<TestFunction>(TestFunction(true, false), status);
+}
+
+/* static */ StandardFunctions::TestFunction* StandardFunctions::TestFunction::testSelect(UErrorCode& status) {
+    return create<TestFunction>(TestFunction(false, true), status);
 }
 
 } // namespace message2
