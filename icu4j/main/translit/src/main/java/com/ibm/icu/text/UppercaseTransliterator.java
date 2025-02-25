@@ -39,8 +39,6 @@ class UppercaseTransliterator extends Transliterator {
     private final ULocale locale;
 
     private final UCaseProps csp;
-    private ReplaceableContextIterator iter;
-    private StringBuilder result;
     private int caseLocale;
 
     /**
@@ -50,8 +48,6 @@ class UppercaseTransliterator extends Transliterator {
         super(_ID, null);
         locale = loc;
         csp=UCaseProps.INSTANCE;
-        iter=new ReplaceableContextIterator();
-        result = new StringBuilder();
         caseLocale = UCaseProps.getCaseLocale(locale);
     }
 
@@ -59,7 +55,7 @@ class UppercaseTransliterator extends Transliterator {
      * Implements {@link Transliterator#handleTransliterate}.
      */
     @Override
-    protected synchronized void handleTransliterate(Replaceable text,
+    protected void handleTransliterate(Replaceable text,
                 Position offsets, boolean isIncremental) {
         if(csp==null) {
             return;
@@ -69,8 +65,10 @@ class UppercaseTransliterator extends Transliterator {
             return;
         }
 
+        ReplaceableContextIterator iter = new ReplaceableContextIterator();
+        StringBuilder result = new StringBuilder();
+
         iter.setText(text);
-        result.setLength(0);
         int c, delta;
 
         // Walk through original string

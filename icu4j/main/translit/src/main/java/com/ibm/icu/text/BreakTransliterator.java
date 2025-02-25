@@ -22,8 +22,6 @@ import com.ibm.icu.util.ULocale;
 final class BreakTransliterator extends Transliterator {
     private BreakIterator bi;
     private String insertion;
-    private int[] boundaries = new int[50];
-    private int boundaryCount = 0;
 
     public BreakTransliterator(String ID, UnicodeFilter filter, BreakIterator bi, String insertion) {
         super(ID, filter);
@@ -52,8 +50,9 @@ final class BreakTransliterator extends Transliterator {
     public BreakIterator getBreakIterator() {
         // Defer initialization of BreakIterator because it is slow,
         // typically over 2000 ms.
-        if (bi == null) bi = BreakIterator.getWordInstance(new ULocale("th_TH"));
-        return bi;
+        // Using a holder class for safe init without a volatile-read.
+        if (bi == null) bi = WordBreakIteratorHolder.BI;
+        return (BreakIterator) bi.clone();
     }
 
     ///CLOVER:OFF
@@ -74,10 +73,11 @@ final class BreakTransliterator extends Transliterator {
         | (1<<Character.ENCLOSING_MARK)
         ;
     @Override
-    protected synchronized void handleTransliterate(Replaceable text, Position pos, boolean incremental) {
-        boundaryCount = 0;
+    protected void handleTransliterate(Replaceable text, Position pos, boolean incremental) {
+        int[] boundaries = new int[50];
+        int boundaryCount = 0;
         int boundary = 0;
-        getBreakIterator(); // Lazy-create it if necessary
+        BreakIterator bi = getBreakIterator(); // Lazy-create it if necessary
         bi.setText(new ReplaceableCharacterIterator(text, pos.start, pos.limit, pos.start));
         // TODO: fix clumsy workaround used below.
         /*
@@ -416,4 +416,7 @@ final class BreakTransliterator extends Transliterator {
         }
     }
 
+    private static class WordBreakIteratorHolder {
+        static final BreakIterator BI = BreakIterator.getWordInstance(new ULocale("th_TH"));
+    }
 }

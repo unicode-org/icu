@@ -61,6 +61,7 @@
     <!-- This is the folder where we gather the files to be posted in the Github Release-->
     <release.directory>${project.build.directory}/release_directory</release.directory>
 
+    <jmh.version>1.37</jmh.version>
     <junit.version>4.13.2</junit.version>
     <junitparams.version>1.1.1</junitparams.version>
     <gson.version>2.11.0</gson.version>

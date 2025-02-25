@@ -43,6 +43,9 @@ COLLATION TESTS
     The collation tests run only on the command line with tabular output:
     perl collationperf.pl |& tee collation_output.txt
 
+JMH
+Some performance tests run using OpenJDK JMH. Example invocation:
+    mvn clean package exec:java -pl perf-tests -Pjmh_benchmark
 
 OTHER COMMAND LINE TESTS
 Additional tests are run from the command line, each producing an HTML
