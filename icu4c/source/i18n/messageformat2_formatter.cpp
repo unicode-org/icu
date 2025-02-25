@@ -24,6 +24,18 @@ U_NAMESPACE_BEGIN
 
 namespace message2 {
 
+    namespace functions {
+    static constexpr std::u16string_view DATETIME = u"datetime";
+    static constexpr std::u16string_view DATE = u"date";
+    static constexpr std::u16string_view TIME = u"time";
+    static constexpr std::u16string_view NUMBER = u"number";
+    static constexpr std::u16string_view INTEGER = u"integer";
+    static constexpr std::u16string_view TEST_FUNCTION = u"test:function";
+    static constexpr std::u16string_view TEST_FORMAT = u"test:format";
+    static constexpr std::u16string_view TEST_SELECT = u"test:select";
+    static constexpr std::u16string_view STRING = u"string";
+    }
+
     // MessageFormatter::Builder
 
     // -------------------------------------
@@ -130,18 +142,18 @@ namespace message2 {
         FormatterFactory* time = StandardFunctions::DateTimeFactory::time(success);
         FormatterFactory* number = new StandardFunctions::NumberFactory();
         FormatterFactory* integer = new StandardFunctions::IntegerFactory();
-        standardFunctionsBuilder.adoptFormatter(FunctionName(UnicodeString("datetime")), dateTime, success)
-            .adoptFormatter(FunctionName(UnicodeString("date")), date, success)
-            .adoptFormatter(FunctionName(UnicodeString("time")), time, success)
-            .adoptFormatter(FunctionName(UnicodeString("number")), number, success)
-            .adoptFormatter(FunctionName(UnicodeString("integer")), integer, success)
-            .adoptFormatter(FunctionName(UnicodeString("test:function")), new StandardFunctions::TestFormatFactory(), success)
-            .adoptFormatter(FunctionName(UnicodeString("test:format")), new StandardFunctions::TestFormatFactory(), success)
-            .adoptSelector(FunctionName(UnicodeString("number")), new StandardFunctions::PluralFactory(UPLURAL_TYPE_CARDINAL), success)
-            .adoptSelector(FunctionName(UnicodeString("integer")), new StandardFunctions::PluralFactory(StandardFunctions::PluralFactory::integer()), success)
-            .adoptSelector(FunctionName(UnicodeString("string")), new StandardFunctions::TextFactory(), success)
-            .adoptSelector(FunctionName(UnicodeString("test:function")), new StandardFunctions::TestSelectFactory(), success)
-            .adoptSelector(FunctionName(UnicodeString("test:select")), new StandardFunctions::TestSelectFactory(), success);
+        standardFunctionsBuilder.adoptFormatter(FunctionName(functions::DATETIME), dateTime, success)
+            .adoptFormatter(FunctionName(functions::DATE), date, success)
+            .adoptFormatter(FunctionName(functions::TIME), time, success)
+            .adoptFormatter(FunctionName(functions::NUMBER), number, success)
+            .adoptFormatter(FunctionName(functions::INTEGER), integer, success)
+            .adoptFormatter(FunctionName(functions::TEST_FUNCTION), new StandardFunctions::TestFormatFactory(), success)
+            .adoptFormatter(FunctionName(functions::TEST_FORMAT), new StandardFunctions::TestFormatFactory(), success)
+            .adoptSelector(FunctionName(functions::NUMBER), new StandardFunctions::PluralFactory(UPLURAL_TYPE_CARDINAL), success)
+            .adoptSelector(FunctionName(functions::INTEGER), new StandardFunctions::PluralFactory(StandardFunctions::PluralFactory::integer()), success)
+            .adoptSelector(FunctionName(functions::STRING), new StandardFunctions::TextFactory(), success)
+            .adoptSelector(FunctionName(functions::TEST_FUNCTION), new StandardFunctions::TestSelectFactory(), success)
+            .adoptSelector(FunctionName(functions::TEST_SELECT), new StandardFunctions::TestSelectFactory(), success);
         CHECK_ERROR(success);
         standardMFFunctionRegistry = standardFunctionsBuilder.build();
         CHECK_ERROR(success);

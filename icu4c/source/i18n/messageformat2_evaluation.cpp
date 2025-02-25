@@ -46,7 +46,7 @@ FunctionOptions::FunctionOptions(UVector&& optionsVector, UErrorCode& status) {
     options = moveVectorToArray<ResolvedFunctionOption>(optionsVector, status);
 }
 
-UBool FunctionOptions::getFunctionOption(const UnicodeString& key, Formattable& option) const {
+UBool FunctionOptions::getFunctionOption(std::u16string_view key, Formattable& option) const {
     if (options == nullptr) {
         U_ASSERT(functionOptionsLen == 0);
     }
@@ -60,7 +60,7 @@ UBool FunctionOptions::getFunctionOption(const UnicodeString& key, Formattable& 
     return false;
 }
 
-UnicodeString FunctionOptions::getStringFunctionOption(const UnicodeString& key) const {
+UnicodeString FunctionOptions::getStringFunctionOption(std::u16string_view key) const {
     Formattable option;
     if (getFunctionOption(key, option)) {
         if (option.getType() == UFMT_STRING) {

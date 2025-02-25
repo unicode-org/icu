@@ -39,7 +39,7 @@ namespace message2 {
 
         private:
         static UnicodeString getStringOption(const FunctionOptions& opts,
-                                             const UnicodeString& optionName,
+                                             std::u16string_view optionName,
                                              UErrorCode& errorCode);
 
         class DateTime;
@@ -86,12 +86,12 @@ namespace message2 {
              */
             UnicodeString getFunctionOption(const FormattedPlaceholder& toFormat,
                                             const FunctionOptions& opts,
-                                            const UnicodeString& optionName) const;
+                                            std::u16string_view optionName) const;
             // Version for options that don't have defaults; sets the error
             // code instead of returning a default value
             UnicodeString getFunctionOption(const FormattedPlaceholder& toFormat,
                                             const FunctionOptions& opts,
-                                            const UnicodeString& optionName,
+                                            std::u16string_view optionName,
                                             UErrorCode& errorCode) const;
 
         };
