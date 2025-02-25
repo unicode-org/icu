@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740432022441,
+  "lastUpdate": 1740517866577,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -63717,6 +63717,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5814697.8466,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "0748442ed6764b4debe456d922c5fa67f9b88bb8",
+          "message": "ICU-23059 ICU4C MF2: Update spec tests\n\nThis updates the MF2 spec tests to https://github.com/unicode-org/message-format-wg/commit/943479b6022993bb1713ab028cbe34f9e6f0b79f with the following exceptions:\n\n- functions/currency.json and functions/math.json are omitted because these are not yet implemented\n\n- bidi.json will be handled in a future PR\n\n- u-options.json will be handled in a future PR\n\nChanges include:\n* `:integer` now returns a value encapsulating the rounded numeric value of the argument, rather than\n  the value itself.\n* Fallbacks are handled according to the current spec.\n* Fallback values are not passed into functions.\n* Characters inside literal fallbacks are properly escaped.\n* The test runner skips null values properly.\n* The test runner handles boolean `expErrors` in defaultTestProperties.\n* `:string` normalizes its input and normalizeNFC() has been refactored so it can be called there.",
+          "timestamp": "2025-02-25T12:24:07-08:00",
+          "tree_id": "d25f57d653eb30e578d306566c89b6a78d27db0d",
+          "url": "https://github.com/unicode-org/icu/commit/0748442ed6764b4debe456d922c5fa67f9b88bb8"
+        },
+        "date": 1740517619463,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 227.9458,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20899113.2521,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5423042.8685,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19687311.0694,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5900758.6502,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
