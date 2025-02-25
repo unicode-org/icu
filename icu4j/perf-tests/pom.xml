@@ -43,6 +43,73 @@
       <artifactId>commons-cli</artifactId>
       <version>${commons-cli.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-core</artifactId>
+      <version>${jmh.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-generator-annprocess</artifactId>
+      <version>${jmh.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>jmh_benchmark</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <annotationProcessors>
+                <annotationProcessor>org.openjdk.jmh.generators.BenchmarkProcessor</annotationProcessor>
+              </annotationProcessors>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>build-jmh-classpath</id>
+                <goals>
+                  <goal>build-classpath</goal>
+                </goals>
+                <configuration>
+                  <includeScope>runtime</includeScope>
+                  <outputProperty>jmhClasspath</outputProperty>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <configuration>
+              <mainClass>org.openjdk.jmh.Main</mainClass>
+              <arguments>
+                <argument>-f</argument>
+                <argument>1</argument>
+                <argument>-wi</argument>
+                <argument>5</argument>
+                <argument>-i</argument>
+                <argument>10</argument>
+              </arguments>
+              <systemProperties>
+                <property>
+                  <key>java.class.path</key>
+                  <value>${project.build.outputDirectory}${path.separator}${jmhClasspath}</value>
+                </property>
+              </systemProperties>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
