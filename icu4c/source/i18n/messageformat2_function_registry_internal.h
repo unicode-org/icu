@@ -273,56 +273,67 @@ static constexpr std::u16string_view YEAR = u"year";
         };
 
         // See https://github.com/unicode-org/message-format-wg/blob/main/test/README.md
-        class TestFormatFactory : public FormatterFactory {
+        class TestFormat : public Function {
         public:
-            Formatter* createFormatter(const Locale& locale, UErrorCode& status) override;
-            TestFormatFactory() {}
-            virtual ~TestFormatFactory();
-        };
-
-        class TestSelect;
-
-        class TestFormat : public Formatter {
-        public:
-            FormattedPlaceholder format(FormattedPlaceholder&& toFormat, FunctionOptions&& options, UErrorCode& status) const override;
+            LocalPointer<FunctionValue> call(const FunctionContext& context,
+                                             const FunctionValue& operand,
+                                             const FunctionOptions& options,
+                                             UErrorCode& errorCode) override;
             virtual ~TestFormat();
-
-        private:
-            friend class TestFormatFactory;
-            friend class TestSelect;
-            TestFormat() {}
-            static void testFunctionParameters(const FormattedPlaceholder& arg,
-                                               const FunctionOptions& options,
-                                               int32_t& decimalPlaces,
-                                               bool& failsFormat,
-                                               bool& failsSelect,
-                                               double& input,
-                                               UErrorCode& status);
-
         };
 
-        // See https://github.com/unicode-org/message-format-wg/blob/main/test/README.md
-        class TestSelectFactory : public SelectorFactory {
+        class TestFormatValue : public FunctionValue {
         public:
-            Selector* createSelector(const Locale& locale, UErrorCode& status) const override;
-            TestSelectFactory() {}
-            virtual ~TestSelectFactory();
+            UnicodeString formatToString(UErrorCode&) const override;
+            TestFormatValue();
+            virtual ~TestFormatValue();
         };
 
-        class TestSelect : public Selector {
+        class TestSelect : public Function {
         public:
-            void selectKey(FormattedPlaceholder&& val,
-                           FunctionOptions&& options,
-                           const UnicodeString* keys,
-                           int32_t keysLen,
-                           UnicodeString* prefs,
-                           int32_t& prefsLen,
-                           UErrorCode& status) const override;
+            LocalPointer<FunctionValue> call(const FunctionContext& context,
+                                             const FunctionValue& operand,
+                                             const FunctionOptions& options,
+                                             UErrorCode& errorCode) override;
             virtual ~TestSelect();
+        };
 
-        private:
-            friend class TestSelectFactory;
-            TestSelect() {}
+        class TestSelectValue : public FunctionValue {
+        public:
+            void selectKeys(const UnicodeString* keys,
+                            int32_t keysLen,
+                            int32_t* prefs,
+                            int32_t& prefsLen,
+                            UErrorCode& status) const override;
+            UBool isSelectable() const override { return true; }
+            TestSelectValue();
+            virtual ~TestSelectValue();
+        };
+
+        class TestFunction : public Function {
+        public:
+            static TestFunction* testFunction(UErrorCode&);
+            static TestFunction* testFormat(UErrorCode&);
+            static TestFunction* testSelect(UErrorCode&);
+
+            LocalPointer<FunctionValue> call(const FunctionContext& context,
+                                             const FunctionValue& operand,
+                                             const FunctionOptions& options,
+                                             UErrorCode& errorCode) override;
+            virtual ~TestFunction();
+        };
+
+        class TestFunctionValue : public FunctionValue {
+        public:
+            UnicodeString formatToString(UErrorCode&) const override;
+            void selectKeys(const UnicodeString* keys,
+                            int32_t keysLen,
+                            int32_t* prefs,
+                            int32_t& prefsLen,
+                            UErrorCode& status) const override;
+            UBool isSelectable() const override { return true; }
+            TestFunctionValue();
+            virtual ~TestFunctionValue();
         };
 
         class StringValue : public FunctionValue {

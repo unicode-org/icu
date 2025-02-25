@@ -483,46 +483,6 @@ PrioritizedVariant::~PrioritizedVariant() {}
     // InternalValue
     // -------------
 
-    bool InternalValue::isFallback() const {
-        return std::holds_alternative<FormattedPlaceholder>(argument)
-            && std::get_if<FormattedPlaceholder>(&argument)->isFallback();
-    }
-
-    bool InternalValue::hasNullOperand() const {
-        return std::holds_alternative<FormattedPlaceholder>(argument)
-            && std::get_if<FormattedPlaceholder>(&argument)->isNullOperand();
-    }
-
-    FormattedPlaceholder InternalValue::takeArgument(UErrorCode& errorCode) {
-        if (U_FAILURE(errorCode)) {
-            return {};
-        }
-
-        if (std::holds_alternative<FormattedPlaceholder>(argument)) {
-            return std::move(*std::get_if<FormattedPlaceholder>(&argument));
-        }
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return {};
-    }
-
-    const UnicodeString& InternalValue::getFallback() const {
-        if (std::holds_alternative<FormattedPlaceholder>(argument)) {
-            return std::get_if<FormattedPlaceholder>(&argument)->getFallback();
-        }
-        return (*std::get_if<InternalValue*>(&argument))->getFallback();
-    }
-
-    const Selector* InternalValue::getSelector(UErrorCode& errorCode) const {
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-
-        if (selector == nullptr) {
-            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        return selector;
-    }
-
     InternalValue::InternalValue(FormattedPlaceholder&& arg) {
         argument = std::move(arg);
         selector = nullptr;

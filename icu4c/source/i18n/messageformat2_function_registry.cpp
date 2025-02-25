@@ -88,10 +88,6 @@ MFFunctionRegistry::Builder::Builder(UErrorCode& errorCode) {
     formattersByType = new Hashtable();
     if (functions == nullptr || formattersByType == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-    } else {
-        formatters->setValueDeleter(uprv_deleteUObject);
-        selectors->setValueDeleter(uprv_deleteUObject);
-        formattersByType->setValueDeleter(uprv_deleteUObject);
     }
 
     functions->setValueDeleter(uprv_deleteUObject);
@@ -639,7 +635,7 @@ static UChar32 digitToChar(int32_t val, UErrorCode errorCode) {
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             return '0';
     }
-    return result;
+    return '0';
 }
 
 int32_t StandardFunctions::Number::digitSizeOption(const FunctionOptions& opts,
@@ -755,9 +751,11 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
         }
         case UFMT_STRING: {
             // Try to parse the string as a number
-            double d = parseNumberLiteral(toFormat, errorCode);
+            const UnicodeString& s = operand.getString(errorCode);
+            U_ASSERT(U_SUCCESS(errorCode));
+            double d = parseNumberLiteral(s, errorCode);
             if (U_FAILURE(errorCode))
-                return {};
+                return;
             formattedNumber = realFormatter.formatDouble(d, errorCode);
             integerValue = static_cast<int64_t>(std::round(d));
             break;

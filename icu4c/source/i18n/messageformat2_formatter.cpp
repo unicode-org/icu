@@ -144,7 +144,7 @@ namespace message2 {
             .adoptFunction(FunctionName(functions::INTEGER),
                                   integer.orphan(), success)
             .adoptFunction(FunctionName(functions::STRING),
-                                  string.orphan(), success);
+                                  string.orphan(), success)
             .adoptFunction(FunctionName(functions::TEST_FUNCTION),
                                   testFunction.orphan(), success)
             .adoptFunction(FunctionName(functions::TEST_FORMAT),

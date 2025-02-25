@@ -353,7 +353,7 @@ FunctionContext MessageFormatter::makeFunctionContext(const FunctionOptions& opt
 
     const Operand& rand = expr.getOperand();
     // Evaluate the operand (evalOperand handles the case of a null operand)
-    InternalValue& randVal = evalOperand(globalEnv, rand, context, status);
+    InternalValue& randVal = evalOperand(fallback, globalEnv, rand, context, status);
 
     // If there's no function, we check for an implicit formatter
     if (!expr.isFunctionCall()) {
