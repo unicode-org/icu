@@ -3,6 +3,7 @@
   "scenario": "Number function",
   "description": "The built-in formatter for numbers.",
   "defaultTestProperties": {
+    "bidiIsolation": "none",
     "locale": "en-US"
   },
   "tests": [
@@ -131,33 +132,14 @@
     },
     {
       "src": ".local $foo = {$bar :number minimumFractionDigits=foo} {{bar {$foo}}}",
-      "params": [
-        {
-          "name": "bar",
-          "value": 4.2
-        }
-      ],
-      "exp": "bar {$bar}",
-      "expErrors": [
-        {
-          "type": "bad-option"
-        }
-      ]
+      "params": [{ "name": "bar", "value": 4.2 }],
+      "expErrors": [{ "type": "bad-option" }]
     },
     {
       "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
-      "params": [
-        {
-          "name": "bar",
-          "value": "foo"
-        }
-      ],
-      "exp": "bar {$bar}",
-      "expErrors": [
-        {
-          "type": "bad-operand"
-        }
-      ]
+      "params": [{ "name": "bar", "value": "foo" }],
+      "exp": "bar {$foo}",
+      "expErrors": [{ "type": "bad-operand" }]
     },
     {
       "src": ".input {$foo :number} {{bar {$foo}}}",
@@ -181,18 +163,8 @@
     },
     {
       "src": ".input {$foo :number minimumFractionDigits=foo} {{bar {$foo}}}",
-      "params": [
-        {
-          "name": "foo",
-          "value": 4.2
-        }
-      ],
-      "exp": "bar {$foo}",
-      "expErrors": [
-        {
-          "type": "bad-option"
-        }
-      ]
+      "params": [{ "name": "foo", "value": 4.2 }],
+      "expErrors": [{ "type": "bad-option" }]
     },
     {
       "src": ".input {$foo :number} {{bar {$foo}}}",

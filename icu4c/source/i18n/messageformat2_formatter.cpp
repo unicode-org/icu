@@ -119,24 +119,6 @@ namespace message2 {
 
     // MessageFormatter
 
-    // Returns the NFC-normalized version of s, returning s itself
-    // if it's already normalized.
-    UnicodeString MessageFormatter::normalizeNFC(const UnicodeString& s) const {
-        UErrorCode status = U_ZERO_ERROR;
-        // Check if string is already normalized
-        UNormalizationCheckResult result = nfcNormalizer->quickCheck(s, status);
-        // If so, return it
-        if (U_SUCCESS(status) && result == UNORM_YES) {
-            return s;
-        }
-        // Otherwise, normalize it
-        UnicodeString normalized = nfcNormalizer->normalize(s, status);
-        if (U_FAILURE(status)) {
-            return {};
-        }
-        return normalized;
-    }
-
     MessageFormatter::MessageFormatter(const MessageFormatter::Builder& builder, UErrorCode &success) : locale(builder.locale), customMFFunctionRegistry(builder.customMFFunctionRegistry) {
         CHECK_ERROR(success);
 
@@ -188,8 +170,6 @@ namespace message2 {
             errors = errorsNew.orphan();
         }
 
-        nfcNormalizer = Normalizer2::getNFCInstance(success);
-
         // Note: we currently evaluate variables lazily,
         // without memoization. This call is still necessary
         // to check out-of-scope uses of local variables in
@@ -218,7 +198,6 @@ namespace message2 {
         signalErrors = other.signalErrors;
         errors = other.errors;
         other.errors = nullptr;
-        nfcNormalizer = other.nfcNormalizer;
         return *this;
     }
 

@@ -3,6 +3,7 @@
   "scenario": "String function",
   "description": "The built-in formatter for strings.",
   "defaultTestProperties": {
+    "bidiIsolation": "none",
     "locale": "en-US"
   },
   "tests": [
@@ -34,8 +35,7 @@
           "value": null
         }
       ],
-      "exp": "other",
-      "ignoreCpp": "Explicit null doesn't work"
+      "exp": "other"
     },
     {
       "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
@@ -45,6 +45,31 @@
           "type": "unresolved-variable"
         }
       ]
+    },
+    {
+      "description": "NFC: keys are normalized (unquoted)",
+      "src": ".local $x = {\u1E0A\u0323 :string} .match $x \u1E0A\u0323 {{Not normalized}} \u1E0C\u0307 {{Normalized}} * {{Wrong}}",
+      "expErrors": [{"type": "duplicate-variant"}]
+    },
+    {
+      "description": "NFC: keys are normalized (quoted)",
+      "src": ".local $x = {\u1E0A\u0323 :string} .match $x |\u1E0A\u0323| {{Not normalized}} |\u1E0C\u0307| {{Normalized}} * {{Wrong}}",
+      "expErrors": [{"type": "duplicate-variant"}]
+    },
+    {
+      "description": "NFC: keys are normalized (mixed)",
+      "src": ".local $x = {\u1E0A\u0323 :string} .match $x \u1E0A\u0323 {{Not normalized}} |\u1E0C\u0307| {{Normalized}} * {{Wrong}}",
+      "expErrors": [{"type": "duplicate-variant"}]
+    },
+    {
+      "description": "NFC: :string normalizes the comparison value (un-normalized selector, normalized key)",
+      "src": ".local $x = {\u1E0A\u0323 :string} .match $x \u1E0C\u0307 {{Right}} * {{Wrong}}",
+      "exp": "Right"
+    },
+    {
+      "description": "NFC: keys are normalized (normalized selector, un-normalized key)",
+      "src": ".local $x = {\u1E0C\u0307 :string} .match $x \u1E0A\u0323 {{Right}} * {{Wrong}}",
+      "exp": "Right"
     }
   ]
 }

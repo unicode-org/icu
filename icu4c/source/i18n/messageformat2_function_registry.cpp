@@ -10,10 +10,13 @@
 #if !UCONFIG_NO_MF2
 
 #include <math.h>
+#include <cmath>
 
 #include "unicode/dtptngen.h"
+#include "unicode/messageformat2.h"
 #include "unicode/messageformat2_data_model_names.h"
 #include "unicode/messageformat2_function_registry.h"
+#include "unicode/normalizer2.h"
 #include "unicode/smpdtfmt.h"
 #include "charstr.h"
 #include "double-conversion.h"
@@ -171,6 +174,28 @@ void MFFunctionRegistry::checkStandard() const {
 }
 
 // Formatter/selector helpers
+
+// Returns the NFC-normalized version of s, returning s itself
+// if it's already normalized.
+/* static */ UnicodeString StandardFunctions::normalizeNFC(const UnicodeString& s) {
+    UErrorCode status = U_ZERO_ERROR;
+    const Normalizer2* nfcNormalizer = Normalizer2::getNFCInstance(status);
+    if (U_FAILURE(status)) {
+        return s;
+    }
+    // Check if string is already normalized
+    UNormalizationCheckResult result = nfcNormalizer->quickCheck(s, status);
+    // If so, return it
+    if (U_SUCCESS(status) && result == UNORM_YES) {
+        return s;
+    }
+    // Otherwise, normalize it
+    UnicodeString normalized = nfcNormalizer->normalize(s, status);
+    if (U_FAILURE(status)) {
+        return {};
+    }
+    return normalized;
+}
 
 // Converts `s` to a double, indicating failure via `errorCode`
 static void strToDouble(const UnicodeString& s, double& result, UErrorCode& errorCode) {
@@ -504,21 +529,6 @@ static UChar32 digitToChar(int32_t val, UErrorCode errorCode) {
     }
 }
 
-static FormattedPlaceholder tryParsingNumberLiteral(const number::LocalizedNumberFormatter& nf, const FormattedPlaceholder& input, UErrorCode& errorCode) {
-    double numberValue = parseNumberLiteral(input.asFormattable(), errorCode);
-    if (U_FAILURE(errorCode)) {
-        return notANumber(input);
-    }
-
-    UErrorCode savedStatus = errorCode;
-    number::FormattedNumber result = nf.formatDouble(numberValue, errorCode);
-    // Ignore U_USING_DEFAULT_WARNING
-    if (errorCode == U_USING_DEFAULT_WARNING) {
-        errorCode = savedStatus;
-    }
-    return FormattedPlaceholder(input, FormattedValue(std::move(result)));
-}
-
 int32_t StandardFunctions::Number::maximumFractionDigits(const FunctionOptions& opts) const {
     Formattable opt;
 
@@ -636,6 +646,8 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
     realFormatter = formatterForOptions(*this, opts, errorCode);
 
     number::FormattedNumber numberResult;
+    int64_t integerValue = 0;
+
     if (U_SUCCESS(errorCode)) {
         // Already checked that contents can be formatted
         const Formattable& toFormat = arg.asFormattable();
@@ -644,23 +656,31 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
             double d = toFormat.getDouble(errorCode);
             U_ASSERT(U_SUCCESS(errorCode));
             numberResult = realFormatter.formatDouble(d, errorCode);
+            integerValue = static_cast<int64_t>(std::round(d));
             break;
         }
         case UFMT_LONG: {
             int32_t l = toFormat.getLong(errorCode);
             U_ASSERT(U_SUCCESS(errorCode));
             numberResult = realFormatter.formatInt(l, errorCode);
+            integerValue = l;
             break;
         }
         case UFMT_INT64: {
             int64_t i = toFormat.getInt64(errorCode);
             U_ASSERT(U_SUCCESS(errorCode));
             numberResult = realFormatter.formatInt(i, errorCode);
+            integerValue = i;
             break;
         }
         case UFMT_STRING: {
             // Try to parse the string as a number
-            return tryParsingNumberLiteral(realFormatter, arg, errorCode);
+            double d = parseNumberLiteral(toFormat, errorCode);
+            if (U_FAILURE(errorCode))
+                return {};
+            numberResult = realFormatter.formatDouble(d, errorCode);
+            integerValue = static_cast<int64_t>(std::round(d));
+            break;
         }
         default: {
             // Other types can't be parsed as a number
@@ -670,6 +690,11 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
         }
     }
 
+    // Need to return the integer value if invoked as :integer
+    if (isInteger) {
+        return FormattedPlaceholder(FormattedPlaceholder(Formattable(integerValue), arg.getFallback()),
+                                    FormattedValue(std::move(numberResult)));
+    }
     return FormattedPlaceholder(arg, FormattedValue(std::move(numberResult)));
 }
 
@@ -1263,9 +1288,11 @@ void StandardFunctions::TextSelector::selectKey(FormattedPlaceholder&& toFormat,
     if (U_FAILURE(errorCode)) {
         return;
     }
+    // Normalize result
+    UnicodeString normalized = normalizeNFC(formattedValue);
 
     for (int32_t i = 0; i < keysLen; i++) {
-        if (keys[i] == formattedValue) {
+        if (keys[i] == normalized) {
 	    prefs[0] = keys[i];
             prefsLen = 1;
             break;

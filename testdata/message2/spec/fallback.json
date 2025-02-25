@@ -1,0 +1,52 @@
+{
+  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "scenario": "Fallback",
+  "description": "Test cases for fallback behaviour.",
+  "defaultTestProperties": {
+    "bidiIsolation": "none",
+    "locale": "en-US",
+    "expErrors": true
+  },
+  "tests": [
+    {
+      "description": "function with unquoted literal operand",
+      "src": "{42 :test:function fails=format}",
+      "exp": "{|42|}"
+    },
+    {
+      "description": "function with quoted literal operand",
+      "src": "{|C:\\\\| :test:function fails=format}",
+      "exp": "{|C:\\\\|}"
+    },
+    {
+      "description": "unannotated implicit input variable",
+      "src": "{$var}",
+      "exp": "{$var}"
+    },
+    {
+      "description": "annotated implicit input variable",
+      "src": "{$var :number}",
+      "exp": "{$var}"
+    },
+    {
+      "description": "local variable with unknown function in declaration",
+      "src": ".local $var = {|val| :test:undefined} {{{$var}}}",
+      "exp": "{$var}"
+    },
+    {
+      "description": "function with local variable operand with unknown function in declaration",
+      "src": ".local $var = {|val| :test:undefined} {{{$var :test:function}}}",
+      "exp": "{$var}"
+    },
+    {
+      "description": "local variable with unknown function in placeholder",
+      "src": ".local $var = {|val|} {{{$var :test:undefined}}}",
+      "exp": "{$var}"
+    },
+    {
+      "description": "function with no operand",
+      "src": "{:test:undefined}",
+      "exp": "{:test:undefined}"
+    }
+  ]
+}
