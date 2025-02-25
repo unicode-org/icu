@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740432729485,
+  "lastUpdate": 1740518497079,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -112509,6 +112509,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 43.624,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "0748442ed6764b4debe456d922c5fa67f9b88bb8",
+          "message": "ICU-23059 ICU4C MF2: Update spec tests\n\nThis updates the MF2 spec tests to https://github.com/unicode-org/message-format-wg/commit/943479b6022993bb1713ab028cbe34f9e6f0b79f with the following exceptions:\n\n- functions/currency.json and functions/math.json are omitted because these are not yet implemented\n\n- bidi.json will be handled in a future PR\n\n- u-options.json will be handled in a future PR\n\nChanges include:\n* `:integer` now returns a value encapsulating the rounded numeric value of the argument, rather than\n  the value itself.\n* Fallbacks are handled according to the current spec.\n* Fallback values are not passed into functions.\n* Characters inside literal fallbacks are properly escaped.\n* The test runner skips null values properly.\n* The test runner handles boolean `expErrors` in defaultTestProperties.\n* `:string` normalizes its input and normalizeNFC() has been refactored so it can be called there.",
+          "timestamp": "2025-02-25T12:24:07-08:00",
+          "tree_id": "d25f57d653eb30e578d306566c89b6a78d27db0d",
+          "url": "https://github.com/unicode-org/icu/commit/0748442ed6764b4debe456d922c5fa67f9b88bb8"
+        },
+        "date": 1740518248650,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 20.4963,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 23.3646,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 27.4853,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 43.9975,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 51.7244,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 37.5535,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 26.0759,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.415,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 93.9596,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 23.3424,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 39.3458,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 43.539,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
