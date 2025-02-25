@@ -429,6 +429,15 @@ namespace message2 {
                     status = U_MF_SELECTOR_ERROR;
                 }
             }
+            /* Returns the name of the function that constructed this value.
+             *
+             * @returns A string representing a function name. The string does
+             *          not include a leading ':'.
+             *
+             * @internal ICU 78 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            virtual const UnicodeString& getFunctionName() const { return functionName; }
             /**
              * Destructor.
              *
@@ -451,6 +460,14 @@ namespace message2 {
              * @deprecated This API is for technology preview only.
              */
             FunctionOptions opts;
+            /**
+             * The name of the function that constructed this FunctionValue.
+             * @internal ICU 78 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            UnicodeString functionName;
+         private:
+
     }; // class FunctionValue
 
 } // namespace message2
