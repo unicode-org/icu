@@ -173,6 +173,10 @@ MBCSOpen(UCMFile *ucm) {
     }
 
     MBCSInit(mbcsData, ucm);
+    /* The memory in the MBSData structure following
+     * newConverter will be properly freed in MBCSClose.
+     */
+    /* coverity[leaked_storage] */
     return &mbcsData->newConverter;
 }
 
