@@ -29570,7 +29570,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49230000}
             }
             man_Nkoo{
-                literacyShareF:int{49500000}
+                literacyShareF:int{49250000}
                 populationShareF:int{49230000}
             }
             nqo{
@@ -32631,8 +32631,8 @@ supplementalData:table(nofallback){
                 officialStatus{"official_regional"}
                 populationShareF:int{47320000}
             }
-            sr_Latn{
-                populationShareF:int{45360000}
+            sr{
+                populationShareF:int{45410000}
             }
             territoryF:intvector{
                 62581600,
