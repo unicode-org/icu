@@ -57,6 +57,17 @@ typedef enum UIllFormedBehavior {
 
 namespace U_HEADER_ONLY_NAMESPACE {
 
+// Handle ill-formed UTF-16: One unpaired surrogate.
+// @internal
+template<typename CP32, UIllFormedBehavior behavior>
+CP32 uprv_u16Sub(CP32 surrogate) {
+    switch (behavior) {
+        case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
+        case U_BEHAVIOR_FFFD: return 0xfffd;
+        case U_BEHAVIOR_SURROGATE: return surrogate;
+    }
+}
+
 /**
  * Result of validating and decoding a minimal Unicode code unit sequence.
  * Returned from validating Unicode string code point iterators.
@@ -250,7 +261,7 @@ protected:
                 c = U16_GET_SUPPLEMENTARY(c, c2);
                 return {c, 2, true, p0};
             } else {
-                return {sub(c), 1, false, p0};
+                return {uprv_u16Sub<CP32, behavior>(c), 1, false, p0};
             }
         }
     }
@@ -270,18 +281,8 @@ protected:
                 c = U16_GET_SUPPLEMENTARY(c2, c);
                 return {c, 2, true, p};
             } else {
-                return {sub(c), 1, false, p};
+                return {uprv_u16Sub<CP32, behavior>(c), 1, false, p};
             }
-        }
-    }
-
-    // Handle ill-formed UTF-16: One unpaired surrogate.
-    // @internal
-    CP32 sub(CP32 surrogate) const {
-        switch (behavior) {
-            case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
-            case U_BEHAVIOR_FFFD: return 0xfffd;
-            case U_BEHAVIOR_SURROGATE: return surrogate;
         }
     }
 
@@ -348,18 +349,8 @@ protected:
                 c = U16_GET_SUPPLEMENTARY(c, c2);
                 return {c, 2, true};
             } else {
-                return {sub(c), 1, false};
+                return {uprv_u16Sub<CP32, behavior>(c), 1, false};
             }
-        }
-    }
-
-    // Handle ill-formed UTF-16: One unpaired surrogate.
-    // @internal
-    CP32 sub(CP32 surrogate) const {
-        switch (behavior) {
-            case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
-            case U_BEHAVIOR_FFFD: return 0xfffd;
-            case U_BEHAVIOR_SURROGATE: return surrogate;
         }
     }
 
