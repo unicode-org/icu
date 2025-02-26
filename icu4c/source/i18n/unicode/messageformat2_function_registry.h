@@ -59,7 +59,7 @@ namespace message2 {
          *         if no function was registered under that name. The pointer is not owned
          *         by the caller.
          *
-         * @internal ICU 77 technology preview
+         * @internal ICU 78 technology preview
          * @deprecated This API is for technology preview only.
          */
         Function* getFunction(const FunctionName& functionName) const;
@@ -124,7 +124,7 @@ namespace message2 {
              * @param errorCode Input/output error code
              * @return A reference to the builder.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             Builder& adoptFunction(const data_model::FunctionName& functionName,
@@ -233,7 +233,7 @@ namespace message2 {
      * Class implementing data from contextual options.
      * See https://github.com/unicode-org/message-format-wg/pull/846
      *
-     * @internal ICU 77 technology preview
+     * @internal ICU 78 technology preview
      * @deprecated This API is for technology preview only.
      */
     class U_I18N_API FunctionContext : public UObject {
@@ -243,7 +243,7 @@ namespace message2 {
              *
              * @return Locale the context was created with.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             const Locale& getLocale() const { return locale; }
@@ -252,7 +252,7 @@ namespace message2 {
              *
              * @return A UBiDiDirection indicating the text direction.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             UBiDiDirection getDirection() const { return dir; }
@@ -262,7 +262,7 @@ namespace message2 {
              * @return A string to be used in formatting to parts.
              *         (Formatting to parts is not yet implemented.)
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             const UnicodeString& getID() const { return id; }
@@ -282,7 +282,7 @@ namespace message2 {
     /**
      * Interface that function handler classes must implement.
      *
-     * @internal ICU 77 technology preview
+     * @internal ICU 78 technology preview
      * @deprecated This API is for technology preview only.
      */
     class U_I18N_API Function : public UObject {
@@ -298,7 +298,7 @@ namespace message2 {
              * @return The function value that is the result of calling this function on
              *         the arguments.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             virtual LocalPointer<FunctionValue> call(const FunctionContext& context,
@@ -308,7 +308,7 @@ namespace message2 {
             /**
              * Destructor.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             virtual ~Function();
@@ -327,7 +327,7 @@ namespace message2 {
      * mutable state in classes implementing FunctionValue is welcomed
      * during the Technology Preview period.
      *
-     * @internal ICU 77 technology preview
+     * @internal ICU 78 technology preview
      * @deprecated This API is for technology preview only.
      */
     class U_I18N_API FunctionValue : public UObject {
@@ -340,7 +340,7 @@ namespace message2 {
              * @param status Input/output error code
              * @return A string.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             virtual UnicodeString formatToString(UErrorCode& status) const {
@@ -356,7 +356,7 @@ namespace message2 {
              *
              * @return A reference to a message2::Formattable object.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             virtual const Formattable& getOperand() const { return operand; }
@@ -365,7 +365,7 @@ namespace message2 {
              *
              * @return A reference to the resolved options for this value.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             virtual const FunctionOptions& getResolvedOptions() const { return opts; }
@@ -376,7 +376,7 @@ namespace message2 {
              *
              * @return True iff this value supports selection.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             virtual UBool isSelectable() const {
@@ -392,7 +392,7 @@ namespace message2 {
              *
              * @return True iff this value represents an absent operand.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             virtual UBool isNullOperand() const { return false; }
@@ -413,7 +413,7 @@ namespace message2 {
              *        which must be less than or equal to `keysLen`.
              * @param status    Input/output error code.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             virtual void selectKeys(const UnicodeString* keys,
@@ -452,7 +452,7 @@ namespace message2 {
             /**
              * Destructor.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             virtual ~FunctionValue();
@@ -460,14 +460,14 @@ namespace message2 {
             /**
              * Operand used to construct this value.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             Formattable operand;
             /**
              * Resolved options attached to this value.
              *
-             * @internal ICU 77 technology preview
+             * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             FunctionOptions opts;
