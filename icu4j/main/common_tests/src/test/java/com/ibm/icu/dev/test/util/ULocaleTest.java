@@ -1824,8 +1824,8 @@ public class ULocaleTest extends CoreTestFmwk {
                 {"en_Cyrl-RU", "en-Cyrl-RU", "en-Cyrl-RU"},
                 {"en_Latn-RU", "en-RU", "en-RU"},
                 {"sr_Cyrl-US", "sr-US", "sr-US"},
-                {"sr_Cyrl-RU", "sr-Cyrl-RU", "sr-Cyrl-RU"},
-                {"sr_Latn-RU", "sr-RU", "sr-RU"},
+                {"sr_Cyrl-RU", "sr-RU", "sr-RU"},
+                {"sr_Latn-RU", "sr_Latn-RU", "sr_Latn-RU"},
         };
         for (String[] test : data) {
             ULocale source = new ULocale(test[0]);
