@@ -5407,7 +5407,6 @@ public class DateFormatTest extends CoreTestFmwk {
         Date k000000 = new Date(1447372800000L);
         Date k003700 = new Date(1447375020000L);
         Date k010000 = new Date(1447376400000L);
-        Date k013000 = new Date(1447378200000L);
         Date k030000 = new Date(1447383600000L);
         Date k090000 = new Date(1447405200000L);
         Date k120000 = new Date(1447416000000L);
