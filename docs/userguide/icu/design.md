@@ -373,7 +373,7 @@ There are 3 major extensibility elements in ICU:
    There are mechanisms available to enhance the built-in error handling when
    it is necessary. For example, you can design and create your own conversion
    callback functions when an error occurs. Refer to the
-   [Conversion](conversion/index.md) chapter callback section for more
+   [Conversion](../conversion/index.md) chapter callback section for more
    information.
 
 ### Resource Bundle Inheritance Model
