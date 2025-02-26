@@ -429,7 +429,8 @@ namespace message2 {
                     status = U_MF_SELECTOR_ERROR;
                 }
             }
-            /* Returns the name of the function that constructed this value.
+            /**
+             * Returns the name of the function that constructed this value.
              *
              * @returns A string representing a function name. The string does
              *          not include a leading ':'.
@@ -438,7 +439,8 @@ namespace message2 {
              * @deprecated This API is for technology preview only.
              */
             virtual const UnicodeString& getFunctionName() const { return functionName; }
-            /* Returns a fallback string that can be used as output
+            /**
+             * Returns a fallback string that can be used as output
              * if processing this function results in an error.
              *             *
              * @returns A string determined by the creator of this FunctionValue.
