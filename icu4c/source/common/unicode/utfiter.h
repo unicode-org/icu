@@ -204,7 +204,7 @@ private:
  * @tparam UIllFormedBehavior TODO
  * @internal
  */
-template<typename UnitIter, typename CP32, UIllFormedBehavior behavior, typename = void>
+template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
 class U16IteratorBase {
 protected:
     // TODO: Maybe std::move() the UnitIters?
@@ -286,6 +286,10 @@ protected:
         }
     }
 
+public:
+    // TODO: Public for U16Iterator::operator==().
+    // Instead... friend? Move pointers up into the public iterator?
+
     // In a validating iterator, we need start & limit so that when we read a code point
     // (forward or backward) we can test if there are enough code units.
     // @internal
@@ -295,73 +299,6 @@ protected:
     // @internal
     const UnitIter limit;
 };
-
-#ifndef U_IN_DOXYGEN
-// Partial template specialization for single-pass input iterator.
-template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
-class U16IteratorBase<
-        UnitIter,
-        CP32,
-        behavior,
-        std::enable_if_t<
-            !std::is_base_of_v<
-                std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>>> {
-protected:
-    // @internal
-    U16IteratorBase(UnitIter p, UnitIter limit) : current(p), limit(limit) {}
-    // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
-    // Test pointers for == or != but not < or >.
-
-    // @internal
-    U16IteratorBase(const U16IteratorBase &other) = default;
-    // @internal
-    U16IteratorBase &operator=(const U16IteratorBase &other) = default;
-
-    // @internal
-    bool operator==(const U16IteratorBase &other) const { return current == other.current; }
-    // @internal
-    bool operator!=(const U16IteratorBase &other) const { return !operator==(other); }
-
-    // @internal
-    void inc() {
-        // TODO: assert current != limit -- more precisely: start <= current < limit
-        // Very similar to U16_FWD_1().
-        auto c = *current;
-        ++current;
-        if (U16_IS_LEAD(c) && current != limit && U16_IS_TRAIL(*current)) {
-            ++current;
-        }
-    }
-
-    // @internal
-    CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p) const {
-        // TODO: assert p != limit -- more precisely: start <= p < limit
-        // Very similar to U16_NEXT_OR_FFFD().
-        CP32 c = *p;
-        ++p;
-        if (!U16_IS_SURROGATE(c)) {
-            return {c, 1, true};
-        } else {
-            uint16_t c2;
-            if (U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(c2 = *p)) {
-                ++p;
-                c = U16_GET_SUPPLEMENTARY(c, c2);
-                return {c, 2, true};
-            } else {
-                return {uprv_u16Sub<CP32, behavior>(c), 1, false};
-            }
-        }
-    }
-
-    // In a validating iterator, we need the limit so that when we read a code point
-    // we can test if there are enough code units.
-    // @internal
-    UnitIter current;
-    // @internal
-    const UnitIter limit;
-};
-#endif  // U_IN_DOXYGEN
 
 /**
  * Validating bidirectional iterator over the code points in a Unicode 16-bit string.
@@ -401,8 +338,32 @@ public:
     U16Iterator(const U16Iterator &other) = default;
     U16Iterator &operator=(const U16Iterator &other) = default;
 
-    bool operator==(const U16Iterator &other) const { return Super::operator==(other); }
-    bool operator!=(const U16Iterator &other) const { return !Super::operator==(other); }
+    bool operator==(const U16Iterator &other) const {
+        // Compare logical positions.
+        // If state>0 then current is that much ahead of the logical position.
+        UnitIter p1 = Super::current;
+        UnitIter p2 = static_cast<const Super &>(other).current;
+        bool ahead1 = state > 0;
+        bool ahead2 = other.state > 0;
+        if (p1 == p2) {
+            return ahead1 == ahead2;
+        } else {  // p1 != p2
+            if (ahead1 == ahead2) { return false; }
+            // Increment the *opposite* UnitIter according to the ahead-ness
+            // to see if it will catch up to the same physical position.
+            if (p2 != static_cast<const Super &>(other).limit) {
+                for (int8_t i = state; i > 0; --i) { ++p2; }
+            }
+            if (p1 != Super::limit) {
+                for (int8_t i = other.state; i > 0; --i) { ++p1; }
+            }
+            // TODO: With a bidirectional UnitIter, we can decrement current by state.
+            // TODO: With a non-validating iterator and a forward-only UnitIter,
+            // we may need to keep a copy of the UnitIter for the actual logical position.
+            return p1 == p2;
+        }
+    }
+    bool operator!=(const U16Iterator &other) const { return !operator==(other); }
 
     CodeUnits<UnitIter, CP32> operator*() {
         if (state == 0) {
@@ -505,11 +466,7 @@ class U16Iterator<
         std::enable_if_t<
             !std::is_base_of_v<
                 std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>>>
-        : private U16IteratorBase<UnitIter, CP32, behavior> {
-    // FYI: We need to qualify all accesses to super class members because of private inheritance.
-    using Super = U16IteratorBase<UnitIter, CP32, behavior>;
-
+                typename std::iterator_traits<UnitIter>::iterator_category>>> {
     // Proxy type for post-increment return value, to make *iter++ work.
     // Also for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning CodeUnits.
@@ -526,19 +483,31 @@ public:
     // TODO: Should these Iterators define value_type etc.?
     //       What about iterator_category depending on the UnitIter??
 
-    U16Iterator(UnitIter p, UnitIter limit) : Super(p, limit), units(0, 0, false) {}
+    // TODO: Does it make sense for the limits to allow having a different type?
+    // We only need to be able to compare current vs. limit for == and !=.
+    // Might allow interesting sentinel types.
+    // Would be trouble for the sentinel constructor that inits both iters from the same p.
+
+    U16Iterator(UnitIter p, UnitIter limit) : current(p), limit(limit) {}
+    // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
+    // Test pointers for == or != but not < or >.
+
     // Constructs an iterator start or limit sentinel.
-    U16Iterator(UnitIter p) : Super(p, p), units(0, 0, false) {}
+    U16Iterator(UnitIter p) : current(p), limit(p) {}
 
     U16Iterator(const U16Iterator &other) = default;
     U16Iterator &operator=(const U16Iterator &other) = default;
 
-    bool operator==(const U16Iterator &other) const { return Super::operator==(other); }
-    bool operator!=(const U16Iterator &other) const { return !Super::operator==(other); }
+    bool operator==(const U16Iterator &other) const {
+        return current == other.current && state == other.state;
+        // Strictly speaking, we should check if the logical position is the same.
+        // However, we cannot move, or do arithmetic with, a single-pass UnitIter.
+    }
+    bool operator!=(const U16Iterator &other) const { return !operator==(other); }
 
     CodeUnits<UnitIter, CP32> operator*() {
         if (state == 0) {
-            units = Super::readAndInc(Super::current);
+            units = readAndInc(current);
             state = units.length();
         }
         return units;
@@ -546,7 +515,7 @@ public:
 
     Proxy operator->() {
         if (state == 0) {
-            units = Super::readAndInc(Super::current);
+            units = readAndInc(current);
             state = units.length();
         }
         return Proxy(units);
@@ -557,7 +526,7 @@ public:
             // operator*() called readAndInc() so current is already ahead.
             state = 0;
         } else {
-            Super::inc();
+            inc();
         }
         return *this;
     }
@@ -567,16 +536,51 @@ public:
             // operator*() called readAndInc() so current is already ahead.
             state = 0;
         } else {
-            units = Super::readAndInc(Super::current);
+            units = readAndInc(current);
             // keep this->state == 0
         }
         return Proxy(units);
     }
 
 private:
+    // @internal
+    void inc() {
+        // TODO: assert current != limit -- more precisely: start <= current < limit
+        // Very similar to U16_FWD_1().
+        auto c = *current;
+        ++current;
+        if (U16_IS_LEAD(c) && current != limit && U16_IS_TRAIL(*current)) {
+            ++current;
+        }
+    }
+
+    // @internal
+    CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p) const {
+        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // Very similar to U16_NEXT_OR_FFFD().
+        CP32 c = *p;
+        ++p;
+        if (!U16_IS_SURROGATE(c)) {
+            return {c, 1, true};
+        } else {
+            uint16_t c2;
+            if (U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(c2 = *p)) {
+                ++p;
+                c = U16_GET_SUPPLEMENTARY(c, c2);
+                return {c, 2, true};
+            } else {
+                return {uprv_u16Sub<CP32, behavior>(c), 1, false};
+            }
+        }
+    }
+
+    // In a validating iterator, we need the limit so that when we read a code point
+    // we can test if there are enough code units.
+    UnitIter current;
+    const UnitIter limit;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // so that we can use a single-pass input iterator for UnitIter.
-    CodeUnits<UnitIter, CP32> units;
+    CodeUnits<UnitIter, CP32> units = {0, 0, false};
     // >0: units = readAndInc(), current = units limit, state = units.len
     //     which means that current is ahead of its logical position
     //  0: initial state
@@ -622,7 +626,7 @@ public:
     U16ReverseIterator &operator=(const U16ReverseIterator &other) = default;
 
     bool operator==(const U16ReverseIterator &other) const { return Super::operator==(other); }
-    bool operator!=(const U16ReverseIterator &other) const { return !Super::operator==(other); }
+    bool operator!=(const U16ReverseIterator &other) const { return !operator==(other); }
 
     CodeUnits<UnitIter, CP32> operator*() const {
         // Call the same function in both operator*() and operator++() so that an
