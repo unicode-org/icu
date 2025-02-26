@@ -132,7 +132,7 @@ namespace message2 {
     // in a context that expects a FunctionValue.
     class BaseValue : public FunctionValue {
         public:
-            static BaseValue* create(const Locale&, const Formattable&, UErrorCode&);
+            static BaseValue* create(const Locale&, const UnicodeString&, const Formattable&, UErrorCode&);
             // Apply default formatters to the argument value
             UnicodeString formatToString(UErrorCode&) const override;
             UBool isSelectable() const override { return true; }
@@ -142,7 +142,7 @@ namespace message2 {
        private:
             Locale locale;
 
-            BaseValue(const Locale&, const Formattable&);
+            BaseValue(const Locale&, const UnicodeString&, const Formattable&);
     }; // class BaseValue
 
     // A NullValue represents the absence of an argument.

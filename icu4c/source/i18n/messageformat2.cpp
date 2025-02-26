@@ -69,7 +69,7 @@ static UnicodeString functionFallback(const InternalValue& operand,
                 fallbackToUse += var;
             }
             // If it exists, create a BaseValue (FunctionValue) for it
-            LocalPointer<BaseValue> result(BaseValue::create(locale, *val, errorCode));
+            LocalPointer<BaseValue> result(BaseValue::create(locale, fallbackToUse, *val, errorCode));
             // Add fallback and return an InternalValue
             if (U_SUCCESS(errorCode)) {
                 return InternalValue(result.orphan(), fallbackToUse);
@@ -110,6 +110,7 @@ static UnicodeString reserialize(const UnicodeString& s) {
 
     // Create a BaseValue (FunctionValue) that wraps the literal
     LocalPointer<BaseValue> val(BaseValue::create(locale,
+                                                  fallbackToUse,
                                                   Formattable(lit.unquoted()),
                                                   errorCode));
     if (U_SUCCESS(errorCode)) {

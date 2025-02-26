@@ -1805,7 +1805,7 @@ StandardFunctions::TestFunctionValue::TestFunctionValue(const TestFunction& pare
     // If FailsFormat is true, attempting to format the placeholder to any
     // formatting target will fail.
     if (failsFormat) {
-        status = U_MF_FORMATTING_ERROR;
+        formattedString = arg.getFallback();
         return;
     }
 
@@ -1848,6 +1848,8 @@ UnicodeString StandardFunctions::TestFunctionValue::formatToString(UErrorCode& s
     }
     if (!canFormat || failsFormat) {
         status = U_MF_FORMATTING_ERROR;
+    }
+    if (!canFormat) {
         return {};
     }
     return formattedString;

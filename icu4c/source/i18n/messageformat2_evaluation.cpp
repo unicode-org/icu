@@ -27,15 +27,19 @@ using namespace data_model;
 // BaseValue
 // ---------
 
-BaseValue::BaseValue(const Locale& loc, const Formattable& source)
+BaseValue::BaseValue(const Locale& loc, const UnicodeString& fb, const Formattable& source)
     : locale(loc) {
     operand = source;
+    fallback += LEFT_CURLY_BRACE;
+    fallback += fb;
+    fallback += RIGHT_CURLY_BRACE;
 }
 
 /* static */ BaseValue* BaseValue::create(const Locale& locale,
+                                          const UnicodeString& fallback,
                                           const Formattable& source,
                                           UErrorCode& errorCode) {
-    return message2::create<BaseValue>(BaseValue(locale, source), errorCode);
+    return message2::create<BaseValue>(BaseValue(locale, fallback, source), errorCode);
 }
 
 extern UnicodeString formattableToString(const Locale&, const UBiDiDirection, const Formattable&, UErrorCode&);
@@ -51,6 +55,7 @@ BaseValue& BaseValue::operator=(BaseValue&& other) noexcept {
     operand = std::move(other.operand);
     opts = std::move(other.opts);
     locale = other.locale;
+    fallback = other.fallback;
 
     return *this;
 }
