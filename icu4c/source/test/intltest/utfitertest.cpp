@@ -154,6 +154,8 @@ void U16IteratorTest::testGood() {
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] * codePoint", u'カ', (*iter).codePoint());
     ++iter;
+    // Fetch the current code point twice.
+    assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
     units = *iter++;
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[4] * length", 2, units.length());
@@ -237,7 +239,7 @@ void U16IteratorTest::testSinglePassIter() {
     SinglePassIter<char16_t> goodBegin(good);
     SinglePassIter<char16_t> goodLimit{};
     U16Iterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
-        goodBegin, goodBegin, goodLimit);
+        goodBegin, goodLimit);
     U16Iterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
     auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
@@ -247,15 +249,14 @@ void U16IteratorTest::testSinglePassIter() {
     assertEquals("iter[1] * length", 1, units.length());
     assertTrue("iter[1] * wellFormed", units.wellFormed());
     // No units.stringView() when the unit iterator is not a pointer.
-    // No data() for a single-pass unit iterator. (Or not one that works as expected.)
+    // No data() for a single-pass unit iterator.
     ++iter;
-    // No post-increment for a single-pass unit iterator. (Or not one that works as expected.)
-    assertEquals("iter[2] * codePoint", u'ç', (*iter).codePoint());
-    ++iter;
+    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] * codePoint", u'カ', (*iter).codePoint());
     ++iter;
-    units = *iter;
-    ++iter;
+    // Fetch the current code point twice.
+    assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
+    units = *iter++;
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[4] * length", 2, units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
@@ -283,6 +284,8 @@ void U16IteratorTest::testFwdIter() {
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] * codePoint", u'カ', (*iter).codePoint());
     ++iter;
+    // Fetch the current code point twice.
+    assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
     units = *iter++;
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[4] * length", 2, units.length());

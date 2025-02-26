@@ -68,7 +68,7 @@ namespace U_HEADER_ONLY_NAMESPACE {
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @draft ICU 78
  */
-template<typename UnitIter, typename CP32>
+template<typename UnitIter, typename CP32, typename = void>
 class CodeUnits {
     using Unit = typename std::iterator_traits<UnitIter>::value_type;
 public:
@@ -83,16 +83,12 @@ public:
 
     bool wellFormed() const { return ok; }
 
-    // disable for single-pass input iterator
-    template<typename Iter = UnitIter>
-    std::enable_if_t<
-        std::is_base_of_v<std::forward_iterator_tag,
-                          typename std::iterator_traits<Iter>::iterator_category>,
-        UnitIter>
-    data() const { return p; }
+    UnitIter data() const { return p; }
 
     uint8_t length() const { return len; }
 
+    // TODO: Do we even need the template logic here?
+    // Or is it disabled anyway if the code does not compile with a non-pointer?
     template<typename Iter = UnitIter>
     std::enable_if_t<
         std::is_pointer_v<Iter>,
@@ -108,6 +104,40 @@ private:
     bool ok;
     UnitIter p;
 };
+
+#ifndef U_IN_DOXYGEN
+// Partial template specialization for single-pass input iterator.
+// No UnitIter field, no getter for it, no stringView().
+template<typename UnitIter, typename CP32>
+class CodeUnits<
+        UnitIter,
+        CP32,
+        std::enable_if_t<
+            !std::is_base_of_v<
+                std::forward_iterator_tag,
+                typename std::iterator_traits<UnitIter>::iterator_category>>> {
+    using Unit = typename std::iterator_traits<UnitIter>::value_type;
+public:
+    // @internal
+    CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed) :
+            c(codePoint), len(length), ok(wellFormed) {}
+
+    CodeUnits(const CodeUnits &other) = default;
+    CodeUnits &operator=(const CodeUnits &other) = default;
+
+    UChar32 codePoint() const { return c; }
+
+    bool wellFormed() const { return ok; }
+
+    uint8_t length() const { return len; }
+
+private:
+    // Order of fields with padding and access frequency in mind.
+    CP32 c;
+    uint8_t len;
+    bool ok;
+};
+#endif  // U_IN_DOXYGEN
 
 // TODO: switch unsafe code to UnitIter as well
 /**
@@ -163,9 +193,10 @@ private:
  * @tparam UIllFormedBehavior TODO
  * @internal
  */
-template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
+template<typename UnitIter, typename CP32, UIllFormedBehavior behavior, typename = void>
 class U16IteratorBase {
 protected:
+    // TODO: Maybe std::move() the UnitIters?
     // @internal
     U16IteratorBase(UnitIter start, UnitIter p, UnitIter limit) :
             start(start), current(p), limit(limit) {}
@@ -264,6 +295,83 @@ protected:
     const UnitIter limit;
 };
 
+#ifndef U_IN_DOXYGEN
+// Partial template specialization for single-pass input iterator.
+template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
+class U16IteratorBase<
+        UnitIter,
+        CP32,
+        behavior,
+        std::enable_if_t<
+            !std::is_base_of_v<
+                std::forward_iterator_tag,
+                typename std::iterator_traits<UnitIter>::iterator_category>>> {
+protected:
+    // @internal
+    U16IteratorBase(UnitIter p, UnitIter limit) : current(p), limit(limit) {}
+    // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
+    // Test pointers for == or != but not < or >.
+
+    // @internal
+    U16IteratorBase(const U16IteratorBase &other) = default;
+    // @internal
+    U16IteratorBase &operator=(const U16IteratorBase &other) = default;
+
+    // @internal
+    bool operator==(const U16IteratorBase &other) const { return current == other.current; }
+    // @internal
+    bool operator!=(const U16IteratorBase &other) const { return !operator==(other); }
+
+    // @internal
+    void inc() {
+        // TODO: assert current != limit -- more precisely: start <= current < limit
+        // Very similar to U16_FWD_1().
+        auto c = *current;
+        ++current;
+        if (U16_IS_LEAD(c) && current != limit && U16_IS_TRAIL(*current)) {
+            ++current;
+        }
+    }
+
+    // @internal
+    CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p) const {
+        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // Very similar to U16_NEXT_OR_FFFD().
+        CP32 c = *p;
+        ++p;
+        if (!U16_IS_SURROGATE(c)) {
+            return {c, 1, true};
+        } else {
+            uint16_t c2;
+            if (U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(c2 = *p)) {
+                ++p;
+                c = U16_GET_SUPPLEMENTARY(c, c2);
+                return {c, 2, true};
+            } else {
+                return {sub(c), 1, false};
+            }
+        }
+    }
+
+    // Handle ill-formed UTF-16: One unpaired surrogate.
+    // @internal
+    CP32 sub(CP32 surrogate) const {
+        switch (behavior) {
+            case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
+            case U_BEHAVIOR_FFFD: return 0xfffd;
+            case U_BEHAVIOR_SURROGATE: return surrogate;
+        }
+    }
+
+    // In a validating iterator, we need the limit so that when we read a code point
+    // we can test if there are enough code units.
+    // @internal
+    UnitIter current;
+    // @internal
+    const UnitIter limit;
+};
+#endif  // U_IN_DOXYGEN
+
 /**
  * Validating bidirectional iterator over the code points in a Unicode 16-bit string.
  *
@@ -274,7 +382,7 @@ protected:
  * @tparam UIllFormedBehavior TODO
  * @draft ICU 78
  */
-template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
+template<typename UnitIter, typename CP32, UIllFormedBehavior behavior, typename = void>
 class U16Iterator : private U16IteratorBase<UnitIter, CP32, behavior> {
     // FYI: We need to qualify all accesses to super class members because of private inheritance.
     using Super = U16IteratorBase<UnitIter, CP32, behavior>;
@@ -324,8 +432,6 @@ public:
         return *this;
     }
 
-    // TODO: disable for single-pass input iterator? or return proxy like std::istreambuf_iterator?
-    // If we return a proxy, then add operator->() to that, too?
     U16Iterator operator++(int) {  // post-increment
         if (state > 0) {
             // operator*() called readAndInc() so current is already ahead.
@@ -383,6 +489,91 @@ private:
     //       but mostly irrelevant when inlined?
     int8_t state = 0;
 };
+
+#ifndef U_IN_DOXYGEN
+// Partial template specialization for single-pass input iterator.
+template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
+class U16Iterator<
+        UnitIter,
+        CP32,
+        behavior,
+        std::enable_if_t<
+            !std::is_base_of_v<
+                std::forward_iterator_tag,
+                typename std::iterator_traits<UnitIter>::iterator_category>>>
+        : private U16IteratorBase<UnitIter, CP32, behavior> {
+    // FYI: We need to qualify all accesses to super class members because of private inheritance.
+    using Super = U16IteratorBase<UnitIter, CP32, behavior>;
+
+    // Proxy type for post-increment return value, to make *iter++ work.
+    struct Proxy {
+        Proxy(CodeUnits<UnitIter, CP32> &units) : units_(units) {}
+        CodeUnits<UnitIter, CP32> &operator*() { return units_; }
+        CodeUnits<UnitIter, CP32> *operator->() { return &units_; }
+        CodeUnits<UnitIter, CP32> units_;
+    };
+
+public:
+    // TODO: Should these Iterators define value_type etc.?
+    //       What about iterator_category depending on the UnitIter??
+
+    U16Iterator(UnitIter p, UnitIter limit) : Super(p, limit), units(0, 0, false) {}
+    // Constructs an iterator start or limit sentinel.
+    U16Iterator(UnitIter p) : Super(p, p), units(0, 0, false) {}
+
+    U16Iterator(const U16Iterator &other) = default;
+    U16Iterator &operator=(const U16Iterator &other) = default;
+
+    bool operator==(const U16Iterator &other) const { return Super::operator==(other); }
+    bool operator!=(const U16Iterator &other) const { return !Super::operator==(other); }
+
+    CodeUnits<UnitIter, CP32> operator*() {
+        if (state == 0) {
+            units = Super::readAndInc(Super::current);
+            state = units.length();
+        }
+        return units;
+    }
+
+    // TODO: For each operator*() also add operator->() to satisfy LegacyInputIterator?
+    // https://en.cppreference.com/w/cpp/named_req/InputIterator
+    // https://en.cppreference.com/w/cpp/language/operators
+    // const CodeUnits<UnitIter, CP32> *operator->() const { return &units; }
+    // TODO: Adding operator->() locks us into storing the CodeUnits inside the iterator, right?
+
+    U16Iterator &operator++() {  // pre-increment
+        if (state != 0) {
+            // operator*() called readAndInc() so current is already ahead.
+            state = 0;
+        } else {
+            Super::inc();
+        }
+        return *this;
+    }
+
+    Proxy operator++(int) {  // post-increment
+        if (state != 0) {
+            // operator*() called readAndInc() so current is already ahead.
+            state = 0;
+        } else {
+            units = Super::readAndInc(Super::current);
+            // keep this->state == 0
+        }
+        return Proxy(units);
+    }
+
+private:
+    // Keep state so that we call readAndInc() only once for both operator*() and ++
+    // so that we can use a single-pass input iterator for UnitIter.
+    CodeUnits<UnitIter, CP32> units;
+    // >0: units = readAndInc(), current = units limit, state = units.len
+    //     which means that current is ahead of its logical position
+    //  0: initial state
+    // TODO: could insert state into hidden CodeUnits field to avoid padding,
+    //       but mostly irrelevant when inlined?
+    int8_t state = 0;
+};
+#endif  // U_IN_DOXYGEN
 
 /**
  * Validating reverse iterator over the code points in a Unicode 16-bit string.
