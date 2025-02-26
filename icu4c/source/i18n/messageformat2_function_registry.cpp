@@ -1867,23 +1867,29 @@ void StandardFunctions::TestFunctionValue::selectKeys(const UnicodeString* keys,
         return;
     }
 
+    prefsLen = 0;
+
+    if (input != 1) {
+        return;
+    }
+
     // If the Input is 1 and DecimalPlaces is 1, the method will return some slice
     // of the list « '1.0', '1' », depending on whether those values are included in keys.
-    bool include1point0 = false;
-    bool include1 = false;
     if (input == 1 && decimalPlaces == 1) {
-        include1point0 = true;
-        include1 = true;
-    } else if (input == 1 && decimalPlaces == 0) {
-        include1 = true;
+        // 1.0 must come first, so search the keys for 1.0 and then 1
+        for (int32_t i = 0; i < keysLen; i++) {
+            if (keys[i] == u"1.0") {
+                prefs[0] = i;
+                prefsLen++;
+            }
+        }
     }
 
     // If the Input is 1 and DecimalPlaces is 0, the method will return the list « '1' » if
     // keys includes '1', or an empty list otherwise.
     // If the Input is any other value, the method will return an empty list.
     for (int32_t i = 0; i < keysLen; i++) {
-        if ((keys[i] == u"1" && include1)
-            || (keys[i] == u"1.0" && include1point0)) {
+        if (keys[i] == u"1") {
             prefs[prefsLen] = i;
             prefsLen++;
         }
