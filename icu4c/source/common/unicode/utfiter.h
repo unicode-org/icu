@@ -386,6 +386,18 @@ template<typename UnitIter, typename CP32, UIllFormedBehavior behavior, typename
 class U16Iterator : private U16IteratorBase<UnitIter, CP32, behavior> {
     // FYI: We need to qualify all accesses to super class members because of private inheritance.
     using Super = U16IteratorBase<UnitIter, CP32, behavior>;
+
+    // Proxy type for operator->() (required by LegacyInputIterator)
+    // so that we don't promise always returning CodeUnits.
+    class Proxy {
+    public:
+        Proxy(CodeUnits<UnitIter, CP32> &units) : units_(units) {}
+        CodeUnits<UnitIter, CP32> &operator*() { return units_; }
+        CodeUnits<UnitIter, CP32> *operator->() { return &units_; }
+    private:
+        CodeUnits<UnitIter, CP32> units_;
+    };
+
 public:
     // TODO: Should these Iterators define value_type etc.?
     //       What about iterator_category depending on the UnitIter??
@@ -409,11 +421,13 @@ public:
         return units;
     }
 
-    // TODO: For each operator*() also add operator->() to satisfy LegacyInputIterator?
-    // https://en.cppreference.com/w/cpp/named_req/InputIterator
-    // https://en.cppreference.com/w/cpp/language/operators
-    // const CodeUnits<UnitIter, CP32> *operator->() const { return &units; }
-    // TODO: Adding operator->() locks us into storing the CodeUnits inside the iterator, right?
+    Proxy operator->() {
+        if (state == 0) {
+            units = Super::readAndInc(Super::current);
+            state = units.length();
+        }
+        return Proxy(units);
+    }
 
     U16Iterator &operator++() {  // pre-increment
         if (state > 0) {
@@ -506,10 +520,14 @@ class U16Iterator<
     using Super = U16IteratorBase<UnitIter, CP32, behavior>;
 
     // Proxy type for post-increment return value, to make *iter++ work.
-    struct Proxy {
+    // Also for operator->() (required by LegacyInputIterator)
+    // so that we don't promise always returning CodeUnits.
+    class Proxy {
+    public:
         Proxy(CodeUnits<UnitIter, CP32> &units) : units_(units) {}
         CodeUnits<UnitIter, CP32> &operator*() { return units_; }
         CodeUnits<UnitIter, CP32> *operator->() { return &units_; }
+    private:
         CodeUnits<UnitIter, CP32> units_;
     };
 
@@ -535,11 +553,13 @@ public:
         return units;
     }
 
-    // TODO: For each operator*() also add operator->() to satisfy LegacyInputIterator?
-    // https://en.cppreference.com/w/cpp/named_req/InputIterator
-    // https://en.cppreference.com/w/cpp/language/operators
-    // const CodeUnits<UnitIter, CP32> *operator->() const { return &units; }
-    // TODO: Adding operator->() locks us into storing the CodeUnits inside the iterator, right?
+    Proxy operator->() {
+        if (state == 0) {
+            units = Super::readAndInc(Super::current);
+            state = units.length();
+        }
+        return Proxy(units);
+    }
 
     U16Iterator &operator++() {  // pre-increment
         if (state != 0) {
@@ -589,6 +609,18 @@ private:
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
 class U16ReverseIterator : private U16IteratorBase<UnitIter, CP32, behavior> {
     using Super = U16IteratorBase<UnitIter, CP32, behavior>;
+
+    // Proxy type for operator->() (required by LegacyInputIterator)
+    // so that we don't promise always returning CodeUnits.
+    class Proxy {
+    public:
+        Proxy(CodeUnits<UnitIter, CP32> &units) : units_(units) {}
+        CodeUnits<UnitIter, CP32> &operator*() { return units_; }
+        CodeUnits<UnitIter, CP32> *operator->() { return &units_; }
+    private:
+        CodeUnits<UnitIter, CP32> units_;
+    };
+
 public:
     U16ReverseIterator(UnitIter start, UnitIter p, UnitIter limit) :
             Super(start, p, limit) {}
@@ -606,6 +638,13 @@ public:
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         UnitIter p = Super::current;
         return Super::decAndRead(p);
+    }
+
+    Proxy operator->() const {
+        // Call the same function in both operator*() and operator++() so that an
+        // optimizing compiler can easily eliminate redundant work when alternating between the two.
+        UnitIter p = Super::current;
+        return Proxy(Super::decAndRead(p));
     }
 
     U16ReverseIterator &operator++() {  // pre-increment

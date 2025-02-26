@@ -144,6 +144,7 @@ void U16IteratorTest::testGood() {
     U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
+    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
     auto units = *iter;
     assertEquals("iter[1] * codePoint", u'b', units.codePoint());
@@ -152,7 +153,7 @@ void U16IteratorTest::testGood() {
     assertTrue("iter[1] * stringView()", units.stringView() == u"b"sv);
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
-    assertEquals("iter[3] * codePoint", u'カ', (*iter).codePoint());
+    assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
     ++iter;
     // Fetch the current code point twice.
     assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
@@ -170,6 +171,7 @@ void U16IteratorTest::testNegative() {
     U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
+    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
     auto units = *iter;
     assertEquals("iter[1] * codePoint", -1, units.codePoint());
@@ -194,6 +196,7 @@ void U16IteratorTest::testFFFD() {
     U16StringCodePoints<char16_t, char32_t, U_BEHAVIOR_FFFD> range(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
+    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
     auto units = *iter;
     assertEquals("iter[1] * codePoint", 0xfffd, units.codePoint());
@@ -217,6 +220,7 @@ void U16IteratorTest::testSurrogate() {
     U16StringCodePoints<char16_t, uint32_t, U_BEHAVIOR_SURROGATE> range(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
+    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
     auto units = *iter;
     assertEquals("iter[1] * codePoint", 0xd900, units.codePoint());
@@ -243,6 +247,7 @@ void U16IteratorTest::testSinglePassIter() {
     U16Iterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
     auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
+    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
     auto units = *iter;
     assertEquals("iter[1] * codePoint", u'b', units.codePoint());
@@ -252,7 +257,7 @@ void U16IteratorTest::testSinglePassIter() {
     // No data() for a single-pass unit iterator.
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
-    assertEquals("iter[3] * codePoint", u'カ', (*iter).codePoint());
+    assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
     ++iter;
     // Fetch the current code point twice.
     assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
@@ -273,6 +278,7 @@ void U16IteratorTest::testFwdIter() {
     // TODO: U16StringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
+    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
     auto units = *iter;
     assertEquals("iter[1] * codePoint", u'b', units.codePoint());
@@ -282,7 +288,7 @@ void U16IteratorTest::testFwdIter() {
     assertTrue("iter[1] * data()[0]", *units.data() == u'b');
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
-    assertEquals("iter[3] * codePoint", u'カ', (*iter).codePoint());
+    assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
     ++iter;
     // Fetch the current code point twice.
     assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
