@@ -43,83 +43,74 @@ namespace message2 {
 
 // Function registry implementation
 
-Formatter::~Formatter() {}
-Selector::~Selector() {}
-FormatterFactory::~FormatterFactory() {}
-SelectorFactory::~SelectorFactory() {}
+Function::~Function() {}
+FunctionValue::~FunctionValue() {}
 
 MFFunctionRegistry MFFunctionRegistry::Builder::build() {
-    U_ASSERT(formatters != nullptr && selectors != nullptr && formattersByType != nullptr);
-    MFFunctionRegistry result = MFFunctionRegistry(formatters, selectors, formattersByType);
-    formatters = nullptr;
-    selectors = nullptr;
+    U_ASSERT(functions != nullptr);
+    U_ASSERT(formattersByType != nullptr);
+    MFFunctionRegistry result = MFFunctionRegistry(functions, formattersByType);
+    functions = nullptr;
     formattersByType = nullptr;
     return result;
 }
 
-MFFunctionRegistry::Builder& MFFunctionRegistry::Builder::adoptSelector(const FunctionName& selectorName, SelectorFactory* selectorFactory, UErrorCode& errorCode) {
+MFFunctionRegistry::Builder&
+MFFunctionRegistry::Builder::adoptFunction(const FunctionName& functionName,
+                                           Function* function,
+                                           UErrorCode& errorCode) {
     if (U_SUCCESS(errorCode)) {
-        U_ASSERT(selectors != nullptr);
-        selectors->put(selectorName, selectorFactory, errorCode);
+        U_ASSERT(functions != nullptr);
+        functions->put(functionName, function, errorCode);
     }
     return *this;
 }
 
-MFFunctionRegistry::Builder& MFFunctionRegistry::Builder::adoptFormatter(const FunctionName& formatterName, FormatterFactory* formatterFactory, UErrorCode& errorCode) {
-    if (U_SUCCESS(errorCode)) {
-        U_ASSERT(formatters != nullptr);
-        formatters->put(formatterName, formatterFactory, errorCode);
-    }
-    return *this;
-}
-
-MFFunctionRegistry::Builder& MFFunctionRegistry::Builder::setDefaultFormatterNameByType(const UnicodeString& type, const FunctionName& functionName, UErrorCode& errorCode) {
+MFFunctionRegistry::Builder&
+MFFunctionRegistry::Builder::setDefaultFormatterNameByType(const UnicodeString& type,
+                                                           const FunctionName& functionName,
+                                                           UErrorCode& errorCode) {
     if (U_SUCCESS(errorCode)) {
         U_ASSERT(formattersByType != nullptr);
         FunctionName* f = create<FunctionName>(FunctionName(functionName), errorCode);
         formattersByType->put(type, f, errorCode);
-    }
-    return *this;
-}
+     }
+     return *this;
+ }
 
 MFFunctionRegistry::Builder::Builder(UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
 
-    formatters = new Hashtable();
-    selectors = new Hashtable();
+    functions = new Hashtable();
     formattersByType = new Hashtable();
-    if (!(formatters != nullptr && selectors != nullptr && formattersByType != nullptr)) {
+    if (functions == nullptr || formattersByType == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-    } else {
-        formatters->setValueDeleter(uprv_deleteUObject);
-        selectors->setValueDeleter(uprv_deleteUObject);
-        formattersByType->setValueDeleter(uprv_deleteUObject);
     }
+
+    functions->setValueDeleter(uprv_deleteUObject);
+    formattersByType->setValueDeleter(uprv_deleteUObject);
 }
 
 MFFunctionRegistry::Builder::~Builder() {
-    if (formatters != nullptr) {
-        delete formatters;
-    }
-    if (selectors != nullptr) {
-        delete selectors;
+    if (functions != nullptr) {
+        delete functions;
+        functions = nullptr;
     }
     if (formattersByType != nullptr) {
         delete formattersByType;
+        formattersByType = nullptr;
     }
 }
 
 // Returns non-owned pointer. Returns pointer rather than reference because it can fail.
-// Returns non-const because FormatterFactory is mutable.
-// TODO: This is unsafe because of the cached-formatters map
-// (the caller could delete the resulting pointer)
-FormatterFactory* MFFunctionRegistry::getFormatter(const FunctionName& formatterName) const {
-    U_ASSERT(formatters != nullptr);
-    return static_cast<FormatterFactory*>(formatters->get(formatterName));
+// Returns non-const because Function is mutable.
+Function* MFFunctionRegistry::getFunction(const FunctionName& functionName) const {
+    U_ASSERT(functions != nullptr);
+    return static_cast<Function*>(functions->get(functionName));
 }
 
 UBool MFFunctionRegistry::getDefaultFormatterNameByType(const UnicodeString& type, FunctionName& name) const {
-    U_ASSERT(formatters != nullptr);
+    U_ASSERT(formattersByType != nullptr);
     const FunctionName* f = static_cast<FunctionName*>(formattersByType->get(type));
     if (f != nullptr) {
         name = *f;
@@ -128,52 +119,32 @@ UBool MFFunctionRegistry::getDefaultFormatterNameByType(const UnicodeString& typ
     return false;
 }
 
-const SelectorFactory* MFFunctionRegistry::getSelector(const FunctionName& selectorName) const {
-    U_ASSERT(selectors != nullptr);
-    return static_cast<const SelectorFactory*>(selectors->get(selectorName));
+bool MFFunctionRegistry::hasFunction(const FunctionName& f) const {
+    return getFunction(f) != nullptr;
 }
 
-bool MFFunctionRegistry::hasFormatter(const FunctionName& f) const {
-    return getFormatter(f) != nullptr;
-}
-
-bool MFFunctionRegistry::hasSelector(const FunctionName& s) const {
-    return getSelector(s) != nullptr;
-}
-
-void MFFunctionRegistry::checkFormatter(const char* s) const {
+void MFFunctionRegistry::checkFunction(const char* s) const {
 #if U_DEBUG
-    U_ASSERT(hasFormatter(FunctionName(UnicodeString(s))));
+    U_ASSERT(hasFunction(FunctionName(UnicodeString(s))));
 #else
    (void) s;
 #endif
 }
 
-void MFFunctionRegistry::checkSelector(const char* s) const {
-#if U_DEBUG
-    U_ASSERT(hasSelector(FunctionName(UnicodeString(s))));
-#else
-    (void) s;
-#endif
-}
-
 // Debugging
 void MFFunctionRegistry::checkStandard() const {
-    checkFormatter("datetime");
-    checkFormatter("date");
-    checkFormatter("time");
-    checkFormatter("number");
-    checkFormatter("integer");
-    checkFormatter("test:function");
-    checkFormatter("test:format");
-    checkSelector("number");
-    checkSelector("integer");
-    checkSelector("string");
-    checkSelector("test:function");
-    checkSelector("test:select");
+    checkFunction("datetime");
+    checkFunction("date");
+    checkFunction("time");
+    checkFunction("number");
+    checkFunction("integer");
+    checkFunction("string");
+    checkFunction("test:function");
+    checkFunction("test:format");
+    checkFunction("test:select");
 }
 
-// Formatter/selector helpers
+// Function/selector helpers
 
 // Returns the NFC-normalized version of s, returning s itself
 // if it's already normalized.
@@ -247,33 +218,32 @@ static int64_t getInt64Value(const Locale& locale, const Formattable& value, UEr
     return 0;
 }
 
-// Adopts its arguments
-MFFunctionRegistry::MFFunctionRegistry(FormatterMap* f, SelectorMap* s, Hashtable* byType) : formatters(f), selectors(s), formattersByType(byType) {
-    U_ASSERT(f != nullptr && s != nullptr && byType != nullptr);
+// Adopts its argument
+MFFunctionRegistry::MFFunctionRegistry(FunctionMap* f, Hashtable* byType)
+    : functions(f), formattersByType(byType) {
+    U_ASSERT(f != nullptr);
+    U_ASSERT(byType != nullptr);
 }
 
 MFFunctionRegistry& MFFunctionRegistry::operator=(MFFunctionRegistry&& other) noexcept {
     cleanup();
 
-    formatters = other.formatters;
-    selectors = other.selectors;
+    functions = other.functions;
+    other.functions = nullptr;
     formattersByType = other.formattersByType;
-    other.formatters = nullptr;
-    other.selectors = nullptr;
     other.formattersByType = nullptr;
 
     return *this;
 }
 
 void MFFunctionRegistry::cleanup() noexcept {
-    if (formatters != nullptr) {
-        delete formatters;
-    }
-    if (selectors != nullptr) {
-        delete selectors;
+    if (functions != nullptr) {
+        delete functions;
+        functions = nullptr;
     }
     if (formattersByType != nullptr) {
         delete formattersByType;
+        formattersByType = nullptr;
     }
 }
 
@@ -282,11 +252,49 @@ MFFunctionRegistry::~MFFunctionRegistry() {
     cleanup();
 }
 
-// Specific formatter implementations
+// Specific function implementations
 
 // --------- Number
 
+/* static */ StandardFunctions::Number*
+StandardFunctions::Number::integer(UErrorCode& success) {
+    return create(true, success);
+}
+
+/* static */ StandardFunctions::Number*
+StandardFunctions::Number::number(UErrorCode& success) {
+    return create(false, success);
+}
+
+/* static */ StandardFunctions::Number*
+StandardFunctions::Number::create(bool isInteger, UErrorCode& success) {
+    NULL_ON_ERROR(success);
+
+    LocalPointer<Number> result(new Number(isInteger));
+    if (!result.isValid()) {
+        success = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result.orphan();
+}
+
+LocalPointer<FunctionValue> StandardFunctions::Number::call(const FunctionContext& context,
+                                                            const FunctionValue& operand,
+                                                            const FunctionOptions& options,
+                                                            UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    LocalPointer<FunctionValue>
+        val(new NumberValue(*this, context, operand, options, errorCode));
+    if (!val.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return val;
+}
+
 /* static */ number::LocalizedNumberFormatter StandardFunctions::formatterForOptions(const Number& number,
+                                                                                     const Locale& locale,
                                                                                      const FunctionOptions& opts,
                                                                                      UErrorCode& status) {
     number::UnlocalizedNumberFormatter nf;
@@ -376,7 +384,9 @@ MFFunctionRegistry::~MFFunctionRegistry() {
 
         // All other options apply to both `:number` and `:integer`
         int32_t minIntegerDigits = number.minimumIntegerDigits(opts);
-        nf = nf.integerWidth(IntegerWidth::zeroFillTo(minIntegerDigits));
+        if (minIntegerDigits != -1) {
+            nf = nf.integerWidth(IntegerWidth::zeroFillTo(minIntegerDigits));
+        }
 
         // signDisplay
         UnicodeString sd = opts.getStringFunctionOption(UnicodeString("signDisplay"));
@@ -427,44 +437,10 @@ MFFunctionRegistry::~MFFunctionRegistry() {
             }
         }
     }
-    return nf.locale(number.locale);
+    return nf.locale(locale);
 }
 
-Formatter* StandardFunctions::NumberFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    Formatter* result = new Number(locale);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-Formatter* StandardFunctions::IntegerFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    Formatter* result = new Number(Number::integer(locale));
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-StandardFunctions::IntegerFactory::~IntegerFactory() {}
-
-static FormattedPlaceholder notANumber(const FormattedPlaceholder& input) {
-    return FormattedPlaceholder(input, FormattedValue(UnicodeString("NaN")));
-}
-
-static double parseNumberLiteral(const Formattable& input, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return {};
-    }
-
-    // Copying string to avoid GCC dangling-reference warning
-    // (although the reference is safe)
-    UnicodeString inputStr = input.getString(errorCode);
-    // Precondition: `input`'s source Formattable has type string
+static double parseNumberLiteral(const UnicodeString& inputStr, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return {};
     }
@@ -527,19 +503,27 @@ static UChar32 digitToChar(int32_t val, UErrorCode errorCode) {
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             return '0';
     }
+    return '0';
 }
 
-int32_t StandardFunctions::Number::maximumFractionDigits(const FunctionOptions& opts) const {
-    Formattable opt;
-
-    if (isInteger) {
-        return 0;
-    }
-
-    if (opts.getFunctionOption(UnicodeString("maximumFractionDigits"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        int64_t val = getInt64Value(locale, opt, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
+int32_t StandardFunctions::Number::digitSizeOption(const FunctionOptions& opts,
+                                                   const UnicodeString& k) const {
+    UErrorCode localStatus = U_ZERO_ERROR;
+    const FunctionValue* opt = opts.getFunctionOption(k,
+                                                      localStatus);
+    if (U_SUCCESS(localStatus)) {
+        // First try the formatted value
+        UnicodeString formatted = opt->formatToString(localStatus);
+        int64_t val = 0;
+        if (U_SUCCESS(localStatus)) {
+            val = getInt64Value(Locale("en-US"), Formattable(formatted), localStatus);
+        }
+        if (U_FAILURE(localStatus)) {
+            localStatus = U_ZERO_ERROR;
+        }
+        // Next try the operand
+        val = getInt64Value(Locale("en-US"), opt->getOperand(), localStatus);
+        if (U_SUCCESS(localStatus)) {
             return static_cast<int32_t>(val);
         }
     }
@@ -549,222 +533,155 @@ int32_t StandardFunctions::Number::maximumFractionDigits(const FunctionOptions& 
     return -1;
 }
 
+int32_t StandardFunctions::Number::maximumFractionDigits(const FunctionOptions& opts) const {
+    if (isInteger) {
+        return 0;
+    }
+
+    return digitSizeOption(opts, UnicodeString("maximumFractionDigits"));
+}
+
 int32_t StandardFunctions::Number::minimumFractionDigits(const FunctionOptions& opts) const {
     Formattable opt;
 
-    if (!isInteger) {
-        if (opts.getFunctionOption(UnicodeString("minimumFractionDigits"), opt)) {
-            UErrorCode localErrorCode = U_ZERO_ERROR;
-            int64_t val = getInt64Value(locale, opt, localErrorCode);
-            if (U_SUCCESS(localErrorCode)) {
-                return static_cast<int32_t>(val);
-            }
-        }
+    if (isInteger) {
+        return -1;
     }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::minFraction()
-    // is an error.
-    return -1;
+    return digitSizeOption(opts, UnicodeString("minimumFractionDigits"));
 }
 
 int32_t StandardFunctions::Number::minimumIntegerDigits(const FunctionOptions& opts) const {
-    Formattable opt;
-
-    if (opts.getFunctionOption(UnicodeString("minimumIntegerDigits"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        int64_t val = getInt64Value(locale, opt, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return static_cast<int32_t>(val);
-        }
-    }
-    return 0;
+    return digitSizeOption(opts, UnicodeString("minimumIntegerDigits"));
 }
 
 int32_t StandardFunctions::Number::minimumSignificantDigits(const FunctionOptions& opts) const {
-    Formattable opt;
-
-    if (!isInteger) {
-        if (opts.getFunctionOption(UnicodeString("minimumSignificantDigits"), opt)) {
-            UErrorCode localErrorCode = U_ZERO_ERROR;
-            int64_t val = getInt64Value(locale, opt, localErrorCode);
-            if (U_SUCCESS(localErrorCode)) {
-                return static_cast<int32_t>(val);
-            }
-        }
+    if (isInteger) {
+        return -1;
     }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::minSignificantDigits()
-    // is an error.
-    return -1;
+    return digitSizeOption(opts, UnicodeString("minimumSignificantDigits"));
 }
 
 int32_t StandardFunctions::Number::maximumSignificantDigits(const FunctionOptions& opts) const {
-    Formattable opt;
-
-    if (opts.getFunctionOption(UnicodeString("maximumSignificantDigits"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        int64_t val = getInt64Value(locale, opt, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return static_cast<int32_t>(val);
-        }
-    }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::maxSignificantDigits()
-    // is an error.
-    return -1; // Not a valid value for Precision; has to be checked
+    return digitSizeOption(opts, UnicodeString("maximumSignificantDigits"));
 }
 
 bool StandardFunctions::Number::usePercent(const FunctionOptions& opts) const {
-    Formattable opt;
-    if (isInteger
-        || !opts.getFunctionOption(UnicodeString("style"), opt)
-        || opt.getType() != UFMT_STRING) {
+    const UnicodeString& style = opts.getStringFunctionOption(UnicodeString("style"));
+    if (isInteger || style.length() == 0) {
         return false;
     }
-    UErrorCode localErrorCode = U_ZERO_ERROR;
-    const UnicodeString& style = opt.getString(localErrorCode);
-    U_ASSERT(U_SUCCESS(localErrorCode));
     return (style == UnicodeString("percent"));
 }
 
-/* static */ StandardFunctions::Number StandardFunctions::Number::integer(const Locale& loc) {
-    return StandardFunctions::Number(loc, true);
-}
-
-FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& arg, FunctionOptions&& opts, UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return {};
-    }
-
-    // No argument => return "NaN"
-    if (!arg.canFormat()) {
+StandardFunctions::NumberValue::NumberValue(const Number& parent,
+                                            const FunctionContext& context,
+                                            const FunctionValue& arg,
+                                            const FunctionOptions& options,
+                                            UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+    // Must have an argument
+    if (arg.isNullOperand()) {
         errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-        return notANumber(arg);
+        return;
     }
+
+    locale = context.getLocale();
+    opts = options.mergeOptions(arg.getResolvedOptions(), errorCode);
+    operand = arg.getOperand();
+    functionName = UnicodeString(parent.isInteger ? "integer" : "number");
 
     number::LocalizedNumberFormatter realFormatter;
-    realFormatter = formatterForOptions(*this, opts, errorCode);
+    realFormatter = formatterForOptions(parent, locale, opts, errorCode);
 
-    number::FormattedNumber numberResult;
     int64_t integerValue = 0;
 
     if (U_SUCCESS(errorCode)) {
-        // Already checked that contents can be formatted
-        const Formattable& toFormat = arg.asFormattable();
-        switch (toFormat.getType()) {
+        switch (operand.getType()) {
         case UFMT_DOUBLE: {
-            double d = toFormat.getDouble(errorCode);
+            double d = operand.getDouble(errorCode);
             U_ASSERT(U_SUCCESS(errorCode));
-            numberResult = realFormatter.formatDouble(d, errorCode);
+            formattedNumber = realFormatter.formatDouble(d, errorCode);
             integerValue = static_cast<int64_t>(std::round(d));
             break;
         }
         case UFMT_LONG: {
-            int32_t l = toFormat.getLong(errorCode);
+            int32_t l = operand.getLong(errorCode);
             U_ASSERT(U_SUCCESS(errorCode));
-            numberResult = realFormatter.formatInt(l, errorCode);
+            formattedNumber = realFormatter.formatInt(l, errorCode);
             integerValue = l;
             break;
         }
         case UFMT_INT64: {
-            int64_t i = toFormat.getInt64(errorCode);
+            int64_t i = operand.getInt64(errorCode);
             U_ASSERT(U_SUCCESS(errorCode));
-            numberResult = realFormatter.formatInt(i, errorCode);
+            formattedNumber = realFormatter.formatInt(i, errorCode);
             integerValue = i;
             break;
         }
         case UFMT_STRING: {
             // Try to parse the string as a number
-            double d = parseNumberLiteral(toFormat, errorCode);
+            const UnicodeString& s = operand.getString(errorCode);
+            U_ASSERT(U_SUCCESS(errorCode));
+            double d = parseNumberLiteral(s, errorCode);
             if (U_FAILURE(errorCode))
-                return {};
-            numberResult = realFormatter.formatDouble(d, errorCode);
+                return;
+            formattedNumber = realFormatter.formatDouble(d, errorCode);
             integerValue = static_cast<int64_t>(std::round(d));
             break;
         }
         default: {
             // Other types can't be parsed as a number
             errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-            return notANumber(arg);
+            break;
         }
         }
     }
 
-    // Need to return the integer value if invoked as :integer
-    if (isInteger) {
-        return FormattedPlaceholder(FormattedPlaceholder(Formattable(integerValue), arg.getFallback()),
-                                    FormattedValue(std::move(numberResult)));
+    // Need to set the integer value if invoked as :integer
+    if (parent.isInteger) {
+        operand = Formattable(integerValue);
     }
-    return FormattedPlaceholder(arg, FormattedValue(std::move(numberResult)));
+}
+
+UnicodeString StandardFunctions::NumberValue::formatToString(UErrorCode& errorCode) const {
+    if (U_FAILURE(errorCode)) {
+        return {};
+    }
+
+    return formattedNumber.toString(errorCode);
 }
 
 StandardFunctions::Number::~Number() {}
-StandardFunctions::NumberFactory::~NumberFactory() {}
+StandardFunctions::NumberValue::~NumberValue() {}
 
-// --------- PluralFactory
+/* static */ StandardFunctions::Number::PluralType
+StandardFunctions::Number::pluralType(const FunctionOptions& opts) {
+    const UnicodeString& select = opts.getStringFunctionOption(UnicodeString("select"));
 
-
-StandardFunctions::Plural::PluralType StandardFunctions::Plural::pluralType(const FunctionOptions& opts) const {
-    Formattable opt;
-
-    if (opts.getFunctionOption(UnicodeString("select"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        UnicodeString val = opt.getString(localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            if (val == UnicodeString("ordinal")) {
-                return PluralType::PLURAL_ORDINAL;
-            }
-            if (val == UnicodeString("exact")) {
-                return PluralType::PLURAL_EXACT;
-            }
+    if (select.length() > 0) {
+        if (select == UnicodeString("ordinal")) {
+            return PluralType::PLURAL_ORDINAL;
+        }
+        if (select == UnicodeString("exact")) {
+            return PluralType::PLURAL_EXACT;
         }
     }
     return PluralType::PLURAL_CARDINAL;
 }
 
-Selector* StandardFunctions::PluralFactory::createSelector(const Locale& locale, UErrorCode& errorCode) const {
-    NULL_ON_ERROR(errorCode);
-
-    Selector* result;
-    if (isInteger) {
-        result = new Plural(Plural::integer(locale, errorCode));
-    } else {
-        result = new Plural(locale, errorCode);
-    }
-    NULL_ON_ERROR(errorCode);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-void StandardFunctions::Plural::selectKey(FormattedPlaceholder&& toFormat,
-                                          FunctionOptions&& opts,
-                                          const UnicodeString* keys,
-                                          int32_t keysLen,
-                                          UnicodeString* prefs,
-                                          int32_t& prefsLen,
-					  UErrorCode& errorCode) const {
+void StandardFunctions::NumberValue::selectKeys(const UnicodeString* keys,
+                                                int32_t keysLen,
+                                                int32_t* prefs,
+                                                int32_t& prefsLen,
+                                                UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
-    // No argument => return "NaN"
-    if (!toFormat.canFormat()) {
-        errorCode = U_MF_SELECTOR_ERROR;
-        return;
-    }
+    Number::PluralType type = Number::pluralType(opts);
 
-    // Handle any formatting options
-    PluralType type = pluralType(opts);
-    FormattedPlaceholder resolvedSelector = numberFormatter->format(std::move(toFormat),
-                                                                    std::move(opts),
-                                                                    errorCode);
-    CHECK_ERROR(errorCode);
-
-    U_ASSERT(resolvedSelector.isEvaluated() && resolvedSelector.output().isNumber());
+    // (resolvedSelector is `this`)
 
     // See  https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md#number-selection
     // 1. Let exact be the JSON string representation of the numeric value of resolvedSelector
-    const number::FormattedNumber& formattedNumber = resolvedSelector.output().getNumber();
     UnicodeString exact = formattedNumber.toString(errorCode);
 
     if (U_FAILURE(errorCode)) {
@@ -776,8 +693,8 @@ void StandardFunctions::Plural::selectKey(FormattedPlaceholder&& toFormat,
     // Step 2. Let keyword be a string which is the result of rule selection on resolvedSelector.
     // If the option select is set to exact, rule-based selection is not used. Return the empty string.
     UnicodeString keyword;
-    if (type != PluralType::PLURAL_EXACT) {
-        UPluralType t = type == PluralType::PLURAL_ORDINAL ? UPLURAL_TYPE_ORDINAL : UPLURAL_TYPE_CARDINAL;
+    if (type != Number::PluralType::PLURAL_EXACT) {
+        UPluralType t = type == Number::PluralType::PLURAL_ORDINAL ? UPLURAL_TYPE_ORDINAL : UPLURAL_TYPE_CARDINAL;
         // Look up plural rules by locale and type
         LocalPointer<PluralRules> rules(PluralRules::forLocale(locale, t, errorCode));
         CHECK_ERROR(errorCode);
@@ -804,7 +721,7 @@ void StandardFunctions::Plural::selectKey(FormattedPlaceholder&& toFormat,
             // 5i(a). If key and exact consist of the same sequence of Unicode code points, then
             if (exact == keys[i]) {
                 // 5i(a)(a) Append key as the last element of the list resultExact.
-		prefs[prefsLen] = keys[i];
+		prefs[prefsLen] = i;
                 prefsLen++;
                 break;
             }
@@ -812,7 +729,7 @@ void StandardFunctions::Plural::selectKey(FormattedPlaceholder&& toFormat,
     }
 
     // Return immediately if exact matching was requested
-    if (prefsLen == keysLen || type == PluralType::PLURAL_EXACT) {
+    if (prefsLen == keysLen || type == Number::PluralType::PLURAL_EXACT) {
         return;
     }
 
@@ -825,7 +742,7 @@ void StandardFunctions::Plural::selectKey(FormattedPlaceholder&& toFormat,
         // 5ii(a). If key and keyword consist of the same sequence of Unicode code points, then
         if (keyword == keys[i]) {
             // 5ii(a)(a) Append key as the last element of the list resultKeyword.
-            prefs[prefsLen] = keys[i];
+            prefs[prefsLen] = i;
             prefsLen++;
         }
     }
@@ -837,116 +754,58 @@ void StandardFunctions::Plural::selectKey(FormattedPlaceholder&& toFormat,
     // (Implicit, since `prefs` is an out-parameter)
 }
 
-StandardFunctions::Plural::Plural(const Locale& loc, UErrorCode& status) : locale(loc) {
-    CHECK_ERROR(status);
+// --------- DateTime
 
-    numberFormatter.adoptInstead(new StandardFunctions::Number(loc));
-    if (!numberFormatter.isValid()) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
+/* static */ StandardFunctions::DateTime*
+StandardFunctions::DateTime::date(UErrorCode& success) {
+    return DateTime::create(DateTimeType::kDate, success);
 }
 
-StandardFunctions::Plural::Plural(const Locale& loc, bool isInt, UErrorCode& status) : locale(loc), isInteger(isInt) {
-    CHECK_ERROR(status);
-
-    if (isInteger) {
-        numberFormatter.adoptInstead(new StandardFunctions::Number(loc, true));
-    } else {
-        numberFormatter.adoptInstead(new StandardFunctions::Number(loc));
-    }
-
-    if (!numberFormatter.isValid()) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
+/* static */ StandardFunctions::DateTime*
+StandardFunctions::DateTime::time(UErrorCode& success) {
+    return DateTime::create(DateTimeType::kTime, success);
 }
 
-StandardFunctions::Plural::~Plural() {}
-
-StandardFunctions::PluralFactory::~PluralFactory() {}
-
-// --------- DateTimeFactory
-
-/* static */ UnicodeString StandardFunctions::getStringOption(const FunctionOptions& opts,
-                                                              const UnicodeString& optionName,
-                                                              UErrorCode& errorCode) {
-    if (U_SUCCESS(errorCode)) {
-        Formattable opt;
-        if (opts.getFunctionOption(optionName, opt)) {
-            return opt.getString(errorCode); // In case it's not a string, error code will be set
-        } else {
-            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-    }
-    // Default is empty string
-    return {};
+/* static */ StandardFunctions::DateTime*
+StandardFunctions::DateTime::dateTime(UErrorCode& success) {
+    return DateTime::create(DateTimeType::kDateTime, success);
 }
 
-// Date/time options only
-static UnicodeString defaultForOption(const UnicodeString& optionName) {
-    if (optionName == UnicodeString("dateStyle")
-        || optionName == UnicodeString("timeStyle")
-        || optionName == UnicodeString("style")) {
-        return UnicodeString("short");
+/* static */ StandardFunctions::DateTime*
+StandardFunctions::DateTime::create(DateTime::DateTimeType type,
+                                    UErrorCode& success) {
+    NULL_ON_ERROR(success);
+
+    LocalPointer<DateTime> result(new DateTime(type));
+    if (!result.isValid()) {
+        success = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
     }
-    return {}; // Empty string is default
+    return result.orphan();
 }
 
-// TODO
-// Only DateTime currently uses the function options stored in the placeholder.
-// It also doesn't use them very consistently (it looks at the previous set of options,
-// and others aren't preserved). This needs to be generalized,
-// but that depends on https://github.com/unicode-org/message-format-wg/issues/515
-// Finally, the option value is assumed to be a string,
-// which works for datetime options but not necessarily in general.
-UnicodeString StandardFunctions::DateTime::getFunctionOption(const FormattedPlaceholder& toFormat,
-                                                             const FunctionOptions& opts,
-                                                             const UnicodeString& optionName) const {
-    // Options passed to the current function invocation take priority
-    Formattable opt;
-    UnicodeString s;
-    UErrorCode localErrorCode = U_ZERO_ERROR;
-    s = getStringOption(opts, optionName, localErrorCode);
-    if (U_SUCCESS(localErrorCode)) {
-        return s;
+LocalPointer<FunctionValue>
+StandardFunctions::DateTime::call(const FunctionContext& context,
+                                  const FunctionValue& val,
+                                  const FunctionOptions& opts,
+                                  UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
     }
-    // Next try the set of options used to construct `toFormat`
-    localErrorCode = U_ZERO_ERROR;
-    s = getStringOption(toFormat.options(), optionName, localErrorCode);
-    if (U_SUCCESS(localErrorCode)) {
-        return s;
+    LocalPointer<FunctionValue>
+        result(new DateTimeValue(type, context, val, opts, errorCode));
+    if (!result.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
-    // Finally, use default
-    return defaultForOption(optionName);
-}
-
-// Used for options that don't have defaults
-UnicodeString StandardFunctions::DateTime::getFunctionOption(const FormattedPlaceholder& toFormat,
-                                                             const FunctionOptions& opts,
-                                                             const UnicodeString& optionName,
-                                                             UErrorCode& errorCode) const {
-    if (U_SUCCESS(errorCode)) {
-        // Options passed to the current function invocation take priority
-        Formattable opt;
-        UnicodeString s;
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        s = getStringOption(opts, optionName, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return s;
-        }
-        // Next try the set of options used to construct `toFormat`
-        localErrorCode = U_ZERO_ERROR;
-        s = getStringOption(toFormat.options(), optionName, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return s;
-        }
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-    }
-    return {};
+    return result;
 }
 
 static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorCode) {
     if (U_SUCCESS(errorCode)) {
         UnicodeString upper = option.toUpper();
+        if (upper.isEmpty()) {
+            return DateFormat::EStyle::kShort;
+        }
         if (upper == UnicodeString("FULL")) {
             return DateFormat::EStyle::kFull;
         }
@@ -959,7 +818,7 @@ static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorC
         if (upper == UnicodeString("SHORT")) {
             return DateFormat::EStyle::kShort;
         }
-        if (upper.isEmpty() || upper == UnicodeString("DEFAULT")) {
+        if (upper == UnicodeString("DEFAULT")) {
             return DateFormat::EStyle::kDefault;
         }
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -967,58 +826,42 @@ static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorC
     return DateFormat::EStyle::kNone;
 }
 
-/* static */ StandardFunctions::DateTimeFactory* StandardFunctions::DateTimeFactory::dateTime(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
+UnicodeString StandardFunctions::DateTimeValue::formatToString(UErrorCode& status) const {
+    (void) status;
 
-    DateTimeFactory* result = new StandardFunctions::DateTimeFactory(DateTimeType::DateTime);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
+    return formattedDate;
 }
 
-/* static */ StandardFunctions::DateTimeFactory* StandardFunctions::DateTimeFactory::date(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
+StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
+                                                const FunctionContext& context,
+                                                const FunctionValue& val,
+                                                const FunctionOptions& options,
+                                                UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+    using DateTimeType = DateTime::DateTimeType;
 
-    DateTimeFactory* result = new DateTimeFactory(DateTimeType::Date);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-/* static */ StandardFunctions::DateTimeFactory* StandardFunctions::DateTimeFactory::time(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    DateTimeFactory* result = new DateTimeFactory(DateTimeType::Time);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-Formatter* StandardFunctions::DateTimeFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    Formatter* result = new StandardFunctions::DateTime(locale, type);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& toFormat,
-                                                   FunctionOptions&& opts,
-                                                   UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return {};
-    }
-
-    // Argument must be present
-    if (!toFormat.canFormat()) {
+    // Must have an argument
+    if (val.isNullOperand()) {
         errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-        return std::move(toFormat);
+        return;
     }
+
+    const Locale& locale = context.getLocale();
+    operand = val.getOperand();
+    opts = options.mergeOptions(val.getResolvedOptions(), errorCode);
+    switch(type) {
+        case DateTimeType::kDateTime:
+            functionName = UnicodeString("dateTime");
+            break;
+        case DateTimeType::kDate:
+            functionName = UnicodeString("date");
+            break;
+        case DateTimeType::kTime:
+            functionName = UnicodeString("time");
+            break;
+    }
+
+    const Formattable* source = &operand;
 
     LocalPointer<DateFormat> df;
     Formattable opt;
@@ -1030,30 +873,32 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     UnicodeString timeStyleName("timeStyle");
     UnicodeString styleName("style");
 
-    bool hasDateStyleOption = opts.getFunctionOption(dateStyleName, opt);
-    bool hasTimeStyleOption = opts.getFunctionOption(timeStyleName, opt);
+    UnicodeString dateStyleOption = opts.getStringFunctionOption(dateStyleName);
+    UnicodeString timeStyleOption = opts.getStringFunctionOption(timeStyleName);
+    bool hasDateStyleOption = dateStyleOption.length() > 0;
+    bool hasTimeStyleOption = timeStyleOption.length() > 0;
     bool noOptions = opts.optionsCount() == 0;
 
-    bool useStyle = (type == DateTimeFactory::DateTimeType::DateTime
+    bool useStyle = (type == DateTimeType::kDateTime
                      && (hasDateStyleOption || hasTimeStyleOption
                          || noOptions))
-        || (type != DateTimeFactory::DateTimeType::DateTime);
+        || (type != DateTimeType::kDateTime);
 
-    bool useDate = type == DateTimeFactory::DateTimeType::Date
-        || (type == DateTimeFactory::DateTimeType::DateTime
+    bool useDate = type == DateTimeType::kDate
+        || (type == DateTimeType::kDateTime
             && hasDateStyleOption);
-    bool useTime = type == DateTimeFactory::DateTimeType::Time
-        || (type == DateTimeFactory::DateTimeType::DateTime
+    bool useTime = type == DateTimeType::kTime
+        || (type == DateTimeType::kDateTime
             && hasTimeStyleOption);
 
     if (useStyle) {
         // Extract style options
-        if (type == DateTimeFactory::DateTimeType::DateTime) {
+        if (type == DateTimeType::kDateTime) {
             // Note that the options-getting has to be repeated across the three cases,
             // since `:datetime` uses "dateStyle"/"timeStyle" and `:date` and `:time`
             // use "style"
-            dateStyle = stringToStyle(getFunctionOption(toFormat, opts, dateStyleName), errorCode);
-            timeStyle = stringToStyle(getFunctionOption(toFormat, opts, timeStyleName), errorCode);
+            dateStyle = stringToStyle(opts.getStringFunctionOption(dateStyleName), errorCode);
+            timeStyle = stringToStyle(opts.getStringFunctionOption(timeStyleName), errorCode);
 
             if (useDate && !useTime) {
                 df.adoptInstead(DateFormat::createDateInstance(dateStyle, locale));
@@ -1062,12 +907,12 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
             } else {
                 df.adoptInstead(DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
             }
-        } else if (type == DateTimeFactory::DateTimeType::Date) {
-            dateStyle = stringToStyle(getFunctionOption(toFormat, opts, styleName), errorCode);
+        } else if (type == DateTimeType::kDate) {
+            dateStyle = stringToStyle(opts.getStringFunctionOption(styleName), errorCode);
             df.adoptInstead(DateFormat::createDateInstance(dateStyle, locale));
         } else {
             // :time
-            timeStyle = stringToStyle(getFunctionOption(toFormat, opts, styleName), errorCode);
+            timeStyle = stringToStyle(opts.getStringFunctionOption(styleName), errorCode);
             df.adoptInstead(DateFormat::createTimeInstance(timeStyle, locale));
         }
     } else {
@@ -1078,7 +923,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
         #define ADD_PATTERN(s) skeleton += UnicodeString(s)
         if (U_SUCCESS(errorCode)) {
             // Year
-            UnicodeString year = getFunctionOption(toFormat, opts, UnicodeString("year"), errorCode);
+            UnicodeString year = opts.getStringFunctionOption(UnicodeString("year"), errorCode);
             if (U_FAILURE(errorCode)) {
                 errorCode = U_ZERO_ERROR;
             } else {
@@ -1090,7 +935,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 }
             }
             // Month
-            UnicodeString month = getFunctionOption(toFormat, opts, UnicodeString("month"), errorCode);
+            UnicodeString month = opts.getStringFunctionOption(UnicodeString("month"), errorCode);
             if (U_FAILURE(errorCode)) {
                 errorCode = U_ZERO_ERROR;
             } else {
@@ -1109,7 +954,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 }
             }
             // Weekday
-            UnicodeString weekday = getFunctionOption(toFormat, opts, UnicodeString("weekday"), errorCode);
+            UnicodeString weekday = opts.getStringFunctionOption(UnicodeString("weekday"), errorCode);
             if (U_FAILURE(errorCode)) {
                 errorCode = U_ZERO_ERROR;
             } else {
@@ -1123,7 +968,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 }
             }
             // Day
-            UnicodeString day = getFunctionOption(toFormat, opts, UnicodeString("day"), errorCode);
+            UnicodeString day = opts.getStringFunctionOption(UnicodeString("day"), errorCode);
             if (U_FAILURE(errorCode)) {
                 errorCode = U_ZERO_ERROR;
             } else {
@@ -1135,7 +980,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 }
             }
             // Hour
-            UnicodeString hour = getFunctionOption(toFormat, opts, UnicodeString("hour"), errorCode);
+            UnicodeString hour = opts.getStringFunctionOption(UnicodeString("hour"), errorCode);
             if (U_FAILURE(errorCode)) {
                 errorCode = U_ZERO_ERROR;
             } else {
@@ -1147,7 +992,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 }
             }
             // Minute
-            UnicodeString minute = getFunctionOption(toFormat, opts, UnicodeString("minute"), errorCode);
+            UnicodeString minute = opts.getStringFunctionOption(UnicodeString("minute"), errorCode);
             if (U_FAILURE(errorCode)) {
                 errorCode = U_ZERO_ERROR;
             } else {
@@ -1159,7 +1004,7 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
                 }
             }
             // Second
-            UnicodeString second = getFunctionOption(toFormat, opts, UnicodeString("second"), errorCode);
+            UnicodeString second = opts.getStringFunctionOption(UnicodeString("second"), errorCode);
             if (U_FAILURE(errorCode)) {
                 errorCode = U_ZERO_ERROR;
             } else {
@@ -1182,18 +1027,17 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     }
 
     if (U_FAILURE(errorCode)) {
-        return {};
+        return;
     }
     if (!df.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return {};
+        return;
     }
 
     UnicodeString result;
-    const Formattable& source = toFormat.asFormattable();
-    switch (source.getType()) {
+    switch (source->getType()) {
     case UFMT_STRING: {
-        const UnicodeString& sourceStr = source.getString(errorCode);
+        const UnicodeString& sourceStr = source->getString(errorCode);
         U_ASSERT(U_SUCCESS(errorCode));
         // Pattern for ISO 8601 format - datetime
         UnicodeString pattern("YYYY-MM-dd'T'HH:mm:ss");
@@ -1220,14 +1064,13 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
             // Use the parsed date as the source value
             // in the returned FormattedPlaceholder; this is necessary
             // so the date can be re-formatted
-            toFormat = FormattedPlaceholder(message2::Formattable::forDate(d),
-                                            toFormat.getFallback());
+            operand = message2::Formattable::forDate(d);
             df->format(d, result, 0, errorCode);
         }
         break;
     }
     case UFMT_DATE: {
-        df->format(source.asICUFormattable(errorCode), result, 0, errorCode);
+        df->format(source->asICUFormattable(errorCode), result, 0, errorCode);
         if (U_FAILURE(errorCode)) {
             if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
                 errorCode = U_MF_OPERAND_MISMATCH_ERROR;
@@ -1242,84 +1085,120 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     }
     }
     if (U_FAILURE(errorCode)) {
-        return {};
+        return;
     }
-    return FormattedPlaceholder(toFormat, std::move(opts), FormattedValue(std::move(result)));
+    // Ignore U_USING_DEFAULT_WARNING
+    if (errorCode == U_USING_DEFAULT_WARNING) {
+        errorCode = U_ZERO_ERROR;
+    }
+    formattedDate = result;
 }
 
-StandardFunctions::DateTimeFactory::~DateTimeFactory() {}
 StandardFunctions::DateTime::~DateTime() {}
+StandardFunctions::DateTimeValue::~DateTimeValue() {}
 
-// --------- TextFactory
+// --------- String
 
-Selector* StandardFunctions::TextFactory::createSelector(const Locale& locale, UErrorCode& errorCode) const {
-    Selector* result = new TextSelector(locale);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
+/* static */ StandardFunctions::String*
+StandardFunctions::String::string(UErrorCode& success) {
+    NULL_ON_ERROR(success);
+
+    LocalPointer<String> result(new String());
+    if (!result.isValid()) {
+        success = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
+    }
+    return result.orphan();
+}
+
+extern UnicodeString formattableToString(const Locale&,
+                                         const UBiDiDirection,
+                                         const Formattable&,
+                                         UErrorCode&);
+
+LocalPointer<FunctionValue>
+StandardFunctions::String::call(const FunctionContext& context,
+                                const FunctionValue& val,
+                                const FunctionOptions& opts,
+                                UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    LocalPointer<FunctionValue>
+        result(new StringValue(context, val, opts, errorCode));
+    if (!result.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
 }
 
-void StandardFunctions::TextSelector::selectKey(FormattedPlaceholder&& toFormat,
-                                                FunctionOptions&& opts,
-                                                const UnicodeString* keys,
-                                                int32_t keysLen,
-                                                UnicodeString* prefs,
-                                                int32_t& prefsLen,
-						UErrorCode& errorCode) const {
-    // No options
-    (void) opts;
+UnicodeString StandardFunctions::StringValue::formatToString(UErrorCode& errorCode) const {
+    (void) errorCode;
 
+    return formattedString;
+}
+
+StandardFunctions::StringValue::StringValue(const FunctionContext& context,
+                                            const FunctionValue& val,
+                                            const FunctionOptions&,
+                                            UErrorCode& status) {
+    CHECK_ERROR(status);
+    operand = val.getOperand();
+    functionName = UnicodeString("string");
+    // No options
+    // Convert to string
+    formattedString = formattableToString(context.getLocale(), context.getDirection(), operand, status);
+}
+
+void StandardFunctions::StringValue::selectKeys(const UnicodeString* keys,
+                                                int32_t keysLen,
+                                                int32_t* prefs,
+                                                int32_t& prefsLen,
+                                                UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Just compares the key and value as strings
 
-    // Argument must be present
-    if (!toFormat.canFormat()) {
-        errorCode = U_MF_SELECTOR_ERROR;
-        return;
-    }
-
     prefsLen = 0;
 
-    // Convert to string
-    const UnicodeString& formattedValue = toFormat.formatToString(locale, errorCode);
     if (U_FAILURE(errorCode)) {
         return;
     }
     // Normalize result
-    UnicodeString normalized = normalizeNFC(formattedValue);
+    UnicodeString normalized = normalizeNFC(formattedString);
 
     for (int32_t i = 0; i < keysLen; i++) {
         if (keys[i] == normalized) {
-	    prefs[0] = keys[i];
+	    prefs[0] = i;
             prefsLen = 1;
             break;
         }
     }
 }
 
-StandardFunctions::TextFactory::~TextFactory() {}
-StandardFunctions::TextSelector::~TextSelector() {}
+StandardFunctions::String::~String() {}
+StandardFunctions::StringValue::~StringValue() {}
 
-// ------------ TestFormatFactory
+// ------------ TestFunction
 
-Formatter* StandardFunctions::TestFormatFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
+StandardFunctions::TestFunction::~TestFunction() {}
+StandardFunctions::TestFunctionValue::~TestFunctionValue() {}
 
-    // Results are not locale-dependent
-    (void) locale;
 
-    Formatter* result = new TestFormat();
-    if (result == nullptr) {
+LocalPointer<FunctionValue> StandardFunctions::TestFunction::call(const FunctionContext& context,
+                                                                  const FunctionValue& operand,
+                                                                  const FunctionOptions& options,
+                                                                  UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    LocalPointer<FunctionValue>
+        val(new TestFunctionValue(*this, context, operand, options, errorCode));
+    if (!val.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
-    return result;
+    return val;
 }
-
-StandardFunctions::TestFormatFactory::~TestFormatFactory() {}
-StandardFunctions::TestFormat::~TestFormat() {}
 
 // Extract numeric value from a Formattable or, if it's a string,
 // parse it as a number according to the MF2 `number-literal` grammar production
@@ -1348,7 +1227,9 @@ double formattableToNumber(const Formattable& arg, UErrorCode& status) {
         }
         case UFMT_STRING: {
             // Try to parse the string as a number
-            result = parseNumberLiteral(arg, status);
+            const UnicodeString& s = arg.getString(status);
+            U_ASSERT(U_SUCCESS(status));
+            result = parseNumberLiteral(s, status);
             if (U_FAILURE(status)) {
                 status = U_MF_OPERAND_MISMATCH_ERROR;
             }
@@ -1363,14 +1244,53 @@ double formattableToNumber(const Formattable& arg, UErrorCode& status) {
     return result;
 }
 
+static bool isTestFunction(const UnicodeString& s) {
+    return (s == u"test:format"
+            || s == u"test:select"
+            || s == u"test:function");
+}
 
-/* static */ void StandardFunctions::TestFormat::testFunctionParameters(const FormattedPlaceholder& arg,
-                                                                        const FunctionOptions& options,
-                                                                        int32_t& decimalPlaces,
-                                                                        bool& failsFormat,
-                                                                        bool& failsSelect,
-                                                                        double& input,
-                                                                        UErrorCode& status) {
+static void setFailsFromFunctionValue(const FunctionValue& optionValue,
+                                      bool& failsFormat,
+                                      bool& failsSelect,
+                                      UErrorCode& status) {
+    UnicodeString failsString = optionValue.getOperand().getString(status);
+    if (U_SUCCESS(status)) {
+        // 9i. If its value resolves to the string 'always', then
+        if (failsString == u"always") {
+            // 9ia. Set FailsFormat to be true
+            failsFormat = true;
+            // 9ib. Set FailsSelect to be true.
+            failsSelect = true;
+        }
+        // 9ii. Else if its value resolves to the string "format", then
+        else if (failsString == u"format") {
+            // 9ia. Set FailsFormat to be true
+            failsFormat = true;
+        }
+        // 9iii. Else if its value resolves to the string "select", then
+        else if (failsString == u"select") {
+            // 9iiia. Set FailsSelect to be true.
+            failsSelect = true;
+        }
+        // 9iv. Else if its value does not resolve to the string "never", then
+        else if (failsString != u"never") {
+            // 9iv(a). Emit "bad-option" Resolution Error.
+            status = U_MF_BAD_OPTION;
+        }
+    } else {
+        // 9iv. again
+        status = U_MF_BAD_OPTION;
+    }
+}
+
+/* static */ void StandardFunctions::TestFunction::testFunctionParameters(const FunctionValue& arg,
+                                                                          const FunctionOptions& options,
+                                                                          int32_t& decimalPlaces,
+                                                                          bool& failsFormat,
+                                                                          bool& failsSelect,
+                                                                          double& input,
+                                                                          UErrorCode& status) const {
     CHECK_ERROR(status);
 
     // 1. Let DecimalPlaces be 0.
@@ -1385,22 +1305,59 @@ double formattableToNumber(const Formattable& arg, UErrorCode& status) {
     // 4. Let arg be the resolved value of the expression operand.
     // (already true)
 
-    // Step 5 omitted because composition isn't fully implemented yet
-    // 6. Else if arg is a numerical value or a string matching the number-literal production, then
-    input = formattableToNumber(arg.asFormattable(), status);
-    if (U_FAILURE(status)) {
-        // 7. Else,
-        // 7i. Emit "bad-input" Resolution Error.
-        status = U_MF_OPERAND_MISMATCH_ERROR;
-        // 7ii. Use a fallback value as the resolved value of the expression.
-        // Further steps of this algorithm are not followed.
+    // 5. If arg is the resolved value of an expression with a :test:function, :test:select, or :test:format annotation for which resolution has succeeded, then
+    if (isTestFunction(arg.getFunctionName())) {
+        // 5i. Let Input be the Input value of arg.
+        input = formattableToNumber(arg.getOperand(), status);
+        if (U_FAILURE(status)) {
+            status = U_MF_OPERAND_MISMATCH_ERROR;
+            return;
+        }
+        const FunctionOptions& opts = arg.getResolvedOptions();
+        // 5ii. Set DecimalPlaces to be DecimalPlaces value of arg.
+        const FunctionValue* decimalPlacesFunctionValue = opts.getFunctionOption(UnicodeString("decimalPlaces"), status);
+        if (U_SUCCESS(status)) {
+            decimalPlaces = formattableToNumber(decimalPlacesFunctionValue->getOperand(), status);
+            if (U_FAILURE(status)) {
+                status = U_MF_OPERAND_MISMATCH_ERROR;
+                return;
+            }
+        } else {
+            // Option was not provided -- not an error
+            status = U_ZERO_ERROR;
+        }
+        // 5iii. Set FailsFormat to be FailsFormat value of arg.
+        const FunctionValue* failsFormatFunctionValue = opts.getFunctionOption(UnicodeString("fails"), status);
+        if (U_SUCCESS(status)) {
+            setFailsFromFunctionValue(*failsFormatFunctionValue, failsFormat, failsSelect, status);
+            if (U_FAILURE(status)) {
+                status = U_MF_BAD_OPTION;
+                return;
+            }
+        } else {
+            // Option was not provided -- not an error
+            status = U_ZERO_ERROR;
+        }
+        // 5iv. Set FailsSelect to be FailsSelect value of arg.
+        // (Done in previous step)
+    } else {
+        // 6. Else if arg is a numerical value or a string matching the number-literal production, then
+        input = formattableToNumber(arg.getOperand(), status);
+        if (U_FAILURE(status)) {
+            // 7. Else,
+            // 7i. Emit "bad-input" Resolution Error.
+            status = U_MF_OPERAND_MISMATCH_ERROR;
+            // 7ii. Use a fallback value as the resolved value of the expression.
+            // Further steps of this algorithm are not followed.
+        }
     }
+
+    const FunctionValue* decimalPlacesOpt = options.getFunctionOption(UnicodeString("decimalPlaces"), status);
     // 8. If the decimalPlaces option is set, then
-    Formattable opt;
-    if (options.getFunctionOption(UnicodeString("decimalPlaces"), opt)) {
+    if (U_SUCCESS(status)) {
         // 8i. If its value resolves to a numerical integer value 0 or 1
         // or their corresponding string representations '0' or '1', then
-        double decimalPlacesInput = formattableToNumber(opt, status);
+        double decimalPlacesInput = formattableToNumber(decimalPlacesOpt->getOperand(), status);
         if (U_SUCCESS(status)) {
             if (decimalPlacesInput == 0 || decimalPlacesInput == 1) {
                 // 8ia. Set DecimalPlaces to be the numerical value of the option.
@@ -1413,68 +1370,53 @@ double formattableToNumber(const Formattable& arg, UErrorCode& status) {
             status = U_MF_BAD_OPTION;
             // 8iib. Use a fallback value as the resolved value of the expression.
         }
+    } else {
+        // Option was not provided -- not an error
+        status = U_ZERO_ERROR;
     }
+
+    const FunctionValue* failsOpt = options.getFunctionOption(UnicodeString("fails"), status);
     // 9. If the fails option is set, then
-    Formattable failsOpt;
-    if (options.getFunctionOption(UnicodeString("fails"), failsOpt)) {
-        UnicodeString failsString = failsOpt.getString(status);
-        if (U_SUCCESS(status)) {
-            // 9i. If its value resolves to the string 'always', then
-            if (failsString == u"always") {
-                // 9ia. Set FailsFormat to be true
-                failsFormat = true;
-                // 9ib. Set FailsSelect to be true.
-                failsSelect = true;
-            }
-            // 9ii. Else if its value resolves to the string "format", then
-            else if (failsString == u"format") {
-                // 9ia. Set FailsFormat to be true
-                failsFormat = true;
-            }
-            // 9iii. Else if its value resolves to the string "select", then
-            else if (failsString == u"select") {
-                // 9iiia. Set FailsSelect to be true.
-                failsSelect = true;
-            }
-            // 9iv. Else if its value does not resolve to the string "never", then
-            else if (failsString != u"never") {
-                // 9iv(a). Emit "bad-option" Resolution Error.
-                status = U_MF_BAD_OPTION;
-            }
-        } else {
-            // 9iv. again
-            status = U_MF_BAD_OPTION;
-        }
+    if (U_SUCCESS(status)) {
+        setFailsFromFunctionValue(*failsOpt, failsFormat, failsSelect, status);
+    } else {
+        // Option was not provided -- not an error
+        status = U_ZERO_ERROR;
     }
 }
 
-FormattedPlaceholder StandardFunctions::TestFormat::format(FormattedPlaceholder&& arg,
-                                                           FunctionOptions&& options,
-                                                           UErrorCode& status) const{
+StandardFunctions::TestFunctionValue::TestFunctionValue(const TestFunction& parent,
+                                                        const FunctionContext&,
+                                                        const FunctionValue& arg,
+                                                        const FunctionOptions& options,
+                                                        UErrorCode& status) {
+    parent.testFunctionParameters(arg, options, decimalPlaces,
+                                  failsFormat, failsSelect, input, status);
+    opts = options.mergeOptions(arg.getResolvedOptions(), status);
+    operand = arg.getOperand();
+    canFormat = parent.canFormat;
+    canSelect = parent.canSelect;
+    functionName = UnicodeString(canFormat && canSelect ?
+                                 "test:function"
+                                 : canFormat ? "test:format"
+                                 : "test:select");
 
-    int32_t decimalPlaces;
-    bool failsFormat;
-    bool failsSelect;
-    double input;
-
-    testFunctionParameters(arg, options, decimalPlaces,
-                           failsFormat, failsSelect, input, status);
     if (U_FAILURE(status)) {
-        return FormattedPlaceholder(arg.getFallback());
+        return;
     }
 
     // If FailsFormat is true, attempting to format the placeholder to any
     // formatting target will fail.
     if (failsFormat) {
-        status = U_MF_FORMATTING_ERROR;
-        return FormattedPlaceholder(arg.getFallback());
+        formattedString = arg.getFallback();
+        return;
     }
-    UnicodeString result;
+
     // When :test:function is used as a formatter, a placeholder resolving to a value
     // with a :test:function expression is formatted as a concatenation of the following parts:
     // 1. If Input is less than 0, the character - U+002D Hyphen-Minus.
     if (input < 0) {
-        result += HYPHEN;
+        formattedString += HYPHEN;
     }
     // 2. The truncated absolute integer value of Input, i.e. floor(abs(Input)), formatted as a
     // sequence of decimal digit characters (U+0030...U+0039).
@@ -1490,84 +1432,89 @@ FormattedPlaceholder StandardFunctions::TestFormat::format(FormattedPlaceholder&
                                                               &ignore,
                                                               &ignoreLen,
                                                               &ignorePoint);
-    result += UnicodeString(buffer);
+    formattedString += UnicodeString(buffer);
     // 3. If DecimalPlaces is 1, then
     if (decimalPlaces == 1) {
         // 3i. The character . U+002E Full Stop.
-        result += u".";
+        formattedString += u".";
         // 3ii. The single decimal digit character representing the value
         // floor((abs(Input) - floor(abs(Input))) * 10)
         int32_t val = floor((abs(input) - floor(abs(input)) * 10));
-        result += digitToChar(val, status);
+        formattedString += digitToChar(val, status);
         U_ASSERT(U_SUCCESS(status));
     }
-    return FormattedPlaceholder(result);
 }
 
-// ------------ TestSelectFactory
-
-StandardFunctions::TestSelectFactory::~TestSelectFactory() {}
-StandardFunctions::TestSelect::~TestSelect() {}
-
-Selector* StandardFunctions::TestSelectFactory::createSelector(const Locale& locale,
-                                                               UErrorCode& errorCode) const {
-    NULL_ON_ERROR(errorCode);
-
-    // Results are not locale-dependent
-    (void) locale;
-
-    Selector* result = new TestSelect();
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
+UnicodeString StandardFunctions::TestFunctionValue::formatToString(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return {};
     }
-    return result;
+    if (!canFormat || failsFormat) {
+        status = U_MF_FORMATTING_ERROR;
+    }
+    if (!canFormat) {
+        return {};
+    }
+    return formattedString;
 }
 
-void StandardFunctions::TestSelect::selectKey(FormattedPlaceholder&& val,
-                                              FunctionOptions&& options,
-                                              const UnicodeString* keys,
-                                              int32_t keysLen,
-                                              UnicodeString* prefs,
-                                              int32_t& prefsLen,
-                                              UErrorCode& status) const {
-    int32_t decimalPlaces;
-    bool failsFormat;
-    bool failsSelect;
-    double input;
-
-    TestFormat::testFunctionParameters(val, options, decimalPlaces,
-                                       failsFormat, failsSelect, input, status);
-
+void StandardFunctions::TestFunctionValue::selectKeys(const UnicodeString* keys,
+                                                      int32_t keysLen,
+                                                      int32_t* prefs,
+                                                      int32_t& prefsLen,
+                                                      UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return;
     }
 
-    if (failsSelect) {
+    if (!canSelect || failsSelect) {
         status = U_MF_SELECTOR_ERROR;
+        return;
+    }
+
+    prefsLen = 0;
+
+    if (input != 1) {
         return;
     }
 
     // If the Input is 1 and DecimalPlaces is 1, the method will return some slice
     // of the list « '1.0', '1' », depending on whether those values are included in keys.
-    bool include1point0 = false;
-    bool include1 = false;
     if (input == 1 && decimalPlaces == 1) {
-        include1point0 = true;
-        include1 = true;
-    } else if (input == 1 && decimalPlaces == 0) {
-        include1 = true;
+        // 1.0 must come first, so search the keys for 1.0 and then 1
+        for (int32_t i = 0; i < keysLen; i++) {
+            if (keys[i] == u"1.0") {
+                prefs[0] = i;
+                prefsLen++;
+            }
+        }
     }
 
     // If the Input is 1 and DecimalPlaces is 0, the method will return the list « '1' » if
     // keys includes '1', or an empty list otherwise.
     // If the Input is any other value, the method will return an empty list.
     for (int32_t i = 0; i < keysLen; i++) {
-        if ((keys[i] == u"1" && include1)
-            || (keys[i] == u"1.0" && include1point0)) {
-            prefs[prefsLen] = keys[i];
+        if (keys[i] == u"1") {
+            prefs[prefsLen] = i;
             prefsLen++;
         }
     }
+}
+
+StandardFunctions::TestFunction::TestFunction(bool format, bool select) : canFormat(format), canSelect(select) {
+    U_ASSERT(format || select);
+}
+
+/* static */ StandardFunctions::TestFunction* StandardFunctions::TestFunction::testFunction(UErrorCode& status) {
+    return create<TestFunction>(TestFunction(true, true), status);
+}
+
+/* static */ StandardFunctions::TestFunction* StandardFunctions::TestFunction::testFormat(UErrorCode& status) {
+    return create<TestFunction>(TestFunction(true, false), status);
+}
+
+/* static */ StandardFunctions::TestFunction* StandardFunctions::TestFunction::testSelect(UErrorCode& status) {
+    return create<TestFunction>(TestFunction(false, true), status);
 }
 
 } // namespace message2
