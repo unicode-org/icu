@@ -14,19 +14,8 @@ on:
                 type: string
                 required: true
                 description: The git ref end of comparison range. Must be descendant of `from_git_ref`. Prefix branches with `origin/`.
-            # Jira user name & API token is used for processing sensitive tickets
-            jira_user_email:
-                type: string
-                required: false
-                description: (optional to include sensitive tickets) Email address of Jira user
-            # Jira user name & API token is used for processing sensitive tickets
-            # We protect the API token as a secret by preventing its value from pasted at the command line
-            # by using add-mask to obfuscate secret values in the jobs
-            # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions
-            jira_user_api_token:
-                type: string
-                required: false
-                description: (optional to include sensitive tickets) API token of Jira user
+            # Jira user name & API token is used for processing sensitive tickets comes from Github Secrets
+            # stored in the repository
 
 jobs:
     commit-report:
