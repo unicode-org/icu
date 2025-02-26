@@ -438,6 +438,15 @@ namespace message2 {
              * @deprecated This API is for technology preview only.
              */
             virtual const UnicodeString& getFunctionName() const { return functionName; }
+            /* Returns a fallback string that can be used as output
+             * if processing this function results in an error.
+             *             *
+             * @returns A string determined by the creator of this FunctionValue.
+             *
+             * @internal ICU 78 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            virtual const UnicodeString& getFallback() const { return fallback; }
             /**
              * Destructor.
              *
@@ -462,12 +471,19 @@ namespace message2 {
             FunctionOptions opts;
             /**
              * The name of the function that constructed this FunctionValue.
+             *
              * @internal ICU 78 technology preview
              * @deprecated This API is for technology preview only.
              */
             UnicodeString functionName;
-         private:
-
+            /**
+             * Fallback string that can be used if a later function encounters
+             * an error when processing this FunctionValue.
+             *
+             * @internal ICU 78 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            UnicodeString fallback;
     }; // class FunctionValue
 
 } // namespace message2
