@@ -201,6 +201,7 @@ namespace message2 {
         FunctionName name;
         const Selector* selector; // May be null
         const Formatter* formatter; // May be null, but one or the other should be non-null unless argument is a FormattedPlaceholder
+        bool checkSelectOption() const;
     }; // class InternalValue
 
 } // namespace message2

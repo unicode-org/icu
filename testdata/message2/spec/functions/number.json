@@ -16,8 +16,111 @@
       "exp": "hello -4.2"
     },
     {
-      "src": "hello {0.42e+1 :number}",
+      "src": "hello {0.42 :number}",
+      "exp": "hello 0.42"
+    },
+    {
+      "src": "hello {|0.42e+1| :number}",
       "exp": "hello 4.2"
+    },
+    {
+      "src": "hello {00 :number}",
+      "exp": "hello {|00|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {042 :number}",
+      "exp": "hello {|042|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1. :number}",
+      "exp": "hello {|1.|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1e :number}",
+      "exp": "hello {|1e|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1E :number}",
+      "exp": "hello {|1E|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1.e :number}",
+      "exp": "hello {|1.e|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1.2e :number}",
+      "exp": "hello {|1.2e|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1.e3 :number}",
+      "exp": "hello {|1.e3|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1e+ :number}",
+      "exp": "hello {|1e+|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1e- :number}",
+      "exp": "hello {|1e-|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1.0e2.0 :number}",
+      "exp": "hello {|1.0e2.0|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
     },
     {
       "src": "hello {foo :number}",
@@ -180,6 +283,42 @@
           "type": "bad-operand"
         }
       ]
+    },
+    {
+      "description": "formatting with select=literal has no effect",
+      "src": "literal select {1 :number select=exact}",
+      "exp": "literal select 1"
+    },
+    {
+      "description": "select=$var with local literal value causes error but no fallback",
+      "src": ".local $bad = {exact} {{variable select {1 :number select=$bad}}}",
+      "exp": "variable select 1",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "description": "select=$var with external string value is not allowed",
+      "src": "variable select {1 :number select=$bad}",
+      "params": [{ "name": "bad", "value": "exact" }],
+      "exp": "variable select 1",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "description": "select=literal works",
+      "src": ".local $sel = {1 :number select=exact} .match $sel 1 {{literal select {$sel}}} * {{OTHER}}",
+      "exp": "literal select 1"
+    },
+    {
+      "description": "having select=literal as a selector operand is not allowed",
+      "src": ".local $sel = {1 :number select=exact} .local $bad = {$sel :number} .match $bad 1 {{ONE}} * {{operand select {$bad}}}",
+      "exp": "operand select 1",
+      "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
+    },
+    {
+      "description": "with select=$var, * is always selected but its formatting is unaffected",
+      "src": ".local $sel = {1 :number select=$bad} .match $sel 1 {{ONE}} * {{variable select {$sel}}}",
+      "params": [{ "name": "bad", "value": "exact" }],
+      "exp": "variable select 1",
+      "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
     },
     {
       "src": "{42 :number @foo @bar=13}",

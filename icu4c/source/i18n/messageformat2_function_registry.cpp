@@ -286,12 +286,144 @@ MFFunctionRegistry::~MFFunctionRegistry() {
 
 // --------- Number
 
+bool inBounds(const UnicodeString& s, int32_t i) {
+    return i < s.length();
+}
+
+bool isDigit(UChar32 c) {
+    return c >= '0' && c <= '9';
+}
+
+bool parseDigits(const UnicodeString& s, int32_t& i) {
+    if (!isDigit(s[i])) {
+        return false;
+    }
+    while (inBounds(s, i) && isDigit(s[i])) {
+        i++;
+    }
+    return true;
+}
+
+// number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
+bool validateNumberLiteral(const UnicodeString& s) {
+    int32_t i = 0;
+
+    if (s.isEmpty()) {
+        return false;
+    }
+
+    // Parse optional sign
+    // ["-"]
+    if (s[0] == HYPHEN) {
+        i++;
+    }
+
+    if (!inBounds(s, i)) {
+        return false;
+    }
+
+    // Parse integer digits
+    // (%x30 / (%x31-39 *DIGIT))
+    if (s[i] == '0') {
+        if (!inBounds(s, i + 1) || s[i + 1] != PERIOD) {
+            return false;
+        }
+        i++;
+    } else {
+        if (!parseDigits(s, i)) {
+            return false;
+        }
+    }
+    // The rest is optional
+    if (!inBounds(s, i)) {
+        return true;
+    }
+
+    // Parse optional decimal digits
+    // ["." 1*DIGIT]
+    if (s[i] == PERIOD) {
+        i++;
+        if (!parseDigits(s, i)) {
+            return false;
+        }
+    }
+
+    if (!inBounds(s, i)) {
+        return true;
+    }
+
+    // Parse optional exponent
+    // [%i"e" ["-" / "+"] 1*DIGIT]
+    if (s[i] == 'e' || s[i] == 'E') {
+        i++;
+        if (!inBounds(s, i)) {
+            return false;
+        }
+        // Parse optional sign
+        if (s[i] == HYPHEN || s[i] == PLUS) {
+            i++;
+        }
+        if (!inBounds(s, i)) {
+            return false;
+        }
+        if (!parseDigits(s, i)) {
+            return false;
+        }
+    }
+    if (i != s.length()) {
+        return false;
+    }
+    return true;
+}
+
+bool isInteger(const Formattable& s) {
+    switch (s.getType()) {
+        case UFMT_DOUBLE:
+        case UFMT_LONG:
+        case UFMT_INT64:
+            return true;
+        case UFMT_STRING: {
+            UErrorCode ignore = U_ZERO_ERROR;
+            const UnicodeString& str = s.getString(ignore);
+            return validateNumberLiteral(str);
+        }
+        default:
+            return false;
+    }
+}
+
+bool isDigitSizeOption(const UnicodeString& s) {
+    return s == UnicodeString("minimumIntegerDigits")
+        || s == UnicodeString("minimumFractionDigits")
+        || s == UnicodeString("maximumFractionDigits")
+        || s == UnicodeString("minimumSignificantDigits")
+        || s == UnicodeString("maximumSignificantDigits");
+}
+
+/* static */ void StandardFunctions::validateDigitSizeOptions(const FunctionOptions& opts,
+                                                              UErrorCode& status) {
+    CHECK_ERROR(status);
+
+    for (int32_t i = 0; i < opts.optionsCount(); i++) {
+        const ResolvedFunctionOption& opt = opts.options[i];
+        if (isDigitSizeOption(opt.getName()) && !isInteger(opt.getValue())) {
+            status = U_MF_BAD_OPTION;
+            return;
+        }
+    }
+}
+
 /* static */ number::LocalizedNumberFormatter StandardFunctions::formatterForOptions(const Number& number,
                                                                                      const FunctionOptions& opts,
                                                                                      UErrorCode& status) {
     number::UnlocalizedNumberFormatter nf;
 
     using namespace number;
+
+    validateDigitSizeOptions(opts, status);
+    if (U_FAILURE(status)) {
+        return {};
+    }
 
     if (U_SUCCESS(status)) {
         Formattable opt;
@@ -469,22 +601,19 @@ static double parseNumberLiteral(const Formattable& input, UErrorCode& errorCode
         return {};
     }
 
-    // Hack: Check for cases that are forbidden by the MF2 grammar
-    // but allowed by StringToDouble
-    int32_t len = inputStr.length();
-
-    if (len > 0 && ((inputStr[0] == '+')
-                    || (inputStr[0] == '0' && len > 1 && inputStr[1] != '.')
-                    || (inputStr[len - 1] == '.')
-                    || (inputStr[0] == '.'))) {
+    // Validate string according to `number-literal` production
+    // in the spec for `:number`. This is because some cases are
+    // forbidden by this grammar, but allowed by StringToDouble.
+    if (!validateNumberLiteral(inputStr)) {
         errorCode = U_MF_OPERAND_MISMATCH_ERROR;
         return 0;
     }
 
-    // Otherwise, convert to double using double_conversion::StringToDoubleConverter
+    // Convert to double using double_conversion::StringToDoubleConverter
     using namespace double_conversion;
     int processedCharactersCount = 0;
     StringToDoubleConverter converter(0, 0, 0, "", "");
+    int32_t len = inputStr.length();
     double result =
         converter.StringToDouble(reinterpret_cast<const uint16_t*>(inputStr.getBuffer()),
                                  len,
@@ -577,7 +706,7 @@ int32_t StandardFunctions::Number::minimumIntegerDigits(const FunctionOptions& o
             return static_cast<int32_t>(val);
         }
     }
-    return 0;
+    return 1;
 }
 
 int32_t StandardFunctions::Number::minimumSignificantDigits(const FunctionOptions& opts) const {
@@ -693,16 +822,16 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
     // Need to return the integer value if invoked as :integer
     if (isInteger) {
         return FormattedPlaceholder(FormattedPlaceholder(Formattable(integerValue), arg.getFallback()),
+                                    std::move(opts),
                                     FormattedValue(std::move(numberResult)));
     }
-    return FormattedPlaceholder(arg, FormattedValue(std::move(numberResult)));
+    return FormattedPlaceholder(arg, std::move(opts), FormattedValue(std::move(numberResult)));
 }
 
 StandardFunctions::Number::~Number() {}
 StandardFunctions::NumberFactory::~NumberFactory() {}
 
 // --------- PluralFactory
-
 
 StandardFunctions::Plural::PluralType StandardFunctions::Plural::pluralType(const FunctionOptions& opts) const {
     Formattable opt;

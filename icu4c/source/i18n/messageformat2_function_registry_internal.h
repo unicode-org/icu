@@ -38,6 +38,8 @@ namespace message2 {
         static UnicodeString normalizeNFC(const UnicodeString&);
 
         private:
+        static void validateDigitSizeOptions(const FunctionOptions&, UErrorCode&);
+        static void checkSelectOption(const FunctionOptions&, UErrorCode&);
         static UnicodeString getStringOption(const FunctionOptions& opts,
                                              const UnicodeString& optionName,
                                              UErrorCode& errorCode);

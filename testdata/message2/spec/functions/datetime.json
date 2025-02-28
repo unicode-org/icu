@@ -45,7 +45,7 @@
       "src": "{|2006-01-02T15:04:06| :datetime}"
     },
     {
-      "src": "{|2006-01-02T15:04:06| :datetime year=numeric month=|2-digit|}"
+      "src": "{|2006-01-02T15:04:06| :datetime year=numeric month=2-digit}"
     },
     {
       "src": "{|2006-01-02T15:04:06| :datetime dateStyle=long}"
