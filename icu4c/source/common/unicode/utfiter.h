@@ -193,37 +193,51 @@ private:
     const Unit *p;
 };
 
-template<typename UnitIter>
-void uprv_inc16(UnitIter &p, UnitIter limit) {
-    // TODO: assert p != limit_ -- more precisely: start_ <= p < limit_
-    // Very similar to U16_FWD_1().
-    auto c = *p;
-    ++p;
-    if (U16_IS_LEAD(c) && p != limit && U16_IS_TRAIL(*p)) {
-        ++p;
-    }
-}
-
+#ifndef U_IN_DOXYGEN
 // @internal
+template<typename UnitIter, typename CP32, UIllFormedBehavior behavior, typename = void>
+class UTFImpl;
+
+// UTF-16
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
-CodeUnits<UnitIter, CP32> uprv_decAndRead16(UnitIter start, UnitIter &p) {
-    // TODO: assert p != start_ -- more precisely: start_ < p <= limit_
-    // Very similar to U16_PREV_OR_FFFD().
-    CP32 c = *--p;
-    if (!U16_IS_SURROGATE(c)) {
-        return {c, 1, true, p};
-    } else {
-        UnitIter p1;
-        uint16_t c2;
-        if (U16_IS_SURROGATE_TRAIL(c) && p != start && (p1 = p, U16_IS_LEAD(c2 = *--p1))) {
-            p = p1;
-            c = U16_GET_SUPPLEMENTARY(c2, c);
-            return {c, 2, true, p};
-        } else {
-            return {uprv_u16Sub<CP32, behavior>(c), 1, false, p};
+class UTFImpl<
+        UnitIter,
+        CP32,
+        behavior,
+        std::enable_if_t<
+            sizeof(typename std::iterator_traits<UnitIter>::value_type) == 2>> {
+public:
+    static void inc(UnitIter &p, UnitIter limit) {
+        // TODO: assert p != limit_ -- more precisely: start_ <= p < limit_
+        // Very similar to U16_FWD_1().
+        auto c = *p;
+        ++p;
+        if (U16_IS_LEAD(c) && p != limit && U16_IS_TRAIL(*p)) {
+            ++p;
         }
     }
-}
+
+    static CodeUnits<UnitIter, CP32> decAndRead(UnitIter start, UnitIter &p) {
+        // TODO: assert p != start_ -- more precisely: start_ < p <= limit_
+        // Very similar to U16_PREV_OR_FFFD().
+        CP32 c = *--p;
+        if (!U16_IS_SURROGATE(c)) {
+            return {c, 1, true, p};
+        } else {
+            UnitIter p1;
+            uint16_t c2;
+            if (U16_IS_SURROGATE_TRAIL(c) && p != start && (p1 = p, U16_IS_LEAD(c2 = *--p1))) {
+                p = p1;
+                c = U16_GET_SUPPLEMENTARY(c2, c);
+                return {c, 2, true, p};
+            } else {
+                return {uprv_u16Sub<CP32, behavior>(c), 1, false, p};
+            }
+        }
+    }
+};
+
+#endif
 
 /**
  * Validating bidirectional iterator over the code points in a Unicode 16-bit string.
@@ -237,6 +251,8 @@ CodeUnits<UnitIter, CP32> uprv_decAndRead16(UnitIter start, UnitIter &p) {
  */
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior, typename = void>
 class U16Iterator {
+    using Impl = UTFImpl<UnitIter, CP32, behavior>;
+
     // Proxy type for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning CodeUnits.
     class Proxy {
@@ -292,9 +308,9 @@ public:
             // operator*() called readAndInc() so p_ is already ahead.
             state_ = 0;
         } else if (state_ == 0) {
-            uprv_inc16(p_, limit_);
+            Impl::inc(p_, limit_);
         } else /* state_ < 0 */ {
-            // operator--() called uprv_decAndRead16() so we know how far to skip; max 2 for UTF-16.
+            // operator--() called decAndRead() so we know how far to skip; max 2 for UTF-16.
             ++p_;
             if (++state_ != 0) {
                 ++p_;
@@ -317,7 +333,7 @@ public:
             // keep this->state_ == 0
             return result;
         } else /* state_ < 0 */ {
-            // operator--() called uprv_decAndRead16() so we know how far to skip; max 2 for UTF-16.
+            // operator--() called decAndRead() so we know how far to skip; max 2 for UTF-16.
             U16Iterator result(*this);
             ++p_;
             if (++state_ != 0) {
@@ -337,7 +353,7 @@ public:
                 state_ = 0;
             }
         }
-        units_ = uprv_decAndRead16(start_, p_);
+        units_ = Impl::decAndRead(start_, p_);
         state_ = -units_.length();
         return *this;
     }
@@ -381,7 +397,7 @@ private:
     // >0: units_ = readAndInc(), p_ = units limit, state_ = units_.len
     //     which means that p_ is ahead of its logical position
     //  0: initial state
-    // <0: units_ = uprv_decAndRead16(), p_ = units start, state_ = -units_.len
+    // <0: units_ = decAndRead(), p_ = units start, state_ = -units_.len
     // TODO: could insert state_ into hidden CodeUnits field to avoid padding,
     //       but mostly irrelevant when inlined?
     mutable int8_t state_ = 0;
@@ -398,6 +414,8 @@ class U16Iterator<
             !std::is_base_of_v<
                 std::forward_iterator_tag,
                 typename std::iterator_traits<UnitIter>::iterator_category>>> {
+    using Impl = UTFImpl<UnitIter, CP32, behavior>;
+
     // Proxy type for post-increment return value, to make *iter++ work.
     // Also for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning CodeUnits.
@@ -457,7 +475,7 @@ public:
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
         } else {
-            uprv_inc16(p_, limit_);
+            Impl::inc(p_, limit_);
         }
         return *this;
     }
@@ -524,6 +542,8 @@ private:
  */
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
 class U16ReverseIterator {
+    using Impl = UTFImpl<UnitIter, CP32, behavior>;
+
     // Proxy type for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning CodeUnits.
     class Proxy {
@@ -550,20 +570,20 @@ public:
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         UnitIter p = p_;
-        return uprv_decAndRead16(start_, p);
+        return Impl::decAndRead(start_, p);
     }
 
     Proxy operator->() const {
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         UnitIter p = p_;
-        return Proxy(uprv_decAndRead16(start_, p));
+        return Proxy(Impl::decAndRead(start_, p));
     }
 
     U16ReverseIterator &operator++() {  // pre-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        uprv_decAndRead16(start_, p_);
+        Impl::decAndRead(start_, p_);
         return *this;
     }
 
@@ -571,7 +591,7 @@ public:
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         U16ReverseIterator result(*this);
-        uprv_decAndRead16(start_, p_);
+        Impl::decAndRead(start_, p_);
         return result;
     }
 
