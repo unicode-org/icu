@@ -209,8 +209,7 @@ class U16IteratorBase {
 protected:
     // TODO: Maybe std::move() the UnitIters?
     // @internal
-    U16IteratorBase(UnitIter start, UnitIter p, UnitIter limit) :
-            start(start), current(p), limit(limit) {}
+    U16IteratorBase(UnitIter start, UnitIter limit) : start(start), limit(limit) {}
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
 
@@ -220,28 +219,24 @@ protected:
     U16IteratorBase &operator=(const U16IteratorBase &other) = default;
 
     // @internal
-    bool operator==(const U16IteratorBase &other) const { return current == other.current; }
-    // @internal
-    bool operator!=(const U16IteratorBase &other) const { return !operator==(other); }
-
-    // @internal
-    void inc() {
-        // TODO: assert current != limit -- more precisely: start <= current < limit
+    void inc(UnitIter &p) {
+        // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_FWD_1().
-        auto c = *current;
-        ++current;
-        if (U16_IS_LEAD(c) && current != limit && U16_IS_TRAIL(*current)) {
-            ++current;
+        auto c = *p;
+        ++p;
+        if (U16_IS_LEAD(c) && p != limit && U16_IS_TRAIL(*p)) {
+            ++p;
         }
     }
 
+    // TODO: unused, remove?
     // @internal
-    void dec() {
+    void dec(UnitIter &p) {
         // TODO: assert p != start -- more precisely: start < p <= limit
         // Very similar to U16_BACK_1().
         UnitIter p1;
-        if (U16_IS_TRAIL(*--current) && current != start && (p1 = current, U16_IS_LEAD(*--p1))) {
-            current = p1;
+        if (U16_IS_TRAIL(*--p) && p != start && (p1 = p, U16_IS_LEAD(*--p1))) {
+            p = p1;
         }
     }
 
@@ -286,16 +281,10 @@ protected:
         }
     }
 
-public:
-    // TODO: Public for U16Iterator::operator==().
-    // Instead... friend? Move pointers up into the public iterator?
-
     // In a validating iterator, we need start & limit so that when we read a code point
     // (forward or backward) we can test if there are enough code units.
     // @internal
     const UnitIter start;
-    // @internal
-    UnitIter current;
     // @internal
     const UnitIter limit;
 };
@@ -331,43 +320,24 @@ public:
     //       What about iterator_category depending on the UnitIter??
 
     U16Iterator(UnitIter start, UnitIter p, UnitIter limit) :
-            Super(start, p, limit), units(0, 0, false, p) {}
+            Super(start, limit), p_(p), units(0, 0, false, p) {}
     // Constructs an iterator start or limit sentinel.
-    U16Iterator(UnitIter p) : Super(p, p, p), units(0, 0, false, p) {}
+    U16Iterator(UnitIter p) : Super(p, p), p_(p), units(0, 0, false, p) {}
 
     U16Iterator(const U16Iterator &other) = default;
     U16Iterator &operator=(const U16Iterator &other) = default;
 
     bool operator==(const U16Iterator &other) const {
         // Compare logical positions.
-        // If state>0 then current is that much ahead of the logical position.
-        UnitIter p1 = Super::current;
-        UnitIter p2 = static_cast<const Super &>(other).current;
-        bool ahead1 = state > 0;
-        bool ahead2 = other.state > 0;
-        if (p1 == p2) {
-            return ahead1 == ahead2;
-        } else {  // p1 != p2
-            if (ahead1 == ahead2) { return false; }
-            // Increment the *opposite* UnitIter according to the ahead-ness
-            // to see if it will catch up to the same physical position.
-            if (p2 != static_cast<const Super &>(other).limit) {
-                for (int8_t i = state; i > 0; --i) { ++p2; }
-            }
-            if (p1 != Super::limit) {
-                for (int8_t i = other.state; i > 0; --i) { ++p1; }
-            }
-            // TODO: With a bidirectional UnitIter, we can decrement current by state.
-            // TODO: With a non-validating iterator and a forward-only UnitIter,
-            // we may need to keep a copy of the UnitIter for the actual logical position.
-            return p1 == p2;
-        }
+        UnitIter p1 = state <= 0 ? p_ : units.data();
+        UnitIter p2 = other.state <= 0 ? other.p_ : other.units.data();
+        return p1 == p2;
     }
     bool operator!=(const U16Iterator &other) const { return !operator==(other); }
 
     CodeUnits<UnitIter, CP32> operator*() {
         if (state == 0) {
-            units = Super::readAndInc(Super::current);
+            units = Super::readAndInc(p_);
             state = units.length();
         }
         return units;
@@ -375,7 +345,7 @@ public:
 
     Proxy operator->() {
         if (state == 0) {
-            units = Super::readAndInc(Super::current);
+            units = Super::readAndInc(p_);
             state = units.length();
         }
         return Proxy(units);
@@ -383,15 +353,15 @@ public:
 
     U16Iterator &operator++() {  // pre-increment
         if (state > 0) {
-            // operator*() called readAndInc() so current is already ahead.
+            // operator*() called readAndInc() so p_ is already ahead.
             state = 0;
         } else if (state == 0) {
-            Super::inc();
+            Super::inc(p_);
         } else /* state < 0 */ {
             // operator--() called decAndRead() so we know how far to skip; max 2 for UTF-16.
-            ++Super::current;
+            ++p_;
             if (++state != 0) {
-                ++Super::current;
+                ++p_;
                 state = 0;
             }
         }
@@ -400,12 +370,12 @@ public:
 
     U16Iterator operator++(int) {  // post-increment
         if (state > 0) {
-            // operator*() called readAndInc() so current is already ahead.
+            // operator*() called readAndInc() so p_ is already ahead.
             U16Iterator result(*this);
             state = 0;
             return result;
         } else if (state == 0) {
-            units = Super::readAndInc(Super::current);
+            units = Super::readAndInc(p_);
             U16Iterator result(*this);
             result.state = units.length();
             // keep this->state == 0
@@ -413,9 +383,9 @@ public:
         } else /* state < 0 */ {
             // operator--() called decAndRead() so we know how far to skip; max 2 for UTF-16.
             U16Iterator result(*this);
-            ++Super::current;
+            ++p_;
             if (++state != 0) {
-                ++Super::current;
+                ++p_;
                 state = 0;
             }
             return result;
@@ -424,14 +394,14 @@ public:
 
     U16Iterator &operator--() {  // pre-decrement
         if (state > 0) {
-            // operator*() called readAndInc() so current is ahead of the logical position.
-            --Super::current;
+            // operator*() called readAndInc() so p_ is ahead of the logical position.
+            --p_;
             if (--state != 0) {
-                --Super::current;
+                --p_;
                 state = 0;
             }
         }
-        units = Super::decAndRead(Super::current);
+        units = Super::decAndRead(p_);
         state = -units.length();
         return *this;
     }
@@ -443,13 +413,14 @@ public:
     }
 
 private:
+    UnitIter p_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
-    // so that we can use a single-pass input iterator for UnitIter.
+    // to make it easy for the compiler to optimize.
     CodeUnits<UnitIter, CP32> units;
-    // >0: units = readAndInc(), current = units limit, state = units.len
-    //     which means that current is ahead of its logical position
+    // >0: units = readAndInc(), p_ = units limit, state = units.len
+    //     which means that p_ is ahead of its logical position
     //  0: initial state
-    // <0: units = decAndRead(), current = units start, state = -units.len
+    // <0: units = decAndRead(), p_ = units start, state = -units.len
     // TODO: could also set state = -1 & use units.len when needed, but less consistent
     // TODO: could insert state into hidden CodeUnits field to avoid padding,
     //       but mostly irrelevant when inlined?
@@ -484,22 +455,22 @@ public:
     //       What about iterator_category depending on the UnitIter??
 
     // TODO: Does it make sense for the limits to allow having a different type?
-    // We only need to be able to compare current vs. limit for == and !=.
+    // We only need to be able to compare p_ vs. limit for == and !=.
     // Might allow interesting sentinel types.
     // Would be trouble for the sentinel constructor that inits both iters from the same p.
 
-    U16Iterator(UnitIter p, UnitIter limit) : current(p), limit(limit) {}
+    U16Iterator(UnitIter p, UnitIter limit) : p_(p), limit(limit) {}
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
 
     // Constructs an iterator start or limit sentinel.
-    U16Iterator(UnitIter p) : current(p), limit(p) {}
+    U16Iterator(UnitIter p) : p_(p), limit(p) {}
 
     U16Iterator(const U16Iterator &other) = default;
     U16Iterator &operator=(const U16Iterator &other) = default;
 
     bool operator==(const U16Iterator &other) const {
-        return current == other.current && state == other.state;
+        return p_ == other.p_ && state == other.state;
         // Strictly speaking, we should check if the logical position is the same.
         // However, we cannot move, or do arithmetic with, a single-pass UnitIter.
     }
@@ -507,7 +478,7 @@ public:
 
     CodeUnits<UnitIter, CP32> operator*() {
         if (state == 0) {
-            units = readAndInc(current);
+            units = readAndInc(p_);
             state = units.length();
         }
         return units;
@@ -515,7 +486,7 @@ public:
 
     Proxy operator->() {
         if (state == 0) {
-            units = readAndInc(current);
+            units = readAndInc(p_);
             state = units.length();
         }
         return Proxy(units);
@@ -523,7 +494,7 @@ public:
 
     U16Iterator &operator++() {  // pre-increment
         if (state != 0) {
-            // operator*() called readAndInc() so current is already ahead.
+            // operator*() called readAndInc() so p_ is already ahead.
             state = 0;
         } else {
             inc();
@@ -533,10 +504,10 @@ public:
 
     Proxy operator++(int) {  // post-increment
         if (state != 0) {
-            // operator*() called readAndInc() so current is already ahead.
+            // operator*() called readAndInc() so p_ is already ahead.
             state = 0;
         } else {
-            units = readAndInc(current);
+            units = readAndInc(p_);
             // keep this->state == 0
         }
         return Proxy(units);
@@ -545,12 +516,12 @@ public:
 private:
     // @internal
     void inc() {
-        // TODO: assert current != limit -- more precisely: start <= current < limit
+        // TODO: assert p_ != limit -- more precisely: start <= p_ < limit
         // Very similar to U16_FWD_1().
-        auto c = *current;
-        ++current;
-        if (U16_IS_LEAD(c) && current != limit && U16_IS_TRAIL(*current)) {
-            ++current;
+        auto c = *p_;
+        ++p_;
+        if (U16_IS_LEAD(c) && p_ != limit && U16_IS_TRAIL(*p_)) {
+            ++p_;
         }
     }
 
@@ -576,13 +547,13 @@ private:
 
     // In a validating iterator, we need the limit so that when we read a code point
     // we can test if there are enough code units.
-    UnitIter current;
+    UnitIter p_;
     const UnitIter limit;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // so that we can use a single-pass input iterator for UnitIter.
     CodeUnits<UnitIter, CP32> units = {0, 0, false};
-    // >0: units = readAndInc(), current = units limit, state = units.len
-    //     which means that current is ahead of its logical position
+    // >0: units = readAndInc(), p_ = units limit, state = units.len
+    //     which means that p_ is ahead of its logical position
     //  0: initial state
     // TODO: could insert state into hidden CodeUnits field to avoid padding,
     //       but mostly irrelevant when inlined?
@@ -618,34 +589,34 @@ class U16ReverseIterator : private U16IteratorBase<UnitIter, CP32, behavior> {
 
 public:
     U16ReverseIterator(UnitIter start, UnitIter p, UnitIter limit) :
-            Super(start, p, limit) {}
+            Super(start, limit), p_(p) {}
     // Constructs an iterator start or limit sentinel.
-    U16ReverseIterator(UnitIter p) : Super(p, p, p) {}
+    U16ReverseIterator(UnitIter p) : Super(p, p), p_(p) {}
 
     U16ReverseIterator(const U16ReverseIterator &other) = default;
     U16ReverseIterator &operator=(const U16ReverseIterator &other) = default;
 
-    bool operator==(const U16ReverseIterator &other) const { return Super::operator==(other); }
+    bool operator==(const U16ReverseIterator &other) const { return p_ == other.p_; }
     bool operator!=(const U16ReverseIterator &other) const { return !operator==(other); }
 
     CodeUnits<UnitIter, CP32> operator*() const {
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        UnitIter p = Super::current;
+        UnitIter p = p_;
         return Super::decAndRead(p);
     }
 
     Proxy operator->() const {
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        UnitIter p = Super::current;
+        UnitIter p = p_;
         return Proxy(Super::decAndRead(p));
     }
 
     U16ReverseIterator &operator++() {  // pre-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        Super::decAndRead(Super::current);
+        Super::decAndRead(p_);
         return *this;
     }
 
@@ -653,9 +624,12 @@ public:
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         U16ReverseIterator result(*this);
-        Super::decAndRead(Super::current);
+        Super::decAndRead(p_);
         return result;
     }
+
+private:
+    UnitIter p_;
 };
 
 /**
@@ -723,7 +697,7 @@ template<typename Unit16, typename CP32>
 class U16UnsafeIteratorBase {
 protected:
     // @internal
-    U16UnsafeIteratorBase(const Unit16 *p) : current(p) {}
+    U16UnsafeIteratorBase(const Unit16 *p) : p_(p) {}
     // Test pointers for == or != but not < or >.
 
     // @internal
@@ -732,15 +706,15 @@ protected:
     U16UnsafeIteratorBase &operator=(const U16UnsafeIteratorBase &other) = default;
 
     // @internal
-    bool operator==(const U16UnsafeIteratorBase &other) const { return current == other.current; }
+    bool operator==(const U16UnsafeIteratorBase &other) const { return p_ == other.p_; }
     // @internal
     bool operator!=(const U16UnsafeIteratorBase &other) const { return !operator==(other); }
 
     // @internal
     void dec() {
         // Very similar to U16_BACK_1_UNSAFE().
-        if (U16_IS_TRAIL(*--current)) {
-            --current;
+        if (U16_IS_TRAIL(*--p_)) {
+            --p_;
         }
     }
 
@@ -772,7 +746,7 @@ protected:
     }
 
     // @internal
-    const Unit16 *current;
+    const Unit16 *p_;
 };
 
 // TODO: make this one work single-pass as well
@@ -801,14 +775,14 @@ public:
     UnsafeCodeUnits<Unit16, CP32> operator*() const {
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        const Unit16 *p = Super::current;
+        const Unit16 *p = Super::p_;
         return Super::readAndInc(p);
     }
 
     U16UnsafeIterator &operator++() {  // pre-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        Super::readAndInc(Super::current);
+        Super::readAndInc(Super::p_);
         return *this;
     }
 
@@ -817,7 +791,7 @@ public:
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         U16UnsafeIterator result(*this);
-        Super::readAndInc(Super::current);
+        Super::readAndInc(Super::p_);
         return result;
     }
 
@@ -858,14 +832,14 @@ public:
     UnsafeCodeUnits<Unit16, CP32> operator*() const {
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        const Unit16 *p = Super::current;
+        const Unit16 *p = Super::p_;
         return Super::decAndRead(p);
     }
 
     U16UnsafeReverseIterator &operator++() {  // pre-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        Super::decAndRead(Super::current);
+        Super::decAndRead(Super::p_);
         return *this;
     }
 
@@ -873,7 +847,7 @@ public:
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         U16UnsafeReverseIterator result(*this);
-        Super::decAndRead(Super::current);
+        Super::decAndRead(Super::p_);
         return result;
     }
 };
