@@ -260,7 +260,7 @@ public:
     }
     bool operator!=(const U16Iterator &other) const { return !operator==(other); }
 
-    CodeUnits<UnitIter, CP32> operator*() {
+    CodeUnits<UnitIter, CP32> operator*() const {
         if (state == 0) {
             units = readAndInc();
             state = units.length();
@@ -268,7 +268,7 @@ public:
         return units;
     }
 
-    Proxy operator->() {
+    Proxy operator->() const {
         if (state == 0) {
             units = readAndInc();
             state = units.length();
@@ -348,7 +348,7 @@ private:
         }
     }
 
-    CodeUnits<UnitIter, CP32> readAndInc() {
+    CodeUnits<UnitIter, CP32> readAndInc() const {
         // TODO: assert p_ != limit_ -- more precisely: start_ <= p_ < limit_
         // Very similar to U16_NEXT_OR_FFFD().
         UnitIter p0 = p_;
@@ -368,14 +368,15 @@ private:
         }
     }
 
-    UnitIter p_;
+    // operator*() etc. are logically const.
+    mutable UnitIter p_;
     // In a validating iterator, we need start_ & limit_ so that when we read a code point
     // (forward or backward) we can test if there are enough code units.
     const UnitIter start_;
     const UnitIter limit_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
-    CodeUnits<UnitIter, CP32> units;
+    mutable CodeUnits<UnitIter, CP32> units;
     // >0: units = readAndInc(), p_ = units limit, state = units.len
     //     which means that p_ is ahead of its logical position
     //  0: initial state
@@ -383,7 +384,7 @@ private:
     // TODO: could also set state = -1 & use units.len when needed, but less consistent
     // TODO: could insert state into hidden CodeUnits field to avoid padding,
     //       but mostly irrelevant when inlined?
-    int8_t state = 0;
+    mutable int8_t state = 0;
 };
 
 #ifndef U_IN_DOXYGEN
@@ -435,7 +436,7 @@ public:
     }
     bool operator!=(const U16Iterator &other) const { return !operator==(other); }
 
-    CodeUnits<UnitIter, CP32> operator*() {
+    CodeUnits<UnitIter, CP32> operator*() const {
         if (!ahead_) {
             units = readAndInc();
             ahead_ = true;
@@ -443,7 +444,7 @@ public:
         return units;
     }
 
-    Proxy operator->() {
+    Proxy operator->() const {
         if (!ahead_) {
             units = readAndInc();
             ahead_ = true;
@@ -485,7 +486,7 @@ private:
     }
 
     // @internal
-    CodeUnits<UnitIter, CP32> readAndInc() {
+    CodeUnits<UnitIter, CP32> readAndInc() const {
         // TODO: assert p_ != limit_ -- more precisely: start_ <= p_ < limit_
         // Very similar to U16_NEXT_OR_FFFD().
         CP32 c = *p_;
@@ -504,19 +505,20 @@ private:
         }
     }
 
-    UnitIter p_;
+    // operator*() etc. are logically const.
+    mutable UnitIter p_;
     // In a validating iterator, we need  limit_ so that when we read a code point
     // we can test if there are enough code units.
     const UnitIter limit_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // so that we can use a single-pass input iterator for UnitIter.
-    CodeUnits<UnitIter, CP32> units = {0, 0, false};
+    mutable CodeUnits<UnitIter, CP32> units = {0, 0, false};
     // true: units = readAndInc(), p_ = units limit
     //     which means that p_ is ahead of its logical position
     // false: initial state
     // TODO: could insert ahead_ into hidden CodeUnits field to avoid padding,
     //       but mostly irrelevant when inlined?
-    bool ahead_ = false;
+    mutable bool ahead_ = false;
 };
 #endif  // U_IN_DOXYGEN
 
