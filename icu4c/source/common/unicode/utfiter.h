@@ -208,7 +208,7 @@ class UTFImpl<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 2>> {
 public:
     static void inc(UnitIter &p, UnitIter limit) {
-        // TODO: assert p != limit_ -- more precisely: start_ <= p < limit_
+        // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_FWD_1().
         auto c = *p;
         ++p;
@@ -217,8 +217,47 @@ public:
         }
     }
 
+    static CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter limit) {
+        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // Very similar to U16_NEXT_OR_FFFD().
+        UnitIter p0 = p;
+        CP32 c = *p;
+        ++p;
+        if (!U16_IS_SURROGATE(c)) {
+            return {c, 1, true, p0};
+        } else {
+            uint16_t c2;
+            if (U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(c2 = *p)) {
+                ++p;
+                c = U16_GET_SUPPLEMENTARY(c, c2);
+                return {c, 2, true, p0};
+            } else {
+                return {uprv_u16Sub<CP32, behavior>(c), 1, false, p0};
+            }
+        }
+    }
+
+    static CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter limit) {
+        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // Very similar to U16_NEXT_OR_FFFD().
+        CP32 c = *p;
+        ++p;
+        if (!U16_IS_SURROGATE(c)) {
+            return {c, 1, true};
+        } else {
+            uint16_t c2;
+            if (U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(c2 = *p)) {
+                ++p;
+                c = U16_GET_SUPPLEMENTARY(c, c2);
+                return {c, 2, true};
+            } else {
+                return {uprv_u16Sub<CP32, behavior>(c), 1, false};
+            }
+        }
+    }
+
     static CodeUnits<UnitIter, CP32> decAndRead(UnitIter start, UnitIter &p) {
-        // TODO: assert p != start_ -- more precisely: start_ < p <= limit_
+        // TODO: assert p != start -- more precisely: start < p <= limit
         // Very similar to U16_PREV_OR_FFFD().
         CP32 c = *--p;
         if (!U16_IS_SURROGATE(c)) {
@@ -233,6 +272,24 @@ public:
             } else {
                 return {uprv_u16Sub<CP32, behavior>(c), 1, false, p};
             }
+        }
+    }
+
+    static void moveToReadAndIncStart(UnitIter &p, int8_t &state) {
+        // state > 0 after readAndInc(); max 2 for UTF-16
+        --p;
+        if (--state != 0) {
+            --p;
+            state = 0;
+        }
+    }
+
+    static void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
+        // state < 0 after decAndRead(); max 2 for UTF-16
+        ++p;
+        if (++state != 0) {
+            ++p;
+            state = 0;
         }
     }
 };
@@ -273,6 +330,7 @@ public:
     // Test pointers for == or != but not < or >.
     U16Iterator(UnitIter start, UnitIter p, UnitIter limit) :
             p_(p), start_(start), limit_(limit), units_(0, 0, false, p) {}
+    // TODO: add constructor with just start-or-p and limit: start=p
     // Constructs an iterator start or limit sentinel.
     U16Iterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p) {}
 
@@ -289,7 +347,7 @@ public:
 
     CodeUnits<UnitIter, CP32> operator*() const {
         if (state_ == 0) {
-            units_ = readAndInc();
+            units_ = Impl::readAndInc(p_, limit_);
             state_ = units_.length();
         }
         return units_;
@@ -297,7 +355,7 @@ public:
 
     Proxy operator->() const {
         if (state_ == 0) {
-            units_ = readAndInc();
+            units_ = Impl::readAndInc(p_, limit_);
             state_ = units_.length();
         }
         return Proxy(units_);
@@ -310,12 +368,8 @@ public:
         } else if (state_ == 0) {
             Impl::inc(p_, limit_);
         } else /* state_ < 0 */ {
-            // operator--() called decAndRead() so we know how far to skip; max 2 for UTF-16.
-            ++p_;
-            if (++state_ != 0) {
-                ++p_;
-                state_ = 0;
-            }
+            // operator--() called decAndRead() so we know how far to skip.
+            Impl::moveToDecAndReadLimit(p_, state_);
         }
         return *this;
     }
@@ -327,19 +381,15 @@ public:
             state_ = 0;
             return result;
         } else if (state_ == 0) {
-            units_ = readAndInc();
+            units_ = Impl::readAndInc(p_, limit_);
             U16Iterator result(*this);
             result.state_ = units_.length();
             // keep this->state_ == 0
             return result;
         } else /* state_ < 0 */ {
-            // operator--() called decAndRead() so we know how far to skip; max 2 for UTF-16.
             U16Iterator result(*this);
-            ++p_;
-            if (++state_ != 0) {
-                ++p_;
-                state_ = 0;
-            }
+            // operator--() called decAndRead() so we know how far to skip.
+            Impl::moveToDecAndReadLimit(p_, state_);
             return result;
         }
     }
@@ -347,11 +397,7 @@ public:
     U16Iterator &operator--() {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
-            --p_;
-            if (--state_ != 0) {
-                --p_;
-                state_ = 0;
-            }
+            Impl::moveToReadAndIncStart(p_, state_);
         }
         units_ = Impl::decAndRead(start_, p_);
         state_ = -units_.length();
@@ -365,26 +411,6 @@ public:
     }
 
 private:
-    CodeUnits<UnitIter, CP32> readAndInc() const {
-        // TODO: assert p_ != limit_ -- more precisely: start_ <= p_ < limit_
-        // Very similar to U16_NEXT_OR_FFFD().
-        UnitIter p0 = p_;
-        CP32 c = *p_;
-        ++p_;
-        if (!U16_IS_SURROGATE(c)) {
-            return {c, 1, true, p0};
-        } else {
-            uint16_t c2;
-            if (U16_IS_SURROGATE_LEAD(c) && p_ != limit_ && U16_IS_TRAIL(c2 = *p_)) {
-                ++p_;
-                c = U16_GET_SUPPLEMENTARY(c, c2);
-                return {c, 2, true, p0};
-            } else {
-                return {uprv_u16Sub<CP32, behavior>(c), 1, false, p0};
-            }
-        }
-    }
-
     // operator*() etc. are logically const.
     mutable UnitIter p_;
     // In a validating iterator, we need start_ & limit_ so that when we read a code point
@@ -456,7 +482,7 @@ public:
 
     CodeUnits<UnitIter, CP32> operator*() const {
         if (!ahead_) {
-            units_ = readAndInc();
+            units_ = Impl::singlePassReadAndInc(p_, limit_);
             ahead_ = true;
         }
         return units_;
@@ -464,7 +490,7 @@ public:
 
     Proxy operator->() const {
         if (!ahead_) {
-            units_ = readAndInc();
+            units_ = Impl::singlePassReadAndInc(p_, limit_);
             ahead_ = true;
         }
         return Proxy(units_);
@@ -485,33 +511,13 @@ public:
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
         } else {
-            units_ = readAndInc();
+            units_ = Impl::singlePassReadAndInc(p_, limit_);
             // keep this->ahead_ == false
         }
         return Proxy(units_);
     }
 
 private:
-    // @internal
-    CodeUnits<UnitIter, CP32> readAndInc() const {
-        // TODO: assert p_ != limit_ -- more precisely: start_ <= p_ < limit_
-        // Very similar to U16_NEXT_OR_FFFD().
-        CP32 c = *p_;
-        ++p_;
-        if (!U16_IS_SURROGATE(c)) {
-            return {c, 1, true};
-        } else {
-            uint16_t c2;
-            if (U16_IS_SURROGATE_LEAD(c) && p_ != limit_ && U16_IS_TRAIL(c2 = *p_)) {
-                ++p_;
-                c = U16_GET_SUPPLEMENTARY(c, c2);
-                return {c, 2, true};
-            } else {
-                return {uprv_u16Sub<CP32, behavior>(c), 1, false};
-            }
-        }
-    }
-
     // operator*() etc. are logically const.
     mutable UnitIter p_;
     // In a validating iterator, we need  limit_ so that when we read a code point
