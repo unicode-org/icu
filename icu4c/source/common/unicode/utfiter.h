@@ -245,89 +245,89 @@ public:
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
     U16Iterator(UnitIter start, UnitIter p, UnitIter limit) :
-            p_(p), start_(start), limit_(limit), units(0, 0, false, p) {}
+            p_(p), start_(start), limit_(limit), units_(0, 0, false, p) {}
     // Constructs an iterator start or limit sentinel.
-    U16Iterator(UnitIter p) : p_(p), start_(p), limit_(p), units(0, 0, false, p) {}
+    U16Iterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p) {}
 
     U16Iterator(const U16Iterator &other) = default;
     U16Iterator &operator=(const U16Iterator &other) = default;
 
     bool operator==(const U16Iterator &other) const {
         // Compare logical positions.
-        UnitIter p1 = state <= 0 ? p_ : units.data();
-        UnitIter p2 = other.state <= 0 ? other.p_ : other.units.data();
+        UnitIter p1 = state_ <= 0 ? p_ : units_.data();
+        UnitIter p2 = other.state_ <= 0 ? other.p_ : other.units_.data();
         return p1 == p2;
     }
     bool operator!=(const U16Iterator &other) const { return !operator==(other); }
 
     CodeUnits<UnitIter, CP32> operator*() const {
-        if (state == 0) {
-            units = readAndInc();
-            state = units.length();
+        if (state_ == 0) {
+            units_ = readAndInc();
+            state_ = units_.length();
         }
-        return units;
+        return units_;
     }
 
     Proxy operator->() const {
-        if (state == 0) {
-            units = readAndInc();
-            state = units.length();
+        if (state_ == 0) {
+            units_ = readAndInc();
+            state_ = units_.length();
         }
-        return Proxy(units);
+        return Proxy(units_);
     }
 
     U16Iterator &operator++() {  // pre-increment
-        if (state > 0) {
+        if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
-            state = 0;
-        } else if (state == 0) {
+            state_ = 0;
+        } else if (state_ == 0) {
             inc();
-        } else /* state < 0 */ {
+        } else /* state_ < 0 */ {
             // operator--() called uprv_decAndRead16() so we know how far to skip; max 2 for UTF-16.
             ++p_;
-            if (++state != 0) {
+            if (++state_ != 0) {
                 ++p_;
-                state = 0;
+                state_ = 0;
             }
         }
         return *this;
     }
 
     U16Iterator operator++(int) {  // post-increment
-        if (state > 0) {
+        if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
             U16Iterator result(*this);
-            state = 0;
+            state_ = 0;
             return result;
-        } else if (state == 0) {
-            units = readAndInc();
+        } else if (state_ == 0) {
+            units_ = readAndInc();
             U16Iterator result(*this);
-            result.state = units.length();
-            // keep this->state == 0
+            result.state_ = units_.length();
+            // keep this->state_ == 0
             return result;
-        } else /* state < 0 */ {
+        } else /* state_ < 0 */ {
             // operator--() called uprv_decAndRead16() so we know how far to skip; max 2 for UTF-16.
             U16Iterator result(*this);
             ++p_;
-            if (++state != 0) {
+            if (++state_ != 0) {
                 ++p_;
-                state = 0;
+                state_ = 0;
             }
             return result;
         }
     }
 
     U16Iterator &operator--() {  // pre-decrement
-        if (state > 0) {
+        if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
             --p_;
-            if (--state != 0) {
+            if (--state_ != 0) {
                 --p_;
-                state = 0;
+                state_ = 0;
             }
         }
-        units = uprv_decAndRead16(start_, p_);
-        state = -units.length();
+        units_ = uprv_decAndRead16(start_, p_);
+        state_ = -units_.length();
         return *this;
     }
 
@@ -376,15 +376,15 @@ private:
     const UnitIter limit_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
-    mutable CodeUnits<UnitIter, CP32> units;
-    // >0: units = readAndInc(), p_ = units limit, state = units.len
+    mutable CodeUnits<UnitIter, CP32> units_;
+    // >0: units_ = readAndInc(), p_ = units limit, state_ = units_.len
     //     which means that p_ is ahead of its logical position
     //  0: initial state
-    // <0: units = uprv_decAndRead16(), p_ = units start, state = -units.len
-    // TODO: could also set state = -1 & use units.len when needed, but less consistent
-    // TODO: could insert state into hidden CodeUnits field to avoid padding,
+    // <0: units_ = uprv_decAndRead16(), p_ = units start, state_ = -units_.len
+    // TODO: could also set state_ = -1 & use units_.len when needed, but less consistent
+    // TODO: could insert state_ into hidden CodeUnits field to avoid padding,
     //       but mostly irrelevant when inlined?
-    mutable int8_t state = 0;
+    mutable int8_t state_ = 0;
 };
 
 #ifndef U_IN_DOXYGEN
@@ -438,18 +438,18 @@ public:
 
     CodeUnits<UnitIter, CP32> operator*() const {
         if (!ahead_) {
-            units = readAndInc();
+            units_ = readAndInc();
             ahead_ = true;
         }
-        return units;
+        return units_;
     }
 
     Proxy operator->() const {
         if (!ahead_) {
-            units = readAndInc();
+            units_ = readAndInc();
             ahead_ = true;
         }
-        return Proxy(units);
+        return Proxy(units_);
     }
 
     U16Iterator &operator++() {  // pre-increment
@@ -467,10 +467,10 @@ public:
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
         } else {
-            units = readAndInc();
+            units_ = readAndInc();
             // keep this->ahead_ == false
         }
-        return Proxy(units);
+        return Proxy(units_);
     }
 
 private:
@@ -512,8 +512,8 @@ private:
     const UnitIter limit_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // so that we can use a single-pass input iterator for UnitIter.
-    mutable CodeUnits<UnitIter, CP32> units = {0, 0, false};
-    // true: units = readAndInc(), p_ = units limit
+    mutable CodeUnits<UnitIter, CP32> units_ = {0, 0, false};
+    // true: units_ = readAndInc(), p_ = units limit
     //     which means that p_ is ahead of its logical position
     // false: initial state
     // TODO: could insert ahead_ into hidden CodeUnits field to avoid padding,
