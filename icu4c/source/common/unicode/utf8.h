@@ -517,7 +517,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
             if(U8_IS_TRAIL(__t1)) { \
                 ++(i); \
             } \
-        } else /* c>=0xf0 */ { \
+        } else /* b>=0xf0 */ { \
             if(U8_IS_VALID_LEAD4_AND_T1(__b, __t1) && \
                     ++(i)!=(length) && U8_IS_TRAIL((s)[i]) && \
                     ++(i)!=(length) && U8_IS_TRAIL((s)[i])) { \

@@ -17,6 +17,7 @@
 #include <string_view>
 #ifdef UTYPES_H
 #include "unicode/utf16.h"
+#include "unicode/utf8.h"
 #include "unicode/uversion.h"
 #else
 // TODO: Remove checks for UTYPES_H and replacement definitions.
@@ -48,7 +49,6 @@ namespace header {}
 #ifndef U_HIDE_DRAFT_API
 
 // Some defined behaviors for handling ill-formed Unicode strings.
-// TODO: For 8-bit strings, the SURROGATE option does not have an equivalent -- static_assert.
 typedef enum UIllFormedBehavior {
     U_BEHAVIOR_NEGATIVE,
     U_BEHAVIOR_FFFD,
@@ -56,17 +56,6 @@ typedef enum UIllFormedBehavior {
 } UIllFormedBehavior;
 
 namespace U_HEADER_ONLY_NAMESPACE {
-
-// Handle ill-formed UTF-16: One unpaired surrogate.
-// @internal
-template<typename CP32, UIllFormedBehavior behavior>
-CP32 uprv_u16Sub(CP32 surrogate) {
-    switch (behavior) {
-        case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
-        case U_BEHAVIOR_FFFD: return 0xfffd;
-        case U_BEHAVIOR_SURROGATE: return surrogate;
-    }
-}
 
 /**
  * Result of validating and decoding a minimal Unicode code unit sequence.
@@ -198,6 +187,152 @@ private:
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior, typename = void>
 class UTFImpl;
 
+// UTF-8
+template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
+class UTFImpl<
+        UnitIter,
+        CP32,
+        behavior,
+        std::enable_if_t<
+            sizeof(typename std::iterator_traits<UnitIter>::value_type) == 1>> {
+    static_assert(behavior != U_BEHAVIOR_SURROGATE,
+                  "For 8-bit strings, the SURROGATE option does not have an equivalent.");
+public:
+    // Handle ill-formed UTF-8
+    static CP32 sub() {
+        switch (behavior) {
+            case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
+            case U_BEHAVIOR_FFFD: return 0xfffd;
+        }
+    }
+
+    static void inc(UnitIter &p, UnitIter limit) {
+        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // Very similar to U8_FWD_1().
+        uint8_t b = *p;
+        ++p;
+        if (U8_IS_LEAD(b) && p != limit) {
+            uint8_t t1 = *p;
+            if ((0xe0 <= b && b < 0xf0)) {
+                if (U8_IS_VALID_LEAD3_AND_T1(b, t1) &&
+                        ++p != limit && U8_IS_TRAIL(*p)) {
+                    ++p;
+                }
+            } else if (b < 0xe0) {
+                if (U8_IS_TRAIL(t1)) {
+                    ++p;
+                }
+            } else /* b >= 0xf0 */ {
+                if (U8_IS_VALID_LEAD4_AND_T1(b, t1) &&
+                        ++p != limit && U8_IS_TRAIL(*p) &&
+                        ++p != limit && U8_IS_TRAIL(*p)) {
+                    ++p;
+                }
+            }
+        }
+    }
+
+    static CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter limit) {
+        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // Very similar to U8_NEXT_OR_FFFD().
+        UnitIter p0 = p;
+        CP32 c = uint8_t(*p);
+        ++p;
+        if (U8_IS_SINGLE(c)) {
+            return {c, 1, true, p0};
+        }
+        uint8_t length = 1;
+        uint8_t t = 0;
+        if (p != limit &&
+                // fetch/validate/assemble all but last trail byte
+                (c >= 0xe0 ?
+                    (c < 0xf0 ?  // U+0800..U+FFFF except surrogates
+                        U8_LEAD3_T1_BITS[c &= 0xf] & (1 << ((t = *p) >> 5)) &&
+                        (t &= 0x3f, 1)
+                    :  // U+10000..U+10FFFF
+                        (c -= 0xf0) <= 4 &&
+                        U8_LEAD4_T1_BITS[(t = *p) >> 4] & (1 << c) &&
+                        (c = (c << 6) | (t & 0x3f), ++length, ++p != limit) &&
+                        (t = *p - 0x80) <= 0x3f) &&
+                    // valid second-to-last trail byte
+                    (c = (c << 6) | t, ++length, ++p != limit)
+                :  // U+0080..U+07FF
+                    c >= 0xc2 && (c &= 0x1f, 1)) &&
+                // last trail byte
+                (t = *p - 0x80) <= 0x3f) {
+            c = (c << 6) | t;
+            ++length;
+            ++p;
+            return {c, length, true, p0};
+        }
+        return {sub(), length, false, p0};  // ill-formed
+    }
+
+    static CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter limit) {
+        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // Very similar to U8_NEXT_OR_FFFD().
+        CP32 c = uint8_t(*p);
+        ++p;
+        if (U8_IS_SINGLE(c)) {
+            return {c, 1, true};
+        }
+        uint8_t length = 1;
+        uint8_t t = 0;
+        if (p != limit &&
+                // fetch/validate/assemble all but last trail byte
+                (c >= 0xe0 ?
+                    (c < 0xf0 ?  // U+0800..U+FFFF except surrogates
+                        U8_LEAD3_T1_BITS[c &= 0xf] & (1 << ((t = *p) >> 5)) &&
+                        (t &= 0x3f, 1)
+                    :  // U+10000..U+10FFFF
+                        (c -= 0xf0) <= 4 &&
+                        U8_LEAD4_T1_BITS[(t = *p) >> 4] & (1 << c) &&
+                        (c = (c << 6) | (t & 0x3f), ++length, ++p != limit) &&
+                        (t = *p - 0x80) <= 0x3f) &&
+                    // valid second-to-last trail byte
+                    (c = (c << 6) | t, ++length, ++p != limit)
+                :  // U+0080..U+07FF
+                    c >= 0xc2 && (c &= 0x1f, 1)) &&
+                // last trail byte
+                (t = *p - 0x80) <= 0x3f) {
+            c = (c << 6) | t;
+            ++length;
+            ++p;
+            return {c, length, true};
+        }
+        return {sub(), length, false};  // ill-formed
+    }
+
+    static CodeUnits<UnitIter, CP32> decAndRead(UnitIter start, UnitIter &p) {
+        // TODO: assert p != start -- more precisely: start < p <= limit
+        // Very similar to U8_PREV_OR_FFFD().
+        CP32 c = *--p;
+        if (!U8_IS_SURROGATE(c)) {
+            return {c, 1, true, p};
+        } else {
+            UnitIter p1;
+            uint16_t c2;
+            if (U8_IS_SURROGATE_TRAIL(c) && p != start && (p1 = p, U8_IS_LEAD(c2 = *--p1))) {
+                p = p1;
+                c = U8_GET_SUPPLEMENTARY(c2, c);
+                return {c, 2, true, p};
+            } else {
+                return {sub(c), 1, false, p};
+            }
+        }
+    }
+
+    static void moveToReadAndIncStart(UnitIter &p, int8_t &state) {
+        // state > 0 after readAndInc()
+        do { --p; } while (--state != 0);
+    }
+
+    static void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
+        // state < 0 after decAndRead()
+        do { ++p; } while (++state != 0);
+    }
+};
+
 // UTF-16
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
 class UTFImpl<
@@ -207,6 +342,15 @@ class UTFImpl<
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 2>> {
 public:
+    // Handle ill-formed UTF-16: One unpaired surrogate.
+    static CP32 sub(CP32 surrogate) {
+        switch (behavior) {
+            case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
+            case U_BEHAVIOR_FFFD: return 0xfffd;
+            case U_BEHAVIOR_SURROGATE: return surrogate;
+        }
+    }
+
     static void inc(UnitIter &p, UnitIter limit) {
         // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_FWD_1().
@@ -232,7 +376,7 @@ public:
                 c = U16_GET_SUPPLEMENTARY(c, c2);
                 return {c, 2, true, p0};
             } else {
-                return {uprv_u16Sub<CP32, behavior>(c), 1, false, p0};
+                return {sub(c), 1, false, p0};
             }
         }
     }
@@ -251,7 +395,7 @@ public:
                 c = U16_GET_SUPPLEMENTARY(c, c2);
                 return {c, 2, true};
             } else {
-                return {uprv_u16Sub<CP32, behavior>(c), 1, false};
+                return {sub(c), 1, false};
             }
         }
     }
@@ -270,7 +414,7 @@ public:
                 c = U16_GET_SUPPLEMENTARY(c2, c);
                 return {c, 2, true, p};
             } else {
-                return {uprv_u16Sub<CP32, behavior>(c), 1, false, p};
+                return {sub(c), 1, false, p};
             }
         }
     }
