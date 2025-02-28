@@ -193,6 +193,17 @@ private:
     const Unit *p;
 };
 
+template<typename UnitIter>
+void uprv_inc16(UnitIter &p, UnitIter limit) {
+    // TODO: assert p != limit_ -- more precisely: start_ <= p < limit_
+    // Very similar to U16_FWD_1().
+    auto c = *p;
+    ++p;
+    if (U16_IS_LEAD(c) && p != limit && U16_IS_TRAIL(*p)) {
+        ++p;
+    }
+}
+
 // @internal
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
 CodeUnits<UnitIter, CP32> uprv_decAndRead16(UnitIter start, UnitIter &p) {
@@ -281,7 +292,7 @@ public:
             // operator*() called readAndInc() so p_ is already ahead.
             state_ = 0;
         } else if (state_ == 0) {
-            inc();
+            uprv_inc16(p_, limit_);
         } else /* state_ < 0 */ {
             // operator--() called uprv_decAndRead16() so we know how far to skip; max 2 for UTF-16.
             ++p_;
@@ -338,16 +349,6 @@ public:
     }
 
 private:
-    void inc() {
-        // TODO: assert p_ != limit_ -- more precisely: start_ <= p_ < limit_
-        // Very similar to U16_FWD_1().
-        auto c = *p_;
-        ++p_;
-        if (U16_IS_LEAD(c) && p_ != limit_ && U16_IS_TRAIL(*p_)) {
-            ++p_;
-        }
-    }
-
     CodeUnits<UnitIter, CP32> readAndInc() const {
         // TODO: assert p_ != limit_ -- more precisely: start_ <= p_ < limit_
         // Very similar to U16_NEXT_OR_FFFD().
@@ -381,7 +382,6 @@ private:
     //     which means that p_ is ahead of its logical position
     //  0: initial state
     // <0: units_ = uprv_decAndRead16(), p_ = units start, state_ = -units_.len
-    // TODO: could also set state_ = -1 & use units_.len when needed, but less consistent
     // TODO: could insert state_ into hidden CodeUnits field to avoid padding,
     //       but mostly irrelevant when inlined?
     mutable int8_t state_ = 0;
@@ -457,7 +457,7 @@ public:
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
         } else {
-            inc();
+            uprv_inc16(p_, limit_);
         }
         return *this;
     }
@@ -474,17 +474,6 @@ public:
     }
 
 private:
-    // @internal
-    void inc() {
-        // TODO: assert p_ != limit_ -- more precisely: start_ <= p_ < limit_
-        // Very similar to U16_FWD_1().
-        auto c = *p_;
-        ++p_;
-        if (U16_IS_LEAD(c) && p_ != limit_ && U16_IS_TRAIL(*p_)) {
-            ++p_;
-        }
-    }
-
     // @internal
     CodeUnits<UnitIter, CP32> readAndInc() const {
         // TODO: assert p_ != limit_ -- more precisely: start_ <= p_ < limit_
