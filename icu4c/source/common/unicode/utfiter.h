@@ -39,6 +39,14 @@ namespace header {}
 #define U16_SURROGATE_OFFSET ((0xd800<<10UL)+0xdc00-0x10000)
 #define U16_GET_SUPPLEMENTARY(lead, trail) \
     (((UChar32)(lead)<<10UL)+(UChar32)(trail)-U16_SURROGATE_OFFSET)
+// unicode/utf8.h
+#define U8_IS_SINGLE(c) (((c)&0x80)==0)
+#define U8_IS_LEAD(c) ((uint8_t)((c)-0xc2)<=0x32)
+#define U8_IS_TRAIL(c) ((int8_t)(c)<-0x40)
+#define U8_LEAD3_T1_BITS "\x20\x30\x30\x30\x30\x30\x30\x30\x30\x30\x30\x30\x30\x10\x30\x30"
+#define U8_IS_VALID_LEAD3_AND_T1(lead, t1) (U8_LEAD3_T1_BITS[(lead)&0xf]&(1<<((uint8_t)(t1)>>5)))
+#define U8_LEAD4_T1_BITS "\x00\x00\x00\x00\x00\x00\x00\x00\x1E\x0F\x0F\x0F\x00\x00\x00\x00"
+#define U8_IS_VALID_LEAD4_AND_T1(lead, t1) (U8_LEAD4_T1_BITS[(uint8_t)(t1)>>4]&(1<<((lead)&7)))
 #endif
 
 /**
@@ -265,7 +273,7 @@ public:
             ++p;
             return {c, length, true, p0};
         }
-        return {sub(), length, false, p0};  // ill-formed
+        return {sub(), length, false, p0};
     }
 
     static CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter limit) {
@@ -300,26 +308,62 @@ public:
             ++p;
             return {c, length, true};
         }
-        return {sub(), length, false};  // ill-formed
+        return {sub(), length, false};
     }
 
     static CodeUnits<UnitIter, CP32> decAndRead(UnitIter start, UnitIter &p) {
         // TODO: assert p != start -- more precisely: start < p <= limit
         // Very similar to U8_PREV_OR_FFFD().
-        CP32 c = *--p;
-        if (!U8_IS_SURROGATE(c)) {
+        CP32 c = uint8_t(*--p);
+        if (U8_IS_SINGLE(c)) {
             return {c, 1, true, p};
-        } else {
-            UnitIter p1;
-            uint16_t c2;
-            if (U8_IS_SURROGATE_TRAIL(c) && p != start && (p1 = p, U8_IS_LEAD(c2 = *--p1))) {
-                p = p1;
-                c = U8_GET_SUPPLEMENTARY(c2, c);
-                return {c, 2, true, p};
-            } else {
-                return {sub(c), 1, false, p};
+        }
+        if (U8_IS_TRAIL(c) && p != start) {
+            UnitIter p1 = p;
+            uint8_t b1 = *--p1;
+            if (U8_IS_LEAD(b1)) {
+                if (b1 < 0xe0) {
+                    p = p1;
+                    c = ((b1 - 0xc0) << 6) | (c & 0x3f);
+                    return {c, 2, true, p};
+                } else if (b1 < 0xf0 ?
+                            U8_IS_VALID_LEAD3_AND_T1(b1, c) :
+                            U8_IS_VALID_LEAD4_AND_T1(b1, c)) {
+                    // Truncated 3- or 4-byte sequence.
+                    p = p1;
+                    return {sub(), 2, false, p};
+                }
+            } else if (U8_IS_TRAIL(b1) && p1 != start) {
+                // Extract the value bits from the last trail byte.
+                c &= 0x3f;
+                uint8_t b2 = *--p1;
+                if (0xe0 <= b2 && b2 <= 0xf4) {
+                    if (b2 < 0xf0) {
+                        b2 &= 0xf;
+                        if (U8_IS_VALID_LEAD3_AND_T1(b2, b1)) {
+                            p = p1;
+                            c = (b2 << 12) | ((b1 & 0x3f) << 6) | c;
+                            return {c, 3, true, p};
+                        }
+                    } else if (U8_IS_VALID_LEAD4_AND_T1(b2, b1)) {
+                        // Truncated 4-byte sequence.
+                        p = p1;
+                        return {sub(), 3, false, p};
+                    }
+                } else if (U8_IS_TRAIL(b2) && p1 != start) {
+                    uint8_t b3 = *--p1;
+                    if (0xf0 <= b3 && b3 <= 0xf4) {
+                        b3 &= 7;
+                        if (U8_IS_VALID_LEAD4_AND_T1(b3, b2)) {
+                            p = p1;
+                            c = (b3 << 18) | ((b2 & 0x3f) << 12) | ((b1 & 0x3f) << 6) | c;
+                            return {c, 4, true, p};
+                        }
+                    }
+                }
             }
         }
+        return {sub(), 1, false, p};
     }
 
     static void moveToReadAndIncStart(UnitIter &p, int8_t &state) {
@@ -1023,7 +1067,7 @@ private:
 
 // TODO: remove experimental sample code
 #ifndef UTYPES_H
-int32_t rangeLoop(std::u16string_view s) {
+int32_t rangeLoop16(std::u16string_view s) {
    header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    for (auto units : range) {
@@ -1032,7 +1076,7 @@ int32_t rangeLoop(std::u16string_view s) {
    return sum;
 }
 
-int32_t loopIterPlusPlus(std::u16string_view s) {
+int32_t loopIterPlusPlus16(std::u16string_view s) {
    header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    auto iter = range.begin();
@@ -1043,7 +1087,7 @@ int32_t loopIterPlusPlus(std::u16string_view s) {
    return sum;
 }
 
-int32_t backwardLoop(std::u16string_view s) {
+int32_t backwardLoop16(std::u16string_view s) {
    header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    auto start = range.begin();
@@ -1054,7 +1098,7 @@ int32_t backwardLoop(std::u16string_view s) {
    return sum;
 }
 
-int32_t reverseLoop(std::u16string_view s) {
+int32_t reverseLoop16(std::u16string_view s) {
    header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
@@ -1063,7 +1107,7 @@ int32_t reverseLoop(std::u16string_view s) {
    return sum;
 }
 
-int32_t unsafeRangeLoop(std::u16string_view s) {
+int32_t unsafeRangeLoop16(std::u16string_view s) {
    header::U16UnsafeStringCodePoints<char16_t, UChar32> range(s);
    int32_t sum = 0;
    for (auto units : range) {
@@ -1072,11 +1116,29 @@ int32_t unsafeRangeLoop(std::u16string_view s) {
    return sum;
 }
 
-int32_t unsafeReverseLoop(std::u16string_view s) {
+int32_t unsafeReverseLoop16(std::u16string_view s) {
    header::U16UnsafeStringCodePoints<char16_t, UChar32> range(s);
    int32_t sum = 0;
    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
-       sum += (*iter).codePoint();
+       sum += iter->codePoint();
+   }
+   return sum;
+}
+
+int32_t rangeLoop8(std::string_view s) {
+   header::U16StringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+   int32_t sum = 0;
+   for (auto units : range) {
+       sum += units.codePoint();
+   }
+   return sum;
+}
+
+int32_t reverseLoop(std::string_view s) {
+   header::U16StringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+   int32_t sum = 0;
+   for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
+       sum += iter->codePoint();
    }
    return sum;
 }
