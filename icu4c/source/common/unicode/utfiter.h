@@ -429,32 +429,32 @@ public:
     U16Iterator &operator=(const U16Iterator &other) = default;
 
     bool operator==(const U16Iterator &other) const {
-        return p_ == other.p_ && state == other.state;
+        return p_ == other.p_ && ahead_ == other.ahead_;
         // Strictly speaking, we should check if the logical position is the same.
         // However, we cannot move, or do arithmetic with, a single-pass UnitIter.
     }
     bool operator!=(const U16Iterator &other) const { return !operator==(other); }
 
     CodeUnits<UnitIter, CP32> operator*() {
-        if (state == 0) {
+        if (!ahead_) {
             units = readAndInc();
-            state = units.length();
+            ahead_ = true;
         }
         return units;
     }
 
     Proxy operator->() {
-        if (state == 0) {
+        if (!ahead_) {
             units = readAndInc();
-            state = units.length();
+            ahead_ = true;
         }
         return Proxy(units);
     }
 
     U16Iterator &operator++() {  // pre-increment
-        if (state != 0) {
+        if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
-            state = 0;
+            ahead_ = false;
         } else {
             inc();
         }
@@ -462,12 +462,12 @@ public:
     }
 
     Proxy operator++(int) {  // post-increment
-        if (state != 0) {
+        if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
-            state = 0;
+            ahead_ = false;
         } else {
             units = readAndInc();
-            // keep this->state == 0
+            // keep this->ahead_ == false
         }
         return Proxy(units);
     }
@@ -511,12 +511,12 @@ private:
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // so that we can use a single-pass input iterator for UnitIter.
     CodeUnits<UnitIter, CP32> units = {0, 0, false};
-    // >0: units = readAndInc(), p_ = units limit, state = units.len
+    // true: units = readAndInc(), p_ = units limit
     //     which means that p_ is ahead of its logical position
-    //  0: initial state
-    // TODO: could insert state into hidden CodeUnits field to avoid padding,
+    // false: initial state
+    // TODO: could insert ahead_ into hidden CodeUnits field to avoid padding,
     //       but mostly irrelevant when inlined?
-    int8_t state = 0;
+    bool ahead_ = false;
 };
 #endif  // U_IN_DOXYGEN
 
