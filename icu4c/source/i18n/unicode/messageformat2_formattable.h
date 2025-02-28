@@ -456,16 +456,23 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
 
     /* const */ UnicodeString name;
     /* const */ Formattable value;
+    // True iff this option was represented in the syntax by a literal value.
+    // This is necessary in order to implement the spec for the `select` option
+    // of `:number` and `:integer`.
+    /* const */ bool sourceIsLiteral;
 
   public:
       const UnicodeString& getName() const { return name; }
       const Formattable& getValue() const { return value; }
-      ResolvedFunctionOption(const UnicodeString& n, const Formattable& f) : name(n), value(f) {}
+      bool isLiteral() const { return sourceIsLiteral; }
+      ResolvedFunctionOption(const UnicodeString& n, const Formattable& f, bool s)
+          : name(n), value(f), sourceIsLiteral(s) {}
       ResolvedFunctionOption() {}
       ResolvedFunctionOption(ResolvedFunctionOption&&);
       ResolvedFunctionOption& operator=(ResolvedFunctionOption&& other) noexcept {
           name = std::move(other.name);
           value = std::move(other.value);
+          sourceIsLiteral = other.sourceIsLiteral;
           return *this;
     }
     virtual ~ResolvedFunctionOption();
@@ -559,6 +566,7 @@ class U_I18N_API FunctionOptions : public UObject {
 
     const ResolvedFunctionOption* getResolvedFunctionOptions(int32_t& len) const;
     UBool getFunctionOption(std::u16string_view, Formattable&) const;
+    UBool wasSetFromLiteral(const UnicodeString&) const;
     // Returns empty string if option doesn't exist
     UnicodeString getStringFunctionOption(std::u16string_view) const;
     int32_t optionsCount() const { return functionOptionsLen; }

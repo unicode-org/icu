@@ -41,54 +41,6 @@ U_NAMESPACE_BEGIN
 
 namespace message2 {
 
-// Constants for option names
-namespace options {
-static constexpr std::u16string_view ALWAYS = u"always";
-static constexpr std::u16string_view COMPACT = u"compact";
-static constexpr std::u16string_view COMPACT_DISPLAY = u"compactDisplay";
-static constexpr std::u16string_view DATE_STYLE = u"dateStyle";
-static constexpr std::u16string_view DAY = u"day";
-static constexpr std::u16string_view DECIMAL_PLACES = u"decimalPlaces";
-static constexpr std::u16string_view DEFAULT_UPPER = u"DEFAULT";
-static constexpr std::u16string_view ENGINEERING = u"engineering";
-static constexpr std::u16string_view EXACT = u"exact";
-static constexpr std::u16string_view EXCEPT_ZERO = u"exceptZero";
-static constexpr std::u16string_view FAILS = u"fails";
-static constexpr std::u16string_view FULL_UPPER = u"FULL";
-static constexpr std::u16string_view HOUR = u"hour";
-static constexpr std::u16string_view LONG = u"long";
-static constexpr std::u16string_view LONG_UPPER = u"LONG";
-static constexpr std::u16string_view MAXIMUM_FRACTION_DIGITS = u"maximumFractionDigits";
-static constexpr std::u16string_view MAXIMUM_SIGNIFICANT_DIGITS = u"maximumSignificantDigits";
-static constexpr std::u16string_view MEDIUM_UPPER = u"MEDIUM";
-static constexpr std::u16string_view MIN2 = u"min2";
-static constexpr std::u16string_view MINIMUM_FRACTION_DIGITS = u"minimumFractionDigits";
-static constexpr std::u16string_view MINIMUM_INTEGER_DIGITS = u"minimumIntegerDigits";
-static constexpr std::u16string_view MINIMUM_SIGNIFICANT_DIGITS = u"minimumSignificantDigits";
-static constexpr std::u16string_view MINUTE = u"minute";
-static constexpr std::u16string_view MONTH = u"month";
-static constexpr std::u16string_view NARROW = u"narrow";
-static constexpr std::u16string_view NEGATIVE = u"negative";
-static constexpr std::u16string_view NEVER = u"never";
-static constexpr std::u16string_view NOTATION = u"notation";
-static constexpr std::u16string_view NUMBERING_SYSTEM = u"numberingSystem";
-static constexpr std::u16string_view NUMERIC = u"numeric";
-static constexpr std::u16string_view ORDINAL = u"ordinal";
-static constexpr std::u16string_view PERCENT_STRING = u"percent";
-static constexpr std::u16string_view SCIENTIFIC = u"scientific";
-static constexpr std::u16string_view SECOND = u"second";
-static constexpr std::u16string_view SELECT = u"select";
-static constexpr std::u16string_view SHORT = u"short";
-static constexpr std::u16string_view SHORT_UPPER = u"SHORT";
-static constexpr std::u16string_view SIGN_DISPLAY = u"signDisplay";
-static constexpr std::u16string_view STYLE = u"style";
-static constexpr std::u16string_view TIME_STYLE = u"timeStyle";
-static constexpr std::u16string_view TWO_DIGIT = u"2-digit";
-static constexpr std::u16string_view USE_GROUPING = u"useGrouping";
-static constexpr std::u16string_view WEEKDAY = u"weekday";
-static constexpr std::u16string_view YEAR = u"year";
-} // namespace options
-
 // Function registry implementation
 
 Formatter::~Formatter() {}
@@ -334,12 +286,144 @@ MFFunctionRegistry::~MFFunctionRegistry() {
 
 // --------- Number
 
+bool inBounds(const UnicodeString& s, int32_t i) {
+    return i < s.length();
+}
+
+bool isDigit(UChar32 c) {
+    return c >= '0' && c <= '9';
+}
+
+bool parseDigits(const UnicodeString& s, int32_t& i) {
+    if (!isDigit(s[i])) {
+        return false;
+    }
+    while (inBounds(s, i) && isDigit(s[i])) {
+        i++;
+    }
+    return true;
+}
+
+// number-literal = ["-"] (%x30 / (%x31-39 *DIGIT)) ["." 1*DIGIT] [%i"e" ["-" / "+"] 1*DIGIT]
+bool validateNumberLiteral(const UnicodeString& s) {
+    int32_t i = 0;
+
+    if (s.isEmpty()) {
+        return false;
+    }
+
+    // Parse optional sign
+    // ["-"]
+    if (s[0] == HYPHEN) {
+        i++;
+    }
+
+    if (!inBounds(s, i)) {
+        return false;
+    }
+
+    // Parse integer digits
+    // (%x30 / (%x31-39 *DIGIT))
+    if (s[i] == '0') {
+        if (!inBounds(s, i + 1) || s[i + 1] != PERIOD) {
+            return false;
+        }
+        i++;
+    } else {
+        if (!parseDigits(s, i)) {
+            return false;
+        }
+    }
+    // The rest is optional
+    if (!inBounds(s, i)) {
+        return true;
+    }
+
+    // Parse optional decimal digits
+    // ["." 1*DIGIT]
+    if (s[i] == PERIOD) {
+        i++;
+        if (!parseDigits(s, i)) {
+            return false;
+        }
+    }
+
+    if (!inBounds(s, i)) {
+        return true;
+    }
+
+    // Parse optional exponent
+    // [%i"e" ["-" / "+"] 1*DIGIT]
+    if (s[i] == 'e' || s[i] == 'E') {
+        i++;
+        if (!inBounds(s, i)) {
+            return false;
+        }
+        // Parse optional sign
+        if (s[i] == HYPHEN || s[i] == PLUS) {
+            i++;
+        }
+        if (!inBounds(s, i)) {
+            return false;
+        }
+        if (!parseDigits(s, i)) {
+            return false;
+        }
+    }
+    if (i != s.length()) {
+        return false;
+    }
+    return true;
+}
+
+bool isInteger(const Formattable& s) {
+    switch (s.getType()) {
+        case UFMT_DOUBLE:
+        case UFMT_LONG:
+        case UFMT_INT64:
+            return true;
+        case UFMT_STRING: {
+            UErrorCode ignore = U_ZERO_ERROR;
+            const UnicodeString& str = s.getString(ignore);
+            return validateNumberLiteral(str);
+        }
+        default:
+            return false;
+    }
+}
+
+bool isDigitSizeOption(const UnicodeString& s) {
+    return s == UnicodeString("minimumIntegerDigits")
+        || s == UnicodeString("minimumFractionDigits")
+        || s == UnicodeString("maximumFractionDigits")
+        || s == UnicodeString("minimumSignificantDigits")
+        || s == UnicodeString("maximumSignificantDigits");
+}
+
+/* static */ void StandardFunctions::validateDigitSizeOptions(const FunctionOptions& opts,
+                                                              UErrorCode& status) {
+    CHECK_ERROR(status);
+
+    for (int32_t i = 0; i < opts.optionsCount(); i++) {
+        const ResolvedFunctionOption& opt = opts.options[i];
+        if (isDigitSizeOption(opt.getName()) && !isInteger(opt.getValue())) {
+            status = U_MF_BAD_OPTION;
+            return;
+        }
+    }
+}
+
 /* static */ number::LocalizedNumberFormatter StandardFunctions::formatterForOptions(const Number& number,
                                                                                      const FunctionOptions& opts,
                                                                                      UErrorCode& status) {
     number::UnlocalizedNumberFormatter nf;
 
     using namespace number;
+
+    validateDigitSizeOptions(opts, status);
+    if (U_FAILURE(status)) {
+        return {};
+    }
 
     if (U_SUCCESS(status)) {
         Formattable opt;
@@ -517,22 +601,19 @@ static double parseNumberLiteral(const Formattable& input, UErrorCode& errorCode
         return {};
     }
 
-    // Hack: Check for cases that are forbidden by the MF2 grammar
-    // but allowed by StringToDouble
-    int32_t len = inputStr.length();
-
-    if (len > 0 && ((inputStr[0] == '+')
-                    || (inputStr[0] == '0' && len > 1 && inputStr[1] != '.')
-                    || (inputStr[len - 1] == '.')
-                    || (inputStr[0] == '.'))) {
+    // Validate string according to `number-literal` production
+    // in the spec for `:number`. This is because some cases are
+    // forbidden by this grammar, but allowed by StringToDouble.
+    if (!validateNumberLiteral(inputStr)) {
         errorCode = U_MF_OPERAND_MISMATCH_ERROR;
         return 0;
     }
 
-    // Otherwise, convert to double using double_conversion::StringToDoubleConverter
+    // Convert to double using double_conversion::StringToDoubleConverter
     using namespace double_conversion;
     int processedCharactersCount = 0;
     StringToDoubleConverter converter(0, 0, 0, "", "");
+    int32_t len = inputStr.length();
     double result =
         converter.StringToDouble(reinterpret_cast<const uint16_t*>(inputStr.getBuffer()),
                                  len,
@@ -625,7 +706,7 @@ int32_t StandardFunctions::Number::minimumIntegerDigits(const FunctionOptions& o
             return static_cast<int32_t>(val);
         }
     }
-    return 0;
+    return 1;
 }
 
 int32_t StandardFunctions::Number::minimumSignificantDigits(const FunctionOptions& opts) const {
@@ -741,16 +822,16 @@ FormattedPlaceholder StandardFunctions::Number::format(FormattedPlaceholder&& ar
     // Need to return the integer value if invoked as :integer
     if (isInteger) {
         return FormattedPlaceholder(FormattedPlaceholder(Formattable(integerValue), arg.getFallback()),
+                                    std::move(opts),
                                     FormattedValue(std::move(numberResult)));
     }
-    return FormattedPlaceholder(arg, FormattedValue(std::move(numberResult)));
+    return FormattedPlaceholder(arg, std::move(opts), FormattedValue(std::move(numberResult)));
 }
 
 StandardFunctions::Number::~Number() {}
 StandardFunctions::NumberFactory::~NumberFactory() {}
 
 // --------- PluralFactory
-
 
 StandardFunctions::Plural::PluralType StandardFunctions::Plural::pluralType(const FunctionOptions& opts) const {
     Formattable opt;
