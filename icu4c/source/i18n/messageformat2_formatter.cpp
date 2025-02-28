@@ -24,18 +24,6 @@ U_NAMESPACE_BEGIN
 
 namespace message2 {
 
-    namespace functions {
-    static constexpr std::u16string_view DATETIME = u"datetime";
-    static constexpr std::u16string_view DATE = u"date";
-    static constexpr std::u16string_view TIME = u"time";
-    static constexpr std::u16string_view NUMBER = u"number";
-    static constexpr std::u16string_view INTEGER = u"integer";
-    static constexpr std::u16string_view TEST_FUNCTION = u"test:function";
-    static constexpr std::u16string_view TEST_FORMAT = u"test:format";
-    static constexpr std::u16string_view TEST_SELECT = u"test:select";
-    static constexpr std::u16string_view STRING = u"string";
-    }
-
     // MessageFormatter::Builder
 
     // -------------------------------------
