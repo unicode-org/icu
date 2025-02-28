@@ -209,7 +209,7 @@ class U16IteratorBase {
 protected:
     // TODO: Maybe std::move() the UnitIters?
     // @internal
-    U16IteratorBase(UnitIter start, UnitIter limit) : start(start), limit(limit) {}
+    U16IteratorBase(UnitIter start, UnitIter limit) : start_(start), limit_(limit) {}
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
 
@@ -220,11 +220,11 @@ protected:
 
     // @internal
     void inc(UnitIter &p) {
-        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // TODO: assert p != limit_ -- more precisely: start_ <= p < limit_
         // Very similar to U16_FWD_1().
         auto c = *p;
         ++p;
-        if (U16_IS_LEAD(c) && p != limit && U16_IS_TRAIL(*p)) {
+        if (U16_IS_LEAD(c) && p != limit_ && U16_IS_TRAIL(*p)) {
             ++p;
         }
     }
@@ -232,17 +232,17 @@ protected:
     // TODO: unused, remove?
     // @internal
     void dec(UnitIter &p) {
-        // TODO: assert p != start -- more precisely: start < p <= limit
+        // TODO: assert p != start_ -- more precisely: start_ < p <= limit_
         // Very similar to U16_BACK_1().
         UnitIter p1;
-        if (U16_IS_TRAIL(*--p) && p != start && (p1 = p, U16_IS_LEAD(*--p1))) {
+        if (U16_IS_TRAIL(*--p) && p != start_ && (p1 = p, U16_IS_LEAD(*--p1))) {
             p = p1;
         }
     }
 
     // @internal
     CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p) const {
-        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // TODO: assert p != limit_ -- more precisely: start_ <= p < limit_
         // Very similar to U16_NEXT_OR_FFFD().
         UnitIter p0 = p;
         CP32 c = *p;
@@ -251,7 +251,7 @@ protected:
             return {c, 1, true, p0};
         } else {
             uint16_t c2;
-            if (U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(c2 = *p)) {
+            if (U16_IS_SURROGATE_LEAD(c) && p != limit_ && U16_IS_TRAIL(c2 = *p)) {
                 ++p;
                 c = U16_GET_SUPPLEMENTARY(c, c2);
                 return {c, 2, true, p0};
@@ -263,7 +263,7 @@ protected:
 
     // @internal
     CodeUnits<UnitIter, CP32> decAndRead(UnitIter &p) const {
-        // TODO: assert p != start -- more precisely: start < p <= limit
+        // TODO: assert p != start_ -- more precisely: start_ < p <= limit_
         // Very similar to U16_PREV_OR_FFFD().
         CP32 c = *--p;
         if (!U16_IS_SURROGATE(c)) {
@@ -271,7 +271,7 @@ protected:
         } else {
             UnitIter p1;
             uint16_t c2;
-            if (U16_IS_SURROGATE_TRAIL(c) && p != start && (p1 = p, U16_IS_LEAD(c2 = *--p1))) {
+            if (U16_IS_SURROGATE_TRAIL(c) && p != start_ && (p1 = p, U16_IS_LEAD(c2 = *--p1))) {
                 p = p1;
                 c = U16_GET_SUPPLEMENTARY(c2, c);
                 return {c, 2, true, p};
@@ -281,12 +281,12 @@ protected:
         }
     }
 
-    // In a validating iterator, we need start & limit so that when we read a code point
+    // In a validating iterator, we need start_ & limit_ so that when we read a code point
     // (forward or backward) we can test if there are enough code units.
     // @internal
-    const UnitIter start;
+    const UnitIter start_;
     // @internal
-    const UnitIter limit;
+    const UnitIter limit_;
 };
 
 /**
@@ -455,16 +455,16 @@ public:
     //       What about iterator_category depending on the UnitIter??
 
     // TODO: Does it make sense for the limits to allow having a different type?
-    // We only need to be able to compare p_ vs. limit for == and !=.
+    // We only need to be able to compare p_ vs. limit_ for == and !=.
     // Might allow interesting sentinel types.
     // Would be trouble for the sentinel constructor that inits both iters from the same p.
 
-    U16Iterator(UnitIter p, UnitIter limit) : p_(p), limit(limit) {}
+    U16Iterator(UnitIter p, UnitIter limit) : p_(p), limit_(limit) {}
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
 
     // Constructs an iterator start or limit sentinel.
-    U16Iterator(UnitIter p) : p_(p), limit(p) {}
+    U16Iterator(UnitIter p) : p_(p), limit_(p) {}
 
     U16Iterator(const U16Iterator &other) = default;
     U16Iterator &operator=(const U16Iterator &other) = default;
@@ -516,18 +516,18 @@ public:
 private:
     // @internal
     void inc() {
-        // TODO: assert p_ != limit -- more precisely: start <= p_ < limit
+        // TODO: assert p_ != limit_ -- more precisely: start_ <= p_ < limit_
         // Very similar to U16_FWD_1().
         auto c = *p_;
         ++p_;
-        if (U16_IS_LEAD(c) && p_ != limit && U16_IS_TRAIL(*p_)) {
+        if (U16_IS_LEAD(c) && p_ != limit_ && U16_IS_TRAIL(*p_)) {
             ++p_;
         }
     }
 
     // @internal
     CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p) const {
-        // TODO: assert p != limit -- more precisely: start <= p < limit
+        // TODO: assert p != limit_ -- more precisely: start_ <= p < limit_
         // Very similar to U16_NEXT_OR_FFFD().
         CP32 c = *p;
         ++p;
@@ -535,7 +535,7 @@ private:
             return {c, 1, true};
         } else {
             uint16_t c2;
-            if (U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(c2 = *p)) {
+            if (U16_IS_SURROGATE_LEAD(c) && p != limit_ && U16_IS_TRAIL(c2 = *p)) {
                 ++p;
                 c = U16_GET_SUPPLEMENTARY(c, c2);
                 return {c, 2, true};
@@ -545,10 +545,10 @@ private:
         }
     }
 
-    // In a validating iterator, we need the limit so that when we read a code point
+    // In a validating iterator, we need the limit_ so that when we read a code point
     // we can test if there are enough code units.
     UnitIter p_;
-    const UnitIter limit;
+    const UnitIter limit_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // so that we can use a single-pass input iterator for UnitIter.
     CodeUnits<UnitIter, CP32> units = {0, 0, false};
