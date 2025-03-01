@@ -20,8 +20,8 @@
 // https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv
 using namespace std::string_view_literals;
 
-using U_HEADER_ONLY_NAMESPACE::U16Iterator;
-using U_HEADER_ONLY_NAMESPACE::U16StringCodePoints;
+using U_HEADER_ONLY_NAMESPACE::UTFIterator;
+using U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints;
 
 // Shared state for one or more copies of single-pass iterators.
 // Similar to https://en.cppreference.com/w/cpp/iterator/istreambuf_iterator
@@ -141,7 +141,7 @@ void U16IteratorTest::runIndexedTest(int32_t index, UBool exec, const char *&nam
 
 void U16IteratorTest::testGood() {
     std::u16string_view good(u"abçカ🚴"sv);
-    U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
+    UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -168,7 +168,7 @@ void U16IteratorTest::testGood() {
 void U16IteratorTest::testNegative() {
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
-    U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(bad);
+    UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -193,7 +193,7 @@ void U16IteratorTest::testNegative() {
 void U16IteratorTest::testFFFD() {
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
-    U16StringCodePoints<char16_t, char32_t, U_BEHAVIOR_FFFD> range(bad);
+    UTFStringCodePoints<char16_t, char32_t, U_BEHAVIOR_FFFD> range(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -217,7 +217,7 @@ void U16IteratorTest::testFFFD() {
 void U16IteratorTest::testSurrogate() {
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
-    U16StringCodePoints<char16_t, uint32_t, U_BEHAVIOR_SURROGATE> range(bad);
+    UTFStringCodePoints<char16_t, uint32_t, U_BEHAVIOR_SURROGATE> range(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -242,9 +242,9 @@ void U16IteratorTest::testSinglePassIter() {
     SinglePassSource<char16_t> good(u"abçカ🚴"sv);
     SinglePassIter<char16_t> goodBegin(good);
     SinglePassIter<char16_t> goodLimit{};
-    U16Iterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
+    UTFIterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
         goodBegin, goodLimit);
-    U16Iterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    UTFIterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
     auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -272,10 +272,10 @@ void U16IteratorTest::testFwdIter() {
     std::u16string_view good(u"abçカ🚴"sv);
     FwdIter<char16_t> goodBegin(good.data());
     FwdIter<char16_t> goodLimit(good.data() + good.length());
-    U16Iterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
+    UTFIterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
         goodBegin, goodBegin, goodLimit);
-    U16Iterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
-    // TODO: U16StringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
+    UTFIterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    // TODO: UTFStringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -336,7 +336,7 @@ void U8IteratorTest::runIndexedTest(int32_t index, UBool exec, const char *&name
 
 void U8IteratorTest::testGood() {
     std::string_view good(reinterpret_cast<const char*>(u8"abçカ🚴"));
-    U16StringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
+    UTFStringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -366,9 +366,9 @@ void U8IteratorTest::testSinglePassIter() {
     SinglePassSource<char> good(reinterpret_cast<const char*>(u8"abçカ🚴"));
     SinglePassIter<char> goodBegin(good);
     SinglePassIter<char> goodLimit{};
-    U16Iterator<SinglePassIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
+    UTFIterator<SinglePassIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
         goodBegin, goodLimit);
-    U16Iterator<SinglePassIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    UTFIterator<SinglePassIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
     auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -396,10 +396,10 @@ void U8IteratorTest::testFwdIter() {
     std::string_view good(reinterpret_cast<const char*>(u8"abçカ🚴"));
     FwdIter<char> goodBegin(good.data());
     FwdIter<char> goodLimit(good.data() + good.length());
-    U16Iterator<FwdIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
+    UTFIterator<FwdIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
         goodBegin, goodBegin, goodLimit);
-    U16Iterator<FwdIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
-    // TODO: U16StringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
+    UTFIterator<FwdIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    // TODO: UTFStringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());

@@ -1,8 +1,9 @@
 // © 2024 and later: Unicode, Inc. and others.
 // License & terms of use: https://www.unicode.org/copyright.html
 
-// utf16cppiter.h
+// utfiter.h
 // created: 2024aug12 Markus W. Scherer
+// TODO: rename this header file to utfiterator.h?
 
 #ifndef __UTF16CPPITER_H__
 #define __UTF16CPPITER_H__
@@ -57,6 +58,8 @@ namespace header {}
 #ifndef U_HIDE_DRAFT_API
 
 // Some defined behaviors for handling ill-formed Unicode strings.
+// TODO: For UTF-32, we have basically orthogonal conditions for surrogate vs. out-of-range.
+// Maybe make U_BEHAVIOR_SURROGATE return FFFD for out-of-range?
 typedef enum UIllFormedBehavior {
     U_BEHAVIOR_NEGATIVE,
     U_BEHAVIOR_FFFD,
@@ -488,6 +491,7 @@ public:
  * Validating bidirectional iterator over the code points in a Unicode 16-bit string.
  *
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
@@ -495,7 +499,7 @@ public:
  * @draft ICU 78
  */
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior, typename = void>
-class U16Iterator {
+class UTFIterator {
     using Impl = UTFImpl<UnitIter, CP32, behavior>;
 
     // Proxy type for operator->() (required by LegacyInputIterator)
@@ -516,22 +520,22 @@ public:
     // TODO: Maybe std::move() the UnitIters?
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
-    U16Iterator(UnitIter start, UnitIter p, UnitIter limit) :
+    UTFIterator(UnitIter start, UnitIter p, UnitIter limit) :
             p_(p), start_(start), limit_(limit), units_(0, 0, false, p) {}
     // TODO: add constructor with just start-or-p and limit: start=p
     // Constructs an iterator start or limit sentinel.
-    U16Iterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p) {}
+    UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p) {}
 
-    U16Iterator(const U16Iterator &other) = default;
-    U16Iterator &operator=(const U16Iterator &other) = default;
+    UTFIterator(const UTFIterator &other) = default;
+    UTFIterator &operator=(const UTFIterator &other) = default;
 
-    bool operator==(const U16Iterator &other) const {
+    bool operator==(const UTFIterator &other) const {
         // Compare logical positions.
         UnitIter p1 = state_ <= 0 ? p_ : units_.data();
         UnitIter p2 = other.state_ <= 0 ? other.p_ : other.units_.data();
         return p1 == p2;
     }
-    bool operator!=(const U16Iterator &other) const { return !operator==(other); }
+    bool operator!=(const UTFIterator &other) const { return !operator==(other); }
 
     CodeUnits<UnitIter, CP32> operator*() const {
         if (state_ == 0) {
@@ -549,7 +553,7 @@ public:
         return Proxy(units_);
     }
 
-    U16Iterator &operator++() {  // pre-increment
+    UTFIterator &operator++() {  // pre-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
             state_ = 0;
@@ -562,27 +566,27 @@ public:
         return *this;
     }
 
-    U16Iterator operator++(int) {  // post-increment
+    UTFIterator operator++(int) {  // post-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
-            U16Iterator result(*this);
+            UTFIterator result(*this);
             state_ = 0;
             return result;
         } else if (state_ == 0) {
             units_ = Impl::readAndInc(p_, limit_);
-            U16Iterator result(*this);
+            UTFIterator result(*this);
             result.state_ = units_.length();
             // keep this->state_ == 0
             return result;
         } else /* state_ < 0 */ {
-            U16Iterator result(*this);
+            UTFIterator result(*this);
             // operator--() called decAndRead() so we know how far to skip.
             Impl::moveToDecAndReadLimit(p_, state_);
             return result;
         }
     }
 
-    U16Iterator &operator--() {  // pre-decrement
+    UTFIterator &operator--() {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
             Impl::moveToReadAndIncStart(p_, state_);
@@ -592,8 +596,8 @@ public:
         return *this;
     }
 
-    U16Iterator operator--(int) {  // post-decrement
-        U16Iterator result(*this);
+    UTFIterator operator--(int) {  // post-decrement
+        UTFIterator result(*this);
         operator--();
         return result;
     }
@@ -620,7 +624,7 @@ private:
 #ifndef U_IN_DOXYGEN
 // Partial template specialization for single-pass input iterator.
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
-class U16Iterator<
+class UTFIterator<
         UnitIter,
         CP32,
         behavior,
@@ -651,22 +655,22 @@ public:
     // Might allow interesting sentinel types.
     // Would be trouble for the sentinel constructor that inits both iters from the same p.
 
-    U16Iterator(UnitIter p, UnitIter limit) : p_(p), limit_(limit) {}
+    UTFIterator(UnitIter p, UnitIter limit) : p_(p), limit_(limit) {}
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
 
     // Constructs an iterator start or limit sentinel.
-    U16Iterator(UnitIter p) : p_(p), limit_(p) {}
+    UTFIterator(UnitIter p) : p_(p), limit_(p) {}
 
-    U16Iterator(const U16Iterator &other) = default;
-    U16Iterator &operator=(const U16Iterator &other) = default;
+    UTFIterator(const UTFIterator &other) = default;
+    UTFIterator &operator=(const UTFIterator &other) = default;
 
-    bool operator==(const U16Iterator &other) const {
+    bool operator==(const UTFIterator &other) const {
         return p_ == other.p_ && ahead_ == other.ahead_;
         // Strictly speaking, we should check if the logical position is the same.
         // However, we cannot move, or do arithmetic with, a single-pass UnitIter.
     }
-    bool operator!=(const U16Iterator &other) const { return !operator==(other); }
+    bool operator!=(const UTFIterator &other) const { return !operator==(other); }
 
     CodeUnits<UnitIter, CP32> operator*() const {
         if (!ahead_) {
@@ -684,7 +688,7 @@ public:
         return Proxy(units_);
     }
 
-    U16Iterator &operator++() {  // pre-increment
+    UTFIterator &operator++() {  // pre-increment
         if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
@@ -728,6 +732,7 @@ private:
  * Not bidirectional, but optimized for reverse iteration.
  *
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
@@ -799,34 +804,36 @@ private:
 /**
  * A C++ "range" for validating iteration over all of the code points of a 16-bit Unicode string.
  *
- * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam Unit16 Code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam UIllFormedBehavior TODO
  * @draft ICU 78
  */
 template<typename Unit16, typename CP32, UIllFormedBehavior behavior>
-class U16StringCodePoints {
+class UTFStringCodePoints {
 public:
     /**
      * Constructs a C++ "range" object over the code points in the string.
      * @draft ICU 78
      */
-    U16StringCodePoints(std::basic_string_view<Unit16> s) : s(s) {}
+    UTFStringCodePoints(std::basic_string_view<Unit16> s) : s(s) {}
 
     /** @draft ICU 78 */
-    U16StringCodePoints(const U16StringCodePoints &other) = default;
+    UTFStringCodePoints(const UTFStringCodePoints &other) = default;
 
     /** @draft ICU 78 */
-    U16StringCodePoints &operator=(const U16StringCodePoints &other) = default;
+    UTFStringCodePoints &operator=(const UTFStringCodePoints &other) = default;
 
     /** @draft ICU 78 */
-    U16Iterator<const Unit16 *, CP32, behavior> begin() const {
+    UTFIterator<const Unit16 *, CP32, behavior> begin() const {
         return {s.data(), s.data(), s.data() + s.length()};
     }
 
     /** @draft ICU 78 */
-    U16Iterator<const Unit16 *, CP32, behavior> end() const {
+    UTFIterator<const Unit16 *, CP32, behavior> end() const {
         const Unit16 *limit = s.data() + s.length();
         return {s.data(), limit, limit};
     }
@@ -848,30 +855,32 @@ private:
 // ------------------------------------------------------------------------- ***
 
 /**
- * Internal base class for public U16UnsafeIterator & U16UnsafeReverseIterator.
+ * Internal base class for public UnsafeUTFIterator & UnsafeUTFReverseIterator.
  * Not intended for public subclassing.
  *
- * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam Unit16 Code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @internal
  */
 template<typename Unit16, typename CP32>
-class U16UnsafeIteratorBase {
+class UnsafeUTFIteratorBase {
 protected:
     // @internal
-    U16UnsafeIteratorBase(const Unit16 *p) : p_(p) {}
+    UnsafeUTFIteratorBase(const Unit16 *p) : p_(p) {}
     // Test pointers for == or != but not < or >.
 
     // @internal
-    U16UnsafeIteratorBase(const U16UnsafeIteratorBase &other) = default;
+    UnsafeUTFIteratorBase(const UnsafeUTFIteratorBase &other) = default;
     // @internal
-    U16UnsafeIteratorBase &operator=(const U16UnsafeIteratorBase &other) = default;
+    UnsafeUTFIteratorBase &operator=(const UnsafeUTFIteratorBase &other) = default;
 
     // @internal
-    bool operator==(const U16UnsafeIteratorBase &other) const { return p_ == other.p_; }
+    bool operator==(const UnsafeUTFIteratorBase &other) const { return p_ == other.p_; }
     // @internal
-    bool operator!=(const U16UnsafeIteratorBase &other) const { return !operator==(other); }
+    bool operator!=(const UnsafeUTFIteratorBase &other) const { return !operator==(other); }
 
     // @internal
     void dec() {
@@ -917,23 +926,25 @@ protected:
  * Non-validating bidirectional iterator over the code points in a UTF-16 string.
  * The string must be well-formed.
  *
- * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam Unit16 Code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @draft ICU 78
  */
 template<typename Unit16, typename CP32>
-class U16UnsafeIterator : private U16UnsafeIteratorBase<Unit16, CP32> {
+class UnsafeUTFIterator : private UnsafeUTFIteratorBase<Unit16, CP32> {
     // FYI: We need to qualify all accesses to super class members because of private inheritance.
-    using Super = U16UnsafeIteratorBase<Unit16, CP32>;
+    using Super = UnsafeUTFIteratorBase<Unit16, CP32>;
 public:
-    U16UnsafeIterator(const Unit16 *p) : Super(p) {}
+    UnsafeUTFIterator(const Unit16 *p) : Super(p) {}
 
-    U16UnsafeIterator(const U16UnsafeIterator &other) = default;
-    U16UnsafeIterator &operator=(const U16UnsafeIterator &other) = default;
+    UnsafeUTFIterator(const UnsafeUTFIterator &other) = default;
+    UnsafeUTFIterator &operator=(const UnsafeUTFIterator &other) = default;
 
-    bool operator==(const U16UnsafeIterator &other) const { return Super::operator==(other); }
-    bool operator!=(const U16UnsafeIterator &other) const { return !Super::operator==(other); }
+    bool operator==(const UnsafeUTFIterator &other) const { return Super::operator==(other); }
+    bool operator!=(const UnsafeUTFIterator &other) const { return !Super::operator==(other); }
 
     UnsafeCodeUnits<Unit16, CP32> operator*() const {
         // Call the same function in both operator*() and operator++() so that an
@@ -942,7 +953,7 @@ public:
         return Super::readAndInc(p);
     }
 
-    U16UnsafeIterator &operator++() {  // pre-increment
+    UnsafeUTFIterator &operator++() {  // pre-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         Super::readAndInc(Super::p_);
@@ -950,21 +961,21 @@ public:
     }
 
     // TODO: disable for single-pass input iterator? or return proxy like std::istreambuf_iterator?
-    U16UnsafeIterator operator++(int) {  // post-increment
+    UnsafeUTFIterator operator++(int) {  // post-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        U16UnsafeIterator result(*this);
+        UnsafeUTFIterator result(*this);
         Super::readAndInc(Super::p_);
         return result;
     }
 
-    U16UnsafeIterator &operator--() {  // pre-decrement
+    UnsafeUTFIterator &operator--() {  // pre-decrement
         Super::dec();
         return *this;
     }
 
-    U16UnsafeIterator operator--(int) {  // post-decrement
-        U16UnsafeIterator result(*this);
+    UnsafeUTFIterator operator--(int) {  // post-decrement
+        UnsafeUTFIterator result(*this);
         Super::dec();
         return result;
     }
@@ -975,22 +986,24 @@ public:
  * Not bidirectional, but optimized for reverse iteration.
  * The string must be well-formed.
  *
- * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam Unit16 Code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @draft ICU 78
  */
 template<typename Unit16, typename CP32>
-class U16UnsafeReverseIterator : private U16UnsafeIteratorBase<Unit16, CP32> {
-    using Super = U16UnsafeIteratorBase<Unit16, CP32>;
+class UnsafeUTFReverseIterator : private UnsafeUTFIteratorBase<Unit16, CP32> {
+    using Super = UnsafeUTFIteratorBase<Unit16, CP32>;
 public:
-    U16UnsafeReverseIterator(const Unit16 *p) : Super(p) {}
+    UnsafeUTFReverseIterator(const Unit16 *p) : Super(p) {}
 
-    U16UnsafeReverseIterator(const U16UnsafeReverseIterator &other) = default;
-    U16UnsafeReverseIterator &operator=(const U16UnsafeReverseIterator &other) = default;
+    UnsafeUTFReverseIterator(const UnsafeUTFReverseIterator &other) = default;
+    UnsafeUTFReverseIterator &operator=(const UnsafeUTFReverseIterator &other) = default;
 
-    bool operator==(const U16UnsafeReverseIterator &other) const { return Super::operator==(other); }
-    bool operator!=(const U16UnsafeReverseIterator &other) const { return !Super::operator==(other); }
+    bool operator==(const UnsafeUTFReverseIterator &other) const { return Super::operator==(other); }
+    bool operator!=(const UnsafeUTFReverseIterator &other) const { return !Super::operator==(other); }
 
     UnsafeCodeUnits<Unit16, CP32> operator*() const {
         // Call the same function in both operator*() and operator++() so that an
@@ -999,17 +1012,17 @@ public:
         return Super::decAndRead(p);
     }
 
-    U16UnsafeReverseIterator &operator++() {  // pre-increment
+    UnsafeUTFReverseIterator &operator++() {  // pre-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         Super::decAndRead(Super::p_);
         return *this;
     }
 
-    U16UnsafeReverseIterator operator++(int) {  // post-increment
+    UnsafeUTFReverseIterator operator++(int) {  // post-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        U16UnsafeReverseIterator result(*this);
+        UnsafeUTFReverseIterator result(*this);
         Super::decAndRead(Super::p_);
         return result;
     }
@@ -1019,41 +1032,43 @@ public:
  * A C++ "range" for non-validating iteration over all of the code points of a UTF-16 string.
  * The string must be well-formed.
  *
- * @tparam Unit16 Code unit type: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam Unit16 Code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @draft ICU 78
  */
 template<typename Unit16, typename CP32>
-class U16UnsafeStringCodePoints {
+class UnsafeUTFStringCodePoints {
 public:
     /**
      * Constructs a C++ "range" object over the code points in the string.
      * @draft ICU 78
      */
-    U16UnsafeStringCodePoints(std::basic_string_view<Unit16> s) : s(s) {}
+    UnsafeUTFStringCodePoints(std::basic_string_view<Unit16> s) : s(s) {}
 
     /** @draft ICU 78 */
-    U16UnsafeStringCodePoints(const U16UnsafeStringCodePoints &other) = default;
-    U16UnsafeStringCodePoints &operator=(const U16UnsafeStringCodePoints &other) = default;
+    UnsafeUTFStringCodePoints(const UnsafeUTFStringCodePoints &other) = default;
+    UnsafeUTFStringCodePoints &operator=(const UnsafeUTFStringCodePoints &other) = default;
 
     /** @draft ICU 78 */
-    U16UnsafeIterator<Unit16, CP32> begin() const {
+    UnsafeUTFIterator<Unit16, CP32> begin() const {
         return {s.data()};
     }
 
     /** @draft ICU 78 */
-    U16UnsafeIterator<Unit16, CP32> end() const {
+    UnsafeUTFIterator<Unit16, CP32> end() const {
         return {s.data() + s.length()};
     }
 
     /** @draft ICU 78 */
-    U16UnsafeReverseIterator<Unit16, CP32> rbegin() const {
+    UnsafeUTFReverseIterator<Unit16, CP32> rbegin() const {
         return {s.data() + s.length()};
     }
 
     /** @draft ICU 78 */
-    U16UnsafeReverseIterator<Unit16, CP32> rend() const {
+    UnsafeUTFReverseIterator<Unit16, CP32> rend() const {
         return {s.data()};
     }
 
@@ -1068,7 +1083,7 @@ private:
 // TODO: remove experimental sample code
 #ifndef UTYPES_H
 int32_t rangeLoop16(std::u16string_view s) {
-   header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+   header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    for (auto units : range) {
        sum += units.codePoint();
@@ -1077,7 +1092,7 @@ int32_t rangeLoop16(std::u16string_view s) {
 }
 
 int32_t loopIterPlusPlus16(std::u16string_view s) {
-   header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+   header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    auto iter = range.begin();
    auto limit = range.end();
@@ -1088,7 +1103,7 @@ int32_t loopIterPlusPlus16(std::u16string_view s) {
 }
 
 int32_t backwardLoop16(std::u16string_view s) {
-   header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+   header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    auto start = range.begin();
    auto iter = range.end();
@@ -1099,7 +1114,7 @@ int32_t backwardLoop16(std::u16string_view s) {
 }
 
 int32_t reverseLoop16(std::u16string_view s) {
-   header::U16StringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+   header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
        sum += (*iter).codePoint();
@@ -1108,7 +1123,7 @@ int32_t reverseLoop16(std::u16string_view s) {
 }
 
 int32_t unsafeRangeLoop16(std::u16string_view s) {
-   header::U16UnsafeStringCodePoints<char16_t, UChar32> range(s);
+   header::UnsafeUTFStringCodePoints<char16_t, UChar32> range(s);
    int32_t sum = 0;
    for (auto units : range) {
        sum += units.codePoint();
@@ -1117,7 +1132,7 @@ int32_t unsafeRangeLoop16(std::u16string_view s) {
 }
 
 int32_t unsafeReverseLoop16(std::u16string_view s) {
-   header::U16UnsafeStringCodePoints<char16_t, UChar32> range(s);
+   header::UnsafeUTFStringCodePoints<char16_t, UChar32> range(s);
    int32_t sum = 0;
    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
        sum += iter->codePoint();
@@ -1126,7 +1141,7 @@ int32_t unsafeReverseLoop16(std::u16string_view s) {
 }
 
 int32_t rangeLoop8(std::string_view s) {
-   header::U16StringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+   header::UTFStringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    for (auto units : range) {
        sum += units.codePoint();
@@ -1135,7 +1150,7 @@ int32_t rangeLoop8(std::string_view s) {
 }
 
 int32_t reverseLoop(std::string_view s) {
-   header::U16StringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+   header::UTFStringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
        sum += iter->codePoint();
