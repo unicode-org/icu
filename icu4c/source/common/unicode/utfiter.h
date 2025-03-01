@@ -739,7 +739,7 @@ class U16ReverseIterator {
     // so that we don't promise always returning CodeUnits.
     class Proxy {
     public:
-        Proxy(CodeUnits<UnitIter, CP32> &units) : units_(units) {}
+        Proxy(CodeUnits<UnitIter, CP32> units) : units_(units) {}
         CodeUnits<UnitIter, CP32> &operator*() { return units_; }
         CodeUnits<UnitIter, CP32> *operator->() { return &units_; }
     private:
@@ -1109,7 +1109,7 @@ int32_t reverseLoop16(std::u16string_view s) {
    header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
-       sum += (*iter).codePoint();
+       sum += iter->codePoint();
    }
    return sum;
 }
@@ -1127,7 +1127,7 @@ int32_t unsafeReverseLoop16(std::u16string_view s) {
    header::UnsafeUTFStringCodePoints<char16_t, UChar32> range(s);
    int32_t sum = 0;
    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
-       sum += iter->codePoint();
+       sum += (*iter).codePoint();  // TODO: ->
    }
    return sum;
 }
@@ -1141,7 +1141,7 @@ int32_t rangeLoop8(std::string_view s) {
    return sum;
 }
 
-int32_t reverseLoop(std::string_view s) {
+int32_t reverseLoop8(std::string_view s) {
    header::UTFStringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
    int32_t sum = 0;
    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
