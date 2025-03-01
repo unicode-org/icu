@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740517561139,
+  "lastUpdate": 1740794086865,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40245,6 +40245,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 54.2196,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "9cc28a6428c8597cbeb2550867748c0e7ae23246",
+          "message": "ICU-23056 Add workflow to generate commit checker report\n\nSee #3413",
+          "timestamp": "2025-02-28T17:19:53-08:00",
+          "tree_id": "2f21de02d917ab44486abd428a562ac1f5bbb6fc",
+          "url": "https://github.com/unicode-org/icu/commit/9cc28a6428c8597cbeb2550867748c0e7ae23246"
+        },
+        "date": 1740793848998,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.3841,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 52.8006,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
