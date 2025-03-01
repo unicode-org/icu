@@ -732,7 +732,7 @@ private:
  * @draft ICU 78
  */
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
-class U16ReverseIterator {
+class UTFReverseIterator {
     using Impl = UTFImpl<UnitIter, CP32, behavior>;
 
     // Proxy type for operator->() (required by LegacyInputIterator)
@@ -747,15 +747,15 @@ class U16ReverseIterator {
     };
 
 public:
-    U16ReverseIterator(UnitIter start, UnitIter p) : p_(p), start_(start) {}
+    UTFReverseIterator(UnitIter start, UnitIter p) : p_(p), start_(start) {}
     // Constructs an iterator start or limit sentinel.
-    U16ReverseIterator(UnitIter p) : p_(p), start_(p) {}
+    UTFReverseIterator(UnitIter p) : p_(p), start_(p) {}
 
-    U16ReverseIterator(const U16ReverseIterator &other) = default;
-    U16ReverseIterator &operator=(const U16ReverseIterator &other) = default;
+    UTFReverseIterator(const UTFReverseIterator &other) = default;
+    UTFReverseIterator &operator=(const UTFReverseIterator &other) = default;
 
-    bool operator==(const U16ReverseIterator &other) const { return p_ == other.p_; }
-    bool operator!=(const U16ReverseIterator &other) const { return !operator==(other); }
+    bool operator==(const UTFReverseIterator &other) const { return p_ == other.p_; }
+    bool operator!=(const UTFReverseIterator &other) const { return !operator==(other); }
 
     CodeUnits<UnitIter, CP32> operator*() const {
         // Call the same function in both operator*() and operator++() so that an
@@ -771,17 +771,17 @@ public:
         return Proxy(Impl::decAndRead(start_, p));
     }
 
-    U16ReverseIterator &operator++() {  // pre-increment
+    UTFReverseIterator &operator++() {  // pre-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         Impl::decAndRead(start_, p_);
         return *this;
     }
 
-    U16ReverseIterator operator++(int) {  // post-increment
+    UTFReverseIterator operator++(int) {  // post-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        U16ReverseIterator result(*this);
+        UTFReverseIterator result(*this);
         Impl::decAndRead(start_, p_);
         return result;
     }
@@ -831,12 +831,12 @@ public:
     }
 
     /** @draft ICU 78 */
-    U16ReverseIterator<const Unit16 *, CP32, behavior> rbegin() const {
+    UTFReverseIterator<const Unit16 *, CP32, behavior> rbegin() const {
         return {s.data(), s.data() + s.length()};
     }
 
     /** @draft ICU 78 */
-    U16ReverseIterator<const Unit16 *, CP32, behavior> rend() const {
+    UTFReverseIterator<const Unit16 *, CP32, behavior> rend() const {
         return {s.data(), s.data()};
     }
 
