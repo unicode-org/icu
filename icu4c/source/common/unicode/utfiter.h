@@ -218,7 +218,6 @@ public:
     }
 
     static void inc(UnitIter &p, UnitIter limit) {
-        // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U8_FWD_1().
         uint8_t b = *p;
         ++p;
@@ -244,7 +243,6 @@ public:
     }
 
     static CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter limit) {
-        // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U8_NEXT_OR_FFFD().
         UnitIter p0 = p;
         CP32 c = uint8_t(*p);
@@ -280,7 +278,6 @@ public:
     }
 
     static CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter limit) {
-        // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U8_NEXT_OR_FFFD().
         CP32 c = uint8_t(*p);
         ++p;
@@ -315,7 +312,6 @@ public:
     }
 
     static CodeUnits<UnitIter, CP32> decAndRead(UnitIter start, UnitIter &p) {
-        // TODO: assert p != start -- more precisely: start < p <= limit
         // Very similar to U8_PREV_OR_FFFD().
         CP32 c = uint8_t(*--p);
         if (U8_IS_SINGLE(c)) {
@@ -399,7 +395,6 @@ public:
     }
 
     static void inc(UnitIter &p, UnitIter limit) {
-        // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_FWD_1().
         auto c = *p;
         ++p;
@@ -409,7 +404,6 @@ public:
     }
 
     static CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter limit) {
-        // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_NEXT_OR_FFFD().
         UnitIter p0 = p;
         CP32 c = *p;
@@ -429,7 +423,6 @@ public:
     }
 
     static CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter limit) {
-        // TODO: assert p != limit -- more precisely: start <= p < limit
         // Very similar to U16_NEXT_OR_FFFD().
         CP32 c = *p;
         ++p;
@@ -448,7 +441,6 @@ public:
     }
 
     static CodeUnits<UnitIter, CP32> decAndRead(UnitIter start, UnitIter &p) {
-        // TODO: assert p != start -- more precisely: start < p <= limit
         // Very similar to U16_PREV_OR_FFFD().
         CP32 c = *--p;
         if (!U16_IS_SURROGATE(c)) {
