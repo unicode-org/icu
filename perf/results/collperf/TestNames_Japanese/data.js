@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740517880692,
+  "lastUpdate": 1740794344963,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -63879,6 +63879,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5784940.3786,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "9cc28a6428c8597cbeb2550867748c0e7ae23246",
+          "message": "ICU-23056 Add workflow to generate commit checker report\n\nSee #3413",
+          "timestamp": "2025-02-28T17:19:53-08:00",
+          "tree_id": "2f21de02d917ab44486abd428a562ac1f5bbb6fc",
+          "url": "https://github.com/unicode-org/icu/commit/9cc28a6428c8597cbeb2550867748c0e7ae23246"
+        },
+        "date": 1740794095630,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 208.8069,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20715101.2906,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5481108.1,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19777125.6104,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5509778.1609,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
