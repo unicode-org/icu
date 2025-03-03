@@ -239,14 +239,14 @@ class UTFImpl<
                   "For 8-bit strings, the SURROGATE option does not have an equivalent.");
 public:
     // Handle ill-formed UTF-8
-    static CP32 sub() {
+    static inline CP32 sub() {
         switch (behavior) {
             case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
             case U_BEHAVIOR_FFFD: return 0xfffd;
         }
     }
 
-    static void inc(UnitIter &p, UnitIter limit) {
+    static inline void inc(UnitIter &p, UnitIter limit) {
         // Very similar to U8_FWD_1().
         uint8_t b = *p;
         ++p;
@@ -271,7 +271,7 @@ public:
         }
     }
 
-    static CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter limit) {
+    static inline CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter limit) {
         // Very similar to U8_NEXT_OR_FFFD().
         UnitIter p0 = p;
         CP32 c = uint8_t(*p);
@@ -306,7 +306,7 @@ public:
         return {sub(), length, false, p0};
     }
 
-    static CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter limit) {
+    static inline CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter limit) {
         // Very similar to U8_NEXT_OR_FFFD().
         CP32 c = uint8_t(*p);
         ++p;
@@ -340,7 +340,7 @@ public:
         return {sub(), length, false};
     }
 
-    static CodeUnits<UnitIter, CP32> decAndRead(UnitIter start, UnitIter &p) {
+    static inline CodeUnits<UnitIter, CP32> decAndRead(UnitIter start, UnitIter &p) {
         // Very similar to U8_PREV_OR_FFFD().
         CP32 c = uint8_t(*--p);
         if (U8_IS_SINGLE(c)) {
@@ -394,12 +394,12 @@ public:
         return {sub(), 1, false, p};
     }
 
-    static void moveToReadAndIncStart(UnitIter &p, int8_t &state) {
+    static inline void moveToReadAndIncStart(UnitIter &p, int8_t &state) {
         // state > 0 after readAndInc()
         do { --p; } while (--state != 0);
     }
 
-    static void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
+    static inline void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
         // state < 0 after decAndRead()
         do { ++p; } while (++state != 0);
     }
@@ -415,7 +415,7 @@ class UTFImpl<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 2>> {
 public:
     // Handle ill-formed UTF-16: One unpaired surrogate.
-    static CP32 sub(CP32 surrogate) {
+    static inline CP32 sub(CP32 surrogate) {
         switch (behavior) {
             case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
             case U_BEHAVIOR_FFFD: return 0xfffd;
@@ -423,7 +423,7 @@ public:
         }
     }
 
-    static void inc(UnitIter &p, UnitIter limit) {
+    static inline void inc(UnitIter &p, UnitIter limit) {
         // Very similar to U16_FWD_1().
         auto c = *p;
         ++p;
@@ -432,7 +432,7 @@ public:
         }
     }
 
-    static CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter limit) {
+    static inline CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter limit) {
         // Very similar to U16_NEXT_OR_FFFD().
         UnitIter p0 = p;
         CP32 c = *p;
@@ -451,7 +451,7 @@ public:
         }
     }
 
-    static CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter limit) {
+    static inline CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter limit) {
         // Very similar to U16_NEXT_OR_FFFD().
         CP32 c = *p;
         ++p;
@@ -469,7 +469,7 @@ public:
         }
     }
 
-    static CodeUnits<UnitIter, CP32> decAndRead(UnitIter start, UnitIter &p) {
+    static inline CodeUnits<UnitIter, CP32> decAndRead(UnitIter start, UnitIter &p) {
         // Very similar to U16_PREV_OR_FFFD().
         CP32 c = *--p;
         if (!U16_IS_SURROGATE(c)) {
@@ -487,7 +487,7 @@ public:
         }
     }
 
-    static void moveToReadAndIncStart(UnitIter &p, int8_t &state) {
+    static inline void moveToReadAndIncStart(UnitIter &p, int8_t &state) {
         // state > 0 after readAndInc(); max 2 for UTF-16
         --p;
         if (--state != 0) {
@@ -496,7 +496,7 @@ public:
         }
     }
 
-    static void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
+    static inline void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
         // state < 0 after decAndRead(); max 2 for UTF-16
         ++p;
         if (++state != 0) {
@@ -541,24 +541,24 @@ public:
     // TODO: Maybe std::move() the UnitIters?
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
-    UTFIterator(UnitIter start, UnitIter p, UnitIter limit) :
+    inline UTFIterator(UnitIter start, UnitIter p, UnitIter limit) :
             p_(p), start_(start), limit_(limit), units_(0, 0, false, p) {}
     // TODO: add constructor with just start-or-p and limit: start=p
     // Constructs an iterator start or limit sentinel.
-    UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p) {}
+    inline UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p) {}
 
-    UTFIterator(const UTFIterator &other) = default;
-    UTFIterator &operator=(const UTFIterator &other) = default;
+    inline UTFIterator(const UTFIterator &other) = default;
+    inline UTFIterator &operator=(const UTFIterator &other) = default;
 
-    bool operator==(const UTFIterator &other) const {
+    inline bool operator==(const UTFIterator &other) const {
         // Compare logical positions.
         UnitIter p1 = state_ <= 0 ? p_ : units_.data();
         UnitIter p2 = other.state_ <= 0 ? other.p_ : other.units_.data();
         return p1 == p2;
     }
-    bool operator!=(const UTFIterator &other) const { return !operator==(other); }
+    inline bool operator!=(const UTFIterator &other) const { return !operator==(other); }
 
-    CodeUnits<UnitIter, CP32> operator*() const {
+    inline CodeUnits<UnitIter, CP32> operator*() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_, limit_);
             state_ = units_.length();
@@ -566,7 +566,7 @@ public:
         return units_;
     }
 
-    Proxy operator->() const {
+    inline Proxy operator->() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_, limit_);
             state_ = units_.length();
@@ -574,7 +574,7 @@ public:
         return Proxy(units_);
     }
 
-    UTFIterator &operator++() {  // pre-increment
+    inline UTFIterator &operator++() {  // pre-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
             state_ = 0;
@@ -587,7 +587,7 @@ public:
         return *this;
     }
 
-    UTFIterator operator++(int) {  // post-increment
+    inline UTFIterator operator++(int) {  // post-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
             UTFIterator result(*this);
@@ -607,7 +607,7 @@ public:
         }
     }
 
-    UTFIterator &operator--() {  // pre-decrement
+    inline UTFIterator &operator--() {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
             Impl::moveToReadAndIncStart(p_, state_);
@@ -617,7 +617,7 @@ public:
         return *this;
     }
 
-    UTFIterator operator--(int) {  // post-decrement
+    inline UTFIterator operator--(int) {  // post-decrement
         UTFIterator result(*this);
         operator--();
         return result;
@@ -676,24 +676,24 @@ public:
     // Might allow interesting sentinel types.
     // Would be trouble for the sentinel constructor that inits both iters from the same p.
 
-    UTFIterator(UnitIter p, UnitIter limit) : p_(p), limit_(limit) {}
+    inline UTFIterator(UnitIter p, UnitIter limit) : p_(p), limit_(limit) {}
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
     // Test pointers for == or != but not < or >.
 
     // Constructs an iterator start or limit sentinel.
-    UTFIterator(UnitIter p) : p_(p), limit_(p) {}
+    inline UTFIterator(UnitIter p) : p_(p), limit_(p) {}
 
-    UTFIterator(const UTFIterator &other) = default;
-    UTFIterator &operator=(const UTFIterator &other) = default;
+    inline UTFIterator(const UTFIterator &other) = default;
+    inline UTFIterator &operator=(const UTFIterator &other) = default;
 
-    bool operator==(const UTFIterator &other) const {
+    inline bool operator==(const UTFIterator &other) const {
         return p_ == other.p_ && ahead_ == other.ahead_;
         // Strictly speaking, we should check if the logical position is the same.
         // However, we cannot move, or do arithmetic with, a single-pass UnitIter.
     }
-    bool operator!=(const UTFIterator &other) const { return !operator==(other); }
+    inline bool operator!=(const UTFIterator &other) const { return !operator==(other); }
 
-    CodeUnits<UnitIter, CP32> operator*() const {
+    inline CodeUnits<UnitIter, CP32> operator*() const {
         if (!ahead_) {
             units_ = Impl::singlePassReadAndInc(p_, limit_);
             ahead_ = true;
@@ -701,7 +701,7 @@ public:
         return units_;
     }
 
-    Proxy operator->() const {
+    inline Proxy operator->() const {
         if (!ahead_) {
             units_ = Impl::singlePassReadAndInc(p_, limit_);
             ahead_ = true;
@@ -709,7 +709,7 @@ public:
         return Proxy(units_);
     }
 
-    UTFIterator &operator++() {  // pre-increment
+    inline UTFIterator &operator++() {  // pre-increment
         if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
@@ -719,7 +719,7 @@ public:
         return *this;
     }
 
-    Proxy operator++(int) {  // post-increment
+    inline Proxy operator++(int) {  // post-increment
         if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
@@ -776,38 +776,38 @@ class UTFReverseIterator {
     };
 
 public:
-    UTFReverseIterator(UnitIter start, UnitIter p) : p_(p), start_(start) {}
+    inline UTFReverseIterator(UnitIter start, UnitIter p) : p_(p), start_(start) {}
     // Constructs an iterator start or limit sentinel.
-    UTFReverseIterator(UnitIter p) : p_(p), start_(p) {}
+    inline UTFReverseIterator(UnitIter p) : p_(p), start_(p) {}
 
-    UTFReverseIterator(const UTFReverseIterator &other) = default;
-    UTFReverseIterator &operator=(const UTFReverseIterator &other) = default;
+    inline UTFReverseIterator(const UTFReverseIterator &other) = default;
+    inline UTFReverseIterator &operator=(const UTFReverseIterator &other) = default;
 
-    bool operator==(const UTFReverseIterator &other) const { return p_ == other.p_; }
-    bool operator!=(const UTFReverseIterator &other) const { return !operator==(other); }
+    inline bool operator==(const UTFReverseIterator &other) const { return p_ == other.p_; }
+    inline bool operator!=(const UTFReverseIterator &other) const { return !operator==(other); }
 
-    CodeUnits<UnitIter, CP32> operator*() const {
+    inline CodeUnits<UnitIter, CP32> operator*() const {
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         UnitIter p = p_;
         return Impl::decAndRead(start_, p);
     }
 
-    Proxy operator->() const {
+    inline Proxy operator->() const {
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         UnitIter p = p_;
         return Proxy(Impl::decAndRead(start_, p));
     }
 
-    UTFReverseIterator &operator++() {  // pre-increment
+    inline UTFReverseIterator &operator++() {  // pre-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         Impl::decAndRead(start_, p_);
         return *this;
     }
 
-    UTFReverseIterator operator++(int) {  // post-increment
+    inline UTFReverseIterator operator++(int) {  // post-increment
         // Call the same function in both operator*() and operator++() so that an
         // optimizing compiler can easily eliminate redundant work when alternating between the two.
         UTFReverseIterator result(*this);
