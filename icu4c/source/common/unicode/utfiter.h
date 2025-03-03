@@ -15,6 +15,7 @@
 
 #if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API || !defined(UTYPES_H)
 
+#include <iterator>
 #include <string_view>
 #ifdef UTYPES_H
 #include "unicode/utf16.h"
@@ -543,7 +544,9 @@ public:
     // Test pointers for == or != but not < or >.
     inline UTFIterator(UnitIter start, UnitIter p, UnitIter limit) :
             p_(p), start_(start), limit_(limit), units_(0, 0, false, p) {}
-    // TODO: add constructor with just start-or-p and limit: start=p
+    // Constructs an iterator with start=p.
+    inline UTFIterator(UnitIter p, UnitIter limit) :
+            p_(p), start_(p), limit_(limit), units_(0, 0, false, p) {}
     // Constructs an iterator start or limit sentinel.
     inline UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p) {}
 

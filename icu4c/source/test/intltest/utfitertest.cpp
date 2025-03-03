@@ -272,8 +272,7 @@ void U16IteratorTest::testFwdIter() {
     std::u16string_view good(u"abçカ🚴"sv);
     FwdIter<char16_t> goodBegin(good.data());
     FwdIter<char16_t> goodLimit(good.data() + good.length());
-    UTFIterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
-        goodBegin, goodBegin, goodLimit);
+    UTFIterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(goodBegin, goodLimit);
     UTFIterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
     // TODO: UTFStringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     auto iter = rangeBegin;
@@ -396,8 +395,7 @@ void U8IteratorTest::testFwdIter() {
     std::string_view good(reinterpret_cast<const char*>(u8"abçカ🚴"));
     FwdIter<char> goodBegin(good.data());
     FwdIter<char> goodLimit(good.data() + good.length());
-    UTFIterator<FwdIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
-        goodBegin, goodBegin, goodLimit);
+    UTFIterator<FwdIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(goodBegin, goodLimit);
     UTFIterator<FwdIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
     // TODO: UTFStringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     auto iter = rangeBegin;
