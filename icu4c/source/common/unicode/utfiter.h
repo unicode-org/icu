@@ -538,7 +538,7 @@ public:
     using value_type = CodeUnits<UnitIter, CP32>;
     // TODO: review the reference and pointer types. Should pointer be Proxy?
     using reference = value_type &;
-    using pointer = value_type *;
+    using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::conditional_t<
         std::is_base_of_v<
@@ -695,7 +695,7 @@ class UTFIterator<
 public:
     using value_type = CodeUnits<UnitIter, CP32>;
     using reference = value_type &;
-    using pointer = value_type *;
+    using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::input_iterator_tag;
 
@@ -806,7 +806,7 @@ class UTFReverseIterator {
 public:
     using value_type = CodeUnits<UnitIter, CP32>;
     using reference = value_type &;
-    using pointer = value_type *;
+    using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::forward_iterator_tag;
 
@@ -893,6 +893,7 @@ public:
         return {s.data(), limit, limit};
     }
 
+#if 0
     /** @draft ICU 78 */
     UTFReverseIterator<const Unit16 *, CP32, behavior> rbegin() const {
         return {s.data(), s.data() + s.length()};
@@ -902,6 +903,14 @@ public:
     UTFReverseIterator<const Unit16 *, CP32, behavior> rend() const {
         return {s.data(), s.data()};
     }
+#else
+    auto rbegin() const {
+        return std::make_reverse_iterator(end());
+    }
+    auto rend() const {
+        return std::make_reverse_iterator(begin());
+    }
+#endif
 
 private:
     std::basic_string_view<Unit16> s;
