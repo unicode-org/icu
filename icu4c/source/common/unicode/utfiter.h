@@ -17,6 +17,7 @@
 
 #include <iterator>
 #include <string_view>
+#include <type_traits>
 #ifdef UTYPES_H
 #include "unicode/utf16.h"
 #include "unicode/utf8.h"
@@ -128,8 +129,6 @@ public:
 
     uint8_t length() const { return len; }
 
-    // TODO: Do we even need the template logic here?
-    // Or is it disabled anyway if the code does not compile with a non-pointer?
     template<typename Iter = UnitIter>
     std::enable_if_t<
         std::is_pointer_v<Iter>,
@@ -536,8 +535,17 @@ class UTFIterator {
     };
 
 public:
-    // TODO: Should these Iterators define value_type etc.?
-    //       What about iterator_category depending on the UnitIter??
+    using value_type = CodeUnits<UnitIter, CP32>;
+    // TODO: review the reference and pointer types. Should pointer be Proxy?
+    using reference = value_type &;
+    using pointer = value_type *;
+    using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
+    using iterator_category = std::conditional_t<
+        std::is_base_of_v<
+            std::bidirectional_iterator_tag,
+            typename std::iterator_traits<UnitIter>::iterator_category>,
+        std::bidirectional_iterator_tag,
+        std::forward_iterator_tag>;
 
     // TODO: Maybe std::move() the UnitIters?
     // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
@@ -610,7 +618,14 @@ public:
         }
     }
 
-    inline UTFIterator &operator--() {  // pre-decrement
+    template<typename Iter = UnitIter>
+    inline
+    std::enable_if_t<
+        std::is_base_of_v<
+            std::bidirectional_iterator_tag,
+            typename std::iterator_traits<Iter>::iterator_category>,
+        UTFIterator &>
+    operator--() {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
             Impl::moveToReadAndIncStart(p_, state_);
@@ -620,7 +635,14 @@ public:
         return *this;
     }
 
-    inline UTFIterator operator--(int) {  // post-decrement
+    template<typename Iter = UnitIter>
+    inline
+    std::enable_if_t<
+        std::is_base_of_v<
+            std::bidirectional_iterator_tag,
+            typename std::iterator_traits<Iter>::iterator_category>,
+        UTFIterator>
+    operator--(int) {  // post-decrement
         UTFIterator result(*this);
         operator--();
         return result;
@@ -671,8 +693,11 @@ class UTFIterator<
     };
 
 public:
-    // TODO: Should these Iterators define value_type etc.?
-    //       What about iterator_category depending on the UnitIter??
+    using value_type = CodeUnits<UnitIter, CP32>;
+    using reference = value_type &;
+    using pointer = value_type *;
+    using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
+    using iterator_category = std::input_iterator_tag;
 
     // TODO: Does it make sense for the limits to allow having a different type?
     // We only need to be able to compare p_ vs. limit_ for == and !=.
@@ -779,6 +804,12 @@ class UTFReverseIterator {
     };
 
 public:
+    using value_type = CodeUnits<UnitIter, CP32>;
+    using reference = value_type &;
+    using pointer = value_type *;
+    using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
+    using iterator_category = std::forward_iterator_tag;
+
     inline UTFReverseIterator(UnitIter start, UnitIter p) : p_(p), start_(start) {}
     // Constructs an iterator start or limit sentinel.
     inline UTFReverseIterator(UnitIter p) : p_(p), start_(p) {}
