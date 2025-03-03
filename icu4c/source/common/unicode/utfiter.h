@@ -48,6 +48,35 @@ namespace header {}
 #define U8_IS_VALID_LEAD3_AND_T1(lead, t1) (U8_LEAD3_T1_BITS[(lead)&0xf]&(1<<((uint8_t)(t1)>>5)))
 #define U8_LEAD4_T1_BITS "\x00\x00\x00\x00\x00\x00\x00\x00\x1E\x0F\x0F\x0F\x00\x00\x00\x00"
 #define U8_IS_VALID_LEAD4_AND_T1(lead, t1) (U8_LEAD4_T1_BITS[(uint8_t)(t1)>>4]&(1<<((lead)&7)))
+#define U8_NEXT(s, i, length, c) U8_INTERNAL_NEXT_OR_SUB(s, i, length, c, U_SENTINEL)
+#define U8_NEXT_OR_FFFD(s, i, length, c) U8_INTERNAL_NEXT_OR_SUB(s, i, length, c, 0xfffd)
+#define U8_INTERNAL_NEXT_OR_SUB(s, i, length, c, sub) { \
+    (c)=(uint8_t)(s)[(i)++]; \
+    if(!U8_IS_SINGLE(c)) { \
+        uint8_t __t = 0; \
+        if((i)!=(length) && \
+            /* fetch/validate/assemble all but last trail byte */ \
+            ((c)>=0xe0 ? \
+                ((c)<0xf0 ?  /* U+0800..U+FFFF except surrogates */ \
+                    U8_LEAD3_T1_BITS[(c)&=0xf]&(1<<((__t=(s)[i])>>5)) && \
+                    (__t&=0x3f, 1) \
+                :  /* U+10000..U+10FFFF */ \
+                    ((c)-=0xf0)<=4 && \
+                    U8_LEAD4_T1_BITS[(__t=(s)[i])>>4]&(1<<(c)) && \
+                    ((c)=((c)<<6)|(__t&0x3f), ++(i)!=(length)) && \
+                    (__t=(s)[i]-0x80)<=0x3f) && \
+                /* valid second-to-last trail byte */ \
+                ((c)=((c)<<6)|__t, ++(i)!=(length)) \
+            :  /* U+0080..U+07FF */ \
+                (c)>=0xc2 && ((c)&=0x1f, 1)) && \
+            /* last trail byte */ \
+            (__t=(s)[i]-0x80)<=0x3f && \
+            ((c)=((c)<<6)|__t, ++(i), 1)) { \
+        } else { \
+            (c)=(sub);  /* ill-formed*/ \
+        } \
+    } \
+}
 #endif
 
 /**
@@ -1075,79 +1104,90 @@ private:
 // TODO: remove experimental sample code
 #ifndef UTYPES_H
 int32_t rangeLoop16(std::u16string_view s) {
-   header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
-   int32_t sum = 0;
-   for (auto units : range) {
-       sum += units.codePoint();
-   }
-   return sum;
+    header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+    int32_t sum = 0;
+    for (auto units : range) {
+        sum += units.codePoint();
+    }
+    return sum;
 }
 
 int32_t loopIterPlusPlus16(std::u16string_view s) {
-   header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
-   int32_t sum = 0;
-   auto iter = range.begin();
-   auto limit = range.end();
-   while (iter != limit) {
-       sum += (*iter++).codePoint();
-   }
-   return sum;
+    header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+    int32_t sum = 0;
+    auto iter = range.begin();
+    auto limit = range.end();
+    while (iter != limit) {
+        sum += (*iter++).codePoint();
+    }
+    return sum;
 }
 
 int32_t backwardLoop16(std::u16string_view s) {
-   header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
-   int32_t sum = 0;
-   auto start = range.begin();
-   auto iter = range.end();
-   while (start != iter) {
-       sum += (*--iter).codePoint();
-   }
-   return sum;
+    header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+    int32_t sum = 0;
+    auto start = range.begin();
+    auto iter = range.end();
+    while (start != iter) {
+        sum += (*--iter).codePoint();
+    }
+    return sum;
 }
 
 int32_t reverseLoop16(std::u16string_view s) {
-   header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
-   int32_t sum = 0;
-   for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
-       sum += iter->codePoint();
-   }
-   return sum;
+    header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+    int32_t sum = 0;
+    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
+        sum += iter->codePoint();
+    }
+    return sum;
 }
 
 int32_t unsafeRangeLoop16(std::u16string_view s) {
-   header::UnsafeUTFStringCodePoints<char16_t, UChar32> range(s);
-   int32_t sum = 0;
-   for (auto units : range) {
-       sum += units.codePoint();
-   }
-   return sum;
+    header::UnsafeUTFStringCodePoints<char16_t, UChar32> range(s);
+    int32_t sum = 0;
+    for (auto units : range) {
+        sum += units.codePoint();
+    }
+    return sum;
 }
 
 int32_t unsafeReverseLoop16(std::u16string_view s) {
-   header::UnsafeUTFStringCodePoints<char16_t, UChar32> range(s);
-   int32_t sum = 0;
-   for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
-       sum += (*iter).codePoint();  // TODO: ->
-   }
-   return sum;
+    header::UnsafeUTFStringCodePoints<char16_t, UChar32> range(s);
+    int32_t sum = 0;
+    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
+        sum += (*iter).codePoint();  // TODO: ->
+    }
+    return sum;
 }
 
 int32_t rangeLoop8(std::string_view s) {
-   header::UTFStringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
-   int32_t sum = 0;
-   for (auto units : range) {
-       sum += units.codePoint();
-   }
-   return sum;
+    header::UTFStringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+    int32_t sum = 0;
+    for (auto units : range) {
+        sum += units.codePoint();
+    }
+    return sum;
 }
 
 int32_t reverseLoop8(std::string_view s) {
-   header::UTFStringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
-   int32_t sum = 0;
-   for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
-       sum += iter->codePoint();
-   }
-   return sum;
+    header::UTFStringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+    int32_t sum = 0;
+    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
+        sum += iter->codePoint();
+    }
+    return sum;
+}
+
+int32_t macroLoop8(std::string_view s) {
+    const char *p = s.data();
+    int32_t sum = 0;
+    for (size_t i = 0, length = s.length(); i < length;) {
+        UChar32 c;
+        U8_NEXT(p, i, length, c);
+        sum += c;
+    }
+    return sum;
 }
 #endif
 
