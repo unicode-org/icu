@@ -1018,7 +1018,7 @@ public class Currency extends MeasureUnit {
             return all;
 
         synchronized (Currency.class) {
-            Set<String> all = ALL_CODES_AS_SET == null ? null : (Set) ALL_CODES_AS_SET.get();
+            all = ALL_CODES_AS_SET == null ? null : (Set) ALL_CODES_AS_SET.get();
             if (all != null)
                 return all;
             else {
