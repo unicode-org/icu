@@ -1012,15 +1012,22 @@ public class Currency extends MeasureUnit {
         return all;
     }
 
-    private static synchronized Set<String> getAllCurrenciesAsSet() {
-        Set<String> all = (ALL_CODES_AS_SET == null) ? null : ALL_CODES_AS_SET.get();
-        if (all == null) {
-            CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-            all = Collections.unmodifiableSet(
-                    new HashSet<>(info.currencies(CurrencyFilter.all())));
-            ALL_CODES_AS_SET = new SoftReference<>(all);
+    private static Set<String> getAllCurrenciesAsSet() {
+        Set<String> all = ALL_CODES_AS_SET == null ? null : (Set) ALL_CODES_AS_SET.get();
+        if (all != null)
+            return all;
+
+        synchronized (Currency.class) {
+            Set<String> all = ALL_CODES_AS_SET == null ? null : (Set) ALL_CODES_AS_SET.get();
+            if (all != null)
+                return all;
+            else {
+                CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
+                all = Collections.unmodifiableSet(new HashSet(info.currencies(CurrencyFilter.all())));
+                ALL_CODES_AS_SET = new SoftReference(all);
+                return all;
+            }
         }
-        return all;
     }
 
     /**
