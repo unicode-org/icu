@@ -89,11 +89,14 @@ namespace header {}
 #ifndef U_HIDE_DRAFT_API
 
 // Some defined behaviors for handling ill-formed Unicode strings.
-// TODO: For UTF-32, we have basically orthogonal conditions for surrogate vs. out-of-range.
-// Maybe make U_BEHAVIOR_SURROGATE return FFFD for out-of-range?
 typedef enum UIllFormedBehavior {
+    // Returns a negative value instead of a code point.
     U_BEHAVIOR_NEGATIVE,
+    // Returns U+FFFD Replacement Character.
     U_BEHAVIOR_FFFD,
+    // UTF-8: Not allowed;
+    // UTF-16: returns the unpaired surrogate;
+    // UTF-32: returns the surrogate code point, or U+FFFD if out of range.
     U_BEHAVIOR_SURROGATE
 } UIllFormedBehavior;
 
@@ -531,6 +534,87 @@ public:
             ++p;
             state = 0;
         }
+    }
+};
+
+// UTF-32: trivial, but still validating
+template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
+class UTFImpl<
+        UnitIter,
+        CP32,
+        behavior,
+        std::enable_if_t<
+            sizeof(typename std::iterator_traits<UnitIter>::value_type) == 4>> {
+public:
+    // Handle ill-formed UTF-32: Out of range.
+    static inline CP32 sub() {
+        switch (behavior) {
+            case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
+            case U_BEHAVIOR_FFFD:
+            case U_BEHAVIOR_SURROGATE: return 0xfffd;
+        }
+    }
+
+    // Handle ill-formed UTF-32: One unpaired surrogate.
+    static inline CP32 subSurrogate(CP32 surrogate) {
+        switch (behavior) {
+            case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
+            case U_BEHAVIOR_FFFD: return 0xfffd;
+            case U_BEHAVIOR_SURROGATE: return surrogate;
+        }
+    }
+
+    static inline void inc(UnitIter &p, UnitIter /*limit*/) {
+        ++p;
+    }
+
+    static inline void dec(UnitIter /*start*/, UnitIter &p) {
+        --p;
+    }
+
+    static inline CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter /*limit*/) {
+        UnitIter p0 = p;
+        uint32_t uc = *p;
+        CP32 c = uc;
+        ++p;
+        if (uc < 0xd800 || (0xe000 <= uc && uc <= 0x10ffff)) {
+            return {c, 1, true, p0};
+        } else if (uc < 0xe000) {
+            return {subSurrogate(c), 1, false, p0};
+        } else {
+            return {sub(), 1, false, p0};
+        }
+    }
+
+    static inline CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter /*limit*/) {
+        uint32_t uc = *p;
+        CP32 c = uc;
+        ++p;
+        if (uc < 0xd800 || (0xe000 <= uc && uc <= 0x10ffff)) {
+            return {c, 1, true};
+        } else if (uc < 0xe000) {
+            return {subSurrogate(c), 1, false};
+        } else {
+            return {sub(), 1, false};
+        }
+    }
+
+    static inline CodeUnits<UnitIter, CP32> decAndRead(UnitIter /*start*/, UnitIter &p) {
+        uint32_t uc = *--p;
+        CP32 c = uc;
+        if (uc < 0xd800 || (0xe000 <= uc && uc <= 0x10ffff)) {
+            return {c, 1, true, p};
+        } else if (uc < 0xe000) {
+            return {subSurrogate(c), 1, false, p};
+        } else {
+            return {sub(), 1, false, p};
+        }
+    }
+
+    static inline void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
+        // state < 0 after decAndRead()
+        ++p;
+        state = 0;
     }
 };
 

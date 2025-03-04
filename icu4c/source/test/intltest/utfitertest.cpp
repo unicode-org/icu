@@ -462,3 +462,139 @@ void U8IteratorTest::testFwdIter() {
     assertTrue("iter[4] * data()[3]", *data == u8"🚴"[3]);
     assertTrue("iter == endIter", iter == rangeLimit);
 }
+
+class U32IteratorTest : public IntlTest {
+public:
+    U32IteratorTest() {}
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
+
+    void testGood();
+    void testNegative();
+    void testFFFD();
+    void testSinglePassIter();
+    void testFwdIter();
+};
+
+extern IntlTest *createU32IteratorTest() {
+    return new U32IteratorTest();
+}
+
+void U32IteratorTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
+    if(exec) {
+        logln("TestSuite U32IteratorTest: ");
+    }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testGood);
+    // TODO: TESTCASE_AUTO(testNegative);
+    // TODO: TESTCASE_AUTO(testFFFD);
+    TESTCASE_AUTO(testSinglePassIter);
+    TESTCASE_AUTO(testFwdIter);
+    TESTCASE_AUTO_END;
+}
+
+void U32IteratorTest::testGood() {
+    std::u32string_view good(U"abçカ🚴"sv);
+    UTFStringCodePoints<char32_t, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
+    assertTrue(
+        "bidirectional_iterator_tag",
+        std::is_same_v<
+            typename std::iterator_traits<
+                UTFIterator<char32_t *, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
+            std::bidirectional_iterator_tag>);
+    auto iter = range.begin();
+    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
+    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
+    ++iter;  // pre-increment
+    auto units = *iter;
+    assertEquals("iter[1] * codePoint", u'b', units.codePoint());
+    assertEquals("iter[1] * length", 1, units.length());
+    assertTrue("iter[1] * wellFormed", units.wellFormed());
+    assertTrue("iter[1] * stringView()", units.stringView() == U"b"sv);
+    ++iter;
+    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
+    assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
+    ++iter;
+    // Fetch the current code point twice.
+    assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
+    units = *iter++;
+    assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
+    assertEquals("iter[4] * length", 1, units.length());
+    assertTrue("iter[4] * wellFormed", units.wellFormed());
+    assertTrue("iter[4] * stringView()", units.stringView() == U"🚴"sv);
+    assertTrue("iter == endIter", iter == range.end());
+}
+
+void U32IteratorTest::testSinglePassIter() {
+    SinglePassSource<char32_t> good(U"abçカ🚴"sv);
+    SinglePassIter<char32_t> goodBegin(good);
+    SinglePassIter<char32_t> goodLimit{};
+    UTFIterator<SinglePassIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
+        goodBegin, goodLimit);
+    UTFIterator<SinglePassIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    assertTrue(
+        "input_iterator_tag",
+        std::is_same_v<
+            typename std::iterator_traits<
+                UTFIterator<SinglePassIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
+            std::input_iterator_tag>);
+    auto iter = rangeBegin;
+    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
+    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
+    ++iter;  // pre-increment
+    auto units = *iter;
+    assertEquals("iter[1] * codePoint", u'b', units.codePoint());
+    assertEquals("iter[1] * length", 1, units.length());
+    assertTrue("iter[1] * wellFormed", units.wellFormed());
+    // No units.stringView() when the unit iterator is not a pointer.
+    // No data() for a single-pass unit iterator.
+    ++iter;
+    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
+    assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
+    ++iter;
+    // Fetch the current code point twice.
+    assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
+    units = *iter++;
+    assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
+    assertEquals("iter[4] * length", 1, units.length());
+    assertTrue("iter[4] * wellFormed", units.wellFormed());
+    assertTrue("iter == endIter", iter == rangeLimit);
+}
+
+void U32IteratorTest::testFwdIter() {
+    std::u32string_view good(U"abçカ🚴"sv);
+    FwdIter<char32_t> goodBegin(good.data());
+    FwdIter<char32_t> goodLimit(good.data() + good.length());
+    UTFIterator<FwdIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(goodBegin, goodLimit);
+    UTFIterator<FwdIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    // TODO: UTFStringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
+    assertTrue(
+        "forward_iterator_tag",
+        std::is_same_v<
+            typename std::iterator_traits<
+                UTFIterator<FwdIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
+            std::forward_iterator_tag>);
+    auto iter = rangeBegin;
+    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
+    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
+    ++iter;  // pre-increment
+    auto units = *iter;
+    assertEquals("iter[1] * codePoint", u'b', units.codePoint());
+    assertEquals("iter[1] * length", 1, units.length());
+    assertTrue("iter[1] * wellFormed", units.wellFormed());
+    // No units.stringView() when the unit iterator is not a pointer.
+    assertTrue("iter[1] * data()[0]", *units.data() == u'b');
+    ++iter;
+    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
+    assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
+    ++iter;
+    // Fetch the current code point twice.
+    assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
+    units = *iter++;
+    assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
+    assertEquals("iter[4] * length", 1, units.length());
+    assertTrue("iter[4] * wellFormed", units.wellFormed());
+    FwdIter<char32_t> data = units.data();
+    assertTrue("iter[4] * data()[0]", *data == U"🚴"[0]);
+    assertTrue("iter == endIter", iter == rangeLimit);
+}
