@@ -546,21 +546,12 @@ class UTFImpl<
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 4>> {
 public:
-    // Handle ill-formed UTF-32: Out of range.
-    static inline CP32 sub() {
-        switch (behavior) {
-            case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
-            case U_BEHAVIOR_FFFD:
-            case U_BEHAVIOR_SURROGATE: return 0xfffd;
-        }
-    }
-
-    // Handle ill-formed UTF-32: One unpaired surrogate.
-    static inline CP32 subSurrogate(CP32 surrogate) {
+    // Handle ill-formed UTF-32
+    static inline CP32 sub(bool forSurrogate, CP32 surrogate) {
         switch (behavior) {
             case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
             case U_BEHAVIOR_FFFD: return 0xfffd;
-            case U_BEHAVIOR_SURROGATE: return surrogate;
+            case U_BEHAVIOR_SURROGATE: return forSurrogate ? surrogate : 0xfffd;
         }
     }
 
@@ -579,10 +570,8 @@ public:
         ++p;
         if (uc < 0xd800 || (0xe000 <= uc && uc <= 0x10ffff)) {
             return {c, 1, true, p0};
-        } else if (uc < 0xe000) {
-            return {subSurrogate(c), 1, false, p0};
         } else {
-            return {sub(), 1, false, p0};
+            return {sub(uc < 0xe000, c), 1, false, p0};
         }
     }
 
@@ -592,10 +581,8 @@ public:
         ++p;
         if (uc < 0xd800 || (0xe000 <= uc && uc <= 0x10ffff)) {
             return {c, 1, true};
-        } else if (uc < 0xe000) {
-            return {subSurrogate(c), 1, false};
         } else {
-            return {sub(), 1, false};
+            return {sub(uc < 0xe000, c), 1, false};
         }
     }
 
@@ -604,10 +591,8 @@ public:
         CP32 c = uc;
         if (uc < 0xd800 || (0xe000 <= uc && uc <= 0x10ffff)) {
             return {c, 1, true, p};
-        } else if (uc < 0xe000) {
-            return {subSurrogate(c), 1, false, p};
         } else {
-            return {sub(), 1, false, p};
+            return {sub(uc < 0xe000, c), 1, false, p};
         }
     }
 
