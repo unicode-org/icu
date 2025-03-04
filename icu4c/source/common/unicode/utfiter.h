@@ -271,6 +271,40 @@ public:
         }
     }
 
+    static inline void dec(UnitIter start, UnitIter &p) {
+        // Very similar to U8_BACK_1().
+        uint8_t c = *--p;
+        if (U8_IS_TRAIL(c) && p != start) {
+            UnitIter p1 = p;
+            uint8_t b1 = *--p1;
+            if (U8_IS_LEAD(b1)) {
+                if (b1 < 0xe0 ||
+                        (b1 < 0xf0 ?
+                            U8_IS_VALID_LEAD3_AND_T1(b1, c) :
+                            U8_IS_VALID_LEAD4_AND_T1(b1, c))) {
+                    p = p1;
+                    return;
+                }
+            } else if (U8_IS_TRAIL(b1) && p1 != start) {
+                uint8_t b2 = *--p1;
+                if (0xe0 <= b2 && b2 <= 0xf4) {
+                    if (b2 < 0xf0 ?
+                            U8_IS_VALID_LEAD3_AND_T1(b2, b1) :
+                            U8_IS_VALID_LEAD4_AND_T1(b2, b1)) {
+                        p = p1;
+                        return;
+                    }
+                } else if (U8_IS_TRAIL(b2) && p1 != start) {
+                    uint8_t b3 = *--p1;
+                    if (0xf0 <= b3 && b3 <= 0xf4 && U8_IS_VALID_LEAD4_AND_T1(b3, b2)) {
+                        p = p1;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     static inline CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter limit) {
         // Very similar to U8_NEXT_OR_FFFD().
         UnitIter p0 = p;
@@ -394,11 +428,6 @@ public:
         return {sub(), 1, false, p};
     }
 
-    static inline void moveToReadAndIncStart(UnitIter &p, int8_t &state) {
-        // state > 0 after readAndInc()
-        do { --p; } while (--state != 0);
-    }
-
     static inline void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
         // state < 0 after decAndRead()
         do { ++p; } while (++state != 0);
@@ -429,6 +458,14 @@ public:
         ++p;
         if (U16_IS_LEAD(c) && p != limit && U16_IS_TRAIL(*p)) {
             ++p;
+        }
+    }
+
+    static inline void dec(UnitIter start, UnitIter &p) {
+        // Very similar to U16_BACK_1().
+        UnitIter p1;
+        if (U16_IS_TRAIL(*--p) && p != start && (p1 = p, U16_IS_LEAD(*--p1))) {
+            p = p1;
         }
     }
 
@@ -487,15 +524,6 @@ public:
         }
     }
 
-    static inline void moveToReadAndIncStart(UnitIter &p, int8_t &state) {
-        // state > 0 after readAndInc(); max 2 for UTF-16
-        --p;
-        if (--state != 0) {
-            --p;
-            state = 0;
-        }
-    }
-
     static inline void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
         // state < 0 after decAndRead(); max 2 for UTF-16
         ++p;
@@ -509,7 +537,8 @@ public:
 #endif
 
 /**
- * Validating bidirectional iterator over the code points in a Unicode 16-bit string.
+ * Validating iterator over the code points in a Unicode string.
+ * It is a bidirectional_iterator if the base UnitIter is.
  *
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
  *     UTF-8: char or char8_t or uint8_t;
@@ -628,7 +657,7 @@ public:
     operator--() {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
-            Impl::moveToReadAndIncStart(p_, state_);
+            p_ = units_.data();
         }
         units_ = Impl::decAndRead(start_, p_);
         state_ = -units_.length();
@@ -761,7 +790,7 @@ public:
 private:
     // operator*() etc. are logically const.
     mutable UnitIter p_;
-    // In a validating iterator, we need  limit_ so that when we read a code point
+    // In a validating iterator, we need limit_ so that when we read a code point
     // we can test if there are enough code units.
     const UnitIter limit_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
@@ -777,7 +806,7 @@ private:
 #endif  // U_IN_DOXYGEN
 
 /**
- * Validating reverse iterator over the code points in a Unicode 16-bit string.
+ * Validating reverse iterator over the code points in a Unicode string.
  * Not bidirectional, but optimized for reverse iteration.
  *
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
@@ -810,50 +839,83 @@ public:
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::forward_iterator_tag;
 
-    inline UTFReverseIterator(UnitIter start, UnitIter p) : p_(p), start_(start) {}
+    inline UTFReverseIterator(UnitIter start, UnitIter p) :
+            p_(p), start_(start), units_(0, 0, false, p), unitsLimit_(p) {}
     // Constructs an iterator start or limit sentinel.
-    inline UTFReverseIterator(UnitIter p) : p_(p), start_(p) {}
+    inline UTFReverseIterator(UnitIter p) :
+            p_(p), start_(p), units_(0, 0, false, p), unitsLimit_(p) {}
 
     inline UTFReverseIterator(const UTFReverseIterator &other) = default;
     inline UTFReverseIterator &operator=(const UTFReverseIterator &other) = default;
 
-    inline bool operator==(const UTFReverseIterator &other) const { return p_ == other.p_; }
+    inline bool operator==(const UTFReverseIterator &other) const {
+        // Compare logical positions.
+        UnitIter p1 = !behind_ ? p_ : unitsLimit_;
+        UnitIter p2 = !other.behind_ ? other.p_ : other.unitsLimit_;
+        return p1 == p2;
+    }
     inline bool operator!=(const UTFReverseIterator &other) const { return !operator==(other); }
 
     inline CodeUnits<UnitIter, CP32> operator*() const {
-        // Call the same function in both operator*() and operator++() so that an
-        // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        UnitIter p = p_;
-        return Impl::decAndRead(start_, p);
+        if (!behind_) {
+            unitsLimit_ = p_;
+            units_ = Impl::decAndRead(start_, p_);
+            behind_ = true;
+        }
+        return units_;
     }
 
     inline Proxy operator->() const {
-        // Call the same function in both operator*() and operator++() so that an
-        // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        UnitIter p = p_;
-        return Proxy(Impl::decAndRead(start_, p));
+        if (!behind_) {
+            unitsLimit_ = p_;
+            units_ = Impl::decAndRead(start_, p_);
+            behind_ = true;
+        }
+        return Proxy(units_);
     }
 
     inline UTFReverseIterator &operator++() {  // pre-increment
-        // Call the same function in both operator*() and operator++() so that an
-        // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        Impl::decAndRead(start_, p_);
+        if (behind_) {
+            // operator*() called decAndRead() so p_ is already behind.
+            behind_ = false;
+        } else {
+            Impl::dec(start_, p_);
+        }
         return *this;
     }
 
     inline UTFReverseIterator operator++(int) {  // post-increment
-        // Call the same function in both operator*() and operator++() so that an
-        // optimizing compiler can easily eliminate redundant work when alternating between the two.
-        UTFReverseIterator result(*this);
-        Impl::decAndRead(start_, p_);
-        return result;
+        if (behind_) {
+            // operator*() called decAndRead() so p_ is already behind.
+            UTFReverseIterator result(*this);
+            behind_ = false;
+            return result;
+        } else {
+            unitsLimit_ = p_;
+            units_ = Impl::decAndRead(start_, p_);
+            UTFReverseIterator result(*this);
+            result.behind_ = true;
+            // keep this->behind_ == false
+            return result;
+        }
     }
 
 private:
-    UnitIter p_;
+    // operator*() etc. are logically const.
+    mutable UnitIter p_;
     // In a validating iterator, we need start_ so that when we read a code point
     // backward we can test if there are enough code units.
     const UnitIter start_;
+    // Keep state so that we call decAndRead() only once for both operator*() and ++
+    // to make it easy for the compiler to optimize.
+    mutable CodeUnits<UnitIter, CP32> units_;
+    mutable UnitIter unitsLimit_;
+    // true: units_ = decAndRead(), p_ = units start
+    //     which means that p_ is behind its logical position
+    // false: initial state
+    // TODO: could insert behind_ into hidden CodeUnits field to avoid padding,
+    //       but mostly irrelevant when inlined?
+    mutable bool behind_ = false;
 };
 
 /**
@@ -893,7 +955,7 @@ public:
         return {s.data(), limit, limit};
     }
 
-#if 0
+#if 1
     /** @draft ICU 78 */
     UTFReverseIterator<const Unit16 *, CP32, behavior> rbegin() const {
         return {s.data(), s.data() + s.length()};
