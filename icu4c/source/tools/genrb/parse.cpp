@@ -297,7 +297,7 @@ static char *getInvariantString(ParseState* state, uint32_t *line, struct UStrin
 
     if(!uprv_isInvariantUString(tokenValue->fChars, tokenValue->fLength)) {
         *status = U_INVALID_FORMAT_ERROR;
-        error(*line, "invariant characters required for table keys, binary data, etc.");
+        error((line == nullptr) ? 0 : *line, "invariant characters required for table keys, binary data, etc.");
         return nullptr;
     }
 
