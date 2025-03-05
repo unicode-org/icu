@@ -1056,6 +1056,7 @@ static void initDateParsersOnce(UErrorCode& errorCode) {
 
     if (!dateParser || !dateTimeParser || !dateTimeUTCParser || !dateTimeZoneParser) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
+        mf2_date_parsers_cleanup();
         return;
     }
     ucln_i18n_registerCleanup(UCLN_I18N_MF2_DATE_PARSERS, mf2_date_parsers_cleanup);
