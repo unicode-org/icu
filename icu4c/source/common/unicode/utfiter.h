@@ -899,8 +899,7 @@ class UTFIterator {
 
 public:
     using value_type = CodeUnits<UnitIter, CP32>;
-    // TODO: review the reference and pointer types. Should pointer be Proxy?
-    using reference = value_type &;
+    using reference = value_type;
     using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::conditional_t<
@@ -910,9 +909,6 @@ public:
         std::bidirectional_iterator_tag,
         std::forward_iterator_tag>;
 
-    // TODO: Maybe std::move() the UnitIters?
-    // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
-    // Test pointers for == or != but not < or >.
     inline UTFIterator(UnitIter start, UnitIter p, UnitIter limit) :
             p_(p), start_(start), limit_(limit), units_(0, 0, false, p) {}
     // Constructs an iterator with start=p.
@@ -1025,8 +1021,6 @@ private:
     //     which means that p_ is ahead of its logical position
     //  0: initial state
     // <0: units_ = decAndRead(), p_ = units start, state_ = -units_.len
-    // TODO: could insert state_ into hidden CodeUnits field to avoid padding,
-    //       but mostly irrelevant when inlined?
     mutable int8_t state_ = 0;
 };
 
@@ -1057,19 +1051,12 @@ class UTFIterator<
 
 public:
     using value_type = CodeUnits<UnitIter, CP32>;
-    using reference = value_type &;
+    using reference = value_type;
     using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::input_iterator_tag;
 
-    // TODO: Does it make sense for the limits to allow having a different type?
-    // We only need to be able to compare p_ vs. limit_ for == and !=.
-    // Might allow interesting sentinel types.
-    // Would be trouble for the sentinel constructor that inits both iters from the same p.
-
     inline UTFIterator(UnitIter p, UnitIter limit) : p_(p), limit_(limit) {}
-    // TODO: We might try to support limit==nullptr, similar to U16_ macros supporting length<0.
-    // Test pointers for == or != but not < or >.
 
     // Constructs an iterator start or limit sentinel.
     inline UTFIterator(UnitIter p) : p_(p), limit_(p) {}
@@ -1133,8 +1120,6 @@ private:
     // true: units_ = readAndInc(), p_ = units limit
     //     which means that p_ is ahead of its logical position
     // false: initial state
-    // TODO: could insert ahead_ into hidden CodeUnits field to avoid padding,
-    //       but mostly irrelevant when inlined?
     mutable bool ahead_ = false;
 };
 #endif  // U_IN_DOXYGEN
@@ -1168,7 +1153,7 @@ class UTFReverseIterator {
 
 public:
     using value_type = CodeUnits<UnitIter, CP32>;
-    using reference = value_type &;
+    using reference = value_type;
     using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::forward_iterator_tag;
@@ -1247,8 +1232,6 @@ private:
     // true: units_ = decAndRead(), p_ = units start
     //     which means that p_ is behind its logical position
     // false: initial state
-    // TODO: could insert behind_ into hidden CodeUnits field to avoid padding,
-    //       but mostly irrelevant when inlined?
     mutable bool behind_ = false;
 };
 
@@ -1343,8 +1326,7 @@ class UnsafeUTFIterator {
 
 public:
     using value_type = UnsafeCodeUnits<UnitIter, CP32>;
-    // TODO: review the reference and pointer types. Should pointer be Proxy?
-    using reference = value_type &;
+    using reference = value_type;
     using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::conditional_t<
@@ -1354,7 +1336,6 @@ public:
         std::bidirectional_iterator_tag,
         std::forward_iterator_tag>;
 
-    // TODO: Maybe std::move() the UnitIters?
     inline UnsafeUTFIterator(UnitIter p) : p_(p), units_(0, 0, p) {}
 
     inline UnsafeUTFIterator(const UnsafeUTFIterator &other) = default;
@@ -1457,8 +1438,6 @@ private:
     //     which means that p_ is ahead of its logical position
     //  0: initial state
     // <0: units_ = decAndRead(), p_ = units start, state_ = -units_.len
-    // TODO: could insert state_ into hidden UnsafeCodeUnits field to avoid padding,
-    //       but mostly irrelevant when inlined?
     mutable int8_t state_ = 0;
 };
 
@@ -1488,7 +1467,7 @@ class UnsafeUTFIterator<
 
 public:
     using value_type = UnsafeCodeUnits<UnitIter, CP32>;
-    using reference = value_type &;
+    using reference = value_type;
     using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::input_iterator_tag;
@@ -1551,8 +1530,6 @@ private:
     // true: units_ = readAndInc(), p_ = units limit
     //     which means that p_ is ahead of its logical position
     // false: initial state
-    // TODO: could insert ahead_ into hidden UnsafeCodeUnits field to avoid padding,
-    //       but mostly irrelevant when inlined?
     mutable bool ahead_ = false;
 };
 #endif  // U_IN_DOXYGEN
@@ -1586,7 +1563,7 @@ class UnsafeUTFReverseIterator {
 
 public:
     using value_type = UnsafeCodeUnits<UnitIter, CP32>;
-    using reference = value_type &;
+    using reference = value_type;
     using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::forward_iterator_tag;
@@ -1659,8 +1636,6 @@ private:
     // true: units_ = decAndRead(), p_ = units start
     //     which means that p_ is behind its logical position
     // false: initial state
-    // TODO: could insert behind_ into hidden UnsafeCodeUnits field to avoid padding,
-    //       but mostly irrelevant when inlined?
     mutable bool behind_ = false;
 };
 
