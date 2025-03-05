@@ -1152,6 +1152,9 @@ DateInfo StandardFunctions::DateTime::createDateInfoFromString(const UnicodeStri
     if (!hasTimeZone) {
         // No time zone; parse the date and time
         absoluteDate = tryPatterns(sourceStr, errorCode);
+        if (U_FAILURE(errorCode)) {
+            return {};
+        }
     } else {
         // Try to split into time zone and non-time-zone parts
         UnicodeString dateTimePart;
@@ -1170,9 +1173,15 @@ DateInfo StandardFunctions::DateTime::createDateInfoFromString(const UnicodeStri
         if (isGMT) {
             dateTimePart += UnicodeString("GMT");
             absoluteDate = tryTimeZonePatterns(dateTimePart, errorCode);
+            if (U_FAILURE(errorCode)) {
+                return {};
+            }
         } else {
             // Try to parse time zone in offset format: [+-]nn:nn
             absoluteDate = tryTimeZonePatterns(sourceStr, errorCode);
+            if (U_FAILURE(errorCode)) {
+                return {};
+            }
             offsetPart = sourceStr.tempSubString(indexOfSign, sourceStr.length());
         }
     }
@@ -1186,6 +1195,9 @@ DateInfo StandardFunctions::DateTime::createDateInfoFromString(const UnicodeStri
             tzID += offsetPart;
         }
         TimeZone::getCanonicalID(tzID, canonicalID, errorCode);
+        if (U_FAILURE(errorCode)) {
+            return {};
+        }
     }
 
     return { absoluteDate, canonicalID };
