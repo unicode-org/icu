@@ -463,10 +463,8 @@ public:
         return {sub(), 1, false, p};
     }
 
-    static inline void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
-        // state < 0 after decAndRead()
-        std::advance(p, -state);
-        state = 0;
+    static inline void moveToDecAndReadLimit(UnitIter &p, uint8_t n) {
+        std::advance(p, n);
     }
 };
 
@@ -560,12 +558,11 @@ public:
         }
     }
 
-    static inline void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
-        // state < 0 after decAndRead(); max 2 for UTF-16
+    static inline void moveToDecAndReadLimit(UnitIter &p, uint8_t n) {
+        // n = 1 or 2 for UTF-16
         ++p;
-        if (++state != 0) {
+        if (n == 2) {
             ++p;
-            state = 0;
         }
     }
 };
@@ -629,10 +626,8 @@ public:
         }
     }
 
-    static inline void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
-        // state < 0 after decAndRead()
+    static inline void moveToDecAndReadLimit(UnitIter &p, uint8_t /*n*/) {
         ++p;
-        state = 0;
     }
 };
 
@@ -745,10 +740,8 @@ public:
         return {c, count, p};
     }
 
-    static inline void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
-        // state < 0 after decAndRead()
-        std::advance(p, -state);
-        state = 0;
+    static inline void moveToDecAndReadLimit(UnitIter &p, uint8_t n) {
+        std::advance(p, n);
     }
 };
 
@@ -817,12 +810,11 @@ public:
         }
     }
 
-    static inline void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
-        // state < 0 after decAndRead(); max 2 for UTF-16
+    static inline void moveToDecAndReadLimit(UnitIter &p, uint8_t n) {
+        // n = 1 or 2 for UTF-16
         ++p;
-        if (++state != 0) {
+        if (n == 2) {
             ++p;
-            state = 0;
         }
     }
 };
@@ -861,10 +853,8 @@ public:
         return {c, 1, p};
     }
 
-    static inline void moveToDecAndReadLimit(UnitIter &p, int8_t &state) {
-        // state < 0 after decAndRead()
+    static inline void moveToDecAndReadLimit(UnitIter &p, uint8_t /*n*/) {
         ++p;
-        state = 0;
     }
 };
 
@@ -928,7 +918,7 @@ public:
     inline CodeUnits<UnitIter, CP32> operator*() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_, limit_);
-            state_ = units_.length();
+            state_ = 1;
         }
         return units_;
     }
@@ -936,7 +926,7 @@ public:
     inline Proxy operator->() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_, limit_);
-            state_ = units_.length();
+            state_ = 1;
         }
         return Proxy(units_);
     }
@@ -949,7 +939,8 @@ public:
             Impl::inc(p_, limit_);
         } else /* state_ < 0 */ {
             // operator--() called decAndRead() so we know how far to skip.
-            Impl::moveToDecAndReadLimit(p_, state_);
+            Impl::moveToDecAndReadLimit(p_, units_.length());
+            state_ = 0;
         }
         return *this;
     }
@@ -963,13 +954,14 @@ public:
         } else if (state_ == 0) {
             units_ = Impl::readAndInc(p_, limit_);
             UTFIterator result(*this);
-            result.state_ = units_.length();
+            result.state_ = 1;
             // keep this->state_ == 0
             return result;
         } else /* state_ < 0 */ {
             UTFIterator result(*this);
             // operator--() called decAndRead() so we know how far to skip.
-            Impl::moveToDecAndReadLimit(p_, state_);
+            Impl::moveToDecAndReadLimit(p_, units_.length());
+            state_ = 0;
             return result;
         }
     }
@@ -987,7 +979,7 @@ public:
             p_ = units_.data();
         }
         units_ = Impl::decAndRead(start_, p_);
-        state_ = -units_.length();
+        state_ = -1;
         return *this;
     }
 
@@ -1020,10 +1012,10 @@ private:
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
     mutable CodeUnits<UnitIter, CP32> units_;
-    // >0: units_ = readAndInc(), p_ = units limit, state_ = units_.len
+    // >0: units_ = readAndInc(), p_ = units limit
     //     which means that p_ is ahead of its logical position
     //  0: initial state
-    // <0: units_ = decAndRead(), p_ = units start, state_ = -units_.len
+    // <0: units_ = decAndRead(), p_ = units start
     mutable int8_t state_ = 0;
 };
 
@@ -1220,7 +1212,7 @@ public:
             p_ = units_.data();
         }
         units_ = Impl::decAndRead(start_, p_);
-        state_ = -units_.length();
+        state_ = -1;
 #endif
         return *this;
     }
@@ -1359,7 +1351,7 @@ public:
     inline UnsafeCodeUnits<UnitIter, CP32> operator*() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_);
-            state_ = units_.length();
+            state_ = 1;
         }
         return units_;
     }
@@ -1367,7 +1359,7 @@ public:
     inline Proxy operator->() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_);
-            state_ = units_.length();
+            state_ = 1;
         }
         return Proxy(units_);
     }
@@ -1380,7 +1372,8 @@ public:
             Impl::inc(p_);
         } else /* state_ < 0 */ {
             // operator--() called decAndRead() so we know how far to skip.
-            Impl::moveToDecAndReadLimit(p_, state_);
+            Impl::moveToDecAndReadLimit(p_, units_.length());
+            state_ = 0;
         }
         return *this;
     }
@@ -1394,13 +1387,14 @@ public:
         } else if (state_ == 0) {
             units_ = Impl::readAndInc(p_);
             UnsafeUTFIterator result(*this);
-            result.state_ = units_.length();
+            result.state_ = 1;
             // keep this->state_ == 0
             return result;
         } else /* state_ < 0 */ {
             UnsafeUTFIterator result(*this);
             // operator--() called decAndRead() so we know how far to skip.
-            Impl::moveToDecAndReadLimit(p_, state_);
+            Impl::moveToDecAndReadLimit(p_, units_.length());
+            state_ = 0;
             return result;
         }
     }
@@ -1418,7 +1412,7 @@ public:
             p_ = units_.data();
         }
         units_ = Impl::decAndRead(p_);
-        state_ = -units_.length();
+        state_ = -1;
         return *this;
     }
 
@@ -1447,10 +1441,10 @@ private:
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
     mutable UnsafeCodeUnits<UnitIter, CP32> units_;
-    // >0: units_ = readAndInc(), p_ = units limit, state_ = units_.len
+    // >0: units_ = readAndInc(), p_ = units limit
     //     which means that p_ is ahead of its logical position
     //  0: initial state
-    // <0: units_ = decAndRead(), p_ = units start, state_ = -units_.len
+    // <0: units_ = decAndRead(), p_ = units start
     mutable int8_t state_ = 0;
 };
 
@@ -1638,7 +1632,7 @@ public:
             p_ = units_.data();
         }
         units_ = Impl::decAndRead(p_);
-        state_ = -units_.length();
+        state_ = -1;
 #endif
         return *this;
     }
