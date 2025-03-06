@@ -237,11 +237,6 @@
         "comment": "Variable names can't start with a : or -"
     },
     {
-        "src": "{$bar+foo}",
-        "char": 5,
-        "comment": "Missing space before annotation. Note that {{$bar:foo}} and {{$bar-foo}} are valid, because variable names can contain a ':' or a '-'"
-    },
-    {
         "src": "{|3.14|:foo}",
         "char": 7,
         "comment": "Missing space before annotation."
@@ -338,10 +333,6 @@
         "src":  ".match {1} {{_}}",
         "char": 12,
         "comment": "Disambiguating a wrong .match from an unsupported statement"
-    },
-    {
-        "src": "{{{/p o4.􍅲 = 1}}}",
-        "char": 9
     }
   ]
 }

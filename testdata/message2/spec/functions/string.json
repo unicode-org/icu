@@ -22,7 +22,7 @@
       "params": [
         {
           "name": "foo",
-          "value": 1
+          "value": "1"
         }
       ],
       "exp": "one"
@@ -32,7 +32,7 @@
       "params": [
         {
           "name": "foo",
-          "value": null
+          "value": "2"
         }
       ],
       "exp": "other"
