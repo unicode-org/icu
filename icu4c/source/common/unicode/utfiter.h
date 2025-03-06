@@ -921,10 +921,7 @@ public:
     inline UTFIterator &operator=(const UTFIterator &other) = default;
 
     inline bool operator==(const UTFIterator &other) const {
-        // Compare logical positions.
-        UnitIter p1 = state_ <= 0 ? p_ : units_.data();
-        UnitIter p2 = other.state_ <= 0 ? other.p_ : other.units_.data();
-        return p1 == p2;
+        return getLogicalPosition() == other.getLogicalPosition();
     }
     inline bool operator!=(const UTFIterator &other) const { return !operator==(other); }
 
@@ -1008,6 +1005,12 @@ public:
     }
 
 private:
+    friend class std::reverse_iterator<UTFIterator<UnitIter, CP32, behavior>>;
+
+    inline UnitIter getLogicalPosition() const {
+        return state_ <= 0 ? p_ : units_.data();
+    }
+
     // operator*() etc. are logically const.
     mutable UnitIter p_;
     // In a validating iterator, we need start_ & limit_ so that when we read a code point
@@ -1124,58 +1127,49 @@ private:
 };
 #endif  // U_IN_DOXYGEN
 
-/**
- * Validating reverse iterator over the code points in a Unicode string.
- * Not bidirectional, but optimized for reverse iteration.
- *
- * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
- *     UTF-8: char or char8_t or uint8_t;
- *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U_BEHAVIOR_NEGATIVE
- * @tparam UIllFormedBehavior How to handle ill-formed Unicode strings
- * @draft ICU 78
- */
+}  // namespace U_HEADER_ONLY_NAMESPACE
+
+#ifndef U_IN_DOXYGEN
+// Bespoke specialization of reverse_iterator.
+// The default implementation implements reverse operator*() and ++ in a way
+// that does most of the same work twice for reading variable-length sequences.
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
-class UTFReverseIterator {
-    using Impl = UTFImpl<UnitIter, CP32, behavior>;
+class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UTFIterator<UnitIter, CP32, behavior>> {
+    using Impl = U_HEADER_ONLY_NAMESPACE::UTFImpl<UnitIter, CP32, behavior>;
+    using CodeUnits_ = U_HEADER_ONLY_NAMESPACE::CodeUnits<UnitIter, CP32>;
 
     // Proxy type for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning CodeUnits.
     class Proxy {
     public:
-        Proxy(CodeUnits<UnitIter, CP32> units) : units_(units) {}
-        CodeUnits<UnitIter, CP32> &operator*() { return units_; }
-        CodeUnits<UnitIter, CP32> *operator->() { return &units_; }
+        Proxy(CodeUnits_ units) : units_(units) {}
+        CodeUnits_ &operator*() { return units_; }
+        CodeUnits_ *operator->() { return &units_; }
     private:
-        CodeUnits<UnitIter, CP32> units_;
+        CodeUnits_ units_;
     };
 
 public:
-    using value_type = CodeUnits<UnitIter, CP32>;
+    using value_type = CodeUnits_;
     using reference = value_type;
     using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
-    using iterator_category = std::forward_iterator_tag;
+    using iterator_category = std::bidirectional_iterator_tag;
 
-    inline UTFReverseIterator(UnitIter start, UnitIter p) :
-            p_(p), start_(start), units_(0, 0, false, p), unitsLimit_(p) {}
-    // Constructs an iterator start or limit sentinel.
-    inline UTFReverseIterator(UnitIter p) :
-            p_(p), start_(p), units_(0, 0, false, p), unitsLimit_(p) {}
+    inline reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<UnitIter, CP32, behavior> iter) :
+            p_(iter.getLogicalPosition()),
+            start_(iter.start_), units_(0, 0, false, p_), unitsLimit_(p_) {}
+            // TODO: limit_
 
-    inline UTFReverseIterator(const UTFReverseIterator &other) = default;
-    inline UTFReverseIterator &operator=(const UTFReverseIterator &other) = default;
+    inline reverse_iterator(const reverse_iterator &other) = default;
+    inline reverse_iterator &operator=(const reverse_iterator &other) = default;
 
-    inline bool operator==(const UTFReverseIterator &other) const {
-        // Compare logical positions.
-        UnitIter p1 = !behind_ ? p_ : unitsLimit_;
-        UnitIter p2 = !other.behind_ ? other.p_ : other.unitsLimit_;
-        return p1 == p2;
+    inline bool operator==(const reverse_iterator &other) const {
+        return getLogicalPosition() == other.getLogicalPosition();
     }
-    inline bool operator!=(const UTFReverseIterator &other) const { return !operator==(other); }
+    inline bool operator!=(const reverse_iterator &other) const { return !operator==(other); }
 
-    inline CodeUnits<UnitIter, CP32> operator*() const {
+    inline CodeUnits_ operator*() const {
         if (!behind_) {
             unitsLimit_ = p_;
             units_ = Impl::decAndRead(start_, p_);
@@ -1193,7 +1187,7 @@ public:
         return Proxy(units_);
     }
 
-    inline UTFReverseIterator &operator++() {  // pre-increment
+    inline reverse_iterator &operator++() {  // pre-increment
         if (behind_) {
             // operator*() called decAndRead() so p_ is already behind.
             behind_ = false;
@@ -1203,23 +1197,45 @@ public:
         return *this;
     }
 
-    inline UTFReverseIterator operator++(int) {  // post-increment
+    inline reverse_iterator operator++(int) {  // post-increment
         if (behind_) {
             // operator*() called decAndRead() so p_ is already behind.
-            UTFReverseIterator result(*this);
+            reverse_iterator result(*this);
             behind_ = false;
             return result;
         } else {
             unitsLimit_ = p_;
             units_ = Impl::decAndRead(start_, p_);
-            UTFReverseIterator result(*this);
+            reverse_iterator result(*this);
             result.behind_ = true;
             // keep this->behind_ == false
             return result;
         }
     }
 
+    inline reverse_iterator &operator--() {  // pre-decrement
+#if 0  // TODO
+        if (state_ > 0) {
+            // operator*() called readAndInc() so p_ is ahead of the logical position.
+            p_ = units_.data();
+        }
+        units_ = Impl::decAndRead(start_, p_);
+        state_ = -units_.length();
+#endif
+        return *this;
+    }
+
+    inline reverse_iterator operator--(int) {  // post-decrement
+        reverse_iterator result(*this);
+        operator--();
+        return result;
+    }
+
 private:
+    inline UnitIter getLogicalPosition() const {
+        return !behind_ ? p_ : unitsLimit_;
+    }
+
     // operator*() etc. are logically const.
     mutable UnitIter p_;
     // In a validating iterator, we need start_ so that when we read a code point
@@ -1227,13 +1243,16 @@ private:
     const UnitIter start_;
     // Keep state so that we call decAndRead() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
-    mutable CodeUnits<UnitIter, CP32> units_;
+    mutable CodeUnits_ units_;
     mutable UnitIter unitsLimit_;
     // true: units_ = decAndRead(), p_ = units start
     //     which means that p_ is behind its logical position
     // false: initial state
     mutable bool behind_ = false;
 };
+#endif  // U_IN_DOXYGEN
+
+namespace U_HEADER_ONLY_NAMESPACE {
 
 /**
  * A C++ "range" for validating iteration over all of the code points of a Unicode string.
@@ -1272,24 +1291,15 @@ public:
         return {s.data(), limit, limit};
     }
 
-#if 1
     /** @draft ICU 78 */
-    UTFReverseIterator<const Unit *, CP32, behavior> rbegin() const {
-        return {s.data(), s.data() + s.length()};
-    }
-
-    /** @draft ICU 78 */
-    UTFReverseIterator<const Unit *, CP32, behavior> rend() const {
-        return {s.data(), s.data()};
-    }
-#else
     auto rbegin() const {
         return std::make_reverse_iterator(end());
     }
+
+    /** @draft ICU 78 */
     auto rend() const {
         return std::make_reverse_iterator(begin());
     }
-#endif
 
 private:
     std::basic_string_view<Unit> s;
@@ -1342,10 +1352,7 @@ public:
     inline UnsafeUTFIterator &operator=(const UnsafeUTFIterator &other) = default;
 
     inline bool operator==(const UnsafeUTFIterator &other) const {
-        // Compare logical positions.
-        UnitIter p1 = state_ <= 0 ? p_ : units_.data();
-        UnitIter p2 = other.state_ <= 0 ? other.p_ : other.units_.data();
-        return p1 == p2;
+        return getLogicalPosition() == other.getLogicalPosition();
     }
     inline bool operator!=(const UnsafeUTFIterator &other) const { return !operator==(other); }
 
@@ -1429,6 +1436,12 @@ public:
     }
 
 private:
+    friend class std::reverse_iterator<UnsafeUTFIterator<UnitIter, CP32>>;
+
+    inline UnitIter getLogicalPosition() const {
+        return state_ <= 0 ? p_ : units_.data();
+    }
+
     // operator*() etc. are logically const.
     mutable UnitIter p_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
@@ -1534,55 +1547,47 @@ private:
 };
 #endif  // U_IN_DOXYGEN
 
-/**
- * Non-validating reverse iterator over the code points in a Unicode string.
- * The string must be well-formed.
- * Not bidirectional, but optimized for reverse iteration.
- *
- * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
- *     UTF-8: char or char8_t or uint8_t;
- *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U_BEHAVIOR_NEGATIVE
- * @draft ICU 78
- */
+}  // namespace U_HEADER_ONLY_NAMESPACE
+
+#ifndef U_IN_DOXYGEN
+// Bespoke specialization of reverse_iterator.
+// The default implementation implements reverse operator*() and ++ in a way
+// that does most of the same work twice for reading variable-length sequences.
 template<typename UnitIter, typename CP32>
-class UnsafeUTFReverseIterator {
-    using Impl = UnsafeUTFImpl<UnitIter, CP32>;
+class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<UnitIter, CP32>> {
+    using Impl = U_HEADER_ONLY_NAMESPACE::UnsafeUTFImpl<UnitIter, CP32>;
+    using UnsafeCodeUnits_ = U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits<UnitIter, CP32>;
 
     // Proxy type for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning UnsafeCodeUnits.
     class Proxy {
     public:
-        Proxy(UnsafeCodeUnits<UnitIter, CP32> units) : units_(units) {}
-        UnsafeCodeUnits<UnitIter, CP32> &operator*() { return units_; }
-        UnsafeCodeUnits<UnitIter, CP32> *operator->() { return &units_; }
+        Proxy(UnsafeCodeUnits_ units) : units_(units) {}
+        UnsafeCodeUnits_ &operator*() { return units_; }
+        UnsafeCodeUnits_ *operator->() { return &units_; }
     private:
-        UnsafeCodeUnits<UnitIter, CP32> units_;
+        UnsafeCodeUnits_ units_;
     };
 
 public:
-    using value_type = UnsafeCodeUnits<UnitIter, CP32>;
+    using value_type = UnsafeCodeUnits_;
     using reference = value_type;
     using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
-    using iterator_category = std::forward_iterator_tag;
+    using iterator_category = std::bidirectional_iterator_tag;
 
-    inline UnsafeUTFReverseIterator(UnitIter p) :
-            p_(p), units_(0, 0, p), unitsLimit_(p) {}
+    inline reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<UnitIter, CP32> iter) :
+            p_(iter.getLogicalPosition()), units_(0, 0, p_), unitsLimit_(p_) {}
 
-    inline UnsafeUTFReverseIterator(const UnsafeUTFReverseIterator &other) = default;
-    inline UnsafeUTFReverseIterator &operator=(const UnsafeUTFReverseIterator &other) = default;
+    inline reverse_iterator(const reverse_iterator &other) = default;
+    inline reverse_iterator &operator=(const reverse_iterator &other) = default;
 
-    inline bool operator==(const UnsafeUTFReverseIterator &other) const {
-        // Compare logical positions.
-        UnitIter p1 = !behind_ ? p_ : unitsLimit_;
-        UnitIter p2 = !other.behind_ ? other.p_ : other.unitsLimit_;
-        return p1 == p2;
+    inline bool operator==(const reverse_iterator &other) const {
+        return getLogicalPosition() == other.getLogicalPosition();
     }
-    inline bool operator!=(const UnsafeUTFReverseIterator &other) const { return !operator==(other); }
+    inline bool operator!=(const reverse_iterator &other) const { return !operator==(other); }
 
-    inline UnsafeCodeUnits<UnitIter, CP32> operator*() const {
+    inline UnsafeCodeUnits_ operator*() const {
         if (!behind_) {
             unitsLimit_ = p_;
             units_ = Impl::decAndRead(p_);
@@ -1600,7 +1605,7 @@ public:
         return Proxy(units_);
     }
 
-    inline UnsafeUTFReverseIterator &operator++() {  // pre-increment
+    inline reverse_iterator &operator++() {  // pre-increment
         if (behind_) {
             // operator*() called decAndRead() so p_ is already behind.
             behind_ = false;
@@ -1610,34 +1615,59 @@ public:
         return *this;
     }
 
-    inline UnsafeUTFReverseIterator operator++(int) {  // post-increment
+    inline reverse_iterator operator++(int) {  // post-increment
         if (behind_) {
             // operator*() called decAndRead() so p_ is already behind.
-            UnsafeUTFReverseIterator result(*this);
+            reverse_iterator result(*this);
             behind_ = false;
             return result;
         } else {
             unitsLimit_ = p_;
             units_ = Impl::decAndRead(p_);
-            UnsafeUTFReverseIterator result(*this);
+            reverse_iterator result(*this);
             result.behind_ = true;
             // keep this->behind_ == false
             return result;
         }
     }
 
+    inline reverse_iterator &operator--() {  // pre-decrement
+#if 0  // TODO
+        if (state_ > 0) {
+            // operator*() called readAndInc() so p_ is ahead of the logical position.
+            p_ = units_.data();
+        }
+        units_ = Impl::decAndRead(p_);
+        state_ = -units_.length();
+#endif
+        return *this;
+    }
+
+    inline reverse_iterator operator--(int) {  // post-decrement
+        reverse_iterator result(*this);
+        operator--();
+        return result;
+    }
+
 private:
+    inline UnitIter getLogicalPosition() const {
+        return !behind_ ? p_ : unitsLimit_;
+    }
+
     // operator*() etc. are logically const.
     mutable UnitIter p_;
     // Keep state so that we call decAndRead() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
-    mutable UnsafeCodeUnits<UnitIter, CP32> units_;
+    mutable UnsafeCodeUnits_ units_;
     mutable UnitIter unitsLimit_;
     // true: units_ = decAndRead(), p_ = units start
     //     which means that p_ is behind its logical position
     // false: initial state
     mutable bool behind_ = false;
 };
+#endif  // U_IN_DOXYGEN
+
+namespace U_HEADER_ONLY_NAMESPACE {
 
 /**
  * A C++ "range" for non-validating iteration over all of the code points of a Unicode string.
@@ -1674,13 +1704,13 @@ public:
     }
 
     /** @draft ICU 78 */
-    UnsafeUTFReverseIterator<const Unit *, CP32> rbegin() const {
-        return {s.data() + s.length()};
+    auto rbegin() const {
+        return std::make_reverse_iterator(end());
     }
 
     /** @draft ICU 78 */
-    UnsafeUTFReverseIterator<const Unit *, CP32> rend() const {
-        return {s.data()};
+    auto rend() const {
+        return std::make_reverse_iterator(begin());
     }
 
 private:
