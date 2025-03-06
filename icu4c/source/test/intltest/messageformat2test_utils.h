@@ -113,7 +113,12 @@ class TestCase : public UMemory {
             return *this;
         }
         Builder& setDateArgument(const UnicodeString& k, UDate date) {
-            arguments[k] = Formattable::forDate(date);
+            // This ignores time zones; the data-driven tests represent date/time values
+            // as a datestamp, so this code suffices to handle those.
+            // Date/time literal strings would be handled using `setArgument()` with a string
+            // argument.
+            DateInfo dateInfo = { date, {} }; // No time zone or calendar name
+            arguments[k] = Formattable(std::move(dateInfo));
             return *this;
         }
         Builder& setDecimalArgument(const UnicodeString& k, std::string_view decimal, UErrorCode& errorCode) {
