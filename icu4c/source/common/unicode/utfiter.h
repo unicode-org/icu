@@ -106,93 +106,17 @@ typedef enum UIllFormedBehavior {
 namespace U_HEADER_ONLY_NAMESPACE {
 
 /**
- * Result of validating and decoding a minimal Unicode code unit sequence.
- * Returned from validating Unicode string code point iterators.
- *
- * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
- *     UTF-8: char or char8_t or uint8_t;
- *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U_BEHAVIOR_NEGATIVE
- * @draft ICU 78
- */
-template<typename UnitIter, typename CP32, typename = void>
-class CodeUnits {
-    using Unit = typename std::iterator_traits<UnitIter>::value_type;
-public:
-    // @internal
-    CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed, UnitIter data) :
-            c(codePoint), len(length), ok(wellFormed), p(data) {}
-
-    CodeUnits(const CodeUnits &other) = default;
-    CodeUnits &operator=(const CodeUnits &other) = default;
-
-    UChar32 codePoint() const { return c; }
-
-    bool wellFormed() const { return ok; }
-
-    UnitIter data() const { return p; }
-
-    uint8_t length() const { return len; }
-
-    template<typename Iter = UnitIter>
-    std::enable_if_t<
-        std::is_pointer_v<Iter>,
-        std::basic_string_view<Unit>>
-    stringView() const {
-        return std::basic_string_view<Unit>(p, len);
-    }
-
-private:
-    // Order of fields with padding and access frequency in mind.
-    CP32 c;
-    uint8_t len;
-    bool ok;
-    UnitIter p;
-};
-
-#ifndef U_IN_DOXYGEN
-// Partial template specialization for single-pass input iterator.
-// No UnitIter field, no getter for it, no stringView().
-template<typename UnitIter, typename CP32>
-class CodeUnits<
-        UnitIter,
-        CP32,
-        std::enable_if_t<
-            !std::is_base_of_v<
-                std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>>> {
-public:
-    // @internal
-    CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed) :
-            c(codePoint), len(length), ok(wellFormed) {}
-
-    CodeUnits(const CodeUnits &other) = default;
-    CodeUnits &operator=(const CodeUnits &other) = default;
-
-    UChar32 codePoint() const { return c; }
-
-    bool wellFormed() const { return ok; }
-
-    uint8_t length() const { return len; }
-
-private:
-    // Order of fields with padding and access frequency in mind.
-    CP32 c;
-    uint8_t len;
-    bool ok;
-};
-#endif  // U_IN_DOXYGEN
-
-/**
- * Result of decoding a minimal Unicode code unit sequence which must be well-formed.
+ * Result of decoding a minimal Unicode code unit sequence.
  * Returned from non-validating Unicode string code point iterators.
+ * Base class for class CodeUnits which is returned from validating iterators.
  *
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
+ * @see UnsafeUTFIterator
+ * @see UnsafeUTFStringCodePoints
  * @draft ICU 78
  */
 template<typename UnitIter, typename CP32, typename = void>
@@ -206,12 +130,33 @@ public:
     UnsafeCodeUnits(const UnsafeCodeUnits &other) = default;
     UnsafeCodeUnits &operator=(const UnsafeCodeUnits &other) = default;
 
+    /**
+     * @return the Unicode code point decoded from the code unit sequence.
+     *     If the sequence is ill-formed and the iterator validates,
+     *     then this is a replacement value according to the iterator‘s
+     *     UIllFormedBehavior template parameter.
+     * @draft ICU 78
+     */
     UChar32 codePoint() const { return c; }
 
+    /**
+     * @return the start of the minimal Unicode code unit sequence.
+     * Not enabled if UnitIter is a single-pass input_iterator.
+     * @draft ICU 78
+     */
     UnitIter data() const { return p; }
 
+    /**
+     * @return the length of the minimal Unicode code unit sequence.
+     * @draft ICU 78
+     */
     uint8_t length() const { return len; }
 
+    /**
+     * @return a string_view of the minimal Unicode code unit sequence.
+     * Enabled only if UnitIter is a pointer.
+     * @draft ICU 78
+     */
     template<typename Iter = UnitIter>
     std::enable_if_t<
         std::is_pointer_v<Iter>,
@@ -256,6 +201,64 @@ private:
 };
 #endif  // U_IN_DOXYGEN
 
+/**
+ * Result of validating and decoding a minimal Unicode code unit sequence.
+ * Returned from validating Unicode string code point iterators.
+ * Adds function wellFormed() to base class UnsafeCodeUnits.
+ *
+ * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if U_BEHAVIOR_NEGATIVE
+ * @see UTFIterator
+ * @see UTFStringCodePoints
+ * @draft ICU 78
+ */
+template<typename UnitIter, typename CP32, typename = void>
+class CodeUnits : public UnsafeCodeUnits<UnitIter, CP32> {
+public:
+    // @internal
+    CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed, UnitIter data) :
+            UnsafeCodeUnits<UnitIter, CP32>(codePoint, length, data), ok(wellFormed) {}
+
+    CodeUnits(const CodeUnits &other) = default;
+    CodeUnits &operator=(const CodeUnits &other) = default;
+
+    bool wellFormed() const { return ok; }
+
+private:
+    bool ok;
+};
+
+#ifndef U_IN_DOXYGEN
+// Partial template specialization for single-pass input iterator.
+// No UnitIter field, no getter for it, no stringView().
+template<typename UnitIter, typename CP32>
+class CodeUnits<
+        UnitIter,
+        CP32,
+        std::enable_if_t<
+            !std::is_base_of_v<
+                std::forward_iterator_tag,
+                typename std::iterator_traits<UnitIter>::iterator_category>>> :
+            public UnsafeCodeUnits<UnitIter, CP32> {
+public:
+    // @internal
+    CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed) :
+            UnsafeCodeUnits<UnitIter, CP32>(codePoint, length), ok(wellFormed) {}
+
+    CodeUnits(const CodeUnits &other) = default;
+    CodeUnits &operator=(const CodeUnits &other) = default;
+
+    bool wellFormed() const { return ok; }
+
+private:
+    bool ok;
+};
+#endif  // U_IN_DOXYGEN
+
+// Validating implementations --------------------------------------------- ***
 
 #ifndef U_IN_DOXYGEN
 // @internal
