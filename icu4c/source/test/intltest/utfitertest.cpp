@@ -22,6 +22,7 @@ using namespace std::string_view_literals;
 
 using U_HEADER_ONLY_NAMESPACE::UTFIterator;
 using U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints;
+using U_HEADER_ONLY_NAMESPACE::utfStringCodePoints;
 
 // Shared state for one or more copies of single-pass iterators.
 // Similar to https://en.cppreference.com/w/cpp/iterator/istreambuf_iterator
@@ -141,7 +142,7 @@ void U16IteratorTest::runIndexedTest(int32_t index, UBool exec, const char *&nam
 
 void U16IteratorTest::testGood() {
     std::u16string_view good(u"abçカ🚴"sv);
-    UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
+    auto range = utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(good);
     // TODO: Try to un-hardcode the iterator types in these checks via declspec.
     assertTrue(
         "bidirectional_iterator_tag",
@@ -175,7 +176,7 @@ void U16IteratorTest::testGood() {
 void U16IteratorTest::testNegative() {
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
-    UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(bad);
+    auto range = utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -200,7 +201,7 @@ void U16IteratorTest::testNegative() {
 void U16IteratorTest::testFFFD() {
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
-    UTFStringCodePoints<char16_t, char32_t, U_BEHAVIOR_FFFD> range(bad);
+    auto range = utfStringCodePoints<char32_t, U_BEHAVIOR_FFFD>(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -224,7 +225,7 @@ void U16IteratorTest::testFFFD() {
 void U16IteratorTest::testSurrogate() {
     static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
     std::u16string_view bad(badChars, 5);
-    UTFStringCodePoints<char16_t, uint32_t, U_BEHAVIOR_SURROGATE> range(bad);
+    auto range = utfStringCodePoints<uint32_t, U_BEHAVIOR_SURROGATE>(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -354,7 +355,7 @@ void U8IteratorTest::runIndexedTest(int32_t index, UBool exec, const char *&name
 
 void U8IteratorTest::testGood() {
     std::string_view good(reinterpret_cast<const char*>(u8"abçカ🚴"));
-    UTFStringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
+    auto range = utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(good);
     assertTrue(
         "bidirectional_iterator_tag",
         std::is_same_v<
@@ -495,7 +496,7 @@ void U32IteratorTest::runIndexedTest(int32_t index, UBool exec, const char *&nam
 
 void U32IteratorTest::testGood() {
     std::u32string_view good(U"abçカ🚴"sv);
-    UTFStringCodePoints<char32_t, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
+    auto range = utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(good);
     assertTrue(
         "bidirectional_iterator_tag",
         std::is_same_v<

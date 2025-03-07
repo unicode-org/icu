@@ -1338,6 +1338,20 @@ private:
     std::basic_string_view<Unit> s;
 };
 
+/**
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if U_BEHAVIOR_NEGATIVE
+ * @tparam UIllFormedBehavior How to handle ill-formed Unicode strings
+ * @return a UTFStringCodePoints&lt;Unit, CP32, behavior&gt;
+ *     for the given std::basic_string_view&lt;Unit&gt;,
+ *     deducing the Unit character type
+ * @draft ICU 78
+ */
+template<typename CP32, UIllFormedBehavior behavior, typename StringView>
+auto utfStringCodePoints(StringView s) {
+    return UTFStringCodePoints<typename StringView::value_type, CP32, behavior>(s);
+}
+
 // Non-validating iterators ------------------------------------------------ ***
 
 /**
@@ -1354,8 +1368,7 @@ private:
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U_BEHAVIOR_NEGATIVE
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @draft ICU 78
  */
 template<typename UnitIter, typename CP32, typename = void>
@@ -1741,8 +1754,7 @@ namespace U_HEADER_ONLY_NAMESPACE {
  * @tparam Unit Code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U_BEHAVIOR_NEGATIVE
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @draft ICU 78
  */
 template<typename Unit, typename CP32>
@@ -1790,21 +1802,32 @@ private:
     std::basic_string_view<Unit> s;
 };
 
+/**
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @return an UnsafeUTFStringCodePoints&lt;Unit, CP32&gt;
+ *     for the given std::basic_string_view&lt;Unit&gt;,
+ *     deducing the Unit character type
+ * @draft ICU 78
+ */
+template<typename CP32, typename StringView>
+auto unsafeUTFStringCodePoints(StringView s) {
+    return UnsafeUTFStringCodePoints<typename StringView::value_type, CP32>(s);
+}
+
 // ------------------------------------------------------------------------- ***
 
 // TODO: remove experimental sample code
 #ifndef UTYPES_H
 int32_t rangeLoop16(std::u16string_view s) {
-    header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
     int32_t sum = 0;
-    for (auto units : range) {
+    for (auto units : header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s)) {
         sum += units.codePoint();
     }
     return sum;
 }
 
 int32_t loopIterPlusPlus16(std::u16string_view s) {
-    header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+    auto range = header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s);
     int32_t sum = 0;
     auto iter = range.begin();
     auto limit = range.end();
@@ -1815,7 +1838,7 @@ int32_t loopIterPlusPlus16(std::u16string_view s) {
 }
 
 int32_t backwardLoop16(std::u16string_view s) {
-    header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+    auto range = header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s);
     int32_t sum = 0;
     auto start = range.begin();
     auto iter = range.end();
@@ -1826,7 +1849,7 @@ int32_t backwardLoop16(std::u16string_view s) {
 }
 
 int32_t reverseLoop16(std::u16string_view s) {
-    header::UTFStringCodePoints<char16_t, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+    auto range = header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s);
     int32_t sum = 0;
     for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
         sum += iter->codePoint();
@@ -1835,16 +1858,15 @@ int32_t reverseLoop16(std::u16string_view s) {
 }
 
 int32_t unsafeRangeLoop16(std::u16string_view s) {
-    header::UnsafeUTFStringCodePoints<char16_t, UChar32> range(s);
     int32_t sum = 0;
-    for (auto units : range) {
+    for (auto units : header::unsafeUTFStringCodePoints<UChar32>(s)) {
         sum += units.codePoint();
     }
     return sum;
 }
 
 int32_t unsafeReverseLoop16(std::u16string_view s) {
-    header::UnsafeUTFStringCodePoints<char16_t, UChar32> range(s);
+    auto range = header::unsafeUTFStringCodePoints<UChar32>(s);
     int32_t sum = 0;
     for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
         sum += iter->codePoint();
@@ -1853,16 +1875,15 @@ int32_t unsafeReverseLoop16(std::u16string_view s) {
 }
 
 int32_t rangeLoop8(std::string_view s) {
-    header::UTFStringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
     int32_t sum = 0;
-    for (auto units : range) {
+    for (auto units : header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s)) {
         sum += units.codePoint();
     }
     return sum;
 }
 
 int32_t reverseLoop8(std::string_view s) {
-    header::UTFStringCodePoints<char, UChar32, U_BEHAVIOR_NEGATIVE> range(s);
+    auto range = header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s);
     int32_t sum = 0;
     for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
         sum += iter->codePoint();
@@ -1882,16 +1903,15 @@ int32_t macroLoop8(std::string_view s) {
 }
 
 int32_t unsafeRangeLoop8(std::string_view s) {
-    header::UnsafeUTFStringCodePoints<char, UChar32> range(s);
     int32_t sum = 0;
-    for (auto units : range) {
+    for (auto units : header::unsafeUTFStringCodePoints<UChar32>(s)) {
         sum += units.codePoint();
     }
     return sum;
 }
 
 int32_t unsafeReverseLoop8(std::string_view s) {
-    header::UnsafeUTFStringCodePoints<char, UChar32> range(s);
+    auto range = header::unsafeUTFStringCodePoints<UChar32>(s);
     int32_t sum = 0;
     for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
         sum += iter->codePoint();
