@@ -1062,7 +1062,7 @@ public:
     inline bool operator==(const UTFIterator &other) const {
         return p_ == other.p_ && ahead_ == other.ahead_;
         // Strictly speaking, we should check if the logical position is the same.
-        // However, we cannot move, or do arithmetic with, a single-pass UnitIter.
+        // However, we cannot advance, or do arithmetic with, a single-pass UnitIter.
     }
     inline bool operator!=(const UTFIterator &other) const { return !operator==(other); }
 
@@ -1149,9 +1149,8 @@ public:
     using iterator_category = std::bidirectional_iterator_tag;
 
     inline reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<UnitIter, CP32, behavior> iter) :
-            p_(iter.getLogicalPosition()),
-            start_(iter.start_), units_(0, 0, false, p_), unitsLimit_(p_) {}
-            // TODO: limit_
+            p_(iter.getLogicalPosition()), start_(iter.start_), limit_(iter.limit_),
+            units_(0, 0, false, p_), unitsLimit_(p_) {}
 
     inline reverse_iterator(const reverse_iterator &other) = default;
     inline reverse_iterator &operator=(const reverse_iterator &other) = default;
@@ -1162,58 +1161,66 @@ public:
     inline bool operator!=(const reverse_iterator &other) const { return !operator==(other); }
 
     inline CodeUnits_ operator*() const {
-        if (!behind_) {
+        if (state_ == 0) {
             unitsLimit_ = p_;
             units_ = Impl::decAndRead(start_, p_);
-            behind_ = true;
+            state_ = -1;
         }
         return units_;
     }
 
     inline Proxy operator->() const {
-        if (!behind_) {
+        if (state_ == 0) {
             unitsLimit_ = p_;
             units_ = Impl::decAndRead(start_, p_);
-            behind_ = true;
+            state_ = -1;
         }
         return Proxy(units_);
     }
 
     inline reverse_iterator &operator++() {  // pre-increment
-        if (behind_) {
+        if (state_ < 0) {
             // operator*() called decAndRead() so p_ is already behind.
-            behind_ = false;
-        } else {
+            state_ = 0;
+        } else if (state_ == 0) {
             Impl::dec(start_, p_);
+        } else /* state_ > 0 */ {
+            // operator--() called readAndInc() so we know how far to skip.
+            p_ = units_.data();
+            state_ = 0;
         }
         return *this;
     }
 
     inline reverse_iterator operator++(int) {  // post-increment
-        if (behind_) {
+        if (state_ < 0) {
             // operator*() called decAndRead() so p_ is already behind.
             reverse_iterator result(*this);
-            behind_ = false;
+            state_ = 0;
             return result;
-        } else {
+        } else if (state_ == 0) {
             unitsLimit_ = p_;
             units_ = Impl::decAndRead(start_, p_);
             reverse_iterator result(*this);
-            result.behind_ = true;
-            // keep this->behind_ == false
+            result.state_ = -1;
+            // keep this->state_ == 0
+            return result;
+        } else /* state_ > 0 */ {
+            reverse_iterator result(*this);
+            // operator--() called readAndInc() so we know how far to skip.
+            p_ = units_.data();
+            state_ = 0;
             return result;
         }
     }
 
     inline reverse_iterator &operator--() {  // pre-decrement
-#if 0  // TODO
-        if (state_ > 0) {
-            // operator*() called readAndInc() so p_ is ahead of the logical position.
-            p_ = units_.data();
+        if (state_ < 0) {
+            // operator*() called decAndRead() so p_ is behind the logical position.
+            p_ = unitsLimit_;
         }
-        units_ = Impl::decAndRead(start_, p_);
-        state_ = -1;
-#endif
+        units_ = Impl::readAndInc(start_, p_);
+        state_ = 1;
         return *this;
     }
 
@@ -1225,22 +1232,25 @@ public:
 
 private:
     inline UnitIter getLogicalPosition() const {
-        return !behind_ ? p_ : unitsLimit_;
+        return state_ >= 0 ? p_ : unitsLimit_;
     }
 
     // operator*() etc. are logically const.
     mutable UnitIter p_;
-    // In a validating iterator, we need start_ so that when we read a code point
-    // backward we can test if there are enough code units.
+    // In a validating iterator, we need start_ & limit_ so that when we read a code point
+    // (forward or backward) we can test if there are enough code units.
     const UnitIter start_;
+    const UnitIter limit_;
     // Keep state so that we call decAndRead() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
     mutable CodeUnits_ units_;
+    // For fast getLogicalPosition() and operator==().
     mutable UnitIter unitsLimit_;
-    // true: units_ = decAndRead(), p_ = units start
+    // >0: units_ = readAndInc(), p_ = units limit
+    //  0: initial state
+    // <0: units_ = decAndRead(), p_ = units start
     //     which means that p_ is behind its logical position
-    // false: initial state
-    mutable bool behind_ = false;
+    mutable int8_t state_ = 0;
 };
 #endif  // U_IN_DOXYGEN
 
@@ -1283,12 +1293,18 @@ public:
         return {s.data(), limit, limit};
     }
 
-    /** @draft ICU 78 */
+    /**
+     * @return reverse_iterator(end())
+     * @draft ICU 78
+     */
     auto rbegin() const {
         return std::make_reverse_iterator(end());
     }
 
-    /** @draft ICU 78 */
+    /**
+     * @return reverse_iterator(begin())
+     * @draft ICU 78
+     */
     auto rend() const {
         return std::make_reverse_iterator(begin());
     }
@@ -1487,7 +1503,7 @@ public:
     inline bool operator==(const UnsafeUTFIterator &other) const {
         return p_ == other.p_ && ahead_ == other.ahead_;
         // Strictly speaking, we should check if the logical position is the same.
-        // However, we cannot move, or do arithmetic with, a single-pass UnitIter.
+        // However, we cannot advance, or do arithmetic with, a single-pass UnitIter.
     }
     inline bool operator!=(const UnsafeUTFIterator &other) const { return !operator==(other); }
 
@@ -1582,58 +1598,66 @@ public:
     inline bool operator!=(const reverse_iterator &other) const { return !operator==(other); }
 
     inline UnsafeCodeUnits_ operator*() const {
-        if (!behind_) {
+        if (state_ == 0) {
             unitsLimit_ = p_;
             units_ = Impl::decAndRead(p_);
-            behind_ = true;
+            state_ = -1;
         }
         return units_;
     }
 
     inline Proxy operator->() const {
-        if (!behind_) {
+        if (state_ == 0) {
             unitsLimit_ = p_;
             units_ = Impl::decAndRead(p_);
-            behind_ = true;
+            state_ = -1;
         }
         return Proxy(units_);
     }
 
     inline reverse_iterator &operator++() {  // pre-increment
-        if (behind_) {
+        if (state_ < 0) {
             // operator*() called decAndRead() so p_ is already behind.
-            behind_ = false;
-        } else {
+            state_ = 0;
+        } else if (state_ == 0) {
             Impl::dec(p_);
+        } else /* state_ > 0 */ {
+            // operator--() called readAndInc() so we know how far to skip.
+            p_ = units_.data();
+            state_ = 0;
         }
         return *this;
     }
 
     inline reverse_iterator operator++(int) {  // post-increment
-        if (behind_) {
+        if (state_ < 0) {
             // operator*() called decAndRead() so p_ is already behind.
             reverse_iterator result(*this);
-            behind_ = false;
+            state_ = 0;
             return result;
-        } else {
+        } else if (state_ == 0) {
             unitsLimit_ = p_;
             units_ = Impl::decAndRead(p_);
             reverse_iterator result(*this);
-            result.behind_ = true;
-            // keep this->behind_ == false
+            result.state_ = -1;
+            // keep this->state_ == 0
+            return result;
+        } else /* state_ > 0 */ {
+            reverse_iterator result(*this);
+            // operator--() called readAndInc() so we know how far to skip.
+            p_ = units_.data();
+            state_ = 0;
             return result;
         }
     }
 
     inline reverse_iterator &operator--() {  // pre-decrement
-#if 0  // TODO
-        if (state_ > 0) {
-            // operator*() called readAndInc() so p_ is ahead of the logical position.
-            p_ = units_.data();
+        if (state_ < 0) {
+            // operator*() called decAndRead() so p_ is behind the logical position.
+            p_ = unitsLimit_;
         }
-        units_ = Impl::decAndRead(p_);
-        state_ = -1;
-#endif
+        units_ = Impl::readAndInc(p_);
+        state_ = 1;
         return *this;
     }
 
@@ -1645,7 +1669,7 @@ public:
 
 private:
     inline UnitIter getLogicalPosition() const {
-        return !behind_ ? p_ : unitsLimit_;
+        return state_ >= 0 ? p_ : unitsLimit_;
     }
 
     // operator*() etc. are logically const.
@@ -1653,11 +1677,13 @@ private:
     // Keep state so that we call decAndRead() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
     mutable UnsafeCodeUnits_ units_;
+    // For fast getLogicalPosition() and operator==().
     mutable UnitIter unitsLimit_;
-    // true: units_ = decAndRead(), p_ = units start
+    // >0: units_ = readAndInc(), p_ = units limit
+    //  0: initial state
+    // <0: units_ = decAndRead(), p_ = units start
     //     which means that p_ is behind its logical position
-    // false: initial state
-    mutable bool behind_ = false;
+    mutable int8_t state_ = 0;
 };
 #endif  // U_IN_DOXYGEN
 
@@ -1685,6 +1711,8 @@ public:
 
     /** @draft ICU 78 */
     UnsafeUTFStringCodePoints(const UnsafeUTFStringCodePoints &other) = default;
+
+    /** @draft ICU 78 */
     UnsafeUTFStringCodePoints &operator=(const UnsafeUTFStringCodePoints &other) = default;
 
     /** @draft ICU 78 */
@@ -1697,12 +1725,18 @@ public:
         return {s.data() + s.length()};
     }
 
-    /** @draft ICU 78 */
+    /**
+     * @return reverse_iterator(end())
+     * @draft ICU 78
+     */
     auto rbegin() const {
         return std::make_reverse_iterator(end());
     }
 
-    /** @draft ICU 78 */
+    /**
+     * @return reverse_iterator(begin())
+     * @draft ICU 78
+     */
     auto rend() const {
         return std::make_reverse_iterator(begin());
     }
