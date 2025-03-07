@@ -878,7 +878,7 @@ public:
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
- * @tparam UIllFormedBehavior How to handle ill-formed Unicode strings
+ * @tparam behavior How to handle ill-formed Unicode strings
  * @draft ICU 78
  */
 template<typename UnitIter, typename CP32, UIllFormedBehavior behavior, typename = void>
@@ -1289,7 +1289,7 @@ namespace U_HEADER_ONLY_NAMESPACE {
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
- * @tparam UIllFormedBehavior How to handle ill-formed Unicode strings
+ * @tparam behavior How to handle ill-formed Unicode strings
  * @draft ICU 78
  */
 template<typename Unit, typename CP32, UIllFormedBehavior behavior>
@@ -1339,9 +1339,58 @@ private:
 };
 
 /**
+ * UTFIterator factory function for start <= p < limit.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @tparam behavior How to handle ill-formed Unicode strings
+ * @param start start code unit iterator
+ * @param p current-position code unit iterator
+ * @param limit limit (exclusive-end) code unit iterator
+ * @return a UTFIterator&lt;UnitIter, CP32, behavior&gt;
+ *     for the given code unit iterators or character pointers
+ * @draft ICU 78
+ */
+template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
+auto utfIterator(UnitIter start, UnitIter p, UnitIter limit) {
+    return UTFIterator<UnitIter, CP32, behavior>(start, p, limit);
+}
+
+/**
+ * UTFIterator factory function for start = p < limit.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @tparam behavior How to handle ill-formed Unicode strings
+ * @param p start and current-position code unit iterator
+ * @param limit limit (exclusive-end) code unit iterator
+ * @return a UTFIterator&lt;UnitIter, CP32, behavior&gt;
+ *     for the given code unit iterators or character pointers
+ * @draft ICU 78
+ */
+template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
+auto utfIterator(UnitIter p, UnitIter limit) {
+    return UTFIterator<UnitIter, CP32, behavior>(p, limit);
+}
+
+/**
+ * UTFIterator factory function for a start or limit sentinel.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @tparam behavior How to handle ill-formed Unicode strings
+ * @param p code unit iterator
+ * @return a UTFIterator&lt;UnitIter, CP32, behavior&gt;
+ *     for the given code unit iterator or character pointer
+ * @draft ICU 78
+ */
+template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
+auto utfIterator(UnitIter p) {
+    return UTFIterator<UnitIter, CP32, behavior>(p);
+}
+
+/**
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
- * @tparam UIllFormedBehavior How to handle ill-formed Unicode strings
+ * @tparam behavior How to handle ill-formed Unicode strings
+ * @param s input string_view
  * @return a UTFStringCodePoints&lt;Unit, CP32, behavior&gt;
  *     for the given std::basic_string_view&lt;Unit&gt;,
  *     deducing the Unit character type
@@ -1804,6 +1853,19 @@ private:
 
 /**
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @param iter code unit iterator
+ * @return an UnsafeUTFIterator&lt;UnitIter, CP32&gt;
+ *     for the given code unit iterator or character pointer
+ * @draft ICU 78
+ */
+template<typename CP32, typename UnitIter>
+auto unsafeUTFIterator(UnitIter iter) {
+    return UnsafeUTFIterator<UnitIter, CP32>(iter);
+}
+
+/**
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @param s input string_view
  * @return an UnsafeUTFStringCodePoints&lt;Unit, CP32&gt;
  *     for the given std::basic_string_view&lt;Unit&gt;,
  *     deducing the Unit character type

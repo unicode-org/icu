@@ -21,6 +21,7 @@
 using namespace std::string_view_literals;
 
 using U_HEADER_ONLY_NAMESPACE::UTFIterator;
+using U_HEADER_ONLY_NAMESPACE::utfIterator;
 using U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints;
 using U_HEADER_ONLY_NAMESPACE::utfStringCodePoints;
 
@@ -250,9 +251,8 @@ void U16IteratorTest::testSinglePassIter() {
     SinglePassSource<char16_t> good(u"abçカ🚴"sv);
     SinglePassIter<char16_t> goodBegin(good);
     SinglePassIter<char16_t> goodLimit{};
-    UTFIterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
-        goodBegin, goodLimit);
-    UTFIterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    auto rangeBegin = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
+    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit);
     assertTrue(
         "input_iterator_tag",
         std::is_same_v<
@@ -286,8 +286,8 @@ void U16IteratorTest::testFwdIter() {
     std::u16string_view good(u"abçカ🚴"sv);
     FwdIter<char16_t> goodBegin(good.data());
     FwdIter<char16_t> goodLimit(good.data() + good.length());
-    UTFIterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(goodBegin, goodLimit);
-    UTFIterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    auto rangeBegin = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
+    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit);
     // TODO: UTFStringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     assertTrue(
         "forward_iterator_tag",
@@ -391,9 +391,8 @@ void U8IteratorTest::testSinglePassIter() {
     SinglePassSource<char> good(reinterpret_cast<const char*>(u8"abçカ🚴"));
     SinglePassIter<char> goodBegin(good);
     SinglePassIter<char> goodLimit{};
-    UTFIterator<SinglePassIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
-        goodBegin, goodLimit);
-    UTFIterator<SinglePassIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    auto rangeBegin = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
+    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit);
     assertTrue(
         "input_iterator_tag",
         std::is_same_v<
@@ -427,8 +426,8 @@ void U8IteratorTest::testFwdIter() {
     std::string_view good(reinterpret_cast<const char*>(u8"abçカ🚴"));
     FwdIter<char> goodBegin(good.data());
     FwdIter<char> goodLimit(good.data() + good.length());
-    UTFIterator<FwdIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(goodBegin, goodLimit);
-    UTFIterator<FwdIter<char>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    auto rangeBegin = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
+    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit);
     // TODO: UTFStringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     assertTrue(
         "forward_iterator_tag",
@@ -530,9 +529,8 @@ void U32IteratorTest::testSinglePassIter() {
     SinglePassSource<char32_t> good(U"abçカ🚴"sv);
     SinglePassIter<char32_t> goodBegin(good);
     SinglePassIter<char32_t> goodLimit{};
-    UTFIterator<SinglePassIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(
-        goodBegin, goodLimit);
-    UTFIterator<SinglePassIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    auto rangeBegin = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
+    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit);
     assertTrue(
         "input_iterator_tag",
         std::is_same_v<
@@ -566,8 +564,8 @@ void U32IteratorTest::testFwdIter() {
     std::u32string_view good(U"abçカ🚴"sv);
     FwdIter<char32_t> goodBegin(good.data());
     FwdIter<char32_t> goodLimit(good.data() + good.length());
-    UTFIterator<FwdIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeBegin(goodBegin, goodLimit);
-    UTFIterator<FwdIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE> rangeLimit(goodLimit);
+    auto rangeBegin = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
+    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit);
     // TODO: UTFStringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     assertTrue(
         "forward_iterator_tag",
