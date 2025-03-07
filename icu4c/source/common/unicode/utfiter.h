@@ -862,7 +862,13 @@ public:
 
 /**
  * Validating iterator over the code points in a Unicode string.
- * It is a bidirectional_iterator if the base UnitIter is.
+ *
+ * The UnitIter can be
+ * an input_iterator, a forward_iterator, or a bidirectional_iterator (including a pointer).
+ * The UTFIterator will have the corresponding iterator_category.
+ *
+ * For reverse iteration, either use this iterator directly as in <code>*--iter</code>
+ * or wrap it using std::make_reverse_iterator(iter).
  *
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
  *     UTF-8: char or char8_t or uint8_t;
@@ -888,6 +894,7 @@ class UTFIterator {
     };
 
 public:
+    /** C++ iterator boilerplate @internal */
     using value_type = CodeUnits<UnitIter, CP32>;
     using reference = value_type;
     using pointer = Proxy;
@@ -899,6 +906,8 @@ public:
         std::bidirectional_iterator_tag,
         std::forward_iterator_tag>;
 
+    // Constructor with start <= p < limit.
+    // All of these iterators/pointers should be at code point boundaries.
     inline UTFIterator(UnitIter start, UnitIter p, UnitIter limit) :
             p_(p), start_(start), limit_(limit), units_(0, 0, false, p) {}
     // Constructs an iterator with start=p.
@@ -923,6 +932,11 @@ public:
         return units_;
     }
 
+    /**
+     * @return the current decoded subsequence via an opaque proxy object
+     * so that <code>iter->codePoint()</code> etc. works.
+     * @draft ICU 78
+     */
     inline Proxy operator->() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_, limit_);
@@ -945,6 +959,12 @@ public:
         return *this;
     }
 
+    /**
+     * @return a copy of this iterator from before the increment.
+     *     If UnitIter is a single-pass input_iterator, then this function
+     *     returns an opaque proxy object so that <code>*iter++</code> still works.
+     * @draft ICU 78
+     */
     inline UTFIterator operator++(int) {  // post-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
@@ -966,6 +986,7 @@ public:
         }
     }
 
+    // Only enabled if UnitIter is a bidirectional_iterator (including a pointer).
     template<typename Iter = UnitIter>
     inline
     std::enable_if_t<
@@ -983,6 +1004,7 @@ public:
         return *this;
     }
 
+    // Only enabled if UnitIter is a bidirectional_iterator (including a pointer).
     template<typename Iter = UnitIter>
     inline
     std::enable_if_t<
@@ -1294,7 +1316,7 @@ public:
     }
 
     /**
-     * @return reverse_iterator(end())
+     * @return std::reverse_iterator(end())
      * @draft ICU 78
      */
     auto rbegin() const {
@@ -1302,7 +1324,7 @@ public:
     }
 
     /**
-     * @return reverse_iterator(begin())
+     * @return std::reverse_iterator(begin())
      * @draft ICU 78
      */
     auto rend() const {
@@ -1318,7 +1340,13 @@ private:
 /**
  * Non-validating iterator over the code points in a Unicode string.
  * The string must be well-formed.
- * It is a bidirectional_iterator if the base UnitIter is.
+ *
+ * The UnitIter can be
+ * an input_iterator, a forward_iterator, or a bidirectional_iterator (including a pointer).
+ * The UTFIterator will have the corresponding iterator_category.
+ *
+ * For reverse iteration, either use this iterator directly as in <code>*--iter</code>
+ * or wrap it using std::make_reverse_iterator(iter).
  *
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
  *     UTF-8: char or char8_t or uint8_t;
@@ -1343,6 +1371,7 @@ class UnsafeUTFIterator {
     };
 
 public:
+    /** C++ iterator boilerplate @internal */
     using value_type = UnsafeCodeUnits<UnitIter, CP32>;
     using reference = value_type;
     using pointer = Proxy;
@@ -1372,6 +1401,11 @@ public:
         return units_;
     }
 
+    /**
+     * @return the current decoded subsequence via an opaque proxy object
+     * so that <code>iter->codePoint()</code> etc. works.
+     * @draft ICU 78
+     */
     inline Proxy operator->() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_);
@@ -1394,6 +1428,12 @@ public:
         return *this;
     }
 
+    /**
+     * @return a copy of this iterator from before the increment.
+     *     If UnitIter is a single-pass input_iterator, then this function
+     *     returns an opaque proxy object so that <code>*iter++</code> still works.
+     * @draft ICU 78
+     */
     inline UnsafeUTFIterator operator++(int) {  // post-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
@@ -1415,6 +1455,7 @@ public:
         }
     }
 
+    // Only enabled if UnitIter is a bidirectional_iterator (including a pointer).
     template<typename Iter = UnitIter>
     inline
     std::enable_if_t<
@@ -1432,6 +1473,7 @@ public:
         return *this;
     }
 
+    // Only enabled if UnitIter is a bidirectional_iterator (including a pointer).
     template<typename Iter = UnitIter>
     inline
     std::enable_if_t<
@@ -1726,7 +1768,7 @@ public:
     }
 
     /**
-     * @return reverse_iterator(end())
+     * @return std::reverse_iterator(end())
      * @draft ICU 78
      */
     auto rbegin() const {
@@ -1734,7 +1776,7 @@ public:
     }
 
     /**
-     * @return reverse_iterator(begin())
+     * @return std::reverse_iterator(begin())
      * @draft ICU 78
      */
     auto rend() const {
