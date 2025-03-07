@@ -25,6 +25,82 @@ using U_HEADER_ONLY_NAMESPACE::utfIterator;
 using U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints;
 using U_HEADER_ONLY_NAMESPACE::utfStringCodePoints;
 
+#ifdef SAMPLE_CODE
+// For API docs etc. Compile when changing samples or APIs.
+using U_HEADER_ONLY_NAMESPACE::unsafeUTFIterator;
+using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
+
+int32_t rangeLoop16(std::u16string_view s) {
+    int32_t sum = 0;
+    for (auto units : utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s)) {
+        sum += units.codePoint();  // < 0 if ill-formed
+    }
+    return sum;
+}
+
+int32_t loopIterPlusPlus16(std::u16string_view s) {
+    auto range = utfStringCodePoints<char32_t, U_BEHAVIOR_FFFD>(s);
+    int32_t sum = 0;
+    for (auto iter = range.begin(), limit = range.end(); iter != limit;) {
+        sum += (*iter++).codePoint();  // U+FFFD if ill-formed
+    }
+    return sum;
+}
+
+int32_t backwardLoop16(std::u16string_view s) {
+    auto range = utfStringCodePoints<UChar32, U_BEHAVIOR_SURROGATE>(s);
+    int32_t sum = 0;
+    for (auto start = range.begin(), iter = range.end(); start != iter;) {
+        sum += (*--iter).codePoint();  // surrogate code point if unpaired / ill-formed
+    }
+    return sum;
+}
+
+int32_t reverseLoop8(std::string_view s) {
+    auto range = utfStringCodePoints<char32_t, U_BEHAVIOR_FFFD>(s);
+    int32_t sum = 0;
+    for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
+        sum += iter->codePoint();  // U+FFFD if ill-formed
+    }
+    return sum;
+}
+
+int32_t unsafeRangeLoop16(std::u16string_view s) {
+    int32_t sum = 0;
+    for (auto units : unsafeUTFStringCodePoints<UChar32>(s)) {
+        sum += units.codePoint();
+    }
+    return sum;
+}
+
+int32_t unsafeReverseLoop8(std::string_view s) {
+    auto range = unsafeUTFStringCodePoints<UChar32>(s);
+    int32_t sum = 0;
+    for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
+        sum += iter->codePoint();
+    }
+    return sum;
+}
+
+char32_t firstCodePointOrFFFD16(std::u16string_view s) {
+    if (s.empty()) { return 0xfffd; }
+    auto range = utfStringCodePoints<char32_t, U_BEHAVIOR_FFFD>(s);
+    return range.begin()->codePoint();
+}
+
+std::string_view firstSequence8(std::string_view s) {
+    if (s.empty()) { return {}; }
+    auto range = utfStringCodePoints<char32_t, U_BEHAVIOR_FFFD>(s);
+    auto units = *(range.begin());
+    if (units.wellFormed()) {
+        return units.stringView();
+    } else {
+        return {};
+    }
+}
+
+#endif  // SAMPLE_CODE
+
 // Shared state for one or more copies of single-pass iterators.
 // Similar to https://en.cppreference.com/w/cpp/iterator/istreambuf_iterator
 // but the iterators only implement LegacyIterator (* and ++) without post-increment.

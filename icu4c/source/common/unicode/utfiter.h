@@ -1891,9 +1891,7 @@ int32_t rangeLoop16(std::u16string_view s) {
 int32_t loopIterPlusPlus16(std::u16string_view s) {
     auto range = header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s);
     int32_t sum = 0;
-    auto iter = range.begin();
-    auto limit = range.end();
-    while (iter != limit) {
+    for (auto iter = range.begin(), limit = range.end(); iter != limit;) {
         sum += (*iter++).codePoint();
     }
     return sum;
@@ -1902,9 +1900,7 @@ int32_t loopIterPlusPlus16(std::u16string_view s) {
 int32_t backwardLoop16(std::u16string_view s) {
     auto range = header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s);
     int32_t sum = 0;
-    auto start = range.begin();
-    auto iter = range.end();
-    while (start != iter) {
+    for (auto start = range.begin(), iter = range.end(); start != iter;) {
         sum += (*--iter).codePoint();
     }
     return sum;
@@ -1913,7 +1909,7 @@ int32_t backwardLoop16(std::u16string_view s) {
 int32_t reverseLoop16(std::u16string_view s) {
     auto range = header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s);
     int32_t sum = 0;
-    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
+    for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
         sum += iter->codePoint();
     }
     return sum;
@@ -1930,7 +1926,7 @@ int32_t unsafeRangeLoop16(std::u16string_view s) {
 int32_t unsafeReverseLoop16(std::u16string_view s) {
     auto range = header::unsafeUTFStringCodePoints<UChar32>(s);
     int32_t sum = 0;
-    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
+    for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
         sum += iter->codePoint();
     }
     return sum;
@@ -1947,7 +1943,7 @@ int32_t rangeLoop8(std::string_view s) {
 int32_t reverseLoop8(std::string_view s) {
     auto range = header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s);
     int32_t sum = 0;
-    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
+    for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
         sum += iter->codePoint();
     }
     return sum;
@@ -1975,7 +1971,7 @@ int32_t unsafeRangeLoop8(std::string_view s) {
 int32_t unsafeReverseLoop8(std::string_view s) {
     auto range = header::unsafeUTFStringCodePoints<UChar32>(s);
     int32_t sum = 0;
-    for (auto iter = range.rbegin(); iter != range.rend(); ++iter) {
+    for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
         sum += iter->codePoint();
     }
     return sum;
