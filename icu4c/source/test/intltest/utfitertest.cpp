@@ -25,8 +25,8 @@ using U_HEADER_ONLY_NAMESPACE::utfIterator;
 using U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints;
 using U_HEADER_ONLY_NAMESPACE::utfStringCodePoints;
 
-#ifdef SAMPLE_CODE
-// For API docs etc. Compile when changing samples or APIs.
+#if 0
+// Sample code for API docs etc. Compile when changing samples or APIs.
 using U_HEADER_ONLY_NAMESPACE::unsafeUTFIterator;
 using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
 
@@ -101,6 +101,9 @@ std::string_view firstSequence8(std::string_view s) {
 
 #endif  // SAMPLE_CODE
 
+template<typename Unit>
+class SinglePassIter;
+
 // Shared state for one or more copies of single-pass iterators.
 // Similar to https://en.cppreference.com/w/cpp/iterator/istreambuf_iterator
 // but the iterators only implement LegacyIterator (* and ++) without post-increment.
@@ -108,6 +111,9 @@ template<typename Unit>
 class SinglePassSource {
 public:
     SinglePassSource(std::basic_string_view<Unit> s) : p(s.data()), limit(s.data() + s.length()) {}
+
+    SinglePassIter<Unit> begin() { return SinglePassIter<Unit>(*this); }
+    SinglePassIter<Unit> end() { return SinglePassIter<Unit>(); }
 
 private:
     template<typename U>
@@ -132,7 +138,13 @@ public:
     // limit sentinel
     SinglePassIter() : src(nullptr) {}
 
-    // TODO: try to delete the copy constructor/assignment?
+    // movable
+    SinglePassIter(SinglePassIter &&src) noexcept = default;
+    SinglePassIter &operator=(SinglePassIter &&src) noexcept = default;
+
+    // not copyable
+    SinglePassIter(const SinglePassIter &other) = delete;
+    SinglePassIter &operator=(const SinglePassIter &other) = delete;
 
     bool operator==(const SinglePassIter &other) const {
         bool done = isDone();
@@ -325,17 +337,15 @@ void U16IteratorTest::testSurrogate() {
 
 void U16IteratorTest::testSinglePassIter() {
     SinglePassSource<char16_t> good(u"abçカ🚴"sv);
-    SinglePassIter<char16_t> goodBegin(good);
-    SinglePassIter<char16_t> goodLimit{};
-    auto rangeBegin = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
-    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit);
+    auto iter = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(good.begin(), good.end());
+    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(good.end(), good.end());
     assertTrue(
         "input_iterator_tag",
         std::is_same_v<
             typename std::iterator_traits<
                 UTFIterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
             std::input_iterator_tag>);
-    auto iter = rangeBegin;
+    // auto iter = std::move(rangeBegin);  -- TODO: why does this want to copy?
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
@@ -363,7 +373,7 @@ void U16IteratorTest::testFwdIter() {
     FwdIter<char16_t> goodBegin(good.data());
     FwdIter<char16_t> goodLimit(good.data() + good.length());
     auto rangeBegin = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
-    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit);
+    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit, goodLimit);
     // TODO: UTFStringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     assertTrue(
         "forward_iterator_tag",
@@ -465,17 +475,15 @@ void U8IteratorTest::testGood() {
 
 void U8IteratorTest::testSinglePassIter() {
     SinglePassSource<char> good(reinterpret_cast<const char*>(u8"abçカ🚴"));
-    SinglePassIter<char> goodBegin(good);
-    SinglePassIter<char> goodLimit{};
-    auto rangeBegin = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
-    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit);
+    auto iter = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(good.begin(), good.end());
+    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(good.end(), good.end());
     assertTrue(
         "input_iterator_tag",
         std::is_same_v<
             typename std::iterator_traits<
                 UTFIterator<SinglePassIter<char>, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
             std::input_iterator_tag>);
-    auto iter = rangeBegin;
+    // auto iter = std::move(rangeBegin);  -- TODO: why does this want to copy?
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
@@ -503,7 +511,7 @@ void U8IteratorTest::testFwdIter() {
     FwdIter<char> goodBegin(good.data());
     FwdIter<char> goodLimit(good.data() + good.length());
     auto rangeBegin = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
-    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit);
+    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit, goodLimit);
     // TODO: UTFStringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     assertTrue(
         "forward_iterator_tag",
@@ -603,17 +611,15 @@ void U32IteratorTest::testGood() {
 
 void U32IteratorTest::testSinglePassIter() {
     SinglePassSource<char32_t> good(U"abçカ🚴"sv);
-    SinglePassIter<char32_t> goodBegin(good);
-    SinglePassIter<char32_t> goodLimit{};
-    auto rangeBegin = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
-    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit);
+    auto iter = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(good.begin(), good.end());
+    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(good.end(), good.end());
     assertTrue(
         "input_iterator_tag",
         std::is_same_v<
             typename std::iterator_traits<
                 UTFIterator<SinglePassIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
             std::input_iterator_tag>);
-    auto iter = rangeBegin;
+    // auto iter = std::move(rangeBegin);  -- TODO: why does this want to copy?
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
@@ -641,7 +647,7 @@ void U32IteratorTest::testFwdIter() {
     FwdIter<char32_t> goodBegin(good.data());
     FwdIter<char32_t> goodLimit(good.data() + good.length());
     auto rangeBegin = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
-    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit);
+    auto rangeLimit = utfIterator<UChar32, U_BEHAVIOR_NEGATIVE>(goodLimit, goodLimit);
     // TODO: UTFStringCodePoints<FwdIter, UChar32, U_BEHAVIOR_NEGATIVE> range(good);
     assertTrue(
         "forward_iterator_tag",

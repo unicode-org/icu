@@ -284,7 +284,7 @@ public:
         }
     }
 
-    static inline void inc(UnitIter &p, UnitIter limit) {
+    static inline void inc(UnitIter &p, const UnitIter &limit) {
         // Very similar to U8_FWD_1().
         uint8_t b = *p;
         ++p;
@@ -378,7 +378,8 @@ public:
         return {sub(), length, false, p0};
     }
 
-    static inline CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter limit) {
+    static inline CodeUnits<UnitIter, CP32> singlePassReadAndInc(
+            UnitIter &p, const UnitIter &limit) {
         // Very similar to U8_NEXT_OR_FFFD().
         CP32 c = uint8_t(*p);
         ++p;
@@ -489,7 +490,7 @@ public:
         }
     }
 
-    static inline void inc(UnitIter &p, UnitIter limit) {
+    static inline void inc(UnitIter &p, const UnitIter &limit) {
         // Very similar to U16_FWD_1().
         auto c = *p;
         ++p;
@@ -525,7 +526,8 @@ public:
         }
     }
 
-    static inline CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter limit) {
+    static inline CodeUnits<UnitIter, CP32> singlePassReadAndInc(
+            UnitIter &p, const UnitIter &limit) {
         // Very similar to U16_NEXT_OR_FFFD().
         CP32 c = *p;
         ++p;
@@ -588,7 +590,7 @@ public:
         }
     }
 
-    static inline void inc(UnitIter &p, UnitIter /*limit*/) {
+    static inline void inc(UnitIter &p, const UnitIter &/*limit*/) {
         ++p;
     }
 
@@ -608,7 +610,8 @@ public:
         }
     }
 
-    static inline CodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p, UnitIter /*limit*/) {
+    static inline CodeUnits<UnitIter, CP32> singlePassReadAndInc(
+            UnitIter &p, const UnitIter &/*limit*/) {
         uint32_t uc = *p;
         CP32 c = uc;
         ++p;
@@ -919,6 +922,9 @@ public:
     // Constructs an iterator start or limit sentinel.
     inline UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p) {}
 
+    inline UTFIterator(UTFIterator &&src) noexcept = default;
+    inline UTFIterator &operator=(UTFIterator &&src) noexcept = default;
+
     inline UTFIterator(const UTFIterator &other) = default;
     inline UTFIterator &operator=(const UTFIterator &other) = default;
 
@@ -1076,10 +1082,14 @@ public:
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::input_iterator_tag;
 
-    inline UTFIterator(UnitIter p, UnitIter limit) : p_(p), limit_(limit) {}
+    inline UTFIterator(UnitIter p, UnitIter limit) : p_(std::move(p)), limit_(std::move(limit)) {}
 
     // Constructs an iterator start or limit sentinel.
-    inline UTFIterator(UnitIter p) : p_(p), limit_(p) {}
+    // Requires p to be copyable.
+    inline UTFIterator(UnitIter p) : p_(std::move(p)), limit_(p_) {}
+
+    inline UTFIterator(UTFIterator &&src) noexcept = default;
+    inline UTFIterator &operator=(UTFIterator &&src) noexcept = default;
 
     inline UTFIterator(const UTFIterator &other) = default;
     inline UTFIterator &operator=(const UTFIterator &other) = default;
@@ -1176,6 +1186,9 @@ public:
     inline reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<UnitIter, CP32, behavior> iter) :
             p_(iter.getLogicalPosition()), start_(iter.start_), limit_(iter.limit_),
             units_(0, 0, false, p_), unitsLimit_(p_) {}
+
+    inline reverse_iterator(reverse_iterator &&src) noexcept = default;
+    inline reverse_iterator &operator=(reverse_iterator &&src) noexcept = default;
 
     inline reverse_iterator(const reverse_iterator &other) = default;
     inline reverse_iterator &operator=(const reverse_iterator &other) = default;
@@ -1352,7 +1365,7 @@ private:
  */
 template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
 auto utfIterator(UnitIter start, UnitIter p, UnitIter limit) {
-    return UTFIterator<UnitIter, CP32, behavior>(start, p, limit);
+    return UTFIterator<UnitIter, CP32, behavior>(std::move(start), std::move(p), std::move(limit));
 }
 
 /**
@@ -1368,11 +1381,17 @@ auto utfIterator(UnitIter start, UnitIter p, UnitIter limit) {
  */
 template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
 auto utfIterator(UnitIter p, UnitIter limit) {
-    return UTFIterator<UnitIter, CP32, behavior>(p, limit);
+    return UTFIterator<UnitIter, CP32, behavior>(std::move(p), std::move(limit));
 }
+
+// Note: We should only enable the following factory function for a copyable UnitIter.
+// In C++17, we would have to partially specialize with enable_if_t testing for forward_iterator,
+// but a function template partial specialization is not allowed.
+// In C++20, we might be able to require the std::copyable concept.
 
 /**
  * UTFIterator factory function for a start or limit sentinel.
+ * Requires UnitIter to be copyable.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @tparam behavior How to handle ill-formed Unicode strings
@@ -1383,7 +1402,7 @@ auto utfIterator(UnitIter p, UnitIter limit) {
  */
 template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
 auto utfIterator(UnitIter p) {
-    return UTFIterator<UnitIter, CP32, behavior>(p);
+    return UTFIterator<UnitIter, CP32, behavior>(std::move(p));
 }
 
 /**
@@ -1449,6 +1468,9 @@ public:
         std::forward_iterator_tag>;
 
     inline UnsafeUTFIterator(UnitIter p) : p_(p), units_(0, 0, p) {}
+
+    inline UnsafeUTFIterator(UnsafeUTFIterator &&src) noexcept = default;
+    inline UnsafeUTFIterator &operator=(UnsafeUTFIterator &&src) noexcept = default;
 
     inline UnsafeUTFIterator(const UnsafeUTFIterator &other) = default;
     inline UnsafeUTFIterator &operator=(const UnsafeUTFIterator &other) = default;
@@ -1602,7 +1624,10 @@ public:
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::input_iterator_tag;
 
-    inline UnsafeUTFIterator(UnitIter p) : p_(p) {}
+    inline UnsafeUTFIterator(UnitIter p) : p_(std::move(p)) {}
+
+    inline UnsafeUTFIterator(UnsafeUTFIterator &&src) noexcept = default;
+    inline UnsafeUTFIterator &operator=(UnsafeUTFIterator &&src) noexcept = default;
 
     inline UnsafeUTFIterator(const UnsafeUTFIterator &other) = default;
     inline UnsafeUTFIterator &operator=(const UnsafeUTFIterator &other) = default;
@@ -1695,6 +1720,9 @@ public:
 
     inline reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<UnitIter, CP32> iter) :
             p_(iter.getLogicalPosition()), units_(0, 0, p_), unitsLimit_(p_) {}
+
+    inline reverse_iterator(reverse_iterator &&src) noexcept = default;
+    inline reverse_iterator &operator=(reverse_iterator &&src) noexcept = default;
 
     inline reverse_iterator(const reverse_iterator &other) = default;
     inline reverse_iterator &operator=(const reverse_iterator &other) = default;
@@ -1860,7 +1888,7 @@ private:
  */
 template<typename CP32, typename UnitIter>
 auto unsafeUTFIterator(UnitIter iter) {
-    return UnsafeUTFIterator<UnitIter, CP32>(iter);
+    return UnsafeUTFIterator<UnitIter, CP32>(std::move(iter));
 }
 
 /**
