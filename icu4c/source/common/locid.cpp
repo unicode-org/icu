@@ -58,6 +58,7 @@
 #include "uniquecharstr.h"
 #include "ustr_imp.h"
 #include "uvector.h"
+#include "locbased.h"
 
 U_NAMESPACE_BEGIN
 
@@ -2747,6 +2748,42 @@ Locale::getBaseName() const {
 }
 
 Locale::Iterator::~Iterator() = default;
+
+DataLocaleInformation::DataLocaleInformation(const DataLocaleInformation& other) {
+    UErrorCode status = U_ZERO_ERROR;
+    actualLocale = other.actualLocale == nullptr ?  nullptr : new CharString(*other.actualLocale, status);
+    validLocale = other.validLocale == nullptr ?  nullptr : new CharString(*other.validLocale, status);
+    U_ASSERT(U_SUCCESS(status));
+}
+DataLocaleInformation::~DataLocaleInformation() {
+    delete actualLocale;
+    delete validLocale;
+}
+
+Locale DataLocaleInformation::getLocale(ULocDataLocaleType type, UErrorCode& status) const {
+    return LocaleBased::getLocale(validLocale, actualLocale, type, status);
+}
+
+const char* DataLocaleInformation::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
+    return LocaleBased::getLocaleID(validLocale, actualLocale, type, status);
+}
+
+void DataLocaleInformation::setLocaleIDs(const char* valid, const char* actual) {
+    UErrorCode status = U_ZERO_ERROR;
+    U_LOCALE_BASED(locBased, *this);
+    locBased.setLocaleIDs(valid, actual, status);
+    U_ASSERT(U_SUCCESS(status));
+}
+
+DataLocaleInformation& DataLocaleInformation::operator=(const DataLocaleInformation& other) {
+    delete actualLocale;
+    delete validLocale;
+    UErrorCode status = U_ZERO_ERROR;
+    actualLocale = other.actualLocale == nullptr ?  nullptr : new CharString(*other.actualLocale, status);
+    validLocale = other.validLocale == nullptr ?  nullptr : new CharString(*other.validLocale, status);
+    U_ASSERT(U_SUCCESS(status));
+    return *this;
+}
 
 //eof
 U_NAMESPACE_END
