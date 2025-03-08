@@ -274,7 +274,7 @@ void TestMessageFormat2::testAPICustomFunctions() {
     // Set up custom function registry
     MFFunctionRegistry::Builder builder(errorCode);
     MFFunctionRegistry functionRegistry =
-        builder.adoptFormatter(data_model::FunctionName("person"), new PersonNameFormatterFactory(), errorCode)
+        builder.adoptFunction(data_model::FunctionName("person"), new PersonNameFunction(), errorCode)
                .build();
 
     Person* person = new Person(UnicodeString("Mr."), UnicodeString("John"), UnicodeString("Doe"));
@@ -314,13 +314,13 @@ void TestMessageFormat2::testAPICustomFunctions() {
 
     // By type
     MFFunctionRegistry::Builder builderByType(errorCode);
-    FunctionName personFormatterName("person");
+    FunctionName personFunctionName("person");
     MFFunctionRegistry functionRegistryByType =
-        builderByType.adoptFormatter(personFormatterName,
-                                   new PersonNameFormatterFactory(),
-                                   errorCode)
+        builderByType.adoptFunction(personFunctionName,
+                                    new PersonNameFunction(),
+                                    errorCode)
                      .setDefaultFormatterNameByType("person",
-                                                    personFormatterName,
+                                                    personFunctionName,
                                                     errorCode)
                      .build();
     mfBuilder.setFunctionRegistry(functionRegistryByType);
@@ -332,8 +332,11 @@ void TestMessageFormat2::testAPICustomFunctions() {
     // Expect "Hello John" because in the custom function we registered,
     // "informal" is the default formality and "length" is the default length
     assertEquals("testAPICustomFunctions", "Hello John", result);
+
     delete person;
 }
+
+PersonNameFunction::~PersonNameFunction() {}
 
 // ICU-22890 lone surrogate cause infinity loop
 void TestMessageFormat2::testHighLoneSurrogate() {

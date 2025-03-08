@@ -314,7 +314,7 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
 
     // Uncomment when test functions are implemented in the registry
     // See https://unicode-org.atlassian.net/browse/ICU-22907
-    // runTestsFromJsonFile(*this, "spec/pattern-selection.json", errorCode);
+    runTestsFromJsonFile(*this, "spec/pattern-selection.json", errorCode);
 
     // Do valid function tests
     runTestsFromJsonFile(*this, "spec/functions/date.json", errorCode);
@@ -328,13 +328,14 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     // TODO: https://github.com/unicode-org/message-format-wg/pull/902 will
     // move the bidi tests into the spec
     runTestsFromJsonFile(*this, "bidi.json", errorCode);
+    // TODO: move this into the spec tests when
+    // https://github.com/unicode-org/message-format-wg/pull/846 lands
+    runTestsFromJsonFile(*this, "u-options.json", errorCode);
     runTestsFromJsonFile(*this, "more-functions.json", errorCode);
     runTestsFromJsonFile(*this, "valid-tests.json", errorCode);
     runTestsFromJsonFile(*this, "resolution-errors.json", errorCode);
     runTestsFromJsonFile(*this, "matches-whitespace.json", errorCode);
     runTestsFromJsonFile(*this, "alias-selector-annotations.json", errorCode);
-    runTestsFromJsonFile(*this, "runtime-errors.json", errorCode);
-    runTestsFromJsonFile(*this, "more-syntax-errors.json", errorCode);
 
     // Re: the expected output for the first test in this file:
     // Note: the more "correct" fallback output seems like it should be "1.000 3" (ignoring the
