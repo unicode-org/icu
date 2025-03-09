@@ -1038,8 +1038,8 @@ private:
     mutable UnitIter p_;
     // In a validating iterator, we need start_ & limit_ so that when we read a code point
     // (forward or backward) we can test if there are enough code units.
-    const UnitIter start_;
-    const UnitIter limit_;
+    UnitIter start_;
+    UnitIter limit_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
     mutable CodeUnits<UnitIter, CP32> units_;
@@ -1143,7 +1143,7 @@ private:
     mutable UnitIter p_;
     // In a validating iterator, we need limit_ so that when we read a code point
     // we can test if there are enough code units.
-    const UnitIter limit_;
+    UnitIter limit_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // so that we can use a single-pass input iterator for UnitIter.
     mutable CodeUnits<UnitIter, CP32> units_ = {0, 0, false};
@@ -1277,8 +1277,8 @@ private:
     mutable UnitIter p_;
     // In a validating iterator, we need start_ & limit_ so that when we read a code point
     // (forward or backward) we can test if there are enough code units.
-    const UnitIter start_;
-    const UnitIter limit_;
+    UnitIter start_;
+    UnitIter limit_;
     // Keep state so that we call decAndRead() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
     mutable CodeUnits_ units_;
