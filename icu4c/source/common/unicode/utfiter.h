@@ -914,12 +914,15 @@ public:
 
     // Constructor with start <= p < limit.
     // All of these iterators/pointers should be at code point boundaries.
+    // Not enabled if UnitIter is a single-pass input_iterator.
+    // TODO: Should we enable this only for a bidirectional_iterator?
     inline UTFIterator(UnitIter start, UnitIter p, UnitIter limit) :
             p_(p), start_(start), limit_(limit), units_(0, 0, false, p) {}
     // Constructs an iterator with start=p.
     inline UTFIterator(UnitIter p, UnitIter limit) :
             p_(p), start_(p), limit_(limit), units_(0, 0, false, p) {}
     // Constructs an iterator start or limit sentinel.
+    // Requires UnitIter to be copyable.
     inline UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p) {}
 
     inline UTFIterator(UTFIterator &&src) noexcept = default;
@@ -1322,13 +1325,12 @@ public:
 
     /** @draft ICU 78 */
     UTFIterator<const Unit *, CP32, behavior> begin() const {
-        return {s.data(), s.data(), s.data() + s.length()};
+        return {s.begin(), s.begin(), s.end()};
     }
 
     /** @draft ICU 78 */
     UTFIterator<const Unit *, CP32, behavior> end() const {
-        const Unit *limit = s.data() + s.length();
-        return {s.data(), limit, limit};
+        return {s.begin(), s.end(), s.end()};
     }
 
     /**
@@ -1353,6 +1355,7 @@ private:
 
 /**
  * UTFIterator factory function for start <= p < limit.
+ * Not enabled if UnitIter is a single-pass input_iterator.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @tparam behavior How to handle ill-formed Unicode strings
@@ -1851,12 +1854,12 @@ public:
 
     /** @draft ICU 78 */
     UnsafeUTFIterator<const Unit *, CP32> begin() const {
-        return {s.data()};
+        return {s.begin()};
     }
 
     /** @draft ICU 78 */
     UnsafeUTFIterator<const Unit *, CP32> end() const {
-        return {s.data() + s.length()};
+        return {s.end()};
     }
 
     /**
@@ -2003,6 +2006,35 @@ int32_t unsafeReverseLoop8(std::string_view s) {
         sum += iter->codePoint();
     }
     return sum;
+}
+
+char32_t firstCodePointOrFFFD16(std::u16string_view s) {
+    if (s.empty()) { return 0xfffd; }
+    auto range = utfStringCodePoints<char32_t, U_BEHAVIOR_FFFD>(s);
+    return range.begin()->codePoint();
+}
+
+std::string_view firstSequence8(std::string_view s) {
+    if (s.empty()) { return {}; }
+    auto range = utfStringCodePoints<char32_t, U_BEHAVIOR_FFFD>(s);
+    auto units = *(range.begin());
+    if (units.wellFormed()) {
+        return units.stringView();
+    } else {
+        return {};
+    }
+}
+
+char32_t unsafeFirstCodePointOrFFFD8(std::string_view s) {
+    if (s.empty()) { return 0xfffd; }
+    auto range = unsafeUTFStringCodePoints<char32_t>(s);
+    return range.begin()->codePoint();
+}
+
+std::string_view unsafeFirstSequence8(std::string_view s) {
+    if (s.empty()) { return {}; }
+    auto range = unsafeUTFStringCodePoints<char32_t>(s);
+    return range.begin()->stringView();
 }
 #endif
 
