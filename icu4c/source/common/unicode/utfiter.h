@@ -141,7 +141,7 @@ public:
 
     /**
      * @return the start of the minimal Unicode code unit sequence.
-     * Not enabled if UnitIter is a single-pass input_iterator.
+     * Only enabled if UnitIter is a (multi-pass) forward_iterator or better.
      * @draft ICU 78
      */
     UnitIter data() const { return p; }
@@ -154,7 +154,7 @@ public:
 
     /**
      * @return a string_view of the minimal Unicode code unit sequence.
-     * Enabled only if UnitIter is a pointer.
+     * Only enabled if UnitIter is a pointer.
      * @draft ICU 78
      */
     template<typename Iter = UnitIter>
@@ -914,7 +914,7 @@ public:
 
     // Constructor with start <= p < limit.
     // All of these iterators/pointers should be at code point boundaries.
-    // Not enabled if UnitIter is a single-pass input_iterator.
+    // Only enabled if UnitIter is a (multi-pass) forward_iterator or better.
     // TODO: Should we enable this only for a bidirectional_iterator?
     inline UTFIterator(UnitIter start, UnitIter p, UnitIter limit) :
             p_(p), start_(start), limit_(limit), units_(0, 0, false, p) {}
@@ -1355,7 +1355,7 @@ private:
 
 /**
  * UTFIterator factory function for start <= p < limit.
- * Not enabled if UnitIter is a single-pass input_iterator.
+ * Only enabled if UnitIter is a (multi-pass) forward_iterator or better.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @tparam behavior How to handle ill-formed Unicode strings
