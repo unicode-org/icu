@@ -92,16 +92,16 @@ namespace header {}
 #ifndef U_HIDE_DRAFT_API
 
 // Some defined behaviors for handling ill-formed Unicode strings.
-typedef enum UIllFormedBehavior {
+typedef enum UTFIllFormedBehavior {
     // Returns a negative value instead of a code point.
-    U_BEHAVIOR_NEGATIVE,
+    UTF_BEHAVIOR_NEGATIVE,
     // Returns U+FFFD Replacement Character.
-    U_BEHAVIOR_FFFD,
+    UTF_BEHAVIOR_FFFD,
     // UTF-8: Not allowed;
     // UTF-16: returns the unpaired surrogate;
     // UTF-32: returns the surrogate code point, or U+FFFD if out of range.
-    U_BEHAVIOR_SURROGATE
-} UIllFormedBehavior;
+    UTF_BEHAVIOR_SURROGATE
+} UTFIllFormedBehavior;
 
 namespace U_HEADER_ONLY_NAMESPACE {
 
@@ -111,7 +111,7 @@ namespace U_HEADER_ONLY_NAMESPACE {
  * Base class for class CodeUnits which is returned from validating iterators.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U_BEHAVIOR_NEGATIVE
+ *              should be signed if UTF_BEHAVIOR_NEGATIVE
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
@@ -134,7 +134,7 @@ public:
      * @return the Unicode code point decoded from the code unit sequence.
      *     If the sequence is ill-formed and the iterator validates,
      *     then this is a replacement value according to the iterator‘s
-     *     UIllFormedBehavior template parameter.
+     *     UTFIllFormedBehavior template parameter.
      * @draft ICU 78
      */
     UChar32 codePoint() const { return c; }
@@ -207,7 +207,7 @@ private:
  * Adds function wellFormed() to base class UnsafeCodeUnits.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U_BEHAVIOR_NEGATIVE
+ *              should be signed if UTF_BEHAVIOR_NEGATIVE
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
@@ -262,25 +262,25 @@ private:
 
 #ifndef U_IN_DOXYGEN
 // @internal
-template<typename CP32, UIllFormedBehavior behavior, typename UnitIter, typename = void>
+template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter, typename = void>
 class UTFImpl;
 
 // UTF-8
-template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
+template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter>
 class UTFImpl<
         CP32,
         behavior,
         UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 1>> {
-    static_assert(behavior != U_BEHAVIOR_SURROGATE,
+    static_assert(behavior != UTF_BEHAVIOR_SURROGATE,
                   "For 8-bit strings, the SURROGATE option does not have an equivalent.");
 public:
     // Handle ill-formed UTF-8
     static inline CP32 sub() {
         switch (behavior) {
-            case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
-            case U_BEHAVIOR_FFFD: return 0xfffd;
+            case UTF_BEHAVIOR_NEGATIVE: return U_SENTINEL;
+            case UTF_BEHAVIOR_FFFD: return 0xfffd;
         }
     }
 
@@ -473,7 +473,7 @@ public:
 };
 
 // UTF-16
-template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
+template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter>
 class UTFImpl<
         CP32,
         behavior,
@@ -484,9 +484,9 @@ public:
     // Handle ill-formed UTF-16: One unpaired surrogate.
     static inline CP32 sub(CP32 surrogate) {
         switch (behavior) {
-            case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
-            case U_BEHAVIOR_FFFD: return 0xfffd;
-            case U_BEHAVIOR_SURROGATE: return surrogate;
+            case UTF_BEHAVIOR_NEGATIVE: return U_SENTINEL;
+            case UTF_BEHAVIOR_FFFD: return 0xfffd;
+            case UTF_BEHAVIOR_SURROGATE: return surrogate;
         }
     }
 
@@ -573,7 +573,7 @@ public:
 };
 
 // UTF-32: trivial, but still validating
-template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
+template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter>
 class UTFImpl<
         CP32,
         behavior,
@@ -584,9 +584,9 @@ public:
     // Handle ill-formed UTF-32
     static inline CP32 sub(bool forSurrogate, CP32 surrogate) {
         switch (behavior) {
-            case U_BEHAVIOR_NEGATIVE: return U_SENTINEL;
-            case U_BEHAVIOR_FFFD: return 0xfffd;
-            case U_BEHAVIOR_SURROGATE: return forSurrogate ? surrogate : 0xfffd;
+            case UTF_BEHAVIOR_NEGATIVE: return U_SENTINEL;
+            case UTF_BEHAVIOR_FFFD: return 0xfffd;
+            case UTF_BEHAVIOR_SURROGATE: return forSurrogate ? surrogate : 0xfffd;
         }
     }
 
@@ -877,14 +877,14 @@ public:
  * or wrap it using std::make_reverse_iterator(iter).
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U_BEHAVIOR_NEGATIVE
+ *              should be signed if UTF_BEHAVIOR_NEGATIVE
  * @tparam behavior How to handle ill-formed Unicode strings
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @draft ICU 78
  */
-template<typename CP32, UIllFormedBehavior behavior, typename UnitIter, typename = void>
+template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter, typename = void>
 class UTFIterator {
     using Impl = UTFImpl<CP32, behavior, UnitIter>;
 
@@ -1055,7 +1055,7 @@ private:
 
 #ifndef U_IN_DOXYGEN
 // Partial template specialization for single-pass input iterator.
-template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
+template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter>
 class UTFIterator<
         CP32,
         behavior,
@@ -1163,7 +1163,7 @@ private:
 // Bespoke specialization of reverse_iterator.
 // The default implementation implements reverse operator*() and ++ in a way
 // that does most of the same work twice for reading variable-length sequences.
-template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
+template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter>
 class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter>> {
     using Impl = U_HEADER_ONLY_NAMESPACE::UTFImpl<CP32, behavior, UnitIter>;
     using CodeUnits_ = U_HEADER_ONLY_NAMESPACE::CodeUnits<CP32, UnitIter>;
@@ -1301,14 +1301,14 @@ namespace U_HEADER_ONLY_NAMESPACE {
  * A C++ "range" for validating iteration over all of the code points of a Unicode string.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U_BEHAVIOR_NEGATIVE
+ *              should be signed if UTF_BEHAVIOR_NEGATIVE
  * @tparam behavior How to handle ill-formed Unicode strings
  * @tparam Unit Code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @draft ICU 78
  */
-template<typename CP32, UIllFormedBehavior behavior, typename Unit>
+template<typename CP32, UTFIllFormedBehavior behavior, typename Unit>
 class UTFStringCodePoints {
 public:
     /**
@@ -1370,7 +1370,7 @@ private:
  *     for the given code unit iterators or character pointers
  * @draft ICU 78
  */
-template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
+template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter>
 auto utfIterator(UnitIter start, UnitIter p, UnitIter limit) {
     return UTFIterator<CP32, behavior, UnitIter>(std::move(start), std::move(p), std::move(limit));
 }
@@ -1390,7 +1390,7 @@ auto utfIterator(UnitIter start, UnitIter p, UnitIter limit) {
  *     for the given code unit iterators or character pointers
  * @draft ICU 78
  */
-template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
+template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter>
 auto utfIterator(UnitIter p, UnitIter limit) {
     return UTFIterator<CP32, behavior, UnitIter>(std::move(p), std::move(limit));
 }
@@ -1415,14 +1415,14 @@ auto utfIterator(UnitIter p, UnitIter limit) {
  *     for the given code unit iterator or character pointer
  * @draft ICU 78
  */
-template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
+template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter>
 auto utfIterator(UnitIter p) {
     return UTFIterator<CP32, behavior, UnitIter>(std::move(p));
 }
 
 /**
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U_BEHAVIOR_NEGATIVE
+ *              should be signed if UTF_BEHAVIOR_NEGATIVE
  * @tparam behavior How to handle ill-formed Unicode strings
  * @tparam StringView Can usually be omitted/deduced: A std::basic_string_view&lt;Unit&gt;
  * @param s input string_view
@@ -1431,7 +1431,7 @@ auto utfIterator(UnitIter p) {
  *     deducing the Unit character type
  * @draft ICU 78
  */
-template<typename CP32, UIllFormedBehavior behavior, typename StringView>
+template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
 auto utfStringCodePoints(StringView s) {
     return UTFStringCodePoints<CP32, behavior, typename StringView::value_type>(s);
 }
@@ -1931,14 +1931,14 @@ auto unsafeUTFStringCodePoints(StringView s) {
 #ifndef UTYPES_H
 int32_t rangeLoop16(std::u16string_view s) {
     int32_t sum = 0;
-    for (auto units : header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s)) {
+    for (auto units : header::utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s)) {
         sum += units.codePoint();
     }
     return sum;
 }
 
 int32_t loopIterPlusPlus16(std::u16string_view s) {
-    auto range = header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s);
+    auto range = header::utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s);
     int32_t sum = 0;
     for (auto iter = range.begin(), limit = range.end(); iter != limit;) {
         sum += (*iter++).codePoint();
@@ -1947,7 +1947,7 @@ int32_t loopIterPlusPlus16(std::u16string_view s) {
 }
 
 int32_t backwardLoop16(std::u16string_view s) {
-    auto range = header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s);
+    auto range = header::utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s);
     int32_t sum = 0;
     for (auto start = range.begin(), iter = range.end(); start != iter;) {
         sum += (*--iter).codePoint();
@@ -1956,7 +1956,7 @@ int32_t backwardLoop16(std::u16string_view s) {
 }
 
 int32_t reverseLoop16(std::u16string_view s) {
-    auto range = header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s);
+    auto range = header::utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s);
     int32_t sum = 0;
     for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
         sum += iter->codePoint();
@@ -1983,14 +1983,14 @@ int32_t unsafeReverseLoop16(std::u16string_view s) {
 
 int32_t rangeLoop8(std::string_view s) {
     int32_t sum = 0;
-    for (auto units : header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s)) {
+    for (auto units : header::utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s)) {
         sum += units.codePoint();
     }
     return sum;
 }
 
 int32_t reverseLoop8(std::string_view s) {
-    auto range = header::utfStringCodePoints<UChar32, U_BEHAVIOR_NEGATIVE>(s);
+    auto range = header::utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s);
     int32_t sum = 0;
     for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
         sum += iter->codePoint();
@@ -2028,13 +2028,13 @@ int32_t unsafeReverseLoop8(std::string_view s) {
 
 char32_t firstCodePointOrFFFD16(std::u16string_view s) {
     if (s.empty()) { return 0xfffd; }
-    auto range = utfStringCodePoints<char32_t, U_BEHAVIOR_FFFD>(s);
+    auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
     return range.begin()->codePoint();
 }
 
 std::string_view firstSequence8(std::string_view s) {
     if (s.empty()) { return {}; }
-    auto range = utfStringCodePoints<char32_t, U_BEHAVIOR_FFFD>(s);
+    auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
     auto units = *(range.begin());
     if (units.wellFormed()) {
         return units.stringView();
