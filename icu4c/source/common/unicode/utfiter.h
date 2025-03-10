@@ -1359,6 +1359,10 @@ private:
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @tparam behavior How to handle ill-formed Unicode strings
+ * @tparam UnitIter Can usually be omitted/deduced:
+ *     An iterator (often a pointer) that returns a code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @param start start code unit iterator
  * @param p current-position code unit iterator
  * @param limit limit (exclusive-end) code unit iterator
@@ -1376,6 +1380,10 @@ auto utfIterator(UnitIter start, UnitIter p, UnitIter limit) {
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @tparam behavior How to handle ill-formed Unicode strings
+ * @tparam UnitIter Can usually be omitted/deduced:
+ *     An iterator (often a pointer) that returns a code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @param p start and current-position code unit iterator
  * @param limit limit (exclusive-end) code unit iterator
  * @return a UTFIterator&lt;CP32, behavior, UnitIter&gt;
@@ -1398,6 +1406,10 @@ auto utfIterator(UnitIter p, UnitIter limit) {
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @tparam behavior How to handle ill-formed Unicode strings
+ * @tparam UnitIter Can usually be omitted/deduced:
+ *     An iterator (often a pointer) that returns a code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @param p code unit iterator
  * @return a UTFIterator&lt;CP32, behavior, UnitIter&gt;
  *     for the given code unit iterator or character pointer
@@ -1412,6 +1424,7 @@ auto utfIterator(UnitIter p) {
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam behavior How to handle ill-formed Unicode strings
+ * @tparam StringView Can usually be omitted/deduced: A std::basic_string_view&lt;Unit&gt;
  * @param s input string_view
  * @return a UTFStringCodePoints&lt;CP32, behavior, Unit&gt;
  *     for the given std::basic_string_view&lt;Unit&gt;,
@@ -1884,6 +1897,10 @@ private:
 
 /**
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @tparam UnitIter Can usually be omitted/deduced:
+ *     An iterator (often a pointer) that returns a code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @param iter code unit iterator
  * @return an UnsafeUTFIterator&lt;CP32, UnitIter&gt;
  *     for the given code unit iterator or character pointer
@@ -1896,6 +1913,7 @@ auto unsafeUTFIterator(UnitIter iter) {
 
 /**
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @tparam StringView Can usually be omitted/deduced: A std::basic_string_view&lt;Unit&gt;
  * @param s input string_view
  * @return an UnsafeUTFStringCodePoints&lt;CP32, Unit&gt;
  *     for the given std::basic_string_view&lt;Unit&gt;,
