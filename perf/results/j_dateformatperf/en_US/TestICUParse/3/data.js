@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1741286766584,
+  "lastUpdate": 1741643646737,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32937,6 +32937,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 891.0742189227814,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "faa80a297236c5976a80429784ed91315adbc4c3",
+          "message": "ICU-23062 Added null check in one spot in genrb where we know we've seen crashes.",
+          "timestamp": "2025-03-06T17:50:59Z",
+          "tree_id": "0d71473117e01fdacc14c630dc03cd21399a75f6",
+          "url": "https://github.com/unicode-org/icu/commit/faa80a297236c5976a80429784ed91315adbc4c3"
+        },
+        "date": 1741643408790,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 841.1031756857294,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
