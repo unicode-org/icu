@@ -20,7 +20,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
-        <icu4j.version>77.1-SNAPSHOT</icu4j.version>
+        <icu4j.version>77.1</icu4j.version>
         <cldr-code.version>47.0-SNAPSHOT</cldr-code.version>
         <guava.version>32.1.1-jre</guava.version>
         <truth.version>1.4.4</truth.version>
