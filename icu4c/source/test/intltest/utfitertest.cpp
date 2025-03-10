@@ -237,7 +237,7 @@ void U16IteratorTest::testGood() {
         "bidirectional_iterator_tag",
         std::is_same_v<
             typename std::iterator_traits<
-                UTFIterator<char16_t *, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
+                UTFIterator<UChar32, U_BEHAVIOR_NEGATIVE, char16_t *>>::iterator_category,
             std::bidirectional_iterator_tag>);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
@@ -343,7 +343,7 @@ void U16IteratorTest::testSinglePassIter() {
         "input_iterator_tag",
         std::is_same_v<
             typename std::iterator_traits<
-                UTFIterator<SinglePassIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
+                UTFIterator<UChar32, U_BEHAVIOR_NEGATIVE, SinglePassIter<char16_t>>>::iterator_category,
             std::input_iterator_tag>);
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -378,7 +378,7 @@ void U16IteratorTest::testFwdIter() {
         "forward_iterator_tag",
         std::is_same_v<
             typename std::iterator_traits<
-                UTFIterator<FwdIter<char16_t>, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
+                UTFIterator<UChar32, U_BEHAVIOR_NEGATIVE, FwdIter<char16_t>>>::iterator_category,
             std::forward_iterator_tag>);
     auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
@@ -445,7 +445,7 @@ void U8IteratorTest::testGood() {
         "bidirectional_iterator_tag",
         std::is_same_v<
             typename std::iterator_traits<
-                UTFIterator<char *, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
+                UTFIterator<UChar32, U_BEHAVIOR_NEGATIVE, char *>>::iterator_category,
             std::bidirectional_iterator_tag>);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
@@ -480,7 +480,7 @@ void U8IteratorTest::testSinglePassIter() {
         "input_iterator_tag",
         std::is_same_v<
             typename std::iterator_traits<
-                UTFIterator<SinglePassIter<char>, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
+                UTFIterator<UChar32, U_BEHAVIOR_NEGATIVE, SinglePassIter<char>>>::iterator_category,
             std::input_iterator_tag>);
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -515,7 +515,7 @@ void U8IteratorTest::testFwdIter() {
         "forward_iterator_tag",
         std::is_same_v<
             typename std::iterator_traits<
-                UTFIterator<FwdIter<char>, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
+                UTFIterator<UChar32, U_BEHAVIOR_NEGATIVE, FwdIter<char>>>::iterator_category,
             std::forward_iterator_tag>);
     auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
@@ -582,7 +582,7 @@ void U32IteratorTest::testGood() {
         "bidirectional_iterator_tag",
         std::is_same_v<
             typename std::iterator_traits<
-                UTFIterator<char32_t *, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
+                UTFIterator<UChar32, U_BEHAVIOR_NEGATIVE, char32_t *>>::iterator_category,
             std::bidirectional_iterator_tag>);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
@@ -615,7 +615,7 @@ void U32IteratorTest::testSinglePassIter() {
         "input_iterator_tag",
         std::is_same_v<
             typename std::iterator_traits<
-                UTFIterator<SinglePassIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
+                UTFIterator<UChar32, U_BEHAVIOR_NEGATIVE, SinglePassIter<char32_t>>>::iterator_category,
             std::input_iterator_tag>);
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -650,7 +650,7 @@ void U32IteratorTest::testFwdIter() {
         "forward_iterator_tag",
         std::is_same_v<
             typename std::iterator_traits<
-                UTFIterator<FwdIter<char32_t>, UChar32, U_BEHAVIOR_NEGATIVE>>::iterator_category,
+                UTFIterator<UChar32, U_BEHAVIOR_NEGATIVE, FwdIter<char32_t>>>::iterator_category,
             std::forward_iterator_tag>);
     auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());

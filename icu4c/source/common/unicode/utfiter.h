@@ -110,16 +110,16 @@ namespace U_HEADER_ONLY_NAMESPACE {
  * Returned from non-validating Unicode string code point iterators.
  * Base class for class CodeUnits which is returned from validating iterators.
  *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U_BEHAVIOR_NEGATIVE
  * @see UnsafeUTFIterator
  * @see UnsafeUTFStringCodePoints
  * @draft ICU 78
  */
-template<typename UnitIter, typename CP32, typename = void>
+template<typename CP32, typename UnitIter, typename = void>
 class UnsafeCodeUnits {
     using Unit = typename std::iterator_traits<UnitIter>::value_type;
 public:
@@ -175,10 +175,10 @@ private:
 #ifndef U_IN_DOXYGEN
 // Partial template specialization for single-pass input iterator.
 // No UnitIter field, no getter for it, no stringView().
-template<typename UnitIter, typename CP32>
+template<typename CP32, typename UnitIter>
 class UnsafeCodeUnits<
-        UnitIter,
         CP32,
+        UnitIter,
         std::enable_if_t<
             !std::is_base_of_v<
                 std::forward_iterator_tag,
@@ -206,21 +206,21 @@ private:
  * Returned from validating Unicode string code point iterators.
  * Adds function wellFormed() to base class UnsafeCodeUnits.
  *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if U_BEHAVIOR_NEGATIVE
  * @see UTFIterator
  * @see UTFStringCodePoints
  * @draft ICU 78
  */
-template<typename UnitIter, typename CP32, typename = void>
-class CodeUnits : public UnsafeCodeUnits<UnitIter, CP32> {
+template<typename CP32, typename UnitIter, typename = void>
+class CodeUnits : public UnsafeCodeUnits<CP32, UnitIter> {
 public:
     // @internal
     CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed, UnitIter data) :
-            UnsafeCodeUnits<UnitIter, CP32>(codePoint, length, data), ok(wellFormed) {}
+            UnsafeCodeUnits<CP32, UnitIter>(codePoint, length, data), ok(wellFormed) {}
 
     CodeUnits(const CodeUnits &other) = default;
     CodeUnits &operator=(const CodeUnits &other) = default;
@@ -234,19 +234,19 @@ private:
 #ifndef U_IN_DOXYGEN
 // Partial template specialization for single-pass input iterator.
 // No UnitIter field, no getter for it, no stringView().
-template<typename UnitIter, typename CP32>
+template<typename CP32, typename UnitIter>
 class CodeUnits<
-        UnitIter,
         CP32,
+        UnitIter,
         std::enable_if_t<
             !std::is_base_of_v<
                 std::forward_iterator_tag,
                 typename std::iterator_traits<UnitIter>::iterator_category>>> :
-            public UnsafeCodeUnits<UnitIter, CP32> {
+            public UnsafeCodeUnits<CP32, UnitIter> {
 public:
     // @internal
     CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed) :
-            UnsafeCodeUnits<UnitIter, CP32>(codePoint, length), ok(wellFormed) {}
+            UnsafeCodeUnits<CP32, UnitIter>(codePoint, length), ok(wellFormed) {}
 
     CodeUnits(const CodeUnits &other) = default;
     CodeUnits &operator=(const CodeUnits &other) = default;
@@ -262,15 +262,15 @@ private:
 
 #ifndef U_IN_DOXYGEN
 // @internal
-template<typename UnitIter, typename CP32, UIllFormedBehavior behavior, typename = void>
+template<typename CP32, UIllFormedBehavior behavior, typename UnitIter, typename = void>
 class UTFImpl;
 
 // UTF-8
-template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
+template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
 class UTFImpl<
-        UnitIter,
         CP32,
         behavior,
+        UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 1>> {
     static_assert(behavior != U_BEHAVIOR_SURROGATE,
@@ -343,7 +343,7 @@ public:
         }
     }
 
-    static inline CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter limit) {
+    static inline CodeUnits<CP32, UnitIter> readAndInc(UnitIter &p, UnitIter limit) {
         // Very similar to U8_NEXT_OR_FFFD().
         UnitIter p0 = p;
         CP32 c = uint8_t(*p);
@@ -378,7 +378,7 @@ public:
         return {sub(), length, false, p0};
     }
 
-    static inline CodeUnits<UnitIter, CP32> singlePassReadAndInc(
+    static inline CodeUnits<CP32, UnitIter> singlePassReadAndInc(
             UnitIter &p, const UnitIter &limit) {
         // Very similar to U8_NEXT_OR_FFFD().
         CP32 c = uint8_t(*p);
@@ -413,7 +413,7 @@ public:
         return {sub(), length, false};
     }
 
-    static inline CodeUnits<UnitIter, CP32> decAndRead(UnitIter start, UnitIter &p) {
+    static inline CodeUnits<CP32, UnitIter> decAndRead(UnitIter start, UnitIter &p) {
         // Very similar to U8_PREV_OR_FFFD().
         CP32 c = uint8_t(*--p);
         if (U8_IS_SINGLE(c)) {
@@ -473,11 +473,11 @@ public:
 };
 
 // UTF-16
-template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
+template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
 class UTFImpl<
-        UnitIter,
         CP32,
         behavior,
+        UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 2>> {
 public:
@@ -507,7 +507,7 @@ public:
         }
     }
 
-    static inline CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter limit) {
+    static inline CodeUnits<CP32, UnitIter> readAndInc(UnitIter &p, UnitIter limit) {
         // Very similar to U16_NEXT_OR_FFFD().
         UnitIter p0 = p;
         CP32 c = *p;
@@ -526,7 +526,7 @@ public:
         }
     }
 
-    static inline CodeUnits<UnitIter, CP32> singlePassReadAndInc(
+    static inline CodeUnits<CP32, UnitIter> singlePassReadAndInc(
             UnitIter &p, const UnitIter &limit) {
         // Very similar to U16_NEXT_OR_FFFD().
         CP32 c = *p;
@@ -545,7 +545,7 @@ public:
         }
     }
 
-    static inline CodeUnits<UnitIter, CP32> decAndRead(UnitIter start, UnitIter &p) {
+    static inline CodeUnits<CP32, UnitIter> decAndRead(UnitIter start, UnitIter &p) {
         // Very similar to U16_PREV_OR_FFFD().
         CP32 c = *--p;
         if (!U16_IS_SURROGATE(c)) {
@@ -573,11 +573,11 @@ public:
 };
 
 // UTF-32: trivial, but still validating
-template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
+template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
 class UTFImpl<
-        UnitIter,
         CP32,
         behavior,
+        UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 4>> {
 public:
@@ -598,7 +598,7 @@ public:
         --p;
     }
 
-    static inline CodeUnits<UnitIter, CP32> readAndInc(UnitIter &p, UnitIter /*limit*/) {
+    static inline CodeUnits<CP32, UnitIter> readAndInc(UnitIter &p, UnitIter /*limit*/) {
         UnitIter p0 = p;
         uint32_t uc = *p;
         CP32 c = uc;
@@ -610,7 +610,7 @@ public:
         }
     }
 
-    static inline CodeUnits<UnitIter, CP32> singlePassReadAndInc(
+    static inline CodeUnits<CP32, UnitIter> singlePassReadAndInc(
             UnitIter &p, const UnitIter &/*limit*/) {
         uint32_t uc = *p;
         CP32 c = uc;
@@ -622,7 +622,7 @@ public:
         }
     }
 
-    static inline CodeUnits<UnitIter, CP32> decAndRead(UnitIter /*start*/, UnitIter &p) {
+    static inline CodeUnits<CP32, UnitIter> decAndRead(UnitIter /*start*/, UnitIter &p) {
         uint32_t uc = *--p;
         CP32 c = uc;
         if (uc < 0xd800 || (0xe000 <= uc && uc <= 0x10ffff)) {
@@ -640,14 +640,14 @@ public:
 // Non-validating implementations ----------------------------------------- ***
 
 // @internal
-template<typename UnitIter, typename CP32, typename = void>
+template<typename CP32, typename UnitIter, typename = void>
 class UnsafeUTFImpl;
 
 // UTF-8
-template<typename UnitIter, typename CP32>
+template<typename CP32, typename UnitIter>
 class UnsafeUTFImpl<
-        UnitIter,
         CP32,
+        UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 1>> {
 public:
@@ -662,7 +662,7 @@ public:
         while (U8_IS_TRAIL(*--p)) {}
     }
 
-    static inline UnsafeCodeUnits<UnitIter, CP32> readAndInc(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p) {
         // Very similar to U8_NEXT_UNSAFE().
         UnitIter p0 = p;
         CP32 c = uint8_t(*p);
@@ -692,7 +692,7 @@ public:
         }
     }
 
-    static inline UnsafeCodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
         // Very similar to U8_NEXT_UNSAFE().
         CP32 c = uint8_t(*p);
         ++p;
@@ -721,7 +721,7 @@ public:
         }
     }
 
-    static inline UnsafeCodeUnits<UnitIter, CP32> decAndRead(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
         // Very similar to U8_PREV_UNSAFE().
         CP32 c = uint8_t(*--p);
         if (U8_IS_SINGLE(c)) {
@@ -752,10 +752,10 @@ public:
 };
 
 // UTF-16
-template<typename UnitIter, typename CP32>
+template<typename CP32, typename UnitIter>
 class UnsafeUTFImpl<
-        UnitIter,
         CP32,
+        UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 2>> {
 public:
@@ -775,7 +775,7 @@ public:
         }
     }
 
-    static inline UnsafeCodeUnits<UnitIter, CP32> readAndInc(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p) {
         // Very similar to U16_NEXT_UNSAFE().
         UnitIter p0 = p;
         CP32 c = *p;
@@ -790,7 +790,7 @@ public:
         }
     }
 
-    static inline UnsafeCodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
         // Very similar to U16_NEXT_UNSAFE().
         CP32 c = *p;
         ++p;
@@ -804,7 +804,7 @@ public:
         }
     }
 
-    static inline UnsafeCodeUnits<UnitIter, CP32> decAndRead(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
         // Very similar to U16_PREV_UNSAFE().
         CP32 c = *--p;
         if (!U16_IS_TRAIL(c)) {
@@ -826,10 +826,10 @@ public:
 };
 
 // UTF-32: trivial
-template<typename UnitIter, typename CP32>
+template<typename CP32, typename UnitIter>
 class UnsafeUTFImpl<
-        UnitIter,
         CP32,
+        UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 4>> {
 public:
@@ -841,20 +841,20 @@ public:
         --p;
     }
 
-    static inline UnsafeCodeUnits<UnitIter, CP32> readAndInc(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p) {
         UnitIter p0 = p;
         CP32 c = *p;
         ++p;
         return {c, 1, p0};
     }
 
-    static inline UnsafeCodeUnits<UnitIter, CP32> singlePassReadAndInc(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
         CP32 c = *p;
         ++p;
         return {c, 1};
     }
 
-    static inline UnsafeCodeUnits<UnitIter, CP32> decAndRead(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
         CP32 c = *--p;
         return {c, 1, p};
     }
@@ -876,32 +876,32 @@ public:
  * For reverse iteration, either use this iterator directly as in <code>*--iter</code>
  * or wrap it using std::make_reverse_iterator(iter).
  *
- * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
- *     UTF-8: char or char8_t or uint8_t;
- *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam behavior How to handle ill-formed Unicode strings
+ * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @draft ICU 78
  */
-template<typename UnitIter, typename CP32, UIllFormedBehavior behavior, typename = void>
+template<typename CP32, UIllFormedBehavior behavior, typename UnitIter, typename = void>
 class UTFIterator {
-    using Impl = UTFImpl<UnitIter, CP32, behavior>;
+    using Impl = UTFImpl<CP32, behavior, UnitIter>;
 
     // Proxy type for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning CodeUnits.
     class Proxy {
     public:
-        Proxy(CodeUnits<UnitIter, CP32> &units) : units_(units) {}
-        CodeUnits<UnitIter, CP32> &operator*() { return units_; }
-        CodeUnits<UnitIter, CP32> *operator->() { return &units_; }
+        Proxy(CodeUnits<CP32, UnitIter> &units) : units_(units) {}
+        CodeUnits<CP32, UnitIter> &operator*() { return units_; }
+        CodeUnits<CP32, UnitIter> *operator->() { return &units_; }
     private:
-        CodeUnits<UnitIter, CP32> units_;
+        CodeUnits<CP32, UnitIter> units_;
     };
 
 public:
     /** C++ iterator boilerplate @internal */
-    using value_type = CodeUnits<UnitIter, CP32>;
+    using value_type = CodeUnits<CP32, UnitIter>;
     using reference = value_type;
     using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
@@ -936,7 +936,7 @@ public:
     }
     inline bool operator!=(const UTFIterator &other) const { return !operator==(other); }
 
-    inline CodeUnits<UnitIter, CP32> operator*() const {
+    inline CodeUnits<CP32, UnitIter> operator*() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_, limit_);
             state_ = 1;
@@ -1031,7 +1031,7 @@ public:
     }
 
 private:
-    friend class std::reverse_iterator<UTFIterator<UnitIter, CP32, behavior>>;
+    friend class std::reverse_iterator<UTFIterator<CP32, behavior, UnitIter>>;
 
     inline UnitIter getLogicalPosition() const {
         return state_ <= 0 ? p_ : units_.data();
@@ -1045,7 +1045,7 @@ private:
     UnitIter limit_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
-    mutable CodeUnits<UnitIter, CP32> units_;
+    mutable CodeUnits<CP32, UnitIter> units_;
     // >0: units_ = readAndInc(), p_ = units limit
     //     which means that p_ is ahead of its logical position
     //  0: initial state
@@ -1055,31 +1055,31 @@ private:
 
 #ifndef U_IN_DOXYGEN
 // Partial template specialization for single-pass input iterator.
-template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
+template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
 class UTFIterator<
-        UnitIter,
         CP32,
         behavior,
+        UnitIter,
         std::enable_if_t<
             !std::is_base_of_v<
                 std::forward_iterator_tag,
                 typename std::iterator_traits<UnitIter>::iterator_category>>> {
-    using Impl = UTFImpl<UnitIter, CP32, behavior>;
+    using Impl = UTFImpl<CP32, behavior, UnitIter>;
 
     // Proxy type for post-increment return value, to make *iter++ work.
     // Also for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning CodeUnits.
     class Proxy {
     public:
-        Proxy(CodeUnits<UnitIter, CP32> &units) : units_(units) {}
-        CodeUnits<UnitIter, CP32> &operator*() { return units_; }
-        CodeUnits<UnitIter, CP32> *operator->() { return &units_; }
+        Proxy(CodeUnits<CP32, UnitIter> &units) : units_(units) {}
+        CodeUnits<CP32, UnitIter> &operator*() { return units_; }
+        CodeUnits<CP32, UnitIter> *operator->() { return &units_; }
     private:
-        CodeUnits<UnitIter, CP32> units_;
+        CodeUnits<CP32, UnitIter> units_;
     };
 
 public:
-    using value_type = CodeUnits<UnitIter, CP32>;
+    using value_type = CodeUnits<CP32, UnitIter>;
     using reference = value_type;
     using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
@@ -1104,7 +1104,7 @@ public:
     }
     inline bool operator!=(const UTFIterator &other) const { return !operator==(other); }
 
-    inline CodeUnits<UnitIter, CP32> operator*() const {
+    inline CodeUnits<CP32, UnitIter> operator*() const {
         if (!ahead_) {
             units_ = Impl::singlePassReadAndInc(p_, limit_);
             ahead_ = true;
@@ -1149,7 +1149,7 @@ private:
     UnitIter limit_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // so that we can use a single-pass input iterator for UnitIter.
-    mutable CodeUnits<UnitIter, CP32> units_ = {0, 0, false};
+    mutable CodeUnits<CP32, UnitIter> units_ = {0, 0, false};
     // true: units_ = readAndInc(), p_ = units limit
     //     which means that p_ is ahead of its logical position
     // false: initial state
@@ -1163,10 +1163,10 @@ private:
 // Bespoke specialization of reverse_iterator.
 // The default implementation implements reverse operator*() and ++ in a way
 // that does most of the same work twice for reading variable-length sequences.
-template<typename UnitIter, typename CP32, UIllFormedBehavior behavior>
-class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UTFIterator<UnitIter, CP32, behavior>> {
-    using Impl = U_HEADER_ONLY_NAMESPACE::UTFImpl<UnitIter, CP32, behavior>;
-    using CodeUnits_ = U_HEADER_ONLY_NAMESPACE::CodeUnits<UnitIter, CP32>;
+template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
+class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter>> {
+    using Impl = U_HEADER_ONLY_NAMESPACE::UTFImpl<CP32, behavior, UnitIter>;
+    using CodeUnits_ = U_HEADER_ONLY_NAMESPACE::CodeUnits<CP32, UnitIter>;
 
     // Proxy type for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning CodeUnits.
@@ -1186,7 +1186,7 @@ public:
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::bidirectional_iterator_tag;
 
-    inline reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<UnitIter, CP32, behavior> iter) :
+    inline reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter> iter) :
             p_(iter.getLogicalPosition()), start_(iter.start_), limit_(iter.limit_),
             units_(0, 0, false, p_), unitsLimit_(p_) {}
 
@@ -1300,15 +1300,15 @@ namespace U_HEADER_ONLY_NAMESPACE {
 /**
  * A C++ "range" for validating iteration over all of the code points of a Unicode string.
  *
- * @tparam Unit Code unit type:
- *     UTF-8: char or char8_t or uint8_t;
- *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam behavior How to handle ill-formed Unicode strings
+ * @tparam Unit Code unit type:
+ *     UTF-8: char or char8_t or uint8_t;
+ *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @draft ICU 78
  */
-template<typename Unit, typename CP32, UIllFormedBehavior behavior>
+template<typename CP32, UIllFormedBehavior behavior, typename Unit>
 class UTFStringCodePoints {
 public:
     /**
@@ -1324,12 +1324,12 @@ public:
     UTFStringCodePoints &operator=(const UTFStringCodePoints &other) = default;
 
     /** @draft ICU 78 */
-    UTFIterator<const Unit *, CP32, behavior> begin() const {
+    UTFIterator<CP32, behavior, const Unit *> begin() const {
         return {s.begin(), s.begin(), s.end()};
     }
 
     /** @draft ICU 78 */
-    UTFIterator<const Unit *, CP32, behavior> end() const {
+    UTFIterator<CP32, behavior, const Unit *> end() const {
         return {s.begin(), s.end(), s.end()};
     }
 
@@ -1362,13 +1362,13 @@ private:
  * @param start start code unit iterator
  * @param p current-position code unit iterator
  * @param limit limit (exclusive-end) code unit iterator
- * @return a UTFIterator&lt;UnitIter, CP32, behavior&gt;
+ * @return a UTFIterator&lt;CP32, behavior, UnitIter&gt;
  *     for the given code unit iterators or character pointers
  * @draft ICU 78
  */
 template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
 auto utfIterator(UnitIter start, UnitIter p, UnitIter limit) {
-    return UTFIterator<UnitIter, CP32, behavior>(std::move(start), std::move(p), std::move(limit));
+    return UTFIterator<CP32, behavior, UnitIter>(std::move(start), std::move(p), std::move(limit));
 }
 
 /**
@@ -1378,13 +1378,13 @@ auto utfIterator(UnitIter start, UnitIter p, UnitIter limit) {
  * @tparam behavior How to handle ill-formed Unicode strings
  * @param p start and current-position code unit iterator
  * @param limit limit (exclusive-end) code unit iterator
- * @return a UTFIterator&lt;UnitIter, CP32, behavior&gt;
+ * @return a UTFIterator&lt;CP32, behavior, UnitIter&gt;
  *     for the given code unit iterators or character pointers
  * @draft ICU 78
  */
 template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
 auto utfIterator(UnitIter p, UnitIter limit) {
-    return UTFIterator<UnitIter, CP32, behavior>(std::move(p), std::move(limit));
+    return UTFIterator<CP32, behavior, UnitIter>(std::move(p), std::move(limit));
 }
 
 // Note: We should only enable the following factory function for a copyable UnitIter.
@@ -1399,13 +1399,13 @@ auto utfIterator(UnitIter p, UnitIter limit) {
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @tparam behavior How to handle ill-formed Unicode strings
  * @param p code unit iterator
- * @return a UTFIterator&lt;UnitIter, CP32, behavior&gt;
+ * @return a UTFIterator&lt;CP32, behavior, UnitIter&gt;
  *     for the given code unit iterator or character pointer
  * @draft ICU 78
  */
 template<typename CP32, UIllFormedBehavior behavior, typename UnitIter>
 auto utfIterator(UnitIter p) {
-    return UTFIterator<UnitIter, CP32, behavior>(std::move(p));
+    return UTFIterator<CP32, behavior, UnitIter>(std::move(p));
 }
 
 /**
@@ -1413,14 +1413,14 @@ auto utfIterator(UnitIter p) {
  *              should be signed if U_BEHAVIOR_NEGATIVE
  * @tparam behavior How to handle ill-formed Unicode strings
  * @param s input string_view
- * @return a UTFStringCodePoints&lt;Unit, CP32, behavior&gt;
+ * @return a UTFStringCodePoints&lt;CP32, behavior, Unit&gt;
  *     for the given std::basic_string_view&lt;Unit&gt;,
  *     deducing the Unit character type
  * @draft ICU 78
  */
 template<typename CP32, UIllFormedBehavior behavior, typename StringView>
 auto utfStringCodePoints(StringView s) {
-    return UTFStringCodePoints<typename StringView::value_type, CP32, behavior>(s);
+    return UTFStringCodePoints<CP32, behavior, typename StringView::value_type>(s);
 }
 
 // Non-validating iterators ------------------------------------------------ ***
@@ -1436,30 +1436,30 @@ auto utfStringCodePoints(StringView s) {
  * For reverse iteration, either use this iterator directly as in <code>*--iter</code>
  * or wrap it using std::make_reverse_iterator(iter).
  *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @tparam UnitIter An iterator (often a pointer) that returns a code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @draft ICU 78
  */
-template<typename UnitIter, typename CP32, typename = void>
+template<typename CP32, typename UnitIter, typename = void>
 class UnsafeUTFIterator {
-    using Impl = UnsafeUTFImpl<UnitIter, CP32>;
+    using Impl = UnsafeUTFImpl<CP32, UnitIter>;
 
     // Proxy type for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning UnsafeCodeUnits.
     class Proxy {
     public:
-        Proxy(UnsafeCodeUnits<UnitIter, CP32> &units) : units_(units) {}
-        UnsafeCodeUnits<UnitIter, CP32> &operator*() { return units_; }
-        UnsafeCodeUnits<UnitIter, CP32> *operator->() { return &units_; }
+        Proxy(UnsafeCodeUnits<CP32, UnitIter> &units) : units_(units) {}
+        UnsafeCodeUnits<CP32, UnitIter> &operator*() { return units_; }
+        UnsafeCodeUnits<CP32, UnitIter> *operator->() { return &units_; }
     private:
-        UnsafeCodeUnits<UnitIter, CP32> units_;
+        UnsafeCodeUnits<CP32, UnitIter> units_;
     };
 
 public:
     /** C++ iterator boilerplate @internal */
-    using value_type = UnsafeCodeUnits<UnitIter, CP32>;
+    using value_type = UnsafeCodeUnits<CP32, UnitIter>;
     using reference = value_type;
     using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
@@ -1483,7 +1483,7 @@ public:
     }
     inline bool operator!=(const UnsafeUTFIterator &other) const { return !operator==(other); }
 
-    inline UnsafeCodeUnits<UnitIter, CP32> operator*() const {
+    inline UnsafeCodeUnits<CP32, UnitIter> operator*() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_);
             state_ = 1;
@@ -1578,7 +1578,7 @@ public:
     }
 
 private:
-    friend class std::reverse_iterator<UnsafeUTFIterator<UnitIter, CP32>>;
+    friend class std::reverse_iterator<UnsafeUTFIterator<CP32, UnitIter>>;
 
     inline UnitIter getLogicalPosition() const {
         return state_ <= 0 ? p_ : units_.data();
@@ -1588,7 +1588,7 @@ private:
     mutable UnitIter p_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
-    mutable UnsafeCodeUnits<UnitIter, CP32> units_;
+    mutable UnsafeCodeUnits<CP32, UnitIter> units_;
     // >0: units_ = readAndInc(), p_ = units limit
     //     which means that p_ is ahead of its logical position
     //  0: initial state
@@ -1598,30 +1598,30 @@ private:
 
 #ifndef U_IN_DOXYGEN
 // Partial template specialization for single-pass input iterator.
-template<typename UnitIter, typename CP32>
+template<typename CP32, typename UnitIter>
 class UnsafeUTFIterator<
-        UnitIter,
         CP32,
+        UnitIter,
         std::enable_if_t<
             !std::is_base_of_v<
                 std::forward_iterator_tag,
                 typename std::iterator_traits<UnitIter>::iterator_category>>> {
-    using Impl = UnsafeUTFImpl<UnitIter, CP32>;
+    using Impl = UnsafeUTFImpl<CP32, UnitIter>;
 
     // Proxy type for post-increment return value, to make *iter++ work.
     // Also for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning UnsafeCodeUnits.
     class Proxy {
     public:
-        Proxy(UnsafeCodeUnits<UnitIter, CP32> &units) : units_(units) {}
-        UnsafeCodeUnits<UnitIter, CP32> &operator*() { return units_; }
-        UnsafeCodeUnits<UnitIter, CP32> *operator->() { return &units_; }
+        Proxy(UnsafeCodeUnits<CP32, UnitIter> &units) : units_(units) {}
+        UnsafeCodeUnits<CP32, UnitIter> &operator*() { return units_; }
+        UnsafeCodeUnits<CP32, UnitIter> *operator->() { return &units_; }
     private:
-        UnsafeCodeUnits<UnitIter, CP32> units_;
+        UnsafeCodeUnits<CP32, UnitIter> units_;
     };
 
 public:
-    using value_type = UnsafeCodeUnits<UnitIter, CP32>;
+    using value_type = UnsafeCodeUnits<CP32, UnitIter>;
     using reference = value_type;
     using pointer = Proxy;
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
@@ -1642,7 +1642,7 @@ public:
     }
     inline bool operator!=(const UnsafeUTFIterator &other) const { return !operator==(other); }
 
-    inline UnsafeCodeUnits<UnitIter, CP32> operator*() const {
+    inline UnsafeCodeUnits<CP32, UnitIter> operator*() const {
         if (!ahead_) {
             units_ = Impl::singlePassReadAndInc(p_);
             ahead_ = true;
@@ -1684,7 +1684,7 @@ private:
     mutable UnitIter p_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // so that we can use a single-pass input iterator for UnitIter.
-    mutable UnsafeCodeUnits<UnitIter, CP32> units_ = {0, 0, false};
+    mutable UnsafeCodeUnits<CP32, UnitIter> units_ = {0, 0, false};
     // true: units_ = readAndInc(), p_ = units limit
     //     which means that p_ is ahead of its logical position
     // false: initial state
@@ -1698,10 +1698,10 @@ private:
 // Bespoke specialization of reverse_iterator.
 // The default implementation implements reverse operator*() and ++ in a way
 // that does most of the same work twice for reading variable-length sequences.
-template<typename UnitIter, typename CP32>
-class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<UnitIter, CP32>> {
-    using Impl = U_HEADER_ONLY_NAMESPACE::UnsafeUTFImpl<UnitIter, CP32>;
-    using UnsafeCodeUnits_ = U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits<UnitIter, CP32>;
+template<typename CP32, typename UnitIter>
+class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter>> {
+    using Impl = U_HEADER_ONLY_NAMESPACE::UnsafeUTFImpl<CP32, UnitIter>;
+    using UnsafeCodeUnits_ = U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits<CP32, UnitIter>;
 
     // Proxy type for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning UnsafeCodeUnits.
@@ -1721,7 +1721,7 @@ public:
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::bidirectional_iterator_tag;
 
-    inline reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<UnitIter, CP32> iter) :
+    inline reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter> iter) :
             p_(iter.getLogicalPosition()), units_(0, 0, p_), unitsLimit_(p_) {}
 
     inline reverse_iterator(reverse_iterator &&src) noexcept = default;
@@ -1831,13 +1831,13 @@ namespace U_HEADER_ONLY_NAMESPACE {
  * A C++ "range" for non-validating iteration over all of the code points of a Unicode string.
  * The string must be well-formed.
  *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @tparam Unit Code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @draft ICU 78
  */
-template<typename Unit, typename CP32>
+template<typename CP32, typename Unit>
 class UnsafeUTFStringCodePoints {
 public:
     /**
@@ -1853,12 +1853,12 @@ public:
     UnsafeUTFStringCodePoints &operator=(const UnsafeUTFStringCodePoints &other) = default;
 
     /** @draft ICU 78 */
-    UnsafeUTFIterator<const Unit *, CP32> begin() const {
+    UnsafeUTFIterator<CP32, const Unit *> begin() const {
         return {s.begin()};
     }
 
     /** @draft ICU 78 */
-    UnsafeUTFIterator<const Unit *, CP32> end() const {
+    UnsafeUTFIterator<CP32, const Unit *> end() const {
         return {s.end()};
     }
 
@@ -1885,26 +1885,26 @@ private:
 /**
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @param iter code unit iterator
- * @return an UnsafeUTFIterator&lt;UnitIter, CP32&gt;
+ * @return an UnsafeUTFIterator&lt;CP32, UnitIter&gt;
  *     for the given code unit iterator or character pointer
  * @draft ICU 78
  */
 template<typename CP32, typename UnitIter>
 auto unsafeUTFIterator(UnitIter iter) {
-    return UnsafeUTFIterator<UnitIter, CP32>(std::move(iter));
+    return UnsafeUTFIterator<CP32, UnitIter>(std::move(iter));
 }
 
 /**
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @param s input string_view
- * @return an UnsafeUTFStringCodePoints&lt;Unit, CP32&gt;
+ * @return an UnsafeUTFStringCodePoints&lt;CP32, Unit&gt;
  *     for the given std::basic_string_view&lt;Unit&gt;,
  *     deducing the Unit character type
  * @draft ICU 78
  */
 template<typename CP32, typename StringView>
 auto unsafeUTFStringCodePoints(StringView s) {
-    return UnsafeUTFStringCodePoints<typename StringView::value_type, CP32>(s);
+    return UnsafeUTFStringCodePoints<CP32, typename StringView::value_type>(s);
 }
 
 // ------------------------------------------------------------------------- ***
