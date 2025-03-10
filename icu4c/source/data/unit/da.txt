@@ -2444,9 +2444,9 @@ da{
         }
         pressure{
             inch-ofhg{
-                dnam{"# Hg"}
-                one{"{0} # Hg"}
-                other{"{0} # Hg"}
+                dnam{"″ Hg"}
+                one{"{0} ″ Hg"}
+                other{"{0} ″ Hg"}
             }
             millimeter-ofhg{
                 dnam{"mmHg"}

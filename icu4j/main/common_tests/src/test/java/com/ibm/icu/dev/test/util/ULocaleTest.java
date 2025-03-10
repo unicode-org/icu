@@ -5723,13 +5723,9 @@ public class ULocaleTest extends CoreTestFmwk {
             assertEquals("addLikelySubtags(" + test.source + ") should be unchanged",
                 l, ULocale.addLikelySubtags(l));
         } else {
-            if (test.source.equals("und-Latn-RS")
-                && logKnownIssue("ICU-23052", "addLikelySubtags(und-Latn-RS) bug") ) {
-              return;
-                }
-              assertEquals("addLikelySubtags(" + test.source + ")",
-                  test.addLikely, ULocale.addLikelySubtags(l).toLanguageTag());
-              }
+            assertEquals("addLikelySubtags(" + test.source + ")",
+                test.addLikely, ULocale.addLikelySubtags(l).toLanguageTag());
+        }
         if (test.removeFavorRegion.equals("FAIL")) {
             assertEquals("minimizeSubtags(" + test.source + ") should be unchanged",
                 l, ULocale.minimizeSubtags(l));
