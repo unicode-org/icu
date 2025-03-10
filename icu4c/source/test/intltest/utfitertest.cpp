@@ -31,6 +31,7 @@ using U_HEADER_ONLY_NAMESPACE::unsafeUTFIterator;
 using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
 
 int32_t rangeLoop16(std::u16string_view s) {
+    // We are just adding up the code points for minimal-code demonstration purposes.
     int32_t sum = 0;
     for (auto units : utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s)) {
         sum += units.codePoint();  // < 0 if ill-formed
@@ -63,6 +64,11 @@ int32_t reverseLoop8(std::string_view s) {
         sum += iter->codePoint();  // U+FFFD if ill-formed
     }
     return sum;
+}
+
+int32_t countCodePoints16(std::u16string_view s) {
+    auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_SURROGATE>(s);
+    return std::distance(range.begin(), range.end());
 }
 
 int32_t unsafeRangeLoop16(std::u16string_view s) {
