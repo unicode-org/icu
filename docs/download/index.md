@@ -14,25 +14,22 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 If you want to use ICU (as opposed to developing it), it is recommended that you download an official packaged version of the ICU source code. These versions are tested more thoroughly than day-to-day development builds of the system, and they are packaged in zip and tar files for convenient download. Here are several recent releases of ICU that are available:
 
-## Release Candidate
+## Latest Release
 
-***2025-02-21: ICU 77rc is now available.***
-It updates to [CLDR 47](https://cldr.unicode.org/downloads/cldr-47)
+***2025-03-13: ICU 77 is now available*** —
+[releases/tag/release-77-1](https://github.com/unicode-org/icu/releases/tag/release-77-1) —
+[Maven: com.ibm.icu / icu4j / version 77.1](https://mvnrepository.com/artifact/com.ibm.icu/icu4j/77.1)
+
+[ICU 77](77.md) updates to [CLDR 47](https://cldr.unicode.org/downloads/cldr-47)
 locale data with new locales, and various additions and corrections.
 
 ICU 77 is mostly focused on bug fixes, segmentation conformance, and other refinements.
 The technology preview implementations of the CLDR MessageFormat 2.0 specification have been updated to incorporate some, but not yet all, of the CLDR 47 changes. (Java more than C++)
 
-See [ICU 77](77.md).
-
-## Latest Release
-
-***2024-10-24: ICU 76 is now available.***
-It updates to [Unicode 16](https://www.unicode.org/versions/Unicode16.0.0/) ([blog](https://blog.unicode.org/2024/09/announcing-unicode-standard-version-160.html)), including new characters and scripts, emoji, collation & IDNA changes, and corresponding APIs and implementations. It also updates to [CLDR 46](https://cldr.unicode.org/downloads/cldr-46) ([beta blog](https://blog.unicode.org/2024/09/unicode-cldr-46-beta-available-for.html)) locale data with new locales, significant updates to existing locales, and various additions and corrections. For example, the CLDR and Unicode default sort orders are now very nearly the same.
-
-Most of the java.time (Temporal) types can now be formatted directly. There are some new APIs to make ICU easier to use with modern C++ and Java patterns. The Java and C++ technology preview implementations of the CLDR MessageFormat 2.0 specification have been updated to match recent changes. See [ICU 76](76.md).
-
 ## Previous Releases
+
+- 2024-10-24: **ICU 76** updates to [Unicode 16](https://www.unicode.org/versions/Unicode16.0.0/) ([blog](https://blog.unicode.org/2024/09/announcing-unicode-standard-version-160.html)), including new characters and scripts, emoji, collation & IDNA changes, and corresponding APIs and implementations. It also updates to [CLDR 46](https://cldr.unicode.org/downloads/cldr-46) ([beta blog](https://blog.unicode.org/2024/09/unicode-cldr-46-beta-available-for.html)) locale data with new locales, significant updates to existing locales, and various additions and corrections. For example, the CLDR and Unicode default sort orders are now very nearly the same.
+  - Most of the java.time (Temporal) types can now be formatted directly. There are some new APIs to make ICU easier to use with modern C++ and Java patterns. The Java and C++ technology preview implementations of the CLDR MessageFormat 2.0 specification have been updated to match recent changes. See [ICU 76](76.md).
 
 - 2024-04-17: **ICU 75** updates to [CLDR 45](https://cldr.unicode.org/index/downloads/cldr-45) ([beta blog](https://blog.unicode.org/2024/04/unicode-cldr-v45-beta-available-for.html)) locale data with new locales and various additions and corrections. C++ code now requires C++17 and is being made more robust. The CLDR MessageFormat 2.0 specification is now in [technology preview](https://github.com/unicode-org/message-format-wg?tab=readme-ov-file#messageformat-2-technical-preview), together with a corresponding update of the ICU4J (Java) tech preview and a new ICU4C (C++) tech preview. See [Downloading ICU &gt; ICU 75](https://icu.unicode.org/download/75).
 
