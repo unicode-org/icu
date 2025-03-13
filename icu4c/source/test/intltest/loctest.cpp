@@ -5923,11 +5923,6 @@ testLikelySubtagsLineFn(void *context,
         return;
     }
 
-    if ((uprv_strcmp(source.c_str(), "und-Latn-RS") == 0 )
-        && THIS->logKnownIssue("ICU-22976", "unexpected likely subtags for und-Latn-RS")) {
-      return;
-    }
-
     Locale actualMax(l);
     actualMax.addLikelySubtags(*pErrorCode);
     if (addLikely == "FAIL") {
