@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1741644640311,
+  "lastUpdate": 1741888321126,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -64095,6 +64095,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16566901.3422,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "c5b7dce96bda17e7e229b2dfdc575421633566c2",
+          "message": "ICU-23073 Use string_view constants for option names and formatter names",
+          "timestamp": "2025-03-13T10:21:46-07:00",
+          "tree_id": "ca07ee4491fd122959a9ec512e418762171a7df5",
+          "url": "https://github.com/unicode-org/icu/commit/c5b7dce96bda17e7e229b2dfdc575421633566c2"
+        },
+        "date": 1741888074309,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 318.0152,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 35150121.4418,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 14836264.284,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 34931110.3821,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16328896.6815,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
