@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1741644183213,
+  "lastUpdate": 1741888117620,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -49893,6 +49893,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.9408,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "c5b7dce96bda17e7e229b2dfdc575421633566c2",
+          "message": "ICU-23073 Use string_view constants for option names and formatter names",
+          "timestamp": "2025-03-13T10:21:46-07:00",
+          "tree_id": "ca07ee4491fd122959a9ec512e418762171a7df5",
+          "url": "https://github.com/unicode-org/icu/commit/c5b7dce96bda17e7e229b2dfdc575421633566c2"
+        },
+        "date": 1741887869871,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.3178,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.0219,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.9382,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
