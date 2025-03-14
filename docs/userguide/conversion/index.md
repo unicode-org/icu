@@ -129,7 +129,7 @@ Unicode.
         date.
 
     5.  ICU's default build includes about 200 conversion tables. See the [ICU
-        Data](../icudata.md) chapter for how to add or remove conversion tables
+        Data](../icu_data/index.md) chapter for how to add or remove conversion tables
         and other data.
 
     6.  In ICU, you can (and should) also use APIs that map a charset name
