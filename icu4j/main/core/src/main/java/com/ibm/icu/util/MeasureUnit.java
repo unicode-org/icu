@@ -44,14 +44,15 @@ public class MeasureUnit implements Serializable {
     private static final long serialVersionUID = -1839973855554750484L;
 
     // Cache of MeasureUnits.
-    // All access to the cache or cacheIsPopulated flag must be synchronized on class MeasureUnit,
+    // All access to the cache or cacheIsPopulated flag must be synchronized on
+    // class MeasureUnit,
     // i.e. from synchronized static methods. Beware of non-static methods.
-    private static final Map<String, Map<String,MeasureUnit>> cache
-        = new HashMap<>();
+    private static final Map<String, Map<String, MeasureUnit>> cache = new HashMap<>();
     private static boolean cacheIsPopulated = false;
 
     /**
      * If type set to null, measureUnitImpl is in use instead of type and subType.
+     * 
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -59,7 +60,9 @@ public class MeasureUnit implements Serializable {
     protected final String type;
 
     /**
-     * If subType set to null, measureUnitImpl is in use instead of type and subType.
+     * If subType set to null, measureUnitImpl is in use instead of type and
+     * subType.
+     * 
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -76,14 +79,18 @@ public class MeasureUnit implements Serializable {
     /**
      * Enumeration for unit complexity. There are three levels:
      * <ul>
-     * <li>SINGLE: A single unit, optionally with a power and/or SI or binary prefix.
+     * <li>SINGLE: A single unit, optionally with a power and/or SI or binary
+     * prefix.
      * Examples: hectare, square-kilometer, kilojoule, per-second, mebibyte.</li>
-     * <li>COMPOUND: A unit composed of the product of multiple single units. Examples:
+     * <li>COMPOUND: A unit composed of the product of multiple single units.
+     * Examples:
      * meter-per-second, kilowatt-hour, kilogram-meter-per-square-second.</li>
-     * <li>MIXED: A unit composed of the sum of multiple single units. Examples: foot-and-inch,
+     * <li>MIXED: A unit composed of the sum of multiple single units. Examples:
+     * foot-and-inch,
      * hour-and-minute-and-second, degree-and-arcminute-and-arcsecond.</li>
      * </ul>
-     * The complexity determines which operations are available. For example, you cannot set the power
+     * The complexity determines which operations are available. For example, you
+     * cannot set the power
      * or prefix of a compound unit.
      *
      * @stable ICU 68
@@ -121,14 +128,14 @@ public class MeasureUnit implements Serializable {
         /**
          * SI prefix: quetta, 10^30.
          *
-         * @draft ICU 75
+         * @stable ICU 75
          */
         QUETTA(30, "quetta", 10),
 
         /**
          * SI prefix: ronna, 10^27.
          *
-         * @draft ICU 75
+         * @stable ICU 75
          */
         RONNA(27, "ronna", 10),
 
@@ -282,14 +289,14 @@ public class MeasureUnit implements Serializable {
         /**
          * SI prefix: ronto, 10^-27.
          *
-         * @draft ICU 75
+         * @stable ICU 75
          */
         RONTO(-27, "ronto", 10),
 
         /**
          * SI prefix: quecto, 10^-30.
          *
-         * @draft ICU 75
+         * @stable ICU 75
          */
         QUECTO(-30, "quecto", 10),
 
@@ -404,18 +411,23 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
-     * Construct a MeasureUnit from a CLDR Core Unit Identifier, defined in UTS
-     * 35. (Core unit identifiers and mixed unit identifiers are supported, long
-     * unit identifiers are not.) Validates and canonicalizes the identifier.
+     * Constructs a MeasureUnit from a CLDR Core Unit Identifier, as defined in UTS
+     * 35.
+     * This method supports core unit identifiers and mixed unit identifiers.
+     * It validates and canonicalizes the given identifier.
      *
-     * Note: dimensionless <code>MeasureUnit</code> is <code>null</code>
+     * Note: A dimensionless <code>MeasureUnit</code> is represented as
+     * <code>null</code>.
      *
+     * Example usage:
+     * 
      * <pre>
-     * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond")
+     * MeasureUnit example = MeasureUnit.forIdentifier("meter-per-second);
      * </pre>
      *
-     * @param identifier CLDR Unit Identifier
-     * @throws IllegalArgumentException if the identifier is invalid.
+     * @param identifier the CLDR Unit Identifier
+     * @return the corresponding MeasureUnit
+     * @throws IllegalArgumentException if the identifier is invalid
      * @stable ICU 68
      */
     public static MeasureUnit forIdentifier(String identifier) {
@@ -448,8 +460,6 @@ public class MeasureUnit implements Serializable {
         this.measureUnitImpl = measureUnitImpl.copy();
     }
 
-
-
     /**
      * Get the type, such as "length". May return null.
      *
@@ -458,7 +468,6 @@ public class MeasureUnit implements Serializable {
     public String getType() {
         return type;
     }
-
 
     /**
      * Get the subType, such as “foot”. May return null.
@@ -495,18 +504,21 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
-     * Creates a MeasureUnit which is this SINGLE unit augmented with the specified prefix.
+     * Creates a MeasureUnit which is this SINGLE unit augmented with the specified
+     * prefix.
      * For example, MeasurePrefix.KILO for "kilo", or MeasurePrefix.KIBI for "kibi".
      * May return {@code this} if this unit already has that prefix.
      * <p>
      * There is sufficient locale data to format all standard prefixes.
      * <p>
-     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an
+     * error will
      * occur. For more information, {@link Complexity}.
      *
      * @param prefix The prefix, from MeasurePrefix.
      * @return A new SINGLE unit.
-     * @throws UnsupportedOperationException if this unit is a COMPOUND or MIXED unit.
+     * @throws UnsupportedOperationException if this unit is a COMPOUND or MIXED
+     *                                       unit.
      * @stable ICU 69
      */
     public MeasureUnit withPrefix(MeasurePrefix prefix) {
@@ -531,10 +543,84 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
-     * Returns the dimensionality (power) of this MeasureUnit. For example, if the unit is square,
+     * Creates a new MeasureUnit with a specified constant denominator.
+     * <p>
+     * This method is applicable only to COMPOUND &amp; SINGLE units. If invoked on a
+     * MIXED unit, an exception will be thrown.
+     * For further details, refer to {@link Complexity}.
+     * <p>
+     * 
+     * NOTE: If the constant denominator is set to 0, it means that you are removing
+     * the constant denominator.
+     *
+     *
+     * @param denominator The constant denominator to set.
+     * @return A new MeasureUnit with the specified constant denominator.
+     * @throws UnsupportedOperationException if the unit is not a COMPOUND unit.
+     * @draft ICU 77
+     */
+    public MeasureUnit withConstantDenominator(long denominator) {
+        if (denominator < 0) {
+            throw new IllegalArgumentException("Denominator cannot be negative");
+        }
+
+        if (this.getComplexity() != Complexity.COMPOUND && this.getComplexity() != Complexity.SINGLE) {
+            throw new UnsupportedOperationException(
+                    "Constant denominator can only be applied to COMPOUND & SINGLE units");
+        }
+
+        MeasureUnitImpl measureUnitImpl = getCopyOfMeasureUnitImpl();
+        measureUnitImpl.setConstantDenominator(denominator);
+
+        measureUnitImpl.setComplexity(denominator == 0 && measureUnitImpl.getSingleUnits().size() < 2
+                ? Complexity.SINGLE
+                : Complexity.COMPOUND);
+
+        return measureUnitImpl.build();
+    }
+
+    /**
+     * Retrieves the constant denominator for this COMPOUND unit.
+     * <p>
+     * Examples:
+     * <ul>
+     * <li>For the unit "liter-per-1000-kiloliter", the constant denominator is
+     * 1000.</li>
+     * <li>For the unit "liter-per-kilometer", the constant denominator is
+     * zero.</li>
+     * </ul>
+     * <p>
+     * This method is applicable only to COMPOUND &amp; SINGLE units. If invoked on a
+     * MIXED unit, an exception will be thrown.
+     * For further details, refer to {@link Complexity}.
+     * <p>
+     * 
+     * NOTE: If no constant denominator exists, the method returns 0.
+     *
+     * @return The value of the constant denominator.
+     * @throws UnsupportedOperationException if the unit is not a COMPOUND unit.
+     * @draft ICU 77
+     */
+    public long getConstantDenominator() {
+        if (this.getComplexity() != Complexity.COMPOUND && this.getComplexity() != Complexity.SINGLE) {
+            throw new UnsupportedOperationException(
+                    "Constant denominator is only supported for COMPOUND & SINGLE units");
+        }
+
+        if (this.measureUnitImpl == null) {
+            return 0;
+        }
+
+        return this.measureUnitImpl.getConstantDenominator();
+    }
+
+    /**
+     * Returns the dimensionality (power) of this MeasureUnit. For example, if the
+     * unit is square,
      * then 2 is returned.
      * <p>
-     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an exception will be thrown.
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an
+     * exception will be thrown.
      * For more information, {@link Complexity}.
      *
      * @return The dimensionality (power) of this simple unit.
@@ -546,10 +632,12 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
-     * Creates a MeasureUnit which is this SINGLE unit augmented with the specified dimensionality
+     * Creates a MeasureUnit which is this SINGLE unit augmented with the specified
+     * dimensionality
      * (power). For example, if dimensionality is 2, the unit will be squared.
      * <p>
-     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an exception is thrown.
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an
+     * exception is thrown.
      * For more information, {@link Complexity}.
      *
      * @param dimensionality The dimensionality (power).
@@ -564,33 +652,47 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
-     * Computes the reciprocal of this MeasureUnit, with the numerator and denominator flipped.
+     * Computes the reciprocal of this MeasureUnit, with the numerator and
+     * denominator flipped.
      * <p>
-     * For example, if the receiver is "meter-per-second", the unit "second-per-meter" is returned.
+     * For example, if the receiver is "meter-per-second", the unit
+     * "second-per-meter" is returned.
      * <p>
-     * NOTE: Only works on SINGLE and COMPOUND units. If this is a MIXED unit, an error will
+     * NOTE: Only works on SINGLE and COMPOUND units. If this is a MIXED unit, an
+     * error will
      * occur. For more information, {@link Complexity}.
      *
+     * <p>
+     * NOTE: An exception will be thrown for units that have a constant denominator.
+     *
      * @return The reciprocal of the target unit.
-     * @throws UnsupportedOperationException if the unit is MIXED.
+     * @throws UnsupportedOperationException if the unit is MIXED or has a constant
+     *                                       denominator.
      * @stable ICU 68
      */
     public MeasureUnit reciprocal() {
+        if (this.getComplexity() == Complexity.COMPOUND && this.getConstantDenominator() != 0) {
+            throw new UnsupportedOperationException("Cannot take reciprocal of a unit with a constant denominator");
+        }
+
         MeasureUnitImpl measureUnit = getCopyOfMeasureUnitImpl();
         measureUnit.takeReciprocal();
         return measureUnit.build();
     }
 
     /**
-     * Computes the product of this unit with another unit. This is a way to build units from
+     * Computes the product of this unit with another unit. This is a way to build
+     * units from
      * constituent parts.
      * <p>
      * The numerator and denominator are preserved through this operation.
      * <p>
-     * For example, if the receiver is "kilowatt" and the argument is "hour-per-day", then the
+     * For example, if the receiver is "kilowatt" and the argument is
+     * "hour-per-day", then the
      * unit "kilowatt-hour-per-day" is returned.
      * <p>
-     * NOTE: Only works on SINGLE and COMPOUND units. If either unit (receivee and argument) is a
+     * NOTE: Only works on SINGLE and COMPOUND units. If either unit (receivee and
+     * argument) is a
      * MIXED unit, an error will occur. For more information, {@link Complexity}.
      *
      * @param other The MeasureUnit to multiply with the target.
@@ -610,16 +712,33 @@ public class MeasureUnit implements Serializable {
             throw new UnsupportedOperationException();
         }
 
-        for (SingleUnitImpl singleUnit :
-                otherImplRef.getSingleUnits()) {
+        for (SingleUnitImpl singleUnit : otherImplRef.getSingleUnits()) {
             implCopy.appendSingleUnit(singleUnit);
         }
+
+        long thisConstantDenominator = this.getConstantDenominator();
+        long otherConstantDenominator = other.getConstantDenominator();
+
+        // TODO: we can also multiply the constant denominators instead of throwing an
+        // exception.
+        if (thisConstantDenominator != 0 && otherConstantDenominator != 0) {
+            // There is only `one` constant denominator in a compound unit.
+            // Therefore, we cannot multiply units that both of them have a constant
+            // denominator.
+            throw new UnsupportedOperationException(
+                    "Cannot multiply units that both of them have a constant denominator");
+        }
+
+        // Because either one of the constant denominators is zero, we can use the
+        // maximum of them.
+        implCopy.setConstantDenominator(Math.max(thisConstantDenominator, otherConstantDenominator));
 
         return implCopy.build();
     }
 
     /**
-     * Returns the list of SINGLE units contained within a sequence of COMPOUND units.
+     * Returns the list of SINGLE units contained within a sequence of COMPOUND
+     * units.
      * <p>
      * Examples:
      * - Given "meter-kilogram-per-second", three units will be returned: "meter",
@@ -628,13 +747,18 @@ public class MeasureUnit implements Serializable {
      * and "second".
      * <p>
      * If this is a SINGLE unit, a list of length 1 will be returned.
-     *
+     * 
+     * <p>
+     * NOTE: For units with a constant denominator, the returned single units will
+     * not include the constant denominator.
+     * To obtain the constant denominator, retrieve it from the original unit.
+     * <p>
+     * 
      * @return An unmodifiable list of single units
      * @stable ICU 68
      */
     public List<MeasureUnit> splitToSingleUnits() {
-        final ArrayList<SingleUnitImpl> singleUnits =
-            getMaybeReferenceOfMeasureUnitImpl().getSingleUnits();
+        final ArrayList<SingleUnitImpl> singleUnits = getMaybeReferenceOfMeasureUnitImpl().getSingleUnits();
         List<MeasureUnit> result = new ArrayList<>(singleUnits.size());
         for (SingleUnitImpl singleUnit : singleUnits) {
             result.add(singleUnit.build());
@@ -693,6 +817,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * For the given type, return the available units.
+     * 
      * @param type the type
      * @return the available units for type. Returned set is unmodifiable.
      * @stable ICU 53
@@ -725,9 +850,11 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
-     * Creates a MeasureUnit instance (creates a singleton instance) or returns one from the cache.
+     * Creates a MeasureUnit instance (creates a singleton instance) or returns one
+     * from the cache.
      * <p>
-     * Normally this method should not be used, since there will be no formatting data
+     * Normally this method should not be used, since there will be no formatting
+     * data
      * available for it, and it may not be returned by getAvailable().
      * However, for special purposes (such as CLDR tooling), it is available.
      *
@@ -804,7 +931,7 @@ public class MeasureUnit implements Serializable {
     static Factory TIMEUNIT_FACTORY = new Factory() {
         @Override
         public MeasureUnit create(String type, String subType) {
-           return new TimeUnit(type, subType);
+            return new TimeUnit(type, subType);
         }
     };
 
@@ -816,7 +943,8 @@ public class MeasureUnit implements Serializable {
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
             UResource.Table unitTypesTable = value.getTable();
             for (int i2 = 0; unitTypesTable.getKeyAndValue(i2, key, value); ++i2) {
-                // Skip "compound" and "coordinate" since they are treated differently from the other units
+                // Skip "compound" and "coordinate" since they are treated differently from the
+                // other units
                 if (key.contentEquals("compound") || key.contentEquals("coordinate")) {
                     continue;
                 }
@@ -849,7 +977,8 @@ public class MeasureUnit implements Serializable {
      * Population is done lazily, in response to MeasureUnit.getAvailable()
      * or other API that expects to see all of the MeasureUnits.
      *
-     * <p>At static initialization time the MeasureUnits cache is populated
+     * <p>
+     * At static initialization time the MeasureUnits cache is populated
      * with public static instances (G_FORCE, METER_PER_SECOND_SQUARED, etc.) only.
      * Adding of others is deferred until later to avoid circular static init
      * dependencies with classes Currency and TimeUnit.
@@ -1080,6 +1209,12 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 64
      */
     public static final MeasureUnit PERMYRIAD = MeasureUnit.internalGetInstance("concentr", "permyriad");
+
+    /**
+     * Constant for unit of concentr: portion-per-1e9
+     * @draft ICU 77
+     */
+    public static final MeasureUnit PORTION_PER_1E9 = MeasureUnit.internalGetInstance("concentr", "portion-per-1e9");
 
     /**
      * Constant for unit of consumption: liter-per-100-kilometer

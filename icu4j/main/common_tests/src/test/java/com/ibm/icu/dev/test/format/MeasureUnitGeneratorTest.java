@@ -264,6 +264,9 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         {"TONNE", "72"},
         {"BEAUFORT", "73"},
         {"GASOLINE_ENERGY_DENSITY", "74"},
+        {"PORTION_PER_1E9", "77"},
+        {"NIGHT", "77"},
+        {"LIGHT_SPEED", "77"},
     };
 
     private static final HashMap<String, String> JAVA_VERSION_MAP = new HashMap<>();

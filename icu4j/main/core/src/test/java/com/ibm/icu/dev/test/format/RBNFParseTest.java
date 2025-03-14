@@ -166,6 +166,18 @@ public class RBNFParseTest extends CoreTestFmwk {
     }
 
     @Test
+    public void TestParseRuleDescriptorOverflow23002() {
+        try {
+            RuleBasedNumberFormat rbnf =
+                new RuleBasedNumberFormat(
+                    "0110110/300113001103000113001103000110i/3013033:",
+                    new Locale("as"));
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        errln("expected exception but didn't get one!");
+    }
+    @Test
     public void TestBadParse() {
         RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(Locale.JAPAN, RuleBasedNumberFormat.SPELLOUT);
         String[] testData = {

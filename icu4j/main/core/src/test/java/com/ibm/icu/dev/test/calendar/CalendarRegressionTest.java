@@ -2718,5 +2718,33 @@ public class CalendarRegressionTest extends CoreTestFmwk {
 
     }
 
+    @Test
+    public void TestMaxActualLimitsWithoutGet23006() {
+        Calendar calendar = Calendar.getInstance(new Locale("zh_zh@calendar=chinese"));
+        // set day equal to 8th August 2025 in Gregorian calendar
+        // this is a leap month in Chinese calendar
+        GregorianCalendar gc = new GregorianCalendar(TimeZone.GMT_ZONE);
+        gc.clear();
+        gc.set(2025, Calendar.AUGUST, 8);
+        calendar.setTimeInMillis(gc.getTimeInMillis());
+        int actualMaximumBeforeCallingGet = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        assertTrue("get(ERA)", calendar.get(Calendar.ERA) > 0); // calling get will cause to compute fields
+        int actualMaximumAfterCallingGet = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        assertEquals("calling getActualMaximum before/after calling get should be the same",
+            actualMaximumBeforeCallingGet, actualMaximumAfterCallingGet);
+        assertEquals("calling getActualMaximum before should return 29",
+            29, actualMaximumBeforeCallingGet);
+
+        gc.set(2026, Calendar.AUGUST, 8);
+        calendar.setTimeInMillis(gc.getTimeInMillis());
+        actualMaximumBeforeCallingGet = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        assertTrue("get(ERA)", calendar.get(Calendar.ERA) > 0); // calling get will cause to compute fields
+        actualMaximumAfterCallingGet = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        assertEquals("calling getActualMaximum before/after calling get should be the same",
+            actualMaximumBeforeCallingGet, actualMaximumAfterCallingGet);
+        assertEquals("calling getActualMaximum before should return 30",
+            30, actualMaximumBeforeCallingGet);
+
+    }
 }
 //eof

@@ -5,29 +5,14 @@
     "locale": "en-US"
   },
   "tests": [
-    { "src": ".match {one :string} {bar :string} one * {{one}} * * {{other}}",
-      "exp": "one" },
-    { "src": ".match {foo :string} {bar :string}one * {{one}} * * {{other}}",
-      "exp": "other"
-    },
-    { "src": ".match {foo :string}{bar :string} one * {{one}} * * {{other}}",
-      "exp": "other"
-    },
-    { "src": ".match {one :string}{bar :string}one * {{one}} * * {{other}}",
-      "exp": "one"
-    },
-    { "src": ".match{foo :string} {bar :string} one * {{one}} * * {{other}}",
-      "exp": "other"
-    },
-    { "src": ".match {foo :string} {bar :string} one * {{one}}* * {{other}}",
+    { "src": ".local $one = {1 :string} .local $bar = {bar :string} .match $one $bar one * {{one}} * * {{other}}",
       "exp": "other" },
-    { "src": ".match {foo :string} {bar :string}one * {{one}}* * {{other}}",
-      "exp": "other"
-    },
-    { "src": ".match {foo :string} {bar :string} one *{{one}} * * {{foo}}",
+    { "src": ".local $foo = {foo :string} .local $bar = {bar :string} .match $foo $bar one * {{one}}* * {{other}}",
+      "exp": "other" },
+    { "src": ".local $foo = {foo :string} .local $bar = {bar :string} .match $foo $bar one *{{one}} * * {{foo}}",
       "exp": "foo"
     },
-    { "src": ".match {foo :string} {bar :string} one *  {{one}} * * {{foo}}",
+    { "src": ".local $foo = {foo :string} .local $bar = {bar :string} .match $foo $bar one *  {{one}} * * {{foo}}",
       "exp": "foo" }
   ]
 }

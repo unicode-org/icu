@@ -45,7 +45,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Cache local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -71,7 +71,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -144,7 +144,7 @@ jobs:
       - name: Create directory for lib files
         run: mkdir icu4c/source/perflib
       - name: Get ICU libs
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
         with:
           name: icu-perf-libs
           path: icu4c/source/lib
@@ -218,7 +218,7 @@ jobs:
       - name: Create directory for lib files
         run: mkdir icu4c/source/perflib
       - name: Get ICU libs
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
         with:
           name: icu-perf-libs
           path: icu4c/source/lib
@@ -283,7 +283,7 @@ jobs:
       - name: Create directory for lib files
         run: mkdir icu4c/source/perflib
       - name: Get ICU libs
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
         with:
           name: icu-perf-libs
           path: icu4c/source/lib
@@ -335,7 +335,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -349,11 +349,6 @@ jobs:
 
       - name: Build and run unicodesetperf test
         run: |
-          # This file needs to be restored  otherwise GHA cannot
-          # check-out the perfdata branch. Setting up this task with GH lfs
-          # modifies the file but the details of why and how are unknown.
-          git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
-          git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
           mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           git status
@@ -397,7 +392,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -411,11 +406,6 @@ jobs:
 
       - name: Build and run ucharacterperf test
         run: |
-          # This file needs to be restored  otherwise GHA cannot
-          # check-out the perfdata branch. Setting up this task with GH lfs
-          # modifies the file but the details of why and how are unknown.
-          git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
-          git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
           mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
@@ -461,7 +451,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -475,11 +465,6 @@ jobs:
 
       - name: Build and run decimalformatperf
         run: |
-          # This file needs to be restored  otherwise GHA cannot
-          # check-out the perfdata branch. Setting up this task with GH lfs
-          # modifies the file but the details of why and how are unknown.
-          git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
-          git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
           mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
@@ -530,7 +515,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -546,11 +531,6 @@ jobs:
         env:
           DATA_FILE_PATH: data/collation
         run: |
-          # This file needs to be restored  otherwise GHA cannot
-          # check-out the perfdata branch. Setting up this task with GH lfs
-          # modifies the file but the details of why and how are unknown.
-          git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
-          git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
           mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
@@ -669,7 +649,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -685,11 +665,6 @@ jobs:
         env:
           DATA_FILE_PATH: data/conversion
         run: |
-          # This file needs to be restored  otherwise GHA cannot
-          # check-out the perfdata branch. Setting up this task with GH lfs
-          # modifies the file but the details of why and how are unknown.
-          git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
-          git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
           mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
@@ -752,7 +727,7 @@ jobs:
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Lookup read-only cache of local Maven repository
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -771,11 +746,6 @@ jobs:
           echo "DDIR=${ddir: -1}" >> $GITHUB_ENV
       - name: Build and run dateformatperf
         run: |
-          # This file needs to be restored  otherwise GHA cannot
-          # check-out the perfdata branch. Setting up this task with GH lfs
-          # modifies the file but the details of why and how are unknown.
-          git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2
-          git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2
           cd icu4j;
           mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;

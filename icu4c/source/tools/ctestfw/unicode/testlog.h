@@ -37,9 +37,10 @@ public:
 
 class T_CTEST_EXPORT_API IcuTestErrorCode {
 public:
-    IcuTestErrorCode(TestLog &callingTestClass, const char *callingTestName)
-            : errorCode(U_ZERO_ERROR),
-              testClass(callingTestClass), testName(callingTestName), scopeMessage() {}
+    IcuTestErrorCode(const IcuTestErrorCode&) = delete;
+    IcuTestErrorCode& operator=(const IcuTestErrorCode&) = delete;
+
+    IcuTestErrorCode(TestLog &callingTestClass, const char *callingTestName);
     virtual ~IcuTestErrorCode();
 
     // ErrorCode API

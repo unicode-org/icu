@@ -111,7 +111,7 @@ icu::UInitOnce gMF2ParseUniSetsInitOnce {};
 
 UnicodeSet* initContentChars(UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return {};
+        return nullptr;
     }
 
     UnicodeSet* result = new UnicodeSet(0x0001, 0x0008); // Omit NULL, HTAB and LF
@@ -133,7 +133,7 @@ UnicodeSet* initContentChars(UErrorCode& status) {
 
 UnicodeSet* initWhitespace(UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return {};
+        return nullptr;
     }
 
     UnicodeSet* result = new UnicodeSet();
@@ -153,7 +153,7 @@ UnicodeSet* initWhitespace(UErrorCode& status) {
 UnicodeSet* initBidiControls(UErrorCode& status) {
     UnicodeSet* result = new UnicodeSet(UnicodeString("[\\u061C]"), status);
     if (U_FAILURE(status)) {
-        return {};
+        return nullptr;
     }
     result->add(0x200E, 0x200F);
     result->add(0x2066, 0x2069);
@@ -164,7 +164,7 @@ UnicodeSet* initBidiControls(UErrorCode& status) {
 UnicodeSet* initAlpha(UErrorCode& status) {
     UnicodeSet* result = new UnicodeSet(UnicodeString("[:letter:]"), status);
     if (U_FAILURE(status)) {
-        return {};
+        return nullptr;
     }
     result->freeze();
     return result;
@@ -173,7 +173,7 @@ UnicodeSet* initAlpha(UErrorCode& status) {
 UnicodeSet* initDigits(UErrorCode& status) {
     UnicodeSet* result = new UnicodeSet(UnicodeString("[:number:]"), status);
     if (U_FAILURE(status)) {
-        return {};
+        return nullptr;
     }
     result->freeze();
     return result;
@@ -181,10 +181,14 @@ UnicodeSet* initDigits(UErrorCode& status) {
 
 UnicodeSet* initNameStartChars(UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return {};
+        return nullptr;
     }
 
-    UnicodeSet* result = new UnicodeSet(*unisets::getImpl(unisets::ALPHA));
+    UnicodeSet* isAlpha = unisets::gUnicodeSets[unisets::ALPHA] = initAlpha(status);
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+    UnicodeSet* result = new UnicodeSet(*isAlpha);
     if (result == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
@@ -209,16 +213,21 @@ UnicodeSet* initNameStartChars(UErrorCode& status) {
 
 UnicodeSet* initNameChars(UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return {};
+        return nullptr;
     }
 
+    UnicodeSet* nameStart = unisets::gUnicodeSets[unisets::NAME_START] = initNameStartChars(status);
+    UnicodeSet* digit = unisets::gUnicodeSets[unisets::DIGIT] = initDigits(status);
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
     UnicodeSet* result = new UnicodeSet();
     if (result == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     };
-    result->addAll(*unisets::getImpl(unisets::NAME_START));
-    result->addAll(*unisets::getImpl(unisets::DIGIT));
+    result->addAll(*nameStart);
+    result->addAll(*digit);
     result->add(HYPHEN);
     result->add(PERIOD);
     result->add(0x00B7);
@@ -230,16 +239,21 @@ UnicodeSet* initNameChars(UErrorCode& status) {
 
 UnicodeSet* initTextChars(UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return {};
+        return nullptr;
     }
 
+    UnicodeSet* content = unisets::gUnicodeSets[unisets::CONTENT] = initContentChars(status);
+    UnicodeSet* whitespace = unisets::gUnicodeSets[unisets::WHITESPACE] = initWhitespace(status);
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
     UnicodeSet* result = new UnicodeSet();
     if (result == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     };
-    result->addAll(*unisets::getImpl(unisets::CONTENT));
-    result->addAll(*unisets::getImpl(unisets::WHITESPACE));
+    result->addAll(*content);
+    result->addAll(*whitespace);
     result->add(PERIOD);
     result->add(AT);
     result->add(PIPE);
@@ -249,16 +263,31 @@ UnicodeSet* initTextChars(UErrorCode& status) {
 
 UnicodeSet* initQuotedChars(UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return {};
+        return nullptr;
     }
 
+    unisets::gUnicodeSets[unisets::TEXT] = initTextChars(status);
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
     UnicodeSet* result = new UnicodeSet();
     if (result == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     };
-    result->addAll(*unisets::getImpl(unisets::CONTENT));
-    result->addAll(*unisets::getImpl(unisets::WHITESPACE));
+    // content and whitespace were initialized by `initTextChars()`
+    UnicodeSet* content = unisets::getImpl(unisets::CONTENT);
+    if (content == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    result->addAll(*content);
+    UnicodeSet* whitespace = unisets::getImpl(unisets::WHITESPACE);
+    if (whitespace == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    result->addAll(*whitespace);
     result->add(PERIOD);
     result->add(AT);
     result->add(LEFT_CURLY_BRACE);
@@ -269,7 +298,7 @@ UnicodeSet* initQuotedChars(UErrorCode& status) {
 
 UnicodeSet* initEscapableChars(UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return {};
+        return nullptr;
     }
 
     UnicodeSet* result = new UnicodeSet();
@@ -298,26 +327,44 @@ UBool U_CALLCONV cleanupMF2ParseUniSets() {
 
 void U_CALLCONV initMF2ParseUniSets(UErrorCode& status) {
     ucln_i18n_registerCleanup(UCLN_I18N_MF2_UNISETS, cleanupMF2ParseUniSets);
+    /*
+      Each of the init functions initializes the UnicodeSets
+      that it depends on.
 
-    gUnicodeSets[unisets::CONTENT] = initContentChars(status);
-    gUnicodeSets[unisets::WHITESPACE] = initWhitespace(status);
+      initBidiControls (no dependencies)
+
+      initEscapableChars (no dependencies)
+
+      initNameChars depends on
+         initDigits
+         initNameStartChars depends on
+           initAlpha
+
+      initQuotedChars depends on
+         initTextChars depends on
+            initContentChars
+            initWhitespace
+     */
     gUnicodeSets[unisets::BIDI] = initBidiControls(status);
-    gUnicodeSets[unisets::ALPHA] = initAlpha(status);
-    gUnicodeSets[unisets::DIGIT] = initDigits(status);
-    gUnicodeSets[unisets::NAME_START] = initNameStartChars(status);
     gUnicodeSets[unisets::NAME_CHAR] = initNameChars(status);
-    gUnicodeSets[unisets::TEXT] = initTextChars(status);
     gUnicodeSets[unisets::QUOTED] = initQuotedChars(status);
     gUnicodeSets[unisets::ESCAPABLE] = initEscapableChars(status);
+
+    if (U_FAILURE(status)) {
+        cleanupMF2ParseUniSets();
+    }
 }
 
-const UnicodeSet* get(Key key) {
-    UErrorCode localStatus = U_ZERO_ERROR;
-    umtx_initOnce(gMF2ParseUniSetsInitOnce, &initMF2ParseUniSets, localStatus);
-    if (U_FAILURE(localStatus)) {
+const UnicodeSet* get(Key key, UErrorCode& status) {
+    umtx_initOnce(gMF2ParseUniSetsInitOnce, &initMF2ParseUniSets, status);
+    if (U_FAILURE(status)) {
         return nullptr;
     }
-    return getImpl(key);
+    UnicodeSet* result = getImpl(key);
+    if (result == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
 }
 
 }

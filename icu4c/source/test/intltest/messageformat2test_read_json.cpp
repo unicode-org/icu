@@ -112,10 +112,11 @@ static bool setArguments(TestMessageFormat2& t,
                     return false; // For now, boolean and null arguments are unsupported
                 }
             } else {
-               schemaError = true;
-               break;
+                // Null argument -- not supported
+                return false;
             }
         } else {
+            t.logln("name is null");
             schemaError = true;
             break;
         }
@@ -138,6 +139,7 @@ static bool setArguments(TestMessageFormat2& t,
 static void runValidTest(TestMessageFormat2& icuTest,
                          const std::string& testName,
                          const std::string& defaultError,
+                         bool anyError,
                          const json& j,
                          IcuTestErrorCode& errorCode) {
     auto j_object = j.template get<json::object_t>();
@@ -205,6 +207,9 @@ static void runValidTest(TestMessageFormat2& icuTest,
     } else if (defaultError.length() > 0) {
         test.setExpectedError(getExpectedRuntimeErrorFromString(defaultError));
         expectedError = true;
+    } else if (anyError) {
+        test.setExpectedAnyError();
+        expectedError = true;
     }
 
     // If no expected result and no error, then set the test builder to expect success
@@ -250,9 +255,13 @@ static void runTestsFromJsonFile(TestMessageFormat2& t,
 
     // Some files have an expected error
     std::string defaultError;
+    bool anyError = false;
     if (!j_object["defaultTestProperties"].is_null()
         && !j_object["defaultTestProperties"]["expErrors"].is_null()) {
         auto expErrors = j_object["defaultTestProperties"]["expErrors"];
+        // If expErrors is a boolean "true", that means we expect all tests
+        // to emit errors but we don't care which ones.
+        anyError = expErrors.is_boolean() && expErrors.template get<bool>();
         // expErrors might also be a boolean, in which case we ignore it --
         // so we have to check if it's an array
         if (expErrors.is_array()) {
@@ -273,7 +282,7 @@ static void runTestsFromJsonFile(TestMessageFormat2& t,
 
             t.logln(u_str(iter->dump()));
 
-            runValidTest(t, testName, defaultError, *iter, errorCode);
+            runValidTest(t, testName, defaultError, anyError, *iter, errorCode);
         }
     } else {
         // Test doesn't follow schema -- probably an error
@@ -301,6 +310,7 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
 
     // Do valid spec tests
     runTestsFromJsonFile(*this, "spec/syntax.json", errorCode);
+    runTestsFromJsonFile(*this, "spec/fallback.json", errorCode);
 
     // Uncomment when test functions are implemented in the registry
     // See https://unicode-org.atlassian.net/browse/ICU-22907
@@ -315,9 +325,6 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     runTestsFromJsonFile(*this, "spec/functions/time.json", errorCode);
 
     // Other tests (non-spec)
-    // TODO: Delete this file after https://github.com/unicode-org/message-format-wg/pull/904
-    // lands and the tests here are updated from the spec repo
-    runTestsFromJsonFile(*this, "normalization.json", errorCode);
     // TODO: https://github.com/unicode-org/message-format-wg/pull/902 will
     // move the bidi tests into the spec
     runTestsFromJsonFile(*this, "bidi.json", errorCode);

@@ -165,28 +165,19 @@ trunk at the source revision is good.~~
 Create the download page before the first milestone, if we have one, or before
 the release candidate.
 
-Log into the ICU homepage Google Site. (If you don't have write access, ask one
-of the editors to grant you access.)
+Since ICU 76, new download pages are in Markdown on GitHub, at docs/download/ .
 
-Verify that there is not already a page for the upcoming release: Either via the
-sitemap, or on the bottom of the main download page where it says something like
-"Subpages (27): View All".
+In your ICU workspace, copy the download page for the last release.
+Adjust the navbar data at the top: Title, and nav_order one fewer than last time.
 
-Copy the download page for the last release: Go to that page, gear menu, Copy
-page; "Name your page" using just the major version number for now (e.g., "61")
-so that the page URL is just that number, select "Put page under Downloading
-ICU", click the red COPY button.
+Adjust the new page as needed: Adjust the title to "ICU 77" (with the right version number...),
+remove contents specific to the previous release, update all version numbers, update all links.
 
-Adjust the new page as needed: Change the title to "Download ICU 61 Release
-Candidate" (with the right version number...), remove contents specific to the
-previous release, update all version numbers, update all links.
+Put a big, **bold+italics** warning at the top like "This version has not been
+released yet. Use it for testing but do not use it in production!"
 
-Put a big, bold+italics, red warning at the top like "This version has not been
-released yet. Use it for testing but not in production!"
-
-Save the page. It is generally a good idea to save frequently. For further
-edits, simply go back into edit mode. (Keyboard shortcut 'e' for edit, ctrl+s
-for save.)
+Compare with the one-year-ago release page and adjust for whether we have a major release,
+a new Unicode version, etc.
 
 Add new contents for the upcoming release: Grab some text from the sibling
 Unicode and CLDR release notes, look at the proposal status doc for this
@@ -198,9 +189,7 @@ like a Migration Issues section etc.
 
 Ask everyone on the team to add stuff & details.
 
-**Once the page has been created and various people are invited to edit it,
-everyone should keep editing short so that the page is not locked for others for
-long periods of time.**
+Once the page has been created and merged, consider editing online on GitHub.
 
 ### Maintenance release
 

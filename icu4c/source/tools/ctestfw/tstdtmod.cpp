@@ -18,6 +18,11 @@
 
 TestLog::~TestLog() {}
 
+IcuTestErrorCode::IcuTestErrorCode(TestLog &callingTestClass, const char *callingTestName)
+    : errorCode(U_ZERO_ERROR),
+      testClass(callingTestClass), testName(callingTestName), scopeMessage() {
+}
+
 IcuTestErrorCode::~IcuTestErrorCode() {
     // Safe because our errlog() does not throw exceptions.
     if(isFailure()) {

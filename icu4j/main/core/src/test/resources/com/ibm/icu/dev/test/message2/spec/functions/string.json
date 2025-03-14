@@ -1,12 +1,14 @@
 {
+  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
   "scenario": "String function",
   "description": "The built-in formatter for strings.",
   "defaultTestProperties": {
+    "bidiIsolation": "none",
     "locale": "en-US"
   },
   "tests": [
     {
-      "src": ".match {$foo :string} |1| {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo |1| {{one}} * {{other}}",
       "params": [
         {
           "name": "foo",
@@ -16,36 +18,58 @@
       "exp": "one"
     },
     {
-      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
       "params": [
         {
           "name": "foo",
-          "value": 1
+          "value": "1"
         }
       ],
-      "exp": "one",
-      "ignoreJava": ":string doesn't stringify numbers?"
+      "exp": "one"
     },
     {
-      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
       "params": [
         {
           "name": "foo",
-          "value": null
+          "value": "2"
         }
       ],
-      "exp": "other",
-      "ignoreCpp": "Can't handle null value for input variable"
+      "exp": "other"
     },
     {
-      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
       "exp": "other",
       "expErrors": [
         {
           "type": "unresolved-variable"
         }
-      ],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      ]
+    },
+    {
+      "description": "NFC: keys are normalized (unquoted)",
+      "src": ".local $x = {\u1E0A\u0323 :string} .match $x \u1E0A\u0323 {{Not normalized}} \u1E0C\u0307 {{Normalized}} * {{Wrong}}",
+      "expErrors": [{"type": "duplicate-variant"}]
+    },
+    {
+      "description": "NFC: keys are normalized (quoted)",
+      "src": ".local $x = {\u1E0A\u0323 :string} .match $x |\u1E0A\u0323| {{Not normalized}} |\u1E0C\u0307| {{Normalized}} * {{Wrong}}",
+      "expErrors": [{"type": "duplicate-variant"}]
+    },
+    {
+      "description": "NFC: keys are normalized (mixed)",
+      "src": ".local $x = {\u1E0A\u0323 :string} .match $x \u1E0A\u0323 {{Not normalized}} |\u1E0C\u0307| {{Normalized}} * {{Wrong}}",
+      "expErrors": [{"type": "duplicate-variant"}]
+    },
+    {
+      "description": "NFC: :string normalizes the comparison value (un-normalized selector, normalized key)",
+      "src": ".local $x = {\u1E0A\u0323 :string} .match $x \u1E0C\u0307 {{Right}} * {{Wrong}}",
+      "exp": "Right"
+    },
+    {
+      "description": "NFC: keys are normalized (normalized selector, un-normalized key)",
+      "src": ".local $x = {\u1E0C\u0307 :string} .match $x \u1E0A\u0323 {{Right}} * {{Wrong}}",
+      "exp": "Right"
     }
   ]
 }

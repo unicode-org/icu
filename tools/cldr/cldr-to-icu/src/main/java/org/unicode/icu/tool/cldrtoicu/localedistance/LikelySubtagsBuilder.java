@@ -270,8 +270,10 @@ final class LikelySubtagsBuilder {
 
         // Add the special case for "und-Latn" => "en-Latn-US" (which is a bit of a
         // hack for language matching).
-        // TODO: Find out the history of this line and document it better.
+        // Temporary patch. Needs an update of the ICU algorithm to match CLDR.
+        // See https://unicode-org.atlassian.net/browse/ICU-23052
         set(lsrTable, "und", "Latn", "", lsr("en", "Latn", "US"));
+        set(lsrTable, "und", "Latn", "RS", lsr("sr", "Latn", "RS"));
         logger.fine(lsrTable::toString);
 
         // Ensure that if "und-RR" => "ll-Ssss-RR", then we also add "Ssss" => "RR".

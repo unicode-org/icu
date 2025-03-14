@@ -3,6 +3,7 @@
   "scenario": "Syntax",
   "description": "Test cases that do not depend on any registry definitions.",
   "defaultTestProperties": {
+    "bidiIsolation": "none",
     "locale": "en-US"
   },
   "tests": [
@@ -697,6 +698,43 @@
     {
       "src": "{{trailing whitespace}} \n",
       "exp": "trailing whitespace"
+    },
+    {
+      "description": "NFC: text is not normalized",
+      "src": "\u1E0A\u0323",
+      "exp": "\u1E0A\u0323"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is",
+      "src": ".local $\u0044\u0323\u0307 = {foo} {{{$\u1E0c\u0307}}}",
+      "exp": "foo"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is normalized, use isn't",
+      "src": ".local $\u1E0c\u0307 = {foo} {{{$\u0044\u0323\u0307}}}",
+      "exp": "foo"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is normalized, use isn't",
+      "src": ".input {$\u1E0c\u0307} {{{$\u0044\u0323\u0307}}}",
+      "params": [{"name": "\u1E0c\u0307", "value": "foo"}],
+      "exp": "foo"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is",
+      "src": ".input {$\u0044\u0323\u0307} {{{$\u1E0c\u0307}}}",
+      "params": [{"name": "\u0044\u0323\u0307", "value": "foo"}],
+      "exp": "foo"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is; reordering",
+      "src": ".local $\u0044\u0307\u0323 = {foo} {{{$\u1E0c\u0307}}}",
+      "exp": "foo"
+    },
+    {
+      "description": "NFC: variables are compared to each other as-if normalized; decl is non-normalized, use is; special case mapping",
+      "src": ".local $\u0041\u030A\u0301 = {foo} {{{$\u01FA}}}",
+      "exp": "foo"
     }
   ]
 }

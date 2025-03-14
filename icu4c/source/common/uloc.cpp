@@ -589,7 +589,7 @@ compareKeywordStructs(const void * /*context*/, const void *left, const void *ri
 }  // namespace
 
 U_EXPORT CharString
-ulocimp_getKeywords(const char* localeID,
+ulocimp_getKeywords(std::string_view localeID,
                     char prev,
                     bool valuesToo,
                     UErrorCode& status)
@@ -606,7 +606,7 @@ ulocimp_getKeywords(const char* localeID,
 }
 
 U_EXPORT void
-ulocimp_getKeywords(const char* localeID,
+ulocimp_getKeywords(std::string_view localeID,
                     char prev,
                     ByteSink& sink,
                     bool valuesToo,
@@ -618,9 +618,8 @@ ulocimp_getKeywords(const char* localeID,
 
     int32_t maxKeywords = ULOC_MAX_NO_KEYWORDS;
     int32_t numKeywords = 0;
-    const char* pos = localeID;
-    const char* equalSign = nullptr;
-    const char* semicolon = nullptr;
+    size_t equalSign = std::string_view::npos;
+    size_t semicolon = std::string_view::npos;
     int32_t i = 0, j, n;
 
     if(prev == '@') { /* start of keyword definition */
@@ -628,40 +627,40 @@ ulocimp_getKeywords(const char* localeID,
         do {
             bool duplicate = false;
             /* skip leading spaces */
-            while(*pos == ' ') {
-                pos++;
+            while (localeID.front() == ' ') {
+                localeID.remove_prefix(1);
             }
-            if (!*pos) { /* handle trailing "; " */
+            if (localeID.empty()) { /* handle trailing "; " */
                 break;
             }
             if(numKeywords == maxKeywords) {
                 status = U_INTERNAL_PROGRAM_ERROR;
                 return;
             }
-            equalSign = uprv_strchr(pos, '=');
-            semicolon = uprv_strchr(pos, ';');
+            equalSign = localeID.find('=');
+            semicolon = localeID.find(';');
             /* lack of '=' [foo@currency] is illegal */
             /* ';' before '=' [foo@currency;collation=pinyin] is illegal */
-            if(!equalSign || (semicolon && semicolon<equalSign)) {
+            if (equalSign == std::string_view::npos ||
+                (semicolon != std::string_view::npos && semicolon < equalSign)) {
+                status = U_INVALID_FORMAT_ERROR;
+                return;
+            }
+            /* zero-length keyword is an error. */
+            if (equalSign == 0) {
                 status = U_INVALID_FORMAT_ERROR;
                 return;
             }
             /* need to normalize both keyword and keyword name */
-            if(equalSign - pos >= ULOC_KEYWORD_BUFFER_LEN) {
+            if (equalSign >= ULOC_KEYWORD_BUFFER_LEN) {
                 /* keyword name too long for internal buffer */
                 status = U_INTERNAL_PROGRAM_ERROR;
                 return;
             }
-            for(i = 0, n = 0; i < equalSign - pos; ++i) {
-                if (pos[i] != ' ') {
-                    keywordList[numKeywords].keyword[n++] = uprv_tolower(pos[i]);
+            for (i = 0, n = 0; static_cast<size_t>(i) < equalSign; ++i) {
+                if (localeID[i] != ' ') {
+                    keywordList[numKeywords].keyword[n++] = uprv_tolower(localeID[i]);
                 }
-            }
-
-            /* zero-length keyword is an error. */
-            if (n == 0) {
-                status = U_INVALID_FORMAT_ERROR;
-                return;
             }
 
             keywordList[numKeywords].keyword[n] = 0;
@@ -669,33 +668,31 @@ ulocimp_getKeywords(const char* localeID,
             /* now grab the value part. First we skip the '=' */
             equalSign++;
             /* then we leading spaces */
-            while(*equalSign == ' ') {
+            while (equalSign < localeID.length() && localeID[equalSign] == ' ') {
                 equalSign++;
             }
 
             /* Premature end or zero-length value */
-            if (!*equalSign || equalSign == semicolon) {
+            if (equalSign == localeID.length() || equalSign == semicolon) {
                 status = U_INVALID_FORMAT_ERROR;
                 return;
             }
 
-            keywordList[numKeywords].valueStart = equalSign;
+            keywordList[numKeywords].valueStart = localeID.data() + equalSign;
 
-            pos = semicolon;
-            i = 0;
-            if(pos) {
-                while(*(pos - i - 1) == ' ') {
-                    i++;
-                }
-                keywordList[numKeywords].valueLen = static_cast<int32_t>(pos - equalSign - i);
-                pos++;
+            std::string_view value = localeID;
+            if (semicolon != std::string_view::npos) {
+                value.remove_suffix(value.length() - semicolon);
+                localeID.remove_prefix(semicolon + 1);
             } else {
-                i = static_cast<int32_t>(uprv_strlen(equalSign));
-                while(i && equalSign[i-1] == ' ') {
-                    i--;
-                }
-                keywordList[numKeywords].valueLen = i;
+                localeID = {};
             }
+            value.remove_prefix(equalSign);
+            if (size_t last = value.find_last_not_of(' '); last != std::string_view::npos) {
+                value.remove_suffix(value.length() - last - 1);
+            }
+            keywordList[numKeywords].valueLen = static_cast<int32_t>(value.length());
+
             /* If this is a duplicate keyword, then ignore it */
             for (j=0; j<numKeywords; ++j) {
                 if (uprv_strcmp(keywordList[j].keyword, keywordList[numKeywords].keyword) == 0) {
@@ -706,7 +703,7 @@ ulocimp_getKeywords(const char* localeID,
             if (!duplicate) {
                 ++numKeywords;
             }
-        } while(pos);
+        } while (!localeID.empty());
 
         /* now we have a list of keywords */
         /* we need to sort it */
@@ -1341,7 +1338,7 @@ _getVariant(std::string_view localeID,
             ByteSink* sink,
             bool needSeparator,
             UErrorCode& status) {
-    if (U_FAILURE(status)) return 0;
+    if (U_FAILURE(status) || localeID.empty()) return 0;
 
     // Reasonable upper limit for variants
     // There are no strict limitation of the syntax of variant in the legacy
@@ -1357,27 +1354,43 @@ _getVariant(std::string_view localeID,
     size_t index = 0;
     if (_isIDSeparator(prev)) {
         /* get a variant string after a '-' or '_' */
-        for (; index < localeID.size() && !_isTerminator(localeID[index]); index++) {
-            if (index >= MAX_VARIANTS_LENGTH) { // same as length > MAX_VARIANTS_LENGTH
+        for (std::string_view sub = localeID;;) {
+            size_t next = sub.find_first_of(".@_-");
+            // For historical reasons, a trailing separator is included in the variant.
+            bool finished = next == std::string_view::npos || next + 1 == sub.length();
+            size_t limit = finished ? sub.length() : next;
+            index += limit;
+            if (index > MAX_VARIANTS_LENGTH) {
                 status = U_ILLEGAL_ARGUMENT_ERROR;
                 return 0;
             }
-            if (needSeparator) {
-                if (sink != nullptr) {
-                    sink->Append("_", 1);
-                }
-                needSeparator = false;
-            }
-            if (sink != nullptr) {
-                char c = uprv_toupper(localeID[index]);
-                if (c == '-') c = '_';
-                sink->Append(&c, 1);
-            }
-        }
-    }
 
-    if (index > 0) {
-        return index;
+            if (sink != nullptr) {
+                if (needSeparator) {
+                    sink->Append("_", 1);
+                } else {
+                    needSeparator = true;
+                }
+
+                int32_t length = static_cast<int32_t>(limit);
+                int32_t minCapacity = uprv_min(length, MAX_VARIANTS_LENGTH);
+                char scratch[MAX_VARIANTS_LENGTH];
+                int32_t capacity = 0;
+                char* buffer = sink->GetAppendBuffer(
+                        minCapacity, minCapacity, scratch, UPRV_LENGTHOF(scratch), &capacity);
+
+                for (size_t i = 0; i < limit; ++i) {
+                    buffer[i] = uprv_toupper(sub[i]);
+                }
+                sink->Append(buffer, length);
+            }
+
+            if (finished) { return index; }
+            sub.remove_prefix(next);
+            if (_isTerminator(sub.front()) || _isBCP47Extension(sub)) { return index; }
+            sub.remove_prefix(1);
+            index++;
+        }
     }
 
     size_t skip = 0;
@@ -1574,6 +1587,8 @@ ulocimp_getSubtags(
 
     if ((variant == nullptr && pEnd == nullptr) || localeID.empty()) { return; }
 
+    bool hasVariant = false;
+
     if (_isIDSeparator(localeID.front()) && !_isBCP47Extension(localeID)) {
         std::string_view sub = localeID;
         /* If there was no country ID, skip a possible extra IDSeparator */
@@ -1581,7 +1596,38 @@ ulocimp_getSubtags(
         sub.remove_prefix(skip);
         size_t len = _getVariant(sub, localeID[0], variant, false, status);
         if (U_FAILURE(status)) { return; }
-        if (len > 0 && pEnd != nullptr) { *pEnd = localeID.data() + skip + len; }
+        if (len > 0) {
+            hasVariant = true;
+            localeID.remove_prefix(skip + len);
+            if (pEnd != nullptr) { *pEnd = localeID.data(); }
+        }
+    }
+
+    if ((variant == nullptr && pEnd == nullptr) || localeID.empty()) { return; }
+
+    if (_isBCP47Extension(localeID)) {
+        localeID.remove_prefix(2);
+        constexpr char vaposix[] = "-va-posix";
+        constexpr size_t length = sizeof vaposix - 1;
+        for (size_t next;; localeID.remove_prefix(next)) {
+            next = localeID.find('-', 1);
+            if (next == std::string_view::npos) { break; }
+            next = localeID.find('-', next + 1);
+            bool finished = next == std::string_view::npos;
+            std::string_view sub = localeID;
+            if (!finished) { sub.remove_suffix(sub.length() - next); }
+
+            if (sub.length() == length && uprv_strnicmp(sub.data(), vaposix, length) == 0) {
+                if (variant != nullptr) {
+                    if (hasVariant) { variant->Append("_", 1); }
+                    constexpr char posix[] = "POSIX";
+                    variant->Append(posix, sizeof posix - 1);
+                }
+                if (pEnd != nullptr) { *pEnd = localeID.data() + length; }
+            }
+
+            if (finished) { break; }
+        }
     }
 }
 
@@ -1740,7 +1786,7 @@ constexpr int32_t I_DEFAULT_LENGTH = UPRV_LENGTHOF(i_default);
  * This is the code underlying uloc_getName and uloc_canonicalize.
  */
 void
-_canonicalize(const char* localeID,
+_canonicalize(std::string_view localeID,
               ByteSink& sink,
               uint32_t options,
               UErrorCode& err) {
@@ -1751,33 +1797,30 @@ _canonicalize(const char* localeID,
     int32_t j, fieldCount=0;
     CharString tempBuffer;  // if localeID has a BCP47 extension, tmpLocaleID points to this
     CharString localeIDWithHyphens;  // if localeID has a BPC47 extension and have _, tmpLocaleID points to this
-    const char* origLocaleID;
-    const char* tmpLocaleID;
-    const char* keywordAssign = nullptr;
-    const char* separatorIndicator = nullptr;
+    std::string_view origLocaleID;
+    std::string_view tmpLocaleID;
+    size_t keywordAssign = std::string_view::npos;
+    size_t separatorIndicator = std::string_view::npos;
 
-    if (localeID != nullptr && _hasBCP47Extension(localeID)) {
-        const char* localeIDPtr = localeID;
+    if (_hasBCP47Extension(localeID)) {
+        std::string_view localeIDPtr = localeID;
 
         // convert all underbars to hyphens, unless the "BCP47 extension" comes at the beginning of the string
-        if (uprv_strchr(localeID, '_') != nullptr && localeID[1] != '-' && localeID[1] != '_') {
-            localeIDWithHyphens.append(localeID, -1, err);
+        if (localeID.size() >= 2 && localeID.find('_') != std::string_view::npos && localeID[1] != '-' && localeID[1] != '_') {
+            localeIDWithHyphens.append(localeID, err);
             if (U_SUCCESS(err)) {
                 for (char* p = localeIDWithHyphens.data(); *p != '\0'; ++p) {
                     if (*p == '_') {
                         *p = '-';
                     }
                 }
-                localeIDPtr = localeIDWithHyphens.data();
+                localeIDPtr = localeIDWithHyphens.toStringPiece();
             }
         }
 
-        tempBuffer = ulocimp_forLanguageTag(localeIDPtr, -1, nullptr, err);
-        tmpLocaleID = U_SUCCESS(err) && !tempBuffer.isEmpty() ? tempBuffer.data() : localeIDPtr;
+        tempBuffer = ulocimp_forLanguageTag(localeIDPtr.data(), static_cast<int32_t>(localeIDPtr.size()), nullptr, err);
+        tmpLocaleID = U_SUCCESS(err) && !tempBuffer.isEmpty() ? static_cast<std::string_view>(tempBuffer.toStringPiece()) : localeIDPtr;
     } else {
-        if (localeID==nullptr) {
-           localeID=uloc_getDefault();
-        }
         tmpLocaleID=localeID;
     }
 
@@ -1788,20 +1831,25 @@ _canonicalize(const char* localeID,
     CharString script;
     CharString country;
     CharString variant;
+    const char* end = nullptr;
     ulocimp_getSubtags(
             tmpLocaleID,
             &tag,
             &script,
             &country,
             &variant,
-            &tmpLocaleID,
+            &end,
             err);
     if (U_FAILURE(err)) {
         return;
     }
+    U_ASSERT(end != nullptr);
+    if (end > tmpLocaleID.data()) {
+        tmpLocaleID.remove_prefix(end - tmpLocaleID.data());
+    }
 
-    if (tag.length() == I_DEFAULT_LENGTH &&
-            uprv_strncmp(origLocaleID, i_default, I_DEFAULT_LENGTH) == 0) {
+    if (tag.length() == I_DEFAULT_LENGTH && origLocaleID.length() >= I_DEFAULT_LENGTH &&
+            uprv_strncmp(origLocaleID.data(), i_default, I_DEFAULT_LENGTH) == 0) {
         tag.clear();
         tag.append(uloc_getDefault(), err);
     } else {
@@ -1826,15 +1874,14 @@ _canonicalize(const char* localeID,
     }
 
     /* Copy POSIX-style charset specifier, if any [mr.utf8] */
-    if (!OPTION_SET(options, _ULOC_CANONICALIZE) && *tmpLocaleID == '.') {
+    if (!OPTION_SET(options, _ULOC_CANONICALIZE) && !tmpLocaleID.empty() && tmpLocaleID.front() == '.') {
         tag.append('.', err);
-        ++tmpLocaleID;
-        const char *atPos = nullptr;
+        tmpLocaleID.remove_prefix(1);
         size_t length;
-        if((atPos = uprv_strchr(tmpLocaleID, '@')) != nullptr) {
-            length = atPos - tmpLocaleID;
+        if (size_t atPos = tmpLocaleID.find('@'); atPos != std::string_view::npos) {
+            length = atPos;
         } else {
-            length = uprv_strlen(tmpLocaleID);
+            length = tmpLocaleID.length();
         }
         // The longest charset name we found in IANA charset registry
         // https://www.iana.org/assignments/character-sets/ is
@@ -1846,33 +1893,34 @@ _canonicalize(const char* localeID,
            err = U_ILLEGAL_ARGUMENT_ERROR; /* malformed keyword name */
            return;
         }
-        tag.append(tmpLocaleID, static_cast<int32_t>(length), err);
-        tmpLocaleID += length;
+        if (length > 0) {
+            tag.append(tmpLocaleID.data(), static_cast<int32_t>(length), err);
+            tmpLocaleID.remove_prefix(length);
+        }
     }
 
     /* Scan ahead to next '@' and determine if it is followed by '=' and/or ';'
-       After this, tmpLocaleID either points to '@' or is nullptr */
-    if ((tmpLocaleID=locale_getKeywordsStart(tmpLocaleID))!=nullptr) {
-        keywordAssign = uprv_strchr(tmpLocaleID, '=');
-        separatorIndicator = uprv_strchr(tmpLocaleID, ';');
+       After this, tmpLocaleID either starts at '@' or is empty. */
+    if (const char* start = locale_getKeywordsStart(tmpLocaleID); start != nullptr) {
+        if (start > tmpLocaleID.data()) {
+            tmpLocaleID.remove_prefix(start - tmpLocaleID.data());
+        }
+        keywordAssign = tmpLocaleID.find('=');
+        separatorIndicator = tmpLocaleID.find(';');
+    } else {
+        tmpLocaleID = {};
     }
 
     /* Copy POSIX-style variant, if any [mr@FOO] */
     if (!OPTION_SET(options, _ULOC_CANONICALIZE) &&
-        tmpLocaleID != nullptr && keywordAssign == nullptr) {
-        for (;;) {
-            char c = *tmpLocaleID;
-            if (c == 0) {
-                break;
-            }
-            tag.append(c, err);
-            ++tmpLocaleID;
-        }
+        !tmpLocaleID.empty() && keywordAssign == std::string_view::npos) {
+        tag.append(tmpLocaleID, err);
+        tmpLocaleID = {};
     }
 
     if (OPTION_SET(options, _ULOC_CANONICALIZE)) {
         /* Handle @FOO variant if @ is present and not followed by = */
-        if (tmpLocaleID!=nullptr && keywordAssign==nullptr) {
+        if (!tmpLocaleID.empty() && keywordAssign == std::string_view::npos) {
             /* Add missing '_' if needed */
             if (fieldCount < 2 || (fieldCount < 3 && !script.isEmpty())) {
                 do {
@@ -1882,7 +1930,9 @@ _canonicalize(const char* localeID,
             }
 
             CharStringByteSink s(&tag);
-            _getVariant(tmpLocaleID+1, '@', &s, !variant.isEmpty(), err);
+            std::string_view sub = tmpLocaleID;
+            sub.remove_prefix(1);
+            _getVariant(sub, '@', &s, !variant.isEmpty(), err);
             if (U_FAILURE(err)) { return; }
         }
 
@@ -1890,7 +1940,7 @@ _canonicalize(const char* localeID,
         for (j=0; j<UPRV_LENGTHOF(CANONICALIZE_MAP); j++) {
             StringPiece id(CANONICALIZE_MAP[j].id);
             if (tag == id) {
-                if (id.empty() && tmpLocaleID != nullptr) {
+                if (id.empty() && !tmpLocaleID.empty()) {
                     break; /* Don't remap "" if keywords present */
                 }
                 tag.clear();
@@ -1903,11 +1953,12 @@ _canonicalize(const char* localeID,
     sink.Append(tag.data(), tag.length());
 
     if (!OPTION_SET(options, _ULOC_STRIP_KEYWORDS)) {
-        if (tmpLocaleID!=nullptr && keywordAssign!=nullptr &&
-            (!separatorIndicator || separatorIndicator > keywordAssign)) {
+        if (!tmpLocaleID.empty() && keywordAssign != std::string_view::npos &&
+            (separatorIndicator == std::string_view::npos || separatorIndicator > keywordAssign)) {
             sink.Append("@", 1);
             ++fieldCount;
-            ulocimp_getKeywords(tmpLocaleID+1, '@', sink, true, err);
+            tmpLocaleID.remove_prefix(1);
+            ulocimp_getKeywords(tmpLocaleID, '@', sink, true, err);
         }
     }
 }
@@ -2077,6 +2128,9 @@ uloc_getName(const char* localeID,
              int32_t nameCapacity,
              UErrorCode* err)
 {
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
     return ByteSinkUtil::viaByteSinkToTerminatedChars(
         name, nameCapacity,
         [&](ByteSink& sink, UErrorCode& status) {
@@ -2086,7 +2140,7 @@ uloc_getName(const char* localeID,
 }
 
 U_EXPORT CharString
-ulocimp_getName(const char* localeID,
+ulocimp_getName(std::string_view localeID,
                 UErrorCode& err)
 {
     return ByteSinkUtil::viaByteSinkToCharString(
@@ -2097,7 +2151,7 @@ ulocimp_getName(const char* localeID,
 }
 
 U_EXPORT void
-ulocimp_getName(const char* localeID,
+ulocimp_getName(std::string_view localeID,
                 ByteSink& sink,
                 UErrorCode& err)
 {
@@ -2110,6 +2164,9 @@ uloc_getBaseName(const char* localeID,
                  int32_t nameCapacity,
                  UErrorCode* err)
 {
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
     return ByteSinkUtil::viaByteSinkToTerminatedChars(
         name, nameCapacity,
         [&](ByteSink& sink, UErrorCode& status) {
@@ -2119,7 +2176,7 @@ uloc_getBaseName(const char* localeID,
 }
 
 U_EXPORT CharString
-ulocimp_getBaseName(const char* localeID,
+ulocimp_getBaseName(std::string_view localeID,
                     UErrorCode& err)
 {
     return ByteSinkUtil::viaByteSinkToCharString(
@@ -2130,7 +2187,7 @@ ulocimp_getBaseName(const char* localeID,
 }
 
 U_EXPORT void
-ulocimp_getBaseName(const char* localeID,
+ulocimp_getBaseName(std::string_view localeID,
                     ByteSink& sink,
                     UErrorCode& err)
 {
@@ -2143,6 +2200,9 @@ uloc_canonicalize(const char* localeID,
                   int32_t nameCapacity,
                   UErrorCode* err)
 {
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
     return ByteSinkUtil::viaByteSinkToTerminatedChars(
         name, nameCapacity,
         [&](ByteSink& sink, UErrorCode& status) {
@@ -2152,7 +2212,7 @@ uloc_canonicalize(const char* localeID,
 }
 
 U_EXPORT CharString
-ulocimp_canonicalize(const char* localeID,
+ulocimp_canonicalize(std::string_view localeID,
                      UErrorCode& err)
 {
     return ByteSinkUtil::viaByteSinkToCharString(
@@ -2163,7 +2223,7 @@ ulocimp_canonicalize(const char* localeID,
 }
 
 U_EXPORT void
-ulocimp_canonicalize(const char* localeID,
+ulocimp_canonicalize(std::string_view localeID,
                      ByteSink& sink,
                      UErrorCode& err)
 {

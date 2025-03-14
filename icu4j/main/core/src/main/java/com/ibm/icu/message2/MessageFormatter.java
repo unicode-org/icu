@@ -51,7 +51,7 @@ import java.util.Map;
  * &#064;Test
  * public void test() {
  *     final Locale enGb = Locale.forLanguageTag("en-GB");
- *     Map<String, Object> arguments = new HashMap<>();
+ *     Map&lt;String, Object&gt; arguments = new HashMap&lt;&gt;();
  *     arguments.put("name", "John");
  *     arguments.put("exp", new Date(2023 - 1900, 2, 27, 19, 42, 51));  // March 27, 2023, 7:42:51 PM
  *
@@ -101,7 +101,7 @@ import java.util.Map;
  *            + " 1 {{You have one notification.}}\n"
  *            + " * {{You have {$count} notifications.}}\n";
  *    final Locale enGb = Locale.forLanguageTag("en-GB");
- *    Map<String, Object> arguments = new HashMap<>();
+ *    Map&lt;String, Object&gt; arguments = new HashMap&lt;&gt;();
  *
  *    MessageFormatter mf2 = MessageFormatter.builder()
  *        .setPattern(message)
@@ -144,6 +144,7 @@ public class MessageFormatter {
     private final Locale locale;
     private final String pattern;
     private final ErrorHandlingBehavior errorHandlingBehavior;
+    private final BidiIsolation bidiIsolation;
     private final MFFunctionRegistry functionRegistry;
     private final MFDataModel.Message dataModel;
     private final MFDataModelFormatter modelFormatter;
@@ -152,6 +153,7 @@ public class MessageFormatter {
         this.locale = builder.locale;
         this.functionRegistry = builder.functionRegistry;
         this.errorHandlingBehavior = builder.errorHandlingBehavior;
+        this.bidiIsolation = builder.bidiIsolation;
         if ((builder.pattern == null && builder.dataModel == null)
                 || (builder.pattern != null && builder.dataModel != null)) {
             throw new IllegalArgumentException(
@@ -173,7 +175,7 @@ public class MessageFormatter {
                         + "Error: " + pe.getMessage() + "\n");
             }
         }
-        modelFormatter = new MFDataModelFormatter(dataModel, locale, errorHandlingBehavior, functionRegistry);
+        modelFormatter = new MFDataModelFormatter(dataModel, locale, errorHandlingBehavior, bidiIsolation, functionRegistry);
     }
 
     /**
@@ -215,6 +217,20 @@ public class MessageFormatter {
     @Deprecated
     public ErrorHandlingBehavior getErrorHandlingBehavior() {
         return errorHandlingBehavior;
+    }
+
+    /**
+     * Get the {@link BidiIsolation} algorithm to use when formatting mixed
+     * message parts with mixed direction.
+     *
+     * @return the bidi isolation algorithm.
+     *
+     * @internal ICU 77 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    @Deprecated
+    public BidiIsolation getBidiIsolation() {
+        return bidiIsolation;
     }
 
     /**
@@ -295,7 +311,7 @@ public class MessageFormatter {
      * depending on this setting.</p>
      *
      * <p>Used in conjunction with the
-     * {@link MessageFormatter.Builder#setErrorHandlingBehavior(ErrorHandlingBehavior)} method.</p>
+     * {@link MessageFormatter.Builder#setErrorHandlingBehavior(MessageFormatter.ErrorHandlingBehavior)} method.</p>
      *
      * @internal ICU 76 technology preview
      * @deprecated This API is for technology preview only.
@@ -321,6 +337,38 @@ public class MessageFormatter {
     }
 
     /**
+     * Determines how the mixtures of bidirectional text are converted to string.
+     *
+     * <p>They can be either ignored, or will implement the default algorithm
+     * described in the MessageFormat 2 specification.</p>
+     *
+     * <p>Used in conjunction with the
+     * {@link MessageFormatter.Builder#setBidiIsolation(MessageFormatter.BidiIsolation)} method.</p>
+     *
+     * @internal ICU 77 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    @Deprecated
+    public static enum BidiIsolation {
+        /**
+         * Ignore any text direction mixture, don't introduce bidi control characters in the formatted result.
+         *
+         * @internal ICU 77 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        @Deprecated
+        NONE,
+        /**
+         * Wrap direction mixtures in bidi control characters as described in the MessageFormat 2 specification.
+         *
+         * @internal ICU 77 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        @Deprecated
+        DEFAULT
+    }
+
+    /**
      * A {@code Builder} used to build instances of {@link MessageFormatter}.
      *
      * @internal ICU 72 technology preview
@@ -331,6 +379,7 @@ public class MessageFormatter {
         private Locale locale = Locale.getDefault(Locale.Category.FORMAT);
         private String pattern = null;
         private ErrorHandlingBehavior errorHandlingBehavior = ErrorHandlingBehavior.BEST_EFFORT;
+        private BidiIsolation bidiIsolation = BidiIsolation.NONE;
         private MFFunctionRegistry functionRegistry = MFFunctionRegistry.builder().build();
         private MFDataModel.Message dataModel = null;
 
@@ -374,7 +423,7 @@ public class MessageFormatter {
          *
          * <p>The default value is {@code ErrorHandlingBehavior.BEST_EFFORT}, trying to fallback.</p>
          *
-         * @param the error handling behavior to use.
+         * @param errorHandlingBehavior the error handling behavior to use.
          * @return the builder, for fluent use.
          *
          * @internal ICU 76 technology preview
@@ -383,6 +432,24 @@ public class MessageFormatter {
         @Deprecated
         public Builder setErrorHandlingBehavior(ErrorHandlingBehavior errorHandlingBehavior) {
             this.errorHandlingBehavior = errorHandlingBehavior;
+            return this;
+        }
+
+        /**
+         * Sets the {@link BidiIsolation} to introduce bidi control characters / tags
+         * as described in the MessageFormat 2 specification.
+         *
+         * <p>The default value is {@code BidiIsolation.NONE}.</p>
+         *
+         * @param bidiIsolation the bidi isolation algorithm to use.
+         * @return the builder, for fluent use.
+         *
+         * @internal ICU 77 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        @Deprecated
+        public Builder setBidiIsolation(BidiIsolation bidiIsolation) {
+            this.bidiIsolation = bidiIsolation;
             return this;
         }
 

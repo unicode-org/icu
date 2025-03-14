@@ -33,8 +33,13 @@ namespace message2 {
     class StandardFunctions {
         friend class MessageFormatter;
 
+        public:
+        // Used for normalizing variable names and keys for comparison
+        static UnicodeString normalizeNFC(const UnicodeString&);
+
+        private:
         static UnicodeString getStringOption(const FunctionOptions& opts,
-                                             const UnicodeString& optionName,
+                                             std::u16string_view optionName,
                                              UErrorCode& errorCode);
 
         class DateTime;
@@ -81,12 +86,12 @@ namespace message2 {
              */
             UnicodeString getFunctionOption(const FormattedPlaceholder& toFormat,
                                             const FunctionOptions& opts,
-                                            const UnicodeString& optionName) const;
+                                            std::u16string_view optionName) const;
             // Version for options that don't have defaults; sets the error
             // code instead of returning a default value
             UnicodeString getFunctionOption(const FormattedPlaceholder& toFormat,
                                             const FunctionOptions& opts,
-                                            const UnicodeString& optionName,
+                                            std::u16string_view optionName,
                                             UErrorCode& errorCode) const;
 
         };
@@ -211,6 +216,60 @@ namespace message2 {
 
             TextSelector(const Locale& l) : locale(l) {}
         };
+
+        // See https://github.com/unicode-org/message-format-wg/blob/main/test/README.md
+        class TestFormatFactory : public FormatterFactory {
+        public:
+            Formatter* createFormatter(const Locale& locale, UErrorCode& status) override;
+            TestFormatFactory() {}
+            virtual ~TestFormatFactory();
+        };
+
+        class TestSelect;
+
+        class TestFormat : public Formatter {
+        public:
+            FormattedPlaceholder format(FormattedPlaceholder&& toFormat, FunctionOptions&& options, UErrorCode& status) const override;
+            virtual ~TestFormat();
+
+        private:
+            friend class TestFormatFactory;
+            friend class TestSelect;
+            TestFormat() {}
+            static void testFunctionParameters(const FormattedPlaceholder& arg,
+                                               const FunctionOptions& options,
+                                               int32_t& decimalPlaces,
+                                               bool& failsFormat,
+                                               bool& failsSelect,
+                                               double& input,
+                                               UErrorCode& status);
+
+        };
+
+        // See https://github.com/unicode-org/message-format-wg/blob/main/test/README.md
+        class TestSelectFactory : public SelectorFactory {
+        public:
+            Selector* createSelector(const Locale& locale, UErrorCode& status) const override;
+            TestSelectFactory() {}
+            virtual ~TestSelectFactory();
+        };
+
+        class TestSelect : public Selector {
+        public:
+            void selectKey(FormattedPlaceholder&& val,
+                           FunctionOptions&& options,
+                           const UnicodeString* keys,
+                           int32_t keysLen,
+                           UnicodeString* prefs,
+                           int32_t& prefsLen,
+                           UErrorCode& status) const override;
+            virtual ~TestSelect();
+
+        private:
+            friend class TestSelectFactory;
+            TestSelect() {}
+        };
+
     };
 
     extern void formatDateWithDefaults(const Locale& locale, UDate date, UnicodeString&, UErrorCode& errorCode);

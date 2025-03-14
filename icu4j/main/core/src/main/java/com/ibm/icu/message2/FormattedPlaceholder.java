@@ -17,6 +17,30 @@ import com.ibm.icu.text.FormattedValue;
 public class FormattedPlaceholder {
     private final FormattedValue formattedValue;
     private final Object inputValue;
+    private final Directionality directionality;
+    private final boolean isolate;
+
+    /**
+     * Constructor creating the {@code FormattedPlaceholder}.
+     *
+     * @param inputValue the original value to be formatted.
+     * @param formattedValue the result of formatting the placeholder.
+     * @param directionality the directionality of the formatted placeholder.
+     * @param isolate true if the placeholder should be considered a bidi isolate. 
+     *
+     * @internal ICU 72 technology preview
+     * @deprecated This API is for ICU internal use only.
+     */
+    @Deprecated
+    public FormattedPlaceholder(Object inputValue, FormattedValue formattedValue, Directionality directionality, boolean isolate) {
+        if (formattedValue == null) {
+            throw new IllegalAccessError("Should not try to wrap a null formatted value");
+        }
+        this.inputValue = inputValue;
+        this.formattedValue = formattedValue;
+        this.directionality = directionality;
+        this.isolate = isolate;
+    }
 
     /**
      * Constructor creating the {@code FormattedPlaceholder}.
@@ -29,11 +53,7 @@ public class FormattedPlaceholder {
      */
     @Deprecated
     public FormattedPlaceholder(Object inputValue, FormattedValue formattedValue) {
-        if (formattedValue == null) {
-            throw new IllegalAccessError("Should not try to wrap a null formatted value");
-        }
-        this.inputValue = inputValue;
-        this.formattedValue = formattedValue;
+        this(inputValue, formattedValue, Directionality.LTR, false);
     }
 
     /**
@@ -60,6 +80,32 @@ public class FormattedPlaceholder {
     @Deprecated
     public FormattedValue getFormattedValue() {
         return formattedValue;
+    }
+
+    /**
+     * Retrieve the directionality of the formatted the placeholder.
+     *
+     * @return the directionality.
+     *
+     * @internal ICU 77 technology preview
+     * @deprecated This API is for ICU internal use only.
+     */
+    @Deprecated
+    public Directionality getDirectionality() {
+        return directionality;
+    }
+
+    /**
+     * Retrieve the BiDi isolate setting of the formatted the placeholder.
+     *
+     * @return the BiDi isolate setting.
+     *
+     * @internal ICU 77 technology preview
+     * @deprecated This API is for ICU internal use only.
+     */
+    @Deprecated
+    public boolean getIsolate() {
+        return isolate;
     }
 
     /**

@@ -57,12 +57,33 @@ merging post RC fixes from trunk and others.
 Every commit being shipped in the next ICU release should be labeled with a Jira
 ticket that is marked as fixed with the correct fix version. Further, there
 should be no Jira tickets marked as fixed with the current fixVersion that do
-not have commits. To check this, run the following tool:
+not have commits. 
+
+### Run locally
+
+To check this, run the following tool:
 
 <https://github.com/unicode-org/icu/tree/main/tools/commit-checker>
 
-Follow the instructions in the README file to generate the report and send it
+Follow the instructions in the README file to generate the report locally and send it
 for review.
+
+### Run via CI
+
+Alternatively, you can run the "BRS Commit Checker Report" workflow directly from the project page CI
+by:
+
+1. Go to the [Actions tab](https://github.com/unicode-org/icu/actions)
+1. Click on the "BRS Commit Checker Report" workflow name on the left hand list of workflows
+1. Click the "Run workflow" dropdown.
+
+    The dropdown should reveal an input form in which to provide inputs
+
+1. Provide the same inputs in the form as you would for a local run of the tool,
+as described in the tool's Readme in the instructions above.
+
+    The only difference from the local run instructions is that git branch names in the 
+Actions workflow input form should be prefixed with `origin/`.
 
 ---
 

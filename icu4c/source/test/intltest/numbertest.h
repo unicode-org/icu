@@ -103,6 +103,8 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void toDecimalNumber();
     void microPropsInternals();
     void formatUnitsAliases();
+    void formatArbitraryConstant();
+    void TestPortionFormat();
     void testIssue22378();
 
     void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;

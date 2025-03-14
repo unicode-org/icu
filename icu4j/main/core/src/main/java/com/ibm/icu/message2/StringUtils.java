@@ -3,6 +3,8 @@
 
 package com.ibm.icu.message2;
 
+import com.ibm.icu.text.Normalizer2;
+
 class StringUtils {
 
     /*
@@ -13,8 +15,8 @@ class StringUtils {
      * abnf:              / %x2F-3F        ; omit @ (%x40)
      * abnf:              / %x41-5B        ; omit \ (%x5C)
      * abnf:              / %x5D-7A        ; omit { | } (%x7B-7D)
-     * abnf:              / %x7E-D7FF      ; omit surrogates
-     * abnf:              / %xE000-10FFFF
+     * abnf:              / %x7E-2FFF      ; omit IDEOGRAPHIC SPACE (%x3000)
+     * abnf:              / %x3001-10FFFF  ; allowing surrogates is intentional
      */
     static boolean isContentChar(int cp) {
         return (cp >= 0x0001 && cp <= 0x0008) // omit HTAB (%x09) and LF (%x0A)
@@ -24,11 +26,11 @@ class StringUtils {
                 || (cp >= 0x002F && cp <= 0x003F) // omit @ (%x40)
                 || (cp >= 0x0041 && cp <= 0x005B) // omit \ (%x5C)
                 || (cp >= 0x005D && cp <= 0x007A) // omit { | } (%x7B-7D)
-                || (cp >= 0x007E && cp <= 0xD7FF) // omit surrogates
-                || (cp >= 0xE000 && cp <= 0x10FFFF);
+                || (cp >= 0x007E && cp <= 0x2FFF) // omit IDEOGRAPHIC SPACE (%x3000)
+                || (cp >= 0x3001 && cp <= 0x10FFFF); //allowing surrogates is intentional
     }
 
-    // abnf: text-char = content-char / s / "." / "@" / "|"
+    // abnf: text-char = content-char / ws / "." / "@" / "|"
     static boolean isTextChar(int cp) {
         return isContentChar(cp) || isWhitespace(cp) || cp == '.' || cp == '@' || cp == '|';
     }
@@ -40,16 +42,25 @@ class StringUtils {
 
     /*
      * ; Whitespace
-     * abnf: s = 1*( SP / HTAB / CR / LF / %x3000 )
+     * abnf: ws = SP / HTAB / CR / LF / %x3000
      */
     static boolean isWhitespace(int cp) {
-        return cp == ' ' || cp == '\t' || cp == '\r' || cp == '\n' || cp == '\u3000';
+        return cp == ' ' || cp == '\t' || cp == '\r' || cp == '\n' || cp == 0x3000;
+    }
+
+    /*
+     * ; Bidirectional marks and isolates
+     * ; ALM / LRM / RLM / LRI, RLI, FSI & PDI
+     * abnf: bidi = %x061C / %x200E / %x200F / %x2066-2069
+     */
+    static boolean isBidi(int cp) {
+        return cp == 0x061C || cp == 0x200E || cp == 0x200F || (cp >= 0x2066 && cp <= 0x2069);
     }
 
     /*
      * abnf: name-start = ALPHA / "_"
      * abnf:            / %xC0-D6 / %xD8-F6 / %xF8-2FF
-     * abnf:            / %x370-37D / %x37F-1FFF / %x200C-200D
+     * abnf:            / %x370-37D / %x37F-61B / %x61D-1FFF / %x200C-200D
      * abnf:            / %x2070-218F / %x2C00-2FEF / %x3001-D7FF
      * abnf:            / %xF900-FDCF / %xFDF0-FFFC / %x10000-EFFFF
      */
@@ -60,7 +71,8 @@ class StringUtils {
                 || (cp >= 0x00D8 && cp <= 0x00F6)
                 || (cp >= 0x00F8 && cp <= 0x02FF)
                 || (cp >= 0x0370 && cp <= 0x037D)
-                || (cp >= 0x037F && cp <= 0x1FFF)
+                || (cp >= 0x037F && cp <= 0x061B)
+                || (cp >= 0x061D && cp <= 0x1FFF)
                 || (cp >= 0x200C && cp <= 0x200D)
                 || (cp >= 0x2070 && cp <= 0x218F)
                 || (cp >= 0x2C00 && cp <= 0x2FEF)
@@ -84,7 +96,7 @@ class StringUtils {
                 || (cp >= 0x203F && cp <= 0x2040);
     }
 
-    // abnf: quoted-char = content-char / s / "." / "@" / "{" / "}"
+    // abnf: quoted-char = content-char / ws / "." / "@" / "{" / "}"
     static boolean isQuotedChar(int cp) {
         return isContentChar(cp)
                 || isWhitespace(cp)
@@ -116,5 +128,11 @@ class StringUtils {
     // abnf: function = ":" identifier *(s option)
     static boolean isFunctionSigil(int cp) {
         return cp == ':';
+    }
+
+    final private static Normalizer2 NFC_NORMALIZER = Normalizer2.getNFCInstance();
+
+    static String toNfc(CharSequence value) {
+        return value == null ? null : NFC_NORMALIZER.normalize(value);
     }
 }

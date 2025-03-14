@@ -146,6 +146,9 @@ static void TestToLegacyType(void);
 static void TestBug20149(void);
 static void TestCDefaultLocale(void);
 static void TestBug21449InfiniteLoop(void);
+static void TestBug23031VaPosix(void);
+static void TestBug23031VaPosixManyExtensions(void);
+static void TestBug23031VaPosixManyVariants(void);
 
 
 /**

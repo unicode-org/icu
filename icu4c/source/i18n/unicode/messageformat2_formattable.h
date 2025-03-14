@@ -551,15 +551,16 @@ class U_I18N_API FunctionOptions : public UObject {
      */
     FunctionOptions& operator=(const FunctionOptions&) = delete;
  private:
+    friend class InternalValue;
     friend class MessageFormatter;
     friend class StandardFunctions;
 
     explicit FunctionOptions(UVector&&, UErrorCode&);
 
     const ResolvedFunctionOption* getResolvedFunctionOptions(int32_t& len) const;
-    UBool getFunctionOption(const UnicodeString&, Formattable&) const;
+    UBool getFunctionOption(std::u16string_view, Formattable&) const;
     // Returns empty string if option doesn't exist
-    UnicodeString getStringFunctionOption(const UnicodeString&) const;
+    UnicodeString getStringFunctionOption(std::u16string_view) const;
     int32_t optionsCount() const { return functionOptionsLen; }
 
     // Named options passed to functions
@@ -568,12 +569,13 @@ class U_I18N_API FunctionOptions : public UObject {
     // that code in the header because it would have to call internal Hashtable methods.
     ResolvedFunctionOption* options;
     int32_t functionOptionsLen = 0;
+
+    /**
+     * The original FunctionOptions isn't usable after this call.
+     * @returns A new, merged FunctionOptions.
+     */
+    FunctionOptions mergeOptions(FunctionOptions&& other, UErrorCode&);
 }; // class FunctionOptions
-
-
-    // TODO doc comments
-    // Encapsulates either a formatted string or formatted number;
-    // more output types could be added in the future.
 
     /**
      * A `FormattedValue` represents the result of formatting a `message2::Formattable`.

@@ -368,9 +368,6 @@ Note: This is also referenced below [Upload API documentations](docs.md#upload-a
 
 ### ICU4J
 
-**Note:** JCite must be installed for building ICU4J documentation:
-<https://icu.unicode.org/setup/java/ant#TOC-Building-ICU4J-API-Reference-Document-with-JCite>
-
 Build the API documentation pages for the new release:
 
 ```

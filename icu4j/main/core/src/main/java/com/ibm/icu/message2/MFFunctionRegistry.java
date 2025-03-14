@@ -26,6 +26,8 @@ import java.util.Set;
  *     </li>
  * </ul>
  *
+ * <p><b>NOTE:</b> all function and selector names are normalized to NFC.
+ *
  * @internal ICU 72 technology preview
  * @deprecated This API is for technology preview only.
  */
@@ -75,7 +77,7 @@ public class MFFunctionRegistry {
      */
     @Deprecated
     public FormatterFactory getFormatter(String formatterName) {
-        return formattersMap.get(formatterName);
+        return formattersMap.get(StringUtils.toNfc(formatterName));
     }
 
     /**
@@ -147,7 +149,7 @@ public class MFFunctionRegistry {
      */
     @Deprecated
     public SelectorFactory getSelector(String selectorName) {
-        return selectorsMap.get(selectorName);
+        return selectorsMap.get(StringUtils.toNfc(selectorName));
     }
 
     /**
@@ -207,7 +209,7 @@ public class MFFunctionRegistry {
          */
         @Deprecated
         public Builder setFormatter(String formatterName, FormatterFactory formatterFactory) {
-            formattersMap.put(formatterName, formatterFactory);
+            formattersMap.put(StringUtils.toNfc(formatterName), formatterFactory);
             return this;
         }
 
@@ -222,7 +224,7 @@ public class MFFunctionRegistry {
          */
         @Deprecated
         public Builder removeFormatter(String formatterName) {
-            formattersMap.remove(formatterName);
+            formattersMap.remove(StringUtils.toNfc(formatterName));
             return this;
         }
 
@@ -252,7 +254,7 @@ public class MFFunctionRegistry {
          */
         @Deprecated
         public Builder setDefaultFormatterNameForType(Class<?> clazz, String formatterName) {
-            classToFormatter.put(clazz, formatterName);
+            classToFormatter.put(clazz, StringUtils.toNfc(formatterName));
             return this;
         }
 
@@ -297,7 +299,7 @@ public class MFFunctionRegistry {
          */
         @Deprecated
         public Builder setSelector(String selectorName, SelectorFactory selectorFactory) {
-            selectorsMap.put(selectorName, selectorFactory);
+            selectorsMap.put(StringUtils.toNfc(selectorName), selectorFactory);
             return this;
         }
 
@@ -312,7 +314,7 @@ public class MFFunctionRegistry {
          */
         @Deprecated
         public Builder removeSelector(String selectorName) {
-            selectorsMap.remove(selectorName);
+            selectorsMap.remove(StringUtils.toNfc(selectorName));
             return this;
         }
 

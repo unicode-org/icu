@@ -678,6 +678,9 @@ ucurr_getName(const char16_t* currency,
     // this function.
     UErrorCode ec2 = U_ZERO_ERROR;
 
+    if (locale == nullptr) {
+        locale = uloc_getDefault();
+    }
     CharString loc = ulocimp_getName(locale, ec2);
     if (U_FAILURE(ec2)) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
@@ -776,6 +779,9 @@ ucurr_getPluralName(const char16_t* currency,
     // this function.
     UErrorCode ec2 = U_ZERO_ERROR;
 
+    if (locale == nullptr) {
+        locale = uloc_getDefault();
+    }
     CharString loc = ulocimp_getName(locale, ec2);
     if (U_FAILURE(ec2)) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
@@ -969,6 +975,9 @@ collectCurrencyNames(const char* locale,
     // Look up the Currencies resource for the given locale.
     UErrorCode ec2 = U_ZERO_ERROR;
 
+    if (locale == nullptr) {
+        locale = uloc_getDefault();
+    }
     CharString loc = ulocimp_getName(locale, ec2);
     if (U_FAILURE(ec2)) {
         ec = U_ILLEGAL_ARGUMENT_ERROR;

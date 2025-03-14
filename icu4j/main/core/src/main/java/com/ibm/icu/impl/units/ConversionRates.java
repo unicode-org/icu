@@ -57,6 +57,10 @@ public class ConversionRates {
             result = result.multiply(getFactorToBase(singleUnit));
         }
 
+        if (measureUnit.getConstantDenominator() != 0) {
+            result = result.divide(BigDecimal.valueOf(measureUnit.getConstantDenominator()));
+        }
+
         return result;
     }
 

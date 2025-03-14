@@ -2596,6 +2596,9 @@ ulocimp_toLanguageTag(const char* localeID,
     bool hadPosix = false;
     const char* pKeywordStart;
 
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
     /* Note: uloc_canonicalize returns "en_US_POSIX" for input locale ID "".  See #6835 */
     icu::CharString canonical = ulocimp_canonicalize(localeID, tmpStatus);
     if (U_FAILURE(tmpStatus)) {

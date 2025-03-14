@@ -1,0 +1,64 @@
+name: BRS Commit Checker Report
+on:
+      workflow_dispatch:
+        inputs:
+            fix_version:
+                type: string
+                required: true
+                description: The ICU Jira "Fix Version" semver
+            from_git_ref:
+                type: string
+                required: true
+                description: The git ref start of comparison range. Prefix branches with `origin/`.
+            end_git_ref:
+                type: string
+                required: true
+                description: The git ref end of comparison range. Must be descendant of `from_git_ref`. Prefix branches with `origin/`.
+            # Jira user name & API token is used for processing sensitive tickets comes from Github Secrets
+            # stored in the repository
+
+jobs:
+    commit-report:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                fetch-tags: true
+                fetch-depth: 0
+            # workaround for bug in checkout action. this step should be redundant.
+            # https://github.com/actions/checkout/issues/1471
+            # https://github.com/actions/checkout/issues/1781
+            # https://github.com/actions/checkout/issues/701#issuecomment-1133937950
+            - name: Fetch all tags
+              run: |
+                git fetch --tags origin
+            - name: Fetch all branches
+              run: |
+                git fetch origin
+            - name: Setup Python
+              uses: actions/setup-python@v5
+              with:
+                python-version: '3.12.8'
+                cache: 'pipenv'
+                cache-dependency-path: |
+                    tools/commit-checker/Pipfile
+                    tools/commit-checker/Pipfile.lock
+            - name: Install pipenv
+              run: |
+                sudo pip3 install pipenv
+            - name: Generate report
+              env:
+                JIRA_USERNAME: ${{ secrets.COMMIT_CHECKER_JIRA_EMAIL }}
+                JIRA_PASSWORD: ${{ secrets.COMMIT_CHECKER_JIRA_TOKEN }}
+              run: |
+                pushd ./tools/commit-checker
+                pipenv install
+                pipenv run python3 check.py \
+                    --jira-query "project=ICU AND fixVersion=${{ inputs.fix_version }}" \
+                    --rev-range "${{ inputs.from_git_ref }}..${{ inputs.end_git_ref }}" > REPORT.md
+                popd
+            # https://github.blog/news-insights/product-news/supercharging-github-actions-with-job-summaries/
+            - name: Reproduce report as workflow job summary
+              run: |
+                cat ./tools/commit-checker/REPORT.md >> $GITHUB_STEP_SUMMARY
+                echo "View the Summary page of this GHA Workflow instance to view the rendered Markdown of this report."

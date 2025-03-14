@@ -1189,7 +1189,7 @@ public:
      * for (auto el : set) {
      *     UnicodeString us(el);
      *     std::string u8;
-     *     printf("set.string length %ld \"%s\"\n", (long)us.length(), us.toUTF8String(u8).c_str());
+     *     printf("set.element length %ld \"%s\"\n", (long)us.length(), us.toUTF8String(u8).c_str());
      * }
      * \endcode
      *

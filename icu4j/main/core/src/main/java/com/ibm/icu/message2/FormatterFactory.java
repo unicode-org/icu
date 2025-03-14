@@ -23,7 +23,7 @@ public interface FormatterFactory {
      * @param locale the locale to use for formatting.
      * @param fixedOptions the options to use for formatting. The keys and values are function dependent.
      * @return the formatter.
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException in case there is a problem with the arguments.
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.

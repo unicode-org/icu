@@ -2716,6 +2716,9 @@ ures_openWithType(UResourceBundle *r, const char* path, const char* localeID,
 
     UResourceDataEntry *entry;
     if(openType != URES_OPEN_DIRECT) {
+        if (localeID == nullptr) {
+            localeID = uloc_getDefault();
+        }
         /* first "canonicalize" the locale ID */
         CharString canonLocaleID = ulocimp_getBaseName(localeID, *status);
         if(U_FAILURE(*status)) {
@@ -3079,6 +3082,9 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         if (kwVal == DEFAULT_TAG) {
             kwVal.clear();
         }
+    }
+    if (locid == nullptr) {
+        locid = uloc_getDefault();
     }
     CharString base = ulocimp_getBaseName(locid, subStatus);
 #if defined(URES_TREE_DEBUG)

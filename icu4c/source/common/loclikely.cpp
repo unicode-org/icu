@@ -300,6 +300,9 @@ ulocimp_addLikelySubtags(const char* localeID,
                          icu::ByteSink& sink,
                          UErrorCode& status) {
     if (U_FAILURE(status)) { return; }
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
     icu::CharString localeBuffer = ulocimp_canonicalize(localeID, status);
     _uloc_addLikelySubtags(localeBuffer.data(), sink, status);
 }
@@ -334,6 +337,9 @@ ulocimp_minimizeSubtags(const char* localeID,
                         bool favorScript,
                         UErrorCode& status) {
     if (U_FAILURE(status)) { return; }
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
     icu::CharString localeBuffer = ulocimp_canonicalize(localeID, status);
     _uloc_minimizeSubtags(localeBuffer.data(), sink, favorScript, status);
 }

@@ -141,7 +141,7 @@
     },
     {
       "comment": "Trailing whitespace after match is valid",
-      "src": ".match {1 :string} * {{}} ",
+      "src": ".local $x = {1 :string} .match $x * {{}} ",
       "exp": ""
     },
     {

@@ -63,7 +63,7 @@
     {
       "src": [".local $num = {|42| :number}\n",
                "{{Testing date formatting: {$num :datetime}}}"],
-      "exp": "Testing date formatting: {|42|}",
+      "exp": "Testing date formatting: {$num}",
       "expErrors": [{"type": "bad-operand"}]
     },
     {

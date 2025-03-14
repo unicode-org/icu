@@ -114,8 +114,7 @@ namespace message2 {
     private:
         friend class MessageContext;
 
-        const Formattable* getArgument(const MessageFormatter&,
-                                       const data_model::VariableName&,
+        const Formattable* getArgument(const data_model::VariableName&,
                                        UErrorCode&) const;
 
         // Avoids using Hashtable so that code constructing a Hashtable

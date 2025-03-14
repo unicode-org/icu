@@ -68,42 +68,42 @@ U_EXPORT std::optional<std::string_view>
 ulocimp_toLegacyTypeWithFallback(std::string_view keyword, std::string_view value);
 
 U_EXPORT icu::CharString
-ulocimp_getKeywords(const char* localeID,
+ulocimp_getKeywords(std::string_view localeID,
                     char prev,
                     bool valuesToo,
                     UErrorCode& status);
 
 U_EXPORT void
-ulocimp_getKeywords(const char* localeID,
+ulocimp_getKeywords(std::string_view localeID,
                     char prev,
                     icu::ByteSink& sink,
                     bool valuesToo,
                     UErrorCode& status);
 
 U_EXPORT icu::CharString
-ulocimp_getName(const char* localeID,
+ulocimp_getName(std::string_view localeID,
                 UErrorCode& err);
 
 U_EXPORT void
-ulocimp_getName(const char* localeID,
+ulocimp_getName(std::string_view localeID,
                 icu::ByteSink& sink,
                 UErrorCode& err);
 
 U_EXPORT icu::CharString
-ulocimp_getBaseName(const char* localeID,
+ulocimp_getBaseName(std::string_view localeID,
                     UErrorCode& err);
 
 U_EXPORT void
-ulocimp_getBaseName(const char* localeID,
+ulocimp_getBaseName(std::string_view localeID,
                     icu::ByteSink& sink,
                     UErrorCode& err);
 
 U_EXPORT icu::CharString
-ulocimp_canonicalize(const char* localeID,
+ulocimp_canonicalize(std::string_view localeID,
                      UErrorCode& err);
 
 U_EXPORT void
-ulocimp_canonicalize(const char* localeID,
+ulocimp_canonicalize(std::string_view localeID,
                      icu::ByteSink& sink,
                      UErrorCode& err);
 

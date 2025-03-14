@@ -546,6 +546,12 @@ public class UnitsConverter {
             return result;
         }
 
+        public Factor divide(BigDecimal value) {
+            Factor result = this.copy();
+            result.factorDen = this.factorDen.multiply(value);
+            return result;
+        }
+
         /**
          * Adds Entity with power or not. For example, {@code 12 ^ 3} or {@code 12}.
          *
