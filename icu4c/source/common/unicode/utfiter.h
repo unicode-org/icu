@@ -1324,12 +1324,12 @@ public:
     UTFStringCodePoints &operator=(const UTFStringCodePoints &other) = default;
 
     /** @draft ICU 78 */
-    UTFIterator<CP32, behavior, const Unit *> begin() const {
+    UTFIterator<CP32, behavior, typename std::basic_string_view<Unit>::iterator> begin() const {
         return {s.begin(), s.begin(), s.end()};
     }
 
     /** @draft ICU 78 */
-    UTFIterator<CP32, behavior, const Unit *> end() const {
+    UTFIterator<CP32, behavior, typename std::basic_string_view<Unit>::iterator> end() const {
         return {s.begin(), s.end(), s.end()};
     }
 
@@ -1866,12 +1866,12 @@ public:
     UnsafeUTFStringCodePoints &operator=(const UnsafeUTFStringCodePoints &other) = default;
 
     /** @draft ICU 78 */
-    UnsafeUTFIterator<CP32, const Unit *> begin() const {
+    UnsafeUTFIterator<CP32, typename std::basic_string_view<Unit>::iterator> begin() const {
         return {s.begin()};
     }
 
     /** @draft ICU 78 */
-    UnsafeUTFIterator<CP32, const Unit *> end() const {
+    UnsafeUTFIterator<CP32, typename std::basic_string_view<Unit>::iterator> end() const {
         return {s.end()};
     }
 
