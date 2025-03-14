@@ -283,7 +283,7 @@ void U16IteratorTest::testNegative() {
     auto sv = units.stringView();
     assertEquals("iter[1] * stringView().length()", 1, sv.length());
     assertEquals("iter[1] * stringView()[0]", 0xd900, sv[0]);
-    // TODO: test units.data()
+    // TODO: test units.begin()
     ++iter;
     assertEquals("iter[2] * codePoint", u'b', (*iter++).codePoint());  // post-increment
     units = *iter++;  // post-increment
@@ -359,7 +359,7 @@ void U16IteratorTest::testSinglePassIter() {
     assertEquals("iter[1] * length", 1, units.length());
     assertTrue("iter[1] * wellFormed", units.wellFormed());
     // No units.stringView() when the unit iterator is not a pointer.
-    // No data() for a single-pass unit iterator.
+    // No begin() for a single-pass unit iterator.
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
@@ -395,7 +395,8 @@ void U16IteratorTest::testFwdIter() {
     assertEquals("iter[1] * length", 1, units.length());
     assertTrue("iter[1] * wellFormed", units.wellFormed());
     // No units.stringView() when the unit iterator is not a pointer.
-    assertTrue("iter[1] * data()[0]", *units.data() == u'b');
+    assertTrue("iter[1] * begin()[0]", *units.begin() == u'b');
+    assertTrue("iter[1] * end()[0]", *units.end() == u'ç');
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
@@ -406,9 +407,10 @@ void U16IteratorTest::testFwdIter() {
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[4] * length", 2, units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
-    FwdIter<char16_t> data = units.data();
-    assertTrue("iter[4] * data()[0]", *data++ == u"🚴"[0]);
-    assertTrue("iter[4] * data()[1]", *data == u"🚴"[1]);
+    FwdIter<char16_t> data = units.begin();
+    assertTrue("iter[4] * begin()[0]", *data++ == u"🚴"[0]);
+    assertTrue("iter[4] * begin()[1]", *data == u"🚴"[1]);
+    assertTrue("iter[4] * end() == endIter", units.end() == goodLimit);
     assertTrue("iter == endIter", iter == rangeLimit);
 }
 
@@ -496,7 +498,7 @@ void U8IteratorTest::testSinglePassIter() {
     assertEquals("iter[1] * length", 1, units.length());
     assertTrue("iter[1] * wellFormed", units.wellFormed());
     // No units.stringView() when the unit iterator is not a pointer.
-    // No data() for a single-pass unit iterator.
+    // No begin() for a single-pass unit iterator.
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
@@ -532,7 +534,8 @@ void U8IteratorTest::testFwdIter() {
     assertEquals("iter[1] * length", 1, units.length());
     assertTrue("iter[1] * wellFormed", units.wellFormed());
     // No units.stringView() when the unit iterator is not a pointer.
-    assertTrue("iter[1] * data()[0]", *units.data() == u8'b');
+    assertTrue("iter[1] * begin()[0]", *units.begin() == u8'b');
+    assertTrue("iter[1] * end()[0]", *units.end() == u8"ç"[0]);
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
@@ -543,11 +546,12 @@ void U8IteratorTest::testFwdIter() {
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[4] * length", 4, units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
-    FwdIter<char> data = units.data();
-    assertTrue("iter[4] * data()[0]", *data++ == u8"🚴"[0]);
-    assertTrue("iter[4] * data()[1]", *data++ == u8"🚴"[1]);
-    assertTrue("iter[4] * data()[2]", *data++ == u8"🚴"[2]);
-    assertTrue("iter[4] * data()[3]", *data == u8"🚴"[3]);
+    FwdIter<char> data = units.begin();
+    assertTrue("iter[4] * begin()[0]", *data++ == u8"🚴"[0]);
+    assertTrue("iter[4] * begin()[1]", *data++ == u8"🚴"[1]);
+    assertTrue("iter[4] * begin()[2]", *data++ == u8"🚴"[2]);
+    assertTrue("iter[4] * begin()[3]", *data == u8"🚴"[3]);
+    assertTrue("iter[4] * end() == endIter", units.end() == goodLimit);
     assertTrue("iter == endIter", iter == rangeLimit);
 }
 
@@ -631,7 +635,7 @@ void U32IteratorTest::testSinglePassIter() {
     assertEquals("iter[1] * length", 1, units.length());
     assertTrue("iter[1] * wellFormed", units.wellFormed());
     // No units.stringView() when the unit iterator is not a pointer.
-    // No data() for a single-pass unit iterator.
+    // No begin() for a single-pass unit iterator.
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
@@ -667,7 +671,8 @@ void U32IteratorTest::testFwdIter() {
     assertEquals("iter[1] * length", 1, units.length());
     assertTrue("iter[1] * wellFormed", units.wellFormed());
     // No units.stringView() when the unit iterator is not a pointer.
-    assertTrue("iter[1] * data()[0]", *units.data() == u'b');
+    assertTrue("iter[1] * begin()[0]", *units.begin() == u'b');
+    assertTrue("iter[1] * end()[0]", *units.end() == u'ç');
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
@@ -678,7 +683,8 @@ void U32IteratorTest::testFwdIter() {
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[4] * length", 1, units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
-    FwdIter<char32_t> data = units.data();
-    assertTrue("iter[4] * data()[0]", *data == U"🚴"[0]);
+    FwdIter<char32_t> data = units.begin();
+    assertTrue("iter[4] * begin()[0]", *data == U"🚴"[0]);
+    assertTrue("iter[4] * end() == endIter", units.end() == goodLimit);
     assertTrue("iter == endIter", iter == rangeLimit);
 }

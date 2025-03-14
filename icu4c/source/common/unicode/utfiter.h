@@ -124,8 +124,8 @@ class UnsafeCodeUnits {
     using Unit = typename std::iterator_traits<UnitIter>::value_type;
 public:
     // @internal
-    UnsafeCodeUnits(CP32 codePoint, uint8_t length, UnitIter data) :
-            c(codePoint), len(length), p(data) {}
+    UnsafeCodeUnits(CP32 codePoint, uint8_t length, UnitIter start, UnitIter limit) :
+            c_(codePoint), len_(length), start_(start), limit_(limit) {}
 
     UnsafeCodeUnits(const UnsafeCodeUnits &other) = default;
     UnsafeCodeUnits &operator=(const UnsafeCodeUnits &other) = default;
@@ -137,20 +137,27 @@ public:
      *     UTFIllFormedBehavior template parameter.
      * @draft ICU 78
      */
-    UChar32 codePoint() const { return c; }
+    UChar32 codePoint() const { return c_; }
 
     /**
      * @return the start of the minimal Unicode code unit sequence.
      * Only enabled if UnitIter is a (multi-pass) forward_iterator or better.
      * @draft ICU 78
      */
-    UnitIter data() const { return p; }
+    UnitIter begin() const { return start_; }
+
+    /**
+     * @return the limit (exclusive end) of the minimal Unicode code unit sequence.
+     * Only enabled if UnitIter is a (multi-pass) forward_iterator or better.
+     * @draft ICU 78
+     */
+    UnitIter end() const { return limit_; }
 
     /**
      * @return the length of the minimal Unicode code unit sequence.
      * @draft ICU 78
      */
-    uint8_t length() const { return len; }
+    uint8_t length() const { return len_; }
 
     /**
      * @return a string_view of the minimal Unicode code unit sequence.
@@ -162,14 +169,15 @@ public:
         std::is_pointer_v<Iter>,
         std::basic_string_view<Unit>>
     stringView() const {
-        return std::basic_string_view<Unit>(p, len);
+        return std::basic_string_view<Unit>(start_, len_);
     }
 
 private:
     // Order of fields with padding and access frequency in mind.
-    CP32 c;
-    uint8_t len;
-    UnitIter p;
+    CP32 c_;
+    uint8_t len_;
+    UnitIter start_;
+    UnitIter limit_;
 };
 
 #ifndef U_IN_DOXYGEN
@@ -185,19 +193,19 @@ class UnsafeCodeUnits<
                 typename std::iterator_traits<UnitIter>::iterator_category>>> {
 public:
     // @internal
-    UnsafeCodeUnits(CP32 codePoint, uint8_t length) : c(codePoint), len(length) {}
+    UnsafeCodeUnits(CP32 codePoint, uint8_t length) : c_(codePoint), len_(length) {}
 
     UnsafeCodeUnits(const UnsafeCodeUnits &other) = default;
     UnsafeCodeUnits &operator=(const UnsafeCodeUnits &other) = default;
 
-    UChar32 codePoint() const { return c; }
+    UChar32 codePoint() const { return c_; }
 
-    uint8_t length() const { return len; }
+    uint8_t length() const { return len_; }
 
 private:
     // Order of fields with padding and access frequency in mind.
-    CP32 c;
-    uint8_t len;
+    CP32 c_;
+    uint8_t len_;
 };
 #endif  // U_IN_DOXYGEN
 
@@ -219,16 +227,16 @@ template<typename CP32, typename UnitIter, typename = void>
 class CodeUnits : public UnsafeCodeUnits<CP32, UnitIter> {
 public:
     // @internal
-    CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed, UnitIter data) :
-            UnsafeCodeUnits<CP32, UnitIter>(codePoint, length, data), ok(wellFormed) {}
+    CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed, UnitIter start, UnitIter limit) :
+            UnsafeCodeUnits<CP32, UnitIter>(codePoint, length, start, limit), ok_(wellFormed) {}
 
     CodeUnits(const CodeUnits &other) = default;
     CodeUnits &operator=(const CodeUnits &other) = default;
 
-    bool wellFormed() const { return ok; }
+    bool wellFormed() const { return ok_; }
 
 private:
-    bool ok;
+    bool ok_;
 };
 
 #ifndef U_IN_DOXYGEN
@@ -246,15 +254,15 @@ class CodeUnits<
 public:
     // @internal
     CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed) :
-            UnsafeCodeUnits<CP32, UnitIter>(codePoint, length), ok(wellFormed) {}
+            UnsafeCodeUnits<CP32, UnitIter>(codePoint, length), ok_(wellFormed) {}
 
     CodeUnits(const CodeUnits &other) = default;
     CodeUnits &operator=(const CodeUnits &other) = default;
 
-    bool wellFormed() const { return ok; }
+    bool wellFormed() const { return ok_; }
 
 private:
-    bool ok;
+    bool ok_;
 };
 #endif  // U_IN_DOXYGEN
 
@@ -349,7 +357,7 @@ public:
         CP32 c = uint8_t(*p);
         ++p;
         if (U8_IS_SINGLE(c)) {
-            return {c, 1, true, p0};
+            return {c, 1, true, p0, p};
         }
         uint8_t length = 1;
         uint8_t t = 0;
@@ -373,9 +381,9 @@ public:
             c = (c << 6) | t;
             ++length;
             ++p;
-            return {c, length, true, p0};
+            return {c, length, true, p0, p};
         }
-        return {sub(), length, false, p0};
+        return {sub(), length, false, p0, p};
     }
 
     static inline CodeUnits<CP32, UnitIter> singlePassReadAndInc(
@@ -415,9 +423,10 @@ public:
 
     static inline CodeUnits<CP32, UnitIter> decAndRead(UnitIter start, UnitIter &p) {
         // Very similar to U8_PREV_OR_FFFD().
+        UnitIter p0 = p;
         CP32 c = uint8_t(*--p);
         if (U8_IS_SINGLE(c)) {
-            return {c, 1, true, p};
+            return {c, 1, true, p, p0};
         }
         if (U8_IS_TRAIL(c) && p != start) {
             UnitIter p1 = p;
@@ -426,13 +435,13 @@ public:
                 if (b1 < 0xe0) {
                     p = p1;
                     c = ((b1 - 0xc0) << 6) | (c & 0x3f);
-                    return {c, 2, true, p};
+                    return {c, 2, true, p, p0};
                 } else if (b1 < 0xf0 ?
                             U8_IS_VALID_LEAD3_AND_T1(b1, c) :
                             U8_IS_VALID_LEAD4_AND_T1(b1, c)) {
                     // Truncated 3- or 4-byte sequence.
                     p = p1;
-                    return {sub(), 2, false, p};
+                    return {sub(), 2, false, p, p0};
                 }
             } else if (U8_IS_TRAIL(b1) && p1 != start) {
                 // Extract the value bits from the last trail byte.
@@ -444,12 +453,12 @@ public:
                         if (U8_IS_VALID_LEAD3_AND_T1(b2, b1)) {
                             p = p1;
                             c = (b2 << 12) | ((b1 & 0x3f) << 6) | c;
-                            return {c, 3, true, p};
+                            return {c, 3, true, p, p0};
                         }
                     } else if (U8_IS_VALID_LEAD4_AND_T1(b2, b1)) {
                         // Truncated 4-byte sequence.
                         p = p1;
-                        return {sub(), 3, false, p};
+                        return {sub(), 3, false, p, p0};
                     }
                 } else if (U8_IS_TRAIL(b2) && p1 != start) {
                     uint8_t b3 = *--p1;
@@ -458,17 +467,13 @@ public:
                         if (U8_IS_VALID_LEAD4_AND_T1(b3, b2)) {
                             p = p1;
                             c = (b3 << 18) | ((b2 & 0x3f) << 12) | ((b1 & 0x3f) << 6) | c;
-                            return {c, 4, true, p};
+                            return {c, 4, true, p, p0};
                         }
                     }
                 }
             }
         }
-        return {sub(), 1, false, p};
-    }
-
-    static inline void moveToDecAndReadLimit(UnitIter &p, uint8_t n) {
-        std::advance(p, n);
+        return {sub(), 1, false, p, p0};
     }
 };
 
@@ -513,15 +518,15 @@ public:
         CP32 c = *p;
         ++p;
         if (!U16_IS_SURROGATE(c)) {
-            return {c, 1, true, p0};
+            return {c, 1, true, p0, p};
         } else {
             uint16_t c2;
             if (U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(c2 = *p)) {
                 ++p;
                 c = U16_GET_SUPPLEMENTARY(c, c2);
-                return {c, 2, true, p0};
+                return {c, 2, true, p0, p};
             } else {
-                return {sub(c), 1, false, p0};
+                return {sub(c), 1, false, p0, p};
             }
         }
     }
@@ -547,27 +552,20 @@ public:
 
     static inline CodeUnits<CP32, UnitIter> decAndRead(UnitIter start, UnitIter &p) {
         // Very similar to U16_PREV_OR_FFFD().
+        UnitIter p0 = p;
         CP32 c = *--p;
         if (!U16_IS_SURROGATE(c)) {
-            return {c, 1, true, p};
+            return {c, 1, true, p, p0};
         } else {
             UnitIter p1;
             uint16_t c2;
             if (U16_IS_SURROGATE_TRAIL(c) && p != start && (p1 = p, U16_IS_LEAD(c2 = *--p1))) {
                 p = p1;
                 c = U16_GET_SUPPLEMENTARY(c2, c);
-                return {c, 2, true, p};
+                return {c, 2, true, p, p0};
             } else {
-                return {sub(c), 1, false, p};
+                return {sub(c), 1, false, p, p0};
             }
-        }
-    }
-
-    static inline void moveToDecAndReadLimit(UnitIter &p, uint8_t n) {
-        // n = 1 or 2 for UTF-16
-        ++p;
-        if (n == 2) {
-            ++p;
         }
     }
 };
@@ -604,9 +602,9 @@ public:
         CP32 c = uc;
         ++p;
         if (uc < 0xd800 || (0xe000 <= uc && uc <= 0x10ffff)) {
-            return {c, 1, true, p0};
+            return {c, 1, true, p0, p};
         } else {
-            return {sub(uc < 0xe000, c), 1, false, p0};
+            return {sub(uc < 0xe000, c), 1, false, p0, p};
         }
     }
 
@@ -623,17 +621,14 @@ public:
     }
 
     static inline CodeUnits<CP32, UnitIter> decAndRead(UnitIter /*start*/, UnitIter &p) {
+        UnitIter p0 = p;
         uint32_t uc = *--p;
         CP32 c = uc;
         if (uc < 0xd800 || (0xe000 <= uc && uc <= 0x10ffff)) {
-            return {c, 1, true, p};
+            return {c, 1, true, p, p0};
         } else {
-            return {sub(uc < 0xe000, c), 1, false, p};
+            return {sub(uc < 0xe000, c), 1, false, p, p0};
         }
-    }
-
-    static inline void moveToDecAndReadLimit(UnitIter &p, uint8_t /*n*/) {
-        ++p;
     }
 };
 
@@ -668,11 +663,11 @@ public:
         CP32 c = uint8_t(*p);
         ++p;
         if (U8_IS_SINGLE(c)) {
-            return {c, 1, p0};
+            return {c, 1, p0, p};
         } else if (c < 0xe0) {
             c = ((c & 0x1f) << 6) | (*p & 0x3f);
             ++p;
-            return {c, 2, p0};
+            return {c, 2, p0, p};
         } else if (c < 0xf0) {
             // No need for (c&0xf) because the upper bits are truncated
             // after <<12 in the cast to uint16_t.
@@ -680,7 +675,7 @@ public:
             ++p;
             c |= *p & 0x3f;
             ++p;
-            return {c, 3, p0};
+            return {c, 3, p0, p};
         } else {
             c = ((c & 7) << 18) | ((*p & 0x3f) << 12);
             ++p;
@@ -688,7 +683,7 @@ public:
             ++p;
             c |= *p & 0x3f;
             ++p;
-            return {c, 4, p0};
+            return {c, 4, p0, p};
         }
     }
 
@@ -723,9 +718,10 @@ public:
 
     static inline UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
         // Very similar to U8_PREV_UNSAFE().
+        UnitIter p0 = p;
         CP32 c = uint8_t(*--p);
         if (U8_IS_SINGLE(c)) {
-            return {c, 1, p};
+            return {c, 1, p, p0};
         }
         // U8_IS_TRAIL(c) if well-formed
         c &= 0x3f;
@@ -743,11 +739,7 @@ public:
             }
         }
         ++count;
-        return {c, count, p};
-    }
-
-    static inline void moveToDecAndReadLimit(UnitIter &p, uint8_t n) {
-        std::advance(p, n);
+        return {c, count, p, p0};
     }
 };
 
@@ -781,12 +773,12 @@ public:
         CP32 c = *p;
         ++p;
         if (!U16_IS_LEAD(c)) {
-            return {c, 1, p0};
+            return {c, 1, p0, p};
         } else {
             uint16_t c2 = *p;
             ++p;
             c = U16_GET_SUPPLEMENTARY(c, c2);
-            return {c, 2, p0};
+            return {c, 2, p0, p};
         }
     }
 
@@ -806,21 +798,14 @@ public:
 
     static inline UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
         // Very similar to U16_PREV_UNSAFE().
+        UnitIter p0 = p;
         CP32 c = *--p;
         if (!U16_IS_TRAIL(c)) {
-            return {c, 1, p};
+            return {c, 1, p, p0};
         } else {
             uint16_t c2 = *--p;
             c = U16_GET_SUPPLEMENTARY(c2, c);
-            return {c, 2, p};
-        }
-    }
-
-    static inline void moveToDecAndReadLimit(UnitIter &p, uint8_t n) {
-        // n = 1 or 2 for UTF-16
-        ++p;
-        if (n == 2) {
-            ++p;
+            return {c, 2, p, p0};
         }
     }
 };
@@ -845,7 +830,7 @@ public:
         UnitIter p0 = p;
         CP32 c = *p;
         ++p;
-        return {c, 1, p0};
+        return {c, 1, p0, p};
     }
 
     static inline UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
@@ -855,12 +840,9 @@ public:
     }
 
     static inline UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
+        UnitIter p0 = p;
         CP32 c = *--p;
-        return {c, 1, p};
-    }
-
-    static inline void moveToDecAndReadLimit(UnitIter &p, uint8_t /*n*/) {
-        ++p;
+        return {c, 1, p, p0};
     }
 };
 
@@ -917,13 +899,13 @@ public:
     // Only enabled if UnitIter is a (multi-pass) forward_iterator or better.
     // TODO: Should we enable this only for a bidirectional_iterator?
     inline UTFIterator(UnitIter start, UnitIter p, UnitIter limit) :
-            p_(p), start_(start), limit_(limit), units_(0, 0, false, p) {}
+            p_(p), start_(start), limit_(limit), units_(0, 0, false, p, p) {}
     // Constructs an iterator with start=p.
     inline UTFIterator(UnitIter p, UnitIter limit) :
-            p_(p), start_(p), limit_(limit), units_(0, 0, false, p) {}
+            p_(p), start_(p), limit_(limit), units_(0, 0, false, p, p) {}
     // Constructs an iterator start or limit sentinel.
     // Requires UnitIter to be copyable.
-    inline UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p) {}
+    inline UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p, p) {}
 
     inline UTFIterator(UTFIterator &&src) noexcept = default;
     inline UTFIterator &operator=(UTFIterator &&src) noexcept = default;
@@ -965,7 +947,7 @@ public:
             Impl::inc(p_, limit_);
         } else /* state_ < 0 */ {
             // operator--() called decAndRead() so we know how far to skip.
-            Impl::moveToDecAndReadLimit(p_, units_.length());
+            p_ = units_.end();
             state_ = 0;
         }
         return *this;
@@ -992,7 +974,7 @@ public:
         } else /* state_ < 0 */ {
             UTFIterator result(*this);
             // operator--() called decAndRead() so we know how far to skip.
-            Impl::moveToDecAndReadLimit(p_, units_.length());
+            p_ = units_.end();
             state_ = 0;
             return result;
         }
@@ -1009,7 +991,7 @@ public:
     operator--() {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
-            p_ = units_.data();
+            p_ = units_.begin();
         }
         units_ = Impl::decAndRead(start_, p_);
         state_ = -1;
@@ -1034,7 +1016,7 @@ private:
     friend class std::reverse_iterator<UTFIterator<CP32, behavior, UnitIter>>;
 
     inline UnitIter getLogicalPosition() const {
-        return state_ <= 0 ? p_ : units_.data();
+        return state_ <= 0 ? p_ : units_.begin();
     }
 
     // operator*() etc. are logically const.
@@ -1188,7 +1170,7 @@ public:
 
     inline reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter> iter) :
             p_(iter.getLogicalPosition()), start_(iter.start_), limit_(iter.limit_),
-            units_(0, 0, false, p_), unitsLimit_(p_) {}
+            units_(0, 0, false, p_, p_) {}
 
     inline reverse_iterator(reverse_iterator &&src) noexcept = default;
     inline reverse_iterator &operator=(reverse_iterator &&src) noexcept = default;
@@ -1203,7 +1185,6 @@ public:
 
     inline CodeUnits_ operator*() const {
         if (state_ == 0) {
-            unitsLimit_ = p_;
             units_ = Impl::decAndRead(start_, p_);
             state_ = -1;
         }
@@ -1212,7 +1193,6 @@ public:
 
     inline Proxy operator->() const {
         if (state_ == 0) {
-            unitsLimit_ = p_;
             units_ = Impl::decAndRead(start_, p_);
             state_ = -1;
         }
@@ -1227,7 +1207,7 @@ public:
             Impl::dec(start_, p_);
         } else /* state_ > 0 */ {
             // operator--() called readAndInc() so we know how far to skip.
-            p_ = units_.data();
+            p_ = units_.begin();
             state_ = 0;
         }
         return *this;
@@ -1240,7 +1220,6 @@ public:
             state_ = 0;
             return result;
         } else if (state_ == 0) {
-            unitsLimit_ = p_;
             units_ = Impl::decAndRead(start_, p_);
             reverse_iterator result(*this);
             result.state_ = -1;
@@ -1249,7 +1228,7 @@ public:
         } else /* state_ > 0 */ {
             reverse_iterator result(*this);
             // operator--() called readAndInc() so we know how far to skip.
-            p_ = units_.data();
+            p_ = units_.begin();
             state_ = 0;
             return result;
         }
@@ -1258,7 +1237,7 @@ public:
     inline reverse_iterator &operator--() {  // pre-decrement
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is behind the logical position.
-            p_ = unitsLimit_;
+            p_ = units_.end();
         }
         units_ = Impl::readAndInc(start_, p_);
         state_ = 1;
@@ -1273,7 +1252,7 @@ public:
 
 private:
     inline UnitIter getLogicalPosition() const {
-        return state_ >= 0 ? p_ : unitsLimit_;
+        return state_ >= 0 ? p_ : units_.end();
     }
 
     // operator*() etc. are logically const.
@@ -1285,8 +1264,6 @@ private:
     // Keep state so that we call decAndRead() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
     mutable CodeUnits_ units_;
-    // For fast getLogicalPosition() and operator==().
-    mutable UnitIter unitsLimit_;
     // >0: units_ = readAndInc(), p_ = units limit
     //  0: initial state
     // <0: units_ = decAndRead(), p_ = units start
@@ -1485,7 +1462,7 @@ public:
         std::bidirectional_iterator_tag,
         std::forward_iterator_tag>;
 
-    inline UnsafeUTFIterator(UnitIter p) : p_(p), units_(0, 0, p) {}
+    inline UnsafeUTFIterator(UnitIter p) : p_(p), units_(0, 0, p, p) {}
 
     inline UnsafeUTFIterator(UnsafeUTFIterator &&src) noexcept = default;
     inline UnsafeUTFIterator &operator=(UnsafeUTFIterator &&src) noexcept = default;
@@ -1527,7 +1504,7 @@ public:
             Impl::inc(p_);
         } else /* state_ < 0 */ {
             // operator--() called decAndRead() so we know how far to skip.
-            Impl::moveToDecAndReadLimit(p_, units_.length());
+            p_ = units_.end();
             state_ = 0;
         }
         return *this;
@@ -1554,7 +1531,7 @@ public:
         } else /* state_ < 0 */ {
             UnsafeUTFIterator result(*this);
             // operator--() called decAndRead() so we know how far to skip.
-            Impl::moveToDecAndReadLimit(p_, units_.length());
+            p_ = units_.end();
             state_ = 0;
             return result;
         }
@@ -1571,7 +1548,7 @@ public:
     operator--() {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
-            p_ = units_.data();
+            p_ = units_.begin();
         }
         units_ = Impl::decAndRead(p_);
         state_ = -1;
@@ -1596,7 +1573,7 @@ private:
     friend class std::reverse_iterator<UnsafeUTFIterator<CP32, UnitIter>>;
 
     inline UnitIter getLogicalPosition() const {
-        return state_ <= 0 ? p_ : units_.data();
+        return state_ <= 0 ? p_ : units_.begin();
     }
 
     // operator*() etc. are logically const.
@@ -1737,7 +1714,7 @@ public:
     using iterator_category = std::bidirectional_iterator_tag;
 
     inline reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter> iter) :
-            p_(iter.getLogicalPosition()), units_(0, 0, p_), unitsLimit_(p_) {}
+            p_(iter.getLogicalPosition()), units_(0, 0, p_, p_) {}
 
     inline reverse_iterator(reverse_iterator &&src) noexcept = default;
     inline reverse_iterator &operator=(reverse_iterator &&src) noexcept = default;
@@ -1752,7 +1729,6 @@ public:
 
     inline UnsafeCodeUnits_ operator*() const {
         if (state_ == 0) {
-            unitsLimit_ = p_;
             units_ = Impl::decAndRead(p_);
             state_ = -1;
         }
@@ -1761,7 +1737,6 @@ public:
 
     inline Proxy operator->() const {
         if (state_ == 0) {
-            unitsLimit_ = p_;
             units_ = Impl::decAndRead(p_);
             state_ = -1;
         }
@@ -1776,7 +1751,7 @@ public:
             Impl::dec(p_);
         } else /* state_ > 0 */ {
             // operator--() called readAndInc() so we know how far to skip.
-            p_ = units_.data();
+            p_ = units_.begin();
             state_ = 0;
         }
         return *this;
@@ -1789,7 +1764,6 @@ public:
             state_ = 0;
             return result;
         } else if (state_ == 0) {
-            unitsLimit_ = p_;
             units_ = Impl::decAndRead(p_);
             reverse_iterator result(*this);
             result.state_ = -1;
@@ -1798,7 +1772,7 @@ public:
         } else /* state_ > 0 */ {
             reverse_iterator result(*this);
             // operator--() called readAndInc() so we know how far to skip.
-            p_ = units_.data();
+            p_ = units_.begin();
             state_ = 0;
             return result;
         }
@@ -1807,7 +1781,7 @@ public:
     inline reverse_iterator &operator--() {  // pre-decrement
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is behind the logical position.
-            p_ = unitsLimit_;
+            p_ = units_.end();
         }
         units_ = Impl::readAndInc(p_);
         state_ = 1;
@@ -1822,7 +1796,7 @@ public:
 
 private:
     inline UnitIter getLogicalPosition() const {
-        return state_ >= 0 ? p_ : unitsLimit_;
+        return state_ >= 0 ? p_ : units_.end();
     }
 
     // operator*() etc. are logically const.
@@ -1830,8 +1804,6 @@ private:
     // Keep state so that we call decAndRead() only once for both operator*() and ++
     // to make it easy for the compiler to optimize.
     mutable UnsafeCodeUnits_ units_;
-    // For fast getLogicalPosition() and operator==().
-    mutable UnitIter unitsLimit_;
     // >0: units_ = readAndInc(), p_ = units limit
     //  0: initial state
     // <0: units_ = decAndRead(), p_ = units start
