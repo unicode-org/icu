@@ -1324,13 +1324,15 @@ public:
     UTFStringCodePoints &operator=(const UTFStringCodePoints &other) = default;
 
     /** @draft ICU 78 */
-    UTFIterator<CP32, behavior, typename std::basic_string_view<Unit>::iterator> begin() const {
-        return {s.begin(), s.begin(), s.end()};
+    auto begin() const {
+        const Unit *limit = s.data() + s.length();
+        return UTFIterator<CP32, behavior, const Unit *>(s.data(), s.data(), limit);
     }
 
     /** @draft ICU 78 */
-    UTFIterator<CP32, behavior, typename std::basic_string_view<Unit>::iterator> end() const {
-        return {s.begin(), s.end(), s.end()};
+    auto end() const {
+        const Unit *limit = s.data() + s.length();
+        return UTFIterator<CP32, behavior, const Unit *>(s.data(), limit, limit);
     }
 
     /**
@@ -1866,13 +1868,13 @@ public:
     UnsafeUTFStringCodePoints &operator=(const UnsafeUTFStringCodePoints &other) = default;
 
     /** @draft ICU 78 */
-    UnsafeUTFIterator<CP32, typename std::basic_string_view<Unit>::iterator> begin() const {
-        return {s.begin()};
+    auto begin() const {
+        return UnsafeUTFIterator<CP32, const Unit *>(s.data());
     }
 
     /** @draft ICU 78 */
-    UnsafeUTFIterator<CP32, typename std::basic_string_view<Unit>::iterator> end() const {
-        return {s.end()};
+    auto end() const {
+        return UnsafeUTFIterator<CP32, const Unit *>(s.data() + s.length());
     }
 
     /**
