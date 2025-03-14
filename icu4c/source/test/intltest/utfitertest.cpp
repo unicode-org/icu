@@ -135,7 +135,7 @@ public:
     typedef Unit value_type;
     typedef Unit &reference;
     typedef Unit *pointer;
-    typedef ssize_t difference_type;
+    typedef std::ptrdiff_t difference_type;
     // This is a LegacyIterator but there is no specific category for that,
     // so we claim it to be a LegacyInputIterator. It *is* single-pass.
     typedef std::input_iterator_tag iterator_category;
@@ -179,7 +179,7 @@ public:
     typedef Unit value_type;
     typedef Unit &reference;
     typedef Unit *pointer;
-    typedef ssize_t difference_type;
+    typedef std::ptrdiff_t difference_type;
     // https://en.cppreference.com/w/cpp/named_req/ForwardIterator#Multi-pass_guarantee
     typedef std::forward_iterator_tag iterator_category;
 
