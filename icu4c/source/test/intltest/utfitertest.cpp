@@ -535,7 +535,8 @@ void U8IteratorTest::testFwdIter() {
     assertTrue("iter[1] * wellFormed", units.wellFormed());
     // No units.stringView() when the unit iterator is not a pointer.
     assertTrue("iter[1] * begin()[0]", *units.begin() == u8'b');
-    assertTrue("iter[1] * end()[0]", *units.end() == u8"ç"[0]);
+    assertTrue("iter[1] * end()[0]",
+               static_cast<uint8_t>(*units.end()) == static_cast<uint8_t>(u8"ç"[0]));
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
@@ -547,10 +548,14 @@ void U8IteratorTest::testFwdIter() {
     assertEquals("iter[4] * length", 4, units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
     FwdIter<char> data = units.begin();
-    assertTrue("iter[4] * begin()[0]", *data++ == u8"🚴"[0]);
-    assertTrue("iter[4] * begin()[1]", *data++ == u8"🚴"[1]);
-    assertTrue("iter[4] * begin()[2]", *data++ == u8"🚴"[2]);
-    assertTrue("iter[4] * begin()[3]", *data == u8"🚴"[3]);
+    assertTrue("iter[4] * begin()[0]",
+               static_cast<uint8_t>(*data++) == static_cast<uint8_t>(u8"🚴"[0]));
+    assertTrue("iter[4] * begin()[1]",
+               static_cast<uint8_t>(*data++) == static_cast<uint8_t>(u8"🚴"[1]));
+    assertTrue("iter[4] * begin()[2]",
+               static_cast<uint8_t>(*data++) == static_cast<uint8_t>(u8"🚴"[2]));
+    assertTrue("iter[4] * begin()[3]",
+               static_cast<uint8_t>(*data) == static_cast<uint8_t>(u8"🚴"[3]));
     assertTrue("iter[4] * end() == endIter", units.end() == goodLimit);
     assertTrue("iter == endIter", iter == rangeLimit);
 }
