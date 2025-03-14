@@ -113,5 +113,29 @@
       "locale": "ro",
       "params": [{ "name": "val", "value": {"decimal": "1234567890123456789.987654321"} }]
     }
+  ],
+    "datetime_extra": [
+    {
+      "srcs": [".local $d = {|2024-07-02T19:23:45Z| :datetime timeStyle=long}\n",
+               "{{Expires at {$d} or {$d :datetime timeStyle=full}}}"],
+      "exp": "Expires at 7:23:45\u202FPM GMT or 7:23:45\u202FPM Greenwich Mean Time",
+      "comment": "This checks that the return value of :datetime preserves the time zone offset if specified"
+    },
+    {
+      "srcs": [".local $d = {|2024-07-02T19:23:45+03:30| :datetime timeStyle=long}\n",
+               "{{Expires at {$d} or {$d :datetime timeStyle=full}}}"],
+      "exp": "Expires at 7:23:45\u202FPM GMT+3:30 or 7:23:45\u202FPM GMT+03:30",
+      "comment": "This checks that the return value of :datetime preserves the time zone offset if specified"
+    },
+    {
+      "src": "{$d :datetime timeStyle=full}",
+      "exp": "7:23:45\u202FPM GMT+03:30",
+      "params": {"d": "2024-07-02T19:23:45+03:30"},
+      "comment": "This checks that an argument can be a date literal string."
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime dateStyle=long} / {|2006-01-03| :datetime dateStyle=medium}",
+      "exp": "January 2, 2006 / Jan 3, 2006"
+    }
   ]
 }
