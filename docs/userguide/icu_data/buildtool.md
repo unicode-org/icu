@@ -55,7 +55,7 @@ The ICU Data Build Tool enables you to write a configuration file that
 specifies what features and locales to include in a custom data bundle.
 
 The configuration file may be written in either [JSON](http://json.org/) or
-[Hjson](https://hjson.org/).  To build ICU4C with custom data, set the
+[Hjson](https://hjson.github.io/).  To build ICU4C with custom data, set the
 `ICU_DATA_FILTER_FILE` environment variable when running `runConfigureICU` on
 Unix or when building the data package on Windows.  For example:
 
