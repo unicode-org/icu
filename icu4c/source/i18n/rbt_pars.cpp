@@ -552,16 +552,15 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
         case ALT_FUNCTION:
             {
                 int32_t iref = pos;
-                TransliteratorIDParser::SingleID* single =
-                    TransliteratorIDParser::parseFilterID(rule, iref);
+                LocalPointer<TransliteratorIDParser::SingleID> single(
+                    TransliteratorIDParser::parseFilterID(rule, iref));
                 // The next character MUST be a segment open
-                if (single == nullptr ||
+                if (single.isNull() ||
                     !ICU_Utility::parseChar(rule, iref, SEGMENT_OPEN)) {
                     return syntaxError(U_INVALID_FUNCTION, rule, start, status);
                 }
                 
                 Transliterator *t = single->createInstance();
-                delete single;
                 if (t == nullptr) {
                     return syntaxError(U_INVALID_FUNCTION, rule, start, status);
                 }
