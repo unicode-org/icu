@@ -159,17 +159,24 @@ public:
      */
     uint8_t length() const { return len_; }
 
+    // C++17: There is no test for contiguous_iterator, so we just work with pointers
+    // and with string and string_view iterators.
     /**
      * @return a string_view of the minimal Unicode code unit sequence.
-     * Only enabled if UnitIter is a pointer.
+     * Only enabled if UnitIter is a pointer, a string_view::iterator, or a string::iterator.
      * @draft ICU 78
      */
     template<typename Iter = UnitIter>
     std::enable_if_t<
-        std::is_pointer_v<Iter>,
+        std::is_pointer_v<Iter> ||
+            std::is_same_v<Iter, typename std::basic_string<Unit>::iterator> ||
+            std::is_same_v<Iter, typename std::basic_string_view<Unit>::iterator>,
         std::basic_string_view<Unit>>
     stringView() const {
-        return std::basic_string_view<Unit>(start_, len_);
+        // C++20:
+        // - require https://en.cppreference.com/w/cpp/iterator/contiguous_iterator
+        // - return string_view(begin(), end())
+        return std::basic_string_view<Unit>(&*start_, len_);
     }
 
 private:
@@ -1287,6 +1294,7 @@ namespace U_HEADER_ONLY_NAMESPACE {
  */
 template<typename CP32, UTFIllFormedBehavior behavior, typename Unit>
 class UTFStringCodePoints {
+    using UnitIter = typename std::basic_string_view<Unit>::iterator;
 public:
     /**
      * Constructs a C++ "range" object over the code points in the string.
@@ -1302,14 +1310,12 @@ public:
 
     /** @draft ICU 78 */
     auto begin() const {
-        const Unit *limit = s.data() + s.length();
-        return UTFIterator<CP32, behavior, const Unit *>(s.data(), s.data(), limit);
+        return UTFIterator<CP32, behavior, UnitIter>(s.begin(), s.begin(), s.end());
     }
 
     /** @draft ICU 78 */
     auto end() const {
-        const Unit *limit = s.data() + s.length();
-        return UTFIterator<CP32, behavior, const Unit *>(s.data(), limit, limit);
+        return UTFIterator<CP32, behavior, UnitIter>(s.begin(), s.end(), s.end());
     }
 
     /**
@@ -1826,6 +1832,7 @@ namespace U_HEADER_ONLY_NAMESPACE {
  */
 template<typename CP32, typename Unit>
 class UnsafeUTFStringCodePoints {
+    using UnitIter = typename std::basic_string_view<Unit>::iterator;
 public:
     /**
      * Constructs a C++ "range" object over the code points in the string.
@@ -1841,12 +1848,12 @@ public:
 
     /** @draft ICU 78 */
     auto begin() const {
-        return UnsafeUTFIterator<CP32, const Unit *>(s.data());
+        return UnsafeUTFIterator<CP32, UnitIter>(s.begin());
     }
 
     /** @draft ICU 78 */
     auto end() const {
-        return UnsafeUTFIterator<CP32, const Unit *>(s.data() + s.length());
+        return UnsafeUTFIterator<CP32, UnitIter>(s.end());
     }
 
     /**
