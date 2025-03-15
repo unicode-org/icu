@@ -15,6 +15,7 @@
 
   <properties>
     <module-name>perf_tests</module-name>
+    <jmh.version>1.37</jmh.version>
   </properties>
 
   <dependencies>
@@ -43,12 +44,23 @@
       <artifactId>commons-cli</artifactId>
       <version>${commons-cli.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-core</artifactId>
+      <version>${jmh.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-generator-annprocess</artifactId>
+      <version>${jmh.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
-        <!-- Copy dependencies by default, so that everythign is easier to run
+        <!-- Copy dependencies by default, so that everything is easier to run
           without having to explicitly list all kind of folders in classpath.
           Just use `./target/*` and `./target/dependency/*`
         -->
@@ -60,6 +72,49 @@
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <annotationProcessors>
+            <annotationProcessor>org.openjdk.jmh.generators.BenchmarkProcessor</annotationProcessor>
+          </annotationProcessors>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <finalName>jmh-benchmarks</finalName>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>org.openjdk.jmh.Main</mainClass>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+              </transformers>
+              <filters>
+                <filter>
+                  <!-- Shading signed JARs will fail without this.
+                       http://stackoverflow.com/questions/999489/invalid-signature-file-when-attempting-to-run-a-jar
+                       -->
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
           </execution>
         </executions>
       </plugin>
