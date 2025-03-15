@@ -16,6 +16,7 @@
 #if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API || !defined(UTYPES_H)
 
 #include <iterator>
+#include <string>
 #include <string_view>
 #include <type_traits>
 #ifdef UTYPES_H
