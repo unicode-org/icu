@@ -121,10 +121,8 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UErrorCode &st
 
     // If there is a result, set the valid locale and actual locale, and the kind
     if (U_SUCCESS(status) && result != nullptr) {
-        U_LOCALE_BASED(locBased, *(BreakIterator*)result);
-
-        locBased.setLocaleIDs(ures_getLocaleByType(b, ULOC_VALID_LOCALE, &status),
-                              actual.data(), status);
+        result->setLocaleIDs(ures_getLocaleByType(b, ULOC_VALID_LOCALE, &status),
+                              actual.data());
         LocaleBased::setLocaleID(loc.getName(), result->requestLocale, status);
     }
 
@@ -207,19 +205,17 @@ BreakIterator::BreakIterator()
 {
 }
 
-BreakIterator::BreakIterator(const BreakIterator &other) : UObject(other) {
+BreakIterator::BreakIterator(const BreakIterator &other) : UObject(other), DataLocaleInformation(other) {
     UErrorCode status = U_ZERO_ERROR;
-    U_LOCALE_BASED(locBased, *this);
-    locBased.setLocaleIDs(other.validLocale, other.actualLocale, status);
     LocaleBased::setLocaleID(other.requestLocale, requestLocale, status);
     U_ASSERT(U_SUCCESS(status));
 }
 
+
 BreakIterator &BreakIterator::operator =(const BreakIterator &other) {
     if (this != &other) {
+        DataLocaleInformation::operator=(other);
         UErrorCode status = U_ZERO_ERROR;
-        U_LOCALE_BASED(locBased, *this);
-        locBased.setLocaleIDs(other.validLocale, other.actualLocale, status);
         LocaleBased::setLocaleID(other.requestLocale, requestLocale, status);
         U_ASSERT(U_SUCCESS(status));
     }
@@ -228,8 +224,6 @@ BreakIterator &BreakIterator::operator =(const BreakIterator &other) {
 
 BreakIterator::~BreakIterator()
 {
-    delete validLocale;
-    delete actualLocale;
     delete requestLocale;
 }
 
@@ -398,8 +392,7 @@ BreakIterator::createInstance(const Locale& loc, int32_t kind, UErrorCode& statu
         // THIS LONG is a sign of bad code -- so the action item is to
         // revisit this in ICU 3.0 and clean it up/fix it/remove it.
         if (U_SUCCESS(status) && (result != nullptr) && *actualLoc.getName() != 0) {
-            U_LOCALE_BASED(locBased, *result);
-            locBased.setLocaleIDs(actualLoc.getName(), actualLoc.getName(), status);
+            result->setLocaleIDs(actualLoc.getName(), actualLoc.getName());
         }
         return result;
     }
@@ -509,7 +502,7 @@ BreakIterator::getLocale(ULocDataLocaleType type, UErrorCode& status) const {
         return requestLocale == nullptr ?
             Locale::getRoot() : Locale(requestLocale->data());
     }
-    return LocaleBased::getLocale(validLocale, actualLocale, type, status);
+    return DataLocaleInformation::getLocale(type, status);
 }
 
 const char *
@@ -520,9 +513,8 @@ BreakIterator::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
     if (type == ULOC_REQUESTED_LOCALE) {
         return requestLocale == nullptr ?  "" : requestLocale->data();
     }
-    return LocaleBased::getLocaleID(validLocale, actualLocale, type, status);
+    return DataLocaleInformation::getLocaleID(type, status);
 }
-
 
 // This implementation of getRuleStatus is a do-nothing stub, here to
 // provide a default implementation for any derived BreakIterator classes that
@@ -547,10 +539,7 @@ int32_t BreakIterator::getRuleStatusVec(int32_t *fillInVec, int32_t capacity, UE
 }
 
 BreakIterator::BreakIterator (const Locale& valid, const Locale& actual) {
-  UErrorCode status = U_ZERO_ERROR;
-  U_LOCALE_BASED(locBased, (*this));
-  locBased.setLocaleIDs(valid.getName(), actual.getName(), status);
-  U_ASSERT(U_SUCCESS(status));
+  setLocaleIDs(valid.getName(), actual.getName());
 }
 
 U_NAMESPACE_END

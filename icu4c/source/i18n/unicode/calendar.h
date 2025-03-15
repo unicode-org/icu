@@ -55,7 +55,6 @@ class ICUServiceFactory;
 typedef int32_t UFieldResolutionTable[12][8];
 
 class BasicTimeZone;
-class CharString;
 /**
  * `Calendar` is an abstract base class for converting between
  * a `UDate` object and a set of integer fields such as
@@ -187,7 +186,7 @@ class CharString;
  *
  * @stable ICU 2.0
  */
-class U_I18N_API Calendar : public UObject {
+class U_I18N_API Calendar : public UObject , public DataLocaleInformation {
 public:
 #ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
@@ -2342,10 +2341,6 @@ private:
     static uint8_t julianDayToDayOfWeek(int32_t julian);
 #endif  /* U_HIDE_INTERNAL_API */
 
- private:
-    CharString* validLocale = nullptr;
-    CharString* actualLocale = nullptr;
-
  public:
 #if !UCONFIG_NO_SERVICE
     /**
@@ -2430,14 +2425,6 @@ private:
      */
     virtual int32_t defaultCenturyStartYear() const = 0;
 
-    /** Get the locale for this calendar object. You can choose between valid and actual locale.
-     *  @param type type of the locale we're looking for (valid or actual)
-     *  @param status error code for the operation
-     *  @return the locale
-     *  @stable ICU 2.8
-     */
-    Locale getLocale(ULocDataLocaleType type, UErrorCode &status) const;
-
     /**
      * @return      The related Gregorian year; will be obtained by modifying the value
      *              obtained by get from UCAL_EXTENDED_YEAR field
@@ -2451,16 +2438,6 @@ private:
      * @internal
      */
     virtual void setRelatedYear(int32_t year);
-
-#ifndef U_HIDE_INTERNAL_API
-    /** Get the locale for this calendar object. You can choose between valid and actual locale.
-     *  @param type type of the locale we're looking for (valid or actual)
-     *  @param status error code for the operation
-     *  @return the locale
-     *  @internal
-     */
-    const char* getLocaleID(ULocDataLocaleType type, UErrorCode &status) const;
-#endif  /* U_HIDE_INTERNAL_API */
 
 private:
     /**
