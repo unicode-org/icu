@@ -20,6 +20,7 @@ import org.junit.runners.JUnit4;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -332,7 +333,7 @@ public class HebrewTest extends CalendarTestFmwk {
                 if (y2 != yact || m2 != mact) {
                     errln("Fail: " + m + "/" + y +
                           " -> add(MONTH, " + monthDelta + ") -> " +
-                          mact + "/" + yact + ", expected " +
+                          mact + "/" + yact + ", gregorian " +
                           m2 + "/" + y2);
                     cal.clear();
                     cal.set(Calendar.YEAR, y);
@@ -353,7 +354,7 @@ public class HebrewTest extends CalendarTestFmwk {
                 if (y3 != yact || m3 != mact) {
                     errln("Fail: " + (m+monthDelta) + "/" + y +
                           " -> complete() -> " +
-                          mact + "/" + yact + ", expected " +
+                          mact + "/" + yact + ", gregorian " +
                           m3 + "/" + y3);
                 }
             }
@@ -538,4 +539,102 @@ public class HebrewTest extends CalendarTestFmwk {
             logln("Info: IllegalArgumentException, because 5777 Adar I 1 is not a valid date.");
         }
     }
+    @Test
+    public void TestHanukkah() {
+        HebrewCalendar hebrew = new HebrewCalendar();
+        GregorianCalendar gregorian = new GregorianCalendar(hebrew.getTimeZone());
+        hebrew.clear();
+        // Based on the Hanukkah data in
+        // https://en.wikipedia.org/wiki/Jewish_and_Israeli_holidays_2000%E2%80%932050
+        Object[][] cases = {
+            { 5760, 1999, Calendar.DECEMBER, 4},
+            { 5761, 2000, Calendar.DECEMBER, 22},
+            { 5762, 2001, Calendar.DECEMBER, 10},
+            { 5763, 2002, Calendar.NOVEMBER, 30},
+            { 5764, 2003, Calendar.DECEMBER, 20},
+            { 5765, 2004, Calendar.DECEMBER, 8},
+            { 5766, 2005, Calendar.DECEMBER, 26},
+            { 5767, 2006, Calendar.DECEMBER, 16},
+            { 5768, 2007, Calendar.DECEMBER, 5},
+            { 5769, 2008, Calendar.DECEMBER, 22},
+            { 5770, 2009, Calendar.DECEMBER, 12},
+            { 5771, 2010, Calendar.DECEMBER, 2},
+            { 5772, 2011, Calendar.DECEMBER, 21},
+            { 5773, 2012, Calendar.DECEMBER, 9},
+            { 5774, 2013, Calendar.NOVEMBER, 28},
+            { 5775, 2014, Calendar.DECEMBER, 17},
+            { 5776, 2015, Calendar.DECEMBER, 7},
+            { 5777, 2016, Calendar.DECEMBER, 25},
+            { 5778, 2017, Calendar.DECEMBER, 13},
+            { 5779, 2018, Calendar.DECEMBER, 3},
+            { 5780, 2019, Calendar.DECEMBER, 23},
+            { 5781, 2020, Calendar.DECEMBER, 11},
+            { 5782, 2021, Calendar.NOVEMBER, 29},
+            { 5783, 2022, Calendar.DECEMBER, 19},
+            { 5784, 2023, Calendar.DECEMBER, 8},
+            { 5785, 2024, Calendar.DECEMBER, 26},
+            { 5786, 2025, Calendar.DECEMBER, 15},
+            { 5787, 2026, Calendar.DECEMBER, 5},
+            { 5788, 2027, Calendar.DECEMBER, 25},
+            { 5789, 2028, Calendar.DECEMBER, 13},
+            { 5790, 2029, Calendar.DECEMBER, 2},
+            { 5791, 2030, Calendar.DECEMBER, 21},
+            { 5792, 2031, Calendar.DECEMBER, 10},
+            { 5793, 2032, Calendar.NOVEMBER, 28},
+            { 5794, 2033, Calendar.DECEMBER, 17},
+            { 5795, 2034, Calendar.DECEMBER, 7},
+            { 5796, 2035, Calendar.DECEMBER, 26},
+            { 5797, 2036, Calendar.DECEMBER, 14},
+            { 5798, 2037, Calendar.DECEMBER, 3},
+            { 5799, 2038, Calendar.DECEMBER, 22},
+            { 5800, 2039, Calendar.DECEMBER, 12},
+            { 5801, 2040, Calendar.NOVEMBER, 30},
+            { 5802, 2041, Calendar.DECEMBER, 18},
+            { 5803, 2042, Calendar.DECEMBER, 8},
+            { 5804, 2043, Calendar.DECEMBER, 27},
+            { 5805, 2044, Calendar.DECEMBER, 15},
+            { 5806, 2045, Calendar.DECEMBER, 4},
+            { 5807, 2046, Calendar.DECEMBER, 24},
+            { 5808, 2047, Calendar.DECEMBER, 13},
+            { 5809, 2048, Calendar.NOVEMBER, 30},
+            { 5810, 2049, Calendar.DECEMBER, 20},
+            { 5811, 2050, Calendar.DECEMBER, 10},
+        };
+        for (Object[] cas : cases) {
+            int hebrewYear = (Integer) cas[0];
+            int gregorianYear = (Integer) cas[1];
+            int gregorianMonth = (Integer) cas[2];
+            int gregorianDate = (Integer) cas[3];
+            // Test from Hebrew Calendar to Gregorian Calendar.
+            // Rosh Hashanah/Hanukkah is the 25th day of Kislev
+            hebrew.set(Calendar.YEAR, hebrewYear);
+            hebrew.set(Calendar.MONTH, KISLEV);
+            hebrew.set(Calendar.DATE, 25);
+            gregorian.setTime(hebrew.getTime());
+            int y = gregorian.get(Calendar.YEAR);
+            int m = gregorian.get(Calendar.MONTH);
+            int d = gregorian.get(Calendar.DATE);
+            if (y != gregorianYear || m != gregorianMonth || d != gregorianDate) {
+                errln("Fail: Hebrew year " + hebrewYear + " starts at Gregorian Date(" +
+                    y + "/" + (m+1) + "/" + d + ") should be Date(" +
+                    gregorianYear + "/" + (gregorianMonth+1) + "/" + gregorianDate + ")");
+            }
+            // Test from Gregorian Calendar to Hebrew Calendar.
+            gregorian.clear();
+            gregorian.set(Calendar.YEAR, gregorianYear);
+            gregorian.set(Calendar.MONTH, gregorianMonth);
+            gregorian.set(Calendar.DATE, gregorianDate);
+            hebrew.setTime(gregorian.getTime());
+            y = hebrew.get(Calendar.YEAR);
+            m = hebrew.get(Calendar.MONTH);
+            d = hebrew.get(Calendar.DATE);
+            if (y != hebrewYear || m != KISLEV || d != 25) {
+                errln("Fail: Gregorian Date(" +
+                    gregorianYear + "/" + (gregorianMonth+1) + "/" + gregorianDate + ") should get " +
+                    "Hebrew Date("+hebrewYear+"/"+(KISLEV+1)+"/25) but got Date(" +
+                    y + "/" + (m+1) + "/" + d + ")");
+            }
+     }
+ }
+
 }

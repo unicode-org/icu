@@ -40,7 +40,7 @@ U_NAMESPACE_BEGIN
  * solar year (approximately 365.24 days) is not an even multiple of
  * the lunar month (approximately 29.53 days) an extra "leap month" is
  * inserted in 7 out of every 19 years.  To make matters even more
- * interesting, the start of a year can be delayed by up to three days
+ * interesting, the start of a year can be delayed by up to two days
  * in order to prevent certain holidays from falling on the Sabbath and
  * to prevent certain illegal year lengths.  Finally, the lengths of certain
  * months can vary depending on the number of days in the year.

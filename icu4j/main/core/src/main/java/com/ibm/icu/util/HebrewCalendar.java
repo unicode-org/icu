@@ -25,7 +25,7 @@ import com.ibm.icu.util.ULocale.Category;
  * solar year (approximately 365.24 days) is not an even multiple of
  * the lunar month (approximately 29.53 days) an extra "leap month" is
  * inserted in 7 out of every 19 years.  To make matters even more
- * interesting, the start of a year can be delayed by up to three days
+ * interesting, the start of a year can be delayed by up to two days
  * in order to prevent certain holidays from falling on the Sabbath and
  * to prevent certain illegal year lengths.  Finally, the lengths of certain
  * months can vary depending on the number of days in the year.
@@ -630,7 +630,7 @@ public class HebrewCalendar extends Calendar {
                 day += 1;
                 wd = (int)(day % 7);
             }
-            if (wd == 1 && frac > 15*HOUR_PARTS+204 && !isLeapYear(year) ) {
+            else if (wd == 1 && frac > 15*HOUR_PARTS+204 && !isLeapYear(year) ) {
                 // If the new moon falls after 3:11:20am (15h204p from the previous noon)
                 // on a Tuesday and it is not a leap year, postpone by 2 days.
                 // This prevents 356-day years.
