@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1741905269856,
+  "lastUpdate": 1742327317891,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40281,6 +40281,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 65.1146,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "ba0f39b592f55b4de55916539a283b2d8a4303b6",
+          "message": "ICU-22817 Use LocalArray to fix memory leak",
+          "timestamp": "2025-03-18T12:21:23-07:00",
+          "tree_id": "d5569d3311f80312f6db841db61b92e03813544b",
+          "url": "https://github.com/unicode-org/icu/commit/ba0f39b592f55b4de55916539a283b2d8a4303b6"
+        },
+        "date": 1742327070617,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 25.5465,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 52.0556,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
