@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742327617924,
+  "lastUpdate": 1742333954937,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -64095,6 +64095,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2165083.8147,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "cdf52396dcdc6ae3a0002d219c34494aab54c51e",
+          "message": "ICU-22817 Fix memory leak in basictz by using LocalPointer\n\nSee https://github.com/LuMingYinDetect/icu_defects/blob/main/icu_1.png",
+          "timestamp": "2025-03-18T14:03:29-07:00",
+          "tree_id": "3a07c6070ab36c7cd43e4a3acc493f5d3ce9a2a4",
+          "url": "https://github.com/unicode-org/icu/commit/cdf52396dcdc6ae3a0002d219c34494aab54c51e"
+        },
+        "date": 1742333708372,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 150.8987,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8895028.9147,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2111826.2823,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7896682.8948,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2173404.0871,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
