@@ -4251,17 +4251,20 @@ int32_t Calendar::internalGetMonth(UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return 0;
     }
-    if (resolveFields(kMonthPrecedence) == UCAL_MONTH) {
-        return internalGet(UCAL_MONTH, status);
+    if (resolveFields(kMonthPrecedence) == UCAL_ORDINAL_MONTH) {
+        return internalGet(UCAL_ORDINAL_MONTH);
     }
-    return internalGet(UCAL_ORDINAL_MONTH, status);
+    return internalGet(UCAL_MONTH);
 }
 
-int32_t Calendar::internalGetMonth(int32_t defaultValue, UErrorCode& /* status */) const {
-    if (resolveFields(kMonthPrecedence) == UCAL_MONTH) {
-        return internalGet(UCAL_MONTH, defaultValue);
+int32_t Calendar::internalGetMonth(int32_t defaultValue, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return 0;
     }
-    return internalGet(UCAL_ORDINAL_MONTH);
+    if (resolveFields(kMonthPrecedence) == UCAL_ORDINAL_MONTH) {
+        return internalGet(UCAL_ORDINAL_MONTH);
+    }
+    return internalGet(UCAL_MONTH, defaultValue);
 }
 
 BasicTimeZone*

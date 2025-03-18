@@ -1177,10 +1177,14 @@ int32_t ChineseCalendar::internalGetMonth(int32_t defaultValue, UErrorCode& stat
     if (U_FAILURE(status)) {
         return 0;
     }
-    if (resolveFields(kMonthPrecedence) == UCAL_MONTH) {
-        return internalGet(UCAL_MONTH, defaultValue);
+    switch (resolveFields(kMonthPrecedence)) {
+        case UCAL_MONTH:
+            return internalGet(UCAL_MONTH);
+        case UCAL_ORDINAL_MONTH:
+            return internalGetMonth(status);
+        default:
+            return defaultValue;
     }
-    return internalGetMonth(status);
 }
 
 ChineseCalendar::Setting ChineseCalendar::getSetting(UErrorCode&) const {
