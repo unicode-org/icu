@@ -208,6 +208,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(Test22633RollTwiceGetTimeOverflow);
 
     TESTCASE_AUTO(Test22633HebrewLargeNegativeDay);
+    TESTCASE_AUTO(Test23069HebrewHanukkah);
     TESTCASE_AUTO(Test22730JapaneseOverflow);
     TESTCASE_AUTO(Test22730CopticOverflow);
     TESTCASE_AUTO(Test22962ComputeJulianDayOverflow);
@@ -5927,6 +5928,116 @@ void CalendarTest::Test22633HebrewLargeNegativeDay() {
     calendar->set(UCAL_DAY_OF_YEAR, -2147483648);
     calendar->get(UCAL_HOUR, status);
     assertEquals("status return without hang", status, U_ILLEGAL_ARGUMENT_ERROR);
+}
+void CalendarTest::Test23069HebrewHanukkah() {
+    // Based on Hanukkah data in
+    // https://en.wikipedia.org/wiki/Jewish_and_Israeli_holidays_2000%E2%80%932050
+    struct TestCase {
+      int32_t hebrewYear;
+      int32_t gregorianYear;
+      int32_t gregorianMonth;
+      int32_t gregorianDate;
+    } cases[] = {
+      { 5760, 1999, UCAL_DECEMBER, 4},
+      { 5761, 2000, UCAL_DECEMBER, 22},
+      { 5762, 2001, UCAL_DECEMBER, 10},
+      { 5763, 2002, UCAL_NOVEMBER, 30},
+      { 5764, 2003, UCAL_DECEMBER, 20},
+      { 5765, 2004, UCAL_DECEMBER, 8},
+      { 5766, 2005, UCAL_DECEMBER, 26},
+      { 5767, 2006, UCAL_DECEMBER, 16},
+      { 5768, 2007, UCAL_DECEMBER, 5},
+      { 5769, 2008, UCAL_DECEMBER, 22},
+      { 5770, 2009, UCAL_DECEMBER, 12},
+      { 5771, 2010, UCAL_DECEMBER, 2},
+      { 5772, 2011, UCAL_DECEMBER, 21},
+      { 5773, 2012, UCAL_DECEMBER, 9},
+      { 5774, 2013, UCAL_NOVEMBER, 28},
+      { 5775, 2014, UCAL_DECEMBER, 17},
+      { 5776, 2015, UCAL_DECEMBER, 7},
+      { 5777, 2016, UCAL_DECEMBER, 25},
+      { 5778, 2017, UCAL_DECEMBER, 13},
+      { 5779, 2018, UCAL_DECEMBER, 3},
+      { 5780, 2019, UCAL_DECEMBER, 23},
+      { 5781, 2020, UCAL_DECEMBER, 11},
+      { 5782, 2021, UCAL_NOVEMBER, 29},
+      { 5783, 2022, UCAL_DECEMBER, 19},
+      { 5784, 2023, UCAL_DECEMBER, 8},
+      { 5785, 2024, UCAL_DECEMBER, 26},
+      { 5786, 2025, UCAL_DECEMBER, 15},
+      { 5787, 2026, UCAL_DECEMBER, 5},
+      { 5788, 2027, UCAL_DECEMBER, 25},
+      { 5789, 2028, UCAL_DECEMBER, 13},
+      { 5790, 2029, UCAL_DECEMBER, 2},
+      { 5791, 2030, UCAL_DECEMBER, 21},
+      { 5792, 2031, UCAL_DECEMBER, 10},
+      { 5793, 2032, UCAL_NOVEMBER, 28},
+      { 5794, 2033, UCAL_DECEMBER, 17},
+      { 5795, 2034, UCAL_DECEMBER, 7},
+      { 5796, 2035, UCAL_DECEMBER, 26},
+      { 5797, 2036, UCAL_DECEMBER, 14},
+      { 5798, 2037, UCAL_DECEMBER, 3},
+      { 5799, 2038, UCAL_DECEMBER, 22},
+      { 5800, 2039, UCAL_DECEMBER, 12},
+      { 5801, 2040, UCAL_NOVEMBER, 30},
+      { 5802, 2041, UCAL_DECEMBER, 18},
+      { 5803, 2042, UCAL_DECEMBER, 8},
+      { 5804, 2043, UCAL_DECEMBER, 27},
+      { 5805, 2044, UCAL_DECEMBER, 15},
+      { 5806, 2045, UCAL_DECEMBER, 4},
+      { 5807, 2046, UCAL_DECEMBER, 24},
+      { 5808, 2047, UCAL_DECEMBER, 13},
+      { 5809, 2048, UCAL_NOVEMBER, 30},
+      { 5810, 2049, UCAL_DECEMBER, 20},
+      { 5811, 2050, UCAL_DECEMBER, 10},
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> hebrew(
+        Calendar::createInstance(Locale("en-u-ca-hebrew"), status),
+        status);
+        U_ASSERT(U_SUCCESS(status));
+    LocalPointer<GregorianCalendar> gregorian(
+        new GregorianCalendar(hebrew->getTimeZone(), status), status);
+        U_ASSERT(U_SUCCESS(status));
+    for (auto& cas : cases) {
+        hebrew->clear();
+        // Test Hebrew Calendar to Gregorian Calendar.
+        // Hanukkah is the 25th day of Kislev
+        hebrew->set(UCAL_YEAR, cas.hebrewYear);
+        hebrew->set(UCAL_MONTH, icu::HebrewCalendar::KISLEV);
+        hebrew->set(UCAL_DATE, 25);
+        gregorian->setTime(hebrew->getTime(status), status);
+        U_ASSERT(U_SUCCESS(status));
+        int32_t year = gregorian->get(UCAL_YEAR, status);
+        int32_t month = gregorian->get(UCAL_MONTH, status);
+        int32_t date = gregorian->get(UCAL_DATE, status);
+        assertEquals("Hebrew to Gregorian Calendar year", year, cas.gregorianYear);
+        assertEquals("Hebrew to Gregorian Calendar month", month, cas.gregorianMonth);
+        assertEquals("Hebrew to Gregorian Calendar date", date, cas.gregorianDate);
+        if (year != cas.gregorianYear || month != cas.gregorianMonth || date != cas.gregorianDate) {
+            printf("Hebrew year %d Gregorain Date(%d/%d/%d) but should be Date(%d/%d/%d)\n",
+                   cas.hebrewYear, year, 1+month, date,
+                   cas.gregorianYear, 1+cas.gregorianMonth, cas.gregorianDate);
+        }
+        // Test Gregorian Calendar to Hebrew Calendar.
+        gregorian->clear();
+        gregorian->set(UCAL_YEAR, cas.gregorianYear);
+        gregorian->set(UCAL_MONTH, cas.gregorianMonth);
+        gregorian->set(UCAL_DATE, cas.gregorianDate);
+        hebrew->setTime(gregorian->getTime(status), status);
+        U_ASSERT(U_SUCCESS(status));
+        year = hebrew->get(UCAL_YEAR, status);
+        month = hebrew->get(UCAL_MONTH, status);
+        date = hebrew->get(UCAL_DATE, status);
+        assertEquals("Gregorian to Hebrew Calendar year", year, cas.hebrewYear);
+        assertEquals("Gregorian to Hebrew Calendar month", month, icu::HebrewCalendar::KISLEV);
+        assertEquals("Gregorian to Hebrew Calendar date", date, 25);
+        if (year != cas.hebrewYear || month != icu::HebrewCalendar::KISLEV || date != 25) {
+            printf("Gregorian year %d Hebrew Date(%d/%d/%d) but should be Date(%d/%d/25)\n",
+                   cas.gregorianYear, year, 1+month, date,
+                   cas.hebrewYear, 1+icu::HebrewCalendar::KISLEV);
+        }
+    }
 }
 
 void CalendarTest::Test22730JapaneseOverflow() {
