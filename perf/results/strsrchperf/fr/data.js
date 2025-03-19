@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742405001195,
+  "lastUpdate": 1742418804679,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40425,6 +40425,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 54.4967,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "255eb4ef3e69cb3aead865234abb959a2820d06f",
+          "message": "ICU-23069 Fix Hebrew calendar calculation\n\nSee #3438",
+          "timestamp": "2025-03-19T13:45:52-07:00",
+          "tree_id": "adb479f21ed8dd90e0dbfc8386c9f9060f360a71",
+          "url": "https://github.com/unicode-org/icu/commit/255eb4ef3e69cb3aead865234abb959a2820d06f"
+        },
+        "date": 1742418554963,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 24.9132,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 50.4968,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
