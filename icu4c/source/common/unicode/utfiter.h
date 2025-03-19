@@ -738,10 +738,10 @@ public:
             uint8_t b = *--p;
             if (b >= 0xc0) {
                 U8_MASK_LEAD_BYTE(b, count);
-                c |= uint32_t(b) << shift;
+                c |= uint32_t{b} << shift;
                 break;
             } else {
-                c |= uint32_t(b & 0x3f) << shift;
+                c |= (uint32_t{b} & 0x3f) << shift;
                 ++count;
                 shift += 6;
             }
