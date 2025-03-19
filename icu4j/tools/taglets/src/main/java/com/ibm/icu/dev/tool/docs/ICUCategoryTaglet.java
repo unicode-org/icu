@@ -13,18 +13,18 @@ import javax.lang.model.element.Element;
 
 import com.sun.source.doctree.DocTree;
 
-public class ICUDraftTaglet extends ICUTaglet {
-    private static final String NAME = "draft";
+public class ICUCategoryTaglet extends ICUTaglet {
+    private static final String NAME = "category";
 
-    public ICUDraftTaglet() {
+    public ICUCategoryTaglet() {
         super(NAME, false);
     }
 
     public String toStringDocTree(DocTree tag, Element element) {
         String text = getText(tag, element);
         if (text.length() == 0) {
-            System.err.println("Warning: empty draft tag");
+            System.err.println("Warning: empty category tag");
         }
-        return STATUS + "<dd>Draft " + text + ".</dd>";
+        return "<dt><span class=\"simpleTagLabel\">Category:</span></dt><dd>" + text + "</dd>";
     }
 }

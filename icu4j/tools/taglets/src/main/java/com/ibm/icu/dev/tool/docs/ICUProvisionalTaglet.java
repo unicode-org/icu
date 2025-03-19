@@ -1,22 +1,26 @@
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/**
+ *******************************************************************************
+ * Copyright (C) 2002-2016 International Business Machines Corporation         *
+ * and others. All Rights Reserved.                                            *
+ *******************************************************************************
+ */
+
 package com.ibm.icu.dev.tool.docs;
 
-import java.util.Map;
+import javax.lang.model.element.Element;
 
-import com.sun.javadoc.Tag;
+import com.sun.source.doctree.DocTree;
 
 public class ICUProvisionalTaglet extends ICUTaglet {
     private static final String NAME = "provisional";
 
-    public static void register(Map taglets) {
-        taglets.remove(NAME); // override standard deprecated taglet
-        taglets.put(NAME, new ICUProvisionalTaglet());
+    public ICUProvisionalTaglet() {
+        super(NAME, false);
     }
 
-    private ICUProvisionalTaglet() {
-        super(NAME, MASK_DEFAULT);
-    }
-
-    public String toString(Tag tag) {
+    public String toStringDocTree(DocTree tag, Element element) {
         return null;
     }
 }
