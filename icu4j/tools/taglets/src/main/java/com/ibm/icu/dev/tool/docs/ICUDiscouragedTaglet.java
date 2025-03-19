@@ -1,25 +1,30 @@
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/**
+ *******************************************************************************
+ * Copyright (C) 2002-2016 International Business Machines Corporation         *
+ * and others. All Rights Reserved.                                            *
+ *******************************************************************************
+ */
+
 package com.ibm.icu.dev.tool.docs;
 
-import java.util.Map;
+import javax.lang.model.element.Element;
 
-import com.sun.javadoc.Tag;
+import com.sun.source.doctree.DocTree;
 
 public class ICUDiscouragedTaglet extends ICUTaglet {
     private static final String NAME = "discouraged";
 
-    public static void register(Map taglets) {
-        taglets.put(NAME, new ICUDiscouragedTaglet());
+    public ICUDiscouragedTaglet() {
+        super(NAME, false);
     }
 
-    private ICUDiscouragedTaglet() {
-        super(NAME, MASK_DEFAULT);
-    }
-
-    public String toString(Tag tag) {
-        String text = tag.text();
+    public String toStringDocTree(DocTree tag, Element element) {
+        String text = getText(tag, element);
         if (text.length() == 0) {
             System.err.println("Error: empty discouraged tag ");
-        } 
-        return "<dt><b><font color=red>Discouraged:</font></b></dt><dd>" + text + "</dd>";
+        }
+        return "<dt><span class=\"simpleTagLabel\" style=\"color:red\">Discouraged:</span></dt><dd>" + text + "</dd>";
     }
 }
