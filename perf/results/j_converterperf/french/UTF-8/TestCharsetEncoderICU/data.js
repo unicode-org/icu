@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742333328943,
+  "lastUpdate": 1742404844498,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33087,6 +33087,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 1.8391467814732723,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "545bf260e19df91d311e35adb4e456f78d52c016",
+          "message": "ICU-22817 Fix potential memory leak by using LocalPointer\n\nSee https://github.com/LuMingYinDetect/icu_defects/blob/main/icu_10.png",
+          "timestamp": "2025-03-18T14:02:55-07:00",
+          "tree_id": "187056250b5f398dd2cd5a1ec52f053d8fc67405",
+          "url": "https://github.com/unicode-org/icu/commit/545bf260e19df91d311e35adb4e456f78d52c016"
+        },
+        "date": 1742404594856,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 1.836141582779053,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
