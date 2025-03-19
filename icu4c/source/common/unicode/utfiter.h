@@ -293,14 +293,14 @@ class UTFImpl<
                   "For 8-bit strings, the SURROGATE option does not have an equivalent.");
 public:
     // Handle ill-formed UTF-8
-    static CP32 sub() {
+    static inline CP32 sub() {
         switch (behavior) {
             case UTF_BEHAVIOR_NEGATIVE: return U_SENTINEL;
             case UTF_BEHAVIOR_FFFD: return 0xfffd;
         }
     }
 
-    static void inc(UnitIter &p, const UnitIter &limit) {
+    static inline void inc(UnitIter &p, const UnitIter &limit) {
         // Very similar to U8_FWD_1().
         uint8_t b = *p;
         ++p;
@@ -325,7 +325,7 @@ public:
         }
     }
 
-    static void dec(UnitIter start, UnitIter &p) {
+    static inline void dec(UnitIter start, UnitIter &p) {
         // Very similar to U8_BACK_1().
         uint8_t c = *--p;
         if (U8_IS_TRAIL(c) && p != start) {
@@ -359,7 +359,7 @@ public:
         }
     }
 
-    static CodeUnits<CP32, UnitIter> readAndInc(UnitIter &p, UnitIter limit) {
+    static inline CodeUnits<CP32, UnitIter> readAndInc(UnitIter &p, UnitIter limit) {
         // Very similar to U8_NEXT_OR_FFFD().
         UnitIter p0 = p;
         CP32 c = uint8_t(*p);
@@ -394,7 +394,7 @@ public:
         return {sub(), length, false, p0, p};
     }
 
-    static CodeUnits<CP32, UnitIter> singlePassReadAndInc(
+    static inline CodeUnits<CP32, UnitIter> singlePassReadAndInc(
             UnitIter &p, const UnitIter &limit) {
         // Very similar to U8_NEXT_OR_FFFD().
         CP32 c = uint8_t(*p);
@@ -429,7 +429,7 @@ public:
         return {sub(), length, false};
     }
 
-    static CodeUnits<CP32, UnitIter> decAndRead(UnitIter start, UnitIter &p) {
+    static inline CodeUnits<CP32, UnitIter> decAndRead(UnitIter start, UnitIter &p) {
         // Very similar to U8_PREV_OR_FFFD().
         UnitIter p0 = p;
         CP32 c = uint8_t(*--p);
@@ -495,7 +495,7 @@ class UTFImpl<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 2>> {
 public:
     // Handle ill-formed UTF-16: One unpaired surrogate.
-    static CP32 sub(CP32 surrogate) {
+    static inline CP32 sub(CP32 surrogate) {
         switch (behavior) {
             case UTF_BEHAVIOR_NEGATIVE: return U_SENTINEL;
             case UTF_BEHAVIOR_FFFD: return 0xfffd;
@@ -503,7 +503,7 @@ public:
         }
     }
 
-    static void inc(UnitIter &p, const UnitIter &limit) {
+    static inline void inc(UnitIter &p, const UnitIter &limit) {
         // Very similar to U16_FWD_1().
         auto c = *p;
         ++p;
@@ -512,7 +512,7 @@ public:
         }
     }
 
-    static void dec(UnitIter start, UnitIter &p) {
+    static inline void dec(UnitIter start, UnitIter &p) {
         // Very similar to U16_BACK_1().
         UnitIter p1;
         if (U16_IS_TRAIL(*--p) && p != start && (p1 = p, U16_IS_LEAD(*--p1))) {
@@ -520,7 +520,7 @@ public:
         }
     }
 
-    static CodeUnits<CP32, UnitIter> readAndInc(UnitIter &p, UnitIter limit) {
+    static inline CodeUnits<CP32, UnitIter> readAndInc(UnitIter &p, UnitIter limit) {
         // Very similar to U16_NEXT_OR_FFFD().
         UnitIter p0 = p;
         CP32 c = *p;
@@ -539,7 +539,7 @@ public:
         }
     }
 
-    static CodeUnits<CP32, UnitIter> singlePassReadAndInc(
+    static inline CodeUnits<CP32, UnitIter> singlePassReadAndInc(
             UnitIter &p, const UnitIter &limit) {
         // Very similar to U16_NEXT_OR_FFFD().
         CP32 c = *p;
@@ -558,7 +558,7 @@ public:
         }
     }
 
-    static CodeUnits<CP32, UnitIter> decAndRead(UnitIter start, UnitIter &p) {
+    static inline CodeUnits<CP32, UnitIter> decAndRead(UnitIter start, UnitIter &p) {
         // Very similar to U16_PREV_OR_FFFD().
         UnitIter p0 = p;
         CP32 c = *--p;
@@ -588,7 +588,7 @@ class UTFImpl<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 4>> {
 public:
     // Handle ill-formed UTF-32
-    static CP32 sub(bool forSurrogate, CP32 surrogate) {
+    static inline CP32 sub(bool forSurrogate, CP32 surrogate) {
         switch (behavior) {
             case UTF_BEHAVIOR_NEGATIVE: return U_SENTINEL;
             case UTF_BEHAVIOR_FFFD: return 0xfffd;
@@ -596,15 +596,15 @@ public:
         }
     }
 
-    static void inc(UnitIter &p, const UnitIter &/*limit*/) {
+    static inline void inc(UnitIter &p, const UnitIter &/*limit*/) {
         ++p;
     }
 
-    static void dec(UnitIter /*start*/, UnitIter &p) {
+    static inline void dec(UnitIter /*start*/, UnitIter &p) {
         --p;
     }
 
-    static CodeUnits<CP32, UnitIter> readAndInc(UnitIter &p, UnitIter /*limit*/) {
+    static inline CodeUnits<CP32, UnitIter> readAndInc(UnitIter &p, UnitIter /*limit*/) {
         UnitIter p0 = p;
         uint32_t uc = *p;
         CP32 c = uc;
@@ -616,7 +616,7 @@ public:
         }
     }
 
-    static CodeUnits<CP32, UnitIter> singlePassReadAndInc(
+    static inline CodeUnits<CP32, UnitIter> singlePassReadAndInc(
             UnitIter &p, const UnitIter &/*limit*/) {
         uint32_t uc = *p;
         CP32 c = uc;
@@ -628,7 +628,7 @@ public:
         }
     }
 
-    static CodeUnits<CP32, UnitIter> decAndRead(UnitIter /*start*/, UnitIter &p) {
+    static inline CodeUnits<CP32, UnitIter> decAndRead(UnitIter /*start*/, UnitIter &p) {
         UnitIter p0 = p;
         uint32_t uc = *--p;
         CP32 c = uc;
@@ -654,18 +654,18 @@ class UnsafeUTFImpl<
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 1>> {
 public:
-    static void inc(UnitIter &p) {
+    static inline void inc(UnitIter &p) {
         // Very similar to U8_FWD_1_UNSAFE().
         uint8_t b = *p;
         std::advance(p, 1 + U8_COUNT_TRAIL_BYTES_UNSAFE(b));
     }
 
-    static void dec(UnitIter &p) {
+    static inline void dec(UnitIter &p) {
         // Very similar to U8_BACK_1_UNSAFE().
         while (U8_IS_TRAIL(*--p)) {}
     }
 
-    static UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p) {
         // Very similar to U8_NEXT_UNSAFE().
         UnitIter p0 = p;
         CP32 c = uint8_t(*p);
@@ -695,7 +695,7 @@ public:
         }
     }
 
-    static UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
         // Very similar to U8_NEXT_UNSAFE().
         CP32 c = uint8_t(*p);
         ++p;
@@ -724,7 +724,7 @@ public:
         }
     }
 
-    static UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
         // Very similar to U8_PREV_UNSAFE().
         UnitIter p0 = p;
         CP32 c = uint8_t(*--p);
@@ -759,7 +759,7 @@ class UnsafeUTFImpl<
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 2>> {
 public:
-    static void inc(UnitIter &p) {
+    static inline void inc(UnitIter &p) {
         // Very similar to U16_FWD_1_UNSAFE().
         auto c = *p;
         ++p;
@@ -768,14 +768,14 @@ public:
         }
     }
 
-    static void dec(UnitIter &p) {
+    static inline void dec(UnitIter &p) {
         // Very similar to U16_BACK_1_UNSAFE().
         if (U16_IS_TRAIL(*--p)) {
             --p;
         }
     }
 
-    static UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p) {
         // Very similar to U16_NEXT_UNSAFE().
         UnitIter p0 = p;
         CP32 c = *p;
@@ -790,7 +790,7 @@ public:
         }
     }
 
-    static UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
         // Very similar to U16_NEXT_UNSAFE().
         CP32 c = *p;
         ++p;
@@ -804,7 +804,7 @@ public:
         }
     }
 
-    static UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
         // Very similar to U16_PREV_UNSAFE().
         UnitIter p0 = p;
         CP32 c = *--p;
@@ -826,28 +826,28 @@ class UnsafeUTFImpl<
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 4>> {
 public:
-    static void inc(UnitIter &p) {
+    static inline void inc(UnitIter &p) {
         ++p;
     }
 
-    static void dec(UnitIter &p) {
+    static inline void dec(UnitIter &p) {
         --p;
     }
 
-    static UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p) {
         UnitIter p0 = p;
         CP32 c = *p;
         ++p;
         return {c, 1, p0, p};
     }
 
-    static UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
         CP32 c = *p;
         ++p;
         return {c, 1};
     }
 
-    static UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
+    static inline UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
         UnitIter p0 = p;
         CP32 c = *--p;
         return {c, 1, p, p0};
@@ -906,27 +906,27 @@ public:
     // All of these iterators/pointers should be at code point boundaries.
     // Only enabled if UnitIter is a (multi-pass) forward_iterator or better.
     // TODO: Should we enable this only for a bidirectional_iterator?
-    UTFIterator(UnitIter start, UnitIter p, UnitIter limit) :
+    inline UTFIterator(UnitIter start, UnitIter p, UnitIter limit) :
             p_(p), start_(start), limit_(limit), units_(0, 0, false, p, p) {}
     // Constructs an iterator with start=p.
-    UTFIterator(UnitIter p, UnitIter limit) :
+    inline UTFIterator(UnitIter p, UnitIter limit) :
             p_(p), start_(p), limit_(limit), units_(0, 0, false, p, p) {}
     // Constructs an iterator start or limit sentinel.
     // Requires UnitIter to be copyable.
-    explicit UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p, p) {}
+    inline explicit UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p, p) {}
 
-    UTFIterator(UTFIterator &&src) noexcept = default;
-    UTFIterator &operator=(UTFIterator &&src) noexcept = default;
+    inline UTFIterator(UTFIterator &&src) noexcept = default;
+    inline UTFIterator &operator=(UTFIterator &&src) noexcept = default;
 
-    UTFIterator(const UTFIterator &other) = default;
-    UTFIterator &operator=(const UTFIterator &other) = default;
+    inline UTFIterator(const UTFIterator &other) = default;
+    inline UTFIterator &operator=(const UTFIterator &other) = default;
 
-    bool operator==(const UTFIterator &other) const {
+    inline bool operator==(const UTFIterator &other) const {
         return getLogicalPosition() == other.getLogicalPosition();
     }
-    bool operator!=(const UTFIterator &other) const { return !operator==(other); }
+    inline bool operator!=(const UTFIterator &other) const { return !operator==(other); }
 
-    CodeUnits<CP32, UnitIter> operator*() const {
+    inline CodeUnits<CP32, UnitIter> operator*() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_, limit_);
             state_ = 1;
@@ -939,7 +939,7 @@ public:
      * so that <code>iter->codePoint()</code> etc. works.
      * @draft ICU 78
      */
-    Proxy operator->() const {
+    inline Proxy operator->() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_, limit_);
             state_ = 1;
@@ -947,7 +947,7 @@ public:
         return Proxy(units_);
     }
 
-    UTFIterator &operator++() {  // pre-increment
+    inline UTFIterator &operator++() {  // pre-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
             state_ = 0;
@@ -967,7 +967,7 @@ public:
      *     returns an opaque proxy object so that <code>*iter++</code> still works.
      * @draft ICU 78
      */
-    UTFIterator operator++(int) {  // post-increment
+    inline UTFIterator operator++(int) {  // post-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
             UTFIterator result(*this);
@@ -990,6 +990,7 @@ public:
 
     // Only enabled if UnitIter is a bidirectional_iterator (including a pointer).
     template<typename Iter = UnitIter>
+    inline
     std::enable_if_t<
         std::is_base_of_v<
             std::bidirectional_iterator_tag,
@@ -1007,6 +1008,7 @@ public:
 
     // Only enabled if UnitIter is a bidirectional_iterator (including a pointer).
     template<typename Iter = UnitIter>
+    inline
     std::enable_if_t<
         std::is_base_of_v<
             std::bidirectional_iterator_tag,
@@ -1021,7 +1023,7 @@ public:
 private:
     friend class std::reverse_iterator<UTFIterator<CP32, behavior, UnitIter>>;
 
-    UnitIter getLogicalPosition() const {
+    inline UnitIter getLogicalPosition() const {
         return state_ <= 0 ? p_ : units_.begin();
     }
 
@@ -1073,26 +1075,26 @@ public:
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::input_iterator_tag;
 
-    UTFIterator(UnitIter p, UnitIter limit) : p_(std::move(p)), limit_(std::move(limit)) {}
+    inline UTFIterator(UnitIter p, UnitIter limit) : p_(std::move(p)), limit_(std::move(limit)) {}
 
     // Constructs an iterator start or limit sentinel.
     // Requires p to be copyable.
-    explicit UTFIterator(UnitIter p) : p_(std::move(p)), limit_(p_) {}
+    inline explicit UTFIterator(UnitIter p) : p_(std::move(p)), limit_(p_) {}
 
-    UTFIterator(UTFIterator &&src) noexcept = default;
-    UTFIterator &operator=(UTFIterator &&src) noexcept = default;
+    inline UTFIterator(UTFIterator &&src) noexcept = default;
+    inline UTFIterator &operator=(UTFIterator &&src) noexcept = default;
 
-    UTFIterator(const UTFIterator &other) = default;
-    UTFIterator &operator=(const UTFIterator &other) = default;
+    inline UTFIterator(const UTFIterator &other) = default;
+    inline UTFIterator &operator=(const UTFIterator &other) = default;
 
-    bool operator==(const UTFIterator &other) const {
+    inline bool operator==(const UTFIterator &other) const {
         return p_ == other.p_ && ahead_ == other.ahead_;
         // Strictly speaking, we should check if the logical position is the same.
         // However, we cannot advance, or do arithmetic with, a single-pass UnitIter.
     }
-    bool operator!=(const UTFIterator &other) const { return !operator==(other); }
+    inline bool operator!=(const UTFIterator &other) const { return !operator==(other); }
 
-    CodeUnits<CP32, UnitIter> operator*() const {
+    inline CodeUnits<CP32, UnitIter> operator*() const {
         if (!ahead_) {
             units_ = Impl::singlePassReadAndInc(p_, limit_);
             ahead_ = true;
@@ -1100,7 +1102,7 @@ public:
         return units_;
     }
 
-    Proxy operator->() const {
+    inline Proxy operator->() const {
         if (!ahead_) {
             units_ = Impl::singlePassReadAndInc(p_, limit_);
             ahead_ = true;
@@ -1108,7 +1110,7 @@ public:
         return Proxy(units_);
     }
 
-    UTFIterator &operator++() {  // pre-increment
+    inline UTFIterator &operator++() {  // pre-increment
         if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
@@ -1118,7 +1120,7 @@ public:
         return *this;
     }
 
-    Proxy operator++(int) {  // post-increment
+    inline Proxy operator++(int) {  // post-increment
         if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
@@ -1174,22 +1176,22 @@ public:
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::bidirectional_iterator_tag;
 
-    explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter> iter) :
+    inline explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter> iter) :
             p_(iter.getLogicalPosition()), start_(iter.start_), limit_(iter.limit_),
             units_(0, 0, false, p_, p_) {}
 
-    reverse_iterator(reverse_iterator &&src) noexcept = default;
-    reverse_iterator &operator=(reverse_iterator &&src) noexcept = default;
+    inline reverse_iterator(reverse_iterator &&src) noexcept = default;
+    inline reverse_iterator &operator=(reverse_iterator &&src) noexcept = default;
 
-    reverse_iterator(const reverse_iterator &other) = default;
-    reverse_iterator &operator=(const reverse_iterator &other) = default;
+    inline reverse_iterator(const reverse_iterator &other) = default;
+    inline reverse_iterator &operator=(const reverse_iterator &other) = default;
 
-    bool operator==(const reverse_iterator &other) const {
+    inline bool operator==(const reverse_iterator &other) const {
         return getLogicalPosition() == other.getLogicalPosition();
     }
-    bool operator!=(const reverse_iterator &other) const { return !operator==(other); }
+    inline bool operator!=(const reverse_iterator &other) const { return !operator==(other); }
 
-    CodeUnits_ operator*() const {
+    inline CodeUnits_ operator*() const {
         if (state_ == 0) {
             units_ = Impl::decAndRead(start_, p_);
             state_ = -1;
@@ -1197,7 +1199,7 @@ public:
         return units_;
     }
 
-    Proxy operator->() const {
+    inline Proxy operator->() const {
         if (state_ == 0) {
             units_ = Impl::decAndRead(start_, p_);
             state_ = -1;
@@ -1205,7 +1207,7 @@ public:
         return Proxy(units_);
     }
 
-    reverse_iterator &operator++() {  // pre-increment
+    inline reverse_iterator &operator++() {  // pre-increment
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is already behind.
             state_ = 0;
@@ -1219,7 +1221,7 @@ public:
         return *this;
     }
 
-    reverse_iterator operator++(int) {  // post-increment
+    inline reverse_iterator operator++(int) {  // post-increment
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is already behind.
             reverse_iterator result(*this);
@@ -1240,7 +1242,7 @@ public:
         }
     }
 
-    reverse_iterator &operator--() {  // pre-decrement
+    inline reverse_iterator &operator--() {  // pre-decrement
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is behind the logical position.
             p_ = units_.end();
@@ -1250,14 +1252,14 @@ public:
         return *this;
     }
 
-    reverse_iterator operator--(int) {  // post-decrement
+    inline reverse_iterator operator--(int) {  // post-decrement
         reverse_iterator result(*this);
         operator--();
         return result;
     }
 
 private:
-    UnitIter getLogicalPosition() const {
+    inline UnitIter getLogicalPosition() const {
         return state_ >= 0 ? p_ : units_.end();
     }
 
@@ -1467,20 +1469,20 @@ public:
         std::bidirectional_iterator_tag,
         std::forward_iterator_tag>;
 
-    explicit UnsafeUTFIterator(UnitIter p) : p_(p), units_(0, 0, p, p) {}
+    inline explicit UnsafeUTFIterator(UnitIter p) : p_(p), units_(0, 0, p, p) {}
 
-    UnsafeUTFIterator(UnsafeUTFIterator &&src) noexcept = default;
-    UnsafeUTFIterator &operator=(UnsafeUTFIterator &&src) noexcept = default;
+    inline UnsafeUTFIterator(UnsafeUTFIterator &&src) noexcept = default;
+    inline UnsafeUTFIterator &operator=(UnsafeUTFIterator &&src) noexcept = default;
 
-    UnsafeUTFIterator(const UnsafeUTFIterator &other) = default;
-    UnsafeUTFIterator &operator=(const UnsafeUTFIterator &other) = default;
+    inline UnsafeUTFIterator(const UnsafeUTFIterator &other) = default;
+    inline UnsafeUTFIterator &operator=(const UnsafeUTFIterator &other) = default;
 
-    bool operator==(const UnsafeUTFIterator &other) const {
+    inline bool operator==(const UnsafeUTFIterator &other) const {
         return getLogicalPosition() == other.getLogicalPosition();
     }
-    bool operator!=(const UnsafeUTFIterator &other) const { return !operator==(other); }
+    inline bool operator!=(const UnsafeUTFIterator &other) const { return !operator==(other); }
 
-    UnsafeCodeUnits<CP32, UnitIter> operator*() const {
+    inline UnsafeCodeUnits<CP32, UnitIter> operator*() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_);
             state_ = 1;
@@ -1493,7 +1495,7 @@ public:
      * so that <code>iter->codePoint()</code> etc. works.
      * @draft ICU 78
      */
-    Proxy operator->() const {
+    inline Proxy operator->() const {
         if (state_ == 0) {
             units_ = Impl::readAndInc(p_);
             state_ = 1;
@@ -1501,7 +1503,7 @@ public:
         return Proxy(units_);
     }
 
-    UnsafeUTFIterator &operator++() {  // pre-increment
+    inline UnsafeUTFIterator &operator++() {  // pre-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
             state_ = 0;
@@ -1521,7 +1523,7 @@ public:
      *     returns an opaque proxy object so that <code>*iter++</code> still works.
      * @draft ICU 78
      */
-    UnsafeUTFIterator operator++(int) {  // post-increment
+    inline UnsafeUTFIterator operator++(int) {  // post-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
             UnsafeUTFIterator result(*this);
@@ -1544,6 +1546,7 @@ public:
 
     // Only enabled if UnitIter is a bidirectional_iterator (including a pointer).
     template<typename Iter = UnitIter>
+    inline
     std::enable_if_t<
         std::is_base_of_v<
             std::bidirectional_iterator_tag,
@@ -1561,6 +1564,7 @@ public:
 
     // Only enabled if UnitIter is a bidirectional_iterator (including a pointer).
     template<typename Iter = UnitIter>
+    inline
     std::enable_if_t<
         std::is_base_of_v<
             std::bidirectional_iterator_tag,
@@ -1575,7 +1579,7 @@ public:
 private:
     friend class std::reverse_iterator<UnsafeUTFIterator<CP32, UnitIter>>;
 
-    UnitIter getLogicalPosition() const {
+    inline UnitIter getLogicalPosition() const {
         return state_ <= 0 ? p_ : units_.begin();
     }
 
@@ -1622,22 +1626,22 @@ public:
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::input_iterator_tag;
 
-    explicit UnsafeUTFIterator(UnitIter p) : p_(std::move(p)) {}
+    inline explicit UnsafeUTFIterator(UnitIter p) : p_(std::move(p)) {}
 
-    UnsafeUTFIterator(UnsafeUTFIterator &&src) noexcept = default;
-    UnsafeUTFIterator &operator=(UnsafeUTFIterator &&src) noexcept = default;
+    inline UnsafeUTFIterator(UnsafeUTFIterator &&src) noexcept = default;
+    inline UnsafeUTFIterator &operator=(UnsafeUTFIterator &&src) noexcept = default;
 
-    UnsafeUTFIterator(const UnsafeUTFIterator &other) = default;
-    UnsafeUTFIterator &operator=(const UnsafeUTFIterator &other) = default;
+    inline UnsafeUTFIterator(const UnsafeUTFIterator &other) = default;
+    inline UnsafeUTFIterator &operator=(const UnsafeUTFIterator &other) = default;
 
-    bool operator==(const UnsafeUTFIterator &other) const {
+    inline bool operator==(const UnsafeUTFIterator &other) const {
         return p_ == other.p_ && ahead_ == other.ahead_;
         // Strictly speaking, we should check if the logical position is the same.
         // However, we cannot advance, or do arithmetic with, a single-pass UnitIter.
     }
-    bool operator!=(const UnsafeUTFIterator &other) const { return !operator==(other); }
+    inline bool operator!=(const UnsafeUTFIterator &other) const { return !operator==(other); }
 
-    UnsafeCodeUnits<CP32, UnitIter> operator*() const {
+    inline UnsafeCodeUnits<CP32, UnitIter> operator*() const {
         if (!ahead_) {
             units_ = Impl::singlePassReadAndInc(p_);
             ahead_ = true;
@@ -1645,7 +1649,7 @@ public:
         return units_;
     }
 
-    Proxy operator->() const {
+    inline Proxy operator->() const {
         if (!ahead_) {
             units_ = Impl::singlePassReadAndInc(p_);
             ahead_ = true;
@@ -1653,7 +1657,7 @@ public:
         return Proxy(units_);
     }
 
-    UnsafeUTFIterator &operator++() {  // pre-increment
+    inline UnsafeUTFIterator &operator++() {  // pre-increment
         if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
@@ -1663,7 +1667,7 @@ public:
         return *this;
     }
 
-    Proxy operator++(int) {  // post-increment
+    inline Proxy operator++(int) {  // post-increment
         if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
@@ -1716,21 +1720,21 @@ public:
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::bidirectional_iterator_tag;
 
-    explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter> iter) :
+    inline explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter> iter) :
             p_(iter.getLogicalPosition()), units_(0, 0, p_, p_) {}
 
-    reverse_iterator(reverse_iterator &&src) noexcept = default;
-    reverse_iterator &operator=(reverse_iterator &&src) noexcept = default;
+    inline reverse_iterator(reverse_iterator &&src) noexcept = default;
+    inline reverse_iterator &operator=(reverse_iterator &&src) noexcept = default;
 
-    reverse_iterator(const reverse_iterator &other) = default;
-    reverse_iterator &operator=(const reverse_iterator &other) = default;
+    inline reverse_iterator(const reverse_iterator &other) = default;
+    inline reverse_iterator &operator=(const reverse_iterator &other) = default;
 
-    bool operator==(const reverse_iterator &other) const {
+    inline bool operator==(const reverse_iterator &other) const {
         return getLogicalPosition() == other.getLogicalPosition();
     }
-    bool operator!=(const reverse_iterator &other) const { return !operator==(other); }
+    inline bool operator!=(const reverse_iterator &other) const { return !operator==(other); }
 
-    UnsafeCodeUnits_ operator*() const {
+    inline UnsafeCodeUnits_ operator*() const {
         if (state_ == 0) {
             units_ = Impl::decAndRead(p_);
             state_ = -1;
@@ -1738,7 +1742,7 @@ public:
         return units_;
     }
 
-    Proxy operator->() const {
+    inline Proxy operator->() const {
         if (state_ == 0) {
             units_ = Impl::decAndRead(p_);
             state_ = -1;
@@ -1746,7 +1750,7 @@ public:
         return Proxy(units_);
     }
 
-    reverse_iterator &operator++() {  // pre-increment
+    inline reverse_iterator &operator++() {  // pre-increment
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is already behind.
             state_ = 0;
@@ -1760,7 +1764,7 @@ public:
         return *this;
     }
 
-    reverse_iterator operator++(int) {  // post-increment
+    inline reverse_iterator operator++(int) {  // post-increment
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is already behind.
             reverse_iterator result(*this);
@@ -1781,7 +1785,7 @@ public:
         }
     }
 
-    reverse_iterator &operator--() {  // pre-decrement
+    inline reverse_iterator &operator--() {  // pre-decrement
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is behind the logical position.
             p_ = units_.end();
@@ -1791,14 +1795,14 @@ public:
         return *this;
     }
 
-    reverse_iterator operator--(int) {  // post-decrement
+    inline reverse_iterator operator--(int) {  // post-decrement
         reverse_iterator result(*this);
         operator--();
         return result;
     }
 
 private:
-    UnitIter getLogicalPosition() const {
+    inline UnitIter getLogicalPosition() const {
         return state_ >= 0 ? p_ : units_.end();
     }
 
