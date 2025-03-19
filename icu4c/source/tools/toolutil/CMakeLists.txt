@@ -1,0 +1,5 @@
+add_library(toolutil)
+icu_add_sources(toolutil)
+target_link_libraries(toolutil PRIVATE icu_lib_defaults icuuc icui18n)
+target_include_directories(toolutil PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_compile_definitions(toolutil PRIVATE U_TOOLUTIL_IMPLEMENTATION)
