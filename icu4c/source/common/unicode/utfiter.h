@@ -882,7 +882,7 @@ class UTFIterator {
     // so that we don't promise always returning CodeUnits.
     class Proxy {
     public:
-        Proxy(CodeUnits<CP32, UnitIter> &units) : units_(units) {}
+        explicit Proxy(CodeUnits<CP32, UnitIter> &units) : units_(units) {}
         CodeUnits<CP32, UnitIter> &operator*() { return units_; }
         CodeUnits<CP32, UnitIter> *operator->() { return &units_; }
     private:
@@ -913,7 +913,7 @@ public:
             p_(p), start_(p), limit_(limit), units_(0, 0, false, p, p) {}
     // Constructs an iterator start or limit sentinel.
     // Requires UnitIter to be copyable.
-    UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p, p) {}
+    explicit UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p, p) {}
 
     UTFIterator(UTFIterator &&src) noexcept = default;
     UTFIterator &operator=(UTFIterator &&src) noexcept = default;
@@ -1059,7 +1059,7 @@ class UTFIterator<
     // so that we don't promise always returning CodeUnits.
     class Proxy {
     public:
-        Proxy(CodeUnits<CP32, UnitIter> &units) : units_(units) {}
+        explicit Proxy(CodeUnits<CP32, UnitIter> &units) : units_(units) {}
         CodeUnits<CP32, UnitIter> &operator*() { return units_; }
         CodeUnits<CP32, UnitIter> *operator->() { return &units_; }
     private:
@@ -1077,7 +1077,7 @@ public:
 
     // Constructs an iterator start or limit sentinel.
     // Requires p to be copyable.
-    UTFIterator(UnitIter p) : p_(std::move(p)), limit_(p_) {}
+    explicit UTFIterator(UnitIter p) : p_(std::move(p)), limit_(p_) {}
 
     UTFIterator(UTFIterator &&src) noexcept = default;
     UTFIterator &operator=(UTFIterator &&src) noexcept = default;
@@ -1160,7 +1160,7 @@ class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior,
     // so that we don't promise always returning CodeUnits.
     class Proxy {
     public:
-        Proxy(CodeUnits_ units) : units_(units) {}
+        explicit Proxy(CodeUnits_ units) : units_(units) {}
         CodeUnits_ &operator*() { return units_; }
         CodeUnits_ *operator->() { return &units_; }
     private:
@@ -1174,7 +1174,7 @@ public:
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::bidirectional_iterator_tag;
 
-    reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter> iter) :
+    explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter> iter) :
             p_(iter.getLogicalPosition()), start_(iter.start_), limit_(iter.limit_),
             units_(0, 0, false, p_, p_) {}
 
@@ -1299,7 +1299,7 @@ public:
      * Constructs a C++ "range" object over the code points in the string.
      * @draft ICU 78
      */
-    UTFStringCodePoints(std::basic_string_view<Unit> s) : s(s) {}
+    explicit UTFStringCodePoints(std::basic_string_view<Unit> s) : s(s) {}
 
     /** @draft ICU 78 */
     UTFStringCodePoints(const UTFStringCodePoints &other) = default;
@@ -1447,7 +1447,7 @@ class UnsafeUTFIterator {
     // so that we don't promise always returning UnsafeCodeUnits.
     class Proxy {
     public:
-        Proxy(UnsafeCodeUnits<CP32, UnitIter> &units) : units_(units) {}
+        explicit Proxy(UnsafeCodeUnits<CP32, UnitIter> &units) : units_(units) {}
         UnsafeCodeUnits<CP32, UnitIter> &operator*() { return units_; }
         UnsafeCodeUnits<CP32, UnitIter> *operator->() { return &units_; }
     private:
@@ -1467,7 +1467,7 @@ public:
         std::bidirectional_iterator_tag,
         std::forward_iterator_tag>;
 
-    UnsafeUTFIterator(UnitIter p) : p_(p), units_(0, 0, p, p) {}
+    explicit UnsafeUTFIterator(UnitIter p) : p_(p), units_(0, 0, p, p) {}
 
     UnsafeUTFIterator(UnsafeUTFIterator &&src) noexcept = default;
     UnsafeUTFIterator &operator=(UnsafeUTFIterator &&src) noexcept = default;
@@ -1608,7 +1608,7 @@ class UnsafeUTFIterator<
     // so that we don't promise always returning UnsafeCodeUnits.
     class Proxy {
     public:
-        Proxy(UnsafeCodeUnits<CP32, UnitIter> &units) : units_(units) {}
+        explicit Proxy(UnsafeCodeUnits<CP32, UnitIter> &units) : units_(units) {}
         UnsafeCodeUnits<CP32, UnitIter> &operator*() { return units_; }
         UnsafeCodeUnits<CP32, UnitIter> *operator->() { return &units_; }
     private:
@@ -1622,7 +1622,7 @@ public:
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::input_iterator_tag;
 
-    UnsafeUTFIterator(UnitIter p) : p_(std::move(p)) {}
+    explicit UnsafeUTFIterator(UnitIter p) : p_(std::move(p)) {}
 
     UnsafeUTFIterator(UnsafeUTFIterator &&src) noexcept = default;
     UnsafeUTFIterator &operator=(UnsafeUTFIterator &&src) noexcept = default;
@@ -1702,7 +1702,7 @@ class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, Uni
     // so that we don't promise always returning UnsafeCodeUnits.
     class Proxy {
     public:
-        Proxy(UnsafeCodeUnits_ units) : units_(units) {}
+        explicit Proxy(UnsafeCodeUnits_ units) : units_(units) {}
         UnsafeCodeUnits_ &operator*() { return units_; }
         UnsafeCodeUnits_ *operator->() { return &units_; }
     private:
@@ -1716,7 +1716,7 @@ public:
     using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
     using iterator_category = std::bidirectional_iterator_tag;
 
-    reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter> iter) :
+    explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter> iter) :
             p_(iter.getLogicalPosition()), units_(0, 0, p_, p_) {}
 
     reverse_iterator(reverse_iterator &&src) noexcept = default;
@@ -1835,7 +1835,7 @@ public:
      * Constructs a C++ "range" object over the code points in the string.
      * @draft ICU 78
      */
-    UnsafeUTFStringCodePoints(std::basic_string_view<Unit> s) : s(s) {}
+    explicit UnsafeUTFStringCodePoints(std::basic_string_view<Unit> s) : s(s) {}
 
     /** @draft ICU 78 */
     UnsafeUTFStringCodePoints(const UnsafeUTFStringCodePoints &other) = default;

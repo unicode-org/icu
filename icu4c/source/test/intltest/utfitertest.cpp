@@ -116,7 +116,7 @@ class SinglePassIter;
 template<typename Unit>
 class SinglePassSource {
 public:
-    SinglePassSource(std::basic_string_view<Unit> s) : p(s.data()), limit(s.data() + s.length()) {}
+    explicit SinglePassSource(std::basic_string_view<Unit> s) : p(s.data()), limit(s.data() + s.length()) {}
 
     SinglePassIter<Unit> begin() { return SinglePassIter<Unit>(*this); }
     SinglePassIter<Unit> end() { return SinglePassIter<Unit>(); }
@@ -140,7 +140,7 @@ public:
     // so we claim it to be a LegacyInputIterator. It *is* single-pass.
     typedef std::input_iterator_tag iterator_category;
 
-    SinglePassIter(SinglePassSource<Unit> &src) : src(&src) {}
+    explicit SinglePassIter(SinglePassSource<Unit> &src) : src(&src) {}
     // limit sentinel
     SinglePassIter() : src(nullptr) {}
 
@@ -183,7 +183,7 @@ public:
     // https://en.cppreference.com/w/cpp/named_req/ForwardIterator#Multi-pass_guarantee
     typedef std::forward_iterator_tag iterator_category;
 
-    FwdIter(const Unit *data) : p(data) {}
+    explicit FwdIter(const Unit *data) : p(data) {}
 
     bool operator==(const FwdIter &other) const { return p == other.p; }
     bool operator!=(const FwdIter &other) const { return !operator==(other); }
