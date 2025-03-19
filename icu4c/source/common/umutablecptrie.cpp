@@ -1543,7 +1543,7 @@ int32_t MutableCodePointTrie::compactTrie(int32_t fastILimit, UErrorCode &errorC
     MixedBlocks mixedBlocks;
     int32_t newDataLength = compactData(fastILimit, newData, newDataCapacity,
                                         dataNullIndex, mixedBlocks, errorCode);
-    if (U_FAILURE(errorCode)) { return 0; }
+    if (U_FAILURE(errorCode)) { uprv_free(newData); return 0; }
     U_ASSERT(newDataLength <= newDataCapacity);
     uprv_free(data);
     data = newData;

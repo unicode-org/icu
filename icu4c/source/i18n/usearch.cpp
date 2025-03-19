@@ -199,6 +199,7 @@ inline int32_t * addTouint32_tArray(int32_t    *destination,
         int32_t* temp = static_cast<int32_t*>(allocateMemory(
                                          sizeof(int32_t) * newlength, status));
         if (U_FAILURE(*status)) {
+            uprv_free(temp);
             return nullptr;
         }
         uprv_memcpy(temp, destination, sizeof(int32_t) * (size_t)offset);
@@ -240,6 +241,7 @@ inline int64_t * addTouint64_tArray(int64_t    *destination,
                                          sizeof(int64_t) * newlength, status));
 
         if (U_FAILURE(*status)) {
+            uprv_free(temp);
             return nullptr;
         }
 
