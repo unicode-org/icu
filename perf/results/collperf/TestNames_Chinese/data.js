@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742418991606,
+  "lastUpdate": 1742428438987,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -64473,6 +64473,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2084266.1673,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "b65650bc5f4344ec4da3f0ae2552607d65c551fa",
+          "message": "ICU-23077 Correct the internalGet call inside Calendar\n\nSee #3439",
+          "timestamp": "2025-03-19T16:22:43-07:00",
+          "tree_id": "eee23315376bfb94e1d9e07a6538de417fb15591",
+          "url": "https://github.com/unicode-org/icu/commit/b65650bc5f4344ec4da3f0ae2552607d65c551fa"
+        },
+        "date": 1742428186628,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 153.0473,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 9071485.5229,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2109942.5808,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7847727.8637,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2119550.8182,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
