@@ -397,7 +397,7 @@
               <!-- To handle the ICU custom taglets (@icu, @draft, @stable, etc -->
               <tagletArtifact>
                 <groupId>com.ibm.icu</groupId>
-                <artifactId>tools_build</artifactId>
+                <artifactId>tools_taglets</artifactId>
                 <version>${project.version}</version>
               </tagletArtifact>
             </tagletArtifacts>
@@ -633,6 +633,7 @@
       </activation>
       <modules>
          <module>tools/build</module>
+         <module>tools/taglets</module>
       </modules>
     </profile>
 
