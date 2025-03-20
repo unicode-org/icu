@@ -118,7 +118,7 @@ public interface UnicodeMatcher {
     /**
      * Returns true if this matcher will match a character c, where c
      * &amp; 0xFF == v, at offset, in the forward direction (with limit &gt;
-     * offset).  This is used by <tt>RuleBasedTransliterator</tt> for
+     * offset).  This is used by {@code RuleBasedTransliterator} for
      * indexing.
      *
      * <p>Note:  This API uses an int even though the value will be

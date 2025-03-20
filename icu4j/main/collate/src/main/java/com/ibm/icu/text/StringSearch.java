@@ -34,7 +34,7 @@ import com.ibm.icu.util.ULocale;
 
 /**
  *
- * <tt>StringSearch</tt> is a {@link SearchIterator} that provides
+ * {@code StringSearch} is a {@link SearchIterator} that provides
  * language-sensitive text searching based on the comparison rules defined
  * in a {@link RuleBasedCollator} object.
  * StringSearch ensures that language eccentricity can be
@@ -107,20 +107,20 @@ import com.ibm.icu.util.ULocale;
  * performing matches, there are no APIs here for setting and getting the
  * attributes. These attributes can be set by getting the collator
  * from {@link #getCollator} and using the APIs in {@link RuleBasedCollator}.
- * Lastly to update <tt>StringSearch</tt> to the new collator attributes,
+ * Lastly to update {@code StringSearch} to the new collator attributes,
  * {@link #reset} has to be called.
  * <p>
  * Restriction: <br>
  * Currently there are no composite characters that consists of a
  * character with combining class &gt; 0 before a character with combining
  * class == 0. However, if such a character exists in the future,
- * <tt>StringSearch</tt> does not guarantee the results for option 1.
+ * {@code StringSearch} does not guarantee the results for option 1.
  * <p>
  * Consult the {@link SearchIterator} documentation for information on
  * and examples of how to use instances of this class to implement text
  * searching.
  * <p>
- * Note, <tt>StringSearch</tt> is not to be subclassed.
+ * Note, {@code StringSearch} is not to be subclassed.
  * </p>
  * @see SearchIterator
  * @see RuleBasedCollator
@@ -290,12 +290,12 @@ public final class StringSearch extends SearchIterator {
     /**
      * Gets the {@link RuleBasedCollator} used for the language rules.
      * <p>
-     * Since <tt>StringSearch</tt> depends on the returned {@link RuleBasedCollator}, any
+     * Since {@code StringSearch} depends on the returned {@link RuleBasedCollator}, any
      * changes to the {@link RuleBasedCollator} result should follow with a call to
      * either {@link #reset()} or {@link #setCollator(RuleBasedCollator)} to ensure the correct
      * search behavior.
      * </p>
-     * @return {@link RuleBasedCollator} used by this <tt>StringSearch</tt>
+     * @return {@link RuleBasedCollator} used by this {@code StringSearch}
      * @see RuleBasedCollator
      * @see #setCollator
      * @stable ICU 2.0
@@ -308,7 +308,7 @@ public final class StringSearch extends SearchIterator {
      * Sets the {@link RuleBasedCollator} to be used for language-specific searching.
      * <p>
      * The iterator's position will not be changed by this method.
-     * @param collator to use for this <tt>StringSearch</tt>
+     * @param collator to use for this {@code StringSearch}
      * @throws IllegalArgumentException thrown when collator is null
      * @see #getCollator
      * @stable ICU 2.0
@@ -334,7 +334,7 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Returns the pattern for which <tt>StringSearch</tt> is searching for.
+     * Returns the pattern for which {@code StringSearch} is searching for.
      * @return the pattern searched for
      * @stable ICU 2.0
      */

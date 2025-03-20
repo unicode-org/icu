@@ -40,8 +40,8 @@ import com.ibm.icu.util.ULocale.Category;
 
 /**
  * A class encapsulating a currency, as defined by ISO 4217.  A
- * <tt>Currency</tt> object can be created given a <tt>Locale</tt> or
- * given an ISO 4217 code.  Once created, the <tt>Currency</tt> object
+ * {@code Currency} object can be created given a {@code Locale} or
+ * given an ISO 4217 code.  Once created, the {@code Currency} object
  * can return various data necessary to its proper display:
  *
  * <ul><li>A display symbol, for a specific locale
@@ -49,11 +49,11 @@ import com.ibm.icu.util.ULocale.Category;
  * <li>A rounding increment
  * </ul>
  *
- * The <tt>DecimalFormat</tt> class uses these data to display
+ * The {@code DecimalFormat} class uses these data to display
  * currencies.
  *
  * <p>Note: This class deliberately resembles
- * <tt>java.util.Currency</tt> but it has a completely independent
+ * {@code java.util.Currency} but it has a completely independent
  * implementation, and adds features not present in the JDK.
  * @author Alan Liu
  * @stable ICU 2.2

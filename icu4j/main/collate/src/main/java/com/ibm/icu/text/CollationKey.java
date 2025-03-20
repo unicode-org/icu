@@ -387,7 +387,7 @@ public final class CollationKey implements Comparable<CollationKey>
      * src/com/ibm/icu/dev/test/collator/CollationAPITest/TestBounds.
      * </a>
      * <p>
-     * Collation keys produced may be compared using the <TT>compare</TT> API.
+     * Collation keys produced may be compared using the {@code compare} API.
      * @param boundType Mode of bound required. It can be BoundMode.LOWER, which
      *              produces a lower inclusive bound, BoundMode.UPPER, that
      *              produces upper bound that matches strings of the same
@@ -510,7 +510,7 @@ public final class CollationKey implements Comparable<CollationKey>
      * @param source CollationKey to merge with
      * @return a CollationKey that contains the valid merged sort keys
      *         with a null String representation,
-     *         i.e. <tt>new CollationKey(null, merged_sort_keys)</tt>
+     *         i.e. {@code new CollationKey(null, merged_sort_keys)}
      * @exception IllegalArgumentException thrown if source CollationKey
      *            argument is null or of 0 length.
      * @stable ICU 2.6

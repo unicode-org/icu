@@ -301,13 +301,13 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * <p><b>Note:</b> You should always use {@link #roll roll} and {@link #add add} rather
  * than attempting to perform arithmetic operations directly on the fields
- * of a <tt>Calendar</tt>.  It is quite possible for <tt>Calendar</tt> subclasses
+ * of a {@code Calendar}.  It is quite possible for {@code Calendar} subclasses
  * to have fields with non-linear behavior, for example missing months
- * or days during non-leap years.  The subclasses' <tt>add</tt> and <tt>roll</tt>
+ * or days during non-leap years.  The subclasses' {@code add} and {@code roll}
  * methods will take this into account, while simple arithmetic manipulations
  * may give invalid results.
  *
- * <p><big><big><b>Calendar Architecture in ICU4J</b></big></big></p>
+ * <p style="font-size:x-large;font-weight:bold">Calendar Architecture in ICU4J</p>
  *
  * <p>Recently the implementation of <code>Calendar</code> has changed
  * significantly in order to better support subclassing. The original
@@ -322,7 +322,7 @@ import com.ibm.icu.util.ULocale.Category;
  * <code>java.util.Calendar</code>.
  * </p>
  *
- * <p><big><b>Changes</b></big></p>
+ * <p style="font-size:large;font-weight:bold">Changes</p>
  *
  * <p>Overview of changes between the classic <code>Calendar</code>
  * architecture and the new architecture.
@@ -402,7 +402,7 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * </ul>
  *
- * <p><big><b>Subclass API</b></big></p>
+ * <p style="font-size:large;font-weight:bold">Subclass API</p>
  *
  * <p>The original <code>Calendar</code> API was based on the experience
  * of implementing a only a single subclass,
@@ -428,7 +428,7 @@ import com.ibm.icu.util.ULocale.Category;
  * fields and the time related fields. These are commonly handled for all
  * calendars by the base class. </p>
  *
- * <p><b>Subclass computation of time <tt>=&gt;</tt> fields</b>
+ * <p><b>Subclass computation of time {@code =&gt;} fields</b>
  *
  * <p>The {@link #ERA}, {@link #YEAR},
  * {@link #EXTENDED_YEAR}, {@link #MONTH},
@@ -455,7 +455,7 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * </ul>
  *
- * <p><b>Subclass computation of fields <tt>=&gt;</tt> time</b>
+ * <p><b>Subclass computation of fields {@code =&gt;} time</b>
  *
  * <p>The interpretation of most field values is handled entirely by
  * <code>Calendar</code>. <code>Calendar</code> determines which fields
@@ -495,7 +495,7 @@ import com.ibm.icu.util.ULocale.Category;
  *   <li>Subclasses should implement {@link #handleGetYearLength}
  *     to return the number of days in the given
  *     extended year. This method is used by
- *     <tt>computeWeekFields</tt> to compute the
+ *     {@code computeWeekFields} to compute the
  *     {@link #WEEK_OF_YEAR} and {@link #YEAR_WOY} fields.</li>
  *
  *   <li>Subclasses should implement {@link #handleGetLimit}
@@ -545,7 +545,7 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * </ul>
  *
- * <p><big><b>Normalized behavior</b></big>
+ * <p style="font-size:large;font-weight:bold">Normalized behavior</p>
  *
  * <p>The behavior of certain fields has been made consistent across all
  * calendar systems and implemented in <code>Calendar</code>.
@@ -587,7 +587,7 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * </ul>
  *
- * <p><big><b>Supported range</b></big>
+ * <p style="font-size:large;font-weight:bold">Supported range</p>
  *
  * <p>The allowable range of <code>Calendar</code> has been
  * narrowed. <code>GregorianCalendar</code> used to attempt to support
@@ -602,7 +602,7 @@ import com.ibm.icu.util.ULocale.Category;
  * should use the protected constants in <code>Calendar</code> to
  * specify an extremely early or extremely late date.</p>
  *
- * <p><big><b>General notes</b></big>
+ * <p style="font-size:large;font-weight:bold">General notes</p>
  *
  * <ul>
  *
@@ -2887,19 +2887,19 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * result in negative years for era 0 (that is the only way to represent years before
      * the calendar epoch in such calendars).
      * <p>
-     * <b>Note:</b> Calling <tt>roll(field, true)</tt> N times is <em>not</em>
-     * necessarily equivalent to calling <tt>roll(field, N)</tt>.  For example,
+     * <b>Note:</b> Calling {@code roll(field, true)} N times is <em>not</em>
+     * necessarily equivalent to calling {@code roll(field, N)}.  For example,
      * imagine that you start with the date Gregorian date January 31, 1995.  If you call
-     * <tt>roll(Calendar.MONTH, 2)</tt>, the result will be March 31, 1995.
-     * But if you call <tt>roll(Calendar.MONTH, true)</tt>, the result will be
+     * {@code roll(Calendar.MONTH, 2)}, the result will be March 31, 1995.
+     * But if you call {@code roll(Calendar.MONTH, true)}, the result will be
      * February 28, 1995.  Calling it one more time will give March 28, 1995, which
      * is usually not the desired result.
      * <p>
-     * <b>Note:</b> You should always use <tt>roll</tt> and <tt>add</tt> rather
+     * <b>Note:</b> You should always use {@code roll} and {@code add} rather
      * than attempting to perform arithmetic operations directly on the fields
-     * of a <tt>Calendar</tt>.  It is quite possible for <tt>Calendar</tt> subclasses
+     * of a {@code Calendar}.  It is quite possible for {@code Calendar} subclasses
      * to have fields with non-linear behavior, for example missing months
-     * or days during non-leap years.  The subclasses' <tt>add</tt> and <tt>roll</tt>
+     * or days during non-leap years.  The subclasses' {@code add} and {@code roll}
      * methods will take this into account, while simple arithmetic manipulations
      * may give invalid results.
      * <p>
@@ -2952,11 +2952,11 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * and {@link #ZONE_OFFSET ZONE_OFFSET}.  Subclasses may, of course, add support for
      * additional fields in their overrides of <code>roll</code>.
      * <p>
-     * <b>Note:</b> You should always use <tt>roll</tt> and <tt>add</tt> rather
+     * <b>Note:</b> You should always use {@code roll} and {@code add} rather
      * than attempting to perform arithmetic operations directly on the fields
-     * of a <tt>Calendar</tt>.  It is quite possible for <tt>Calendar</tt> subclasses
+     * of a {@code Calendar}.  It is quite possible for {@code Calendar} subclasses
      * to have fields with non-linear behavior, for example missing months
-     * or days during non-leap years.  The subclasses' <tt>add</tt> and <tt>roll</tt>
+     * or days during non-leap years.  The subclasses' {@code add} and {@code roll}
      * methods will take this into account, while simple arithmetic manipulations
      * may give invalid results.
      * <p>
@@ -3330,11 +3330,11 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * and {@link #ZONE_OFFSET ZONE_OFFSET}.  Subclasses may, of course, add support for
      * additional fields in their overrides of <code>add</code>.
      * <p>
-     * <b>Note:</b> You should always use <tt>roll</tt> and <tt>add</tt> rather
+     * <b>Note:</b> You should always use {@code roll} and {@code add} rather
      * than attempting to perform arithmetic operations directly on the fields
-     * of a <tt>Calendar</tt>.  It is quite possible for <tt>Calendar</tt> subclasses
+     * of a {@code Calendar}.  It is quite possible for {@code Calendar} subclasses
      * to have fields with non-linear behavior, for example missing months
-     * or days during non-leap years.  The subclasses' <tt>add</tt> and <tt>roll</tt>
+     * or days during non-leap years.  The subclasses' {@code add} and {@code roll}
      * methods will take this into account, while simple arithmetic manipulations
      * may give invalid results.
      * <p>
@@ -6746,9 +6746,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * {@icu} Returns the locale that was used to create this object, or null.
      * This may may differ from the locale requested at the time of
      * this object's creation.  For example, if an object is created
-     * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
-     * drawn from <tt>en</tt> (the <i>actual</i> locale), and
-     * <tt>en_US</tt> may be the most specific locale that exists (the
+     * for locale {@code en_US_CALIFORNIA}, the actual data may be
+     * drawn from {@code en} (the <i>actual</i> locale), and
+     * {@code en_US} may be the most specific locale that exists (the
      * <i>valid</i> locale).
      *
      * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8

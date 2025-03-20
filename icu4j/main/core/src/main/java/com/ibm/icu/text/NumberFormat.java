@@ -1334,7 +1334,7 @@ public abstract class NumberFormat extends UFormat {
     }
 
     /**
-     * Sets the <tt>Currency</tt> object used to display currency
+     * Sets the {@code Currency} object used to display currency
      * amounts.  This takes effect immediately, if this format is a
      * currency format.  If this format is not a currency format, then
      * the currency object is used if and when this object becomes a
@@ -1348,7 +1348,7 @@ public abstract class NumberFormat extends UFormat {
     }
 
     /**
-     * Returns the <tt>Currency</tt> object used to display currency
+     * Returns the {@code Currency} object used to display currency
      * amounts.  This may be null.
      * @stable ICU 2.6
      */
