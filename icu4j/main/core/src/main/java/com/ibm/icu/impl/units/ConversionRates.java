@@ -183,7 +183,7 @@ public class ConversionRates {
 
 
                     String keyString = key.toString();
-                    String valueString = value.toString().replaceAll(" ", "");
+                    String valueString = value.toString().replace(" ", "");
                     if ("target".equals(keyString)) {
                         target = valueString;
                     } else if ("factor".equals(keyString)) {
