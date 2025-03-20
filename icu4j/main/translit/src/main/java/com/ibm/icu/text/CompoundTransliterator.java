@@ -43,9 +43,9 @@ class CompoundTransliterator extends Transliterator {
      * @param transliterators array of <code>Transliterator</code>
      * objects
      * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
+     * {@code filter.contains()} returns {@code false} will not be
+     * altered by this transliterator.  If {@code filter} is
+     * {@code null} then no filtering is applied.
      */
     /*public CompoundTransliterator(Transliterator[] transliterators,
                                   UnicodeFilter filter) {

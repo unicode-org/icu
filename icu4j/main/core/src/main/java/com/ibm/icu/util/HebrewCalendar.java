@@ -439,7 +439,7 @@ public class HebrewCalendar extends Calendar {
      * <p>
      * <b>Note:</b> You should always use {@link #roll roll} and add rather
      * than attempting to perform arithmetic operations directly on the fields
-     * of a <tt>HebrewCalendar</tt>.  Since the {@link #MONTH MONTH} field behaves
+     * of a {@code HebrewCalendar}.  Since the {@link #MONTH MONTH} field behaves
      * discontinuously in non-leap years, simple arithmetic can give invalid results.
      * <p>
      * @param field     the time field.
@@ -527,7 +527,7 @@ public class HebrewCalendar extends Calendar {
      * <p>
      * <b>Note:</b> You should always use roll and {@link #add add} rather
      * than attempting to perform arithmetic operations directly on the fields
-     * of a <tt>HebrewCalendar</tt>.  Since the {@link #MONTH MONTH} field behaves
+     * of a {@code HebrewCalendar}.  Since the {@link #MONTH MONTH} field behaves
      * discontinuously in non-leap years, simple arithmetic can give invalid results.
      * <p>
      * @param field     the time field.

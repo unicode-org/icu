@@ -371,8 +371,7 @@
                 [ERROR] com\ibm\icu\util\ULocale.java:100: error: reference not found
                 [ERROR]  * {@link com.ibm.icu.text.Collator}
             -->
-            <!-- <doclint>html</doclint> -->
-            <doclint>none</doclint>
+            <doclint>html</doclint>
             <notimestamp>true</notimestamp>
             <nodeprecatedlist>true</nodeprecatedlist>
             <quiet>true</quiet>
@@ -380,7 +379,6 @@
             <doctitle>${icu4j.api.doc.window.title}</doctitle>
             <header>${icu4j.api.doc.header}</header>
             <bottom>${icu4j.api.doc.copyright.footer}</bottom>
-            <stylesheetfile>${icu4j.api.doc.root.dir}/stylesheet8.css</stylesheetfile>
             <encoding>UTF-8</encoding>
             <docencoding>UTF-8</docencoding>
             <charset>UTF-8</charset>
