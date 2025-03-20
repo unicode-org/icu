@@ -355,11 +355,27 @@ public final class LikelySubtags {
                 } else {
                     iter.resetToState64(state);
                     value = trieNext(iter, "", 0);
-                    assert value > 0;
+                    assert value != 0;
+                    if (value < 0) {
+                        retainLanguage = !language.isEmpty();
+                        retainScript = !script.isEmpty();
+                        retainRegion = !region.isEmpty();
+                        // Fallback to und_$region =>
+                        iter.resetToState64(trieUndState);  // "und" ("*")
+                        value = trieNext(iter, "", 0);
+                        assert value == 0;
+                        long trieUndEmptyState = iter.getState64();
+                        value = trieNext(iter, region, 0);
+                        // Fallback to und =>
+                        if (value < 0) {
+                            iter.resetToState64(trieUndEmptyState);
+                            value = trieNext(iter, "", 0);
+                            assert value > 0;
+                        }
+                    }
                 }
             }
         }
-        LSR result = lsrs[value];
 
         if (returnInputIfUnmatch &&
             (!(matchLanguage || matchScript || (matchRegion && language.isEmpty())))) {
@@ -370,17 +386,21 @@ public final class LikelySubtags {
         }
 
         if (! (retainLanguage || retainScript || retainRegion)) {
-            assert result.flags == LSR.IMPLICIT_LSR;
-            return result;
+            assert value >= 0;
+            assert lsrs[value].flags == LSR.IMPLICIT_LSR;
+            return lsrs[value];
         }
         if (!retainLanguage) {
-            language = result.language;
+            assert value >= 0;
+            language = lsrs[value].language;
         }
         if (!retainScript) {
-            script = result.script;
+            assert value >= 0;
+            script = lsrs[value].script;
         }
         if (!retainRegion) {
-            region = result.region;
+            assert value >= 0;
+            region = lsrs[value].region;
         }
         int retainMask = (retainLanguage ? 4 : 0) + (retainScript ? 2 : 0) + (retainRegion ? 1 : 0);
         // retainOldMask flags = LSR explicit-subtag flags
