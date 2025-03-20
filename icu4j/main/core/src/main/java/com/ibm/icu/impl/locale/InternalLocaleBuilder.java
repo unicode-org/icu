@@ -75,7 +75,7 @@ public final class InternalLocaleBuilder {
             _variant = "";
         } else {
             // normalize separators to "_"
-            String var = variant.replaceAll(LanguageTag.SEP, BaseLocale.SEP);
+            String var = variant.replace(LanguageTag.SEP, BaseLocale.SEP);
             int errIdx = checkVariants(var, BaseLocale.SEP);
             if (errIdx != -1) {
                 throw new LocaleSyntaxException("Ill-formed variant: " + variant, errIdx);
@@ -121,7 +121,7 @@ public final class InternalLocaleBuilder {
         } else {
             if (type.length() != 0) {
                 // normalize separator to "-"
-                String tp = type.replaceAll(BaseLocale.SEP, LanguageTag.SEP);
+                String tp = type.replace(BaseLocale.SEP, LanguageTag.SEP);
                 // validate
                 StringTokenIterator itr = new StringTokenIterator(tp, LanguageTag.SEP);
                 while (!itr.isDone()) {
@@ -166,7 +166,7 @@ public final class InternalLocaleBuilder {
             }
         } else {
             // validate value
-            String val = value.replaceAll(BaseLocale.SEP, LanguageTag.SEP);
+            String val = value.replace(BaseLocale.SEP, LanguageTag.SEP);
             StringTokenIterator itr = new StringTokenIterator(val, LanguageTag.SEP);
             while (!itr.isDone()) {
                 String s = itr.current();
@@ -202,7 +202,7 @@ public final class InternalLocaleBuilder {
             clearExtensions();
             return this;
         }
-        subtags = subtags.replaceAll(BaseLocale.SEP, LanguageTag.SEP);
+        subtags = subtags.replace(BaseLocale.SEP, LanguageTag.SEP);
         StringTokenIterator itr = new StringTokenIterator(subtags, LanguageTag.SEP);
 
         List<String> extensions = null;
@@ -485,7 +485,7 @@ public final class InternalLocaleBuilder {
                     if (sb.length() != 0) {
                         sb.append(BaseLocale.SEP);
                     }
-                    sb.append(privuse.substring(privVarStart).replaceAll(LanguageTag.SEP, BaseLocale.SEP));
+                    sb.append(privuse.substring(privVarStart).replace(LanguageTag.SEP, BaseLocale.SEP));
                     variant = sb.toString();
                 }
             }
