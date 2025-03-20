@@ -342,6 +342,9 @@ class U_I18N_API MeasureFormat : public Format {
      */
     const PluralRules &getPluralRules() const;
 
+    using DataLocaleInformation::getLocale;
+    using DataLocaleInformation::getLocaleID;
+
     /**
      * ICU use only.
      * @internal.
