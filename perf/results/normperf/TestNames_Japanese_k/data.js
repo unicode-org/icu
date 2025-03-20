@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742428644931,
+  "lastUpdate": 1742486942005,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -71457,6 +71457,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 11.9428,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "slawrence@owlcyberdefense.com",
+            "name": "Steve Lawrence",
+            "username": "stevedlawrence"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "3edd9c828af6e6a1f4e17154fe0ad50362914bbd",
+          "message": "ICU-22303 Support parsing infinity/NaN when decimal pattern match is required\n\nIf a DecimalFormat pattern contains a decimal point and\nsetDecimalPatternMatchRequired is true, then DecimalFormat parse() fails\nto parse infinity/NaN representations. This is because infinity/NaN\nparsing does not set the HAS_DECIMAL_SEPARATOR_FLAG and so the\nRequireDecimalSeparatorValidator fails.\n\nThis modifies the RequireDecimalSeparatorValidator so that it does not\nfail if the INFINITY or NAN flags are set, making it so decimal\nseparators are not required if the infinity/NaN representations are\nparsed.",
+          "timestamp": "2025-03-19T16:19:41-07:00",
+          "tree_id": "f69340f1f01171fe88ecfe6a9790a9dc26b47b55",
+          "url": "https://github.com/unicode-org/icu/commit/3edd9c828af6e6a1f4e17154fe0ad50362914bbd"
+        },
+        "date": 1742486689925,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 13.6351,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 10.1786,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 10.0798,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 11.2128,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 12.0209,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 12.0452,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
