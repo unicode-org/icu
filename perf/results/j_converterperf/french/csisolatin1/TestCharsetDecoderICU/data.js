@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742486350547,
+  "lastUpdate": 1742498483572,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33177,6 +33177,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.2605907042048993,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "marc@prux.org",
+            "name": "Marc Prud'hommeaux",
+            "username": "marcprux"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "d78cf74bca8dcbcbaea8cdcb1d8ac04db02b61ed",
+          "message": "ICU-23055 Update buildtool.md to point to hjson.github.io\n\nThe pre-existing link to https://hjson.org goes to some sort of gambling/gaming site. It looks like the new authoritative link is https://hjson.github.io/",
+          "timestamp": "2025-03-20T12:12:45-07:00",
+          "tree_id": "22575796f1c18ec737d014a1437a95d3eeaf82db",
+          "url": "https://github.com/unicode-org/icu/commit/d78cf74bca8dcbcbaea8cdcb1d8ac04db02b61ed"
+        },
+        "date": 1742498240280,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.25905071304340305,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
