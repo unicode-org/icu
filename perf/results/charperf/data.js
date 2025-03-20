@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742428673133,
+  "lastUpdate": 1742486994994,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -106737,6 +106737,96 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIsWhiteSpace",
             "value": 5.2156,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "slawrence@owlcyberdefense.com",
+            "name": "Steve Lawrence",
+            "username": "stevedlawrence"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "3edd9c828af6e6a1f4e17154fe0ad50362914bbd",
+          "message": "ICU-22303 Support parsing infinity/NaN when decimal pattern match is required\n\nIf a DecimalFormat pattern contains a decimal point and\nsetDecimalPatternMatchRequired is true, then DecimalFormat parse() fails\nto parse infinity/NaN representations. This is because infinity/NaN\nparsing does not set the HAS_DECIMAL_SEPARATOR_FLAG and so the\nRequireDecimalSeparatorValidator fails.\n\nThis modifies the RequireDecimalSeparatorValidator so that it does not\nfail if the INFINITY or NAN flags are set, making it so decimal\nseparators are not required if the infinity/NaN representations are\nparsed.",
+          "timestamp": "2025-03-19T16:19:41-07:00",
+          "tree_id": "f69340f1f01171fe88ecfe6a9790a9dc26b47b55",
+          "url": "https://github.com/unicode-org/icu/commit/3edd9c828af6e6a1f4e17154fe0ad50362914bbd"
+        },
+        "date": 1742486742365,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIsAlpha",
+            "value": 4.2887,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsUpper",
+            "value": 4.3043,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsLower",
+            "value": 4.6002,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsDigit",
+            "value": 4.306,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsSpace",
+            "value": 5.2226,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsAlphaNumeric",
+            "value": 4.3044,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsPrint",
+            "value": 4.3047,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsControl",
+            "value": 4.285,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToLower",
+            "value": 5.4789,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToUpper",
+            "value": 5.223,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsWhiteSpace",
+            "value": 5.2179,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
