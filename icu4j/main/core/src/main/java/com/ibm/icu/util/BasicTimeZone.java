@@ -19,8 +19,8 @@ import com.ibm.icu.impl.Grego;
  * {@icu} BasicTimeZone extends <code>TimeZone</code> with additional methods to access
  * time zone transitions and rules.  All ICU <code>TimeZone</code> concrete subclasses
  * extend this class. APIs added to <code>java.util.TimeZone</code> by
- * <code>BasicTimeZone</code> are annotated with <strong>'<font
- * style="color:red">[icu]</font>'</strong>.
+ * <code>BasicTimeZone</code> are annotated with <strong>'<span
+ * style="color:red">[icu]</span>'</strong>.
  *
  * @see com.ibm.icu.util.TimeZoneRule
  * @see com.ibm.icu.util.TimeZoneTransition

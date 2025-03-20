@@ -94,7 +94,7 @@ import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
  *
  * <p>This class provides selectors {@link #VALID_LOCALE} and {@link
  * #ACTUAL_LOCALE} intended for use in methods named
- * <tt>getLocale()</tt>.  These methods exist in several ICU classes,
+ * {@code getLocale()}.  These methods exist in several ICU classes,
  * including {@link com.ibm.icu.util.Calendar}, {@link
  * com.ibm.icu.util.Currency}, {@link com.ibm.icu.text.UFormat},
  * {@link com.ibm.icu.text.BreakIterator},
@@ -102,7 +102,7 @@ import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
  * {@link com.ibm.icu.text.DateFormatSymbols}, and {@link
  * com.ibm.icu.text.DecimalFormatSymbols} and their subclasses, if
  * any. Once an object of one of these classes has been created,
- * <tt>getLocale()</tt> may be called on it to determine the valid and
+ * {@code getLocale()} may be called on it to determine the valid and
  * actual locale arrived at during the object's construction.
  *
  * <p>Note: The <i>actual</i> locale is returned correctly, but the <i>valid</i>
@@ -2539,7 +2539,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Selector for <tt>getLocale()</tt> indicating the locale of the
+     * {@icu} Selector for {@code getLocale()} indicating the locale of the
      * resource containing the data.  This is always at or above the
      * valid locale.  If the valid locale does not contain the
      * specific data being requested, then the actual locale will be
@@ -2551,7 +2551,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     public static Type ACTUAL_LOCALE = new Type();
 
     /**
-     * {@icu} Selector for <tt>getLocale()</tt> indicating the most specific
+     * {@icu} Selector for {@code getLocale()} indicating the most specific
      * locale for which any data exists.  This is always at or above
      * the requested locale, and at or below the actual locale.  If
      * the requested locale does not correspond to any resource data,
@@ -2566,7 +2566,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     public static Type VALID_LOCALE = new Type();
 
     /**
-     * Opaque selector enum for <tt>getLocale()</tt>.
+     * Opaque selector enum for {@code getLocale()}.
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE

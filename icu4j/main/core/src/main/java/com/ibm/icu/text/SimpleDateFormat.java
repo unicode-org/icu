@@ -102,8 +102,7 @@ import com.ibm.icu.util.UResourceBundle;
  *         <td>1996</td>
  *         <td>Year. Normally the length specifies the padding, but for two letters it also specifies the maximum
  *         length. Example:<div style="text-align: center">
- *             <center>
- *             <table border="1" cellpadding="2" cellspacing="0">
+ *             <table border="1" style="border-collapse:collapse;padding:2px;margin:0 auto;">
  *                 <tr>
  *                     <th>Year</th>
  *                     <th style="text-align: right">y</th>
@@ -153,7 +152,7 @@ import com.ibm.icu.util.UResourceBundle;
  *                     <td style="text-align: right">12345</td>
  *                 </tr>
  *             </table>
- *             </center></div>
+ *             </div>
  *         </td>
  *     </tr>
  *     <tr>

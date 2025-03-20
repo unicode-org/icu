@@ -377,7 +377,7 @@ import com.ibm.icu.util.UResourceBundle;
  * <p>The following example rules illustrate many of the features of
  * the rule language.
  *
- * <table border="0" cellpadding="4">
+ * <table style="border:none;padding:4px;">
  *     <tr>
  *         <td style="vertical-align: top;">Rule 1.</td>
  *         <td style="vertical-align: top; write-space: nowrap;"><code>abc{def}&gt;x|y</code></td>
@@ -395,7 +395,7 @@ import com.ibm.icu.util.UResourceBundle;
  * <p>Applying these rules to the string &quot;<code>adefabcdefz</code>&quot;
  * yields the following results:
  *
- * <table border="0" cellpadding="4">
+ * <table style="border:none;padding:4px;">
  *     <tr>
  *         <td style="vertical-align: top; write-space: nowrap;"><code>|adefabcdefz</code></td>
  *         <td style="vertical-align: top;">Initial state, no rules match. Advance
@@ -674,9 +674,9 @@ public abstract class Transliterator implements StringTransform  {
 
     /**
      * This transliterator's filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
+     * {@code filter.contains()} returns {@code false} will not be
+     * altered by this transliterator.  If {@code filter} is
+     * {@code null} then no filtering is applied.
      */
     private UnicodeSet filter;
 
@@ -742,9 +742,9 @@ public abstract class Transliterator implements StringTransform  {
      * Default constructor.
      * @param ID the string identifier for this transliterator
      * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
+     * {@code filter.contains()} returns {@code false} will not be
+     * altered by this transliterator.  If {@code filter} is
+     * {@code null} then no filtering is applied.
      * @stable ICU 2.0
      */
     protected Transliterator(String ID, UnicodeFilter filter) {
@@ -1530,7 +1530,7 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns the filter used by this transliterator, or <tt>null</tt>
+     * Returns the filter used by this transliterator, or {@code null}
      * if this transliterator uses no filter.
      * @stable ICU 2.0
      */
@@ -1540,7 +1540,7 @@ public abstract class Transliterator implements StringTransform  {
 
     /**
      * Changes the filter used by this transliterator.  If the filter
-     * is set to <tt>null</tt> then no filtering will occur.
+     * is set to {@code null} then no filtering will occur.
      *
      * <p>Callers must take care if a transliterator is in use by
      * multiple threads.  The filter should not be changed by one

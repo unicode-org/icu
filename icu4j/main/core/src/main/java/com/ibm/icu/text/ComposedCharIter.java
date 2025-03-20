@@ -15,7 +15,7 @@ import com.ibm.icu.impl.Normalizer2Impl;
  * One problem is that this class is not designed to return supplementary characters.
  * Use the Normalizer2 and UCharacter classes instead.
  * <p>
- * <tt>ComposedCharIter</tt> is an iterator class that returns all
+ * {@code ComposedCharIter} is an iterator class that returns all
  * of the precomposed characters defined in the Unicode standard, along
  * with their decomposed forms.  This is often useful when building
  * data tables (<i>e.g.</i> collation tables) which need to treat composed
@@ -30,17 +30,17 @@ import com.ibm.icu.impl.Normalizer2Impl;
  * <p>
  * You can avoid this problem by ensuring that the collation table contains
  * rules for both the decomposed <i>and</i> composed versions of each character.
- * To do so, use a <tt>ComposedCharIter</tt> to iterate through all of the
+ * To do so, use a {@code ComposedCharIter} to iterate through all of the
  * composed characters in Unicode.  If the decomposition for that character
  * consists solely of characters that are listed in your ruleset, you can
  * add a new rule for the composed character that makes it equivalent to
  * its decomposition sequence.
  * <p>
- * Note that <tt>ComposedCharIter</tt> iterates over a <em>static</em> table
+ * Note that {@code ComposedCharIter} iterates over a <em>static</em> table
  * of the composed characters in Unicode.  If you want to iterate over the
  * composed characters in a particular string, use {@link Normalizer} instead.
  * <p>
- * When constructing a <tt>ComposedCharIter</tt> there is one
+ * When constructing a {@code ComposedCharIter} there is one
  * optional feature that you can enable or disable:
  * <ul>
  *   <li>{@link Normalizer#IGNORE_HANGUL} - Do not iterate over the Hangul
@@ -50,7 +50,7 @@ import com.ibm.icu.impl.Normalizer2Impl;
  *          is a canonical decomposition.
  * </ul>
  * <p>
- * <tt>ComposedCharIter</tt> is currently based on version 2.1.8 of the
+ * {@code ComposedCharIter} is currently based on version 2.1.8 of the
  * <a href="http://www.unicode.org" target="unicode">Unicode Standard</a>.
  * It will be updated as later versions of Unicode are released.
  * @deprecated ICU 2.2
@@ -68,7 +68,7 @@ public final class ComposedCharIter {
     public static final  char DONE = (char) Normalizer.DONE;
 
     /**
-     * Construct a new <tt>ComposedCharIter</tt>.  The iterator will return
+     * Construct a new {@code ComposedCharIter}.  The iterator will return
      * all Unicode characters with canonical decompositions, including Korean
      * Hangul characters.
      * @deprecated ICU 2.2
@@ -79,10 +79,10 @@ public final class ComposedCharIter {
     }
 
     /**
-     * Constructs a non-default <tt>ComposedCharIter</tt> with optional behavior.
+     * Constructs a non-default {@code ComposedCharIter} with optional behavior.
      * <p>
-     * @param compat    <tt>false</tt> for canonical decompositions only;
-     *                  <tt>true</tt> for both canonical and compatibility
+     * @param compat    {@code false} for canonical decompositions only;
+     *                  {@code true} for both canonical and compatibility
      *                  decompositions.
      *
      * @param options   Optional decomposition features. None are supported, so this is ignored.
@@ -112,10 +112,10 @@ public final class ComposedCharIter {
     
     /**
      * Returns the next precomposed Unicode character.
-     * Repeated calls to <tt>next</tt> return all of the precomposed characters defined
+     * Repeated calls to {@code next} return all of the precomposed characters defined
      * by Unicode, in ascending order.  After all precomposed characters have
-     * been returned, {@link #hasNext} will return <tt>false</tt> and further calls
-     * to <tt>next</tt> will return {@link #DONE}.
+     * been returned, {@link #hasNext} will return {@code false} and further calls
+     * to {@code next} will return {@link #DONE}.
      * @deprecated ICU 2.2
      */
     @Deprecated

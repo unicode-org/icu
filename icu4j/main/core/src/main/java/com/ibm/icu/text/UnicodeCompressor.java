@@ -17,15 +17,15 @@ package com.ibm.icu.text;
 * <P>The SCSU works by using dynamically positioned <EM>windows</EM>
 * consisting of 128 consecutive characters in Unicode.  During compression, 
 * characters within a window are encoded in the compressed stream as the bytes 
-* <TT>0x7F - 0xFF</TT>. The SCSU provides transparency for the characters 
-* (bytes) between <TT>U+0000 - U+00FF</TT>.  The SCSU approximates the 
+* {@code 0x7F - 0xFF}. The SCSU provides transparency for the characters 
+* (bytes) between {@code U+0000 - U+00FF}.  The SCSU approximates the 
 * storage size of traditional character sets, for example 1 byte per
 * character for ASCII or Latin-1 text, and 2 bytes per character for CJK
 * ideographs.</P>
 *
 * <P><STRONG>USAGE</STRONG></P>
 *
-* <P>The static methods on <TT>UnicodeCompressor</TT> may be used in a
+* <P>The static methods on {@code UnicodeCompressor} may be used in a
 * straightforward manner to compress simple strings:</P>
 *
 * <PRE>
@@ -35,7 +35,7 @@ package com.ibm.icu.text;
 *
 * <P>The static methods have a fairly large memory footprint.
 * For finer-grained control over memory usage, 
-* <TT>UnicodeCompressor</TT> offers more powerful APIs allowing
+* {@code UnicodeCompressor} offers more powerful APIs allowing
 * iterative compression:</P>
 *
 * <PRE>
@@ -901,7 +901,7 @@ public final class UnicodeCompressor implements SCSU
     * Determine if a character is in a dynamic window.
     * @param c The character to test
     * @param whichWindow The dynamic window the test
-    * @return true if <TT>c</TT> will fit in <TT>whichWindow</TT>, 
+    * @return true if {@code c} will fit in {@code whichWindow}, 
     * false otherwise.
     */
     private boolean inDynamicWindow(int c, 
@@ -915,7 +915,7 @@ public final class UnicodeCompressor implements SCSU
      * Determine if a character is in a static window.
     * @param c The character to test
     * @param whichWindow The static window the test
-    * @return true if <TT>c</TT> will fit in <TT>whichWindow</TT>, 
+    * @return true if {@code c} will fit in {@code whichWindow}, 
     * false otherwise.
     */
     private static boolean inStaticWindow(int c, 
@@ -932,7 +932,7 @@ public final class UnicodeCompressor implements SCSU
     /**
     * Determine if a character is compressible.
     * @param c The character to test.
-    * @return true if the <TT>c</TT> is compressible, false otherwise.
+    * @return true if the {@code c} is compressible, false otherwise.
     */
     private static boolean isCompressible(int c)
     {
@@ -946,7 +946,7 @@ public final class UnicodeCompressor implements SCSU
     /**
      * Determine if a dynamic window for a certain character is defined
      * @param c The character in question
-     * @return The dynamic window containing <TT>c</TT>, or 
+     * @return The dynamic window containing {@code c}, or 
      * INVALIDWINDOW if not defined.
      */
     private int findDynamicWindow(int c)
@@ -966,7 +966,7 @@ public final class UnicodeCompressor implements SCSU
     /**
      * Determine if a static window for a certain character is defined
      * @param c The character in question
-     * @return The static window containing <TT>c</TT>, or 
+     * @return The static window containing {@code c}, or 
      * INVALIDWINDOW if not defined.
      */
     private static int findStaticWindow(int c)

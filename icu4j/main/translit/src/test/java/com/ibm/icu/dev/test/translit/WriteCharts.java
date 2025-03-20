@@ -208,9 +208,9 @@ public class WriteCharts {
                     
                 map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss, Normalizer.NFKD))
                         + "\u0000" + ss, 
-                    "<td class='s'>" + ss + "<br><tt>" + hex(ss)
-                        + "</tt></td><td class='t'>" + ts + "<br><tt>" + hex(ts)
-                        + "</tt></td><td class='r'>" + rt + "<br><tt>" + hex(rt) + "</tt></td>" );
+                    "<td class='s'>" + ss + "<br>{@code " + hex(ss)
+                        + "</tt></td><td class='t'>" + ts + "<br>{@code " + hex(ts)
+                        + "</tt></td><td class='r'>" + rt + "<br>{@code " + hex(rt) + "</tt></td>" );
                 
                 // Check Duals
                 /*
@@ -233,9 +233,9 @@ public class WriteCharts {
                         group = 0x100;
                         map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss12, Normalizer.DECOMP_COMPAT, 0))
                                 + "\u0000" + ss12, 
-                            "<td class='s'>" + ss12 + "<br><tt>" + hex(ss12)
-                                + "</tt></td><td class='t'>" + ts12 + "<br><tt>" + hex(ts12)
-                                + "</tt></td><td class='r'>" + rt12 + "<br><tt>" + hex(rt12) + "</tt></td>" );
+                            "<td class='s'>" + ss12 + "<br>{@code " + hex(ss12)
+                                + "</tt></td><td class='t'>" + ts12 + "<br>{@code " + hex(ts12)
+                                + "</tt></td><td class='r'>" + rt12 + "<br>{@code " + hex(rt12) + "</tt></td>" );
                     }
                 }
                 */
@@ -271,7 +271,7 @@ public class WriteCharts {
                 }
                     
                 map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ts, Normalizer.NFKD)) + ts, 
-                    "<td class='s'>-</td><td class='t'>" + ts + "<br><tt>" + hex(ts)
+                    "<td class='s'>-</td><td class='t'>" + ts + "<br>{@code " + hex(ts)
                     + "</tt></td><td class='r'>"
                     + rt + "<br><tt>" + hex(rt) + "</tt></td>");
             //}

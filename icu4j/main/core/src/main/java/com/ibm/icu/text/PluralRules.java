@@ -133,31 +133,31 @@ import com.ibm.icu.util.ULocale;
  * <tr>
  * <td>1.0</td>
  * <td>1</td>
- * <td align="right">0</td>
+ * <td style="text-align:right">0</td>
  * <td>1</td>
  * </tr>
  * <tr>
  * <td>1.00</td>
  * <td>1</td>
- * <td align="right">0</td>
+ * <td style="text-align:right">0</td>
  * <td>2</td>
  * </tr>
  * <tr>
  * <td>1.3</td>
  * <td>1</td>
- * <td align="right">3</td>
+ * <td style="text-align:right">3</td>
  * <td>1</td>
  * </tr>
  * <tr>
  * <td>1.03</td>
  * <td>1</td>
- * <td align="right">3</td>
+ * <td style="text-align:right">3</td>
  * <td>2</td>
  * </tr>
  * <tr>
  * <td>1.23</td>
  * <td>1</td>
- * <td align="right">23</td>
+ * <td style="text-align:right">23</td>
  * <td>2</td>
  * </tr>
  * </tbody>

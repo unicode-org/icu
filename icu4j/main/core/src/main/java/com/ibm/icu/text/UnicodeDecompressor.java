@@ -17,7 +17,7 @@ package com.ibm.icu.text;
 *
 * <P><STRONG>USAGE</STRONG></P>
 *
-* <P>The static methods on <TT>UnicodeDecompressor</TT> may be used in a
+* <P>The static methods on {@code UnicodeDecompressor} may be used in a
 * straightforward manner to decompress simple strings:</P>
 *
 * <PRE>
@@ -27,7 +27,7 @@ package com.ibm.icu.text;
 *
 * <P>The static methods have a fairly large memory footprint.
 * For finer-grained control over memory usage, 
-* <TT>UnicodeDecompressor</TT> offers more powerful APIs allowing
+* {@code UnicodeDecompressor} offers more powerful APIs allowing
 * iterative decompression:</P>
 *
 * <PRE>

@@ -101,7 +101,7 @@ import com.ibm.icu.util.ULocale.Category;
  * A numbered pattern argument is matched with a map key that contains that number
  * as an ASCII-decimal-digit string (without leading zero).
  *
- * <h3><a name="patterns">Patterns and Their Interpretation</a></h3>
+ * <h3><a id="patterns">Patterns and Their Interpretation</a></h3>
  *
  * <code>MessageFormat</code> uses patterns of the following form:
  * <blockquote><pre>
@@ -242,7 +242,7 @@ import com.ibm.icu.util.ULocale.Category;
  *           <br>&nbsp;&nbsp;&nbsp;&nbsp;.setDefaultRuleset(argStyleText);</code>
  * </table>
  *
- * <h4><a name="diffsjdk">Differences from java.text.MessageFormat</a></h4>
+ * <h4><a id="diffsjdk">Differences from java.text.MessageFormat</a></h4>
  *
  * <p>The ICU MessageFormat supports both named and numbered arguments,
  * while the JDK MessageFormat only supports numbered arguments.
@@ -345,7 +345,7 @@ import com.ibm.icu.util.ULocale.Category;
  * </pre>
  * See {@link PluralFormat} and {@link PluralRules} for details.
  *
- * <h4><a name="synchronization">Synchronization</a></h4>
+ * <h4><a id="synchronization">Synchronization</a></h4>
  *
  * <p>MessageFormats are not synchronized.
  * It is recommended to create separate format instances for each thread.

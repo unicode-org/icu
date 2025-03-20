@@ -21,10 +21,10 @@ package com.ibm.icu.text;
 public abstract class UnicodeFilter implements UnicodeMatcher {
 
     /**
-     * Returns <tt>true</tt> for characters that are in the selected
+     * Returns {@code true} for characters that are in the selected
      * subset.  In other words, if a character is <b>to be
-     * filtered</b>, then <tt>contains()</tt> returns
-     * <b><tt>false</tt></b>.
+     * filtered</b>, then {@code contains()} returns
+     * <b>{@code false}</b>.
      * @stable ICU 2.0
      */
     public abstract boolean contains(int c);

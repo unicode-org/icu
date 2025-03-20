@@ -12,27 +12,27 @@ package com.ibm.icu.text;
 import java.text.CharacterIterator;
 
 /**
- * <tt>SearchIterator</tt> is an abstract base class that provides 
+ * {@code SearchIterator} is an abstract base class that provides 
  * methods to search for a pattern within a text string. Instances of
- * <tt>SearchIterator</tt> maintain a current position and scan over the 
+ * {@code SearchIterator} maintain a current position and scan over the 
  * target text, returning the indices the pattern is matched and the length 
  * of each match.
  * <p>
- * <tt>SearchIterator</tt> defines a protocol for text searching. 
+ * {@code SearchIterator} defines a protocol for text searching. 
  * Subclasses provide concrete implementations of various search algorithms. 
- * For example, <tt>StringSearch</tt> implements language-sensitive pattern 
+ * For example, {@code StringSearch} implements language-sensitive pattern 
  * matching based on the comparison rules defined in a 
- * <tt>RuleBasedCollator</tt> object. 
+ * {@code RuleBasedCollator} object. 
  * <p> 
  * Other options for searching include using a BreakIterator to restrict 
  * the points at which matches are detected.
  * <p>
- * <tt>SearchIterator</tt> provides an API that is similar to that of
- * other text iteration classes such as <tt>BreakIterator</tt>. Using 
+ * {@code SearchIterator} provides an API that is similar to that of
+ * other text iteration classes such as {@code BreakIterator}. Using 
  * this class, it is easy to scan through text looking for all occurrences of 
- * a given pattern. The following example uses a <tt>StringSearch</tt> 
+ * a given pattern. The following example uses a {@code StringSearch} 
  * object to find all instances of "fox" in the target string. Any other 
- * subclass of <tt>SearchIterator</tt> can be used in an identical 
+ * subclass of {@code SearchIterator} can be used in an identical 
  * manner.
  * <pre><code>
  * String target = "The quick brown fox jumped over the lazy fox";
@@ -220,7 +220,7 @@ public abstract class SearchIterator
      *                found, but the match's start or end index is not a 
      *                boundary as determined by the {@link BreakIterator}, 
      *                the match will be rejected and another will be searched 
-     *                for. If this parameter is <tt>null</tt>, no break
+     *                for. If this parameter is {@code null}, no break
      *                detection is attempted.
      * @see BreakIterator
      * @stable ICU 2.0
@@ -329,7 +329,7 @@ public abstract class SearchIterator
      * Returns the BreakIterator that is used to restrict the indexes at which 
      * matches are detected. This will be the same object that was passed to 
      * the constructor or to {@link #setBreakIterator}.
-     * If the {@link BreakIterator} has not been set, <tt>null</tt> will be returned.
+     * If the {@link BreakIterator} has not been set, {@code null} will be returned.
      * See {@link #setBreakIterator} for more information.
      * 
      * @return the BreakIterator set to restrict logic matches
@@ -546,7 +546,7 @@ public abstract class SearchIterator
     }
 
     /**
-     * Returns the first index equal or greater than <tt>position</tt> at which the 
+     * Returns the first index equal or greater than {@code position} at which the 
      * string text matches the search pattern. The iterator is adjusted so 
      * that its current index (as returned by {@link #getIndex()}) is the 
      * match position if one was found.
@@ -555,7 +555,7 @@ public abstract class SearchIterator
      * 
      * @param  position where search if to start from.
      * @return The character index of the first match following 
-     *         <tt>position</tt>, or {@link #DONE} if there are no matches.
+     *         {@code position}, or {@link #DONE} if there are no matches.
      * @throws IndexOutOfBoundsException    If position is less than or greater
      *      than the text range for searching.
      * @see #getIndex
@@ -586,7 +586,7 @@ public abstract class SearchIterator
     }
 
     /**
-     * Returns the first index less than <tt>position</tt> at which the string 
+     * Returns the first index less than {@code position} at which the string 
      * text matches the search pattern. The iterator is adjusted so that its 
      * current index (as returned by {@link #getIndex}) is the match 
      * position if one was found. If a match is not found, 
@@ -594,13 +594,13 @@ public abstract class SearchIterator
      * adjusted to the index {@link #DONE}
      * <p>
      * When the overlapping option ({@link #isOverlapping}) is off, the last index of the
-     * result match is always less than <tt>position</tt>.
+     * result match is always less than {@code position}.
      * When the overlapping option is on, the result match may span across
-     * <tt>position</tt>.
+     * {@code position}.
      *
      * @param  position where search is to start from.
      * @return The character index of the first match preceding 
-     *         <tt>position</tt>, or {@link #DONE} if there are 
+     *         {@code position}, or {@link #DONE} if there are 
      *         no matches.
      * @throws IndexOutOfBoundsException If position is less than or greater than
      *                                   the text range for searching

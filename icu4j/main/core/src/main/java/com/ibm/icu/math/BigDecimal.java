@@ -11,7 +11,7 @@ import com.ibm.icu.lang.UCharacter;
 /* ------------------------------------------------------------------ */
 /* BigDecimal -- Decimal arithmetic for Java                          */
 /* ------------------------------------------------------------------ */
-/* Copyright IBM Corporation, 1996-2016.  All Rights Reserved.       */
+/* Copyright IBM Corporation, 1996-2016.  All Rights Reserved.        */
 /*                                                                    */
 /* The BigDecimal class provides immutable arbitrary-precision        */
 /* floating point (including integer) decimal numbers.                */
@@ -1237,15 +1237,15 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * and returns a result of type <code>int</code>.
      * <p>
      * The result will be:
-     * <table cellpadding=2>
+     * <table style="padding:2px;">
      * <tr>
-     * <td align=right><b>-1</b></td> <td>if the current object is less than the first parameter</td>
+     * <td style="text-align:right"><b>-1</b></td> <td>if the current object is less than the first parameter</td>
      * </tr>
      * <tr>
-     * <td align=right><b>0</b></td> <td>if the current object is equal to the first parameter</td>
+     * <td style="text-align:right"><b>0</b></td> <td>if the current object is equal to the first parameter</td>
      * </tr>
      * <tr>
-     * <td align=right><b>1</b></td> <td>if the current object is greater than the first parameter.</td>
+     * <td style="text-align:right"><b>1</b></td> <td>if the current object is greater than the first parameter.</td>
      * </tr>
      * </table>
      * <p>

@@ -2354,9 +2354,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Returns the locale that was used to create this object, or null.
      * This may may differ from the locale requested at the time of
      * this object's creation.  For example, if an object is created
-     * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
-     * drawn from <tt>en</tt> (the <i>actual</i> locale), and
-     * <tt>en_US</tt> may be the most specific locale that exists (the
+     * for locale {@code en_US_CALIFORNIA}, the actual data may be
+     * drawn from {@code en} (the <i>actual</i> locale), and
+     * {@code en_US} may be the most specific locale that exists (the
      * <i>valid</i> locale).
      *
      * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8

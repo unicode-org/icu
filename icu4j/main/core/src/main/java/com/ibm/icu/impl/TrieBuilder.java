@@ -23,7 +23,7 @@ import com.ibm.icu.lang.UCharacter;
  * when you have a lot of redundance, such as where all 21,000 Han ideographs 
  * have the same value.  However, lookup is much faster than a hash table.
  * A trie of any primitive data type serves two purposes:
- * <UL type = round>
+ * <UL>
  *     <LI>Fast access of the indexed values.
  *     <LI>Smaller memory footprint.
  * </UL>

@@ -360,7 +360,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.8.0</version>
+          <version>3.11.2</version>
           <configuration>
             <excludePackageNames>com.ibm.icu.impl,com.ibm.icu.impl.*,com.ibm.icu.dev.*,com.ibm.icu.samples,com.ibm.icu.samples.*</excludePackageNames>
             <!--
@@ -379,35 +379,66 @@
             <doctitle>${icu4j.api.doc.window.title}</doctitle>
             <header>${icu4j.api.doc.header}</header>
             <bottom>${icu4j.api.doc.copyright.footer}</bottom>
-            <stylesheetfile>${icu4j.api.doc.root.dir}/stylesheet8.css</stylesheetfile>
             <encoding>UTF-8</encoding>
             <docencoding>UTF-8</docencoding>
             <charset>UTF-8</charset>
             <breakiterator>true</breakiterator>
             <use>true</use>
-            <maxmemory>256m</maxmemory>
-            <minmemory>256m</minmemory>
             <!-- <verbose>true</verbose> -->
+            <additionalJOptions>
+              <additionalJOption>-J-Dfile.encoding=UTF-8</additionalJOption>
+            </additionalJOptions>
+            <!--
+              Although the Maven Javadoc plugin claims that taglets are auto-detected,
+              it does not seem to work. But listing them explicitly does.
+            -->
             <taglets>
               <taglet>
-                <tagletClass>com.ibm.icu.dev.tool.docs.ICUTaglet</tagletClass>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUBugTaglet</tagletClass>
+              </taglet>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUCategoryTaglet</tagletClass>
+              </taglet>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUDiscouragedTaglet</tagletClass>
+              </taglet>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUDraftTaglet</tagletClass>
+              </taglet>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUEnhancedTaglet</tagletClass>
+              </taglet>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUInternalTaglet</tagletClass>
+              </taglet>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUNewTaglet</tagletClass>
+              </taglet>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUNoteTaglet</tagletClass>
+              </taglet>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUObsoleteTaglet</tagletClass>
+              </taglet>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUProvisionalTaglet</tagletClass>
+              </taglet>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUStableTaglet</tagletClass>
+              </taglet>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUSummaryTaglet</tagletClass>
+              </taglet>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUTestTaglet</tagletClass>
               </taglet>
             </taglets>
-            <tagletArtifacts>
-              <!-- To handle the ICU custom taglets (@icu, @draft, @stable, etc -->
-              <tagletArtifact>
-                <groupId>com.ibm.icu</groupId>
-                <artifactId>tools_build</artifactId>
-                <version>${project.version}</version>
-              </tagletArtifact>
-            </tagletArtifacts>
-            <tags>
-              <tag>
-                <name>category</name>
-                <placement>a</placement>
-                <head>Category:</head>
-              </tag>
-            </tags>
+            <!-- To handle the ICU custom taglets (@icu, @draft, @stable, etc -->
+            <tagletArtifact>
+              <groupId>com.ibm.icu</groupId>
+              <artifactId>tools_taglets</artifactId>
+              <version>${project.version}</version>
+            </tagletArtifact>
           </configuration>
         </plugin>
         <plugin>
@@ -648,6 +679,9 @@
       <activation>
         <jdk>[9,)</jdk>
       </activation>
+      <modules>
+         <module>tools/taglets</module>
+      </modules>
       <build>
         <plugins>
           <plugin>
@@ -769,5 +803,29 @@
         </build>
     </profile>
   </profiles>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <id>aggregate</id>
+            <inherited>false</inherited>
+            <reports>
+              <report>aggregate</report>
+            </reports>
+          </reportSet>
+          <reportSet>
+            <id>default</id>
+            <reports>
+              <report>javadoc</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 
 </project>
