@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742428482352,
+  "lastUpdate": 1742486811453,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -64365,6 +64365,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1310497.9583,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "slawrence@owlcyberdefense.com",
+            "name": "Steve Lawrence",
+            "username": "stevedlawrence"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "3edd9c828af6e6a1f4e17154fe0ad50362914bbd",
+          "message": "ICU-22303 Support parsing infinity/NaN when decimal pattern match is required\n\nIf a DecimalFormat pattern contains a decimal point and\nsetDecimalPatternMatchRequired is true, then DecimalFormat parse() fails\nto parse infinity/NaN representations. This is because infinity/NaN\nparsing does not set the HAS_DECIMAL_SEPARATOR_FLAG and so the\nRequireDecimalSeparatorValidator fails.\n\nThis modifies the RequireDecimalSeparatorValidator so that it does not\nfail if the INFINITY or NAN flags are set, making it so decimal\nseparators are not required if the infinity/NaN representations are\nparsed.",
+          "timestamp": "2025-03-19T16:19:41-07:00",
+          "tree_id": "f69340f1f01171fe88ecfe6a9790a9dc26b47b55",
+          "url": "https://github.com/unicode-org/icu/commit/3edd9c828af6e6a1f4e17154fe0ad50362914bbd"
+        },
+        "date": 1742486561924,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 274.828,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 3015950.4211,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1315776.184,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 2807695.1659,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1316551.5696,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
