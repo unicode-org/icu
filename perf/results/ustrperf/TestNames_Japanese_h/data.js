@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742429086684,
+  "lastUpdate": 1742487348761,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -113277,6 +113277,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 40.0518,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "slawrence@owlcyberdefense.com",
+            "name": "Steve Lawrence",
+            "username": "stevedlawrence"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "3edd9c828af6e6a1f4e17154fe0ad50362914bbd",
+          "message": "ICU-22303 Support parsing infinity/NaN when decimal pattern match is required\n\nIf a DecimalFormat pattern contains a decimal point and\nsetDecimalPatternMatchRequired is true, then DecimalFormat parse() fails\nto parse infinity/NaN representations. This is because infinity/NaN\nparsing does not set the HAS_DECIMAL_SEPARATOR_FLAG and so the\nRequireDecimalSeparatorValidator fails.\n\nThis modifies the RequireDecimalSeparatorValidator so that it does not\nfail if the INFINITY or NAN flags are set, making it so decimal\nseparators are not required if the infinity/NaN representations are\nparsed.",
+          "timestamp": "2025-03-19T16:19:41-07:00",
+          "tree_id": "f69340f1f01171fe88ecfe6a9790a9dc26b47b55",
+          "url": "https://github.com/unicode-org/icu/commit/3edd9c828af6e6a1f4e17154fe0ad50362914bbd"
+        },
+        "date": 1742487108771,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.1409,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.2759,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.9875,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 27.7878,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.3447,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 36.5055,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.043,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.0328,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 86.1347,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.687,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 37.0262,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 40.5389,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
