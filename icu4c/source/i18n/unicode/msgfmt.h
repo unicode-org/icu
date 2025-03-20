@@ -438,7 +438,6 @@ public:
      */
     virtual void setLocale(const Locale& theLocale);
 
-    using DataLocaleInformation::getLocale;
     /**
      * Gets the locale used for creating argument Format objects.
      * format information.
