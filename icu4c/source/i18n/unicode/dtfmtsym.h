@@ -82,7 +82,7 @@ class CharString;
  * locale at least contains any resources that are to be particularized for the
  * calendar type.
  */
-class U_I18N_API DateFormatSymbols final : public UObject  {
+class U_I18N_API DateFormatSymbols final : public UObject, public DataLocaleInformation {
 public:
     /**
      * Construct a DateFormatSymbols object by loading format data from
@@ -590,13 +590,6 @@ public:
      */
     void setLocalPatternChars(const UnicodeString& newLocalPatternChars);
 
-    /**
-     * Returns the locale for this object. Two flavors are available:
-     * valid and actual locale.
-     * @stable ICU 2.8
-     */
-    Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
-
     /* The following type and kCapContextUsageTypeCount cannot be #ifndef U_HIDE_INTERNAL_API,
        they are needed for .h file declarations. */ 
     /**
@@ -915,12 +908,6 @@ private:
     int32_t         fStandaloneNarrowDayPeriodsCount;
 
 private:
-    /** valid/actual locale information 
-     *  these are always ICU locales, so the length should not be a problem
-     */
-    CharString* validLocale = nullptr;
-    CharString* actualLocale = nullptr;
-
     DateFormatSymbols() = delete; // default constructor not implemented
 
     /**
