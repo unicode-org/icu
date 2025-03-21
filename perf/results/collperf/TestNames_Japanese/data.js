@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742499059443,
+  "lastUpdate": 1742573666945,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -64527,6 +64527,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5499480.8124,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "marc@prux.org",
+            "name": "Marc Prud'hommeaux",
+            "username": "marcprux"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "d78cf74bca8dcbcbaea8cdcb1d8ac04db02b61ed",
+          "message": "ICU-23055 Update buildtool.md to point to hjson.github.io\n\nThe pre-existing link to https://hjson.org goes to some sort of gambling/gaming site. It looks like the new authoritative link is https://hjson.github.io/",
+          "timestamp": "2025-03-20T12:12:45-07:00",
+          "tree_id": "22575796f1c18ec737d014a1437a95d3eeaf82db",
+          "url": "https://github.com/unicode-org/icu/commit/d78cf74bca8dcbcbaea8cdcb1d8ac04db02b61ed"
+        },
+        "date": 1742573064289,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 210.5186,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21692800.5219,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5574273.202,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 21680841.9479,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5487048.513,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
