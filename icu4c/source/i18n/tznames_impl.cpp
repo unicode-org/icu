@@ -715,15 +715,15 @@ private:
         for (int32_t i = 0; i < UTZNM_INDEX_COUNT; i++) {
             const char16_t* name = fNames[i];
             if (name != nullptr) {
-                ZNameInfo* nameinfo = static_cast<ZNameInfo*>(uprv_malloc(sizeof(ZNameInfo)));
-                if (nameinfo == nullptr) {
+                LocalMemory<ZNameInfo> nameinfo(static_cast<ZNameInfo*>(uprv_malloc(sizeof(ZNameInfo))));
+                if (nameinfo.isNull()) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                     return;
                 }
                 nameinfo->mzID = mzID;
                 nameinfo->tzID = tzID;
                 nameinfo->type = getTZNameType(static_cast<UTimeZoneNameTypeIndex>(i));
-                trie.put(name, nameinfo, status); // trie.put() takes ownership of the key
+                trie.put(name, nameinfo.orphan(), status); // trie.put() takes ownership of the key
                 if (U_FAILURE(status)) {
                     return;
                 }
