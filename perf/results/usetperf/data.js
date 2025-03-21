@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742499253012,
+  "lastUpdate": 1742573447871,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -92973,6 +92973,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1448.5819,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "marc@prux.org",
+            "name": "Marc Prud'hommeaux",
+            "username": "marcprux"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "d78cf74bca8dcbcbaea8cdcb1d8ac04db02b61ed",
+          "message": "ICU-23055 Update buildtool.md to point to hjson.github.io\n\nThe pre-existing link to https://hjson.org goes to some sort of gambling/gaming site. It looks like the new authoritative link is https://hjson.github.io/",
+          "timestamp": "2025-03-20T12:12:45-07:00",
+          "tree_id": "22575796f1c18ec737d014a1437a95d3eeaf82db",
+          "url": "https://github.com/unicode-org/icu/commit/d78cf74bca8dcbcbaea8cdcb1d8ac04db02b61ed"
+        },
+        "date": 1742573194047,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 78231.9493,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 167529.0917,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.542,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.526,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.3372,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8414.5904,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 31307.018,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1424.4175,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
