@@ -169,7 +169,8 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env, const O
         FormattedPlaceholder optValue = rhsVal->forceFormatting(context.getErrors(), status);
         resolvedOpt.adoptInstead(create<ResolvedFunctionOption>
                                  (ResolvedFunctionOption(k,
-                                                         optValue.asFormattable()),
+                                                         optValue.asFormattable(),
+                                                         v.isLiteral()),
                                   status));
         if (U_FAILURE(status)) {
             return {};
