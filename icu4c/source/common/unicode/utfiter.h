@@ -94,7 +94,8 @@ namespace header {}
 
 // Some defined behaviors for handling ill-formed Unicode strings.
 typedef enum UTFIllFormedBehavior {
-    // Returns a negative value instead of a code point.
+    // Returns a negative value (-1=U_SENTINEL) instead of a code point.
+    // If CP32 is an unsigned type, then the negative value becomes 0xffffffff=UINT32_MAX.
     UTF_BEHAVIOR_NEGATIVE,
     // Returns U+FFFD Replacement Character.
     UTF_BEHAVIOR_FFFD,
@@ -122,6 +123,7 @@ namespace U_HEADER_ONLY_NAMESPACE {
  */
 template<typename CP32, typename UnitIter, typename = void>
 class UnsafeCodeUnits {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     using Unit = typename std::iterator_traits<UnitIter>::value_type;
 public:
     // @internal
@@ -199,6 +201,7 @@ class UnsafeCodeUnits<
             !std::is_base_of_v<
                 std::forward_iterator_tag,
                 typename std::iterator_traits<UnitIter>::iterator_category>>> {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     // @internal
     UnsafeCodeUnits(CP32 codePoint, uint8_t length) : c_(codePoint), len_(length) {}
@@ -289,6 +292,7 @@ class UTFImpl<
         UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 1>> {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     static_assert(behavior != UTF_BEHAVIOR_SURROGATE,
                   "For 8-bit strings, the SURROGATE option does not have an equivalent.");
 public:
@@ -493,6 +497,7 @@ class UTFImpl<
         UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 2>> {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     // Handle ill-formed UTF-16: One unpaired surrogate.
     static inline CP32 sub(CP32 surrogate) {
@@ -586,6 +591,7 @@ class UTFImpl<
         UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 4>> {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     // Handle ill-formed UTF-32
     static inline CP32 sub(bool forSurrogate, CP32 surrogate) {
@@ -653,6 +659,7 @@ class UnsafeUTFImpl<
         UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 1>> {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     static inline void inc(UnitIter &p) {
         // Very similar to U8_FWD_1_UNSAFE().
@@ -758,6 +765,7 @@ class UnsafeUTFImpl<
         UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 2>> {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     static inline void inc(UnitIter &p) {
         // Very similar to U16_FWD_1_UNSAFE().
@@ -825,6 +833,7 @@ class UnsafeUTFImpl<
         UnitIter,
         std::enable_if_t<
             sizeof(typename std::iterator_traits<UnitIter>::value_type) == 4>> {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     static inline void inc(UnitIter &p) {
         ++p;
@@ -876,6 +885,7 @@ public:
  */
 template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter, typename = void>
 class UTFIterator {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     using Impl = UTFImpl<CP32, behavior, UnitIter>;
 
     // Proxy type for operator->() (required by LegacyInputIterator)
@@ -1054,6 +1064,7 @@ class UTFIterator<
             !std::is_base_of_v<
                 std::forward_iterator_tag,
                 typename std::iterator_traits<UnitIter>::iterator_category>>> {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     using Impl = UTFImpl<CP32, behavior, UnitIter>;
 
     // Proxy type for post-increment return value, to make *iter++ work.
@@ -1155,6 +1166,7 @@ private:
 // that does most of the same work twice for reading variable-length sequences.
 template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter>
 class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter>> {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     using Impl = U_HEADER_ONLY_NAMESPACE::UTFImpl<CP32, behavior, UnitIter>;
     using CodeUnits_ = U_HEADER_ONLY_NAMESPACE::CodeUnits<CP32, UnitIter>;
 
@@ -1295,6 +1307,7 @@ namespace U_HEADER_ONLY_NAMESPACE {
  */
 template<typename CP32, UTFIllFormedBehavior behavior, typename Unit>
 class UTFStringCodePoints {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     using UnitIter = typename std::basic_string_view<Unit>::iterator;
 public:
     /**
@@ -1443,6 +1456,7 @@ auto utfStringCodePoints(StringView s) {
  */
 template<typename CP32, typename UnitIter, typename = void>
 class UnsafeUTFIterator {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     using Impl = UnsafeUTFImpl<CP32, UnitIter>;
 
     // Proxy type for operator->() (required by LegacyInputIterator)
@@ -1605,6 +1619,7 @@ class UnsafeUTFIterator<
             !std::is_base_of_v<
                 std::forward_iterator_tag,
                 typename std::iterator_traits<UnitIter>::iterator_category>>> {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     using Impl = UnsafeUTFImpl<CP32, UnitIter>;
 
     // Proxy type for post-increment return value, to make *iter++ work.
@@ -1699,6 +1714,7 @@ private:
 // that does most of the same work twice for reading variable-length sequences.
 template<typename CP32, typename UnitIter>
 class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter>> {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     using Impl = U_HEADER_ONLY_NAMESPACE::UnsafeUTFImpl<CP32, UnitIter>;
     using UnsafeCodeUnits_ = U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits<CP32, UnitIter>;
 
@@ -1833,6 +1849,7 @@ namespace U_HEADER_ONLY_NAMESPACE {
  */
 template<typename CP32, typename Unit>
 class UnsafeUTFStringCodePoints {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     using UnitIter = typename std::basic_string_view<Unit>::iterator;
 public:
     /**
