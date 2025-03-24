@@ -906,6 +906,8 @@ public:
  * an input_iterator, a forward_iterator, or a bidirectional_iterator (including a pointer).
  * The UTFIterator will have the corresponding iterator_category.
  *
+ * Call utfIterator() to have the compiler deduce the UnitIter type.
+ *
  * For reverse iteration, either use this iterator directly as in <code>*--iter</code>
  * or wrap it using std::make_reverse_iterator(iter).
  *
@@ -916,6 +918,7 @@ public:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @draft ICU 78
+ * @see utfIterator
  */
 template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter, typename = void>
 class UTFIterator {
@@ -1398,6 +1401,8 @@ namespace U_HEADER_ONLY_NAMESPACE {
 /**
  * A C++ "range" for validating iteration over all of the code points of a Unicode string.
  *
+ * Call utfStringCodePoints() to have the compiler deduce the Unit type.
+ *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if UTF_BEHAVIOR_NEGATIVE
  * @tparam behavior How to handle ill-formed Unicode strings
@@ -1405,6 +1410,7 @@ namespace U_HEADER_ONLY_NAMESPACE {
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @draft ICU 78
+ * @see utfStringCodePoints
  */
 template<typename CP32, UTFIllFormedBehavior behavior, typename Unit>
 class UTFStringCodePoints {
@@ -1559,6 +1565,8 @@ auto utfStringCodePoints(StringView s) {
  * an input_iterator, a forward_iterator, or a bidirectional_iterator (including a pointer).
  * The UTFIterator will have the corresponding iterator_category.
  *
+ * Call unsafeUTFIterator() to have the compiler deduce the UnitIter type.
+ *
  * For reverse iteration, either use this iterator directly as in <code>*--iter</code>
  * or wrap it using std::make_reverse_iterator(iter).
  *
@@ -1567,6 +1575,7 @@ auto utfStringCodePoints(StringView s) {
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @draft ICU 78
+ * @see unsafeUTFIterator
  */
 template<typename CP32, typename UnitIter, typename = void>
 class UnsafeUTFIterator {
@@ -2008,11 +2017,14 @@ namespace U_HEADER_ONLY_NAMESPACE {
  * A C++ "range" for non-validating iteration over all of the code points of a Unicode string.
  * The string must be well-formed.
  *
+ * Call unsafeUTFStringCodePoints() to have the compiler deduce the Unit type.
+ *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @tparam Unit Code unit type:
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t
  * @draft ICU 78
+ * @see unsafeUTFStringCodePoints
  */
 template<typename CP32, typename Unit>
 class UnsafeUTFStringCodePoints {
