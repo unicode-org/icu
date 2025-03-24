@@ -98,6 +98,111 @@ namespace header {}
 /**
  * \file
  * \brief C++ header-only API: C++ iterators over Unicode strings (=UTF-8/16/32 if well-formed).
+ *
+ * Sample code:
+ * \code
+ * #include <string_view>
+ * #include <iostream>
+ * #include "unicode/utypes.h"
+ * #include "unicode/utfiterator.h"
+ * 
+ * using U_HEADER_ONLY_NAMESPACE::utfIterator;
+ * using U_HEADER_ONLY_NAMESPACE::utfStringCodePoints;
+ * using U_HEADER_ONLY_NAMESPACE::unsafeUTFIterator;
+ * using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
+ * 
+ * int32_t rangeLoop16(std::u16string_view s) {
+ *     // We are just adding up the code points for minimal-code demonstration purposes.
+ *     int32_t sum = 0;
+ *     for (auto units : utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s)) {
+ *         sum += units.codePoint();  // < 0 if ill-formed
+ *     }
+ *     return sum;
+ * }
+ * 
+ * int32_t loopIterPlusPlus16(std::u16string_view s) {
+ *     auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
+ *     int32_t sum = 0;
+ *     for (auto iter = range.begin(), limit = range.end(); iter != limit;) {
+ *         sum += (*iter++).codePoint();  // U+FFFD if ill-formed
+ *     }
+ *     return sum;
+ * }
+ * 
+ * int32_t backwardLoop16(std::u16string_view s) {
+ *     auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_SURROGATE>(s);
+ *     int32_t sum = 0;
+ *     for (auto start = range.begin(), iter = range.end(); start != iter;) {
+ *         sum += (*--iter).codePoint();  // surrogate code point if unpaired / ill-formed
+ *     }
+ *     return sum;
+ * }
+ * 
+ * int32_t reverseLoop8(std::string_view s) {
+ *     auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
+ *     int32_t sum = 0;
+ *     for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
+ *         sum += iter->codePoint();  // U+FFFD if ill-formed
+ *     }
+ *     return sum;
+ * }
+ * 
+ * int32_t countCodePoints16(std::u16string_view s) {
+ *     auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_SURROGATE>(s);
+ *     return std::distance(range.begin(), range.end());
+ * }
+ * 
+ * int32_t unsafeRangeLoop16(std::u16string_view s) {
+ *     int32_t sum = 0;
+ *     for (auto units : unsafeUTFStringCodePoints<UChar32>(s)) {
+ *         sum += units.codePoint();
+ *     }
+ *     return sum;
+ * }
+ * 
+ * int32_t unsafeReverseLoop8(std::string_view s) {
+ *     auto range = unsafeUTFStringCodePoints<UChar32>(s);
+ *     int32_t sum = 0;
+ *     for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
+ *         sum += iter->codePoint();
+ *     }
+ *     return sum;
+ * }
+ * 
+ * char32_t firstCodePointOrFFFD16(std::u16string_view s) {
+ *     if (s.empty()) { return 0xfffd; }
+ *     auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
+ *     return range.begin()->codePoint();
+ * }
+ * 
+ * std::string_view firstSequence8(std::string_view s) {
+ *     if (s.empty()) { return {}; }
+ *     auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
+ *     auto units = *(range.begin());
+ *     if (units.wellFormed()) {
+ *         return units.stringView();
+ *     } else {
+ *         return {};
+ *     }
+ * }
+ * 
+ * template<typename InputStream>  // some istream or streambuf
+ * std::u32string cpFromInput(InputStream &in) {
+ *     // This is a single-pass input_iterator.
+ *     std::istreambuf_iterator bufIter(in);
+ *     std::istreambuf_iterator<typename InputStream::char_type> bufLimit;
+ *     auto iter = utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(bufIter);
+ *     auto limit = utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(bufLimit);
+ *     std::u32string s32;
+ *     for (; iter != limit; ++iter) {
+ *         s32.push_back(iter->codePoint());
+ *     }
+ *     return s32;
+ * }
+ * 
+ * std::u32string cpFromStdin() { return cpFromInput(std::cin); }
+ * std::u32string cpFromWideStdin() { return cpFromInput(std::wcin); }
+ * \endcode
  */
 
 #ifndef U_HIDE_DRAFT_API
