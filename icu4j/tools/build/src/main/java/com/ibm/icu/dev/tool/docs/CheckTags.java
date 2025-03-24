@@ -32,15 +32,32 @@
 
 package com.ibm.icu.dev.tool.docs;
 
-import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.ConstructorDoc;
-import com.sun.javadoc.ExecutableMemberDoc;
-import com.sun.javadoc.ProgramElementDoc;
-import com.sun.javadoc.RootDoc;
-import com.sun.javadoc.Tag;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class CheckTags {
-    RootDoc root;
+import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.QualifiedNameable;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Elements;
+
+import com.sun.source.doctree.BlockTagTree;
+import com.sun.source.doctree.DocTree;
+import com.sun.source.doctree.InlineTagTree;
+import com.sun.source.util.DocTrees;
+
+import jdk.javadoc.doclet.Doclet;
+import jdk.javadoc.doclet.DocletEnvironment;
+import jdk.javadoc.doclet.Reporter;
+
+public class CheckTags implements Doclet {
+    private DocTrees docTrees;
+    private Elements elements;
+
     boolean log;
     boolean brief;
     boolean isShort;
@@ -118,7 +135,7 @@ public class CheckTags {
             DocNode last = stack[ix];
             if (error) {
                 last.errorCount += 1;
-        }
+            }
 
             boolean show = !brief || last.reportError;
             // boolean nomsg = show && brief && error;
@@ -162,86 +179,61 @@ public class CheckTags {
         }
     }
 
-    public static boolean start(RootDoc root) {
-        return new CheckTags(root).run();
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        // The documentation says "usually the latest version"
+        // But even if at this time JDK 23 is already released, we
+        // want to be able to compile / use this doclet with at least JDK 11.
+        // So anything above RELEASE_11 is undefined
+        return SourceVersion.RELEASE_11;
     }
 
-    public static int optionLength(String option) {
-        if (option.equals("-log")) {
-            return 1;
-        } else if (option.equals("-brief")) {
-            return 1;
-        } else if (option.equals("-short")) {
-            return 1;
-        }
-        return 0;
+    @Override
+    public void init(Locale locale, Reporter reporter) {
     }
 
-    CheckTags(RootDoc root) {
-        this.root = root;
+    @Override
+    public String getName() {
+        return this.getClass().getSimpleName();
+    }
 
-        String[][] options = root.options();
-        for (int i = 0; i < options.length; ++i) {
-            String opt = options[i][0];
-            if (opt.equals("-log")) {
-                this.log = true;
-            } else if (opt.equals("-brief")) {
-                this.brief = true;
-            } else if (opt.equals("-short")) {
-                this.isShort = true;
+    @Override
+    public Set<Option> getSupportedOptions() {
+        return SUPPORTED_OPTIONS;
+    }
+
+    private final static Set<Option> SUPPORTED_OPTIONS = Set.of(
+            new JavadocHelper.GatherApiDataOption(0, "-log", "log", "the description of name"),
+            new JavadocHelper.GatherApiDataOption(0, "-brief", "brief", "the description of output"),
+            new JavadocHelper.GatherApiDataOption(0, "-short", "short", "the description of base"));
+
+    private void initFromOptions() {
+        for (Option opt : SUPPORTED_OPTIONS) {
+            JavadocHelper.GatherApiDataOption option = (JavadocHelper.GatherApiDataOption) opt;
+            switch (option.getName()) {
+                case "-log":
+                    this.log = option.getBooleanValue(false);
+                    break;
+                case "-brief":
+                    this.brief = option.getBooleanValue(false);
+                    break;
+                case "-isShort":
+                    this.isShort = option.getBooleanValue(false);
+                    break;
             }
         }
     }
 
-    boolean run() {
-        doDocs(root.classes(), "Package", true);
-        return false;
-    }
-
-    static final String[] tagKinds = {
-        "@internal", "@draft", "@stable", "@since", "@deprecated", "@author", "@see", "@version",
-        "@param", "@return", "@throws", "@obsolete", "@exception", "@serial", "@provisional"
-    };
-
-    static final int UNKNOWN = -1;
-    static final int INTERNAL = 0;
-    static final int DRAFT = 1;
-    static final int STABLE = 2;
-    static final int SINCE = 3;
-    static final int DEPRECATED = 4;
-    static final int AUTHOR = 5;
-    static final int SEE = 6;
-    static final int VERSION = 7;
-    static final int PARAM = 8;
-    static final int RETURN = 9;
-    static final int THROWS = 10;
-    static final int OBSOLETE = 11;
-    static final int EXCEPTION = 12;
-    static final int SERIAL = 13;
-    static final int PROVISIONAL = 14;
-
-    static int tagKindIndex(String kind) {
-        for (int i = 0; i < tagKinds.length; ++i) {
-            if (kind.equals(tagKinds[i])) {
-                return i;
-            }
-        }
-        return UNKNOWN;
-    }
-
-    static final String[] icuTagNames = {
-        "@icu", "@icunote", "@icuenhanced"
-    };
-    static final int ICU = 0;
-    static final int ICUNOTE = 1;
-    static final int ICUENHANCED = 2;
-    static int icuTagIndex(String name) {
-        for (int i = 0; i < icuTagNames.length; ++i) {
-            if (icuTagNames[i].equals(name)) {
-                return i;
-            }
-        }
-        return UNKNOWN;
+    @Override
+    public boolean run(DocletEnvironment environment) {
+        docTrees = environment.getDocTrees();
+        elements = environment.getElementUtils();
+        initFromOptions();
+        List<? extends Element> allClasses = environment.getIncludedElements().stream()
+                .filter(e-> e.getKind().isClass())
+                .collect(Collectors.toList());
+        doDocs(allClasses, "Package", true);
+        return true;
     }
 
     boolean newline = false;
@@ -274,46 +266,45 @@ public class CheckTags {
         output(msg, true, true);
     }
 
-    void tagErr(String msg, Tag tag) {
-        // Tag.position() requires JDK 1.4, build.xml tests for this
+    void tagErr(String msg, Element element, DocTree tag) {
         if (msg.length() > 0) {
             msg += ": ";
         }
-        errln(msg + tag.toString() + " [" + tag.position() + "]");
+        errln(msg + tag.toString() + " [" + JavadocHelper.position(elements, docTrees, element, tag) + "]");
     };
 
-    void tagErr(Tag tag) {
-        tagErr("", tag);
+    void tagErr(Element element, BlockTagTree tag) {
+        tagErr("", element, tag);
     }
 
-    void doDocs(ProgramElementDoc[] docs, String header, boolean reportError) {
-        if (docs != null && docs.length > 0) {
+    void doDocs(Collection<? extends Element> elements, String header, boolean reportError) {
+        if (elements != null && !elements.isEmpty()) {
             stack.push(header, reportError);
-            for (int i = 0; i < docs.length; ++i) {
-                doDoc(docs[i]);
+            for (Element element : elements) {
+                doDoc(element);
             }
             stack.pop();
         }
     }
 
-    void doDoc(ProgramElementDoc doc) {
-        if (doc != null && (doc.isPublic() || doc.isProtected())
-            && !(doc instanceof ConstructorDoc && ((ConstructorDoc)doc).isSynthetic())) {
-
+    void doDoc(Element doc) {
+        if (doc != null && (JavadocHelper.isPublic(doc) || JavadocHelper.isProtected(doc))
+            && !(JavadocHelper.isKindConstructor(doc) && JavadocHelper.isSynthetic(elements, doc))) {
             // unfortunately, in JDK 1.4.1 MemberDoc.isSynthetic is not properly implemented for
             // synthetic constructors.  So you'll have to live with spurious errors or 'implement'
             // the synthetic constructors...
 
-            boolean isClass = doc.isClass() || doc.isInterface();
+            boolean isClass = JavadocHelper.isKindClassOrInterface(doc);
             String header;
             if (!isShort || isClass) {
                 header = "--- ";
             } else {
                 header = "";
             }
-            header += (isClass ? doc.qualifiedName() : doc.name());
-            if (doc instanceof ExecutableMemberDoc) {
-                header += ((ExecutableMemberDoc)doc).flatSignature();
+            if (doc instanceof ExecutableElement) {
+                header += JavadocHelper.flatSignature(doc);
+            } else {
+                header += (isClass ? ((QualifiedNameable) doc).getQualifiedName() : doc.getSimpleName());
             }
             if (!isShort || isClass) {
                 header += " ---";
@@ -324,17 +315,23 @@ public class CheckTags {
             }
             boolean recurse = doTags(doc);
             if (recurse && isClass) {
-                ClassDoc cdoc = (ClassDoc)doc;
-                doDocs(cdoc.fields(), "Fields", !brief);
-                doDocs(cdoc.constructors(), "Constructors", !brief);
-                doDocs(cdoc.methods(), "Methods", !brief);
+                TypeElement cdoc = (TypeElement)doc;
+                List<? extends Element> fields = cdoc.getEnclosedElements().stream()
+                        .filter(JavadocHelper::isKindField).collect(Collectors.toList());
+                doDocs(fields, "Fields", !brief);
+                List<? extends Element> constructors = cdoc.getEnclosedElements().stream()
+                        .filter(JavadocHelper::isKindConstructor).collect(Collectors.toList());
+                doDocs(constructors, "Constructors", !brief);
+                List<? extends Element> methods = cdoc.getEnclosedElements().stream()
+                        .filter(JavadocHelper::isKindMethod).collect(Collectors.toList());
+                doDocs(methods, "Methods", !brief);
             }
             stack.pop();
         }
     }
 
     /** Return true if subelements of this doc should be checked */
-    boolean doTags(ProgramElementDoc doc) {
+    boolean doTags(Element doc) {
         boolean foundRequiredTag = false;
         boolean foundDraftTag = false;
         boolean foundProvisionalTag = false;
@@ -344,45 +341,52 @@ public class CheckTags {
         boolean foundStableTag = false;
         boolean retainAll = false;
 
+        if (JavadocHelper.isIgnoredEnumMethod(doc)) {
+            return false;
+        }
+
         // first check inline tags
-        for (Tag tag : doc.inlineTags()) {
-            int index = icuTagIndex(tag.name());
-            if (index >= 0) {
-                String text = tag.text().trim();
-                switch (index) {
+        for (InlineTagTree tag : JavadocHelper.getInnerTags(docTrees, doc)) {
+            JavadocHelper.IcuTagKind index = JavadocHelper.IcuTagKind.ofTag(tag);
+            String text = JavadocHelper.toText(tag).trim();
+            // System.out.println("SPY    ==== " + tag + " === " + index + " == '" + text + "'");
+            switch (index) {
                 case ICU: {
-                    if (doc.isClass() || doc.isInterface()) {
-                        tagErr("tag should appear only in member docs", tag);
+                    if (JavadocHelper.isKindClassOrInterface(doc)) {
+                        tagErr("tag should appear only in member docs", doc, tag);
                     }
                 } break;
                 case ICUNOTE: {
-                    if (text.length() > 0) {
-                        tagErr("tag should not contain text", tag);
+                    if (!text.isEmpty()) {
+                        tagErr("tag should not contain text", doc, tag);
                     }
                 } break;
                 case ICUENHANCED: {
-                    if (text.length() == 0) {
-                        tagErr("text should name related jdk class", tag);
+                    if (text.isEmpty()) {
+                        tagErr("text should name related jdk class", doc, tag);
                     }
-                    if (!(doc.isClass() || doc.isInterface())) {
-                        tagErr("tag should appear only in class/interface docs", tag);
+                    if (!(JavadocHelper.isKindClassOrInterface(doc))) {
+                        tagErr("tag should appear only in class/interface docs", doc, tag);
                     }
                 } break;
-                default:
-                    tagErr("unrecognized tag index for tag", tag);
+                case UNKNOWN:
+                    // It might be a standard tag, so we don't complain about this
                     break;
-                }
+                default:
+                    tagErr("unrecognized tag index for tag", doc, tag);
+                    break;
             }
         }
 
+        // System.out.println("SPY====== " + doc);
         // next check regular tags
-        for (Tag tag : doc.tags()) {
-            String kind = tag.kind();
-            int ix = tagKindIndex(kind);
-
+        for (BlockTagTree tag : JavadocHelper.getBlockTags(docTrees, doc)) {
+            JavadocHelper.TagKind ix = JavadocHelper.TagKind.ofTag(tag);
+            String tagText = JavadocHelper.toText(tag);
+            // System.out.println("SPY    ==== " + tag + " === " + ix + " == '" + tagText + "'");
             switch (ix) {
             case UNKNOWN:
-                errln("unknown kind: " + kind);
+                errln("unknown kind: " + tag.getTagName());
                 break;
 
             case INTERNAL:
@@ -393,16 +397,16 @@ public class CheckTags {
             case DRAFT:
                 foundRequiredTag = true;
                 foundDraftTag = true;
-                if (tag.text().indexOf("ICU 2.8") != -1 &&
-                    tag.text().indexOf("(retain") == -1) { // catch both retain and retainAll
-                    tagErr(tag);
+                if (tagText.indexOf("ICU 2.8") != -1 &&
+                        tagText.indexOf("(retain") == -1) { // catch both retain and retainAll
+                    tagErr(doc, tag);
                     break;
                 }
-                if (tag.text().indexOf("ICU") != 0) {
-                    tagErr(tag);
+                if (tagText.indexOf("ICU") != 0) {
+                    tagErr(doc, tag);
                     break;
                 }
-                retainAll |= (tag.text().indexOf("(retainAll)") != -1);
+                retainAll |= (tagText.indexOf("(retainAll)") != -1);
                 break;
 
             case PROVISIONAL:
@@ -411,14 +415,14 @@ public class CheckTags {
 
             case DEPRECATED:
                 foundDeprecatedTag = true;
-                if (tag.text().indexOf("ICU") == 0) {
+                if (tagText.indexOf("ICU") == 0) {
                     foundRequiredTag = true;
                 }
                 break;
 
             case OBSOLETE:
-                if (tag.text().indexOf("ICU") != 0) {
-                    tagErr(tag);
+                if (tagText.indexOf("ICU") != 0) {
+                    tagErr(doc, tag);
                 }
                 foundObsoleteTag = true;
                 foundRequiredTag = true;
@@ -426,9 +430,8 @@ public class CheckTags {
 
             case STABLE:
                 {
-                    String text = tag.text();
-                    if (text.length() != 0 && text.indexOf("ICU") != 0) {
-                        tagErr(tag);
+                    if (tagText.length() != 0 && tagText.indexOf("ICU") != 0) {
+                        tagErr(tagText, doc, tag);
                     }
                     foundRequiredTag = true;
                     foundStableTag = true;
@@ -436,11 +439,13 @@ public class CheckTags {
                 break;
 
             case SINCE:
-                tagErr(tag);
+                tagErr(doc, tag);
                 break;
 
             case EXCEPTION:
-                logln("You really ought to use @throws, you know... :-)");
+                //TODO: Why would we report this?
+                // logln("You really ought to use @throws, you know... :-)");
+                break;
 
             case AUTHOR:
             case SEE:
@@ -448,18 +453,20 @@ public class CheckTags {
             case RETURN:
             case THROWS:
             case SERIAL:
+            case DISCOURAGED:
+            case CATEGORY:
                 break;
 
             case VERSION:
-                tagErr(tag);
+                tagErr(doc, tag);
                 break;
 
             default:
                 errln("unknown index: " + ix);
-            }
-        }
+            } // end if switch
+        } // end of iteration on tags
         if (!foundRequiredTag) {
-            errln("missing required tag [" + doc.position() + "]");
+            errln("missing required tag [" + JavadocHelper.position(elements, docTrees, doc) + "]");
         }
         if (foundInternalTag && !foundDeprecatedTag) {
             errln("internal tag missing deprecated");

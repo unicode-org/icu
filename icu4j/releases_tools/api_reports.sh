@@ -11,8 +11,8 @@ fi
 # ====================================================================================
 # The start of the script proper
 
-reportTitle "Checking the JDK version (must be 8)"
-checkThatJdk8IsDefault
+reportTitle "Checking the JDK version (must be newer than 8)"
+checkThatJdk8IsNotDefault
 
 # ====================================================================================
 
@@ -22,7 +22,7 @@ mvn clean -q --batch-mode
 # Build everything
 mvn install -q --batch-mode -DskipITs -DskipTests
 # Gather API info
-mvn site -q  --batch-mode -DskipITs -DskipTests -P gatherapi > /dev/null
+mvn site -q --batch-mode -DskipITs -DskipTests -P gatherapi > /dev/null
 
 checkFileCreated "${out_dir}/icu4j${api_report_version}.api3.gz"
 

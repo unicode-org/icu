@@ -688,21 +688,6 @@
       </build>
     </profile>
 
-    <!-- The tools/build module depends on the old tools.jar (jdk 1.8)
-      The com.sun.javadoc package was deprecated in Java 11, and has been removed for Java 17.
-      JDK 11 does not include tools.jar anymore. The code must be updated, see migration guide at
-        https://docs.oracle.com/en/java/javase/11/docs/api/jdk.javadoc/jdk/javadoc/doclet/package-summary.html#migration
-    -->
-    <profile>
-      <id>old_jdk_taglet</id>
-      <activation>
-        <jdk>[1.7,1.8]</jdk>
-      </activation>
-      <modules>
-         <module>tools/build</module>
-      </modules>
-    </profile>
-
     <!-- Starting with JDK 9, the Java compiler supports the −−release version.
       Unlike source (checking the language features) and target (the version of the classes generated),
       this option also checks that newer APIs are not used.
@@ -716,6 +701,7 @@
         <jdk>[9,)</jdk>
       </activation>
       <modules>
+         <module>tools/build</module>
          <module>tools/taglets</module>
       </modules>
       <build>

@@ -50,136 +50,96 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.ConstructorDoc;
-import com.sun.javadoc.ExecutableMemberDoc;
-import com.sun.javadoc.FieldDoc;
-import com.sun.javadoc.LanguageVersion;
-import com.sun.javadoc.MemberDoc;
-import com.sun.javadoc.MethodDoc;
-import com.sun.javadoc.ProgramElementDoc;
-import com.sun.javadoc.RootDoc;
-import com.sun.javadoc.Tag;
+import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.PackageElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.ArrayType;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.ErrorType;
+import javax.lang.model.type.ExecutableType;
+import javax.lang.model.type.IntersectionType;
+import javax.lang.model.type.NoType;
+import javax.lang.model.type.NullType;
+import javax.lang.model.type.PrimitiveType;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.TypeVariable;
+import javax.lang.model.type.TypeVisitor;
+import javax.lang.model.type.UnionType;
+import javax.lang.model.type.WildcardType;
+import javax.lang.model.util.Elements;
 
-public class GatherAPIData {
-    RootDoc root;
-    TreeSet results;
-    String srcName = "Current"; // default source name
-    String output; // name of output file to write
-    String base; // strip this prefix
-    Pattern pat;
-    boolean zip;
-    boolean gzip;
-    boolean internal;
-    boolean version;
+import com.sun.source.doctree.BlockTagTree;
+import com.sun.source.util.DocTrees;
 
-    public static int optionLength(String option) {
-        if (option.equals("-name")) {
-            return 2;
-        } else if (option.equals("-output")) {
-            return 2;
-        } else if (option.equals("-base")) {
-            return 2;
-        } else if (option.equals("-filter")) {
-            return 2;
-        } else if (option.equals("-zip")) {
-            return 1;
-        } else if (option.equals("-gzip")) {
-            return 1;
-        } else if (option.equals("-internal")) {
-            return 1;
-        } else if (option.equals("-version")) {
-            return 1;
-        }
-        return 0;
+import jdk.javadoc.doclet.Doclet;
+import jdk.javadoc.doclet.DocletEnvironment;
+import jdk.javadoc.doclet.Reporter;
+
+@SupportedAnnotationTypes("*")
+@SupportedSourceVersion(SourceVersion.RELEASE_9)
+public class GatherAPIData implements Doclet {
+    private Elements elementUtils;
+    private DocTrees docTrees;
+    private TreeSet<APIInfo> results = new TreeSet<>(APIInfo.defaultComparator());
+    private String srcName = ""; // default source name
+    private String output; // name of output file to write
+    private String base; // strip this prefix
+    private Pattern pat;
+    private boolean zip;
+    private boolean gzip;
+    private boolean internal;
+    private boolean version;
+
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        // The documentation says "usually the latest version"
+        // But even if at this time JDK 23 is already released, we
+        // want to be able to compile / use this doclet with at least JDK 11.
+        // So anything above RELEASE_11 is undefined
+        return SourceVersion.RELEASE_11;
     }
 
-    public static boolean start(RootDoc root) {
-        return new GatherAPIData(root).run();
+    @Override
+    public void init(Locale locale, Reporter reporter) {
     }
 
-    /**
-     * If you don't do this, javadoc treats enums like regular classes!
-     * doesn't matter if you pass -source 1.5 or not.
-     */
-    public static LanguageVersion languageVersion() {
-        return LanguageVersion.JAVA_1_5;
+    @Override
+    public String getName() {
+        return this.getClass().getSimpleName();
     }
 
-    GatherAPIData(RootDoc root) {
-        this.root = root;
-
-        String[][] options = root.options();
-        for (int i = 0; i < options.length; ++i) {
-            String opt = options[i][0];
-            if (opt.equals("-name")) {
-                this.srcName = options[i][1];
-            } else if (opt.equals("-output")) {
-                this.output = options[i][1];
-            } else if (opt.equals("-base")) {
-                this.base = options[i][1]; // should not include '.'
-            } else if (opt.equals("-filter")) {
-                this.pat = Pattern.compile(options[i][1], Pattern.CASE_INSENSITIVE);
-            } else if (opt.equals("-zip")) {
-                this.zip = true;
-            } else if (opt.equals("-gzip")) {
-                this.gzip = true;
-            } else if (opt.equals("-internal")) {
-                this.internal = true;
-            } else if (opt.equals("-version")) {
-                this.version = true;
-            }
-        }
-
-        results = new TreeSet(APIInfo.defaultComparator());
+    @Override
+    public Set<Doclet.Option> getSupportedOptions() {
+        return SUPPORTED_OPTIONS;
     }
 
-    private boolean run() {
-        doDocs(root.classes());
+    @Override
+    public boolean run(DocletEnvironment environment) {
+        elementUtils = environment.getElementUtils();
+        docTrees = environment.getDocTrees();
 
-        OutputStream os = System.out;
-        if (output != null) {
-            ZipOutputStream zos = null;
-            try {
-                if (zip) {
-                    zos = new ZipOutputStream(new FileOutputStream(output + ".zip"));
-                    zos.putNextEntry(new ZipEntry(output));
-                    os = zos;
-                } else if (gzip) {
-                    os = new GZIPOutputStream(new FileOutputStream(output + ".gz"));
-                } else {
-                    os = new FileOutputStream(output);
-                }
-            }
-            catch (IOException e) {
-                RuntimeException re = new RuntimeException(e.getMessage());
-                re.initCause(e);
-                throw re;
-            }
-            finally {
-                if (zos != null) {
-                    try {
-                        zos.close();
-                    } catch (Exception e) {
-                        // ignore
-                    }
-                }
-            }
-        }
+        initFromOptions();
+        doDocs(environment.getIncludedElements());
 
-        BufferedWriter bw = null;
-        try {
-            OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
-            bw = new BufferedWriter(osw);
-
+        try (OutputStream os = getOutputFileAsStream(output);
+                OutputStreamWriter osw = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {
+            BufferedWriter bw = new BufferedWriter(osw);
             // writing data file
             bw.write(String.valueOf(APIInfo.VERSION) + APIInfo.SEP); // header version
             bw.write(srcName + APIInfo.SEP); // source name
@@ -188,63 +148,50 @@ public class GatherAPIData {
             writeResults(results, bw);
             bw.close(); // should flush, close all, etc
         } catch (IOException e) {
-            try { bw.close(); } catch (IOException e2) {}
-            RuntimeException re = new RuntimeException("write error: " + e.getMessage());
+            RuntimeException re = new RuntimeException(e.getMessage());
             re.initCause(e);
             throw re;
         }
 
-        return false;
+        return true;
     }
 
-    private void doDocs(ProgramElementDoc[] docs) {
-        if (docs != null && docs.length > 0) {
-            for (int i = 0; i < docs.length; ++i) {
-                doDoc(docs[i]);
+    private OutputStream getOutputFileAsStream(String output) throws IOException {
+        if (output == null) {
+            return System.out;
+        }
+        if (zip) {
+            ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(output + ".zip"));
+            zos.putNextEntry(new ZipEntry(output));
+            return zos;
+        }
+        if (gzip) {
+            return new GZIPOutputStream(new FileOutputStream(output + ".gz"));
+        }
+        return new FileOutputStream(output);
+    }
+
+    private void doDocs(Collection<? extends Element> docs) {
+        if (docs != null) {
+            for (Element doc : docs) {
+                doDoc(doc);
             }
         }
     }
 
-    private void doDoc(ProgramElementDoc doc) {
+    private void doDoc(Element doc) {
         if (ignore(doc)) return;
 
-        if (doc.isClass() || doc.isInterface()) {
-            ClassDoc cdoc = (ClassDoc)doc;
-            doDocs(cdoc.fields());
-            doDocs(cdoc.constructors());
-            doDocs(cdoc.methods());
-            doDocs(cdoc.enumConstants());
-            // don't call this to iterate over inner classes,
-            // root.classes already includes them
-            // doDocs(cdoc.innerClasses());
+        // isClass() ==> CLASS || ENUM;
+        // isInterface() ==> INTERFACE || ANNOTATION_TYPE
+        if (JavadocHelper.isKindClassOrInterface(doc)) {
+            doDocs(doc.getEnclosedElements());
         }
 
         APIInfo info = createInfo(doc);
         if (info != null) {
             results.add(info);
         }
-    }
-
-    // Sigh. Javadoc doesn't indicate when the compiler generates
-    // the values and valueOf enum methods.  The position of the
-    // method for these is not always the same as the position of
-    // the class, though it often is, so we can't use that.
-
-    private boolean isIgnoredEnumMethod(ProgramElementDoc doc) {
-        if (doc.isMethod() && doc.containingClass().isEnum()) {
-            // System.out.println("*** " + doc.qualifiedName() + " pos: " +
-            //                    doc.position().line() +
-            //                    " contained by: " +
-            //                    doc.containingClass().name() +
-            //                    " pos: " +
-            //                    doc.containingClass().position().line());
-            // return doc.position().line() == doc.containingClass().position().line();
-
-            String name = doc.name();
-            // assume we don't have enums that overload these method names.
-            return "values".equals(name) || "valueOf".equals(name);
-        }
-        return false;
     }
 
     // isSynthesized also doesn't seem to work.  Let's do this, documenting
@@ -258,22 +205,38 @@ public class GatherAPIData {
     // javadoc comments by the policy. So, we no longer ignore abstract
     // class's no-arg constructor blindly. -Yoshito 2014-05-21
 
-    private boolean isAbstractClassDefaultConstructor(ProgramElementDoc doc) {
-        return doc.isConstructor()
-            && doc.containingClass().isAbstract()
-            && "()".equals(((ConstructorDoc) doc).signature());
+    private boolean isAbstractClassDefaultConstructor(Element doc) {
+        return JavadocHelper.isKindConstructor(doc)
+            && JavadocHelper.isAbstract(doc.getEnclosingElement())
+            && ((ExecutableElement) doc).getParameters().isEmpty();
     }
 
     private static final boolean IGNORE_NO_ARG_ABSTRACT_CTOR = false;
 
-    private boolean ignore(ProgramElementDoc doc) {
-        if (doc == null) return true;
-        if (doc.isPrivate() || doc.isPackagePrivate()) return true;
-        if (doc instanceof MemberDoc && ((MemberDoc)doc).isSynthetic()) return true;
-        if (doc.qualifiedName().indexOf(".misc") != -1) {
-            System.out.println("misc: " + doc.qualifiedName()); return true;
+    private boolean ignore(Element doc) {
+        if (doc == null) {
+            return true;
         }
-        if (isIgnoredEnumMethod(doc)) {
+
+        if (JavadocHelper.isPrivate(doc) || JavadocHelper.isDefault(doc)) {
+            return true;
+        }
+
+        if (JavadocHelper.isVisibilityPackage(doc)) {
+            return true;
+        }
+
+        if (JavadocHelper.isKindPackage(doc)) {
+            return true;
+        }
+
+        if (doc.toString().contains(".misc")) {
+            System.out.println("misc: " + doc.toString()); {
+                return true;
+            }
+        }
+
+        if (JavadocHelper.isIgnoredEnumMethod(doc)) {
             return true;
         }
 
@@ -281,66 +244,41 @@ public class GatherAPIData {
             return true;
         }
 
-        if (false && doc.qualifiedName().indexOf("LocaleDisplayNames") != -1) {
-          System.err.print("*** " + doc.qualifiedName() + ":");
-          if (doc.isClass()) System.err.print(" class");
-          if (doc.isConstructor()) System.err.print(" constructor");
-          if (doc.isEnum()) System.err.print(" enum");
-          if (doc.isEnumConstant()) System.err.print(" enum_constant");
-          if (doc.isError()) System.err.print(" error");
-          if (doc.isException()) System.err.print(" exception");
-          if (doc.isField()) System.err.print(" field");
-          if (doc.isInterface()) System.err.print(" interface");
-          if (doc.isMethod()) System.err.print(" method");
-          if (doc.isOrdinaryClass()) System.err.print(" ordinary_class");
-          System.err.println();
-        }
-
         if (!internal) { // debug
-            Tag[] tags = doc.tags();
-            for (int i = 0; i < tags.length; ++i) {
-                if (tagKindIndex(tags[i].kind()) == INTERNAL) { return true; }
+            for (BlockTagTree tag : JavadocHelper.getBlockTags(docTrees, doc)) {
+                if (JavadocHelper.TagKind.ofTag(tag) == JavadocHelper.TagKind.INTERNAL) {
+                    return true;
+                }
             }
         }
-        if (pat != null && (doc.isClass() || doc.isInterface())) {
-            if (!pat.matcher(doc.name()).matches()) {
+
+        if (pat != null && JavadocHelper.isKindClassOrInterface(doc)) {
+            if (!pat.matcher(doc.getSimpleName().toString()).matches()) {
                 return true;
             }
         }
+
         return false;
     }
 
-    private static void writeResults(Collection c, BufferedWriter w) {
-        Iterator iter = c.iterator();
-        while (iter.hasNext()) {
-            APIInfo info = (APIInfo)iter.next();
+    private static void writeResults(Collection<APIInfo> c, BufferedWriter w) {
+        for (APIInfo info : c) {
             info.writeln(w);
         }
     }
 
     private String trimBase(String arg) {
+        String orgArg = arg;
         if (base != null) {
             for (int n = arg.indexOf(base); n != -1; n = arg.indexOf(base, n)) {
-                arg = arg.substring(0, n) + arg.substring(n+base.length());
+                arg = arg.substring(0, n) + arg.substring(n + base.length());
             }
         }
         return arg;
     }
 
-    public APIInfo createInfo(ProgramElementDoc doc) {
-
-        // Doc. name
-        // Doc. isField, isMethod, isConstructor, isClass, isInterface
-        // ProgramElementDoc. containingClass, containingPackage
-        // ProgramElementDoc. isPublic, isProtected, isPrivate, isPackagePrivate
-        // ProgramElementDoc. isStatic, isFinal
-        // MemberDoc.isSynthetic
-        // ExecutableMemberDoc isSynchronized, signature
-        // Type.toString() // e.g. "String[][]"
-        // ClassDoc.isAbstract, superClass, interfaces, fields, methods, constructors, innerClasses
-        // FieldDoc type
-        // ConstructorDoc qualifiedName
-        // MethodDoc isAbstract, returnType
+    private APIInfo createInfo(Element doc) {
+        if (ignore(doc)) return null;
 
         APIInfo info = new APIInfo();
         if (version) {
@@ -353,128 +291,172 @@ public class GatherAPIData {
         info.setStatusVersion(version[0]);
 
         // visibility
-        if (doc.isPublic()) {
+        if (JavadocHelper.isPublic(doc)) {
             info.setPublic();
-        } else if (doc.isProtected()) {
+        } else if (JavadocHelper.isProtected(doc)) {
             info.setProtected();
-        } else if (doc.isPrivate()) {
+        } else if (JavadocHelper.isPrivate(doc)) {
             info.setPrivate();
         } else {
             // default is package
         }
 
         // static
-        if (doc.isStatic()) {
+        if (JavadocHelper.isStatic(doc)) {
             info.setStatic();
         } else {
             // default is non-static
         }
 
-        // final
-        if (doc.isFinal() && !doc.isEnum()) {
+        // Final. Enums are final by default.
+        if (JavadocHelper.isFinal(doc) && !JavadocHelper.isKindEnum(doc)) {
             info.setFinal();
         } else {
             // default is non-final
         }
 
         // type
-        if (doc.isField()) {
+        if (JavadocHelper.isKindFieldExact(doc)) {
             info.setField();
-        } else if (doc.isMethod()) {
+        } else if (JavadocHelper.isKindMethod(doc)) {
             info.setMethod();
-        } else if (doc.isConstructor()) {
+        } else if (JavadocHelper.isKindConstructor(doc)) {
             info.setConstructor();
-        } else if (doc.isClass() || doc.isInterface()) {
-            if (doc.isEnum()) {
+        } else if (JavadocHelper.isKindClassOrInterface(doc)) {
+            if (JavadocHelper.isKindEnum(doc)) {
                 info.setEnum();
             } else {
                 info.setClass();
             }
-        } else if (doc.isEnumConstant()) {
+        } else if (JavadocHelper.isKindEnumConstant(doc)) {
             info.setEnumConstant();
         }
 
-        info.setPackage(trimBase(doc.containingPackage().name()));
+        PackageElement packageElement = elementUtils.getPackageOf(doc);
+        info.setPackage(trimBase(packageElement.getQualifiedName().toString()));
 
-        String className = (doc.isClass() || doc.isInterface() || (doc.containingClass() == null))
+        String className = (JavadocHelper.isKindClassOrInterface(doc) || doc.getEnclosingElement() == null)
                 ? ""
-                : doc.containingClass().name();
+                : withoutPackage(doc.getEnclosingElement());
         info.setClassName(className);
 
-        String name = doc.name();
-        if (doc.isConstructor()) {
-            // Workaround for Javadoc incompatibility between 7 and 8.
-            // Javadoc 7 prepends enclosing class name for a nested
-            // class's constructor. We need to generate the same format
-            // because existing ICU API signature were generated with
-            // Javadoc 7 or older verions.
-            int dotIdx = className.lastIndexOf('.');
-            if (!name.contains(".") && dotIdx > 0) {
-                name = className.substring(0, dotIdx + 1) + name;
-            }
+        String name = doc.getSimpleName().toString();
+        if (JavadocHelper.isKindConstructor(doc)) {
+            // The constructor name is always `<init>` with the javax.lang APIs.
+            // For backward compatibility with older generated files we use the class name instead.
+            name = className;
+        } else if (JavadocHelper.isKindClassOrInterface(doc)) {
+            name = withoutPackage(doc);
         }
         info.setName(name);
 
-        if (doc instanceof FieldDoc) {
-            FieldDoc fdoc = (FieldDoc)doc;
-            info.setSignature(trimBase(fdoc.type().toString()));
-        } else if (doc instanceof ClassDoc) {
-            ClassDoc cdoc = (ClassDoc)doc;
+        if (JavadocHelper.isKindField(doc)) {
+            VariableElement fdoc = (VariableElement) doc;
+            hackSetSignature(info, trimBase(fdoc.asType().toString()));
+        } else if (JavadocHelper.isKindClassOrInterface(doc)) {
+            TypeElement cdoc = (TypeElement) doc;
 
-            if (cdoc.isClass() && cdoc.isAbstract()) {
+            if (!JavadocHelper.isKindInterface(doc) && JavadocHelper.isAbstract(cdoc)) {
                 // interfaces are abstract by default, don't mark them as abstract
                 info.setAbstract();
             }
 
             StringBuffer buf = new StringBuffer();
-            if (cdoc.isClass()) {
+            if (JavadocHelper.isKindClass(cdoc)) {
                 buf.append("extends ");
-                buf.append(cdoc.superclassType().toString());
+                buf.append(cdoc.getSuperclass().toString());
             }
-            ClassDoc[] imp = cdoc.interfaces();
-            if (imp != null && imp.length > 0) {
+            List<? extends TypeMirror> imp = cdoc.getInterfaces();
+            if (!imp.isEmpty()) {
                 if (buf.length() > 0) {
                     buf.append(" ");
                 }
                 buf.append("implements");
-                for (int i = 0; i < imp.length; ++i) {
+                for (int i = 0; i < imp.size(); ++i) {
                     if (i != 0) {
                         buf.append(",");
                     }
                     buf.append(" ");
-                    buf.append(imp[i].qualifiedName());
+                    buf.append(imp.get(i).toString()
+                            .replaceAll("<[^<>]+>", "") // interfaces with parameters.
+                            .replaceAll("<[^<>]+>", "") // 3 nesting levels should be enough
+                            .replaceAll("<[^<>]+>", "") // max I've seen was 2
+                    );
                 }
             }
-            info.setSignature(trimBase(buf.toString()));
-        } else {
-            ExecutableMemberDoc emdoc = (ExecutableMemberDoc)doc;
-            if (emdoc.isSynchronized()) {
+            hackSetSignature(info, trimBase(buf.toString()));
+        } else if (JavadocHelper.isKindMethod(doc) || JavadocHelper.isKindConstructor(doc)) {
+            ExecutableElement emdoc = (ExecutableElement)doc;
+            if (JavadocHelper.isSynchronized(emdoc)) {
                 info.setSynchronized();
             }
 
-            if (doc instanceof MethodDoc) {
-                MethodDoc mdoc = (MethodDoc)doc;
-                if (mdoc.isAbstract()) {
+            if (JavadocHelper.isKindMethod(doc)) {
+                if (JavadocHelper.isAbstract(emdoc)) {
                     // Workaround for Javadoc incompatibility between 7 and 8.
                     // isAbstract() returns false for a method in an interface
                     // on Javadoc 7, while Javadoc 8 returns true. Because existing
                     // API signature data files were generated before, we do not
                     // set abstract if a method is in an interface.
-                    if (!mdoc.containingClass().isInterface()) {
+                    if (!JavadocHelper.isKindInterface(emdoc.getEnclosingElement())) {
                         info.setAbstract();
                     }
                 }
-                info.setSignature(trimBase(mdoc.returnType().toString() + emdoc.signature()));
+
+                String retSig = stringFromTypeMirror(emdoc.getReturnType());
+
+                // Signature, as returned by default, can be something like this: "boolean<T>containsAll(java.util.Iterator<T>)"
+                // The old API returned "boolean(java.util.Iterator<T>)"
+                // Consider using the signature "as is" (including the method name)
+                hackSetSignature(info, trimBase(retSig + toTheBracket(emdoc.toString())));
             } else {
                 // constructor
-                info.setSignature(trimBase(emdoc.signature()));
+                hackSetSignature(info, toTheBracket(emdoc.toString()));
             }
+        } else {
+            throw new RuntimeException("Unknown element kind: " + doc.getKind());
         }
 
         return info;
     }
 
-    private int tagStatus(final ProgramElementDoc doc, String[] version) {
+    private static String stringFromTypeMirror(TypeMirror rrt) {
+        StringBuilder retSig = new StringBuilder();
+        rrt.accept(new ToStringTypeVisitor(), retSig);
+        return retSig.toString();
+    }
+
+    private void hackSetSignature(APIInfo info, String value) {
+        value = value.replace(",", ", ").replace(",  ", ", ");
+        info.setSignature(value);
+    }
+
+    private String withoutPackage(Element enclosingElement) {
+        if (enclosingElement == null) {
+            return "";
+        }
+
+        String result = enclosingElement.toString();
+
+        PackageElement pack = this.elementUtils.getPackageOf(enclosingElement);
+        if (pack == null) {
+            return result;
+        }
+
+        // Takes something like "com.ibm.icu.charset.CharsetCallback.Decoder"
+        // and removes the package, resulting in "CharsetCallback.Decoder"
+        // This can't really be done just by looking at the string form.
+        String packName = pack.getQualifiedName().toString() + ".";
+        return result.startsWith(packName) ? result.substring(packName.length()) : result;
+    }
+
+    private String toTheBracket(String str) {
+        if (str == null) return null;
+        int openBr = str.indexOf('(');
+        return openBr > 1 ? str.substring(openBr) : str;
+    }
+
+    private int tagStatus(final Element doc, String[] version) {
         class Result {
             boolean deprecatedFlag = false;
             int res = -1;
@@ -534,55 +516,54 @@ public class GatherAPIData {
             }
         }
 
-        Tag[] tags = doc.tags();
+        List<BlockTagTree> tags = JavadocHelper.getBlockTags(docTrees, doc);
         Result result = new Result();
         String statusVer = "";
-        for (int i = 0; i < tags.length; ++i) {
-            Tag tag = tags[i];
-
-            String kind = tag.kind();
-            int ix = tagKindIndex(kind);
+        for (BlockTagTree tag : tags) {
+            JavadocHelper.TagKind ix = JavadocHelper.TagKind.ofTag(tag);
 
             switch (ix) {
-            case INTERNAL:
-                result.set(internal ? APIInfo.STA_INTERNAL : -2); // -2 for legacy compatibility
-                statusVer = getStatusVersion(tag);
-                break;
+                case INTERNAL:
+                    result.set(internal ? APIInfo.STA_INTERNAL : -2); // -2 for legacy compatibility
+                    statusVer = getStatusVersion(tag);
+                    break;
 
-            case DRAFT:
-                result.set(APIInfo.STA_DRAFT);
-                statusVer = getStatusVersion(tag);
-                break;
+                case DRAFT:
+                    result.set(APIInfo.STA_DRAFT);
+                    statusVer = getStatusVersion(tag);
+                    break;
 
-            case STABLE:
-                result.set(APIInfo.STA_STABLE);
-                statusVer = getStatusVersion(tag);
-                break;
+                case STABLE:
+                    result.set(APIInfo.STA_STABLE);
+                    statusVer = getStatusVersion(tag);
+                    break;
 
-            case DEPRECATED:
-                result.set(APIInfo.STA_DEPRECATED);
-                statusVer = getStatusVersion(tag);
-                break;
+                case DEPRECATED:
+                    result.set(APIInfo.STA_DEPRECATED);
+                    statusVer = getStatusVersion(tag);
+                    break;
 
-            case OBSOLETE:
-                result.set(APIInfo.STA_OBSOLETE);
-                statusVer = getStatusVersion(tag);
-                break;
+                case OBSOLETE:
+                    result.set(APIInfo.STA_OBSOLETE);
+                    statusVer = getStatusVersion(tag);
+                    break;
 
-            case SINCE:
-            case EXCEPTION:
-            case VERSION:
-            case UNKNOWN:
-            case AUTHOR:
-            case SEE:
-            case PARAM:
-            case RETURN:
-            case THROWS:
-            case SERIAL:
-                break;
+                case SINCE:
+                case EXCEPTION:
+                case VERSION:
+                case UNKNOWN:
+                case AUTHOR:
+                case SEE:
+                case PARAM:
+                case RETURN:
+                case THROWS:
+                case SERIAL:
+                case DISCOURAGED:
+                case CATEGORY:
+                    break;
 
-            default:
-                throw new RuntimeException("unknown index " + ix + " for tag: " + kind);
+                default:
+                    throw new RuntimeException("unknown index " + ix + " for tag: " + tag);
             }
         }
 
@@ -592,8 +573,8 @@ public class GatherAPIData {
         return result.get();
     }
 
-    private String getStatusVersion(Tag tag) {
-        String text = tag.text();
+    private String getStatusVersion(BlockTagTree tag) {
+        String text = tag.toString();
         if (text != null && text.length() > 0) {
             // Extract version string
             int start = -1;
@@ -615,33 +596,128 @@ public class GatherAPIData {
         return "";
     }
 
-    private static final int UNKNOWN = -1;
-    private static final int INTERNAL = 0;
-    private static final int DRAFT = 1;
-    private static final int STABLE = 2;
-    private static final int SINCE = 3;
-    private static final int DEPRECATED = 4;
-    private static final int AUTHOR = 5;
-    private static final int SEE = 6;
-    private static final int VERSION = 7;
-    private static final int PARAM = 8;
-    private static final int RETURN = 9;
-    private static final int THROWS = 10;
-    private static final int OBSOLETE = 11;
-    private static final int EXCEPTION = 12;
-    private static final int SERIAL = 13;
+    private final static Set<Doclet.Option> SUPPORTED_OPTIONS = Set.of(
+        new JavadocHelper.GatherApiDataOption(1, "-name", "the_name", "the description of name"),
+        new JavadocHelper.GatherApiDataOption(1, "-output", "the_output", "the description of output"),
+        new JavadocHelper.GatherApiDataOption(1, "-base", "the_base", "the description of base"),
+        new JavadocHelper.GatherApiDataOption(1, "--filter", "the_filter", "the description of filter"),
+        new JavadocHelper.GatherApiDataOption(0, "-zip", "the description of zip"),
+        new JavadocHelper.GatherApiDataOption(0, "-gzip", "the description of gzip"),
+        new JavadocHelper.GatherApiDataOption(0, "-internal", "the description of internal"),
+        new JavadocHelper.GatherApiDataOption(0, "-version", "the description of version")
+    );
 
-    private static int tagKindIndex(String kind) {
-        final String[] tagKinds = {
-            "@internal", "@draft", "@stable", "@since", "@deprecated", "@author", "@see",
-            "@version", "@param", "@return", "@throws", "@obsolete", "@exception", "@serial"
-        };
-
-        for (int i = 0; i < tagKinds.length; ++i) {
-            if (kind.equals(tagKinds[i])) {
-                return i;
+    private void initFromOptions() {
+        for (Doclet.Option opt : SUPPORTED_OPTIONS) {
+            JavadocHelper.GatherApiDataOption option = (JavadocHelper.GatherApiDataOption) opt;
+            switch (option.getName()) {
+                case "-name":
+                    this.srcName = option.getStringValue("");
+                    break;
+                case "-output":
+                    this.output = option.getStringValue(null);
+                    break;
+                case "-base":
+                    this.base = option.getStringValue(null); // should not include '.'
+                    break;
+                case "-filter":
+                    String filt = option.getStringValue(null);
+                    if (filt != null) {
+                        this.pat = Pattern.compile(filt, Pattern.CASE_INSENSITIVE);
+                    }
+                    break;
+                case "-zip":
+                    this.zip = option.getBooleanValue(false);
+                    break;
+                case "-gzip":
+                    this.gzip = option.getBooleanValue(false);
+                    break;
+                case "-internal":
+                    this.internal = option.getBooleanValue(false);
+                    break;
+                case "-version":
+                    this.version = option.getBooleanValue(false);
+                    break;
             }
         }
-        return UNKNOWN;
     }
+
+    static class ToStringTypeVisitor implements TypeVisitor<StringBuilder, StringBuilder> {
+
+        @Override
+        public StringBuilder visitPrimitive(PrimitiveType t, StringBuilder p) {
+            return p.append(t);
+        }
+
+        @Override
+        public StringBuilder visitArray(ArrayType t, StringBuilder p) {
+            return p.append(t);
+        }
+
+        @Override
+        public StringBuilder visitDeclared(DeclaredType t, StringBuilder p) {
+            return p.append(t);
+        }
+
+        @Override
+        public StringBuilder visitTypeVariable(TypeVariable t, StringBuilder p) {
+            String upperBound = t.getUpperBound().toString();
+            p.append(t.asElement().getSimpleName());
+            if (!"java.lang.Object".equals(upperBound)) {
+                return p.append(" extends ").append(upperBound);
+            }
+            return p;
+        }
+
+        @Override
+        public StringBuilder visitNoType(NoType t, StringBuilder p) {
+            return p.append(t);
+        }
+
+        // ==================================================================
+        // Below this line there are unexpected types.
+        // But we must implement them because the interface requires it.
+        // And also because we want to throw (so that we can fix it).
+
+        @Override
+        public StringBuilder visitNull(NullType t, StringBuilder p) {
+            throw new RuntimeException("Unexpected visitor NullType:" + t);
+        }
+
+        @Override
+        public StringBuilder visitUnknown(TypeMirror t, StringBuilder p) {
+            throw new RuntimeException("Unexpected visitor TypeMirror:" + t);
+        }
+
+        @Override
+        public StringBuilder visitUnion(UnionType t, StringBuilder p) {
+            throw new RuntimeException("Unexpected visitor UnionType:" + t);
+        }
+
+        @Override
+        public StringBuilder visit(TypeMirror t, StringBuilder p) {
+            throw new RuntimeException("Unexpected visitor TypeMirror:" + t);
+        }
+
+        @Override
+        public StringBuilder visitIntersection(IntersectionType t, StringBuilder p) {
+            throw new RuntimeException("Unexpected visitor IntersectionType:" + t);
+        }
+
+        @Override
+        public StringBuilder visitWildcard(WildcardType t, StringBuilder p) {
+            throw new RuntimeException("Unexpected visitor WildcardType:" + t);
+        }
+
+        @Override
+        public StringBuilder visitExecutable(ExecutableType t, StringBuilder p) {
+            throw new RuntimeException("Unexpected visitor ExecutableType:" + t);
+        }
+
+        @Override
+        public StringBuilder visitError(ErrorType t, StringBuilder p) {
+            throw new RuntimeException("Unexpected visitor ErrorType:" + t);
+        }
+    }
+
 }
