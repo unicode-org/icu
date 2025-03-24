@@ -281,8 +281,8 @@ void Safe16::testGood() {
 }
 
 void Safe16::testNegative() {
-    static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
-    std::u16string_view bad(badChars, 5);
+    static const char16_t badChars[] = { u'a', 0xd900, u'ç', 0xdc05, u"🚴"[0], u"🚴"[1] };
+    std::u16string_view bad(badChars, 6);
     auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
@@ -295,19 +295,20 @@ void Safe16::testNegative() {
     auto sv = units.stringView();
     assertEquals("iter[1] * stringView().length()", 1, sv.length());
     assertEquals("iter[1] * stringView()[0]", 0xd900, sv[0]);
-    // TODO: test units.begin()
+    assertTrue("iter[1] * begin()[0]", *units.begin() == 0xd900);
+    assertTrue("iter[1] * end()[0]", *units.end() == u'ç');
     ++iter;
-    assertEquals("iter[2] * codePoint", u'b', (*iter++).codePoint());  // post-increment
+    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     units = *iter++;  // post-increment
     assertEquals("iter[3] * codePoint", -1, units.codePoint());
     assertFalse("iter[3] * wellFormed", units.wellFormed());
-    assertEquals("iter[4] * stringView()", u"ç", (*iter++).stringView());  // post-increment
+    assertEquals("iter[4] * stringView()", u"🚴", (*iter++).stringView());  // post-increment
     assertTrue("iter == endIter", iter == range.end());
 }
 
 void Safe16::testFFFD() {
-    static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
-    std::u16string_view bad(badChars, 5);
+    static const char16_t badChars[] = { u'a', 0xd900, u'ç', 0xdc05, u"🚴"[0], u"🚴"[1] };
+    std::u16string_view bad(badChars, 6);
     auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
@@ -320,18 +321,20 @@ void Safe16::testFFFD() {
     auto sv = units.stringView();
     assertEquals("iter[1] * stringView().length()", 1, sv.length());
     assertEquals("iter[1] * stringView()[0]", 0xd900, sv[0]);
+    assertTrue("iter[1] * begin()[0]", *units.begin() == 0xd900);
+    assertTrue("iter[1] * end()[0]", *units.end() == u'ç');
     ++iter;
-    assertEquals("iter[2] * codePoint", u'b', (*iter++).codePoint());  // post-increment
+    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     units = *iter++;  // post-increment
     assertEquals("iter[3] * codePoint", 0xfffd, units.codePoint());
     assertFalse("iter[3] * wellFormed", units.wellFormed());
-    assertEquals("iter[4] * stringView()", u"ç", (*iter++).stringView());  // post-increment
+    assertEquals("iter[4] * stringView()", u"🚴", (*iter++).stringView());  // post-increment
     assertTrue("iter == endIter", iter == range.end());
 }
 
 void Safe16::testSurrogate() {
-    static const char16_t badChars[] = { u'a', 0xd900, u'b', 0xdc05, u'ç' };
-    std::u16string_view bad(badChars, 5);
+    static const char16_t badChars[] = { u'a', 0xd900, u'ç', 0xdc05, u"🚴"[0], u"🚴"[1] };
+    std::u16string_view bad(badChars, 6);
     auto range = utfStringCodePoints<uint32_t, UTF_BEHAVIOR_SURROGATE>(bad);
     auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
@@ -344,12 +347,14 @@ void Safe16::testSurrogate() {
     auto sv = units.stringView();
     assertEquals("iter[1] * stringView().length()", 1, sv.length());
     assertEquals("iter[1] * stringView()[0]", 0xd900, sv[0]);
+    assertTrue("iter[1] * begin()[0]", *units.begin() == 0xd900);
+    assertTrue("iter[1] * end()[0]", *units.end() == u'ç');
     ++iter;
-    assertEquals("iter[2] * codePoint", u'b', (*iter++).codePoint());  // post-increment
+    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     units = *iter++;  // post-increment
     assertEquals("iter[3] * codePoint", 0xdc05, units.codePoint());
     assertFalse("iter[3] * wellFormed", units.wellFormed());
-    assertEquals("iter[4] * stringView()", u"ç", (*iter++).stringView());  // post-increment
+    assertEquals("iter[4] * stringView()", u"🚴", (*iter++).stringView());  // post-increment
     assertTrue("iter == endIter", iter == range.end());
 }
 
