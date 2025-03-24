@@ -23,8 +23,6 @@
  *
  * flags names of classes and their members that have no tags or incorrect syntax.
  *
- * Requires JDK 1.4 or later
- *
  * Use build.xml 'checktags' ant target, or
  * run from directory containing CheckTags.class as follows:
  * javadoc -classpath ${JAVA_HOME}/lib/tools.jar -doclet CheckTags -sourcepath ${ICU4J_src} [packagenames]
@@ -52,6 +50,7 @@ import com.sun.source.util.TreePath;
 import jdk.javadoc.doclet.Doclet;
 
 class JavadocHelper {
+
     // ===== Kind =====
 
     /** The standard {@code isClass()} test returns true for both {@code CLASS}
@@ -115,7 +114,8 @@ class JavadocHelper {
         return kind.isClass() || kind.isInterface();
     }
 
-    // Visibility
+    // ===== Visibility =====
+
     static boolean isPublic(Element element) {
         return element.getModifiers().contains(Modifier.PUBLIC);
     }
@@ -187,6 +187,8 @@ class JavadocHelper {
         return position(el, docTrees, element);
     }
 
+    // ===== Accessing tags =====
+
     static List<BlockTagTree> getBlockTags(DocTrees docTrees, Element element) {
         List<BlockTagTree> result = new ArrayList<>();
         DocCommentTree dct = docTrees.getDocCommentTree(element);
@@ -247,7 +249,68 @@ class JavadocHelper {
         return false;
     }
 
-    // Doclet options
+    // Known taglets, standard or ICU extensions
+    static enum TagKind {
+        UNKNOWN("<unknown>"),
+        INTERNAL("internal"),
+        DRAFT("draft"),
+        STABLE("stable"),
+        SINCE("since"),
+        DEPRECATED("deprecated"),
+        AUTHOR("author"),
+        SEE("see"),
+        VERSION("version"),
+        PARAM("param"),
+        RETURN("return"),
+        THROWS("throws"),
+        OBSOLETE("obsolete"),
+        EXCEPTION("exception"),
+        SERIAL("serial"),
+        PROVISIONAL("provisional"), // never used
+        DISCOURAGED("discouraged"), // DecimalFormatSymbols(x13), IslamicCalendar(x2)
+        CATEGORY("category"); // only used in DecimalFormat(x82)
+
+        private final String value;
+
+        private TagKind(String value) {
+            this.value = value;
+        }
+
+        static TagKind ofTag(BlockTagTree tag) {
+            for (TagKind tk : TagKind.values()) {
+                if (tk.value.equals(tag.getTagName())) {
+                    return tk;
+                }
+            }
+            return TagKind.UNKNOWN;
+        }
+    }
+
+    // Known ICU taglets
+    static enum IcuTagKind {
+        UNKNOWN("<unknown>"),
+        ICU("icu"),
+        ICUNOTE("icunote"),
+        ICUENHANCED("icuenhanced");
+
+        private final String value;
+
+        private IcuTagKind(String value) {
+            this.value = value;
+        }
+
+        static IcuTagKind ofTag(InlineTagTree tag) {
+            for (IcuTagKind tk : IcuTagKind.values()) {
+                if (tk.value.equals(tag.getTagName())) {
+                    return tk;
+                }
+            }
+            return IcuTagKind.UNKNOWN;
+        }
+    }
+
+    // ===== Doclet options convenience class =====
+
     static class GatherApiDataOption implements Doclet.Option {
         final int length;
         final String name;
@@ -318,66 +381,6 @@ class JavadocHelper {
 
         public String getStringValue(String fallbackValue) {
             return strValue != null ? strValue : fallbackValue;
-        }
-    }
-
-    // Known taglets, standard or ICU extensions
-    static enum TagKind {
-        UNKNOWN("<unknown>"),
-        INTERNAL("internal"),
-        DRAFT("draft"),
-        STABLE("stable"),
-        SINCE("since"),
-        DEPRECATED("deprecated"),
-        AUTHOR("author"),
-        SEE("see"),
-        VERSION("version"),
-        PARAM("param"),
-        RETURN("return"),
-        THROWS("throws"),
-        OBSOLETE("obsolete"),
-        EXCEPTION("exception"),
-        SERIAL("serial"),
-        PROVISIONAL("provisional"), // never used
-        DISCOURAGED("discouraged"), // DecimalFormatSymbols(x13), IslamicCalendar(x2)
-        CATEGORY("category"); // only used in DecimalFormat(x82)
-
-        private final String value;
-
-        private TagKind(String value) {
-            this.value = value;
-        }
-
-        static TagKind ofTag(BlockTagTree tag) {
-            for (TagKind tk : TagKind.values()) {
-                if (tk.value.equals(tag.getTagName())) {
-                    return tk;
-                }
-            }
-            return TagKind.UNKNOWN;
-        }
-    }
-
-    // Known ICU taglets
-    static enum IcuTagKind {
-        UNKNOWN("<unknown>"),
-        ICU("icu"),
-        ICUNOTE("icunote"),
-        ICUENHANCED("icuenhanced");
-
-        private final String value;
-
-        private IcuTagKind(String value) {
-            this.value = value;
-        }
-
-        static IcuTagKind ofTag(InlineTagTree tag) {
-            for (IcuTagKind tk : IcuTagKind.values()) {
-                if (tk.value.equals(tag.getTagName())) {
-                    return tk;
-                }
-            }
-            return IcuTagKind.UNKNOWN;
         }
     }
 }
