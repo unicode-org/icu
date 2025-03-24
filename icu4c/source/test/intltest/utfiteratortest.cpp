@@ -252,14 +252,12 @@ void Safe16::runIndexedTest(int32_t index, UBool exec, const char *&name, char *
 void Safe16::testGood() {
     std::u16string_view good(u"abçカ🚴"sv);
     auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(good);
-    // TODO: Try to un-hardcode the iterator types in these checks via declspec.
+    auto iter = range.begin();
     assertTrue(
         "bidirectional_iterator_tag",
         std::is_same_v<
-            typename std::iterator_traits<
-                UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, char16_t *>>::iterator_category,
+            typename std::iterator_traits<decltype(iter)>::iterator_category,
             std::bidirectional_iterator_tag>);
-    auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
@@ -362,8 +360,7 @@ void Safe16::testSinglePassIter() {
     assertTrue(
         "input_iterator_tag",
         std::is_same_v<
-            typename std::iterator_traits<
-                UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, SinglePassIter<char16_t>>>::iterator_category,
+            typename std::iterator_traits<decltype(iter)>::iterator_category,
             std::input_iterator_tag>);
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -394,13 +391,12 @@ void Safe16::testFwdIter() {
     auto rangeBegin = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
     auto rangeLimit = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodLimit);
     // TODO: UTFStringCodePoints<FwdIter, UChar32, UTF_BEHAVIOR_NEGATIVE> range(good);
+    auto iter = rangeBegin;
     assertTrue(
         "forward_iterator_tag",
         std::is_same_v<
-            typename std::iterator_traits<
-                UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, FwdIter<char16_t>>>::iterator_category,
+            typename std::iterator_traits<decltype(iter)>::iterator_category,
             std::forward_iterator_tag>);
-    auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
@@ -459,13 +455,12 @@ void Safe8::runIndexedTest(int32_t index, UBool exec, const char *&name, char * 
 void Safe8::testGood() {
     std::string_view good(reinterpret_cast<const char*>(u8"abçカ🚴"));
     auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(good);
+    auto iter = range.begin();
     assertTrue(
         "bidirectional_iterator_tag",
         std::is_same_v<
-            typename std::iterator_traits<
-                UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, char *>>::iterator_category,
+            typename std::iterator_traits<decltype(iter)>::iterator_category,
             std::bidirectional_iterator_tag>);
-    auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
@@ -497,8 +492,7 @@ void Safe8::testSinglePassIter() {
     assertTrue(
         "input_iterator_tag",
         std::is_same_v<
-            typename std::iterator_traits<
-                UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, SinglePassIter<char>>>::iterator_category,
+            typename std::iterator_traits<decltype(iter)>::iterator_category,
             std::input_iterator_tag>);
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -529,13 +523,12 @@ void Safe8::testFwdIter() {
     auto rangeBegin = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
     auto rangeLimit = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodLimit);
     // TODO: UTFStringCodePoints<FwdIter, UChar32, UTF_BEHAVIOR_NEGATIVE> range(good);
+    auto iter = rangeBegin;
     assertTrue(
         "forward_iterator_tag",
         std::is_same_v<
-            typename std::iterator_traits<
-                UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, FwdIter<char>>>::iterator_category,
+            typename std::iterator_traits<decltype(iter)>::iterator_category,
             std::forward_iterator_tag>);
-    auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
@@ -599,13 +592,12 @@ void Safe32::runIndexedTest(int32_t index, UBool exec, const char *&name, char *
 void Safe32::testGood() {
     std::u32string_view good(U"abçカ🚴"sv);
     auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(good);
+    auto iter = range.begin();
     assertTrue(
         "bidirectional_iterator_tag",
         std::is_same_v<
-            typename std::iterator_traits<
-                UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, char32_t *>>::iterator_category,
+            typename std::iterator_traits<decltype(iter)>::iterator_category,
             std::bidirectional_iterator_tag>);
-    auto iter = range.begin();
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
@@ -635,8 +627,7 @@ void Safe32::testSinglePassIter() {
     assertTrue(
         "input_iterator_tag",
         std::is_same_v<
-            typename std::iterator_traits<
-                UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, SinglePassIter<char32_t>>>::iterator_category,
+            typename std::iterator_traits<decltype(iter)>::iterator_category,
             std::input_iterator_tag>);
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
@@ -666,14 +657,13 @@ void Safe32::testFwdIter() {
     FwdIter<char32_t> goodLimit(good.data() + good.length());
     auto rangeBegin = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
     auto rangeLimit = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodLimit);
+    auto iter = rangeBegin;
     // TODO: UTFStringCodePoints<FwdIter, UChar32, UTF_BEHAVIOR_NEGATIVE> range(good);
     assertTrue(
         "forward_iterator_tag",
         std::is_same_v<
-            typename std::iterator_traits<
-                UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, FwdIter<char32_t>>>::iterator_category,
+            typename std::iterator_traits<decltype(iter)>::iterator_category,
             std::forward_iterator_tag>);
-    auto iter = rangeBegin;
     assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
