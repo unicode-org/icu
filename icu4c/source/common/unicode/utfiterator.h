@@ -1,9 +1,8 @@
 // © 2024 and later: Unicode, Inc. and others.
 // License & terms of use: https://www.unicode.org/copyright.html
 
-// utfiter.h
+// utfiterator.h
 // created: 2024aug12 Markus W. Scherer
-// TODO: rename this header file to utfiterator.h?
 
 #ifndef __UTFITERATOR_H__
 #define __UTFITERATOR_H__

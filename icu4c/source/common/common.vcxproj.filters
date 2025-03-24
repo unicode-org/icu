@@ -1258,9 +1258,6 @@
     <CustomBuild Include="unicode\utf16.h">
       <Filter>strings</Filter>
     </CustomBuild>
-    <CustomBuild Include="unicode\utf16cppiter.h">
-      <Filter>strings</Filter>
-    </CustomBuild>
     <CustomBuild Include="unicode\utf32.h">
       <Filter>strings</Filter>
     </CustomBuild>
@@ -1268,6 +1265,9 @@
       <Filter>strings</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\utf_old.h">
+      <Filter>strings</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\utfiterator.h">
       <Filter>strings</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\bytestrie.h">
