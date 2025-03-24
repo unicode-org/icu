@@ -105,6 +105,20 @@ std::string_view firstSequence8(std::string_view s) {
     }
 }
 
+template<typename InputStream>  // some istream or streambuf
+std::u32string cpFromInput(InputStream &in) {
+    // This is a single-pass input_iterator.
+    std::istreambuf_iterator bufIter(in);
+    std::istreambuf_iterator<typename InputStream::char_type> bufLimit;
+    auto begin = utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(bufIter);
+    auto limit = utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(bufLimit);
+    std::u32string s32;
+    for (; bufIter != bufLimit; ++bufIter) {
+        s32.push_back(*bufIter);
+    }
+    return s32;
+}
+
 #endif  // SAMPLE_CODE
 
 template<typename Unit>
