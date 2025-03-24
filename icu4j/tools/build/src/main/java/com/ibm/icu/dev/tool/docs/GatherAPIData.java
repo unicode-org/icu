@@ -135,7 +135,7 @@ public class GatherAPIData implements Doclet {
         docTrees = environment.getDocTrees();
 
         initFromOptions();
-        doDocs(environment.getIncludedElements());
+        doElements(environment.getIncludedElements());
 
         try (OutputStream os = getOutputFileAsStream(output);
                 OutputStreamWriter osw = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {
@@ -171,24 +171,24 @@ public class GatherAPIData implements Doclet {
         return new FileOutputStream(output);
     }
 
-    private void doDocs(Collection<? extends Element> docs) {
-        if (docs != null) {
-            for (Element doc : docs) {
-                doDoc(doc);
+    private void doElements(Collection<? extends Element> elements) {
+        if (elements != null) {
+            for (Element element : elements) {
+                doElement(element);
             }
         }
     }
 
-    private void doDoc(Element doc) {
-        if (ignore(doc)) return;
+    private void doElement(Element element) {
+        if (ignore(element)) return;
 
         // isClass() ==> CLASS || ENUM;
         // isInterface() ==> INTERFACE || ANNOTATION_TYPE
-        if (JavadocHelper.isKindClassOrInterface(doc)) {
-            doDocs(doc.getEnclosedElements());
+        if (JavadocHelper.isKindClassOrInterface(element)) {
+            doElements(element.getEnclosedElements());
         }
 
-        APIInfo info = createInfo(doc);
+        APIInfo info = createInfo(element);
         if (info != null) {
             results.add(info);
         }
@@ -205,55 +205,55 @@ public class GatherAPIData implements Doclet {
     // javadoc comments by the policy. So, we no longer ignore abstract
     // class's no-arg constructor blindly. -Yoshito 2014-05-21
 
-    private boolean isAbstractClassDefaultConstructor(Element doc) {
-        return JavadocHelper.isKindConstructor(doc)
-            && JavadocHelper.isAbstract(doc.getEnclosingElement())
-            && ((ExecutableElement) doc).getParameters().isEmpty();
+    private boolean isAbstractClassDefaultConstructor(Element element) {
+        return JavadocHelper.isKindConstructor(element)
+            && JavadocHelper.isAbstract(element.getEnclosingElement())
+            && ((ExecutableElement) element).getParameters().isEmpty();
     }
 
     private static final boolean IGNORE_NO_ARG_ABSTRACT_CTOR = false;
 
-    private boolean ignore(Element doc) {
-        if (doc == null) {
+    private boolean ignore(Element element) {
+        if (element == null) {
             return true;
         }
 
-        if (JavadocHelper.isPrivate(doc) || JavadocHelper.isDefault(doc)) {
+        if (JavadocHelper.isPrivate(element) || JavadocHelper.isDefault(element)) {
             return true;
         }
 
-        if (JavadocHelper.isVisibilityPackage(doc)) {
+        if (JavadocHelper.isVisibilityPackage(element)) {
             return true;
         }
 
-        if (JavadocHelper.isKindPackage(doc)) {
+        if (JavadocHelper.isKindPackage(element)) {
             return true;
         }
 
-        if (doc.toString().contains(".misc")) {
-            System.out.println("misc: " + doc.toString()); {
+        if (element.toString().contains(".misc")) {
+            System.out.println("misc: " + element.toString()); {
                 return true;
             }
         }
 
-        if (JavadocHelper.isIgnoredEnumMethod(doc)) {
+        if (JavadocHelper.isIgnoredEnumMethod(element)) {
             return true;
         }
 
-        if (IGNORE_NO_ARG_ABSTRACT_CTOR && isAbstractClassDefaultConstructor(doc)) {
+        if (IGNORE_NO_ARG_ABSTRACT_CTOR && isAbstractClassDefaultConstructor(element)) {
             return true;
         }
 
         if (!internal) { // debug
-            for (BlockTagTree tag : JavadocHelper.getBlockTags(docTrees, doc)) {
+            for (BlockTagTree tag : JavadocHelper.getBlockTags(docTrees, element)) {
                 if (JavadocHelper.TagKind.ofTag(tag) == JavadocHelper.TagKind.INTERNAL) {
                     return true;
                 }
             }
         }
 
-        if (pat != null && JavadocHelper.isKindClassOrInterface(doc)) {
-            if (!pat.matcher(doc.getSimpleName().toString()).matches()) {
+        if (pat != null && JavadocHelper.isKindClassOrInterface(element)) {
+            if (!pat.matcher(element.getSimpleName().toString()).matches()) {
                 return true;
             }
         }
@@ -277,8 +277,8 @@ public class GatherAPIData implements Doclet {
         return arg;
     }
 
-    private APIInfo createInfo(Element doc) {
-        if (ignore(doc)) return null;
+    private APIInfo createInfo(Element element) {
+        if (ignore(element)) return null;
 
         APIInfo info = new APIInfo();
         if (version) {
@@ -287,86 +287,86 @@ public class GatherAPIData implements Doclet {
 
         // status
         String[] version = new String[1];
-        info.setType(APIInfo.STA, tagStatus(doc, version));
+        info.setType(APIInfo.STA, tagStatus(element, version));
         info.setStatusVersion(version[0]);
 
         // visibility
-        if (JavadocHelper.isPublic(doc)) {
+        if (JavadocHelper.isPublic(element)) {
             info.setPublic();
-        } else if (JavadocHelper.isProtected(doc)) {
+        } else if (JavadocHelper.isProtected(element)) {
             info.setProtected();
-        } else if (JavadocHelper.isPrivate(doc)) {
+        } else if (JavadocHelper.isPrivate(element)) {
             info.setPrivate();
         } else {
             // default is package
         }
 
         // static
-        if (JavadocHelper.isStatic(doc)) {
+        if (JavadocHelper.isStatic(element)) {
             info.setStatic();
         } else {
             // default is non-static
         }
 
         // Final. Enums are final by default.
-        if (JavadocHelper.isFinal(doc) && !JavadocHelper.isKindEnum(doc)) {
+        if (JavadocHelper.isFinal(element) && !JavadocHelper.isKindEnum(element)) {
             info.setFinal();
         } else {
             // default is non-final
         }
 
         // type
-        if (JavadocHelper.isKindFieldExact(doc)) {
+        if (JavadocHelper.isKindFieldExact(element)) {
             info.setField();
-        } else if (JavadocHelper.isKindMethod(doc)) {
+        } else if (JavadocHelper.isKindMethod(element)) {
             info.setMethod();
-        } else if (JavadocHelper.isKindConstructor(doc)) {
+        } else if (JavadocHelper.isKindConstructor(element)) {
             info.setConstructor();
-        } else if (JavadocHelper.isKindClassOrInterface(doc)) {
-            if (JavadocHelper.isKindEnum(doc)) {
+        } else if (JavadocHelper.isKindClassOrInterface(element)) {
+            if (JavadocHelper.isKindEnum(element)) {
                 info.setEnum();
             } else {
                 info.setClass();
             }
-        } else if (JavadocHelper.isKindEnumConstant(doc)) {
+        } else if (JavadocHelper.isKindEnumConstant(element)) {
             info.setEnumConstant();
         }
 
-        PackageElement packageElement = elementUtils.getPackageOf(doc);
+        PackageElement packageElement = elementUtils.getPackageOf(element);
         info.setPackage(trimBase(packageElement.getQualifiedName().toString()));
 
-        String className = (JavadocHelper.isKindClassOrInterface(doc) || doc.getEnclosingElement() == null)
+        String className = (JavadocHelper.isKindClassOrInterface(element) || element.getEnclosingElement() == null)
                 ? ""
-                : withoutPackage(doc.getEnclosingElement());
+                : withoutPackage(element.getEnclosingElement());
         info.setClassName(className);
 
-        String name = doc.getSimpleName().toString();
-        if (JavadocHelper.isKindConstructor(doc)) {
+        String name = element.getSimpleName().toString();
+        if (JavadocHelper.isKindConstructor(element)) {
             // The constructor name is always `<init>` with the javax.lang APIs.
             // For backward compatibility with older generated files we use the class name instead.
             name = className;
-        } else if (JavadocHelper.isKindClassOrInterface(doc)) {
-            name = withoutPackage(doc);
+        } else if (JavadocHelper.isKindClassOrInterface(element)) {
+            name = withoutPackage(element);
         }
         info.setName(name);
 
-        if (JavadocHelper.isKindField(doc)) {
-            VariableElement fdoc = (VariableElement) doc;
-            hackSetSignature(info, trimBase(fdoc.asType().toString()));
-        } else if (JavadocHelper.isKindClassOrInterface(doc)) {
-            TypeElement cdoc = (TypeElement) doc;
+        if (JavadocHelper.isKindField(element)) {
+            VariableElement varElement = (VariableElement) element;
+            hackSetSignature(info, trimBase(varElement.asType().toString()));
+        } else if (JavadocHelper.isKindClassOrInterface(element)) {
+            TypeElement typeElementc = (TypeElement) element;
 
-            if (!JavadocHelper.isKindInterface(doc) && JavadocHelper.isAbstract(cdoc)) {
+            if (!JavadocHelper.isKindInterface(element) && JavadocHelper.isAbstract(typeElementc)) {
                 // interfaces are abstract by default, don't mark them as abstract
                 info.setAbstract();
             }
 
             StringBuffer buf = new StringBuffer();
-            if (JavadocHelper.isKindClass(cdoc)) {
+            if (JavadocHelper.isKindClass(typeElementc)) {
                 buf.append("extends ");
-                buf.append(cdoc.getSuperclass().toString());
+                buf.append(typeElementc.getSuperclass().toString());
             }
-            List<? extends TypeMirror> imp = cdoc.getInterfaces();
+            List<? extends TypeMirror> imp = typeElementc.getInterfaces();
             if (!imp.isEmpty()) {
                 if (buf.length() > 0) {
                     buf.append(" ");
@@ -385,36 +385,36 @@ public class GatherAPIData implements Doclet {
                 }
             }
             hackSetSignature(info, trimBase(buf.toString()));
-        } else if (JavadocHelper.isKindMethod(doc) || JavadocHelper.isKindConstructor(doc)) {
-            ExecutableElement emdoc = (ExecutableElement)doc;
-            if (JavadocHelper.isSynchronized(emdoc)) {
+        } else if (JavadocHelper.isKindMethod(element) || JavadocHelper.isKindConstructor(element)) {
+            ExecutableElement execElement = (ExecutableElement) element;
+            if (JavadocHelper.isSynchronized(execElement)) {
                 info.setSynchronized();
             }
 
-            if (JavadocHelper.isKindMethod(doc)) {
-                if (JavadocHelper.isAbstract(emdoc)) {
+            if (JavadocHelper.isKindMethod(element)) {
+                if (JavadocHelper.isAbstract(execElement)) {
                     // Workaround for Javadoc incompatibility between 7 and 8.
                     // isAbstract() returns false for a method in an interface
                     // on Javadoc 7, while Javadoc 8 returns true. Because existing
                     // API signature data files were generated before, we do not
                     // set abstract if a method is in an interface.
-                    if (!JavadocHelper.isKindInterface(emdoc.getEnclosingElement())) {
+                    if (!JavadocHelper.isKindInterface(execElement.getEnclosingElement())) {
                         info.setAbstract();
                     }
                 }
 
-                String retSig = stringFromTypeMirror(emdoc.getReturnType());
+                String retSig = stringFromTypeMirror(execElement.getReturnType());
 
                 // Signature, as returned by default, can be something like this: "boolean<T>containsAll(java.util.Iterator<T>)"
                 // The old API returned "boolean(java.util.Iterator<T>)"
                 // Consider using the signature "as is" (including the method name)
-                hackSetSignature(info, trimBase(retSig + toTheBracket(emdoc.toString())));
+                hackSetSignature(info, trimBase(retSig + toTheBracket(execElement.toString())));
             } else {
                 // constructor
-                hackSetSignature(info, toTheBracket(emdoc.toString()));
+                hackSetSignature(info, toTheBracket(execElement.toString()));
             }
         } else {
-            throw new RuntimeException("Unknown element kind: " + doc.getKind());
+            throw new RuntimeException("Unknown element kind: " + element.getKind());
         }
 
         return info;
@@ -456,7 +456,7 @@ public class GatherAPIData implements Doclet {
         return openBr > 1 ? str.substring(openBr) : str;
     }
 
-    private int tagStatus(final Element doc, String[] version) {
+    private int tagStatus(final Element element, String[] version) {
         class Result {
             boolean deprecatedFlag = false;
             int res = -1;
@@ -492,7 +492,7 @@ public class GatherAPIData implements Doclet {
                         isValid = false;
                     }
                     if (!isValid) {
-                        System.err.println("bad doc: " + doc + " both: "
+                        System.err.println("bad element: " + element + " both: "
                                            + APIInfo.getTypeValName(APIInfo.STA, res) + " and: "
                                            + APIInfo.getTypeValName(APIInfo.STA, val));
                         return;
@@ -507,22 +507,21 @@ public class GatherAPIData implements Doclet {
             }
             int get() {
                 if (res == -1) {
-                    System.err.println("warning: no tag for " + doc);
+                    System.err.println("warning: no tag for " + element);
                     return 0;
                 } else if (res == APIInfo.STA_INTERNAL && !deprecatedFlag) {
-                    System.err.println("warning: no @deprecated tag for @internal API: " + doc);
+                    System.err.println("warning: no @deprecated tag for @internal API: " + element);
                 }
                 return res;
             }
         }
 
-        List<BlockTagTree> tags = JavadocHelper.getBlockTags(docTrees, doc);
+        List<BlockTagTree> tags = JavadocHelper.getBlockTags(docTrees, element);
         Result result = new Result();
         String statusVer = "";
         for (BlockTagTree tag : tags) {
-            JavadocHelper.TagKind ix = JavadocHelper.TagKind.ofTag(tag);
-
-            switch (ix) {
+            JavadocHelper.TagKind tagKind = JavadocHelper.TagKind.ofTag(tag);
+            switch (tagKind) {
                 case INTERNAL:
                     result.set(internal ? APIInfo.STA_INTERNAL : -2); // -2 for legacy compatibility
                     statusVer = getStatusVersion(tag);
@@ -563,7 +562,7 @@ public class GatherAPIData implements Doclet {
                     break;
 
                 default:
-                    throw new RuntimeException("unknown index " + ix + " for tag: " + tag);
+                    throw new RuntimeException("unknown tagKind " + tagKind + " for tag: " + tag);
             }
         }
 
