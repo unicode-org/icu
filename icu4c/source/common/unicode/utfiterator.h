@@ -22,7 +22,7 @@
 #include "unicode/utf16.h"
 #include "unicode/utf8.h"
 #include "unicode/uversion.h"
-#else
+#elif !defined(U_IN_DOXYGEN)
 // TODO: Remove checks for UTYPES_H and replacement definitions.
 // unicode/utypes.h etc.
 #include <inttypes.h>

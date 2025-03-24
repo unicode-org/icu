@@ -121,10 +121,13 @@
 
 /**
  * \def U_FORCE_INLINE
+ * Forces function inlining on compilers that are known to support it.
  * @internal
  */
 #ifdef U_FORCE_INLINE
     // already defined
+#elif defined(U_IN_DOXYGEN)
+#  define U_FORCE_INLINE(specifiers) specifiers inline
 #elif (defined(__clang__) && __clang__) || U_GCC_MAJOR_MINOR != 0
 #  define U_FORCE_INLINE(specifiers) [[gnu::always_inline]] specifiers
 #elif defined(U_REAL_MSVC)
