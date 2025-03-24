@@ -119,6 +119,22 @@
 /** Obsolete/same as U_CAPI; was used to declare a function as an internal ICU C API  */
 #define U_INTERNAL U_CAPI
 
+/**
+ * \def U_FORCE_INLINE
+ * @internal
+ */
+#ifdef U_FORCE_INLINE
+    // already defined
+#elif (defined(__clang__) && __clang__) || U_GCC_MAJOR_MINOR != 0
+#  define U_FORCE_INLINE(specifiers) [[gnu::always_inline]] specifiers
+#elif defined(U_REAL_MSVC)
+#  define U_FORCE_INLINE(specifiers) specifiers __forceinline
+#elif defined(__ICC) || defined(__INTEL_COMPILER)
+#  define U_FORCE_INLINE(specifiers) specifiers __attribute__((always_inline))
+#else
+#  define U_FORCE_INLINE(specifiers) specifiers inline
+#endif
+
 // Before ICU 65, function-like, multi-statement ICU macros were just defined as
 // series of statements wrapped in { } blocks and the caller could choose to
 // either treat them as if they were actual functions and end the invocation
