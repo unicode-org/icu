@@ -388,10 +388,8 @@ void Safe16::testFwdIter() {
     std::u16string_view good(u"abçカ🚴"sv);
     FwdIter<char16_t> goodBegin(good.data());
     FwdIter<char16_t> goodLimit(good.data() + good.length());
-    auto rangeBegin = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
+    auto iter = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
     auto rangeLimit = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodLimit);
-    // TODO: UTFStringCodePoints<FwdIter, UChar32, UTF_BEHAVIOR_NEGATIVE> range(good);
-    auto iter = rangeBegin;
     assertTrue(
         "forward_iterator_tag",
         std::is_same_v<
@@ -520,10 +518,8 @@ void Safe8::testFwdIter() {
     std::string_view good(reinterpret_cast<const char*>(u8"abçカ🚴"));
     FwdIter<char> goodBegin(good.data());
     FwdIter<char> goodLimit(good.data() + good.length());
-    auto rangeBegin = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
+    auto iter = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
     auto rangeLimit = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodLimit);
-    // TODO: UTFStringCodePoints<FwdIter, UChar32, UTF_BEHAVIOR_NEGATIVE> range(good);
-    auto iter = rangeBegin;
     assertTrue(
         "forward_iterator_tag",
         std::is_same_v<
@@ -655,10 +651,8 @@ void Safe32::testFwdIter() {
     std::u32string_view good(U"abçカ🚴"sv);
     FwdIter<char32_t> goodBegin(good.data());
     FwdIter<char32_t> goodLimit(good.data() + good.length());
-    auto rangeBegin = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
+    auto iter = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodBegin, goodLimit);
     auto rangeLimit = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(goodLimit);
-    auto iter = rangeBegin;
-    // TODO: UTFStringCodePoints<FwdIter, UChar32, UTF_BEHAVIOR_NEGATIVE> range(good);
     assertTrue(
         "forward_iterator_tag",
         std::is_same_v<

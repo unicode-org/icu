@@ -105,12 +105,12 @@ namespace header {}
  * #include <iostream>
  * #include "unicode/utypes.h"
  * #include "unicode/utfiterator.h"
- * 
+ *
  * using U_HEADER_ONLY_NAMESPACE::utfIterator;
  * using U_HEADER_ONLY_NAMESPACE::utfStringCodePoints;
  * using U_HEADER_ONLY_NAMESPACE::unsafeUTFIterator;
  * using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
- * 
+ *
  * int32_t rangeLoop16(std::u16string_view s) {
  *     // We are just adding up the code points for minimal-code demonstration purposes.
  *     int32_t sum = 0;
@@ -119,7 +119,7 @@ namespace header {}
  *     }
  *     return sum;
  * }
- * 
+ *
  * int32_t loopIterPlusPlus16(std::u16string_view s) {
  *     auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
  *     int32_t sum = 0;
@@ -128,7 +128,7 @@ namespace header {}
  *     }
  *     return sum;
  * }
- * 
+ *
  * int32_t backwardLoop16(std::u16string_view s) {
  *     auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_SURROGATE>(s);
  *     int32_t sum = 0;
@@ -137,7 +137,7 @@ namespace header {}
  *     }
  *     return sum;
  * }
- * 
+ *
  * int32_t reverseLoop8(std::string_view s) {
  *     auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
  *     int32_t sum = 0;
@@ -146,12 +146,12 @@ namespace header {}
  *     }
  *     return sum;
  * }
- * 
+ *
  * int32_t countCodePoints16(std::u16string_view s) {
  *     auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_SURROGATE>(s);
  *     return std::distance(range.begin(), range.end());
  * }
- * 
+ *
  * int32_t unsafeRangeLoop16(std::u16string_view s) {
  *     int32_t sum = 0;
  *     for (auto units : unsafeUTFStringCodePoints<UChar32>(s)) {
@@ -159,7 +159,7 @@ namespace header {}
  *     }
  *     return sum;
  * }
- * 
+ *
  * int32_t unsafeReverseLoop8(std::string_view s) {
  *     auto range = unsafeUTFStringCodePoints<UChar32>(s);
  *     int32_t sum = 0;
@@ -168,13 +168,13 @@ namespace header {}
  *     }
  *     return sum;
  * }
- * 
+ *
  * char32_t firstCodePointOrFFFD16(std::u16string_view s) {
  *     if (s.empty()) { return 0xfffd; }
  *     auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
  *     return range.begin()->codePoint();
  * }
- * 
+ *
  * std::string_view firstSequence8(std::string_view s) {
  *     if (s.empty()) { return {}; }
  *     auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
@@ -185,7 +185,7 @@ namespace header {}
  *         return {};
  *     }
  * }
- * 
+ *
  * template<typename InputStream>  // some istream or streambuf
  * std::u32string cpFromInput(InputStream &in) {
  *     // This is a single-pass input_iterator.
@@ -199,7 +199,7 @@ namespace header {}
  *     }
  *     return s32;
  * }
- * 
+ *
  * std::u32string cpFromStdin() { return cpFromInput(std::cin); }
  * std::u32string cpFromWideStdin() { return cpFromInput(std::wcin); }
  * \endcode
