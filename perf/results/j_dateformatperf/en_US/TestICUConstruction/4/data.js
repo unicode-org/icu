@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742836347123,
+  "lastUpdate": 1742859741480,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33297,6 +33297,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1938.7882776006525,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "ad0df7e4c8883cbb5be060bb3a34c30a3e1c136d",
+          "message": "ICU-22817 Use LocalPointer/Memory/Array to clarify ownership transfer\n\nSee #3443",
+          "timestamp": "2025-03-24T16:24:02-07:00",
+          "tree_id": "07b0bbcd644ebb38361f363151e426e327d73de1",
+          "url": "https://github.com/unicode-org/icu/commit/ad0df7e4c8883cbb5be060bb3a34c30a3e1c136d"
+        },
+        "date": 1742859487750,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1967.470553047592,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
