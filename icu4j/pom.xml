@@ -652,6 +652,42 @@
       </build>
     </profile>
 
+    <!-- This is used to check that all API are properly tagged
+      (regular, draft, deprecated, status consistency, etc.)
+      To run it:
+        mvn install -DskipITs -DskipTests
+        mvn site -DskipITs -DskipTests -P checktags
+    -->
+    <profile>
+      <id>checktags</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>aggregate</id>
+                <phase>site</phase>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <failOnError>false</failOnError>
+              <useStandardDocletOptions>false</useStandardDocletOptions>
+              <doclet>com.ibm.icu.dev.tool.docs.CheckTags</doclet>
+              <docletArtifact>
+                <groupId>com.ibm.icu</groupId>
+                <artifactId>tools_build</artifactId>
+                <version>${project.version}</version>
+              </docletArtifact>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
     <!-- The tools/build module depends on the old tools.jar (jdk 1.8)
       The com.sun.javadoc package was deprecated in Java 11, and has been removed for Java 17.
       JDK 11 does not include tools.jar anymore. The code must be updated, see migration guide at
