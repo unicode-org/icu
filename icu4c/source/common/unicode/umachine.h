@@ -122,20 +122,23 @@
 /**
  * \def U_FORCE_INLINE
  * Forces function inlining on compilers that are known to support it.
+ * Place this before specifiers like "static" and "explicit".
+ *
+ * This does not replace the "inline" keyword which suspends the One Definition Rule (ODR)
+ * in addition to optionally serving as an inlining hint to the compiler.
+ *
  * @internal
  */
 #ifdef U_FORCE_INLINE
     // already defined
 #elif defined(U_IN_DOXYGEN)
-#  define U_FORCE_INLINE(specifiers) specifiers inline
+#  define U_FORCE_INLINE
 #elif (defined(__clang__) && __clang__) || U_GCC_MAJOR_MINOR != 0
-#  define U_FORCE_INLINE(specifiers) [[gnu::always_inline]] specifiers
+#  define U_FORCE_INLINE [[gnu::always_inline]]
 #elif defined(U_REAL_MSVC)
-#  define U_FORCE_INLINE(specifiers) specifiers __forceinline
-#elif defined(__ICC) || defined(__INTEL_COMPILER)
-#  define U_FORCE_INLINE(specifiers) specifiers __attribute__((always_inline))
+#  define U_FORCE_INLINE __forceinline
 #else
-#  define U_FORCE_INLINE(specifiers) specifiers inline
+#  define U_FORCE_INLINE
 #endif
 
 // Before ICU 65, function-like, multi-statement ICU macros were just defined as
