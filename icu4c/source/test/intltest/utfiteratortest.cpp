@@ -27,6 +27,7 @@ using U_HEADER_ONLY_NAMESPACE::utfStringCodePoints;
 
 #if 0
 // Sample code for API docs etc. Compile when changing samples or APIs.
+#include <iostream>
 using U_HEADER_ONLY_NAMESPACE::unsafeUTFIterator;
 using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
 
@@ -110,14 +111,17 @@ std::u32string cpFromInput(InputStream &in) {
     // This is a single-pass input_iterator.
     std::istreambuf_iterator bufIter(in);
     std::istreambuf_iterator<typename InputStream::char_type> bufLimit;
-    auto begin = utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(bufIter);
+    auto iter = utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(bufIter);
     auto limit = utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(bufLimit);
     std::u32string s32;
-    for (; bufIter != bufLimit; ++bufIter) {
-        s32.push_back(*bufIter);
+    for (; iter != limit; ++iter) {
+        s32.push_back(iter->codePoint());
     }
     return s32;
 }
+
+std::u32string cpFromStdin() { return cpFromInput(std::cin); }
+std::u32string cpFromWideStdin() { return cpFromInput(std::wcin); }
 
 #endif  // SAMPLE_CODE
 
