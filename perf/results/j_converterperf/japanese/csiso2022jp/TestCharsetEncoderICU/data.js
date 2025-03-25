@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742863091427,
+  "lastUpdate": 1742869553025,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33117,6 +33117,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 28.73177266249799,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "7e633707847e7861e247ed97bf8b3d5382ac2adc",
+          "message": "ICU-23040 Doclet migration: rename variables that don't match the type",
+          "timestamp": "2025-03-24T19:16:33-07:00",
+          "tree_id": "3abea59e09f3d86721f12e9e33e67220f7a3ece4",
+          "url": "https://github.com/unicode-org/icu/commit/7e633707847e7861e247ed97bf8b3d5382ac2adc"
+        },
+        "date": 1742869307906,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 28.86595718829607,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
