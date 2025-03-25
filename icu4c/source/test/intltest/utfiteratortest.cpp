@@ -277,7 +277,33 @@ void Safe16::testGood() {
     assertEquals("iter[4] * length", 2, units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
     assertTrue("iter[4] * stringView()", units.stringView() == u"🚴"sv);
+    auto unitsIter = units.begin();
+    assertEquals("iter[4] * begin()[0]", u"🚴"[0], *unitsIter++);
+    assertEquals("iter[4] * begin()[1]", u"🚴"[1], *unitsIter);
+    assertTrue("iter[4] * end() == endIter", units.end() == good.end());
     assertTrue("iter == endIter", iter == range.end());
+    // backwards
+    units = *--iter;  // pre-decrement
+    assertEquals("iter[back 4] * codePoint", U'🚴', units.codePoint());
+    assertEquals("iter[back 4] * length", 2, units.length());
+    assertTrue("iter[back 4] * wellFormed", units.wellFormed());
+    assertTrue("iter[back 4] * stringView()", units.stringView() == u"🚴"sv);
+    unitsIter = units.begin();
+    assertEquals("iter[back 4] * begin()[0]", u"🚴"[0], *unitsIter++);
+    assertEquals("iter[back 4] * begin()[1]", u"🚴"[1], *unitsIter);
+    assertTrue("iter[back 4] * end() == endIter", units.end() == good.end());
+    --iter;
+    assertEquals("iter[back 3] * codePoint", u'カ', (*iter--).codePoint());  // post-decrement
+    assertEquals("iter[back 2] * codePoint", u'ç', (*iter).codePoint());
+    assertEquals("iter[back 2] -> length", 1, iter->length());
+    units = *--iter;
+    assertEquals("iter[back 1] * codePoint", u'b', units.codePoint());
+    assertTrue("iter[back 1] * wellFormed", units.wellFormed());
+    assertTrue("iter[back 1] * stringView()", units.stringView() == u"b"sv);
+    --iter;
+    assertEquals("iter[back 0] -> codePoint", u'a', iter->codePoint());
+    assertTrue("iter[back 0] -> begin() == beginIter", iter->begin() == good.begin());
+    assertTrue("iter == beginIter", iter == range.begin());
 }
 
 void Safe16::testNegative() {
@@ -304,6 +330,16 @@ void Safe16::testNegative() {
     assertFalse("iter[3] * wellFormed", units.wellFormed());
     assertEquals("iter[4] * stringView()", u"🚴", (*iter++).stringView());  // post-increment
     assertTrue("iter == endIter", iter == range.end());
+    // backwards
+    assertEquals("iter[back 4] * codePoint", U'🚴', (*--iter).codePoint());
+    assertTrue("iter[back 4] -> wellFormed", iter->wellFormed());
+    assertEquals("iter[back 3] * codePoint", U_SENTINEL, (*--iter).codePoint());
+    assertFalse("iter[back 3] -> wellFormed", iter->wellFormed());
+    assertEquals("iter[back 2] * codePoint", U'ç', (*--iter).codePoint());
+    assertEquals("iter[back 1] * codePoint", U_SENTINEL, (*--iter).codePoint());
+    assertEquals("iter[back 0] * codePoint", U'a', (*--iter).codePoint());
+    assertTrue("iter[back 0] -> begin() == beginIter", iter->begin() == bad.begin());
+    assertTrue("iter == beginIter", iter == range.begin());
 }
 
 void Safe16::testFFFD() {
@@ -330,6 +366,16 @@ void Safe16::testFFFD() {
     assertFalse("iter[3] * wellFormed", units.wellFormed());
     assertEquals("iter[4] * stringView()", u"🚴", (*iter++).stringView());  // post-increment
     assertTrue("iter == endIter", iter == range.end());
+    // backwards
+    assertEquals("iter[back 4] * codePoint", U'🚴', (*--iter).codePoint());
+    assertTrue("iter[back 4] -> wellFormed", iter->wellFormed());
+    assertEquals("iter[back 3] * codePoint", 0xfffd, (*--iter).codePoint());
+    assertFalse("iter[back 3] -> wellFormed", iter->wellFormed());
+    assertEquals("iter[back 2] * codePoint", U'ç', (*--iter).codePoint());
+    assertEquals("iter[back 1] * codePoint", 0xfffd, (*--iter).codePoint());
+    assertEquals("iter[back 0] * codePoint", U'a', (*--iter).codePoint());
+    assertTrue("iter[back 0] -> begin() == beginIter", iter->begin() == bad.begin());
+    assertTrue("iter == beginIter", iter == range.begin());
 }
 
 void Safe16::testSurrogate() {
@@ -356,6 +402,16 @@ void Safe16::testSurrogate() {
     assertFalse("iter[3] * wellFormed", units.wellFormed());
     assertEquals("iter[4] * stringView()", u"🚴", (*iter++).stringView());  // post-increment
     assertTrue("iter == endIter", iter == range.end());
+    // backwards
+    assertEquals("iter[back 4] * codePoint", U'🚴', (*--iter).codePoint());
+    assertTrue("iter[back 4] -> wellFormed", iter->wellFormed());
+    assertEquals("iter[back 3] * codePoint", 0xdc05, (*--iter).codePoint());
+    assertFalse("iter[back 3] -> wellFormed", iter->wellFormed());
+    assertEquals("iter[back 2] * codePoint", U'ç', (*--iter).codePoint());
+    assertEquals("iter[back 1] * codePoint", 0xd900, (*--iter).codePoint());
+    assertEquals("iter[back 0] * codePoint", U'a', (*--iter).codePoint());
+    assertTrue("iter[back 0] -> begin() == beginIter", iter->begin() == bad.begin());
+    assertTrue("iter == beginIter", iter == range.begin());
 }
 
 void Safe16::testSinglePassIter() {
@@ -420,9 +476,9 @@ void Safe16::testFwdIter() {
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[4] * length", 2, units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
-    FwdIter<char16_t> data = units.begin();
-    assertTrue("iter[4] * begin()[0]", *data++ == u"🚴"[0]);
-    assertTrue("iter[4] * begin()[1]", *data == u"🚴"[1]);
+    FwdIter<char16_t> unitsIter = units.begin();
+    assertTrue("iter[4] * begin()[0]", *unitsIter++ == u"🚴"[0]);
+    assertTrue("iter[4] * begin()[1]", *unitsIter == u"🚴"[1]);
     assertTrue("iter[4] * end() == endIter", units.end() == goodLimit);
     assertTrue("iter == endIter", iter == rangeLimit);
 }
@@ -485,7 +541,39 @@ void Safe8::testGood() {
     assertTrue("iter[4] * wellFormed", units.wellFormed());
     assertTrue("iter[4] * stringView()",
                units.stringView() == std::string_view(reinterpret_cast<const char*>(u8"🚴")));
+    auto unitsIter = units.begin();
+    assertEquals("iter[4] * begin()[0]", static_cast<char>(u8"🚴"[0]), *unitsIter++);
+    assertEquals("iter[4] * begin()[1]", static_cast<char>(u8"🚴"[1]), *unitsIter++);
+    assertEquals("iter[4] * begin()[2]", static_cast<char>(u8"🚴"[2]), *unitsIter++);
+    assertEquals("iter[4] * begin()[3]", static_cast<char>(u8"🚴"[3]), *unitsIter);
+    assertTrue("iter[4] * end() == endIter", units.end() == good.end());
     assertTrue("iter == endIter", iter == range.end());
+    // backwards
+    units = *--iter;  // pre-decrement
+    assertEquals("iter[back 4] * codePoint", U'🚴', units.codePoint());
+    assertEquals("iter[back 4] * length", 4, units.length());
+    assertTrue("iter[back 4] * wellFormed", units.wellFormed());
+    assertTrue("iter[back 4] * stringView()",
+               units.stringView() == std::string_view(reinterpret_cast<const char*>(u8"🚴")));
+    unitsIter = units.begin();
+    assertEquals("iter[back 4] * begin()[0]", static_cast<char>(u8"🚴"[0]), *unitsIter++);
+    assertEquals("iter[back 4] * begin()[1]", static_cast<char>(u8"🚴"[1]), *unitsIter++);
+    assertEquals("iter[back 4] * begin()[2]", static_cast<char>(u8"🚴"[2]), *unitsIter++);
+    assertEquals("iter[back 4] * begin()[3]", static_cast<char>(u8"🚴"[3]), *unitsIter);
+    assertTrue("iter[back 4] * end() == endIter", units.end() == good.end());
+    --iter;
+    assertEquals("iter[back 3] * codePoint", u'カ', (*iter--).codePoint());  // post-decrement
+    assertEquals("iter[back 2] * codePoint", u'ç', (*iter).codePoint());
+    assertEquals("iter[back 2] -> length", 2, iter->length());
+    units = *--iter;
+    assertEquals("iter[back 1] * codePoint", u'b', units.codePoint());
+    assertTrue("iter[back 1] * wellFormed", units.wellFormed());
+    assertTrue("iter[back 1] * stringView()",
+               units.stringView() == std::string_view(reinterpret_cast<const char*>(u8"b")));
+    --iter;
+    assertEquals("iter[back 0] -> codePoint", u'a', iter->codePoint());
+    assertTrue("iter[back 0] -> begin() == beginIter", iter->begin() == good.begin());
+    assertTrue("iter == beginIter", iter == range.begin());
 }
 
 void Safe8::testSinglePassIter() {
@@ -551,15 +639,15 @@ void Safe8::testFwdIter() {
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[4] * length", 4, units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
-    FwdIter<char> data = units.begin();
+    FwdIter<char> unitsIter = units.begin();
     assertTrue("iter[4] * begin()[0]",
-               static_cast<uint8_t>(*data++) == static_cast<uint8_t>(u8"🚴"[0]));
+               static_cast<uint8_t>(*unitsIter++) == static_cast<uint8_t>(u8"🚴"[0]));
     assertTrue("iter[4] * begin()[1]",
-               static_cast<uint8_t>(*data++) == static_cast<uint8_t>(u8"🚴"[1]));
+               static_cast<uint8_t>(*unitsIter++) == static_cast<uint8_t>(u8"🚴"[1]));
     assertTrue("iter[4] * begin()[2]",
-               static_cast<uint8_t>(*data++) == static_cast<uint8_t>(u8"🚴"[2]));
+               static_cast<uint8_t>(*unitsIter++) == static_cast<uint8_t>(u8"🚴"[2]));
     assertTrue("iter[4] * begin()[3]",
-               static_cast<uint8_t>(*data) == static_cast<uint8_t>(u8"🚴"[3]));
+               static_cast<uint8_t>(*unitsIter) == static_cast<uint8_t>(u8"🚴"[3]));
     assertTrue("iter[4] * end() == endIter", units.end() == goodLimit);
     assertTrue("iter == endIter", iter == rangeLimit);
 }
@@ -618,7 +706,31 @@ void Safe32::testGood() {
     assertEquals("iter[4] * length", 1, units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
     assertTrue("iter[4] * stringView()", units.stringView() == U"🚴"sv);
+    auto unitsIter = units.begin();
+    assertEquals("iter[4] * begin()[0]", static_cast<UChar32>(U'🚴'), *unitsIter);
+    assertTrue("iter[4] * end() == endIter", units.end() == good.end());
     assertTrue("iter == endIter", iter == range.end());
+    // backwards
+    units = *--iter;  // pre-decrement
+    assertEquals("iter[back 4] * codePoint", U'🚴', units.codePoint());
+    assertEquals("iter[back 4] * length", 1, units.length());
+    assertTrue("iter[back 4] * wellFormed", units.wellFormed());
+    assertTrue("iter[back 4] * stringView()", units.stringView() == U"🚴"sv);
+    unitsIter = units.begin();
+    assertEquals("iter[back 4] * begin()[0]", static_cast<UChar32>(U'🚴'), *unitsIter);
+    assertTrue("iter[back 4] * end() == endIter", units.end() == good.end());
+    --iter;
+    assertEquals("iter[back 3] * codePoint", u'カ', (*iter--).codePoint());  // post-decrement
+    assertEquals("iter[back 2] * codePoint", u'ç', (*iter).codePoint());
+    assertEquals("iter[back 2] -> length", 1, iter->length());
+    units = *--iter;
+    assertEquals("iter[back 1] * codePoint", u'b', units.codePoint());
+    assertTrue("iter[back 1] * wellFormed", units.wellFormed());
+    assertTrue("iter[back 1] * stringView()", units.stringView() == U"b"sv);
+    --iter;
+    assertEquals("iter[back 0] -> codePoint", u'a', iter->codePoint());
+    assertTrue("iter[back 0] -> begin() == beginIter", iter->begin() == good.begin());
+    assertTrue("iter == beginIter", iter == range.begin());
 }
 
 void Safe32::testSinglePassIter() {
@@ -683,8 +795,8 @@ void Safe32::testFwdIter() {
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[4] * length", 1, units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
-    FwdIter<char32_t> data = units.begin();
-    assertTrue("iter[4] * begin()[0]", *data == U"🚴"[0]);
+    FwdIter<char32_t> unitsIter = units.begin();
+    assertTrue("iter[4] * begin()[0]", *unitsIter == U'🚴');
     assertTrue("iter[4] * end() == endIter", units.end() == goodLimit);
     assertTrue("iter == endIter", iter == rangeLimit);
 }
