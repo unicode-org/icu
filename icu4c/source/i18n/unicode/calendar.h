@@ -57,7 +57,7 @@ typedef int32_t UFieldResolutionTable[12][8];
 class BasicTimeZone;
 class CharString;
 
-class U_I18N_API WeekSystem {
+class U_I18N_API WeekRules {
  public:
     /**
      * Gets what the first day of the week is; e.g., Sunday in US, Monday in France.
@@ -120,7 +120,7 @@ class U_I18N_API WeekSystem {
     virtual UBool isWeekend(UDate date, UErrorCode &status) const = 0;
 };
 
-class U_I18N_API CalendarLimits {
+class U_I18N_API DateFieldRange {
  public:
    /**
      * Gets the minimum value for the given time field. e.g., for Gregorian
@@ -192,7 +192,7 @@ class U_I18N_API CalendarLimits {
 
 };
 
-class U_I18N_API DateFields {
+class U_I18N_API CalendarFieldAccessor {
  public:
     /**
      * Gets the value for a given time field.
@@ -271,7 +271,7 @@ class U_I18N_API DateFields {
     virtual UDate getTime(UErrorCode& status) const = 0;
 };
 
-class U_I18N_API InternalCenturyInfo {
+class U_I18N_API CenturyContext {
  public:
     /**
      * @return true if this calendar has a default century (i.e. 03 -> 2003)
@@ -423,10 +423,10 @@ class U_I18N_API InternalCenturyInfo {
  * @stable ICU 2.0
  */
 class U_I18N_API Calendar : public UObject,
-  public InternalCenturyInfo, 
-  public WeekSystem,
-  public CalendarLimits,
-  public DateFields {
+  public CenturyContext,
+  public WeekRules,
+  public DateFieldRange,
+  public CalendarFieldAccessor {
 public:
 #ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
@@ -2731,14 +2731,14 @@ public:
 #endif  /* U_HIDE_INTERNAL_API */
 };
 
-class U_I18N_API DateFieldsBuilder : public UObject {
+class U_I18N_API FieldAccessorBuilder : public UObject {
   public:
-    DateFieldsBuilder(const Locale& locale, UErrorCode &status);
-    virtual ~DateFieldsBuilder();
+    FieldAccessorBuilder(const Locale& locale, UErrorCode &status);
+    virtual ~FieldAccessorBuilder();
 
-    DateFieldsBuilder& adoptCalendar (Calendar *value, UErrorCode &status);
-    DateFieldsBuilder& setTimeZone(const TimeZone& value, UErrorCode &status);
-    DateFieldsBuilder& adoptTimeZone (TimeZone *value, UErrorCode &status);
+    FieldAccessorBuilder& adoptCalendar (Calendar *value, UErrorCode &status);
+    FieldAccessorBuilder& setTimeZone(const TimeZone& value, UErrorCode &status);
+    FieldAccessorBuilder& adoptTimeZone (TimeZone *value, UErrorCode &status);
 
     /**
      * Sets this Calendar's current time with the given UDate. The time specified should
@@ -2749,7 +2749,7 @@ class U_I18N_API DateFieldsBuilder : public UObject {
      *                set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
      */
-    DateFieldsBuilder& setTime(UDate value, UErrorCode &status);
+    FieldAccessorBuilder& setTime(UDate value, UErrorCode &status);
 
     /**
      * UDate Arithmetic function. Adds the specified (signed) amount of time to the given
@@ -2770,7 +2770,7 @@ class U_I18N_API DateFieldsBuilder : public UObject {
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
      */
-    DateFieldsBuilder& add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
+    FieldAccessorBuilder& add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
     /**
      * Time Field Rolling function. Rolls by the given amount on the given
@@ -2802,7 +2802,7 @@ class U_I18N_API DateFieldsBuilder : public UObject {
      *                previously set in the time field is invalid, this will be set to
      *                an error status.
      */
-    DateFieldsBuilder& roll(UCalendarDateFields field, int32_t amount, UErrorCode& status);
+    FieldAccessorBuilder& roll(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
     /**
      * Specifies whether or not date/time interpretation is to be lenient. With lenient
@@ -2813,7 +2813,7 @@ class U_I18N_API DateFieldsBuilder : public UObject {
      *
      * @param lenient  True specifies date/time interpretation to be lenient.
      */
-    DateFieldsBuilder& setLenient(UBool lenient, UErrorCode& status);
+    FieldAccessorBuilder& setLenient(UBool lenient, UErrorCode& status);
 
     /**
      * Sets the behavior for handling wall time repeating multiple times
@@ -2834,7 +2834,7 @@ class U_I18N_API DateFieldsBuilder : public UObject {
      * <code>UCAL_WALLTIME_FIRST</code> or <code>UCAL_WALLTIME_LAST</code>.
      * @see #getRepeatedWallTimeOption
      */
-    DateFieldsBuilder& setRepeatedWallTimeOption(UCalendarWallTimeOption option,  UErrorCode& status);
+    FieldAccessorBuilder& setRepeatedWallTimeOption(UCalendarWallTimeOption option,  UErrorCode& status);
 
     /**
      * Sets the behavior for handling skipped wall time at positive time zone offset
@@ -2855,14 +2855,14 @@ class U_I18N_API DateFieldsBuilder : public UObject {
      * <code>UCAL_WALLTIME_NEXT_VALID</code>.
      * @see #getSkippedWallTimeOption
      */
-    DateFieldsBuilder& setSkippedWallTimeOption(UCalendarWallTimeOption option,  UErrorCode& status);
+    FieldAccessorBuilder& setSkippedWallTimeOption(UCalendarWallTimeOption option,  UErrorCode& status);
 
     /**
      * Sets what the first day of the week is; e.g., Sunday in US, Monday in France.
      *
      * @param value  The given first day of the week.
      */
-    DateFieldsBuilder& setFirstDayOfWeek(UCalendarDaysOfWeek value, UErrorCode& status);
+    FieldAccessorBuilder& setFirstDayOfWeek(UCalendarDaysOfWeek value, UErrorCode& status);
 
     /**
      * Sets what the minimal days required in the first week of the year are; For
@@ -2872,7 +2872,7 @@ class U_I18N_API DateFieldsBuilder : public UObject {
      *
      * @param value  The given minimal days required in the first week of the year.
      */
-    DateFieldsBuilder&  setMinimalDaysInFirstWeek(uint8_t value, UErrorCode& status);
+    FieldAccessorBuilder&  setMinimalDaysInFirstWeek(uint8_t value, UErrorCode& status);
 
     /**
      * Sets the given time field with the given value.
@@ -2880,14 +2880,14 @@ class U_I18N_API DateFieldsBuilder : public UObject {
      * @param field  The given time field.
      * @param value  The value to be set for the given time field.
      */
-    DateFieldsBuilder& set(UCalendarDateFields field, int32_t value, UErrorCode& status);
+    FieldAccessorBuilder& set(UCalendarDateFields field, int32_t value, UErrorCode& status);
 
     /**
      * Clears the values of all the time fields, making them both unset and assigning
      * them a value of zero. The field values will be determined during the next
      * resolving of time into time fields.
      */
-    DateFieldsBuilder& clear(UErrorCode& status);
+    FieldAccessorBuilder& clear(UErrorCode& status);
 
     /**
      * Clears the value in the given time field, both making it unset and assigning it a
@@ -2897,7 +2897,7 @@ class U_I18N_API DateFieldsBuilder : public UObject {
      *
      * @param field  The time field to be cleared.
      */
-    DateFieldsBuilder&  clear(UCalendarDateFields field, UErrorCode& status);
+    FieldAccessorBuilder&  clear(UCalendarDateFields field, UErrorCode& status);
 
    /**
      * Sets The Temporal monthCode which is a string identifier that starts
@@ -2916,7 +2916,7 @@ class U_I18N_API DateFieldsBuilder : public UObject {
      * @param temporalMonth  The value to be set for temporal monthCode.
      * @param status        ICU Error Code
      */
-    DateFieldsBuilder& setTemporalMonthCode(const char* temporalMonth, UErrorCode& status);
+    FieldAccessorBuilder& setTemporalMonthCode(const char* temporalMonth, UErrorCode& status);
 
     /**
      * Sets the GregorianCalendar change date. This is the point when the switch from
@@ -2926,13 +2926,13 @@ class U_I18N_API DateFieldsBuilder : public UObject {
      * @param date     The given Gregorian cutover date.
      * @param status  Output param set to success/failure code on exit.
      */
-    DateFieldsBuilder& setGregorianChange(UDate date, UErrorCode& status);
+    FieldAccessorBuilder& setGregorianChange(UDate date, UErrorCode& status);
 
-    WeekSystem* buildWeekSystem(UErrorCode& status) const;
+    WeekRules* buildWeekRules(UErrorCode& status) const;
 
-    CalendarLimits* buildCalendarLimits(UErrorCode& status) const;
+    DateFieldRange* buildDateFieldRange(UErrorCode& status) const;
 
-    DateFields* buildDateFields(UErrorCode& status) const;
+    CalendarFieldAccessor* buildFieldAccessor(UErrorCode& status) const;
 
   private:
     LocalPointer<Calendar> fCalendar;

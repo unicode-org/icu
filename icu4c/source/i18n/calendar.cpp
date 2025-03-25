@@ -609,7 +609,7 @@ UBool Calendar::unregister(URegistryKey key, UErrorCode& status) {
 
 // -------------------------------------
 
-static const int32_t kCalendarLimits[UCAL_FIELD_COUNT][4] = {
+static const int32_t kDateFieldRange[UCAL_FIELD_COUNT][4] = {
     //    Minimum  Greatest min      Least max   Greatest max
     {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // ERA
     {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // YEAR
@@ -2722,7 +2722,7 @@ int32_t Calendar::getLimit(UCalendarDateFields field, ELimitType limitType) cons
     case UCAL_JULIAN_DAY:
     case UCAL_MILLISECONDS_IN_DAY:
     case UCAL_IS_LEAP_MONTH:
-        return kCalendarLimits[field][limitType];
+        return kDateFieldRange[field][limitType];
 
     case UCAL_WEEK_OF_MONTH:
         {
@@ -4279,24 +4279,24 @@ Calendar::getBasicTimeZone() const {
 }
 
 
-// DateFieldsBuilder
-DateFieldsBuilder::DateFieldsBuilder(const Locale& locale, UErrorCode &status)
+// FieldAccessorBuilder
+FieldAccessorBuilder::FieldAccessorBuilder(const Locale& locale, UErrorCode &status)
      : UObject(), fCalendar(Calendar::createInstance(locale, status), status) {
 }
 
-DateFieldsBuilder::~DateFieldsBuilder() {
+FieldAccessorBuilder::~FieldAccessorBuilder() {
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::setTimeZone(const TimeZone& value, UErrorCode &status) {
+FieldAccessorBuilder&
+FieldAccessorBuilder::setTimeZone(const TimeZone& value, UErrorCode &status) {
     if (U_SUCCESS(status)) {
         fCalendar->setTimeZone(value);
     }
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::adoptTimeZone (TimeZone *value, UErrorCode &status) {
+FieldAccessorBuilder&
+FieldAccessorBuilder::adoptTimeZone (TimeZone *value, UErrorCode &status) {
     if (U_SUCCESS(status)) {
         fCalendar->adoptTimeZone(value);
     } else {
@@ -4305,22 +4305,22 @@ DateFieldsBuilder::adoptTimeZone (TimeZone *value, UErrorCode &status) {
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::adoptCalendar (Calendar *value, UErrorCode &status) {
+FieldAccessorBuilder&
+FieldAccessorBuilder::adoptCalendar (Calendar *value, UErrorCode &status) {
     fCalendar.adoptInsteadAndCheckErrorCode(value, status);
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::setTime(UDate value, UErrorCode &status) {
+FieldAccessorBuilder&
+FieldAccessorBuilder::setTime(UDate value, UErrorCode &status) {
     if (U_SUCCESS(status)) {
         fCalendar->setTime(value, status);
     }
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::add(UCalendarDateFields field, int32_t amount,
+FieldAccessorBuilder&
+FieldAccessorBuilder::add(UCalendarDateFields field, int32_t amount,
                        UErrorCode& status) {
     if (U_SUCCESS(status)) {
         fCalendar->add(field, amount, status);
@@ -4328,8 +4328,8 @@ DateFieldsBuilder::add(UCalendarDateFields field, int32_t amount,
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::roll(UCalendarDateFields field, int32_t amount,
+FieldAccessorBuilder&
+FieldAccessorBuilder::roll(UCalendarDateFields field, int32_t amount,
                         UErrorCode& status) {
    if (U_SUCCESS(status)) {
        fCalendar->roll(field, amount, status);
@@ -4337,16 +4337,16 @@ DateFieldsBuilder::roll(UCalendarDateFields field, int32_t amount,
    return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::setLenient(UBool lenient, UErrorCode& status) {
+FieldAccessorBuilder&
+FieldAccessorBuilder::setLenient(UBool lenient, UErrorCode& status) {
     if (U_SUCCESS(status)) {
         fCalendar->setLenient(lenient);
     }
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::setRepeatedWallTimeOption(UCalendarWallTimeOption option,
+FieldAccessorBuilder&
+FieldAccessorBuilder::setRepeatedWallTimeOption(UCalendarWallTimeOption option,
                                              UErrorCode& status) {
     if (U_SUCCESS(status)) {
         fCalendar->setRepeatedWallTimeOption(option);
@@ -4354,16 +4354,16 @@ DateFieldsBuilder::setRepeatedWallTimeOption(UCalendarWallTimeOption option,
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::setSkippedWallTimeOption(UCalendarWallTimeOption option,  UErrorCode& status) {
+FieldAccessorBuilder&
+FieldAccessorBuilder::setSkippedWallTimeOption(UCalendarWallTimeOption option,  UErrorCode& status) {
     if (U_SUCCESS(status)) {
         fCalendar->setSkippedWallTimeOption(option);
     }
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::setFirstDayOfWeek(UCalendarDaysOfWeek value,
+FieldAccessorBuilder&
+FieldAccessorBuilder::setFirstDayOfWeek(UCalendarDaysOfWeek value,
                                      UErrorCode& status) {
     if (U_SUCCESS(status)) {
         fCalendar->setFirstDayOfWeek(value);
@@ -4371,48 +4371,48 @@ DateFieldsBuilder::setFirstDayOfWeek(UCalendarDaysOfWeek value,
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::setMinimalDaysInFirstWeek(uint8_t value, UErrorCode& status) {
+FieldAccessorBuilder&
+FieldAccessorBuilder::setMinimalDaysInFirstWeek(uint8_t value, UErrorCode& status) {
     if (U_SUCCESS(status)) {
         fCalendar->setMinimalDaysInFirstWeek(value);
     }
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::set(UCalendarDateFields field, int32_t value, UErrorCode& status) {
+FieldAccessorBuilder&
+FieldAccessorBuilder::set(UCalendarDateFields field, int32_t value, UErrorCode& status) {
     if (U_SUCCESS(status)) {
         fCalendar->set(field, value, status);
     }
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::clear(UErrorCode& status) {
+FieldAccessorBuilder&
+FieldAccessorBuilder::clear(UErrorCode& status) {
     if (U_SUCCESS(status)) {
         fCalendar->clear();
     }
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::clear(UCalendarDateFields field, UErrorCode& status) {
+FieldAccessorBuilder&
+FieldAccessorBuilder::clear(UCalendarDateFields field, UErrorCode& status) {
     if (U_SUCCESS(status)) {
         fCalendar->clear(field);
     }
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::setTemporalMonthCode(const char* temporalMonth, UErrorCode& status) {
+FieldAccessorBuilder&
+FieldAccessorBuilder::setTemporalMonthCode(const char* temporalMonth, UErrorCode& status) {
     if (U_SUCCESS(status)) {
         fCalendar->setTemporalMonthCode(temporalMonth, status);
     }
     return *this;
 }
 
-DateFieldsBuilder&
-DateFieldsBuilder::setGregorianChange(UDate date, UErrorCode& status) {
+FieldAccessorBuilder&
+FieldAccessorBuilder::setGregorianChange(UDate date, UErrorCode& status) {
    if (U_SUCCESS(status)) {
        if (fCalendar->getDynamicClassID() ==
           GregorianCalendar::getStaticClassID() ||
@@ -4428,24 +4428,24 @@ DateFieldsBuilder::setGregorianChange(UDate date, UErrorCode& status) {
    return *this;
 }
 
-WeekSystem*
-DateFieldsBuilder::buildWeekSystem(UErrorCode& status) const {
+WeekRules*
+FieldAccessorBuilder::buildWeekRules(UErrorCode& status) const {
     if (U_SUCCESS(status)) {
         return fCalendar->clone();
     }
     return nullptr;
 }
 
-CalendarLimits*
-DateFieldsBuilder::buildCalendarLimits(UErrorCode& status) const {
+DateFieldRange*
+FieldAccessorBuilder::buildDateFieldRange(UErrorCode& status) const {
     if (U_SUCCESS(status)) {
         return fCalendar->clone();
     }
     return nullptr;
 }
 
-DateFields*
-DateFieldsBuilder::buildDateFields(UErrorCode& status) const {
+CalendarFieldAccessor*
+FieldAccessorBuilder::buildFieldAccessor(UErrorCode& status) const {
     if (U_SUCCESS(status)) {
         return fCalendar->clone();
     }
