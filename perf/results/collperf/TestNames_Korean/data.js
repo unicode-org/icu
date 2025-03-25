@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742860726527,
+  "lastUpdate": 1742863772039,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -64527,6 +64527,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12748670.9515,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "f6894e28d2d9ecb4f663bd1a1427c89d5bc96806",
+          "message": "ICU-23083 Optimize LSR loaded from langinfo.res\n\nIt uses string pools to reduce the memory impact",
+          "timestamp": "2025-03-24T17:26:46-07:00",
+          "tree_id": "73945588d1a635300a71c772a4a447a61d0f6a90",
+          "url": "https://github.com/unicode-org/icu/commit/f6894e28d2d9ecb4f663bd1a1427c89d5bc96806"
+        },
+        "date": 1742863519910,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 217.0268,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 56054292.1002,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12072954.4691,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 52207167.229,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12796477.3004,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
