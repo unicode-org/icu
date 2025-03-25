@@ -273,36 +273,6 @@
           <version>3.6.0</version>
           <executions>
             <execution>
-              <!-- Workaround for Windows symlink issue:
-                 https://issues.apache.org/jira/browse/MRESOURCES-237
-                 Note: The recommended fix there is to filter out the symlink files, which
-                 would result in no license files in the .jar. That is not what we want.
-                 Instead, this `<execution>` config copies the LICENSE file to `target` at build time.
-              -->
-              <id>add-resource</id>
-              <goals>
-                <goal>add-resource</goal>
-              </goals>
-              <configuration>
-                <resources>
-                  <resource>
-                    <directory>${rootlocation}/../testdata/</directory>
-                    <includes>
-                      <!-- Do not "repair" this to use ${rootlocation}/../ and LICENSE.
-                        This is a workaround for Eclipse, which fails to import the projects because
-                        ${rootlocation}/../ overlaps with the location of the sub-projects (for example main/core).
-                        True, because {rootlocation} is resolved to $icu_root/icu4j.
-                        So ${rootlocation}/../ points to $icu_root, which overlaps with $icu_root/icu4j/main/core.
-                        But $icu_root/testdata/ does not overlap with $icu_root/icu4j/ so all is good.
-                        We then go up one step for the LICENSE, because Eclipse does not validate for files overlapping, only folders.
-                      -->
-                      <include>../LICENSE</include>
-                    </includes>
-                  </resource>
-                </resources>
-              </configuration>
-            </execution>
-            <execution>
               <id>root-location</id>
               <phase>initialize</phase>
               <goals>

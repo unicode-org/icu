@@ -90,48 +90,6 @@
         </configuration>
       </plugin>
 
-      <!--
-        Mainly for running localespi tests in Java 8:
-        The easiest way to get the integration tests to pass (in particular, to get the JVM that is
-        spawned with the `-Djava.ext.dirs` system property value to be interpreted properly in order
-        for the extensions jars therein to be loaded correctly) was to copy the jars needed to a
-        separate directory. (The alternative of pointing to the build directories of the respective
-        submodules didn't seem to work.)
-
-        This isn't of much use for Java 9+, in which extensions are deprecated and the regular
-        classpath is to be used instead.
-      -->
-      <plugin>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>it-test-copy-localespi-extension-jars</id>
-            <phase>integration-test</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>icu4j</artifactId>
-                  <version>${project.version}</version>
-                  <type>${project.packaging}</type>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>icu4j-localespi</artifactId>
-                  <version>${project.version}</version>
-                  <type>${project.packaging}</type>
-                </artifactItem>
-              </artifactItems>
-              <!-- https://stackoverflow.com/questions/36181371/how-can-i-get-the-temp-folder-of-a-machine-running-maven -->
-              <outputDirectory>${java.io.tmpdir}/ext-test-jars</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
       <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
         <executions>
@@ -209,6 +167,7 @@
   </build>
 
   <profiles>
+
     <!--
       For testing localespi using the Java extensions feature, which last existed in Java 8.
       ICU4J currently has a minimum supported version of 8.
@@ -222,7 +181,53 @@
         <localespi-tests.jvm.args>-Djava.ext.dirs="${java.io.tmpdir}/ext-test-jars"</localespi-tests.jvm.args>
         <localespi-tests.locale-providers></localespi-tests.locale-providers>
       </properties>
+      <build>
+        <plugins>
+          <!--
+            Mainly for running localespi tests in Java 8:
+            The easiest way to get the integration tests to pass (in particular, to get the JVM that is
+            spawned with the `-Djava.ext.dirs` system property value to be interpreted properly in order
+            for the extensions jars therein to be loaded correctly) was to copy the jars needed to a
+            separate directory. (The alternative of pointing to the build directories of the respective
+            submodules didn't seem to work.)
+
+            This isn't of much use for Java 9+, in which extensions are deprecated and the regular
+            classpath is to be used instead.
+          -->
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>it-test-copy-localespi-extension-jars</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>copy</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>${project.groupId}</groupId>
+                      <artifactId>icu4j</artifactId>
+                      <version>${project.version}</version>
+                      <type>${project.packaging}</type>
+                    </artifactItem>
+                    <artifactItem>
+                      <groupId>${project.groupId}</groupId>
+                      <artifactId>icu4j-localespi</artifactId>
+                      <version>${project.version}</version>
+                      <type>${project.packaging}</type>
+                    </artifactItem>
+                  </artifactItems>
+                  <!-- https://stackoverflow.com/questions/36181371/how-can-i-get-the-temp-folder-of-a-machine-running-maven -->
+                  <outputDirectory>${java.io.tmpdir}/ext-test-jars</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
+
     <!--
       For testing localespi using the classpath for Java 9+, since Java extensions were
       deprecated after Java 8.
@@ -237,6 +242,7 @@
         <localespi-tests.locale-providers>CLDR,COMPAT,SPI</localespi-tests.locale-providers>
       </properties>
     </profile>
+
     <profile>
       <id>with_javadoc</id>
       <build>

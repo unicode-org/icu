@@ -45,25 +45,4 @@
     </dependency>
   </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <!-- Copy dependencies by default, so that everythign is easier to run
-          without having to explicitly list all kind of folders in classpath.
-          Just use `./target/*` and `./target/dependency/*`
-        -->
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
 </project>
