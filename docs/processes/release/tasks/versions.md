@@ -204,7 +204,7 @@ The command requires a version number string that follows the typical Java / Mav
     This can be done by running the following command:
 
     ```
-    mvn versions:set-property -DnewVersion=74 -Dproperty=icu.major.version
+    mvn versions:set-property -DnewVersion=74 -Dproperty=icu.major.version -DgenerateBackupPoms=false
     ```
 
     This should happen at the same time and along with the work in the previous step for the version number

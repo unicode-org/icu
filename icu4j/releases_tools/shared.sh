@@ -5,10 +5,10 @@
 export MAVEN_ARGS='--no-transfer-progress'
 
 # Version update!
-export artifact_version='77.1'
-export github_rel_version='77_1'
-export api_report_version='77'
-export api_report_prev_version='76'
+export artifact_version='78.0.1-SNAPSHOT'
+export github_rel_version='78_0_1'
+export api_report_version='78'
+export api_report_prev_version='77'
 export out_dir=target
 
 function checkThatJdk8IsNotDefault() {
