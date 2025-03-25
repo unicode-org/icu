@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742914402515,
+  "lastUpdate": 1742939534480,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -114045,6 +114045,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 40.2602,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "f6abd2cc2e60b68009c009ce0f4af79bef63d73f",
+          "message": "ICU-23086 Fix Eclipse errors on imported projects\n\n- perf-tests: the copy was a convenience (as the doc said)\n- icu4j-localespi: the copy was only needed for JDK 8.\n  Moving it into a self-activating profile (based on jdk version)\n  means that the copy still happens when building with maven under jdk 8,\n  but will not get activated in Eclipse (so no error)\n- The use of ../testdata (the warning) was an incorrect way to share resources\n  they should have their own (resource only) Maven artifact.\n  And nothing in the folder is not used by icu4j right now.\n  ICU-23050 (\"Deduplicate C & Java testdata to a common directory\") is still open.",
+          "timestamp": "2025-03-25T14:29:57-07:00",
+          "tree_id": "29172a4bec2439d2b060cc88d73fad2db61d5a2b",
+          "url": "https://github.com/unicode-org/icu/commit/f6abd2cc2e60b68009c009ce0f4af79bef63d73f"
+        },
+        "date": 1742939284141,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.1383,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.2976,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.7767,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 28.1259,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.3641,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 36.4505,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.0596,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.1277,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 86.239,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.745,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 37.5153,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 40.004,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
