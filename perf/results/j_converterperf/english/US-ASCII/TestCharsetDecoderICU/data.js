@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742869966265,
+  "lastUpdate": 1742913542245,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33387,6 +33387,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.556774259129929,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "dcff47f86b5822106c3a4a8ef0ab495c96dcf4d0",
+          "message": "ICU-23040 Fix invalid html5 tags and attributes",
+          "timestamp": "2025-03-24T10:03:27-07:00",
+          "tree_id": "b9c39aded5f9c382a66bbaaf48e8540171a15db7",
+          "url": "https://github.com/unicode-org/icu/commit/dcff47f86b5822106c3a4a8ef0ab495c96dcf4d0"
+        },
+        "date": 1742913284354,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5561592609297709,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
