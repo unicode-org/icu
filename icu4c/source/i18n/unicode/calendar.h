@@ -57,6 +57,14 @@ typedef int32_t UFieldResolutionTable[12][8];
 class BasicTimeZone;
 class CharString;
 
+/**
+ * The WeekRules interface in ICU defines the logic for week-related
+ * calculations in different calendar systems. It manages parameters like the
+ * first day of the week and the minimum days in the first week, supporting
+ * various regional and international week numbering conventions, including the
+ * ISO 8601 standard. This class works with the Calendar class, enabling
+ * customization and adherence to specific week-related rules.
+ */
 class U_I18N_API WeekRules {
  public:
     /**
@@ -120,6 +128,14 @@ class U_I18N_API WeekRules {
     virtual UBool isWeekend(UDate date, UErrorCode &status) const = 0;
 };
 
+/**
+ * DateFieldRange interface defines permissible boundaries for date/time
+ * components (e.g., month: 1-12). This ensures data integrity within the ICU
+ * library by preventing invalid dates/times during formatting/parsing. It's
+ * also useful for developers when iterating through date/time ranges (e.g.,
+ * generating schedules). Associated with constants like DAY_OF_MONTH, it
+ * provides a structured way to manage date/time component constraints.
+ */
 class U_I18N_API DateFieldRange {
  public:
    /**
@@ -192,6 +208,11 @@ class U_I18N_API DateFieldRange {
 
 };
 
+/**
+ * The CalendarFieldAccessor class provides an interface to get individual
+ * components (year, month, day, etc.) of a Calendar object. This improves code
+ * maintainability and flexibility.
+ */
 class U_I18N_API CalendarFieldAccessor {
  public:
     /**
@@ -271,6 +292,15 @@ class U_I18N_API CalendarFieldAccessor {
     virtual UDate getTime(UErrorCode& status) const = 0;
 };
 
+/**
+ * The CenturyContext class provides a framework for interpreting year values
+ * that are not fully specified with a century, such as a two-digit year. This
+ * class addresses the ambiguity of two-digit years by providing context, such
+ * as a default century or a range of years for interpretation. It is utilized
+ * during date parsing and formatting to ensure accurate conversion between
+ * textual representations of dates and the internal Calendar representation,
+ * particularly when dealing with formats where the century might be omitted.
+ */
 class U_I18N_API CenturyContext {
  public:
     /**
@@ -2731,6 +2761,11 @@ public:
 #endif  /* U_HIDE_INTERNAL_API */
 };
 
+/**
+ * Provides a builder pattern for constructing instances of
+ * CalendarFieldAccessor,simplifying the creation and configuration of field
+ * accessors for Calendar objects.
+ */
 class U_I18N_API FieldAccessorBuilder : public UObject {
   public:
     FieldAccessorBuilder(const Locale& locale, UErrorCode &status);
@@ -2927,10 +2962,6 @@ class U_I18N_API FieldAccessorBuilder : public UObject {
      * @param status  Output param set to success/failure code on exit.
      */
     FieldAccessorBuilder& setGregorianChange(UDate date, UErrorCode& status);
-
-    WeekRules* buildWeekRules(UErrorCode& status) const;
-
-    DateFieldRange* buildDateFieldRange(UErrorCode& status) const;
 
     CalendarFieldAccessor* buildFieldAccessor(UErrorCode& status) const;
 

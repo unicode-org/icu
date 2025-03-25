@@ -4428,22 +4428,6 @@ FieldAccessorBuilder::setGregorianChange(UDate date, UErrorCode& status) {
    return *this;
 }
 
-WeekRules*
-FieldAccessorBuilder::buildWeekRules(UErrorCode& status) const {
-    if (U_SUCCESS(status)) {
-        return fCalendar->clone();
-    }
-    return nullptr;
-}
-
-DateFieldRange*
-FieldAccessorBuilder::buildDateFieldRange(UErrorCode& status) const {
-    if (U_SUCCESS(status)) {
-        return fCalendar->clone();
-    }
-    return nullptr;
-}
-
 CalendarFieldAccessor*
 FieldAccessorBuilder::buildFieldAccessor(UErrorCode& status) const {
     if (U_SUCCESS(status)) {
