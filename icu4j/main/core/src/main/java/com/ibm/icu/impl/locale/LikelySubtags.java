@@ -355,6 +355,7 @@ public final class LikelySubtags {
                 } else {
                     iter.resetToState64(state);
                     value = trieNext(iter, "", 0);
+                    assert value != 0;
                     if (value < 0) {
                         retainLanguage = !language.isEmpty();
                         retainScript = !script.isEmpty();

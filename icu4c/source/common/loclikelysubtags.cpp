@@ -715,6 +715,7 @@ LSR LikelySubtags::maximize(StringPiece language, StringPiece script, StringPiec
             } else {
                 iter.resetToState64(state);
                 value = trieNext(iter, "", 0);
+                U_ASSERT(value != 0);
                 // For the case of und_Latn
                 if (value < 0) {
                     retainLanguage = !language.empty();
