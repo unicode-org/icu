@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742859982516,
+  "lastUpdate": 1742863347308,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33267,6 +33267,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.7991944440981877,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "f6894e28d2d9ecb4f663bd1a1427c89d5bc96806",
+          "message": "ICU-23083 Optimize LSR loaded from langinfo.res\n\nIt uses string pools to reduce the memory impact",
+          "timestamp": "2025-03-24T17:26:46-07:00",
+          "tree_id": "73945588d1a635300a71c772a4a447a61d0f6a90",
+          "url": "https://github.com/unicode-org/icu/commit/f6894e28d2d9ecb4f663bd1a1427c89d5bc96806"
+        },
+        "date": 1742863092227,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.8013302810825211,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
