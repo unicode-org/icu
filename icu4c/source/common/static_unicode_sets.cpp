@@ -187,7 +187,11 @@ void U_CALLCONV initNumberParseUniSets(UErrorCode& status) {
     U_ASSERT(gUnicodeSets[PERCENT_SIGN] != nullptr);
     U_ASSERT(gUnicodeSets[PERMILLE_SIGN] != nullptr);
 
+    // The following don't currently have parseLenients in data.
+    U_ASSERT(gUnicodeSets[INFINITY_SIGN] == nullptr);
     gUnicodeSets[INFINITY_SIGN] = new UnicodeSet(u"[∞]", status);
+    U_ASSERT(gUnicodeSets[APPROXIMATELY_SIGN] == nullptr);
+    gUnicodeSets[APPROXIMATELY_SIGN] = new UnicodeSet(u"[∼~≈≃約]", status); // this set was manually curated
     if (U_FAILURE(status)) { return; }
 
     U_ASSERT(gUnicodeSets[DOLLAR_SIGN] != nullptr);

@@ -89,6 +89,8 @@ class U_I18N_API AffixTokenMatcherWarehouse : public UMemory {
 
     NumberParseMatcher& plusSign();
 
+    NumberParseMatcher& approximatelySign();
+
     NumberParseMatcher& percent();
 
     NumberParseMatcher& permille();
@@ -108,6 +110,7 @@ class U_I18N_API AffixTokenMatcherWarehouse : public UMemory {
     // NOTE: These are default-constructed and should not be used until initialized.
     MinusSignMatcher fMinusSign;
     PlusSignMatcher fPlusSign;
+    ApproximatelySignMatcher fApproximatelySign;
     PercentMatcher fPercent;
     PermilleMatcher fPermille;
     CombinedCurrencyMatcher fCurrency;

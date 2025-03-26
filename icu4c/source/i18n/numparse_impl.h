@@ -79,6 +79,7 @@ class U_I18N_API NumberParserImpl : public MutableMatcherCollection, public UMem
         PercentMatcher percent;
         PermilleMatcher permille;
         PlusSignMatcher plusSign;
+        ApproximatelySignMatcher approximatelySign;
         DecimalMatcher decimal;
         ScientificMatcher scientific;
         CombinedCurrencyMatcher currency;
