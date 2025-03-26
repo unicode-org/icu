@@ -350,10 +350,11 @@ jobs:
       - name: Build and run unicodesetperf test
         run: |
           cd icu4j;
-          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
+          mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
           git status
           cd perf-tests;
           mkdir -p perf/results/j_unicodesetperf/${{ matrix.perf }};
+          mvn dependency:copy-dependencies 
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.UnicodeSetPerf ${{ matrix.perf }} -a -t 2 -p 4 [:Lt:] | tee perf/results/j_unicodesetperf/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
@@ -407,9 +408,10 @@ jobs:
       - name: Build and run ucharacterperf test
         run: |
           cd icu4j;
-          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
+          mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_ucharacterperf;
+          mvn dependency:copy-dependencies 
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.UCharacterPerf -a -t 2 -p 4 0 ffff | tee perf/results/j_ucharacterperf/output.txt
 
       - name: Store performance test results
@@ -466,13 +468,14 @@ jobs:
       - name: Build and run decimalformatperf
         run: |
           cd icu4j;
-          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
+          mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }};
           # Delay execution by random number of seconds. Spreading execution of multiple
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
+          mvn dependency:copy-dependencies 
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.DecimalFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} "#,###.##" "1.234,56" -r 1 | tee perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
@@ -532,13 +535,14 @@ jobs:
           DATA_FILE_PATH: data/collation
         run: |
           cd icu4j;
-          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
+          mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }};
           # Delay execution by random number of seconds. Spreading execution of multiple
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
+          mvn dependency:copy-dependencies 
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.NormalizerPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 ${{ matrix.mode }} | tee perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
           cat perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
 
@@ -666,14 +670,15 @@ jobs:
           DATA_FILE_PATH: data/conversion
         run: |
           cd icu4j;
-          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
+          mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }};
           # Delay execution by random number of seconds. Spreading execution of multiple
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          java -cp ./target/*:./target/dependency/*:../main/charset/target/* com.ibm.icu.dev.test.perf.ConverterPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 -T ${{ matrix.test_enc }} | tee perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }}/output.txt
+          mvn dependency:copy-dependencies 
+          java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.ConverterPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 -T ${{ matrix.test_enc }} | tee perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
@@ -747,13 +752,14 @@ jobs:
       - name: Build and run dateformatperf
         run: |
           cd icu4j;
-          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
+          mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_dateformatperf/${{ matrix.locale }}/${{ matrix.perf }}/${{ env.DDIR }};
           # Delay execution by random number of seconds. Spreading execution of multiple
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
+          mvn dependency:copy-dependencies 
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.DateFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} ${{ env.PARM }} -r 1 | tee perf/results/j_dateformatperf/${{ matrix.locale }}/${{ matrix.perf }}/${{ env.DDIR }}/output.txt
 
       - name: Store performance test results
