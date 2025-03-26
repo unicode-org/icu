@@ -4,7 +4,9 @@
 // utfiteratortest.cpp
 // created: 2024aug12 Markus W. Scherer
 
+#include <string>
 #include <string_view>
+#include <vector>
 
 // Test header-only ICU C++ APIs. Do not use other ICU C++ APIs.
 // Non-default configuration:
@@ -220,6 +222,29 @@ private:
     const Unit *p;
 };
 
+template<typename StringView>
+std::vector<StringView> split(StringView s) {
+    using Unit = typename StringView::value_type;
+    std::vector<StringView> result;
+    while (!s.empty()) {
+        auto pos = s.find(static_cast<Unit>(u'|'));
+        if (pos == StringView::npos) { break; }
+        result.push_back(s.substr(0, pos));
+        s.remove_prefix(pos + 1);
+    }
+    result.push_back(s);
+    return result;
+}
+
+template<typename Unit>
+std::basic_string<Unit> join(std::vector<std::basic_string_view<Unit>> parts) {
+    std::basic_string<Unit> result;
+    for (auto part : parts) {
+        result.append(part);
+    }
+    return result;
+}
+
 class UTFIteratorTest : public IntlTest {
 public:
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) override {
@@ -249,20 +274,30 @@ public:
         TESTCASE_AUTO_END;
     }
 
-    void testSafe16Good();
+    template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
+    void testSafeGood(StringView piped);
+
+    void testSafe16Good() {
+        testSafeGood<UChar32, UTF_BEHAVIOR_NEGATIVE>(u"a|b|ç|カ|🚴"sv);
+    }
     void testSafe16Negative();
     void testSafe16FFFD();
     void testSafe16Surrogate();
     void testSafe16SinglePassIter();
     void testSafe16FwdIter();
 
-    void testSafe8Good();
+    void testSafe8Good() {
+        std::string_view piped(reinterpret_cast<const char *>(u8"a|b|ç|カ|🚴"));
+        testSafeGood<UChar32, UTF_BEHAVIOR_NEGATIVE>(piped);
+    }
     void testSafe8Negative();
     void testSafe8FFFD();
     void testSafe8SinglePassIter();
     void testSafe8FwdIter();
 
-    void testSafe32Good();
+    void testSafe32Good() {
+        testSafeGood<UChar32, UTF_BEHAVIOR_NEGATIVE>(U"a|b|ç|カ|🚴"sv);
+    }
     void testSafe32Negative();
     void testSafe32FFFD();
     void testSafe32Surrogate();
@@ -274,9 +309,15 @@ extern IntlTest *createUTFIteratorTest() {
     return new UTFIteratorTest();
 }
 
-void UTFIteratorTest::testSafe16Good() {
-    std::u16string_view good(u"abçカ🚴"sv);
-    auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(good);
+template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
+void UTFIteratorTest::testSafeGood(StringView piped) {
+    using Unit = typename StringView::value_type;
+    auto parts = split(piped);
+    auto joined = join<Unit>(parts);
+    auto last = parts[4];
+    StringView good(joined);
+    // "abçカ🚴"
+    auto range = utfStringCodePoints<CP32, behavior>(good);
     auto iter = range.begin();
     assertTrue(
         "bidirectional_iterator_tag",
@@ -288,9 +329,9 @@ void UTFIteratorTest::testSafe16Good() {
     ++iter;  // pre-increment
     auto units = *iter;
     assertEquals("iter[1] * codePoint", u'b', units.codePoint());
-    assertEquals("iter[1] * length", 1, units.length());
+    assertEquals("iter[1] * length", parts[1].length(), units.length());
     assertTrue("iter[1] * wellFormed", units.wellFormed());
-    assertTrue("iter[1] * stringView()", units.stringView() == u"b"sv);
+    assertTrue("iter[1] * stringView()", units.stringView() == parts[1]);
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
@@ -299,32 +340,34 @@ void UTFIteratorTest::testSafe16Good() {
     assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
     units = *iter++;
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
-    assertEquals("iter[4] * length", 2, units.length());
+    assertEquals("iter[4] * length", last.length(), units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
-    assertTrue("iter[4] * stringView()", units.stringView() == u"🚴"sv);
+    assertTrue("iter[4] * stringView()", units.stringView() == last);
     auto unitsIter = units.begin();
-    assertEquals("iter[4] * begin()[0]", u"🚴"[0], *unitsIter++);
-    assertEquals("iter[4] * begin()[1]", u"🚴"[1], *unitsIter);
+    for (auto c : last) {
+        assertEquals("iter[back 4] * begin()[i]", static_cast<CP32>(c), *unitsIter++);
+    }
     assertTrue("iter[4] * end() == endIter", units.end() == good.end());
     assertTrue("iter == endIter", iter == range.end());
     // backwards
     units = *--iter;  // pre-decrement
     assertEquals("iter[back 4] * codePoint", U'🚴', units.codePoint());
-    assertEquals("iter[back 4] * length", 2, units.length());
+    assertEquals("iter[back 4] * length", last.length(), units.length());
     assertTrue("iter[back 4] * wellFormed", units.wellFormed());
-    assertTrue("iter[back 4] * stringView()", units.stringView() == u"🚴"sv);
+    assertTrue("iter[back 4] * stringView()", units.stringView() == last);
     unitsIter = units.begin();
-    assertEquals("iter[back 4] * begin()[0]", u"🚴"[0], *unitsIter++);
-    assertEquals("iter[back 4] * begin()[1]", u"🚴"[1], *unitsIter);
+    for (auto c : last) {
+        assertEquals("iter[back 4] * begin()[i]", static_cast<CP32>(c), *unitsIter++);
+    }
     assertTrue("iter[back 4] * end() == endIter", units.end() == good.end());
     --iter;
     assertEquals("iter[back 3] * codePoint", u'カ', (*iter--).codePoint());  // post-decrement
     assertEquals("iter[back 2] * codePoint", u'ç', (*iter).codePoint());
-    assertEquals("iter[back 2] -> length", 1, iter->length());
+    assertEquals("iter[back 2] -> length", parts[2].length(), iter->length());
     units = *--iter;
     assertEquals("iter[back 1] * codePoint", u'b', units.codePoint());
     assertTrue("iter[back 1] * wellFormed", units.wellFormed());
-    assertTrue("iter[back 1] * stringView()", units.stringView() == u"b"sv);
+    assertTrue("iter[back 1] * stringView()", units.stringView() == parts[1]);
     --iter;
     assertEquals("iter[back 0] -> codePoint", u'a', iter->codePoint());
     assertTrue("iter[back 0] -> begin() == beginIter", iter->begin() == good.begin());
@@ -508,71 +551,6 @@ void UTFIteratorTest::testSafe16FwdIter() {
     assertTrue("iter == endIter", iter == rangeLimit);
 }
 
-void UTFIteratorTest::testSafe8Good() {
-    std::string_view good(reinterpret_cast<const char*>(u8"abçカ🚴"));
-    auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(good);
-    auto iter = range.begin();
-    assertTrue(
-        "bidirectional_iterator_tag",
-        std::is_same_v<
-            typename std::iterator_traits<decltype(iter)>::iterator_category,
-            std::bidirectional_iterator_tag>);
-    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
-    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
-    ++iter;  // pre-increment
-    auto units = *iter;
-    assertEquals("iter[1] * codePoint", u'b', units.codePoint());
-    assertEquals("iter[1] * length", 1, units.length());
-    assertTrue("iter[1] * wellFormed", units.wellFormed());
-    assertTrue("iter[1] * stringView()",
-               units.stringView() == std::string_view(reinterpret_cast<const char*>(u8"b")));
-    ++iter;
-    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
-    assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
-    ++iter;
-    // Fetch the current code point twice.
-    assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
-    units = *iter++;
-    assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
-    assertEquals("iter[4] * length", 4, units.length());
-    assertTrue("iter[4] * wellFormed", units.wellFormed());
-    assertTrue("iter[4] * stringView()",
-               units.stringView() == std::string_view(reinterpret_cast<const char*>(u8"🚴")));
-    auto unitsIter = units.begin();
-    assertEquals("iter[4] * begin()[0]", static_cast<char>(u8"🚴"[0]), *unitsIter++);
-    assertEquals("iter[4] * begin()[1]", static_cast<char>(u8"🚴"[1]), *unitsIter++);
-    assertEquals("iter[4] * begin()[2]", static_cast<char>(u8"🚴"[2]), *unitsIter++);
-    assertEquals("iter[4] * begin()[3]", static_cast<char>(u8"🚴"[3]), *unitsIter);
-    assertTrue("iter[4] * end() == endIter", units.end() == good.end());
-    assertTrue("iter == endIter", iter == range.end());
-    // backwards
-    units = *--iter;  // pre-decrement
-    assertEquals("iter[back 4] * codePoint", U'🚴', units.codePoint());
-    assertEquals("iter[back 4] * length", 4, units.length());
-    assertTrue("iter[back 4] * wellFormed", units.wellFormed());
-    assertTrue("iter[back 4] * stringView()",
-               units.stringView() == std::string_view(reinterpret_cast<const char*>(u8"🚴")));
-    unitsIter = units.begin();
-    assertEquals("iter[back 4] * begin()[0]", static_cast<char>(u8"🚴"[0]), *unitsIter++);
-    assertEquals("iter[back 4] * begin()[1]", static_cast<char>(u8"🚴"[1]), *unitsIter++);
-    assertEquals("iter[back 4] * begin()[2]", static_cast<char>(u8"🚴"[2]), *unitsIter++);
-    assertEquals("iter[back 4] * begin()[3]", static_cast<char>(u8"🚴"[3]), *unitsIter);
-    assertTrue("iter[back 4] * end() == endIter", units.end() == good.end());
-    --iter;
-    assertEquals("iter[back 3] * codePoint", u'カ', (*iter--).codePoint());  // post-decrement
-    assertEquals("iter[back 2] * codePoint", u'ç', (*iter).codePoint());
-    assertEquals("iter[back 2] -> length", 2, iter->length());
-    units = *--iter;
-    assertEquals("iter[back 1] * codePoint", u'b', units.codePoint());
-    assertTrue("iter[back 1] * wellFormed", units.wellFormed());
-    assertTrue("iter[back 1] * stringView()",
-               units.stringView() == std::string_view(reinterpret_cast<const char*>(u8"b")));
-    --iter;
-    assertEquals("iter[back 0] -> codePoint", u'a', iter->codePoint());
-    assertTrue("iter[back 0] -> begin() == beginIter", iter->begin() == good.begin());
-    assertTrue("iter == beginIter", iter == range.begin());
-}
-
 void UTFIteratorTest::testSafe8SinglePassIter() {
     SinglePassSource<char> good(reinterpret_cast<const char*>(u8"abçカ🚴"));
     auto iter = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(good.begin(), good.end());
@@ -647,61 +625,6 @@ void UTFIteratorTest::testSafe8FwdIter() {
                static_cast<uint8_t>(*unitsIter) == static_cast<uint8_t>(u8"🚴"[3]));
     assertTrue("iter[4] * end() == endIter", units.end() == goodLimit);
     assertTrue("iter == endIter", iter == rangeLimit);
-}
-
-void UTFIteratorTest::testSafe32Good() {
-    std::u32string_view good(U"abçカ🚴"sv);
-    auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(good);
-    auto iter = range.begin();
-    assertTrue(
-        "bidirectional_iterator_tag",
-        std::is_same_v<
-            typename std::iterator_traits<decltype(iter)>::iterator_category,
-            std::bidirectional_iterator_tag>);
-    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
-    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
-    ++iter;  // pre-increment
-    auto units = *iter;
-    assertEquals("iter[1] * codePoint", u'b', units.codePoint());
-    assertEquals("iter[1] * length", 1, units.length());
-    assertTrue("iter[1] * wellFormed", units.wellFormed());
-    assertTrue("iter[1] * stringView()", units.stringView() == U"b"sv);
-    ++iter;
-    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
-    assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
-    ++iter;
-    // Fetch the current code point twice.
-    assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
-    units = *iter++;
-    assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
-    assertEquals("iter[4] * length", 1, units.length());
-    assertTrue("iter[4] * wellFormed", units.wellFormed());
-    assertTrue("iter[4] * stringView()", units.stringView() == U"🚴"sv);
-    auto unitsIter = units.begin();
-    assertEquals("iter[4] * begin()[0]", static_cast<UChar32>(U'🚴'), *unitsIter);
-    assertTrue("iter[4] * end() == endIter", units.end() == good.end());
-    assertTrue("iter == endIter", iter == range.end());
-    // backwards
-    units = *--iter;  // pre-decrement
-    assertEquals("iter[back 4] * codePoint", U'🚴', units.codePoint());
-    assertEquals("iter[back 4] * length", 1, units.length());
-    assertTrue("iter[back 4] * wellFormed", units.wellFormed());
-    assertTrue("iter[back 4] * stringView()", units.stringView() == U"🚴"sv);
-    unitsIter = units.begin();
-    assertEquals("iter[back 4] * begin()[0]", static_cast<UChar32>(U'🚴'), *unitsIter);
-    assertTrue("iter[back 4] * end() == endIter", units.end() == good.end());
-    --iter;
-    assertEquals("iter[back 3] * codePoint", u'カ', (*iter--).codePoint());  // post-decrement
-    assertEquals("iter[back 2] * codePoint", u'ç', (*iter).codePoint());
-    assertEquals("iter[back 2] -> length", 1, iter->length());
-    units = *--iter;
-    assertEquals("iter[back 1] * codePoint", u'b', units.codePoint());
-    assertTrue("iter[back 1] * wellFormed", units.wellFormed());
-    assertTrue("iter[back 1] * stringView()", units.stringView() == U"b"sv);
-    --iter;
-    assertEquals("iter[back 0] -> codePoint", u'a', iter->codePoint());
-    assertTrue("iter[back 0] -> begin() == beginIter", iter->begin() == good.begin());
-    assertTrue("iter == beginIter", iter == range.begin());
 }
 
 void UTFIteratorTest::testSafe32SinglePassIter() {
