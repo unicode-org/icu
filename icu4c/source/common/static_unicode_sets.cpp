@@ -191,7 +191,8 @@ void U_CALLCONV initNumberParseUniSets(UErrorCode& status) {
     U_ASSERT(gUnicodeSets[INFINITY_SIGN] == nullptr);
     gUnicodeSets[INFINITY_SIGN] = new UnicodeSet(u"[∞]", status);
     U_ASSERT(gUnicodeSets[APPROXIMATELY_SIGN] == nullptr);
-    gUnicodeSets[APPROXIMATELY_SIGN] = new UnicodeSet(u"[∼~≈≃約]", status); // this set was manually curated
+    // This set of characters was manually curated from the values of the approximatelySign element of CLDR common/main/*.xml files.
+    gUnicodeSets[APPROXIMATELY_SIGN] = new UnicodeSet(u"[∼~≈≃約]", status);
     if (U_FAILURE(status)) { return; }
 
     U_ASSERT(gUnicodeSets[DOLLAR_SIGN] != nullptr);
