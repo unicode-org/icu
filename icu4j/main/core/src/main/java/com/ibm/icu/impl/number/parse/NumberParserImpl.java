@@ -227,6 +227,7 @@ public class NumberParserImpl {
         if (parseMode == ParseMode.LENIENT) {
             parser.addMatcher(PlusSignMatcher.getInstance(symbols, false));
             parser.addMatcher(MinusSignMatcher.getInstance(symbols, false));
+            parser.addMatcher(ApproximatelySignMatcher.getInstance(symbols, false));
         }
         parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
         parser.addMatcher(InfinityMatcher.getInstance(symbols));
