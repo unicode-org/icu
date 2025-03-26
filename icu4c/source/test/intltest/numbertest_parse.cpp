@@ -123,6 +123,10 @@ void NumberParserTest::testBasic() {
                  {3, u"                              1,234", u"a0", 35, 1234.}, // should not hang
                  {3, u"NaN", u"0", 3, NAN},
                  {3, u"NaN E5", u"0", 6, NAN},
+                 {3, u"~100", u"~0", 4, 100.0},
+                 {3, u" ~ 100", u"~0", 6, 100.0},
+                 {3, u"≈100", u"~0", 4, 100.0},
+                 {3, u"100≈", u"~0", 3, 100.0},
                  {3, u"0", u"0", 1, 0.0}};
 
     parse_flags_t parseFlags = PARSE_FLAG_IGNORE_CASE | PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
@@ -179,6 +183,10 @@ void NumberParserTest::testBasic() {
                 cas.expectedCharsConsumed, resultObject.charEnd);
             assertEquals("Strict Parse failed: " + message,
                 cas.expectedResultDouble, resultObject.getDouble(status));
+        }
+
+        if (status.errDataIfFailureAndReset("parsing test failed")) {
+            continue;
         }
     }
 }

@@ -128,6 +128,10 @@ public class NumberParserTest extends CoreTestFmwk {
                 { 3, "                              1,234", "a0", 35, 1234. }, // should not hang
                 { 3, "NaN", "0", 3, Double.NaN },
                 { 3, "NaN E5", "0", 6, Double.NaN },
+                { 3, "~100", "~0", 4, 100.0 },
+                { 3, " ~ 100", "~0", 6, 100.0 },
+                { 3, "≈100", "~0", 4, 100.0 },
+                { 3, "100≈", "~0", 3, 100.0 },
                 { 3, "0", "0", 1, 0.0 } };
 
         int parseFlags = ParsingUtils.PARSE_FLAG_IGNORE_CASE

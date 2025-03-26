@@ -49,6 +49,7 @@ public class StaticUnicodeSets {
         PERCENT_SIGN,
         PERMILLE_SIGN,
         INFINITY_SIGN,
+        APPROXIMATELY_SIGN,
 
         // Currency Symbols
         DOLLAR_SIGN,
@@ -263,7 +264,11 @@ public class StaticUnicodeSets {
         assert unicodeSets.containsKey(Key.PERCENT_SIGN);
         assert unicodeSets.containsKey(Key.PERMILLE_SIGN);
 
+        // The following don't currently have parseLenients in data.
         unicodeSets.put(Key.INFINITY_SIGN, new UnicodeSet("[∞]").freeze());
+        // This set of characters was manually curated from the
+        // values of the approximatelySign element of CLDR common/main/*.xml files.
+        unicodeSets.put(Key.APPROXIMATELY_SIGN, new UnicodeSet("[∼~≈≃約]").freeze());
 
         assert unicodeSets.containsKey(Key.DOLLAR_SIGN);
         assert unicodeSets.containsKey(Key.POUND_SIGN);
