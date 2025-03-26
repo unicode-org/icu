@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742945505011,
+  "lastUpdate": 1743013884176,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40893,6 +40893,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 60.7876,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "0b984044546c7f2db3a841e253049e176532f490",
+          "message": "ICU-23086 Fix CI performance tests",
+          "timestamp": "2025-03-26T11:00:46-07:00",
+          "tree_id": "8d7797e088fb93bd3f214c2f9e4ad64d5288a2e0",
+          "url": "https://github.com/unicode-org/icu/commit/0b984044546c7f2db3a841e253049e176532f490"
+        },
+        "date": 1743013624342,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 28.046,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 61.4088,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
