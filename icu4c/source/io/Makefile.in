@@ -58,7 +58,7 @@ CXXFLAGS += $(LIBCXXFLAGS)
 CPPFLAGS += -I$(srcdir) -I$(top_srcdir)/common -I$(top_srcdir)/i18n $(LIBCPPFLAGS) $(CPPFLAGSICUIO)
 DEFS += -DU_IO_IMPLEMENTATION
 LDFLAGS += $(LDFLAGSICUIO)
-LIBS = $(LIBICUUC) $(LIBICUI18N) $(DEFAULT_LIBS)
+LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS)
 
 SOURCES = $(shell cat $(srcdir)/sources.txt)
 OBJECTS = $(SOURCES:.cpp=.o)
