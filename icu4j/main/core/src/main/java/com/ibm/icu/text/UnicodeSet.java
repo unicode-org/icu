@@ -3601,7 +3601,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             }
         }
 
-        if (valueAlias.length() > 0) {
+        if (valueAlias != null && !valueAlias.isEmpty()) {
             p = UCharacter.getPropertyEnum(propertyAlias);
 
             // Treat gc as gcm
@@ -3835,7 +3835,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         else {
             // Handle case where no '=' is seen, and \N{}
             propName = pattern.substring(pos, close);
-            valueName = "";
+            valueName = null;
 
             // Handle \N{name}
             if (isName) {
