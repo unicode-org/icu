@@ -190,7 +190,6 @@ private:
     SinglePassSource<Unit> *src;
 };
 
-// TODO: still needed once we test with both SinglePassIter and a bidirectional iter?
 template<typename Unit>
 class FwdIter {
 public:
@@ -221,35 +220,61 @@ private:
     const Unit *p;
 };
 
-class Safe16 : public IntlTest {
+class UTFIteratorTest : public IntlTest {
 public:
-    Safe16() {}
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) override {
+        if (exec) { logln("TestSuite UTFIteratorTest: "); }
+        TESTCASE_AUTO_BEGIN;
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
+        TESTCASE_AUTO(testSafe16Good);
+        TESTCASE_AUTO(testSafe16Negative);
+        TESTCASE_AUTO(testSafe16FFFD);
+        TESTCASE_AUTO(testSafe16Surrogate);
+        TESTCASE_AUTO(testSafe16SinglePassIter);
+        TESTCASE_AUTO(testSafe16FwdIter);
 
-    void testGood();
-    void testNegative();
-    void testFFFD();
-    void testSurrogate();
-    void testSinglePassIter();
-    void testFwdIter();
+        TESTCASE_AUTO(testSafe8Good);
+        // TODO: TESTCASE_AUTO(testSafe8Negative);
+        // TODO: TESTCASE_AUTO(testSafe8FFFD);
+        TESTCASE_AUTO(testSafe8SinglePassIter);
+        TESTCASE_AUTO(testSafe8FwdIter);
+
+        TESTCASE_AUTO(testSafe32Good);
+        // TODO: TESTCASE_AUTO(testSafe32Negative);
+        // TODO: TESTCASE_AUTO(testSafe32FFFD);
+        // TODO: TESTCASE_AUTO(testSafe32Surrogate);
+        TESTCASE_AUTO(testSafe32SinglePassIter);
+        TESTCASE_AUTO(testSafe32FwdIter);
+
+        TESTCASE_AUTO_END;
+    }
+
+    void testSafe16Good();
+    void testSafe16Negative();
+    void testSafe16FFFD();
+    void testSafe16Surrogate();
+    void testSafe16SinglePassIter();
+    void testSafe16FwdIter();
+
+    void testSafe8Good();
+    void testSafe8Negative();
+    void testSafe8FFFD();
+    void testSafe8SinglePassIter();
+    void testSafe8FwdIter();
+
+    void testSafe32Good();
+    void testSafe32Negative();
+    void testSafe32FFFD();
+    void testSafe32Surrogate();
+    void testSafe32SinglePassIter();
+    void testSafe32FwdIter();
 };
 
-void Safe16::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
-    if(exec) {
-        logln("TestSuite Safe16: ");
-    }
-    TESTCASE_AUTO_BEGIN;
-    TESTCASE_AUTO(testGood);
-    TESTCASE_AUTO(testNegative);
-    TESTCASE_AUTO(testFFFD);
-    TESTCASE_AUTO(testSurrogate);
-    TESTCASE_AUTO(testSinglePassIter);
-    TESTCASE_AUTO(testFwdIter);
-    TESTCASE_AUTO_END;
+extern IntlTest *createUTFIteratorTest() {
+    return new UTFIteratorTest();
 }
 
-void Safe16::testGood() {
+void UTFIteratorTest::testSafe16Good() {
     std::u16string_view good(u"abçカ🚴"sv);
     auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(good);
     auto iter = range.begin();
@@ -306,7 +331,7 @@ void Safe16::testGood() {
     assertTrue("iter == beginIter", iter == range.begin());
 }
 
-void Safe16::testNegative() {
+void UTFIteratorTest::testSafe16Negative() {
     static const char16_t badChars[] = { u'a', 0xd900, u'ç', 0xdc05, u"🚴"[0], u"🚴"[1] };
     std::u16string_view bad(badChars, 6);
     auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(bad);
@@ -342,7 +367,7 @@ void Safe16::testNegative() {
     assertTrue("iter == beginIter", iter == range.begin());
 }
 
-void Safe16::testFFFD() {
+void UTFIteratorTest::testSafe16FFFD() {
     static const char16_t badChars[] = { u'a', 0xd900, u'ç', 0xdc05, u"🚴"[0], u"🚴"[1] };
     std::u16string_view bad(badChars, 6);
     auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(bad);
@@ -378,7 +403,7 @@ void Safe16::testFFFD() {
     assertTrue("iter == beginIter", iter == range.begin());
 }
 
-void Safe16::testSurrogate() {
+void UTFIteratorTest::testSafe16Surrogate() {
     static const char16_t badChars[] = { u'a', 0xd900, u'ç', 0xdc05, u"🚴"[0], u"🚴"[1] };
     std::u16string_view bad(badChars, 6);
     auto range = utfStringCodePoints<uint32_t, UTF_BEHAVIOR_SURROGATE>(bad);
@@ -414,7 +439,7 @@ void Safe16::testSurrogate() {
     assertTrue("iter == beginIter", iter == range.begin());
 }
 
-void Safe16::testSinglePassIter() {
+void UTFIteratorTest::testSafe16SinglePassIter() {
     SinglePassSource<char16_t> good(u"abçカ🚴"sv);
     auto iter = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(good.begin(), good.end());
     auto rangeLimit = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(good.end(), good.end());
@@ -445,7 +470,7 @@ void Safe16::testSinglePassIter() {
     assertTrue("iter == endIter", iter == rangeLimit);
 }
 
-void Safe16::testFwdIter() {
+void UTFIteratorTest::testSafe16FwdIter() {
     std::u16string_view good(u"abçカ🚴"sv);
     FwdIter<char16_t> goodBegin(good.data());
     FwdIter<char16_t> goodLimit(good.data() + good.length());
@@ -483,35 +508,7 @@ void Safe16::testFwdIter() {
     assertTrue("iter == endIter", iter == rangeLimit);
 }
 
-// TODO: test back & forth with bidirectional iterator (not random access, not contiguous)
-
-class Safe8 : public IntlTest {
-public:
-    Safe8() {}
-
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
-
-    void testGood();
-    void testNegative();
-    void testFFFD();
-    void testSinglePassIter();
-    void testFwdIter();
-};
-
-void Safe8::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
-    if(exec) {
-        logln("TestSuite Safe8: ");
-    }
-    TESTCASE_AUTO_BEGIN;
-    TESTCASE_AUTO(testGood);
-    // TODO: TESTCASE_AUTO(testNegative);
-    // TODO: TESTCASE_AUTO(testFFFD);
-    TESTCASE_AUTO(testSinglePassIter);
-    TESTCASE_AUTO(testFwdIter);
-    TESTCASE_AUTO_END;
-}
-
-void Safe8::testGood() {
+void UTFIteratorTest::testSafe8Good() {
     std::string_view good(reinterpret_cast<const char*>(u8"abçカ🚴"));
     auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(good);
     auto iter = range.begin();
@@ -576,7 +573,7 @@ void Safe8::testGood() {
     assertTrue("iter == beginIter", iter == range.begin());
 }
 
-void Safe8::testSinglePassIter() {
+void UTFIteratorTest::testSafe8SinglePassIter() {
     SinglePassSource<char> good(reinterpret_cast<const char*>(u8"abçカ🚴"));
     auto iter = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(good.begin(), good.end());
     auto rangeLimit = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(good.end(), good.end());
@@ -607,7 +604,7 @@ void Safe8::testSinglePassIter() {
     assertTrue("iter == endIter", iter == rangeLimit);
 }
 
-void Safe8::testFwdIter() {
+void UTFIteratorTest::testSafe8FwdIter() {
     std::string_view good(reinterpret_cast<const char*>(u8"abçカ🚴"));
     FwdIter<char> goodBegin(good.data());
     FwdIter<char> goodLimit(good.data() + good.length());
@@ -652,33 +649,7 @@ void Safe8::testFwdIter() {
     assertTrue("iter == endIter", iter == rangeLimit);
 }
 
-class Safe32 : public IntlTest {
-public:
-    Safe32() {}
-
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
-
-    void testGood();
-    void testNegative();
-    void testFFFD();
-    void testSinglePassIter();
-    void testFwdIter();
-};
-
-void Safe32::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
-    if(exec) {
-        logln("TestSuite Safe32: ");
-    }
-    TESTCASE_AUTO_BEGIN;
-    TESTCASE_AUTO(testGood);
-    // TODO: TESTCASE_AUTO(testNegative);
-    // TODO: TESTCASE_AUTO(testFFFD);
-    TESTCASE_AUTO(testSinglePassIter);
-    TESTCASE_AUTO(testFwdIter);
-    TESTCASE_AUTO_END;
-}
-
-void Safe32::testGood() {
+void UTFIteratorTest::testSafe32Good() {
     std::u32string_view good(U"abçカ🚴"sv);
     auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(good);
     auto iter = range.begin();
@@ -733,7 +704,7 @@ void Safe32::testGood() {
     assertTrue("iter == beginIter", iter == range.begin());
 }
 
-void Safe32::testSinglePassIter() {
+void UTFIteratorTest::testSafe32SinglePassIter() {
     SinglePassSource<char32_t> good(U"abçカ🚴"sv);
     auto iter = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(good.begin(), good.end());
     auto rangeLimit = utfIterator<UChar32, UTF_BEHAVIOR_NEGATIVE>(good.end(), good.end());
@@ -764,7 +735,7 @@ void Safe32::testSinglePassIter() {
     assertTrue("iter == endIter", iter == rangeLimit);
 }
 
-void Safe32::testFwdIter() {
+void UTFIteratorTest::testSafe32FwdIter() {
     std::u32string_view good(U"abçカ🚴"sv);
     FwdIter<char32_t> goodBegin(good.data());
     FwdIter<char32_t> goodLimit(good.data() + good.length());
@@ -799,22 +770,4 @@ void Safe32::testFwdIter() {
     assertTrue("iter[4] * begin()[0]", *unitsIter == U'🚴');
     assertTrue("iter[4] * end() == endIter", units.end() == goodLimit);
     assertTrue("iter == endIter", iter == rangeLimit);
-}
-
-// top-level test class ---------------------------------------------------- ***
-
-class UTFIteratorTest : public IntlTest {
-public:
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr) override {
-    if (exec) logln("TestSuite Utilities: ");
-    TESTCASE_AUTO_BEGIN;
-    TESTCASE_AUTO_CLASS(Safe16);
-    TESTCASE_AUTO_CLASS(Safe8);
-    TESTCASE_AUTO_CLASS(Safe32);
-    TESTCASE_AUTO_END;
-    }
-};
-
-extern IntlTest *createUTFIteratorTest() {
-    return new UTFIteratorTest();
 }
