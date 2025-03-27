@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743089451979,
+  "lastUpdate": 1743116705669,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -114429,6 +114429,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 40.006,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "d0e30acc684eefd61fb42a510f8fef84221a5126",
+          "message": "ICU-23059 ICU4C MF2: Spec test updates\n\nUpdate spec tests to current version from message-format-wg\n\n  - Update parser for changed name-start grammar rule\n  - Validate number literals in :number implementation (since parser no longer does this)\n  - Disallow `:number`/`:integer` select option set from variable\n\n    See https://github.com/unicode-org/message-format-wg/pull/1016\n\n    As part of this, un-skip tests where the `bad-option` error is\n    expected, and implement validating digit size options\n    (pending PR https://github.com/unicode-org/icu/pull/2973 is intended\n    to do this more fully)",
+          "timestamp": "2025-03-27T15:20:49-07:00",
+          "tree_id": "82386ad1723afb4ecd9b7ae63983dd3fe28f543e",
+          "url": "https://github.com/unicode-org/icu/commit/d0e30acc684eefd61fb42a510f8fef84221a5126"
+        },
+        "date": 1743116453981,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.1105,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.2797,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.7063,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 28.0546,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.2569,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 36.3371,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.016,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.0959,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 86.4783,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.6935,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 37.2228,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 40.015,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
