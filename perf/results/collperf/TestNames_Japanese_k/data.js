@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743088982132,
+  "lastUpdate": 1743116550719,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -64959,6 +64959,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5606965.3711,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "d0e30acc684eefd61fb42a510f8fef84221a5126",
+          "message": "ICU-23059 ICU4C MF2: Spec test updates\n\nUpdate spec tests to current version from message-format-wg\n\n  - Update parser for changed name-start grammar rule\n  - Validate number literals in :number implementation (since parser no longer does this)\n  - Disallow `:number`/`:integer` select option set from variable\n\n    See https://github.com/unicode-org/message-format-wg/pull/1016\n\n    As part of this, un-skip tests where the `bad-option` error is\n    expected, and implement validating digit size options\n    (pending PR https://github.com/unicode-org/icu/pull/2973 is intended\n    to do this more fully)",
+          "timestamp": "2025-03-27T15:20:49-07:00",
+          "tree_id": "82386ad1723afb4ecd9b7ae63983dd3fe28f543e",
+          "url": "https://github.com/unicode-org/icu/commit/d0e30acc684eefd61fb42a510f8fef84221a5126"
+        },
+        "date": 1743115816078,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 232.0364,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21676872.495,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5416968.337,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20549891.761,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5689757.8032,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
