@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743089286029,
+  "lastUpdate": 1743116340899,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -107817,6 +107817,96 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIsWhiteSpace",
             "value": 5.2147,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "d0e30acc684eefd61fb42a510f8fef84221a5126",
+          "message": "ICU-23059 ICU4C MF2: Spec test updates\n\nUpdate spec tests to current version from message-format-wg\n\n  - Update parser for changed name-start grammar rule\n  - Validate number literals in :number implementation (since parser no longer does this)\n  - Disallow `:number`/`:integer` select option set from variable\n\n    See https://github.com/unicode-org/message-format-wg/pull/1016\n\n    As part of this, un-skip tests where the `bad-option` error is\n    expected, and implement validating digit size options\n    (pending PR https://github.com/unicode-org/icu/pull/2973 is intended\n    to do this more fully)",
+          "timestamp": "2025-03-27T15:20:49-07:00",
+          "tree_id": "82386ad1723afb4ecd9b7ae63983dd3fe28f543e",
+          "url": "https://github.com/unicode-org/icu/commit/d0e30acc684eefd61fb42a510f8fef84221a5126"
+        },
+        "date": 1743116025762,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIsAlpha",
+            "value": 4.2885,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsUpper",
+            "value": 4.3052,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsLower",
+            "value": 4.5986,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsDigit",
+            "value": 4.3032,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsSpace",
+            "value": 5.2238,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsAlphaNumeric",
+            "value": 4.3075,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsPrint",
+            "value": 4.3047,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsControl",
+            "value": 4.2858,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToLower",
+            "value": 5.4806,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToUpper",
+            "value": 5.222,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsWhiteSpace",
+            "value": 5.2161,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
