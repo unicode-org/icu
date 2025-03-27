@@ -311,7 +311,7 @@ void FormattedStringBuilderTest::testCodePoints() {
 }
 
 void FormattedStringBuilderTest::testInsertOverflow() {
-    if (quick || logKnownIssue("22047", "FormattedStringBuilder with long length crashes in toUnicodeString in CI Linux tests")) return;
+    if (quick /* || logKnownIssue("22047", "FormattedStringBuilder with long length crashes in toUnicodeString in CI Linux tests") */) return;
     
     // Setup the test fixture in sb, sb2, ustr.
     UErrorCode status = U_ZERO_ERROR;
