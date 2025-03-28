@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743115649717,
+  "lastUpdate": 1743127854292,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33357,6 +33357,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.009643307152669915,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "1bf6bf774dbc8c6c2051963a81100ea1114b497f",
+          "message": "ICU-23087 Pass null to applyPropertyAlias for a unary property query",
+          "timestamp": "2025-03-28T02:57:27+01:00",
+          "tree_id": "152ec7bcddc9d6e83541d3e3a09d5bb8daf1455a",
+          "url": "https://github.com/unicode-org/icu/commit/1bf6bf774dbc8c6c2051963a81100ea1114b497f"
+        },
+        "date": 1743127590946,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.009633028911197739,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
