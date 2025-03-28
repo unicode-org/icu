@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743128287665,
+  "lastUpdate": 1743206157157,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -65229,6 +65229,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16489462.7876,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "ee90520429f197aa11a9ca3c05f91712134109be",
+          "message": "ICU-23081 Use String.replace on non-regex string queries\n\nhttps://unicode-org.atlassian.net/browse/ICU-23081",
+          "timestamp": "2025-03-28T16:34:38-07:00",
+          "tree_id": "41f850bd441b70f8c1da8806bdb42827c7ad5140",
+          "url": "https://github.com/unicode-org/icu/commit/ee90520429f197aa11a9ca3c05f91712134109be"
+        },
+        "date": 1743205910173,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 325.0942,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 35493353.5799,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 14890872.6324,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 35332490.5274,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16476859.2171,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
