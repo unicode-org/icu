@@ -125,8 +125,14 @@ static constexpr std::u16string_view YEAR = u"year";
             const Locale& locale;
             const DateTimeFactory::DateTimeType type;
             friend class DateTimeFactory;
-            DateTime(const Locale& l, DateTimeFactory::DateTimeType t) : locale(l), type(t) {}
+            DateTime(const Locale& l, DateTimeFactory::DateTimeType t)
+                : locale(l), type(t) {}
             const LocalPointer<icu::DateFormat> icuFormatter;
+
+            // Methods for parsing date literals
+            UDate tryPatterns(const UnicodeString&, UErrorCode&) const;
+            UDate tryTimeZonePatterns(const UnicodeString&, UErrorCode&) const;
+            DateInfo createDateInfoFromString(const UnicodeString&, UErrorCode&) const;
 
             /*
               Looks up an option by name, first checking `opts`, then the cached options
@@ -322,7 +328,7 @@ static constexpr std::u16string_view YEAR = u"year";
 
     };
 
-    extern void formatDateWithDefaults(const Locale& locale, UDate date, UnicodeString&, UErrorCode& errorCode);
+    extern void formatDateWithDefaults(const Locale& locale, const DateInfo& date, UnicodeString&, UErrorCode& errorCode);
     extern number::FormattedNumber formatNumberWithDefaults(const Locale& locale, double toFormat, UErrorCode& errorCode);
     extern number::FormattedNumber formatNumberWithDefaults(const Locale& locale, int32_t toFormat, UErrorCode& errorCode);
     extern number::FormattedNumber formatNumberWithDefaults(const Locale& locale, int64_t toFormat, UErrorCode& errorCode);
