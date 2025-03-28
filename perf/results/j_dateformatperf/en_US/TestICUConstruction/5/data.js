@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743127467226,
+  "lastUpdate": 1743205355194,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33357,6 +33357,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1949.528444247632,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "ee90520429f197aa11a9ca3c05f91712134109be",
+          "message": "ICU-23081 Use String.replace on non-regex string queries\n\nhttps://unicode-org.atlassian.net/browse/ICU-23081",
+          "timestamp": "2025-03-28T16:34:38-07:00",
+          "tree_id": "41f850bd441b70f8c1da8806bdb42827c7ad5140",
+          "url": "https://github.com/unicode-org/icu/commit/ee90520429f197aa11a9ca3c05f91712134109be"
+        },
+        "date": 1743205114359,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1922.2057267923185,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
