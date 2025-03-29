@@ -296,10 +296,7 @@ public:
     }
 
     template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
-    void testSafeGood(StringView piped);
-
-    template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
-    void testSafeBad(StringView piped);
+    void testSafe(StringView piped, bool isWellFormed);
 
     template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
     void testSafeSinglePassIter(StringView piped);
@@ -327,16 +324,16 @@ public:
     static constexpr std::u32string_view bad32{badChars32, std::size(badChars32)};
 
     void testSafe16Good() {
-        testSafeGood<UChar32, UTF_BEHAVIOR_NEGATIVE>(good16);
+        testSafe<UChar32, UTF_BEHAVIOR_NEGATIVE>(good16, true);
     }
     void testSafe16Negative() {
-        testSafeBad<UChar32, UTF_BEHAVIOR_NEGATIVE>(bad16);
+        testSafe<UChar32, UTF_BEHAVIOR_NEGATIVE>(bad16, false);
     }
     void testSafe16FFFD() {
-        testSafeBad<char32_t, UTF_BEHAVIOR_FFFD>(bad16);
+        testSafe<char32_t, UTF_BEHAVIOR_FFFD>(bad16, false);
     }
     void testSafe16Surrogate() {
-        testSafeBad<uint32_t, UTF_BEHAVIOR_SURROGATE>(bad16);
+        testSafe<uint32_t, UTF_BEHAVIOR_SURROGATE>(bad16, false);
     }
     void testSafe16SinglePassIter() {
         testSafeSinglePassIter<UChar32, UTF_BEHAVIOR_NEGATIVE>(good16);
@@ -346,15 +343,15 @@ public:
     }
 
     void testSafe8Good() {
-        testSafeGood<UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars});
+        testSafe<UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars}, true);
     }
     void testSafe8Negative() {
-        testSafeBad<UChar32, UTF_BEHAVIOR_NEGATIVE>(
-            std::string_view(string8FromBytes(badChars8, std::size(badChars8))));
+        testSafe<UChar32, UTF_BEHAVIOR_NEGATIVE>(
+            std::string_view(string8FromBytes(badChars8, std::size(badChars8))), false);
     }
     void testSafe8FFFD() {
-        testSafeBad<char32_t, UTF_BEHAVIOR_FFFD>(
-            std::string_view(string8FromBytes(badChars8, std::size(badChars8))));
+        testSafe<char32_t, UTF_BEHAVIOR_FFFD>(
+            std::string_view(string8FromBytes(badChars8, std::size(badChars8))), false);
     }
     void testSafe8SinglePassIter() {
         testSafeSinglePassIter<UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars});
@@ -364,16 +361,16 @@ public:
     }
 
     void testSafe32Good() {
-        testSafeGood<UChar32, UTF_BEHAVIOR_NEGATIVE>(good32);
+        testSafe<UChar32, UTF_BEHAVIOR_NEGATIVE>(good32, true);
     }
     void testSafe32Negative() {
-        testSafeBad<UChar32, UTF_BEHAVIOR_NEGATIVE>(bad32);
+        testSafe<UChar32, UTF_BEHAVIOR_NEGATIVE>(bad32, false);
     }
     void testSafe32FFFD() {
-        testSafeBad<char32_t, UTF_BEHAVIOR_FFFD>(bad32);
+        testSafe<char32_t, UTF_BEHAVIOR_FFFD>(bad32, false);
     }
     void testSafe32Surrogate() {
-        testSafeBad<uint32_t, UTF_BEHAVIOR_SURROGATE>(bad32);
+        testSafe<uint32_t, UTF_BEHAVIOR_SURROGATE>(bad32, false);
     }
     void testSafe32SinglePassIter() {
         testSafeSinglePassIter<UChar32, UTF_BEHAVIOR_NEGATIVE>(good32);
@@ -390,14 +387,16 @@ extern IntlTest *createUTFIteratorTest() {
 }
 
 template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
-void UTFIteratorTest::testSafeGood(StringView piped) {
+void UTFIteratorTest::testSafe(StringView piped, bool isWellFormed) {
     using Unit = typename StringView::value_type;
     auto parts = split(piped);
     auto joined = join<Unit>(parts);
     auto last = parts[4];
-    StringView good(joined);
+    StringView sv(joined);
     // "abçカ🚴"
-    auto range = utfStringCodePoints<CP32, behavior>(good);
+    // or
+    // "a?ç?🚴" where the ? sequences are ill-formed
+    auto range = utfStringCodePoints<CP32, behavior>(sv);
     auto iter = range.begin();
     assertTrue(
         "bidirectional_iterator_tag",
@@ -408,27 +407,36 @@ void UTFIteratorTest::testSafeGood(StringView piped) {
     assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
     ++iter;  // pre-increment
     auto units = *iter;
-    assertEquals("iter[1] * codePoint", u'b', units.codePoint());
+    CP32 expectedCP = isWellFormed ? u'b' : sub<CP32, behavior>(parts[1]);
+    assertEquals("iter[1] * codePoint", expectedCP, units.codePoint());
     assertEquals("iter[1] * length", parts[1].length(), units.length());
-    assertTrue("iter[1] * wellFormed", units.wellFormed());
+    assertEquals("iter[1] * wellFormed", isWellFormed, units.wellFormed());
     assertTrue("iter[1] * stringView()", units.stringView() == parts[1]);
+    auto unitsIter = units.begin();
+    for (auto c : parts[1]) {
+        assertEquals("iter[1] * begin()[i]",
+                     static_cast<UChar32>(c), static_cast<UChar32>(*unitsIter++));
+    }
+    assertTrue("iter[1] * end()[0]", *units.end() == parts[2][0]);
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
-    assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
-    ++iter;
+    units = *iter++;  // post-increment
+    expectedCP = isWellFormed ? u'カ' : sub<CP32, behavior>(parts[3]);
+    assertEquals("iter[3] * codePoint", expectedCP, units.codePoint());
+    assertEquals("iter[3] * wellFormed", isWellFormed, units.wellFormed());
     // Fetch the current code point twice.
     assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
-    units = *iter++;
+    units = *iter++;  // post-increment
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[4] * length", last.length(), units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
     assertTrue("iter[4] * stringView()", units.stringView() == last);
-    auto unitsIter = units.begin();
+    unitsIter = units.begin();
     for (auto c : last) {
         assertEquals("iter[back 4] * begin()[i]",
                      static_cast<UChar32>(c), static_cast<UChar32>(*unitsIter++));
     }
-    assertTrue("iter[4] * end() == endIter", units.end() == good.end());
+    assertTrue("iter[4] * end() == endIter", units.end() == sv.end());
     assertTrue("iter == endIter", iter == range.end());
     // backwards
     units = *--iter;  // pre-decrement
@@ -441,67 +449,21 @@ void UTFIteratorTest::testSafeGood(StringView piped) {
         assertEquals("iter[back 4] * begin()[i]",
                      static_cast<UChar32>(c), static_cast<UChar32>(*unitsIter++));
     }
-    assertTrue("iter[back 4] * end() == endIter", units.end() == good.end());
+    assertTrue("iter[back 4] * end() == endIter", units.end() == sv.end());
     --iter;
-    assertEquals("iter[back 3] * codePoint", u'カ', (*iter--).codePoint());  // post-decrement
+    assertEquals("iter[back 3] -> wellFormed", isWellFormed, iter->wellFormed());
+    assertEquals("iter[back 3] * codePoint", expectedCP, (*iter--).codePoint());  // post-decrement
     assertEquals("iter[back 2] * codePoint", u'ç', (*iter).codePoint());
     assertEquals("iter[back 2] -> length", parts[2].length(), iter->length());
+    assertTrue("iter[back 2] -> wellFormed", iter->wellFormed());
     units = *--iter;
-    assertEquals("iter[back 1] * codePoint", u'b', units.codePoint());
-    assertTrue("iter[back 1] * wellFormed", units.wellFormed());
+    expectedCP = isWellFormed ? u'b' : sub<CP32, behavior>(parts[1]);
+    assertEquals("iter[back 1] * codePoint", expectedCP, units.codePoint());
+    assertEquals("iter[back 1] * wellFormed", isWellFormed, units.wellFormed());
     assertTrue("iter[back 1] * stringView()", units.stringView() == parts[1]);
     --iter;
     assertEquals("iter[back 0] -> codePoint", u'a', iter->codePoint());
-    assertTrue("iter[back 0] -> begin() == beginIter", iter->begin() == good.begin());
-    assertTrue("iter == beginIter", iter == range.begin());
-}
-
-template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
-void UTFIteratorTest::testSafeBad(StringView piped) {
-    using Unit = typename StringView::value_type;
-    auto parts = split(piped);
-    auto joined = join<Unit>(parts);
-    StringView bad(joined);
-    // "a?ç?🚴" where the ? sequences are ill-formed
-    auto range = utfStringCodePoints<CP32, behavior>(bad);
-    auto iter = range.begin();
-    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
-    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
-    ++iter;  // pre-increment
-    auto units = *iter;
-    assertEquals("iter[1] * codePoint", sub<CP32, behavior>(parts[1]), units.codePoint());
-    assertEquals("iter[1] * length", parts[1].length(), units.length());
-    assertFalse("iter[1] * wellFormed", units.wellFormed());
-    auto sv = units.stringView();
-    assertEquals("iter[1] * stringView().length()",
-                 static_cast<int32_t>(parts[1].length()), static_cast<int32_t>(sv.length()));
-    int32_t i = 0;
-    for (auto c : parts[1]) {
-        assertEquals("iter[1] * stringView()[i]",
-                     static_cast<UChar32>(c), static_cast<UChar32>(sv[i++]));
-    }
-    auto unitsIter = units.begin();
-    for (auto c : parts[1]) {
-        assertEquals("iter[1] * begin()[i]",
-                     static_cast<UChar32>(c), static_cast<UChar32>(*unitsIter++));
-    }
-    assertTrue("iter[1] * end()[0]", *units.end() == parts[2][0]);
-    ++iter;
-    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
-    units = *iter++;  // post-increment
-    assertEquals("iter[3] * codePoint", sub<CP32, behavior>(parts[3]), units.codePoint());
-    assertFalse("iter[3] * wellFormed", units.wellFormed());
-    assertTrue("iter[4] * stringView()", (*iter++).stringView() == parts[4]);  // post-increment
-    assertTrue("iter == endIter", iter == range.end());
-    // backwards
-    assertEquals("iter[back 4] * codePoint", U'🚴', (*--iter).codePoint());
-    assertTrue("iter[back 4] -> wellFormed", iter->wellFormed());
-    assertEquals("iter[back 3] * codePoint", sub<CP32, behavior>(parts[3]), (*--iter).codePoint());
-    assertFalse("iter[back 3] -> wellFormed", iter->wellFormed());
-    assertEquals("iter[back 2] * codePoint", U'ç', (*--iter).codePoint());
-    assertEquals("iter[back 1] * codePoint", sub<CP32, behavior>(parts[1]), (*--iter).codePoint());
-    assertEquals("iter[back 0] * codePoint", U'a', (*--iter).codePoint());
-    assertTrue("iter[back 0] -> begin() == beginIter", iter->begin() == bad.begin());
+    assertTrue("iter[back 0] -> begin() == beginIter", iter->begin() == sv.begin());
     assertTrue("iter == beginIter", iter == range.begin());
 }
 
