@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -2185,7 +2186,16 @@ public abstract class Transliterator implements StringTransform  {
             if (type.equals("file") || type.equals("internal")) {
                 // Rest of line is <resource>:<encoding>:<direction>
                 //                pos       colon      c2
-                String resString = res.getString("resource");
+                int rowIndex = row;
+                Supplier<String> resSupplier = () -> {
+                    // Capture the row Id instead of the UResourceBundle object
+                    // due to the memory cost.
+                    UResourceBundle rootBund = UResourceBundle.getBundleInstance(
+                            ICUData.ICU_TRANSLIT_BASE_NAME, ROOT);
+                    UResourceBundle transIDsBund = rootBund.get(RB_RULE_BASED_IDS);
+                    UResourceBundle thisBund = transIDsBund.get(rowIndex).get(0);
+                    return thisBund.getString("resource");
+                };
                 int dir;
                 String direction = res.getString("direction");
                 switch (direction.charAt(0)) {
@@ -2199,7 +2209,7 @@ public abstract class Transliterator implements StringTransform  {
                     throw new RuntimeException("Can't parse direction: " + direction);
                 }
                 registry.put(ID,
-                             resString, // resource
+                             resSupplier, // resource
                              dir,
                              !type.equals("internal"));
             } else if (type.equals("alias")) {
