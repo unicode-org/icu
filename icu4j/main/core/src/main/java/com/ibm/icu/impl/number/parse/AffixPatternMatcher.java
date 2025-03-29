@@ -76,6 +76,9 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
             case AffixUtils.TYPE_PLUS_SIGN:
                 addMatcher(factory.plusSign());
                 break;
+            case AffixUtils.TYPE_APPROXIMATELY_SIGN:
+                addMatcher(factory.approximatelySign());
+                break;
             case AffixUtils.TYPE_PERCENT:
                 addMatcher(factory.percent());
                 break;
@@ -87,6 +90,7 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
             case AffixUtils.TYPE_CURRENCY_TRIPLE:
             case AffixUtils.TYPE_CURRENCY_QUAD:
             case AffixUtils.TYPE_CURRENCY_QUINT:
+            case AffixUtils.TYPE_CURRENCY_OVERFLOW:
                 // All currency symbols use the same matcher
                 addMatcher(factory.currency());
                 break;
