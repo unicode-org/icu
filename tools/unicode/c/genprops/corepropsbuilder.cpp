@@ -965,6 +965,7 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
     totalSize=4*offset;
 
     indexes[UPROPS_MAX_VALUES_INDEX]=
+        (((int32_t)U_INCB_COUNT-1)<<UPROPS_INCB_SHIFT)|
         (((int32_t)U_EA_COUNT-1)<<UPROPS_EA_SHIFT)|
         ((int32_t)USCRIPT_CODE_LIMIT-1);
     indexes[UPROPS_MAX_VALUES_2_INDEX]=

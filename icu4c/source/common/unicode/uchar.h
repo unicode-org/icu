@@ -2809,6 +2809,15 @@ typedef enum UIndicConjunctBreak {
     U_INCB_EXTEND,
     /** @stable ICU 76 */
     U_INCB_LINKER,
+#ifndef U_HIDE_DEPRECATED_API
+    /**
+     * One more than the highest normal UIndicConjunctBreak value.
+     * The highest value is available via u_getIntPropertyMaxValue(UCHAR_INDIC_CONJUNCT_BREAK).
+     *
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
+     */
+    U_INCB_COUNT
+#endif  // U_HIDE_DEPRECATED_API
 } UIndicConjunctBreak;
 
 /**
