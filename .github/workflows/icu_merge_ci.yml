@@ -27,11 +27,16 @@ env:
 permissions:
   contents: read
 
+# Using Java 11 because Java version not deemed significant for downloading artifacts,
+# and is the lowest version we support, so the cached artifacts can be used by any other version.
+uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+  with:
+    distribution: 'temurin'
+    java-version: '11'
+
 jobs:
 
   # Initialize the Maven artifact cache
-  # Uses Java 8 because Java version not deemed significant for downloading
-  # artifacts
   #
   # This job is created according to the cache strategy of reuse from a single job:
   # https://github.com/actions/cache/blob/main/caching-strategies.md#make-cache-read-only--reuse-cache-from-centralized-job
@@ -49,10 +54,6 @@ jobs:
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: 'temurin'
-          java-version: '8'
       # Download all of the artifacts needed for the code and build plugins
       - name: Download all artifacts
         run: |
@@ -78,10 +79,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: 'temurin'
-          java-version: '11'
       - name: ICU4J little-endian
         run: |
           cd icu4c/source;
@@ -342,11 +339,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: 'temurin'
-          java-version: '8'
-
       - name: Build and run unicodesetperf test
         run: |
           cd icu4j;
@@ -354,9 +346,8 @@ jobs:
           git status
           cd perf-tests;
           mkdir -p perf/results/j_unicodesetperf/${{ matrix.perf }};
-          mvn dependency:copy-dependencies 
+          mvn dependency:copy-dependencies
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.UnicodeSetPerf ${{ matrix.perf }} -a -t 2 -p 4 [:Lt:] | tee perf/results/j_unicodesetperf/${{ matrix.perf }}/output.txt
-
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
         with:
@@ -400,20 +391,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: 'temurin'
-          java-version: '8'
-
       - name: Build and run ucharacterperf test
         run: |
           cd icu4j;
           mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_ucharacterperf;
-          mvn dependency:copy-dependencies 
+          mvn dependency:copy-dependencies
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.UCharacterPerf -a -t 2 -p 4 0 ffff | tee perf/results/j_ucharacterperf/output.txt
-
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
         with:
@@ -460,11 +445,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: 'temurin'
-          java-version: '8'
-
       - name: Build and run decimalformatperf
         run: |
           cd icu4j;
@@ -475,9 +455,8 @@ jobs:
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          mvn dependency:copy-dependencies 
+          mvn dependency:copy-dependencies
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.DecimalFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} "#,###.##" "1.234,56" -r 1 | tee perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }}/output.txt
-
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
         with:
@@ -525,11 +504,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: 'temurin'
-          java-version: '8'
-
       - name: Build and run normperf
         env:
           DATA_FILE_PATH: data/collation
@@ -542,7 +516,7 @@ jobs:
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          mvn dependency:copy-dependencies 
+          mvn dependency:copy-dependencies
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.NormalizerPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 ${{ matrix.mode }} | tee perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
           cat perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
 
@@ -660,11 +634,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: 'temurin'
-          java-version: '8'
-
       - name: Build and run converterperf
         env:
           DATA_FILE_PATH: data/conversion
@@ -677,7 +646,7 @@ jobs:
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          mvn dependency:copy-dependencies 
+          mvn dependency:copy-dependencies
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.ConverterPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 -T ${{ matrix.test_enc }} | tee perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
@@ -739,11 +708,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: 'temurin'
-          java-version: '8'
-
       - name: Extract identifying digit and parameter.
         run: |
           ddir='${{ matrix.parms }}';
@@ -759,7 +723,7 @@ jobs:
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          mvn dependency:copy-dependencies 
+          mvn dependency:copy-dependencies
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.DateFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} ${{ env.PARM }} -r 1 | tee perf/results/j_dateformatperf/${{ matrix.locale }}/${{ matrix.perf }}/${{ env.DDIR }}/output.txt
 
       - name: Store performance test results

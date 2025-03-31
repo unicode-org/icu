@@ -55,7 +55,7 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v4.2.2
       with:
-        java-version: '8' # The custom Taglets for javadoc (tools/build) are still Java 8. They need updating to use a different JDK version.
+        java-version: '11'
         distribution: 'temurin'
         server-id: icu4j-maven-repo # Value of the distributionManagement/repository/id field of the pom.xml
         server-username: MAVEN_USERNAME # env variable for username in deploy
