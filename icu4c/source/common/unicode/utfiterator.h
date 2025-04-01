@@ -418,11 +418,21 @@ private:
 };
 #endif  // U_IN_DOXYGEN
 
-// Validating implementations --------------------------------------------- ***
+// Validating implementations ---------------------------------------------- ***
 
 #ifndef U_IN_DOXYGEN
 template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter, typename = void>
 class UTFImpl;
+
+// Note: readAndInc() functions take both a p0 and a p iterator.
+// They must have the same value.
+// For a multi-pass UnitIter, the caller must copy its p into a local variable p0,
+// and readAndInc() copies p0 and the incremented p into the CodeUnits.
+// For a single-pass UnitIter, which may not be default-constructible nor coypable,
+// the caller can pass p into both references, and readAndInc() does not use p0
+// and constructs CodeUnits without them.
+// Moving the p0 variable into the call site avoids having to declare it inside readAndInc()
+// which may not be possible for a single-pass iterator.
 
 // UTF-8
 template<typename CP32, UTFIllFormedBehavior behavior, typename UnitIter>
@@ -503,13 +513,21 @@ public:
         }
     }
 
-    U_FORCE_INLINE static CodeUnits<CP32, UnitIter> readAndInc(UnitIter &p, UnitIter limit) {
+    U_FORCE_INLINE static CodeUnits<CP32, UnitIter> readAndInc(
+            UnitIter &p0, UnitIter &p, const UnitIter &limit) {
+        constexpr bool isMultiPass =
+            std::is_base_of_v<
+                std::forward_iterator_tag,
+                typename std::iterator_traits<UnitIter>::iterator_category>;
         // Very similar to U8_NEXT_OR_FFFD().
-        UnitIter p0 = p;
         CP32 c = uint8_t(*p);
         ++p;
         if (U8_IS_SINGLE(c)) {
-            return {c, 1, true, p0, p};
+            if constexpr (isMultiPass) {
+                return {c, 1, true, p0, p};
+            } else {
+                return {c, 1, true};
+            }
         }
         uint8_t length = 1;
         uint8_t t = 0;
@@ -533,44 +551,17 @@ public:
             c = (c << 6) | t;
             ++length;
             ++p;
-            return {c, length, true, p0, p};
+            if constexpr (isMultiPass) {
+                return {c, length, true, p0, p};
+            } else {
+                return {c, length, true};
+            }
         }
-        return {sub(), length, false, p0, p};
-    }
-
-    U_FORCE_INLINE static CodeUnits<CP32, UnitIter> singlePassReadAndInc(
-            UnitIter &p, const UnitIter &limit) {
-        // Very similar to U8_NEXT_OR_FFFD().
-        CP32 c = uint8_t(*p);
-        ++p;
-        if (U8_IS_SINGLE(c)) {
-            return {c, 1, true};
+        if constexpr (isMultiPass) {
+            return {sub(), length, false, p0, p};
+        } else {
+            return {sub(), length, false};
         }
-        uint8_t length = 1;
-        uint8_t t = 0;
-        if (p != limit &&
-                // fetch/validate/assemble all but last trail byte
-                (c >= 0xe0 ?
-                    (c < 0xf0 ?  // U+0800..U+FFFF except surrogates
-                        U8_LEAD3_T1_BITS[c &= 0xf] & (1 << ((t = *p) >> 5)) &&
-                        (t &= 0x3f, 1)
-                    :  // U+10000..U+10FFFF
-                        (c -= 0xf0) <= 4 &&
-                        U8_LEAD4_T1_BITS[(t = *p) >> 4] & (1 << c) &&
-                        (c = (c << 6) | (t & 0x3f), ++length, ++p != limit) &&
-                        (t = *p - 0x80) <= 0x3f) &&
-                    // valid second-to-last trail byte
-                    (c = (c << 6) | t, ++length, ++p != limit)
-                :  // U+0080..U+07FF
-                    c >= 0xc2 && (c &= 0x1f, 1)) &&
-                // last trail byte
-                (t = *p - 0x80) <= 0x3f) {
-            c = (c << 6) | t;
-            ++length;
-            ++p;
-            return {c, length, true};
-        }
-        return {sub(), length, false};
     }
 
     U_FORCE_INLINE static CodeUnits<CP32, UnitIter> decAndRead(UnitIter start, UnitIter &p) {
@@ -665,40 +656,37 @@ public:
         }
     }
 
-    U_FORCE_INLINE static CodeUnits<CP32, UnitIter> readAndInc(UnitIter &p, UnitIter limit) {
+    U_FORCE_INLINE static CodeUnits<CP32, UnitIter> readAndInc(
+            UnitIter &p0, UnitIter &p, const UnitIter &limit) {
+        constexpr bool isMultiPass =
+            std::is_base_of_v<
+                std::forward_iterator_tag,
+                typename std::iterator_traits<UnitIter>::iterator_category>;
         // Very similar to U16_NEXT_OR_FFFD().
-        UnitIter p0 = p;
         CP32 c = *p;
         ++p;
         if (!U16_IS_SURROGATE(c)) {
-            return {c, 1, true, p0, p};
-        } else {
-            uint16_t c2;
-            if (U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(c2 = *p)) {
-                ++p;
-                c = U16_GET_SUPPLEMENTARY(c, c2);
-                return {c, 2, true, p0, p};
+            if constexpr (isMultiPass) {
+                return {c, 1, true, p0, p};
             } else {
-                return {sub(c), 1, false, p0, p};
+                return {c, 1, true};
             }
-        }
-    }
-
-    U_FORCE_INLINE static CodeUnits<CP32, UnitIter> singlePassReadAndInc(
-            UnitIter &p, const UnitIter &limit) {
-        // Very similar to U16_NEXT_OR_FFFD().
-        CP32 c = *p;
-        ++p;
-        if (!U16_IS_SURROGATE(c)) {
-            return {c, 1, true};
         } else {
             uint16_t c2;
             if (U16_IS_SURROGATE_LEAD(c) && p != limit && U16_IS_TRAIL(c2 = *p)) {
                 ++p;
                 c = U16_GET_SUPPLEMENTARY(c, c2);
-                return {c, 2, true};
+                if constexpr (isMultiPass) {
+                    return {c, 2, true, p0, p};
+                } else {
+                    return {c, 2, true};
+                }
             } else {
-                return {sub(c), 1, false};
+                if constexpr (isMultiPass) {
+                    return {sub(c), 1, false, p0, p};
+                } else {
+                    return {sub(c), 1, false};
+                }
             }
         }
     }
@@ -750,27 +738,27 @@ public:
         --p;
     }
 
-    U_FORCE_INLINE static CodeUnits<CP32, UnitIter> readAndInc(UnitIter &p, UnitIter /*limit*/) {
-        UnitIter p0 = p;
+    U_FORCE_INLINE static CodeUnits<CP32, UnitIter> readAndInc(
+            UnitIter &p0, UnitIter &p, const UnitIter &/*limit*/) {
+        constexpr bool isMultiPass =
+            std::is_base_of_v<
+                std::forward_iterator_tag,
+                typename std::iterator_traits<UnitIter>::iterator_category>;
         uint32_t uc = *p;
         CP32 c = uc;
         ++p;
         if (uc < 0xd800 || (0xe000 <= uc && uc <= 0x10ffff)) {
-            return {c, 1, true, p0, p};
+            if constexpr (isMultiPass) {
+                return {c, 1, true, p0, p};
+            } else {
+                return {c, 1, true};
+            }
         } else {
-            return {sub(uc < 0xe000, c), 1, false, p0, p};
-        }
-    }
-
-    U_FORCE_INLINE static CodeUnits<CP32, UnitIter> singlePassReadAndInc(
-            UnitIter &p, const UnitIter &/*limit*/) {
-        uint32_t uc = *p;
-        CP32 c = uc;
-        ++p;
-        if (uc < 0xd800 || (0xe000 <= uc && uc <= 0x10ffff)) {
-            return {c, 1, true};
-        } else {
-            return {sub(uc < 0xe000, c), 1, false};
+            if constexpr (isMultiPass) {
+                return {sub(uc < 0xe000, c), 1, false, p0, p};
+            } else {
+                return {sub(uc < 0xe000, c), 1, false};
+            }
         }
     }
 
@@ -786,7 +774,7 @@ public:
     }
 };
 
-// Non-validating implementations ----------------------------------------- ***
+// Non-validating implementations ------------------------------------------ ***
 
 template<typename CP32, typename UnitIter, typename = void>
 class UnsafeUTFImpl;
@@ -811,17 +799,28 @@ public:
         while (U8_IS_TRAIL(*--p)) {}
     }
 
-    U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p) {
+    U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p0, UnitIter &p) {
+        constexpr bool isMultiPass =
+            std::is_base_of_v<
+                std::forward_iterator_tag,
+                typename std::iterator_traits<UnitIter>::iterator_category>;
         // Very similar to U8_NEXT_UNSAFE().
-        UnitIter p0 = p;
         CP32 c = uint8_t(*p);
         ++p;
         if (U8_IS_SINGLE(c)) {
-            return {c, 1, p0, p};
+            if constexpr (isMultiPass) {
+                return {c, 1, p0, p};
+            } else {
+                return {c, 1};
+            }
         } else if (c < 0xe0) {
             c = ((c & 0x1f) << 6) | (*p & 0x3f);
             ++p;
-            return {c, 2, p0, p};
+            if constexpr (isMultiPass) {
+                return {c, 2, p0, p};
+            } else {
+                return {c, 2};
+            }
         } else if (c < 0xf0) {
             // No need for (c&0xf) because the upper bits are truncated
             // after <<12 in the cast to uint16_t.
@@ -829,7 +828,11 @@ public:
             ++p;
             c |= *p & 0x3f;
             ++p;
-            return {c, 3, p0, p};
+            if constexpr (isMultiPass) {
+                return {c, 3, p0, p};
+            } else {
+                return {c, 3};
+            }
         } else {
             c = ((c & 7) << 18) | ((*p & 0x3f) << 12);
             ++p;
@@ -837,36 +840,11 @@ public:
             ++p;
             c |= *p & 0x3f;
             ++p;
-            return {c, 4, p0, p};
-        }
-    }
-
-    U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
-        // Very similar to U8_NEXT_UNSAFE().
-        CP32 c = uint8_t(*p);
-        ++p;
-        if (U8_IS_SINGLE(c)) {
-            return {c, 1};
-        } else if (c < 0xe0) {
-            c = ((c & 0x1f) << 6) | (*p & 0x3f);
-            ++p;
-            return {c, 2};
-        } else if (c < 0xf0) {
-            // No need for (c&0xf) because the upper bits are truncated
-            // after <<12 in the cast to uint16_t.
-            c = uint16_t(c << 12) | ((*p & 0x3f) << 6);
-            ++p;
-            c |= *p & 0x3f;
-            ++p;
-            return {c, 3};
-        } else {
-            c = ((c & 7) << 18) | ((*p & 0x3f) << 12);
-            ++p;
-            c |= (*p & 0x3f) << 6;
-            ++p;
-            c |= *p & 0x3f;
-            ++p;
-            return {c, 4};
+            if constexpr (isMultiPass) {
+                return {c, 4, p0, p};
+            } else {
+                return {c, 4};
+            }
         }
     }
 
@@ -922,32 +900,29 @@ public:
         }
     }
 
-    U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p) {
-        // Very similar to U16_NEXT_UNSAFE().
-        UnitIter p0 = p;
-        CP32 c = *p;
-        ++p;
-        if (!U16_IS_LEAD(c)) {
-            return {c, 1, p0, p};
-        } else {
-            uint16_t c2 = *p;
-            ++p;
-            c = U16_GET_SUPPLEMENTARY(c, c2);
-            return {c, 2, p0, p};
-        }
-    }
-
-    U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
+    U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p0, UnitIter &p) {
+        constexpr bool isMultiPass =
+            std::is_base_of_v<
+                std::forward_iterator_tag,
+                typename std::iterator_traits<UnitIter>::iterator_category>;
         // Very similar to U16_NEXT_UNSAFE().
         CP32 c = *p;
         ++p;
         if (!U16_IS_LEAD(c)) {
-            return {c, 1};
+            if constexpr (isMultiPass) {
+                return {c, 1, p0, p};
+            } else {
+                return {c, 1};
+            }
         } else {
             uint16_t c2 = *p;
             ++p;
             c = U16_GET_SUPPLEMENTARY(c, c2);
-            return {c, 2};
+            if constexpr (isMultiPass) {
+                return {c, 2, p0, p};
+            } else {
+                return {c, 2};
+            }
         }
     }
 
@@ -982,17 +957,18 @@ public:
         --p;
     }
 
-    U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p) {
-        UnitIter p0 = p;
+    U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p0, UnitIter &p) {
+        constexpr bool isMultiPass =
+            std::is_base_of_v<
+                std::forward_iterator_tag,
+                typename std::iterator_traits<UnitIter>::iterator_category>;
         CP32 c = *p;
         ++p;
-        return {c, 1, p0, p};
-    }
-
-    U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> singlePassReadAndInc(UnitIter &p) {
-        CP32 c = *p;
-        ++p;
-        return {c, 1};
+        if constexpr (isMultiPass) {
+            return {c, 1, p0, p};
+        } else {
+            return {c, 1};
+        }
     }
 
     U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> decAndRead(UnitIter &p) {
@@ -1003,6 +979,8 @@ public:
 };
 
 #endif
+
+// Validating iterators ---------------------------------------------------- ***
 
 /**
  * Validating iterator over the code points in a Unicode string.
@@ -1124,7 +1102,8 @@ public:
      */
     U_FORCE_INLINE CodeUnits<CP32, UnitIter> operator*() const {
         if (state_ == 0) {
-            units_ = Impl::readAndInc(p_, limit_);
+            UnitIter p0 = p_;
+            units_ = Impl::readAndInc(p0, p_, limit_);
             state_ = 1;
         }
         return units_;
@@ -1140,7 +1119,8 @@ public:
      */
     U_FORCE_INLINE Proxy operator->() const {
         if (state_ == 0) {
-            units_ = Impl::readAndInc(p_, limit_);
+            UnitIter p0 = p_;
+            units_ = Impl::readAndInc(p0, p_, limit_);
             state_ = 1;
         }
         return Proxy(units_);
@@ -1181,7 +1161,8 @@ public:
             state_ = 0;
             return result;
         } else if (state_ == 0) {
-            units_ = Impl::readAndInc(p_, limit_);
+            UnitIter p0 = p_;
+            units_ = Impl::readAndInc(p0, p_, limit_);
             UTFIterator result(*this);
             result.state_ = 1;
             // keep this->state_ == 0
@@ -1316,7 +1297,7 @@ public:
 
     U_FORCE_INLINE CodeUnits<CP32, UnitIter> operator*() const {
         if (!ahead_) {
-            units_ = Impl::singlePassReadAndInc(p_, limit_);
+            units_ = Impl::readAndInc(p_, p_, limit_);
             ahead_ = true;
         }
         return units_;
@@ -1324,7 +1305,7 @@ public:
 
     U_FORCE_INLINE Proxy operator->() const {
         if (!ahead_) {
-            units_ = Impl::singlePassReadAndInc(p_, limit_);
+            units_ = Impl::readAndInc(p_, p_, limit_);
             ahead_ = true;
         }
         return Proxy(units_);
@@ -1345,7 +1326,7 @@ public:
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
         } else {
-            units_ = Impl::singlePassReadAndInc(p_, limit_);
+            units_ = Impl::readAndInc(p_, p_, limit_);
             // keep this->ahead_ == false
         }
         return Proxy(units_);
@@ -1468,7 +1449,8 @@ public:
             // operator*() called decAndRead() so p_ is behind the logical position.
             p_ = units_.end();
         }
-        units_ = Impl::readAndInc(start_, p_);
+        UnitIter p0 = p_;
+        units_ = Impl::readAndInc(p0, p_, limit_);
         state_ = 1;
         return *this;
     }
@@ -1756,7 +1738,8 @@ public:
      */
     U_FORCE_INLINE UnsafeCodeUnits<CP32, UnitIter> operator*() const {
         if (state_ == 0) {
-            units_ = Impl::readAndInc(p_);
+            UnitIter p0 = p_;
+            units_ = Impl::readAndInc(p0, p_);
             state_ = 1;
         }
         return units_;
@@ -1772,7 +1755,8 @@ public:
      */
     U_FORCE_INLINE Proxy operator->() const {
         if (state_ == 0) {
-            units_ = Impl::readAndInc(p_);
+            UnitIter p0 = p_;
+            units_ = Impl::readAndInc(p0, p_);
             state_ = 1;
         }
         return Proxy(units_);
@@ -1813,7 +1797,8 @@ public:
             state_ = 0;
             return result;
         } else if (state_ == 0) {
-            units_ = Impl::readAndInc(p_);
+            UnitIter p0 = p_;
+            units_ = Impl::readAndInc(p0, p_);
             UnsafeUTFIterator result(*this);
             result.state_ = 1;
             // keep this->state_ == 0
@@ -1939,7 +1924,7 @@ public:
 
     U_FORCE_INLINE UnsafeCodeUnits<CP32, UnitIter> operator*() const {
         if (!ahead_) {
-            units_ = Impl::singlePassReadAndInc(p_);
+            units_ = Impl::readAndInc(p_, p_);
             ahead_ = true;
         }
         return units_;
@@ -1947,7 +1932,7 @@ public:
 
     U_FORCE_INLINE Proxy operator->() const {
         if (!ahead_) {
-            units_ = Impl::singlePassReadAndInc(p_);
+            units_ = Impl::readAndInc(p_, p_);
             ahead_ = true;
         }
         return Proxy(units_);
@@ -1968,7 +1953,7 @@ public:
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
         } else {
-            units_ = Impl::singlePassReadAndInc(p_);
+            units_ = Impl::readAndInc(p_, p_);
             // keep this->ahead_ == false
         }
         return Proxy(units_);
@@ -2087,7 +2072,8 @@ public:
             // operator*() called decAndRead() so p_ is behind the logical position.
             p_ = units_.end();
         }
-        units_ = Impl::readAndInc(p_);
+        UnitIter p0 = p_;
+        units_ = Impl::readAndInc(p0, p_);
         state_ = 1;
         return *this;
     }
