@@ -269,6 +269,7 @@ public:
         TESTCASE_AUTO(testSafe16Negative);
         TESTCASE_AUTO(testSafe16FFFD);
         TESTCASE_AUTO(testSafe16Surrogate);
+        TESTCASE_AUTO(testUnsafe16);
 
         TESTCASE_AUTO(testSafe16SinglePassIterGood);
         TESTCASE_AUTO(testSafe16SinglePassIterNegative);
@@ -280,6 +281,7 @@ public:
         TESTCASE_AUTO(testSafe8Good);
         TESTCASE_AUTO(testSafe8Negative);
         TESTCASE_AUTO(testSafe8FFFD);
+        TESTCASE_AUTO(testUnsafe8);
 
         TESTCASE_AUTO(testSafe8SinglePassIterGood);
         TESTCASE_AUTO(testSafe8SinglePassIterFFFD);
@@ -292,6 +294,7 @@ public:
         TESTCASE_AUTO(testSafe32Negative);
         TESTCASE_AUTO(testSafe32FFFD);
         TESTCASE_AUTO(testSafe32Surrogate);
+        TESTCASE_AUTO(testUnsafe32);
 
         TESTCASE_AUTO(testSafe32SinglePassIterGood);
         TESTCASE_AUTO(testSafe32SinglePassIterSurrogate);
@@ -315,8 +318,9 @@ public:
         }
     }
 
-    template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
-    void testSafe(StringView piped, bool isWellFormed);
+    template<typename CodePoints, TestMode mode,
+             typename CP32, UTFIllFormedBehavior behavior, typename StringView>
+    void testBidiIter(StringView piped);
 
     template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
     void testSafeSinglePassIter(StringView piped, bool isWellFormed);
@@ -347,17 +351,26 @@ public:
     static constexpr std::u32string_view bad32{badChars32, std::size(badChars32)};
 
     void testSafe16Good() {
-        testSafe<UChar32, UTF_BEHAVIOR_NEGATIVE>(good16, true);
+        testBidiIter<UTFStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE, char16_t>, WELL_FORMED,
+            UChar32, UTF_BEHAVIOR_NEGATIVE>(good16);
     }
     void testSafe16Negative() {
-        testSafe<UChar32, UTF_BEHAVIOR_NEGATIVE>(bad16, false);
+        testBidiIter<UTFStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE, char16_t>, ILL_FORMED,
+            UChar32, UTF_BEHAVIOR_NEGATIVE>(bad16);
     }
     void testSafe16FFFD() {
-        testSafe<char32_t, UTF_BEHAVIOR_FFFD>(bad16, false);
+        testBidiIter<UTFStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD, char16_t>, ILL_FORMED,
+            char32_t, UTF_BEHAVIOR_FFFD>(bad16);
     }
     void testSafe16Surrogate() {
-        testSafe<uint32_t, UTF_BEHAVIOR_SURROGATE>(bad16, false);
+        testBidiIter<UTFStringCodePoints<uint32_t, UTF_BEHAVIOR_SURROGATE, char16_t>, ILL_FORMED,
+            uint32_t, UTF_BEHAVIOR_SURROGATE>(bad16);
     }
+    void testUnsafe16() {
+        testBidiIter<UnsafeUTFStringCodePoints<UChar32, char16_t>, UNSAFE,
+            UChar32, UTF_BEHAVIOR_NEGATIVE>(good16);
+    }
+
     void testSafe16SinglePassIterGood() {
         testSafeSinglePassIter<UChar32, UTF_BEHAVIOR_NEGATIVE>(good16, true);
     }
@@ -367,6 +380,7 @@ public:
     void testUnsafe16SinglePassIter() {
         testUnsafeSinglePassIter<UChar32>(good16);
     }
+
     void testSafe16FwdIter() {
         testFwdIter<
             UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, FwdIter<char16_t>>,
@@ -377,16 +391,24 @@ public:
     }
 
     void testSafe8Good() {
-        testSafe<UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars}, true);
+        testBidiIter<UTFStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE, char>, WELL_FORMED,
+            UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars});
     }
     void testSafe8Negative() {
-        testSafe<UChar32, UTF_BEHAVIOR_NEGATIVE>(
-            std::string_view(string8FromBytes(badChars8, std::size(badChars8))), false);
+        testBidiIter<UTFStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE, char>, ILL_FORMED,
+            UChar32, UTF_BEHAVIOR_NEGATIVE>(
+                std::string_view(string8FromBytes(badChars8, std::size(badChars8))));
     }
     void testSafe8FFFD() {
-        testSafe<char32_t, UTF_BEHAVIOR_FFFD>(
-            std::string_view(string8FromBytes(badChars8, std::size(badChars8))), false);
+        testBidiIter<UTFStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD, char>, ILL_FORMED,
+            char32_t, UTF_BEHAVIOR_FFFD>(
+                std::string_view(string8FromBytes(badChars8, std::size(badChars8))));
     }
+    void testUnsafe8() {
+        testBidiIter<UnsafeUTFStringCodePoints<UChar32, char>, UNSAFE,
+            UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars});
+    }
+
     void testSafe8SinglePassIterGood() {
         testSafeSinglePassIter<UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars}, true);
     }
@@ -397,6 +419,7 @@ public:
     void testUnsafe8SinglePassIter() {
         testUnsafeSinglePassIter<UChar32>(std::string_view{good8Chars});
     }
+
     void testSafe8FwdIter() {
         testFwdIter<
             UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, FwdIter<char>>,
@@ -408,17 +431,26 @@ public:
     }
 
     void testSafe32Good() {
-        testSafe<UChar32, UTF_BEHAVIOR_NEGATIVE>(good32, true);
+        testBidiIter<UTFStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE, char32_t>, WELL_FORMED,
+            UChar32, UTF_BEHAVIOR_NEGATIVE>(good32);
     }
     void testSafe32Negative() {
-        testSafe<UChar32, UTF_BEHAVIOR_NEGATIVE>(bad32, false);
+        testBidiIter<UTFStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE, char32_t>, ILL_FORMED,
+            UChar32, UTF_BEHAVIOR_NEGATIVE>(bad32);
     }
     void testSafe32FFFD() {
-        testSafe<char32_t, UTF_BEHAVIOR_FFFD>(bad32, false);
+        testBidiIter<UTFStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD, char32_t>, ILL_FORMED,
+            char32_t, UTF_BEHAVIOR_FFFD>(bad32);
     }
     void testSafe32Surrogate() {
-        testSafe<uint32_t, UTF_BEHAVIOR_SURROGATE>(bad32, false);
+        testBidiIter<UTFStringCodePoints<uint32_t, UTF_BEHAVIOR_SURROGATE, char32_t>, ILL_FORMED,
+            uint32_t, UTF_BEHAVIOR_SURROGATE>(bad32);
     }
+    void testUnsafe32() {
+        testBidiIter<UnsafeUTFStringCodePoints<UChar32, char32_t>, UNSAFE,
+            UChar32, UTF_BEHAVIOR_NEGATIVE>(good32);
+    }
+
     void testSafe32SinglePassIterGood() {
         testSafeSinglePassIter<UChar32, UTF_BEHAVIOR_NEGATIVE>(good32, true);
     }
@@ -428,6 +460,7 @@ public:
     void testUnsafe32SinglePassIter() {
         testUnsafeSinglePassIter<UChar32>(good32);
     }
+
     void testSafe32FwdIter() {
         testFwdIter<
             UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, FwdIter<char32_t>>,
@@ -444,8 +477,9 @@ extern IntlTest *createUTFIteratorTest() {
     return new UTFIteratorTest();
 }
 
-template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
-void UTFIteratorTest::testSafe(StringView piped, bool isWellFormed) {
+template<typename CodePoints, TestMode mode,
+         typename CP32, UTFIllFormedBehavior behavior, typename StringView>
+void UTFIteratorTest::testBidiIter(StringView piped) {
     using Unit = typename StringView::value_type;
     auto parts = split(piped);
     auto joined = join<Unit>(parts);
@@ -454,7 +488,8 @@ void UTFIteratorTest::testSafe(StringView piped, bool isWellFormed) {
     // "abçカ🚴"
     // or
     // "a?ç?🚴" where the ? sequences are ill-formed
-    auto range = utfStringCodePoints<CP32, behavior>(sv);
+    constexpr bool isWellFormed = mode != ILL_FORMED;
+    CodePoints range{sv};
     auto iter = range.begin();
     assertTrue(
         "bidirectional_iterator_tag",
@@ -468,7 +503,9 @@ void UTFIteratorTest::testSafe(StringView piped, bool isWellFormed) {
     CP32 expectedCP = isWellFormed ? u'b' : sub<CP32, behavior>(parts[1]);
     assertEquals("iter[1] * codePoint", expectedCP, units.codePoint());
     assertEquals("iter[1] * length", parts[1].length(), units.length());
-    assertEquals("iter[1] * wellFormed", isWellFormed, units.wellFormed());
+    if constexpr (mode != UNSAFE) {
+        assertEquals("iter[1] * wellFormed", isWellFormed, units.wellFormed());
+    }
     assertTrue("iter[1] * stringView()", units.stringView() == parts[1]);
     auto unitsIter = units.begin();
     for (auto c : parts[1]) {
@@ -481,13 +518,17 @@ void UTFIteratorTest::testSafe(StringView piped, bool isWellFormed) {
     units = *iter++;  // post-increment
     expectedCP = isWellFormed ? u'カ' : sub<CP32, behavior>(parts[3]);
     assertEquals("iter[3] * codePoint", expectedCP, units.codePoint());
-    assertEquals("iter[3] * wellFormed", isWellFormed, units.wellFormed());
+    if constexpr (mode != UNSAFE) {
+        assertEquals("iter[3] * wellFormed", isWellFormed, units.wellFormed());
+    }
     // Fetch the current code point twice.
     assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
     units = *iter++;  // post-increment
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[4] * length", last.length(), units.length());
-    assertTrue("iter[4] * wellFormed", units.wellFormed());
+    if constexpr (mode != UNSAFE) {
+        assertTrue("iter[4] * wellFormed", units.wellFormed());
+    }
     assertTrue("iter[4] * stringView()", units.stringView() == last);
     unitsIter = units.begin();
     for (auto c : last) {
@@ -500,7 +541,9 @@ void UTFIteratorTest::testSafe(StringView piped, bool isWellFormed) {
     units = *--iter;  // pre-decrement
     assertEquals("iter[back 4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[back 4] * length", last.length(), units.length());
-    assertTrue("iter[back 4] * wellFormed", units.wellFormed());
+    if constexpr (mode != UNSAFE) {
+        assertTrue("iter[back 4] * wellFormed", units.wellFormed());
+    }
     assertTrue("iter[back 4] * stringView()", units.stringView() == last);
     unitsIter = units.begin();
     for (auto c : last) {
@@ -509,15 +552,21 @@ void UTFIteratorTest::testSafe(StringView piped, bool isWellFormed) {
     }
     assertTrue("iter[back 4] * end() == endIter", units.end() == sv.end());
     --iter;
-    assertEquals("iter[back 3] -> wellFormed", isWellFormed, iter->wellFormed());
+    if constexpr (mode != UNSAFE) {
+        assertEquals("iter[back 3] -> wellFormed", isWellFormed, iter->wellFormed());
+    }
     assertEquals("iter[back 3] * codePoint", expectedCP, (*iter--).codePoint());  // post-decrement
     assertEquals("iter[back 2] * codePoint", u'ç', (*iter).codePoint());
     assertEquals("iter[back 2] -> length", parts[2].length(), iter->length());
-    assertTrue("iter[back 2] -> wellFormed", iter->wellFormed());
+    if constexpr (mode != UNSAFE) {
+        assertTrue("iter[back 2] -> wellFormed", iter->wellFormed());
+    }
     units = *--iter;
     expectedCP = isWellFormed ? u'b' : sub<CP32, behavior>(parts[1]);
     assertEquals("iter[back 1] * codePoint", expectedCP, units.codePoint());
-    assertEquals("iter[back 1] * wellFormed", isWellFormed, units.wellFormed());
+    if constexpr (mode != UNSAFE) {
+        assertEquals("iter[back 1] * wellFormed", isWellFormed, units.wellFormed());
+    }
     assertTrue("iter[back 1] * stringView()", units.stringView() == parts[1]);
     --iter;
     assertEquals("iter[back 0] -> codePoint", u'a', iter->codePoint());
