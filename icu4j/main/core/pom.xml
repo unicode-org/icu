@@ -21,6 +21,12 @@
   <dependencies>
     <dependency>
       <groupId>com.ibm.icu</groupId>
+      <artifactId>tools_taglets</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
       <artifactId>framework</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
