@@ -1068,6 +1068,12 @@ public:
      * @draft ICU 78
      */
     U_FORCE_INLINE explicit UTFIterator(UnitIter p) : p_(p), start_(p), limit_(p), units_(0, 0, false, p, p) {}
+    /**
+     * Default constructor. Makes a non-functional iterator.
+     *
+     * @draft ICU 78
+     */
+    U_FORCE_INLINE UTFIterator() : p_{}, start_{}, limit_{}, units_(0, 0, false, p_, p_) {}
 
     /** Move constructor. @draft ICU 78 */
     U_FORCE_INLINE UTFIterator(UTFIterator &&src) noexcept = default;
@@ -1381,6 +1387,7 @@ public:
     U_FORCE_INLINE explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter> iter) :
             p_(iter.getLogicalPosition()), start_(iter.start_), limit_(iter.limit_),
             units_(0, 0, false, p_, p_) {}
+    U_FORCE_INLINE reverse_iterator() : p_{}, start_{}, limit_{}, units_(0, 0, false, p_, p_) {}
 
     U_FORCE_INLINE reverse_iterator(reverse_iterator &&src) noexcept = default;
     U_FORCE_INLINE reverse_iterator &operator=(reverse_iterator &&src) noexcept = default;
@@ -1704,6 +1711,12 @@ public:
      * @draft ICU 78
      */
     U_FORCE_INLINE explicit UnsafeUTFIterator(UnitIter p) : p_(p), units_(0, 0, p, p) {}
+    /**
+     * Default constructor. Makes a non-functional iterator.
+     *
+     * @draft ICU 78
+     */
+    U_FORCE_INLINE UnsafeUTFIterator() : p_{}, units_(0, 0, p_, p_) {}
 
     /** Move constructor. @draft ICU 78 */
     U_FORCE_INLINE UnsafeUTFIterator(UnsafeUTFIterator &&src) noexcept = default;
@@ -2004,6 +2017,7 @@ public:
 
     U_FORCE_INLINE explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter> iter) :
             p_(iter.getLogicalPosition()), units_(0, 0, p_, p_) {}
+    U_FORCE_INLINE reverse_iterator() : p_{}, units_(0, 0, p_, p_) {}
 
     U_FORCE_INLINE reverse_iterator(reverse_iterator &&src) noexcept = default;
     U_FORCE_INLINE reverse_iterator &operator=(reverse_iterator &&src) noexcept = default;
