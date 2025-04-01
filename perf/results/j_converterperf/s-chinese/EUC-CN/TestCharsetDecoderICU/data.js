@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743205776805,
+  "lastUpdate": 1743548349357,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33567,6 +33567,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.03470699214967961,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "e296ac93b57b006e5d715269cd3831d8abc2a3c3",
+          "message": "ICU-23072 Support from JDK 11 and up - fix bad actions",
+          "timestamp": "2025-04-01T15:33:11-07:00",
+          "tree_id": "581643453864678a8f47e4965b0834c82c2b58e4",
+          "url": "https://github.com/unicode-org/icu/commit/e296ac93b57b006e5d715269cd3831d8abc2a3c3"
+        },
+        "date": 1743548102058,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.02876108261669658,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
