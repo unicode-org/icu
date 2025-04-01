@@ -64,6 +64,11 @@
     <junitparams.version>1.1.1</junitparams.version>
     <gson.version>2.11.0</gson.version>
     <commons-cli.version>1.9.0</commons-cli.version>
+    <!-- We need at least 3.5.1 to avoid https://github.com/codehaus-plexus/plexus-io/issues/109.
+        Once we upgrade maven-source-plugin and maven-jar-plugin to versions new enough to depend
+        on 3.5.1 or higher, we can remove this override.
+    -->
+    <plexus-io.version>3.5.1</plexus-io.version>
 
     <proj-title>International Components for Unicode for Java</proj-title>
     <proj.displayname>${project.artifactId}</proj.displayname>
@@ -240,6 +245,14 @@
         <plugin>
           <artifactId>maven-source-plugin</artifactId>
           <version>3.3.1</version>
+          <dependencies>
+            <!-- Do not remove, see the plexus-io.version comment in the properties section -->
+            <dependency>
+              <groupId>org.codehaus.plexus</groupId>
+              <artifactId>plexus-io</artifactId>
+              <version>${plexus-io.version}</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <artifactId>maven-gpg-plugin</artifactId>
@@ -438,6 +451,14 @@
               </manifestEntries>
             </archive>
           </configuration>
+          <dependencies>
+            <!-- Do not remove, see the plexus-io.version comment in the properties section -->
+            <dependency>
+              <groupId>org.codehaus.plexus</groupId>
+              <artifactId>plexus-io</artifactId>
+              <version>${plexus-io.version}</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
