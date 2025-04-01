@@ -269,16 +269,22 @@ public:
         TESTCASE_AUTO(testSafe16Negative);
         TESTCASE_AUTO(testSafe16FFFD);
         TESTCASE_AUTO(testSafe16Surrogate);
+
         TESTCASE_AUTO(testSafe16SinglePassIterGood);
         TESTCASE_AUTO(testSafe16SinglePassIterNegative);
+        TESTCASE_AUTO(testUnsafe16SinglePassIter);
+
         TESTCASE_AUTO(testSafe16FwdIter);
         TESTCASE_AUTO(testUnsafe16FwdIter);
 
         TESTCASE_AUTO(testSafe8Good);
         TESTCASE_AUTO(testSafe8Negative);
         TESTCASE_AUTO(testSafe8FFFD);
+
         TESTCASE_AUTO(testSafe8SinglePassIterGood);
         TESTCASE_AUTO(testSafe8SinglePassIterFFFD);
+        TESTCASE_AUTO(testUnsafe8SinglePassIter);
+
         TESTCASE_AUTO(testSafe8FwdIter);
         TESTCASE_AUTO(testUnsafe8FwdIter);
 
@@ -286,8 +292,11 @@ public:
         TESTCASE_AUTO(testSafe32Negative);
         TESTCASE_AUTO(testSafe32FFFD);
         TESTCASE_AUTO(testSafe32Surrogate);
+
         TESTCASE_AUTO(testSafe32SinglePassIterGood);
         TESTCASE_AUTO(testSafe32SinglePassIterSurrogate);
+        TESTCASE_AUTO(testUnsafe32SinglePassIter);
+
         TESTCASE_AUTO(testSafe32FwdIter);
         TESTCASE_AUTO(testUnsafe32FwdIter);
 
@@ -311,6 +320,9 @@ public:
 
     template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
     void testSafeSinglePassIter(StringView piped, bool isWellFormed);
+
+    template<typename CP32, typename StringView>
+    void testUnsafeSinglePassIter(StringView piped);
 
     template<typename Iter, TestMode mode, typename StringView>
     void testFwdIter(StringView piped);
@@ -352,6 +364,9 @@ public:
     void testSafe16SinglePassIterNegative() {
         testSafeSinglePassIter<UChar32, UTF_BEHAVIOR_NEGATIVE>(bad16, false);
     }
+    void testUnsafe16SinglePassIter() {
+        testUnsafeSinglePassIter<UChar32>(good16);
+    }
     void testSafe16FwdIter() {
         testFwdIter<
             UTFIterator<UChar32, UTF_BEHAVIOR_NEGATIVE, FwdIter<char16_t>>,
@@ -378,6 +393,9 @@ public:
     void testSafe8SinglePassIterFFFD() {
         testSafeSinglePassIter<char32_t, UTF_BEHAVIOR_FFFD>(
             std::string_view(string8FromBytes(badChars8, std::size(badChars8))), false);
+    }
+    void testUnsafe8SinglePassIter() {
+        testUnsafeSinglePassIter<UChar32>(std::string_view{good8Chars});
     }
     void testSafe8FwdIter() {
         testFwdIter<
@@ -406,6 +424,9 @@ public:
     }
     void testSafe32SinglePassIterSurrogate() {
         testSafeSinglePassIter<uint32_t, UTF_BEHAVIOR_SURROGATE>(bad32, false);
+    }
+    void testUnsafe32SinglePassIter() {
+        testUnsafeSinglePassIter<UChar32>(good32);
     }
     void testSafe32FwdIter() {
         testFwdIter<
@@ -511,6 +532,8 @@ void UTFIteratorTest::testSafeSinglePassIter(StringView piped, bool isWellFormed
     auto joined = join<Unit>(parts);
     SinglePassSource<Unit> good(joined);
     // "abçカ🚴"
+    // or
+    // "a?ç?🚴" where the ? sequences are ill-formed
     auto iter = utfIterator<CP32, behavior>(good.begin(), good.end());
     auto rangeLimit = utfIterator<CP32, behavior>(good.end(), good.end());
     assertTrue(
@@ -539,6 +562,43 @@ void UTFIteratorTest::testSafeSinglePassIter(StringView piped, bool isWellFormed
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
     assertEquals("iter[4] * length", parts[4].length(), units.length());
     assertTrue("iter[4] * wellFormed", units.wellFormed());
+    assertTrue("iter == endIter", iter == rangeLimit);
+}
+
+// The preceding and following test functions are copies. Keep them in sync.
+// A single-pass iterator need not be default-constructible, so it looks like we cannot
+// conditionalize this test function like others.
+template<typename CP32, typename StringView>
+void UTFIteratorTest::testUnsafeSinglePassIter(StringView piped) {
+    using Unit = typename StringView::value_type;
+    auto parts = split(piped);
+    auto joined = join<Unit>(parts);
+    SinglePassSource<Unit> good(joined);
+    // "abçカ🚴"
+    auto iter = unsafeUTFIterator<CP32>(good.begin());
+    auto rangeLimit = unsafeUTFIterator<CP32>(good.end());
+    assertTrue(
+        "input_iterator_tag",
+        std::is_same_v<
+            typename std::iterator_traits<decltype(iter)>::iterator_category,
+            std::input_iterator_tag>);
+    assertEquals("iter[0] * codePoint", u'a', (*iter).codePoint());
+    assertEquals("iter[0] -> codePoint", u'a', iter->codePoint());
+    ++iter;  // pre-increment
+    auto units = *iter;
+    assertEquals("iter[1] * codePoint", u'b', units.codePoint());
+    assertEquals("iter[1] * length", parts[1].length(), units.length());
+    // No units.stringView() when the unit iterator is not a pointer.
+    // No begin() for a single-pass unit iterator.
+    ++iter;
+    assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
+    assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
+    ++iter;
+    // Fetch the current code point twice.
+    assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
+    units = *iter++;
+    assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
+    assertEquals("iter[4] * length", parts[4].length(), units.length());
     assertTrue("iter == endIter", iter == rangeLimit);
 }
 

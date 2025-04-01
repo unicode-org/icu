@@ -1977,7 +1977,7 @@ private:
     mutable UnitIter p_;
     // Keep state so that we call readAndInc() only once for both operator*() and ++
     // so that we can use a single-pass input iterator for UnitIter.
-    mutable UnsafeCodeUnits<CP32, UnitIter> units_ = {0, 0, false};
+    mutable UnsafeCodeUnits<CP32, UnitIter> units_ = {0, 0};
     // true: units_ = readAndInc(), p_ = units limit
     //     which means that p_ is ahead of its logical position
     // false: initial state
