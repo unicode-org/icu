@@ -15,6 +15,8 @@
 // #define U_SHOW_CPLUSPLUS_HEADER_API 1
 
 #include "unicode/utypes.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "unicode/utfiterator.h"
 #include "intltest.h"
 
@@ -128,6 +130,8 @@ std::u32string cpFromStdin() { return cpFromInput(std::cin); }
 std::u32string cpFromWideStdin() { return cpFromInput(std::wcin); }
 
 #endif  // SAMPLE_CODE
+
+namespace {
 
 template<typename Unit>
 class SinglePassIter;
@@ -258,6 +262,9 @@ std::string string8FromBytes(const int bytes[], size_t length) {
 }
 
 enum TestMode { ILL_FORMED, WELL_FORMED, UNSAFE };
+enum IterType { INPUT, FWD, CONFIG };
+
+}  // namespace
 
 class UTFIteratorTest : public IntlTest {
 public:
@@ -302,6 +309,8 @@ public:
 
         TESTCASE_AUTO(testSafe32FwdIter);
         TESTCASE_AUTO(testUnsafe32FwdIter);
+
+        TESTCASE_AUTO(testUnsafe16LongLinear);
 
         TESTCASE_AUTO_END;
     }
@@ -469,6 +478,45 @@ public:
     void testUnsafe32FwdIter() {
         testFwdIter<UnsafeUTFIterator<UChar32, FwdIter<char32_t>>, UNSAFE>(good32);
     }
+
+    // implementation code coverage ---------------------------------------- ***
+
+    void initLong();
+
+    void testUnsafe16LongLinear() {
+        initLong();
+        std::u16string_view sv{longGood16};
+        auto parts = longGood16Parts;
+        auto codePoints = longGood32;
+        size_t i = 0;
+        for (auto units : unsafeUTFStringCodePoints<UChar32>(sv)) {
+            printf("U+%04lx\n", (long)units.codePoint());
+            assertEquals("cp[i]", static_cast<UChar32>(codePoints[i]), units.codePoint());
+            assertEquals("length[i]", parts[i].length(), units.length());
+            // TODO: wellFormed, begin(), end()
+            ++i;
+        }
+    }
+
+    std::string longGood8;
+    std::u16string longGood16;
+    std::u32string longGood32;
+
+    std::vector<std::string> longGood8Parts;
+    std::vector<std::u16string> longGood16Parts;
+    std::vector<std::u32string> longGood32Parts;
+
+    std::string longBad8;
+    std::u16string longBad16;
+    std::u32string longBad32;
+
+    std::u32string longBad8CodePoints;
+    std::u32string longBad16CodePoints;
+    std::u32string longBad32CodePoints;
+
+    std::vector<std::string> longBad8Parts;
+    std::vector<std::u16string> longBad16Parts;
+    std::vector<std::u32string> longBad32Parts;
 };
 
 const char *UTFIteratorTest::good8Chars = reinterpret_cast<const char *>(u8"a|b|ç|カ|🚴");
@@ -706,4 +754,143 @@ void UTFIteratorTest::testFwdIter(StringView piped) {
     }
     assertTrue("iter[4] * end() == endIter", units.end() == goodLimit);
     assertTrue("iter == endIter", iter == rangeLimit);
+}
+
+namespace {
+
+enum PartType { GOOD, BAD8, BAD16, BAD32 };
+
+struct Part {
+    constexpr Part(char32_t c) : type_(GOOD), len_(0), c_(c) {}
+    constexpr Part(PartType t, int32_t u0) : type_(t), len_(1), u0_(u0) {}
+    constexpr Part(PartType t, int32_t u0, int32_t u1) : type_(t), len_(2), u0_(u0), u1_(u1) {}
+    constexpr Part(PartType t, int32_t u0, int32_t u1, int32_t u2) :
+            type_(t), len_(3), u0_(u0), u1_(u1), u2_(u2) {}
+
+    PartType type_;
+    uint8_t len_;
+    char32_t c_ = U'?';
+    int32_t u0_ = 0;
+    int32_t u1_ = 0;
+    int32_t u2_ = 0;
+};
+
+// Careful: We test with the reverse order of parts as well.
+// For that to yield self-contained results, parts must not
+// continue sequences across part boundaries in either order.
+constexpr Part testParts[] = {
+    // "abçカ🚴"
+    u'a',
+    0x7f,
+    0x80,
+    Part(BAD8, 0xc0),
+    Part(BAD8, 0x80),
+    Part(BAD8, 0xc1),
+    0,
+    Part(BAD8, 0xe0),
+    Part(BAD8, 0xe0, 0xa0),
+    Part(BAD8, 0xe0, 0xbf),
+    Part(BAD8, 0xed, 0x9f),
+    // ED A0 xx .. ED BF xx would be surrogate code points
+    Part(BAD8, 0xed),
+    Part(BAD8, 0xa0),
+    Part(BAD8, 0xed),
+    Part(BAD8, 0xbf),
+    u'ç',
+    Part(BAD8, 0xee, 0x80),
+    Part(BAD8, 0xef, 0xbf),
+    Part(BAD8, 0xf0),
+    Part(BAD8, 0x8f),
+    u'b',
+    Part(BAD8, 0xf0),
+    Part(BAD8, 0xf0, 0x90),
+    Part(BAD8, 0xf0, 0x90, 0x80),
+    Part(BAD8, 0xf4),
+    Part(BAD8, 0xf4, 0x8f),
+    Part(BAD8, 0xf4, 0x8f, 0xbf),
+    Part(BAD8, 0xf5),
+    Part(BAD8, 0xbf),
+    U'🚴',
+    0x7ff,
+    0x800,
+    0xfff,
+    0x1000,
+    0xd7ff,
+    Part(BAD16, 0xd800),
+    Part(BAD16, 0xdbff),
+    u'カ',
+    Part(BAD16, 0xdc00),
+    Part(BAD16, 0xdfff),
+    0xe000,
+    0xfffd,
+    0xffff,
+    0x10000,
+    0x10ffff,
+    Part(BAD32, 0x110000),
+    Part(BAD32, -1)
+};
+
+}  // namespace
+
+void UTFIteratorTest::initLong() {
+    if (!longGood32.empty()) { return; }
+    for (auto part : testParts) {
+        switch (part.type_) {
+        case GOOD: {
+            char u8[4];
+            size_t len8 = 0;
+            U8_APPEND_UNSAFE(u8, len8, part.c_);
+            longGood8.append(u8, len8);
+            longGood8Parts.push_back({u8, len8});
+            longBad8.append(u8, len8);
+            longBad8CodePoints.push_back(part.c_);
+            longBad8Parts.push_back({u8, len8});
+
+            char16_t u16[2];
+            size_t len16 = 0;
+            U16_APPEND_UNSAFE(u16, len16, part.c_);
+            longGood16.append(u16, len16);
+            longGood16Parts.push_back({u16, len16});
+            longBad16.append(u16, len16);
+            longBad16CodePoints.push_back(part.c_);
+            longBad16Parts.push_back({u16, len16});
+
+            longGood32.push_back(part.c_);
+            longGood32Parts.push_back({part.c_, 1});
+            longBad32.push_back(part.c_);
+            longBad32CodePoints.push_back(part.c_);
+            longBad32Parts.push_back({part.c_, 1});
+            break;
+        }
+        case BAD8: {
+            char u8[3] = {
+                static_cast<char>(part.u0_),
+                static_cast<char>(part.u1_),
+                static_cast<char>(part.u2_)
+            };
+            longBad8.append(u8, part.len_);
+            longBad8CodePoints.push_back(U'?');
+            longBad8Parts.push_back({u8, part.len_});
+            break;
+        }
+        case BAD16: {  // surrogate code unit / code point
+            char16_t u16 = part.u0_;
+            longBad16.push_back(u16);
+            longBad16CodePoints.push_back(U'?');
+            longBad16Parts.push_back({&u16, 1});
+            char32_t u32 = part.u0_;
+            longBad32.push_back(u32);
+            longBad32CodePoints.push_back(U'?');
+            longBad32Parts.push_back({&u32, 1});
+            break;
+        }
+        case BAD32: {
+            char32_t u32 = part.u0_;
+            longBad32.push_back(u32);
+            longBad32CodePoints.push_back(U'?');
+            longBad32Parts.push_back({&u32, 1});
+            break;
+        }
+        }
+    }
 }
