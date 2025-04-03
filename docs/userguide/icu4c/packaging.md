@@ -40,7 +40,7 @@ distribution from conflicting with any libraries that you need. On operating sys
 that do not have a standard C++ ABI (name mangling) for compilers, it is recommended to
 do this special packaging anyway. More details on customizing ICU are available in the
 [User Guide](../).
-The [ICU Source Code Organization](./index/#icu-source-code-organization) section of
+The [ICU Source Code Organization](./index.md#icu-source-code-organization) section of
 the ICU4C gives a more complete description of the libraries.
 
 ICU has several libraries for you to use. Here is an example of libraries that are frequently packaged.
@@ -75,7 +75,7 @@ with -DU_STATIC_IMPLEMENTATION. Also see [How To Use ICU](../icu/howtouseicu.md)
 
 ### Reduce the number of libraries used
 
-ICU consists of a number of different libraries. The library dependency chart in the [Design](../design#library-dependencies-c)
+ICU consists of a number of different libraries. The library dependency chart in the [Design](../icu/design.md#library-dependencies-c)
 chapter can be used to understand and
 determine the exact set of libraries needed.
 
@@ -145,12 +145,12 @@ There are many ways in which ICU data may be reduced. If only certain locales or
 converters will be used, others may be removed. Additionally, data may be
 packaged as individual files or interchangeable archives (.dat files), allowing
 data to be installed and removed without rebuilding ICU. For details, see the
-[ICU Data](../icudata.md) chapter.
+[ICU Data](../icu_data/index.md) chapter.
 
 ## ICU Versions
 
-(This section assumes the reader is familiar with [ICU version numbers](../design#version-numbers-in-icu) as
-covered in the [Design](../design.md) chapter, and filename conventions for
+(This section assumes the reader is familiar with [ICU version numbers](../icu/design.md#version-numbers-in-icu) as
+covered in the [Design](../icu/design.md) chapter, and filename conventions for
 libraries as described above.)
 
 ### POSIX Library Names
@@ -237,5 +237,5 @@ DLLs will be copied with names such as 'icuuc55.dll'.
 The services which are now known as ICU were written to provide operating
 system-level and application environment-level services. Several operating
 systems include ICU as a standard or optional package.
-See [ICU Binary Compatibility](../design#icu-binary-compatibility) for
+See [ICU Binary Compatibility](../icu/design.md#icu-binary-compatibility) for
 more details.
