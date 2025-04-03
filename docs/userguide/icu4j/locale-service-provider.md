@@ -20,6 +20,8 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ---
 
+# WARNING: Please note that for ICU 78 (2025-oct) we are planning to remove the ICU4J Locale Service Provider. See the [ICU 77 page](https://unicode-org.github.io/icu/download/77.html) for details.
+
 ## Overview
 
 Java SE 6 introduced a new feature which allows Java user code to extend locale
