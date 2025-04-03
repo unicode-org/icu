@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743547969540,
+  "lastUpdate": 1743717268417,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -67076,6 +67076,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 9.181051489179188,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "770c4b80421c08e0cd31c42c3cf2fac8520e8d1c",
+          "message": "ICU-23095 Add fuzzer for DecimalFormatSymbols",
+          "timestamp": "2025-04-03T14:36:55-07:00",
+          "tree_id": "4395097ac49e3a10b1309e09758250fb8647ed78",
+          "url": "https://github.com/unicode-org/icu/commit/770c4b80421c08e0cd31c42c3cf2fac8520e8d1c"
+        },
+        "date": 1743717014471,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 9.106102305967548,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
