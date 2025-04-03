@@ -4,6 +4,7 @@
 // utfiteratortest.cpp
 // created: 2024aug12 Markus W. Scherer
 
+#include <algorithm>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -261,8 +262,22 @@ std::string string8FromBytes(const int bytes[], size_t length) {
     return result;
 }
 
+template<typename T>
+T reverseCopy(T x) {
+    T result{x};
+    std::reverse(result.begin(), result.end());
+    return result;
+}
+
 enum TestMode { ILL_FORMED, WELL_FORMED, UNSAFE };
-enum IterType { INPUT, FWD, CONFIG };
+enum IterType { INPUT, FWD, CONTIG };
+
+template<typename Unit>
+struct ImplTest {
+    std::basic_string<Unit> str;
+    std::vector<std::basic_string<Unit>> parts;
+    std::u32string codePoints;
+};
 
 }  // namespace
 
@@ -310,7 +325,13 @@ public:
         TESTCASE_AUTO(testSafe32FwdIter);
         TESTCASE_AUTO(testUnsafe32FwdIter);
 
+        TESTCASE_AUTO(testSafe16LongLinear);
+        TESTCASE_AUTO(testSafe8LongLinear);
+        TESTCASE_AUTO(testSafe32LongLinear);
+
         TESTCASE_AUTO(testUnsafe16LongLinear);
+        TESTCASE_AUTO(testUnsafe8LongLinear);
+        TESTCASE_AUTO(testUnsafe32LongLinear);
 
         TESTCASE_AUTO_END;
     }
@@ -483,40 +504,63 @@ public:
 
     void initLong();
 
-    void testUnsafe16LongLinear() {
-        initLong();
-        std::u16string_view sv{longGood16};
-        auto parts = longGood16Parts;
-        auto codePoints = longGood32;
-        size_t i = 0;
-        for (auto units : unsafeUTFStringCodePoints<UChar32>(sv)) {
-            printf("U+%04lx\n", (long)units.codePoint());
-            assertEquals("cp[i]", static_cast<UChar32>(codePoints[i]), units.codePoint());
-            assertEquals("length[i]", parts[i].length(), units.length());
-            // TODO: wellFormed, begin(), end()
-            ++i;
+    template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename Unit, typename Units>
+    void checkUnits(const Units &units, std::basic_string_view<Unit> part, UChar32 expectedCP);
+
+    template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename Unit, typename Iter>
+    void testLongLinear(const ImplTest<Unit> &test, Iter begin, Iter end) {
+        for (size_t i = 0; begin != end; ++i, ++begin) {
+            checkUnits<mode, behavior, type, Unit>(*begin, test.parts[i], test.codePoints[i]);
         }
     }
 
-    std::string longGood8;
-    std::u16string longGood16;
-    std::u32string longGood32;
+    template<UTFIllFormedBehavior behavior, IterType type, typename Unit>
+    void testSafeLongLinear(const ImplTest<Unit> &test) {
+        initLong();
+        // TODO: fix utfStringCodePoints() & unsafeUTFStringCodePoints()
+        // to *actually take* string_view arguments.
+        // Currently, if we pass in a string, then the function makes a temporary copy
+        // of the string and creates an [Unsafe]UTFStringCodePoints which
+        // takes a copy of a string_view *which refers to the temporary copy*
+        // which then goes out of scope, taking its heap buffer with it.
+        // Look at unicode/char16ptr.h ConvertibleToU16StringView.
+        // If this means that we can no longer deduce the Unit type, then maybe
+        // remove these functions.
+        // If we can keep them, then pass test.str directly into the ...CodePoints() function.
+        std::basic_string_view<Unit> sv{test.str};
+        auto range = utfStringCodePoints<UChar32, behavior>(sv);
+        // any mode != UNSAFE
+        testLongLinear<ILL_FORMED, behavior, type, Unit>(test, range.begin(), range.end());
+    }
 
-    std::vector<std::string> longGood8Parts;
-    std::vector<std::u16string> longGood16Parts;
-    std::vector<std::u32string> longGood32Parts;
+    template<IterType type, typename Unit>
+    void testUnsafeLongLinear(const ImplTest<Unit> &test) {
+        initLong();
+        std::basic_string_view<Unit> sv{test.str};
+        auto range = unsafeUTFStringCodePoints<UChar32>(sv);
+        testLongLinear<UNSAFE, UTF_BEHAVIOR_FFFD, type, Unit>(test, range.begin(), range.end());
+    }
 
-    std::string longBad8;
-    std::u16string longBad16;
-    std::u32string longBad32;
+    void testSafe16LongLinear() {
+        testSafeLongLinear<UTF_BEHAVIOR_SURROGATE, CONTIG, char16_t>(longBad16);
+    }
+    void testSafe8LongLinear() {
+        testSafeLongLinear<UTF_BEHAVIOR_NEGATIVE, CONTIG, char>(longBad8);
+    }
+    void testSafe32LongLinear() {
+        testSafeLongLinear<UTF_BEHAVIOR_SURROGATE, CONTIG, char32_t>(longBad32);
+    }
 
-    std::u32string longBad8CodePoints;
-    std::u32string longBad16CodePoints;
-    std::u32string longBad32CodePoints;
+    void testUnsafe16LongLinear() { testUnsafeLongLinear<CONTIG, char16_t>(longGood16); }
+    void testUnsafe8LongLinear() { testUnsafeLongLinear<CONTIG, char>(longGood8); }
+    void testUnsafe32LongLinear() { testUnsafeLongLinear<CONTIG, char32_t>(longGood32); }
 
-    std::vector<std::string> longBad8Parts;
-    std::vector<std::u16string> longBad16Parts;
-    std::vector<std::u32string> longBad32Parts;
+    ImplTest<char> longGood8;
+    ImplTest<char16_t> longGood16;
+    ImplTest<char32_t> longGood32;
+    ImplTest<char> longBad8;
+    ImplTest<char16_t> longBad16;
+    ImplTest<char32_t> longBad32;
 };
 
 const char *UTFIteratorTest::good8Chars = reinterpret_cast<const char *>(u8"a|b|ç|カ|🚴");
@@ -833,33 +877,33 @@ constexpr Part testParts[] = {
 }  // namespace
 
 void UTFIteratorTest::initLong() {
-    if (!longGood32.empty()) { return; }
+    if (!longGood32.str.empty()) { return; }
     for (auto part : testParts) {
         switch (part.type_) {
         case GOOD: {
             char u8[4];
             size_t len8 = 0;
             U8_APPEND_UNSAFE(u8, len8, part.c_);
-            longGood8.append(u8, len8);
-            longGood8Parts.push_back({u8, len8});
-            longBad8.append(u8, len8);
-            longBad8CodePoints.push_back(part.c_);
-            longBad8Parts.push_back({u8, len8});
+            longGood8.str.append(u8, len8);
+            longGood8.parts.push_back({u8, len8});
+            longBad8.str.append(u8, len8);
+            longBad8.parts.push_back({u8, len8});
+            longBad8.codePoints.push_back(part.c_);
 
             char16_t u16[2];
             size_t len16 = 0;
             U16_APPEND_UNSAFE(u16, len16, part.c_);
-            longGood16.append(u16, len16);
-            longGood16Parts.push_back({u16, len16});
-            longBad16.append(u16, len16);
-            longBad16CodePoints.push_back(part.c_);
-            longBad16Parts.push_back({u16, len16});
+            longGood16.str.append(u16, len16);
+            longGood16.parts.push_back({u16, len16});
+            longBad16.str.append(u16, len16);
+            longBad16.parts.push_back({u16, len16});
+            longBad16.codePoints.push_back(part.c_);
 
-            longGood32.push_back(part.c_);
-            longGood32Parts.push_back({part.c_, 1});
-            longBad32.push_back(part.c_);
-            longBad32CodePoints.push_back(part.c_);
-            longBad32Parts.push_back({part.c_, 1});
+            longGood32.str.push_back(part.c_);
+            longGood32.parts.push_back({&part.c_, 1});
+            longBad32.str.push_back(part.c_);
+            longBad32.parts.push_back({&part.c_, 1});
+            longBad32.codePoints.push_back(part.c_);
             break;
         }
         case BAD8: {
@@ -868,29 +912,58 @@ void UTFIteratorTest::initLong() {
                 static_cast<char>(part.u1_),
                 static_cast<char>(part.u2_)
             };
-            longBad8.append(u8, part.len_);
-            longBad8CodePoints.push_back(U'?');
-            longBad8Parts.push_back({u8, part.len_});
+            longBad8.str.append(u8, part.len_);
+            longBad8.parts.push_back({u8, part.len_});
+            longBad8.codePoints.push_back(U'?');
             break;
         }
         case BAD16: {  // surrogate code unit / code point
             char16_t u16 = part.u0_;
-            longBad16.push_back(u16);
-            longBad16CodePoints.push_back(U'?');
-            longBad16Parts.push_back({&u16, 1});
+            longBad16.str.push_back(u16);
+            longBad16.parts.push_back({&u16, 1});
+            longBad16.codePoints.push_back(U'?');
             char32_t u32 = part.u0_;
-            longBad32.push_back(u32);
-            longBad32CodePoints.push_back(U'?');
-            longBad32Parts.push_back({&u32, 1});
+            longBad32.str.push_back(u32);
+            longBad32.parts.push_back({&u32, 1});
+            longBad32.codePoints.push_back(U'?');
             break;
         }
         case BAD32: {
             char32_t u32 = part.u0_;
-            longBad32.push_back(u32);
-            longBad32CodePoints.push_back(U'?');
-            longBad32Parts.push_back({&u32, 1});
+            longBad32.str.push_back(u32);
+            longBad32.parts.push_back({&u32, 1});
+            longBad32.codePoints.push_back(U'?');
             break;
         }
         }
+    }
+    longGood8.codePoints = longGood16.codePoints = longGood32.codePoints = longGood32.str;
+}
+
+template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename Unit, typename Units>
+void UTFIteratorTest::checkUnits(
+        const Units &units, std::basic_string_view<Unit> part, UChar32 expectedCP) {
+    printf("U+%04lx\n", (long)units.codePoint());
+    bool expectedWellFormed = true;
+    if (expectedCP == u'?') {
+        expectedCP = sub<UChar32, behavior>(part);
+        expectedWellFormed = false;
+    }
+    assertEquals("cp[i]", expectedCP, units.codePoint());
+    assertEquals("length[i]", part.length(), units.length());
+    if constexpr (mode != UNSAFE) {
+        assertEquals("wellFormed[i]", expectedWellFormed, units.wellFormed());
+    }
+    if constexpr (type >= FWD) {
+        int32_t j = 0;
+        for (Unit unit : units) {  // begin()..end()
+            assertEquals("units.iter[i][j]",
+                         static_cast<UChar32>(part[j]), static_cast<UChar32>(unit));
+            ++j;
+        }
+        assertEquals("units.iter.length[i]", static_cast<int32_t>(part.length()), j);
+    }
+    if constexpr (type >= CONTIG) {
+        assertTrue("stringView[i]", part == units.stringView());
     }
 }
