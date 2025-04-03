@@ -107,7 +107,9 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UErrorCode &st
         }
     }
 
+    /* coverity[incorrect_free] */
     ures_close(brkRules);
+    /* coverity[incorrect_free] */
     ures_close(brkName);
 
     UDataMemory* file = udata_open(U_ICUDATA_BRKITR, ext, fnbuff, &status);
