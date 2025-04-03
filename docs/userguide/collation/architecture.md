@@ -58,7 +58,7 @@ when opening collators:
 
 2.  The empty locale name ("") means the root locale.
     The Collation Service adheres to the ICU conventions described in the
-    "[ICU Architectural Design](../design.md) " section of the users guide.
+    "[ICU Architectural Design](../icu/design.md)" section of the users guide.
     In particular:
 
 3.  The standard error code convention is usually followed. (Functions that do
