@@ -40,6 +40,7 @@ FUZZER_TARGETS = \
 		 collator_rulebased_fuzzer \
 		 converter_fuzzer date_format_fuzzer \
 		 date_time_pattern_generator_fuzzer \
+		 decimal_format_symbols_fuzzer \
 		 dtfmtsym_fuzzer \
 		 list_format_fuzzer locale_fuzzer \
 		 locale_morph_fuzzer \
