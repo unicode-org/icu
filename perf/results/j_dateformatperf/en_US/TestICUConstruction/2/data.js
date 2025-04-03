@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743547809438,
+  "lastUpdate": 1743717152574,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33687,6 +33687,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1889.5543657591197,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "770c4b80421c08e0cd31c42c3cf2fac8520e8d1c",
+          "message": "ICU-23095 Add fuzzer for DecimalFormatSymbols",
+          "timestamp": "2025-04-03T14:36:55-07:00",
+          "tree_id": "4395097ac49e3a10b1309e09758250fb8647ed78",
+          "url": "https://github.com/unicode-org/icu/commit/770c4b80421c08e0cd31c42c3cf2fac8520e8d1c"
+        },
+        "date": 1743716902796,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1839.3096193246602,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
