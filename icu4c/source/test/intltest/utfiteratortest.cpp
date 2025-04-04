@@ -269,8 +269,12 @@ T reverseCopy(T x) {
     return result;
 }
 
-enum TestMode { ILL_FORMED, WELL_FORMED, UNSAFE };
+// Use SAFE when we don't care about ILL_FORMED vs. WELL_FORMED.
+enum TestMode { SAFE, ILL_FORMED, WELL_FORMED, UNSAFE };
 enum IterType { INPUT, FWD, CONTIG };
+
+// Use this don't-care behavior value for unsafe iterators that do not use the behavior tparam.
+constexpr auto ANY_B = UTF_BEHAVIOR_FFFD;
 
 template<typename Unit>
 struct ImplTest {
@@ -325,13 +329,13 @@ public:
         TESTCASE_AUTO(testSafe32FwdIter);
         TESTCASE_AUTO(testUnsafe32FwdIter);
 
-        TESTCASE_AUTO(testSafe16LongLinear);
-        TESTCASE_AUTO(testSafe8LongLinear);
-        TESTCASE_AUTO(testSafe32LongLinear);
+        TESTCASE_AUTO(testSafe16LongLinearContig);
+        TESTCASE_AUTO(testSafe8LongLinearContig);
+        TESTCASE_AUTO(testSafe32LongLinearContig);
 
-        TESTCASE_AUTO(testUnsafe16LongLinear);
-        TESTCASE_AUTO(testUnsafe8LongLinear);
-        TESTCASE_AUTO(testUnsafe32LongLinear);
+        TESTCASE_AUTO(testUnsafe16LongLinearContig);
+        TESTCASE_AUTO(testUnsafe8LongLinearContig);
+        TESTCASE_AUTO(testUnsafe32LongLinearContig);
 
         TESTCASE_AUTO_END;
     }
@@ -400,7 +404,7 @@ public:
         testBidiIter<ILL_FORMED, uint32_t, UTF_BEHAVIOR_SURROGATE>(bad16);
     }
     void testUnsafe16() {
-        testBidiIter<UNSAFE, UChar32, UTF_BEHAVIOR_NEGATIVE>(good16);
+        testBidiIter<UNSAFE, UChar32, ANY_B>(good16);
     }
 
     void testSafe16SinglePassIterGood() {
@@ -414,10 +418,10 @@ public:
     }
 
     void testSafe16FwdIter() {
-        testFwdIter<WELL_FORMED, UChar32, UTF_BEHAVIOR_NEGATIVE>(good16);
+        testFwdIter<SAFE, UChar32, UTF_BEHAVIOR_NEGATIVE>(good16);
     }
     void testUnsafe16FwdIter() {
-        testFwdIter<UNSAFE, UChar32, UTF_BEHAVIOR_FFFD>(good16);
+        testFwdIter<UNSAFE, UChar32, ANY_B>(good16);
     }
 
     void testSafe8Good() {
@@ -432,7 +436,7 @@ public:
                 std::string_view(string8FromBytes(badChars8, std::size(badChars8))));
     }
     void testUnsafe8() {
-        testBidiIter<UNSAFE, UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars});
+        testBidiIter<UNSAFE, UChar32, ANY_B>(std::string_view{good8Chars});
     }
 
     void testSafe8SinglePassIterGood() {
@@ -447,10 +451,10 @@ public:
     }
 
     void testSafe8FwdIter() {
-        testFwdIter<WELL_FORMED, UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars});
+        testFwdIter<SAFE, UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars});
     }
     void testUnsafe8FwdIter() {
-        testFwdIter<UNSAFE, UChar32, UTF_BEHAVIOR_FFFD>(std::string_view{good8Chars});
+        testFwdIter<UNSAFE, UChar32, ANY_B>(std::string_view{good8Chars});
     }
 
     void testSafe32Good() {
@@ -466,7 +470,7 @@ public:
         testBidiIter<ILL_FORMED, uint32_t, UTF_BEHAVIOR_SURROGATE>(bad32);
     }
     void testUnsafe32() {
-        testBidiIter<UNSAFE, UChar32, UTF_BEHAVIOR_NEGATIVE>(good32);
+        testBidiIter<UNSAFE, UChar32, ANY_B>(good32);
     }
 
     void testSafe32SinglePassIterGood() {
@@ -480,10 +484,10 @@ public:
     }
 
     void testSafe32FwdIter() {
-        testFwdIter<WELL_FORMED, UChar32, UTF_BEHAVIOR_NEGATIVE>(good32);
+        testFwdIter<SAFE, UChar32, UTF_BEHAVIOR_NEGATIVE>(good32);
     }
     void testUnsafe32FwdIter() {
-        testFwdIter<UNSAFE, UChar32, UTF_BEHAVIOR_FFFD>(good32);
+        testFwdIter<UNSAFE, UChar32, ANY_B>(good32);
     }
 
     // implementation code coverage ---------------------------------------- ***
@@ -500,8 +504,8 @@ public:
         }
     }
 
-    template<UTFIllFormedBehavior behavior, IterType type, typename Unit>
-    void testSafeLongLinear(const ImplTest<Unit> &test) {
+    template<TestMode mode, UTFIllFormedBehavior behavior, typename Unit>
+    void testLongLinearContig(const ImplTest<Unit> &test) {
         initLong();
         // TODO: fix utfStringCodePoints() & unsafeUTFStringCodePoints()
         // to *actually take* string_view arguments.
@@ -514,32 +518,34 @@ public:
         // remove these functions.
         // If we can keep them, then pass test.str directly into the ...CodePoints() function.
         std::basic_string_view<Unit> sv{test.str};
-        auto range = utfStringCodePoints<UChar32, behavior>(sv);
-        // any mode != UNSAFE
-        testLongLinear<ILL_FORMED, behavior, type, Unit>(test, range.begin(), range.end());
+        if constexpr (mode == UNSAFE) {
+            auto range = unsafeUTFStringCodePoints<UChar32>(sv);
+            testLongLinear<mode, behavior, CONTIG, Unit>(test, range.begin(), range.end());
+        } else {
+            auto range = utfStringCodePoints<UChar32, behavior>(sv);
+            testLongLinear<mode, behavior, CONTIG, Unit>(test, range.begin(), range.end());
+        }
     }
 
-    template<IterType type, typename Unit>
-    void testUnsafeLongLinear(const ImplTest<Unit> &test) {
-        initLong();
-        std::basic_string_view<Unit> sv{test.str};
-        auto range = unsafeUTFStringCodePoints<UChar32>(sv);
-        testLongLinear<UNSAFE, UTF_BEHAVIOR_FFFD, type, Unit>(test, range.begin(), range.end());
+    void testSafe16LongLinearContig() {
+        testLongLinearContig<SAFE, UTF_BEHAVIOR_SURROGATE, char16_t>(longBad16);
+    }
+    void testSafe8LongLinearContig() {
+        testLongLinearContig<SAFE, UTF_BEHAVIOR_NEGATIVE, char>(longBad8);
+    }
+    void testSafe32LongLinearContig() {
+        testLongLinearContig<SAFE, UTF_BEHAVIOR_SURROGATE, char32_t>(longBad32);
     }
 
-    void testSafe16LongLinear() {
-        testSafeLongLinear<UTF_BEHAVIOR_SURROGATE, CONTIG, char16_t>(longBad16);
+    void testUnsafe16LongLinearContig() {
+        testLongLinearContig<UNSAFE, ANY_B, char16_t>(longGood16);
     }
-    void testSafe8LongLinear() {
-        testSafeLongLinear<UTF_BEHAVIOR_NEGATIVE, CONTIG, char>(longBad8);
+    void testUnsafe8LongLinearContig() {
+        testLongLinearContig<UNSAFE, ANY_B, char>(longGood8);
     }
-    void testSafe32LongLinear() {
-        testSafeLongLinear<UTF_BEHAVIOR_SURROGATE, CONTIG, char32_t>(longBad32);
+    void testUnsafe32LongLinearContig() {
+        testLongLinearContig<UNSAFE, ANY_B, char32_t>(longGood32);
     }
-
-    void testUnsafe16LongLinear() { testUnsafeLongLinear<CONTIG, char16_t>(longGood16); }
-    void testUnsafe8LongLinear() { testUnsafeLongLinear<CONTIG, char>(longGood8); }
-    void testUnsafe32LongLinear() { testUnsafeLongLinear<CONTIG, char32_t>(longGood32); }
 
     ImplTest<char> longGood8;
     ImplTest<char16_t> longGood16;
