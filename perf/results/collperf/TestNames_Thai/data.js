@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743794745994,
+  "lastUpdate": 1743800810674,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -65391,6 +65391,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2114024.5749,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "572d03f85af47f62057ea3f7c069254a4737d1b7",
+          "message": "ICU-23052 Fix addLikelySubtags\n\nRemove hack in the conversion tool by fixing the code\n\nICU-23052 Assert the value will never be 0",
+          "timestamp": "2025-04-04T13:36:14-07:00",
+          "tree_id": "8f423d116d57bfd4f30454e02fc2ea27603f01c6",
+          "url": "https://github.com/unicode-org/icu/commit/572d03f85af47f62057ea3f7c069254a4737d1b7"
+        },
+        "date": 1743800554745,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 385.48,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 12953676.9042,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2151149.5641,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 11848222.6718,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2137310.3458,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
