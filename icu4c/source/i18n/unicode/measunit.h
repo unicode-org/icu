@@ -2847,29 +2847,25 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getTonne();
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Returns by pointer, unit of mass: metric-ton
      * (renamed to tonne in CLDR 42 / ICU 72).
      * Caller owns returned value and must free it.
-     * Note: In ICU 74 this will be deprecated in favor of
-     * createTonne(), which is currently draft but will
-     * become stable in ICU 74, and which uses the preferred naming.
      * Also see {@link #getMetricTon()} and {@link #createTonne()}.
      * @param status ICU error code.
-     * @stable ICU 54
+     * @deprecated ICU 78 use createTonne(UErrorCode &status)
      */
     static MeasureUnit *createMetricTon(UErrorCode &status);
 
     /**
      * Returns by value, unit of mass: metric-ton
      * (renamed to tonne in CLDR 42 / ICU 72).
-     * Note: In ICU 74 this will be deprecated in favor of
-     * getTonne(), which is currently draft but will
-     * become stable in ICU 74, and which uses the preferred naming.
      * Also see {@link #createMetricTon()} and {@link #getTonne()}.
-     * @stable ICU 64
+     * @deprecated ICU 78 use getTonne()
      */
     static MeasureUnit getMetricTon();
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Returns by pointer, unit of power: gigawatt.
