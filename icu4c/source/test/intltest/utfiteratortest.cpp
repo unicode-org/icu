@@ -281,6 +281,17 @@ struct ImplTest {
     std::basic_string<Unit> str;
     std::vector<std::basic_string<Unit>> parts;
     std::u32string codePoints;
+
+    ImplTest reverseParts() const {
+        ImplTest result;
+        // We cannot just reverse the string.
+        // We need to keep the code units for each subsequence in order.
+        // We could join the reversed parts, but so far we don't need the reversed string.
+        result.parts = reverseCopy(parts);
+        // result.str = join<Unit>(result.parts);
+        result.codePoints = reverseCopy(codePoints);
+        return result;
+    }
 };
 
 }  // namespace
@@ -360,6 +371,14 @@ public:
         TESTCASE_AUTO(testUnsafe16LongBackward);
         TESTCASE_AUTO(testUnsafe8LongBackward);
         TESTCASE_AUTO(testUnsafe32LongBackward);
+
+        TESTCASE_AUTO(testSafe16LongReverse);
+        TESTCASE_AUTO(testSafe8LongReverse);
+        TESTCASE_AUTO(testSafe32LongReverse);
+
+        TESTCASE_AUTO(testUnsafe16LongReverse);
+        TESTCASE_AUTO(testUnsafe8LongReverse);
+        TESTCASE_AUTO(testUnsafe32LongReverse);
 
         TESTCASE_AUTO_END;
     }
@@ -577,6 +596,7 @@ public:
         }
     }
 
+    // backward: from end to begin with *--iter
     template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename Unit, typename Iter>
     void testLongBackward(const ImplTest<Unit> &test, Iter begin, Iter end) {
         for (size_t i = test.codePoints.length(); begin != end;) {
@@ -594,6 +614,20 @@ public:
         } else {
             auto range = utfStringCodePoints<UChar32, behavior>(test.str);
             testLongBackward<mode, behavior, CONTIG, Unit>(test, range.begin(), range.end());
+        }
+    }
+
+    // reverse: from rbegin() to rend(), uses the reverse_iterator
+    template<TestMode mode, UTFIllFormedBehavior behavior, typename Unit>
+    void testLongReverse(const ImplTest<Unit> &test) {
+        initLong();
+        auto reverse = test.reverseParts();
+        if constexpr (mode == UNSAFE) {
+            auto range = unsafeUTFStringCodePoints<UChar32>(test.str);
+            testLongLinear<mode, behavior, CONTIG, Unit>(reverse, range.rbegin(), range.rend());
+        } else {
+            auto range = utfStringCodePoints<UChar32, behavior>(test.str);
+            testLongLinear<mode, behavior, CONTIG, Unit>(reverse, range.rbegin(), range.rend());
         }
     }
 
@@ -675,6 +709,26 @@ public:
     }
     void testUnsafe32LongBackward() {
         testLongBackward<UNSAFE, ANY_B, char32_t>(longGood32);
+    }
+
+    void testSafe16LongReverse() {
+        testLongReverse<SAFE, UTF_BEHAVIOR_SURROGATE, char16_t>(longBad16);
+    }
+    void testSafe8LongReverse() {
+        testLongReverse<SAFE, UTF_BEHAVIOR_NEGATIVE, char>(longBad8);
+    }
+    void testSafe32LongReverse() {
+        testLongReverse<SAFE, UTF_BEHAVIOR_SURROGATE, char32_t>(longBad32);
+    }
+
+    void testUnsafe16LongReverse() {
+        testLongReverse<UNSAFE, ANY_B, char16_t>(longGood16);
+    }
+    void testUnsafe8LongReverse() {
+        testLongReverse<UNSAFE, ANY_B, char>(longGood8);
+    }
+    void testUnsafe32LongReverse() {
+        testLongReverse<UNSAFE, ANY_B, char32_t>(longGood32);
     }
 
     ImplTest<char> longGood8;
