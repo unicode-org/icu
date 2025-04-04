@@ -247,9 +247,8 @@ class TransliteratorRegistry {
                     return resource;
                 }
 
-                String str = resourceSupplier.get();
-                resource = str;
-                return str;
+                resource = resourceSupplier.get();
+                return resource;
             }
         }
     }
