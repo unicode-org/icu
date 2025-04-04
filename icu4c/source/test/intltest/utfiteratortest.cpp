@@ -353,6 +353,14 @@ public:
         TESTCASE_AUTO(testUnsafe8LongLinearFwd);
         TESTCASE_AUTO(testUnsafe32LongLinearFwd);
 
+        TESTCASE_AUTO(testSafe16LongBackward);
+        TESTCASE_AUTO(testSafe8LongBackward);
+        TESTCASE_AUTO(testSafe32LongBackward);
+
+        TESTCASE_AUTO(testUnsafe16LongBackward);
+        TESTCASE_AUTO(testUnsafe8LongBackward);
+        TESTCASE_AUTO(testUnsafe32LongBackward);
+
         TESTCASE_AUTO_END;
     }
 
@@ -569,6 +577,26 @@ public:
         }
     }
 
+    template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename Unit, typename Iter>
+    void testLongBackward(const ImplTest<Unit> &test, Iter begin, Iter end) {
+        for (size_t i = test.codePoints.length(); begin != end;) {
+            --i;
+            checkUnits<mode, behavior, type, Unit>(*--end, test.parts[i], test.codePoints[i]);
+        }
+    }
+
+    template<TestMode mode, UTFIllFormedBehavior behavior, typename Unit>
+    void testLongBackward(const ImplTest<Unit> &test) {
+        initLong();
+        if constexpr (mode == UNSAFE) {
+            auto range = unsafeUTFStringCodePoints<UChar32>(test.str);
+            testLongBackward<mode, behavior, CONTIG, Unit>(test, range.begin(), range.end());
+        } else {
+            auto range = utfStringCodePoints<UChar32, behavior>(test.str);
+            testLongBackward<mode, behavior, CONTIG, Unit>(test, range.begin(), range.end());
+        }
+    }
+
     void testSafe16LongLinearContig() {
         testLongLinearContig<SAFE, UTF_BEHAVIOR_SURROGATE, char16_t>(longBad16);
     }
@@ -627,6 +655,26 @@ public:
     }
     void testUnsafe32LongLinearFwd() {
         testLongLinearFwd<UNSAFE, ANY_B, char32_t>(longGood32);
+    }
+
+    void testSafe16LongBackward() {
+        testLongBackward<SAFE, UTF_BEHAVIOR_SURROGATE, char16_t>(longBad16);
+    }
+    void testSafe8LongBackward() {
+        testLongBackward<SAFE, UTF_BEHAVIOR_NEGATIVE, char>(longBad8);
+    }
+    void testSafe32LongBackward() {
+        testLongBackward<SAFE, UTF_BEHAVIOR_SURROGATE, char32_t>(longBad32);
+    }
+
+    void testUnsafe16LongBackward() {
+        testLongBackward<UNSAFE, ANY_B, char16_t>(longGood16);
+    }
+    void testUnsafe8LongBackward() {
+        testLongBackward<UNSAFE, ANY_B, char>(longGood8);
+    }
+    void testUnsafe32LongBackward() {
+        testLongBackward<UNSAFE, ANY_B, char32_t>(longGood32);
     }
 
     ImplTest<char> longGood8;
