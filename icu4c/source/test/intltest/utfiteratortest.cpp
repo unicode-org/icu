@@ -345,6 +345,14 @@ public:
         TESTCASE_AUTO(testUnsafe8LongLinearInput);
         TESTCASE_AUTO(testUnsafe32LongLinearInput);
 
+        TESTCASE_AUTO(testSafe16LongLinearFwd);
+        TESTCASE_AUTO(testSafe8LongLinearFwd);
+        TESTCASE_AUTO(testSafe32LongLinearFwd);
+
+        TESTCASE_AUTO(testUnsafe16LongLinearFwd);
+        TESTCASE_AUTO(testUnsafe8LongLinearFwd);
+        TESTCASE_AUTO(testUnsafe32LongLinearFwd);
+
         TESTCASE_AUTO_END;
     }
 
@@ -543,6 +551,24 @@ public:
         }
     }
 
+    template<TestMode mode, UTFIllFormedBehavior behavior, typename Unit>
+    void testLongLinearFwd(const ImplTest<Unit> &test) {
+        initLong();
+        FwdIter<Unit> srcBegin(test.str.data());
+        FwdIter<Unit> srcLimit(test.str.data() + test.str.length());
+        if constexpr (mode == UNSAFE) {
+            testLongLinear<mode, behavior, FWD, Unit>(
+                test,
+                unsafeUTFIterator<UChar32>(srcBegin),
+                unsafeUTFIterator<UChar32>(srcLimit));
+        } else {
+            testLongLinear<mode, behavior, FWD, Unit>(
+                test,
+                utfIterator<UChar32, behavior>(srcBegin, srcLimit),
+                utfIterator<UChar32, behavior>(srcLimit));
+        }
+    }
+
     void testSafe16LongLinearContig() {
         testLongLinearContig<SAFE, UTF_BEHAVIOR_SURROGATE, char16_t>(longBad16);
     }
@@ -581,6 +607,26 @@ public:
     }
     void testUnsafe32LongLinearInput() {
         testLongLinearInput<UNSAFE, ANY_B, char32_t>(longGood32);
+    }
+
+    void testSafe16LongLinearFwd() {
+        testLongLinearFwd<SAFE, UTF_BEHAVIOR_SURROGATE, char16_t>(longBad16);
+    }
+    void testSafe8LongLinearFwd() {
+        testLongLinearFwd<SAFE, UTF_BEHAVIOR_NEGATIVE, char>(longBad8);
+    }
+    void testSafe32LongLinearFwd() {
+        testLongLinearFwd<SAFE, UTF_BEHAVIOR_SURROGATE, char32_t>(longBad32);
+    }
+
+    void testUnsafe16LongLinearFwd() {
+        testLongLinearFwd<UNSAFE, ANY_B, char16_t>(longGood16);
+    }
+    void testUnsafe8LongLinearFwd() {
+        testLongLinearFwd<UNSAFE, ANY_B, char>(longGood8);
+    }
+    void testUnsafe32LongLinearFwd() {
+        testLongLinearFwd<UNSAFE, ANY_B, char32_t>(longGood32);
     }
 
     ImplTest<char> longGood8;
