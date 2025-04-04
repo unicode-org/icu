@@ -1776,10 +1776,10 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of mass: metric-ton (renamed to tonne in CLDR 42 / ICU 72).
-     * Note: In ICU 74 this will be deprecated in favor of TONNE, which is currently
-     * draft but will become stable in ICU 74, and which uses the preferred naming.
-     * @stable ICU 54
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final MeasureUnit METRIC_TON = MeasureUnit.internalGetInstance("mass", "tonne");
 
     /**
