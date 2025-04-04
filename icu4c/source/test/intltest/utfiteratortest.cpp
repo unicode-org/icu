@@ -337,6 +337,14 @@ public:
         TESTCASE_AUTO(testUnsafe8LongLinearContig);
         TESTCASE_AUTO(testUnsafe32LongLinearContig);
 
+        TESTCASE_AUTO(testSafe16LongLinearInput);
+        TESTCASE_AUTO(testSafe8LongLinearInput);
+        TESTCASE_AUTO(testSafe32LongLinearInput);
+
+        TESTCASE_AUTO(testUnsafe16LongLinearInput);
+        TESTCASE_AUTO(testUnsafe8LongLinearInput);
+        TESTCASE_AUTO(testUnsafe32LongLinearInput);
+
         TESTCASE_AUTO_END;
     }
 
@@ -518,6 +526,23 @@ public:
         }
     }
 
+    template<TestMode mode, UTFIllFormedBehavior behavior, typename Unit>
+    void testLongLinearInput(const ImplTest<Unit> &test) {
+        initLong();
+        SinglePassSource<Unit> src(test.str);
+        if constexpr (mode == UNSAFE) {
+            testLongLinear<mode, behavior, INPUT, Unit>(
+                test,
+                unsafeUTFIterator<UChar32>(src.begin()),
+                unsafeUTFIterator<UChar32>(src.end()));
+        } else {
+            testLongLinear<mode, behavior, INPUT, Unit>(
+                test,
+                utfIterator<UChar32, behavior>(src.begin(), src.end()),
+                utfIterator<UChar32, behavior>(src.end(), src.end()));
+        }
+    }
+
     void testSafe16LongLinearContig() {
         testLongLinearContig<SAFE, UTF_BEHAVIOR_SURROGATE, char16_t>(longBad16);
     }
@@ -536,6 +561,26 @@ public:
     }
     void testUnsafe32LongLinearContig() {
         testLongLinearContig<UNSAFE, ANY_B, char32_t>(longGood32);
+    }
+
+    void testSafe16LongLinearInput() {
+        testLongLinearInput<SAFE, UTF_BEHAVIOR_SURROGATE, char16_t>(longBad16);
+    }
+    void testSafe8LongLinearInput() {
+        testLongLinearInput<SAFE, UTF_BEHAVIOR_NEGATIVE, char>(longBad8);
+    }
+    void testSafe32LongLinearInput() {
+        testLongLinearInput<SAFE, UTF_BEHAVIOR_SURROGATE, char32_t>(longBad32);
+    }
+
+    void testUnsafe16LongLinearInput() {
+        testLongLinearInput<UNSAFE, ANY_B, char16_t>(longGood16);
+    }
+    void testUnsafe8LongLinearInput() {
+        testLongLinearInput<UNSAFE, ANY_B, char>(longGood8);
+    }
+    void testUnsafe32LongLinearInput() {
+        testLongLinearInput<UNSAFE, ANY_B, char32_t>(longGood32);
     }
 
     ImplTest<char> longGood8;
