@@ -1632,21 +1632,94 @@ auto utfIterator(UnitIter p) {
 /**
  * UTFStringCodePoints factory function for a "range" of code points in a string,
  * which validates while decoding.
- * Deduces the Unit template parameter from the input.
+ * Avoids having to explicitly specify the Unit template parameter for the UTFStringCodePoints.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if UTF_BEHAVIOR_NEGATIVE
  * @tparam behavior How to handle ill-formed Unicode strings
- * @tparam StringView Can usually be omitted/deduced: A std::basic_string_view&lt;Unit&gt;
- * @param s input string_view
+ * @param s input string
  * @return a UTFStringCodePoints&lt;CP32, behavior, Unit&gt;
- *     for the given std::basic_string_view&lt;Unit&gt;,
- *     deducing the Unit character type
+ *     for the given std::basic_string_view&lt;Unit&gt;
  * @draft ICU 78
  */
-template<typename CP32, UTFIllFormedBehavior behavior, typename StringView>
-auto utfStringCodePoints(StringView s) {
-    return UTFStringCodePoints<CP32, behavior, typename StringView::value_type>(s);
+template<typename CP32, UTFIllFormedBehavior behavior>
+auto utfStringCodePoints(std::string_view s) {
+    return UTFStringCodePoints<CP32, behavior, decltype(s)::value_type>(s);
+}
+
+/**
+ * UTFStringCodePoints factory function for a "range" of code points in a string,
+ * which validates while decoding.
+ * Avoids having to explicitly specify the Unit template parameter for the UTFStringCodePoints.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if UTF_BEHAVIOR_NEGATIVE
+ * @tparam behavior How to handle ill-formed Unicode strings
+ * @param s input string
+ * @return a UTFStringCodePoints&lt;CP32, behavior, Unit&gt;
+ *     for the given std::basic_string_view&lt;Unit&gt;
+ * @draft ICU 78
+ */
+template<typename CP32, UTFIllFormedBehavior behavior>
+auto utfStringCodePoints(std::u16string_view s) {
+    return UTFStringCodePoints<CP32, behavior, decltype(s)::value_type>(s);
+}
+
+/**
+ * UTFStringCodePoints factory function for a "range" of code points in a string,
+ * which validates while decoding.
+ * Avoids having to explicitly specify the Unit template parameter for the UTFStringCodePoints.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if UTF_BEHAVIOR_NEGATIVE
+ * @tparam behavior How to handle ill-formed Unicode strings
+ * @param s input string
+ * @return a UTFStringCodePoints&lt;CP32, behavior, Unit&gt;
+ *     for the given std::basic_string_view&lt;Unit&gt;
+ * @draft ICU 78
+ */
+template<typename CP32, UTFIllFormedBehavior behavior>
+auto utfStringCodePoints(std::u32string_view s) {
+    return UTFStringCodePoints<CP32, behavior, decltype(s)::value_type>(s);
+}
+
+#if U_CPLUSPLUS_VERSION >= 20
+// The new type char8_t is distinct from char. u8"literals" are now char8_t literals.
+/**
+ * UTFStringCodePoints factory function for a "range" of code points in a string,
+ * which validates while decoding.
+ * Avoids having to explicitly specify the Unit template parameter for the UTFStringCodePoints.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if UTF_BEHAVIOR_NEGATIVE
+ * @tparam behavior How to handle ill-formed Unicode strings
+ * @param s input string
+ * @return a UTFStringCodePoints&lt;CP32, behavior, Unit&gt;
+ *     for the given std::basic_string_view&lt;Unit&gt;
+ * @draft ICU 78
+ */
+template<typename CP32, UTFIllFormedBehavior behavior>
+auto utfStringCodePoints(std::u8string_view s) {
+    return UTFStringCodePoints<CP32, behavior, decltype(s)::value_type>(s);
+}
+#endif
+
+/**
+ * UTFStringCodePoints factory function for a "range" of code points in a string,
+ * which validates while decoding.
+ * Avoids having to explicitly specify the Unit template parameter for the UTFStringCodePoints.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
+ *              should be signed if UTF_BEHAVIOR_NEGATIVE
+ * @tparam behavior How to handle ill-formed Unicode strings
+ * @param s input string
+ * @return a UTFStringCodePoints&lt;CP32, behavior, Unit&gt;
+ *     for the given std::basic_string_view&lt;Unit&gt;
+ * @draft ICU 78
+ */
+template<typename CP32, UTFIllFormedBehavior behavior>
+auto utfStringCodePoints(std::wstring_view s) {
+    return UTFStringCodePoints<CP32, behavior, decltype(s)::value_type>(s);
 }
 
 // Non-validating iterators ------------------------------------------------ ***
@@ -2206,19 +2279,89 @@ auto unsafeUTFIterator(UnitIter iter) {
 /**
  * UnsafeUTFStringCodePoints factory function for a "range" of code points in a string.
  * The string must be well-formed.
- * Deduces the Unit template parameter from the input.
+ * Avoids having to explicitly specify the Unit template parameter
+ * for the UnsafeUTFStringCodePoints.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
- * @tparam StringView Can usually be omitted/deduced: A std::basic_string_view&lt;Unit&gt;
- * @param s input string_view
+ * @param s input string
  * @return an UnsafeUTFStringCodePoints&lt;CP32, Unit&gt;
- *     for the given std::basic_string_view&lt;Unit&gt;,
- *     deducing the Unit character type
+ *     for the given std::basic_string_view&lt;Unit&gt;
  * @draft ICU 78
  */
-template<typename CP32, typename StringView>
-auto unsafeUTFStringCodePoints(StringView s) {
-    return UnsafeUTFStringCodePoints<CP32, typename StringView::value_type>(s);
+template<typename CP32>
+auto unsafeUTFStringCodePoints(std::string_view s) {
+    return UnsafeUTFStringCodePoints<CP32, decltype(s)::value_type>(s);
+}
+
+/**
+ * UnsafeUTFStringCodePoints factory function for a "range" of code points in a string.
+ * The string must be well-formed.
+ * Avoids having to explicitly specify the Unit template parameter
+ * for the UnsafeUTFStringCodePoints.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @param s input string
+ * @return an UnsafeUTFStringCodePoints&lt;CP32, Unit&gt;
+ *     for the given std::basic_string_view&lt;Unit&gt;
+ * @draft ICU 78
+ */
+template<typename CP32>
+auto unsafeUTFStringCodePoints(std::u16string_view s) {
+    return UnsafeUTFStringCodePoints<CP32, decltype(s)::value_type>(s);
+}
+
+/**
+ * UnsafeUTFStringCodePoints factory function for a "range" of code points in a string.
+ * The string must be well-formed.
+ * Avoids having to explicitly specify the Unit template parameter
+ * for the UnsafeUTFStringCodePoints.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @param s input string
+ * @return an UnsafeUTFStringCodePoints&lt;CP32, Unit&gt;
+ *     for the given std::basic_string_view&lt;Unit&gt;
+ * @draft ICU 78
+ */
+template<typename CP32>
+auto unsafeUTFStringCodePoints(std::u32string_view s) {
+    return UnsafeUTFStringCodePoints<CP32, decltype(s)::value_type>(s);
+}
+
+#if U_CPLUSPLUS_VERSION >= 20
+// The new type char8_t is distinct from char. u8"literals" are now char8_t literals.
+/**
+ * UnsafeUTFStringCodePoints factory function for a "range" of code points in a string.
+ * The string must be well-formed.
+ * Avoids having to explicitly specify the Unit template parameter
+ * for the UnsafeUTFStringCodePoints.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @param s input string
+ * @return an UnsafeUTFStringCodePoints&lt;CP32, Unit&gt;
+ *     for the given std::basic_string_view&lt;Unit&gt;
+ * @draft ICU 78
+ */
+template<typename CP32>
+auto unsafeUTFStringCodePoints(std::u8string_view s) {
+    return UnsafeUTFStringCodePoints<CP32, decltype(s)::value_type>(s);
+}
+#endif
+
+/**
+ * UnsafeUTFStringCodePoints factory function for a "range" of code points in a string.
+ * The string must be well-formed.
+ * Avoids having to explicitly specify the Unit template parameter
+ * for the UnsafeUTFStringCodePoints.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @param s input string
+ * @return an UnsafeUTFStringCodePoints&lt;CP32, Unit&gt;
+ *     for the given std::basic_string_view&lt;Unit&gt;
+ * @draft ICU 78
+ */
+template<typename CP32>
+auto unsafeUTFStringCodePoints(std::wstring_view s) {
+    return UnsafeUTFStringCodePoints<CP32, decltype(s)::value_type>(s);
 }
 
 // ------------------------------------------------------------------------- ***

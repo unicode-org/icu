@@ -507,22 +507,11 @@ public:
     template<TestMode mode, UTFIllFormedBehavior behavior, typename Unit>
     void testLongLinearContig(const ImplTest<Unit> &test) {
         initLong();
-        // TODO: fix utfStringCodePoints() & unsafeUTFStringCodePoints()
-        // to *actually take* string_view arguments.
-        // Currently, if we pass in a string, then the function makes a temporary copy
-        // of the string and creates an [Unsafe]UTFStringCodePoints which
-        // takes a copy of a string_view *which refers to the temporary copy*
-        // which then goes out of scope, taking its heap buffer with it.
-        // Look at unicode/char16ptr.h ConvertibleToU16StringView.
-        // If this means that we can no longer deduce the Unit type, then maybe
-        // remove these functions.
-        // If we can keep them, then pass test.str directly into the ...CodePoints() function.
-        std::basic_string_view<Unit> sv{test.str};
         if constexpr (mode == UNSAFE) {
-            auto range = unsafeUTFStringCodePoints<UChar32>(sv);
+            auto range = unsafeUTFStringCodePoints<UChar32>(test.str);
             testLongLinear<mode, behavior, CONTIG, Unit>(test, range.begin(), range.end());
         } else {
-            auto range = utfStringCodePoints<UChar32, behavior>(sv);
+            auto range = utfStringCodePoints<UChar32, behavior>(test.str);
             testLongLinear<mode, behavior, CONTIG, Unit>(test, range.begin(), range.end());
         }
     }
