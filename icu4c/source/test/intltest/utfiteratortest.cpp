@@ -1017,6 +1017,8 @@ constexpr Part testParts[] = {
     Part(BAD8, 0xed),
     Part(BAD8, 0xbf),
     u'ç',
+    Part(BAD8, 0xbf),  // extra trail byte
+    u'カ',
     Part(BAD8, 0xee, 0x80),
     Part(BAD8, 0xef, 0xbf),
     Part(BAD8, 0xf0),
@@ -1031,6 +1033,7 @@ constexpr Part testParts[] = {
     Part(BAD8, 0xf5),
     Part(BAD8, 0xbf),
     U'🚴',
+    Part(BAD8, 0x80),  // extra trail byte
     0x7ff,
     0x800,
     0xfff,
