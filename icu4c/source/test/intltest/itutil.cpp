@@ -51,6 +51,7 @@ extern IntlTest *createPluralMapTest();
 extern IntlTest *createStaticUnicodeSetsTest();
 #endif
 static IntlTest *createUHashTest();
+extern IntlTest *createUTFIteratorTest();
 
 void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
@@ -90,6 +91,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
     TESTCASE_AUTO_CREATE_CLASS(UColHeaderOnlyTest);
 #endif
     TESTCASE_AUTO_CREATE_CLASS(USetHeaderOnlyTest);
+    TESTCASE_AUTO_CREATE_CLASS(UTFIteratorTest);
     TESTCASE_AUTO_END;
 }
 
