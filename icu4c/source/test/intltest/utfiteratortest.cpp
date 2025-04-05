@@ -380,6 +380,22 @@ public:
         TESTCASE_AUTO(testUnsafe8LongReverse);
         TESTCASE_AUTO(testUnsafe32LongReverse);
 
+        TESTCASE_AUTO(testSafe16Zigzag);
+        TESTCASE_AUTO(testSafe8Zigzag);
+        TESTCASE_AUTO(testSafe32Zigzag);
+
+        TESTCASE_AUTO(testUnsafe16Zigzag);
+        TESTCASE_AUTO(testUnsafe8Zigzag);
+        TESTCASE_AUTO(testUnsafe32Zigzag);
+
+        TESTCASE_AUTO(testSafe16ZigzagReverse);
+        TESTCASE_AUTO(testSafe8ZigzagReverse);
+        TESTCASE_AUTO(testSafe32ZigzagReverse);
+
+        TESTCASE_AUTO(testUnsafe16ZigzagReverse);
+        TESTCASE_AUTO(testUnsafe8ZigzagReverse);
+        TESTCASE_AUTO(testUnsafe32ZigzagReverse);
+
         TESTCASE_AUTO_END;
     }
 
@@ -539,7 +555,8 @@ public:
 
     void initLong();
 
-    template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename Unit, typename Units>
+    template<TestMode mode, UTFIllFormedBehavior behavior,
+             IterType type, typename Unit, typename Units>
     void checkUnits(const Units &units, std::basic_string_view<Unit> part, UChar32 expectedCP);
 
     template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename Unit, typename Iter>
@@ -597,7 +614,8 @@ public:
     }
 
     // backward: from end to begin with *--iter
-    template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename Unit, typename Iter>
+    template<TestMode mode, UTFIllFormedBehavior behavior,
+             IterType type, typename Unit, typename Iter>
     void testLongBackward(const ImplTest<Unit> &test, Iter begin, Iter end) {
         for (size_t i = test.codePoints.length(); begin != end;) {
             --i;
@@ -628,6 +646,47 @@ public:
         } else {
             auto range = utfStringCodePoints<UChar32, behavior>(test.str);
             testLongLinear<mode, behavior, CONTIG, Unit>(reverse, range.rbegin(), range.rend());
+        }
+    }
+
+    // Test state keeping in a bidirectional_iterator:
+    // Change directions, increment/decrement without reading, etc.
+    template<TestMode mode, UTFIllFormedBehavior behavior,
+             IterType type, typename Unit, typename Iter>
+    void zigzag(const ImplTest<Unit> &test, size_t i,
+                const Iter &begin, Iter iter, const Iter &end);
+
+    template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename Unit, typename Iter>
+    void testZigzag(const ImplTest<Unit> &test, Iter begin, Iter end) {
+        size_t i = 0;
+        for (Iter iter = begin; iter != end; ++i, ++iter) {
+            zigzag<mode, behavior, type, Unit>(test, i, begin, iter, end);
+        }
+    }
+
+    template<TestMode mode, UTFIllFormedBehavior behavior, typename Unit>
+    void testZigzag(const ImplTest<Unit> &test) {
+        initLong();
+        if constexpr (mode == UNSAFE) {
+            auto range = unsafeUTFStringCodePoints<UChar32>(test.str);
+            testZigzag<mode, behavior, CONTIG, Unit>(test, range.begin(), range.end());
+        } else {
+            auto range = utfStringCodePoints<UChar32, behavior>(test.str);
+            testZigzag<mode, behavior, CONTIG, Unit>(test, range.begin(), range.end());
+        }
+    }
+
+    // Exercise the reverse_iterator as well.
+    template<TestMode mode, UTFIllFormedBehavior behavior, typename Unit>
+    void testZigzagReverse(const ImplTest<Unit> &test) {
+        initLong();
+        auto reverse = test.reverseParts();
+        if constexpr (mode == UNSAFE) {
+            auto range = unsafeUTFStringCodePoints<UChar32>(test.str);
+            testZigzag<mode, behavior, CONTIG, Unit>(reverse, range.rbegin(), range.rend());
+        } else {
+            auto range = utfStringCodePoints<UChar32, behavior>(test.str);
+            testZigzag<mode, behavior, CONTIG, Unit>(reverse, range.rbegin(), range.rend());
         }
     }
 
@@ -729,6 +788,46 @@ public:
     }
     void testUnsafe32LongReverse() {
         testLongReverse<UNSAFE, ANY_B, char32_t>(longGood32);
+    }
+
+    void testSafe16Zigzag() {
+        testZigzag<SAFE, UTF_BEHAVIOR_SURROGATE, char16_t>(longBad16);
+    }
+    void testSafe8Zigzag() {
+        testZigzag<SAFE, UTF_BEHAVIOR_NEGATIVE, char>(longBad8);
+    }
+    void testSafe32Zigzag() {
+        testZigzag<SAFE, UTF_BEHAVIOR_SURROGATE, char32_t>(longBad32);
+    }
+
+    void testUnsafe16Zigzag() {
+        testZigzag<UNSAFE, ANY_B, char16_t>(longGood16);
+    }
+    void testUnsafe8Zigzag() {
+        testZigzag<UNSAFE, ANY_B, char>(longGood8);
+    }
+    void testUnsafe32Zigzag() {
+        testZigzag<UNSAFE, ANY_B, char32_t>(longGood32);
+    }
+
+    void testSafe16ZigzagReverse() {
+        testZigzagReverse<SAFE, UTF_BEHAVIOR_SURROGATE, char16_t>(longBad16);
+    }
+    void testSafe8ZigzagReverse() {
+        testZigzagReverse<SAFE, UTF_BEHAVIOR_NEGATIVE, char>(longBad8);
+    }
+    void testSafe32ZigzagReverse() {
+        testZigzagReverse<SAFE, UTF_BEHAVIOR_SURROGATE, char32_t>(longBad32);
+    }
+
+    void testUnsafe16ZigzagReverse() {
+        testZigzagReverse<UNSAFE, ANY_B, char16_t>(longGood16);
+    }
+    void testUnsafe8ZigzagReverse() {
+        testZigzagReverse<UNSAFE, ANY_B, char>(longGood8);
+    }
+    void testUnsafe32ZigzagReverse() {
+        testZigzagReverse<UNSAFE, ANY_B, char32_t>(longGood32);
     }
 
     ImplTest<char> longGood8;
@@ -1122,7 +1221,7 @@ void UTFIteratorTest::initLong() {
 template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename Unit, typename Units>
 void UTFIteratorTest::checkUnits(
         const Units &units, std::basic_string_view<Unit> part, UChar32 expectedCP) {
-    printf("U+%04lx\n", (long)units.codePoint());
+    // printf("U+%04lx\n", (long)units.codePoint());
     bool expectedWellFormed = true;
     if (expectedCP == u'?') {
         expectedCP = sub<UChar32, behavior>(part);
@@ -1145,4 +1244,55 @@ void UTFIteratorTest::checkUnits(
     if constexpr (type >= CONTIG) {
         assertTrue("stringView[i]", part == units.stringView());
     }
+}
+
+template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename Unit, typename Iter>
+void UTFIteratorTest::zigzag(const ImplTest<Unit> &test, size_t i,
+                             const Iter &begin, Iter iter, const Iter &end) {
+    static constexpr const char *path = "**+*+--*PPp++*p--+P+pP-*-*";
+    // size_t i0 = i;
+    size_t iLimit = test.codePoints.length();
+    for (const char *p = path; *p != 0; ++p) {
+        switch(*p) {
+        case '*':
+            if (i < iLimit) {
+                checkUnits<mode, behavior, type, Unit>(
+                    *iter, test.parts[i], test.codePoints[i]);
+            }
+            break;
+        case '+':  // pre-increment
+            if (i < iLimit) {
+                ++i;
+                ++iter;
+            } else {
+                assertTrue("at limit", iter == end);
+            }
+            break;
+        case '-':  // pre-decrement
+            if (i > 0) {
+                --i;
+                --iter;
+            } else {
+                assertTrue("at start", iter == begin);
+            }
+            break;
+        case 'P':  // post-increment
+            if (i < iLimit) {
+                checkUnits<mode, behavior, type, Unit>(
+                    *iter++, test.parts[i], test.codePoints[i]);
+                ++i;
+            }
+            break;
+        case 'p':  // post-decrement
+            if (0 < i && i < iLimit) {
+                checkUnits<mode, behavior, type, Unit>(
+                    *iter--, test.parts[i], test.codePoints[i]);
+                --i;
+            }
+            break;
+        default:
+            break;
+        }
+    }
+    // printf("zz %lu -> %lu\n", i0, i);
 }
