@@ -205,7 +205,7 @@ BreakIterator::BreakIterator()
 {
 }
 
-BreakIterator::BreakIterator(const BreakIterator &other) : UObject(other), DataLocaleInformation(other) {
+BreakIterator::BreakIterator(const BreakIterator &other) : DataLocaleInformation(other) {
     UErrorCode status = U_ZERO_ERROR;
     LocaleBased::setLocaleID(other.requestLocale, requestLocale, status);
     U_ASSERT(U_SUCCESS(status));

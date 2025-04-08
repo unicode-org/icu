@@ -96,7 +96,7 @@ class CharString;
  * subclasses, such code will not necessarily work and will not be
  * guaranteed to work stably from release to release.
  */
-class U_I18N_API Format : public UObject, public DataLocaleInformation {
+class U_I18N_API Format : public DataLocaleInformation {
 public:
 
     /** Destructor

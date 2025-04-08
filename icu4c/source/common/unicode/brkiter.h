@@ -105,7 +105,7 @@ class CharString;
  * and in the sample program icu/source/samples/break/break.cpp
  *
  */
-class U_COMMON_API BreakIterator : public UObject , public DataLocaleInformation  {
+class U_COMMON_API BreakIterator : public DataLocaleInformation  {
 public:
     /**
      *  destructor

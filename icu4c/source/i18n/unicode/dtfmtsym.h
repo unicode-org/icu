@@ -82,7 +82,7 @@ class CharString;
  * locale at least contains any resources that are to be particularized for the
  * calendar type.
  */
-class U_I18N_API DateFormatSymbols final : public UObject, public DataLocaleInformation {
+class U_I18N_API DateFormatSymbols final : public DataLocaleInformation {
 public:
     /**
      * Construct a DateFormatSymbols object by loading format data from

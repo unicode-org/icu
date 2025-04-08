@@ -71,7 +71,7 @@ FieldPosition::clone() const {
 // default constructor
 
 Format::Format()
-    : UObject()
+    : DataLocaleInformation()
 {
 }
 
@@ -85,7 +85,7 @@ Format::~Format()
 // copy constructor
 
 Format::Format(const Format &that)
-    : UObject(that), DataLocaleInformation(that)
+    : DataLocaleInformation(that)
 {
     *this = that;
 }

@@ -695,7 +695,7 @@ static const char gGregorian[] = "gregorian";
 // -------------------------------------
 
 Calendar::Calendar(UErrorCode& success)
-:   UObject(),
+:   DataLocaleInformation(),
 fIsTimeSet(false),
 fAreFieldsSet(false),
 fAreAllFieldsSet(false),
@@ -718,7 +718,7 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
 // -------------------------------------
 
 Calendar::Calendar(TimeZone* adoptZone, const Locale& aLocale, UErrorCode& success)
-:   UObject(),
+:   DataLocaleInformation(),
 fIsTimeSet(false),
 fAreFieldsSet(false),
 fAreAllFieldsSet(false),
@@ -748,7 +748,7 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
 // -------------------------------------
 
 Calendar::Calendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& success)
-:   UObject(),
+:   DataLocaleInformation(),
 fIsTimeSet(false),
 fAreFieldsSet(false),
 fAreAllFieldsSet(false),
@@ -779,7 +779,7 @@ Calendar::~Calendar()
 // -------------------------------------
 
 Calendar::Calendar(const Calendar &source)
-:   UObject(source), DataLocaleInformation(source)
+:   DataLocaleInformation(source)
 {
     *this = source;
 }

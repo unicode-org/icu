@@ -1295,7 +1295,7 @@ Locale::isBogus() const {
  * <code>DataLocaleInformation</code> is an abstract base class for objects
  * that perform getLocale operations to query locale data resolution.
  */
-class U_COMMON_API DataLocaleInformation : public UMemory {
+class U_COMMON_API DataLocaleInformation : public UObject {
 public:
     DataLocaleInformation() = default;
 

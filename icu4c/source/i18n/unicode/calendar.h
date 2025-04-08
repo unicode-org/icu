@@ -186,7 +186,7 @@ class BasicTimeZone;
  *
  * @stable ICU 2.0
  */
-class U_I18N_API Calendar : public UObject , public DataLocaleInformation {
+class U_I18N_API Calendar : public DataLocaleInformation {
 public:
 #ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
