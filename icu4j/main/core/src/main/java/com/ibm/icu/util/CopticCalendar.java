@@ -335,5 +335,15 @@ public final class CopticCalendar extends CECalendar
     public static int copticToJD(long year, int month, int date) {
         return ceToJD(year, month, date, JD_EPOCH_OFFSET);
     }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected final int getRelatedYearDifferences() {
+        return 284;
+    }
+
 }
 

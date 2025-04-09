@@ -490,6 +490,15 @@ public class PersianCalendar extends Calendar {
     }    
 
     /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected final int getRelatedYearDiff() {
+        return 622;
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @internal

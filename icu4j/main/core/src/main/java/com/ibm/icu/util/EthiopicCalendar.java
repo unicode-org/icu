@@ -401,6 +401,15 @@ public final class EthiopicCalendar extends CECalendar
     }
 
     /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected final int getRelatedYearDifferences() {
+        return isAmeteAlemEra() ? -5492 : 8;
+    }
+
+    /**
      * set type based on locale
      */
     private void setCalcTypeForLocale(ULocale locale) {
