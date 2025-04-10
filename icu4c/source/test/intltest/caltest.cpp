@@ -216,6 +216,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestAddOverflow);
 
     TESTCASE_AUTO(Test22750Roll);
+    TESTCASE_AUTO(Test23101ExtendedYear);
 
     TESTCASE_AUTO(TestChineseCalendarComputeMonthStart);
     TESTCASE_AUTO(Test22962MonthAddOneOverflow);
@@ -6145,6 +6146,41 @@ void CalendarTest::Test22750Roll() {
         if (failure(status2, "Calendar::createInstance")) return;
         calendar->add(UCAL_DAY_OF_WEEK_IN_MONTH, 538976288, status2);
         calendar->roll(UCAL_DATE, 538976288, status2);
+    }
+}
+
+void CalendarTest::Test23101ExtendedYear() {
+    IcuTestErrorCode status(*this, "Test23101ExtendedYear");
+
+    static const struct TestCase {
+        const char* calendarName;
+        const char16_t* expectedExtendedYear20250101;
+        const char16_t* expectedExtendedYear20250701;
+    } testCases[] = {
+        { "gregory", u"2025", u"2025" },
+        { "chinese", u"4661", u"4662" },
+        { "japanese", u"2025", u"2025" },
+        { "ethiopic", u"2017", u"2017" },
+        { "ethiopic-amete-alem", u"2017", u"2017" },
+    };
+
+    const UDate date20250101 = (UDate) 1735689600000;
+    const UDate date20250701 = (UDate) 1751328000000;
+
+    for (const TestCase& testCase : testCases) {
+        Locale locale;
+        locale.setKeywordValue("calendar", testCase.calendarName, status);
+        if (status.errIfFailureAndReset()) { return; }
+        LocalPointer<Calendar> cal(Calendar::createInstance(
+                *TimeZone::getGMT(), locale, status));
+        SimpleDateFormat formatter(u"u", Locale::getRoot(), status);
+        if (status.errIfFailureAndReset()) { return; }
+        formatter.setCalendar(*cal);
+        UnicodeString actual20250101, actual20250701;
+        formatter.format(date20250101, actual20250101);
+        formatter.format(date20250701, actual20250701);
+        assertEquals("2025-01-01", testCase.expectedExtendedYear20250101, actual20250101);
+        assertEquals("2025-07-01", testCase.expectedExtendedYear20250701, actual20250701);
     }
 }
 
