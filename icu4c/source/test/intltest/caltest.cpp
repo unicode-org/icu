@@ -126,6 +126,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestIslamicUmAlQura);
     TESTCASE_AUTO(TestIslamicTabularDates);
     TESTCASE_AUTO(TestHebrewMonthValidation);
+    TESTCASE_AUTO(TestHebrewLargeYear23070);
     TESTCASE_AUTO(TestWeekData);
     TESTCASE_AUTO(TestAddAcrossZoneTransition);
     TESTCASE_AUTO(TestChineseCalendarMapping);
@@ -3595,6 +3596,21 @@ void CalendarTest::TestIslamicTabularDates() {
     delete formatter;
 }
 
+void CalendarTest::TestHebrewLargeYear23070() {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gcal(status);
+    gcal.clear();
+    gcal.set(UCAL_YEAR, 189393);
+    gcal.set(UCAL_MONTH, UCAL_NOVEMBER);
+    gcal.set(UCAL_DATE, 23);
+    LocalPointer<Calendar>  cal(Calendar::createInstance(Locale::createFromName("he_IL@calendar=hebrew"), status));
+    if (failure(status, "Calendar::createInstance, locale:he_IL@calendar=hebrew", true)) return;
+    cal->setTime(gcal.getTime(status), status);
+    if (failure(status, "Calendare getTime/setTime failure", true)) return;
+    printf("Y=%d error=%x\n", cal->get(UCAL_YEAR, status), status);
+    printf("M=%d error=%x\n", cal->get(UCAL_MONTH, status), status);
+    printf("D=%d error=%x\n", cal->get(UCAL_DATE, status), status);
+}
 void CalendarTest::TestHebrewMonthValidation() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar>  cal(Calendar::createInstance(Locale::createFromName("he_IL@calendar=hebrew"), status));
