@@ -722,49 +722,57 @@ UVector&
 ICUService::getDisplayNames(UVector& result, 
                             const Locale& locale, 
                             const UnicodeString* matchID, 
-                            UErrorCode& status) const 
+                            UErrorCode& status) const
 {
+    // cast away semantic const
+    return const_cast<ICUService *>(this)->getDisplayNamesImpl(result, locale, matchID, status);
+}
+
+UVector&
+ICUService::getDisplayNamesImpl(UVector& result,
+                            const Locale& locale,
+                            const UnicodeString* matchID,
+                            UErrorCode& status)
+{
+    if (U_FAILURE(status)) { return result; }
     result.removeAllElements();
     result.setDeleter(userv_deleteStringPair);
-    if (U_SUCCESS(status)) {
-        ICUService* ncthis = const_cast<ICUService*>(this); // cast away semantic const
-        Mutex mutex(&lock);
+    Mutex mutex(&lock);
 
-        if (dnCache != nullptr && dnCache->locale != locale) {
-            delete dnCache;
-            ncthis->dnCache = nullptr;
+    if (dnCache != nullptr && dnCache->locale != locale) {
+        delete dnCache;
+        dnCache = nullptr;
+    }
+
+    if (dnCache == nullptr) {
+        const Hashtable* m = getVisibleIDMap(status);
+        if (U_FAILURE(status)) {
+            return result;
+        }
+        dnCache = new DNCache(locale);
+        if (dnCache == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return result;
         }
 
-        if (dnCache == nullptr) {
-            const Hashtable* m = getVisibleIDMap(status);
-            if (U_FAILURE(status)) {
-                return result;
-            }
-            ncthis->dnCache = new DNCache(locale); 
-            if (dnCache == nullptr) {
+        int32_t pos = UHASH_FIRST;
+        const UHashElement* entry = nullptr;
+        while ((entry = m->nextElement(pos)) != nullptr) {
+            const UnicodeString* id = static_cast<const UnicodeString*>(entry->key.pointer);
+            ICUServiceFactory* f = static_cast<ICUServiceFactory*>(entry->value.pointer);
+            UnicodeString dname;
+            f->getDisplayName(*id, locale, dname);
+            if (dname.isBogus()) {
                 status = U_MEMORY_ALLOCATION_ERROR;
-                return result;
-            }
-
-            int32_t pos = UHASH_FIRST;
-            const UHashElement* entry = nullptr;
-            while ((entry = m->nextElement(pos)) != nullptr) {
-                const UnicodeString* id = static_cast<const UnicodeString*>(entry->key.pointer);
-                ICUServiceFactory* f = static_cast<ICUServiceFactory*>(entry->value.pointer);
-                UnicodeString dname;
-                f->getDisplayName(*id, locale, dname);
-                if (dname.isBogus()) {
-                    status = U_MEMORY_ALLOCATION_ERROR;
-                } else {
-                    dnCache->cache.put(dname, (void*)id, status); // share pointer with visibleIDMap
-                    if (U_SUCCESS(status)) {
-                        continue;
-                    }
+            } else {
+                dnCache->cache.put(dname, (void*)id, status); // share pointer with visibleIDMap
+                if (U_SUCCESS(status)) {
+                    continue;
                 }
-                delete dnCache;
-                ncthis->dnCache = nullptr;
-                return result;
             }
+            delete dnCache;
+            dnCache = nullptr;
+            return result;
         }
     }
 
