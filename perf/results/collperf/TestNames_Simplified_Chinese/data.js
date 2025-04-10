@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743874444887,
+  "lastUpdate": 1744307258367,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -65445,6 +65445,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2175606.0644,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "committer": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "distinct": true,
+          "id": "e13492c92b0bcb222ecb2c561ccb49ae9ef58759",
+          "message": "ICU-23098 Allow tests to pass with parallel building",
+          "timestamp": "2025-04-10T10:17:48-07:00",
+          "tree_id": "ff5047d4d00884100e42a2b446ac30f16ec5e48d",
+          "url": "https://github.com/unicode-org/icu/commit/e13492c92b0bcb222ecb2c561ccb49ae9ef58759"
+        },
+        "date": 1744307002901,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 152.4154,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 9049878.3759,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2122907.9605,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7939175.6879,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2176500.7183,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
