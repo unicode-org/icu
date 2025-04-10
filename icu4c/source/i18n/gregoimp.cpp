@@ -176,18 +176,6 @@ int32_t Grego::dayToYear(int32_t day, int16_t& doy, UErrorCode& status) {
     return year;
 }
 
-void Grego::dayToFields(int32_t day, int32_t& year, int8_t& month,
-                        int8_t& dom, int8_t& dow, UErrorCode& status) {
-    int16_t unusedDOY;
-    dayToFields(day, year, month, dom, dow, unusedDOY, status);
-}
-
-void Grego::dayToFields(int32_t day, int32_t& year, int8_t& month,
-                        int8_t& dom, int16_t& doy, UErrorCode& status) {
-    int8_t unusedDOW;
-    dayToFields(day, year, month, dom, unusedDOW, doy, status);
-}
-
 void Grego::timeToFields(UDate time, int32_t& year, int8_t& month,
                         int8_t& dom, int32_t& mid, UErrorCode& status) {
     int8_t unusedDOW;

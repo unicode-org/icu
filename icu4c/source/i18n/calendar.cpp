@@ -1529,9 +1529,15 @@ void Calendar::computeGregorianFields(int32_t julianDay, UErrorCode& ec) {
         ec = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
+    int8_t dayOfWeek;
     Grego::dayToFields(julianDay, fGregorianYear, fGregorianMonth,
                        fGregorianDayOfMonth,
+                       dayOfWeek,
                        fGregorianDayOfYear, ec);
+    if (U_FAILURE(ec)) {
+        return;
+    }
+    internalSet(UCAL_DAY_OF_WEEK, dayOfWeek);
 }
 
 /**
@@ -1560,8 +1566,7 @@ void Calendar::computeWeekFields(UErrorCode &ec) {
     }
 
     // Compute day of week: JD 0 = Monday
-    int32_t dayOfWeek = julianDayToDayOfWeek(fFields[UCAL_JULIAN_DAY]);
-    internalSet(UCAL_DAY_OF_WEEK, dayOfWeek);
+    int32_t dayOfWeek = fFields[UCAL_DAY_OF_WEEK];
     int32_t firstDayOfWeek = getFirstDayOfWeek();
     // Calculate 1-based localized day of week
     int32_t dowLocal = dayOfWeek - firstDayOfWeek + 1;
