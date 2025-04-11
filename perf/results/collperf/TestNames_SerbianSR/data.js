@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744307226770,
+  "lastUpdate": 1744394109728,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -65499,6 +65499,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16486476.402,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mingaleev@google.com",
+            "name": "Almaz Mingaleev",
+            "username": "Yqwed"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "32c96106d36ef364f220f5027505df8c8c5e78b8",
+          "message": "ICU-23096 Update ICU to TZDB 2025b.\n\nExtra changes are due to https://github.com/unicode-org/cldr/pull/4535\n\ncldr-to-icu updates locale fallback files, but they were not\npicked up.",
+          "timestamp": "2025-04-11T10:25:44-07:00",
+          "tree_id": "b74e56ffa1beaa7dab0a259094ca2fb47d34ed19",
+          "url": "https://github.com/unicode-org/icu/commit/32c96106d36ef364f220f5027505df8c8c5e78b8"
+        },
+        "date": 1744393857792,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 369.0464,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 54407473.4489,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 14987547.6861,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 51533011.1843,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16581712.3348,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
