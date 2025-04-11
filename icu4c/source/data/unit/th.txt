@@ -77,22 +77,22 @@ th{
                 dnam{"มิลลิโมลต่อลิตร"}
                 other{"{0} มิลลิโมลต่อลิตร"}
             }
+            part-per-1e6{
+                dnam{"ส่วนต่อล้าน"}
+                other{"{0} ส่วนต่อล้าน"}
+            }
+            part-per-1e9{
+                dnam{"ส่วนต่อพันล้าน"}
+                other{"{0} ส่วนต่อพันล้าน"}
+            }
             percent{
                 other{"{0} เปอร์เซ็นต์"}
             }
             permille{
                 other{"{0} เปอร์มิลล์"}
             }
-            permillion{
-                dnam{"ส่วนต่อล้าน"}
-                other{"{0} ส่วนต่อล้าน"}
-            }
             permyriad{
                 other{"{0} เปอร์มีเรียด"}
-            }
-            portion-per-1e9{
-                dnam{"ส่วนต่อพันล้าน"}
-                other{"{0} ส่วนต่อพันล้าน"}
             }
         }
         consumption{
@@ -623,19 +623,19 @@ th{
             mole{
                 other{"{0}โมล"}
             }
-            permille{
-                dnam{"‰"}
-            }
-            permillion{
+            part-per-1e6{
                 dnam{"สตล."}
                 other{"{0}สตล."}
             }
-            permyriad{
-                dnam{"‱"}
-            }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"สตพล."}
                 other{"{0}สตพล."}
+            }
+            permille{
+                dnam{"‰"}
+            }
+            permyriad{
+                dnam{"‱"}
             }
         }
         consumption{
@@ -1315,22 +1315,22 @@ th{
                 dnam{"โมล"}
                 other{"{0} โมล"}
             }
+            part-per-1e6{
+                dnam{"ส่วน/ล้าน"}
+                other{"{0} สตล."}
+            }
+            part-per-1e9{
+                dnam{"ส่วน/พันล้าน"}
+                other{"{0} สตพล."}
+            }
             percent{
                 dnam{"เปอร์เซ็นต์"}
             }
             permille{
                 dnam{"เปอร์มิลล์"}
             }
-            permillion{
-                dnam{"ส่วน/ล้าน"}
-                other{"{0} สตล."}
-            }
             permyriad{
                 dnam{"เปอร์มีเรียด"}
-            }
-            portion-per-1e9{
-                dnam{"ส่วน/พันล้าน"}
-                other{"{0} สตพล."}
             }
         }
         consumption{

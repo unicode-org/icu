@@ -1168,7 +1168,7 @@ yue_Hans{
             ec{"埃法特"}
         }
         "Pacific:Enderbury"{
-            ec{"恩得伯理岛"}
+            ec{"坎顿"}
         }
         "Pacific:Fakaofo"{
             ec{"法考福"}
@@ -1193,9 +1193,6 @@ yue_Hans{
         }
         "Pacific:Honolulu"{
             ec{"檀香山"}
-        }
-        "Pacific:Kanton"{
-            ec{"坎顿"}
         }
         "Pacific:Kiritimati"{
             ec{"基里地马地岛"}

@@ -175,9 +175,11 @@
 //ldml/dates/calendars/calendar[@type="(%A)"]/(dateTimeFormat)s/\2Length[@type="(%A)"]/\2[@type="standard"]/pattern[@type="%A"]
      ; /calendar/$1/DateTimePatterns
 
-# DateTime atTime patterns (4 x values)
+# DateTime atTime/relative patterns (4 x values)
 //ldml/dates/calendars/calendar[@type="(%A)"]/(dateTimeFormat)s/\2Length[@type="(%A)"]/\2[@type="atTime"]/pattern[@type="%A"]
      ; /calendar/$1/DateTimePatterns%atTime
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateTimeFormat)s/\2Length[@type="(%A)"]/\2[@type="relative"]/pattern[@type="%A"]
+     ; /calendar/$1/DateTimePatterns%relative
 
 # ---- /calendar/xxx/DateTimeSkeletons
 # This is similar to DateTimePatterns above except that for this we do not have the DateTime patterns (4 x values, plus the duplicate value at index 8).
@@ -288,6 +290,7 @@
 //ldml/localeDisplayNames/transformNames/transformName[@type="(%W)"] ; /transformNames/$1
 
 //ldml/localeDisplayNames/types/type[@key="(%A)"][@type="(%A)"][@alt="(%A)"] ; /Types%$3/$1/$2
+//ldml/localeDisplayNames/types/type[@key="(%A)"][@type="(%A)"][@scope="(%A)"] ; /Types/$1%$3/$2
 //ldml/localeDisplayNames/types/type[@key="(%A)"][@type="(%A)"] ; /Types/$1/$2
 
 //ldml/localeDisplayNames/variants/variant[@type="(%A)"][@alt="(%A)"] ; /Variants%$2/$1
@@ -346,6 +349,11 @@
 //ldml/numbers/minimalPairs/genderMinimalPairs[@gender="(%A)"] ; /NumberElements/minimalPairs/gender/$1
 //ldml/numbers/minimalPairs/ordinalMinimalPairs[@ordinal="(%A)"] ; /NumberElements/minimalPairs/ordinal/$1
 //ldml/numbers/minimalPairs/pluralMinimalPairs[@count="(%A)"] ; /NumberElements/minimalPairs/plural/$1
+
+//ldml/numbers/rationalFormats[@numberSystem="(%W)"]/rationalPattern ; /NumberElements/$1/rationalFormats/rationalPattern
+//ldml/numbers/rationalFormats[@numberSystem="(%W)"]/integerAndRationalPattern[@type="(%W)"] ; /NumberElements/$1/rationalFormats/integerAndRationalPattern%$2
+//ldml/numbers/rationalFormats[@numberSystem="(%W)"]/integerAndRationalPattern ; /NumberElements/$1/rationalFormats/integerAndRationalPattern
+//ldml/numbers/rationalFormats[@numberSystem="(%W)"]/rationalUsage ; /NumberElements/$1/rationalFormats/rationalUsage
 
 # PersonNames
 # For namePattern, the alt value can just be 1 or 2.

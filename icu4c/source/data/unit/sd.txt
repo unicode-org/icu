@@ -97,19 +97,19 @@ sd{
                 one{"{0} مول"}
                 other{"{0} مولز"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"حصا في ملين"}
                 one{"{0} حصو في ملين"}
                 other{"{0} حصا في ملين"}
             }
-            permyriad{
-                one{"{0} پيرمائيرڊ"}
-                other{"{0} پيرمائيرڊ"}
-            }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"حصا في ارب"}
                 one{"{0} حصو في ارب"}
                 other{"{0} حصا في ارب"}
+            }
+            permyriad{
+                one{"{0} پيرمائيرڊ"}
+                other{"{0} پيرمائيرڊ"}
             }
         }
         consumption{
@@ -559,7 +559,7 @@ sd{
             }
         }
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"ح ف ا"}
                 one{"{0}ح ف ا"}
                 other{"{0}ح ف ا"}
@@ -836,13 +836,13 @@ sd{
             mole{
                 dnam{"مول"}
             }
-            permyriad{
-                dnam{"پيرمائيرڊ"}
-            }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"حصا/ارب"}
                 one{"{0} ح ف ا"}
                 other{"{0} ح ف ا"}
+            }
+            permyriad{
+                dnam{"پيرمائيرڊ"}
             }
         }
         consumption{

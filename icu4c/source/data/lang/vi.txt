@@ -864,13 +864,11 @@ vi{
             tertiary{"Sắp xếp dấu trọng âm/chữ cái/độ rộng"}
         }
         collation{
-            big5han{"Thứ tự sắp xếp theo tiếng Trung phồn thể - Big5"}
             compat{"Thứ tự sắp xếp trước đây, để tương thích"}
             dictionary{"Thứ tự sắp xếp theo từ điển"}
             ducet{"Thứ tự sắp xếp unicode mặc định"}
             emoji{"Thứ tự sắp xếp biểu tượng"}
             eor{"Quy tắc sắp xếp Châu Âu"}
-            gb2312han{"Thứ tự sắp xếp theo tiếng Trung giản thể - GB2312"}
             phonebook{"Thứ tự sắp xếp theo danh bạ điện thoại"}
             phonetic{"Thứ tự sắp xếp theo ngữ âm"}
             pinyin{"Thứ tự sắp xếp theo bính âm"}

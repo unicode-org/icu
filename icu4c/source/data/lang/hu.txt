@@ -823,13 +823,11 @@ hu{
             tertiary{"Ékezetek/kisbetű-nagybetű/szélesség rendezése"}
         }
         collation{
-            big5han{"Hagyományos kínai sorrend - Big5"}
             compat{"Előző rendezési sorrend a kompatibilitás érdekében"}
             dictionary{"Szótári rendezési sorrend"}
             ducet{"Alapértelmezett Unicode rendezési sorrend"}
             emoji{"Emodzsi rendezési sorrend"}
             eor{"Európai rendezési szabályok"}
-            gb2312han{"Egyszerűsített kínai sorrend - GB2312"}
             phonebook{"Telefonkönyv sorrend"}
             phonetic{"Fonetikus rendezési sorrend"}
             pinyin{"Pinyin sorrend"}

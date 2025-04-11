@@ -685,13 +685,11 @@ sc{
             standard{"formadu de valuta istandard"}
         }
         collation{
-            big5han{"ordinamentu de su tzinesu traditzionale - Big5"}
             compat{"ordinamentu antepostu, pro cumpatibilitade"}
             dictionary{"ordinamentu de su ditzionàriu"}
             ducet{"ordinamentu Unicode predefinidu"}
             emoji{"ordinamentu de sas emoji"}
             eor{"règulas de ordinamentu europeas"}
-            gb2312han{"ordinamentu de su tzinesu semplificadu - GB2312"}
             phonebook{"ordinamentu de s’elencu telefònicu"}
             pinyin{"ordinamentu pinyin"}
             search{"chirca genèrica"}

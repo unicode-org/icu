@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 root{
-    Version{"47"}
+    Version{"48"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -42,11 +42,23 @@ root{
                 dnam{"rev"}
                 other{"{0} rev"}
             }
+            steradian{
+                dnam{"sr"}
+                other{"{0} sr"}
+            }
         }
         area{
             acre{
                 dnam{"acre"}
                 other{"{0} ac"}
+            }
+            bu-jp{
+                dnam{"bu [JP]"}
+                other{"{0} bu [JP]"}
+            }
+            cho{
+                dnam{"cho [JP]"}
+                other{"{0} cho [JP]"}
             }
             dunam{
                 dnam{"dunam"}
@@ -55,6 +67,10 @@ root{
             hectare{
                 dnam{"hectare"}
                 other{"{0} ha"}
+            }
+            se-jp{
+                dnam{"se [JP]"}
+                other{"{0} se [JP]"}
             }
             square-centimeter{
                 dnam{"cm²"}
@@ -149,6 +165,10 @@ root{
                 dnam{"kt"}
                 other{"{0} kt"}
             }
+            katal{
+                dnam{"kat"}
+                other{"{0} kat"}
+            }
             milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 other{"{0} mg/dL"}
@@ -161,6 +181,22 @@ root{
                 dnam{"mol"}
                 other{"{0} mol"}
             }
+            ofglucose{
+                dnam{"glucose"}
+                other{"{0} Glc"}
+            }
+            part{
+                dnam{"part"}
+                other{"{0} part"}
+            }
+            part-per-1e6{
+                dnam{"ppm"}
+                other{"{0} ppm"}
+            }
+            part-per-1e9{
+                dnam{"ppb"}
+                other{"{0} ppb"}
+            }
             percent{
                 dnam{"%"}
                 other{"{0}%"}
@@ -169,17 +205,9 @@ root{
                 dnam{"‰"}
                 other{"{0}‰"}
             }
-            permillion{
-                dnam{"ppm"}
-                other{"{0} ppm"}
-            }
             permyriad{
                 dnam{"‱"}
                 other{"{0}‱"}
-            }
-            portion-per-1e9{
-                dnam{"ppb"}
-                other{"{0} ppb"}
             }
         }
         consumption{
@@ -268,6 +296,10 @@ root{
                 dnam{"dec"}
                 other{"{0} dec"}
             }
+            fortnight{
+                dnam{"fortnight"}
+                other{"{0} fw"}
+            }
             hour{
                 dnam{"hr"}
                 other{"{0} h"}
@@ -329,6 +361,18 @@ root{
                 dnam{"amp"}
                 other{"{0} A"}
             }
+            coulomb{
+                dnam{"C"}
+                other{"{0} C"}
+            }
+            farad{
+                dnam{"F"}
+                other{"{0} F"}
+            }
+            henry{
+                dnam{"H"}
+                other{"{0} H"}
+            }
             milliampere{
                 dnam{"mA"}
                 other{"{0} mA"}
@@ -337,25 +381,45 @@ root{
                 dnam{"ohm"}
                 other{"{0} Ω"}
             }
+            siemens{
+                dnam{"S"}
+                other{"{0} S"}
+            }
             volt{
                 dnam{"volt"}
                 other{"{0} V"}
             }
         }
         energy{
+            becquerel{
+                dnam{"Bq"}
+                other{"{0} Bq"}
+            }
             british-thermal-unit{
                 dnam{"Btu"}
                 other{"{0} Btu"}
             }
+            british-thermal-unit-it{
+                dnam{"BTU-IT"}
+                other{"{0} BTU-IT"}
+            }
             calorie{
                 dnam{"cal"}
                 other{"{0} cal"}
+            }
+            calorie-it{
+                dnam{"calorie-IT"}
+                other{"{0} cal-IT"}
             }
             electronvolt{
                 dnam{"eV"}
                 other{"{0} eV"}
             }
             foodcalorie:alias{"/LOCALE/unitsShort/energy/kilocalorie"}
+            gray{
+                dnam{"Gy"}
+                other{"{0} Gy"}
+            }
             joule{
                 dnam{"joule"}
                 other{"{0} J"}
@@ -372,12 +436,20 @@ root{
                 dnam{"kWh"}
                 other{"{0} kWh"}
             }
+            sievert{
+                dnam{"Sv"}
+                other{"{0} Sv"}
+            }
             therm-us{
                 dnam{"US therm"}
                 other{"{0} US therm"}
             }
         }
         force{
+            kilogram-force{
+                dnam{"kgf"}
+                other{"{0} kgf"}
+            }
             kilowatt-hour-per-100-kilometer{
                 dnam{"kWh/100km"}
                 other{"{0} kWh/100km"}
@@ -444,6 +516,10 @@ root{
                 other{"{0} cm"}
                 per{"{0}/cm"}
             }
+            chain{
+                dnam{"chain"}
+                other{"{0} chain"}
+            }
             decimeter{
                 dnam{"dm"}
                 other{"{0} dm"}
@@ -469,6 +545,14 @@ root{
                 dnam{"in"}
                 other{"{0} in"}
                 per{"{0}/in"}
+            }
+            jo-jp{
+                dnam{"jo [JP]"}
+                other{"{0} jo [JP]"}
+            }
+            ken{
+                dnam{"ken [JP]"}
+                other{"{0} ken [JP]"}
             }
             kilometer{
                 dnam{"km"}
@@ -520,9 +604,33 @@ root{
                 dnam{"pt"}
                 other{"{0} pt"}
             }
+            ri-jp{
+                dnam{"ri [JP]"}
+                other{"{0} ri [JP]"}
+            }
+            rin{
+                dnam{"rin [JP]"}
+                other{"{0} rin [JP]"}
+            }
+            rod{
+                dnam{"rod"}
+                other{"{0} rod"}
+            }
+            shaku-cloth{
+                dnam{"shaku [cloth, JP]"}
+                other{"{0} shaku [cloth, JP]"}
+            }
+            shaku-length{
+                dnam{"shaku [JP]"}
+                other{"{0} shaku [JP]"}
+            }
             solar-radius{
                 dnam{"R☉"}
                 other{"{0} R☉"}
+            }
+            sun{
+                dnam{"sun [JP]"}
+                other{"{0} sun [JP]"}
             }
             yard{
                 dnam{"yd"}
@@ -547,6 +655,16 @@ root{
                 other{"{0} L☉"}
             }
         }
+        magnetic{
+            tesla{
+                dnam{"T"}
+                other{"{0} T"}
+            }
+            weber{
+                dnam{"Wb"}
+                other{"{0} Wb"}
+            }
+        }
         mass{
             carat{
                 dnam{"CD"}
@@ -559,6 +677,10 @@ root{
             earth-mass{
                 dnam{"M⊕"}
                 other{"{0} M⊕"}
+            }
+            fun{
+                dnam{"fun [JP]"}
+                other{"{0} fun [JP]"}
             }
             grain{
                 dnam{"grain"}
@@ -595,6 +717,10 @@ root{
                 dnam{"lb"}
                 other{"{0} lb"}
                 per{"{0}/lb"}
+            }
+            slug{
+                dnam{"slug"}
+                other{"{0} slug"}
             }
             solar-mass{
                 dnam{"M☉"}
@@ -648,6 +774,10 @@ root{
                 dnam{"bar"}
                 other{"{0} bar"}
             }
+            gasoline-energy-density{
+                dnam{"gas E"}
+                other{"{0} gas E"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 other{"{0} hPa"}
@@ -671,6 +801,10 @@ root{
             millimeter-ofhg{
                 dnam{"mm Hg"}
                 other{"{0} mm Hg"}
+            }
+            ofhg{
+                dnam{"Hg"}
+                other{"{0} Hg"}
             }
             pascal{
                 dnam{"Pa"}
@@ -723,6 +857,10 @@ root{
             kelvin{
                 dnam{"K"}
                 other{"{0} K"}
+            }
+            rankine{
+                dnam{"°R"}
+                other{"{0} °R"}
             }
         }
         torque{
@@ -786,6 +924,14 @@ root{
                 dnam{"cup"}
                 other{"{0} c"}
             }
+            cup-imperial{
+                dnam{"cup Imp."}
+                other{"{0} cup Imp."}
+            }
+            cup-jp{
+                dnam{"cup [JP]"}
+                other{"{0} cup [JP]"}
+            }
             cup-metric{
                 dnam{"mcup"}
                 other{"{0} mc"}
@@ -818,6 +964,10 @@ root{
                 dnam{"Imp. fl oz"}
                 other{"{0} fl oz Imp."}
             }
+            fluid-ounce-metric{
+                dnam{"fl oz m."}
+                other{"{0} fl oz m."}
+            }
             gallon{
                 dnam{"US gal"}
                 other{"{0} gal US"}
@@ -836,6 +986,14 @@ root{
                 dnam{"jigger"}
                 other{"{0} jigger"}
             }
+            koku{
+                dnam{"koku [JP]"}
+                other{"{0} koku [JP]"}
+            }
+            kosaji{
+                dnam{"kosaji [JP]"}
+                other{"{0} kosaji [JP]"}
+            }
             liter{
                 dnam{"liter"}
                 other{"{0} l"}
@@ -849,6 +1007,10 @@ root{
                 dnam{"mL"}
                 other{"{0} mL"}
             }
+            osaji{
+                dnam{"osaji [JP]"}
+                other{"{0} osaji [JP]"}
+            }
             pinch{
                 dnam{"pinch"}
                 other{"{0} pinch"}
@@ -856,6 +1018,10 @@ root{
             pint{
                 dnam{"pt"}
                 other{"{0} pt"}
+            }
+            pint-imperial{
+                dnam{"pint Imp."}
+                other{"{0} pt Imp."}
             }
             pint-metric{
                 dnam{"mpt"}
@@ -869,6 +1035,14 @@ root{
                 dnam{"qt Imp"}
                 other{"{0} qt Imp."}
             }
+            sai{
+                dnam{"sai [JP]"}
+                other{"{0} sai [JP]"}
+            }
+            shaku{
+                dnam{"shaku [vol, JP]"}
+                other{"{0} shaku [vol, JP]"}
+            }
             tablespoon{
                 dnam{"tbsp"}
                 other{"{0} tbsp"}
@@ -876,6 +1050,10 @@ root{
             teaspoon{
                 dnam{"tsp"}
                 other{"{0} tsp"}
+            }
+            to-jp{
+                dnam{"to [JP]"}
+                other{"{0} to [JP]"}
             }
         }
     }

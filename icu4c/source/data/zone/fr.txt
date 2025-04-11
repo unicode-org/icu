@@ -415,9 +415,6 @@ fr{
         "Pacific:Efate"{
             ec{"Éfaté"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fidji"}
         }
@@ -426,9 +423,6 @@ fr{
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
-        }
-        "Pacific:Kanton"{
-            ec{"Canton"}
         }
         "Pacific:Marquesas"{
             ec{"Marquises"}

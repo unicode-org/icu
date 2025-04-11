@@ -64,11 +64,11 @@ yo{
                 dnam{"àwọ́n ohun"}
                 other{"{0} àwon ohun"}
             }
+            part-per-1e9{
+                dnam{"ẹ̀yà nínú ìdá blíọ̀nù"}
+            }
             permille{
                 other{"{0} ìdákan nínú ẹgbẹ̀rún"}
-            }
-            portion-per-1e9{
-                dnam{"ẹ̀yà nínú ìdá blíọ̀nù"}
             }
         }
         consumption{
@@ -310,11 +310,11 @@ yo{
             mole{
                 other{"{0}mol"}
             }
+            part-per-1e6{
+                other{"{0}ppm"}
+            }
             permille{
                 other{"{0}‰"}
-            }
-            permillion{
-                other{"{0}ppm"}
             }
         }
         consumption{
@@ -769,12 +769,12 @@ yo{
                 dnam{"ohun"}
                 other{"{0} ohun"}
             }
+            part-per-1e6{
+                dnam{"ara/milíọ̀nù"}
+            }
             permille{
                 dnam{"ìdákan nínú ẹgbẹ̀rún"}
                 other{"{0} pasenti"}
-            }
-            permillion{
-                dnam{"ara/milíọ̀nù"}
             }
         }
         digital{

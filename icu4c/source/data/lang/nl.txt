@@ -942,13 +942,11 @@ nl{
             tertiary{"Sorteren op accenten/hoofdlettergebruik/breedte"}
         }
         collation{
-            big5han{"Traditioneel-Chinese sorteervolgorde - Big5"}
             compat{"vorige sorteervolgorde, voor compatibiliteit"}
             dictionary{"Woordenboeksorteervolgorde"}
             ducet{"standaard Unicode-sorteervolgorde"}
             emoji{"emojisorteervolgorde"}
             eor{"Europese sorteerregels"}
-            gb2312han{"Vereenvoudigd-Chinese sorteervolgorde - GB2312"}
             phonebook{"Telefoonboeksorteervolgorde"}
             phonetic{"Fonetische sorteervolgorde"}
             pinyin{"Pinyinsorteervolgorde"}

@@ -443,9 +443,6 @@ gl{
         "Pacific:Easter"{
             ec{"Illa de Pascua"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fixi"}
         }

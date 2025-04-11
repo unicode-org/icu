@@ -359,17 +359,11 @@ ca{
         "Pacific:Easter"{
             ec{"Illa de Pasqua"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Galapagos"{
             ec{"Galápagos"}
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
-        }
-        "Pacific:Kanton"{
-            ec{"Canton"}
         }
         "Pacific:Marquesas"{
             ec{"Marqueses"}

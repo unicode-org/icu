@@ -730,12 +730,10 @@ is{
             tertiary{"Raða áherslum/hástaf eða lágstaf/breidd"}
         }
         collation{
-            big5han{"hefðbundin kínversk röðun - Big5"}
             compat{"Fyrri röðun, til samræmis"}
             dictionary{"Orðabókarröð"}
             ducet{"Sjálfgefin Unicode-röðun"}
             eor{"Evrópskar reglur um röðun"}
-            gb2312han{"einfölduð kínversk röðun - GB2312"}
             phonebook{"Símaskráarröðun"}
             phonetic{"Hljóðfræðileg röð"}
             pinyin{"Pinyin-röðun"}

@@ -879,6 +879,7 @@ public class MeasureUnit implements Serializable {
         } else {
             factory = UNIT_FACTORY;
         }
+        
         return MeasureUnit.addUnit(type, subType, factory);
     }
 
@@ -1091,10 +1092,28 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit REVOLUTION_ANGLE = MeasureUnit.internalGetInstance("angle", "revolution");
 
     /**
+     * Constant for unit of angle: steradian
+     * @draft ICU 78
+     */
+    public static final MeasureUnit STERADIAN = MeasureUnit.internalGetInstance("angle", "steradian");
+
+    /**
      * Constant for unit of area: acre
      * @stable ICU 53
      */
     public static final MeasureUnit ACRE = MeasureUnit.internalGetInstance("area", "acre");
+
+    /**
+     * Constant for unit of area: bu-jp
+     * @draft ICU 78
+     */
+    public static final MeasureUnit BU_JP = MeasureUnit.internalGetInstance("area", "bu-jp");
+
+    /**
+     * Constant for unit of area: cho
+     * @draft ICU 78
+     */
+    public static final MeasureUnit CHO = MeasureUnit.internalGetInstance("area", "cho");
 
     /**
      * Constant for unit of area: dunam
@@ -1107,6 +1126,12 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 53
      */
     public static final MeasureUnit HECTARE = MeasureUnit.internalGetInstance("area", "hectare");
+
+    /**
+     * Constant for unit of area: se-jp
+     * @draft ICU 78
+     */
+    public static final MeasureUnit SE_JP = MeasureUnit.internalGetInstance("area", "se-jp");
 
     /**
      * Constant for unit of area: square-centimeter
@@ -1163,6 +1188,12 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit KARAT = MeasureUnit.internalGetInstance("concentr", "karat");
 
     /**
+     * Constant for unit of concentr: katal
+     * @draft ICU 78
+     */
+    public static final MeasureUnit KATAL = MeasureUnit.internalGetInstance("concentr", "katal");
+
+    /**
      * Constant for unit of concentr: milligram-ofglucose-per-deciliter
      * @stable ICU 69
      */
@@ -1187,6 +1218,30 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit MOLE = MeasureUnit.internalGetInstance("concentr", "mole");
 
     /**
+     * Constant for unit of concentr: ofglucose
+     * @draft ICU 78
+     */
+    public static final MeasureUnit OFGLUCOSE = MeasureUnit.internalGetInstance("concentr", "ofglucose");
+
+    /**
+     * Constant for unit of concentr: part
+     * @draft ICU 78
+     */
+    public static final MeasureUnit PART = MeasureUnit.internalGetInstance("concentr", "part");
+
+    /**
+     * Constant for unit of concentr: part-per-1e6
+     * @draft ICU 78
+     */
+    public static final MeasureUnit PART_PER_1E6 = MeasureUnit.internalGetInstance("concentr", "part-per-1e6");
+
+    /**
+     * Constant for unit of concentr: part-per-1e9
+     * @draft ICU 78
+     */
+    public static final MeasureUnit PART_PER_1E9 = MeasureUnit.internalGetInstance("concentr", "part-per-1e9");
+
+    /**
      * Constant for unit of concentr: percent
      * @stable ICU 63
      */
@@ -1200,21 +1255,16 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of concentr: permillion
+     * (renamed to part-per-1e6 in CLDR 48 / ICU 78).
      * @stable ICU 57
      */
-    public static final MeasureUnit PART_PER_MILLION = MeasureUnit.internalGetInstance("concentr", "permillion");
+    public static final MeasureUnit PART_PER_MILLION = MeasureUnit.internalGetInstance("concentr", "part-per-1e6");
 
     /**
      * Constant for unit of concentr: permyriad
      * @stable ICU 64
      */
     public static final MeasureUnit PERMYRIAD = MeasureUnit.internalGetInstance("concentr", "permyriad");
-
-    /**
-     * Constant for unit of concentr: portion-per-1e9
-     * @draft ICU 77
-     */
-    public static final MeasureUnit PORTION_PER_1E9 = MeasureUnit.internalGetInstance("concentr", "portion-per-1e9");
 
     /**
      * Constant for unit of consumption: liter-per-100-kilometer
@@ -1331,6 +1381,12 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit DECADE = MeasureUnit.internalGetInstance("duration", "decade");
 
     /**
+     * Constant for unit of duration: fortnight
+     * @draft ICU 78
+     */
+    public static final MeasureUnit FORTNIGHT = MeasureUnit.internalGetInstance("duration", "fortnight");
+
+    /**
      * Constant for unit of duration: hour
      * @stable ICU 4.0
      */
@@ -1421,6 +1477,24 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit AMPERE = MeasureUnit.internalGetInstance("electric", "ampere");
 
     /**
+     * Constant for unit of electric: coulomb
+     * @draft ICU 78
+     */
+    public static final MeasureUnit COULOMB = MeasureUnit.internalGetInstance("electric", "coulomb");
+
+    /**
+     * Constant for unit of electric: farad
+     * @draft ICU 78
+     */
+    public static final MeasureUnit FARAD = MeasureUnit.internalGetInstance("electric", "farad");
+
+    /**
+     * Constant for unit of electric: henry
+     * @draft ICU 78
+     */
+    public static final MeasureUnit HENRY = MeasureUnit.internalGetInstance("electric", "henry");
+
+    /**
      * Constant for unit of electric: milliampere
      * @stable ICU 54
      */
@@ -1433,10 +1507,22 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit OHM = MeasureUnit.internalGetInstance("electric", "ohm");
 
     /**
+     * Constant for unit of electric: siemens
+     * @draft ICU 78
+     */
+    public static final MeasureUnit SIEMENS = MeasureUnit.internalGetInstance("electric", "siemens");
+
+    /**
      * Constant for unit of electric: volt
      * @stable ICU 54
      */
     public static final MeasureUnit VOLT = MeasureUnit.internalGetInstance("electric", "volt");
+
+    /**
+     * Constant for unit of energy: becquerel
+     * @draft ICU 78
+     */
+    public static final MeasureUnit BECQUEREL = MeasureUnit.internalGetInstance("energy", "becquerel");
 
     /**
      * Constant for unit of energy: british-thermal-unit
@@ -1445,10 +1531,22 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit BRITISH_THERMAL_UNIT = MeasureUnit.internalGetInstance("energy", "british-thermal-unit");
 
     /**
+     * Constant for unit of energy: british-thermal-unit-it
+     * @draft ICU 78
+     */
+    public static final MeasureUnit BRITISH_THERMAL_UNIT_IT = MeasureUnit.internalGetInstance("energy", "british-thermal-unit-it");
+
+    /**
      * Constant for unit of energy: calorie
      * @stable ICU 54
      */
     public static final MeasureUnit CALORIE = MeasureUnit.internalGetInstance("energy", "calorie");
+
+    /**
+     * Constant for unit of energy: calorie-it
+     * @draft ICU 78
+     */
+    public static final MeasureUnit CALORIE_IT = MeasureUnit.internalGetInstance("energy", "calorie-it");
 
     /**
      * Constant for unit of energy: electronvolt
@@ -1461,6 +1559,12 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 54
      */
     public static final MeasureUnit FOODCALORIE = MeasureUnit.internalGetInstance("energy", "foodcalorie");
+
+    /**
+     * Constant for unit of energy: gray
+     * @draft ICU 78
+     */
+    public static final MeasureUnit GRAY = MeasureUnit.internalGetInstance("energy", "gray");
 
     /**
      * Constant for unit of energy: joule
@@ -1487,10 +1591,22 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit KILOWATT_HOUR = MeasureUnit.internalGetInstance("energy", "kilowatt-hour");
 
     /**
+     * Constant for unit of energy: sievert
+     * @draft ICU 78
+     */
+    public static final MeasureUnit SIEVERT = MeasureUnit.internalGetInstance("energy", "sievert");
+
+    /**
      * Constant for unit of energy: therm-us
      * @stable ICU 65
      */
     public static final MeasureUnit THERM_US = MeasureUnit.internalGetInstance("energy", "therm-us");
+
+    /**
+     * Constant for unit of force: kilogram-force
+     * @draft ICU 78
+     */
+    public static final MeasureUnit KILOGRAM_FORCE = MeasureUnit.internalGetInstance("force", "kilogram-force");
 
     /**
      * Constant for unit of force: kilowatt-hour-per-100-kilometer
@@ -1595,6 +1711,12 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit CENTIMETER = MeasureUnit.internalGetInstance("length", "centimeter");
 
     /**
+     * Constant for unit of length: chain
+     * @draft ICU 78
+     */
+    public static final MeasureUnit CHAIN = MeasureUnit.internalGetInstance("length", "chain");
+
+    /**
      * Constant for unit of length: decimeter
      * @stable ICU 54
      */
@@ -1629,6 +1751,18 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 53
      */
     public static final MeasureUnit INCH = MeasureUnit.internalGetInstance("length", "inch");
+
+    /**
+     * Constant for unit of length: jo-jp
+     * @draft ICU 78
+     */
+    public static final MeasureUnit JO_JP = MeasureUnit.internalGetInstance("length", "jo-jp");
+
+    /**
+     * Constant for unit of length: ken
+     * @draft ICU 78
+     */
+    public static final MeasureUnit KEN = MeasureUnit.internalGetInstance("length", "ken");
 
     /**
      * Constant for unit of length: kilometer
@@ -1703,10 +1837,46 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit POINT = MeasureUnit.internalGetInstance("length", "point");
 
     /**
+     * Constant for unit of length: ri-jp
+     * @draft ICU 78
+     */
+    public static final MeasureUnit RI_JP = MeasureUnit.internalGetInstance("length", "ri-jp");
+
+    /**
+     * Constant for unit of length: rin
+     * @draft ICU 78
+     */
+    public static final MeasureUnit RIN = MeasureUnit.internalGetInstance("length", "rin");
+
+    /**
+     * Constant for unit of length: rod
+     * @draft ICU 78
+     */
+    public static final MeasureUnit ROD = MeasureUnit.internalGetInstance("length", "rod");
+
+    /**
+     * Constant for unit of length: shaku-cloth
+     * @draft ICU 78
+     */
+    public static final MeasureUnit SHAKU_CLOTH = MeasureUnit.internalGetInstance("length", "shaku-cloth");
+
+    /**
+     * Constant for unit of length: shaku-length
+     * @draft ICU 78
+     */
+    public static final MeasureUnit SHAKU_LENGTH = MeasureUnit.internalGetInstance("length", "shaku-length");
+
+    /**
      * Constant for unit of length: solar-radius
      * @stable ICU 64
      */
     public static final MeasureUnit SOLAR_RADIUS = MeasureUnit.internalGetInstance("length", "solar-radius");
+
+    /**
+     * Constant for unit of length: sun
+     * @draft ICU 78
+     */
+    public static final MeasureUnit SUN = MeasureUnit.internalGetInstance("length", "sun");
 
     /**
      * Constant for unit of length: yard
@@ -1739,6 +1909,18 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit SOLAR_LUMINOSITY = MeasureUnit.internalGetInstance("light", "solar-luminosity");
 
     /**
+     * Constant for unit of magnetic: tesla
+     * @draft ICU 78
+     */
+    public static final MeasureUnit TESLA = MeasureUnit.internalGetInstance("magnetic", "tesla");
+
+    /**
+     * Constant for unit of magnetic: weber
+     * @draft ICU 78
+     */
+    public static final MeasureUnit WEBER = MeasureUnit.internalGetInstance("magnetic", "weber");
+
+    /**
      * Constant for unit of mass: carat
      * @stable ICU 54
      */
@@ -1755,6 +1937,12 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 64
      */
     public static final MeasureUnit EARTH_MASS = MeasureUnit.internalGetInstance("mass", "earth-mass");
+
+    /**
+     * Constant for unit of mass: fun
+     * @draft ICU 78
+     */
+    public static final MeasureUnit FUN = MeasureUnit.internalGetInstance("mass", "fun");
 
     /**
      * Constant for unit of mass: grain
@@ -1811,6 +1999,12 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 53
      */
     public static final MeasureUnit POUND = MeasureUnit.internalGetInstance("mass", "pound");
+
+    /**
+     * Constant for unit of mass: slug
+     * @draft ICU 78
+     */
+    public static final MeasureUnit SLUG = MeasureUnit.internalGetInstance("mass", "slug");
 
     /**
      * Constant for unit of mass: solar-mass
@@ -1927,6 +2121,12 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit MILLIMETER_OF_MERCURY = MeasureUnit.internalGetInstance("pressure", "millimeter-ofhg");
 
     /**
+     * Constant for unit of pressure: ofhg
+     * @draft ICU 78
+     */
+    public static final MeasureUnit OFHG = MeasureUnit.internalGetInstance("pressure", "ofhg");
+
+    /**
      * Constant for unit of pressure: pascal
      * @stable ICU 65
      */
@@ -1997,6 +2197,12 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 54
      */
     public static final MeasureUnit KELVIN = MeasureUnit.internalGetInstance("temperature", "kelvin");
+
+    /**
+     * Constant for unit of temperature: rankine
+     * @draft ICU 78
+     */
+    public static final MeasureUnit RANKINE = MeasureUnit.internalGetInstance("temperature", "rankine");
 
     /**
      * Constant for unit of torque: newton-meter
@@ -2083,6 +2289,18 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit CUP = MeasureUnit.internalGetInstance("volume", "cup");
 
     /**
+     * Constant for unit of volume: cup-imperial
+     * @draft ICU 78
+     */
+    public static final MeasureUnit CUP_IMPERIAL = MeasureUnit.internalGetInstance("volume", "cup-imperial");
+
+    /**
+     * Constant for unit of volume: cup-jp
+     * @draft ICU 78
+     */
+    public static final MeasureUnit CUP_JP = MeasureUnit.internalGetInstance("volume", "cup-jp");
+
+    /**
      * Constant for unit of volume: cup-metric
      * @stable ICU 56
      */
@@ -2131,6 +2349,12 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit FLUID_OUNCE_IMPERIAL = MeasureUnit.internalGetInstance("volume", "fluid-ounce-imperial");
 
     /**
+     * Constant for unit of volume: fluid-ounce-metric
+     * @draft ICU 78
+     */
+    public static final MeasureUnit FLUID_OUNCE_METRIC = MeasureUnit.internalGetInstance("volume", "fluid-ounce-metric");
+
+    /**
      * Constant for unit of volume: gallon
      * @stable ICU 54
      */
@@ -2155,6 +2379,18 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit JIGGER = MeasureUnit.internalGetInstance("volume", "jigger");
 
     /**
+     * Constant for unit of volume: koku
+     * @draft ICU 78
+     */
+    public static final MeasureUnit KOKU = MeasureUnit.internalGetInstance("volume", "koku");
+
+    /**
+     * Constant for unit of volume: kosaji
+     * @draft ICU 78
+     */
+    public static final MeasureUnit KOSAJI = MeasureUnit.internalGetInstance("volume", "kosaji");
+
+    /**
      * Constant for unit of volume: liter
      * @stable ICU 53
      */
@@ -2173,6 +2409,12 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit MILLILITER = MeasureUnit.internalGetInstance("volume", "milliliter");
 
     /**
+     * Constant for unit of volume: osaji
+     * @draft ICU 78
+     */
+    public static final MeasureUnit OSAJI = MeasureUnit.internalGetInstance("volume", "osaji");
+
+    /**
      * Constant for unit of volume: pinch
      * @stable ICU 68
      */
@@ -2183,6 +2425,12 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 54
      */
     public static final MeasureUnit PINT = MeasureUnit.internalGetInstance("volume", "pint");
+
+    /**
+     * Constant for unit of volume: pint-imperial
+     * @draft ICU 78
+     */
+    public static final MeasureUnit PINT_IMPERIAL = MeasureUnit.internalGetInstance("volume", "pint-imperial");
 
     /**
      * Constant for unit of volume: pint-metric
@@ -2203,6 +2451,18 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit QUART_IMPERIAL = MeasureUnit.internalGetInstance("volume", "quart-imperial");
 
     /**
+     * Constant for unit of volume: sai
+     * @draft ICU 78
+     */
+    public static final MeasureUnit SAI = MeasureUnit.internalGetInstance("volume", "sai");
+
+    /**
+     * Constant for unit of volume: shaku
+     * @draft ICU 78
+     */
+    public static final MeasureUnit SHAKU = MeasureUnit.internalGetInstance("volume", "shaku");
+
+    /**
      * Constant for unit of volume: tablespoon
      * @stable ICU 54
      */
@@ -2213,6 +2473,12 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 54
      */
     public static final MeasureUnit TEASPOON = MeasureUnit.internalGetInstance("volume", "teaspoon");
+
+    /**
+     * Constant for unit of volume: to-jp
+     * @draft ICU 78
+     */
+    public static final MeasureUnit TO_JP = MeasureUnit.internalGetInstance("volume", "to-jp");
 
     // End generated MeasureUnit constants
 

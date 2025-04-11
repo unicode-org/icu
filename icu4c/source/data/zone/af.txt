@@ -259,9 +259,6 @@ af{
         "Pacific:Easter"{
             ec{"Paas"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fidji"}
         }

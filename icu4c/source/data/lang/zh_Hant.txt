@@ -924,13 +924,11 @@ zh_Hant{
             tertiary{"排序重音/大小寫/全半形"}
         }
         collation{
-            big5han{"繁體中文排序 - Big5"}
             compat{"舊制排序"}
             dictionary{"字典排序"}
             ducet{"預設 Unicode 排序"}
             emoji{"表情符號"}
             eor{"歐洲排序規則"}
-            gb2312han{"簡體中文排序 - GB2312"}
             phonebook{"電話簿排序"}
             phonetic{"發音排序"}
             pinyin{"拼音排序"}

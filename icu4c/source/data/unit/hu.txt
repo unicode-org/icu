@@ -460,6 +460,28 @@ hu{
                 one{"{0} mól"}
                 other{"{0} mól"}
             }
+            part-per-1e6{
+                case{
+                    accusative{
+                        one{"{0} részecske/milliót"}
+                        other{"{0} részecske/milliót"}
+                    }
+                    instrumental{
+                        one{"{0} részecske/millióval"}
+                        other{"{0} részecske/millióval"}
+                    }
+                    terminative{
+                        one{"{0} részecske/millióig"}
+                        other{"{0} részecske/millióig"}
+                    }
+                    translative{
+                        one{"{0} részecske/millióvá"}
+                        other{"{0} részecske/millióvá"}
+                    }
+                }
+                one{"{0} részecske/millió"}
+                other{"{0} részecske/millió"}
+            }
             percent{
                 case{
                     accusative{
@@ -503,28 +525,6 @@ hu{
                 }
                 one{"{0} ezrelék"}
                 other{"{0} ezrelék"}
-            }
-            permillion{
-                case{
-                    accusative{
-                        one{"{0} részecske/milliót"}
-                        other{"{0} részecske/milliót"}
-                    }
-                    instrumental{
-                        one{"{0} részecske/millióval"}
-                        other{"{0} részecske/millióval"}
-                    }
-                    terminative{
-                        one{"{0} részecske/millióig"}
-                        other{"{0} részecske/millióig"}
-                    }
-                    translative{
-                        one{"{0} részecske/millióvá"}
-                        other{"{0} részecske/millióvá"}
-                    }
-                }
-                one{"{0} részecske/millió"}
-                other{"{0} részecske/millió"}
             }
             permyriad{
                 case{
@@ -3074,14 +3074,14 @@ hu{
             millimole-per-liter{
                 dnam{"mmol/l"}
             }
+            part-per-1e6{
+                dnam{"ppm"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
-            }
-            permillion{
-                dnam{"ppm"}
             }
         }
         consumption{
@@ -3207,14 +3207,14 @@ hu{
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
+            part-per-1e6{
+                dnam{"részecske/millió"}
+            }
             percent{
                 dnam{"százalék"}
             }
             permille{
                 dnam{"ezrelék"}
-            }
-            permillion{
-                dnam{"részecske/millió"}
             }
         }
         consumption{

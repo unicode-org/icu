@@ -135,9 +135,6 @@ fo{
         "Indian:Mauritius"{
             ec{"Móritius"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }

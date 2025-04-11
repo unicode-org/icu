@@ -122,23 +122,23 @@ ms{
                 dnam{"milimol setiap liter"}
                 other{"{0} milimol setiap liter"}
             }
+            part-per-1e6{
+                dnam{"bahagian setiap juta"}
+                other{"{0} bahagian setiap juta"}
+            }
+            part-per-1e9{
+                dnam{"bahagian per bilion"}
+                other{"{0} bahagian per bilion"}
+            }
             percent{
                 other{"{0} peratus"}
             }
             permille{
                 other{"{0} per seribu"}
             }
-            permillion{
-                dnam{"bahagian setiap juta"}
-                other{"{0} bahagian setiap juta"}
-            }
             permyriad{
                 dnam{"permyriad"}
                 other{"{0} permyriad"}
-            }
-            portion-per-1e9{
-                dnam{"bahagian per bilion"}
-                other{"{0} bahagian per bilion"}
             }
         }
         consumption{
@@ -1110,14 +1110,14 @@ ms{
             karat{
                 dnam{"karat"}
             }
+            part-per-1e9{
+                dnam{"bahagian/bilion"}
+            }
             percent{
                 dnam{"peratus"}
             }
             permille{
                 dnam{"per seribu"}
-            }
-            portion-per-1e9{
-                dnam{"bahagian/bilion"}
             }
         }
         consumption{

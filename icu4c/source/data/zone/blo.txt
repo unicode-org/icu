@@ -1128,6 +1128,9 @@ blo{
         "Pacific:Efate"{
             ec{"Efatee"}
         }
+        "Pacific:Enderbury"{
+            ec{"Kantɔn"}
+        }
         "Pacific:Fakaofo"{
             ec{"Fakawofoo"}
         }
@@ -1145,9 +1148,6 @@ blo{
         }
         "Pacific:Guam"{
             ec{"Guwam"}
-        }
-        "Pacific:Kanton"{
-            ec{"Kantɔn"}
         }
         "Pacific:Kiritimati"{
             ec{"Kirimatii"}

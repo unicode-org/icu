@@ -87,11 +87,11 @@ zu{
                 one{"{0} i-karat"}
                 other{"{0} ama-karats"}
             }
+            part-per-1e6{
+                dnam{"ppm"}
+            }
             permille{
                 dnam{"permille"}
-            }
-            permillion{
-                dnam{"ppm"}
             }
         }
         consumption{
@@ -314,7 +314,7 @@ zu{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
-            permillion{
+            part-per-1e6{
                 one{"{0}item"}
                 other{"{0}ppm"}
             }
@@ -873,7 +873,7 @@ zu{
             karat{
                 dnam{"karats"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"izingxenye/izigidi"}
             }
         }

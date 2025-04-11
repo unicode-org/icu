@@ -515,9 +515,6 @@ es{
         "Pacific:Easter"{
             ec{"Isla de Pascua"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fiyi"}
         }

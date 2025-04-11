@@ -256,7 +256,7 @@ no{
             ec{"Påskeøya"}
         }
         "Pacific:Enderbury"{
-            ec{"Enderbury"}
+            ec{"Kantonøya"}
         }
         "Pacific:Galapagos"{
             ec{"Galápagosøyene"}
@@ -266,9 +266,6 @@ no{
             sd{"HDT"}
             sg{"HST"}
             ss{"HST"}
-        }
-        "Pacific:Kanton"{
-            ec{"Kantonøya"}
         }
         "Pacific:Norfolk"{
             ec{"Norfolkøya"}

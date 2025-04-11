@@ -144,9 +144,6 @@ id{
         "Indian:Maldives"{
             ec{"Maladewa"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Guadalcanal"{
             ec{"Guadalkanal"}
         }

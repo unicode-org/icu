@@ -45,9 +45,6 @@ sw{
         "Europe:London"{
             ld{"Saa za Majira ya Joto za Uingereza"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }

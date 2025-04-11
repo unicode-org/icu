@@ -1035,7 +1035,7 @@ lv{
             ec{"Lieldienu sala"}
         }
         "Pacific:Enderbury"{
-            ec{"Enderberija"}
+            ec{"Kantona"}
         }
         "Pacific:Fiji"{
             ec{"Fidži"}
@@ -1054,9 +1054,6 @@ lv{
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
-        }
-        "Pacific:Kanton"{
-            ec{"Kantona"}
         }
         "Pacific:Kiritimati"{
             ec{"Kirisimasi"}

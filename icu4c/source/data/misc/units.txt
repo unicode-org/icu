@@ -2,13 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 units:table(nofallback){
-    cldrVersion{"47"}
+    cldrVersion{"48"}
     convertUnits{
-        100-kilometer{
-            factor{"100000"}
-            systems{"si metric"}
-            target{"meter"}
-        }
         acre{
             factor{"ft2_to_m2 * 43560"}
             systems{"ussystem uksystem"}
@@ -140,6 +135,11 @@ units:table(nofallback){
             systems{"ussystem"}
             target{"cubic-meter"}
         }
+        cup-imperial{
+            factor{"gal_imp_to_m3/16"}
+            systems{"uksystem"}
+            target{"cubic-meter"}
+        }
         cup-jp{
             factor{"1*100*0.000001"}
             systems{"jpsystem"}
@@ -252,6 +252,11 @@ units:table(nofallback){
         fluid-ounce-imperial{
             factor{"gal_imp_to_m3/160"}
             systems{"uksystem"}
+            target{"cubic-meter"}
+        }
+        fluid-ounce-metric{
+            factor{"0.03*0.001"}
+            systems{"metric_adjacent"}
             target{"cubic-meter"}
         }
         foodcalorie{
@@ -370,7 +375,7 @@ units:table(nofallback){
         karat{
             factor{"1/24"}
             systems{"metric_adjacent ussystem uksystem"}
-            target{"portion"}
+            target{"part"}
         }
         katal{
             factor{"item_per_mole"}
@@ -525,6 +530,11 @@ units:table(nofallback){
             systems{"astronomical prefixable"}
             target{"meter"}
         }
+        part{
+            factor{"1"}
+            systems{"metric_adjacent ussystem uksystem"}
+            target{"part"}
+        }
         pascal{
             factor{"1"}
             systems{"si metric prefixable"}
@@ -533,22 +543,17 @@ units:table(nofallback){
         percent{
             factor{"1/100"}
             systems{"metric_adjacent ussystem uksystem"}
-            target{"portion"}
+            target{"part"}
         }
         permille{
             factor{"1/1000"}
             systems{"metric_adjacent ussystem uksystem"}
-            target{"portion"}
-        }
-        permillion{
-            factor{"1/1000000"}
-            systems{"metric_adjacent ussystem uksystem"}
-            target{"portion"}
+            target{"part"}
         }
         permyriad{
             factor{"1/10000"}
             systems{"metric_adjacent ussystem uksystem"}
-            target{"portion"}
+            target{"part"}
         }
         pinch{
             factor{"gal_to_m3/128*128"}
@@ -579,11 +584,6 @@ units:table(nofallback){
             factor{"ft_to_m/864"}
             systems{"metric_adjacent ussystem uksystem"}
             target{"meter"}
-        }
-        portion{
-            factor{"1"}
-            systems{"metric_adjacent ussystem uksystem"}
-            target{"portion"}
         }
         pound{
             factor{"lb_to_kg"}
@@ -2494,7 +2494,7 @@ units:table(nofallback){
             per-second{"radioactivity"}
         }
         {
-            portion{"portion"}
+            part{"portion"}
         }
         {
             bit{"digital"}

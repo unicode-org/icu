@@ -810,12 +810,10 @@ es{
             tertiary{"Ordenar acentos/mayúsculas y minúsculas/ancho"}
         }
         collation{
-            big5han{"orden del chino tradicional - Big5"}
             compat{"orden anterior, para compatibilidad"}
             dictionary{"orden de diccionario"}
             ducet{"orden predeterminado de Unicode"}
             eor{"reglas de ordenación europeas"}
-            gb2312han{"orden del chino simplificado - GB2312"}
             phonebook{"orden de listín telefónico"}
             phonetic{"orden fonético"}
             pinyin{"orden pinyin"}

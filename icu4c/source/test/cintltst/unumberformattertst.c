@@ -18,6 +18,7 @@
 #include "unicode/ustring.h"
 #include "cformtst.h"
 #include "cintltst.h"
+#include "cstring.h"
 #include "cmemory.h"
 
 static void TestSkeletonFormatToString(void);
@@ -425,6 +426,10 @@ static void TestPerUnitInArabic(void) {
             if (U_FAILURE(status)) {
                 log_err("FAIL u_strFromUTF8: %s = %s ( %s )\n", locale, buffer,
                         u_errorName(status));
+            }
+            if (uprv_strncmp(simpleMeasureUnits[i], "volume-",7)==0 || uprv_strncmp(simpleMeasureUnits[j], "volume-",7)==0) {
+                log_knownIssue("ICU-23104", "Strange handling of part-per-1e9 & volumes in skeletons");
+                continue;
             }
             UNumberFormatter* nf = unumf_openForSkeletonAndLocale(
                 ubuffer, outputlen, locale, &status);

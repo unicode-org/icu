@@ -387,9 +387,6 @@ sl{
         "Pacific:Easter"{
             ec{"Velikonočni otok"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fidži"}
         }

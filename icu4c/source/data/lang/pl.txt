@@ -900,12 +900,10 @@ pl{
             tertiary{"Sortowanie znaków akcentowanych/wielkości liter/szerokości"}
         }
         collation{
-            big5han{"chiński tradycyjny porządek sortowania - Big5"}
             compat{"poprzedni porządek sortowania, dla zgodności"}
             dictionary{"sortowanie słownikowe"}
             ducet{"domyślna kolejność sortowania Unicode"}
             eor{"europejskie reguły określania kolejności"}
-            gb2312han{"chiński uproszczony porządek sortowania - GB2312"}
             phonebook{"porządek sortowania książki telefonicznej"}
             phonetic{"sortowanie fonetyczne"}
             pinyin{"porządek sortowania pinyin"}

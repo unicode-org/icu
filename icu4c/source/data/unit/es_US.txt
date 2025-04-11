@@ -221,14 +221,14 @@ es_US{
     }
     unitsShort{
         concentr{
+            part-per-1e9{
+                dnam{"partes/mil millones"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
-            }
-            portion-per-1e9{
-                dnam{"partes/mil millones"}
             }
         }
         digital{

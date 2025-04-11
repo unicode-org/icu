@@ -249,6 +249,20 @@ hsb{
                 other{"{0} molow"}
                 two{"{0} molej"}
             }
+            part-per-1e6{
+                dnam{"milionćiny"}
+                few{"{0} milionćiny"}
+                one{"{0} milionćina"}
+                other{"{0} milionćinow"}
+                two{"{0} milionćinje"}
+            }
+            part-per-1e9{
+                dnam{"miliardćina"}
+                few{"{0} miliardćiny"}
+                one{"{0} miliardćina"}
+                other{"{0} miliardćinow"}
+                two{"{0} miliardćinje"}
+            }
             percent{
                 dnam{"procenty"}
                 few{"{0} procenty"}
@@ -263,26 +277,12 @@ hsb{
                 other{"{0} promilow"}
                 two{"{0} promilej"}
             }
-            permillion{
-                dnam{"milionćiny"}
-                few{"{0} milionćiny"}
-                one{"{0} milionćina"}
-                other{"{0} milionćinow"}
-                two{"{0} milionćinje"}
-            }
             permyriad{
                 dnam{"dźesaćiny promila"}
                 few{"{0} dźesaćiny promila"}
                 one{"{0} dźesaćina promila"}
                 other{"{0} dźesaćinow promila"}
                 two{"{0} dźesaćinje promila"}
-            }
-            portion-per-1e9{
-                dnam{"miliardćina"}
-                few{"{0} miliardćiny"}
-                one{"{0} miliardćina"}
-                other{"{0} miliardćinow"}
-                two{"{0} miliardćinje"}
             }
         }
         consumption{
@@ -1448,7 +1448,7 @@ hsb{
             }
         }
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"n"}
                 few{"{0} n"}
                 one{"{0} n"}
@@ -1631,6 +1631,13 @@ hsb{
                 other{"{0} mmol/l"}
                 two{"{0} mmol/l"}
             }
+            part-per-1e9{
+                dnam{"nano"}
+                few{"{0} nano"}
+                one{"{0} nano"}
+                other{"{0} nano"}
+                two{"{0} nano"}
+            }
             percent{
                 few{"{0} %"}
                 one{"{0} %"}
@@ -1648,13 +1655,6 @@ hsb{
                 one{"{0} ‱"}
                 other{"{0} ‱"}
                 two{"{0} ‱"}
-            }
-            portion-per-1e9{
-                dnam{"nano"}
-                few{"{0} nano"}
-                one{"{0} nano"}
-                other{"{0} nano"}
-                two{"{0} nano"}
             }
         }
         consumption{

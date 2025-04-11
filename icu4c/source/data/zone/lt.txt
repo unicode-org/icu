@@ -1082,9 +1082,6 @@ lt{
         "Pacific:Efate"{
             ec{"Efatė"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderburis"}
-        }
         "Pacific:Fakaofo"{
             ec{"Fakaofas"}
         }

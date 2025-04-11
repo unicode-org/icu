@@ -919,11 +919,9 @@ it{
             tertiary{"Ordina accenti/lettere/larghezza"}
         }
         collation{
-            big5han{"Ordinamento Cinese tradizionale - Big5"}
             compat{"Ordinamento precedente, per compatibilità"}
             dictionary{"Ordinamento dizionario"}
             ducet{"Ordinamento Unicode predefinito"}
-            gb2312han{"Ordinamento Cinese semplificato - GB2312"}
             phonebook{"Ordinamento Elenco telefonico"}
             phonetic{"Ordinamento fonetico"}
             pinyin{"Ordinamento pinyin"}

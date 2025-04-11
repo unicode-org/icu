@@ -166,6 +166,16 @@ et{
                 one{"{0} mool"}
                 other{"{0} mooli"}
             }
+            part-per-1e6{
+                dnam{"osa miljoni kohta"}
+                one{"{0} osa miljoni kohta"}
+                other{"{0} osa miljoni kohta"}
+            }
+            part-per-1e9{
+                dnam{"miljardikosa"}
+                one{"{0} miljardikosa"}
+                other{"{0} miljardikosa"}
+            }
             percent{
                 dnam{"protsent"}
                 one{"{0} protsent"}
@@ -176,19 +186,9 @@ et{
                 one{"{0} promill"}
                 other{"{0} promilli"}
             }
-            permillion{
-                dnam{"osa miljoni kohta"}
-                one{"{0} osa miljoni kohta"}
-                other{"{0} osa miljoni kohta"}
-            }
             permyriad{
                 one{"{0} promüriaad"}
                 other{"{0} promüriaadi"}
-            }
-            portion-per-1e9{
-                dnam{"miljardikosa"}
-                one{"{0} miljardikosa"}
-                other{"{0} miljardikosa"}
             }
         }
         consumption{
@@ -1206,16 +1206,16 @@ et{
             mole{
                 dnam{"mool"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"osa/miljon"}
             }
-            permyriad{
-                dnam{"promüriaad"}
-            }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"osakesed/miljard"}
                 one{"{0} miljardikosa"}
                 other{"{0} miljardikosa"}
+            }
+            permyriad{
+                dnam{"promüriaad"}
             }
         }
         consumption{

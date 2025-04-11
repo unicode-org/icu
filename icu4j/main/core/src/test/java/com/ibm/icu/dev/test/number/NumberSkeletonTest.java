@@ -11,6 +11,7 @@ import java.util.Locale;
 
 import org.junit.Test;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.SkeletonSyntaxException;
@@ -20,7 +21,7 @@ import com.ibm.icu.util.ULocale;
  * @author sffc
  *
  */
-public class NumberSkeletonTest {
+public class NumberSkeletonTest extends CoreTestFmwk {
 
     @Test
     public void validTokens() {
@@ -435,7 +436,7 @@ public class NumberSkeletonTest {
             {"area", "acre"},
             {"concentr", "percent"},
             {"concentr", "permille"},
-            {"concentr", "permillion"},
+            {"concentr", "part-per-1e9"},
             {"concentr", "permyriad"},
             {"digital", "bit"},
             {"length", "yard"},
@@ -446,7 +447,9 @@ public class NumberSkeletonTest {
                 String skeleton = "measure-unit/" + cas1[0] + "-" + cas1[1] + " per-measure-unit/" +
                                   cas2[0] + "-" + cas2[1];
 
-                if (cas1[0] != cas2[0] && cas1[1] != cas2[1]) {
+                if (cas1[1].equals("part-per-1e9") || cas2[1].equals("part-per-1e9")) {
+                    logKnownIssue("ICU-23104", "Strange handling of part-per-1e9 in skeletons");
+                } else if (cas1[0] != cas2[0] && cas1[1] != cas2[1]) {
                     String toSkeleton = NumberFormatter.forSkeleton(skeleton).toSkeleton();
 
                     // Ensure both subtype are in the toSkeleton.

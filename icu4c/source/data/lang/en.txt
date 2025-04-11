@@ -17,14 +17,14 @@ en{
         currency{"Currency"}
         d0{"Transform Destination"}
         dx{"Dictionary Break Exclusions"}
-        em{"Emoji Presentation Style"}
+        em{"Emoji Presentation"}
         fw{"First day of week"}
         h0{"Mixed-in"}
         hc{"Hour Cycle (12 vs 24)"}
         i0{"Input Method"}
         k0{"Keyboard"}
         kv{"Highest Ignored"}
-        lb{"Line Break Style"}
+        lb{"Line Break Strictness"}
         lw{"Line Breaks In Words Setting"}
         m0{"Transform Rules"}
         ms{"Measurement System"}
@@ -33,7 +33,7 @@ en{
         rg{"Region For Supplemental Data"}
         s0{"Transform Source"}
         sd{"Region Subdivision"}
-        ss{"Sentence Break Suppressions Type"}
+        ss{"Sentence Break After Abbr."}
         t{"Transform"}
         t0{"Machine Translated"}
         timezone{"Time Zone"}
@@ -324,6 +324,7 @@ en{
         kcg{"Tyap"}
         kde{"Makonde"}
         kea{"Kabuverdianu"}
+        kek{"Qʼeqchiʼ"}
         ken{"Kenyang"}
         kfo{"Koro"}
         kg{"Kongo"}
@@ -618,7 +619,7 @@ en{
         tig{"Tigre"}
         tiv{"Tiv"}
         tk{"Turkmen"}
-        tkl{"Tokelau"}
+        tkl{"Tokelauan"}
         tkr{"Tsakhur"}
         tl{"Tagalog"}
         tlh{"Klingon"}
@@ -750,6 +751,7 @@ en{
         Bass{"Bassa Vah"}
         Batk{"Batak"}
         Beng{"Bangla"}
+        Berf{"Beria Erfe"}
         Bhks{"Bhaiksuki"}
         Blis{"Blissymbols"}
         Bopo{"Bopomofo"}
@@ -762,6 +764,7 @@ en{
         Cari{"Carian"}
         Cham{"Cham"}
         Cher{"Cherokee"}
+        Chis{"Chisoi"}
         Chrs{"Chorasmian"}
         Cirt{"Cirth"}
         Copt{"Coptic"}
@@ -894,6 +897,7 @@ en{
         Shaw{"Shavian"}
         Shrd{"Sharada"}
         Sidd{"Siddham"}
+        Sidt{"Sidetic"}
         Sind{"Khudawadi"}
         Sinh{"Sinhala"}
         Sogd{"Sogdian"}
@@ -914,6 +918,7 @@ en{
         Taml{"Tamil"}
         Tang{"Tangut"}
         Tavt{"Tai Viet"}
+        Tayo{"Tai Yo"}
         Telu{"Telugu"}
         Teng{"Tengwar"}
         Tfng{"Tifinagh"}
@@ -924,6 +929,7 @@ en{
         Tirh{"Tirhuta"}
         Tnsa{"Tangsa"}
         Todr{"Todhri"}
+        Tols{"Tolong Siki"}
         Toto{"Toto"}
         Tutg{"Tulu-Tigalari"}
         Ugar{"Ugaritic"}
@@ -974,14 +980,36 @@ en{
             islamic-rgsa{"Hijri Calendar (Saudi Arabia, sighting)"}
             islamic-tbla{"Hijri Calendar (tabular, astronomical epoch)"}
             islamic-umalqura{"Hijri Calendar (Umm al-Qura)"}
-            iso8601{"ISO-8601 Calendar"}
+            iso8601{"Gregorian Calendar (Year First)"}
             japanese{"Japanese Calendar"}
             persian{"Persian Calendar"}
             roc{"Minguo Calendar"}
         }
+        calendar%core{
+            buddhist{"Buddhist"}
+            chinese{"Chinese"}
+            coptic{"Coptic"}
+            dangi{"Dangi"}
+            ethiopic{"Ethiopic"}
+            ethiopic-amete-alem{"Ethiopic Amete Alem"}
+            gregorian{"Gregorian"}
+            hebrew{"Hebrew"}
+            indian{"Indian National"}
+            islamic{"Hijri"}
+            islamic-civil{"Hijri (tabular, civil epoch)"}
+            islamic-tbla{"Hijri (tabular, astronomical epoch)"}
+            islamic-umalqura{"Hijri (Umm al-Qura)"}
+            japanese{"Japanese"}
+            persian{"Persian"}
+            roc{"Minguo"}
+        }
         cf{
             account{"Accounting Currency Format"}
             standard{"Standard Currency Format"}
+        }
+        cf%core{
+            account{"Accounting"}
+            standard{"Standard"}
         }
         colAlternate{
             non-ignorable{"Sort Symbols"}
@@ -1023,13 +1051,11 @@ en{
             tertiary{"Sort Accents/Case/Width"}
         }
         collation{
-            big5han{"Traditional Chinese Sort Order - Big5"}
             compat{"Previous Sort Order, for compatibility"}
             dictionary{"Dictionary Sort Order"}
             ducet{"Default Unicode Sort Order"}
             emoji{"Emoji Sort Order"}
             eor{"European Ordering Rules"}
-            gb2312han{"Simplified Chinese Sort Order - GB2312"}
             phonebook{"Phonebook Sort Order"}
             phonetic{"Phonetic Sort Order"}
             pinyin{"Pinyin Sort Order"}
@@ -1040,6 +1066,20 @@ en{
             traditional{"Traditional Sort Order"}
             unihan{"Radical-Stroke Sort Order"}
             zhuyin{"Zhuyin Sort Order"}
+        }
+        collation%core{
+            compat{"Compatibility"}
+            dictionary{"Dictionary"}
+            ducet{"Default Unicode"}
+            phonebook{"Phonebook"}
+            phonetic{"Phonetic"}
+            pinyin{"Pinyin"}
+            search{"Search"}
+            standard{"Standard"}
+            stroke{"Stroke"}
+            traditional{"Traditional"}
+            unihan{"Radical-Stroke"}
+            zhuyin{"Zhuyin"}
         }
         d0{
             accents{"To Accented Characters From ASCII Sequence"}
@@ -1071,6 +1111,11 @@ en{
             emoji{"Prefer Emoji Presentation For Emoji Characters"}
             text{"Prefer Text Presentation For Emoji Characters"}
         }
+        em%core{
+            default{"Default"}
+            emoji{"Emoji"}
+            text{"Text"}
+        }
         fw{
             fri{"First Day of Week Is Friday"}
             mon{"First Day of Week Is Monday"}
@@ -1088,6 +1133,12 @@ en{
             h12{"12 Hour System (1–12)"}
             h23{"24 Hour System (0–23)"}
             h24{"24 Hour System (1–24)"}
+        }
+        hc%core{
+            h11{"12 (0–11)"}
+            h12{"12 (1–12)"}
+            h23{"24 (0–23)"}
+            h24{"24 (1–24)"}
         }
         i0{
             handwrit{"Handwriting Input Method"}
@@ -1137,11 +1188,22 @@ en{
             normal{"Normal Line Break Style"}
             strict{"Strict Line Break Style"}
         }
+        lb%core{
+            loose{"Loose"}
+            normal{"Normal"}
+            strict{"Strict"}
+        }
         lw{
             breakall{"Allow Line Breaks In All Words"}
             keepall{"Prevent Line Breaks In All Words"}
             normal{"Normal Line Breaks For Words"}
             phrase{"Prevent Line Breaks In Phrases"}
+        }
+        lw%core{
+            breakall{"Break all"}
+            keepall{"Keep all"}
+            normal{"Normal"}
+            phrase{"Keep in phrases"}
         }
         m0{
             aethiopi{"Encylopedia Aethiopica Transliteration"}
@@ -1184,6 +1246,11 @@ en{
             metric{"Metric System"}
             uksystem{"Imperial Measurement System"}
             ussystem{"US Measurement System"}
+        }
+        ms%core{
+            metric{"Metric"}
+            uksystem{"UK"}
+            ussystem{"US"}
         }
         mu{
             celsius{"Celsius"}
@@ -1304,6 +1371,10 @@ en{
             none{"Sentence Breaks Without Abbreviation Handling"}
             standard{"Suppress Sentence Breaks After Standard Abbreviations"}
         }
+        ss%core{
+            none{"Off"}
+            standard{"On"}
+        }
         t0{
             und{"Unspecified Machine Translation"}
         }
@@ -1314,6 +1385,11 @@ en{
     Types%short{
         numbers{
             arabext{"X Arabic-Indic Digits"}
+        }
+    }
+    Types%variant{
+        calendar{
+            iso8601{"ISO 8601 Order"}
         }
     }
     Variants{

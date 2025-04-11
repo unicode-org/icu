@@ -341,9 +341,6 @@ fi{
         "Pacific:Easter"{
             ec{"Pääsiäissaari"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fidži"}
         }

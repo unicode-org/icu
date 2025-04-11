@@ -711,13 +711,11 @@ ga{
             standard{"Formáid Airgeadra Caighdeánach"}
         }
         collation{
-            big5han{"Ord sórtála Síneach traidisiúnta - Big5"}
             compat{"Ord Sórtála Roimhe Seo, ar son na comhoiriúnachta"}
             dictionary{"Ord Sórtála Foclóirí"}
             ducet{"Ord Sórtála Réamhshocraithe Unicode"}
             emoji{"Ord Sórtála Emoji"}
             eor{"Rialacha Ordaithe Eorpacha"}
-            gb2312han{"Ord sórtála Síneach simplithe - GB 2312"}
             phonebook{"Ord sórtála an eolaire teileafóin"}
             pinyin{"Ord sórtála pinyin"}
             search{"Cuardach Ilfhóinteach"}

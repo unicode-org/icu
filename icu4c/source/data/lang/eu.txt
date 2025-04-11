@@ -740,13 +740,11 @@ eu{
             tertiary{"Ordenatu azentuak / maiuskula eta minuskulak / zabalera"}
         }
         collation{
-            big5han{"Txinera tradizionalaren alfabetoa-Big5"}
             compat{"Aurreko hurrenkera, bateragarria izateko"}
             dictionary{"Hurrenkera alfabetikoa"}
             ducet{"Unicode hurrenkera lehenetsia"}
             emoji{"Emojien hurrenkera"}
             eor{"Europako ordenatzeko arauak"}
-            gb2312han{"Txinera sinplifikatuaren alfabetoa -GB2312"}
             phonebook{"Telefonoen zerrenda"}
             phonetic{"Ordenatzeko irizpide fonetikoa"}
             pinyin{"Pinyin hurrenkera"}

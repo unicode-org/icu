@@ -848,12 +848,10 @@ hr{
             tertiary{"Poredaj po naglascima/veličini/širini"}
         }
         collation{
-            big5han{"razvrstavanje prema tradicionalnom kineskom - Big5"}
             compat{"prethodni redoslijed razvrstavanja, radi kompatibilnosti"}
             dictionary{"rječničko razvrstavanje"}
             ducet{"standardno unicode razvrstavanje"}
             eor{"Europska pravila razvrstavanja"}
-            gb2312han{"razvrstavanje prema pojednostavljenom kineskom - GB2312"}
             phonebook{"razvrstavanje po abecedi"}
             phonetic{"fonetsko razvrstavanje"}
             pinyin{"pinyin razvrstavanje"}

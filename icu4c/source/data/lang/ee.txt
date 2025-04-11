@@ -247,10 +247,8 @@ ee{
             roc{"china repɔbliktɔwo ƒe kalenda tso 1912"}
         }
         collation{
-            big5han{"blema chinatɔwo ƒe ɖoɖomɔ nu"}
             dictionary{"nuɖoɖo ɖe nyagɔmeɖegbalẽ ƒe ɖoɖomɔ nu"}
             ducet{"nuɖoɖo ɖe unicode ƒe ɖoɖo nu"}
-            gb2312han{"chinagbe yeye ƒe ɖoɖomɔ nu"}
             phonebook{"fonegbalẽ me ɖoɖomɔ nu"}
             pinyin{"pinyin ɖoɖomɔ nu"}
             search{"nudidi hena zazã gbadza"}

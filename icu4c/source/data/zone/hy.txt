@@ -1167,7 +1167,7 @@ hy{
             ec{"Էֆատե"}
         }
         "Pacific:Enderbury"{
-            ec{"Էնդերբերի կղզի"}
+            ec{"Կանտոն"}
         }
         "Pacific:Fakaofo"{
             ec{"Ֆակաոֆո"}
@@ -1192,9 +1192,6 @@ hy{
         }
         "Pacific:Honolulu"{
             ec{"Հոնոլուլու"}
-        }
-        "Pacific:Kanton"{
-            ec{"Կանտոն"}
         }
         "Pacific:Kiritimati"{
             ec{"Կիրիտիմատի"}

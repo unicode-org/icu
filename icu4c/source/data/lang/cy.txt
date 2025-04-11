@@ -696,11 +696,9 @@ cy{
             standard{"Fformat Arian Safonol"}
         }
         collation{
-            big5han{"Trefn Traddodiadol Tsieina - Big5"}
             dictionary{"Trefn Geiriadur"}
             ducet{"Trefn Rhagosodedig Unicode"}
             eor{"Rheolau trefnu Ewropeaidd"}
-            gb2312han{"Trefn Symledig Tsieina - GB2312"}
             phonebook{"Trefn Llyfr Ffôn"}
             pinyin{"Trefn Pinyin"}
             search{"Chwilio at Ddibenion Cyffredinol"}

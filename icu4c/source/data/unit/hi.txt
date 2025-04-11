@@ -267,6 +267,29 @@ hi{
             mole{
                 gender{"masculine"}
             }
+            part-per-1e6{
+                case{
+                    oblique{
+                        one{"{0} हिस्सा प्रति दस लाख"}
+                        other{"{0} हिस्सा प्रति दस लाख"}
+                    }
+                }
+                gender{"masculine"}
+                one{"{0} हिस्सा प्रति दस लाख"}
+                other{"{0} हिस्सा प्रति दस लाख"}
+            }
+            part-per-1e9{
+                case{
+                    oblique{
+                        one{"{0} पार्ट प्रति बिलियन"}
+                        other{"{0} पार्ट्स प्रति बिलियन"}
+                    }
+                }
+                dnam{"पार्ट्स प्रति बिलियन"}
+                gender{"masculine"}
+                one{"{0} पार्ट प्रति बिलियन"}
+                other{"{0} पार्ट्स प्रति बिलियन"}
+            }
             percent{
                 case{
                     oblique{
@@ -289,17 +312,6 @@ hi{
                 one{"{0} प्रति हज़ार"}
                 other{"{0} प्रति हज़ार"}
             }
-            permillion{
-                case{
-                    oblique{
-                        one{"{0} हिस्सा प्रति दस लाख"}
-                        other{"{0} हिस्सा प्रति दस लाख"}
-                    }
-                }
-                gender{"masculine"}
-                one{"{0} हिस्सा प्रति दस लाख"}
-                other{"{0} हिस्सा प्रति दस लाख"}
-            }
             permyriad{
                 case{
                     oblique{
@@ -311,18 +323,6 @@ hi{
                 gender{"masculine"}
                 one{"{0} प्रति दस हज़ार"}
                 other{"{0} प्रति दस हज़ार"}
-            }
-            portion-per-1e9{
-                case{
-                    oblique{
-                        one{"{0} पार्ट प्रति बिलियन"}
-                        other{"{0} पार्ट्स प्रति बिलियन"}
-                    }
-                }
-                dnam{"पार्ट्स प्रति बिलियन"}
-                gender{"masculine"}
-                one{"{0} पार्ट प्रति बिलियन"}
-                other{"{0} पार्ट्स प्रति बिलियन"}
             }
         }
         consumption{
@@ -1888,11 +1888,11 @@ hi{
             10p9{"गी {0}"}
         }
         concentr{
+            part-per-1e6{
+                dnam{"ppm"}
+            }
             percent{
                 dnam{"%"}
-            }
-            permillion{
-                dnam{"ppm"}
             }
         }
         consumption{
@@ -2422,17 +2422,17 @@ hi{
                 one{"{0} मोल"}
                 other{"{0} मोल"}
             }
+            part-per-1e6{
+                dnam{"हिस्सा प्रति दस लाख"}
+            }
+            part-per-1e9{
+                dnam{"पार्ट्स/बिलियन"}
+            }
             percent{
                 dnam{"प्रतिशत"}
             }
             permille{
                 dnam{"प्रति हज़ार"}
-            }
-            permillion{
-                dnam{"हिस्सा प्रति दस लाख"}
-            }
-            portion-per-1e9{
-                dnam{"पार्ट्स/बिलियन"}
             }
         }
         consumption{

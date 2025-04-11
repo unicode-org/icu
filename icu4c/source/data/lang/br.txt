@@ -717,12 +717,10 @@ br{
             standard{"furmad moneiz standart"}
         }
         collation{
-            big5han{"urzh rummañ sinaek hengounel - Big5"}
             dictionary{"urzh rummañ ar geriadur"}
             ducet{"urzh rummañ Unicode dre ziouer"}
             emoji{"urzh rummañ ar fromlunioù"}
             eor{"reolennoù urzhiañ europat"}
-            gb2312han{"urzh rummañ sinaek eeunaet - GB2312"}
             phonebook{"urzh rummañ al levr-pellgomz"}
             pinyin{"urzh rummañ pinyin"}
             search{"enklask hollek"}

@@ -98,10 +98,8 @@ fr_CA{
     }
     Types{
         collation{
-            big5han{"ordre de tri chinois traditionnel - Big5"}
             dictionary{"ordre de tri du dictionnaire"}
             eor{"ordre multilingue européen"}
-            gb2312han{"ordre de tri chinois simplifié - GB2312"}
             phonebook{"ordre de tri de l’annuaire"}
             pinyin{"ordre de tri pinyin"}
             searchjl{"Rechercher par consonne initiale en hangeul"}

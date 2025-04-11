@@ -271,9 +271,6 @@ qu{
         "Indian:Maldives"{
             ec{"Maldivas"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }

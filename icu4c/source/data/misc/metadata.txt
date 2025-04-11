@@ -336,6 +336,10 @@ metadata:table(nofallback){
                 reason{"deprecated"}
                 replacement{"njz"}
             }
+            dek{
+                reason{"deprecated"}
+                replacement{"sqm"}
+            }
             deu{
                 reason{"overlong"}
                 replacement{"de"}
@@ -1211,6 +1215,10 @@ metadata:table(nofallback){
             npi{
                 reason{"macrolanguage"}
                 replacement{"ne"}
+            }
+            nte{
+                reason{"deprecated"}
+                replacement{"eko"}
             }
             nts{
                 reason{"deprecated"}
@@ -5186,7 +5194,15 @@ metadata:table(nofallback){
             }
             part-per-million{
                 reason{"deprecated"}
-                replacement{"permillion"}
+                replacement{"part-per-1e6"}
+            }
+            permillion{
+                reason{"deprecated"}
+                replacement{"part-per-1e6"}
+            }
+            portion-per-1e9{
+                reason{"deprecated"}
+                replacement{"part-per-1e9"}
             }
             pound-foot{
                 reason{"deprecated"}
@@ -5362,6 +5378,7 @@ metadata:table(nofallback){
         "kcg_NG",
         "kde_TZ",
         "kea_CV",
+        "kek_GT",
         "ken_CM",
         "kgp_BR",
         "khq_ML",
@@ -5410,6 +5427,7 @@ metadata:table(nofallback){
         "luo_KE",
         "luy_KE",
         "lv_LV",
+        "lzz_TR",
         "mai_IN",
         "mas_KE",
         "mdf_RU",
@@ -5467,6 +5485,7 @@ metadata:table(nofallback){
         "pcm_NG",
         "pis_SB",
         "pl_PL",
+        "pms_IT",
         "prg_PL",
         "ps_AF",
         "pt_BR",

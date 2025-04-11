@@ -1142,9 +1142,6 @@ kgp{
         "Pacific:Efate"{
             ec{"Éfaté"}
         }
-        "Pacific:Enderbury"{
-            ec{"Ẽnnermuri"}
-        }
         "Pacific:Fakaofo"{
             ec{"Fakaofu"}
         }

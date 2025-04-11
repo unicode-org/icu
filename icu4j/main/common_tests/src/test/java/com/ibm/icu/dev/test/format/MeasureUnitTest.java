@@ -1330,61 +1330,61 @@ public class MeasureUnitTest extends CoreTestFmwk {
         List<ConstantDenominatorTestCase> testCases = Arrays.asList(
                 new ConstantDenominatorTestCase("meter-per-1000", 1000),
                 new ConstantDenominatorTestCase("liter-per-1000-kiloliter", 1000),
-                new ConstantDenominatorTestCase("meter-per-100-kilometer", 100),
+                new ConstantDenominatorTestCase("meter-per-100-kilometer", 100), // Failing ICU-23045
                 new ConstantDenominatorTestCase("liter-per-kilometer", 0),
                 new ConstantDenominatorTestCase("second-per-1000-minute", 1000),
                 new ConstantDenominatorTestCase("gram-per-1000-kilogram", 1000),
-                new ConstantDenominatorTestCase("meter-per-100", 100), // Failing ICU-23045
-                new ConstantDenominatorTestCase("portion-per-1", 1),
-                new ConstantDenominatorTestCase("portion-per-2", 2),
-                new ConstantDenominatorTestCase("portion-per-3", 3),
-                new ConstantDenominatorTestCase("portion-per-4", 4),
-                new ConstantDenominatorTestCase("portion-per-5", 5),
-                new ConstantDenominatorTestCase("portion-per-6", 6),
-                new ConstantDenominatorTestCase("portion-per-7", 7),
-                new ConstantDenominatorTestCase("portion-per-8", 8),
-                new ConstantDenominatorTestCase("portion-per-9", 9),
+                new ConstantDenominatorTestCase("meter-per-100", 100),
+                new ConstantDenominatorTestCase("part-per-1", 1),
+                new ConstantDenominatorTestCase("part-per-2", 2),
+                new ConstantDenominatorTestCase("part-per-3", 3),
+                new ConstantDenominatorTestCase("part-per-4", 4),
+                new ConstantDenominatorTestCase("part-per-5", 5),
+                new ConstantDenominatorTestCase("part-per-6", 6),
+                new ConstantDenominatorTestCase("part-per-7", 7),
+                new ConstantDenominatorTestCase("part-per-8", 8),
+                new ConstantDenominatorTestCase("part-per-9", 9),
 
                 // Test for constant denominators that are powers of 10
-                new ConstantDenominatorTestCase("portion-per-10", 10),
-                new ConstantDenominatorTestCase("portion-per-100", 100),
-                new ConstantDenominatorTestCase("portion-per-1000", 1000),
-                new ConstantDenominatorTestCase("portion-per-10000", 10000),
-                new ConstantDenominatorTestCase("portion-per-100000", 100000),
-                new ConstantDenominatorTestCase("portion-per-1000000", 1000000),
-                new ConstantDenominatorTestCase("portion-per-10000000", 10000000),
-                new ConstantDenominatorTestCase("portion-per-100000000", 100000000),
-                new ConstantDenominatorTestCase("portion-per-1000000000", 1000000000), // Failing ICU-23045
-                new ConstantDenominatorTestCase("portion-per-10000000000", 10000000000L),
-                new ConstantDenominatorTestCase("portion-per-100000000000", 100000000000L),
-                new ConstantDenominatorTestCase("portion-per-1000000000000", 1000000000000L),
-                new ConstantDenominatorTestCase("portion-per-10000000000000", 10000000000000L),
-                new ConstantDenominatorTestCase("portion-per-100000000000000", 100000000000000L),
-                new ConstantDenominatorTestCase("portion-per-1000000000000000", 1000000000000000L),
-                new ConstantDenominatorTestCase("portion-per-10000000000000000", 10000000000000000L),
-                new ConstantDenominatorTestCase("portion-per-100000000000000000", 100000000000000000L),
-                new ConstantDenominatorTestCase("portion-per-1000000000000000000", 1000000000000000000L),
-                new ConstantDenominatorTestCase("portion-per-1e3-kilometer", 1000),
+                new ConstantDenominatorTestCase("part-per-10", 10),
+                new ConstantDenominatorTestCase("part-per-100", 100),
+                new ConstantDenominatorTestCase("part-per-1000", 1000),
+                new ConstantDenominatorTestCase("part-per-10000", 10000),
+                new ConstantDenominatorTestCase("part-per-100000", 100000),
+                new ConstantDenominatorTestCase("part-per-1000000", 1000000), // Failing ICU-23045
+                new ConstantDenominatorTestCase("part-per-10000000", 10000000),
+                new ConstantDenominatorTestCase("part-per-100000000", 100000000),
+                new ConstantDenominatorTestCase("part-per-1000000000", 1000000000), // Failing ICU-23045
+                new ConstantDenominatorTestCase("part-per-10000000000", 10000000000L),
+                new ConstantDenominatorTestCase("part-per-100000000000", 100000000000L),
+                new ConstantDenominatorTestCase("part-per-1000000000000", 1000000000000L),
+                new ConstantDenominatorTestCase("part-per-10000000000000", 10000000000000L),
+                new ConstantDenominatorTestCase("part-per-100000000000000", 100000000000000L),
+                new ConstantDenominatorTestCase("part-per-1000000000000000", 1000000000000000L),
+                new ConstantDenominatorTestCase("part-per-10000000000000000", 10000000000000000L),
+                new ConstantDenominatorTestCase("part-per-100000000000000000", 100000000000000000L),
+                new ConstantDenominatorTestCase("part-per-1000000000000000000", 1000000000000000000L),
+                new ConstantDenominatorTestCase("part-per-1e3-kilometer", 1000),
         
                 // Test for constant denominators that are represented as scientific notation numbers.
-                new ConstantDenominatorTestCase("portion-per-1e1", 10),
-                new ConstantDenominatorTestCase("portion-per-1E1", 10),
-                new ConstantDenominatorTestCase("portion-per-1e2", 100),
-                new ConstantDenominatorTestCase("portion-per-1E2", 100),
-                new ConstantDenominatorTestCase("portion-per-1e3", 1000),
-                new ConstantDenominatorTestCase("portion-per-1E3", 1000),
-                new ConstantDenominatorTestCase("portion-per-1e4", 10000),
-                new ConstantDenominatorTestCase("portion-per-1E4", 10000),
-                new ConstantDenominatorTestCase("portion-per-1e5", 100000),
-                new ConstantDenominatorTestCase("portion-per-1E5", 100000),
-                new ConstantDenominatorTestCase("portion-per-1e6", 1000000),
-                new ConstantDenominatorTestCase("portion-per-1E6", 1000000),
-                new ConstantDenominatorTestCase("portion-per-1e9", 1000000000), // Failing ICU-23045
-                new ConstantDenominatorTestCase("portion-per-1E9", 1000000000), // Failing ICU-23045
-                new ConstantDenominatorTestCase("portion-per-1e10", 10000000000L),
-                new ConstantDenominatorTestCase("portion-per-1E10", 10000000000L),
-                new ConstantDenominatorTestCase("portion-per-1e18", 1000000000000000000L),
-                new ConstantDenominatorTestCase("portion-per-1E18", 1000000000000000000L),
+                new ConstantDenominatorTestCase("part-per-1e1", 10),
+                new ConstantDenominatorTestCase("part-per-1E1", 10),
+                new ConstantDenominatorTestCase("part-per-1e2", 100),
+                new ConstantDenominatorTestCase("part-per-1E2", 100),
+                new ConstantDenominatorTestCase("part-per-1e3", 1000),
+                new ConstantDenominatorTestCase("part-per-1E3", 1000),
+                new ConstantDenominatorTestCase("part-per-1e4", 10000),
+                new ConstantDenominatorTestCase("part-per-1E4", 10000),
+                new ConstantDenominatorTestCase("part-per-1e5", 100000),
+                new ConstantDenominatorTestCase("part-per-1E5", 100000),
+                new ConstantDenominatorTestCase("part-per-1e6", 1000000), // Failing ICU-23045
+                new ConstantDenominatorTestCase("part-per-1E6", 1000000), // Failing ICU-23045
+                new ConstantDenominatorTestCase("part-per-1e9", 1000000000), // Failing ICU-23045
+                new ConstantDenominatorTestCase("part-per-1E9", 1000000000), // Failing ICU-23045
+                new ConstantDenominatorTestCase("part-per-1e10", 10000000000L),
+                new ConstantDenominatorTestCase("part-per-1E10", 10000000000L),
+                new ConstantDenominatorTestCase("part-per-1e18", 1000000000000000000L),
+                new ConstantDenominatorTestCase("part-per-1E18", 1000000000000000000L),
         
                 // Test for constant denominators that are randomly selected.
                 new ConstantDenominatorTestCase("liter-per-12345-kilometer", 12345),
@@ -1398,9 +1398,12 @@ public class MeasureUnitTest extends CoreTestFmwk {
 
         for (ConstantDenominatorTestCase testCase : testCases) {
             switch (testCase.identifier) {
-                case "portion-per-1000000000":
-                case "portion-per-1e9":
-                case "portion-per-1E9":
+                case "part-per-1000000":
+                case "part-per-1000000000":
+                case "part-per-1e6":
+                case "part-per-1E6":
+                case "part-per-1e9":
+                case "part-per-1E9":
                 case "meter-per-100-kilometer":
                     logKnownIssue("ICU-23045", "Incorrect constant denominator for certain unit identifiers");
                     continue;
@@ -1590,10 +1593,10 @@ public class MeasureUnitTest extends CoreTestFmwk {
                 continue;
             }
 
-            if (unit.getIdentifier().equals("portion-per-1e9")) {
-            	logKnownIssue("ICU-22781", "Handle concentr/perbillion in ICU");
-            	continue;
-            }
+            //if (unit.getIdentifier().equals("part-per-1e9")) {
+            //	logKnownIssue("ICU-22781", "Handle concentr/perbillion in ICU");
+            //	continue;
+            //}
 
             // Prove that all built-in units are parseable, except "generic" temperature
             // (and for now, beaufort units)

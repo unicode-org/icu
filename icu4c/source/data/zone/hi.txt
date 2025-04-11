@@ -1167,7 +1167,7 @@ hi{
             ec{"एफ़ेट"}
         }
         "Pacific:Enderbury"{
-            ec{"एंडरबरी"}
+            ec{"कैंटन"}
         }
         "Pacific:Fakaofo"{
             ec{"फ़ाकाओफ़ो"}
@@ -1195,9 +1195,6 @@ hi{
             sd{"HST"}
             sg{"एचएसटी"}
             ss{"एचएसटी"}
-        }
-        "Pacific:Kanton"{
-            ec{"कैंटन"}
         }
         "Pacific:Kiritimati"{
             ec{"किरीतिमाति"}

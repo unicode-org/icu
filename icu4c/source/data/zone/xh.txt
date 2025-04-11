@@ -21,9 +21,6 @@ xh{
         "Etc:UTC"{
             ls{"Coordinated Universal Time"}
         }
-        "Etc:Unknown"{
-            ec{"Unknown City"}
-        }
         "Europe:Dublin"{
             ld{"Irish Standard Time"}
         }

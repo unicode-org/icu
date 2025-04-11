@@ -225,6 +225,20 @@ gd{
                 other{"{0} mòl"}
                 two{"{0} mhòl"}
             }
+            part-per-1e6{
+                dnam{"pàirt sa mhillean"}
+                few{"{0} pàirtean sa mhillean"}
+                one{"{0} phàirt sa mhillean"}
+                other{"{0} pàirt sa mhillean"}
+                two{"{0} phàirt sa mhillean"}
+            }
+            part-per-1e9{
+                dnam{"pàirt sa bhillean"}
+                few{"{0} pàirtean sa bhillean"}
+                one{"{0} phàirt sa bhillean"}
+                other{"{0} pàirt sa bhillean"}
+                two{"{0} phàirt sa bhillean"}
+            }
             percent{
                 few{"{0} sa cheud"}
                 one{"{0} sa cheud"}
@@ -237,25 +251,11 @@ gd{
                 other{"{0} sa mhìle"}
                 two{"{0} sa mhìle"}
             }
-            permillion{
-                dnam{"pàirt sa mhillean"}
-                few{"{0} pàirtean sa mhillean"}
-                one{"{0} phàirt sa mhillean"}
-                other{"{0} pàirt sa mhillean"}
-                two{"{0} phàirt sa mhillean"}
-            }
             permyriad{
                 few{"{0} sna deich mìltean"}
                 one{"{0} sna deich mìltean"}
                 other{"{0} sna deich mìltean"}
                 two{"{0} sna deich mìltean"}
-            }
-            portion-per-1e9{
-                dnam{"pàirt sa bhillean"}
-                few{"{0} pàirtean sa bhillean"}
-                one{"{0} phàirt sa bhillean"}
-                other{"{0} pàirt sa bhillean"}
-                two{"{0} phàirt sa bhillean"}
             }
         }
         consumption{
@@ -1505,26 +1505,26 @@ gd{
                 other{"{0}mòl"}
                 two{"{0}mòl"}
             }
+            part-per-1e6{
+                few{"{0}ppm"}
+                one{"{0}ppm"}
+                other{"{0}ppm"}
+                two{"{0}ppm"}
+            }
+            part-per-1e9{
+                few{"{0}ppb"}
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+                two{"{0}ppb"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
             }
-            permillion{
-                few{"{0}ppm"}
-                one{"{0}ppm"}
-                other{"{0}ppm"}
-                two{"{0}ppm"}
-            }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                few{"{0}ppb"}
-                one{"{0}ppb"}
-                other{"{0}ppb"}
-                two{"{0}ppb"}
             }
         }
         consumption{
@@ -2673,6 +2673,9 @@ gd{
                 other{"{0} mòl"}
                 two{"{0} mòl"}
             }
+            part-per-1e9{
+                dnam{"pàirt/billean"}
+            }
             percent{
                 dnam{"sa cheud"}
             }
@@ -2681,9 +2684,6 @@ gd{
             }
             permyriad{
                 dnam{"sna deich mìltean"}
-            }
-            portion-per-1e9{
-                dnam{"pàirt/billean"}
             }
         }
         consumption{

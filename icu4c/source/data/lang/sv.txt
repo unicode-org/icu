@@ -951,13 +951,11 @@ sv{
             tertiary{"Sortera accenter/skiftläge/bredd"}
         }
         collation{
-            big5han{"big5-sorteringsordning"}
             compat{"bakåtkompatibel sorteringsordning"}
             dictionary{"ordbokssorteringsordning"}
             ducet{"grundläggande Unicode-sorteringsordning"}
             emoji{"emojisorteringsordning"}
             eor{"sorteringsordning för flerspråkliga europeiska dokument"}
-            gb2312han{"gb2312-sorteringsordning"}
             phonebook{"telefonkatalogssorteringsordning"}
             phonetic{"fonetisk sorteringsordning"}
             pinyin{"pinyin-sorteringsordning"}

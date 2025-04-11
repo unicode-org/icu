@@ -814,9 +814,6 @@ sq{
         "Pacific:Easter"{
             ec{"Pashkë"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbur"}
-        }
         "Pacific:Fiji"{
             ec{"Fixhi"}
         }

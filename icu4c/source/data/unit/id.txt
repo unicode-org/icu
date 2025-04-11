@@ -137,22 +137,22 @@ id{
                 dnam{"millimol per liter"}
                 other{"{0} millimol per liter"}
             }
+            part-per-1e6{
+                dnam{"bagian per juta"}
+                other{"{0} bagian per juta"}
+            }
+            part-per-1e9{
+                dnam{"bagian per miliar"}
+                other{"{0} bagian per miliar"}
+            }
             percent{
                 other{"{0} persen"}
             }
             permille{
                 other{"{0} permil"}
             }
-            permillion{
-                dnam{"bagian per juta"}
-                other{"{0} bagian per juta"}
-            }
             permyriad{
                 other{"{0} permyriad"}
-            }
-            portion-per-1e9{
-                dnam{"bagian per miliar"}
-                other{"{0} bagian per miliar"}
             }
         }
         consumption{
@@ -815,14 +815,14 @@ id{
             millimole-per-liter{
                 dnam{"mmol/L"}
             }
+            part-per-1e6{
+                dnam{"ppm"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
-            }
-            permillion{
-                dnam{"ppm"}
             }
             permyriad{
                 dnam{"‱"}
@@ -1104,20 +1104,20 @@ id{
             millimole-per-liter{
                 dnam{"millimol/liter"}
             }
+            part-per-1e6{
+                dnam{"bagian/juta"}
+            }
+            part-per-1e9{
+                dnam{"bagian/miliar"}
+            }
             percent{
                 dnam{"persen"}
             }
             permille{
                 dnam{"permil"}
             }
-            permillion{
-                dnam{"bagian/juta"}
-            }
             permyriad{
                 dnam{"permyriad"}
-            }
-            portion-per-1e9{
-                dnam{"bagian/miliar"}
             }
         }
         consumption{

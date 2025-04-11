@@ -913,12 +913,10 @@ de{
             tertiary{"Akzente/Fall/Breite sortieren"}
         }
         collation{
-            big5han{"Traditionelle chinesische Sortierung (Big5)"}
             compat{"Vorherige Sortierung, Kompatibilität"}
             dictionary{"Lexikografische Sortierung"}
             ducet{"Unicode-Sortierung"}
             eor{"Europäische Sortierregeln"}
-            gb2312han{"Vereinfachte chinesische Sortierung (GB2312)"}
             phonebook{"Telefonbuch-Sortierung"}
             phonetic{"Phonetische Sortierung"}
             pinyin{"Pinyin-Sortierung"}

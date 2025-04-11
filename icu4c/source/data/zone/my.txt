@@ -1167,7 +1167,7 @@ my{
             ec{"အီဖာတီ"}
         }
         "Pacific:Enderbury"{
-            ec{"အန်ဒါဘူရီ"}
+            ec{"ကန်တွန်"}
         }
         "Pacific:Fakaofo"{
             ec{"ဖာခါအိုဖို"}
@@ -1192,9 +1192,6 @@ my{
         }
         "Pacific:Honolulu"{
             ec{"ဟိုနိုလူလူ"}
-        }
-        "Pacific:Kanton"{
-            ec{"ကန်တွန်"}
         }
         "Pacific:Kiritimati"{
             ec{"ခရိဒီမတီ"}

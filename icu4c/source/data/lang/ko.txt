@@ -853,12 +853,10 @@ ko{
             tertiary{"악센트/대소문자/전반각 정렬"}
         }
         collation{
-            big5han{"중국어 번체 정렬 순서 (Big5)"}
             compat{"호환성을 위해 이전 정렬 순서"}
             dictionary{"사전 정렬순"}
             ducet{"기본 유니코드 정렬 순서"}
             eor{"유럽 정렬 규칙"}
-            gb2312han{"중국어 간체 정렬 순서 (GB2312)"}
             phonebook{"전화번호부순"}
             phonetic{"소리나는 대로 정렬 순서"}
             pinyin{"병음순"}

@@ -161,6 +161,16 @@ fo{
                 one{"{0} millimol fyri hvønn litur"}
                 other{"{0} millimol fyri hvønn litur"}
             }
+            part-per-1e6{
+                dnam{"partar fyri hvørja millión"}
+                one{"{0} partur fyri hvørja millión"}
+                other{"{0} partar fyri hvørja millión"}
+            }
+            part-per-1e9{
+                dnam{"partar fyri hvørja milliard"}
+                one{"{0} part fyri hvørja milliard"}
+                other{"{0} partar fyri hvørja milliard"}
+            }
             percent{
                 one{"{0} prosent"}
                 other{"{0} prosent"}
@@ -169,19 +179,9 @@ fo{
                 one{"{0} promilla"}
                 other{"{0} promillur"}
             }
-            permillion{
-                dnam{"partar fyri hvørja millión"}
-                one{"{0} partur fyri hvørja millión"}
-                other{"{0} partar fyri hvørja millión"}
-            }
             permyriad{
                 one{"{0} promyriad"}
                 other{"{0} promyriad"}
-            }
-            portion-per-1e9{
-                dnam{"partar fyri hvørja milliard"}
-                one{"{0} part fyri hvørja milliard"}
-                other{"{0} partar fyri hvørja milliard"}
             }
         }
         consumption{
@@ -968,6 +968,16 @@ fo{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
+            part-per-1e6{
+                dnam{"pt./mill."}
+                one{"{0}pt./mill"}
+                other{"{0}pt./mill"}
+            }
+            part-per-1e9{
+                dnam{"partar/mia."}
+                one{"{0}part/mia."}
+                other{"{0}partar/mia."}
+            }
             percent{
                 dnam{"%"}
             }
@@ -976,20 +986,10 @@ fo{
                 one{"{0}‰"}
                 other{"{0}‰"}
             }
-            permillion{
-                dnam{"pt./mill."}
-                one{"{0}pt./mill"}
-                other{"{0}pt./mill"}
-            }
             permyriad{
                 dnam{"‱"}
                 one{"{0}‱"}
                 other{"{0}‱"}
-            }
-            portion-per-1e9{
-                dnam{"partar/mia."}
-                one{"{0}part/mia."}
-                other{"{0}partar/mia."}
             }
         }
         consumption{
@@ -1586,6 +1586,16 @@ fo{
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
+            part-per-1e6{
+                dnam{"partar/millión"}
+                one{"{0} pt./mill."}
+                other{"{0} pt./mill."}
+            }
+            part-per-1e9{
+                dnam{"partar/milliard"}
+                one{"{0} part/mia."}
+                other{"{0} partar/mia."}
+            }
             percent{
                 dnam{"prosent"}
                 one{"{0} %"}
@@ -1596,20 +1606,10 @@ fo{
                 one{"{0} ‰"}
                 other{"{0} ‰"}
             }
-            permillion{
-                dnam{"partar/millión"}
-                one{"{0} pt./mill."}
-                other{"{0} pt./mill."}
-            }
             permyriad{
                 dnam{"promyriad"}
                 one{"{0} ‱"}
                 other{"{0} ‱"}
-            }
-            portion-per-1e9{
-                dnam{"partar/milliard"}
-                one{"{0} part/mia."}
-                other{"{0} partar/mia."}
             }
         }
         consumption{

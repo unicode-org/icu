@@ -204,6 +204,12 @@ nl{
             mole{
                 gender{"common"}
             }
+            part-per-1e6{
+                gender{"common"}
+            }
+            part-per-1e9{
+                gender{"common"}
+            }
             percent{
                 gender{"neuter"}
                 one{"{0} procent"}
@@ -214,17 +220,11 @@ nl{
                 one{"{0} promille"}
                 other{"{0} promille"}
             }
-            permillion{
-                gender{"common"}
-            }
             permyriad{
                 dnam{"basispunt"}
                 gender{"neuter"}
                 one{"{0} basispunt"}
                 other{"{0} basispunten"}
-            }
-            portion-per-1e9{
-                gender{"common"}
             }
         }
         consumption{

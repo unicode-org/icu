@@ -1167,7 +1167,7 @@ lo{
             ec{"ເອຟາເຕ"}
         }
         "Pacific:Enderbury"{
-            ec{"ເອັນເດີເບີລີ"}
+            ec{"ແຄນຕອນ"}
         }
         "Pacific:Fakaofo"{
             ec{"ຟາກາວໂຟ"}
@@ -1192,9 +1192,6 @@ lo{
         }
         "Pacific:Honolulu"{
             ec{"ໂຮໂນລູລູ"}
-        }
-        "Pacific:Kanton"{
-            ec{"ແຄນຕອນ"}
         }
         "Pacific:Kiritimati"{
             ec{"ຄີຣິທີມາຕີ"}

@@ -21,14 +21,8 @@ en_001{
         "America:St_Vincent"{
             ec{"St Vincent"}
         }
-        "Asia:Aqtau"{
-            ec{"Aktau"}
-        }
         "Atlantic:St_Helena"{
             ec{"St Helena"}
-        }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
         }
         "Pacific:Honolulu"{
             sd{"∅∅∅"}

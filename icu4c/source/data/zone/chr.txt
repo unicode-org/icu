@@ -1167,7 +1167,7 @@ chr{
             ec{"ᎡᏩᏖ"}
         }
         "Pacific:Enderbury"{
-            ec{"ᎡᏂᏇᎵ"}
+            ec{"ᎧᏛᏂ"}
         }
         "Pacific:Fakaofo"{
             ec{"ᏩᎧᎣᏬ"}
@@ -1195,9 +1195,6 @@ chr{
             sd{"HDT"}
             sg{"HST"}
             ss{"HST"}
-        }
-        "Pacific:Kanton"{
-            ec{"ᎧᏛᏂ"}
         }
         "Pacific:Kiritimati"{
             ec{"ᎩᎵᏘᎹᏘ"}

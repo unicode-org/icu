@@ -529,9 +529,6 @@ pl{
         "Pacific:Easter"{
             ec{"Wyspa Wielkanocna"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fidżi"}
         }

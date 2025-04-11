@@ -253,9 +253,6 @@ ro{
         "Pacific:Easter"{
             ec{"Insula Paștelui"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }

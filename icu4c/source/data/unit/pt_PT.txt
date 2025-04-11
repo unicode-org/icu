@@ -80,7 +80,7 @@ pt_PT{
                 one{"{0} milimole por litro"}
                 other{"{0} milimoles por litro"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"partes por mil milhões"}
                 one{"{0} parte por mil milhões"}
                 other{"{0} partes por mil milhões"}
@@ -269,7 +269,7 @@ pt_PT{
             karat{
                 dnam{"quilates"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"ppmm"}
                 one{"{0} ppmm"}
                 other{"{0} ppmm"}
@@ -437,7 +437,7 @@ pt_PT{
             millimole-per-liter{
                 dnam{"milimole/litro"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"partes/mil milhões"}
                 one{"{0} ppmm"}
                 other{"{0} ppmm"}

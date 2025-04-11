@@ -62,7 +62,7 @@ zh_Hant{
                 dnam{"每公升毫莫耳"}
                 other{"每公升 {0} 毫莫耳"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"十億分點濃度"}
                 other{"{0} 十億分點濃度"}
             }
@@ -363,10 +363,10 @@ zh_Hant{
             mole{
                 other{"{0}莫耳"}
             }
-            permillion{
+            part-per-1e6{
                 other{"{0}百萬分率"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 other{"{0}ppb"}
             }
         }
@@ -974,18 +974,18 @@ zh_Hant{
                 dnam{"莫耳"}
                 other{"{0} 莫耳"}
             }
+            part-per-1e6{
+                dnam{"百萬分率"}
+                other{"{0} 百萬分率"}
+            }
+            part-per-1e9{
+                dnam{"濃度/十億"}
+            }
             percent{
                 dnam{"百分比"}
             }
             permille{
                 dnam{"千分比"}
-            }
-            permillion{
-                dnam{"百萬分率"}
-                other{"{0} 百萬分率"}
-            }
-            portion-per-1e9{
-                dnam{"濃度/十億"}
             }
         }
         consumption{

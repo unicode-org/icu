@@ -303,6 +303,29 @@ sv{
                 one{"{0} mol"}
                 other{"{0} mol"}
             }
+            part-per-1e6{
+                case{
+                    genitive{
+                        one{"{0} miljondels"}
+                        other{"{0} miljondelars"}
+                    }
+                }
+                gender{"common"}
+                one{"{0} miljondel"}
+                other{"{0} miljondelar"}
+            }
+            part-per-1e9{
+                case{
+                    genitive{
+                        one{"{0} miljarddels"}
+                        other{"{0} miljarddelars"}
+                    }
+                }
+                dnam{"miljarddelar"}
+                gender{"common"}
+                one{"{0} miljarddel"}
+                other{"{0} miljarddelar"}
+            }
             percent{
                 case{
                     genitive{
@@ -327,17 +350,6 @@ sv{
                 one{"{0} promille"}
                 other{"{0} promille"}
             }
-            permillion{
-                case{
-                    genitive{
-                        one{"{0} miljondels"}
-                        other{"{0} miljondelars"}
-                    }
-                }
-                gender{"common"}
-                one{"{0} miljondel"}
-                other{"{0} miljondelar"}
-            }
             permyriad{
                 case{
                     genitive{
@@ -349,18 +361,6 @@ sv{
                 gender{"common"}
                 one{"{0} promyriad"}
                 other{"{0} promyriad"}
-            }
-            portion-per-1e9{
-                case{
-                    genitive{
-                        one{"{0} miljarddels"}
-                        other{"{0} miljarddelars"}
-                    }
-                }
-                dnam{"miljarddelar"}
-                gender{"common"}
-                one{"{0} miljarddel"}
-                other{"{0} miljarddelar"}
             }
         }
         consumption{
@@ -1941,6 +1941,14 @@ sv{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
+            part-per-1e6{
+                one{"{0}ppm"}
+                other{"{0}ppm"}
+            }
+            part-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
             percent{
                 one{"{0}%"}
                 other{"{0}%"}
@@ -1949,17 +1957,9 @@ sv{
                 one{"{0}‰"}
                 other{"{0}‰"}
             }
-            permillion{
-                one{"{0}ppm"}
-                other{"{0}ppm"}
-            }
             permyriad{
                 one{"{0}‱"}
                 other{"{0}‱"}
-            }
-            portion-per-1e9{
-                one{"{0}ppb"}
-                other{"{0}ppb"}
             }
         }
         consumption{
@@ -2721,6 +2721,9 @@ sv{
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
+            part-per-1e6{
+                dnam{"miljondelar"}
+            }
             percent{
                 one{"{0} %"}
                 other{"{0} %"}
@@ -2728,9 +2731,6 @@ sv{
             permille{
                 one{"{0} ‰"}
                 other{"{0} ‰"}
-            }
-            permillion{
-                dnam{"miljondelar"}
             }
             permyriad{
                 one{"{0} ‱"}

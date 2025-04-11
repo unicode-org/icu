@@ -276,9 +276,6 @@ sv{
         "Pacific:Easter"{
             ec{"Påskön"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Galapagos"{
             ec{"Galápagos"}
         }

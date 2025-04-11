@@ -1157,9 +1157,6 @@ ce{
         "Pacific:Efate"{
             ec{"Эфате"}
         }
-        "Pacific:Enderbury"{
-            ec{"Эндерберин, гӀ-е"}
-        }
         "Pacific:Fakaofo"{
             ec{"Факаофо"}
         }

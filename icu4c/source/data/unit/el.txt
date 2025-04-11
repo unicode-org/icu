@@ -382,6 +382,38 @@ el{
             mole{
                 gender{"neuter"}
             }
+            part-per-1e6{
+                case{
+                    accusative{
+                        one{"{0} μέρος ανά εκατομμύριο"}
+                        other{"{0} μέρη ανά εκατομμύριο"}
+                    }
+                    genitive{
+                        one{"{0} μέρους ανά εκατομμύριο"}
+                        other{"{0} μερών ανά εκατομμύριο"}
+                    }
+                }
+                dnam{"μέρη ανά εκατομμύριο"}
+                gender{"neuter"}
+                one{"{0} μέρος ανά εκατομμύριο"}
+                other{"{0} μέρη ανά εκατομμύριο"}
+            }
+            part-per-1e9{
+                case{
+                    accusative{
+                        one{"{0} μέρος στο δισεκατομμύριο"}
+                        other{"{0} μέρη στο δισεκατομμύριο"}
+                    }
+                    genitive{
+                        one{"{0} μέρους στο δισεκατομμύριο"}
+                        other{"{0} μερών στο δισεκατομμύριο"}
+                    }
+                }
+                dnam{"μέρη στο δισεκατομμύριο"}
+                gender{"neuter"}
+                one{"{0} μέρος στο δισεκατομμύριο"}
+                other{"{0} μέρη στο δισεκατομμύριο"}
+            }
             percent{
                 case{
                     accusative{
@@ -412,22 +444,6 @@ el{
                 one{"{0} τοις χιλίοις"}
                 other{"{0} τοις χιλίοις"}
             }
-            permillion{
-                case{
-                    accusative{
-                        one{"{0} μέρος ανά εκατομμύριο"}
-                        other{"{0} μέρη ανά εκατομμύριο"}
-                    }
-                    genitive{
-                        one{"{0} μέρους ανά εκατομμύριο"}
-                        other{"{0} μερών ανά εκατομμύριο"}
-                    }
-                }
-                dnam{"μέρη ανά εκατομμύριο"}
-                gender{"neuter"}
-                one{"{0} μέρος ανά εκατομμύριο"}
-                other{"{0} μέρη ανά εκατομμύριο"}
-            }
             permyriad{
                 case{
                     accusative{
@@ -442,22 +458,6 @@ el{
                 gender{"neuter"}
                 one{"{0} τοις δεκάκις χιλίοις"}
                 other{"{0} τοις δεκάκις χιλίοις"}
-            }
-            portion-per-1e9{
-                case{
-                    accusative{
-                        one{"{0} μέρος στο δισεκατομμύριο"}
-                        other{"{0} μέρη στο δισεκατομμύριο"}
-                    }
-                    genitive{
-                        one{"{0} μέρους στο δισεκατομμύριο"}
-                        other{"{0} μερών στο δισεκατομμύριο"}
-                    }
-                }
-                dnam{"μέρη στο δισεκατομμύριο"}
-                gender{"neuter"}
-                one{"{0} μέρος στο δισεκατομμύριο"}
-                other{"{0} μέρη στο δισεκατομμύριο"}
             }
         }
         consumption{
@@ -2395,14 +2395,14 @@ el{
             10p9{"γιγ-{0}"}
         }
         concentr{
+            part-per-1e6{
+                dnam{"ppm"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
-            }
-            permillion{
-                dnam{"ppm"}
             }
             permyriad{
                 dnam{"‱"}
@@ -2852,20 +2852,20 @@ el{
                 one{"{0} μολ"}
                 other{"{0} μολ"}
             }
+            part-per-1e6{
+                dnam{"μέρη/εκατ."}
+            }
+            part-per-1e9{
+                dnam{"μέρη/δισεκατομμύριο"}
+            }
             percent{
                 dnam{"τοις εκατό"}
             }
             permille{
                 dnam{"τοις χιλίοις"}
             }
-            permillion{
-                dnam{"μέρη/εκατ."}
-            }
             permyriad{
                 dnam{"τοις δεκάκις χιλίοις"}
-            }
-            portion-per-1e9{
-                dnam{"μέρη/δισεκατομμύριο"}
             }
         }
         consumption{
