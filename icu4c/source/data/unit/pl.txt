@@ -802,6 +802,50 @@ pl{
                 one{"{0} mol"}
                 other{"{0} mola"}
             }
+            part-per-1e6{
+                case{
+                    accusative{
+                        few{"{0} części na milion"}
+                        many{"{0} części na milion"}
+                        one{"{0} część na milion"}
+                        other{"{0} części na milion"}
+                    }
+                    genitive{
+                        few{"{0} części na milion"}
+                        many{"{0} części na milion"}
+                        one{"{0} części na milion"}
+                        other{"{0} części na milion"}
+                    }
+                }
+                dnam{"części na milion"}
+                few{"{0} części na milion"}
+                gender{"feminine"}
+                many{"{0} części na milion"}
+                one{"{0} część na milion"}
+                other{"{0} części na milion"}
+            }
+            part-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} części na miliard"}
+                        many{"{0} części na miliard"}
+                        one{"{0} część na miliard"}
+                        other{"{0} części na miliard"}
+                    }
+                    genitive{
+                        few{"{0} części na miliard"}
+                        many{"{0} części na miliard"}
+                        one{"{0} części na miliard"}
+                        other{"{0} części na miliard"}
+                    }
+                }
+                dnam{"części na miliard"}
+                few{"{0} części na miliard"}
+                gender{"feminine"}
+                many{"{0} części na miliard"}
+                one{"{0} część na miliard"}
+                other{"{0} części na miliard"}
+            }
             percent{
                 case{
                     accusative{
@@ -864,28 +908,6 @@ pl{
                 one{"{0} promil"}
                 other{"{0} promila"}
             }
-            permillion{
-                case{
-                    accusative{
-                        few{"{0} części na milion"}
-                        many{"{0} części na milion"}
-                        one{"{0} część na milion"}
-                        other{"{0} części na milion"}
-                    }
-                    genitive{
-                        few{"{0} części na milion"}
-                        many{"{0} części na milion"}
-                        one{"{0} części na milion"}
-                        other{"{0} części na milion"}
-                    }
-                }
-                dnam{"części na milion"}
-                few{"{0} części na milion"}
-                gender{"feminine"}
-                many{"{0} części na milion"}
-                one{"{0} część na milion"}
-                other{"{0} części na milion"}
-            }
             permyriad{
                 case{
                     accusative{
@@ -907,28 +929,6 @@ pl{
                 many{"{0} punktów bazowych"}
                 one{"{0} punkt bazowy"}
                 other{"{0} punktu bazowego"}
-            }
-            portion-per-1e9{
-                case{
-                    accusative{
-                        few{"{0} części na miliard"}
-                        many{"{0} części na miliard"}
-                        one{"{0} część na miliard"}
-                        other{"{0} części na miliard"}
-                    }
-                    genitive{
-                        few{"{0} części na miliard"}
-                        many{"{0} części na miliard"}
-                        one{"{0} części na miliard"}
-                        other{"{0} części na miliard"}
-                    }
-                }
-                dnam{"części na miliard"}
-                few{"{0} części na miliard"}
-                gender{"feminine"}
-                many{"{0} części na miliard"}
-                one{"{0} część na miliard"}
-                other{"{0} części na miliard"}
             }
         }
         consumption{

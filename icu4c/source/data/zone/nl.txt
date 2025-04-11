@@ -277,9 +277,6 @@ nl{
         "Pacific:Easter"{
             ec{"Paaseiland"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Gambier"{
             ec{"Îles Gambier"}
         }

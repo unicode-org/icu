@@ -98,9 +98,7 @@ zh_Hant_HK{
             ethiopic-amete-alem{"埃塞俄比亞阿美德阿萊姆曆"}
         }
         collation{
-            big5han{"繁體中文排序 (Big5)"}
             dictionary{"詞典排序"}
-            gb2312han{"簡體中文排序 (GB2312)"}
         }
         ms{
             uksystem{"英制"}

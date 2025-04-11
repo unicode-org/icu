@@ -261,10 +261,10 @@ zh_Hant_HK{
             item{
                 other{"{0} 個項目"}
             }
-            permillion{
+            part-per-1e6{
                 other{"{0} ppm"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"濃度/十億"}
             }
         }

@@ -1167,7 +1167,7 @@ gu{
             ec{"એફેટ"}
         }
         "Pacific:Enderbury"{
-            ec{"એંડર્બરી"}
+            ec{"કેન્ટન"}
         }
         "Pacific:Fakaofo"{
             ec{"ફાકાઓફો"}
@@ -1192,9 +1192,6 @@ gu{
         }
         "Pacific:Honolulu"{
             ec{"હોનોલુલુ"}
-        }
-        "Pacific:Kanton"{
-            ec{"કેન્ટન"}
         }
         "Pacific:Kiritimati"{
             ec{"કિરિતિમાતી"}

@@ -637,6 +637,63 @@ lv{
                 other{"{0} moli"}
                 zero{"{0} molu"}
             }
+            part-per-1e6{
+                case{
+                    accusative{
+                        one{"{0} miljono daļu"}
+                        other{"{0} miljonās daļas"}
+                        zero{"{0} miljono daļu"}
+                    }
+                    dative{
+                        one{"{0} miljonajai daļai"}
+                        other{"{0} miljonajām daļām"}
+                        zero{"{0} miljono daļu"}
+                    }
+                    genitive{
+                        one{"{0} miljonās daļas"}
+                        other{"{0} miljono daļu"}
+                        zero{"{0} miljono daļu"}
+                    }
+                    locative{
+                        one{"{0} miljonajā daļā"}
+                        other{"{0} miljonajās daļās"}
+                        zero{"{0} miljono daļu"}
+                    }
+                }
+                gender{"feminine"}
+                one{"{0} miljonā daļa"}
+                other{"{0} miljonās daļas"}
+                zero{"{0} miljono daļu"}
+            }
+            part-per-1e9{
+                case{
+                    accusative{
+                        one{"{0} miljarddaļu"}
+                        other{"{0} miljarddaļas"}
+                        zero{"{0} miljarddaļu"}
+                    }
+                    dative{
+                        one{"{0} miljarddaļai"}
+                        other{"{0} miljarddaļām"}
+                        zero{"{0} miljarddaļu"}
+                    }
+                    genitive{
+                        one{"{0} miljarddaļas"}
+                        other{"{0} miljarddaļu"}
+                        zero{"{0} miljarddaļu"}
+                    }
+                    locative{
+                        one{"{0} miljarddaļā"}
+                        other{"{0} miljarddaļās"}
+                        zero{"{0} miljarddaļu"}
+                    }
+                }
+                dnam{"miljarddaļas"}
+                gender{"feminine"}
+                one{"{0} miljarddaļa"}
+                other{"{0} miljarddaļas"}
+                zero{"{0} miljarddaļu"}
+            }
             percent{
                 case{
                     accusative{
@@ -693,34 +750,6 @@ lv{
                 other{"{0} promiles"}
                 zero{"{0} promiļu"}
             }
-            permillion{
-                case{
-                    accusative{
-                        one{"{0} miljono daļu"}
-                        other{"{0} miljonās daļas"}
-                        zero{"{0} miljono daļu"}
-                    }
-                    dative{
-                        one{"{0} miljonajai daļai"}
-                        other{"{0} miljonajām daļām"}
-                        zero{"{0} miljono daļu"}
-                    }
-                    genitive{
-                        one{"{0} miljonās daļas"}
-                        other{"{0} miljono daļu"}
-                        zero{"{0} miljono daļu"}
-                    }
-                    locative{
-                        one{"{0} miljonajā daļā"}
-                        other{"{0} miljonajās daļās"}
-                        zero{"{0} miljono daļu"}
-                    }
-                }
-                gender{"feminine"}
-                one{"{0} miljonā daļa"}
-                other{"{0} miljonās daļas"}
-                zero{"{0} miljono daļu"}
-            }
             permyriad{
                 case{
                     accusative{
@@ -748,35 +777,6 @@ lv{
                 one{"{0} promiriāde"}
                 other{"{0} promiriādes"}
                 zero{"{0}‱"}
-            }
-            portion-per-1e9{
-                case{
-                    accusative{
-                        one{"{0} miljarddaļu"}
-                        other{"{0} miljarddaļas"}
-                        zero{"{0} miljarddaļu"}
-                    }
-                    dative{
-                        one{"{0} miljarddaļai"}
-                        other{"{0} miljarddaļām"}
-                        zero{"{0} miljarddaļu"}
-                    }
-                    genitive{
-                        one{"{0} miljarddaļas"}
-                        other{"{0} miljarddaļu"}
-                        zero{"{0} miljarddaļu"}
-                    }
-                    locative{
-                        one{"{0} miljarddaļā"}
-                        other{"{0} miljarddaļās"}
-                        zero{"{0} miljarddaļu"}
-                    }
-                }
-                dnam{"miljarddaļas"}
-                gender{"feminine"}
-                one{"{0} miljarddaļa"}
-                other{"{0} miljarddaļas"}
-                zero{"{0} miljarddaļu"}
             }
         }
         consumption{
@@ -3970,7 +3970,7 @@ lv{
             }
         }
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"miljarddaļas"}
             }
         }
@@ -4274,20 +4274,20 @@ lv{
             mole{
                 dnam{"mols"}
             }
+            part-per-1e6{
+                dnam{"miljonās daļas"}
+            }
+            part-per-1e9{
+                dnam{"miljarddaļas"}
+            }
             percent{
                 dnam{"procents"}
             }
             permille{
                 dnam{"promile"}
             }
-            permillion{
-                dnam{"miljonās daļas"}
-            }
             permyriad{
                 dnam{"promiriāde"}
-            }
-            portion-per-1e9{
-                dnam{"miljarddaļas"}
             }
         }
         consumption{

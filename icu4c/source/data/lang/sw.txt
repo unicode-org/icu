@@ -645,10 +645,8 @@ sw{
             tertiary{"Panga Viinitoni/Herufi/Upana"}
         }
         collation{
-            big5han{"Mpangilio wa Kichina cha Jadi - Big5"}
             dictionary{"Mpangilio wa Kamusi"}
             ducet{"Mpangilio Chaguo-Msingi wa Unicode"}
-            gb2312han{"Mpangilio wa Kichina Rahisi - GB2312"}
             phonebook{"Mpangilio wa Orodha za Nambari za Simu"}
             phonetic{"Utaratibu wa Kupanga Fonetiki"}
             pinyin{"Mpangilio wa Kipinyin"}

@@ -199,6 +199,18 @@ ca{
                 one{"{0} mol"}
                 other{"{0} mols"}
             }
+            part-per-1e6{
+                dnam{"parts per milió"}
+                gender{"masculine"}
+                one{"{0} part per milió"}
+                other{"{0} parts per milió"}
+            }
+            part-per-1e9{
+                dnam{"part per mil milions"}
+                gender{"masculine"}
+                one{"{0} part per mil milions"}
+                other{"{0} parts per mil milions"}
+            }
             percent{
                 gender{"masculine"}
                 one{"{0} per cent"}
@@ -209,22 +221,10 @@ ca{
                 one{"{0} per mil"}
                 other{"{0} per mil"}
             }
-            permillion{
-                dnam{"parts per milió"}
-                gender{"masculine"}
-                one{"{0} part per milió"}
-                other{"{0} parts per milió"}
-            }
             permyriad{
                 gender{"masculine"}
                 one{"{0} per deu mil"}
                 other{"{0} per deu mil"}
-            }
-            portion-per-1e9{
-                dnam{"part per mil milions"}
-                gender{"masculine"}
-                one{"{0} part per mil milions"}
-                other{"{0} parts per mil milions"}
             }
         }
         consumption{
@@ -1187,14 +1187,14 @@ ca{
             millimole-per-liter{
                 dnam{"mM/l"}
             }
+            part-per-1e6{
+                dnam{"ppm"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
-            }
-            permillion{
-                dnam{"ppm"}
             }
             permyriad{
                 dnam{"‱"}
@@ -1409,6 +1409,12 @@ ca{
                 one{"{0} mM/l"}
                 other{"{0} mM/l"}
             }
+            part-per-1e6{
+                dnam{"parts/milió"}
+            }
+            part-per-1e9{
+                dnam{"part/mil milions"}
+            }
             percent{
                 dnam{"per cent"}
                 one{"{0} %"}
@@ -1419,16 +1425,10 @@ ca{
                 one{"{0} ‰"}
                 other{"{0} ‰"}
             }
-            permillion{
-                dnam{"parts/milió"}
-            }
             permyriad{
                 dnam{"per deu mil"}
                 one{"{0} ‱"}
                 other{"{0} ‱"}
-            }
-            portion-per-1e9{
-                dnam{"part/mil milions"}
             }
         }
         consumption{

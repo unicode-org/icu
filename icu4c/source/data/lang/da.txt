@@ -842,12 +842,10 @@ da{
             tertiary{"Sortér efter accenter/store og små bogstaver/bredde"}
         }
         collation{
-            big5han{"sorteringsrækkefølge uforkortet kinesisk - Big5"}
             compat{"tidligere sorteringsrækkefølge, kompatibilitet"}
             dictionary{"sorteringsrækkefølge for ordbog"}
             ducet{"Unicode-standardsorteringsrækkefølge"}
             eor{"europæisk sorteringsrækkefølge"}
-            gb2312han{"sorteringsrækkefølge forkortet kinesisk - GB2312"}
             phonebook{"sorteringsrækkefølge i telefonbøger"}
             phonetic{"fonetisk sorteringsrækkefølge"}
             pinyin{"pinyin-baseret sorteringsrækkefølge"}

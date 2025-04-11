@@ -11,7 +11,7 @@ es_419{
             }
         }
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"partes por mil millones"}
                 one{"{0} parte por mil millones"}
                 other{"{0} partes por mil millones"}

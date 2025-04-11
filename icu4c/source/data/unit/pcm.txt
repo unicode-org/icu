@@ -169,6 +169,16 @@ pcm{
                 one{"{0} Mol"}
                 other{"{0} Mol"}
             }
+            part-per-1e6{
+                dnam{"Pat-dẹm Fọ Ích Míliọn"}
+                one{"{0} Pat Fọ Ích Míliọn"}
+                other{"{0} Pat Fọ Ích Míliọn"}
+            }
+            part-per-1e9{
+                dnam{"pat fọ ích bíliọn"}
+                one{"{0} pat fọ ích bíliọn"}
+                other{"{0} pat fọ ích bíliọn"}
+            }
             percent{
                 one{"{0} Pasẹnt"}
                 other{"{0} Pasẹnt"}
@@ -177,19 +187,9 @@ pcm{
                 one{"{0} Fọ Ích Taúzan"}
                 other{"{0} Fọ Ích Taúzan"}
             }
-            permillion{
-                dnam{"Pat-dẹm Fọ Ích Míliọn"}
-                one{"{0} Pat Fọ Ích Míliọn"}
-                other{"{0} Pat Fọ Ích Míliọn"}
-            }
             permyriad{
                 one{"{0} Fọ Ích Tẹ́n Taúzan"}
                 other{"{0} Fọ Ích Tẹ́n Taúzan"}
-            }
-            portion-per-1e9{
-                dnam{"pat fọ ích bíliọn"}
-                one{"{0} pat fọ ích bíliọn"}
-                other{"{0} pat fọ ích bíliọn"}
             }
         }
         consumption{
@@ -1019,22 +1019,22 @@ pcm{
                 one{"{0} kárá"}
                 other{"{0} kárá"}
             }
+            part-per-1e6{
+                dnam{"Pfim"}
+            }
+            part-per-1e9{
+                dnam{"pfib"}
+                one{"{0}pfib"}
+                other{"{0}pfib"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
             }
-            permillion{
-                dnam{"Pfim"}
-            }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                dnam{"pfib"}
-                one{"{0}pfib"}
-                other{"{0}pfib"}
             }
         }
         consumption{
@@ -1341,24 +1341,24 @@ pcm{
             millimole-per-liter{
                 dnam{"Mílimol/Líta"}
             }
+            part-per-1e6{
+                dnam{"Pat/Míliọn"}
+                one{"{0} pfim"}
+                other{"{0} pfim"}
+            }
+            part-per-1e9{
+                dnam{"pat/bíliọn"}
+                one{"{0} pfib"}
+                other{"{0} pfib"}
+            }
             percent{
                 dnam{"Pasẹnt"}
             }
             permille{
                 dnam{"Fọ Ích Taúzan"}
             }
-            permillion{
-                dnam{"Pat/Míliọn"}
-                one{"{0} pfim"}
-                other{"{0} pfim"}
-            }
             permyriad{
                 dnam{"Fọ Ích Tẹ́n Taúzan"}
-            }
-            portion-per-1e9{
-                dnam{"pat/bíliọn"}
-                one{"{0} pfib"}
-                other{"{0} pfib"}
             }
         }
         consumption{
@@ -1718,7 +1718,9 @@ pcm{
                 dnam{"Tọns"}
             }
             tonne{
-                dnam{"T"}
+                dnam{"M. Tọn-dẹm"}
+                one{"{0} M. Tọn"}
+                other{"{0} M. Tọn"}
             }
         }
         power{

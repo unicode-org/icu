@@ -1009,7 +1009,7 @@ so{
             ec{"Iistar"}
         }
         "Pacific:Enderbury"{
-            ec{"Enderburi"}
+            ec{"Kantoon"}
         }
         "Pacific:Fakaofo"{
             ec{"fakofo"}
@@ -1025,9 +1025,6 @@ so{
         }
         "Pacific:Guam"{
             ec{"Guwam"}
-        }
-        "Pacific:Kanton"{
-            ec{"Kantoon"}
         }
         "Pacific:Kiritimati"{
             ec{"Kiritimaati"}

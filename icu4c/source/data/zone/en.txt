@@ -3,14 +3,56 @@
 // Generated using tools/cldr/cldr-to-icu/
 en{
     zoneStrings{
+        "America:Mexico_City"{
+            ec{"Mexico City"}
+        }
+        "Antarctica:Casey"{
+            ec{"Casey Station"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont d’Urville Station"}
+        }
         "Antarctica:Macquarie"{
             ec{"Macquarie Island"}
+        }
+        "Antarctica:Mawson"{
+            ec{"Mawson Station"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"McMurdo Station"}
+        }
+        "Antarctica:Palmer"{
+            ec{"Palmer Land"}
+        }
+        "Antarctica:Rothera"{
+            ec{"Rothera Station"}
+        }
+        "Antarctica:Syowa"{
+            ec{"Showa Station"}
+        }
+        "Antarctica:Troll"{
+            ec{"Troll Station"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostok Station"}
+        }
+        "Asia:Aqtau"{
+            ec{"Aktau"}
         }
         "Asia:Qostanay"{
             ec{"Kostanay"}
         }
+        "Asia:Qyzylorda"{
+            ec{"Kyzylorda"}
+        }
         "Asia:Saigon"{
             ec{"Ho Chi Minh City"}
+        }
+        "Atlantic:Canary"{
+            ec{"Canaries"}
+        }
+        "Atlantic:Faeroe"{
+            ec{"Faroes"}
         }
         "Australia:Lord_Howe"{
             ec{"Lord Howe Island"}
@@ -19,7 +61,7 @@ en{
             ls{"Coordinated Universal Time"}
         }
         "Etc:Unknown"{
-            ec{"Unknown City"}
+            ec{"Unknown Location"}
         }
         "Europe:Dublin"{
             ld{"Irish Standard Time"}
@@ -27,22 +69,52 @@ en{
         "Europe:London"{
             ld{"British Summer Time"}
         }
+        "Indian:Chagos"{
+            ec{"Chagos Archipelago"}
+        }
         "Indian:Christmas"{
             ec{"Christmas Island"}
         }
         "Indian:Cocos"{
             ec{"Cocos Islands"}
         }
+        "Indian:Comoro"{
+            ec{"Comoros"}
+        }
+        "Indian:Kerguelen"{
+            ec{"Kerguelen Islands"}
+        }
+        "Pacific:Chatham"{
+            ec{"Chatham Islands"}
+        }
         "Pacific:Easter"{
             ec{"Easter Island"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Canton Island"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Galápagos Islands"}
         }
         "Pacific:Honolulu"{
             sd{"HDT"}
             sg{"HST"}
             ss{"HST"}
         }
+        "Pacific:Kwajalein"{
+            ec{"Kwajalein Atoll"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Marquesas Islands"}
+        }
+        "Pacific:Midway"{
+            ec{"Midway Atoll"}
+        }
         "Pacific:Norfolk"{
             ec{"Norfolk Island"}
+        }
+        "Pacific:Pitcairn"{
+            ec{"Pitcairn Islands"}
         }
         "Pacific:Wake"{
             ec{"Wake Island"}
@@ -370,9 +442,9 @@ en{
             ls{"Hong Kong Standard Time"}
         }
         "meta:Hovd"{
-            ld{"Hovd Summer Time"}
-            lg{"Hovd Time"}
-            ls{"Hovd Standard Time"}
+            ld{"Khovd Summer Time"}
+            lg{"Khovd Time"}
+            ls{"Khovd Standard Time"}
         }
         "meta:India"{
             ls{"India Standard Time"}
@@ -592,9 +664,9 @@ en{
             ls{"North Korea Time"}
         }
         "meta:Qyzylorda"{
-            ld{"Qyzylorda Summer Time"}
-            lg{"Qyzylorda Time"}
-            ls{"Qyzylorda Standard Time"}
+            ld{"Kyzylorda Summer Time"}
+            lg{"Kyzylorda Time"}
+            ls{"Kyzylorda Standard Time"}
         }
         "meta:Reunion"{
             ls{"Réunion Time"}

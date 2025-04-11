@@ -308,6 +308,30 @@ da{
                 one{"{0} mol"}
                 other{"{0} mol"}
             }
+            part-per-1e6{
+                case{
+                    genitive{
+                        one{"{0} part per millions"}
+                        other{"{0} parts per millions"}
+                    }
+                }
+                dnam{"parts per million"}
+                gender{"common"}
+                one{"{0} part per million"}
+                other{"{0} parts per million"}
+            }
+            part-per-1e9{
+                case{
+                    genitive{
+                        one{"{0} milliardtedels"}
+                        other{"{0} milliardtedeles"}
+                    }
+                }
+                dnam{"milliardtedele"}
+                gender{"common"}
+                one{"{0} milliardtedel"}
+                other{"{0} milliardtedele"}
+            }
             percent{
                 case{
                     genitive{
@@ -332,32 +356,8 @@ da{
                 one{"{0} promille"}
                 other{"{0} promille"}
             }
-            permillion{
-                case{
-                    genitive{
-                        one{"{0} part per millions"}
-                        other{"{0} parts per millions"}
-                    }
-                }
-                dnam{"parts per million"}
-                gender{"common"}
-                one{"{0} part per million"}
-                other{"{0} parts per million"}
-            }
             permyriad{
                 gender{"common"}
-            }
-            portion-per-1e9{
-                case{
-                    genitive{
-                        one{"{0} milliardtedels"}
-                        other{"{0} milliardtedeles"}
-                    }
-                }
-                dnam{"milliardtedele"}
-                gender{"common"}
-                one{"{0} milliardtedel"}
-                other{"{0} milliardtedele"}
             }
         }
         consumption{
@@ -2190,6 +2190,9 @@ da{
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
+            part-per-1e9{
+                dnam{"dele/milliard"}
+            }
             percent{
                 dnam{"pct."}
                 one{"{0} pct."}
@@ -2202,9 +2205,6 @@ da{
             permyriad{
                 one{"{0} ‱"}
                 other{"{0} ‱"}
-            }
-            portion-per-1e9{
-                dnam{"dele/milliard"}
             }
         }
         consumption{

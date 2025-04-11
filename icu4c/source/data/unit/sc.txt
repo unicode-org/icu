@@ -180,6 +180,16 @@ sc{
                 one{"{0} mole"}
                 other{"{0} moles"}
             }
+            part-per-1e6{
+                dnam{"partes pro millione"}
+                one{"{0} parte pro millione"}
+                other{"{0} partes pro millione"}
+            }
+            part-per-1e9{
+                dnam{"partes pro milliardu"}
+                one{"{0} parte pro milliardu"}
+                other{"{0} partes pro milliardu"}
+            }
             percent{
                 dnam{"pro chentu"}
                 one{"{0} pro chentu"}
@@ -190,20 +200,10 @@ sc{
                 one{"{0} pro milli"}
                 other{"{0} pro milli"}
             }
-            permillion{
-                dnam{"partes pro millione"}
-                one{"{0} parte pro millione"}
-                other{"{0} partes pro millione"}
-            }
             permyriad{
                 dnam{"pro deghemìgia"}
                 one{"{0} pro deghemìgia"}
                 other{"{0} pro deghemìgia"}
-            }
-            portion-per-1e9{
-                dnam{"partes pro milliardu"}
-                one{"{0} parte pro milliardu"}
-                other{"{0} partes pro milliardu"}
             }
         }
         consumption{
@@ -1118,11 +1118,11 @@ sc{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
-            permillion{
+            part-per-1e6{
                 one{"{0}ppm"}
                 other{"{0}ppm"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 one{"{0}ppb"}
                 other{"{0}ppb"}
             }
@@ -1857,7 +1857,7 @@ sc{
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"partes/milliardu"}
             }
         }

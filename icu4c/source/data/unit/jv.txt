@@ -121,15 +121,15 @@ jv{
                 dnam{"milimol saben liter"}
                 other{"{0} milimol saben liter"}
             }
+            part-per-1e6{
+                dnam{"bagean saben yuta"}
+                other{"{0} bagean saben yuta"}
+            }
             percent{
                 other{"{0} persen"}
             }
             permille{
                 other{"{0} permil"}
-            }
-            permillion{
-                dnam{"bagean saben yuta"}
-                other{"{0} bagean saben yuta"}
             }
             permyriad{
                 other{"{0} permiriad"}
@@ -829,15 +829,15 @@ jv{
             karat{
                 dnam{"karat"}
             }
+            part-per-1e6{
+                dnam{"bagean/yuta"}
+                other{"{0}bpj"}
+            }
             percent{
                 dnam{"persen"}
             }
             permille{
                 dnam{"permil"}
-            }
-            permillion{
-                dnam{"bagean/yuta"}
-                other{"{0}bpj"}
             }
             permyriad{
                 dnam{"permiriad"}

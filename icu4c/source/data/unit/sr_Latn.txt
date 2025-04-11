@@ -435,6 +435,54 @@ sr_Latn{
                 one{"{0} mol"}
                 other{"{0} mola"}
             }
+            part-per-1e6{
+                case{
+                    accusative{
+                        few{"{0} čestice na milion"}
+                        one{"{0} česticu na milion"}
+                        other{"{0} čestica na milion"}
+                    }
+                    genitive{
+                        few{"{0} čestice na milion"}
+                        one{"{0} čestice na milion"}
+                        other{"{0} čestica na milion"}
+                    }
+                    instrumental{
+                        few{"{0} čestice na milion"}
+                        one{"{0} česticom na milion"}
+                        other{"{0} čestica na milion"}
+                    }
+                }
+                dnam{"čestica na milion"}
+                few{"{0} čestice na milion"}
+                gender{"feminine"}
+                one{"{0} čestica na milion"}
+                other{"{0} čestica na milion"}
+            }
+            part-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} dela na milijardu"}
+                        one{"{0} deo na milijardu"}
+                        other{"{0} delova na milijardu"}
+                    }
+                    genitive{
+                        few{"{0} dela na milijardu"}
+                        one{"{0} dela na milijardu"}
+                        other{"{0} delova na milijardu"}
+                    }
+                    instrumental{
+                        few{"{0} dela na milijardu"}
+                        one{"{0} delom na milijardu"}
+                        other{"{0} delova na milijardu"}
+                    }
+                }
+                dnam{"delovi na milijardu"}
+                few{"{0} dela na milijardu"}
+                gender{"inanimate"}
+                one{"{0} deo na milijardu"}
+                other{"{0} delova na milijardu"}
+            }
             percent{
                 case{
                     genitive{
@@ -471,56 +519,8 @@ sr_Latn{
                 one{"{0} promil"}
                 other{"{0} promila"}
             }
-            permillion{
-                case{
-                    accusative{
-                        few{"{0} čestice na milion"}
-                        one{"{0} česticu na milion"}
-                        other{"{0} čestica na milion"}
-                    }
-                    genitive{
-                        few{"{0} čestice na milion"}
-                        one{"{0} čestice na milion"}
-                        other{"{0} čestica na milion"}
-                    }
-                    instrumental{
-                        few{"{0} čestice na milion"}
-                        one{"{0} česticom na milion"}
-                        other{"{0} čestica na milion"}
-                    }
-                }
-                dnam{"čestica na milion"}
-                few{"{0} čestice na milion"}
-                gender{"feminine"}
-                one{"{0} čestica na milion"}
-                other{"{0} čestica na milion"}
-            }
             permyriad{
                 gender{"inanimate"}
-            }
-            portion-per-1e9{
-                case{
-                    accusative{
-                        few{"{0} dela na milijardu"}
-                        one{"{0} deo na milijardu"}
-                        other{"{0} delova na milijardu"}
-                    }
-                    genitive{
-                        few{"{0} dela na milijardu"}
-                        one{"{0} dela na milijardu"}
-                        other{"{0} delova na milijardu"}
-                    }
-                    instrumental{
-                        few{"{0} dela na milijardu"}
-                        one{"{0} delom na milijardu"}
-                        other{"{0} delova na milijardu"}
-                    }
-                }
-                dnam{"delovi na milijardu"}
-                few{"{0} dela na milijardu"}
-                gender{"inanimate"}
-                one{"{0} deo na milijardu"}
-                other{"{0} delova na milijardu"}
             }
         }
         consumption{
@@ -3019,14 +3019,14 @@ sr_Latn{
                 one{"{0} stavka"}
                 other{"{0} stavki"}
             }
+            part-per-1e9{
+                dnam{"delovi/milijarda"}
+            }
             percent{
                 dnam{"procenat"}
             }
             permille{
                 dnam{"promil"}
-            }
-            portion-per-1e9{
-                dnam{"delovi/milijarda"}
             }
         }
         consumption{

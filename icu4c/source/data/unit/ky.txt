@@ -143,6 +143,16 @@ ky{
             mole{
                 dnam{"мольдор"}
             }
+            part-per-1e6{
+                dnam{"миллионго бөлүктөр"}
+                one{"миллионго {0} бөлүк"}
+                other{"миллионго {0} бөлүк"}
+            }
+            part-per-1e9{
+                dnam{"мкг/л"}
+                one{"{0} мкг/л"}
+                other{"{0} мкг/л"}
+            }
             percent{
                 one{"{0} пайыз"}
                 other{"{0} пайыз"}
@@ -150,16 +160,6 @@ ky{
             permille{
                 one{"{0} промилле"}
                 other{"{0} промилле"}
-            }
-            permillion{
-                dnam{"миллионго бөлүктөр"}
-                one{"миллионго {0} бөлүк"}
-                other{"миллионго {0} бөлүк"}
-            }
-            portion-per-1e9{
-                dnam{"мкг/л"}
-                one{"{0} мкг/л"}
-                other{"{0} мкг/л"}
             }
         }
         consumption{
@@ -845,13 +845,13 @@ ky{
                 one{"{0}ммоль/л"}
                 other{"{0}ммоль/л"}
             }
-            percent{
-                dnam{"%"}
-            }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"мкг/л"}
                 one{"{0} мкг/л"}
                 other{"{0} мкг/л"}
+            }
+            percent{
+                dnam{"%"}
             }
         }
         consumption{
@@ -1169,19 +1169,19 @@ ky{
                 one{"{0} моль"}
                 other{"{0} моль"}
             }
+            part-per-1e6{
+                dnam{"миллионго/бөлүк"}
+            }
+            part-per-1e9{
+                dnam{"мкг/л"}
+                one{"{0} мкг/л"}
+                other{"{0} мкг/л"}
+            }
             percent{
                 dnam{"пайыз"}
             }
             permille{
                 dnam{"промилле"}
-            }
-            permillion{
-                dnam{"миллионго/бөлүк"}
-            }
-            portion-per-1e9{
-                dnam{"мкг/л"}
-                one{"{0} мкг/л"}
-                other{"{0} мкг/л"}
             }
         }
         consumption{

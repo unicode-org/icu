@@ -170,6 +170,12 @@ bs{
                 one{"{0} mol"}
                 other{"{0} mola"}
             }
+            part-per-1e6{
+                dnam{"dijelovi na milion"}
+                few{"{0} dijela na milion"}
+                one{"{0} dio na milion"}
+                other{"{0} dijelova na milion"}
+            }
             percent{
                 dnam{"procenat"}
                 few{"{0} procenta"}
@@ -181,12 +187,6 @@ bs{
                 few{"{0} promila"}
                 one{"{0} promil"}
                 other{"{0} promila"}
-            }
-            permillion{
-                dnam{"dijelovi na milion"}
-                few{"{0} dijela na milion"}
-                one{"{0} dio na milion"}
-                other{"{0} dijelova na milion"}
             }
             permyriad{
                 dnam{"permyriad"}
@@ -1122,7 +1122,7 @@ bs{
             }
         }
         concentr{
-            permillion{
+            part-per-1e6{
                 dnam{"ppm"}
             }
         }
@@ -1404,7 +1404,7 @@ bs{
             millimole-per-liter{
                 dnam{"milimol/litar"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"dijelovi/milion"}
             }
         }

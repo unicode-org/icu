@@ -955,13 +955,11 @@ et{
             tertiary{"järjesta diakriitikud, algustähed ja laius"}
         }
         collation{
-            big5han{"hiina traditsiooniline sortimisjärjestus (Big5)"}
             compat{"varasem sortimisjärjestus (ühilduvuse jaoks)"}
             dictionary{"sõnastiku sortimisjärjestus"}
             ducet{"Unicode’i vaikejärjestus"}
             emoji{"emoji sortimisjärjestus"}
             eor{"Euroopa järjestusreeglid"}
-            gb2312han{"hiina lihtsustatud sortimisjärjestus (GB2312)"}
             phonebook{"telefoniraamatu sortimisjärjestus"}
             phonetic{"foneetiline sortimisjärjestus"}
             pinyin{"pinyin’i sortimisjärjestus"}

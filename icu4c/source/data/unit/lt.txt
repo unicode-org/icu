@@ -868,6 +868,86 @@ lt{
                 one{"{0} molis"}
                 other{"{0} molių"}
             }
+            part-per-1e6{
+                case{
+                    accusative{
+                        few{"{0} milijonines dalis"}
+                        many{"{0} milijoninės dalies"}
+                        one{"{0} milijoninę dalį"}
+                        other{"{0} milijoninių dalių"}
+                    }
+                    dative{
+                        few{"{0} milijoninėms dalims"}
+                        many{"{0} milijoninės dalies"}
+                        one{"{0} milijoninei daliai"}
+                        other{"{0} milijoninių dalių"}
+                    }
+                    genitive{
+                        few{"{0} milijoninių dalių"}
+                        many{"{0} milijoninės dalies"}
+                        one{"{0} milijoninės dalies"}
+                        other{"{0} milijoninių dalių"}
+                    }
+                    instrumental{
+                        few{"{0} milijoninėmis dalimis"}
+                        many{"{0} milijoninės dalies"}
+                        one{"{0} milijonine dalimi"}
+                        other{"{0} milijoninių dalių"}
+                    }
+                    locative{
+                        few{"{0} milijoninėse dalyse"}
+                        many{"{0} milijoninės dalies"}
+                        one{"{0} milijoninėje dalyje"}
+                        other{"{0} milijoninių dalių"}
+                    }
+                }
+                dnam{"milijoninės dalys"}
+                few{"{0} milijoninės dalys"}
+                gender{"feminine"}
+                many{"{0} milijoninės dalies"}
+                one{"{0} milijoninė dalis"}
+                other{"{0} milijoninių dalių"}
+            }
+            part-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} milijonines dalelytes"}
+                        many{"{0} milijoninės dalelytės"}
+                        one{"{0} milijoninę dalelytę"}
+                        other{"{0} milijoninių dalelyčių"}
+                    }
+                    dative{
+                        few{"{0} milijoninėms dalelytėms"}
+                        many{"{0} milijoninės dalelytės"}
+                        one{"{0} milijoninei dalelytei"}
+                        other{"{0} milijoninių dalelyčių"}
+                    }
+                    genitive{
+                        few{"{0} milijoninių dalelyčių"}
+                        many{"{0} milijoninės dalelytės"}
+                        one{"{0} milijoninės dalelytės"}
+                        other{"{0} milijoninių dalelyčių"}
+                    }
+                    instrumental{
+                        few{"{0} milijoninėmis dalelytėmis"}
+                        many{"{0} milijoninės dalelytės"}
+                        one{"{0} milijonine dalelyte"}
+                        other{"{0} milijoninių dalelyčių"}
+                    }
+                    locative{
+                        few{"{0} milijoninėse dalelytėse"}
+                        many{"{0} milijoninės dalelytės"}
+                        one{"{0} milijoninėje dalelytėje"}
+                        other{"{0} milijoninių dalelyčių"}
+                    }
+                }
+                dnam{"milijoninės dalelytės"}
+                few{"{0} milijoninės dalelytės"}
+                gender{"feminine"}
+                many{"{0} milijoninės dalelytės"}
+                one{"{0} milijoninė dalelytė"}
+                other{"{0} milijoninių dalelyčių"}
+            }
             percent{
                 case{
                     accusative{
@@ -946,88 +1026,8 @@ lt{
                 one{"{0} promilė"}
                 other{"{0} promilių"}
             }
-            permillion{
-                case{
-                    accusative{
-                        few{"{0} milijonines dalis"}
-                        many{"{0} milijoninės dalies"}
-                        one{"{0} milijoninę dalį"}
-                        other{"{0} milijoninių dalių"}
-                    }
-                    dative{
-                        few{"{0} milijoninėms dalims"}
-                        many{"{0} milijoninės dalies"}
-                        one{"{0} milijoninei daliai"}
-                        other{"{0} milijoninių dalių"}
-                    }
-                    genitive{
-                        few{"{0} milijoninių dalių"}
-                        many{"{0} milijoninės dalies"}
-                        one{"{0} milijoninės dalies"}
-                        other{"{0} milijoninių dalių"}
-                    }
-                    instrumental{
-                        few{"{0} milijoninėmis dalimis"}
-                        many{"{0} milijoninės dalies"}
-                        one{"{0} milijonine dalimi"}
-                        other{"{0} milijoninių dalių"}
-                    }
-                    locative{
-                        few{"{0} milijoninėse dalyse"}
-                        many{"{0} milijoninės dalies"}
-                        one{"{0} milijoninėje dalyje"}
-                        other{"{0} milijoninių dalių"}
-                    }
-                }
-                dnam{"milijoninės dalys"}
-                few{"{0} milijoninės dalys"}
-                gender{"feminine"}
-                many{"{0} milijoninės dalies"}
-                one{"{0} milijoninė dalis"}
-                other{"{0} milijoninių dalių"}
-            }
             permyriad{
                 gender{"masculine"}
-            }
-            portion-per-1e9{
-                case{
-                    accusative{
-                        few{"{0} milijonines dalelytes"}
-                        many{"{0} milijoninės dalelytės"}
-                        one{"{0} milijoninę dalelytę"}
-                        other{"{0} milijoninių dalelyčių"}
-                    }
-                    dative{
-                        few{"{0} milijoninėms dalelytėms"}
-                        many{"{0} milijoninės dalelytės"}
-                        one{"{0} milijoninei dalelytei"}
-                        other{"{0} milijoninių dalelyčių"}
-                    }
-                    genitive{
-                        few{"{0} milijoninių dalelyčių"}
-                        many{"{0} milijoninės dalelytės"}
-                        one{"{0} milijoninės dalelytės"}
-                        other{"{0} milijoninių dalelyčių"}
-                    }
-                    instrumental{
-                        few{"{0} milijoninėmis dalelytėmis"}
-                        many{"{0} milijoninės dalelytės"}
-                        one{"{0} milijonine dalelyte"}
-                        other{"{0} milijoninių dalelyčių"}
-                    }
-                    locative{
-                        few{"{0} milijoninėse dalelytėse"}
-                        many{"{0} milijoninės dalelytės"}
-                        one{"{0} milijoninėje dalelytėje"}
-                        other{"{0} milijoninių dalelyčių"}
-                    }
-                }
-                dnam{"milijoninės dalelytės"}
-                few{"{0} milijoninės dalelytės"}
-                gender{"feminine"}
-                many{"{0} milijoninės dalelytės"}
-                one{"{0} milijoninė dalelytė"}
-                other{"{0} milijoninių dalelyčių"}
             }
         }
         consumption{
@@ -5254,15 +5254,15 @@ lt{
             }
         }
         concentr{
-            percent{
-                dnam{"%"}
-            }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"dalelytė/mln."}
                 few{"{0} dalelytės/mln."}
                 many{"{0} dalelytės/mln."}
                 one{"{0} dalelytė/mln."}
                 other{"{0} dalelyčių/mln."}
+            }
+            percent{
+                dnam{"%"}
             }
         }
         consumption{
@@ -5435,6 +5435,13 @@ lt{
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
+            part-per-1e9{
+                dnam{"dalelytė/mln."}
+                few{"{0} dalelytės/mln."}
+                many{"{0} dalelytės/mln."}
+                one{"{0} dalelytė/mln."}
+                other{"{0} dalelyčių/mln."}
+            }
             percent{
                 dnam{"procentas"}
                 few{"{0} %"}
@@ -5448,13 +5455,6 @@ lt{
                 many{"{0} ‰"}
                 one{"{0} ‰"}
                 other{"{0} ‰"}
-            }
-            portion-per-1e9{
-                dnam{"dalelytė/mln."}
-                few{"{0} dalelytės/mln."}
-                many{"{0} dalelytės/mln."}
-                one{"{0} dalelytė/mln."}
-                other{"{0} dalelyčių/mln."}
             }
         }
         consumption{

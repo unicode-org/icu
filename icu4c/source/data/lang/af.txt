@@ -614,10 +614,8 @@ af{
             tertiary{"Sorteer aksente/kas/breedte"}
         }
         collation{
-            big5han{"Tradisionele Chinese sorteervolgorde - Groot5"}
             dictionary{"Woordeboek-sorteervolgorde"}
             ducet{"Verstek Unicode-rangskikvolgorde"}
-            gb2312han{"Vereenvoudigde Chinese sorteervolgorde - GB2312"}
             phonebook{"Foonboek-sorteervolgorde"}
             phonetic{"Fonetiese sorteerorde"}
             pinyin{"Pinyin-sorteervolgorde"}

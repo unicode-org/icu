@@ -244,6 +244,14 @@ ga{
             mole{
                 dnam{"móil"}
             }
+            part-per-1e6{
+                dnam{"codanna sa mhilliún"}
+                few{"{0} chuid sa mhilliún"}
+                many{"{0} gcuid sa mhilliún"}
+                one{"{0} chuid sa mhilliún"}
+                other{"{0} cuid sa mhilliún"}
+                two{"{0} chuid sa mhilliún"}
+            }
             percent{
                 few{"{0}%"}
                 many{"{0}%"}
@@ -257,14 +265,6 @@ ga{
                 one{"{0} faoin míle"}
                 other{"{0} faoin míle"}
                 two{"{0}‰"}
-            }
-            permillion{
-                dnam{"codanna sa mhilliún"}
-                few{"{0} chuid sa mhilliún"}
-                many{"{0} gcuid sa mhilliún"}
-                one{"{0} chuid sa mhilliún"}
-                other{"{0} cuid sa mhilliún"}
-                two{"{0} chuid sa mhilliún"}
             }
             permyriad{
                 dnam{"faoin deich míle"}
@@ -2089,19 +2089,19 @@ ga{
                 other{"{0} mól"}
                 two{"{0} mhól"}
             }
-            percent{
-                dnam{"faoin gcéad"}
-            }
-            permille{
-                dnam{"faoin míle"}
-            }
-            permillion{
+            part-per-1e6{
                 dnam{"codanna/milliún"}
                 few{"{0}/milliún"}
                 many{"{0}/milliún"}
                 one{"{0}/milliún"}
                 other{"{0}/milliún"}
                 two{"{0}/milliún"}
+            }
+            percent{
+                dnam{"faoin gcéad"}
+            }
+            permille{
+                dnam{"faoin míle"}
             }
             permyriad{
                 dnam{"permeiriad"}

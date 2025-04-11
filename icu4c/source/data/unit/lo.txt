@@ -125,23 +125,23 @@ lo{
                 dnam{"ໂມ​ລ"}
                 other{"{0} ໂມ​ລ"}
             }
+            part-per-1e6{
+                dnam{"ພາດຕໍ່ລ້ານ"}
+                other{"{0} ພາດຕໍ່ລ້ານ"}
+            }
+            part-per-1e9{
+                dnam{"ສ່ວນໃນພັນລ້ານສ່ວນ"}
+                other{"{0} ສ່ວນໃນພັນລ້ານສ່ວນ"}
+            }
             percent{
                 other{"{0} ເປີເຊັນ"}
             }
             permille{
                 other{"{0} ຕໍ່ພັນ"}
             }
-            permillion{
-                dnam{"ພາດຕໍ່ລ້ານ"}
-                other{"{0} ພາດຕໍ່ລ້ານ"}
-            }
             permyriad{
                 dnam{"ເປີ​ມີ​ຣຽດ"}
                 other{"{0} ເປີ​ມີ​ຣຽດ"}
-            }
-            portion-per-1e9{
-                dnam{"ສ່ວນໃນພັນລ້ານສ່ວນ"}
-                other{"{0} ສ່ວນໃນພັນລ້ານສ່ວນ"}
             }
         }
         consumption{
@@ -548,15 +548,15 @@ lo{
             }
         }
         concentr{
+            part-per-1e9{
+                dnam{"ສ່ວນ/ພັນລ້ານສ່ວນ"}
+                other{"{0}ppb"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
-            }
-            portion-per-1e9{
-                dnam{"ສ່ວນ/ພັນລ້ານສ່ວນ"}
-                other{"{0}ppb"}
             }
         }
         consumption{
@@ -771,17 +771,17 @@ lo{
             millimole-per-liter{
                 dnam{"ມິລິໂມນ/ລິດ"}
             }
+            part-per-1e6{
+                dnam{"ພາດ/ລ້ານ"}
+            }
+            part-per-1e9{
+                dnam{"ສ່ວນ/ພັນລ້ານສ່ວນ"}
+            }
             percent{
                 dnam{"ເປີເຊັນ"}
             }
             permille{
                 dnam{"ຕໍ່ພັນ"}
-            }
-            permillion{
-                dnam{"ພາດ/ລ້ານ"}
-            }
-            portion-per-1e9{
-                dnam{"ສ່ວນ/ພັນລ້ານສ່ວນ"}
             }
         }
         consumption{

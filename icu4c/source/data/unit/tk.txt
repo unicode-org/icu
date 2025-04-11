@@ -162,6 +162,15 @@ tk{
             mole{
                 dnam{"mollar"}
             }
+            part-per-1e6{
+                one{"{0} bölejik/million"}
+                other{"{0} bölejik/million"}
+            }
+            part-per-1e9{
+                dnam{"bölejik/milliard"}
+                one{"milliardda {0} bölejik"}
+                other{"milliardda {0} bölejik"}
+            }
             percent{
                 one{"{0} göterim"}
                 other{"{0} göterim"}
@@ -170,18 +179,9 @@ tk{
                 one{"{0} promille"}
                 other{"{0} promille"}
             }
-            permillion{
-                one{"{0} bölejik/million"}
-                other{"{0} bölejik/million"}
-            }
             permyriad{
                 one{"{0} permiriad"}
                 other{"{0} permiriad"}
-            }
-            portion-per-1e9{
-                dnam{"bölejik/milliard"}
-                one{"milliardda {0} bölejik"}
-                other{"milliardda {0} bölejik"}
             }
         }
         consumption{
@@ -995,13 +995,13 @@ tk{
             10p-2{"s{0}"}
         }
         concentr{
-            percent{
-                dnam{"%"}
-            }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"bmlrd"}
                 one{"{0} bmlrd"}
                 other{"{0} bmlrd"}
+            }
+            percent{
+                dnam{"%"}
             }
         }
         consumption{
@@ -1263,22 +1263,22 @@ tk{
             millimole-per-liter{
                 dnam{"millimol/litr"}
             }
+            part-per-1e6{
+                dnam{"bölejik/million"}
+            }
+            part-per-1e9{
+                dnam{"bölejik/milliard"}
+                one{"{0} bölejik/milliard"}
+                other{"{0} bölejik/milliard"}
+            }
             percent{
                 dnam{"göterim"}
             }
             permille{
                 dnam{"promille"}
             }
-            permillion{
-                dnam{"bölejik/million"}
-            }
             permyriad{
                 dnam{"permiriad"}
-            }
-            portion-per-1e9{
-                dnam{"bölejik/milliard"}
-                one{"{0} bölejik/milliard"}
-                other{"{0} bölejik/milliard"}
             }
         }
         consumption{

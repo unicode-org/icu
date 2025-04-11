@@ -113,16 +113,16 @@ km{
                 dnam{"មិល្លីម៉ូលក្នុងមួយលីត្រ"}
                 other{"{0} មិល្លីម៉ូលក្នុងមួយលីត្រ"}
             }
-            percent{
-                other{"{0} ភាគរយ"}
-            }
-            permillion{
+            part-per-1e6{
                 dnam{"ផ្នែកក្នុងមួយលាន"}
                 other{"{0} ផ្នែកក្នុងមួយលាន"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"ផ្នែកក្នុងមួយប៊ីលាន"}
                 other{"{0} ផ្នែកក្នុងមួយប៊ីលាន"}
+            }
+            percent{
+                other{"{0} ភាគរយ"}
             }
         }
         consumption{
@@ -716,11 +716,11 @@ km{
                 dnam{"ម៉ូល"}
                 other{"{0} ម៉ូល"}
             }
+            part-per-1e9{
+                other{"{0}ppb"}
+            }
             percent{
                 dnam{"%"}
-            }
-            portion-per-1e9{
-                other{"{0}ppb"}
             }
         }
         consumption{
@@ -888,11 +888,11 @@ km{
                 dnam{"មិល្លីម៉ូល/លីត្រ"}
                 other{"{0} ម.ម៉ូល/លី"}
             }
+            part-per-1e9{
+                dnam{"ផ្នែក/ប៊ីលាន"}
+            }
             percent{
                 dnam{"ភាគរយ"}
-            }
-            portion-per-1e9{
-                dnam{"ផ្នែក/ប៊ីលាន"}
             }
         }
         consumption{

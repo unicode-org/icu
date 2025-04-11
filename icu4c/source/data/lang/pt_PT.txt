@@ -211,9 +211,7 @@ pt_PT{
             tertiary{"Ordenar acentos/tipo de letra/largura"}
         }
         collation{
-            big5han{"Ordem do chinês tradicional - Big5"}
             eor{"Regras de ordenação europeias"}
-            gb2312han{"Ordem do chinês simplificado - GB2312"}
             phonebook{"Ordem da lista telefónica"}
             pinyin{"Ordem de pinyin"}
             standard{"Ordenação padrão"}

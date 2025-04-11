@@ -1167,7 +1167,7 @@ kn{
             ec{"ಇಫೇಟ್"}
         }
         "Pacific:Enderbury"{
-            ec{"ಎಂಡರ್ಬರಿ"}
+            ec{"ಕ್ಯಾಂಟನ್"}
         }
         "Pacific:Fakaofo"{
             ec{"ಫಕೋಫೋ"}
@@ -1192,9 +1192,6 @@ kn{
         }
         "Pacific:Honolulu"{
             ec{"ಹೊನಲುಲು"}
-        }
-        "Pacific:Kanton"{
-            ec{"ಕ್ಯಾಂಟನ್"}
         }
         "Pacific:Kiritimati"{
             ec{"ಕಿರಿತಿಮತಿ"}

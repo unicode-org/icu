@@ -752,10 +752,8 @@ fy{
             tertiary{"sortearje neffens aksinten/haadletterbrûkme/breedte"}
         }
         collation{
-            big5han{"Tradisjonele-Sineeske soartear oarder - Big5"}
             dictionary{"Wurdboeksortearfolgorde"}
             ducet{"Standert Unikoade-sortearfolgorde"}
-            gb2312han{"Ferienfâldigde-Sineeske sortearfolgorde - GB2312"}
             phonebook{"Telefoanboeksortearfolgorde"}
             phonetic{"Fonetyske sortearfolgorde"}
             pinyin{"Pinyinvolgorde"}

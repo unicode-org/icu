@@ -358,9 +358,6 @@ tr{
         "Pacific:Easter"{
             ec{"Paskalya Adası"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }

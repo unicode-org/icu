@@ -15,9 +15,6 @@ ig{
         "Europe:London"{
             ld{"Oge Okpomọkụ Britain"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "meta:Afghanistan"{
             ls{"Oge Afghanistan"}
         }

@@ -17,7 +17,7 @@ sr_Latn_BA{
             10p30{"Q{0}"}
         }
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 case{
                     accusative{
                         few{"{0} dijela na milijardu"}
@@ -197,7 +197,7 @@ sr_Latn_BA{
     }
     unitsNarrow{
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"dijelovi/milijarda"}
             }
         }
@@ -271,7 +271,7 @@ sr_Latn_BA{
     }
     unitsShort{
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"dijelovi/milijarda"}
             }
         }

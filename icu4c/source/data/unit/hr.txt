@@ -564,6 +564,54 @@ hr{
                 one{"{0} mola"}
                 other{"{0} mola"}
             }
+            part-per-1e6{
+                case{
+                    accusative{
+                        few{"{0} dijela na milijun"}
+                        one{"{0} dio na milijun"}
+                        other{"{0} dijelova na milijun"}
+                    }
+                    genitive{
+                        few{"{0} dijela na milijun"}
+                        one{"{0} dijela na milijun"}
+                        other{"{0} dijelova na milijun"}
+                    }
+                    instrumental{
+                        few{"{0} dijela na milijun"}
+                        one{"{0} dijelom na milijun"}
+                        other{"{0} dijelova na milijun"}
+                    }
+                }
+                dnam{"dijelovi na milijun"}
+                few{"{0} dijela na milijun"}
+                gender{"inanimate"}
+                one{"{0} dio na milijun"}
+                other{"{0} dijelova na milijun"}
+            }
+            part-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} dijela na milijardu"}
+                        one{"{0} dio na milijardu"}
+                        other{"{0} dijelova na milijardu"}
+                    }
+                    genitive{
+                        few{"{0} dijela na milijardu"}
+                        one{"{0} dijela na milijardu"}
+                        other{"{0} dijelova na milijardu"}
+                    }
+                    instrumental{
+                        few{"{0} dijela na milijardu"}
+                        one{"{0} dijelom na milijardu"}
+                        other{"{0} dijelova na milijardu"}
+                    }
+                }
+                dnam{"dijelovi na milijardu"}
+                few{"{0} dijela na milijardu"}
+                gender{"inanimate"}
+                one{"{0} dio na milijardu"}
+                other{"{0} dijelova na milijardu"}
+            }
             percent{
                 case{
                     accusative{
@@ -612,30 +660,6 @@ hr{
                 one{"{0} promil"}
                 other{"{0} promila"}
             }
-            permillion{
-                case{
-                    accusative{
-                        few{"{0} dijela na milijun"}
-                        one{"{0} dio na milijun"}
-                        other{"{0} dijelova na milijun"}
-                    }
-                    genitive{
-                        few{"{0} dijela na milijun"}
-                        one{"{0} dijela na milijun"}
-                        other{"{0} dijelova na milijun"}
-                    }
-                    instrumental{
-                        few{"{0} dijela na milijun"}
-                        one{"{0} dijelom na milijun"}
-                        other{"{0} dijelova na milijun"}
-                    }
-                }
-                dnam{"dijelovi na milijun"}
-                few{"{0} dijela na milijun"}
-                gender{"inanimate"}
-                one{"{0} dio na milijun"}
-                other{"{0} dijelova na milijun"}
-            }
             permyriad{
                 case{
                     accusative{
@@ -659,30 +683,6 @@ hr{
                 gender{"inanimate"}
                 one{"{0} permyriad"}
                 other{"{0} permyriada"}
-            }
-            portion-per-1e9{
-                case{
-                    accusative{
-                        few{"{0} dijela na milijardu"}
-                        one{"{0} dio na milijardu"}
-                        other{"{0} dijelova na milijardu"}
-                    }
-                    genitive{
-                        few{"{0} dijela na milijardu"}
-                        one{"{0} dijela na milijardu"}
-                        other{"{0} dijelova na milijardu"}
-                    }
-                    instrumental{
-                        few{"{0} dijela na milijardu"}
-                        one{"{0} dijelom na milijardu"}
-                        other{"{0} dijelova na milijardu"}
-                    }
-                }
-                dnam{"dijelovi na milijardu"}
-                few{"{0} dijela na milijardu"}
-                gender{"inanimate"}
-                one{"{0} dio na milijardu"}
-                other{"{0} dijelova na milijardu"}
             }
         }
         consumption{
@@ -3412,7 +3412,7 @@ hr{
                 one{"{0} mol"}
                 other{"{0} mola"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"dijelovi/milijarda"}
             }
         }
@@ -3607,6 +3607,9 @@ hr{
                 one{"{0} mola"}
                 other{"{0} mola"}
             }
+            part-per-1e9{
+                dnam{"dijelovi/milijarda"}
+            }
             percent{
                 few{"{0} %"}
                 one{"{0} %"}
@@ -3621,9 +3624,6 @@ hr{
                 few{"{0} ‱"}
                 one{"{0} ‱"}
                 other{"{0} ‱"}
-            }
-            portion-per-1e9{
-                dnam{"dijelovi/milijarda"}
             }
         }
         consumption{

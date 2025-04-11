@@ -76,10 +76,10 @@ zh{
                 dnam{"摩尔"}
                 other{"{0}摩尔"}
             }
-            permillion{
+            part-per-1e6{
                 other{"百万分之{0}"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"十亿分比"}
                 other{"十亿分之{0}"}
             }
@@ -1091,7 +1091,7 @@ zh{
                 dnam{"项"}
                 other{"{0}项"}
             }
-            permillion{
+            part-per-1e6{
                 other{"{0}ppm"}
             }
         }

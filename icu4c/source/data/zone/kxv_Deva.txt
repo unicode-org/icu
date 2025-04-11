@@ -1159,6 +1159,9 @@ kxv_Deva{
         "Pacific:Efate"{
             ec{"एप़ेट"}
         }
+        "Pacific:Enderbury"{
+            ec{"केंटन"}
+        }
         "Pacific:Fakaofo"{
             ec{"प़ाकाओप़ो"}
         }
@@ -1179,9 +1182,6 @@ kxv_Deva{
         }
         "Pacific:Guam"{
             ec{"गुआम"}
-        }
-        "Pacific:Kanton"{
-            ec{"केंटन"}
         }
         "Pacific:Kiritimati"{
             ec{"किरीतिमाति"}

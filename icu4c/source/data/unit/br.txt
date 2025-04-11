@@ -1674,6 +1674,13 @@ br{
                 other{"{0}mol"}
                 two{"{0}mol"}
             }
+            part-per-1e6{
+                few{"{0}ppm"}
+                many{"{0}ppm"}
+                one{"{0}ppm"}
+                other{"{0}ppm"}
+                two{"{0}ppm"}
+            }
             percent{
                 few{"{0}%"}
                 many{"{0}%"}
@@ -1687,13 +1694,6 @@ br{
                 one{"{0}‰"}
                 other{"{0}‰"}
                 two{"{0}‰"}
-            }
-            permillion{
-                few{"{0}ppm"}
-                many{"{0}ppm"}
-                one{"{0}ppm"}
-                other{"{0}ppm"}
-                two{"{0}ppm"}
             }
             permyriad{
                 few{"{0}‱"}

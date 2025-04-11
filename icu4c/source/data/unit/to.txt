@@ -143,6 +143,10 @@ to{
                 dnam{"molo"}
                 other{"molo ʻe {0}"}
             }
+            part-per-1e6{
+                dnam{"konga he miliona"}
+                other{"konga ʻe {0} he miliona"}
+            }
             percent{
                 dnam{"peseti"}
                 other{"peseti ʻe {0}"}
@@ -150,10 +154,6 @@ to{
             permille{
                 dnam{"pemili"}
                 other{"pemili ʻe {0}"}
-            }
-            permillion{
-                dnam{"konga he miliona"}
-                other{"konga ʻe {0} he miliona"}
             }
             permyriad{
                 dnam{"pemano"}
@@ -876,14 +876,14 @@ to{
             mole{
                 other{"{0} mol"}
             }
+            part-per-1e6{
+                other{"{0} khm"}
+            }
             percent{
                 other{"{0}%"}
             }
             permille{
                 other{"{0}‰"}
-            }
-            permillion{
-                other{"{0} khm"}
             }
             permyriad{
                 other{"{0}‱"}
@@ -1529,15 +1529,15 @@ to{
             mole{
                 other{"mol ʻe {0}"}
             }
+            part-per-1e6{
+                dnam{"khm"}
+                other{"khm ʻe {0}"}
+            }
             percent{
                 other{"% ʻe {0}"}
             }
             permille{
                 other{"‰ ʻe {0}"}
-            }
-            permillion{
-                dnam{"khm"}
-                other{"khm ʻe {0}"}
             }
             permyriad{
                 other{"‱ ʻe {0}"}

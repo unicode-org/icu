@@ -124,6 +124,13 @@ my{
                 dnam{"တစ်လီတာရှိ မီလီမိုးလ်"}
                 other{"တစ်လီတာရှိ {0} မီလီမိုးလ်"}
             }
+            part-per-1e6{
+                other{"တစ်သန်းပုံ {0} ပုံ"}
+            }
+            part-per-1e9{
+                dnam{"သန်းတစ်ထောင်ပုံ တစ်ပုံ"}
+                other{"သန်းတစ်ထောင်ပုံ {0} ပုံ"}
+            }
             percent{
                 dnam{"ရာခိုင်နှုန်း"}
                 other{"{0} ရာခိုင်နှုန်း"}
@@ -132,15 +139,8 @@ my{
                 dnam{"ထောင်လီစိတ်"}
                 other{"{0} ထောင်လီစိတ်"}
             }
-            permillion{
-                other{"တစ်သန်းပုံ {0} ပုံ"}
-            }
             permyriad{
                 other{"{0} ပါမီရိတ်"}
-            }
-            portion-per-1e9{
-                dnam{"သန်းတစ်ထောင်ပုံ တစ်ပုံ"}
-                other{"သန်းတစ်ထောင်ပုံ {0} ပုံ"}
             }
         }
         consumption{
@@ -683,7 +683,7 @@ my{
             }
         }
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 other{"{0}ppb"}
             }
         }
@@ -908,14 +908,14 @@ my{
             karat{
                 dnam{"ကာရက်"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"တစ်သန်းပုံ တစ်ပုံ"}
+            }
+            part-per-1e9{
+                dnam{"သန်းတစ်ထောင်ပုံ တစ်ပုံ"}
             }
             permyriad{
                 dnam{"ပါမီရိတ်"}
-            }
-            portion-per-1e9{
-                dnam{"သန်းတစ်ထောင်ပုံ တစ်ပုံ"}
             }
         }
         consumption{

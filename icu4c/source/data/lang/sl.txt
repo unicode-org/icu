@@ -791,13 +791,11 @@ sl{
             tertiary{"Razvrščanje po naglasih/velikih črkah/malih črkah/širini"}
         }
         collation{
-            big5han{"razvrščanje po sistemu tradicionalne kitajščine - Big5"}
             compat{"prej uporabljeno razvrščanje za združljivost"}
             dictionary{"slovarsko razvrščanje"}
             ducet{"Privzeto razvrščanje Unicode"}
             emoji{"razvrščanje čustvenčkov"}
             eor{"evropska pravila razvrščanja"}
-            gb2312han{"razvrščanje po sistemu poenostavljene kitajščine - GB2312"}
             phonebook{"razvrščanje po sistemu telefonskega imenika"}
             phonetic{"fonetično razvrščanje"}
             pinyin{"razvrščanje po sistemu pinjin"}

@@ -892,12 +892,10 @@ ca{
             tertiary{"Ordena per accent/majúscules/amplada"}
         }
         collation{
-            big5han{"ordre del xinès tradicional - Big5"}
             compat{"ordre anterior, per a compatibilitat"}
             dictionary{"ordre de diccionari"}
             ducet{"ordre Unicode predeterminat"}
             eor{"normes europees d’ordenació"}
-            gb2312han{"ordre del xinès simplificat - GB2312"}
             phonebook{"ordre de la guia telefònica"}
             phonetic{"ordre fonètic"}
             pinyin{"ordre pinyin"}

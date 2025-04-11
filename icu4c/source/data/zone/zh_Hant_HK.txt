@@ -450,9 +450,6 @@ zh_Hant_HK{
         "Pacific:Chatham"{
             ec{"查塔姆"}
         }
-        "Pacific:Enderbury"{
-            ec{"恩德伯里島"}
-        }
         "Pacific:Fakaofo"{
             ec{"法考福環礁"}
         }

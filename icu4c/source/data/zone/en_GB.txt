@@ -4,15 +4,6 @@
 en_GB{
     %%Parent{"en_001"}
     zoneStrings{
-        "America:Bahia_Banderas"{
-            ec{"Bahia Banderas"}
-        }
-        "America:Cancun"{
-            ec{"Cancun"}
-        }
-        "America:Merida"{
-            ec{"Merida"}
-        }
         "Europe:London"{
             sd{"BST"}
         }

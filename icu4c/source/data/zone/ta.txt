@@ -1167,7 +1167,7 @@ ta{
             ec{"ஈஃபேட்"}
         }
         "Pacific:Enderbury"{
-            ec{"எண்டர்பரி"}
+            ec{"கேன்டன்"}
         }
         "Pacific:Fakaofo"{
             ec{"ஃபகாஃபோ"}
@@ -1192,9 +1192,6 @@ ta{
         }
         "Pacific:Honolulu"{
             ec{"ஹோனோலூலூ"}
-        }
-        "Pacific:Kanton"{
-            ec{"கேன்டன்"}
         }
         "Pacific:Kiritimati"{
             ec{"கிரிடிமாட்டி"}

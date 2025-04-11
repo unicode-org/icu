@@ -1166,6 +1166,9 @@ syr{
         "Pacific:Efate"{
             ec{"ܝܦܐܬ"}
         }
+        "Pacific:Enderbury"{
+            ec{"ܟܐܢܬܘܢ"}
+        }
         "Pacific:Fakaofo"{
             ec{"ܦܐܟܐܘܦܘ"}
         }
@@ -1186,9 +1189,6 @@ syr{
         }
         "Pacific:Guam"{
             ec{"ܓܘܐܡ"}
-        }
-        "Pacific:Kanton"{
-            ec{"ܟܐܢܬܘܢ"}
         }
         "Pacific:Kiritimati"{
             ec{"ܟܝܪܝܡܐܬܝ"}

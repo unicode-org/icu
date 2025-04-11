@@ -14,11 +14,11 @@ yo_BJ{
             item{
                 dnam{"àwɔ́n ohun"}
             }
+            part-per-1e9{
+                dnam{"ɛ̀yà nínú ìdá blíɔ̀nù"}
+            }
             permille{
                 other{"{0} ìdákan nínú ɛgbɛ̀rún"}
-            }
-            portion-per-1e9{
-                dnam{"ɛ̀yà nínú ìdá blíɔ̀nù"}
             }
         }
         consumption{
@@ -205,11 +205,11 @@ yo_BJ{
     }
     unitsShort{
         concentr{
+            part-per-1e6{
+                dnam{"ara/milíɔ̀nù"}
+            }
             permille{
                 dnam{"ìdákan nínú ɛgbɛ̀rún"}
-            }
-            permillion{
-                dnam{"ara/milíɔ̀nù"}
             }
         }
         digital{

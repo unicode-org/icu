@@ -158,6 +158,11 @@ ia{
                 one{"{0} millimol per litro"}
                 other{"{0} millimoles per litro"}
             }
+            part-per-1e6{
+                dnam{"partes per million"}
+                one{"{0} parte per million"}
+                other{"{0} partes per million"}
+            }
             percent{
                 dnam{"per cento"}
                 one{"{0} per cento"}
@@ -167,11 +172,6 @@ ia{
                 dnam{"per mille"}
                 one{"{0} per mille"}
                 other{"{0} per mille"}
-            }
-            permillion{
-                dnam{"partes per million"}
-                one{"{0} parte per million"}
-                other{"{0} partes per million"}
             }
         }
         consumption{

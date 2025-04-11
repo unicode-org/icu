@@ -471,6 +471,52 @@ fi{
                 one{"{0} mooli"}
                 other{"{0} moolia"}
             }
+            part-per-1e6{
+                case{
+                    elative{
+                        one{"{0} miljoonasosasta"}
+                        other{"{0} miljoonasosasta"}
+                    }
+                    genitive{
+                        one{"{0} miljoonasosan"}
+                        other{"{0} miljoonasosan"}
+                    }
+                    illative{
+                        one{"{0} miljoonasosaan"}
+                        other{"{0} miljoonasosaan"}
+                    }
+                    partitive{
+                        one{"{0} miljoonasosaa"}
+                        other{"{0} miljoonasosaa"}
+                    }
+                }
+                dnam{"miljoonasosat"}
+                one{"{0} miljoonasosa"}
+                other{"{0} miljoonasosaa"}
+            }
+            part-per-1e9{
+                case{
+                    elative{
+                        one{"{0} miljardisosasta"}
+                        other{"{0} miljardisosasta"}
+                    }
+                    genitive{
+                        one{"{0} miljardisosan"}
+                        other{"{0} miljardisosan"}
+                    }
+                    illative{
+                        one{"{0} miljardisosaan"}
+                        other{"{0} miljardisosaan"}
+                    }
+                    partitive{
+                        one{"{0} miljardisosaa"}
+                        other{"{0} miljardisosaa"}
+                    }
+                }
+                dnam{"miljardisosat"}
+                one{"{0} miljardisosa"}
+                other{"{0} miljardisosaa"}
+            }
             percent{
                 case{
                     elative{
@@ -517,29 +563,6 @@ fi{
                 one{"{0} promille"}
                 other{"{0} promillea"}
             }
-            permillion{
-                case{
-                    elative{
-                        one{"{0} miljoonasosasta"}
-                        other{"{0} miljoonasosasta"}
-                    }
-                    genitive{
-                        one{"{0} miljoonasosan"}
-                        other{"{0} miljoonasosan"}
-                    }
-                    illative{
-                        one{"{0} miljoonasosaan"}
-                        other{"{0} miljoonasosaan"}
-                    }
-                    partitive{
-                        one{"{0} miljoonasosaa"}
-                        other{"{0} miljoonasosaa"}
-                    }
-                }
-                dnam{"miljoonasosat"}
-                one{"{0} miljoonasosa"}
-                other{"{0} miljoonasosaa"}
-            }
             permyriad{
                 case{
                     elative{
@@ -561,29 +584,6 @@ fi{
                 }
                 one{"{0} peruspiste"}
                 other{"{0} peruspistettä"}
-            }
-            portion-per-1e9{
-                case{
-                    elative{
-                        one{"{0} miljardisosasta"}
-                        other{"{0} miljardisosasta"}
-                    }
-                    genitive{
-                        one{"{0} miljardisosan"}
-                        other{"{0} miljardisosan"}
-                    }
-                    illative{
-                        one{"{0} miljardisosaan"}
-                        other{"{0} miljardisosaan"}
-                    }
-                    partitive{
-                        one{"{0} miljardisosaa"}
-                        other{"{0} miljardisosaa"}
-                    }
-                }
-                dnam{"miljardisosat"}
-                one{"{0} miljardisosa"}
-                other{"{0} miljardisosaa"}
             }
         }
         consumption{
@@ -3173,13 +3173,13 @@ fi{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
+            part-per-1e6{
+                one{"{0}ppm"}
+                other{"{0}ppm"}
+            }
             permille{
                 one{"{0}‰"}
                 other{"{0}‰"}
-            }
-            permillion{
-                one{"{0}ppm"}
-                other{"{0}ppm"}
             }
             permyriad{
                 dnam{"‱"}

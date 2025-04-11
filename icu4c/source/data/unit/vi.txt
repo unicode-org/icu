@@ -115,12 +115,12 @@ vi{
                 dnam{"carat"}
                 other{"{0} carat"}
             }
-            permyriad{
-                other{"{0} phần vạn"}
-            }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"phần tỷ"}
                 other{"{0} phần tỷ"}
+            }
+            permyriad{
+                other{"{0} phần vạn"}
             }
         }
         consumption{
@@ -639,11 +639,11 @@ vi{
             }
         }
         concentr{
+            part-per-1e9{
+                other{"{0}ppb"}
+            }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                other{"{0}ppb"}
             }
         }
         digital{
@@ -805,11 +805,11 @@ vi{
                 dnam{"mục"}
                 other{"{0} mục"}
             }
+            part-per-1e9{
+                dnam{"phần tỷ"}
+            }
             permyriad{
                 dnam{"phần vạn"}
-            }
-            portion-per-1e9{
-                dnam{"phần tỷ"}
             }
         }
         consumption{

@@ -622,13 +622,11 @@ fil{
             tertiary{"Pag-uri-uriin ang Mga Accent/Case/Lapad"}
         }
         collation{
-            big5han{"Pagkakasunod-sunod ng Pag-uuri ng Tradisyunal na Chinese - Big5"}
             compat{"Nakaraang Pagkakasunud-sunod ng Pag-uuri, para sa compatibility"}
             dictionary{"Pagkakasunud-sunod ng Pag-uuri ng Diksyunaryo"}
             ducet{"Default na Pagkakasunud-sunod ng Ayos ng Unicode"}
             emoji{"Pagkakasunud-sunod ng Pag-uuri ng Emoji"}
             eor{"Mga Tuntunin ng European na Pagkakasunud-sunod"}
-            gb2312han{"Pagkakasunud-sunod ng Pag-uuri ng Pinasimpleng Chinese - GB2312"}
             phonebook{"Pagkakasunud-sunod ng Pag-uuri ng Phonebook"}
             phonetic{"Phonetic na Ayos ng Pag-uuri-uri"}
             pinyin{"Pagkakasunud-sunod ng Pag-uuri ng Pinyin"}

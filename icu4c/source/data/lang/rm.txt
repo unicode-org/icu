@@ -687,9 +687,7 @@ rm{
             standard{"format da valuta da standard"}
         }
         collation{
-            big5han{"chinaisa tradiziunala - Big5"}
             ducet{"zavrada unicode standard"}
-            gb2312han{"chinaisa simplifitgada - GB2312"}
             phonebook{"cudesch da telefon"}
             pinyin{"Pinyin"}
             search{"tschertga generala"}

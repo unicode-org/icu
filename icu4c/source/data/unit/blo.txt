@@ -1062,6 +1062,16 @@ blo{
                 other{"mol{0}"}
                 zero{"mol{0}"}
             }
+            part-per-1e6{
+                one{"ppm{0}"}
+                other{"ppm{0}"}
+                zero{"ppm{0}"}
+            }
+            part-per-1e9{
+                one{"ppb{0}"}
+                other{"ppb{0}"}
+                zero{"ppb{0}"}
+            }
             percent{
                 one{"%{0}"}
                 other{"%{0}"}
@@ -1072,20 +1082,10 @@ blo{
                 other{"‰{0}"}
                 zero{"‰{0}"}
             }
-            permillion{
-                one{"ppm{0}"}
-                other{"ppm{0}"}
-                zero{"ppm{0}"}
-            }
             permyriad{
                 one{"‱{0}"}
                 other{"‱{0}"}
                 zero{"‱{0}"}
-            }
-            portion-per-1e9{
-                one{"ppb{0}"}
-                other{"ppb{0}"}
-                zero{"ppb{0}"}
             }
         }
         consumption{
@@ -1838,6 +1838,16 @@ blo{
                 other{"mol {0}"}
                 zero{"mol {0}"}
             }
+            part-per-1e6{
+                one{"ppm {0}"}
+                other{"ppm {0}"}
+                zero{"ppm {0}"}
+            }
+            part-per-1e9{
+                one{"ppb {0}"}
+                other{"ppb {0}"}
+                zero{"ppb {0}"}
+            }
             percent{
                 one{"%{0}"}
                 other{"%{0}"}
@@ -1848,20 +1858,10 @@ blo{
                 other{"‰{0}"}
                 zero{"‰{0}"}
             }
-            permillion{
-                one{"ppm {0}"}
-                other{"ppm {0}"}
-                zero{"ppm {0}"}
-            }
             permyriad{
                 one{"‱{0}"}
                 other{"‱{0}"}
                 zero{"‱{0}"}
-            }
-            portion-per-1e9{
-                one{"ppb {0}"}
-                other{"ppb {0}"}
-                zero{"ppb {0}"}
             }
         }
         consumption{

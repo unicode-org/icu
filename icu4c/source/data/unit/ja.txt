@@ -726,20 +726,20 @@ ja{
                 dnam{"mol"}
                 other{"{0}mol"}
             }
+            part-per-1e6{
+                other{"{0}ppm"}
+            }
+            part-per-1e9{
+                other{"{0}ppb"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
             }
-            permillion{
-                other{"{0}ppm"}
-            }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                other{"{0}ppb"}
             }
         }
         consumption{

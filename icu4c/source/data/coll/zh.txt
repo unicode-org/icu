@@ -1865,7 +1865,7 @@ zh{
                 "&弞<沈阳/阳"
                 "&銺<藏文/文"
             }
-            Version{"47"}
+            Version{"48"}
         }
         private-pinyin{
             Sequence{
@@ -1879,7 +1879,7 @@ zh{
                 "&[before 2]u<<ū<<<Ū<<ú<<<Ú<<ǔ<<<Ǔ<<ù<<<Ù"
                 "&U<<ǖ<<<Ǖ<<ǘ<<<Ǘ<<ǚ<<<Ǚ<<ǜ<<<Ǜ<<ü<<<Ü"
             }
-            Version{"47"}
+            Version{"48"}
         }
         stroke{
             Sequence{
@@ -2584,7 +2584,7 @@ zh{
                 "&龟<<<⻳"
                 "&龠<<<⿕"
             }
-            Version{"47"}
+            Version{"48"}
         }
         unihan{
             Sequence{
@@ -2592,7 +2592,7 @@ zh{
                 "[import zh-u-co-private-pinyin]"
                 "[reorder Hani Bopo]"
             }
-            Version{"47"}
+            Version{"48"}
         }
         zhuyin{
             Sequence{
@@ -4618,7 +4618,7 @@ zh{
                 "&龟<<<⻳"
                 "&龠<<<⿕"
             }
-            Version{"47"}
+            Version{"48"}
         }
     }
 }
