@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744307277509,
+  "lastUpdate": 1744394216445,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -94533,6 +94533,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1478.3706,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mingaleev@google.com",
+            "name": "Almaz Mingaleev",
+            "username": "Yqwed"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "32c96106d36ef364f220f5027505df8c8c5e78b8",
+          "message": "ICU-23096 Update ICU to TZDB 2025b.\n\nExtra changes are due to https://github.com/unicode-org/cldr/pull/4535\n\ncldr-to-icu updates locale fallback files, but they were not\npicked up.",
+          "timestamp": "2025-04-11T10:25:44-07:00",
+          "tree_id": "b74e56ffa1beaa7dab0a259094ca2fb47d34ed19",
+          "url": "https://github.com/unicode-org/icu/commit/32c96106d36ef364f220f5027505df8c8c5e78b8"
+        },
+        "date": 1744393965394,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 78281.0438,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 167585.9064,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5417,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.7482,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.3377,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8635.0049,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 32569.0724,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1446.2974,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
