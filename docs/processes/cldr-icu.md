@@ -217,7 +217,7 @@ cp -p $CLDR_DIR/common/dtd/ldmlICU.dtd $ICU4C_DIR/source/data/dtd/cldr/common/dt
 ```sh
 open $ICU_DIR/tools/cldr/cldr-to-icu/pom.xml
 ```
-(search for `icu4j-for-cldr` and update to the latest tagged version per instructions)
+(search for `<icu4j.version>` and update to the latest tagged version per instructions)
 
 3c. Update the build for any new icu version, added locales, etc.
 ```sh
@@ -280,6 +280,19 @@ already present in the ICU4C sources. This process uses the `LdmlConverter` in
   `coll/de__PHONEBOOK.txt`, `coll/de_.txt`, etc.
 * Before running the tool to regenerate the data, make any necessary changes to the
   `config.xml` file, such as adding new locales etc.
+* **Temporary note 2025-04-07:** There are some steps mentioned in `$ICU_DIR/tools/cldr/cldr-to-icu/README.md`
+  that were not mentioned in these instructions but seem to be necessary for the next step to
+  work properly, these are:
+    * Build ICU4J:
+    ```
+    cd "$ICU_DIR"
+    mvn clean install -f icu4j -DskipTests -DskipITs
+    ```
+    * Build the conversion tool:
+    ```
+    cd "$ICU_DIR/tools/cldr/cldr-to-icu/"
+    mvn clean package -DskipTests -DskipITs
+    ```
 
 ```sh
 cd $ICU_DIR/tools/cldr/cldr-to-icu

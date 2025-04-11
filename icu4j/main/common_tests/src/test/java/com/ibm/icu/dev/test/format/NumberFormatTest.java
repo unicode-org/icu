@@ -7154,25 +7154,25 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
 
         TestCase[] testCases = {
-                new TestCase("portion-per-1e9", "en-US", 1, "1 part per billion"),
-                new TestCase("portion-per-1e9", "en-US", 2, "2 parts per billion"),
-                new TestCase("portion-per-1e9", "en-US", 1000000, "1,000,000 parts per billion"),
-                new TestCase("portion-per-1e9", "de-DE", 1000000, "1.000.000 Milliardstel"),
-                new TestCase("portion-per-1e1", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
-                new TestCase("portion-per-1e2", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
-                new TestCase("portion-per-1e3", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
-                new TestCase("portion-per-1e4", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
-                new TestCase("portion-per-1e5", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
-                new TestCase("portion-per-1e6", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
-                new TestCase("portion-per-1e7", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
-                new TestCase("portion-per-1e8", "en-US", 1, "UNKNOWN"), // Failing CLDR-18274
+                new TestCase("part-per-1e9", "en-US", 1, "1 part per billion"),
+                new TestCase("part-per-1e9", "en-US", 2, "2 parts per billion"),
+                new TestCase("part-per-1e9", "en-US", 1000000, "1,000,000 parts per billion"),
+                new TestCase("part-per-1e9", "de-DE", 1000000, "1.000.000 Milliardstel"),
+                new TestCase("part-per-1e1", "en-US", 1, "1 part per 10"),
+                new TestCase("part-per-1e2", "en-US", 1, "1 part per 100"),
+                new TestCase("part-per-1e3", "en-US", 1, "1 part per 1000"),
+                new TestCase("part-per-1e4", "en-US", 1, "1 part per 10000"),
+                new TestCase("part-per-1e5", "en-US", 1, "1 part per 100000"),
+                new TestCase("part-per-1e6", "en-US", 1, "1 part per million"),
+                new TestCase("part-per-1e7", "en-US", 1, "1 part per 10000000"),
+                new TestCase("part-per-1e8", "en-US", 1, "1 part per 100000000"),
         };
 
         for (TestCase testCase : testCases) {
-            if (testCase.unitIdentifier.compareTo("portion-per-1e9") != 0) {
-                logKnownIssue("CLDR-18274", "The data for portion-per-XYZ is not determined yet.");
-                continue;
-            }
+            //if (testCase.unitIdentifier.compareTo("portion-per-1e9") != 0) {
+            //    logKnownIssue("CLDR-18274", "The data for portion-per-XYZ is not determined yet.");
+            //    continue;
+            //}
             MeasureUnit unit = MeasureUnit.forIdentifier(testCase.unitIdentifier);
             LocalizedNumberFormatter formatter = NumberFormatter.withLocale(ULocale.forLanguageTag(testCase.locale))
                     .unit(unit)

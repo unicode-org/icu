@@ -849,15 +849,15 @@ static void TestISO8601(void) {
     } TestCase;
 
     const TestCase testCases[] = {
-        { "en_GB@calendar=iso8601;rg=uszzzz", u"EEEEyMMMMdjmm", u"y MMMM d, EEEE 'at' h:mm a" },
-        { "en_GB@calendar=iso8601;rg=uszzzz", u"EEEEyMMMMdHmm", u"y MMMM d, EEEE 'at' HH:mm" },
-        { "en_GB@calendar=iso8601;rg=uszzzz", u"Edjmm",         u"d, EEE, h:mm a" },
-        { "en_GB@calendar=iso8601;rg=uszzzz", u"EdHmm",         u"d, EEE, HH:mm" },
+        { "en_GB@calendar=iso8601;rg=uszzzz", u"EEEEyMMMMdjmm", u"y MMMM d, EEEE h:mm a" },
+        { "en_GB@calendar=iso8601;rg=uszzzz", u"EEEEyMMMMdHmm", u"y MMMM d, EEEE HH:mm" },
+        { "en_GB@calendar=iso8601;rg=uszzzz", u"Edjmm",         u"d, EEE h:mm a" },
+        { "en_GB@calendar=iso8601;rg=uszzzz", u"EdHmm",         u"d, EEE HH:mm" },
 
-        { "en_US@calendar=iso8601",           u"EEEEyMMMMdjmm", u"y MMMM d, EEEE 'at' h:mm a" },
-        { "en_US@calendar=iso8601",           u"EEEEyMMMMdHmm", u"y MMMM d, EEEE 'at' HH:mm" },
-        { "en_US@calendar=iso8601",           u"Edjmm",         u"d, EEE, h:mm a" },
-        { "en_US@calendar=iso8601",           u"EdHmm",         u"d, EEE, HH:mm" },
+        { "en_US@calendar=iso8601",           u"EEEEyMMMMdjmm", u"y MMMM d, EEEE h:mm a" },
+        { "en_US@calendar=iso8601",           u"EEEEyMMMMdHmm", u"y MMMM d, EEEE HH:mm" },
+        { "en_US@calendar=iso8601",           u"Edjmm",         u"d, EEE h:mm a" },
+        { "en_US@calendar=iso8601",           u"EdHmm",         u"d, EEE HH:mm" },
 
         { "en_US",                            u"EEEEyMMMMdjmm", u"EEEE, MMMM d, y 'at' h:mm a" },
         { "en_US",                            u"EEEEyMMMMdHmm", u"EEEE, MMMM d, y 'at' HH:mm" },
