@@ -1164,7 +1164,7 @@ el{
             ec{"Εφάτε"}
         }
         "Pacific:Enderbury"{
-            ec{"Έντερμπερι"}
+            ec{"Καντών"}
         }
         "Pacific:Fakaofo"{
             ec{"Φακαόφο"}
@@ -1189,9 +1189,6 @@ el{
         }
         "Pacific:Honolulu"{
             ec{"Χονολουλού"}
-        }
-        "Pacific:Kanton"{
-            ec{"Καντών"}
         }
         "Pacific:Kiritimati"{
             ec{"Κιριτιμάτι"}

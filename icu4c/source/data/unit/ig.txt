@@ -30,7 +30,7 @@ ig{
             }
         }
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"akụkụ kwa ijeri"}
                 other{"{0} akụkụ kwa ijeri"}
             }
@@ -154,10 +154,10 @@ ig{
             millimole-per-liter{
                 other{"{0}mmol/L"}
             }
-            permillion{
+            part-per-1e6{
                 other{"{0}ppm"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"akụkụ/ijeri"}
             }
         }
@@ -238,7 +238,7 @@ ig{
                 dnam{"ihe"}
                 other{"{0} ihe"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"akụkụ/ijeri"}
             }
         }

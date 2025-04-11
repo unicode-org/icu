@@ -24,7 +24,7 @@ yue{
             per{"每 {1} {0}"}
         }
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"十億分點濃度"}
                 other{"{0} 十億分點濃度"}
             }
@@ -175,7 +175,7 @@ yue{
     }
     unitsNarrow{
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 other{"{0}ppb"}
             }
         }
@@ -405,16 +405,16 @@ yue{
                 dnam{"摩爾"}
                 other{"{0} 摩爾"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"百萬分率"}
                 other{"{0} 百萬分率"}
+            }
+            part-per-1e9{
+                dnam{"濃度/十億"}
             }
             permyriad{
                 dnam{"點子"}
                 other{"{0} 點子"}
-            }
-            portion-per-1e9{
-                dnam{"濃度/十億"}
             }
         }
         consumption{

@@ -696,13 +696,11 @@ sq{
             standard{"format valutor standard"}
         }
         collation{
-            big5han{"Radhitje e kinezishtes tradicionale - Big5"}
             compat{"Radhitja e mëparshme, për pajtueshmëri"}
             dictionary{"Radhitje fjalori"}
             ducet{"radhitje unikode e parazgjedhur"}
             emoji{"Radhitje Emoji"}
             eor{"Rregulla evropiane radhitjeje"}
-            gb2312han{"Radhitje e kinezishtes së thjeshtësuar - GB2312"}
             phonebook{"Radhitje libri telefonik"}
             pinyin{"Radhitje pinini"}
             search{"kërkim i përgjithshëm"}

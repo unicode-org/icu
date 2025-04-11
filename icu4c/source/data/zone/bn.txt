@@ -1167,7 +1167,7 @@ bn{
             ec{"ইফাতে"}
         }
         "Pacific:Enderbury"{
-            ec{"এন্ডারবারি"}
+            ec{"ক্যান্টন"}
         }
         "Pacific:Fakaofo"{
             ec{"ফ্যাকাওফো"}
@@ -1192,9 +1192,6 @@ bn{
         }
         "Pacific:Honolulu"{
             ec{"হনোলুলু"}
-        }
-        "Pacific:Kanton"{
-            ec{"ক্যান্টন"}
         }
         "Pacific:Kiritimati"{
             ec{"কিরিতিমাতি"}

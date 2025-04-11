@@ -163,6 +163,16 @@ eu{
             mole{
                 dnam{"molak"}
             }
+            part-per-1e6{
+                dnam{"zati milioi bakoitzeko"}
+                one{"{0} zati milioi bakoitzeko"}
+                other{"{0} zati milioi bakoitzeko"}
+            }
+            part-per-1e9{
+                dnam{"zati mila milioiko"}
+                one{"{0} zati mila milioiko"}
+                other{"{0} zati mila milioiko"}
+            }
             percent{
                 dnam{"ehuneko"}
                 one{"ehuneko {0}"}
@@ -172,16 +182,6 @@ eu{
                 dnam{"milako"}
                 one{"milako {0}"}
                 other{"milako {0}"}
-            }
-            permillion{
-                dnam{"zati milioi bakoitzeko"}
-                one{"{0} zati milioi bakoitzeko"}
-                other{"{0} zati milioi bakoitzeko"}
-            }
-            portion-per-1e9{
-                dnam{"zati mila milioiko"}
-                one{"{0} zati mila milioiko"}
-                other{"{0} zati mila milioiko"}
             }
         }
         consumption{
@@ -919,7 +919,7 @@ eu{
             millimole-per-liter{
                 dnam{"mmol/l"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"zati / m. m."}
                 one{"{0} zati / m. m."}
                 other{"{0} zati / m. m."}
@@ -1174,6 +1174,14 @@ eu{
             mole{
                 dnam{"mola"}
             }
+            part-per-1e6{
+                dnam{"zati/milioi"}
+            }
+            part-per-1e9{
+                dnam{"zati / mila milioi"}
+                one{"{0} zati / m. m."}
+                other{"{0} zati / m. m."}
+            }
             percent{
                 one{"% {0}"}
                 other{"% {0}"}
@@ -1182,17 +1190,9 @@ eu{
                 one{"‰ {0}"}
                 other{"‰ {0}"}
             }
-            permillion{
-                dnam{"zati/milioi"}
-            }
             permyriad{
                 one{"‱ {0}"}
                 other{"‱ {0}"}
-            }
-            portion-per-1e9{
-                dnam{"zati / mila milioi"}
-                one{"{0} zati / m. m."}
-                other{"{0} zati / m. m."}
             }
         }
         consumption{

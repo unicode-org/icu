@@ -1166,9 +1166,6 @@ ps{
         "Pacific:Efate"{
             ec{"عفات"}
         }
-        "Pacific:Enderbury"{
-            ec{"انډربري"}
-        }
         "Pacific:Fakaofo"{
             ec{"فوکافو"}
         }

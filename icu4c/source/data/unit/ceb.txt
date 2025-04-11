@@ -167,6 +167,11 @@ ceb{
                 one{"{0} ka mole"}
                 other{"{0} ka mga mole"}
             }
+            part-per-1e6{
+                dnam{"mga part per million"}
+                one{"{0} ka part per million"}
+                other{"{0} ka mga part per million"}
+            }
             percent{
                 one{"{0} ka porsyento"}
                 other{"{0} ka porsyento"}
@@ -174,11 +179,6 @@ ceb{
             permille{
                 one{"{0} ka permille"}
                 other{"{0} ka permille"}
-            }
-            permillion{
-                dnam{"mga part per million"}
-                one{"{0} ka part per million"}
-                other{"{0} ka mga part per million"}
             }
             permyriad{
                 one{"{0} ka permyriad"}
@@ -1098,14 +1098,14 @@ ceb{
             mole{
                 dnam{"mole"}
             }
+            part-per-1e6{
+                dnam{"mga part/million"}
+            }
             percent{
                 dnam{"porsyento"}
             }
             permille{
                 dnam{"permille"}
-            }
-            permillion{
-                dnam{"mga part/million"}
             }
             permyriad{
                 dnam{"permyriad"}

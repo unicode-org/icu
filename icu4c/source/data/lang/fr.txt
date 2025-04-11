@@ -906,12 +906,10 @@ fr{
             }
         }
         collation{
-            big5han{"ordre chinois traditionnel - Big5"}
             compat{"ancien ordre de tri pour compatibilité"}
             dictionary{"ordre du dictionnaire"}
             ducet{"ordre de tri Unicode par défaut"}
             eor{"règles de classement européen"}
-            gb2312han{"ordre chinois simplifié - GB2312"}
             phonebook{"ordre de l’annuaire"}
             phonetic{"ordre de tri phonétique"}
             pinyin{"ordre pinyin"}

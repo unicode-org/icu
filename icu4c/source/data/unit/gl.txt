@@ -169,24 +169,24 @@ gl{
                 one{"{0} mol"}
                 other{"{0} moles"}
             }
+            part-per-1e6{
+                dnam{"partes por millón"}
+                one{"{0} parte por millón"}
+                other{"{0} partes por millón"}
+            }
+            part-per-1e9{
+                dnam{"partes por mil millóns"}
+                one{"{0} parte por mil millóns"}
+                other{"{0} partes por mil millóns"}
+            }
             percent{
                 dnam{"tanto por cento"}
             }
             permille{
                 dnam{"tanto por mil"}
             }
-            permillion{
-                dnam{"partes por millón"}
-                one{"{0} parte por millón"}
-                other{"{0} partes por millón"}
-            }
             permyriad{
                 dnam{"tanto por dez mil"}
-            }
-            portion-per-1e9{
-                dnam{"partes por mil millóns"}
-                one{"{0} parte por mil millóns"}
-                other{"{0} partes por mil millóns"}
             }
         }
         consumption{
@@ -1041,7 +1041,7 @@ gl{
             karat{
                 dnam{"kt"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"ppmm"}
                 one{"{0} ppmm"}
                 other{"{0} ppmm"}
@@ -1288,6 +1288,11 @@ gl{
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
+            part-per-1e9{
+                dnam{"partes/mil millóns"}
+                one{"{0} ppmm"}
+                other{"{0} ppmm"}
+            }
             percent{
                 one{"{0} %"}
                 other{"{0} %"}
@@ -1299,11 +1304,6 @@ gl{
             permyriad{
                 one{"{0} ‱"}
                 other{"{0} ‱"}
-            }
-            portion-per-1e9{
-                dnam{"partes/mil millóns"}
-                one{"{0} ppmm"}
-                other{"{0} ppmm"}
             }
         }
         consumption{

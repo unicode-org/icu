@@ -436,9 +436,6 @@ sk{
         "Pacific:Easter"{
             ec{"Veľkonočný ostrov"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fidži"}
         }

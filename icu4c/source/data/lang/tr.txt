@@ -931,13 +931,11 @@ tr{
             tertiary{"Aksanları/Büyük-Küçük Harfleri/Genişliği Sıralama"}
         }
         collation{
-            big5han{"Geleneksel Çince Sıralama Düzeni - Big5"}
             compat{"Önceki Sıralama Düzeni (uyumluluk için)"}
             dictionary{"Sözlük Sıralama Düzeni"}
             ducet{"Saptanmış Unicode Sıralama Düzeni"}
             emoji{"Emoji Sıralama Düzeni"}
             eor{"Avrupa Sıralama Kuralları"}
-            gb2312han{"Basitleştirilmiş Çince Sıralama Düzeni - GB2312"}
             phonebook{"Telefon Defteri Sıralama Düzeni"}
             phonetic{"Fonetik Sıralama Düzeni"}
             pinyin{"Pinyin Sıralama Düzeni"}

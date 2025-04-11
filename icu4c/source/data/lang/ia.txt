@@ -578,13 +578,11 @@ ia{
             standard{"formato de moneta standard"}
         }
         collation{
-            big5han{"ordinamento traditional chinese - Big5"}
             compat{"ordinamento previe, pro compatibilitate"}
             dictionary{"ordinamento de dictionario"}
             ducet{"ordinamento Unicode predefinite"}
             emoji{"ordinamento de emoji"}
             eor{"regulas europee de ordinamento"}
-            gb2312han{"ordinamento chinese simplificate - GB2312"}
             phonebook{"ordinamento de annuario telephonic"}
             pinyin{"ordinamento pinyin"}
             search{"recerca generic"}

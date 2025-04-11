@@ -1164,9 +1164,6 @@ bs_Cyrl{
         "Pacific:Efate"{
             ec{"Ефат"}
         }
-        "Pacific:Enderbury"{
-            ec{"Ендербери"}
-        }
         "Pacific:Fakaofo"{
             ec{"Факаофо"}
         }

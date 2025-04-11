@@ -48,9 +48,6 @@ fil{
         "Europe:London"{
             ld{"Oras sa Tag-init ng Britain"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }

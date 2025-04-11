@@ -208,6 +208,18 @@ es{
                 one{"{0} mol"}
                 other{"{0} moles"}
             }
+            part-per-1e6{
+                dnam{"partes por millón"}
+                gender{"feminine"}
+                one{"{0} parte por millón"}
+                other{"{0} partes por millón"}
+            }
+            part-per-1e9{
+                dnam{"partes por millardo"}
+                gender{"feminine"}
+                one{"{0} parte por millardo"}
+                other{"{0} partes por millardo"}
+            }
             percent{
                 gender{"masculine"}
                 one{"{0} por ciento"}
@@ -218,22 +230,10 @@ es{
                 one{"{0} por mil"}
                 other{"{0} por mil"}
             }
-            permillion{
-                dnam{"partes por millón"}
-                gender{"feminine"}
-                one{"{0} parte por millón"}
-                other{"{0} partes por millón"}
-            }
             permyriad{
                 gender{"masculine"}
                 one{"{0} por diez mil"}
                 other{"{0} por diez mil"}
-            }
-            portion-per-1e9{
-                dnam{"partes por millardo"}
-                gender{"feminine"}
-                one{"{0} parte por millardo"}
-                other{"{0} partes por millardo"}
             }
         }
         consumption{
@@ -1331,6 +1331,14 @@ es{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
+            part-per-1e6{
+                one{"{0}ppm"}
+                other{"{0}ppm"}
+            }
+            part-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
             percent{
                 dnam{"%"}
                 one{"{0}%"}
@@ -1340,17 +1348,9 @@ es{
                 one{"{0}‰"}
                 other{"{0}‰"}
             }
-            permillion{
-                one{"{0}ppm"}
-                other{"{0}ppm"}
-            }
             permyriad{
                 one{"{0}‱"}
                 other{"{0}‱"}
-            }
-            portion-per-1e9{
-                one{"{0}ppb"}
-                other{"{0}ppb"}
             }
         }
         consumption{
@@ -2091,6 +2091,9 @@ es{
                 one{"{0} ct"}
                 other{"{0} ct"}
             }
+            part-per-1e9{
+                dnam{"partes/millardo"}
+            }
             percent{
                 dnam{"por ciento"}
                 one{"{0} %"}
@@ -2105,9 +2108,6 @@ es{
                 dnam{"por diez mil"}
                 one{"{0} ‱"}
                 other{"{0} ‱"}
-            }
-            portion-per-1e9{
-                dnam{"partes/millardo"}
             }
         }
         consumption{

@@ -822,9 +822,6 @@ uz{
         "Pacific:Easter"{
             ec{"Pasxa oroli"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderberi oroli"}
-        }
         "Pacific:Gambier"{
             ec{"Gambye oroli"}
         }

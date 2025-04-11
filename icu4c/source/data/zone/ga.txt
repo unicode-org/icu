@@ -418,9 +418,6 @@ ga{
         "Indian:Reunion"{
             ec{"La Réunion"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fidsí"}
         }

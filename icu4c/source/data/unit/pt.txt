@@ -203,6 +203,18 @@ pt{
                 one{"{0} mol"}
                 other{"{0} mols"}
             }
+            part-per-1e6{
+                dnam{"partes por milhão"}
+                gender{"feminine"}
+                one{"{0} parte por milhão"}
+                other{"{0} partes por milhão"}
+            }
+            part-per-1e9{
+                dnam{"partes por bilhão"}
+                gender{"feminine"}
+                one{"{0} parte por bilhão"}
+                other{"{0} partes por bilhão"}
+            }
             percent{
                 gender{"masculine"}
                 one{"{0} por cento"}
@@ -213,22 +225,10 @@ pt{
                 one{"{0} por mil"}
                 other{"{0} por mil"}
             }
-            permillion{
-                dnam{"partes por milhão"}
-                gender{"feminine"}
-                one{"{0} parte por milhão"}
-                other{"{0} partes por milhão"}
-            }
             permyriad{
                 gender{"masculine"}
                 one{"{0} ponto base"}
                 other{"{0} pontos base"}
-            }
-            portion-per-1e9{
-                dnam{"partes por bilhão"}
-                gender{"feminine"}
-                one{"{0} parte por bilhão"}
-                other{"{0} partes por bilhão"}
             }
         }
         consumption{
@@ -1216,14 +1216,14 @@ pt{
             millimole-per-liter{
                 dnam{"mmol/l"}
             }
+            part-per-1e6{
+                dnam{"ppm"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
-            }
-            permillion{
-                dnam{"ppm"}
             }
             permyriad{
                 dnam{"‱"}
@@ -1578,20 +1578,20 @@ pt{
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
+            part-per-1e6{
+                dnam{"partes/milhão"}
+            }
+            part-per-1e9{
+                dnam{"partes/bilhão"}
+            }
             percent{
                 dnam{"por cento"}
             }
             permille{
                 dnam{"por mil"}
             }
-            permillion{
-                dnam{"partes/milhão"}
-            }
             permyriad{
                 dnam{"ponto base"}
-            }
-            portion-per-1e9{
-                dnam{"partes/bilhão"}
             }
         }
         consumption{

@@ -57,9 +57,6 @@ ms{
         "Europe:London"{
             ld{"Waktu Musim Panas British"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }

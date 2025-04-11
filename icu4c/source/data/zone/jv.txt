@@ -228,9 +228,6 @@ jv{
         "Pacific:Easter"{
             ec{"Paskah"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Port_Moresby"{
             ec{"Pelabuhan Moresby"}
         }

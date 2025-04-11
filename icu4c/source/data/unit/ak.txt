@@ -111,6 +111,16 @@ ak{
                 one{"{0} mole"}
                 other{"{0} mole"}
             }
+            part-per-1e6{
+                dnam{"paat ɔpepem biara"}
+                one{"paat ɔpepem biara {0}"}
+                other{"paat ɔpepem biara {0}"}
+            }
+            part-per-1e9{
+                dnam{"paat ɔpepepem biara"}
+                one{"paat ɔpepepem biara {0}"}
+                other{"paat ɔpepepem biara {0}"}
+            }
             percent{
                 dnam{"ɔha nkyɛmu"}
                 one{"ɔha nkyɛmu {0}"}
@@ -121,20 +131,10 @@ ak{
                 one{"pɛɛmile {0}"}
                 other{"pɛɛmile {0}"}
             }
-            permillion{
-                dnam{"paat ɔpepem biara"}
-                one{"paat ɔpepem biara {0}"}
-                other{"paat ɔpepem biara {0}"}
-            }
             permyriad{
                 dnam{"pɛɛmiride"}
                 one{"pɛɛmiride {0}"}
                 other{"pɛɛmiride {0}"}
-            }
-            portion-per-1e9{
-                dnam{"paat ɔpepepem biara"}
-                one{"paat ɔpepepem biara {0}"}
-                other{"paat ɔpepepem biara {0}"}
             }
         }
         consumption{
@@ -645,17 +645,17 @@ ak{
             millimole-per-liter{
                 dnam{"milimol/lita"}
             }
+            part-per-1e6{
+                dnam{"paat ɔpepem biara"}
+            }
+            part-per-1e9{
+                dnam{"paat ɔpepepem biara"}
+            }
             percent{
                 dnam{"ɔha nkyɛmu"}
             }
-            permillion{
-                dnam{"paat ɔpepem biara"}
-            }
             permyriad{
                 dnam{"pɛɛmiride"}
-            }
-            portion-per-1e9{
-                dnam{"paat ɔpepepem biara"}
             }
         }
         consumption{
@@ -878,20 +878,20 @@ ak{
             mole{
                 dnam{"mole"}
             }
+            part-per-1e6{
+                dnam{"paat ɔpepem biara"}
+            }
+            part-per-1e9{
+                dnam{"paat ɔpepepem biara"}
+            }
             percent{
                 dnam{"ɔha nkyɛmu"}
             }
             permille{
                 dnam{"pɛɛmile"}
             }
-            permillion{
-                dnam{"paat ɔpepem biara"}
-            }
             permyriad{
                 dnam{"pɛɛmiride"}
-            }
-            portion-per-1e9{
-                dnam{"paat ɔpepepem biara"}
             }
         }
         consumption{

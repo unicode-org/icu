@@ -1166,6 +1166,9 @@ tg{
         "Pacific:Efate"{
             ec{"Эфате"}
         }
+        "Pacific:Enderbury"{
+            ec{"Кантон"}
+        }
         "Pacific:Fakaofo"{
             ec{"Факаофо"}
         }
@@ -1186,9 +1189,6 @@ tg{
         }
         "Pacific:Guam"{
             ec{"Гуам"}
-        }
-        "Pacific:Kanton"{
-            ec{"Кантон"}
         }
         "Pacific:Kiritimati"{
             ec{"Киритимати"}

@@ -1167,7 +1167,7 @@ ml{
             ec{"ഇഫാതെ"}
         }
         "Pacific:Enderbury"{
-            ec{"എൻഡബറി"}
+            ec{"കാൻട്ടൻ"}
         }
         "Pacific:Fakaofo"{
             ec{"ഫക്കാവോഫോ"}
@@ -1192,9 +1192,6 @@ ml{
         }
         "Pacific:Honolulu"{
             ec{"ഹോണലൂലു"}
-        }
-        "Pacific:Kanton"{
-            ec{"കാൻട്ടൻ"}
         }
         "Pacific:Kiritimati"{
             ec{"കിരിറ്റിമാറ്റി"}

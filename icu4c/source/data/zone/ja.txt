@@ -1167,7 +1167,7 @@ ja{
             ec{"エフェテ島"}
         }
         "Pacific:Enderbury"{
-            ec{"エンダーベリー島"}
+            ec{"カントン島"}
         }
         "Pacific:Fakaofo"{
             ec{"ファカオフォ"}
@@ -1192,9 +1192,6 @@ ja{
         }
         "Pacific:Honolulu"{
             ec{"ホノルル"}
-        }
-        "Pacific:Kanton"{
-            ec{"カントン島"}
         }
         "Pacific:Kiritimati"{
             ec{"キリスィマスィ島"}

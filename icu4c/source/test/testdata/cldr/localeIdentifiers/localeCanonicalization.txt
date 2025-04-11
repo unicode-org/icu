@@ -125,6 +125,7 @@ cze	;	cs
 daf	;	dnj
 dan	;	da
 dap	;	njz
+dek	;	sqm
 deu	;	de
 dgo	;	doi
 dhd	;	mwr
@@ -327,6 +328,7 @@ nom	;	cbr
 noo	;	dtd
 nor	;	no
 npi	;	ne
+nte	;	eko
 nts	;	pij
 nxu	;	bpp
 nya	;	ny
@@ -1364,6 +1366,7 @@ cze_Adlm_AC_fonipa	;	cs_Adlm_AC_fonipa
 daf_Adlm_AC_fonipa	;	dnj_Adlm_AC_fonipa
 dan_Adlm_AC_fonipa	;	da_Adlm_AC_fonipa
 dap_Adlm_AC_fonipa	;	njz_Adlm_AC_fonipa
+dek_Adlm_AC_fonipa	;	sqm_Adlm_AC_fonipa
 deu_Adlm_AC_fonipa	;	de_Adlm_AC_fonipa
 dgo_Adlm_AC_fonipa	;	doi_Adlm_AC_fonipa
 dhd_Adlm_AC_fonipa	;	mwr_Adlm_AC_fonipa
@@ -1596,6 +1599,7 @@ nor_Adlm_AC_bokmal_fonipa_nynorsk	;	nb_Adlm_AC_fonipa
 nor_Adlm_AC_fonipa	;	no_Adlm_AC_fonipa
 nor_Adlm_AC_fonipa_nynorsk	;	nn_Adlm_AC_fonipa
 npi_Adlm_AC_fonipa	;	ne_Adlm_AC_fonipa
+nte_Adlm_AC_fonipa	;	eko_Adlm_AC_fonipa
 nts_Adlm_AC_fonipa	;	pij_Adlm_AC_fonipa
 nxu_Adlm_AC_fonipa	;	bpp_Adlm_AC_fonipa
 nya_Adlm_AC_fonipa	;	ny_Adlm_AC_fonipa

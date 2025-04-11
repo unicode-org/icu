@@ -160,6 +160,16 @@ or{
                 one{"{0} ମୋଲ"}
                 other{"{0} ମୋଲସ"}
             }
+            part-per-1e6{
+                dnam{"ଅଂଶ ପ୍ରତି ନିୟୁତ"}
+                one{"{0} ଅଂଶ ପ୍ରତି ନିୟୁତ"}
+                other{"{0} ଅଂଶ ପ୍ରତି ନିୟୁତ"}
+            }
+            part-per-1e9{
+                dnam{"ବିଲିୟନ ପ୍ରତି ଅଂଶଗୁଡିକ"}
+                one{"{0} ପାର୍ଟ୍ସ ପ୍ରତି ବିଲିୟନ୍"}
+                other{"{0} ପାର୍ଟ୍ସ ପ୍ରତି ବିଲିୟନ୍"}
+            }
             percent{
                 one{"{0} ଶତକଡ଼ା"}
                 other{"{0} ଶତକଡ଼ା"}
@@ -168,19 +178,9 @@ or{
                 one{"{0} ପରମିଲ"}
                 other{"{0} ପରମିଲ"}
             }
-            permillion{
-                dnam{"ଅଂଶ ପ୍ରତି ନିୟୁତ"}
-                one{"{0} ଅଂଶ ପ୍ରତି ନିୟୁତ"}
-                other{"{0} ଅଂଶ ପ୍ରତି ନିୟୁତ"}
-            }
             permyriad{
                 one{"{0} ପରମାଇରିଆଡ"}
                 other{"{0} ପରମାଇରିଆଡ"}
-            }
-            portion-per-1e9{
-                dnam{"ବିଲିୟନ ପ୍ରତି ଅଂଶଗୁଡିକ"}
-                one{"{0} ପାର୍ଟ୍ସ ପ୍ରତି ବିଲିୟନ୍"}
-                other{"{0} ପାର୍ଟ୍ସ ପ୍ରତି ବିଲିୟନ୍"}
             }
         }
         consumption{
@@ -981,23 +981,23 @@ or{
                 one{"{0}ମୋଲ"}
                 other{"{0}ମୋଲ"}
             }
+            part-per-1e6{
+                dnam{"ପିପିଏମ୍"}
+                one{"{0}ପିପିଏମ୍"}
+                other{"{0}ପିପିଏମ୍"}
+            }
+            part-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
             }
-            permillion{
-                dnam{"ପିପିଏମ୍"}
-                one{"{0}ପିପିଏମ୍"}
-                other{"{0}ପିପିଏମ୍"}
-            }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                one{"{0}ppb"}
-                other{"{0}ppb"}
             }
         }
         consumption{
@@ -1571,22 +1571,22 @@ or{
                 one{"ମୋଲ"}
                 other{"{0} ମୋଲ"}
             }
+            part-per-1e6{
+                dnam{"ଅଂଶ/ନିୟୁତ"}
+                one{"{0} ପିପିଏମ୍"}
+                other{"{0} ପିପିଏମ୍"}
+            }
+            part-per-1e9{
+                dnam{"ପାର୍ଟ୍ସ/ବିଲିୟନ୍"}
+            }
             percent{
                 dnam{"ଶତକଡ଼ା"}
             }
             permille{
                 dnam{"ପରମିଲ"}
             }
-            permillion{
-                dnam{"ଅଂଶ/ନିୟୁତ"}
-                one{"{0} ପିପିଏମ୍"}
-                other{"{0} ପିପିଏମ୍"}
-            }
             permyriad{
                 dnam{"ପରମାଇରିଆଡ"}
-            }
-            portion-per-1e9{
-                dnam{"ପାର୍ଟ୍ସ/ବିଲିୟନ୍"}
             }
         }
         consumption{

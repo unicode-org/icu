@@ -101,7 +101,7 @@ nn{
             millimole-per-liter{
                 gender{"neuter"}
             }
-            permillion{
+            part-per-1e6{
                 case{
                     genitive{
                         one{"{0} del per millions"}
@@ -688,7 +688,7 @@ nn{
             millimole-per-liter{
                 dnam{"mmol/l"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"delar/milliard"}
             }
         }

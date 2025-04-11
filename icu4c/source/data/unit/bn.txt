@@ -146,6 +146,16 @@ bn{
                 one{"{0} মোল"}
                 other{"{0} মোল্স"}
             }
+            part-per-1e6{
+                dnam{"ভাগ, প্রতি মিলিয়নে"}
+                one{"{0} ভাগ, প্রতি মিলিয়নে"}
+                other{"{0} ভাগ, প্রতি মিলিয়নে"}
+            }
+            part-per-1e9{
+                dnam{"পার্ট প্রতি বিলিয়ন"}
+                one{"{0} পার্ট প্রতি বিলিয়ন"}
+                other{"{0} পার্ট প্রতি বিলিয়ন"}
+            }
             percent{
                 one{"{0}শতাংশ"}
                 other{"{0}শতাংশ"}
@@ -154,19 +164,9 @@ bn{
                 one{"{0} প্রতিমাইল"}
                 other{"{0}প্রতিমাইল"}
             }
-            permillion{
-                dnam{"ভাগ, প্রতি মিলিয়নে"}
-                one{"{0} ভাগ, প্রতি মিলিয়নে"}
-                other{"{0} ভাগ, প্রতি মিলিয়নে"}
-            }
             permyriad{
                 one{"{0} পারমিরিয়াড"}
                 other{"{0} পারমিরিয়াড"}
-            }
-            portion-per-1e9{
-                dnam{"পার্ট প্রতি বিলিয়ন"}
-                one{"{0} পার্ট প্রতি বিলিয়ন"}
-                other{"{0} পার্ট প্রতি বিলিয়ন"}
             }
         }
         consumption{
@@ -886,12 +886,12 @@ bn{
             10p9{"গি{0}"}
         }
         concentr{
-            permille{
-                dnam{"‰"}
-            }
-            portion-per-1e9{
+            part-per-1e9{
                 one{"{0}ppb"}
                 other{"{0} ppb"}
+            }
+            permille{
+                dnam{"‰"}
             }
         }
         consumption{
@@ -1232,6 +1232,9 @@ bn{
                 one{"{0} মোল"}
                 other{"{0} মোল"}
             }
+            part-per-1e9{
+                dnam{"পার্ট/ বিলিয়ন"}
+            }
             percent{
                 dnam{"শতাংশ"}
             }
@@ -1240,9 +1243,6 @@ bn{
             }
             permyriad{
                 dnam{"পারমিরিয়াড"}
-            }
-            portion-per-1e9{
-                dnam{"পার্ট/ বিলিয়ন"}
             }
         }
         consumption{

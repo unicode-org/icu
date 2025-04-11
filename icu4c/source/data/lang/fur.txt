@@ -268,9 +268,7 @@ fur{
             roc{"calendari de Republiche di Cine"}
         }
         collation{
-            big5han{"ordin cinês tradizionâl - Big5"}
             ducet{"ordenament predeterminât Unicode"}
-            gb2312han{"ordin cinês semplificât - GB2312"}
             phonebook{"ordin elenc telefonic"}
             pinyin{"ordin pinyin"}
             search{"ricercje par fins gjenerâi"}

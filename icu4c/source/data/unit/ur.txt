@@ -183,6 +183,18 @@ ur{
                 one{"{0} مول"}
                 other{"{0} مولز"}
             }
+            part-per-1e6{
+                dnam{"فی ملین حصے"}
+                gender{"feminine"}
+                one{"{0} فی ملین حصے"}
+                other{"{0} فی ملین حصے"}
+            }
+            part-per-1e9{
+                dnam{"اجزا فی بلین"}
+                gender{"masculine"}
+                one{"{0} جزو فی بلین"}
+                other{"{0} اجزا فی بلین"}
+            }
             percent{
                 gender{"feminine"}
                 one{"{0} فیصد"}
@@ -193,22 +205,10 @@ ur{
                 one{"{0} فی ہزار"}
                 other{"{0} فی ہزار"}
             }
-            permillion{
-                dnam{"فی ملین حصے"}
-                gender{"feminine"}
-                one{"{0} فی ملین حصے"}
-                other{"{0} فی ملین حصے"}
-            }
             permyriad{
                 gender{"feminine"}
                 one{"{0} پرمرئیڈ"}
                 other{"{0} پرمرئیڈ"}
-            }
-            portion-per-1e9{
-                dnam{"اجزا فی بلین"}
-                gender{"masculine"}
-                one{"{0} جزو فی بلین"}
-                other{"{0} اجزا فی بلین"}
             }
         }
         consumption{
@@ -1081,21 +1081,21 @@ ur{
             10p24{"یوٹا{0}"}
         }
         concentr{
+            part-per-1e6{
+                dnam{"ppm"}
+            }
+            part-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
             }
-            permillion{
-                dnam{"ppm"}
-            }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                one{"{0}ppb"}
-                other{"{0}ppb"}
             }
         }
         consumption{
@@ -1467,20 +1467,20 @@ ur{
                 one{"{0} مول"}
                 other{"{0} مول"}
             }
+            part-per-1e6{
+                dnam{"حصے/ملین"}
+            }
+            part-per-1e9{
+                dnam{"اجزا/بلین"}
+            }
             percent{
                 dnam{"فیصد"}
             }
             permille{
                 dnam{"فی ہزار"}
             }
-            permillion{
-                dnam{"حصے/ملین"}
-            }
             permyriad{
                 dnam{"پرمرئیڈ"}
-            }
-            portion-per-1e9{
-                dnam{"اجزا/بلین"}
             }
         }
         consumption{

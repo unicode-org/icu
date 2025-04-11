@@ -267,9 +267,6 @@ dsb{
         "Pacific:Easter"{
             ec{"Jatšowne kupy"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fidži"}
         }

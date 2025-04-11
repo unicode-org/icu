@@ -849,9 +849,6 @@ az{
         "Pacific:Easter"{
             ec{"Pasxa"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderböri"}
-        }
         "Pacific:Fiji"{
             ec{"Fici"}
         }

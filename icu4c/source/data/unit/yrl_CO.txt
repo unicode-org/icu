@@ -12,7 +12,7 @@ yrl_CO{
             }
         }
         concentr{
-            permillion{
+            part-per-1e6{
                 dnam{"pisawera-ita millón rupi"}
                 one{"{0} pisawera millón rupi"}
                 other{"{0} pisawera-ita millón rupi"}
@@ -77,7 +77,7 @@ yrl_CO{
             }
         }
         concentr{
-            permillion{
+            part-per-1e6{
                 dnam{"pisawera millón rupi"}
             }
         }

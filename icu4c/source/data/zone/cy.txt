@@ -134,9 +134,6 @@ cy{
         "Pacific:Easter"{
             ec{"Ynys y Pasg"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }

@@ -331,9 +331,6 @@ is{
         "Pacific:Easter"{
             ec{"Páskaeyja"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fídjí"}
         }

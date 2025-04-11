@@ -1100,9 +1100,6 @@ yrl{
         "Pacific:Efate"{
             ec{"Efaté"}
         }
-        "Pacific:Enderbury"{
-            ec{"Ẽdeburi"}
-        }
         "Pacific:Fakaofo"{
             ec{"Fakaufu"}
         }

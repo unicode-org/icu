@@ -133,16 +133,16 @@ kok{
                 dnam{"मोल्स"}
                 other{"{0} मोल्स"}
             }
+            part-per-1e6{
+                dnam{"पार्ट पर मिलियन"}
+                other{"{0} पार्ट पर मिलियन"}
+            }
             percent{
                 dnam{"टक्को"}
                 other{"{0} टक्को"}
             }
             permille{
                 other{"{0} दरमायल"}
-            }
-            permillion{
-                dnam{"पार्ट पर मिलियन"}
-                other{"{0} पार्ट पर मिलियन"}
             }
             permyriad{
                 other{"{0} परमिरियड"}
@@ -817,12 +817,12 @@ kok{
             mole{
                 other{"{0}मोल"}
             }
-            permille{
-                dnam{"‰"}
-            }
-            permillion{
+            part-per-1e6{
                 dnam{"ppm"}
                 other{"{0}ppm"}
+            }
+            permille{
+                dnam{"‰"}
             }
             permyriad{
                 dnam{"‱"}
@@ -1454,11 +1454,11 @@ kok{
                 dnam{"मोल"}
                 other{"{0} मोल"}
             }
+            part-per-1e6{
+                dnam{"पार्ट/मिलियन"}
+            }
             permille{
                 dnam{"दरमायल"}
-            }
-            permillion{
-                dnam{"पार्ट/मिलियन"}
             }
             permyriad{
                 dnam{"परमिरियड"}

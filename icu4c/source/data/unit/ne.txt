@@ -121,6 +121,11 @@ ne{
                 one{"{0} mg/dL"}
                 other{"{0} मिलिग्राम पति डेेसिलिटर"}
             }
+            part-per-1e9{
+                dnam{"अंश प्रति बरब"}
+                one{"{0} अंश प्रति अरब"}
+                other{"{0} अंश प्रति अरब"}
+            }
             percent{
                 one{"{0} प्रतिशत"}
                 other{"{0} प्रतिशत"}
@@ -132,11 +137,6 @@ ne{
             permyriad{
                 one{"{0} पर्माइराइड"}
                 other{"{0} पर्माइराइड"}
-            }
-            portion-per-1e9{
-                dnam{"अंश प्रति बरब"}
-                one{"{0} अंश प्रति अरब"}
-                other{"{0} अंश प्रति अरब"}
             }
         }
         consumption{
@@ -819,17 +819,17 @@ ne{
                 one{"{0}mmol/L"}
                 other{"{0}mmol/L"}
             }
-            permille{
-                one{"{0}‰"}
-                other{"{0}‰"}
-            }
-            permillion{
+            part-per-1e6{
                 one{"{0}ppm"}
                 other{"{0}ppm"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 one{"{0}ppb"}
                 other{"{0}ppb"}
+            }
+            permille{
+                one{"{0}‰"}
+                other{"{0}‰"}
             }
         }
         consumption{
@@ -1357,6 +1357,9 @@ ne{
                 one{"{0} मोल"}
                 other{"{0} मोल"}
             }
+            part-per-1e9{
+                dnam{"अंश/अरब"}
+            }
             percent{
                 dnam{"प्रतिशत"}
             }
@@ -1367,9 +1370,6 @@ ne{
             }
             permyriad{
                 dnam{"पर्माइराइड"}
-            }
-            portion-per-1e9{
-                dnam{"अंश/अरब"}
             }
         }
         consumption{

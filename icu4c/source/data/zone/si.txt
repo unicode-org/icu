@@ -1167,7 +1167,7 @@ si{
             ec{"එෆාත්"}
         }
         "Pacific:Enderbury"{
-            ec{"එන්ඩර්බරි"}
+            ec{"කැන්ටන්"}
         }
         "Pacific:Fakaofo"{
             ec{"ෆාකාඕෆෝ"}
@@ -1192,9 +1192,6 @@ si{
         }
         "Pacific:Honolulu"{
             ec{"හොනොලුලු"}
-        }
-        "Pacific:Kanton"{
-            ec{"කැන්ටන්"}
         }
         "Pacific:Kiritimati"{
             ec{"කිරිමටි"}

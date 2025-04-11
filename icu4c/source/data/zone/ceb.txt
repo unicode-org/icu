@@ -18,9 +18,6 @@ ceb{
         "Europe:London"{
             ld{"British Summer Time"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "meta:Afghanistan"{
             ls{"Oras sa Afghanistan"}
         }

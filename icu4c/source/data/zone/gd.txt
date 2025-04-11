@@ -352,9 +352,6 @@ gd{
         "Pacific:Easter"{
             ec{"Rapa Nui"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fìdi"}
         }

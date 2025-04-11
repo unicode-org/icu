@@ -2,19 +2,43 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 root{
-    Version{"47"}
+    Version{"48"}
     zoneStrings{
         "Africa:Asmera"{
             ec{"Asmara"}
         }
+        "Africa:El_Aaiun"{
+            ec{"El Aaiún"}
+        }
+        "Africa:Lome"{
+            ec{"Lomé"}
+        }
+        "Africa:Ndjamena"{
+            ec{"N’Djamena"}
+        }
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
+        }
+        "America:Araguaina"{
+            ec{"Araguaína"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Río Gallegos"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucumán"}
         }
         "America:Asuncion"{
             ec{"Asunción"}
         }
         "America:Bahia_Banderas"{
             ec{"Bahía de Banderas"}
+        }
+        "America:Belem"{
+            ec{"Belém"}
+        }
+        "America:Bogota"{
+            ec{"Bogotá"}
         }
         "America:Cancun"{
             ec{"Cancún"}
@@ -25,8 +49,17 @@ root{
         "America:Coral_Harbour"{
             ec{"Atikokan"}
         }
+        "America:Cordoba"{
+            ec{"Córdoba"}
+        }
+        "America:Cuiaba"{
+            ec{"Cuiabá"}
+        }
         "America:Curacao"{
             ec{"Curaçao"}
+        }
+        "America:Eirunepe"{
+            ec{"Eirunepé"}
         }
         "America:Godthab"{
             ec{"Nuuk"}
@@ -58,8 +91,20 @@ root{
         "America:Lower_Princes"{
             ec{"Lower Prince’s Quarter"}
         }
+        "America:Maceio"{
+            ec{"Maceió"}
+        }
+        "America:Mazatlan"{
+            ec{"Mazatlán"}
+        }
         "America:Merida"{
             ec{"Mérida"}
+        }
+        "America:Mexico_City"{
+            ec{"Ciudad de México"}
+        }
+        "America:Miquelon"{
+            ec{"Saint-Pierre"}
         }
         "America:Noronha"{
             ec{"Fernando de Noronha"}
@@ -72,6 +117,12 @@ root{
         }
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, North Dakota"}
+        }
+        "America:Santarem"{
+            ec{"Santarém"}
+        }
+        "America:Sao_Paulo"{
+            ec{"São Paulo"}
         }
         "America:Scoresbysund"{
             ec{"Ittoqqortoormiit"}
@@ -97,8 +148,14 @@ root{
         "Antarctica:DumontDUrville"{
             ec{"Dumont-d’Urville"}
         }
+        "Antarctica:Syowa"{
+            ec{"Showa"}
+        }
         "Asia:Calcutta"{
             ec{"Kolkata"}
+        }
+        "Asia:Hovd"{
+            ec{"Khovd"}
         }
         "Asia:Katmandu"{
             ec{"Kathmandu"}
@@ -112,6 +169,12 @@ root{
         "Asia:Saigon"{
             ec{"Ho Chi Minh"}
         }
+        "Asia:Urumqi"{
+            ec{"Ürümqi"}
+        }
+        "Atlantic:Canary"{
+            ec{"Canarias"}
+        }
         "Atlantic:Faeroe"{
             ec{"Faroe"}
         }
@@ -121,11 +184,35 @@ root{
         "Etc:UTC"{
             ss{"UTC"}
         }
+        "Europe:Busingen"{
+            ec{"Büsingen"}
+        }
+        "Europe:Chisinau"{
+            ec{"Chișinău"}
+        }
         "Europe:Kiev"{
             ec{"Kyiv"}
         }
+        "Europe:Tirane"{
+            ec{"Tirana"}
+        }
+        "Indian:Comoro"{
+            ec{"Comores"}
+        }
+        "Indian:Mahe"{
+            ec{"Mahé"}
+        }
         "Indian:Reunion"{
             ec{"Réunion"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Canton"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Galápagos"}
+        }
+        "Pacific:Noumea"{
+            ec{"Nouméa"}
         }
         "Pacific:Ponape"{
             ec{"Pohnpei"}
@@ -133,8 +220,12 @@ root{
         "Pacific:Truk"{
             ec{"Chuuk"}
         }
+        "Pacific:Wallis"{
+            ec{"Wallis & Futuna"}
+        }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
+        gmtUnknownFormat{"GMT+?"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}"}

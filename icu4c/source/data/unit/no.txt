@@ -320,6 +320,30 @@ no{
                 one{"{0} mol"}
                 other{"{0} mol"}
             }
+            part-per-1e6{
+                case{
+                    genitive{
+                        one{"{0} del per millions"}
+                        other{"{0} deler per millions"}
+                    }
+                }
+                dnam{"deler per million"}
+                gender{"masculine"}
+                one{"{0} del per million"}
+                other{"{0} deler per million"}
+            }
+            part-per-1e9{
+                case{
+                    genitive{
+                        one{"{0} del per milliards"}
+                        other{"{0} deler per milliards"}
+                    }
+                }
+                dnam{"deler per milliard"}
+                gender{"masculine"}
+                one{"{0} del per milliard"}
+                other{"{0} deler per milliard"}
+            }
             percent{
                 case{
                     genitive{
@@ -342,18 +366,6 @@ no{
                 one{"{0} promille"}
                 other{"{0} promille"}
             }
-            permillion{
-                case{
-                    genitive{
-                        one{"{0} del per millions"}
-                        other{"{0} deler per millions"}
-                    }
-                }
-                dnam{"deler per million"}
-                gender{"masculine"}
-                one{"{0} del per million"}
-                other{"{0} deler per million"}
-            }
             permyriad{
                 case{
                     genitive{
@@ -364,18 +376,6 @@ no{
                 gender{"masculine"}
                 one{"{0} promyriade"}
                 other{"{0} promyriade"}
-            }
-            portion-per-1e9{
-                case{
-                    genitive{
-                        one{"{0} del per milliards"}
-                        other{"{0} deler per milliards"}
-                    }
-                }
-                dnam{"deler per milliard"}
-                gender{"masculine"}
-                one{"{0} del per milliard"}
-                other{"{0} deler per milliard"}
             }
         }
         consumption{
@@ -1951,6 +1951,14 @@ no{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
+            part-per-1e6{
+                one{"{0}ppm"}
+                other{"{0}ppm"}
+            }
+            part-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
             percent{
                 dnam{"%"}
                 one{"{0}%"}
@@ -1961,18 +1969,10 @@ no{
                 one{"{0}‰"}
                 other{"{0}‰"}
             }
-            permillion{
-                one{"{0}ppm"}
-                other{"{0}ppm"}
-            }
             permyriad{
                 dnam{"‱"}
                 one{"{0}‱"}
                 other{"{0}‱"}
-            }
-            portion-per-1e9{
-                one{"{0}ppb"}
-                other{"{0}ppb"}
             }
         }
         consumption{
@@ -2519,6 +2519,9 @@ no{
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
+            part-per-1e9{
+                dnam{"deler/milliard"}
+            }
             percent{
                 dnam{"prosent"}
                 one{"{0} %"}
@@ -2533,9 +2536,6 @@ no{
                 dnam{"promyriade"}
                 one{"{0} ‱"}
                 other{"{0} ‱"}
-            }
-            portion-per-1e9{
-                dnam{"deler/milliard"}
             }
         }
         consumption{

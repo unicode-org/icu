@@ -422,10 +422,8 @@ ksh{
             roc{"rotschineesesche Kaländer"}
         }
         collation{
-            big5han{"zoteert nohm tradizjonäll schineesesch Big5"}
             dictionary{"zotehrt wi em Wööterbohch"}
             ducet{"standattmähßesch zotehrt nohm Unicode"}
-            gb2312han{"zoteert nohm eijfacher schineesesch GB2312"}
             phonebook{"zoteert wi em Tollefoonbooch"}
             pinyin{"zoteert noh de Pinjin Ömschreff vum Schineesesch"}
             search{"Söhke"}

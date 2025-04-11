@@ -119,6 +119,11 @@ yrl{
                 dnam{"mol-ita"}
                 other{"{0} mol-ita"}
             }
+            part-per-1e6{
+                dnam{"pisawera-ita miliãu rupi"}
+                one{"{0} pisawera miliãu rupi"}
+                other{"{0} pisawera-ita miliãu rupi"}
+            }
             percent{
                 one{"{0} sẽtu rupi"}
                 other{"{0} sẽtu rupi"}
@@ -126,11 +131,6 @@ yrl{
             permille{
                 one{"{0} mil rupi"}
                 other{"{0} mil rupi"}
-            }
-            permillion{
-                dnam{"pisawera-ita miliãu rupi"}
-                one{"{0} pisawera miliãu rupi"}
-                other{"{0} pisawera-ita miliãu rupi"}
             }
             permyriad{
                 one{"{0} pitusá-pitasukasá"}
@@ -1085,14 +1085,14 @@ yrl{
                 dnam{"mirimol/ritru"}
                 other{"{0} mmol/l"}
             }
+            part-per-1e6{
+                dnam{"pisawera miliãu rupi"}
+            }
             percent{
                 dnam{"sẽtu rupi"}
             }
             permille{
                 dnam{"mil rupi"}
-            }
-            permillion{
-                dnam{"pisawera miliãu rupi"}
             }
             permyriad{
                 dnam{"pitusá-pitasukasá"}

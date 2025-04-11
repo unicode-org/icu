@@ -394,6 +394,34 @@ ro{
                 one{"{0} mol"}
                 other{"{0} de moli"}
             }
+            part-per-1e6{
+                case{
+                    genitive{
+                        few{"{0} părți pe milion"}
+                        one{"unei părți pe milion"}
+                        other{"{0} de părți pe milion"}
+                    }
+                }
+                dnam{"părți pe milion"}
+                few{"{0} părți pe milion"}
+                gender{"feminine"}
+                one{"{0} parte pe milion"}
+                other{"{0} de părți pe milion"}
+            }
+            part-per-1e9{
+                case{
+                    genitive{
+                        few{"{0} părți pe miliard"}
+                        one{"unei părți pe miliard"}
+                        other{"{0} de părți pe miliard"}
+                    }
+                }
+                dnam{"părți pe miliard"}
+                few{"{0} părți pe miliard"}
+                gender{"feminine"}
+                one{"{0} parte pe miliard"}
+                other{"{0} de părți pe miliard"}
+            }
             percent{
                 case{
                     genitive{
@@ -422,20 +450,6 @@ ro{
                 one{"{0} promilă"}
                 other{"{0} de promile"}
             }
-            permillion{
-                case{
-                    genitive{
-                        few{"{0} părți pe milion"}
-                        one{"unei părți pe milion"}
-                        other{"{0} de părți pe milion"}
-                    }
-                }
-                dnam{"părți pe milion"}
-                few{"{0} părți pe milion"}
-                gender{"feminine"}
-                one{"{0} parte pe milion"}
-                other{"{0} de părți pe milion"}
-            }
             permyriad{
                 case{
                     genitive{
@@ -448,20 +462,6 @@ ro{
                 gender{"feminine"}
                 one{"{0} la zece mii"}
                 other{"{0} la zece mii"}
-            }
-            portion-per-1e9{
-                case{
-                    genitive{
-                        few{"{0} părți pe miliard"}
-                        one{"unei părți pe miliard"}
-                        other{"{0} de părți pe miliard"}
-                    }
-                }
-                dnam{"părți pe miliard"}
-                few{"{0} părți pe miliard"}
-                gender{"feminine"}
-                one{"{0} parte pe miliard"}
-                other{"{0} de părți pe miliard"}
             }
         }
         consumption{
@@ -2271,6 +2271,9 @@ ro{
             karat{
                 dnam{"carat"}
             }
+            part-per-1e9{
+                dnam{"părți/miliard"}
+            }
             permille{
                 few{"{0} ‰"}
                 one{"{0} ‰"}
@@ -2280,9 +2283,6 @@ ro{
                 few{"{0} ‱"}
                 one{"{0} ‱"}
                 other{"{0} ‱"}
-            }
-            portion-per-1e9{
-                dnam{"părți/miliard"}
             }
         }
         consumption{
@@ -2521,7 +2521,7 @@ ro{
                 one{"{0} mol"}
                 other{"{0} moli"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"părți/miliard"}
             }
         }

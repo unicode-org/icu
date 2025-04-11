@@ -1163,6 +1163,9 @@ xnr{
         "Pacific:Efate"{
             ec{"एफ़ेट"}
         }
+        "Pacific:Enderbury"{
+            ec{"कैंटन"}
+        }
         "Pacific:Fakaofo"{
             ec{"फ़ाकाओफ़ो"}
         }
@@ -1183,9 +1186,6 @@ xnr{
         }
         "Pacific:Guam"{
             ec{"गुआम"}
-        }
-        "Pacific:Kanton"{
-            ec{"कैंटन"}
         }
         "Pacific:Kiritimati"{
             ec{"किरीतिमाति"}

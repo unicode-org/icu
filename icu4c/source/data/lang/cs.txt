@@ -921,12 +921,10 @@ cs{
             tertiary{"Řadit akcenty/velká a malá písmena/šířku"}
         }
         collation{
-            big5han{"Řazení pro tradiční čínštinu – Big5"}
             compat{"Předchozí řazení, kompatibilita"}
             dictionary{"Slovníkové řazení"}
             ducet{"Výchozí řazení Unicode"}
             eor{"Evropské řazení"}
-            gb2312han{"Řazení pro zjednodušenou čínštinu – GB2312"}
             phonebook{"Řazení telefonního seznamu"}
             phonetic{"Fonetické řazení"}
             pinyin{"Řazení podle pchin-jinu"}

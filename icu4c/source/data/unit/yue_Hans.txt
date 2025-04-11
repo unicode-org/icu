@@ -31,7 +31,7 @@ yue_Hans{
             per{"每 {1} {0}"}
         }
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"十亿分点浓度"}
                 other{"{0} 十亿分点浓度"}
             }
@@ -248,7 +248,7 @@ yue_Hans{
             }
         }
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 other{"{0}ppb"}
             }
         }
@@ -480,16 +480,16 @@ yue_Hans{
                 dnam{"摩尔"}
                 other{"{0} 摩尔"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"百万分率"}
                 other{"{0} 百万分率"}
+            }
+            part-per-1e9{
+                dnam{"浓度/十亿"}
             }
             permyriad{
                 dnam{"点子"}
                 other{"{0} 点子"}
-            }
-            portion-per-1e9{
-                dnam{"浓度/十亿"}
             }
         }
         consumption{

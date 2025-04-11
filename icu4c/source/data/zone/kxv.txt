@@ -1163,6 +1163,9 @@ kxv{
         "Pacific:Efate"{
             ec{"ipeṭe"}
         }
+        "Pacific:Enderbury"{
+            ec{"kanṭon"}
+        }
         "Pacific:Fakaofo"{
             ec{"pakaopo"}
         }
@@ -1183,9 +1186,6 @@ kxv{
         }
         "Pacific:Guam"{
             ec{"guam"}
-        }
-        "Pacific:Kanton"{
-            ec{"kanṭon"}
         }
         "Pacific:Kiritimati"{
             ec{"kiritimati"}

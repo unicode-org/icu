@@ -101,7 +101,7 @@ qu{
                 dnam{"imakuna"}
                 other{"{0} imakuna"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"partes por millon"}
                 other{"{0} partes por millon"}
             }
@@ -540,7 +540,7 @@ qu{
                 dnam{"ima"}
                 other{"{0} ima"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"partes/millon"}
             }
         }

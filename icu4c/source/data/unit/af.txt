@@ -161,6 +161,16 @@ af{
                 one{"{0} millimol per liter"}
                 other{"{0} millimol per liter"}
             }
+            part-per-1e6{
+                dnam{"dele per miljoen"}
+                one{"{0} deel per miljoen"}
+                other{"{0} dele per miljoen"}
+            }
+            part-per-1e9{
+                dnam{"deeltjies per miljard"}
+                one{"{0} deeltjie per miljard"}
+                other{"{0} deeltjies per miljard"}
+            }
             percent{
                 dnam{"persent"}
                 one{"{0} persent"}
@@ -170,19 +180,9 @@ af{
                 one{"{0} per duisend"}
                 other{"{0} per duisend"}
             }
-            permillion{
-                dnam{"dele per miljoen"}
-                one{"{0} deel per miljoen"}
-                other{"{0} dele per miljoen"}
-            }
             permyriad{
                 one{"{0} per tienduisend"}
                 other{"{0} per tienduisend"}
-            }
-            portion-per-1e9{
-                dnam{"deeltjies per miljard"}
-                one{"{0} deeltjie per miljard"}
-                other{"{0} deeltjies per miljard"}
             }
         }
         consumption{
@@ -1049,24 +1049,24 @@ af{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
+            part-per-1e6{
+                dnam{"d.p.m."}
+                one{"{0}d.p.m."}
+                other{"{0} d.p.m."}
+            }
+            part-per-1e9{
+                dnam{"deeltjies/miljard"}
+                one{"{0}deeltjie/miljard"}
+                other{"{0}deeltjies/miljard"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
             }
-            permillion{
-                dnam{"d.p.m."}
-                one{"{0}d.p.m."}
-                other{"{0} d.p.m."}
-            }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                dnam{"deeltjies/miljard"}
-                one{"{0}deeltjie/miljard"}
-                other{"{0}deeltjies/miljard"}
             }
         }
         consumption{
@@ -1806,24 +1806,24 @@ af{
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
+            part-per-1e6{
+                dnam{"dele/miljoen"}
+                one{"{0} d.p.m."}
+                other{"{0} d.p.m."}
+            }
+            part-per-1e9{
+                dnam{"deeltjies/miljard"}
+                one{"{0} deeltjie/miljard"}
+                other{"{0} deeltjies/miljard"}
+            }
             percent{
                 dnam{"percent"}
             }
             permille{
                 dnam{"per duisend"}
             }
-            permillion{
-                dnam{"dele/miljoen"}
-                one{"{0} d.p.m."}
-                other{"{0} d.p.m."}
-            }
             permyriad{
                 dnam{"per tienduisend"}
-            }
-            portion-per-1e9{
-                dnam{"deeltjies/miljard"}
-                one{"{0} deeltjie/miljard"}
-                other{"{0} deeltjies/miljard"}
             }
         }
         consumption{

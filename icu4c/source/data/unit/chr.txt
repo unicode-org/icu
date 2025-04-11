@@ -170,6 +170,16 @@ chr{
                 one{"{0} ᎼᎴ"}
                 other{"{0} ᎼᎴᏍ"}
             }
+            part-per-1e6{
+                dnam{"ᏚᏙᏢᏒ ᎢᏳᏆᏗᏅᏛ ᎢᏳᏓᎵ"}
+                one{"{0} ᎤᏙᏢᏒ ᎢᏳᏆᏗᏅᏛ ᎢᏳᏓᎵ"}
+                other{"{0} ᏚᏙᏢᏒ ᎢᏳᏆᏗᏅᏛ ᎢᏳᏓᎵ"}
+            }
+            part-per-1e9{
+                dnam{"ᏚᏙᏢᏒ ᎢᏳᏓᎵ ᎢᏳᏔᎵᎳᏗᏅᏛ"}
+                one{"{0} ᎤᏙᏢᏒ ᎢᏳᏓᎵ ᎢᏳᏔᎵᎳᏗᏅᏛ"}
+                other{"{0} ᏚᏙᏢᏒ ᎢᏳᏓᎵ ᎢᏳᏔᎵᎳᏗᏅᏛ"}
+            }
             percent{
                 one{"{0} ᏓᎬᏩᎶᏛ"}
                 other{"{0} ᏓᎬᏩᎶᏛ"}
@@ -178,19 +188,9 @@ chr{
                 one{"{0} ᏈᎻᎴ"}
                 other{"{0} ᏈᎻᎴ"}
             }
-            permillion{
-                dnam{"ᏚᏙᏢᏒ ᎢᏳᏆᏗᏅᏛ ᎢᏳᏓᎵ"}
-                one{"{0} ᎤᏙᏢᏒ ᎢᏳᏆᏗᏅᏛ ᎢᏳᏓᎵ"}
-                other{"{0} ᏚᏙᏢᏒ ᎢᏳᏆᏗᏅᏛ ᎢᏳᏓᎵ"}
-            }
             permyriad{
                 one{"{0} ᏋᎻᎵᎠᏗ"}
                 other{"{0} ᏋᎻᎵᎠᏗ"}
-            }
-            portion-per-1e9{
-                dnam{"ᏚᏙᏢᏒ ᎢᏳᏓᎵ ᎢᏳᏔᎵᎳᏗᏅᏛ"}
-                one{"{0} ᎤᏙᏢᏒ ᎢᏳᏓᎵ ᎢᏳᏔᎵᎳᏗᏅᏛ"}
-                other{"{0} ᏚᏙᏢᏒ ᎢᏳᏓᎵ ᎢᏳᏔᎵᎳᏗᏅᏛ"}
             }
         }
         consumption{
@@ -1084,23 +1084,23 @@ chr{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
+            part-per-1e6{
+                dnam{"ppm"}
+                one{"{0}ppm"}
+                other{"{0}ppm"}
+            }
+            part-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
             }
-            permillion{
-                dnam{"ppm"}
-                one{"{0}ppm"}
-                other{"{0}ppm"}
-            }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                one{"{0}ppb"}
-                other{"{0}ppb"}
             }
         }
         consumption{
@@ -1933,20 +1933,20 @@ chr{
             mole{
                 dnam{"ᎼᎴ"}
             }
+            part-per-1e6{
+                dnam{"ᏚᏙᏢᏒ/ᎢᏳᏆᏗᏅᏛ"}
+            }
+            part-per-1e9{
+                dnam{"ᏚᏙᏢᏒ/ᎢᏳᏔᎵᎳᏗᏅᏛ"}
+            }
             percent{
                 dnam{"ᏓᎬᏩᎶᏛ"}
             }
             permille{
                 dnam{"ᏈᎻᎴ"}
             }
-            permillion{
-                dnam{"ᏚᏙᏢᏒ/ᎢᏳᏆᏗᏅᏛ"}
-            }
             permyriad{
                 dnam{"ᏋᎻᎵᎠᏗ"}
-            }
-            portion-per-1e9{
-                dnam{"ᏚᏙᏢᏒ/ᎢᏳᏔᎵᎳᏗᏅᏛ"}
             }
         }
         consumption{

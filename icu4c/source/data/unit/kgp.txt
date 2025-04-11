@@ -113,6 +113,11 @@ kgp{
             mole{
                 dnam{"mol ag"}
             }
+            part-per-1e6{
+                dnam{"milhão ki kupar ‘e"}
+                one{"{0} kupar milhão ki"}
+                other{"{0} kupar 'e milhão ki"}
+            }
             percent{
                 one{"{0} sẽnto ki"}
                 other{"{0} sẽnto ki"}
@@ -120,11 +125,6 @@ kgp{
             permille{
                 one{"{0} mil ki"}
                 other{"{0} mil ki"}
-            }
-            permillion{
-                dnam{"milhão ki kupar ‘e"}
-                one{"{0} kupar milhão ki"}
-                other{"{0} kupar 'e milhão ki"}
             }
             permyriad{
                 one{"{0} pãntu mase"}
@@ -1085,14 +1085,14 @@ kgp{
                 dnam{"mĩrimol/ritru"}
                 other{"{0} mmol/l"}
             }
+            part-per-1e6{
+                dnam{"kupar ‘e/milhão ki"}
+            }
             percent{
                 dnam{"sẽnto ki"}
             }
             permille{
                 dnam{"mil ki"}
-            }
-            permillion{
-                dnam{"kupar ‘e/milhão ki"}
             }
             permyriad{
                 dnam{"pãntu mase"}

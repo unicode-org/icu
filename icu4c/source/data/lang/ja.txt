@@ -926,12 +926,10 @@ ja{
             tertiary{"アクセント/大文字小文字/全角半角で並べ替え"}
         }
         collation{
-            big5han{"繁体字中国語順(Big5)"}
             compat{"以前の順序（互換性）"}
             dictionary{"辞書順"}
             ducet{"ユニコード照合順"}
             eor{"ヨーロッパ言語文字の並べ替え規則"}
-            gb2312han{"簡体字中国語順(GB2312)"}
             phonebook{"電話帳順"}
             phonetic{"音声順による並べ替え"}
             pinyin{"ピンイン順"}

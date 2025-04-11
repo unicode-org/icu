@@ -108,7 +108,7 @@ ast{
                 one{"{0} milimol per llitru"}
                 other{"{0} milimoles per llitru"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"partes per millón"}
                 one{"{0} parte per millón"}
                 other{"{0} partes per millón"}
@@ -774,7 +774,7 @@ ast{
                 one{"{0}mmol/L"}
                 other{"{0}mmol/L"}
             }
-            permillion{
+            part-per-1e6{
                 one{"{0}ppm"}
                 other{"{0}ppm"}
             }

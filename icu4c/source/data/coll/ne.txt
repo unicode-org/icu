@@ -5,7 +5,7 @@ ne{
     collations{
         standard{
             Sequence{"[reorder Deva]"}
-            Version{"47"}
+            Version{"48"}
         }
     }
 }

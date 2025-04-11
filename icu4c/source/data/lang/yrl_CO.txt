@@ -37,8 +37,6 @@ yrl_CO{
             primary{"Reyupurawaka letera básika ñũtú"}
         }
         collation{
-            big5han{"Xinañẽẽga rikusawarupí muakaresawa - Big5"}
-            gb2312han{"Xinañeẽga iwasuĩma muakarewa - GB2312"}
             search{"Sikaisá purusawa pañérupí"}
         }
     }

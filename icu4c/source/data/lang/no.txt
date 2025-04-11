@@ -921,13 +921,11 @@ no{
             tertiary{"Sortér aksenttegn / små og store bokstaver / bredde"}
         }
         collation{
-            big5han{"tradisjonell kinesisk sortering - Big 5"}
             compat{"forrige sorteringsrekkefølge (for kompatibilitet)"}
             dictionary{"ordlistesortering"}
             ducet{"standard Unicode-sorteringsrekkefølge"}
             emoji{"emoji-sorteringsrekkefølge"}
             eor{"sorteringsrekkefølge for flerspråklige europeiske dokumenter"}
-            gb2312han{"forenklet kinesisk sortering - GB2312"}
             phonebook{"telefonkatalogsortering"}
             phonetic{"fonetisk sortering"}
             pinyin{"pinyinsortering"}

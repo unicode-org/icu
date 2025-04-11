@@ -245,6 +245,21 @@ he{
                 other{"{0} מול"}
                 two{"{0} מול"}
             }
+            part-per-1e6{
+                dnam{"חלקים למיליון"}
+                gender{"masculine"}
+                many{"{0} חלקים למיליון"}
+                one{"{0} חלקים למיליון"}
+                other{"{0} חלקים למיליון"}
+                two{"{0} חלקים למיליון"}
+            }
+            part-per-1e9{
+                dnam{"חלקים למיליארד"}
+                gender{"masculine"}
+                one{"{0} חלקים למיליארד"}
+                other{"{0} חלקים למיליארד"}
+                two{"{0} חלקים למיליארד"}
+            }
             percent{
                 dnam{"אחוז"}
                 gender{"masculine"}
@@ -261,14 +276,6 @@ he{
                 other{"{0} פרומיל"}
                 two{"{0} פרומיל"}
             }
-            permillion{
-                dnam{"חלקים למיליון"}
-                gender{"masculine"}
-                many{"{0} חלקים למיליון"}
-                one{"{0} חלקים למיליון"}
-                other{"{0} חלקים למיליון"}
-                two{"{0} חלקים למיליון"}
-            }
             permyriad{
                 dnam{"רבבית"}
                 gender{"feminine"}
@@ -276,13 +283,6 @@ he{
                 one{"{0} רבבית"}
                 other{"{0} רבביות"}
                 two{"{0} רבביות"}
-            }
-            portion-per-1e9{
-                dnam{"חלקים למיליארד"}
-                gender{"masculine"}
-                one{"{0} חלקים למיליארד"}
-                other{"{0} חלקים למיליארד"}
-                two{"{0} חלקים למיליארד"}
             }
         }
         consumption{

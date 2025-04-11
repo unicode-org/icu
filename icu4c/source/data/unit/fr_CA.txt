@@ -63,19 +63,19 @@ fr_CA{
             }
         }
         concentr{
-            permille{
-                one{"{0} pour mille"}
-                other{"{0} pour mille"}
-            }
-            permillion{
+            part-per-1e6{
                 dnam{"parties par million"}
                 one{"{0} partie par million"}
                 other{"{0} parties par million"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"parties par milliard"}
                 one{"{0} partie par milliard"}
                 other{"{0} parties par milliard"}
+            }
+            permille{
+                one{"{0} pour mille"}
+                other{"{0} pour mille"}
             }
         }
         consumption{
@@ -540,7 +540,7 @@ fr_CA{
             }
         }
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"p.p. 10⁹"}
                 one{"{0}pp10⁹"}
                 other{"{0}pp10⁹"}
@@ -844,6 +844,11 @@ fr_CA{
             karat{
                 dnam{"carats"}
             }
+            part-per-1e9{
+                dnam{"p.p. 10⁹"}
+                one{"{0} p.p. 10⁹"}
+                other{"{0} p.p. 10⁹"}
+            }
             percent{
                 one{"{0} %"}
                 other{"{0} %"}
@@ -851,11 +856,6 @@ fr_CA{
             permille{
                 one{"{0} ‰"}
                 other{"{0} ‰"}
-            }
-            portion-per-1e9{
-                dnam{"p.p. 10⁹"}
-                one{"{0} p.p. 10⁹"}
-                other{"{0} p.p. 10⁹"}
             }
         }
         consumption{

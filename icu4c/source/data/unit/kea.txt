@@ -128,6 +128,10 @@ kea{
                 dnam{"milimol pur litru"}
                 other{"{0} milimol pur litru"}
             }
+            part-per-1e6{
+                dnam{"parti pur milhãu"}
+                other{"{0} parti pur milhãu"}
+            }
             percent{
                 dnam{"pursentu"}
                 other{"{0} pursentu"}
@@ -135,10 +139,6 @@ kea{
             permille{
                 dnam{"pur mil"}
                 other{"{0} pur mil"}
-            }
-            permillion{
-                dnam{"parti pur milhãu"}
-                other{"{0} parti pur milhãu"}
             }
             permyriad{
                 dnam{"pontu bazi"}
@@ -816,7 +816,7 @@ kea{
                 dnam{"milimol/litru"}
                 other{"{0} mmol/l"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"parti/milhãu"}
             }
         }
