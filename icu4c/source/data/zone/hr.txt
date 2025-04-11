@@ -318,9 +318,6 @@ hr{
         "Indian:Mauritius"{
             ec{"Mauricijus"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fidži"}
         }

@@ -33,9 +33,6 @@ ee{
         "Europe:London"{
             ld{"British dzomeŋɔli gaƒoƒo me"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }

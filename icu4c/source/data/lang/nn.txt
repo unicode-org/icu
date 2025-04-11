@@ -139,9 +139,7 @@ nn{
             account{"valutaformat for rekneskapsføring"}
         }
         collation{
-            big5han{"tradisjonell kinesisk sortering"}
             ducet{"standard Unicode-sorteringsrekkjefølgje"}
-            gb2312han{"forenkla kinesisk sortering"}
             pinyin{"pinyin-sortering"}
             standard{"standard sorteringsrekkjefølgje"}
         }

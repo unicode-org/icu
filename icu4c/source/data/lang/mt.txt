@@ -544,8 +544,6 @@ mt{
             japanese{"Kalendarju Ġappuniż"}
         }
         collation{
-            big5han{"Ordni Ċiniż Tradizzjonali (Big5)"}
-            gb2312han{"Ordni Ċiniż Sempliċi (GB2312)"}
             phonebook{"Ordni Telefonika"}
             pinyin{"Ordni tal-Pinjin"}
             standard{"Ordni Standard"}

@@ -736,13 +736,11 @@ zu{
             tertiary{"Hlela Ukuphimisela/Ukuma kwezinhlamvu/Ububanzi"}
         }
         collation{
-            big5han{"Ukuhlunga kwe-Traditional Chinese - Big5"}
             compat{"Ukuhlunga Kwangaphambilini, ngokusebenzisana"}
             dictionary{"Uhlelo Lokuhlunga Lesichazamazwi"}
             ducet{"Ukuhlunga okuzenzakalelayo kwe-Unicode"}
             emoji{"Uhlelo Lokuhlunga le-Emoji"}
             eor{"Imithetho Yokuhlunga ye-European"}
-            gb2312han{"Ukuhlunga kwe-Simplified Chinese - GB2312"}
             phonebook{"Ukuhlunga kwebhuku lefoni"}
             phonetic{"Hlela Ngokwefonetiki"}
             pinyin{"Ukuhlunga nge-Pinyin"}

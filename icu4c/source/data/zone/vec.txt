@@ -595,6 +595,9 @@ vec{
         "Pacific:Efate"{
             ec{"Ìzola Efate"}
         }
+        "Pacific:Enderbury"{
+            ec{"Atolo Canton"}
+        }
         "Pacific:Fakaofo"{
             ec{"Atolo Fakaofo"}
         }
@@ -609,9 +612,6 @@ vec{
         }
         "Pacific:Guadalcanal"{
             ec{"Ìzola Guadalcanal"}
-        }
-        "Pacific:Kanton"{
-            ec{"Atolo Canton"}
         }
         "Pacific:Kiritimati"{
             ec{"Atolo Kiritimati"}

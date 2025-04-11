@@ -92,22 +92,22 @@ sw{
                 one{"milimoli {0} kwa kila lita"}
                 other{"milimoli {0} kwa kila lita"}
             }
+            part-per-1e6{
+                one{"sehemu {0} kwa kila milioni"}
+                other{"sehemu {0} kwa kila milioni"}
+            }
+            part-per-1e9{
+                dnam{"sehemu kwa kila bilioni"}
+                one{"sehemu {0} kwa kila bilioni"}
+                other{"sehemu {0} kwa kila bilioni"}
+            }
             permille{
                 one{"{0} kwa kila elfu"}
                 other{"{0} kwa kila elfu"}
             }
-            permillion{
-                one{"sehemu {0} kwa kila milioni"}
-                other{"sehemu {0} kwa kila milioni"}
-            }
             permyriad{
                 one{"permyriadi {0}"}
                 other{"permyriadi {0}"}
-            }
-            portion-per-1e9{
-                dnam{"sehemu kwa kila bilioni"}
-                one{"sehemu {0} kwa kila bilioni"}
-                other{"sehemu {0} kwa kila bilioni"}
             }
         }
         consumption{
@@ -548,10 +548,10 @@ sw{
                 one{"mmol {0}/L"}
                 other{"mmol {0}/L"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"ppm"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"sehemu kwa kila bilioni"}
             }
         }
@@ -819,6 +819,14 @@ sw{
                 one{"moli {0}"}
                 other{"moli {0}"}
             }
+            part-per-1e6{
+                dnam{"sehemu kwa kila milioni"}
+                one{"ppm {0}"}
+                other{"ppm {0}"}
+            }
+            part-per-1e9{
+                dnam{"sehemu kwa bilioni"}
+            }
             percent{
                 dnam{"asilimia"}
                 one{"asilimia {0}"}
@@ -829,16 +837,8 @@ sw{
                 one{"{0} kwa elfu"}
                 other{"{0} kwa elfu"}
             }
-            permillion{
-                dnam{"sehemu kwa kila milioni"}
-                one{"ppm {0}"}
-                other{"ppm {0}"}
-            }
             permyriad{
                 dnam{"permyriadi"}
-            }
-            portion-per-1e9{
-                dnam{"sehemu kwa bilioni"}
             }
         }
         consumption{

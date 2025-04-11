@@ -1124,9 +1124,6 @@ pcm{
         "Pacific:Efate"{
             ec{"Ẹfátẹ"}
         }
-        "Pacific:Enderbury"{
-            ec{"Ẹ́ndábẹ́ri"}
-        }
         "Pacific:Fakaofo"{
             ec{"Fakáófo"}
         }

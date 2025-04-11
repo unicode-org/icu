@@ -151,6 +151,16 @@ am{
                 one{"{0} mol"}
                 other{"{0} mol"}
             }
+            part-per-1e6{
+                case{
+                    accusative{
+                        one{"{0} ክፍል በየሚሊዮን"}
+                        other{"{0} ክፍል በየሚሊዮን"}
+                    }
+                }
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
             percent{
                 case{
                     accusative{
@@ -170,16 +180,6 @@ am{
                 }
                 one{"{0} በማይል"}
                 other{"{0}‰"}
-            }
-            permillion{
-                case{
-                    accusative{
-                        one{"{0} ክፍል በየሚሊዮን"}
-                        other{"{0} ክፍል በየሚሊዮን"}
-                    }
-                }
-                one{"{0} ppm"}
-                other{"{0} ppm"}
             }
         }
         consumption{

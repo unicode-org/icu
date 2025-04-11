@@ -1167,7 +1167,7 @@ or{
             ec{"ଇଫେଟ୍‌"}
         }
         "Pacific:Enderbury"{
-            ec{"ଏଣ୍ଡେରବୁରି"}
+            ec{"କ୍ୟାଣ୍ଟନ"}
         }
         "Pacific:Fakaofo"{
             ec{"ଫାକାଓଫୋ"}
@@ -1192,9 +1192,6 @@ or{
         }
         "Pacific:Honolulu"{
             ec{"ହୋନୋଲୁଲୁ"}
-        }
-        "Pacific:Kanton"{
-            ec{"କ୍ୟାଣ୍ଟନ"}
         }
         "Pacific:Kiritimati"{
             ec{"କିରିତିମାଟି"}

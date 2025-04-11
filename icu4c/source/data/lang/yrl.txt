@@ -757,12 +757,10 @@ yrl{
             tertiary{"Reyupurawaka asẽtu-ita/turusuwa-ita yuí mirĩwa-ita/turususawa"}
         }
         collation{
-            big5han{"Xinanhẽẽga rikusawarupí muakaresawa - Big5"}
             compat{"Muakaresawa rinũdewa nũgarásawa"}
             dictionary{"Disiunariu muakaresawa"}
             ducet{"Unicode muakaresawa retewa"}
             eor{"Tekô eurupawara muakarésawa supé"}
-            gb2312han{"Xinanheẽga iwasuĩma muakarewa - GB2312"}
             phonebook{"Terefuni sesewara muakaresawa"}
             phonetic{"Yupurawakasawa terefuniara mukaresawa"}
             pinyin{"Pin-yin mukaresawa"}

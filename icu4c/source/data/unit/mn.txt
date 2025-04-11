@@ -146,6 +146,16 @@ mn{
                 one{"литр тутамд {0} миллимоль"}
                 other{"литр тутамд {0} миллимоль"}
             }
+            part-per-1e6{
+                dnam{"саяны хувь"}
+                one{"саяны {0} хувь"}
+                other{"саяны {0} хувь"}
+            }
+            part-per-1e9{
+                dnam{"мкг/кг"}
+                one{"{0} мкг/кг"}
+                other{"{0} мкг/кг"}
+            }
             percent{
                 one{"{0} хувь"}
                 other{"{0} хувь"}
@@ -154,19 +164,9 @@ mn{
                 one{"мянганы {0} хувь"}
                 other{"мянганы {0} хувь"}
             }
-            permillion{
-                dnam{"саяны хувь"}
-                one{"саяны {0} хувь"}
-                other{"саяны {0} хувь"}
-            }
             permyriad{
                 one{"арван мянганы {0} хувь"}
                 other{"арван мянганы {0} хувь"}
-            }
-            portion-per-1e9{
-                dnam{"мкг/кг"}
-                one{"{0} мкг/кг"}
-                other{"{0} мкг/кг"}
             }
         }
         consumption{
@@ -879,24 +879,24 @@ mn{
             }
         }
         concentr{
+            part-per-1e6{
+                dnam{"ppm"}
+                one{"{0}ppm"}
+                other{"{0}ppm"}
+            }
+            part-per-1e9{
+                dnam{"мкг/кг"}
+                one{"{0} мкг/кг"}
+                other{"{0} мкг/кг"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
             }
-            permillion{
-                dnam{"ppm"}
-                one{"{0}ppm"}
-                other{"{0}ppm"}
-            }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                dnam{"мкг/кг"}
-                one{"{0} мкг/кг"}
-                other{"{0} мкг/кг"}
             }
         }
         consumption{
@@ -1235,24 +1235,24 @@ mn{
                 one{"{0} моль"}
                 other{"{0} моль"}
             }
+            part-per-1e6{
+                dnam{"хувь/сая"}
+                one{"саяны {0} хувь"}
+                other{"{0}x10⁻⁶"}
+            }
+            part-per-1e9{
+                dnam{"мкг/кг"}
+                one{"{0} мкг/кг"}
+                other{"{0} мкг/кг"}
+            }
             percent{
                 dnam{"хувь"}
             }
             permille{
                 dnam{"мянганы хувь"}
             }
-            permillion{
-                dnam{"хувь/сая"}
-                one{"саяны {0} хувь"}
-                other{"{0}x10⁻⁶"}
-            }
             permyriad{
                 dnam{"арван мянганы хувь"}
-            }
-            portion-per-1e9{
-                dnam{"мкг/кг"}
-                one{"{0} мкг/кг"}
-                other{"{0} мкг/кг"}
             }
         }
         consumption{

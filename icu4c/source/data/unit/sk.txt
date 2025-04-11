@@ -941,6 +941,86 @@ sk{
                 one{"{0} mol"}
                 other{"{0} molov"}
             }
+            part-per-1e6{
+                case{
+                    accusative{
+                        few{"{0} milióntiny"}
+                        many{"{0} milióntiny"}
+                        one{"{0} milióntinu"}
+                        other{"{0} milióntin"}
+                    }
+                    dative{
+                        few{"{0} milióntinám"}
+                        many{"{0} milióntiny"}
+                        one{"{0} milióntine"}
+                        other{"{0} milióntinám"}
+                    }
+                    genitive{
+                        few{"{0} milióntin"}
+                        many{"{0} milióntiny"}
+                        one{"{0} milióntiny"}
+                        other{"{0} milióntin"}
+                    }
+                    instrumental{
+                        few{"{0} milióntinami"}
+                        many{"{0} milióntiny"}
+                        one{"{0} milióntinou"}
+                        other{"{0} milióntinami"}
+                    }
+                    locative{
+                        few{"{0} milióntinách"}
+                        many{"{0} milióntiny"}
+                        one{"{0} milióntine"}
+                        other{"{0} milióntinách"}
+                    }
+                }
+                dnam{"milióntiny"}
+                few{"{0} milióntiny"}
+                gender{"feminine"}
+                many{"{0} milióntiny"}
+                one{"{0} milióntina"}
+                other{"{0} milióntin"}
+            }
+            part-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} častice na miliardu"}
+                        many{"{0} častice na miliardu"}
+                        one{"{0} časticu na miliardu"}
+                        other{"{0} častíc na miliardu"}
+                    }
+                    dative{
+                        few{"{0} časticiam na miliardu"}
+                        many{"{0} častice na miliardu"}
+                        one{"{0} častici na miliardu"}
+                        other{"{0} časticiam na miliardu"}
+                    }
+                    genitive{
+                        few{"{0} častíc na miliardu"}
+                        many{"{0} častice na miliardu"}
+                        one{"{0} častice na miliardu"}
+                        other{"{0} častíc na miliardu"}
+                    }
+                    instrumental{
+                        few{"{0} časticami na miliardu"}
+                        many{"{0} častice na miliardu"}
+                        one{"{0} časticou na miliardu"}
+                        other{"{0} časticami na miliardu"}
+                    }
+                    locative{
+                        few{"{0} časticiach na miliardu"}
+                        many{"{0} častice na miliardu"}
+                        one{"{0} častici na miliardu"}
+                        other{"{0} časticiach na miliardu"}
+                    }
+                }
+                dnam{"častice na miliardu"}
+                few{"{0} častice na miliardu"}
+                gender{"feminine"}
+                many{"{0} častice na miliardu"}
+                one{"{0} častica na miliardu"}
+                other{"{0} častíc na miliardu"}
+            }
             percent{
                 case{
                     accusative{
@@ -1021,46 +1101,6 @@ sk{
                 one{"{0} promile"}
                 other{"{0} promile"}
             }
-            permillion{
-                case{
-                    accusative{
-                        few{"{0} milióntiny"}
-                        many{"{0} milióntiny"}
-                        one{"{0} milióntinu"}
-                        other{"{0} milióntin"}
-                    }
-                    dative{
-                        few{"{0} milióntinám"}
-                        many{"{0} milióntiny"}
-                        one{"{0} milióntine"}
-                        other{"{0} milióntinám"}
-                    }
-                    genitive{
-                        few{"{0} milióntin"}
-                        many{"{0} milióntiny"}
-                        one{"{0} milióntiny"}
-                        other{"{0} milióntin"}
-                    }
-                    instrumental{
-                        few{"{0} milióntinami"}
-                        many{"{0} milióntiny"}
-                        one{"{0} milióntinou"}
-                        other{"{0} milióntinami"}
-                    }
-                    locative{
-                        few{"{0} milióntinách"}
-                        many{"{0} milióntiny"}
-                        one{"{0} milióntine"}
-                        other{"{0} milióntinách"}
-                    }
-                }
-                dnam{"milióntiny"}
-                few{"{0} milióntiny"}
-                gender{"feminine"}
-                many{"{0} milióntiny"}
-                one{"{0} milióntina"}
-                other{"{0} milióntin"}
-            }
             permyriad{
                 case{
                     accusative{
@@ -1100,46 +1140,6 @@ sk{
                 many{"{0} desatiny promile"}
                 one{"{0} desatina promile"}
                 other{"{0} desatín promile"}
-            }
-            portion-per-1e9{
-                case{
-                    accusative{
-                        few{"{0} častice na miliardu"}
-                        many{"{0} častice na miliardu"}
-                        one{"{0} časticu na miliardu"}
-                        other{"{0} častíc na miliardu"}
-                    }
-                    dative{
-                        few{"{0} časticiam na miliardu"}
-                        many{"{0} častice na miliardu"}
-                        one{"{0} častici na miliardu"}
-                        other{"{0} časticiam na miliardu"}
-                    }
-                    genitive{
-                        few{"{0} častíc na miliardu"}
-                        many{"{0} častice na miliardu"}
-                        one{"{0} častice na miliardu"}
-                        other{"{0} častíc na miliardu"}
-                    }
-                    instrumental{
-                        few{"{0} časticami na miliardu"}
-                        many{"{0} častice na miliardu"}
-                        one{"{0} časticou na miliardu"}
-                        other{"{0} časticami na miliardu"}
-                    }
-                    locative{
-                        few{"{0} časticiach na miliardu"}
-                        many{"{0} častice na miliardu"}
-                        one{"{0} častici na miliardu"}
-                        other{"{0} časticiach na miliardu"}
-                    }
-                }
-                dnam{"častice na miliardu"}
-                few{"{0} častice na miliardu"}
-                gender{"feminine"}
-                many{"{0} častice na miliardu"}
-                one{"{0} častica na miliardu"}
-                other{"{0} častíc na miliardu"}
             }
         }
         consumption{

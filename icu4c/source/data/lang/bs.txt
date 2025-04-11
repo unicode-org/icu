@@ -866,13 +866,11 @@ bs{
             tertiary{"Poredaj po naglascima/veličini/širini"}
         }
         collation{
-            big5han{"Tradicionalno kinesko sortiranje"}
             compat{"Prethodno sortiranje radi usklađenosti"}
             dictionary{"Rječničko sortiranje"}
             ducet{"standardno Unicode sortiranje"}
             emoji{"Sortiranje po emoji sličicama"}
             eor{"Evropska pravila sortiranja"}
-            gb2312han{"Pojednostavljeno kinesko sortiranje - GB2312"}
             phonebook{"Sortiranje kao telefonski imenik"}
             phonetic{"Fonetsko sortiranje"}
             pinyin{"Pinjin sortiranje"}

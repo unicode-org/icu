@@ -906,11 +906,9 @@ yue_Hans{
             tertiary{"排序重音/大小写/全半形"}
         }
         collation{
-            big5han{"繁体中文排序 - Big5"}
             dictionary{"字典排序"}
             ducet{"预设 Unicode 排序"}
             eor{"欧洲排序规则"}
-            gb2312han{"简体中文排序 - GB2312"}
             phonebook{"电话簿排序"}
             phonetic{"发音排序"}
             pinyin{"拼音排序"}

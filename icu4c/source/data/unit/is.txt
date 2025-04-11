@@ -463,6 +463,45 @@ is{
                 one{"{0} mól"}
                 other{"{0} mól"}
             }
+            part-per-1e6{
+                case{
+                    accusative{
+                        one{"{0} milljónarhluta"}
+                        other{"{0} milljónarhluta"}
+                    }
+                    dative{
+                        one{"{0} milljónarhluta"}
+                        other{"{0} milljónarhlutum"}
+                    }
+                    genitive{
+                        one{"{0} milljónarhluta"}
+                        other{"{0} milljónarhluta"}
+                    }
+                }
+                gender{"masculine"}
+                one{"{0} milljónarhluti"}
+                other{"{0} milljónarhlutar"}
+            }
+            part-per-1e9{
+                case{
+                    accusative{
+                        one{"{0} hluta á milljarð"}
+                        other{"{0} hluta á milljarð"}
+                    }
+                    dative{
+                        one{"{0} hluta á milljarð"}
+                        other{"{0} hlutum á milljarð"}
+                    }
+                    genitive{
+                        one{"{0} hluta á milljarð"}
+                        other{"{0} hluta á milljarð"}
+                    }
+                }
+                dnam{"hlutar á milljarð"}
+                gender{"masculine"}
+                one{"{0} hluti á milljarð"}
+                other{"{0} hlutar á milljarð"}
+            }
             percent{
                 case{
                     accusative{
@@ -501,25 +540,6 @@ is{
                 one{"{0} prómill"}
                 other{"{0} prómill"}
             }
-            permillion{
-                case{
-                    accusative{
-                        one{"{0} milljónarhluta"}
-                        other{"{0} milljónarhluta"}
-                    }
-                    dative{
-                        one{"{0} milljónarhluta"}
-                        other{"{0} milljónarhlutum"}
-                    }
-                    genitive{
-                        one{"{0} milljónarhluta"}
-                        other{"{0} milljónarhluta"}
-                    }
-                }
-                gender{"masculine"}
-                one{"{0} milljónarhluti"}
-                other{"{0} milljónarhlutar"}
-            }
             permyriad{
                 case{
                     accusative{
@@ -538,26 +558,6 @@ is{
                 gender{"neuter"}
                 one{"{0} permyriad"}
                 other{"{0} permyriad"}
-            }
-            portion-per-1e9{
-                case{
-                    accusative{
-                        one{"{0} hluta á milljarð"}
-                        other{"{0} hluta á milljarð"}
-                    }
-                    dative{
-                        one{"{0} hluta á milljarð"}
-                        other{"{0} hlutum á milljarð"}
-                    }
-                    genitive{
-                        one{"{0} hluta á milljarð"}
-                        other{"{0} hluta á milljarð"}
-                    }
-                }
-                dnam{"hlutar á milljarð"}
-                gender{"masculine"}
-                one{"{0} hluti á milljarð"}
-                other{"{0} hlutar á milljarð"}
             }
         }
         consumption{
@@ -2809,15 +2809,15 @@ is{
                 one{"{0}mmól/l"}
                 other{"{0}mmól/l"}
             }
+            part-per-1e6{
+                dnam{"ppm"}
+                one{"{0}ppm"}
+                other{"{0}ppm"}
+            }
             percent{
                 dnam{"%"}
                 one{"{0}%"}
                 other{"{0}%"}
-            }
-            permillion{
-                dnam{"ppm"}
-                one{"{0}ppm"}
-                other{"{0}ppm"}
             }
             permyriad{
                 dnam{"‱"}
@@ -3132,6 +3132,9 @@ is{
                 one{"{0} mól"}
                 other{"{0} mól"}
             }
+            part-per-1e6{
+                dnam{"milljónarhlutar"}
+            }
             percent{
                 dnam{"prósent"}
                 one{"{0}%"}
@@ -3139,9 +3142,6 @@ is{
             }
             permille{
                 dnam{"prómill"}
-            }
-            permillion{
-                dnam{"milljónarhlutar"}
             }
             permyriad{
                 dnam{"permyriad"}

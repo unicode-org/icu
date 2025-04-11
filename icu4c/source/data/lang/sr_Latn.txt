@@ -801,12 +801,10 @@ sr_Latn{
             tertiary{"Sortiraj akcente/mala i velika slova/širinu"}
         }
         collation{
-            big5han{"tradicionalno kinesko sortiranje"}
             compat{"prethodni redosled sortiranja, zbog kompatibilnosti"}
             dictionary{"redosled sortiranja u rečniku"}
             ducet{"podrazumevani Unicode redosled sortiranja"}
             eor{"evropska pravila redosleda"}
-            gb2312han{"pojednostavljeno kinesko sortiranje"}
             phonebook{"sortiranje kao telefonski imenik"}
             phonetic{"fonetski redosled sortiranja"}
             pinyin{"pinjin sortiranje"}

@@ -625,10 +625,8 @@ gl{
             tertiary{"Clasificar acentos/maiúsculas e minúsculas/ancho"}
         }
         collation{
-            big5han{"Orde de clasificación chinesa tradicional - Big5"}
             dictionary{"Criterio de ordenación do dicionario"}
             ducet{"criterio de ordenación Unicode predeterminado"}
-            gb2312han{"orde de clasifcación chinesa simplificada - GB2312"}
             phonebook{"orde de clasificación da guía telefónica"}
             phonetic{"Orde de clasificación fonética"}
             pinyin{"Orde de clasificación pinyin"}

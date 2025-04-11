@@ -739,12 +739,10 @@ sk{
             tertiary{"Radiť akcenty/veľké a malé písmená/šírku"}
         }
         collation{
-            big5han{"tradičné čínske zoradenie – Big5"}
             compat{"predchádzajúce zoradenie, kompatibilita"}
             dictionary{"slovníkové zoradenie"}
             ducet{"predvolené zoradenie unicode"}
             eor{"európske zoradenie"}
-            gb2312han{"zjednodušené čínske zoradenie – GB2312"}
             phonebook{"lexikografické zoradenie"}
             phonetic{"fonetické zoradenie"}
             pinyin{"zoradenie pchin-jin"}

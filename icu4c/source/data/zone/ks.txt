@@ -1151,9 +1151,6 @@ ks{
         "Pacific:Efate"{
             ec{"ایفاتیے"}
         }
-        "Pacific:Enderbury"{
-            ec{"اؠنڑربیری"}
-        }
         "Pacific:Fakaofo"{
             ec{"فَکَوفو"}
         }

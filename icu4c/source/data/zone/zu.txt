@@ -1157,9 +1157,6 @@ zu{
         "Pacific:Efate"{
             ec{"i-Efate"}
         }
-        "Pacific:Enderbury"{
-            ec{"i-Enderbury"}
-        }
         "Pacific:Fakaofo"{
             ec{"i-Fakaofo"}
         }

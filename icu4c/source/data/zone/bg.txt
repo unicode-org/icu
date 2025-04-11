@@ -1167,7 +1167,7 @@ bg{
             ec{"Ефате"}
         }
         "Pacific:Enderbury"{
-            ec{"Ендърбъри"}
+            ec{"Кантон"}
         }
         "Pacific:Fakaofo"{
             ec{"Факаофо"}
@@ -1192,9 +1192,6 @@ bg{
         }
         "Pacific:Honolulu"{
             ec{"Хонолулу"}
-        }
-        "Pacific:Kanton"{
-            ec{"Кантон"}
         }
         "Pacific:Kiritimati"{
             ec{"Киритимати"}

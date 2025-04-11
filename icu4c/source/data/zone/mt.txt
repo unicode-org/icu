@@ -96,9 +96,6 @@ mt{
         "Indian:Maldives"{
             ec{"il-Maldivi"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }

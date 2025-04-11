@@ -934,6 +934,86 @@ sl{
                 other{"{0} molov"}
                 two{"{0} mola"}
             }
+            part-per-1e6{
+                case{
+                    accusative{
+                        few{"{0} delce na milijon"}
+                        one{"{0} delec na milijon"}
+                        other{"{0} delcev na milijon"}
+                        two{"{0} delca na milijon"}
+                    }
+                    dative{
+                        few{"{0} delcem na milijon"}
+                        one{"{0} delcu na milijon"}
+                        other{"{0} delcem na milijon"}
+                        two{"{0} delcema na milijon"}
+                    }
+                    genitive{
+                        few{"{0} delcev na milijon"}
+                        one{"{0} delca na milijon"}
+                        other{"{0} delcev na milijon"}
+                        two{"{0} delcev na milijon"}
+                    }
+                    instrumental{
+                        few{"{0} delci na milijon"}
+                        one{"{0} delcem na milijon"}
+                        other{"{0} delci na milijon"}
+                        two{"{0} delcema na milijon"}
+                    }
+                    locative{
+                        few{"{0} delcih na milijon"}
+                        one{"{0} delcu na milijon"}
+                        other{"{0} delcih na milijon"}
+                        two{"{0} delcih na milijon"}
+                    }
+                }
+                dnam{"delci na milijon"}
+                few{"{0} delci na milijon"}
+                gender{"masculine"}
+                one{"{0} delec na milijon"}
+                other{"{0} delcev na milijon"}
+                two{"{0} delca na milijon"}
+            }
+            part-per-1e9{
+                case{
+                    accusative{
+                        few{"{0} delce na milijardo"}
+                        one{"{0} delec na milijardo"}
+                        other{"{0} delcev na milijardo"}
+                        two{"{0} delca na milijardo"}
+                    }
+                    dative{
+                        few{"{0} delcem na milijardo"}
+                        one{"{0} delcu na milijardo"}
+                        other{"{0} delcem na milijardo"}
+                        two{"{0} delcema na milijardo"}
+                    }
+                    genitive{
+                        few{"{0} delcev na milijardo"}
+                        one{"{0} delca na milijardo"}
+                        other{"{0} delcev na milijardo"}
+                        two{"{0} delcev na milijardo"}
+                    }
+                    instrumental{
+                        few{"{0} delci na milijardo"}
+                        one{"{0} delcem na milijardo"}
+                        other{"{0} delci na milijardo"}
+                        two{"{0} delcema na milijardo"}
+                    }
+                    locative{
+                        few{"{0} delcih na milijardo"}
+                        one{"{0} delcu na milijardo"}
+                        other{"{0} delcih na milijardo"}
+                        two{"{0} delcih na milijardo"}
+                    }
+                }
+                dnam{"delci na milijardo"}
+                few{"{0} delci na milijardo"}
+                gender{"masculine"}
+                one{"{0} delec na milijardo"}
+                other{"{0} delcev na milijardo"}
+                two{"{0} delca na milijardo"}
+            }
             percent{
                 case{
                     accusative{
@@ -1012,46 +1092,6 @@ sl{
                 other{"{0} promilov"}
                 two{"{0} promila"}
             }
-            permillion{
-                case{
-                    accusative{
-                        few{"{0} delce na milijon"}
-                        one{"{0} delec na milijon"}
-                        other{"{0} delcev na milijon"}
-                        two{"{0} delca na milijon"}
-                    }
-                    dative{
-                        few{"{0} delcem na milijon"}
-                        one{"{0} delcu na milijon"}
-                        other{"{0} delcem na milijon"}
-                        two{"{0} delcema na milijon"}
-                    }
-                    genitive{
-                        few{"{0} delcev na milijon"}
-                        one{"{0} delca na milijon"}
-                        other{"{0} delcev na milijon"}
-                        two{"{0} delcev na milijon"}
-                    }
-                    instrumental{
-                        few{"{0} delci na milijon"}
-                        one{"{0} delcem na milijon"}
-                        other{"{0} delci na milijon"}
-                        two{"{0} delcema na milijon"}
-                    }
-                    locative{
-                        few{"{0} delcih na milijon"}
-                        one{"{0} delcu na milijon"}
-                        other{"{0} delcih na milijon"}
-                        two{"{0} delcih na milijon"}
-                    }
-                }
-                dnam{"delci na milijon"}
-                few{"{0} delci na milijon"}
-                gender{"masculine"}
-                one{"{0} delec na milijon"}
-                other{"{0} delcev na milijon"}
-                two{"{0} delca na milijon"}
-            }
             permyriad{
                 case{
                     accusative{
@@ -1091,46 +1131,6 @@ sl{
                 one{"{0} desettisočina"}
                 other{"{0} desettisočin"}
                 two{"{0} desettisočini"}
-            }
-            portion-per-1e9{
-                case{
-                    accusative{
-                        few{"{0} delce na milijardo"}
-                        one{"{0} delec na milijardo"}
-                        other{"{0} delcev na milijardo"}
-                        two{"{0} delca na milijardo"}
-                    }
-                    dative{
-                        few{"{0} delcem na milijardo"}
-                        one{"{0} delcu na milijardo"}
-                        other{"{0} delcem na milijardo"}
-                        two{"{0} delcema na milijardo"}
-                    }
-                    genitive{
-                        few{"{0} delcev na milijardo"}
-                        one{"{0} delca na milijardo"}
-                        other{"{0} delcev na milijardo"}
-                        two{"{0} delcev na milijardo"}
-                    }
-                    instrumental{
-                        few{"{0} delci na milijardo"}
-                        one{"{0} delcem na milijardo"}
-                        other{"{0} delci na milijardo"}
-                        two{"{0} delcema na milijardo"}
-                    }
-                    locative{
-                        few{"{0} delcih na milijardo"}
-                        one{"{0} delcu na milijardo"}
-                        other{"{0} delcih na milijardo"}
-                        two{"{0} delcih na milijardo"}
-                    }
-                }
-                dnam{"delci na milijardo"}
-                few{"{0} delci na milijardo"}
-                gender{"masculine"}
-                one{"{0} delec na milijardo"}
-                other{"{0} delcev na milijardo"}
-                two{"{0} delca na milijardo"}
             }
         }
         consumption{

@@ -1164,7 +1164,7 @@ brx{
             ec{"एफाटे"}
         }
         "Pacific:Enderbury"{
-            ec{"एन्डारबारी"}
+            ec{"केन्ट’न"}
         }
         "Pacific:Fakaofo"{
             ec{"फाकाअफ’"}
@@ -1189,9 +1189,6 @@ brx{
         }
         "Pacific:Honolulu"{
             ec{"हनलुलु"}
-        }
-        "Pacific:Kanton"{
-            ec{"केन्ट’न"}
         }
         "Pacific:Kiritimati"{
             ec{"किरीतिमाति"}

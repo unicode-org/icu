@@ -73,14 +73,14 @@ doi{
             mole{
                 dnam{"मोल"}
             }
+            part-per-1e6{
+                dnam{"हिस्से फी दस लक्ख"}
+            }
             percent{
                 dnam{"प्रतिशत/फीसदी"}
             }
             permille{
                 dnam{"फी ज्हार"}
-            }
-            permillion{
-                dnam{"हिस्से फी दस लक्ख"}
             }
             permyriad{
                 dnam{"फी दस ज्हार"}
@@ -639,7 +639,7 @@ doi{
             mole{
                 dnam{"मोल"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"हिफीदल"}
             }
         }
@@ -1101,14 +1101,14 @@ doi{
             mole{
                 dnam{"मोल"}
             }
+            part-per-1e6{
+                dnam{"हिस्से/दस लक्ख"}
+            }
             percent{
                 dnam{"प्रतिशत/फीसदी"}
             }
             permille{
                 dnam{"फी ज्हार"}
-            }
-            permillion{
-                dnam{"हिस्से/दस लक्ख"}
             }
         }
         consumption{

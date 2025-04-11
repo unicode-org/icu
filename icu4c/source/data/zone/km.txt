@@ -1167,7 +1167,7 @@ km{
             ec{"អ៊ីហ្វាតេ"}
         }
         "Pacific:Enderbury"{
-            ec{"អ៊ីនដឺប៊ូរី"}
+            ec{"កាន់តុន"}
         }
         "Pacific:Fakaofo"{
             ec{"ហ្វាកៅហ្វូ"}
@@ -1192,9 +1192,6 @@ km{
         }
         "Pacific:Honolulu"{
             ec{"ហូណូលូលូ"}
-        }
-        "Pacific:Kanton"{
-            ec{"កាន់តុន"}
         }
         "Pacific:Kiritimati"{
             ec{"គិរីទីម៉ាទិ"}

@@ -1167,7 +1167,7 @@ am{
             ec{"ኢፋቴ"}
         }
         "Pacific:Enderbury"{
-            ec{"ኢንደርበሪ"}
+            ec{"ካንቶን"}
         }
         "Pacific:Fakaofo"{
             ec{"ፋካኦፎ"}
@@ -1192,9 +1192,6 @@ am{
         }
         "Pacific:Honolulu"{
             ec{"ሆኖሉሉ"}
-        }
-        "Pacific:Kanton"{
-            ec{"ካንቶን"}
         }
         "Pacific:Kiritimati"{
             ec{"ኪሪቲማቲ"}

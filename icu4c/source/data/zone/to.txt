@@ -83,7 +83,7 @@ to{
             ec{"Lapanui"}
         }
         "Pacific:Enderbury"{
-            ec{"ʻEnitipulī"}
+            ec{"Kanitoni"}
         }
         "Pacific:Fiji"{
             ec{"Fisi"}
@@ -99,9 +99,6 @@ to{
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
-        }
-        "Pacific:Kanton"{
-            ec{"Kanitoni"}
         }
         "Pacific:Kiritimati"{
             ec{"Kilisimasi"}

@@ -297,9 +297,6 @@ de{
         "Pacific:Easter"{
             ec{"Osterinsel"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fidschi"}
         }

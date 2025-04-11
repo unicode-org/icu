@@ -1164,6 +1164,9 @@ kxv_Telu{
         "Pacific:Efate"{
             ec{"ఇఫేట్"}
         }
+        "Pacific:Enderbury"{
+            ec{"కాంటన్"}
+        }
         "Pacific:Fakaofo"{
             ec{"ఫాకోఫో"}
         }
@@ -1184,9 +1187,6 @@ kxv_Telu{
         }
         "Pacific:Guam"{
             ec{"గ్వామ్"}
-        }
-        "Pacific:Kanton"{
-            ec{"కాంటన్"}
         }
         "Pacific:Kiritimati"{
             ec{"కిరీటిమాటి"}

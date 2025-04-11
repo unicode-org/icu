@@ -117,6 +117,16 @@ as{
                 one{"প্ৰতি লিটাৰত {0} মিলিমোল"}
                 other{"প্ৰতি লিটাৰত {0} মিলিমোল"}
             }
+            part-per-1e6{
+                dnam{"প্ৰতি মিলিয়নত ভাগ"}
+                one{"প্ৰতি মিলিয়নত {0} ভাগ"}
+                other{"প্ৰতি মিলিয়নত {0} ভাগ"}
+            }
+            part-per-1e9{
+                dnam{"প্ৰতি বিলিয়নত অংশ"}
+                one{"{0} প্ৰতি বিলিয়নত অংশ"}
+                other{"{0} প্ৰতি বিলিয়নত অংশ"}
+            }
             percent{
                 dnam{"%"}
                 one{"{0} শতাংশ"}
@@ -126,19 +136,9 @@ as{
                 one{"{0} প্ৰতিমাইল"}
                 other{"{0} প্ৰতিমাইল"}
             }
-            permillion{
-                dnam{"প্ৰতি মিলিয়নত ভাগ"}
-                one{"প্ৰতি মিলিয়নত {0} ভাগ"}
-                other{"প্ৰতি মিলিয়নত {0} ভাগ"}
-            }
             permyriad{
                 one{"{0} পাৰমিৰেইড"}
                 other{"{0} পাৰমিৰেইড"}
-            }
-            portion-per-1e9{
-                dnam{"প্ৰতি বিলিয়নত অংশ"}
-                one{"{0} প্ৰতি বিলিয়নত অংশ"}
-                other{"{0} প্ৰতি বিলিয়নত অংশ"}
             }
         }
         consumption{
@@ -799,23 +799,23 @@ as{
             10p9{"গিগা{0}"}
         }
         concentr{
+            part-per-1e6{
+                dnam{"ppm"}
+                one{"{0}ppm"}
+                other{"{0}ppm"}
+            }
+            part-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
             }
-            permillion{
-                dnam{"ppm"}
-                one{"{0}ppm"}
-                other{"{0}ppm"}
-            }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                one{"{0}ppb"}
-                other{"{0}ppb"}
             }
         }
         consumption{
@@ -1124,20 +1124,20 @@ as{
                 one{"{0} ম’ল"}
                 other{"{0} ম’ল"}
             }
+            part-per-1e6{
+                dnam{"ভাগ/মিলিয়ন"}
+            }
+            part-per-1e9{
+                dnam{"অংশ/বিলিয়ন"}
+            }
             percent{
                 dnam{"শতাংশ"}
             }
             permille{
                 dnam{"প্ৰতিমাইল"}
             }
-            permillion{
-                dnam{"ভাগ/মিলিয়ন"}
-            }
             permyriad{
                 dnam{"পাৰমিৰেইড"}
-            }
-            portion-per-1e9{
-                dnam{"অংশ/বিলিয়ন"}
             }
         }
         consumption{

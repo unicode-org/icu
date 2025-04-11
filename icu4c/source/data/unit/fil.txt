@@ -169,6 +169,16 @@ fil{
                 one{"{0} mole"}
                 other{"{0} mole"}
             }
+            part-per-1e6{
+                dnam{"parts per million"}
+                one{"{0} part per million"}
+                other{"{0} parts per million"}
+            }
+            part-per-1e9{
+                dnam{"parts per billion"}
+                one{"{0} part per billion"}
+                other{"{0} parts per billion"}
+            }
             percent{
                 dnam{"porsyento"}
                 one{"{0} porsyento"}
@@ -179,19 +189,9 @@ fil{
                 one{"{0} permille"}
                 other{"{0} na permille"}
             }
-            permillion{
-                dnam{"parts per million"}
-                one{"{0} part per million"}
-                other{"{0} parts per million"}
-            }
             permyriad{
                 one{"{0} permyriad"}
                 other{"{0} permyriad"}
-            }
-            portion-per-1e9{
-                dnam{"parts per billion"}
-                one{"{0} part per billion"}
-                other{"{0} parts per billion"}
             }
         }
         consumption{
@@ -1034,15 +1034,15 @@ fil{
             mole{
                 dnam{"mol"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"ppm"}
+            }
+            part-per-1e9{
+                one{"{0}ppb"}
+                other{"{0}ppb"}
             }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                one{"{0}ppb"}
-                other{"{0}ppb"}
             }
         }
         consumption{
@@ -1513,14 +1513,14 @@ fil{
             mole{
                 dnam{"mole"}
             }
-            permillion{
+            part-per-1e6{
                 dnam{"parts/million"}
+            }
+            part-per-1e9{
+                dnam{"parts/billion"}
             }
             permyriad{
                 dnam{"permyriad"}
-            }
-            portion-per-1e9{
-                dnam{"parts/billion"}
             }
         }
         consumption{

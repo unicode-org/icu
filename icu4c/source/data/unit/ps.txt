@@ -176,6 +176,11 @@ ps{
                 one{"{0} مول"}
                 other{"{0} مولز"}
             }
+            part-per-1e6{
+                dnam{"پارټتس في مليون"}
+                one{"{0} پارټ في مليون"}
+                other{"{0} پارټس في مليون"}
+            }
             percent{
                 one{"{0} سلنه"}
                 other{"{0} سلنه"}
@@ -183,11 +188,6 @@ ps{
             permille{
                 one{"{0} في ميل"}
                 other{"{0} في ميل"}
-            }
-            permillion{
-                dnam{"پارټتس في مليون"}
-                one{"{0} پارټ في مليون"}
-                other{"{0} پارټس في مليون"}
             }
             permyriad{
                 one{"{0} زرمه"}
@@ -929,7 +929,7 @@ ps{
     }
     unitsNarrow{
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 dnam{"p/b"}
             }
         }
@@ -1171,20 +1171,20 @@ ps{
                 one{"{0} مول"}
                 other{"{0} مول"}
             }
+            part-per-1e6{
+                dnam{"پارټس/مليون"}
+            }
+            part-per-1e9{
+                dnam{"p/b"}
+            }
             percent{
                 dnam{"سلنه"}
             }
             permille{
                 dnam{"في ميل"}
             }
-            permillion{
-                dnam{"پارټس/مليون"}
-            }
             permyriad{
                 dnam{"زرمه"}
-            }
-            portion-per-1e9{
-                dnam{"p/b"}
             }
         }
         consumption{

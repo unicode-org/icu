@@ -757,12 +757,10 @@ kgp{
             tertiary{"Ti kri vir/vẽnhrá mág mré vẽnhrá kẽsir/tãpér to kuprẽg"}
         }
         collation{
-            big5han{"Sĩnẽj Vỹsa ke to ke pẽ - Big5"}
             compat{"Ẽgno tá jẽnẽ já kỹ ta ki já"}
             dictionary{"Vẽnhrá Nỹtĩj-fẽ nỹtĩ há"}
             ducet{"Unicode to ke pẽ"}
             eor{"Orópa tá vẽnhvin han to ke"}
-            gb2312han{"Sĩnẽj ke to ke (sĩmpri há) - GB2312"}
             phonebook{"Terefonĩ Risita to ke"}
             phonetic{"Fonẽtika to ke kuprãg"}
             pinyin{"Pin-yin to nỹtĩ"}

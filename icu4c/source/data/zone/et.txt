@@ -346,7 +346,7 @@ et{
             ec{"Lihavõttesaar"}
         }
         "Pacific:Enderbury"{
-            ec{"Enderbury"}
+            ec{"Abariringa"}
         }
         "Pacific:Fiji"{
             ec{"Fidži"}
@@ -356,9 +356,6 @@ et{
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
-        }
-        "Pacific:Kanton"{
-            ec{"Abariringa"}
         }
         "Pacific:Marquesas"{
             ec{"Markiisaared"}

@@ -980,13 +980,11 @@ fi{
             tertiary{"painomerkit ja aakkoslajit tai merkkileveydet huomioiva lajittelu"}
         }
         collation{
-            big5han{"perinteinen kiinalainen järjestys Big5"}
             compat{"aiempi lajittelujärjestys yhteensopivuutta varten"}
             dictionary{"sanakirjajärjestys"}
             ducet{"Unicoden oletusjärjestys"}
             emoji{"emojien lajittelujärjestys"}
             eor{"yleiseurooppalainen lajittelujärjestys"}
-            gb2312han{"yksinkertaistettu kiinalainen järjestys GB2312"}
             phonebook{"puhelinluettelojärjestys"}
             phonetic{"äänteellinen järjestys"}
             pinyin{"pinyin-järjestys"}

@@ -833,13 +833,11 @@ ast{
             standard{"formatu monetariu estándar"}
         }
         collation{
-            big5han{"orde de clasificación chinu tradicional - Big5"}
             compat{"orde de clasificación anterior, por compatibilidá"}
             dictionary{"orde de clasificación de diccionariu"}
             ducet{"orde de clasificación Unicode predetermináu"}
             emoji{"orde de clasificación Emoji"}
             eor{"regles d’ordenamientu europees"}
-            gb2312han{"orde de clasificación chinu simplificáu - GB2312"}
             phonebook{"orde de clasificación de llista telefónica"}
             pinyin{"orde de clasificación pinyin"}
             search{"gueta xeneral"}

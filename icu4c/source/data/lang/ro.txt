@@ -856,13 +856,11 @@ ro{
             tertiary{"Ordonați după accente/dimensiunea literei/lățime"}
         }
         collation{
-            big5han{"ordine de sortare a chinezei tradiționale - Big5"}
             compat{"ordine de sortare anterioară, pentru compatibilitate"}
             dictionary{"ordine de sortare a dicționarului"}
             ducet{"ordine de sortare Unicode implicită"}
             emoji{"ordine de sortare a emojiurilor"}
             eor{"regulile europene de sortare"}
-            gb2312han{"ordine de sortare a chinezei simplificate - GB2312"}
             phonebook{"ordine de sortare după cartea de telefon"}
             phonetic{"ordine de sortare fonetică"}
             pinyin{"ordine de sortare pinyin"}

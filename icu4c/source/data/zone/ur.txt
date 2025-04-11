@@ -1167,7 +1167,7 @@ ur{
             ec{"ایفیٹ"}
         }
         "Pacific:Enderbury"{
-            ec{"اینڈربری"}
+            ec{"کانٹن"}
         }
         "Pacific:Fakaofo"{
             ec{"فکاؤفو"}
@@ -1192,9 +1192,6 @@ ur{
         }
         "Pacific:Honolulu"{
             ec{"ہونولولو"}
-        }
-        "Pacific:Kanton"{
-            ec{"کانٹن"}
         }
         "Pacific:Kiritimati"{
             ec{"کریتیماٹی"}

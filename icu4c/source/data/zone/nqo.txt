@@ -1166,6 +1166,9 @@ nqo{
         "Pacific:Efate"{
             ec{"ߋߝߊߕߋ߫"}
         }
+        "Pacific:Enderbury"{
+            ec{"ߞߊ߲ߕߐ߲߫"}
+        }
         "Pacific:Fakaofo"{
             ec{"ߝߞߊߏߝߏ߫"}
         }
@@ -1186,9 +1189,6 @@ nqo{
         }
         "Pacific:Guam"{
             ec{"ߜ߭ߎߥߊ߲߫"}
-        }
-        "Pacific:Kanton"{
-            ec{"ߞߊ߲ߕߐ߲߫"}
         }
         "Pacific:Kiritimati"{
             ec{"ߞߙߌߕߌߡߊߕߌ߫"}

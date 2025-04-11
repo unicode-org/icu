@@ -882,9 +882,6 @@ tk{
         "Pacific:Easter"{
             ec{"Pasha adasy"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderberi"}
-        }
         "Pacific:Galapagos"{
             ec{"Galapagos adalary"}
         }

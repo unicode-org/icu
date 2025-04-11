@@ -1167,7 +1167,7 @@ as{
             ec{"এফেট"}
         }
         "Pacific:Enderbury"{
-            ec{"এণ্ডৰবাৰী"}
+            ec{"কেণ্টন"}
         }
         "Pacific:Fakaofo"{
             ec{"ফাকাওফো"}
@@ -1189,9 +1189,6 @@ as{
         }
         "Pacific:Guam"{
             ec{"গুৱাম"}
-        }
-        "Pacific:Kanton"{
-            ec{"কেণ্টন"}
         }
         "Pacific:Kiritimati"{
             ec{"কিৰিটিমাটি"}

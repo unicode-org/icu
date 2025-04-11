@@ -139,6 +139,17 @@ gu{
             mole{
                 gender{"masculine"}
             }
+            part-per-1e6{
+                dnam{"કણ પ્રતિ મિલિયન"}
+                gender{"masculine"}
+                one{"{0} કણ પ્રતિ મિલિયન"}
+                other{"{0} કણ પ્રતિ મિલિયન"}
+            }
+            part-per-1e9{
+                dnam{"પ્રતિ અબજ ભાગ"}
+                one{"{0} પ્રતિ અબજ ભાગ"}
+                other{"{0} પ્રતિ અબજ ભાગ"}
+            }
             percent{
                 gender{"masculine"}
                 one{"{0} ટકા"}
@@ -149,21 +160,10 @@ gu{
                 one{"{0} પ્રતિમાઈલ"}
                 other{"{0} પ્રતિમાઈલ"}
             }
-            permillion{
-                dnam{"કણ પ્રતિ મિલિયન"}
-                gender{"masculine"}
-                one{"{0} કણ પ્રતિ મિલિયન"}
-                other{"{0} કણ પ્રતિ મિલિયન"}
-            }
             permyriad{
                 gender{"masculine"}
                 one{"{0} પરમિરિયડ"}
                 other{"{0} પરમિરિયડ"}
-            }
-            portion-per-1e9{
-                dnam{"પ્રતિ અબજ ભાગ"}
-                one{"{0} પ્રતિ અબજ ભાગ"}
-                other{"{0} પ્રતિ અબજ ભાગ"}
             }
         }
         consumption{
@@ -873,21 +873,21 @@ gu{
             millimole-per-liter{
                 dnam{"mmol/L"}
             }
+            part-per-1e6{
+                dnam{"ppm"}
+            }
+            part-per-1e9{
+                one{"{0} પ્રતિ અબજ ભાગ"}
+                other{"{0} પ્રતિ અબજ ભાગ"}
+            }
             percent{
                 dnam{"%"}
             }
             permille{
                 dnam{"‰"}
             }
-            permillion{
-                dnam{"ppm"}
-            }
             permyriad{
                 dnam{"‱"}
-            }
-            portion-per-1e9{
-                one{"{0} પ્રતિ અબજ ભાગ"}
-                other{"{0} પ્રતિ અબજ ભાગ"}
             }
         }
         consumption{
@@ -1201,22 +1201,22 @@ gu{
                 one{"{0} મોલ"}
                 other{"{0} મોલ"}
             }
+            part-per-1e6{
+                dnam{"કણ/મિલિયન"}
+            }
+            part-per-1e9{
+                dnam{"ભાગ/અબજ"}
+                one{"{0} પ્રતિ અબજ ભાગ"}
+                other{"{0} પ્રતિ અબજ ભાગ"}
+            }
             percent{
                 dnam{"ટકા"}
             }
             permille{
                 dnam{"પ્રતિમાઈલ"}
             }
-            permillion{
-                dnam{"કણ/મિલિયન"}
-            }
             permyriad{
                 dnam{"પરમિરિયડ"}
-            }
-            portion-per-1e9{
-                dnam{"ભાગ/અબજ"}
-                one{"{0} પ્રતિ અબજ ભાગ"}
-                other{"{0} પ્રતિ અબજ ભાગ"}
             }
         }
         consumption{

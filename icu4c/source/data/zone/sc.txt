@@ -252,9 +252,6 @@ sc{
         "Indian:Reunion"{
             ec{"Reunione"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Guam"{
             ec{"Guàm"}
         }
@@ -262,9 +259,6 @@ sc{
             sd{"OLH"}
             sg{"OIH"}
             ss{"OIH"}
-        }
-        "Pacific:Kanton"{
-            ec{"Canton"}
         }
         "Pacific:Marquesas"{
             ec{"Marchesas"}

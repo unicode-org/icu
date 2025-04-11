@@ -901,13 +901,11 @@ gd{
             standard{"Fòrmat stannardach an airgeadra"}
         }
         collation{
-            big5han{"Òrdugh seòrsachaidh na Sìnise Tradaiseanta - Big5"}
             compat{"Òrdugh seòrsachaidh roimhe a chum co-chòrdalachd"}
             dictionary{"Òrdugh seòrsachaidh an fhaclair"}
             ducet{"Òrdugh seòrsachaidh Unicode bunaiteach"}
             emoji{"Òrdugh seòrsachaidh Emoji"}
             eor{"Òrdugh seòrsachaidh Eòrpach"}
-            gb2312han{"Òrdugh seòrsachaidh na Sìnise Simplichte - GB2312"}
             phonebook{"Òrdugh seòrsachaidh nan leabhraichean-fòn"}
             pinyin{"Òrdugh seòrsachaidh Pinyin"}
             search{"Lorg coitcheann"}

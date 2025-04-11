@@ -144,7 +144,7 @@ ko{
                 dnam{"몰"}
                 other{"{0}몰"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 other{"{0}ppb"}
             }
         }
@@ -781,7 +781,7 @@ ko{
     }
     unitsNarrow{
         concentr{
-            portion-per-1e9{
+            part-per-1e9{
                 other{"{0}ppb"}
             }
         }
@@ -920,10 +920,10 @@ ko{
             mole{
                 other{"{0}mol"}
             }
-            permillion{
+            part-per-1e6{
                 other{"{0}ppm"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 other{"{0}ppb"}
             }
         }

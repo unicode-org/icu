@@ -78,9 +78,6 @@ vi{
         "Europe:Prague"{
             ec{"Praha"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
             sd{"HDT"}

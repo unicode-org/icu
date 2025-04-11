@@ -206,6 +206,18 @@ it{
                 one{"{0} mole"}
                 other{"{0} moli"}
             }
+            part-per-1e6{
+                dnam{"parti per milione"}
+                gender{"feminine"}
+                one{"{0} parte per milione"}
+                other{"{0} parti per milione"}
+            }
+            part-per-1e9{
+                dnam{"parti per miliardo"}
+                gender{"feminine"}
+                one{"{0} parte per miliardo"}
+                other{"{0} parti per miliardo"}
+            }
             percent{
                 dnam{"percentuale"}
                 gender{"masculine"}
@@ -218,23 +230,11 @@ it{
                 one{"{0} per mille"}
                 other{"{0} per mille"}
             }
-            permillion{
-                dnam{"parti per milione"}
-                gender{"feminine"}
-                one{"{0} parte per milione"}
-                other{"{0} parti per milione"}
-            }
             permyriad{
                 dnam{"punto base"}
                 gender{"masculine"}
                 one{"{0} punto base"}
                 other{"{0} punti base"}
-            }
-            portion-per-1e9{
-                dnam{"parti per miliardo"}
-                gender{"feminine"}
-                one{"{0} parte per miliardo"}
-                other{"{0} parti per miliardo"}
             }
         }
         consumption{
@@ -1286,16 +1286,16 @@ it{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
-            percent{
-                dnam{"%"}
-            }
-            permillion{
+            part-per-1e6{
                 one{"{0}ppm"}
                 other{"{0}ppm"}
             }
-            portion-per-1e9{
+            part-per-1e9{
                 one{"{0}ppb"}
                 other{"{0}ppb"}
+            }
+            percent{
+                dnam{"%"}
             }
         }
         consumption{

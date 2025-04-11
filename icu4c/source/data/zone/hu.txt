@@ -453,9 +453,6 @@ hu{
         "Pacific:Easter"{
             ec{"Húsvét-szigetek"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Fiji"{
             ec{"Fidzsi"}
         }

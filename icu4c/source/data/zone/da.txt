@@ -180,9 +180,6 @@ da{
         "Pacific:Easter"{
             ec{"Påskeøen"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }

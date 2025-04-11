@@ -806,12 +806,10 @@ pt{
             tertiary{"Classificar acentos/maiúsculas e minúsculas/largura"}
         }
         collation{
-            big5han{"Ordem do Chinês Tradicional - Big5"}
             compat{"Ordem anterior, para compatibilidade"}
             dictionary{"Ordem do dicionário"}
             ducet{"Ordem padrão do Unicode"}
             eor{"Regras europeias de ordenação"}
-            gb2312han{"Ordem do Chinês Simplificado - GB2312"}
             phonebook{"Ordem de lista telefônica"}
             phonetic{"Ordem de classificação fonética"}
             pinyin{"Ordem Pin-yin"}
