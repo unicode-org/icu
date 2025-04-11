@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744393503569,
+  "lastUpdate": 1744403677406,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33567,6 +33567,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 135.1588323839033,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "40fb3a9e4a520760e85df2763447f17c78316e24",
+          "message": "ICU-23004 C++ Unicode string code point iterators (#3096)",
+          "timestamp": "2025-04-11T13:14:14-07:00",
+          "tree_id": "daed79b2b09a31f1ec15d8202ce1648b48f964e2",
+          "url": "https://github.com/unicode-org/icu/commit/40fb3a9e4a520760e85df2763447f17c78316e24"
+        },
+        "date": 1744403426004,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 142.2028345272686,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
