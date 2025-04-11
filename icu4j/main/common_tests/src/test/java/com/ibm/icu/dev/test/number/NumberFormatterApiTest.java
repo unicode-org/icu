@@ -6014,7 +6014,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 new TestCase(MeasureUnit.MILLIGRAM_OFGLUCOSE_PER_DECILITER, "2 milligrams per deciliter"),
                 new TestCase(MeasureUnit.forIdentifier("millimeter-ofhg"), "2 millimeters of mercury"),
                 new TestCase(MeasureUnit.forIdentifier("liter-per-100-kilometer"), "2 liters per 100 kilometers"),
-                new TestCase(MeasureUnit.forIdentifier("permillion"), "2 parts per million"),
+                new TestCase(MeasureUnit.forIdentifier("part-per-1e6"), "2 parts per million"),
         };
 
         for (TestCase testCase : testCases) {

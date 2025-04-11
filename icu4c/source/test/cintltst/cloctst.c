@@ -4625,8 +4625,8 @@ const char* const full_data[][3] = {
     "dz"
   }, {
     "und_BY",
-    "be_Cyrl_BY",
-    "be"
+    "ru_Cyrl_BY",
+    "ru_BY"
   }, {
     "und_Beng",
     "bn_Beng_BD",

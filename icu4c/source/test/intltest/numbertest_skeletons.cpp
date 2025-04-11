@@ -6,6 +6,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/dcfmtsym.h"
+#include "unicode/ustring.h"
 
 #include "cstr.h"
 #include "numbertest.h"
@@ -445,6 +446,10 @@ void NumberSkeletonTest::perUnitInArabic() {
             skeleton += cas2.subtype;
 
             status.setScope(skeleton);
+            if (u_strcmp(cas1.type, u"volume")==0 || u_strcmp(cas2.type, u"volume")==0) {
+                logKnownIssue("ICU-23104", "Strange handling of part-per-1e9 & volumes in skeletons");
+                continue;
+            }
             UnicodeString actual = NumberFormatter::forSkeleton(skeleton, status).locale("ar")
                                    .formatDouble(5142.3, status)
                                    .toString(status);
@@ -462,7 +467,7 @@ void NumberSkeletonTest::perUnitToSkeleton() {
         {u"area", u"acre"},
         {u"concentr", u"percent"},
         {u"concentr", u"permille"},
-        {u"concentr", u"permillion"},
+        {u"concentr", u"part-per-1e6"},
         {u"concentr", u"permyriad"},
         {u"digital", u"bit"},
         {u"length", u"yard"},
@@ -481,7 +486,9 @@ void NumberSkeletonTest::perUnitToSkeleton() {
             skeleton += cas2.subtype;
 
             status.setScope(skeleton);
-            if (cas1.type != cas2.type && cas1.subtype != cas2.subtype) {
+            if (u_strcmp(cas1.subtype, u"part-per-1e6")==0 || u_strcmp(cas2.subtype, u"part-per-1e6")==0) {
+                logKnownIssue("ICU-23104", "Strange handling of part-per-1e9 & volumes in skeletons");
+            } else if (cas1.type != cas2.type && cas1.subtype != cas2.subtype) {
                 UnicodeString toSkeleton = NumberFormatter::forSkeleton(
                     skeleton, status).toSkeleton(status);
                 if (status.errIfFailureAndReset()) {

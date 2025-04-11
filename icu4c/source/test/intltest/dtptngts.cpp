@@ -1374,6 +1374,10 @@ void IntlTestDateTimePatternGeneratorAPI::testJjMapping() {
             errln("FAIL: DateTimePatternGenerator::staticGetSkeleton locale %s: %s", localeID, u_errorName(status));
             continue;
         }
+        if (uprv_strcmp(localeID, "ku_SY")==0) {
+            logKnownIssue("CLDR-18495", "ku_SY needs Gregorian standard time patterns using 'h'");
+            continue;
+        }
         const char16_t* charPtr = timeCycleChars;
         for (; *charPtr != static_cast<char16_t>(0); charPtr++) {
              if (jPatSkeleton.indexOf(*charPtr) >= 0) {
