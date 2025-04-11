@@ -1555,6 +1555,14 @@ protected:
      * @internal
      */
     virtual bool isEra0CountingBackward() const { return false; }
+
+    /**
+     * Related year differences.
+     * @return The difference in Related year.
+     * @internal
+     */
+    virtual int32_t getRelatedYearDifferences() const { return 0; }
+
 #endif  /* U_HIDE_INTERNAL_API */
 
     /**

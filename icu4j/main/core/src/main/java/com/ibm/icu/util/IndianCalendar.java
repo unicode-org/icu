@@ -499,7 +499,16 @@ public class IndianCalendar extends Calendar {
 
        return jd;
     }
-    
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected final int getRelatedYearDifferences() {
+        return 79;
+    }
+
     /*
      * The following function is not needed for basic calendar functioning.
      * This routine converts a gregorian date to the corresponding Julian date"

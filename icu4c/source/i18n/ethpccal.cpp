@@ -95,23 +95,6 @@ EthiopicCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status)
     internalSet(UCAL_DAY_OF_YEAR, (30 * month) + day);
 }
 
-constexpr uint32_t kEthiopicRelatedYearDiff = 8;
-
-int32_t EthiopicCalendar::getRelatedYear(UErrorCode &status) const
-{
-    int32_t year = get(UCAL_EXTENDED_YEAR, status);
-    if (U_FAILURE(status)) {
-        return 0;
-    }
-    return year + kEthiopicRelatedYearDiff;
-}
-
-void EthiopicCalendar::setRelatedYear(int32_t year)
-{
-    // set extended year
-    set(UCAL_EXTENDED_YEAR, year - kEthiopicRelatedYearDiff);
-}
-
 IMPL_SYSTEM_DEFAULT_CENTURY(EthiopicCalendar, "@calendar=ethiopic")
 
 int32_t
@@ -194,23 +177,6 @@ EthiopicAmeteAlemCalendar::handleGetLimit(UCalendarDateFields field, ELimitType 
         return 0; // Only one era in this mode, era is always 0
     }
     return EthiopicCalendar::handleGetLimit(field, limitType);
-}
-
-constexpr uint32_t kEthiopicAmeteAlemRelatedYearDiff = -5492;
-
-int32_t EthiopicAmeteAlemCalendar::getRelatedYear(UErrorCode &status) const
-{
-    int32_t year = get(UCAL_EXTENDED_YEAR, status);
-    if (U_FAILURE(status)) {
-        return 0;
-    }
-    return year + kEthiopicAmeteAlemRelatedYearDiff;
-}
-
-void EthiopicAmeteAlemCalendar::setRelatedYear(int32_t year)
-{
-    // set extended year
-    set(UCAL_EXTENDED_YEAR, year - kEthiopicAmeteAlemRelatedYearDiff);
 }
 
 int32_t
