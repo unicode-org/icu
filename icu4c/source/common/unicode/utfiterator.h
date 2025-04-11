@@ -7,9 +7,6 @@
 #ifndef __UTFITERATOR_H__
 #define __UTFITERATOR_H__
 
-// TODO: For experimentation outside of ICU, comment out this include.
-// Experimentally conditional code below checks for UTYPES_H and
-// otherwise uses copies of bits of ICU.
 #include "unicode/utypes.h"
 
 #if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API || !defined(UTYPES_H)
@@ -18,82 +15,9 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
-#ifdef UTYPES_H
 #include "unicode/utf16.h"
 #include "unicode/utf8.h"
 #include "unicode/uversion.h"
-#elif !defined(U_IN_DOXYGEN)
-// TODO: Remove checks for UTYPES_H and replacement definitions.
-// unicode/utypes.h etc.
-#include <inttypes.h>
-typedef int32_t UChar32;
-constexpr UChar32 U_SENTINEL = -1;
-#ifdef U_FORCE_INLINE
-    // already defined
-#elif defined(U_IN_DOXYGEN)
-#  define U_FORCE_INLINE inline
-#elif (defined(__clang__) && __clang__) || U_GCC_MAJOR_MINOR != 0
-#  define U_FORCE_INLINE [[gnu::always_inline]]
-#elif defined(U_REAL_MSVC)
-#  define U_FORCE_INLINE __forceinline
-#else
-#  define U_FORCE_INLINE inline
-#endif
-// unicode/uversion.h
-#define U_HEADER_ONLY_NAMESPACE header
-namespace header {}
-// unicode/utf.h
-#define U_IS_SURROGATE(c) (((c)&0xfffff800)==0xd800)
-// unicode/utf16.h
-#define U16_IS_LEAD(c) (((c)&0xfffffc00)==0xd800)
-#define U16_IS_TRAIL(c) (((c)&0xfffffc00)==0xdc00)
-#define U16_IS_SURROGATE(c) U_IS_SURROGATE(c)
-#define U16_IS_SURROGATE_LEAD(c) (((c)&0x400)==0)
-#define U16_IS_SURROGATE_TRAIL(c) (((c)&0x400)!=0)
-#define U16_SURROGATE_OFFSET ((0xd800<<10UL)+0xdc00-0x10000)
-#define U16_GET_SUPPLEMENTARY(lead, trail) \
-    (((UChar32)(lead)<<10UL)+(UChar32)(trail)-U16_SURROGATE_OFFSET)
-// unicode/utf8.h
-#define U8_IS_SINGLE(c) (((c)&0x80)==0)
-#define U8_IS_LEAD(c) ((uint8_t)((c)-0xc2)<=0x32)
-#define U8_IS_TRAIL(c) ((int8_t)(c)<-0x40)
-#define U8_LEAD3_T1_BITS "\x20\x30\x30\x30\x30\x30\x30\x30\x30\x30\x30\x30\x30\x10\x30\x30"
-#define U8_IS_VALID_LEAD3_AND_T1(lead, t1) (U8_LEAD3_T1_BITS[(lead)&0xf]&(1<<((uint8_t)(t1)>>5)))
-#define U8_LEAD4_T1_BITS "\x00\x00\x00\x00\x00\x00\x00\x00\x1E\x0F\x0F\x0F\x00\x00\x00\x00"
-#define U8_IS_VALID_LEAD4_AND_T1(lead, t1) (U8_LEAD4_T1_BITS[(uint8_t)(t1)>>4]&(1<<((lead)&7)))
-#define U8_NEXT(s, i, length, c) U8_INTERNAL_NEXT_OR_SUB(s, i, length, c, U_SENTINEL)
-#define U8_NEXT_OR_FFFD(s, i, length, c) U8_INTERNAL_NEXT_OR_SUB(s, i, length, c, 0xfffd)
-#define U8_INTERNAL_NEXT_OR_SUB(s, i, length, c, sub) { \
-    (c)=(uint8_t)(s)[(i)++]; \
-    if(!U8_IS_SINGLE(c)) { \
-        uint8_t __t = 0; \
-        if((i)!=(length) && \
-            /* fetch/validate/assemble all but last trail byte */ \
-            ((c)>=0xe0 ? \
-                ((c)<0xf0 ?  /* U+0800..U+FFFF except surrogates */ \
-                    U8_LEAD3_T1_BITS[(c)&=0xf]&(1<<((__t=(s)[i])>>5)) && \
-                    (__t&=0x3f, 1) \
-                :  /* U+10000..U+10FFFF */ \
-                    ((c)-=0xf0)<=4 && \
-                    U8_LEAD4_T1_BITS[(__t=(s)[i])>>4]&(1<<(c)) && \
-                    ((c)=((c)<<6)|(__t&0x3f), ++(i)!=(length)) && \
-                    (__t=(s)[i]-0x80)<=0x3f) && \
-                /* valid second-to-last trail byte */ \
-                ((c)=((c)<<6)|__t, ++(i)!=(length)) \
-            :  /* U+0080..U+07FF */ \
-                (c)>=0xc2 && ((c)&=0x1f, 1)) && \
-            /* last trail byte */ \
-            (__t=(s)[i]-0x80)<=0x3f && \
-            ((c)=((c)<<6)|__t, ++(i), 1)) { \
-        } else { \
-            (c)=(sub);  /* ill-formed*/ \
-        } \
-    } \
-}
-#define U8_COUNT_TRAIL_BYTES_UNSAFE(leadByte) \
-    (((uint8_t)(leadByte)>=0xc2)+((uint8_t)(leadByte)>=0xe0)+((uint8_t)(leadByte)>=0xf0))
-#define U8_MASK_LEAD_BYTE(leadByte, countTrailBytes) ((leadByte)&=(1<<(6-(countTrailBytes)))-1)
-#endif
 
 /**
  * \file
@@ -1036,7 +960,6 @@ public:
         std::bidirectional_iterator_tag,
         std::forward_iterator_tag>;
 
-    // TODO: Should we enable this only for a bidirectional_iterator?
     /**
      * Constructor with start <= p < limit.
      * All of these iterators/pointers should be at code point boundaries.
@@ -2363,137 +2286,6 @@ template<typename CP32>
 auto unsafeUTFStringCodePoints(std::wstring_view s) {
     return UnsafeUTFStringCodePoints<CP32, decltype(s)::value_type>(s);
 }
-
-// ------------------------------------------------------------------------- ***
-
-// TODO: remove experimental sample code
-#if !defined(UTYPES_H) && !defined(U_IN_DOXYGEN)
-int32_t rangeLoop16(std::u16string_view s) {
-    int32_t sum = 0;
-    for (auto units : header::utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s)) {
-        sum += units.codePoint();
-    }
-    return sum;
-}
-
-int32_t loopIterPlusPlus16(std::u16string_view s) {
-    auto range = header::utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s);
-    int32_t sum = 0;
-    for (auto iter = range.begin(), limit = range.end(); iter != limit;) {
-        sum += (*iter++).codePoint();
-    }
-    return sum;
-}
-
-int32_t backwardLoop16(std::u16string_view s) {
-    auto range = header::utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s);
-    int32_t sum = 0;
-    for (auto start = range.begin(), iter = range.end(); start != iter;) {
-        sum += (*--iter).codePoint();
-    }
-    return sum;
-}
-
-int32_t reverseLoop16(std::u16string_view s) {
-    auto range = header::utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s);
-    int32_t sum = 0;
-    for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
-        sum += iter->codePoint();
-    }
-    return sum;
-}
-
-int32_t unsafeRangeLoop16(std::u16string_view s) {
-    int32_t sum = 0;
-    for (auto units : header::unsafeUTFStringCodePoints<UChar32>(s)) {
-        sum += units.codePoint();
-    }
-    return sum;
-}
-
-int32_t unsafeReverseLoop16(std::u16string_view s) {
-    auto range = header::unsafeUTFStringCodePoints<UChar32>(s);
-    int32_t sum = 0;
-    for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
-        sum += iter->codePoint();
-    }
-    return sum;
-}
-
-int32_t rangeLoop8(std::string_view s) {
-    int32_t sum = 0;
-    for (auto units : header::utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s)) {
-        sum += units.codePoint();
-    }
-    return sum;
-}
-
-int32_t reverseLoop8(std::string_view s) {
-    auto range = header::utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s);
-    int32_t sum = 0;
-    for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
-        sum += iter->codePoint();
-    }
-    return sum;
-}
-
-int32_t macroLoop8(std::string_view s) {
-    const char *p = s.data();
-    int32_t sum = 0;
-    for (size_t i = 0, length = s.length(); i < length;) {
-        UChar32 c;
-        U8_NEXT(p, i, length, c);
-        sum += c;
-    }
-    return sum;
-}
-
-int32_t unsafeRangeLoop8(std::string_view s) {
-    int32_t sum = 0;
-    for (auto units : header::unsafeUTFStringCodePoints<UChar32>(s)) {
-        sum += units.codePoint();
-    }
-    return sum;
-}
-
-int32_t unsafeReverseLoop8(std::string_view s) {
-    auto range = header::unsafeUTFStringCodePoints<UChar32>(s);
-    int32_t sum = 0;
-    for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
-        sum += iter->codePoint();
-    }
-    return sum;
-}
-
-char32_t firstCodePointOrFFFD16(std::u16string_view s) {
-    if (s.empty()) { return 0xfffd; }
-    auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
-    return range.begin()->codePoint();
-}
-
-std::string_view firstSequence8(std::string_view s) {
-    if (s.empty()) { return {}; }
-    auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
-    auto units = *(range.begin());
-    if (units.wellFormed()) {
-        return units.stringView();
-    } else {
-        return {};
-    }
-}
-
-char32_t unsafeFirstCodePointOrFFFD8(std::string_view s) {
-    if (s.empty()) { return 0xfffd; }
-    auto range = unsafeUTFStringCodePoints<char32_t>(s);
-    return range.begin()->codePoint();
-}
-
-std::string_view unsafeFirstSequence8(std::string_view s) {
-    if (s.empty()) { return {}; }
-    auto range = unsafeUTFStringCodePoints<char32_t>(s);
-    return range.begin()->stringView();
-}
-#endif
 
 }  // namespace U_HEADER_ONLY_NAMESPACE
 

@@ -34,104 +34,6 @@ using U_HEADER_ONLY_NAMESPACE::unsafeUTFIterator;
 using U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints;
 using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
 
-#if 0
-// Sample code for API docs etc. Compile when changing samples or APIs.
-#include <iostream>
-
-int32_t rangeLoop16(std::u16string_view s) {
-    // We are just adding up the code points for minimal-code demonstration purposes.
-    int32_t sum = 0;
-    for (auto units : utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(s)) {
-        sum += units.codePoint();  // < 0 if ill-formed
-    }
-    return sum;
-}
-
-int32_t loopIterPlusPlus16(std::u16string_view s) {
-    auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
-    int32_t sum = 0;
-    for (auto iter = range.begin(), limit = range.end(); iter != limit;) {
-        sum += (*iter++).codePoint();  // U+FFFD if ill-formed
-    }
-    return sum;
-}
-
-int32_t backwardLoop16(std::u16string_view s) {
-    auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_SURROGATE>(s);
-    int32_t sum = 0;
-    for (auto start = range.begin(), iter = range.end(); start != iter;) {
-        sum += (*--iter).codePoint();  // surrogate code point if unpaired / ill-formed
-    }
-    return sum;
-}
-
-int32_t reverseLoop8(std::string_view s) {
-    auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
-    int32_t sum = 0;
-    for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
-        sum += iter->codePoint();  // U+FFFD if ill-formed
-    }
-    return sum;
-}
-
-int32_t countCodePoints16(std::u16string_view s) {
-    auto range = utfStringCodePoints<UChar32, UTF_BEHAVIOR_SURROGATE>(s);
-    return std::distance(range.begin(), range.end());
-}
-
-int32_t unsafeRangeLoop16(std::u16string_view s) {
-    int32_t sum = 0;
-    for (auto units : unsafeUTFStringCodePoints<UChar32>(s)) {
-        sum += units.codePoint();
-    }
-    return sum;
-}
-
-int32_t unsafeReverseLoop8(std::string_view s) {
-    auto range = unsafeUTFStringCodePoints<UChar32>(s);
-    int32_t sum = 0;
-    for (auto iter = range.rbegin(), limit = range.rend(); iter != limit; ++iter) {
-        sum += iter->codePoint();
-    }
-    return sum;
-}
-
-char32_t firstCodePointOrFFFD16(std::u16string_view s) {
-    if (s.empty()) { return 0xfffd; }
-    auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
-    return range.begin()->codePoint();
-}
-
-std::string_view firstSequence8(std::string_view s) {
-    if (s.empty()) { return {}; }
-    auto range = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(s);
-    auto units = *(range.begin());
-    if (units.wellFormed()) {
-        return units.stringView();
-    } else {
-        return {};
-    }
-}
-
-template<typename InputStream>  // some istream or streambuf
-std::u32string cpFromInput(InputStream &in) {
-    // This is a single-pass input_iterator.
-    std::istreambuf_iterator bufIter(in);
-    std::istreambuf_iterator<typename InputStream::char_type> bufLimit;
-    auto iter = utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(bufIter);
-    auto limit = utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(bufLimit);
-    std::u32string s32;
-    for (; iter != limit; ++iter) {
-        s32.push_back(iter->codePoint());
-    }
-    return s32;
-}
-
-std::u32string cpFromStdin() { return cpFromInput(std::cin); }
-std::u32string cpFromWideStdin() { return cpFromInput(std::wcin); }
-
-#endif  // SAMPLE_CODE
-
 namespace {
 
 template<typename Unit>
@@ -1221,7 +1123,6 @@ void UTFIteratorTest::initLong() {
 template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename Unit, typename Units>
 void UTFIteratorTest::checkUnits(
         const Units &units, std::basic_string_view<Unit> part, UChar32 expectedCP) {
-    // printf("U+%04lx\n", (long)units.codePoint());
     bool expectedWellFormed = true;
     if (expectedCP == u'?') {
         expectedCP = sub<UChar32, behavior>(part);
@@ -1250,7 +1151,6 @@ template<TestMode mode, UTFIllFormedBehavior behavior, IterType type, typename U
 void UTFIteratorTest::zigzag(const ImplTest<Unit> &test, size_t i,
                              const Iter &begin, Iter iter, const Iter &end) {
     static constexpr const char *path = "**+*+--*PPp++*p--+P+pP-*-*";
-    // size_t i0 = i;
     size_t iLimit = test.codePoints.length();
     for (const char *p = path; *p != 0; ++p) {
         switch(*p) {
@@ -1294,5 +1194,4 @@ void UTFIteratorTest::zigzag(const ImplTest<Unit> &test, size_t i,
             break;
         }
     }
-    // printf("zz %lu -> %lu\n", i0, i);
 }
