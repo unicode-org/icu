@@ -20,6 +20,10 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
+        <!-- Note: see https://github.com/unicode-org/icu/packages/1954682/versions
+            for the icu4j.version tag to use. In general we should just use the latest
+            SNAPSHOT for the ICU version that we want, so this should only need updating
+            when the ICU version changes e.g. from 74.0.1, to 74.1, then to 75.0.1 -->
         <icu4j.version>78.0.1-SNAPSHOT</icu4j.version>
         <cldr-code.version>48.0-SNAPSHOT</cldr-code.version>
         <guava.version>32.1.1-jre</guava.version>
