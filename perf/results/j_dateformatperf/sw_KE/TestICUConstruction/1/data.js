@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744403550302,
+  "lastUpdate": 1744672058356,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33657,6 +33657,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2937.698132174051,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "07356e55a502ae3e6c828cc4b5eb438cf46f770b",
+          "message": "ICU-23056 Integrate CLDR 48 m1 to ICU main, part 3: ICU code/test/doc mods",
+          "timestamp": "2025-04-14T15:52:04-07:00",
+          "tree_id": "0cd289c30cabb46f3397e529c756c89ec4c5e54b",
+          "url": "https://github.com/unicode-org/icu/commit/07356e55a502ae3e6c828cc4b5eb438cf46f770b"
+        },
+        "date": 1744671813841,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2911.2149587344047,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
