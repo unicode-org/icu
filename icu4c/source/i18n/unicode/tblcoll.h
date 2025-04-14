@@ -242,7 +242,7 @@ public:
      *         the based Collator.
      * @stable ICU 2.2
      */
-    virtual CollationElementIterator* createCollationElementIterator(
+    CollationElementIterator* createCollationElementIterator(
                                            const UnicodeString& source) const;
 
     /**
@@ -254,7 +254,7 @@ public:
      *         based Collator.
      * @stable ICU 2.2
      */
-    virtual CollationElementIterator* createCollationElementIterator(
+    CollationElementIterator* createCollationElementIterator(
                                          const CharacterIterator& source) const;
 
     // Make deprecated versions of Collator::compare() visible.
