@@ -153,6 +153,7 @@ NFRule::makeRules(UnicodeString& description,
         // base value is an even multiple of its divisor (or it's one
         // of the special rules)
         if ((rule1->baseValue > 0
+            && (rule1->radix != 0) // ICU-23109 Ensure next line won't "% 0"
             && (rule1->baseValue % util64_pow(rule1->radix, rule1->exponent)) == 0)
             || rule1->getType() == kImproperFractionRule
             || rule1->getType() == kDefaultRule) {
