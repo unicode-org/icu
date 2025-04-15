@@ -76,10 +76,6 @@ config* text !eol zos-working-tree-encoding=IBM-1047
 *.otf -text zos-working-tree-encoding=UTF-8
 *.utf16be -text zos-working-tree-encoding=UTF-8
 
-# The following file types are stored in Git-LFS.
-# Only .jars
-*.jar filter=lfs diff=lfs merge=lfs -text zos-working-tree-encoding=UTF-8
-
 # Enable syntax highlighting on GitHub.com
 .cpyskip.txt linguist-language=Ignore-List
 

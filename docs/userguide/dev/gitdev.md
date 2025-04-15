@@ -21,7 +21,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 ---
 
 
-For git & git lfs installation see the [Source Code Setup](../../devsetup/source/)
+For git & related tools installation see the [Source Code Setup](../../devsetup/source/)
 page.
 
 For setup with language compilers and IDEs, see the [Setup for Contributors](../../devsetup/source/) page

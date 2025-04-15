@@ -29,7 +29,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 You can view ICU source code online: <https://github.com/unicode-org/icu>
 
-***Make sure you have git lfs installed.*** See the following section.
+> :point_right: **Note**: If you are working with ICU 76 and previous, then you will need to install and use git-lfs. See the following section.
 
 For read-only usage, create a local clone:
 
@@ -81,7 +81,7 @@ contribute to ICU.)
 *   Install a **git client**
     *   <https://git-scm.com/downloads>
     *   Linux: `sudo apt install git`
-*   Install **git-lfs** if your git client does not already have LFS support
+*   For ICU 76 and previous versions: install **git-lfs** if your git client does not already have LFS support
     (ICU uses git Large File Storage to store large binary content such as
     \*.jar files.)
     *   <https://git-lfs.github.com/>
@@ -90,8 +90,8 @@ contribute to ICU.)
     *   Linux: `sudo apt install git-lfs`
     *   MacOS: Consider using Homebrew or MacPorts.
     *   The command `git lfs version` will indicate if LFS is installed.
-*   Setup git LFS for your local user account once on each machine:
-    *   `git lfs install --skip-repo`
+    *   Setup git LFS for your local user account once on each machine:
+        *   `git lfs install --skip-repo`
 
 ### Working with git
 

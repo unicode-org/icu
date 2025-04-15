@@ -23,8 +23,6 @@ jobs:
 
     - name: Checkout and setup
       uses: actions/checkout@v4
-      with:
-        lfs: true
 
     - name: Set up JDK
       uses: actions/setup-java@v4
