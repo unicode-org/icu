@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744743700204,
+  "lastUpdate": 1744749170213,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -65769,6 +65769,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 128963.0874,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "0be976d7e1a470315639066441466ddfa01a6c71",
+          "message": "ICU-23082 Lazily load ICU transliteration rules\n\nhttps://unicode-org.atlassian.net/browse/ICU-23082\n\nUse a java lambda to lazily read the rules.\nOnce the rule is read, the rule string is cached in ResourceEntry.",
+          "timestamp": "2025-04-15T13:12:42-07:00",
+          "tree_id": "c230c64b9646621c0cf3d397e77c8e0bdffae1ae",
+          "url": "https://github.com/unicode-org/icu/commit/0be976d7e1a470315639066441466ddfa01a6c71"
+        },
+        "date": 1744748916772,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 554.4434,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 626283.7306,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 87655.5436,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 563979.8871,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 129347.6892,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
