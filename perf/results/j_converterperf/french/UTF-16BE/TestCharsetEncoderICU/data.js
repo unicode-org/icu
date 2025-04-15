@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744672728162,
+  "lastUpdate": 1744743310377,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33717,6 +33717,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 4.052382555954815,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "14d69b02ecf9eb90fbe1c9d073b019ec59d1ba33",
+          "message": "ICU-23048 Remove links to LFS in CI\n\nSee #3474",
+          "timestamp": "2025-04-15T11:28:16-07:00",
+          "tree_id": "d375e31d1932eb1ece7b16d0decad94843848d75",
+          "url": "https://github.com/unicode-org/icu/commit/14d69b02ecf9eb90fbe1c9d073b019ec59d1ba33"
+        },
+        "date": 1744743058276,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 4.056362851866638,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
