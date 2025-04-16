@@ -17,10 +17,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.junit.Test;
@@ -68,9 +68,10 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    private static final HashSet<String> DRAFT_VERSION_SET = new HashSet<>();
+    private static final Set<String> DRAFT_VERSION_SET = Set.of("76", "77", "78");
 
-    private static final HashSet<String> TIME_CODES = new HashSet<>();
+    private static final Set<String> TIME_CODES =
+        Set.of("year", "month", "week", "day", "hour", "minute", "second");
 
     private static final String[][] JAVA_VERSIONS = {
         {"G_FORCE", "53"},
@@ -162,7 +163,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         {"PARSEC", "54"},
         {"LUX", "54"},
         {"CARAT", "54"},
-        {"METRIC_TON", "54"},
+        {"METRIC_TON", "54"}, // renamed to tonne in ICU 72, deprecated in 78
         {"MICROGRAM", "54"},
         {"MILLIGRAM", "54"},
         {"OUNCE_TROY", "54"},
@@ -202,9 +203,9 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         {"KNOT", "56"},
         {"CUP_METRIC", "56"},
         {"PINT_METRIC", "56"},
-        {"MILLIGRAM_PER_DECILITER", "57"},
+        {"MILLIGRAM_PER_DECILITER", "57"}, // renamed to milligram-ofglucose-per-deciliter in ICU 69
         {"MILLIMOLE_PER_LITER", "57"},
-        {"PART_PER_MILLION", "57"},
+        {"PART_PER_MILLION", "57"}, // renamed to part-per-1e6 in ICU 78
         {"MILE_PER_GALLON_IMPERIAL", "57"},
         {"GALLON_IMPERIAL", "57"},
         {"POINT", "59"},
@@ -320,13 +321,6 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
     private static final Map<String,String> CLDR_NAME_REMAP = new HashMap<>();
 
     static {
-        TIME_CODES.add("year");
-        TIME_CODES.add("month");
-        TIME_CODES.add("week");
-        TIME_CODES.add("day");
-        TIME_CODES.add("hour");
-        TIME_CODES.add("minute");
-        TIME_CODES.add("second");
         for (String[] funcNameAndVersion : JAVA_VERSIONS) {
             JAVA_VERSION_MAP.put(funcNameAndVersion[0], funcNameAndVersion[1]);
         }
@@ -464,11 +458,19 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
                         out.println("#endif /* U_HIDE_DRAFT_API */");
                     }
                     out.println("");
-                    // Hack: METRIC-TON unit changed its name from "metric-ton" to "tonne"
-                    // In order to preserve the existing APIs for "metric-ton" we need to
-                    // add those APIs manually
-                    if (name.equals("Tonne")) {
-                        addCXXHForMetricTon(out);
+                    // Add corresponding backward-compatibility API if there is one
+                    switch (name) {
+                        case "MilligramOfglucosePerDeciliter":
+                            addCXXHForMilligramPerDeciliter(out);
+                            break;
+                        case "PartPer1E6":
+                            addCXXHForPartPerMillion(out);
+                            break;
+                        case "Tonne":
+                            addCXXHForMetricTon(out);
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
@@ -476,32 +478,75 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    // Add the headers for "metric-ton"
-    // The tool won't create them any more
+    // Add backward compatibility header for "milligram-per-deciliter"
+    private static void addCXXHForMilligramPerDeciliter(PrintStream out) {
+        out.println("    /**");
+        out.println("     * Returns by pointer, unit of concentr: milligram-per-deciliter.");
+        out.println("     * (renamed to milligram-ofglucose-per-deciliter in CLDR 39 / ICU 69).");
+        out.println("     * Caller owns returned value and must free it.");
+        out.println("     * Also see {@link #createMilligramOfglucosePerDeciliter()}.");
+        out.println("     * Also see {@link #getMilligramPerDeciliter()}.");
+        out.println("     * @param status ICU error code.");
+        out.println("     * @stable ICU 57");
+        out.println("     */");
+        out.println("    static MeasureUnit *createMilligramPerDeciliter(UErrorCode &status);");
+        out.println("");
+        out.println("    /**");
+        out.println("     * Returns by value, unit of concentr: milligram-per-deciliter.");
+        out.println("     * (renamed to milligram-ofglucose-per-deciliter in CLDR 39 / ICU 69).");
+        out.println("     * Also see {@link #getMilligramOfglucosePerDeciliter()}.");
+        out.println("     * Also see {@link #createMilligramPerDeciliter()}.");
+        out.println("     * @stable ICU 64");
+        out.println("     */");
+        out.println("    static MeasureUnit getMilligramPerDeciliter();");
+        out.println("");
+    }
+
+    // Add backward compatibility header for "part-per-million"
+    private static void addCXXHForPartPerMillion(PrintStream out) {
+        out.println("    /**");
+        out.println("     * Returns by pointer, unit of concentr: part-per-million.");
+        out.println("     * (renamed to part-per-1e6 in CLDR 48 / ICU 78).");
+        out.println("     * Caller owns returned value and must free it.");
+        out.println("     * Also see {@link #createPartPer1E6()}.");
+        out.println("     * Also see {@link #getPartPerMillion()}.");
+        out.println("     * @param status ICU error code.");
+        out.println("     * @stable ICU 57");
+        out.println("     */");
+        out.println("    static MeasureUnit *createPartPerMillion(UErrorCode &status);");
+        out.println("");
+        out.println("    /**");
+        out.println("     * Returns by value, unit of concentr: part-per-million.");
+        out.println("     * (renamed to part-per-1e6 in CLDR 48 / ICU 78).");
+        out.println("     * Also see {@link #getPartPer1E6()}.");
+        out.println("     * Also see {@link #createPartPerMillion()}.");
+        out.println("     * @stable ICU 64");
+        out.println("     */");
+        out.println("    static MeasureUnit getPartPerMillion();");
+        out.println("");
+    }
+
+    // Add backward compatibility header for "metric-ton"
     private static void addCXXHForMetricTon(PrintStream out) {
+        out.println("#ifndef U_HIDE_DEPRECATED_API");
         out.println("    /**");
         out.println("     * Returns by pointer, unit of mass: metric-ton");
         out.println("     * (renamed to tonne in CLDR 42 / ICU 72).");
         out.println("     * Caller owns returned value and must free it.");
-        out.println("     * Note: In ICU 74 this will be deprecated in favor of");
-        out.println("     * createTonne(), which is currently draft but will");
-        out.println("     * become stable in ICU 74, and which uses the preferred naming.");
         out.println("     * Also see {@link #getMetricTon()} and {@link #createTonne()}.");
         out.println("     * @param status ICU error code.");
-        out.println("     * @stable ICU 54");
+        out.println("     * @deprecated ICU 78 use createTonne(UErrorCode &status)");
         out.println("     */");
         out.println("    static MeasureUnit *createMetricTon(UErrorCode &status);");
         out.println("");
         out.println("    /**");
         out.println("     * Returns by value, unit of mass: metric-ton");
         out.println("     * (renamed to tonne in CLDR 42 / ICU 72).");
-        out.println("     * Note: In ICU 74 this will be deprecated in favor of");
-        out.println("     * getTonne(), which is currently draft but will");
-        out.println("     * become stable in ICU 74, and which uses the preferred naming.");
         out.println("     * Also see {@link #createMetricTon()} and {@link #getTonne()}.");
-        out.println("     * @stable ICU 64");
+        out.println("     * @deprecated ICU 78 use getTonne()");
         out.println("     */");
         out.println("    static MeasureUnit getMetricTon();");
+        out.println("#endif  /* U_HIDE_DEPRECATED_API */");
         out.println("");
     }
 
@@ -674,11 +719,19 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
                             typeSubType.first, typeSubType.second);
                     out.println("}");
                     out.println();
-                    // Hack: METRIC-TON unit changed its name from "metric-ton" to "tonne"
-                    // In order to preserve the existing APIs for "metric-ton" we need to
-                    // add those APIs manually
-                    if (name.equals("Tonne")) {
-                        addCXXForMetricTon(typeSubType, out);
+                    // Add entry for corresponding backward-compatibility API if there is one
+                    switch (name) {
+                        case "MilligramOfglucosePerDeciliter":
+                            addCXXForBackwardCompatibility(out, "MilligramPerDeciliter", typeSubType);
+                            break;
+                        case "PartPer1E6":
+                            addCXXForBackwardCompatibility(out, "PartPerMillion", typeSubType);
+                            break;
+                        case "Tonne":
+                            addCXXForBackwardCompatibility(out, "MetricTon", typeSubType);
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
@@ -688,8 +741,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
 
     // Add the API skeletons for "metric-ton"
     // The tool won't create them any more
-    private static void addCXXForMetricTon(Pair<Integer, Integer> typeSubType, PrintStream out) {
-        String name = "MetricTon";
+    private static void addCXXForBackwardCompatibility(PrintStream out, String name, Pair<Integer, Integer> typeSubType) {
         out.printf("MeasureUnit *MeasureUnit::create%s(UErrorCode &status) {\n", name);
         out.printf("    return MeasureUnit::create(%d, %d, status);\n",
                         typeSubType.first, typeSubType.second);
@@ -753,12 +805,33 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
                     checkForDup(seen, javaName, unit);
                     out.printf("                MeasureUnit.%s,\n", javaName);
                     count++;
+                    // Add corresponding backward-compatibility API if there is one
+                    switch (javaName) {
+                        case "MILLIGRAM_OFGLUCOSE_PER_DECILITER":
+                            addBackwardCompatibilityEntry(out, "MILLIGRAM_PER_DECILITER");
+                            count++;
+                            break;
+                        case "PART_PER_1E6":
+                            addBackwardCompatibilityEntry(out, "PART_PER_MILLION");
+                            count++;
+                            break;
+                        case "TONNE":
+                            addBackwardCompatibilityEntry(out, "METRIC_TON");
+                            count++;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             out.println("        };");
             out.printf("        assertEquals(\"\",  %d, units.length);\n", count);
             out.println("    }");
         }
+    }
+
+    private static void addBackwardCompatibilityEntry(PrintStream out, String javaName) {
+        out.printf("                MeasureUnit.%s, // backward compatibility API\n", javaName);
     }
 
     private static void generateCXXBackwardCompatibilityTest(String version) throws IOException {
@@ -780,11 +853,30 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
                     checkForDup(seen, camelCase, unit);
                     out.printf("    measureUnit.adoptInstead(MeasureUnit::create%s(status));\n", camelCase);
                     out.printf("    measureUnitValue = MeasureUnit::get%s();\n", camelCase);
+                    // Add corresponding backward-compatibility API if there is one
+                    switch (camelCase) {
+                        case "MilligramOfglucosePerDeciliter":
+                            addCXXBackwardCompatibilityEntry(out, "MilligramPerDeciliter");
+                            break;
+                        case "PartPer1E6":
+                            addCXXBackwardCompatibilityEntry(out, "PartPerMillion");
+                            break;
+                        case "Tonne":
+                            addCXXBackwardCompatibilityEntry(out, "MetricTon");
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             out.println("    assertSuccess(\"\", status);");
             out.println("}");
         }
+    }
+
+    private static void addCXXBackwardCompatibilityEntry(PrintStream out, String name) {
+        out.printf("    measureUnit.adoptInstead(MeasureUnit::create%s(status)); // backward compatibility API\n", name);
+        out.printf("    measureUnitValue = MeasureUnit::get%s(); // backward compatibility API\n", name);
     }
 
     private static String toJAVAName(MeasureUnit unit) {
@@ -849,10 +941,62 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
                                 "\");");
                     }
                     out.println();
+                    // Add corresponding backward-compatibility API if there is one
+                    switch (name) {
+                        case "MILLIGRAM_OFGLUCOSE_PER_DECILITER":
+                            addJavaForMilligramPerDeciliter(out, type, code);
+                            break;
+                        case "PART_PER_1E6":
+                            addJavaForPartPerMillion(out, type, code);
+                            break;
+                        case "TONNE":
+                            addJavaForMetricTon(out, type, code);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             out.println("    // End generated MeasureUnit constants");
         }
+    }
+
+    // Add backward compatibility header for MILLIGRAM_PER_DECILITER
+    private static void addJavaForMilligramPerDeciliter(PrintStream out, String type, String code) {
+        out.println("    /**");
+        out.println("     * Constant for unit of concentr: milligram-per-deciliter");
+        out.println("     * (renamed to milligram-ofglucose-per-deciliter in CLDR 39 / ICU 69).");
+        out.println("     * @stable ICU 57");
+        out.println("     */");
+        out.println("    public static final MeasureUnit MILLIGRAM_PER_DECILITER = MeasureUnit.internalGetInstance(\"" +
+                            type + "\", \"" + code + "\");");
+        out.println("");
+    }
+
+    // Add backward compatibility header for PART_PER_MILLION
+    private static void addJavaForPartPerMillion(PrintStream out, String type, String code) {
+        out.println("    /**");
+        out.println("     * Constant for unit of concentr: part-per-million");
+        out.println("     * (renamed to part-per-1e6 in CLDR 48 / ICU 78).");
+        out.println("     * @stable ICU 57");
+        out.println("     */");
+        out.println("    public static final MeasureUnit PART_PER_MILLION = MeasureUnit.internalGetInstance(\"" +
+                            type + "\", \"" + code + "\");");
+        out.println("");
+    }
+
+    // Add backward compatibility header for METRIC_TON
+    private static void addJavaForMetricTon(PrintStream out, String type, String code) {
+        out.println("    /**");
+        out.println("     * Constant for unit of mass: metric-ton");
+        out.println("     * (renamed to tonne in CLDR 42 / ICU 72).");
+        out.println("     * @internal");
+        out.println("     * @deprecated This API is ICU internal only.");
+        out.println("     */");
+        out.println("    @Deprecated");
+        out.println("    public static final MeasureUnit METRIC_TON = MeasureUnit.internalGetInstance(\"" +
+                            type + "\", \"" + code + "\");");
+        out.println("");
     }
 
     private static String getVersion(String javaName, String thisVersion) {

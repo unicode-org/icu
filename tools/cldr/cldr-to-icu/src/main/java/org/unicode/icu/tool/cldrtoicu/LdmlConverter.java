@@ -110,6 +110,7 @@ public final class LdmlConverter {
         supplementalMatcher(
             "convertUnits",
             "unitConstants",
+            "unitIdComponents",
             "unitQuantities",
             "unitPreferenceData",
             "unitPrefixes");

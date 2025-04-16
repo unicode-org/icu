@@ -812,6 +812,58 @@ units:table(nofallback){
         speed_of_light_meters_per_second{"299792458"}
         tsubo_to_m2{"400/121"}
     }
+    unitIdComponents{
+        and{"and"}
+        per{"per"}
+        power{
+            "square",
+            "cubic",
+            "pow2",
+            "pow3",
+            "pow4",
+            "pow5",
+            "pow6",
+            "pow7",
+            "pow8",
+            "pow9",
+            "pow10",
+            "pow11",
+            "pow12",
+            "pow13",
+            "pow14",
+            "pow15",
+        }
+        prefix{
+            "arc",
+            "british",
+            "dessert",
+            "fluid",
+            "light",
+            "nautical",
+            "xxx",
+            "x",
+            "curr",
+        }
+        suffix{
+            "force",
+            "imperial",
+            "luminosity",
+            "mass",
+            "metric",
+            "person",
+            "radius",
+            "scandinavian",
+            "troy",
+            "unit",
+            "it",
+            "us",
+            "energy",
+            "density",
+            "cloth",
+            "length",
+            "jp",
+        }
+    }
     unitPreferenceData{
         "area"{
             "default"{

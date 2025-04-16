@@ -1633,7 +1633,6 @@ public class MeasureUnitTest extends CoreTestFmwk {
             new TestCase("centimeter-centimeter", MeasureUnit.SQUARE_CENTIMETER),
             new TestCase("square-foot", MeasureUnit.SQUARE_FOOT),
             new TestCase("pow2-inch", MeasureUnit.SQUARE_INCH),
-            new TestCase("milligram-per-deciliter", MeasureUnit.MILLIGRAM_PER_DECILITER),
             new TestCase("pound-force-per-pow2-inch", MeasureUnit.POUND_PER_SQUARE_INCH),
             new TestCase("yard-pow2-yard", MeasureUnit.CUBIC_YARD),
             new TestCase("square-yard-yard", MeasureUnit.CUBIC_YARD),

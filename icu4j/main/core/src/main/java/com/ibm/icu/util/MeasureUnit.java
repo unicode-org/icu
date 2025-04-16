@@ -1201,9 +1201,10 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of concentr: milligram-per-deciliter
+     * (renamed to milligram-ofglucose-per-deciliter in CLDR 39 / ICU 69).
      * @stable ICU 57
      */
-    public static final MeasureUnit MILLIGRAM_PER_DECILITER = MeasureUnit.internalGetInstance("concentr", "milligram-per-deciliter");
+    public static final MeasureUnit MILLIGRAM_PER_DECILITER = MeasureUnit.internalGetInstance("concentr", "milligram-ofglucose-per-deciliter");
 
     /**
      * Constant for unit of concentr: millimole-per-liter
@@ -1236,6 +1237,13 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit PART_PER_1E6 = MeasureUnit.internalGetInstance("concentr", "part-per-1e6");
 
     /**
+     * Constant for unit of concentr: part-per-million
+     * (renamed to part-per-1e6 in CLDR 48 / ICU 78).
+     * @stable ICU 57
+     */
+    public static final MeasureUnit PART_PER_MILLION = MeasureUnit.internalGetInstance("concentr", "part-per-1e6");
+
+    /**
      * Constant for unit of concentr: part-per-1e9
      * @draft ICU 78
      */
@@ -1252,13 +1260,6 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 63
      */
     public static final MeasureUnit PERMILLE = MeasureUnit.internalGetInstance("concentr", "permille");
-
-    /**
-     * Constant for unit of concentr: permillion
-     * (renamed to part-per-1e6 in CLDR 48 / ICU 78).
-     * @stable ICU 57
-     */
-    public static final MeasureUnit PART_PER_MILLION = MeasureUnit.internalGetInstance("concentr", "part-per-1e6");
 
     /**
      * Constant for unit of concentr: permyriad
@@ -1963,14 +1964,6 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit KILOGRAM = MeasureUnit.internalGetInstance("mass", "kilogram");
 
     /**
-     * Constant for unit of mass: metric-ton (renamed to tonne in CLDR 42 / ICU 72).
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static final MeasureUnit METRIC_TON = MeasureUnit.internalGetInstance("mass", "tonne");
-
-    /**
      * Constant for unit of mass: microgram
      * @stable ICU 54
      */
@@ -2029,6 +2022,15 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 72
      */
     public static final MeasureUnit TONNE = MeasureUnit.internalGetInstance("mass", "tonne");
+
+    /**
+     * Constant for unit of mass: metric-ton
+     * (renamed to tonne in CLDR 42 / ICU 72).
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static final MeasureUnit METRIC_TON = MeasureUnit.internalGetInstance("mass", "tonne");
 
     /**
      * Constant for unit of power: gigawatt

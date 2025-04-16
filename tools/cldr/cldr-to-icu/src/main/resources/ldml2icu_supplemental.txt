@@ -185,6 +185,9 @@
 
 # units.xml
 
+//supplementalData/unitIdComponents/unitIdComponent[@type="(%A)"][@values="(%A)"]
+    ; /unitIdComponents/$1 ; values=$2
+
 //supplementalData/unitPrefixes/unitPrefix[@type="(%W)"][@symbol="(%W)"][@power10="(%A)"]
     ; /unitPrefixes/$1/symbol ; values=$2
     ; /unitPrefixes/$1/power10 ; values=$3
