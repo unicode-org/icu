@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744748393061,
+  "lastUpdate": 1744832602484,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34257,6 +34257,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 3.7705358003435454,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "3ec40b8e9bce2d7ac7c81983f39841c0f276d71c",
+          "message": "ICU-23109 Fix float point exception cased by \"% 0\"",
+          "timestamp": "2025-04-16T12:26:51-07:00",
+          "tree_id": "840ddbf8f524a6271fa64c0b88069e4bc6ffde30",
+          "url": "https://github.com/unicode-org/icu/commit/3ec40b8e9bce2d7ac7c81983f39841c0f276d71c"
+        },
+        "date": 1744832355946,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.772529191059851,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
