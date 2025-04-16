@@ -4683,8 +4683,8 @@ void MeasureFormatTest::TestCompatible78() {
     measureUnitValue = MeasureUnit::getKatal();
     measureUnit.adoptInstead(MeasureUnit::createMilligramOfglucosePerDeciliter(status));
     measureUnitValue = MeasureUnit::getMilligramOfglucosePerDeciliter();
-    measureUnit.adoptInstead(MeasureUnit::createMilligramPerDeciliter(status));
-    measureUnitValue = MeasureUnit::getMilligramPerDeciliter();
+    measureUnit.adoptInstead(MeasureUnit::createMilligramPerDeciliter(status)); // backward compatibility API
+    measureUnitValue = MeasureUnit::getMilligramPerDeciliter(); // backward compatibility API
     measureUnit.adoptInstead(MeasureUnit::createMillimolePerLiter(status));
     measureUnitValue = MeasureUnit::getMillimolePerLiter();
     measureUnit.adoptInstead(MeasureUnit::createMole(status));
@@ -4695,14 +4695,14 @@ void MeasureFormatTest::TestCompatible78() {
     measureUnitValue = MeasureUnit::getPart();
     measureUnit.adoptInstead(MeasureUnit::createPartPer1E6(status));
     measureUnitValue = MeasureUnit::getPartPer1E6();
+    measureUnit.adoptInstead(MeasureUnit::createPartPerMillion(status)); // backward compatibility API
+    measureUnitValue = MeasureUnit::getPartPerMillion(); // backward compatibility API
     measureUnit.adoptInstead(MeasureUnit::createPartPer1E9(status));
     measureUnitValue = MeasureUnit::getPartPer1E9();
     measureUnit.adoptInstead(MeasureUnit::createPercent(status));
     measureUnitValue = MeasureUnit::getPercent();
     measureUnit.adoptInstead(MeasureUnit::createPermille(status));
     measureUnitValue = MeasureUnit::getPermille();
-    measureUnit.adoptInstead(MeasureUnit::createPartPerMillion(status));
-    measureUnitValue = MeasureUnit::getPartPerMillion();
     measureUnit.adoptInstead(MeasureUnit::createPermyriad(status));
     measureUnitValue = MeasureUnit::getPermyriad();
     measureUnit.adoptInstead(MeasureUnit::createLiterPer100Kilometers(status));
@@ -4957,6 +4957,8 @@ void MeasureFormatTest::TestCompatible78() {
     measureUnitValue = MeasureUnit::getTon();
     measureUnit.adoptInstead(MeasureUnit::createTonne(status));
     measureUnitValue = MeasureUnit::getTonne();
+    measureUnit.adoptInstead(MeasureUnit::createMetricTon(status)); // backward compatibility API
+    measureUnitValue = MeasureUnit::getMetricTon(); // backward compatibility API
     measureUnit.adoptInstead(MeasureUnit::createGigawatt(status));
     measureUnitValue = MeasureUnit::getGigawatt();
     measureUnit.adoptInstead(MeasureUnit::createHorsepower(status));
@@ -6727,7 +6729,6 @@ void MeasureFormatTest::TestParseToBuiltIn() {
         {"centimeter-centimeter", MeasureUnit::getSquareCentimeter()},
         {"square-foot", MeasureUnit::getSquareFoot()},
         {"pow2-inch", MeasureUnit::getSquareInch()},
-        {"milligram-per-deciliter", MeasureUnit::getMilligramPerDeciliter()},
         {"pound-force-per-pow2-inch", MeasureUnit::getPoundPerSquareInch()},
         {"yard-pow2-yard", MeasureUnit::getCubicYard()},
         {"square-yard-yard", MeasureUnit::getCubicYard()},

@@ -2986,13 +2986,13 @@ public class MeasureUnitCompatibilityTest extends CoreTestFmwk {
                 MeasureUnit.KARAT,
                 MeasureUnit.KATAL,
                 MeasureUnit.MILLIGRAM_OFGLUCOSE_PER_DECILITER,
-                MeasureUnit.MILLIGRAM_PER_DECILITER,
+                MeasureUnit.MILLIGRAM_PER_DECILITER, // backward compatibility API
                 MeasureUnit.MILLIMOLE_PER_LITER,
                 MeasureUnit.MOLE,
                 MeasureUnit.OFGLUCOSE,
                 MeasureUnit.PART,
                 MeasureUnit.PART_PER_1E6,
-                MeasureUnit.PART_PER_MILLION,
+                MeasureUnit.PART_PER_MILLION, // backward compatibility API
                 MeasureUnit.PART_PER_1E9,
                 MeasureUnit.PERCENT,
                 MeasureUnit.PERMILLE,
@@ -3123,6 +3123,7 @@ public class MeasureUnitCompatibilityTest extends CoreTestFmwk {
                 MeasureUnit.STONE,
                 MeasureUnit.TON,
                 MeasureUnit.TONNE,
+                MeasureUnit.METRIC_TON, // backward compatibility API
                 MeasureUnit.GIGAWATT,
                 MeasureUnit.HORSEPOWER,
                 MeasureUnit.KILOWATT,
@@ -3199,7 +3200,7 @@ public class MeasureUnitCompatibilityTest extends CoreTestFmwk {
                 MeasureUnit.TEASPOON,
                 MeasureUnit.TO_JP,
         };
-        assertEquals("",  237, units.length);
+        assertEquals("",  238, units.length);
     }
 
    /*

@@ -41,27 +41,27 @@ static const int32_t gOffsets[] = {
     2,
     8,
     21,
-    35,
-    39,
-    341,
-    352,
-    371,
-    379,
-    393,
-    397,
-    401,
-    409,
-    440,
-    444,
-    446,
+    34,
+    38,
+    340,
+    351,
+    370,
+    378,
+    392,
+    396,
+    400,
+    408,
+    439,
+    443,
+    445,
+    462,
     463,
-    464,
-    470,
-    482,
-    488,
-    493,
-    495,
-    539
+    469,
+    481,
+    487,
+    492,
+    494,
+    538
 };
 
 static const int32_t kCurrencyOffset = 5;
@@ -121,7 +121,6 @@ static const char * const gSubTypes[] = {
     "karat",
     "katal",
     "milligram-ofglucose-per-deciliter",
-    "milligram-per-deciliter",
     "millimole-per-liter",
     "mole",
     "ofglucose",
@@ -842,91 +841,91 @@ MeasureUnit MeasureUnit::getMilligramOfglucosePerDeciliter() {
 }
 
 MeasureUnit *MeasureUnit::createMilligramPerDeciliter(UErrorCode &status) {
-    return MeasureUnit::create(3, 4, status);
+    return MeasureUnit::create(3, 3, status);
 }
 
 MeasureUnit MeasureUnit::getMilligramPerDeciliter() {
-    return MeasureUnit(3, 4);
+    return MeasureUnit(3, 3);
 }
 
 MeasureUnit *MeasureUnit::createMillimolePerLiter(UErrorCode &status) {
-    return MeasureUnit::create(3, 5, status);
+    return MeasureUnit::create(3, 4, status);
 }
 
 MeasureUnit MeasureUnit::getMillimolePerLiter() {
-    return MeasureUnit(3, 5);
+    return MeasureUnit(3, 4);
 }
 
 MeasureUnit *MeasureUnit::createMole(UErrorCode &status) {
-    return MeasureUnit::create(3, 6, status);
+    return MeasureUnit::create(3, 5, status);
 }
 
 MeasureUnit MeasureUnit::getMole() {
-    return MeasureUnit(3, 6);
+    return MeasureUnit(3, 5);
 }
 
 MeasureUnit *MeasureUnit::createOfglucose(UErrorCode &status) {
-    return MeasureUnit::create(3, 7, status);
+    return MeasureUnit::create(3, 6, status);
 }
 
 MeasureUnit MeasureUnit::getOfglucose() {
-    return MeasureUnit(3, 7);
+    return MeasureUnit(3, 6);
 }
 
 MeasureUnit *MeasureUnit::createPart(UErrorCode &status) {
-    return MeasureUnit::create(3, 8, status);
+    return MeasureUnit::create(3, 7, status);
 }
 
 MeasureUnit MeasureUnit::getPart() {
-    return MeasureUnit(3, 8);
+    return MeasureUnit(3, 7);
 }
 
 MeasureUnit *MeasureUnit::createPartPer1E6(UErrorCode &status) {
-    return MeasureUnit::create(3, 9, status);
+    return MeasureUnit::create(3, 8, status);
 }
 
 MeasureUnit MeasureUnit::getPartPer1E6() {
-    return MeasureUnit(3, 9);
-}
-
-MeasureUnit *MeasureUnit::createPartPer1E9(UErrorCode &status) {
-    return MeasureUnit::create(3, 10, status);
-}
-
-MeasureUnit MeasureUnit::getPartPer1E9() {
-    return MeasureUnit(3, 10);
-}
-
-MeasureUnit *MeasureUnit::createPercent(UErrorCode &status) {
-    return MeasureUnit::create(3, 11, status);
-}
-
-MeasureUnit MeasureUnit::getPercent() {
-    return MeasureUnit(3, 11);
-}
-
-MeasureUnit *MeasureUnit::createPermille(UErrorCode &status) {
-    return MeasureUnit::create(3, 12, status);
-}
-
-MeasureUnit MeasureUnit::getPermille() {
-    return MeasureUnit(3, 12);
+    return MeasureUnit(3, 8);
 }
 
 MeasureUnit *MeasureUnit::createPartPerMillion(UErrorCode &status) {
-    return MeasureUnit::create(3, 9, status);
+    return MeasureUnit::create(3, 8, status);
 }
 
 MeasureUnit MeasureUnit::getPartPerMillion() {
+    return MeasureUnit(3, 8);
+}
+
+MeasureUnit *MeasureUnit::createPartPer1E9(UErrorCode &status) {
+    return MeasureUnit::create(3, 9, status);
+}
+
+MeasureUnit MeasureUnit::getPartPer1E9() {
     return MeasureUnit(3, 9);
 }
 
+MeasureUnit *MeasureUnit::createPercent(UErrorCode &status) {
+    return MeasureUnit::create(3, 10, status);
+}
+
+MeasureUnit MeasureUnit::getPercent() {
+    return MeasureUnit(3, 10);
+}
+
+MeasureUnit *MeasureUnit::createPermille(UErrorCode &status) {
+    return MeasureUnit::create(3, 11, status);
+}
+
+MeasureUnit MeasureUnit::getPermille() {
+    return MeasureUnit(3, 11);
+}
+
 MeasureUnit *MeasureUnit::createPermyriad(UErrorCode &status) {
-    return MeasureUnit::create(3, 13, status);
+    return MeasureUnit::create(3, 12, status);
 }
 
 MeasureUnit MeasureUnit::getPermyriad() {
-    return MeasureUnit(3, 13);
+    return MeasureUnit(3, 12);
 }
 
 MeasureUnit *MeasureUnit::createLiterPer100Kilometers(UErrorCode &status) {

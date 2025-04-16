@@ -1175,7 +1175,9 @@ class U_I18N_API MeasureUnit: public UObject {
 
     /**
      * Returns by pointer, unit of concentr: milligram-per-deciliter.
+     * (renamed to milligram-ofglucose-per-deciliter in CLDR 39 / ICU 69).
      * Caller owns returned value and must free it.
+     * Also see {@link #createMilligramOfglucosePerDeciliter()}.
      * Also see {@link #getMilligramPerDeciliter()}.
      * @param status ICU error code.
      * @stable ICU 57
@@ -1184,6 +1186,8 @@ class U_I18N_API MeasureUnit: public UObject {
 
     /**
      * Returns by value, unit of concentr: milligram-per-deciliter.
+     * (renamed to milligram-ofglucose-per-deciliter in CLDR 39 / ICU 69).
+     * Also see {@link #getMilligramOfglucosePerDeciliter()}.
      * Also see {@link #createMilligramPerDeciliter()}.
      * @stable ICU 64
      */
@@ -1275,6 +1279,26 @@ class U_I18N_API MeasureUnit: public UObject {
     static MeasureUnit getPartPer1E6();
 #endif /* U_HIDE_DRAFT_API */
 
+    /**
+     * Returns by pointer, unit of concentr: part-per-million.
+     * (renamed to part-per-1e6 in CLDR 48 / ICU 78).
+     * Caller owns returned value and must free it.
+     * Also see {@link #createPartPer1E6()}.
+     * Also see {@link #getPartPerMillion()}.
+     * @param status ICU error code.
+     * @stable ICU 57
+     */
+    static MeasureUnit *createPartPerMillion(UErrorCode &status);
+
+    /**
+     * Returns by value, unit of concentr: part-per-million.
+     * (renamed to part-per-1e6 in CLDR 48 / ICU 78).
+     * Also see {@link #getPartPer1E6()}.
+     * Also see {@link #createPartPerMillion()}.
+     * @stable ICU 64
+     */
+    static MeasureUnit getPartPerMillion();
+
 #ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of concentr: part-per-1e9.
@@ -1324,26 +1348,6 @@ class U_I18N_API MeasureUnit: public UObject {
      * @stable ICU 64
      */
     static MeasureUnit getPermille();
-
-    /**
-     * Returns by pointer, unit of concentr: permillion.
-     * (renamed to part-per-1e6 in CLDR 48 / ICU 78).
-     * Caller owns returned value and must free it.
-     * Also see {@link #createPartPer1E6()}.
-     * Also see {@link #getPartPerMillion()}.
-     * @param status ICU error code.
-     * @stable ICU 57
-     */
-    static MeasureUnit *createPartPerMillion(UErrorCode &status);
-
-    /**
-     * Returns by value, unit of concentr: permillion.
-     * (renamed to part-per-1e6 in CLDR 48 / ICU 78).
-     * Also see {@link #getPartPer1E6()}.
-     * Also see {@link #createPartPerMillion()}.
-     * @stable ICU 64
-     */
-    static MeasureUnit getPartPerMillion();
 
     /**
      * Returns by pointer, unit of concentr: permyriad.
