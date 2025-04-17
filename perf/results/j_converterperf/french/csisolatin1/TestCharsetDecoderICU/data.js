@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744909301532,
+  "lastUpdate": 1744924858933,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34017,6 +34017,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.46236406719554624,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "32d9a90b0c4632cd29e01d20830b9ad2dcc4ac62",
+          "message": "ICU-23102 Simplify calendar code",
+          "timestamp": "2025-04-17T13:59:08-07:00",
+          "tree_id": "769e12d6eb96e071702ddd3643f4cb63c2bcc3ab",
+          "url": "https://github.com/unicode-org/icu/commit/32d9a90b0c4632cd29e01d20830b9ad2dcc4ac62"
+        },
+        "date": 1744924599079,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.4663106106157395,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
