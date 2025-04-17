@@ -489,6 +489,16 @@ public class PersianCalendar extends Calendar {
         internalSet(DAY_OF_YEAR, dayOfYear);       
     }    
 
+    private static final int PERSIAN_CALENDAR_RELATED_YEAR_DIFFERENCE = 622;
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected final int getRelatedYearDifference() {
+        return PERSIAN_CALENDAR_RELATED_YEAR_DIFFERENCE;
+    }
+
     /**
      * {@inheritDoc}
      *

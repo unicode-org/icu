@@ -914,6 +914,17 @@ public class HebrewCalendar extends Calendar {
         return "hebrew";
     }
 
+    private static final int HEBREW_CALENDAR_RELATED_YEAR_DIFFERENCE = -3760;
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected final int getRelatedYearDifference() {
+        return HEBREW_CALENDAR_RELATED_YEAR_DIFFERENCE;
+    }
+
     //-------------------------------------------------------------------------
     // Temporal Calendar API.
     //-------------------------------------------------------------------------

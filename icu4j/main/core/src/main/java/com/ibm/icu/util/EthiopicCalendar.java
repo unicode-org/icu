@@ -400,6 +400,22 @@ public final class EthiopicCalendar extends CECalendar
         return ceToJD(year, month, date, JD_EPOCH_OFFSET_AMETE_MIHRET);
     }
 
+
+    private static final int ETHIOPIC_AMETE_ALEM_CALENDAR_RELATED_YEAR_DIFFERENCE = -5492;
+
+    private static final int ETHIOPIC_CALENDAR_RELATED_YEAR_DIFFERENCE = 8;
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected final int getRelatedYearDifference() {
+        return isAmeteAlemEra() ?
+            ETHIOPIC_AMETE_ALEM_CALENDAR_RELATED_YEAR_DIFFERENCE :
+            ETHIOPIC_CALENDAR_RELATED_YEAR_DIFFERENCE;
+    }
+
     /**
      * set type based on locale
      */
