@@ -174,17 +174,9 @@ EthiopicAmeteAlemCalendar::handleGetExtendedYear(UErrorCode& status)
 void
 EthiopicAmeteAlemCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status)
 {
-    int32_t eyear, month, day;
-    jdToCE(julianDay, getJDEpochOffset(), eyear, month, day, status);
-    if (U_FAILURE(status)) return;
-
-    internalSet(UCAL_EXTENDED_YEAR, eyear);
+    EthiopicCalendar::handleComputeFields(julianDay, status);
     internalSet(UCAL_ERA, AMETE_ALEM);
-    internalSet(UCAL_YEAR, eyear + AMETE_MIHRET_DELTA);
-    internalSet(UCAL_MONTH, month);
-    internalSet(UCAL_ORDINAL_MONTH, month);
-    internalSet(UCAL_DATE, day);
-    internalSet(UCAL_DAY_OF_YEAR, (30 * month) + day);
+    internalSet(UCAL_YEAR, internalGet(UCAL_EXTENDED_YEAR, 1) + AMETE_MIHRET_DELTA);
 }
 
 int32_t
