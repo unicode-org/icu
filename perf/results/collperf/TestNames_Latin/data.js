@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744850114000,
+  "lastUpdate": 1744864882734,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -65931,6 +65931,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1314255.4045,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "4ea8af8ee971a4eb90c336f3f105475efa467bd0",
+          "message": "ICU-23088 convert CLDR unitIdComponents; fix superseded unit APIs, update MeasureUnitGeneratorTest",
+          "timestamp": "2025-04-16T21:11:58-07:00",
+          "tree_id": "f76a781ccdf540babc564c36e765948d531d00cc",
+          "url": "https://github.com/unicode-org/icu/commit/4ea8af8ee971a4eb90c336f3f105475efa467bd0"
+        },
+        "date": 1744864628896,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 280.4993,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 2979296.5802,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1318410.172,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 2772086.045,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1317544.2541,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
