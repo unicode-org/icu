@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744849263642,
+  "lastUpdate": 1744864020987,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34167,6 +34167,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 311.2196553830757,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "4ea8af8ee971a4eb90c336f3f105475efa467bd0",
+          "message": "ICU-23088 convert CLDR unitIdComponents; fix superseded unit APIs, update MeasureUnitGeneratorTest",
+          "timestamp": "2025-04-16T21:11:58-07:00",
+          "tree_id": "f76a781ccdf540babc564c36e765948d531d00cc",
+          "url": "https://github.com/unicode-org/icu/commit/4ea8af8ee971a4eb90c336f3f105475efa467bd0"
+        },
+        "date": 1744863776744,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 306.8352641390098,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
