@@ -1236,14 +1236,29 @@ Calendar::set(int32_t year, int32_t month, int32_t date, int32_t hour, int32_t m
 // -------------------------------------
 int32_t Calendar::getRelatedYear(UErrorCode &status) const
 {
-    return get(UCAL_EXTENDED_YEAR, status);
+    int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    if (uprv_add32_overflow(year, getRelatedYearDifference(), &year)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    return year;
 }
 
 // -------------------------------------
 void Calendar::setRelatedYear(int32_t year)
 {
     // set extended year
+    if (uprv_add32_overflow(year, -getRelatedYearDifference(), &year)) {
+        return;
+    }
     set(UCAL_EXTENDED_YEAR, year);
+}
+
+int32_t Calendar::getRelatedYearDifference() const {
+    return 0;
 }
 
 // -------------------------------------

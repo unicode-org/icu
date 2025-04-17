@@ -790,23 +790,6 @@ int64_t HebrewCalendar::handleComputeMonthStart(
     return day + 347997LL;
 }
 
-constexpr uint32_t kHebrewRelatedYearDiff = -3760;
-
-int32_t HebrewCalendar::getRelatedYear(UErrorCode &status) const
-{
-    int32_t year = get(UCAL_EXTENDED_YEAR, status);
-    if (U_FAILURE(status)) {
-        return 0;
-    }
-    return year + kHebrewRelatedYearDiff;
-}
-
-void HebrewCalendar::setRelatedYear(int32_t year)
-{
-    // set extended year
-    set(UCAL_EXTENDED_YEAR, year - kHebrewRelatedYearDiff);
-}
-
 IMPL_SYSTEM_DEFAULT_CENTURY(HebrewCalendar, "@calendar=hebrew")
 
 bool HebrewCalendar::inTemporalLeapYear(UErrorCode& status) const {
@@ -870,6 +853,11 @@ int32_t HebrewCalendar::internalGetMonth(UErrorCode& status) const {
         }
     }
     return Calendar::internalGetMonth(status);
+}
+
+int32_t HebrewCalendar::getRelatedYearDifference() const {
+    constexpr int32_t kHebrewCalendarRelatedYearDifference = -3760;
+    return kHebrewCalendarRelatedYearDifference;
 }
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(HebrewCalendar)

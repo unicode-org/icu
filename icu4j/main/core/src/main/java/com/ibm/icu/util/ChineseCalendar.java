@@ -1186,6 +1186,15 @@ public class ChineseCalendar extends Calendar {
 
     }
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected final int getRelatedYearDifference() {
+        return epochYear - 1;
+    }
+
     /*
     private static CalendarFactory factory;
     public static CalendarFactory factory() {
