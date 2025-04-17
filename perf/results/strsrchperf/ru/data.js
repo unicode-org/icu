@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744925102267,
+  "lastUpdate": 1744928353442,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -41613,6 +41613,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 52.3652,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "b092784912de71223027d004d6261a80521bc499",
+          "message": "ICU-23102 Simplify GregorianCalendar\n\nRemove unnecessary fNormalizedGregorianCutover which is not read for\nany decision making nor in ICU4J.",
+          "timestamp": "2025-04-17T14:46:23-07:00",
+          "tree_id": "2af320446d7050524902b0f2022dcd3ecb62e4a2",
+          "url": "https://github.com/unicode-org/icu/commit/b092784912de71223027d004d6261a80521bc499"
+        },
+        "date": 1744928080142,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 25.3418,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 50.9852,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
