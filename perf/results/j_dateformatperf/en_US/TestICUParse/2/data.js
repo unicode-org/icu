@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744832868112,
+  "lastUpdate": 1744849594416,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33717,6 +33717,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 138.22051755944923,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "22181ee16ae37d9f8843cab75d8bfff813fd5e04",
+          "message": "ICU-23102 Remove unused code",
+          "timestamp": "2025-04-16T17:05:07-07:00",
+          "tree_id": "cc7af7eab3e714c8e85d1fd4a66dec776c90a41f",
+          "url": "https://github.com/unicode-org/icu/commit/22181ee16ae37d9f8843cab75d8bfff813fd5e04"
+        },
+        "date": 1744849337181,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 138.094457743172,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
