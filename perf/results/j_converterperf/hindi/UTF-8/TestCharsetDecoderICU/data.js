@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1745360361675,
+  "lastUpdate": 1745362381576,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34107,6 +34107,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.8874046934482833,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "e3e815342cf6ddd305f481fddafbb23bda353b5b",
+          "message": "ICU-23102 Simplify Calendar code\n\nAvoid calling unnecessary computeGregorianFields()\nRefactor and reduced handleComputeFields in CECalendar",
+          "timestamp": "2025-04-22T15:26:37-07:00",
+          "tree_id": "50058e497874d038f7325b5b9c3c3dc7faf771b2",
+          "url": "https://github.com/unicode-org/icu/commit/e3e815342cf6ddd305f481fddafbb23bda353b5b"
+        },
+        "date": 1745362132048,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.88902435499774,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
