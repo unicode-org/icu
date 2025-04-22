@@ -162,19 +162,25 @@ protected:
      */
     virtual int32_t handleGetExtendedYear(UErrorCode& status) override;
 
-    /**
-     * Compute fields from the JD
-     * @internal
-     */
-    virtual void handleComputeFields(int32_t julianDay, UErrorCode &status) override;
-
     DECLARE_OVERRIDE_SYSTEM_DEFAULT_CENTURY
 
     /**
      * Return the date offset from Julian
      * @internal
      */
-    virtual int32_t getJDEpochOffset() const override;
+    int32_t getJDEpochOffset() const override;
+
+    /**
+     * Compute the era from extended year.
+     * @internal
+     */
+    int32_t extendedYearToEra(int32_t extendedYear) const override;
+
+    /**
+     * Compute the year from extended year.
+     * @internal
+     */
+    int32_t extendedYearToYear(int32_t extendedYear) const override;
 
 public:
     /**
@@ -315,12 +321,6 @@ protected:
     virtual int32_t handleGetExtendedYear(UErrorCode& status) override;
 
     /**
-     * Compute fields from the JD
-     * @internal
-     */
-    virtual void handleComputeFields(int32_t julianDay, UErrorCode &status) override;
-
-    /**
      * Calculate the limit for a specified type of limit and field
      * @internal
      */
@@ -330,6 +330,18 @@ protected:
      * @internal
      */
     virtual int32_t defaultCenturyStartYear() const override;
+
+    /**
+     * Compute the era from extended year.
+     * @internal
+     */
+    int32_t extendedYearToEra(int32_t extendedYear) const override;
+
+    /**
+     * Compute the year from extended year.
+     * @internal
+     */
+    int32_t extendedYearToYear(int32_t extendedYear) const override;
 };
 
 U_NAMESPACE_END

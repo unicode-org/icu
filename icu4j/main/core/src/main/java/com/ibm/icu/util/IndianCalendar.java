@@ -359,7 +359,6 @@ public class IndianCalendar extends Calendar {
     protected void handleComputeFields(int julianDay){
         double jdAtStartOfGregYear;
         int leapMonth, IndianYear, yday, IndianMonth, IndianDayOfMonth, mday;
-        computeGregorianFields(julianDay);
         int gregorianYear = getGregorianYear(); // Stores gregorian date corresponding to Julian day;
         IndianYear = gregorianYear - INDIAN_ERA_START;            // Year in Saka era
 

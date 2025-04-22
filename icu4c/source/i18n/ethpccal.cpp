@@ -79,22 +79,6 @@ EthiopicCalendar::handleGetExtendedYear(UErrorCode& status)
     return year;
 }
 
-void
-EthiopicCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status)
-{
-    int32_t eyear, month, day;
-    jdToCE(julianDay, getJDEpochOffset(), eyear, month, day, status);
-    if (U_FAILURE(status)) return;
-
-    internalSet(UCAL_EXTENDED_YEAR, eyear);
-    internalSet(UCAL_ERA, (eyear > 0) ? AMETE_MIHRET : AMETE_ALEM);
-    internalSet(UCAL_YEAR, (eyear > 0) ? eyear : (eyear + AMETE_MIHRET_DELTA));
-    internalSet(UCAL_MONTH, month);
-    internalSet(UCAL_ORDINAL_MONTH, month);
-    internalSet(UCAL_DATE, day);
-    internalSet(UCAL_DAY_OF_YEAR, (30 * month) + day);
-}
-
 IMPL_SYSTEM_DEFAULT_CENTURY(EthiopicCalendar, "@calendar=ethiopic")
 
 int32_t
@@ -103,6 +87,13 @@ EthiopicCalendar::getJDEpochOffset() const
     return JD_EPOCH_OFFSET_AMETE_MIHRET;
 }
 
+int32_t EthiopicCalendar::extendedYearToEra(int32_t extendedYear) const {
+    return extendedYear <= 0 ? AMETE_ALEM : AMETE_MIHRET;
+}
+
+int32_t EthiopicCalendar::extendedYearToYear(int32_t extendedYear) const {
+    return extendedYear <= 0 ? extendedYear + AMETE_MIHRET_DELTA : extendedYear;
+}
 
 int32_t EthiopicCalendar::getRelatedYearDifference() const {
     constexpr int32_t kEthiopicCalendarRelatedYearDifference = 8;
@@ -159,13 +150,14 @@ EthiopicAmeteAlemCalendar::handleGetExtendedYear(UErrorCode& status)
     return year;
 }
 
-void
-EthiopicAmeteAlemCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status)
-{
-    EthiopicCalendar::handleComputeFields(julianDay, status);
-    internalSet(UCAL_ERA, AMETE_ALEM);
-    internalSet(UCAL_YEAR, internalGet(UCAL_EXTENDED_YEAR, 1) + AMETE_MIHRET_DELTA);
+int32_t EthiopicAmeteAlemCalendar::extendedYearToEra(int32_t /* extendedYear */) const {
+    return AMETE_ALEM;
 }
+
+int32_t EthiopicAmeteAlemCalendar::extendedYearToYear(int32_t extendedYear) const {
+    return extendedYear + AMETE_MIHRET_DELTA;
+}
+
 
 int32_t
 EthiopicAmeteAlemCalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) const

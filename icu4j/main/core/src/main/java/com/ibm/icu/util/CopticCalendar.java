@@ -281,32 +281,21 @@ public final class CopticCalendar extends CECalendar
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Override
     @Deprecated
-    protected void handleComputeFields(int julianDay) {
-        int era, year;
-        int[] fields = new int[3];
-        jdToCE(julianDay, getJDEpochOffset(), fields);
+    @Override
+    protected int extendedYearToEra(int eyear) {
+        return (eyear <= 0) ? BCE : CE;
+    }
 
-        // fields[0] eyear
-        // fields[1] month
-        // fields[2] day
-
-        if (fields[0] <= 0) {
-            era = BCE;
-            year = 1 - fields[0];
-        } else {
-            era = CE;
-            year = fields[0];
-        }
-
-        internalSet(EXTENDED_YEAR, fields[0]);
-        internalSet(ERA, era);
-        internalSet(YEAR, year);
-        internalSet(MONTH, fields[1]);
-        internalSet(ORDINAL_MONTH, fields[1]);
-        internalSet(DAY_OF_MONTH, fields[2]);
-        internalSet(DAY_OF_YEAR, (30 * fields[1]) + fields[2]);
+    /**
+     * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    @Override
+    protected int extendedYearToYear(int eyear) {
+        return (eyear <= 0) ? 1-eyear : eyear;
     }
 
     /**
