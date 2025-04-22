@@ -175,6 +175,42 @@ abstract class CECalendar extends Calendar {
     abstract protected int getJDEpochOffset();
 
     /**
+     * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Override
+    @Deprecated
+    protected void handleComputeFields(int julianDay) {
+        int era, year;
+        int[] fields = new int[3];
+        jdToCE(julianDay, getJDEpochOffset(), fields);
+        internalSet(EXTENDED_YEAR, fields[0]);
+        internalSet(ERA, extendedYearToEra(fields[0]));
+        internalSet(YEAR, extendedYearToYear(fields[0]));
+        internalSet(MONTH, fields[1]);
+        internalSet(ORDINAL_MONTH, fields[1]);
+        internalSet(DAY_OF_MONTH, fields[2]);
+        internalSet(DAY_OF_YEAR, (30 * fields[1]) + fields[2]);
+    }
+
+    /**
+     * Convert extended year to era
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    abstract protected int extendedYearToEra(int eyear);
+
+    /**
+     * Convert extended year to year
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    abstract protected int extendedYearToYear(int eyear);
+
+    /**
      * Return JD of start of given month/extended year
      */
     protected int handleComputeMonthStart(int eyear,
