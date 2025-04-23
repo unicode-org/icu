@@ -60,6 +60,7 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
         TESTCASE_AUTO(test21683_StateLeak);
         TESTCASE_AUTO(testCreateLNRFFromNumberingSystemInSkeleton);
         TESTCASE_AUTO(test22288_DifferentStartEndSettings);
+        TESTCASE_AUTO(test23110_PercentApproximately);
     TESTCASE_AUTO_END;
 }
 
@@ -1178,6 +1179,26 @@ void NumberRangeFormatterTest::test22288_DifferentStartEndSettings() {
                     .roundingMode(UNUM_ROUND_CEILING)));
         FormattedNumberRange result = lnrf.formatFormattableRange(2.5, 2.5, status);
         assertEquals("Should format successfully", u"2–3 US dollars", result.toString(status));
+}
+
+void NumberRangeFormatterTest::test23110_PercentApproximately() {
+    IcuTestErrorCode status(*this, "test23110_PercentApproximately");
+
+    assertFormatRange(
+        u"Approximately percentage formatting",
+        NumberRangeFormatter::with()
+            .numberFormatterBoth(NumberFormatter::forSkeleton(u"%x100", status)),
+        Locale("en-US"),
+        u"100% – 500%",
+        u"499.99999% – 500.00001%",
+        u"~500%", // was returning "~50,000%"
+        u"0% – 300%",
+        u"~0%",
+        u"300% – 300,000%",
+        u"300,000% – 500,000%",
+        u"499,900% – 500,100%",
+        u"~500,000%",
+        u"500,000% – 500,000,000%");
 }
 
 void  NumberRangeFormatterTest::assertFormatRange(

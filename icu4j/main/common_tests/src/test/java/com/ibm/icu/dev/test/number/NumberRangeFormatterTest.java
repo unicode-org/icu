@@ -1050,6 +1050,25 @@ public class NumberRangeFormatterTest extends CoreTestFmwk {
         assertEquals("Should format successfully", "2–3 US dollars", result.toString());
     }
 
+    @Test
+    public void Test23110_PercentApproximately() {
+        assertFormatRange(
+            "Approximately percentage formatting",
+            NumberRangeFormatter.with()
+                .numberFormatterBoth(NumberFormatter.forSkeleton("%x100")),
+            ULocale.forLanguageTag("en-US"),
+            "100% – 500%",
+            "499.99999% – 500.00001%",
+            "~500%", // was returning "~50,000%"
+            "0% – 300%",
+            "~0%",
+            "300% – 300,000%",
+            "300,000% – 500,000%",
+            "499,900% – 500,100%",
+            "~500,000%",
+            "500,000% – 500,000,000%");
+    }
+
     static void assertFormatRange(
             String message,
             UnlocalizedNumberRangeFormatter f,
