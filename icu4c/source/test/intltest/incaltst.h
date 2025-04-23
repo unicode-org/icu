@@ -47,6 +47,9 @@ public:
     void TestGregorianToPersian();
     void TestPersianFormat();
 
+    void TestMyanmar();
+    void TestMyanmarFormat();
+
     void TestConsistencyGregorian();
     void TestConsistencyCoptic();
     void TestConsistencyEthiopic();

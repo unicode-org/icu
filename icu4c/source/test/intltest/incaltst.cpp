@@ -92,6 +92,8 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     TESTCASE_AUTO(TestGregorianToPersian);
     TESTCASE_AUTO(TestPersianFormat);
     TESTCASE_AUTO(TestTaiwan);
+    TESTCASE_AUTO(TestMyanmar);
+    TESTCASE_AUTO(TestMyanmarFormat);
     TESTCASE_AUTO(TestConsistencyGregorian);
     TESTCASE_AUTO(TestConsistencyCoptic);
     TESTCASE_AUTO(TestConsistencyEthiopic);
@@ -778,6 +780,118 @@ void IntlCalendarTest::TestForceGannenNumbering()
         }
     }
 }
+
+/**
+ * Verify the Myanmar Calendar.
+ */
+void IntlCalendarTest::TestMyanmar() {
+    UDate timeA = Calendar::getNow();
+
+    Calendar *cal;
+    UErrorCode status = U_ZERO_ERROR;
+    cal = Calendar::createInstance("en_US@calendar=myanmar", status);
+    CHECK(status, UnicodeString("Creating en_US@calendar=myanmar calendar"));
+    // Sanity check the calendar
+    UDate timeB = Calendar::getNow();
+    UDate timeCal = cal->getTime(status);
+
+    if(!(timeA <= timeCal) || !(timeCal <= timeB)) {
+      errln((UnicodeString)"Error: Calendar time " + timeCal +
+            " is not within sampled times [" + timeA + " to " + timeB + "]!");
+    }
+
+    // Test thingyan in recent years
+    int32_t data[] = {
+        2024, 6, 12, 1386, 6, 12, // 2024
+        2019, 4, 17, 1381, 4, 17, // start of 1381
+        2019, 1,  1, 1380, 1,  1,
+        2018,12, 31, 1380,12, 31,
+
+        2018, 4, 17, 1380, 4, 17, // start year in kason
+        2018, 4, 16, 1379, 4, 16, // late kason
+        2017, 4, 17, 1379, 4, 17, // start year in tagu
+        2017, 4, 16, 1378, 4, 16, // late tagu
+
+        2016, 4, 17, 1378, 4, 17, // first day of 1378, tagu
+        2016, 4, 16, 1377, 4, 16, // last day of 1377, late tagu
+
+        2015, 4, 17, 1377, 4, 17, // first day of year is single-day tagu
+        2015, 4, 3,  1376, 4,  3, //  late dagu
+
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+    };
+
+    Calendar *grego = Calendar::createInstance("en_US@calendar=gregorian", status);
+    for (int32_t i=0; data[i]!=-1; ) {
+        int32_t gregYear = data[i++];
+        int32_t gregMonth = data[i++]-1;
+        int32_t gregDay = data[i++];
+        int32_t myanYear = data[i++];
+        int32_t myanMonth = data[i++]-1;
+        int32_t myanDay = data[i++];
+
+        // Test conversion from Myanmar dates
+        grego->clear();
+        grego->set(gregYear, gregMonth, gregDay);
+
+        cal->clear();
+        cal->set(myanYear, myanMonth, myanDay);
+
+        UDate myanTime = cal->getTime(status);
+        UDate gregTime = grego->getTime(status);
+
+        if (myanTime != gregTime) {
+          errln(UnicodeString("Expected ") + gregTime + " but got " + myanTime);
+        }
+
+        // Test conversion to Myanmar dates
+        cal->clear();
+        cal->setTime(gregTime, status);
+
+        int32_t computedYear = cal->get(UCAL_YEAR, status);
+        int32_t computedMonth = cal->get(UCAL_MONTH, status);
+        int32_t computedDay = cal->get(UCAL_DATE, status);
+
+        if ((myanYear != computedYear) ||
+            (myanMonth != computedMonth) ||
+            (myanDay != computedDay)) {
+          errln(UnicodeString("Expected ") + myanYear + "/" + (myanMonth+1) + "/" + myanDay +
+                " but got " +  computedYear + "/" + (computedMonth+1) + "/" + computedDay);
+        }
+
+    }
+
+    delete cal;
+    delete grego;
+}
+
+void IntlCalendarTest::TestMyanmarFormat() {
+    UErrorCode status = U_ZERO_ERROR;
+    SimpleDateFormat fmt(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=myanmar"), status);
+    CHECK(status, "creating date format instance");
+    SimpleDateFormat fmt2(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=gregorian"), status);
+    CHECK(status, "creating gregorian date format instance");
+    UnicodeString gregorianDate("April 15, 1989 AD");
+    UDate aDate = fmt2.parse(gregorianDate, status);
+    UnicodeString str;
+    fmt.format(aDate, str);
+    logln(UnicodeString() + "as Myanmar Calendar: " + escape(str));
+    UnicodeString expected("April 15, 1350 BC"); // TODO : correct to ME
+    if(str != expected) {
+        errln("Expected " + escape(expected) + " but got " + escape(str));
+    }
+    UDate otherDate = fmt.parse(expected, status);
+    if(otherDate != aDate) {
+        UnicodeString str3;
+        fmt.format(otherDate, str3);
+        errln("Parse incorrect of " + escape(expected) + " - wanted " + aDate + " but got " +  otherDate + ", " + escape(str3));
+    } else {
+        logln("Parsed OK: " + expected);
+    }
+
+    CHECK(status, "Error occurred testing Myanmar Calendar in English ");
+}
+
 
 /**
  * Verify the Persian Calendar.

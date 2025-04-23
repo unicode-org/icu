@@ -5,7 +5,7 @@
 * File MYANCAL.CPP
 *
 * Modification History:
-* 04/18/2025  srl          copied from buddhcal.h
+* 04/18/2025  mapmeld          copied from buddhcal.h
 *
 */
 
