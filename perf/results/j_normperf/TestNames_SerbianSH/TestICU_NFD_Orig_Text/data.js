@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1745362092480,
+  "lastUpdate": 1745373279934,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34257,6 +34257,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 8.929157205937724,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "08a074664e519a27275a2725ffb57327fba7e59e",
+          "message": "ICU-23097 Fix memory leak while fail",
+          "timestamp": "2025-04-22T18:34:49-07:00",
+          "tree_id": "d776566fdd98ed9e1fbdadb68c8d6870e8ed947c",
+          "url": "https://github.com/unicode-org/icu/commit/08a074664e519a27275a2725ffb57327fba7e59e"
+        },
+        "date": 1745373025932,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 9.494007888061036,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
