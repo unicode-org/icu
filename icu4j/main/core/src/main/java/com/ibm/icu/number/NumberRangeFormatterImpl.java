@@ -178,6 +178,8 @@ class NumberRangeFormatterImpl {
     }
 
     public FormattedNumberRange format(DecimalQuantity quantity1, DecimalQuantity quantity2, boolean equalBeforeRounding) {
+        DecimalQuantity quantityBackup = quantity1.createCopy();
+
         FormattedStringBuilder string = new FormattedStringBuilder();
         MicroProps micros1 = formatterImpl1.preProcess(quantity1);
         MicroProps micros2;
@@ -224,7 +226,7 @@ class NumberRangeFormatterImpl {
         case (2 | (1 << 4)): // APPROXIMATELY, EQUAL_AFTER_ROUNDING
         case (2 | (0 << 4)): // APPROXIMATELY, EQUAL_BEFORE_ROUNDING
         case (1 | (1 << 4)): // APPROXIMATE_OR_SINGLE_VALUE, EQUAL_AFTER_ROUNDING
-            formatApproximately(quantity1, quantity2, string, micros1, micros2);
+            formatApproximately(quantityBackup, quantity1, quantity2, string, micros1, micros2);
             break;
 
         case (1 | (0 << 4)): // APPROXIMATE_OR_SINGLE_VALUE, EQUAL_BEFORE_ROUNDING
@@ -252,13 +254,12 @@ class NumberRangeFormatterImpl {
 
     }
 
-    private void formatApproximately(DecimalQuantity quantity1, DecimalQuantity quantity2, FormattedStringBuilder string,
+    private void formatApproximately(DecimalQuantity quantityBackup, DecimalQuantity quantity1, DecimalQuantity quantity2, FormattedStringBuilder string,
             MicroProps micros1, MicroProps micros2) {
         if (fSameFormatters) {
             // Re-format using the approximately formatter:
-            quantity1.resetExponent();
-            MicroProps microsAppx = fApproximatelyFormatter.preProcess(quantity1);
-            int length = NumberFormatterImpl.writeNumber(microsAppx, quantity1, string, 0);
+            MicroProps microsAppx = fApproximatelyFormatter.preProcess(quantityBackup);
+            int length = NumberFormatterImpl.writeNumber(microsAppx, quantityBackup, string, 0);
             // HEURISTIC: Desired modifier order: inner, middle, approximately, outer.
             length += microsAppx.modInner.apply(string, 0, length);
             length += microsAppx.modMiddle.apply(string, 0, length);

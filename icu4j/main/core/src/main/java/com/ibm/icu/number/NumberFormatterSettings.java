@@ -655,12 +655,14 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
         long seen = 0;
         NumberFormatterSettings<?> current = this;
         while (current != null) {
-            long keyBitmask = (1L << current.key);
-            if (0 != (seen & keyBitmask)) {
-                current = current.parent;
-                continue;
+            if (current.key != KEY_MACROS) {
+                long keyBitmask = (1L << current.key);
+                if (0 != (seen & keyBitmask)) {
+                    current = current.parent;
+                    continue;
+                }
+                seen |= keyBitmask;
             }
-            seen |= keyBitmask;
             switch (current.key) {
             case KEY_MACROS:
                 macros.fallback((MacroProps) current.value);

@@ -334,6 +334,7 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
     void test21683_StateLeak();
     void testCreateLNRFFromNumberingSystemInSkeleton();
     void test22288_DifferentStartEndSettings();
+    void test23110_PercentApproximately();
 
     void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 
