@@ -1206,7 +1206,7 @@ CollationDataBuilder::getJamoCE32s(uint32_t jamoCE32s[], UErrorCode &errorCode) 
         anyJamoAssigned |= Collation::isAssignedCE32(ce32);
         // TODO: Try to prevent [optimize [Jamo]] from counting as anyJamoAssigned.
         // (As of CLDR 24 [2013] the Korean tailoring does not optimize conjoining Jamo.)
-        if(ce32 == Collation::FALLBACK_CE32) {
+        if(base != nullptr && ce32 == Collation::FALLBACK_CE32) {
             fromBase = true;
             ce32 = base->getCE32(jamo);
         }
