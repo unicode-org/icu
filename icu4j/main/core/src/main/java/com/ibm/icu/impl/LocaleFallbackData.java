@@ -499,6 +499,8 @@ class LocaleFallbackData {
         t.put("ku_AM", "Cyrl");
         t.put("ku_AZ", "Cyrl");
         t.put("ku_GE", "Cyrl");
+        t.put("ku_IQ", "Arab");
+        t.put("ku_IR", "Arab");
         t.put("ku_LB", "Arab");
         t.put("ku_TM", "Cyrl");
         t.put("kuf", "Laoo");
@@ -723,7 +725,10 @@ class LocaleFallbackData {
         t.put("phu", "Thai");
         t.put("phv", "Arab");
         t.put("phw", "Deva");
-        t.put("pi", "Sinh");
+        t.put("pi_IN", "Deva");
+        t.put("pi_LK", "Sinh");
+        t.put("pi_MM", "Mymr");
+        t.put("pi_TH", "Thai");
         t.put("pka", "Brah");
         t.put("pkr", "Mlym");
         t.put("plk", "Arab");
@@ -731,7 +736,6 @@ class LocaleFallbackData {
         t.put("pmh", "Brah");
         t.put("pnt", "Grek");
         t.put("pnt_RU", "Cyrl");
-        t.put("pra", "Khar");
         t.put("prc", "Arab");
         t.put("prd", "Arab");
         t.put("prt", "Thai");
@@ -1054,7 +1058,6 @@ class LocaleFallbackData {
         t.put("zh_US", "Hant");
         t.put("zh_VN", "Hant");
         t.put("zhd", "Hani");
-        t.put("zhx", "Nshu");
         t.put("zko", "Cyrl");
         t.put("zkt", "Kits");
         t.put("zkz", "Cyrl");
