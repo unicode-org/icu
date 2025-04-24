@@ -290,7 +290,6 @@ mhr	;	chm
 mkd	;	mk
 mlg	;	mg
 mlt	;	mt
-mnk	;	man
 mnt	;	wnn
 mo	;	ro
 mof	;	xnt
@@ -1557,7 +1556,6 @@ mhr_Adlm_AC_fonipa	;	chm_Adlm_AC_fonipa
 mkd_Adlm_AC_fonipa	;	mk_Adlm_AC_fonipa
 mlg_Adlm_AC_fonipa	;	mg_Adlm_AC_fonipa
 mlt_Adlm_AC_fonipa	;	mt_Adlm_AC_fonipa
-mnk_Adlm_AC_fonipa	;	man_Adlm_AC_fonipa
 mnt_Adlm_AC_fonipa	;	wnn_Adlm_AC_fonipa
 mo_Adlm_AC_fonipa	;	ro_Adlm_AC_fonipa
 mof_Adlm_AC_fonipa	;	xnt_Adlm_AC_fonipa

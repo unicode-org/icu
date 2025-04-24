@@ -1048,9 +1048,11 @@ fr{
             eras{
                 narrow{
                     "H",
+                    "BH",
                 }
                 wide{
                     "ère de l’Hégire",
+                    "BH",
                 }
             }
             monthNames{

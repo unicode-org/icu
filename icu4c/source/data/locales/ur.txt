@@ -782,6 +782,7 @@ ur{
             eras{
                 abbreviated{
                     "ہجری",
+                    "BH",
                 }
             }
             monthNames{

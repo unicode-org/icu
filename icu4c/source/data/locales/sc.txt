@@ -1150,12 +1150,15 @@ sc{
             eras{
                 abbreviated{
                     "e.E.",
+                    "BH",
                 }
                 narrow{
                     "E",
+                    "BH",
                 }
                 wide{
                     "era de s’Egira",
+                    "BH",
                 }
             }
             intervalFormats{

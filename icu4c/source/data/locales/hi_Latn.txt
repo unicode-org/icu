@@ -335,6 +335,7 @@ hi_Latn{
             eras{
                 abbreviated{
                     "Hijri",
+                    "BH",
                 }
             }
             monthNames{

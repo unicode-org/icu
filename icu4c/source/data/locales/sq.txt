@@ -807,6 +807,7 @@ sq{
             eras{
                 abbreviated{
                     "H.",
+                    "BH",
                 }
             }
             monthNames{

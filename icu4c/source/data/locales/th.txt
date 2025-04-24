@@ -1166,9 +1166,11 @@ th{
             eras{
                 abbreviated{
                     "ฮ.ศ.",
+                    "BH",
                 }
                 wide{
                     "ฮิจเราะห์ศักราช",
+                    "BH",
                 }
             }
             monthNames{

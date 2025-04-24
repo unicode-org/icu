@@ -1364,6 +1364,7 @@ yue{
             eras{
                 abbreviated{
                     "伊斯蘭曆",
+                    "BH",
                 }
             }
             monthNames{

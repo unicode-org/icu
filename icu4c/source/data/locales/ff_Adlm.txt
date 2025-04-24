@@ -1888,6 +1888,7 @@ ff_Adlm{
             eras{
                 abbreviated{
                     "𞤇𞤊",
+                    "BH",
                 }
             }
             monthNames{

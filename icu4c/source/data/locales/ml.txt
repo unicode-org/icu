@@ -767,6 +767,7 @@ ml{
             eras{
                 abbreviated{
                     "ഹിജറ",
+                    "BH",
                 }
             }
             monthNames{

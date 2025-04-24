@@ -139,6 +139,13 @@ supplementalData:table(nofallback){
                         15,
                     }
                 }
+                1{
+                    end:intvector{
+                        622,
+                        7,
+                        14,
+                    }
+                }
             }
             system{"lunar"}
         }
@@ -149,6 +156,13 @@ supplementalData:table(nofallback){
                         622,
                         7,
                         16,
+                    }
+                }
+                1{
+                    end:intvector{
+                        622,
+                        7,
+                        15,
                     }
                 }
             }
@@ -163,6 +177,13 @@ supplementalData:table(nofallback){
                         15,
                     }
                 }
+                1{
+                    end:intvector{
+                        622,
+                        7,
+                        14,
+                    }
+                }
             }
             system{"lunar"}
         }
@@ -175,6 +196,13 @@ supplementalData:table(nofallback){
                         15,
                     }
                 }
+                1{
+                    end:intvector{
+                        622,
+                        7,
+                        14,
+                    }
+                }
             }
             system{"lunar"}
         }
@@ -185,6 +213,13 @@ supplementalData:table(nofallback){
                         622,
                         7,
                         15,
+                    }
+                }
+                1{
+                    end:intvector{
+                        622,
+                        7,
+                        14,
                     }
                 }
             }
@@ -4888,7 +4923,6 @@ supplementalData:table(nofallback){
                 "mhr",
                 "mja",
                 "mld",
-                "mnk",
                 "mnt",
                 "mo",
                 "mof",
@@ -6316,8 +6350,7 @@ supplementalData:table(nofallback){
                 "mma~r",
                 "mmt~z",
                 "mn",
-                "mna~j",
-                "mnl~s",
+                "mna~s",
                 "mnu~z",
                 "moa",
                 "moc~e",
@@ -14151,8 +14184,8 @@ supplementalData:table(nofallback){
             }
             secondary{
                 scripts{
-                    "Cyrl",
                     "Arab",
+                    "Cyrl",
                 }
             }
         }
@@ -15164,12 +15197,13 @@ supplementalData:table(nofallback){
         }
         pi{
             primary{
-                scripts{"Mymr"}
+                scripts{"Latn"}
             }
             secondary{
                 scripts{
-                    "Sinh",
                     "Deva",
+                    "Mymr",
+                    "Sinh",
                     "Thai",
                 }
             }
@@ -27850,6 +27884,9 @@ supplementalData:table(nofallback){
             pa{
                 populationShareF:int{48360000}
             }
+            pi{
+                populationShareF:int{44200000}
+            }
             pl{
                 populationShareF:int{48400000}
             }
@@ -28841,6 +28878,9 @@ supplementalData:table(nofallback){
                 officialStatus{"official_regional"}
                 populationShareF:int{48280000}
             }
+            pi_Deva{
+                populationShareF:int{0}
+            }
             raj{
                 populationShareF:int{47100000}
             }
@@ -28942,13 +28982,16 @@ supplementalData:table(nofallback){
             }
             ckb{
                 officialStatus{"official_regional"}
-                populationShareF:int{49200000}
+                populationShareF:int{49120000}
             }
             en{
                 populationShareF:int{49350000}
             }
             fa{
                 populationShareF:int{47870000}
+            }
+            ku_Arab{
+                populationShareF:int{49100000}
             }
             lrc{
                 populationShareF:int{47610000}
@@ -28980,7 +29023,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48140000}
             }
             ckb{
-                populationShareF:int{48390000}
+                populationShareF:int{47630000}
             }
             fa{
                 officialStatus{"official"}
@@ -29003,6 +29046,9 @@ supplementalData:table(nofallback){
             }
             kk_Arab{
                 populationShareF:int{45340000}
+            }
+            ku_Arab{
+                populationShareF:int{47560000}
             }
             lki{
                 populationShareF:int{47760000}
@@ -29028,7 +29074,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48190000}
             }
             sdh{
-                populationShareF:int{48370000}
+                populationShareF:int{48450000}
             }
             territoryF:intvector{
                 62144000,
@@ -29498,6 +29544,9 @@ supplementalData:table(nofallback){
             en{
                 populationShareF:int{49100000}
             }
+            pi_Sinh{
+                populationShareF:int{0}
+            }
             si{
                 officialStatus{"official"}
                 populationShareF:int{49680000}
@@ -29900,6 +29949,9 @@ supplementalData:table(nofallback){
             my{
                 officialStatus{"official"}
                 populationShareF:int{49640000}
+            }
+            pi_Mymr{
+                populationShareF:int{0}
             }
             rhg{
                 populationShareF:int{48170000}
@@ -31156,6 +31208,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48130000}
             }
             bua{
+                officialStatus{"official_regional"}
                 populationShareF:int{47220000}
             }
             ce{
@@ -31908,6 +31961,9 @@ supplementalData:table(nofallback){
             nod{
                 populationShareF:int{48960000}
                 writingShareF:int{48500000}
+            }
+            pi_Thai{
+                populationShareF:int{0}
             }
             shn{
                 populationShareF:int{46960000}
@@ -34991,6 +35047,13 @@ supplementalData:table(nofallback){
                 "H",
             }
             preferred{"h"}
+        }
+        ku_SY{
+            allowed{
+                "H",
+                "hB",
+            }
+            preferred{"H"}
         }
         ml_IN{
             allowed{

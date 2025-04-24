@@ -867,6 +867,7 @@ lv{
             eras{
                 wide{
                     "pēc hidžras",
+                    "BH",
                 }
             }
             monthNames{

@@ -1181,6 +1181,7 @@ sv{
             eras{
                 wide{
                     "efter Hirja",
+                    "BH",
                 }
             }
             intervalFormats{

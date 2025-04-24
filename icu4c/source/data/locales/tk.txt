@@ -730,6 +730,7 @@ tk{
             eras{
                 abbreviated{
                     "HS",
+                    "BH",
                 }
             }
             monthNames{

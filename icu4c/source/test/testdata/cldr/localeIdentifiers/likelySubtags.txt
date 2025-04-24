@@ -633,6 +633,7 @@ ks-IN ;	ks-Arab-IN ;	ks ;
 ku ;	ku-Latn-TR ;	ku ;	
 ku-AQ ;	ku-Latn-AQ ;	ku-AQ ;	
 ku-Egyp ;	ku-Egyp-TR ;	ku-Egyp ;	
+ku-IQ ;	ku-Arab-IQ ;	ku-Arab ;	ku-IQ
 ku-Latn ;	ku-Latn-TR ;	ku ;	
 ku-SY ;	ku-Latn-SY ;	ku-SY ;	
 ku-TR ;	ku-Latn-TR ;	ku ;	
@@ -1424,6 +1425,7 @@ und-Latn-IL ;	en-Latn-IL ;	en-IL ;
 und-Latn-IM ;	en-Latn-IM ;	en-IM ;	
 und-Latn-IN ;	en-Latn-IN ;	en-IN ;	
 und-Latn-IO ;	en-Latn-IO ;	en-IO ;	
+und-Latn-IQ ;	en-Latn-IQ ;	en-IQ ;	
 und-Latn-IS ;	is-Latn-IS ;	is ;	
 und-Latn-IT ;	it-Latn-IT ;	it ;	
 und-Latn-JE ;	en-Latn-JE ;	en-JE ;	

@@ -911,6 +911,7 @@ ro{
             eras{
                 wide{
                     "A.H.",
+                    "BH",
                 }
             }
         }

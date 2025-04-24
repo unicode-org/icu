@@ -749,6 +749,7 @@ bs_Cyrl{
             eras{
                 abbreviated{
                     "АХ",
+                    "BH",
                 }
             }
             monthNames{

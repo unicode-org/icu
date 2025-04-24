@@ -822,6 +822,7 @@ el{
             eras{
                 abbreviated{
                     "Ε.Ε.",
+                    "BH",
                 }
             }
         }

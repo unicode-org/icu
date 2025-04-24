@@ -807,9 +807,11 @@ ms{
             eras{
                 abbreviated{
                     "H",
+                    "BH",
                 }
                 wide{
                     "AH",
+                    "BH",
                 }
             }
             monthNames{

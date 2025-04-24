@@ -781,6 +781,7 @@ sr{
             eras{
                 abbreviated{
                     "АХ",
+                    "BH",
                 }
             }
             monthNames{

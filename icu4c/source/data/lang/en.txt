@@ -703,6 +703,16 @@ en{
         zxx{"No linguistic content"}
         zza{"Zaza"}
     }
+    Languages%core{
+        ckb{"Kurdish"}
+        ku{"Kurdish"}
+        sdh{"Kurdish"}
+    }
+    Languages%extension{
+        ckb{"Central"}
+        ku{"Kurmanji"}
+        sdh{"Southern"}
+    }
     Languages%long{
         cr{"Woods Cree"}
         zh{"Mandarin Chinese"}
@@ -729,10 +739,12 @@ en{
         en_US{"US English"}
     }
     Languages%variant{
+        bqi{"Luri Bakhtiari"}
         ckb{"Kurdish, Sorani"}
         hi_Latn{"Hinglish"}
         ky{"Kirghiz"}
         my{"Myanmar Language"}
+        pi{"Pāli"}
         ps{"Pushto"}
         ug{"Uighur"}
     }

@@ -844,6 +844,7 @@ hu{
             eras{
                 abbreviated{
                     "MF",
+                    "BH",
                 }
             }
             monthNames{

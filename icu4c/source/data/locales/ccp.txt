@@ -473,6 +473,7 @@ ccp{
             eras{
                 abbreviated{
                     "𑄡𑄪𑄇𑄴",
+                    "BH",
                 }
             }
             monthNames{
