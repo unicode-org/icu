@@ -663,6 +663,10 @@ CollationDataBuilder::addCE32(const UnicodeString &prefix, const UnicodeString &
         // If c has contextual base mappings or if we add a contextual mapping,
         // then copy the base mappings.
         // Otherwise we just override the base mapping.
+        if (base == nullptr){
+            U_FAILURE(U_INTERNAL_PROGRAM_ERROR);
+            return;
+        }
         uint32_t baseCE32 = base->getFinalCE32(base->getCE32(c));
         if(hasContext || Collation::ce32HasContext(baseCE32)) {
             oldCE32 = copyFromBaseCE32(c, baseCE32, true, errorCode);
