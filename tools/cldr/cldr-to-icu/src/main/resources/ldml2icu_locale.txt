@@ -273,6 +273,7 @@
 //ldml/localeDisplayNames/keys/key[@type="(%A)"] ; /Keys/$1
 
 //ldml/localeDisplayNames/languages/language[@type="(%A)"][@alt="(%A)"] ; /Languages%$2/$1
+//ldml/localeDisplayNames/languages/language[@type="(%A)"][@menu="(%A)"] ; /Languages%$2/$1
 //ldml/localeDisplayNames/languages/language[@type="(%A)"] ; /Languages/$1
 
 //ldml/localeDisplayNames/localeDisplayPattern/localeKeyTypePattern ; /localeDisplayPattern/keyTypePattern
