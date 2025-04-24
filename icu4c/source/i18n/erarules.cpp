@@ -192,13 +192,8 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
             }
         } else {
             if (hasEnd) {
-                if (eraIdx != 0) {
-                    // This implementation does not support end only rule for eras other than
-                    // the first one.
-                    status = U_INVALID_FORMAT_ERROR;
-                    return nullptr;
-                }
-                U_ASSERT(eraIdx == 0);
+                // The islamic calendars now have an end-only rule for the
+                // second (and final) entry; basically they are in reverse order.
                 startDates[eraIdx] = MIN_ENCODED_START;
             } else {
                 status = U_INVALID_FORMAT_ERROR;
@@ -267,6 +262,15 @@ int32_t EraRules::getEraIndex(int32_t year, int32_t month, int32_t day, UErrorCo
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
+    if (numEras > 1 && startDates[numEras-1] == MIN_ENCODED_START) {
+        // Multiple eras in reverse order, linear search from beginning.
+        // Currently only for islamic.
+        for (int eraIdx = 0; eraIdx < numEras; eraIdx++) {
+            if (compareEncodedDateWithYMD(startDates[eraIdx], year, month, day) <= 0) {
+                return eraIdx;
+            }
+        }
+    }
     int32_t high = numEras; // last index + 1
     int32_t low;
 
@@ -311,14 +315,26 @@ void EraRules::initCurrentEra() {
     if (U_FAILURE(ec)) return;
     int currentEncodedDate = encodeDate(year, month0 + 1 /* changes to 1-base */, dom);
     int eraIdx = numEras - 1;
-    while (eraIdx > 0) {
-        if (currentEncodedDate >= startDates[eraIdx]) {
-            break;
+    if (eraIdx > 0 && startDates[eraIdx] == MIN_ENCODED_START) {
+        // Multiple eras in reverse order, search from beginning.
+        // Currently only for islamic. Here current era must be
+        // in the array.
+        for (eraIdx = 0; eraIdx < numEras; eraIdx++) {
+            if (currentEncodedDate >= startDates[eraIdx]) {
+                break;
+            }
         }
-        eraIdx--;
+    } else {
+        // The usual behavior, search from end
+        while (eraIdx > 0) {
+            if (currentEncodedDate >= startDates[eraIdx]) {
+                break;
+            }
+            eraIdx--;
+        }
+        // Note: current era could be before the first era.
+        // In this case, this implementation returns the first era index (0).
     }
-    // Note: current era could be before the first era.
-    // In this case, this implementation returns the first era index (0).
     currentEra = eraIdx;
 }
 

@@ -95,13 +95,8 @@ public class EraRules {
                 }
             } else {
                 if (hasEnd) {
-                    if (eraIdx != 0) {
-                        // This implementation does not support end only rule for eras other than
-                        // the first one.
-                        throw new ICUException(
-                                "Era data for " + eraIdxStr + " in era rule data for " + calType.getId()
-                                + " has only end rule.");
-                    }
+                    // The islamic calendars now have an end-only rule for the
+                    // second (and final) entry; basically they are in reverse order.
                     startDates[eraIdx] = MIN_ENCODED_START;
                 } else {
                     throw new ICUException("Missing era start/end rule date for key:" + eraIdxStr + " in era rule data for "
@@ -177,6 +172,15 @@ public class EraRules {
         if (month < 1 || month > 12 || day < 1 || day > 31) {
             throw new IllegalArgumentException("Illegal date - year:" + year + "month:" + month + "day:" + day);
         }
+        if (numEras > 1 && startDates[numEras-1] == MIN_ENCODED_START) {
+            // Multiple eras in reverse order, linear search from beginning.
+            // Currently only for islamic.
+            for (int eraIdx = 0; eraIdx < numEras; eraIdx++) {
+                if (compareEncodedDateWithYMD(startDates[eraIdx], year, month, day) <= 0) {
+                    return eraIdx;
+                }
+            }
+        }
         int high = numEras; // last index + 1
         int low;
 
@@ -219,14 +223,26 @@ public class EraRules {
         int[] fields = Grego.timeToFields(localMillis, null);
         int currentEncodedDate = encodeDate(fields[0], fields[1] + 1 /* changes to 1-base */, fields[2]);
         int eraIdx = numEras - 1;
-        while (eraIdx > 0) {
-            if (currentEncodedDate >= startDates[eraIdx]) {
-                break;
+        if (eraIdx > 0 && startDates[eraIdx] == MIN_ENCODED_START) {
+            // Multiple eras in reverse order, search from beginning.
+            // Currently only for islamic. Here current era must be
+            // in the array.
+            for (eraIdx = 0; eraIdx < numEras; eraIdx++) {
+                if (currentEncodedDate >= startDates[eraIdx]) {
+                    break;
+                }
             }
-            eraIdx--;
+        } else {
+            // The usual behavior, search from end
+            while (eraIdx > 0) {
+               if (currentEncodedDate >= startDates[eraIdx]) {
+                    break;
+                }
+                eraIdx--;
+            }
+            // Note: current era could be before the first era.
+            // In this case, this implementation returns the first era index (0).
         }
-        // Note: current era could be before the first era.
-        // In this case, this implementation returns the first era index (0).
         currentEra = eraIdx;
     }
 

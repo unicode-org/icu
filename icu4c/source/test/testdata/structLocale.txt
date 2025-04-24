@@ -40195,11 +40195,14 @@ structLocale:table(nofallback){
             eras{
                 abbreviated{
                     "",
+                    "",
                 }
                 wide{
                     "",
+                    "",
                 }
                 narrow{
+                    "",
                     "",
                 }
             }
