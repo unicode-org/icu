@@ -954,9 +954,11 @@ mr{
             eras{
                 abbreviated{
                     "हि.व.",
+                    "BH",
                 }
                 wide{
                     "हिजरी वर्ष",
+                    "BH",
                 }
             }
             monthNames{

@@ -783,6 +783,7 @@ sr_Latn{
             eras{
                 abbreviated{
                     "AH",
+                    "BH",
                 }
             }
             monthNames{

@@ -1182,9 +1182,11 @@ he{
             eras{
                 abbreviated{
                     "הג׳רה",
+                    "BH",
                 }
                 wide{
                     "שנת היג׳רה",
+                    "BH",
                 }
             }
             monthNames{

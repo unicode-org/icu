@@ -1157,6 +1157,7 @@ nl{
             eras{
                 wide{
                     "Saʻna Hizjria",
+                    "BH",
                 }
             }
             intervalFormats{

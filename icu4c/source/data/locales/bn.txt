@@ -919,6 +919,7 @@ bn{
             eras{
                 abbreviated{
                     "যুগ",
+                    "BH",
                 }
             }
             monthNames{

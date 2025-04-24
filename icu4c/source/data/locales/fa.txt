@@ -1021,9 +1021,11 @@ fa{
             eras{
                 abbreviated{
                     "ه‍.ق.",
+                    "BH",
                 }
                 wide{
                     "هجری قمری",
+                    "BH",
                 }
             }
             monthNames{

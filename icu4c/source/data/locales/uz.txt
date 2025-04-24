@@ -731,6 +731,7 @@ uz{
             eras{
                 abbreviated{
                     "hijriy",
+                    "BH",
                 }
             }
             monthNames{

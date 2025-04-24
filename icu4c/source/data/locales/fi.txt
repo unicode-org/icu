@@ -1214,6 +1214,7 @@ fi{
             eras{
                 wide{
                     "hidžran jälkeen",
+                    "BH",
                 }
             }
             monthNames{

@@ -670,6 +670,7 @@ fy{
             eras{
                 abbreviated{
                     "Saʻna Hizjria",
+                    "BH",
                 }
             }
             monthNames{

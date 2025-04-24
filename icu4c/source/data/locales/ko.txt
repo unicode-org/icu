@@ -1524,6 +1524,7 @@ ko{
             eras{
                 wide{
                     "히즈라력",
+                    "BH",
                 }
             }
             monthNames{

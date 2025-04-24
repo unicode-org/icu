@@ -889,9 +889,11 @@ is{
             eras{
                 abbreviated{
                     "EH",
+                    "BH",
                 }
                 wide{
                     "eftir Hijra",
+                    "BH",
                 }
             }
             monthNames{

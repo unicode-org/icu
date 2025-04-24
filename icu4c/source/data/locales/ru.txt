@@ -1051,6 +1051,7 @@ ru{
             eras{
                 wide{
                     "после хиджры",
+                    "BH",
                 }
             }
             monthNames{

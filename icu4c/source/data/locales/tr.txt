@@ -781,6 +781,7 @@ tr{
             eras{
                 abbreviated{
                     "Hicri",
+                    "BH",
                 }
             }
             monthNames{

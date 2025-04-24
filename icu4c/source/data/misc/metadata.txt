@@ -1056,10 +1056,6 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"mt"}
             }
-            mnk{
-                reason{"macrolanguage"}
-                replacement{"man"}
-            }
             mnt{
                 reason{"deprecated"}
                 replacement{"wnn"}
@@ -5272,12 +5268,14 @@ metadata:table(nofallback){
         "bm_Nkoo_ML",
         "bn_BD",
         "bo_CN",
+        "bqi_IR",
         "br_FR",
         "brx_IN",
         "bs_Cyrl_BA",
         "bs_Latn",
         "bs_Latn_BA",
         "bss_CM",
+        "bua_RU",
         "byn_ER",
         "ca_ES",
         "cad_US",
@@ -5402,7 +5400,9 @@ metadata:table(nofallback){
         "ksb_TZ",
         "ksf_CM",
         "ksh_DE",
-        "ku_TR",
+        "ku_Arab_IQ",
+        "ku_Latn",
+        "ku_Latn_TR",
         "kw_GB",
         "kxv_Deva_IN",
         "kxv_Latn",
@@ -5483,6 +5483,8 @@ metadata:table(nofallback){
         "pa_Guru_IN",
         "pap_CW",
         "pcm_NG",
+        "pi_Latn",
+        "pi_Latn_GB",
         "pis_SB",
         "pl_PL",
         "pms_IT",
@@ -5519,6 +5521,7 @@ metadata:table(nofallback){
         "seh_MZ",
         "ses_ML",
         "sg_CF",
+        "sgs_LT",
         "shi_Latn_MA",
         "shi_Tfng",
         "shi_Tfng_MA",

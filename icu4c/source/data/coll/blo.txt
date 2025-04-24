@@ -1,0 +1,18 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+blo{
+    collations{
+        standard{
+            Sequence{
+                "&a < ǝ <<< Ǝ"
+                "&g < gb <<< Gb <<< GB"
+                "&k < kp <<< Kp <<< KP"
+                "&n < ny <<< Ny <<< NY"
+                "&ŋ < ŋm <<< Ŋm <<< ŊM"
+                "&s < sh <<< Sh <<< SH"
+            }
+            Version{"48"}
+        }
+    }
+}

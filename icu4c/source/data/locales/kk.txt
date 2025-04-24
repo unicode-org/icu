@@ -819,12 +819,15 @@ kk{
             eras{
                 abbreviated{
                     "ХЖ",
+                    "BH",
                 }
                 narrow{
                     "ХЖ",
+                    "BH",
                 }
                 wide{
                     "ХЖ",
+                    "BH",
                 }
             }
             monthNames{

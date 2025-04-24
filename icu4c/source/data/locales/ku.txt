@@ -629,6 +629,7 @@ ku{
             eras{
                 abbreviated{
                     "Hicrî",
+                    "BH",
                 }
             }
             monthNames{

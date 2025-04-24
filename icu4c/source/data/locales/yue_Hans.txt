@@ -1390,6 +1390,7 @@ yue_Hans{
             eras{
                 abbreviated{
                     "伊斯兰历",
+                    "BH",
                 }
             }
             monthNames{

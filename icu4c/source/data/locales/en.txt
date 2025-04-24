@@ -1637,6 +1637,11 @@ en{
             eras{
                 abbreviated{
                     "AH",
+                    "BH",
+                }
+                wide{
+                    "Anno Hegirae",
+                    "Before Hijrah",
                 }
             }
             monthNames{

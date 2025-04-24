@@ -2556,6 +2556,7 @@ root{
             eras{
                 abbreviated{
                     "AH",
+                    "BH",
                 }
                 narrow:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}

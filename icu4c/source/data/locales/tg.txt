@@ -676,6 +676,7 @@ tg{
             eras{
                 abbreviated{
                     "САНА",
+                    "BH",
                 }
             }
             monthNames{
