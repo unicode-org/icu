@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1745520133140,
+  "lastUpdate": 1745601622824,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -66363,6 +66363,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12840398.6738,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "b9b952c5e24b869ea4ff3b0df37aaee0387d302a",
+          "message": "ICU-23056 Integrate CLDR 48 m2 to ICU main, part 3: ICU code/test/tool mods",
+          "timestamp": "2025-04-25T09:48:11-07:00",
+          "tree_id": "5ec14c14d0d10f59a0d37225a1b14f77cfa3d42b",
+          "url": "https://github.com/unicode-org/icu/commit/b9b952c5e24b869ea4ff3b0df37aaee0387d302a"
+        },
+        "date": 1745601361352,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 218.8732,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 56657793.8781,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12251395.5927,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 53912395.7807,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12844941.1953,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
