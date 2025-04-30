@@ -1,0 +1,65 @@
+/* © 2025 and later: Unicode, Inc. and others. */
+
+body {
+  font-family: sans-serif;
+}
+
+td {
+  border: 1px solid black;
+  padding: 0 .5em;
+}
+
+table, th {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+th {
+  cursor: pointer;
+  background-color: #aaa;
+}
+
+table.sortable tbody tr:nth-child(2n) td {
+  background: #ddd;
+}
+
+table.sortable tbody tr:nth-child(2n+1) td {
+  background: #eee;
+}
+
+.file_name {
+  font-family: monospace;
+}
+
+.tag, .suggestion {
+  font-family: monospace;
+  white-space: pre;
+}
+
+.severity_warning {
+  color:#aa0;
+}
+
+.severity_error {
+  color:#f00;
+}
+
+.severity_unknown {
+  color:#f0f;
+}
+
+th::after {
+  content: " \23F6\23F7";
+}
+
+th.sorttable_sorted::after {
+  content: " \23F7";
+}
+
+th.sorttable_sorted_reverse::after {
+  content: " \23F6";
+}
+
+#sorttable_sortfwdind, #sorttable_sortrevind {
+  display: none;
+}

@@ -104,6 +104,7 @@ icu4j/perf-tests/data/collation/ulyss10.txt
 icu4j/perf-tests/data/collation/2drvb10.txt
 icu4j/perf-tests/data/collation/vfear11a.txt
 icu4j/perf-tests/data/collation/nvsbl10.txt
+icu4j/tools/build/src/main/resources/com/ibm/icu/dev/tool/errorprone/sorttable.js
 #
 # docs
 #
