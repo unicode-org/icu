@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1745600671909,
+  "lastUpdate": 1746030205465,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34047,6 +34047,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 247.37238222694077,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "hsivonen@hsivonen.fi",
+            "name": "Henri Sivonen",
+            "username": "hsivonen"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f30554916d9f2783be9bcebc7faf8fc336f54a73",
+          "message": "ICU-23053 In the ICU4X mode of the collation builder, mark middle starters in contractions",
+          "timestamp": "2025-04-30T09:05:29-07:00",
+          "tree_id": "90d3f81cfcdbebf9e26f1dcf4d2de08ed79692b6",
+          "url": "https://github.com/unicode-org/icu/commit/f30554916d9f2783be9bcebc7faf8fc336f54a73"
+        },
+        "date": 1746029954539,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 213.14215603289193,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
