@@ -51,6 +51,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.release>11</maven.compiler.release>
 
     <maven-central-repo-url>https://oss.sonatype.org</maven-central-repo-url>
@@ -690,6 +691,7 @@
               <showWarnings>true</showWarnings>
               <failOnError>false</failOnError>
               <fork>true</fork>
+              <encoding>UTF-8</encoding>
               <!-- Use <compilerArg> to pass flags to errorprone. See https://errorprone.info/docs/flags -->
               <compilerArgs>
                 <arg>-XDcompilePolicy=simple</arg>
@@ -702,6 +704,7 @@
                 <arg>-Xplugin:ErrorProne -XepAllErrorsAsWarnings</arg>
                 <arg>-Xmaxerrs</arg>
                 <arg>10000</arg>
+                <arg>-J-Dfile.encoding=UTF-8</arg>
                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
