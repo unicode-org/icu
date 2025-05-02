@@ -39,6 +39,7 @@ public abstract class TestBoilerplate<T> extends TestFmwk {
 
     protected static Random random = new Random(12345);
 
+    @SuppressWarnings({"SelfEquals", "EqualsNull"})
     protected final void _test() throws Exception {
         List<T> list = new LinkedList<T>();
         while (_addTestObject(list)) {

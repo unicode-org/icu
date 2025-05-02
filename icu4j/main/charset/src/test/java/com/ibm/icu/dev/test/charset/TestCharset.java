@@ -5818,7 +5818,8 @@ public class TestCharset extends TestFmwk {
         String testCase = "\u7d42";
 
         try {
-            testCase.getBytes(charsetName);
+            // We don't expect any particular value.
+            var unused = testCase.getBytes(charsetName);
         } catch (Exception ex) {
             errln("Error calling getBytes(): " + ex);
         }

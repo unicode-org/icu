@@ -857,6 +857,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable<UnicodeMap<T>>,
      * Utility for extracting map
      * @deprecated
      */
+    @Deprecated
     public UnicodeMap<T> putAllIn(Map<? super String, ? super T> map) {
         for (String key : keySet()) {
             map.put(key, get(key));

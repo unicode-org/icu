@@ -313,7 +313,7 @@ public class CollationAPITest extends TestFmwk {
 
         // Code coverage for dummy "not designed" hashCode() which does "assert false".
         try {
-            iterator1.hashCode();  // We don't expect any particular value.
+            var unused = iterator1.hashCode();  // We don't expect any particular value.
         } catch (AssertionError ignored) {
             // Expected to be thrown if assertions are enabled.
         }
