@@ -80,7 +80,7 @@ class APIInfo {
                 this.name.equals(that.name) &&
                 this.sig.equals(that.sig) &&
                 this.exc.equals(that.exc) &&
-                this.stver.equals(this.stver);
+                this.stver.equals(that.stver);
         }
         catch (ClassCastException e) {
             return false;

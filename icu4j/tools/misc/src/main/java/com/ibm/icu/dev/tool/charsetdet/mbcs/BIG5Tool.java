@@ -234,7 +234,7 @@ public class BIG5Tool {
     //  WARNING:  this class's natural ordering (from Comparable) and equals()
     //            are inconsistent.
 
-    static class ChEl implements Comparable {
+    static class ChEl implements Comparable<ChEl> {
         int charCode;
         int occurences;
 
@@ -258,10 +258,9 @@ public class BIG5Tool {
 
         // We want to be able to sort the results by frequency of occurrence
         //   Compare backwards.  We want most frequent chars first.
-        public int compareTo(Object other) {
-            ChEl o = (ChEl)other;
-            return (this.occurences> o.occurences? -1 :
-                   (this.occurences==o.occurences?  0 : 1));
+        public int compareTo(ChEl other) {
+            return (this.occurences> other.occurences? -1 :
+                   (this.occurences==other.occurences?  0 : 1));
         }
 
     }

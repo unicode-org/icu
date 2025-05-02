@@ -26,7 +26,7 @@ public class NGramList
         Object mapKey(String key);
     }
     
-    public static final class NGram implements Comparable
+    public static final class NGram implements Comparable<NGram>
     {
         private String value;
         private int refCount;
@@ -63,11 +63,9 @@ public class NGramList
         }
         
         // Note: This makes higher refCounts come *before* lower refCounts...
-        public int compareTo(Object o)
+        public int compareTo(NGram o)
         {
-            NGram ng = (NGram) o;
-            
-            return ng.getRefCount() - refCount;
+            return o.getRefCount() - refCount;
         }
     }
     
