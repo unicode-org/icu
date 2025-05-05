@@ -2,7 +2,7 @@ TODO: Please describe your changes here.
 
 TODO: Please read the following on ICU Contributing, and then delete these instructions.
 
-Thank you for your pull request! 
+Thank you for your pull request!
 
 * For general info on contributing: https://github.com/unicode-org/icu/blob/main/CONTRIBUTING.md
 * Associating PRs with Jira issues
@@ -13,7 +13,7 @@ Thank you for your pull request!
 * Contributors license agreement (CLA):
   - You will be automatically asked to sign the CLA before the PR is accepted.
   - To sign the CLA: https://cla-assistant.io/unicode-org/icu
-  - For terms of use and license, see https://www.unicode.org/terms_of_use.html
+  - For terms of use and license, see https://www.unicode.org/copyright.html
 
 TODO: Fill out the checklist below.
 

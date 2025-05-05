@@ -99,7 +99,8 @@ _… and thanks for contributing!_
 
 ### Copyright & Licenses
 
-Copyright © 2016-2024 Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.
+Copyright © 2016 and later: Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.
+License & terms of use: https://www.unicode.org/copyright.html
 
 The project is released under [LICENSE](./LICENSE).
 
@@ -109,7 +110,7 @@ The project is released under [LICENSE](./LICENSE).
 [coding-guidelines]: docs/userguide/dev/codingguidelines.md
 [com.ibm.icu.dev.test]: ./icu4j/main/framework/src/test/java/com/ibm/icu/dev/test/
 [contacts]: https://icu.unicode.org/contacts
-[copyright]: http://www.unicode.org/copyright.html
+[copyright]: https://www.unicode.org/copyright.html
 [design]: docs/userguide/icu/design.md
 [git4icu]: https://unicode-org.github.io/icu/userguide/dev/gitdev
 [howtouse]: docs/userguide/icu/howtouseicu.md
@@ -127,7 +128,7 @@ The project is released under [LICENSE](./LICENSE).
 [signing]: https://www.unicode.org/policies/licensing_policy.html#signing
 [ticket-lifecycle]: https://icu.unicode.org/processes/ticket-lifecycle
 [tips]: https://unicode-org.github.io/icu/devsetup/cpp/
-[unicode-announcement]: http://blog.unicode.org/2016/05/icu-joins-unicode-consortium.html
+[unicode-announcement]: https://blog.unicode.org/2016/05/icu-joins-unicode-consortium.html
 [unicode-corporate-clas]: https://www.unicode.org/policies/corporate-cla-list/
 [unicode-license]: https://www.unicode.org/license.txt
 [unicode-org/icu]: https://github.com/unicode.org/icu
