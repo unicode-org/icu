@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1746225362274,
+  "lastUpdate": 1746453088122,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -66741,6 +66741,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16537900.6428,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dloehr@google.com",
+            "name": "Devon Loehr",
+            "username": "DKLoehr"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "876e2f7e78593014f930b54025ae4f7b66f95b87",
+          "message": "ICU-23107 remove unnecessary virtual specifiers",
+          "timestamp": "2025-05-05T15:21:11+02:00",
+          "tree_id": "45a4e5eeabccf2a614a76ea34d603fe345bcf59b",
+          "url": "https://github.com/unicode-org/icu/commit/876e2f7e78593014f930b54025ae4f7b66f95b87"
+        },
+        "date": 1746452823821,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 358.1072,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 52999138.8321,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 15023868.531,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 51269796.4572,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16412902.2825,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
