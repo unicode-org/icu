@@ -1,5 +1,6 @@
 #!/bin/bash
 # Copyright (C) 2020 and later: Unicode, Inc. and others.
+# License & terms of use: https://www.unicode.org/copyright.html
 
 # set VERSION to the ICU version. set top_srcdir to the parent of icurc
 # Note: You need to set LD_LIBRARY_PATH/etc before calling this script.
@@ -75,7 +76,7 @@ do
     cat >> ${DISTY_DIR}/tmp/${README} <<EOF
 # ICU Data Zip for ${VERSION}
 
-For information on Unicode ICU, see [http://icu-project.org](http://icu-project.org)
+For information on Unicode ICU, see https://icu.unicode.org/
 
 ## Contents
 
@@ -90,7 +91,7 @@ This .zip file contains:
 This file contains prebuilt data in form **${endian}**.
 ("l" for Little Endian, "b" for Big Endian, "e" for EBCDIC.)
 It may be used to simplify build and installation of ICU.
-See [http://icu-project.org](http://icu-project.org) for further information.
+See https://icu.unicode.org/ for further information.
 
 ## License
 
@@ -99,7 +100,7 @@ See [LICENSE](./LICENSE).
 > Copyright © 2016 and later Unicode, Inc. and others. All Rights Reserved.
 Unicode and the Unicode Logo are registered trademarks
 of Unicode, Inc. in the U.S. and other countries.
-[Terms of Use and License](http://www.unicode.org/copyright.html)
+[Terms of Use and License](https://www.unicode.org/copyright.html)
 
 EOF
     zip -v -j ${DISTY_DIR}/${base} \

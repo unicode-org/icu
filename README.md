@@ -32,7 +32,8 @@ OpenSSF Scorecard | [![OpenSSF Scorecard](https://api.securityscorecards.dev/pro
 
 ### Copyright & Licenses
 
-Copyright © 2016-2024 Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.
+Copyright © 2016 and later: Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.
+License & terms of use: https://www.unicode.org/copyright.html
 
 A CLA is required to contribute to this project - please refer to the [CONTRIBUTING.md](./CONTRIBUTING.md) file (or start a Pull Request) for more information.
 
