@@ -9,7 +9,7 @@
 
 #if !UCONFIG_NO_MF2
 
-#include "unicode/calendar.h"
+#include "unicode/gregocal.h"
 #include "messageformat2test.h"
 
 using namespace icu::message2;
@@ -159,13 +159,14 @@ void TestMessageFormat2::testAPISimple() {
         .setLocale(locale)
         .build(errorCode);
 
-    Calendar* cal(Calendar::createInstance(errorCode)); 
+    GregorianCalendar cal(errorCode);
    // Sunday, October 28, 2136 8:39:12 AM PST
-    cal->set(2136, Calendar::OCTOBER, 28, 8, 39, 12);
-    UDate date = cal->getTime(errorCode);
+    cal.set(2136, Calendar::OCTOBER, 28, 8, 39, 12);
 
     argsBuilder.clear();
-    argsBuilder["today"] = message2::Formattable::forDate(date);
+    DateInfo dateInfo = { cal.getTime(errorCode),
+                          "Pacific Standard Time" };
+    argsBuilder["today"] = message2::Formattable(std::move(dateInfo));
     args = MessageArguments(argsBuilder, errorCode);
     result = mf.formatToString(args, errorCode);
     assertEquals("testAPI", "Today is Sunday, October 28, 2136.", result);
@@ -188,8 +189,6 @@ void TestMessageFormat2::testAPISimple() {
         .build(errorCode);
     result = mf.formatToString(args, errorCode);
     assertEquals("testAPI", "Maria added 12 photos to her album.", result);
-
-    delete cal;
 }
 
 // Design doc example, with more details
