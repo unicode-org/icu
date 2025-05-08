@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1746471579547,
+  "lastUpdate": 1746736112317,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34467,6 +34467,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1940.1278713581828,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "795d7ac82c4b29cf721d0ad62c0b178347d453bf",
+          "message": "ICU-23054 Fix Eclipse warning, leftover from un-sharing test data",
+          "timestamp": "2025-05-08T13:20:45-07:00",
+          "tree_id": "502c7b41bb18f122297d158f44afd188ae2a298c",
+          "url": "https://github.com/unicode-org/icu/commit/795d7ac82c4b29cf721d0ad62c0b178347d453bf"
+        },
+        "date": 1746735856903,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1880.7561147131523,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
