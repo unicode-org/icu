@@ -27,6 +27,7 @@
 #include "uassert.h"
 #include "unicode/normlzr.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "dictionarydata.h"
 
 U_NAMESPACE_BEGIN
@@ -42,7 +43,11 @@ DictionaryBreakEngine::~DictionaryBreakEngine() {
 }
 
 UBool
-DictionaryBreakEngine::handles(UChar32 c, const char*) const {
+DictionaryBreakEngine::handles(UChar32 c, const char* locale) const {
+    if (DictionaryBreakEngine::suppressScriptBreak(locale, c)) {
+        // suppressed by ID
+        return false;
+    }
     return fSet.contains(c);
 }
 
@@ -84,6 +89,40 @@ DictionaryBreakEngine::setCharacters( const UnicodeSet &set ) {
     // Compact for caching
     fSet.compact();
 }
+
+UBool DictionaryBreakEngine::suppressScriptBreak(const char *locale, UScriptCode code) {
+    // get the keyword value
+    UErrorCode status = U_ZERO_ERROR;
+    char buf[ULOC_KEYWORD_AND_VALUES_CAPACITY];
+    int32_t len = uloc_getKeywordValue(locale, "dx", buf, ULOC_KEYWORD_AND_VALUES_CAPACITY, &status);
+    if (U_FAILURE(status)) return false;
+    // loop over the keyword values
+    for(int32_t i =0; i<len; i+= 5) {
+        // turn hyphen into a null
+        if(buf[i+4] != 0 && buf[i+4] == '-') {
+            buf[i+4] = 0; // terminate (in buffer):  'hira-kata' -> 'hira\0kata'
+        } // else: possibly malformed, let match fail
+
+        const char *scriptName = buf+i;
+        if (!uprv_strncmp(scriptName, "zyyy", 4)) {
+            return true; // matched 'all'
+        } else if(!uprv_strnicmp(scriptName, uscript_getShortName(code), 4)) {
+            return true; // matched the specific script
+        }
+    }
+    return false;
+}
+
+UBool DictionaryBreakEngine::suppressScriptBreak(const char *locale, UChar32 c) {
+    UErrorCode status = U_ZERO_ERROR;
+    UScriptCode code = uscript_getScript(c, &status);
+    if (U_FAILURE(status)) {
+        return false;
+    } else {
+        return suppressScriptBreak(locale, code);
+    }
+}
+
 
 /*
  ******************************************************************
