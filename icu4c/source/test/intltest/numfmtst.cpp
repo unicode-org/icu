@@ -156,6 +156,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestFormatAttributes);
   TESTCASE_AUTO(TestFieldPositionIterator);
   TESTCASE_AUTO(TestDecimal);
+  TESTCASE_AUTO(TestDecimalFormatParse7E);
   TESTCASE_AUTO(TestCurrencyFractionDigits);
   TESTCASE_AUTO(TestExponentParse);
   TESTCASE_AUTO(TestExplicitParents);
@@ -6981,6 +6982,29 @@ void NumberFormatTest::TestDecimal() {
 
 }
 
+void NumberFormatTest::TestDecimalFormatParse7E() {
+    UErrorCode  status = U_ZERO_ERROR;
+    UnicodeString testdata = u"~";
+    icu::Formattable result;
+    icu::DecimalFormat dfmt(testdata, status);
+    if (U_SUCCESS(status)) {
+        dfmt.parse(testdata, result, status);
+    }
+
+    // Test basic behavior
+    status = U_ZERO_ERROR;
+    dfmt = icu::DecimalFormat(u"~0", status);
+    ASSERT_SUCCESS(status);
+    dfmt.parse(u"200", result, status);
+    ASSERT_EQUALS(status, U_INVALID_FORMAT_ERROR);
+    status = U_ZERO_ERROR;
+    dfmt.parse(u"≈200", result, status);
+    ASSERT_SUCCESS(status);
+    if (result.getInt64() != 200) {
+        errln(UnicodeString(u"Got unexpected parse result: ") + DoubleToUnicodeString(result.getInt64()));
+    }
+}
+
 void NumberFormatTest::TestCurrencyFractionDigits() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString text1, text2;
@@ -10048,7 +10072,7 @@ void NumberFormatTest::Test13733_StrictAndLenient() {
             parsedStrictValue = ca_strict->getNumber().getInt64();
         }
         assertEquals("Strict parse of " + inputString + " using " + patternString,
-            parsedStrictValue, cas.expectedStrictParse);
+            cas.expectedStrictParse, parsedStrictValue);
 
         ppos.setIndex(0);
         df.setLenient(true);
@@ -10058,7 +10082,7 @@ void NumberFormatTest::Test13733_StrictAndLenient() {
             parsedLenientValue = ca_lenient->getNumber().getInt64();
         }
         assertEquals("Lenient parse of " + inputString + " using " + patternString,
-            parsedLenientValue, cas.expectedLenientParse);
+            cas.expectedLenientParse, parsedLenientValue);
     }
 }
 
