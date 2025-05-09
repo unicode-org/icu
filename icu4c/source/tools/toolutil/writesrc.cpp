@@ -136,7 +136,7 @@ usrc_writeFileNameGeneratedBy(
 
     time(&t);
     lt=localtime(&t);
-    if(generator==nullptr) {
+    if(generator==nullptr && lt!=nullptr) {
         strftime(buffer, sizeof(buffer), "%Y-%m-%d", lt);
         fprintf(f, pattern, prefix, prefix, filename, prefix, prefix, buffer);
     } else {
