@@ -1,0 +1,3 @@
+add_executable(icuexportdata)
+icu_add_sources(icuexportdata)
+target_link_libraries(icuexportdata PRIVATE icu_defaults icuuc toolutil)
