@@ -34535,6 +34535,7 @@ structLocale:table(nofallback){
             islamic-umalqura{""}
             iso8601{""}
             japanese{""}
+            myanmar{""}
             persian{""}
             roc{""}
         }
