@@ -68,6 +68,7 @@ void AlphabeticIndexTest::runIndexedTest( int32_t index, UBool exec, const char*
     TESTCASE_AUTO(TestJapaneseKanji);
     TESTCASE_AUTO(TestChineseUnihan);
     TESTCASE_AUTO(testHasBuckets);
+    TESTCASE_AUTO(checkMaxLabelCount);
     TESTCASE_AUTO_END;
 }
 
@@ -755,6 +756,54 @@ void AlphabeticIndexTest::checkHasBuckets(const Locale &locale, UScriptCode scri
     assertEquals(loc + u" real bucket", U_ALPHAINDEX_NORMAL, bucket->getLabelType());
     assertEquals(loc + u" expected script", script,
             uscript_getScript(bucket->getLabel().char32At(0), errorCode));
+}
+
+void AlphabeticIndexTest::checkMaxLabelCount() {
+    IcuTestErrorCode errorCode(*this, "checkMaxLabelCount");
+    UErrorCode status = U_ZERO_ERROR;
+    Locale locale("en");
+    UnicodeString loc = locale.getName();
+    AlphabeticIndex aindex(locale, status);
+
+    int32_t defaultMax = aindex.getMaxLabelCount();
+    assertEquals("Expect max count = 99", 99, defaultMax);
+
+    aindex.setMaxLabelCount(237, status);
+    if (U_FAILURE(errorCode)) {
+      dataerrln("%s %d  Error in index setMaxLabelCount",  __FILE__, __LINE__);
+      return;
+    }
+
+    // Verify that all bucket are cleared after setting max bucket count.
+    const UnicodeString bucketLabel = aindex.getBucketLabel();
+    assertEquals("Expect empty string", "", bucketLabel);
+
+    int32_t maxChanged = aindex.getMaxLabelCount();
+    assertEquals("Expect max count = 237", 237, maxChanged);
+
+    int32_t bigMax = 100000;
+    aindex.setMaxLabelCount(bigMax, errorCode);
+    if (U_FAILURE(errorCode)) {
+      dataerrln("%s %d  Error in index setMaxLabelCount to bigMax",
+                __FILE__, __LINE__);
+      return;
+    }
+    maxChanged = aindex.getMaxLabelCount();
+    assertEquals("Expect max count = 100000", bigMax, maxChanged);
+
+    int32_t numBuckets = aindex.getBucketCount(status);
+    int32_t expectedBuckets = 0x1C;
+    assertEquals("Expect numBuckets = 1", expectedBuckets, numBuckets);
+
+    // This should fail.
+    aindex.setMaxLabelCount(0, status);
+    assertEquals("Expect U_ILLEGAL_ARGUMENT on setMaxLabelCount(0)",
+		 U_ILLEGAL_ARGUMENT_ERROR, status);
+
+    // Make sure the number of buckets hasn't changed.
+    status = U_ZERO_ERROR;    
+    numBuckets = aindex.getBucketCount(status);
+    assertEquals("Expect numBuckets = 1", expectedBuckets, numBuckets);
 }
 
 #endif
