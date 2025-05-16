@@ -2356,7 +2356,7 @@ void UnicodeStringTest::TestLargeMemory() {
 #if U_PLATFORM_IS_LINUX_BASED || U_PLATFORM_IS_DARWIN_BASED
     if(quick) { return; }
     IcuTestErrorCode status(*this, "TestLargeMemory");
-    constexpr uint32_t len = 2147483643;
+    constexpr uint32_t len = (PTRDIFF_MAX - 10) / sizeof(char16_t);
     char16_t *buf = new char16_t[len];
     if (buf == nullptr) { return; }
     uprv_memset(buf, 0x4e, len * 2);
