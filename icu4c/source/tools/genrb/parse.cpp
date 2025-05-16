@@ -1026,6 +1026,15 @@ writeCollationSpecialPrimariesTOML(const char* outputdir, const char* name, cons
         lastPrimaries[i] = static_cast<uint16_t>((data->getLastPrimaryForGroup(UCOL_REORDER_CODE_FIRST + i) + 1) >> 16);
     }
 
+    uint8_t compressibleBytes[32] = {};
+    for (int32_t i = 0; i < 256; ++i) {
+        if (data->compressibleBytes[i]) {
+            int32_t arrIndex = i >> 3;
+            uint8_t mask = (1 << (i & 7));
+            compressibleBytes[arrIndex] |= mask;
+        }
+    }
+
     uint32_t numericPrimary = data->numericPrimary;
     if (numericPrimary & 0xFFFFFF) {
         printf("Lower 24 bits set in numeric primary");
@@ -1034,6 +1043,7 @@ writeCollationSpecialPrimariesTOML(const char* outputdir, const char* name, cons
     }
 
     usrc_writeArray(f, "last_primaries = [\n  ", lastPrimaries, 16, 4, "  ", "\n]\n");
+    usrc_writeArray(f, "compressible_bytes = [\n  ", compressibleBytes, 8, 32, "  ", "\n]\n");
     fprintf(f, "numeric_primary = 0x%X\n", numericPrimary >> 24);
     fclose(f);
 }
