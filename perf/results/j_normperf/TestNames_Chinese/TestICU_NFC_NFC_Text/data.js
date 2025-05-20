@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1747485621956,
+  "lastUpdate": 1747745794984,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34587,6 +34587,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 4.988428454673646,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alexfh@google.com",
+            "name": "Alexander Kornienko",
+            "username": "alexfh"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "353866d1ecaa4d3d910993c1b54cd243c89237a2",
+          "message": "ICU-23122 Fix a comparison error\n\nThe error was found by clang's recently improved -Wtautological-overlap-compare\ndiagnostic.",
+          "timestamp": "2025-05-20T14:32:45+02:00",
+          "tree_id": "3c167f9ad48b2be9eb3136cc55d37eda499a0f8a",
+          "url": "https://github.com/unicode-org/icu/commit/353866d1ecaa4d3d910993c1b54cd243c89237a2"
+        },
+        "date": 1747745528907,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 4.247726880797057,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
