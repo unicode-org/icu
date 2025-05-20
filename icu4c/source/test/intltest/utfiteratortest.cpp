@@ -5,6 +5,13 @@
 // created: 2024aug12 Markus W. Scherer
 
 #include <algorithm>
+#include <array>
+#include <iterator>
+#include <forward_list>
+#include <iostream>
+#include <list>
+#include <ranges>
+#include <streambuf>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -1195,3 +1202,126 @@ void UTFIteratorTest::zigzag(const ImplTest<Unit> &test, size_t i,
         }
     }
 }
+
+#if __cpp_lib_concepts >= 2020'02  // Test against C++20 concepts.
+namespace {
+template <typename Iterator>
+using CodePointIterator = UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, Iterator>;
+
+// Check that the iterators satisfy the right concepts.
+namespace input {
+using CodeUnitIterator = std::istreambuf_iterator<char16_t>;
+static_assert(std::input_iterator<CodeUnitIterator>);
+static_assert(!std::forward_iterator<CodeUnitIterator>);
+static_assert(std::input_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(!std::forward_iterator<CodePointIterator<CodeUnitIterator>>);
+} // namespace input
+namespace forward {
+using CodeUnitIterator = std::forward_list<char16_t>::iterator;
+static_assert(std::forward_iterator<CodeUnitIterator>);
+static_assert(!std::bidirectional_iterator<CodeUnitIterator>);
+static_assert(std::forward_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(!std::bidirectional_iterator<CodePointIterator<CodeUnitIterator>>);
+} // namespace forward
+namespace bidirectional {
+using CodeUnitIterator = std::list<char16_t>::iterator;
+static_assert(std::bidirectional_iterator<CodeUnitIterator>);
+static_assert(!std::random_access_iterator<CodeUnitIterator>);
+static_assert(std::bidirectional_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(!std::random_access_iterator<CodePointIterator<CodeUnitIterator>>);
+} // namespace bidirectional
+namespace contiguous {
+using CodeUnitIterator = std::u16string::iterator;
+static_assert(std::contiguous_iterator<CodeUnitIterator>);
+static_assert(std::bidirectional_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(!std::random_access_iterator<CodePointIterator<CodeUnitIterator>>);
+} // namespace contiguous
+
+void uncommonInputRange() {
+    // Reads a sequence of space-separated hex code units from standard input.
+    auto codeUnits = std::views::istream<uint16_t>(std::cin >> std::hex);
+    using CodeUnits = decltype(codeUnits);
+    // This range has a sentinel.
+    static_assert(!std::ranges::common_range<CodeUnits>);
+    static_assert(std::ranges::input_range<CodeUnits>);
+    static_assert(!std::ranges::forward_range<CodeUnits>);
+    // TODO(egg): This does not compile.
+    // UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, std::ranges::iterator_t<CodeUnits>> it;
+}
+
+void uncommonForwardRange() {
+    const std::u16string source;
+    constexpr std::array<char16_t, 7> hardBreaks{0x0A, 0x0B, 0x0C, 0x0D, 0x85, 0x2028, 0x2029};
+    // Code units from the third line in `source`.
+    auto codeUnits =
+        *(source | std::ranges::views::lazy_split(hardBreaks) | std::views::drop(2)).begin();
+    using CodeUnits = decltype(codeUnits);
+    // This range has a sentinel.
+    static_assert(!std::ranges::common_range<CodeUnits>);
+    // Even though `source` is contiguous, the lazy split makes this forward-only.
+    static_assert(std::ranges::forward_range<CodeUnits>);
+    static_assert(!std::ranges::bidirectional_range<CodeUnits>);
+    // TODO(egg): This does not compile.
+    // UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, std::ranges::iterator_t<CodeUnits>> it;
+}
+
+void commonForwardRange() {
+    const std::forward_list<char16_t> source;
+    constexpr std::array<char16_t, 7> hardBreaks{0x0A, 0x0B, 0x0C, 0x0D, 0x85, 0x2028, 0x2029};
+    // Code units from the third line in `source`.
+    auto codeUnits = *(source | std::ranges::views::split(hardBreaks) | std::views::drop(2)).begin();
+    using CodeUnits = decltype(codeUnits);
+    // This range does not have a sentinel.
+    static_assert(std::ranges::common_range<CodeUnits>);
+    // Forward-only because we started from a forward list.
+    static_assert(std::ranges::forward_range<CodeUnits>);
+    static_assert(!std::ranges::bidirectional_range<CodeUnits>);
+    // TODO(egg): UTFStringCodePoints could support this.
+    struct CodePoints : std::ranges::view_interface<CodePoints> {
+      using iterator = UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, std::ranges::iterator_t<CodeUnits>>;
+        CodePoints(CodeUnits codeUnits) : codeUnits(codeUnits) {}
+        iterator begin() const { return iterator(codeUnits.begin(), codeUnits.end()); }
+        iterator end() const { return iterator(codeUnits.end(), codeUnits.end()); }
+        CodeUnits const codeUnits;
+    };
+    static_assert(std::ranges::common_range<CodePoints>);
+    static_assert(std::ranges::forward_range<CodePoints>);
+    static_assert(!std::ranges::bidirectional_range<CodePoints>);
+}
+
+void commonBidirectionalRange() {
+    const std::u8string card;
+    // Read code units from `card`, skipping any bytes set to FF.
+    auto codeUnits = card | std::ranges::views::filter([](char8_t c) { return c != 0xFF; });
+    using CodeUnits = decltype(codeUnits);
+    // This range does not have a sentinel.
+    static_assert(std::ranges::common_range<CodeUnits>);
+    // Bidirectional but not contiguous (there are holes where the bytes are FF).
+    static_assert(std::ranges::bidirectional_range<CodeUnits>);
+    static_assert(!std::ranges::contiguous_range<CodeUnits>);
+    // TODO(egg): UTFStringCodePoints could support this.
+    struct CodePoints : std::ranges::view_interface<CodePoints> {
+        using iterator = UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, std::ranges::iterator_t<CodeUnits>>;
+        CodePoints(CodeUnits codeUnits) : codeUnits(codeUnits) {}
+        iterator begin() { return iterator(codeUnits.begin(), codeUnits.end()); }
+        iterator end() { return iterator(codeUnits.end(), codeUnits.end()); }
+        CodeUnits codeUnits;
+    };
+    static_assert(std::ranges::common_range<CodePoints>);
+    static_assert(std::ranges::forward_range<CodePoints>);
+    static_assert(std::ranges::bidirectional_range<CodePoints>);
+}
+
+void contiguousRange() {
+    std::u16string codeUnits;
+    static_assert(std::ranges::contiguous_range<decltype(codeUnits)>);
+    auto codePoints = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits);
+    static_assert(std::ranges::bidirectional_range<decltype(codePoints)>);
+    static_assert(!std::ranges::random_access_range<decltype(codePoints)>);
+    auto unsafeCodePoints = unsafeUTFStringCodePoints<char32_t>(codeUnits);
+    static_assert(std::ranges::bidirectional_range<decltype(unsafeCodePoints)>);
+    static_assert(!std::ranges::random_access_range<decltype(unsafeCodePoints)>);
+}
+
+} // namespace
+#endif
