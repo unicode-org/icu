@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1747486096808,
+  "lastUpdate": 1747746297418,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42333,6 +42333,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 51.9424,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alexfh@google.com",
+            "name": "Alexander Kornienko",
+            "username": "alexfh"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "353866d1ecaa4d3d910993c1b54cd243c89237a2",
+          "message": "ICU-23122 Fix a comparison error\n\nThe error was found by clang's recently improved -Wtautological-overlap-compare\ndiagnostic.",
+          "timestamp": "2025-05-20T14:32:45+02:00",
+          "tree_id": "3c167f9ad48b2be9eb3136cc55d37eda499a0f8a",
+          "url": "https://github.com/unicode-org/icu/commit/353866d1ecaa4d3d910993c1b54cd243c89237a2"
+        },
+        "date": 1747746034701,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.1299,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 51.9735,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
