@@ -162,6 +162,7 @@ usrc_writeArray(FILE *f,
     p32=nullptr;
     p64=nullptr;
     switch(width) {
+    case 1:
     case 8:
         p8=(const uint8_t *)p;
         break;
@@ -192,6 +193,7 @@ usrc_writeArray(FILE *f,
             }
         }
         switch(width) {
+        case 1:
         case 8:
             value=p8[i];
             break;
@@ -208,7 +210,11 @@ usrc_writeArray(FILE *f,
             value=0; /* unreachable */
             break;
         }
-        fprintf(f, value<=9 ? "%" PRId64 : "0x%" PRIx64, value);
+        if (width == 1) {
+            fprintf(f, value ? "true" : "false");
+        } else {
+            fprintf(f, value<=9 ? "%" PRId64 : "0x%" PRIx64, value);
+        }
     }
     if(postfix!=nullptr) {
         fputs(postfix, f);
