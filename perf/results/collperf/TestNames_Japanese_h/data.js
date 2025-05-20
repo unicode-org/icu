@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1747486332399,
+  "lastUpdate": 1747746635007,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -67119,6 +67119,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5358603.737,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alexfh@google.com",
+            "name": "Alexander Kornienko",
+            "username": "alexfh"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "353866d1ecaa4d3d910993c1b54cd243c89237a2",
+          "message": "ICU-23122 Fix a comparison error\n\nThe error was found by clang's recently improved -Wtautological-overlap-compare\ndiagnostic.",
+          "timestamp": "2025-05-20T14:32:45+02:00",
+          "tree_id": "3c167f9ad48b2be9eb3136cc55d37eda499a0f8a",
+          "url": "https://github.com/unicode-org/icu/commit/353866d1ecaa4d3d910993c1b54cd243c89237a2"
+        },
+        "date": 1747746374361,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 211.8872,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21144251.5381,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5220239.6022,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20354242.4998,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5584023.4711,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
