@@ -61,7 +61,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "16.0"
+#define U_UNICODE_VERSION "17.0"
 
 /**
  * \file

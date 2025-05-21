@@ -47,32 +47,28 @@ and see the change logs below.
 
 ---------------------------------------------------------------------------- ***
 
-Unicode 16.0 update for ICU 76
+Unicode 17.0 update for ICU 78
 
-https://www.unicode.org/versions/Unicode16.0.0/
-https://www.unicode.org/versions/beta-16.0.0.html
+https://www.unicode.org/versions/Unicode17.0.0/
+https://www.unicode.org/versions/beta-17.0.0.html
 https://www.unicode.org/Public/draft/
 https://www.unicode.org/reports/uax-proposed-updates.html
-https://www.unicode.org/reports/tr44/tr44-33.html
+https://www.unicode.org/reports/tr44/tr44-35.html
 
-https://unicode-org.atlassian.net/browse/ICU-22707 Unicode 16
-https://unicode-org.atlassian.net/browse/CLDR-17226 BRS Unicode 16
-
-https://github.com/unicode-org/unicodetools/pull/774 delete the RecommendedSetGenerator
-
-https://github.com/unicode-org/unicodetools/issues/492 adjust cldr/*BreakTest generation for Unicode 15.1
+https://unicode-org.atlassian.net/browse/ICU-23038 Unicode 17
+https://unicode-org.atlassian.net/browse/CLDR-18283 BRS Unicode 17
 
 * Command-line environment setup
 
 Markus:
 
 export UNIDATA_ROOT=~/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni16/final
+export UNICODE_DATA=$UNIDATA_ROOT/uni17/beta
 export CLDR_SRC=~/cldr/uni/src
 export ICU_ROOT=~/icu/uni
 export ICU_SRC=$ICU_ROOT/src
 export ICU_OUT=$ICU_ROOT/dbg
-export ICUDT=icudt76b
+export ICUDT=icudt78b
 export ICU4C_DATA_IN=$ICU_SRC/icu4c/source/data/in
 export ICU4C_UNIDATA=$ICU_SRC/icu4c/source/data/unidata
 export LD_LIBRARY_PATH=$ICU_OUT/icu4c/lib
@@ -81,12 +77,12 @@ export UNICODE_TOOLS=~/unitools/mine/src
 Elango:
 
 export UNIDATA_ROOT=~/oss/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni16/final
+export UNICODE_DATA=$UNIDATA_ROOT/uni17/beta
 export CLDR_SRC=~/oss/cldr/mine/src
 export ICU_ROOT=~/oss/icu
 export ICU_SRC=$ICU_ROOT
 export ICU_OUT=$ICU_ROOT
-export ICUDT=icudt76b
+export ICUDT=icudt78b
 export ICU4C_DATA_IN=$ICU_SRC/icu4c/source/data/in
 export ICU4C_UNIDATA=$ICU_SRC/icu4c/source/data/unidata
 export LD_LIBRARY_PATH=$ICU_OUT/icu4c/lib
@@ -118,14 +114,14 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
   https://github.com/unicode-org/unicodetools/blob/main/docs/inputdata.md
 - mkdir -p $UNICODE_DATA
 - download Unicode files into $UNICODE_DATA
-  + use an FTP client; anonymous FTP from www.unicode.org at /Public/draft etc.
+  + use an FTP client; anonymous FTP from www.unicode.org at /Public/draft
   + subfolders: emoji, idna, security, ucd, uca
   + for pre-release (alpha, beta) data files:
     ~ if one of us produces the alpha.zip or beta.zip collection of data files for publication,
       then we can use its contents directly (no FTP from unicode.org necessary)
     ~ otherwise download from https://www.unicode.org/Public/draft/
-    ~ you can omit or discard the UCD/charts/ and UCD/ucdxml/ files/folders
-    ~ you can omit or discard UCD/ucd/Unihan.zip
+    ~ you can omit or discard the charts/ and ucdxml/ files/folders
+    ~ you can omit or discard ucd/Unihan.zip
   + alternate way of fetching files, if available:
     copy the files from a Unicode Tools workspace that is up to date with
     https://github.com/unicode-org/unicodetools
@@ -133,26 +129,7 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
     ~ before the Unicode release copy files from "dev" subfolders, for example
       https://github.com/unicode-org/unicodetools/tree/main/unicodetools/data/ucd/dev
   + for final-release data files, the source of truth is the files in
-    https://www.unicode.org/Public/(version) [=UCD],
-    https://www.unicode.org/Public/UCA/(version),
-    https://www.unicode.org/Public/idna/(version),
-    etc.
-- get the CLDR version of GraphemeBreakTest.txt from CLDR (if it has been updated there already)
-  or from the UCD/cldr/ output folder of the Unicode Tools:
-  From Unicode 12/CLDR 35/ICU 64 to Unicode 15.0/CLDR 43/ICU 73,
-  CLDR used modified grapheme break rules.
-  This might happen again.
-  + To check in the Unicode Tools workspace:
-    ~/unitools/mine/Generated$ meld UCD/16.0.0/auxiliary/*GraphemeBreakTest.txt UCD/16.0.0/cldr/GraphemeBreakTest-cldr.txt
-  + If different, and after copying into CLDR:
-    cp $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt icu4c/source/test/testdata
-  or
-    cp ~/unitools/mine/Generated/UCD/16.0.0/cldr/GraphemeBreakTest-cldr.txt icu4c/source/test/testdata/GraphemeBreakTest.txt
-    cp ~/unitools/mine/Generated/UCD/16.0.0/cldr/GraphemeBreakTest-cldr.txt $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
-    cp ~/unitools/mine/Generated/UCD/16.0.0/cldr/GraphemeBreakTest-cldr.html $CLDR_SRC/common/properties/segments/GraphemeBreakTest.html
-  + We may need CLDR versions of WordBreakTest.txt and LineBreakTest.txt
-    unless Unicode 16 and CLDR 46 eliminate their differences:
-    unicodetools issue #492
+    https://www.unicode.org/Public/(version)
 
 * process and/or copy files
 - cd $ICU_SRC/tools/unicode
@@ -336,14 +313,14 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
   output:
     ...
     make[1]: Entering directory '/usr/local/google/home/mscherer/icu/uni/dbg/icu4c/data'
-    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt76b
-    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt76b
-    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt76l.dat ./out/icu4j/icudt76b.dat -s ./out/build/icudt76l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt76b
-    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt76b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt76b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt76b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt76b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt76b"
-    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt76b/
+    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt78b
+    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt78b
+    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt78l.dat ./out/icu4j/icudt78b.dat -s ./out/build/icudt78l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt78b
+    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt78b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt78b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt78b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt78b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt78b"
+    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt78b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icudata.jar /tmp/icu4j/main/shared/data
-    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt76b/
+    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt78b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icutzdata.jar /tmp/icu4j/main/shared/data
     make[1]: Leaving directory '/usr/local/google/home/mscherer/icu/uni/dbg/icu4c/data'
@@ -378,16 +355,11 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
 *** CLDR numbering systems
 - look for new sets of decimal digits (gc=ND & nv=4) and add to CLDR
   for example:
-    ~/unitools/mine/src$ diff -u unicodetools/data/ucd/15.1.0/extracted/DerivedGeneralCategory.txt unicodetools/data/ucd/dev/extracted/DerivedGeneralCategory.txt | grep '; Nd' | egrep '^\+'
+    ~/unitools/mine/src$ diff -u unicodetools/data/ucd/16.0.0/extracted/DerivedGeneralCategory.txt unicodetools/data/ucd/dev/extracted/DerivedGeneralCategory.txt | grep '; Nd' | egrep '^\+'
     -->
-      +10D40..10D49  ; Nd #  [10] GARAY DIGIT ZERO..GARAY DIGIT NINE
-      +116D0..116E3  ; Nd #  [20] MYANMAR PAO DIGIT ZERO..MYANMAR EASTERN PWO KAREN DIGIT NINE
-      +11BF0..11BF9  ; Nd #  [10] SUNUWAR DIGIT ZERO..SUNUWAR DIGIT NINE
-      +16130..16139  ; Nd #  [10] GURUNG KHEMA DIGIT ZERO..GURUNG KHEMA DIGIT NINE
-      +16D70..16D79  ; Nd #  [10] KIRAT RAI DIGIT ZERO..KIRAT RAI DIGIT NINE
-      +1CCF0..1CCF9  ; Nd #  [10] OUTLINED DIGIT ZERO..OUTLINED DIGIT NINE
-      +1E5F1..1E5FA  ; Nd #  [10] OL ONAL DIGIT ZERO..OL ONAL DIGIT NINE
-  --> https://github.com/unicode-org/cldr/pull/3658
+      +11DE0..11DE9  ; Nd #  [10] TOLONG SIKI DIGIT ZERO..TOLONG SIKI DIGIT NINE
+      +16DA0..16DA9  ; Nd #  [10] CHISOI DIGIT ZERO..CHISOI DIGIT NINE
+  --> https://github.com/unicode-org/cldr/pull/4726
 
 *** merge the Unicode update branch back onto the main branch
 - make sure that changes to Unicode tools are checked in:
