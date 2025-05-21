@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1747861906814,
+  "lastUpdate": 1747868037879,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -67281,6 +67281,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5472948.7195,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "b30c63d1b930610850489a67433b9c3ba55d6f43",
+          "message": "ICU-23054 Fix several types of errorprone warnings\n\nFixed: `CheckReturnValue`, `EqualsHashCode`, `JavaTimeDefaultTimeZone`\nAnd a couple of resource leaks (streams opened and not closed)",
+          "timestamp": "2025-05-21T15:34:33-07:00",
+          "tree_id": "9ab9831ef9aca29bc93606b0ed75b00bde0eb3d0",
+          "url": "https://github.com/unicode-org/icu/commit/b30c63d1b930610850489a67433b9c3ba55d6f43"
+        },
+        "date": 1747867773923,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 209.8134,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21102911.3094,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5456489.5526,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20058865.1099,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5487795.608,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
