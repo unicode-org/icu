@@ -363,7 +363,7 @@ public class PersonNameFormatterImpl {
         Locale.Builder builder = new Locale.Builder();
         if (oldLocale != null) {
             workingLocale = oldLocale;
-            builder.setLocale(oldLocale);
+            var unused = builder.setLocale(oldLocale);
             localeScript = ULocale.addLikelySubtags(ULocale.forLocale(oldLocale)).getScript();
         } else {
             ULocale tmpLocale = ULocale.addLikelySubtags(new ULocale("und_" + scriptCode));
@@ -372,7 +372,7 @@ public class PersonNameFormatterImpl {
             localeScript = workingLocale.getScript();
 
             if (regionCode != null) {
-                builder.setRegion(regionCode);
+                var unused = builder.setRegion(regionCode);
             }
         }
 

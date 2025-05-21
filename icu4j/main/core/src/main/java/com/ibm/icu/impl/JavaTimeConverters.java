@@ -91,6 +91,7 @@ public class JavaTimeConverters {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @SuppressWarnings("JavaTimeDefaultTimeZone")
     public static Calendar temporalToCalendar(OffsetTime time) {
         return temporalToCalendar(time.atDate(LocalDate.now()));
     }

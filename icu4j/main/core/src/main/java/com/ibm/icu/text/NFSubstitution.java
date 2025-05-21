@@ -1651,11 +1651,10 @@ class NumeratorSubstitution extends NFSubstitution {
         if (withZeros) {
             String workText = text;
             ParsePosition workPos = new ParsePosition(1);
-            //int digit;
 
             while (workText.length() > 0 && workPos.getIndex() != 0) {
                 workPos.setIndex(0);
-                /*digit = */ruleSet.parse(workText, workPos, 1, nonNumericalExecutedRuleMask, recursionCount).intValue(); // parse zero or nothing at all
+                var unused = ruleSet.parse(workText, workPos, 1, nonNumericalExecutedRuleMask, recursionCount).intValue(); // parse zero or nothing at all
                 if (workPos.getIndex() == 0) {
                     // we failed, either there were no more zeros, or the number was formatted with digits
                     // either way, we're done
