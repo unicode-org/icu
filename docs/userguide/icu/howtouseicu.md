@@ -30,13 +30,13 @@ In addition, ICU4C installs several scripts and makefile fragments that help
 build other code using ICU.
 
 For C++, note that there are [Recommended Build
-Options](icu4c/build#recommended-build-options)
+Options](../icu4c/build#recommended-build-options)
 (both for normal use and for ICU as system-level libraries) which are not
 default simply for compatibility with older ICU-using code.
 
 Starting with ICU 49, the ICU4C Readme has a short section about
 [User-Configurable
-Settings](icu4c/build#user-configurable-settings).
+Settings](../icu4c/build#user-configurable-settings).
 
 ## C++ Makefiles
 
@@ -154,13 +154,13 @@ ICU C++ APIs are normally defined in a versioned namespace, for example
 "icu_50". There is a stable "icu" alias which should be used instead. (Entry
 point versioning is only to allow for multiple ICU versions linked into one
 program. [It is optional and should be off for system
-libraries.](icu4c/build#recommended-build-options))
+libraries.](../icu4c/build#recommended-build-options))
 
 By default, and only for backward compatibility, the ICU headers contain a line
 `using namespace icu_50;` which makes all ICU APIs visible in/with the global
 namespace (and potentially collide with non-ICU APIs there). One of the
 [Recommended Build
-Options](icu4c/build#recommended-build-options)
+Options](../icu4c/build#recommended-build-options)
 is to turn this off.
 
 To write forward declarations, use
@@ -189,7 +189,7 @@ samples. Their paths are given in the installed `Makefile.inc` (see above).
 
 ### Data Packaging Settings
 
-The `pkgdata` tool (see [Packaging ICU4C](packaging/index.md) ) makes use of the
+The `pkgdata` tool (see [Packaging ICU4C](../icu4c/packaging/index.md) ) makes use of the
 installed file `**$(prefix)/lib/icu/pkgdata.inc**` to set parameters for data
 packaging operations that require use of platform compilers and linkers ( in
 `static` or `dll` mode). `pkgdata` uses the icu-config script in order to locate
