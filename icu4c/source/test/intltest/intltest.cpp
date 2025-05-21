@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cinttypes>
 #include <cmath>
 #include <math.h>
 #include <string_view>
@@ -73,12 +74,12 @@ UCharToUnicodeString(char16_t c) { return {c}; }
 // [rtg] Just to get things working
 UnicodeString
 operator+(const UnicodeString& left,
-      long num)
+      int64_t num)
 {
     char buffer[64];    // nos changed from 10 to 64
     char danger = 'p';  // guard against overrunning the buffer (rtg)
 
-    snprintf(buffer, sizeof(buffer), "%ld", num);
+    snprintf(buffer, sizeof(buffer), "%" PRId64, num);
     assert(danger == 'p');
 
     return left + buffer;
@@ -86,12 +87,12 @@ operator+(const UnicodeString& left,
 
 UnicodeString
 operator+(const UnicodeString& left,
-      unsigned long num)
+      uint64_t num)
 {
     char buffer[64];    // nos changed from 10 to 64
     char danger = 'p';  // guard against overrunning the buffer (rtg)
 
-    snprintf(buffer, sizeof(buffer), "%lu", num);
+    snprintf(buffer, sizeof(buffer), "%" PRIu64, num);
     assert(danger == 'p');
 
     return left + buffer;
@@ -103,11 +104,7 @@ Int64ToUnicodeString(int64_t num)
     char buffer[64];    // nos changed from 10 to 64
     char danger = 'p';  // guard against overrunning the buffer (rtg)
 
-#if defined(_MSC_VER)
-    snprintf(buffer, sizeof(buffer), "%I64d", num);
-#else
-    snprintf(buffer, sizeof(buffer), "%lld", static_cast<long long>(num));
-#endif
+    snprintf(buffer, sizeof(buffer), "%" PRId64, num);
     assert(danger == 'p');
 
     return buffer;
@@ -142,14 +139,6 @@ operator+(const UnicodeString& left,
 
     return left + buffer;
 }
-
-#if 0
-UnicodeString
-operator+(const UnicodeString& left,
-          int64_t num) {
-  return left + Int64ToUnicodeString(num);
-}
-#endif
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -232,13 +221,18 @@ UnicodeString toString(const Formattable& f) {
 
 // useful when operator+ won't cooperate
 UnicodeString toString(int32_t n) {
-    return UnicodeString() + static_cast<long>(n);
+    return UnicodeString() + static_cast<int64_t>(n);
 }
 
 
 
 UnicodeString toString(UBool b) {
-  return b ? UnicodeString("true"):UnicodeString("false");
+    return b ? b != 1 ? UnicodeString("static_cast<UBool>(") + b + ")" : UnicodeString("true")
+             : UnicodeString("false");
+}
+
+UnicodeString toString(bool b) {
+  return b ? UnicodeString("true") : UnicodeString("false");
 }
 
 UnicodeString toString(const UnicodeSet& uniset, UErrorCode& status) {
@@ -249,17 +243,17 @@ UnicodeString toString(const UnicodeSet& uniset, UErrorCode& status) {
 
 // stephen - cleaned up 05/05/99
 UnicodeString operator+(const UnicodeString& left, char num)
-{ return left + static_cast<long>(num); }
+{ return left + static_cast<int64_t>(num); }
 UnicodeString operator+(const UnicodeString& left, short num)
-{ return left + static_cast<long>(num); }
+{ return left + static_cast<int64_t>(num); }
 UnicodeString operator+(const UnicodeString& left, int num)
-{ return left + static_cast<long>(num); }
+{ return left + static_cast<int64_t>(num); }
 UnicodeString operator+(const UnicodeString& left, unsigned char num)
-{ return left + static_cast<unsigned long>(num); }
+{ return left + static_cast<uint64_t>(num); }
 UnicodeString operator+(const UnicodeString& left, unsigned short num)
-{ return left + static_cast<unsigned long>(num); }
+{ return left + static_cast<uint64_t>(num); }
 UnicodeString operator+(const UnicodeString& left, unsigned int num)
-{ return left + static_cast<unsigned long>(num); }
+{ return left + static_cast<uint64_t>(num); }
 UnicodeString operator+(const UnicodeString& left, float num)
 { return left + static_cast<double>(num); }
 
@@ -2091,12 +2085,22 @@ UBool IntlTest::assertEquals(const char* message, std::u16string_view expected,
         possibleDataError);
 }
 
-UBool IntlTest::assertEquals(const char* message,
-                             int32_t expected,
-                             int32_t actual) {
+bool IntlTest::assertSigned64Equals(const char *message, int64_t expected, int64_t actual) {
     if (expected != actual) {
-        errln(UnicodeString("FAIL: ") + message + "; got " +
-              actual + "=0x" + toHex(actual) +
+        errln(UnicodeString("FAIL: ") + message + "; got " + actual + "; expected " + expected);
+        return false;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln(UnicodeString("Ok: ") + message + "; got " + actual);
+    }
+#endif
+    return true;
+}
+
+bool IntlTest::assertSigned32Equals(const char *message, int32_t expected, int32_t actual) {
+    if (expected != actual) {
+        errln(UnicodeString("FAIL: ") + message + "; got " + actual + "=0x" + toHex(actual) +
               "; expected " + expected + "=0x" + toHex(expected));
         return false;
     }
@@ -2108,18 +2112,18 @@ UBool IntlTest::assertEquals(const char* message,
     return true;
 }
 
-UBool IntlTest::assertEquals(const char* message,
-                             int64_t expected,
-                             int64_t actual) {
+bool IntlTest::assertCodePointEquals(const char *message, char32_t expected, char32_t actual) {
     if (expected != actual) {
-        errln(UnicodeString("FAIL: ") + message + "; got int64 " +
-              Int64ToUnicodeString(actual) + 
-              "; expected " + Int64ToUnicodeString(expected) );
+        errln(UnicodeString("FAIL: ") + message + "; got U+" + toHex(actual, actual <= 0xFFFF ? 4 : -1) +
+              " " + UnicodeString(static_cast<UChar32>(actual)) + "; expected U+" +
+              toHex(expected, expected <= 0xFFFF ? 4 : -1) + +" " +
+              UnicodeString(static_cast<UChar32>(expected)));
         return false;
     }
 #ifdef VERBOSE_ASSERTIONS
     else {
-      logln(UnicodeString("Ok: ") + message + "; got int64 " + Int64ToUnicodeString(actual));
+        logln(UnicodeString("Ok: ") + message + "; got U+" + toHex(actual, actual <= 0xFFFF ? 4 : -1) +
+              " " + UnicodeString(static_cast<UChar32>(actual)));
     }
 #endif
     return true;
@@ -2143,18 +2147,29 @@ UBool IntlTest::assertEquals(const char* message,
     return true;
 }
 
-UBool IntlTest::assertEquals(const char* message,
-                             UBool expected,
-                             UBool actual) {
+bool IntlTest::assertBooleanEquals(const char *message, int8_t expected, int8_t actual) {
     if (expected != actual) {
-        errln(UnicodeString("FAIL: ") + message + "; got " +
-              toString(actual) +
-              "; expected " + toString(expected));
+        errln(UnicodeString("FAIL: ") + message + "; got " + toString(actual) + "; expected " +
+              toString(expected));
         return false;
     }
 #ifdef VERBOSE_ASSERTIONS
     else {
-      logln(UnicodeString("Ok: ") + message + "; got " + toString(actual));
+        logln(UnicodeString("Ok: ") + message + "; got " + toString(actual));
+    }
+#endif
+    return true;
+}
+
+bool IntlTest::assertBooleanNotEquals(const char *message, int8_t expected, int8_t actual) {
+    if (expected == actual) {
+        errln(UnicodeString("FAIL: ") + message + "; got " + toString(actual) + "; expected != " +
+              toString(expected));
+        return false;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln(UnicodeString("Ok: ") + message + "; got " + toString(actual));
     }
 #endif
     return true;
@@ -2259,9 +2274,22 @@ UBool IntlTest::assertEquals(const char* message,
     return true;
 }
 
-UBool IntlTest::assertNotEquals(const char* message,
-                                int32_t expectedNot,
-                                int32_t actual) {
+bool IntlTest::assertSigned64NotEquals(const char *message, int64_t expected, int64_t actual) {
+    if (expected == actual) {
+        errln(UnicodeString("FAIL: ") + message + "; got " + actual + "; expected != " + expected);
+        return false;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln(UnicodeString("Ok: ") + message + "; got " + actual);
+    }
+#endif
+    return true;
+}
+
+bool IntlTest::assertSigned32NotEquals(const char* message,
+                                       int32_t expectedNot,
+                                       int32_t actual) {
     if (expectedNot == actual) {
         errln(UnicodeString("FAIL: ") + message + "; got " + actual + "=0x" + toHex(actual) +
               "; expected != " + expectedNot);
@@ -2271,6 +2299,23 @@ UBool IntlTest::assertNotEquals(const char* message,
     else {
         logln(UnicodeString("Ok: ") + message + "; got " + actual + "=0x" + toHex(actual) +
               " != " + expectedNot);
+    }
+#endif
+    return true;
+}
+
+bool IntlTest::assertCodePointNotEquals(const char *message, char32_t expected, char32_t actual) {
+    if (expected == actual) {
+        errln(UnicodeString("FAIL: ") + message + "; got U+" + toHex(actual, actual <= 0xFFFF ? 4 : -1) +
+              " " + UnicodeString(static_cast<UChar32>(actual)) + "; expected != U+" +
+              toHex(expected, expected <= 0xFFFF ? 4 : -1) + +" " +
+              UnicodeString(static_cast<UChar32>(expected)));
+        return false;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln(UnicodeString("Ok: ") + message + "; got U+" + toHex(actual, actual <= 0xFFFF ? 4 : -1) +
+              " " + UnicodeString(static_cast<UChar32>(actual)));
     }
 #endif
     return true;
@@ -2308,7 +2353,7 @@ UBool IntlTest::assertEqualsNear(const char* message,
 
 static char ASSERT_BUF[256];
 
-static const char* extractToAssertBuf(std::u16string_view message) {
+const char* IntlTest::extractToAssertBuf(std::u16string_view message) {
     UnicodeString buf;
     escape(message, buf);
     buf.extract(0, 0x7FFFFFFF, ASSERT_BUF, sizeof(ASSERT_BUF) - 1, nullptr);
@@ -2340,21 +2385,7 @@ UBool IntlTest::assertEquals(std::u16string_view message,
                              const char* actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
 }
-UBool IntlTest::assertEquals(std::u16string_view message,
-                             UBool expected,
-                             UBool actual) {
-    return assertEquals(extractToAssertBuf(message), expected, actual);
-}
-UBool IntlTest::assertEquals(std::u16string_view message,
-                             int32_t expected,
-                             int32_t actual) {
-    return assertEquals(extractToAssertBuf(message), expected, actual);
-}
-UBool IntlTest::assertEquals(std::u16string_view message,
-                             int64_t expected,
-                             int64_t actual) {
-    return assertEquals(extractToAssertBuf(message), expected, actual);
-}
+
 UBool IntlTest::assertEquals(std::u16string_view message,
                              double expected,
                              double actual) {
@@ -2374,11 +2405,6 @@ UBool IntlTest::assertEquals(std::u16string_view message,
                              const std::vector<std::string>& expected,
                              const std::vector<std::string>& actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
-}
-UBool IntlTest::assertNotEquals(std::u16string_view message,
-                                int32_t expectedNot,
-                                int32_t actual) {
-    return assertNotEquals(extractToAssertBuf(message), expectedNot, actual);
 }
 UBool IntlTest::assertEqualsNear(std::u16string_view message,
                                  double expected,

@@ -592,6 +592,9 @@
     <ClCompile Include="usetheaderonlytest.cpp">
       <Filter>misc</Filter>
     </ClCompile>
+    <ClCompile Include="intltesttest.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">

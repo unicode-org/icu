@@ -52,11 +52,13 @@ extern IntlTest *createStaticUnicodeSetsTest();
 #endif
 static IntlTest *createUHashTest();
 extern IntlTest *createUTFIteratorTest();
+extern IntlTest *createIntlTestTest();
 
 void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite Utilities: ");
     TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO_CREATE_CLASS(IntlTestTest);
     TESTCASE_AUTO_CLASS(MultithreadTest);
     TESTCASE_AUTO_CLASS(StringTest);
     TESTCASE_AUTO_CLASS(UnicodeStringTest);
