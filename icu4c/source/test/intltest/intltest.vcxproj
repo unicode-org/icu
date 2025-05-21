@@ -73,6 +73,7 @@
     <ClCompile Include="collationtest.cpp" />
     <ClCompile Include="colldata.cpp" />
     <ClCompile Include="erarulestest.cpp" />
+    <ClCompile Include="intltesttest.cpp" />
     <ClCompile Include="numfmtspectest.cpp" />
     <ClCompile Include="regiontst.cpp" />
     <ClCompile Include="ucharstrietest.cpp" />
