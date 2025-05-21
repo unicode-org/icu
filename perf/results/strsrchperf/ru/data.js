@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1747818857247,
+  "lastUpdate": 1747824981381,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42225,6 +42225,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 55.1754,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "438bed3d1ac040546a9b4e66d4e33c68752902b3",
+          "message": "ICU-23121 Fix GHA workflow for ICU4X releases",
+          "timestamp": "2025-05-21T12:33:48+02:00",
+          "tree_id": "fcec93e422c6ee292685842231e2ac62f7846d63",
+          "url": "https://github.com/unicode-org/icu/commit/438bed3d1ac040546a9b4e66d4e33c68752902b3"
+        },
+        "date": 1747824719164,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 24.5099,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 54.0084,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
