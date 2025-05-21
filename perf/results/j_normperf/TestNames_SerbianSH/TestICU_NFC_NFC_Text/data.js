@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1747836632821,
+  "lastUpdate": 1747839210575,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34587,6 +34587,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 1.5558139042365096,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "7767b8c91c868ee6fbf1b84cd72a995f2b708ec2",
+          "message": "ICU-23121 Fix GHA workflow for ICU4X, third try",
+          "timestamp": "2025-05-21T16:24:22+02:00",
+          "tree_id": "361d6893ec1008a3b5aee33ef94393262fcca1fb",
+          "url": "https://github.com/unicode-org/icu/commit/7767b8c91c868ee6fbf1b84cd72a995f2b708ec2"
+        },
+        "date": 1747838946410,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 1.5795052160689547,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
