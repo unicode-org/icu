@@ -942,7 +942,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
       - name: Upload to icu4x tag
-        if: ${{ inputs.gitReleaseTag && startsWith(input.gitReleaseTag, 'icu4x/') }}
+        if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'icu4x/') }}
         run: |
           gh release upload ${{ inputs.gitReleaseTag }} icuexportdata_*.zip --clobber
         env:
