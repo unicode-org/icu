@@ -935,8 +935,14 @@ jobs:
         with:
           name: icuexportdata_output
           path: icuexportdata_*.zip
-      - name: Upload to release
-        if: ${{ inputs.gitReleaseTag && (startsWith(inputs.gitReleaseTag, 'release-') || startsWith(input.gitReleaseTag, 'icu4x/')) }}
+      - name: Upload to release tag
+        if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
+        run: |
+          gh release upload ${{ inputs.gitReleaseTag }} icuexportdata_*.zip --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Upload to icu4x tag
+        if: ${{ inputs.gitReleaseTag && startsWith(input.gitReleaseTag, 'icu4x/') }}
         run: |
           gh release upload ${{ inputs.gitReleaseTag }} icuexportdata_*.zip --clobber
         env:
