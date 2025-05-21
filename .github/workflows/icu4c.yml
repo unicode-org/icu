@@ -25,7 +25,10 @@ on:
     # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
     inputs:
       gitReleaseTag:
-        description: 'Release tag to upload to. Must start with "release-"'
+        description: 'Release tag to upload to. Must start with "release-" or "icu4x/"'
+        type: string
+      gitReleaseFilename:
+        description: 'Release tag with no slashes, to be used in file names'
         type: string
 
 # For non-release branches (namely: PRs), only run CI on the most recent commit. Cancel
@@ -926,14 +929,14 @@ jobs:
       - name: Zip
         run: |
           cd icu4c/source/icuexportdata
-          zip -r ../../../icuexportdata_${{ inputs.gitReleaseTag }}.zip .
+          zip -r ../../../icuexportdata_${{ inputs.gitReleaseFilename }}.zip .
       - name: Publish Artifact
         uses: actions/upload-artifact@v4
         with:
           name: icuexportdata_output
           path: icuexportdata_*.zip
       - name: Upload to release
-        if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
+        if: ${{ inputs.gitReleaseTag && (startsWith(inputs.gitReleaseTag, 'release-') || startsWith(input.gitReleaseTag, 'icu4x/')) }}
         run: |
           gh release upload ${{ inputs.gitReleaseTag }} icuexportdata_*.zip --clobber
         env:
