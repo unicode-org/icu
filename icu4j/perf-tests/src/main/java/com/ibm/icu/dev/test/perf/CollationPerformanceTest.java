@@ -13,6 +13,9 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -831,7 +834,7 @@ public class CollationPerformanceTest {
             opt_icu = false;
         }
         
-        if (opt_rules.length() != 0) {
+        if (!opt_rules.isEmpty()) {
             try {
                 icuCol = new com.ibm.icu.text.RuleBasedCollator(getCollationRules(opt_rules));
             } catch (Exception e) {
@@ -1119,37 +1122,20 @@ public class CollationPerformanceTest {
      * 3. File encoding is ISO-8859-1
      */
     String getCollationRules(String ruleFileName) {
-        FileInputStream fis = null;
-        InputStreamReader isr = null;
-        BufferedReader br = null;
-        try {
-            fis = new FileInputStream(opt_rules);
-            isr = new InputStreamReader(fis,"ISO-8859-1");
-            br= new BufferedReader(isr);
-        } catch (Exception e) {
+        StringBuilder rules = new StringBuilder();
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(ruleFileName), StandardCharsets.ISO_8859_1)) {
+            br.lines().forEach(line -> {
+                int commentPos = line.indexOf('#');
+                if (commentPos >= 0) line = line.substring(0, commentPos);
+                rules.append(line.trim());
+            });
+        } catch (IOException e) {
             System.err.println("Error: File access exception: " + e.getMessage() + "!");
             System.exit(2);
         }
-        String rules = "";
-        String line = "";
-        while (true) {
-            try {
-                line = br.readLine();
-            } catch (IOException e) {
-                System.err.println("Read File Error" + e.getMessage() + "!");
-                System.exit(1);
-            }
-            if (line == null) {
-                break;
-            }
-            int commentPos = line.indexOf('#');
-            if (commentPos >= 0) line = line.substring(0, commentPos);
-            line = line.trim();
-            rules = rules + line;
-        }
-        return rules;
+        return rules.toString();
     }
-    
+
     //Implementing qsort
     void qSortImpl_java_usekeys(String src[], int fromIndex, int toIndex, java.text.Collator c) {
         int low = fromIndex;

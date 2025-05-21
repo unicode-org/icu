@@ -7,14 +7,13 @@
 **********************************************************************
 */
 package com.ibm.icu.dev.test.perf;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.BreakIterator;
 
 import com.ibm.icu.text.RuleBasedBreakIterator;
-import com.ibm.icu.text.UTF16;
 
 /**
  * A class for testing UnicodeSet performance.
@@ -24,7 +23,6 @@ import com.ibm.icu.text.UTF16;
  */
 public class RBBIPerf extends PerfTest {
 
-    String                  dataFileName;
     RuleBasedBreakIterator  bi;
     BreakIterator           jdkbi;
     String                  testString;
@@ -40,19 +38,7 @@ public class RBBIPerf extends PerfTest {
         }
 
         try {
-            dataFileName = args[0];
-            StringBuffer  testFileBuf = new StringBuffer();
-            InputStream is = new FileInputStream(dataFileName);
-            InputStreamReader isr = new InputStreamReader(is, "UTF-8");           
-            int c;
-            for (;;) {
-                c = isr.read();
-                if (c < 0) {
-                    break;
-                }
-                UTF16.append(testFileBuf, c);
-            }
-            testString = testFileBuf.toString();
+            testString = Files.readString(Paths.get(args[0]), StandardCharsets.UTF_8);
         }
         catch (IOException e) {
             throw new RuntimeException(e.toString());   

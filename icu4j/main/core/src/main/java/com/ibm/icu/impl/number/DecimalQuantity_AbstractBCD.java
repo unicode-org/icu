@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.text.FieldPosition;
+import java.util.Objects;
 
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.Utility;
@@ -1199,6 +1200,23 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             }
             return true;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(scale, precision, flags, lReqPos, rReqPos, isApproximate);
+
+        if (precision == 0) {
+            return result;
+        }
+        if (isApproximate) {
+            return Objects.hash(result, origDouble, origDelta);
+        } else {
+            for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
+                return Objects.hash(result, getDigit(m));
+            }
+        }
+        return result;
     }
 
     /**
