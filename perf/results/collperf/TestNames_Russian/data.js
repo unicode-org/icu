@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1747840015861,
+  "lastUpdate": 1747861944867,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -67173,6 +67173,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 128768.8389,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "david.dehilster@lexisnexisrisk.com",
+            "name": "David de Hilster",
+            "username": "dehilsterlexis"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "61406e1ed51db806525d95f608c3e4c32a696124",
+          "message": "ICU-21834 Bad link to build in ICU FAQs\n\nSigned-off-by: David de Hilster <david.dehilster@lexisnexisrisk.com>",
+          "timestamp": "2025-05-21T13:49:54-07:00",
+          "tree_id": "60d71f1c259f6218639480e603b3b137b447bd2e",
+          "url": "https://github.com/unicode-org/icu/commit/61406e1ed51db806525d95f608c3e4c32a696124"
+        },
+        "date": 1747861681520,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 541.3646,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 617846.9151,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 87612.7607,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 553535.404,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 128329.0668,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
