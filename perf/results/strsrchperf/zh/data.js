@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1747866767033,
+  "lastUpdate": 1747867850861,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42513,6 +42513,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 53.0374,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "b30c63d1b930610850489a67433b9c3ba55d6f43",
+          "message": "ICU-23054 Fix several types of errorprone warnings\n\nFixed: `CheckReturnValue`, `EqualsHashCode`, `JavaTimeDefaultTimeZone`\nAnd a couple of resource leaks (streams opened and not closed)",
+          "timestamp": "2025-05-21T15:34:33-07:00",
+          "tree_id": "9ab9831ef9aca29bc93606b0ed75b00bde0eb3d0",
+          "url": "https://github.com/unicode-org/icu/commit/b30c63d1b930610850489a67433b9c3ba55d6f43"
+        },
+        "date": 1747867593264,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.3782,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 53.2993,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
