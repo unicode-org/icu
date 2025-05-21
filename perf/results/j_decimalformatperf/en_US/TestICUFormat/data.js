@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1747861031587,
+  "lastUpdate": 1747866219264,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34917,6 +34917,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 310.0597262644852,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "edd67f076f576338f2ab8cce76f79da8b3be10ab",
+          "message": "ICU-21834 Fix more docs links in \"How To Use ICU\" page",
+          "timestamp": "2025-05-21T15:16:38-07:00",
+          "tree_id": "2036c940c6920b16efdc0c575baffcbbe189495a",
+          "url": "https://github.com/unicode-org/icu/commit/edd67f076f576338f2ab8cce76f79da8b3be10ab"
+        },
+        "date": 1747865962306,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 285.87977850051925,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
