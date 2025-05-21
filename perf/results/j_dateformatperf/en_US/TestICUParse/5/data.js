@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1747839149429,
+  "lastUpdate": 1747861059038,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34467,6 +34467,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 370.3906757928379,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "david.dehilster@lexisnexisrisk.com",
+            "name": "David de Hilster",
+            "username": "dehilsterlexis"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "61406e1ed51db806525d95f608c3e4c32a696124",
+          "message": "ICU-21834 Bad link to build in ICU FAQs\n\nSigned-off-by: David de Hilster <david.dehilster@lexisnexisrisk.com>",
+          "timestamp": "2025-05-21T13:49:54-07:00",
+          "tree_id": "60d71f1c259f6218639480e603b3b137b447bd2e",
+          "url": "https://github.com/unicode-org/icu/commit/61406e1ed51db806525d95f608c3e4c32a696124"
+        },
+        "date": 1747860801430,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 365.4678363246936,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
