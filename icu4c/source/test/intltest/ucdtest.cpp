@@ -493,7 +493,7 @@ void UnicodeTest::TestScriptMetadata() {
                          static_cast<int32_t>(charScript), static_cast<int32_t>(uscript_getScript(firstChar, errorCode)));
             assertEquals("RTL vs. set", rtl.contains(firstChar), uscript_isRightToLeft(sc));
             assertEquals("cased vs. set", cased.contains(firstChar), uscript_isCased(sc));
-            assertEquals("encoded, has characters", static_cast<UBool>(sc == charScript), static_cast<UBool>(!scriptSet.isEmpty()));
+            assertEquals("encoded, has characters", sc == charScript, !scriptSet.isEmpty());
             if(uscript_isRightToLeft(sc)) {
                 rtl.removeAll(scriptSet);
             }

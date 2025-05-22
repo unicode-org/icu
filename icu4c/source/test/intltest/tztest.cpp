@@ -2057,14 +2057,14 @@ void TimeZoneTest::TestCanonicalIDAPI() {
     UnicodeString canonicalID;
     UErrorCode ec = U_ZERO_ERROR;
     UnicodeString *pResult = &TimeZone::getCanonicalID(bogus, canonicalID, ec);
-    assertEquals("TimeZone::getCanonicalID(bogus) should fail", static_cast<int32_t>(U_ILLEGAL_ARGUMENT_ERROR), ec);
+    assertEquals("TimeZone::getCanonicalID(bogus) should fail", U_ILLEGAL_ARGUMENT_ERROR, ec);
     assertTrue("TimeZone::getCanonicalID(bogus) should return the dest string", pResult == &canonicalID);
 
     // U_FAILURE on input.
     UnicodeString berlin("Europe/Berlin");
     ec = U_MEMORY_ALLOCATION_ERROR;
     pResult = &TimeZone::getCanonicalID(berlin, canonicalID, ec);
-    assertEquals("TimeZone::getCanonicalID(failure) should fail", static_cast<int32_t>(U_MEMORY_ALLOCATION_ERROR), ec);
+    assertEquals("TimeZone::getCanonicalID(failure) should fail", U_MEMORY_ALLOCATION_ERROR, ec);
     assertTrue("TimeZone::getCanonicalID(failure) should return the dest string", pResult == &canonicalID);
 
     // Valid input should un-bogus the dest string.
@@ -2681,7 +2681,7 @@ void TimeZoneTest::TestGetIanaID() {
 
         TimeZone::getIanaID(inputID, ianaID, sts);
         if (u_strcmp(TESTDATA[i].expected, UNKNOWN) == 0) {
-            assertEquals(inputID + " should fail", static_cast<int32_t>(U_ILLEGAL_ARGUMENT_ERROR), sts);
+            assertEquals(inputID + " should fail", U_ILLEGAL_ARGUMENT_ERROR, sts);
             assertTrue(inputID + " should set bogus", ianaID.isBogus());
         } else {
             assertEquals(inputID, UnicodeString(TESTDATA[i].expected), ianaID);
