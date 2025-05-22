@@ -503,7 +503,7 @@ StringTest::TestStringPieceOther() {
     Other other;
     StringPiece piece(other);
 
-    assertEquals("size()", piece.size(), static_cast<int32_t>(other.size()));
+    assertEquals("size()", piece.size(), other.size());
     assertEquals("data()", piece.data(), other.data());
 }
 
@@ -876,6 +876,6 @@ void
 StringTest::Testctou() {
   const char *cs = "Fa\\u0127mu";
   UnicodeString u = ctou(cs);
-  assertEquals("Testing unescape@0", static_cast<int32_t>(0x0046), u.charAt(0));
-  assertEquals("Testing unescape@2", static_cast<int32_t>(295), u.charAt(2));
+  assertEquals("Testing unescape@0", 0x0046, u.charAt(0));
+  assertEquals("Testing unescape@2", 295, u.charAt(2));
 }

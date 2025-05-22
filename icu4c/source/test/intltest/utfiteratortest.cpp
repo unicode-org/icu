@@ -1140,7 +1140,7 @@ void UTFIteratorTest::checkUnits(
                          static_cast<UChar32>(part[j]), static_cast<UChar32>(unit));
             ++j;
         }
-        assertEquals("units.iter.length[i]", static_cast<int32_t>(part.length()), j);
+        assertEquals("units.iter.length[i]", part.length(), j);
     }
     if constexpr (type >= CONTIG) {
         assertTrue("stringView[i]", part == units.stringView());
