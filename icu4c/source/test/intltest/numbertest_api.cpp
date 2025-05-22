@@ -3397,6 +3397,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
             u"0",
             u"0");
 
+    // Keep the result having more trailing zeros
     assertFormatSingle(
             u"FracSig withSignificantDigits Trailing Zeros RELAXED",
             u".0/@@@r",
@@ -3407,13 +3408,35 @@ void NumberFormatterApiTest::roundingFractionFigures() {
             1,
             u"1.00");
 
-    // Trailing zeros follow the strategy that was chosen:
+    // Keep the result having fewer trailing zeros
     assertFormatSingle(
             u"FracSig withSignificantDigits Trailing Zeros STRICT",
             u".0/@@@s",
             u".0/@@@s",
             NumberFormatter::with().precision(Precision::fixedFraction(1)
                 .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_STRICT)),
+            Locale::getEnglish(),
+            1,
+            u"1.0");
+
+    // Keep the result having more trailing zeros
+    assertFormatSingle(
+            u"FracSig withSignificantDigits Trailing Zeros RELAXED",
+            u".00#/@@####r",
+            u".00#/@@####r",
+            NumberFormatter::with().precision(Precision::minMaxFraction(2, 3)
+                .withSignificantDigits(2, 6, UNUM_ROUNDING_PRIORITY_RELAXED)),
+            Locale::getEnglish(),
+            1,
+            u"1.00");
+
+    // Keep the result having fewer trailing zeros
+    assertFormatSingle(
+            u"FracSig withSignificantDigits Trailing Zeros STRICT",
+            u".00#/@@####s",
+            u".00#/@@####s",
+            NumberFormatter::with().precision(Precision::minMaxFraction(2, 3)
+                .withSignificantDigits(2, 6, UNUM_ROUNDING_PRIORITY_STRICT)),
             Locale::getEnglish(),
             1,
             u"1.0");
@@ -3850,26 +3873,27 @@ void NumberFormatterApiTest::roundingPriorityCoverageTest() {
     IcuTestErrorCode status(*this, "roundingPriorityCoverageTest");
     struct TestCase {
         double input;
-        const char16_t* expectedRelaxed0113;
-        const char16_t* expectedStrict0113;
+        const char16_t* expectedRelaxed0123;
+        const char16_t* expectedStrict0123;
         const char16_t* expectedRelaxed1133;
         const char16_t* expectedStrict1133;
     } cases[] = {
-        { 0.9999, u"1",      u"1",     u"1.00",    u"1.0" },
+        { 0.1000, u"0.10",   u"0.1",   u"0.100",   u"0.1" },
+        { 0.9999, u"1.0",    u"1",     u"1.00",    u"1.0" },
         { 9.9999, u"10",     u"10",    u"10.0",    u"10.0" },
         { 99.999, u"100",    u"100",   u"100.0",   u"100" },
         { 999.99, u"1000",   u"1000",  u"1000.0",  u"1000" },
 
-        { 0, u"0", u"0", u"0.00", u"0.0" },
+        { 0, u"0.0", u"0", u"0.00", u"0.0" },
 
         { 9.876,  u"9.88",   u"9.9",   u"9.88",   u"9.9" },
-        { 9.001,  u"9",      u"9",     u"9.00",   u"9.0" },
+        { 9.001,  u"9.0",    u"9",     u"9.00",   u"9.0" },
     };
     for (const auto& cas : cases) {
         auto precisionRelaxed0113 = Precision::minMaxFraction(0, 1)
-            .withSignificantDigits(1, 3, UNUM_ROUNDING_PRIORITY_RELAXED);
+            .withSignificantDigits(2, 3, UNUM_ROUNDING_PRIORITY_RELAXED);
         auto precisionStrict0113 = Precision::minMaxFraction(0, 1)
-            .withSignificantDigits(1, 3, UNUM_ROUNDING_PRIORITY_STRICT);
+            .withSignificantDigits(2, 3, UNUM_ROUNDING_PRIORITY_STRICT);
         auto precisionRelaxed1133 = Precision::minMaxFraction(1, 1)
             .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_RELAXED);
         auto precisionStrict1133 = Precision::minMaxFraction(1, 1)
@@ -3893,10 +3917,10 @@ void NumberFormatterApiTest::roundingPriorityCoverageTest() {
             );
         };
 
-        check(u" Relaxed 0113", cas.expectedRelaxed0113, precisionRelaxed0113);
+        check(u" Relaxed 0123", cas.expectedRelaxed0123, precisionRelaxed0113);
         if (status.errIfFailureAndReset()) continue;
 
-        check(u" Strict 0113", cas.expectedStrict0113, precisionStrict0113);
+        check(u" Strict 0123", cas.expectedStrict0123, precisionStrict0113);
         if (status.errIfFailureAndReset()) continue;
 
         check(u" Relaxed 1133", cas.expectedRelaxed1133, precisionRelaxed1133);
