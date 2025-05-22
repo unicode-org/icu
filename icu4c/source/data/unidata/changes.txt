@@ -121,7 +121,7 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
       then we can use its contents directly (no FTP from unicode.org necessary)
     ~ otherwise download from https://www.unicode.org/Public/draft/
     ~ you can omit or discard the charts/ and ucdxml/ files/folders
-    ~ you can omit or discard ucd/Unihan.zip
+    ~ you can omit or discard ucd/UCD.zip & ucd/Unihan.zip & security/*.zip
   + alternate way of fetching files, if available:
     copy the files from a Unicode Tools workspace that is up to date with
     https://github.com/unicode-org/unicodetools
@@ -143,43 +143,40 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
 
 * new constants for new property values
 - preparseucd.py error:
-    ValueError: missing uchar.h enum constants for some property values:
-    [('blk', {'Garay', 'Tulu_Tigalari', 'Todhri', 'Sunuwar', 'Egyptian_Hieroglyphs_Ext_A', 'Kirat_Rai', 'Symbols_For_Legacy_Computing_Sup', 'Myanmar_Ext_C', 'Ol_Onal', 'Gurung_Khema'}),
-    ('sc', {'Gara', 'Onao', 'Todr', 'Krai', 'Tutg', 'Sunu', 'Gukh'}),
-    ('InSC', {'Reordering_Killer'})]
+    ValueError: missing uchar.h enum constants for some property values: [('blk', {'Tangut_Components_Sup', 'Misc_Symbols_Sup', 'CJK_Ext_J', 'Tai_Yo', 'Chisoi', 'Sharada_Sup', 'Beria_Erfe', 'Tolong_Siki', 'Sidetic'}), ('jg', {'Thin_Noon'}), ('lb', {'HH'}), ('sc', {'Chis', 'Sidt', 'Tols', 'Berf', 'Tayo'})]
   = PropertyValueAliases.txt new property values (diff old & new .txt files)
-    (cd $UNIDATA_ROOT && diff -u uni15.1/final/ucd/PropertyValueAliases.txt uni16/alpha/UCD/ucd/PropertyValueAliases.txt | egrep '^[-+][a-zA-Z]')
-    +age; 16.0                             ; V16_0
-    +blk; Egyptian_Hieroglyphs_Ext_A       ; Egyptian_Hieroglyphs_Extended_A
-    +blk; Garay                            ; Garay
-    +blk; Gurung_Khema                     ; Gurung_Khema
-    +blk; Kirat_Rai                        ; Kirat_Rai
-    +blk; Myanmar_Ext_C                    ; Myanmar_Extended_C
-    +blk; Ol_Onal                          ; Ol_Onal
-    +blk; Sunuwar                          ; Sunuwar
-    +blk; Symbols_For_Legacy_Computing_Sup ; Symbols_For_Legacy_Computing_Supplement
-    +blk; Todhri                           ; Todhri
-    +blk; Tulu_Tigalari                    ; Tulu_Tigalari
-    +InSC; Reordering_Killer               ; Reordering_Killer
-    -jg ; Teh_Marbuta_Goal                 ; Hamza_On_Heh_Goal
-    +jg ; Teh_Marbuta_Goal                 ; Teh_Marbuta_Goal                 ; Hamza_On_Heh_Goal
-    +sc ; Gara                             ; Garay
-    +sc ; Gukh                             ; Gurung_Khema
-    +sc ; Krai                             ; Kirat_Rai
-    +sc ; Onao                             ; Ol_Onal
-    +sc ; Sunu                             ; Sunuwar
-    +sc ; Todr                             ; Todhri
-    +sc ; Tutg                             ; Tulu_Tigalari
+    (cd $UNIDATA_ROOT && diff -u uni16/final/UCD/ucd/PropertyValueAliases.txt uni17/beta/ucd/PropertyValueAliases.txt | egrep '^[-+][a-zA-Z]')
+    +age; 17.0                             ; V17_0
+    +blk; Beria_Erfe                       ; Beria_Erfe
+    +blk; Chisoi                           ; Chisoi
+    +blk; CJK_Ext_J                        ; CJK_Unified_Ideographs_Extension_J
+    +blk; Misc_Symbols_Sup                 ; Miscellaneous_Symbols_Supplement
+    +blk; Sharada_Sup                      ; Sharada_Supplement
+    +blk; Sidetic                          ; Sidetic
+    +blk; Tai_Yo                           ; Tai_Yo
+    +blk; Tangut_Components_Sup            ; Tangut_Components_Supplement
+    +blk; Tolong_Siki                      ; Tolong_Siki
+    +jg ; Thin_Noon                        ; Thin_Noon
+    +lb ; HH                               ; Unambiguous_Hyphen
+    +sc ; Berf                             ; Beria_Erfe
+    +sc ; Chis                             ; Chisoi
+    +sc ; Sidt                             ; Sidetic
+    +sc ; Tayo                             ; Tai_Yo
+    +sc ; Tols                             ; Tolong_Siki
   + copy new API constants from the preparseucd.py output into the .h/.java files,
     add/adjust comments, wrap lines, and set numeric values
   + (ignore Age: no API constants for that)
-  + Block: uchar.h before UBLOCK_COUNT,
-      UCharacter.UnicodeBlock IDs, UCharacter.UnicodeBlock objects
+  + Block:
+      uchar.h before UBLOCK_COUNT,
+      UCharacter.UnicodeBlock IDs before COUNT,
+      UCharacter.UnicodeBlock objects before INVALID_CODE
   + Script: uscript.h & com.ibm.icu.lang.UScript
   + for new scripts: fix expectedLong names
       in cintltst/cucdapi.c/TestUScriptCodeAPI()
       and in com.ibm.icu.dev.test.lang.TestUScript.java
   + Indic_Syllabic_Category: uchar.h & UCharacter.IndicSyllabicCategory
+  + Note: preparseucd.py does not write constants for values of every property.
+    Add some manually, or write more generator code.
   + after adding new API constants, run preparseucd.py again
 
 * update Script metadata: SCRIPT_PROPS[] in uscript_props.cpp & UScript.ScriptMetadata
@@ -190,6 +187,8 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
   to make sure that there are no syntax errors
 
   $ICU_OUT/icu4c$ echo;echo; date; make -j20 tests &> out.txt ; tail -n 30 out.txt ; date
+
+TODO
 
 * Bazel build process
 
