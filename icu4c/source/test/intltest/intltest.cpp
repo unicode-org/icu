@@ -227,7 +227,8 @@ UnicodeString toString(int32_t n) {
 
 
 UnicodeString toString(UBool b) {
-  return b ? UnicodeString("true"):UnicodeString("false");
+    return b ? b != 1 ? UnicodeString("static_cast<UBool>(") + b + ")" : UnicodeString("true")
+             : UnicodeString("false");
 }
 
 UnicodeString toString(bool b) {

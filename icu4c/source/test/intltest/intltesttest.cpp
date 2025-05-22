@@ -147,6 +147,7 @@ class IntlTestTest : public IntlTest {
         assertEquals(WHERE "should have failed", 1, metatest.newErrors());
         assertNotEquals("decimal enum in " + lastLogLine, std::u16string::npos, lastLogLine.find(u"65"));
         assertEquals("NO hex enum in " + lastLogLine, std::u16string::npos, lastLogLine.find(u"41"));
+        assertEquals("NO UBool in " + lastLogLine, std::u16string::npos, lastLogLine.find(u"UBool"));
     }
 
     void testAssertNotEquals() {
@@ -248,6 +249,7 @@ class IntlTestTest : public IntlTest {
         assertEquals(WHERE "should have failed", 1, metatest.newErrors());
         assertNotEquals("decimal enum in " + lastLogLine, std::u16string::npos, lastLogLine.find(u"65"));
         assertEquals("NO hex enum in " + lastLogLine, std::u16string::npos, lastLogLine.find(u"41"));
+        assertEquals("NO UBool in " + lastLogLine, std::u16string::npos, lastLogLine.find(u"UBool"));
     }
 };
 
