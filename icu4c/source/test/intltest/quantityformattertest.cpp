@@ -47,12 +47,12 @@ void QuantityFormatterTest::TestBasic() {
     assertFalse(
             "adding bad variant",
             fmt.addIfAbsent("a bad variant", "{0} pounds", status));
-    assertEquals("adding bad variant status", static_cast<int32_t>(U_ILLEGAL_ARGUMENT_ERROR), status);
+    assertEquals("adding bad variant status", U_ILLEGAL_ARGUMENT_ERROR, status);
     status = U_ZERO_ERROR;
     assertFalse(
             "Adding bad pattern",
             fmt.addIfAbsent("other", "{0} {1} too many placeholders", status));
-    assertEquals("adding bad pattern status", static_cast<int32_t>(U_ILLEGAL_ARGUMENT_ERROR), status);
+    assertEquals("adding bad pattern status", U_ILLEGAL_ARGUMENT_ERROR, status);
     status = U_ZERO_ERROR;
     assertFalse("isValid with no patterns", fmt.isValid());
     assertTrue(

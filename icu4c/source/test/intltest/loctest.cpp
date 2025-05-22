@@ -4372,7 +4372,7 @@ LocaleTest::TestCreateKeywordSet() {
             status);
     status.errIfFailureAndReset("\"%s\"", l.getName());
 
-    assertEquals("set::size()", 2, static_cast<int32_t>(result.size()));
+    assertEquals("set::size()", 2, result.size());
     assertTrue("set::find(\"calendar\")",
                result.find("calendar") != result.end());
     assertTrue("set::find(\"collation\")",
@@ -4391,7 +4391,7 @@ LocaleTest::TestCreateKeywordSetEmpty() {
             status);
     status.errIfFailureAndReset("\"%s\"", l.getName());
 
-    assertEquals("set::size()", 0, static_cast<int32_t>(result.size()));
+    assertEquals("set::size()", 0, result.size());
 }
 
 void
@@ -4427,7 +4427,7 @@ LocaleTest::TestCreateUnicodeKeywordSet() {
             status);
     status.errIfFailureAndReset("\"%s\"", l.getName());
 
-    assertEquals("set::size()", 2, static_cast<int32_t>(result.size()));
+    assertEquals("set::size()", 2, result.size());
     assertTrue("set::find(\"ca\")",
                result.find("ca") != result.end());
     assertTrue("set::find(\"co\")",
@@ -4451,7 +4451,7 @@ LocaleTest::TestCreateUnicodeKeywordSetEmpty() {
             status);
     status.errIfFailureAndReset("\"%s\"", l.getName());
 
-    assertEquals("set::size()", 0, static_cast<int32_t>(result.size()));
+    assertEquals("set::size()", 0, result.size());
 
     LocalPointer<StringEnumeration> se(l.createUnicodeKeywords(status), status);
     assertTrue("createUnicodeKeywords", se.isNull());
@@ -4476,7 +4476,7 @@ LocaleTest::TestCreateUnicodeKeywordSetWithPrivateUse() {
                result.find("x") == result.end());
     assertTrue("getUnicodeKeywords set::find(\"foo\")",
                result.find("foo") == result.end());
-    assertEquals("set::size()", 1, static_cast<int32_t>(result.size()));
+    assertEquals("set::size()", 1, result.size());
 
     LocalPointer<StringEnumeration> se(l.createUnicodeKeywords(status), status);
     status.errIfFailureAndReset("\"%s\" createUnicodeKeywords()", l.getName());
