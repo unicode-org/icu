@@ -893,8 +893,7 @@ void StringCaseTest::assertGreekUpperNormalized(const UnicodeString &s16,
             expectedErrorCode = U_STRING_NOT_TERMINATED_WARNING;
         } else {
             expectedErrorCode = U_ZERO_ERROR;
-            // Casts to int32_t to avoid matching UBool.
-            assertEquals(msg + cap + " NUL", static_cast<int32_t>(0), static_cast<int32_t>(dest8b[length]));
+            assertEquals(msg + cap + " NUL", 0, dest8b[length]);
         }
         assertEquals(msg + cap + " errorCode", expectedErrorCode, errorCode);
         if (cap >= expected8Length) {
