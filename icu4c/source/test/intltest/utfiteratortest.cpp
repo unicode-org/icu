@@ -306,6 +306,7 @@ public:
         TESTCASE_AUTO(testUnsafe32ZigzagReverse);
 
 #if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2019'11 // C++20 ranges.
+        #error __cpp_lib_ranges
         TESTCASE_AUTO(testUncommonInputRange);
         TESTCASE_AUTO(testUncommonForwardRange);
         TESTCASE_AUTO(testCommonForwardRange);
