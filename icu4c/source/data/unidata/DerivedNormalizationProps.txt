@@ -1,6 +1,6 @@
-# DerivedNormalizationProps-16.0.0.txt
-# Date: 2024-04-30, 21:48:18 GMT
-# © 2024 Unicode®, Inc.
+# DerivedNormalizationProps-17.0.0.txt
+# Date: 2025-01-27, 18:09:14 GMT
+# © 2025 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use and license, see https://www.unicode.org/terms_of_use.html
 #
@@ -132,6 +132,7 @@
 33DD  ; FC_NFKC; 0077 0062
 33DE  ; FC_NFKC; 0076 2215 006D
 33DF  ; FC_NFKC; 0061 2215 006D
+A7F1  ; FC_NFKC; 0073
 A7F2  ; FC_NFKC; 0063
 A7F3  ; FC_NFKC; 0066
 A7F4  ; FC_NFKC; 0071
@@ -679,7 +680,7 @@ A7F8  ; FC_NFKC; 0127
 1F16C ; FC_NFKC; 006D 0072
 1F190 ; FC_NFKC; 0064 006A
 
-# Total code points: 663
+# Total code points: 664
 
 # ================================================
 
@@ -1515,7 +1516,7 @@ FB46..FB4E    ; NFC_QC; N
 32C0..33FF    ; NFKD_QC; N
 A69C..A69D    ; NFKD_QC; N
 A770          ; NFKD_QC; N
-A7F2..A7F4    ; NFKD_QC; N
+A7F1..A7F4    ; NFKD_QC; N
 A7F8..A7F9    ; NFKD_QC; N
 AB5C..AB5F    ; NFKD_QC; N
 AB69          ; NFKD_QC; N
@@ -1753,7 +1754,7 @@ FFED..FFEE    ; NFKD_QC; N
 1FBF0..1FBF9  ; NFKD_QC; N
 2F800..2FA1D  ; NFKD_QC; N
 
-# Total code points: 17085
+# Total code points: 17086
 
 # ================================================
 
@@ -1946,7 +1947,7 @@ FFED..FFEE    ; NFKD_QC; N
 32C0..33FF    ; NFKC_QC; N
 A69C..A69D    ; NFKC_QC; N
 A770          ; NFKC_QC; N
-A7F2..A7F4    ; NFKC_QC; N
+A7F1..A7F4    ; NFKC_QC; N
 A7F8..A7F9    ; NFKC_QC; N
 AB5C..AB5F    ; NFKC_QC; N
 AB69          ; NFKC_QC; N
@@ -2164,7 +2165,7 @@ FFED..FFEE    ; NFKC_QC; N
 1FBF0..1FBF9  ; NFKC_QC; N
 2F800..2FA1D  ; NFKC_QC; N
 
-# Total code points: 4964
+# Total code points: 4965
 
 # ================================================
 
@@ -5448,11 +5449,15 @@ A7C7          ; NFKC_CF; A7C8
 A7C9          ; NFKC_CF; A7CA
 A7CB          ; NFKC_CF; 0264
 A7CC          ; NFKC_CF; A7CD
+A7CE          ; NFKC_CF; A7CF
 A7D0          ; NFKC_CF; A7D1
+A7D2          ; NFKC_CF; A7D3
+A7D4          ; NFKC_CF; A7D5
 A7D6          ; NFKC_CF; A7D7
 A7D8          ; NFKC_CF; A7D9
 A7DA          ; NFKC_CF; A7DB
 A7DC          ; NFKC_CF; 019B
+A7F1          ; NFKC_CF; 0073
 A7F2          ; NFKC_CF; 0063
 A7F3          ; NFKC_CF; 0066
 A7F4          ; NFKC_CF; 0071
@@ -7184,6 +7189,31 @@ FFF0..FFF8    ; NFKC_CF;
 16E5D         ; NFKC_CF; 16E7D
 16E5E         ; NFKC_CF; 16E7E
 16E5F         ; NFKC_CF; 16E7F
+16EA0         ; NFKC_CF; 16EBB
+16EA1         ; NFKC_CF; 16EBC
+16EA2         ; NFKC_CF; 16EBD
+16EA3         ; NFKC_CF; 16EBE
+16EA4         ; NFKC_CF; 16EBF
+16EA5         ; NFKC_CF; 16EC0
+16EA6         ; NFKC_CF; 16EC1
+16EA7         ; NFKC_CF; 16EC2
+16EA8         ; NFKC_CF; 16EC3
+16EA9         ; NFKC_CF; 16EC4
+16EAA         ; NFKC_CF; 16EC5
+16EAB         ; NFKC_CF; 16EC6
+16EAC         ; NFKC_CF; 16EC7
+16EAD         ; NFKC_CF; 16EC8
+16EAE         ; NFKC_CF; 16EC9
+16EAF         ; NFKC_CF; 16ECA
+16EB0         ; NFKC_CF; 16ECB
+16EB1         ; NFKC_CF; 16ECC
+16EB2         ; NFKC_CF; 16ECD
+16EB3         ; NFKC_CF; 16ECE
+16EB4         ; NFKC_CF; 16ECF
+16EB5         ; NFKC_CF; 16ED0
+16EB6         ; NFKC_CF; 16ED1
+16EB7         ; NFKC_CF; 16ED2
+16EB8         ; NFKC_CF; 16ED3
 1BCA0..1BCA3  ; NFKC_CF;
 1CCD6         ; NFKC_CF; 0061
 1CCD7         ; NFKC_CF; 0062
@@ -9148,7 +9178,7 @@ E0080..E00FF  ; NFKC_CF;
 E0100..E01EF  ; NFKC_CF;
 E01F0..E0FFF  ; NFKC_CF;
 
-# Total code points: 10554
+# Total code points: 10583
 
 # ================================================
 
@@ -11582,11 +11612,15 @@ A7C7          ; NFKC_SCF; A7C8
 A7C9          ; NFKC_SCF; A7CA
 A7CB          ; NFKC_SCF; 0264
 A7CC          ; NFKC_SCF; A7CD
+A7CE          ; NFKC_SCF; A7CF
 A7D0          ; NFKC_SCF; A7D1
+A7D2          ; NFKC_SCF; A7D3
+A7D4          ; NFKC_SCF; A7D5
 A7D6          ; NFKC_SCF; A7D7
 A7D8          ; NFKC_SCF; A7D9
 A7DA          ; NFKC_SCF; A7DB
 A7DC          ; NFKC_SCF; 019B
+A7F1          ; NFKC_SCF; 0073
 A7F2          ; NFKC_SCF; 0063
 A7F3          ; NFKC_SCF; 0066
 A7F4          ; NFKC_SCF; 0071
@@ -13318,6 +13352,31 @@ FFF0..FFF8    ; NFKC_SCF;
 16E5D         ; NFKC_SCF; 16E7D
 16E5E         ; NFKC_SCF; 16E7E
 16E5F         ; NFKC_SCF; 16E7F
+16EA0         ; NFKC_SCF; 16EBB
+16EA1         ; NFKC_SCF; 16EBC
+16EA2         ; NFKC_SCF; 16EBD
+16EA3         ; NFKC_SCF; 16EBE
+16EA4         ; NFKC_SCF; 16EBF
+16EA5         ; NFKC_SCF; 16EC0
+16EA6         ; NFKC_SCF; 16EC1
+16EA7         ; NFKC_SCF; 16EC2
+16EA8         ; NFKC_SCF; 16EC3
+16EA9         ; NFKC_SCF; 16EC4
+16EAA         ; NFKC_SCF; 16EC5
+16EAB         ; NFKC_SCF; 16EC6
+16EAC         ; NFKC_SCF; 16EC7
+16EAD         ; NFKC_SCF; 16EC8
+16EAE         ; NFKC_SCF; 16EC9
+16EAF         ; NFKC_SCF; 16ECA
+16EB0         ; NFKC_SCF; 16ECB
+16EB1         ; NFKC_SCF; 16ECC
+16EB2         ; NFKC_SCF; 16ECD
+16EB3         ; NFKC_SCF; 16ECE
+16EB4         ; NFKC_SCF; 16ECF
+16EB5         ; NFKC_SCF; 16ED0
+16EB6         ; NFKC_SCF; 16ED1
+16EB7         ; NFKC_SCF; 16ED2
+16EB8         ; NFKC_SCF; 16ED3
 1BCA0..1BCA3  ; NFKC_SCF;
 1CCD6         ; NFKC_SCF; 0061
 1CCD7         ; NFKC_SCF; 0062
@@ -15282,7 +15341,7 @@ E0080..E00FF  ; NFKC_SCF;
 E0100..E01EF  ; NFKC_SCF;
 E01F0..E0FFF  ; NFKC_SCF;
 
-# Total code points: 10516
+# Total code points: 10545
 
 # ================================================
 
@@ -16052,12 +16111,15 @@ A7C2          ; Changes_When_NFKC_Casefolded
 A7C4..A7C7    ; Changes_When_NFKC_Casefolded
 A7C9          ; Changes_When_NFKC_Casefolded
 A7CB..A7CC    ; Changes_When_NFKC_Casefolded
+A7CE          ; Changes_When_NFKC_Casefolded
 A7D0          ; Changes_When_NFKC_Casefolded
+A7D2          ; Changes_When_NFKC_Casefolded
+A7D4          ; Changes_When_NFKC_Casefolded
 A7D6          ; Changes_When_NFKC_Casefolded
 A7D8          ; Changes_When_NFKC_Casefolded
 A7DA          ; Changes_When_NFKC_Casefolded
 A7DC          ; Changes_When_NFKC_Casefolded
-A7F2..A7F4    ; Changes_When_NFKC_Casefolded
+A7F1..A7F4    ; Changes_When_NFKC_Casefolded
 A7F5          ; Changes_When_NFKC_Casefolded
 A7F8..A7F9    ; Changes_When_NFKC_Casefolded
 AB5C..AB5F    ; Changes_When_NFKC_Casefolded
@@ -16199,6 +16261,7 @@ FFF0..FFF8    ; Changes_When_NFKC_Casefolded
 10D50..10D65  ; Changes_When_NFKC_Casefolded
 118A0..118BF  ; Changes_When_NFKC_Casefolded
 16E40..16E5F  ; Changes_When_NFKC_Casefolded
+16EA0..16EB8  ; Changes_When_NFKC_Casefolded
 1BCA0..1BCA3  ; Changes_When_NFKC_Casefolded
 1CCD6..1CCEF  ; Changes_When_NFKC_Casefolded
 1CCF0..1CCF9  ; Changes_When_NFKC_Casefolded
@@ -16300,6 +16363,6 @@ E0080..E00FF  ; Changes_When_NFKC_Casefolded
 E0100..E01EF  ; Changes_When_NFKC_Casefolded
 E01F0..E0FFF  ; Changes_When_NFKC_Casefolded
 
-# Total code points: 10554
+# Total code points: 10583
 
 # EOF
