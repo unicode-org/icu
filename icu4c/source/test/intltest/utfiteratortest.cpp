@@ -305,7 +305,7 @@ public:
         TESTCASE_AUTO(testUnsafe8ZigzagReverse);
         TESTCASE_AUTO(testUnsafe32ZigzagReverse);
 
-#if __cpp_lib_ranges >= 2019'11 // C++20 ranges.
+#if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2019'11 // C++20 ranges.
         TESTCASE_AUTO(testUncommonInputRange);
         TESTCASE_AUTO(testUncommonForwardRange);
         TESTCASE_AUTO(testCommonForwardRange);
@@ -468,7 +468,7 @@ public:
         testFwdIter<UNSAFE, UChar32, ANY_B>(good32);
     }
 
-#if __cpp_lib_ranges >= 2019'11  // C++20 ranges.
+#if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2019'11 // C++20 ranges.
     void testUncommonInputRange() {
         std::istringstream stream("D808 DC2D D808 DEBA D808 DE40 200B D808 DF60 D808 DEA9");
         // Reads a sequence of space-separated hex code units from a stream.
@@ -1331,7 +1331,7 @@ void UTFIteratorTest::zigzag(const ImplTest<Unit> &test, size_t i,
     }
 }
 
-#if __cpp_lib_concepts >= 2020'02  // Test against C++20 concepts.
+#if defined(__cpp_lib_concepts) && __cpp_lib_concepts >= 2020'02 // Test against C++20 concepts.
 namespace {
 template <typename Iterator>
 using CodePointIterator = UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, Iterator>;
