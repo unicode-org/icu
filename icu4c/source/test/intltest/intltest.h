@@ -36,9 +36,8 @@ U_NAMESPACE_USE
 UnicodeString UCharToUnicodeString(char16_t c);
 UnicodeString Int64ToUnicodeString(int64_t num);
 UnicodeString DoubleToUnicodeString(double num);
-//UnicodeString operator+(const UnicodeString& left, int64_t num); // Some compilers don't allow this because of the long type.
-UnicodeString operator+(const UnicodeString& left, long num);
-UnicodeString operator+(const UnicodeString& left, unsigned long num);
+UnicodeString operator+(const UnicodeString& left, int64_t num);
+UnicodeString operator+(const UnicodeString& left, uint64_t num);
 UnicodeString operator+(const UnicodeString& left, double num);
 UnicodeString operator+(const UnicodeString& left, char num);
 UnicodeString operator+(const UnicodeString& left, short num);
@@ -300,9 +299,84 @@ public:
     UBool assertEquals(const char* message, std::u16string_view expected,
                        std::u16string_view actual, UBool possibleDataError=false);
     UBool assertEquals(const char* message, const char* expected, const char* actual);
-    UBool assertEquals(const char* message, UBool expected, UBool actual);
-    UBool assertEquals(const char* message, int32_t expected, int32_t actual);
-    UBool assertEquals(const char* message, int64_t expected, int64_t actual);
+
+    template <typename Message, typename T, typename U,
+              typename = std::enable_if_t<(std::is_same_v<T, UBool> || std::is_same_v<T, bool>) &&
+                                          (std::is_same_v<U, UBool> || std::is_same_v<U, bool>)>>
+    bool assertEquals(const Message &message, T expected, U actual) {
+        return assertBooleanEquals(extractToAssertBuf(message), expected, actual);
+    }
+
+    // Since UChar32 is int32_t, we do not know whether we are looking at code points or some other
+    // number.  Show both the decimal and hexadecimal representations on failure.
+    template <typename Message, typename T, typename U,
+              typename = std::enable_if_t<std::is_same_v<T, int32_t> && std::is_same_v<U, int32_t>>,
+              typename = void, typename = void>
+    bool assertEquals(const Message &message, T expected, U actual) {
+        return assertSigned32Equals(extractToAssertBuf(message), expected, actual);
+    }
+
+    // This overload applies when at least one of the sides of the comparison is char32_t or char16_t.
+    // In this case, we can be pretty sure that we are comparing code points or UTF-16 (or UTF-32) code
+    // units, so we do not show the decimal value, only the hex value in U+ notation, and we show the
+    // literal character as well.
+    template <typename Message, typename T, typename U,
+              typename = std::enable_if_t<std::is_same_v<T, char32_t> || std::is_same_v<U, char32_t> ||
+                                          std::is_same_v<T, char16_t> || std::is_same_v<U, char16_t>>,
+              typename = void>
+    bool assertEquals(const Message& message, T expected, U actual) {
+        return assertCodePointEquals(extractToAssertBuf(message), expected, actual);
+    }
+
+    // Otherwise, for enumeration or integral types, log only the decimal value.
+    template <typename Message, typename T, typename U,
+              typename = std::enable_if_t<(std::is_integral_v<T> || std::is_enum_v<T>) &&
+                                          (std::is_integral_v<U> || std::is_enum_v<U>) &&
+                                          !(std::is_same_v<T, int32_t> && std::is_same_v<U, int32_t>) &&
+                                          !((std::is_same_v<T, UBool> || std::is_same_v<T, bool>) &&
+                                            (std::is_same_v<U, UBool> || std::is_same_v<U, bool>)) &&
+                                          !(std::is_same_v<T, char32_t> || std::is_same_v<U, char32_t> ||
+                                            std::is_same_v<T, char16_t> || std::is_same_v<U, char16_t>)>,
+              typename = void, typename = void, typename = void>
+    bool assertEquals(const Message &message, T expected, U actual) {
+        return assertSigned64Equals(extractToAssertBuf(message), expected, actual);
+    }
+
+    template <typename Message, typename T, typename U,
+              typename = std::enable_if_t<(std::is_same_v<T, UBool> || std::is_same_v<T, bool>) &&
+                                          (std::is_same_v<U, UBool> || std::is_same_v<U, bool>)>>
+    bool assertNotEquals(const Message &message, T expected, U actual) {
+        return assertBooleanNotEquals(extractToAssertBuf(message), expected, actual);
+    }
+
+    template <typename Message, typename T, typename U,
+              typename = std::enable_if_t<std::is_same_v<T, int32_t> && std::is_same_v<U, int32_t>>,
+              typename = void, typename = void>
+    bool assertNotEquals(const Message &message, T expected, U actual) {
+        return assertSigned32NotEquals(extractToAssertBuf(message), expected, actual);
+    }
+
+    template <typename Message, typename T, typename U,
+              typename = std::enable_if_t<std::is_same_v<T, char32_t> || std::is_same_v<U, char32_t> ||
+                                          std::is_same_v<T, char16_t> || std::is_same_v<U, char16_t>>,
+              typename = void>
+    bool assertNotEquals(const Message &message, T expected, U actual) {
+        return assertCodePointNotEquals(extractToAssertBuf(message), expected, actual);
+    }
+
+    template <typename Message, typename T, typename U,
+              typename = std::enable_if_t<(std::is_integral_v<T> || std::is_enum_v<T>) &&
+                                          (std::is_integral_v<U> || std::is_enum_v<U>) &&
+                                          !(std::is_same_v<T, int32_t> && std::is_same_v<U, int32_t>) &&
+                                          !((std::is_same_v<T, UBool> || std::is_same_v<T, bool>) &&
+                                            (std::is_same_v<U, UBool> || std::is_same_v<U, bool>)) &&
+                                          !(std::is_same_v<T, char32_t> || std::is_same_v<U, char32_t> ||
+                                            std::is_same_v<T, char16_t> || std::is_same_v<U, char16_t>)>,
+              typename = void, typename = void, typename = void>
+    bool assertNotEquals(const Message &message, T expected, U actual) {
+        return assertSigned64NotEquals(extractToAssertBuf(message), expected, actual);
+    }
+
     UBool assertEquals(const char* message, double expected, double actual);
 
     // for disambiguation
@@ -340,21 +414,18 @@ public:
                                   const Formattable& actual);
 #endif
 #endif
-    UBool assertNotEquals(const char* message, int32_t expectedNot, int32_t actual);
     UBool assertTrue(std::u16string_view message, UBool condition, UBool quiet=false, UBool possibleDataError=false);
     UBool assertFalse(std::u16string_view message, UBool condition, UBool quiet=false, UBool possibleDataError=false);
     UBool assertSuccess(std::u16string_view message, UErrorCode ec);
     UBool assertEquals(std::u16string_view message, std::u16string_view expected,
                        std::u16string_view actual, UBool possibleDataError=false);
     UBool assertEquals(std::u16string_view message, const char* expected, const char* actual);
-    UBool assertEquals(std::u16string_view message, UBool expected, UBool actual);
-    UBool assertEquals(std::u16string_view message, int32_t expected, int32_t actual);
-    UBool assertEquals(std::u16string_view message, int64_t expected, int64_t actual);
     UBool assertEquals(std::u16string_view message, double expected, double actual);
 
     // for disambiguation
     UBool assertEquals(std::u16string_view message, const char* expected,
                        std::u16string_view actual, UBool possibleDataError=false);
+
 
     /**
      * Asserts that two doubles are equal to within a positive delta. Returns
@@ -376,7 +447,6 @@ public:
 #endif
     UBool assertEquals(std::u16string_view message,
         const std::vector<std::string>& expected, const std::vector<std::string>& actual);
-    UBool assertNotEquals(std::u16string_view message, int32_t expectedNot, int32_t actual);
 
     virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ); // override !
 
@@ -399,6 +469,24 @@ public:
     int32_t     threadCount;
 
 private:
+    // This takes int8_t (aka UBool), not bool, so that in case we actually mean to compare int8_t
+    // integers, the test result is at least correct. The error message will still be useless (unless one
+    // of the values is 0, it will say that we expected true and got true instead).
+    bool assertBooleanEquals(const char *message, int8_t expected, int8_t actual);
+    bool assertSigned32Equals(const char *message, int32_t expected, int32_t actual);
+    bool assertSigned64Equals(const char *message, int64_t expected, int64_t actual);
+    bool assertCodePointEquals(const char *message, char32_t expected, char32_t actual);
+
+    bool assertBooleanNotEquals(const char *message, int8_t expected, int8_t actual);
+    bool assertSigned32NotEquals(const char *message, int32_t expected, int32_t actual);
+    bool assertSigned64NotEquals(const char *message, int64_t expected, int64_t actual);
+    bool assertCodePointNotEquals(const char *message, char32_t expected, char32_t actual);
+
+    static const char* extractToAssertBuf(const char* message) {
+      return message;
+    }
+    static const char* extractToAssertBuf(std::u16string_view message);
+
     UBool       LL_linestart;
     int32_t     LL_indentlevel;
 

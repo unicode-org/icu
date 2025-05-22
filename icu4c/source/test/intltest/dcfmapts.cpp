@@ -137,7 +137,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
         DecimalFormat df("0", {"en", status}, status);
         UnicodeString result;
         assertEquals("pat 0: ", 0, df.getGroupingSize());
-        assertEquals("pat 0: ", static_cast<UBool>(false), df.isGroupingUsed());
+        assertEquals("pat 0: ", false, df.isGroupingUsed());
         df.setGroupingUsed(false);
         assertEquals("pat 0 then disabled: ", 0, df.getGroupingSize());
         assertEquals("pat 0 then disabled: ", u"1111", df.format(1111, result.remove()));
@@ -149,7 +149,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
         DecimalFormat df("#,##0", {"en", status}, status);
         UnicodeString result;
         assertEquals("pat #,##0: ", 3, df.getGroupingSize());
-        assertEquals("pat #,##0: ", static_cast<UBool>(true), df.isGroupingUsed());
+        assertEquals("pat #,##0: ", true, df.isGroupingUsed());
         df.setGroupingUsed(false);
         assertEquals("pat #,##0 then disabled: ", 3, df.getGroupingSize());
         assertEquals("pat #,##0 then disabled: ", u"1111", df.format(1111, result.remove()));
