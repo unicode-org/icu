@@ -1,0 +1,20 @@
+add_executable(pkgdata)
+icu_add_sources(pkgdata)
+target_link_libraries(pkgdata PRIVATE icu_defaults icuuc toolutil)
+
+add_dependencies(pkgdata gencnval)
+
+add_custom_command(
+  TARGET pkgdata POST_BUILD
+  COMMAND nmake /nologo /f ${icu4c_SOURCE_DIR}/data/makedata.mak
+	ICUMAKE=${icu4c_SOURCE_DIR}/data
+	DLL_OUTPUT=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+	ICUPBIN=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+	GENRB_DIR=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+	GENCNVAL_DIR=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+	GENCFU_DIR=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+	ICUPKG_DIR=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+	MAKECONV_DIR=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+	CFG=${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}\\$<CONFIG>
+	$<$<CONFIG:Debug>:DEBUG=true>
+  VERBATIM)
