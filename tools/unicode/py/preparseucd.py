@@ -359,9 +359,9 @@ def SetPropertyValue(pname, vname, start, end):
 # Parsing ------------------------------------------------------------------ ***
 
 _stripped_cp_re = re.compile("([0-9a-fA-F]+)$")
-_stripped_range_re = re.compile("([0-9a-fA-F]+)\.\.([0-9a-fA-F]+)$")
+_stripped_range_re = re.compile("([0-9a-fA-F]+)\\.\\.([0-9a-fA-F]+)$")
 # Default value for all of Unicode.
-_missing_re = re.compile("# *@missing: *0000\.\.10FFFF *; *(.+)$")
+_missing_re = re.compile("# *@missing: *0000\\.\\.10FFFF *; *(.+)$")
 # Default value for some range.
 _missing2_re = re.compile("# *@missing: *(.+)$")
 
@@ -1607,7 +1607,7 @@ def IdnaToUTS46TextFile(s, t):
 # Preprocessing ------------------------------------------------------------ ***
 
 _strip_re = re.compile("([0-9a-fA-F]+.+?) *#.*")
-_code_point_re = re.compile("\s*([0-9a-fA-F]+)\s*;")
+_code_point_re = re.compile("\\s*([0-9a-fA-F]+)\\s*;")
 
 def CopyAndStripWithOptionalMerge(s, t, do_merge):
   # TODO: We do not seem to need the do_merge argument and logic any more.
@@ -1721,7 +1721,7 @@ _files = {
   "emoji-sequences.txt": (CopyOnly,),
   "emoji-zwj-sequences.txt": (CopyOnly,),
   "GraphemeBreakProperty.txt": (DontCopy, ParseGraphemeBreakProperty),
-  "GraphemeBreakTest-cldr.txt": (CopyOnly, "testdata"),
+  "GraphemeBreakTest.txt": (CopyOnly, "testdata"),
   "IdentifierStatus.txt": (DontCopy, ParseIdentifierStatus),
   "IdentifierType.txt": (DontCopy, ParseIdentifierType),
   "IdnaTestV2.txt": (CopyOnly, "testdata"),
@@ -1991,7 +1991,7 @@ _uchar_re = re.compile(
 
 # Sample line to match:
 #    /** Zs @stable ICU 2.0 */
-_gc_comment_re = re.compile(" */\*\* *([A-Z][a-z]) ")
+_gc_comment_re = re.compile(" */\\*\\* *([A-Z][a-z]) ")
 
 # Sample line to match:
 #    U_SPACE_SEPARATOR         = 12,
@@ -1999,7 +1999,7 @@ _gc_re = re.compile(" *(U_[A-Z_]+) *= *[0-9]+,")
 
 # Sample line to match:
 #    /** L @stable ICU 2.0 */
-_bc_comment_re = re.compile(" */\*\* *([A-Z]{1,3}) ")
+_bc_comment_re = re.compile(" */\\*\\* *([A-Z]{1,3}) ")
 
 # Sample line to match:
 #    U_LEFT_TO_RIGHT               = 0,
@@ -2144,7 +2144,7 @@ def ParseUCharHeader(icu4c_src_root):
 # Sample line to match:
 #    USCRIPT_LOMA   = 139,/* Loma */
 _uscript_re = re.compile(
-    " *(USCRIPT_[A-Z_]+) *= *[0-9]+ *, */\* *([A-Z][a-z]{3}) *\*/")
+    " *(USCRIPT_[A-Z_]+) *= *[0-9]+ *, */\\* *([A-Z][a-z]{3}) *\\*/")
 
 def ParseUScriptHeader(icu4c_src_root):
   uscript_path = os.path.join(icu4c_src_root, "source",

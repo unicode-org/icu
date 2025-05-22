@@ -1338,6 +1338,27 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 76 */
         public static final int TULU_TIGALARI_ID = 338; /*[11380]*/
 
+        // New blocks in Unicode 17.0.0
+
+        /** @stable ICU 78 */
+        public static final int BERIA_ERFE_ID = 339; /*[16EA0]*/
+        /** @stable ICU 78 */
+        public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_J_ID = 340; /*[323B0]*/
+        /** @stable ICU 78 */
+        public static final int CHISOI_ID = 341; /*[16D80]*/
+        /** @stable ICU 78 */
+        public static final int MISCELLANEOUS_SYMBOLS_SUPPLEMENT_ID = 342; /*[1CEC0]*/
+        /** @stable ICU 78 */
+        public static final int SHARADA_SUPPLEMENT_ID = 343; /*[11B60]*/
+        /** @stable ICU 78 */
+        public static final int SIDETIC_ID = 344; /*[10940]*/
+        /** @stable ICU 78 */
+        public static final int TAI_YO_ID = 345; /*[1E6C0]*/
+        /** @stable ICU 78 */
+        public static final int TANGUT_COMPONENTS_SUPPLEMENT_ID = 346; /*[18D80]*/
+        /** @stable ICU 78 */
+        public static final int TOLONG_SIKI_ID = 347; /*[11DB0]*/
+
         /**
          * One more than the highest normal UnicodeBlock value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.BLOCK).
@@ -1345,7 +1366,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 339;
+        public static final int COUNT = 348;
 
         // blocks objects ---------------------------------------------------
 
@@ -2813,6 +2834,31 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock TULU_TIGALARI =
                 new UnicodeBlock("TULU_TIGALARI", TULU_TIGALARI_ID);
 
+        // New blocks in Unicode 17.0.0
+
+        /** @stable ICU 78 */
+        public static final UnicodeBlock BERIA_ERFE = new UnicodeBlock("BERIA_ERFE", BERIA_ERFE_ID);
+        /** @stable ICU 78 */
+        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_J =
+                new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_J", CJK_UNIFIED_IDEOGRAPHS_EXTENSION_J_ID);
+        /** @stable ICU 78 */
+        public static final UnicodeBlock CHISOI = new UnicodeBlock("CHISOI", CHISOI_ID);
+        /** @stable ICU 78 */
+        public static final UnicodeBlock MISCELLANEOUS_SYMBOLS_SUPPLEMENT =
+                new UnicodeBlock("MISCELLANEOUS_SYMBOLS_SUPPLEMENT", MISCELLANEOUS_SYMBOLS_SUPPLEMENT_ID);
+        /** @stable ICU 78 */
+        public static final UnicodeBlock SHARADA_SUPPLEMENT =
+                new UnicodeBlock("SHARADA_SUPPLEMENT", SHARADA_SUPPLEMENT_ID);
+        /** @stable ICU 78 */
+        public static final UnicodeBlock SIDETIC = new UnicodeBlock("SIDETIC", SIDETIC_ID);
+        /** @stable ICU 78 */
+        public static final UnicodeBlock TAI_YO = new UnicodeBlock("TAI_YO", TAI_YO_ID);
+        /** @stable ICU 78 */
+        public static final UnicodeBlock TANGUT_COMPONENTS_SUPPLEMENT =
+                new UnicodeBlock("TANGUT_COMPONENTS_SUPPLEMENT", TANGUT_COMPONENTS_SUPPLEMENT_ID);
+        /** @stable ICU 78 */
+        public static final UnicodeBlock TOLONG_SIKI = new UnicodeBlock("TOLONG_SIKI", TOLONG_SIKI_ID);
+
         /**
          * @stable ICU 2.4
          */
@@ -3454,6 +3500,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 76 */
         public static final int KASHMIRI_YEH = 104;
 
+        /** @stable ICU 78 */
+        public static final int THIN_NOON = 105;
+
         /**
          * One more than the highest normal JoiningGroup value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.JoiningGroup).
@@ -3461,7 +3510,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 105;
+        public static final int COUNT = 106;
     }
 
     /**
@@ -3886,6 +3935,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int VIRAMA_FINAL = 46;  /*[VF]*/
         /** @stable ICU 74 */
         public static final int VIRAMA = 47;  /*[VI]*/
+        /** @stable ICU 78 */
+        public static final int UNAMBIGUOUS_HYPHEN = 48;  /*[HH]*/
         /**
          * One more than the highest normal LineBreak value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.LINE_BREAK).
@@ -3893,7 +3944,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 48;
+        public static final int COUNT = 49;
     }
 
     /**

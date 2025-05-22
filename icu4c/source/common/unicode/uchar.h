@@ -61,7 +61,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "16.0"
+#define U_UNICODE_VERSION "17.0"
 
 /**
  * \file
@@ -1985,6 +1985,27 @@ enum UBlockCode {
     /** @stable ICU 76 */
     UBLOCK_TULU_TIGALARI = 338, /*[11380]*/
 
+    // New blocks in Unicode 17.0.0
+
+    /** @stable ICU 78 */
+    UBLOCK_BERIA_ERFE = 339, /*[16EA0]*/
+    /** @stable ICU 78 */
+    UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_J = 340, /*[323B0]*/
+    /** @stable ICU 78 */
+    UBLOCK_CHISOI = 341, /*[16D80]*/
+    /** @stable ICU 78 */
+    UBLOCK_MISCELLANEOUS_SYMBOLS_SUPPLEMENT = 342, /*[1CEC0]*/
+    /** @stable ICU 78 */
+    UBLOCK_SHARADA_SUPPLEMENT = 343, /*[11B60]*/
+    /** @stable ICU 78 */
+    UBLOCK_SIDETIC = 344, /*[10940]*/
+    /** @stable ICU 78 */
+    UBLOCK_TAI_YO = 345, /*[1E6C0]*/
+    /** @stable ICU 78 */
+    UBLOCK_TANGUT_COMPONENTS_SUPPLEMENT = 346, /*[18D80]*/
+    /** @stable ICU 78 */
+    UBLOCK_TOLONG_SIKI = 347, /*[11DB0]*/
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UBlockCode value.
@@ -1992,7 +2013,7 @@ enum UBlockCode {
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UBLOCK_COUNT = 339,
+    UBLOCK_COUNT = 348,
 #endif  // U_HIDE_DEPRECATED_API
 
     /** @stable ICU 2.0 */
@@ -2289,6 +2310,8 @@ typedef enum UJoiningGroup {
 
     U_JG_KASHMIRI_YEH,  /**< @stable ICU 76 */
 
+    U_JG_THIN_NOON,  /**< @stable ICU 78 */
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UJoiningGroup value.
@@ -2536,6 +2559,8 @@ typedef enum ULineBreak {
     U_LB_VIRAMA_FINAL = 46,      /*[VF]*/
     /** @stable ICU 74 */
     U_LB_VIRAMA = 47,            /*[VI]*/
+    /** @stable ICU 78 */
+    U_LB_UNAMBIGUOUS_HYPHEN = 48,/*[HH]*/
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal ULineBreak value.
@@ -2543,7 +2568,7 @@ typedef enum ULineBreak {
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    U_LB_COUNT = 48
+    U_LB_COUNT = 49
 #endif  // U_HIDE_DEPRECATED_API
 } ULineBreak;
 

@@ -60,7 +60,7 @@ public final class UCharacterTest extends CoreTestFmwk
     /**
      * Expected Unicode version.
      */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance(16, 0);
+    private final VersionInfo VERSION_ = VersionInfo.getInstance(17, 0);
 
     // constructor ===================================================
 
