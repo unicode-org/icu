@@ -356,6 +356,8 @@ public: // package
 
     void Test22750Roll();
 
+    void Test23101ExtendedYear();
+
     void RunTestOnCalendars(void(TestFunc)(Calendar*, UCalendarDateFields));
 
     void verifyFirstDayOfWeek(const char* locale, UCalendarDaysOfWeek expected);
