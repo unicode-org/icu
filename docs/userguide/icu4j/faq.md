@@ -62,7 +62,7 @@ Time Zone Data Version: 2011g
 #### I'm using ICU4J X, but planning to upgrade ICU4J version to X+1 soon. What should I do for the migration?
 
 See the user guide section
-[Version Numbers in ICU](../design#version-numbers-in-icu)
+[Version Numbers in ICU](../icu/design#version-numbers-in-icu)
 for the details about the meaning of the version number parts and how the ICU
 version number changes.
 
@@ -70,7 +70,7 @@ In general, two different reference releases are not binary compatible (i.e.
 drop-in jar file replacement would not work). To use a new reference version of
 ICU4J, you should rebuild your application with the new ICU4J library. ICU
 project has the
-[API compatibility policy](../design#icu-api-compatibility)
+[API compatibility policy](../icu/design#icu-api-compatibility)
 long as you're using ICU APIs marked as @stable in the API reference
 documentation, your application should successfully compile with the new
 reference version of ICU4J library without any source code modifications. (Note:
