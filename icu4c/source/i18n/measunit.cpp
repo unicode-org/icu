@@ -2650,7 +2650,13 @@ const char *MeasureUnit::getSubtype() const {
 }
 
 const char *MeasureUnit::getIdentifier() const {
-    return fImpl ? fImpl->identifier.data() : gSubTypes[getOffset()];
+    if (fImpl){
+        return fImpl->identifier.data();
+    } else if  (fTypeId < 0 || fSubTypeId < 0) {
+        return "";
+    } else {
+        return gSubTypes[getOffset()];
+    }
 }
 
 bool MeasureUnit::operator==(const UObject& other) const {
