@@ -8,6 +8,9 @@
  */
 package com.ibm.icu.dev.test.rbbi;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.text.StringCharacterIterator;
 import java.util.Locale;
 
@@ -107,6 +110,33 @@ public class BreakIteratorTest extends CoreTestFmwk
     // tests
     //=========================================================================
 
+    @Test
+    public void TestPreceding_NegativeIndex() {
+        String source = "The quick brown fox jumped over the lazy dog.";
+        BreakIterator iter = BreakIterator.getWordInstance();
+        iter.setText(source);
+
+        assertEquals("length of source string", 45, source.length());
+
+        Object[][] casesData = {
+            {"negative index",                 -2, BreakIterator.DONE},
+            {"zero",                            0, BreakIterator.DONE},
+            {"one",                             1, 0},
+            {"middle",                         41, 40},
+            {"end",                            45, 44},
+            {"after the end", source.length() + 2, source.length()}
+        };
+
+        for (Object[] caseDatum : casesData) {
+            String desc = (String) caseDatum[0];
+            int startIdx = (int) caseDatum[1];
+            int expected = (int) caseDatum[2];
+
+            int actual = iter.preceding(startIdx);
+
+            assertThat(desc, actual, is(expected));
+        }
+    }
 
     /*
      * @bug 4153072

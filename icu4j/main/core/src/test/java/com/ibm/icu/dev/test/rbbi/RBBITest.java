@@ -324,14 +324,14 @@ public class RBBITest extends CoreTestFmwk {
         rbbi.setText((CharacterIterator)null);
         if (rbbi.preceding(-1) != BreakIterator.DONE) {
             errln("RuleBasedBreakIterator.preceding(-1) was suppose to return "
-                    + "0 when the object has a fText of null.");
+                    + "DONE when the object has a fText of null.");
         }
 
         // Tests when "else if (offset < fText.getBeginIndex())" is true
         rbbi.setText("dummy");
-        if (rbbi.preceding(-1) != 0) {
+        if (rbbi.preceding(-1) != BreakIterator.DONE) {
             errln("RuleBasedBreakIterator.preceding(-1) was suppose to return "
-                    + "0 when the object has a fText of dummy.");
+                    + "DONE when the object has a fText of dummy.");
         }
     }
 

@@ -511,7 +511,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         if (fText == null || offset > fText.getEndIndex()) {
             return last();
         } else if (offset < fText.getBeginIndex()) {
-            return first();
+            return DONE;
         }
 
         // Move requested offset to a code point start. It might be between a lead and trail surrogate.
