@@ -347,6 +347,10 @@ public abstract class BreakIterator implements Cloneable
         // NOTE:  This implementation is here solely because we can't add new
         // abstract methods to an existing class.  There is almost ALWAYS a
         // better, faster way to do this.
+
+        if (offset < 0) {
+            return DONE;
+        }
         int pos = following(offset);
         while (pos >= offset && pos != DONE)
             pos = previous();

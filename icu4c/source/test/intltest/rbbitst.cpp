@@ -107,6 +107,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestGetDisplayName);
 #if !UCONFIG_NO_FILE_IO
     TESTCASE_AUTO(TestEndBehaviour);
+    TESTCASE_AUTO(TestPreceding_NegativeIndex);
     TESTCASE_AUTO(TestWordBreaks);
     TESTCASE_AUTO(TestWordBoundary);
     TESTCASE_AUTO(TestLineBreaks);
@@ -737,6 +738,34 @@ void RBBITest::executeTest(TestParams *t, UErrorCode &status) {
                   "        Expected, Actual= %d, %d",
                   i, t->getSrcLine(i), t->getSrcCol(i), expectedBreak, actualBreak);
         }
+    }
+}
+
+void RBBITest::TestPreceding_NegativeIndex() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale loc = Locale::getRoot();
+    LocalPointer<BreakIterator> bi(BreakIterator::createWordInstance(loc, status));
+    UnicodeString source(u"The quick brown fox jumped over the lazy dog.");
+    bi->setText(source);
+
+    assertEquals("length of source string", 45, source.length());
+
+    struct TestCase {
+        const UnicodeString description;
+        const int32_t startIdx;
+        const int32_t expected;
+    } cases[] = {
+        {"negative index",                 -2, BreakIterator::DONE},
+        {"zero",                            0, BreakIterator::DONE},
+        {"one",                             1, 0},
+        {"middle",                         41, 40},
+        {"end",                            45, 44},
+        {"after the end", source.length() + 2, source.length()}
+    };
+
+    for (const auto& cas : cases) {
+        int32_t actual = bi->preceding(cas.startIdx);
+        assertEquals(cas.description, cas.expected, actual);
     }
 }
 

@@ -58,6 +58,7 @@ public:
 
     void TestExtended();
     void executeTest(TestParams *, UErrorCode &status);
+    void TestPreceding_NegativeIndex();
 
     void TestWordBreaks();
     void TestWordBoundary();
