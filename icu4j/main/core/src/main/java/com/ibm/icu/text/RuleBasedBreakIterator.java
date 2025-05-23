@@ -524,12 +524,12 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
 
     /**
-     * Throw IllegalArgumentException unless begin &lt;= offset &lt; end.
+     * Throw IndexOutOfBoundsException unless begin &lt;= offset &lt; end.
      * @stable ICU 2.0
      */
     protected static final void checkOffset(int offset, CharacterIterator text) {
         if (offset < text.getBeginIndex() || offset > text.getEndIndex()) {
-            throw new IllegalArgumentException("offset out of bounds");
+            throw new IndexOutOfBoundsException("offset out of bounds");
         }
     }
 
