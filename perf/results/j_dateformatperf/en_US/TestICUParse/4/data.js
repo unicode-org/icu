@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1747867451281,
+  "lastUpdate": 1748085639260,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34587,6 +34587,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 776.1084519613024,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "454ce01479fdf4435e0a6600c38fc205a898501c",
+          "message": "ICU-22987 Return DONE for BreakIterator.preceding on negative index\n\nSee #3507",
+          "timestamp": "2025-05-24T03:47:39-07:00",
+          "tree_id": "4475702b691af50781307631a598ec30902d5a7f",
+          "url": "https://github.com/unicode-org/icu/commit/454ce01479fdf4435e0a6600c38fc205a898501c"
+        },
+        "date": 1748085375625,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 807.2410557522563,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
