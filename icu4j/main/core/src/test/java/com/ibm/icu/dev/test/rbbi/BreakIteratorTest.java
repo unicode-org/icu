@@ -158,7 +158,7 @@ public class BreakIteratorTest extends CoreTestFmwk
                     errln("Didn't get exception with offset = " + index +
                                     " and begin index = " + begin);
             }
-            catch (IllegalArgumentException e) {
+            catch (IndexOutOfBoundsException e) {
                 if (index >= begin)
                     errln("Got exception with offset = " + index +
                                     " and begin index = " + begin);
