@@ -188,8 +188,6 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
 
   $ICU_OUT/icu4c$ echo;echo; date; make -j20 tests &> out.txt ; tail -n 30 out.txt ; date
 
-TODO
-
 * Bazel build process
 
 See https://unicode-org.github.io/icu/processes/unicode-update#bazel-build-process
@@ -199,6 +197,11 @@ Consider running `bazelisk --version` outside of the $ICU_SRC folder
 to find out the latest `bazel` version, and
 copying that version number into the $ICU_SRC/.bazeliskrc config file.
 (Revert if you find incompatibilities, or, better, update our build & config files.)
+
+* TODO for mid-2025:
+  Error when upgrading from Bazel 7.2.1 to Bazel 8.2.1:
+    ERROR: Skipping '//icu4c/source/tools/gennorm2': error loading package 'icu4c/source/tools/gennorm2': Unable to find package for @@[unknown repo 'rules_cc' requested from @@]//cc:defs.bzl: The repository '@@[unknown repo 'rules_cc' requested from @@]' could not be resolved: No repository visible as '@rules_cc' from main repository. Was the repository introduced in WORKSPACE? The WORKSPACE file is disabled by default in Bazel 8 (late 2024) and will be removed in Bazel 9 (late 2025), please migrate to Bzlmod. See https://bazel.build/external/migration.
+  Need to revisit!
 
 * generate data files
 
@@ -212,6 +215,13 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
 - build/bootstrap/generate new files:
     icu4c/source/data/unidata/generate.sh
 
+* NOTE: propsVectorsTrie_index in uprops.icu / uchar_props_data.h
+  (and a bit of propsVectors)
+  increased by some 22kB, probably mostly due to the revised Identifier_Type data,
+  especially for Unified_Ideograph characters.
+
+TODO
+
 * run & fix ICU4C tests
 - Note: Some of the collation data and test data will be updated below,
   so at this time we might get some collation test failures.
@@ -220,12 +230,6 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
   few characters or ranges, and are not expected to change often.
   They are tested at least in C++ intltest (e.g., against ppucd.txt).
   If these tests fail, then update the implementation and the tests.
-- update CLDR GraphemeBreakTest.txt
-  (see the download section above about this file)
-    cd ~/unitools/mine/Generated
-    cp UCD/16.0.0/cldr/GraphemeBreakTest-cldr.txt $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
-    cp UCD/16.0.0/cldr/GraphemeBreakTest-cldr.html $CLDR_SRC/common/properties/segments/GraphemeBreakTest.html
-    cp $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt $ICU_SRC/icu4c/source/test/testdata
 - Robin or Andy helps with RBBI & spoof check test failures
 
 * collation: CLDR collation root, UCA DUCET

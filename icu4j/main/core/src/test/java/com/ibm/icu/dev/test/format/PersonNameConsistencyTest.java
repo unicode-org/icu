@@ -49,12 +49,10 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
     private static Map<String, String> KNOWN_ISSUES = makeKnownIssuesList();
 
     private static Map<String, String> makeKnownIssuesList() {
-        Map<String, String> knownIssues = new HashMap<>();
-
-        // there are no current locales for which we have known issues
-        knownIssues.put("bal_Latn.txt", "CLDR-17874");
-
-        return knownIssues;
+        return Map.of(
+                "bal_Latn.txt", "CLDR-17874",
+                // Khmer person name tests: adjust for Unicode 17 GCB changes
+                "km.txt", "CLDR-18815");
     }
     static List<String> readTestCases() throws Exception {
         List<String> tests = new ArrayList<>();

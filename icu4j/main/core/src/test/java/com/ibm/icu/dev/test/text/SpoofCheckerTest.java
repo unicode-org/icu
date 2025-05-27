@@ -609,7 +609,7 @@ public class SpoofCheckerTest extends CoreTestFmwk {
                 {"a", RestrictionLevel.ASCII},
                 {"γ", RestrictionLevel.SINGLE_SCRIPT_RESTRICTIVE},
                 {"aアー", RestrictionLevel.HIGHLY_RESTRICTIVE},
-                {"aऄ", RestrictionLevel.MODERATELY_RESTRICTIVE},
+                {"aअ", RestrictionLevel.MODERATELY_RESTRICTIVE},
                 {"aγ", RestrictionLevel.MINIMALLY_RESTRICTIVE},
                 {"a♥", RestrictionLevel.UNRESTRICTIVE},
                 {"a\u303c", RestrictionLevel.HIGHLY_RESTRICTIVE},
