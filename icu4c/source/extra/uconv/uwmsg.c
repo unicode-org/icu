@@ -46,6 +46,7 @@ uprint(const UChar *s,
     const UChar *mySourceEnd;
     char *myTarget;
     int32_t arraySize;
+    UErrorCode bufferStatus;
 
     if(s == 0) return;
 
@@ -54,6 +55,7 @@ uprint(const UChar *s,
     mySourceEnd  = mySource + sourceLen;
     myTarget     = buf;
     arraySize    = BUF_SIZE;
+    bufferStatus = U_ZERO_ERROR;
 
     /* open a default converter */
     converter = ucnv_open(0, status);
@@ -64,12 +66,12 @@ uprint(const UChar *s,
     /* perform the conversion */
     do {
         /* reset the error code */
-        *status = U_ZERO_ERROR;
+        bufferStatus = U_ZERO_ERROR;
 
         /* perform the conversion */
         ucnv_fromUnicode(converter, &myTarget,  myTarget + arraySize,
             &mySource, mySourceEnd, NULL,
-            true, status);
+            true, &bufferStatus);
 
         /* Write the converted data to the FILE* */
         fwrite(buf, sizeof(char), myTarget - buf, f);
@@ -78,7 +80,10 @@ uprint(const UChar *s,
         myTarget     = buf;
         arraySize    = BUF_SIZE;
     }
-    while(*status == U_BUFFER_OVERFLOW_ERROR); 
+    while(bufferStatus == U_BUFFER_OVERFLOW_ERROR);
+    if (U_FAILURE(bufferStatus)) {
+        *status = bufferStatus;
+    }
 
 finish:
 

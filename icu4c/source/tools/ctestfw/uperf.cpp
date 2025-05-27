@@ -189,16 +189,20 @@ void UPerfTest::init(UOption addOptions[], int32_t addOptionsCount,
     int32_t len = 0;
     if(fileName!=nullptr){
         //pre-flight
-        ucbuf_resolveFileName(sourceDir, fileName, nullptr, &len, &status);
+        UErrorCode bufferStatus = U_ZERO_ERROR;
+        ucbuf_resolveFileName(sourceDir, fileName, nullptr, &len, &bufferStatus);
         resolvedFileName = static_cast<char*>(uprv_malloc(len));
         if(resolvedFileName==nullptr){
             status= U_MEMORY_ALLOCATION_ERROR;
             return;
         }
-        if(status == U_BUFFER_OVERFLOW_ERROR){
-            status = U_ZERO_ERROR;
+        if(bufferStatus == U_BUFFER_OVERFLOW_ERROR){
+            bufferStatus = U_ZERO_ERROR;
         }
-        ucbuf_resolveFileName(sourceDir, fileName, resolvedFileName, &len, &status);
+        ucbuf_resolveFileName(sourceDir, fileName, resolvedFileName, &len, &bufferStatus);
+        if (U_FAILURE(bufferStatus)) {
+            status = bufferStatus;
+        }
         ucharBuf = ucbuf_open(resolvedFileName,&encoding,true,false,&status);
 
         if(U_FAILURE(status)){
