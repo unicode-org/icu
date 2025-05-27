@@ -2674,14 +2674,15 @@ Locale::setKeywordValue(StringPiece keywordName,
         // Remove -1 from the capacity so that this function can guarantee NUL termination.
         CheckedArrayByteSink sink(fullName + offset, capacity - offset - 1);
 
+        UErrorCode bufferStatus = U_ZERO_ERROR;
         int32_t reslen = ulocimp_setKeywordValue(
             {fullName + offset, static_cast<std::string_view::size_type>(length - offset)},
             keywordName,
             keywordValue,
             sink,
-            status);
+            bufferStatus);
 
-        if (status == U_BUFFER_OVERFLOW_ERROR) {
+        if (bufferStatus == U_BUFFER_OVERFLOW_ERROR) {
             capacity = reslen + offset + 1;
             char* newFullName = static_cast<char*>(uprv_malloc(capacity));
             if (newFullName == nullptr) {
@@ -2697,11 +2698,13 @@ Locale::setKeywordValue(StringPiece keywordName,
                 uprv_free(fullName);
             }
             fullName = newFullName;
-            status = U_ZERO_ERROR;
             continue;
         }
 
-        if (U_FAILURE(status)) { return; }
+        if (U_FAILURE(bufferStatus)) {
+            status = bufferStatus;
+            return;
+        }
         u_terminateChars(fullName, capacity, reslen + offset, &status);
         break;
     }
