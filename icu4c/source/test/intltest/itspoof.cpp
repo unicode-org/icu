@@ -49,15 +49,15 @@
 
 #define TEST_ASSERT_EQ(a, b) UPRV_BLOCK_MACRO_BEGIN { \
     if ((a) != (b)) { \
-        errln("Test Failure at file %s, line %d: \"%s\" (%d) != \"%s\" (%d)", \
-              __FILE__, __LINE__, #a, (a), #b, (b)); \
+        errln("Test Failure at file %s, line %d: \"%s\" (%d=0x%x) != \"%s\" (%d=0x%x)", \
+              __FILE__, __LINE__, #a, (a), (a), #b, (b), (b)); \
     } \
 } UPRV_BLOCK_MACRO_END
 
 #define TEST_ASSERT_NE(a, b) UPRV_BLOCK_MACRO_BEGIN { \
     if ((a) == (b)) { \
-        errln("Test Failure at file %s, line %d: \"%s\" (%d) == \"%s\" (%d)", \
-              __FILE__, __LINE__, #a, (a), #b, (b)); \
+        errln("Test Failure at file %s, line %d: \"%s\" (%d=0x%x) == \"%s\" (%d=0x%x)", \
+              __FILE__, __LINE__, #a, (a), (a), #b, (b), (b)); \
     } \
 } UPRV_BLOCK_MACRO_END
 
@@ -632,7 +632,7 @@ void IntlTestSpoof::testRestrictionLevel() {
         {"a",                     USPOOF_ASCII},
         {"\\u03B3",               USPOOF_SINGLE_SCRIPT_RESTRICTIVE},
         {"\\u0061\\u30A2\\u30FC", USPOOF_HIGHLY_RESTRICTIVE},
-        {"\\u0061\\u0904",        USPOOF_MODERATELY_RESTRICTIVE},
+        {"\\u0061\\u0905",        USPOOF_MODERATELY_RESTRICTIVE},
         {"\\u0061\\u03B3",        USPOOF_MINIMALLY_RESTRICTIVE},
         {"\\u0061\\u2665",                USPOOF_UNRESTRICTIVE},
         {"\\u0061\\u303C",                USPOOF_HIGHLY_RESTRICTIVE},
