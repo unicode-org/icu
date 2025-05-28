@@ -220,8 +220,6 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
   increased by some 22kB, probably mostly due to the revised Identifier_Type data,
   especially for Unified_Ideograph characters.
 
-TODO
-
 * run & fix ICU4C tests
 - Note: Some of the collation data and test data will be updated below,
   so at this time we might get some collation test failures.
@@ -231,6 +229,7 @@ TODO
   They are tested at least in C++ intltest (e.g., against ppucd.txt).
   If these tests fail, then update the implementation and the tests.
 - Robin or Andy helps with RBBI & spoof check test failures
+  + TODO
 
 * collation: CLDR collation root, UCA DUCET
 
@@ -244,7 +243,7 @@ TODO
     cp -v $ICU4C_UNIDATA/UCARules.txt /tmp/UCARules-old.txt
     (note removing the underscore before "Rules")
     cp -v $CLDR_SRC/common/uca/UCA_Rules_SHORT.txt $ICU4C_UNIDATA/UCARules.txt
-- restore TODO diffs in UCARules.txt
+- restore TODO diffs in UCARules.txt; adjust boundaries as needed, e.g., for new currency symbols
     meld /tmp/UCARules-old.txt $ICU4C_UNIDATA/UCARules.txt
 - update (ICU4C)/source/test/testdata/CollationTest_*.txt
   and (ICU4J)/main/tests/collate/src/com/ibm/icu/dev/data/CollationTest_*.txt
@@ -270,25 +269,22 @@ TODO
 - run Unicode Tools GenerateUnihanCollators & GenerateUnihanCollatorFiles,
   check CLDR diffs, copy to CLDR, test CLDR, ... as documented there
 - generate ICU zh collation data
-    WARNING: outdated, don't do this, follow the tools/cldr/cldr-to-icu/README.md file!
-    --- Old text from here:
-    instructions inspired by
-    https://github.com/unicode-org/icu/blob/main/tools/cldr/cldr-to-icu/README.txt and
-    https://github.com/unicode-org/icu/blob/main/icu4c/source/data/cldr-icu-readme.txt
+    Follow the tools/cldr/cldr-to-icu/README.md file.
   + setup:
     export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
         (didn't work without setting JAVA_HOME,
          nor with the Google default of /usr/local/buildtools/java/jdk
          [Google security limitations in the XML parser])
+    export PATH=$JAVA_HOME/bin:$PATH
     export TOOLS_ROOT=$ICU_SRC/tools
+    export ICU_DIR=$ICU_SRC
     export CLDR_DIR=$CLDR_SRC
     export CLDR_DATA_DIR=$CLDR_DIR
         (pointing to the "raw" data, not cldr-staging/.../production should be ok for the relevant files)
-    cd "$TOOLS_ROOT/cldr/lib"
-    ./install-cldr-jars.sh "$CLDR_DIR"
-  + generate the files we need
-    cd "$TOOLS_ROOT/cldr/cldr-to-icu"
-    ant -f build-icu-data.xml -DoutDir=/tmp/icu -DoutputTypes=coll,transforms -DlocaleIdFilter='zh.*'
+  + build & run Java code
+    Follow the instructions in the TLDR section of the cldr-to-icu/README.md file.
+    In TLDR "Run the conversion tool" add parameters to generate only the files we need:
+      java -jar target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar --outDir=/tmp/icu --outputTypes=coll,transforms --localeIdFilter='zh.*' --dontGenCode
   + diff
     cd $ICU_SRC
     meld icu4c/source/data/coll/zh.txt /tmp/icu/coll/zh.txt
@@ -316,14 +312,14 @@ TODO
   output:
     ...
     make[1]: Entering directory '/usr/local/google/home/mscherer/icu/uni/dbg/icu4c/data'
-    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt78b
-    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt78b
-    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt78l.dat ./out/icu4j/icudt78b.dat -s ./out/build/icudt78l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt78b
-    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt78b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt78b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt78b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt78b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt78b"
-    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt78b/
+    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudata
+    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudata
+    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt78l.dat ./out/icu4j/icudt78b.dat -s ./out/build/icudt78l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudata
+    mv ./out/icu4j/"com/ibm/icu/impl/data/icudata/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudata/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudata/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudata/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudata"
+    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudata/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icudata.jar /tmp/icu4j/main/shared/data
-    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt78b/
+    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudata/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icutzdata.jar /tmp/icu4j/main/shared/data
     make[1]: Leaving directory '/usr/local/google/home/mscherer/icu/uni/dbg/icu4c/data'
@@ -348,7 +344,9 @@ TODO
     cp -v confusables.txt confusablesWholeScript.txt NormalizationCorrections.txt NormalizationTest.txt SpecialCasing.txt UnicodeData.txt $ICU_SRC/icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode
     cd ../../test/testdata
     cp -v BidiCharacterTest.txt BidiTest.txt IdnaTestV2.txt $ICU_SRC/icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode
-    cp -v $UNICODE_DATA/UCD/ucd/CompositionExclusions.txt $ICU_SRC/icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode
+    cp -v $UNICODE_DATA/ucd/CompositionExclusions.txt $ICU_SRC/icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode
+
+TODO
 
 * run & fix ICU4J tests
 
