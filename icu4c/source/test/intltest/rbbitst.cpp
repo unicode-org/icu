@@ -2273,8 +2273,7 @@ RBBILineMonkey::RBBILineMonkey() :
     partition.emplace_back("AS", UnicodeSet(uR"([\p{Line_Break=Aksara_Start}])", status));
     partition.emplace_back("B2", UnicodeSet(uR"([\p{Line_Break=Break_Both}])", status));
     partition.emplace_back("BA_EastAsian", UnicodeSet(uR"([\p{Line_Break=Break_After}&[\p{ea=F}\p{ea=W}\p{ea=H}]])", status));
-    partition.emplace_back("BA_Hyphen", UnicodeSet(uR"([\p{Line_Break=Break_After}&[\u2010]])", status));
-    partition.emplace_back("BAmEastAsianmHyphen", UnicodeSet(uR"([\p{Line_Break=Break_After}-[\p{ea=F}\p{ea=W}\p{ea=H}]-[\u2010]])", status));
+    partition.emplace_back("BAmEastAsian", UnicodeSet(uR"([\p{Line_Break=Break_After}-[\p{ea=F}\p{ea=W}\p{ea=H}]])", status));
     partition.emplace_back("BB", UnicodeSet(uR"([\p{Line_Break=Break_Before}])", status));
     partition.emplace_back("BK", UnicodeSet(uR"([\p{Line_Break=Mandatory_Break}])", status));
     partition.emplace_back("CB", UnicodeSet(uR"([\p{Line_Break=Contingent_Break}])", status));
@@ -2290,11 +2289,12 @@ RBBILineMonkey::RBBILineMonkey() :
     partition.emplace_back("GLmEastAsian", UnicodeSet(uR"([\p{Line_Break=Glue}-[\p{ea=F}\p{ea=W}\p{ea=H}]])", status));
     partition.emplace_back("H2", UnicodeSet(uR"([\p{Line_Break=H2}])", status));
     partition.emplace_back("H3", UnicodeSet(uR"([\p{Line_Break=H3}])", status));
+    partition.emplace_back("HH", UnicodeSet(uR"([\p{Line_Break=Unambiguous_Hyphen}])", status));
     partition.emplace_back("HL", UnicodeSet(uR"([\p{Line_Break=HL}])", status));
     partition.emplace_back("HY", UnicodeSet(uR"([\p{Line_Break=Hyphen}])", status));
     partition.emplace_back("ID_EastAsian", UnicodeSet(uR"([\p{Line_Break=Ideographic}&[\p{ea=F}\p{ea=W}\p{ea=H}]])", status));
-    partition.emplace_back("ID_ExtPictUnassigned", UnicodeSet(uR"([\p{Line_Break=Ideographic}&[\p{Extended_Pictographic}&\p{gc=Cn}]])", status));
-    partition.emplace_back("IDmEastAsianmExtPictUnassigned", UnicodeSet(uR"([\p{Line_Break=Ideographic}-[\p{ea=F}\p{ea=W}\p{ea=H}]-[\p{Extended_Pictographic}&\p{gc=Cn}]])", status));
+    partition.emplace_back("ID_ExtPictUnassigned", UnicodeSet(uR"([\p{Line_Break=Ideographic}&[\p{Extended_Pictographic=True}&\p{gc=Cn}]])", status));
+    partition.emplace_back("IDmEastAsianmExtPictUnassigned", UnicodeSet(uR"([\p{Line_Break=Ideographic}-[\p{ea=F}\p{ea=W}\p{ea=H}]-[\p{Extended_Pictographic=True}&\p{gc=Cn}]])", status));
     partition.emplace_back("IN_EastAsian", UnicodeSet(uR"([\p{Line_Break=Inseparable}&[\p{ea=F}\p{ea=W}\p{ea=H}]])", status));
     partition.emplace_back("INmEastAsian", UnicodeSet(uR"([\p{Line_Break=Inseparable}-[\p{ea=F}\p{ea=W}\p{ea=H}]])", status));
     partition.emplace_back("IS", UnicodeSet(uR"([\p{Line_Break=Infix_Numeric}])", status));
@@ -2324,8 +2324,8 @@ RBBILineMonkey::RBBILineMonkey() :
     partition.emplace_back("VF", UnicodeSet(uR"([\p{Line_Break=Virama_Final}])", status));
     partition.emplace_back("VI", UnicodeSet(uR"([\p{Line_Break=Virama}])", status));
     partition.emplace_back("WJ", UnicodeSet(uR"([\p{Line_Break=Word_Joiner}])", status));
-    partition.emplace_back("XX_ExtPictUnassigned", UnicodeSet(uR"([\p{Line_Break=Unknown}&[\p{Extended_Pictographic}&\p{gc=Cn}]])", status));
-    partition.emplace_back("XXmExtPictUnassigned", UnicodeSet(uR"([\p{Line_Break=Unknown}-[\p{Extended_Pictographic}&\p{gc=Cn}]])", status));
+    partition.emplace_back("XX_ExtPictUnassigned", UnicodeSet(uR"([\p{Line_Break=Unknown}&[\p{Extended_Pictographic=True}&\p{gc=Cn}]])", status));
+    partition.emplace_back("XXmExtPictUnassigned", UnicodeSet(uR"([\p{Line_Break=Unknown}-[\p{Extended_Pictographic=True}&\p{gc=Cn}]])", status));
     partition.emplace_back("ZW", UnicodeSet(uR"([\p{Line_Break=ZWSpace}])", status));
     partition.emplace_back("CJ", UnicodeSet(uR"([\p{Line_Break=Conditional_Japanese_Starter}])", status));
     partition.emplace_back("RI", UnicodeSet(uR"([\p{Line_Break=Regional_Indicator}])", status));
@@ -2349,7 +2349,7 @@ RBBILineMonkey::RBBILineMonkey() :
     rules.push_back(std::make_unique<RegexRule>(uR"(× $WJ)", uR"()", u'×', uR"(\p{Line_Break=Word_Joiner})"));
     rules.push_back(std::make_unique<RegexRule>(uR"($WJ ×)", uR"(\p{Line_Break=Word_Joiner})", u'×', uR"()"));
     rules.push_back(std::make_unique<RegexRule>(uR"($GL ×)", uR"(\p{Line_Break=Glue})", u'×', uR"()"));
-    rules.push_back(std::make_unique<RegexRule>(uR"([^ $SP $BA $HY] × $GL)", uR"([^ \p{Line_Break=Space} \p{Line_Break=Break_After} \p{Line_Break=Hyphen}])", u'×', uR"(\p{Line_Break=Glue})"));
+    rules.push_back(std::make_unique<RegexRule>(uR"([^ $SP $BA $HY $HH] × $GL)", uR"([^ \p{Line_Break=Space} \p{Line_Break=Break_After} \p{Line_Break=Hyphen} \p{Line_Break=Unambiguous_Hyphen}])", u'×', uR"(\p{Line_Break=Glue})"));
     rules.push_back(std::make_unique<RegexRule>(uR"(× $EX)", uR"()", u'×', uR"(\p{Line_Break=Exclamation})"));
     rules.push_back(std::make_unique<RegexRule>(uR"(× $CL)", uR"()", u'×', uR"(\p{Line_Break=Close_Punctuation})"));
     rules.push_back(std::make_unique<RegexRule>(uR"(× $CP)", uR"()", u'×', uR"(\p{Line_Break=CP})"));
@@ -2370,12 +2370,13 @@ RBBILineMonkey::RBBILineMonkey() :
     rules.push_back(std::make_unique<RegexRule>(uR"(( [^$EastAsian] | $sot ) $QU ×)", uR"(( [^[\p{ea=F}\p{ea=W}\p{ea=H}]] | ^ ) \p{Line_Break=Quotation})", u'×', uR"()"));
     rules.push_back(std::make_unique<RegexRule>(uR"(÷ $CB)", uR"()", u'÷', uR"(\p{Line_Break=Contingent_Break})"));
     rules.push_back(std::make_unique<RegexRule>(uR"($CB ÷)", uR"(\p{Line_Break=Contingent_Break})", u'÷', uR"()"));
-    rules.push_back(std::make_unique<RegexRule>(uR"(( $BK | $CR | $LF | $NL | $SP | $ZW | $CB | $GL | $sot ) ( $HY | $Hyphen ) × $AL)", uR"(( \p{Line_Break=Mandatory_Break} | \p{Line_Break=Carriage_Return} | \p{Line_Break=Line_Feed} | \p{Line_Break=Next_Line} | \p{Line_Break=Space} | \p{Line_Break=ZWSpace} | \p{Line_Break=Contingent_Break} | \p{Line_Break=Glue} | ^ ) ( \p{Line_Break=Hyphen} | [\u2010] ))", u'×', uR"([\p{Line_Break=Ambiguous} \p{Line_Break=Alphabetic} \p{Line_Break=Surrogate} \p{Line_Break=Unknown} [\p{Line_Break=Complex_Context}--\p{gc=Mn}--\p{gc=Mc}]])"));
+    rules.push_back(std::make_unique<RegexRule>(uR"(( $BK | $CR | $LF | $NL | $SP | $ZW | $CB | $GL | $sot ) ( $HY | $HH ) × ( $AL | $HL ))", uR"(( \p{Line_Break=Mandatory_Break} | \p{Line_Break=Carriage_Return} | \p{Line_Break=Line_Feed} | \p{Line_Break=Next_Line} | \p{Line_Break=Space} | \p{Line_Break=ZWSpace} | \p{Line_Break=Contingent_Break} | \p{Line_Break=Glue} | ^ ) ( \p{Line_Break=Hyphen} | \p{Line_Break=Unambiguous_Hyphen} ))", u'×', uR"(( [\p{Line_Break=Ambiguous} \p{Line_Break=Alphabetic} \p{Line_Break=Surrogate} \p{Line_Break=Unknown} [\p{Line_Break=Complex_Context}--\p{gc=Mn}--\p{gc=Mc}]] | \p{Line_Break=HL} ))"));
     rules.push_back(std::make_unique<RegexRule>(uR"(× $BA)", uR"()", u'×', uR"(\p{Line_Break=Break_After})"));
+    rules.push_back(std::make_unique<RegexRule>(uR"(× $HH)", uR"()", u'×', uR"(\p{Line_Break=Unambiguous_Hyphen})"));
     rules.push_back(std::make_unique<RegexRule>(uR"(× $HY)", uR"()", u'×', uR"(\p{Line_Break=Hyphen})"));
     rules.push_back(std::make_unique<RegexRule>(uR"(× $NS)", uR"()", u'×', uR"([\p{Line_Break=Nonstarter} \p{Line_Break=Conditional_Japanese_Starter}])"));
     rules.push_back(std::make_unique<RegexRule>(uR"($BB ×)", uR"(\p{Line_Break=Break_Before})", u'×', uR"()"));
-    rules.push_back(std::make_unique<RegexRule>(uR"($HL ($HY | $NonEastAsianBA) × [^$HL])", uR"(\p{Line_Break=HL} (\p{Line_Break=Hyphen} | [\p{Line_Break=Break_After} && [^[\p{ea=F}\p{ea=W}\p{ea=H}]]]))", u'×', uR"([^\p{Line_Break=HL}])"));
+    rules.push_back(std::make_unique<RegexRule>(uR"($HL ($HY | $HH) × [^$HL])", uR"(\p{Line_Break=HL} (\p{Line_Break=Hyphen} | \p{Line_Break=Unambiguous_Hyphen}))", u'×', uR"([^\p{Line_Break=HL}])"));
     rules.push_back(std::make_unique<RegexRule>(uR"($SY × $HL)", uR"(\p{Line_Break=Break_Symbols})", u'×', uR"(\p{Line_Break=HL})"));
     rules.push_back(std::make_unique<RegexRule>(uR"(× $IN)", uR"()", u'×', uR"(\p{Line_Break=Inseparable})"));
     rules.push_back(std::make_unique<RegexRule>(uR"(($AL | $HL) × $NU)", uR"(([\p{Line_Break=Ambiguous} \p{Line_Break=Alphabetic} \p{Line_Break=Surrogate} \p{Line_Break=Unknown} [\p{Line_Break=Complex_Context}--\p{gc=Mn}--\p{gc=Mc}]] | \p{Line_Break=HL}))", u'×', uR"(\p{Line_Break=Numeric})"));
@@ -2416,7 +2417,7 @@ RBBILineMonkey::RBBILineMonkey() :
     rules.push_back(std::make_unique<RegexRule>(uR"([^$RI] ($RI $RI)* $RI × $RI)", uR"([^\p{Line_Break=Regional_Indicator}] (\p{Line_Break=Regional_Indicator} \p{Line_Break=Regional_Indicator})* \p{Line_Break=Regional_Indicator})", u'×', uR"(\p{Line_Break=Regional_Indicator})"));
     rules.push_back(std::make_unique<RegexRule>(uR"($RI ÷ $RI)", uR"(\p{Line_Break=Regional_Indicator})", u'÷', uR"(\p{Line_Break=Regional_Indicator})"));
     rules.push_back(std::make_unique<RegexRule>(uR"($EB × $EM)", uR"(\p{Line_Break=E_Base})", u'×', uR"(\p{Line_Break=E_Modifier})"));
-    rules.push_back(std::make_unique<RegexRule>(uR"($ExtPictUnassigned × $EM)", uR"([\p{Extended_Pictographic}&&\p{gc=Cn}])", u'×', uR"(\p{Line_Break=E_Modifier})"));
+    rules.push_back(std::make_unique<RegexRule>(uR"($ExtPictUnassigned × $EM)", uR"([\p{Extended_Pictographic=True}&&\p{gc=Cn}])", u'×', uR"(\p{Line_Break=E_Modifier})"));
     // --- End of generated code. ---
 
 
@@ -3078,7 +3079,9 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
     for (i=0; i<numCharClasses; i++) {
         const UnicodeSet& s = chClasses[i];
         if (s.size() == 0) {
-            errln("Character Class #%d is null or of zero size.", i);
+            errln("Character Class #%d is null or of zero size. (Have you updated the generated "
+                  "monkey test rules and partition?)",
+                  i);
             return;
         }
     }
