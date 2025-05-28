@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1748436127302,
+  "lastUpdate": 1748441995979,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -67659,6 +67659,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5444387.4477,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "55c7cea9ca4bac34f012748867d49032de638690",
+          "message": "ICU-23128 Don't clobber UErrorCode on expected U_BUFFER_OVERFLOW_ERROR.\n\nWhen it's expected that a function call might result in setting\nU_BUFFER_OVERFLOW_ERROR upon which a new buffer is allocated and the\nfunction call is retried, this should upon success not overwrite any\nalready set value of UErrorCode, as this could accidentally overwrite\nsome valid and meaningful value when this was other than U_ZERO_ERROR.",
+          "timestamp": "2025-05-28T15:47:03+02:00",
+          "tree_id": "c5ebbfb455c655f34263152bb2cef3386130dcb8",
+          "url": "https://github.com/unicode-org/icu/commit/55c7cea9ca4bac34f012748867d49032de638690"
+        },
+        "date": 1748441730520,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 213.5195,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21964166.1965,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5234295.6716,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20594403.9101,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5417908.383,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
