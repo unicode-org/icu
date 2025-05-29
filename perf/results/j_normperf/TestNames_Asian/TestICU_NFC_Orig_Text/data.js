@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1748440953997,
+  "lastUpdate": 1748535427119,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34977,6 +34977,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 3.1337014585068066,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "a146a0fd4bb41d60a57a308b0ccf88da494c79c1",
+          "message": "ICU-23124 Fix exception type in BreakIterator for OOB index values",
+          "timestamp": "2025-05-29T09:10:02-07:00",
+          "tree_id": "899d902bb31bfbbae2c0ae9228347229d05e11a4",
+          "url": "https://github.com/unicode-org/icu/commit/a146a0fd4bb41d60a57a308b0ccf88da494c79c1"
+        },
+        "date": 1748535169163,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 3.1335349270225916,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
