@@ -743,7 +743,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-    - uses: bazel-contrib/setup-bazel@0.14.0
+    - uses: bazel-contrib/setup-bazel@0.15.0
     - name: Get CI Linux runner VM version
       id: linux-version
       run: |
