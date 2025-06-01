@@ -14,6 +14,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
 import com.ibm.icu.impl.units.SingleUnitImpl;
+import com.ibm.icu.impl.units.UnitsConverter.Convertibility;
 import com.ibm.icu.text.UnicodeSet;
 
 
@@ -42,6 +44,51 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class MeasureUnit implements Serializable {
     private static final long serialVersionUID = -1839973855554750484L;
+
+    /**
+     * Conversion info for the unit to the base unit.
+     * 
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public class ConversionInfo {
+        private final BigDecimal conversionRateToBaseUnit;
+        private final BigDecimal offsetToBaseUnit;
+        private final String baseUnit;
+        private final String reciprocalBaseUnit;
+
+        public ConversionInfo(BigDecimal conversionRateToBaseUnit, BigDecimal offsetToBaseUnit, String baseUnit,
+                String reciprocalBaseUnit) {
+            this.conversionRateToBaseUnit = conversionRateToBaseUnit;
+            this.offsetToBaseUnit = offsetToBaseUnit;
+            this.baseUnit = baseUnit;
+            this.reciprocalBaseUnit = reciprocalBaseUnit;
+        }
+
+        public BigDecimal getConversionRateToBaseUnit() {
+            return conversionRateToBaseUnit;
+        }
+
+        public BigDecimal getOffsetToBaseUnit() {
+            return offsetToBaseUnit;
+        }
+
+        public String getBaseUnit() {
+            return baseUnit;
+        }
+
+        public String getReciprocalBaseUnit() {
+            return reciprocalBaseUnit;
+        }
+
+    }
+
+    // Conversion info for the unit to the base unit.
+    //
+    // NOTE
+    // If the conversionInfo is null, then the conversion info is not set for this
+    // unit.
+    private final ConversionInfo conversionInfo;
 
     // Cache of MeasureUnits.
     // All access to the cache or cacheIsPopulated flag must be synchronized on
@@ -408,6 +455,68 @@ public class MeasureUnit implements Serializable {
     protected MeasureUnit(String type, String subType) {
         this.type = type;
         this.subType = subType;
+        this.conversionInfo = null;
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected MeasureUnit(String type, String subType, ConversionInfo conversionInfo) {
+        this.type = type;
+        this.subType = subType;
+        this.conversionInfo = conversionInfo;
+    }
+
+    public BigDecimal convertFrom(MeasureUnit other, BigDecimal value) {
+        if (this.getComplexity() == Complexity.MIXED || other.getComplexity() == Complexity.MIXED) {
+            throw new UnsupportedOperationException("Conversion between mixed units is not supported");
+        }
+
+        if (conversionInfo == null || other.conversionInfo == null) {
+            throw new UnsupportedOperationException("Conversion info not set for this unit");
+        }
+
+        String baseUnit = conversionInfo.getBaseUnit();
+        String otherBaseUnit = other.conversionInfo.getBaseUnit();
+        String otherReciprocalBaseUnit = other.conversionInfo.getReciprocalBaseUnit();
+
+        // Determine convertibility
+        Convertibility convertibility;
+        if (baseUnit.equals(otherBaseUnit)) {
+            convertibility = Convertibility.CONVERTIBLE;
+        } else if (baseUnit.equals(otherReciprocalBaseUnit)) {
+            convertibility = Convertibility.RECIPROCAL;
+        } else {
+            throw new UnsupportedOperationException("Units are not convertible");
+        }
+
+        BigDecimal conversionRateToBaseUnit = conversionInfo.getConversionRateToBaseUnit();
+        BigDecimal offsetToBaseUnit = conversionInfo.getOffsetToBaseUnit();
+
+        BigDecimal conversionRateOfOtherUnitToBase = other.conversionInfo.getConversionRateToBaseUnit();
+        BigDecimal offsetOfOtherUnitToBase = other.conversionInfo.getOffsetToBaseUnit();
+
+        BigDecimal conversionRateFromCurrentUnitToOtherUnit;
+        if (convertibility == Convertibility.CONVERTIBLE) {
+            conversionRateFromCurrentUnitToOtherUnit = conversionRateToBaseUnit.divide(conversionRateOfOtherUnitToBase);
+        } else {
+            conversionRateFromCurrentUnitToOtherUnit = conversionRateToBaseUnit
+                    .multiply(conversionRateOfOtherUnitToBase);
+        }
+
+        // TODO: re-check this.
+        BigDecimal offsetFromCurrentUnitToOtherUnit;
+        if (convertibility == Convertibility.CONVERTIBLE) {
+            offsetFromCurrentUnitToOtherUnit = offsetToBaseUnit.multiply(conversionRateToBaseUnit)
+                    .subtract(offsetOfOtherUnitToBase);
+        } else {
+            offsetFromCurrentUnitToOtherUnit = offsetToBaseUnit.multiply(conversionRateOfOtherUnitToBase)
+                    .add(offsetOfOtherUnitToBase);
+        }
+
+        return value.multiply(conversionRateFromCurrentUnitToOtherUnit).add(offsetFromCurrentUnitToOtherUnit);
     }
 
     /**
@@ -457,6 +566,14 @@ public class MeasureUnit implements Serializable {
     private MeasureUnit(MeasureUnitImpl measureUnitImpl) {
         type = null;
         subType = null;
+        conversionInfo = null;
+        this.measureUnitImpl = measureUnitImpl.copy();
+    }
+
+    private MeasureUnit(MeasureUnitImpl measureUnitImpl, ConversionInfo conversionInfo) {
+        type = null;
+        subType = null;
+        this.conversionInfo = conversionInfo;
         this.measureUnitImpl = measureUnitImpl.copy();
     }
 
