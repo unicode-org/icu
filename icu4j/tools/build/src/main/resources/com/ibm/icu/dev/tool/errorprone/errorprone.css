@@ -39,6 +39,10 @@ table.sortable tbody tr:nth-child(2n+1) td {
   white-space: pre;
 }
 
+.tags {
+  font-size: small;
+}
+
 .severity_warning {
   color:#aa0;
 }

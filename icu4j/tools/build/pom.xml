@@ -40,7 +40,7 @@
       <!--
       From icu4j:
         mvn clean test -ntp -DskipTests -DskipITs -l /tmp/errorprone.log -P errorprone
-        mvn exec:java -f tools/build/ -P errorprone_report
+        mvn exec:java -f tools/build/ -P errorprone_report -DlogFile=/tmp/errorprone.log
 
       The links to the source files go to the main GitHub repo (`main` branch).
         But when we work locally, or in a fork / branch, the links might point to an incorrect file / line.
