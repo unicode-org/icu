@@ -487,18 +487,8 @@ public:
         static_assert(!std::ranges::common_range<CodeUnitRange>);
         static_assert(std::ranges::input_range<CodeUnitRange>);
         static_assert(!std::ranges::forward_range<CodeUnitRange>);
-        // TODO(egg): This does not compile.
-        // Markus: I got the iterator as such to compile, but the constructor
-        // sees a sentinel type for the limit (as expected),
-        // so this still does not compile.
-        // TODO: Do we have to change all of the iterator and range templates to
-        // take two iterator template parameters (UnitIter, LimitIter)
-        // ... and change all iterator call sites?
-        // I can't find a way to deduce the sentinel type from the iterator type.
-        // TODO: If we have to change the template API, can we limit the damage to
-        // the input iterator specialization?
-        // UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, std::ranges::iterator_t<CodeUnitRange>> it(
-        //     codeUnits.begin(), codeUnits.end());
+        auto it = utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits.begin(), codeUnits.end());
+        // TODO: Use `it`.
     }
 
     void testUncommonForwardRange() {
