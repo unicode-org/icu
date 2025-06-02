@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1748881912903,
+  "lastUpdate": 1748904669568,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35187,6 +35187,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.5599297271896746,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "efe7fdd70879bd2e7715f1b699e81b964e213152",
+          "message": "ICU-12717 Improve errorprone reporting",
+          "timestamp": "2025-06-02T15:34:59-07:00",
+          "tree_id": "29851772e8be362804c631428cad22e0168bade9",
+          "url": "https://github.com/unicode-org/icu/commit/efe7fdd70879bd2e7715f1b699e81b964e213152"
+        },
+        "date": 1748904406342,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.238650843730991,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
