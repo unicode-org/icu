@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1748535444422,
+  "lastUpdate": 1748881793715,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34647,6 +34647,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.006318985282327732,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "3962233a96cb1b65cb583e88ae143c08fe72514f",
+          "message": "ICU-23004 Correct the return type of UnsafeCodeUnits::codePoint per ICU-TC 2025-05-22",
+          "timestamp": "2025-06-02T17:56:23+02:00",
+          "tree_id": "545206b4500b0dc0dba02afad37bbdba3de0e20c",
+          "url": "https://github.com/unicode-org/icu/commit/3962233a96cb1b65cb583e88ae143c08fe72514f"
+        },
+        "date": 1748881526189,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.006263517322568419,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
