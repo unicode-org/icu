@@ -1344,6 +1344,8 @@ void UTFIteratorTest::zigzag(const ImplTest<Unit> &test, size_t i,
 namespace {
 template <typename Iterator>
 using CodePointIterator = UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, Iterator>;
+template <typename Iterator>
+using UnsafeCodePointIterator = UnsafeUTFIterator<char32_t, Iterator>;
 
 // Check that the iterators satisfy the right concepts.
 namespace input {
@@ -1352,6 +1354,8 @@ static_assert(std::input_iterator<CodeUnitIterator>);
 static_assert(!std::forward_iterator<CodeUnitIterator>);
 static_assert(std::input_iterator<CodePointIterator<CodeUnitIterator>>);
 static_assert(!std::forward_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(std::input_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
+static_assert(!std::forward_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
 } // namespace input
 namespace forward {
 using CodeUnitIterator = std::forward_list<char16_t>::iterator;
@@ -1359,6 +1363,8 @@ static_assert(std::forward_iterator<CodeUnitIterator>);
 static_assert(!std::bidirectional_iterator<CodeUnitIterator>);
 static_assert(std::forward_iterator<CodePointIterator<CodeUnitIterator>>);
 static_assert(!std::bidirectional_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(std::forward_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
+static_assert(!std::bidirectional_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
 } // namespace forward
 namespace bidirectional {
 using CodeUnitIterator = std::list<char16_t>::iterator;
@@ -1366,12 +1372,16 @@ static_assert(std::bidirectional_iterator<CodeUnitIterator>);
 static_assert(!std::random_access_iterator<CodeUnitIterator>);
 static_assert(std::bidirectional_iterator<CodePointIterator<CodeUnitIterator>>);
 static_assert(!std::random_access_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(std::bidirectional_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
+static_assert(!std::random_access_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
 } // namespace bidirectional
 namespace contiguous {
 using CodeUnitIterator = std::u16string::iterator;
 static_assert(std::contiguous_iterator<CodeUnitIterator>);
 static_assert(std::bidirectional_iterator<CodePointIterator<CodeUnitIterator>>);
 static_assert(!std::random_access_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(std::bidirectional_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
+static_assert(!std::random_access_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
 } // namespace contiguous
 
 } // namespace
