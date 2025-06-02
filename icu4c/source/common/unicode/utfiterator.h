@@ -166,6 +166,52 @@ typedef enum UTFIllFormedBehavior {
 
 namespace U_HEADER_ONLY_NAMESPACE {
 
+namespace prv {
+#if U_CPLUSPLUS_VERSION >= 20
+
+/** @internal */
+template<typename Iter>
+using iter_value_t = typename std::iter_value_t<Iter>;
+
+/** @internal */
+template<typename Iter>
+using iter_difference_t = std::iter_difference_t<Iter>;
+
+/** @internal */
+template<typename Iter>
+constexpr bool forward_iterator = std::forward_iterator<Iter>;
+
+/** @internal */
+template<typename Iter>
+constexpr bool bidirectional_iterator = std::bidirectional_iterator<Iter>;
+
+#else
+
+/** @internal */
+template<typename Iter>
+using iter_value_t = typename std::iterator_traits<Iter>::value_type;
+
+/** @internal */
+template<typename Iter>
+using iter_difference_t = typename std::iterator_traits<Iter>::difference_type;
+
+/** @internal */
+template<typename Iter>
+constexpr bool forward_iterator =
+    std::is_base_of_v<
+        std::forward_iterator_tag,
+        typename std::iterator_traits<Iter>::iterator_category>;
+
+/** @internal */
+template<typename Iter>
+constexpr bool bidirectional_iterator =
+    std::is_base_of_v<
+        std::bidirectional_iterator_tag,
+        typename std::iterator_traits<Iter>::iterator_category>;
+
+#endif
+}  // namespace prv
+
 /**
  * Result of decoding a code unit sequence for one code point.
  * Returned from non-validating Unicode string code point iterators.
@@ -183,7 +229,7 @@ namespace U_HEADER_ONLY_NAMESPACE {
 template<typename CP32, typename UnitIter, typename = void>
 class UnsafeCodeUnits {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
-    using Unit = typename std::iterator_traits<UnitIter>::value_type;
+    using Unit = typename prv::iter_value_t<UnitIter>;
 public:
     /** @internal */
     UnsafeCodeUnits(CP32 codePoint, uint8_t length, UnitIter start, UnitIter limit) :
@@ -258,10 +304,7 @@ template<typename CP32, typename UnitIter>
 class UnsafeCodeUnits<
         CP32,
         UnitIter,
-        std::enable_if_t<
-            !std::is_base_of_v<
-                std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>>> {
+        std::enable_if_t<!prv::forward_iterator<UnitIter>>> {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     UnsafeCodeUnits(CP32 codePoint, uint8_t length) : c_(codePoint), len_(length) {}
@@ -323,10 +366,7 @@ template<typename CP32, typename UnitIter>
 class CodeUnits<
         CP32,
         UnitIter,
-        std::enable_if_t<
-            !std::is_base_of_v<
-                std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>>> :
+        std::enable_if_t<!prv::forward_iterator<UnitIter>>> :
             public UnsafeCodeUnits<CP32, UnitIter> {
 public:
     CodeUnits(CP32 codePoint, uint8_t length, bool wellFormed) :
@@ -364,8 +404,7 @@ class UTFImpl<
         CP32,
         behavior,
         UnitIter,
-        std::enable_if_t<
-            sizeof(typename std::iterator_traits<UnitIter>::value_type) == 1>> {
+        std::enable_if_t<sizeof(typename prv::iter_value_t<UnitIter>) == 1>> {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     static_assert(behavior != UTF_BEHAVIOR_SURROGATE,
                   "For 8-bit strings, the SURROGATE option does not have an equivalent.");
@@ -439,10 +478,7 @@ public:
 
     U_FORCE_INLINE static CodeUnits<CP32, UnitIter> readAndInc(
             UnitIter &p0, UnitIter &p, const UnitIter &limit) {
-        constexpr bool isMultiPass =
-            std::is_base_of_v<
-                std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>;
+        constexpr bool isMultiPass = prv::forward_iterator<UnitIter>;
         // Very similar to U8_NEXT_OR_FFFD().
         CP32 c = uint8_t(*p);
         ++p;
@@ -550,8 +586,7 @@ class UTFImpl<
         CP32,
         behavior,
         UnitIter,
-        std::enable_if_t<
-            sizeof(typename std::iterator_traits<UnitIter>::value_type) == 2>> {
+        std::enable_if_t<sizeof(typename prv::iter_value_t<UnitIter>) == 2>> {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     // Handle ill-formed UTF-16: One unpaired surrogate.
@@ -582,10 +617,7 @@ public:
 
     U_FORCE_INLINE static CodeUnits<CP32, UnitIter> readAndInc(
             UnitIter &p0, UnitIter &p, const UnitIter &limit) {
-        constexpr bool isMultiPass =
-            std::is_base_of_v<
-                std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>;
+        constexpr bool isMultiPass = prv::forward_iterator<UnitIter>;
         // Very similar to U16_NEXT_OR_FFFD().
         CP32 c = *p;
         ++p;
@@ -641,8 +673,7 @@ class UTFImpl<
         CP32,
         behavior,
         UnitIter,
-        std::enable_if_t<
-            sizeof(typename std::iterator_traits<UnitIter>::value_type) == 4>> {
+        std::enable_if_t<sizeof(typename prv::iter_value_t<UnitIter>) == 4>> {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     // Handle ill-formed UTF-32
@@ -664,10 +695,7 @@ public:
 
     U_FORCE_INLINE static CodeUnits<CP32, UnitIter> readAndInc(
             UnitIter &p0, UnitIter &p, const UnitIter &/*limit*/) {
-        constexpr bool isMultiPass =
-            std::is_base_of_v<
-                std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>;
+        constexpr bool isMultiPass = prv::forward_iterator<UnitIter>;
         uint32_t uc = *p;
         CP32 c = uc;
         ++p;
@@ -708,8 +736,7 @@ template<typename CP32, typename UnitIter>
 class UnsafeUTFImpl<
         CP32,
         UnitIter,
-        std::enable_if_t<
-            sizeof(typename std::iterator_traits<UnitIter>::value_type) == 1>> {
+        std::enable_if_t<sizeof(typename prv::iter_value_t<UnitIter>) == 1>> {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     U_FORCE_INLINE static void inc(UnitIter &p) {
@@ -724,10 +751,7 @@ public:
     }
 
     U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p0, UnitIter &p) {
-        constexpr bool isMultiPass =
-            std::is_base_of_v<
-                std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>;
+        constexpr bool isMultiPass = prv::forward_iterator<UnitIter>;
         // Very similar to U8_NEXT_UNSAFE().
         CP32 c = uint8_t(*p);
         ++p;
@@ -804,8 +828,7 @@ template<typename CP32, typename UnitIter>
 class UnsafeUTFImpl<
         CP32,
         UnitIter,
-        std::enable_if_t<
-            sizeof(typename std::iterator_traits<UnitIter>::value_type) == 2>> {
+        std::enable_if_t<sizeof(typename prv::iter_value_t<UnitIter>) == 2>> {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     U_FORCE_INLINE static void inc(UnitIter &p) {
@@ -825,10 +848,7 @@ public:
     }
 
     U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p0, UnitIter &p) {
-        constexpr bool isMultiPass =
-            std::is_base_of_v<
-                std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>;
+        constexpr bool isMultiPass = prv::forward_iterator<UnitIter>;
         // Very similar to U16_NEXT_UNSAFE().
         CP32 c = *p;
         ++p;
@@ -869,8 +889,7 @@ template<typename CP32, typename UnitIter>
 class UnsafeUTFImpl<
         CP32,
         UnitIter,
-        std::enable_if_t<
-            sizeof(typename std::iterator_traits<UnitIter>::value_type) == 4>> {
+        std::enable_if_t<sizeof(typename prv::iter_value_t<UnitIter>) == 4>> {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     U_FORCE_INLINE static void inc(UnitIter &p) {
@@ -882,10 +901,7 @@ public:
     }
 
     U_FORCE_INLINE static UnsafeCodeUnits<CP32, UnitIter> readAndInc(UnitIter &p0, UnitIter &p) {
-        constexpr bool isMultiPass =
-            std::is_base_of_v<
-                std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>;
+        constexpr bool isMultiPass = prv::forward_iterator<UnitIter>;
         CP32 c = *p;
         ++p;
         if constexpr (isMultiPass) {
@@ -951,12 +967,10 @@ public:
     /** C++ iterator boilerplate @internal */
     using pointer = Proxy;
     /** C++ iterator boilerplate @internal */
-    using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
+    using difference_type = prv::iter_difference_t<UnitIter>;
     /** C++ iterator boilerplate @internal */
     using iterator_category = std::conditional_t<
-        std::is_base_of_v<
-            std::bidirectional_iterator_tag,
-            typename std::iterator_traits<UnitIter>::iterator_category>,
+        prv::bidirectional_iterator<UnitIter>,
         std::bidirectional_iterator_tag,
         std::forward_iterator_tag>;
 
@@ -1114,11 +1128,7 @@ public:
      */
     template<typename Iter = UnitIter>
     U_FORCE_INLINE
-    std::enable_if_t<
-        std::is_base_of_v<
-            std::bidirectional_iterator_tag,
-            typename std::iterator_traits<Iter>::iterator_category>,
-        UTFIterator &>
+    std::enable_if_t<prv::bidirectional_iterator<Iter>, UTFIterator &>
     operator--() {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
@@ -1138,11 +1148,7 @@ public:
      */
     template<typename Iter = UnitIter>
     U_FORCE_INLINE
-    std::enable_if_t<
-        std::is_base_of_v<
-            std::bidirectional_iterator_tag,
-            typename std::iterator_traits<Iter>::iterator_category>,
-        UTFIterator>
+    std::enable_if_t<prv::bidirectional_iterator<Iter>, UTFIterator>
     operator--(int) {  // post-decrement
         UTFIterator result(*this);
         operator--();
@@ -1179,10 +1185,7 @@ class UTFIterator<
         CP32,
         behavior,
         UnitIter,
-        std::enable_if_t<
-            !std::is_base_of_v<
-                std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>>> {
+        std::enable_if_t<!prv::forward_iterator<UnitIter>>> {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     using Impl = UTFImpl<CP32, behavior, UnitIter>;
 
@@ -1202,7 +1205,7 @@ public:
     using value_type = CodeUnits<CP32, UnitIter>;
     using reference = value_type;
     using pointer = Proxy;
-    using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
+    using difference_type = prv::iter_difference_t<UnitIter>;
     using iterator_category = std::input_iterator_tag;
 
     U_FORCE_INLINE UTFIterator(UnitIter p, UnitIter limit) : p_(std::move(p)), limit_(std::move(limit)) {}
@@ -1304,7 +1307,7 @@ public:
     using value_type = CodeUnits_;
     using reference = value_type;
     using pointer = Proxy;
-    using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
+    using difference_type = U_HEADER_ONLY_NAMESPACE::prv::iter_difference_t<UnitIter>;
     using iterator_category = std::bidirectional_iterator_tag;
 
     U_FORCE_INLINE explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter> iter) :
@@ -1691,12 +1694,10 @@ public:
     /** C++ iterator boilerplate @internal */
     using pointer = Proxy;
     /** C++ iterator boilerplate @internal */
-    using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
+    using difference_type = prv::iter_difference_t<UnitIter>;
     /** C++ iterator boilerplate @internal */
     using iterator_category = std::conditional_t<
-        std::is_base_of_v<
-            std::bidirectional_iterator_tag,
-            typename std::iterator_traits<UnitIter>::iterator_category>,
+        prv::bidirectional_iterator<UnitIter>,
         std::bidirectional_iterator_tag,
         std::forward_iterator_tag>;
 
@@ -1830,11 +1831,7 @@ public:
      */
     template<typename Iter = UnitIter>
     U_FORCE_INLINE
-    std::enable_if_t<
-        std::is_base_of_v<
-            std::bidirectional_iterator_tag,
-            typename std::iterator_traits<Iter>::iterator_category>,
-        UnsafeUTFIterator &>
+    std::enable_if_t<prv::bidirectional_iterator<Iter>, UnsafeUTFIterator &>
     operator--() {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
@@ -1854,11 +1851,7 @@ public:
      */
     template<typename Iter = UnitIter>
     U_FORCE_INLINE
-    std::enable_if_t<
-        std::is_base_of_v<
-            std::bidirectional_iterator_tag,
-            typename std::iterator_traits<Iter>::iterator_category>,
-        UnsafeUTFIterator>
+    std::enable_if_t<prv::bidirectional_iterator<Iter>, UnsafeUTFIterator>
     operator--(int) {  // post-decrement
         UnsafeUTFIterator result(*this);
         operator--();
@@ -1890,10 +1883,7 @@ template<typename CP32, typename UnitIter>
 class UnsafeUTFIterator<
         CP32,
         UnitIter,
-        std::enable_if_t<
-            !std::is_base_of_v<
-                std::forward_iterator_tag,
-                typename std::iterator_traits<UnitIter>::iterator_category>>> {
+        std::enable_if_t<!prv::forward_iterator<UnitIter>>> {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
     using Impl = UnsafeUTFImpl<CP32, UnitIter>;
 
@@ -1913,7 +1903,7 @@ public:
     using value_type = UnsafeCodeUnits<CP32, UnitIter>;
     using reference = value_type;
     using pointer = Proxy;
-    using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
+    using difference_type = prv::iter_difference_t<UnitIter>;
     using iterator_category = std::input_iterator_tag;
 
     U_FORCE_INLINE explicit UnsafeUTFIterator(UnitIter p) : p_(std::move(p)) {}
@@ -2008,7 +1998,7 @@ public:
     using value_type = UnsafeCodeUnits_;
     using reference = value_type;
     using pointer = Proxy;
-    using difference_type = typename std::iterator_traits<UnitIter>::difference_type;
+    using difference_type = U_HEADER_ONLY_NAMESPACE::prv::iter_difference_t<UnitIter>;
     using iterator_category = std::bidirectional_iterator_tag;
 
     U_FORCE_INLINE explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter> iter) :
