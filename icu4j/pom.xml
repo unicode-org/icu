@@ -678,7 +678,8 @@
     </profile>
 
     <profile>
-      <!-- mvn clean test -ntp -DskipTests -DskipITs -l errorprone.log -P errorprone
+      <!-- mvn clean test -ntp -DskipTests -DskipITs -l /tmp/errorprone.log -P errorprone
+           mvn exec:java -f tools/build/ -P errorprone_report -DlogFile=/tmp/errorprone.log
       Then inspect the content of the errorprone.log file.
       We will have some script to convert that to a more friendly format (likely html) -->
       <id>errorprone</id>
@@ -701,7 +702,7 @@
                     So we force them all to be reported as warning.
                     The drawback is that there are not errors now, they get mixed with the real warnings.
                 -->
-                <arg>-Xplugin:ErrorProne -XepAllErrorsAsWarnings</arg>
+                <arg>-Xplugin:ErrorProne -XepAllErrorsAsWarnings -Xep:UnicodeEscape:OFF</arg>
                 <arg>-Xmaxerrs</arg>
                 <arg>10000</arg>
                 <arg>-J-Dfile.encoding=UTF-8</arg>

@@ -17,10 +17,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableBiMap;
-import com.google.errorprone.BugCheckerInfo;
-import com.google.errorprone.scanner.BuiltInCheckerSuppliers;
-
 class ErrorProneReport {
     private static final String HTML_REPORT_FILE = "errorprone1.html";
     private static final String HTML_REPORT_FILE2 = "errorprone2.html";
@@ -28,8 +24,6 @@ class ErrorProneReport {
     private static final String SORTTABLE_CSS_FILE = "errorprone.css";
     private static final String [] EMBEDDED_FILES =
         { SORTTABLE_JS_FILE, SORTTABLE_CSS_FILE };
-    private static final ImmutableBiMap<String, BugCheckerInfo> KNOWN_ERRORS =
-            BuiltInCheckerSuppliers.allChecks().getAllChecks();
 
     public static void genReports(String icuDir, String mavenStdOut, String outDir, String baseUrl)
             throws IOException {
@@ -95,6 +89,11 @@ class ErrorProneReport {
                             ? Map.of("target", "errWin")
                             : Map.of("href", error.url, "target", "errWin");
                     hu.openTag("a", attr).text(error.type).closeTag("a");
+
+                    String tags = ErrorProneUtils.getTags(error.type);
+                    if (tags != null) {
+                        hu.openTag("span", Map.of("class", "tags")).text(" " + tags).closeTag("span");
+                    }
                     hu.closeTag("td");
 
                     outDescription(hu, error);
@@ -145,8 +144,12 @@ class ErrorProneReport {
                 // "class", "severity_" + errorSeverity)
                 hu.openTag("h3", Map.of("id", "name_" + errorType))
                         .text("[" + firstEntry.severity + "] ")
-                        .openTag("span", Map.of("class", "tag")).text(errorType).closeTag("span")
-                        .text(" [" + errorsOfType.size() + "] ");
+                        .openTag("span", Map.of("class", "tag")).text(errorType).closeTag("span");
+                String tags = ErrorProneUtils.getTags(errorType);
+                if (tags != null) {
+                    hu.openTag("span", Map.of("class", "tags")).text(" " + tags).closeTag("span");
+                }
+                hu.text(" (" + errorsOfType.size() + ") ");
                 String url = ErrorProneUtils.getUrl(errorType);
                 if (url != null) {
                     hu.openTag("a", Map.of("href", url, "target", "errWin"))
@@ -252,8 +255,12 @@ class ErrorProneReport {
                     .openTag("span", Map.of("class", "tag"))
                     .text(e.getKey())
                     .closeTag("span")
-                    .closeTag("a")
-                    .text(" [" + e.getValue().size() + "]\n");
+                    .closeTag("a");
+            String tags = ErrorProneUtils.getTags(e.getKey());
+            if (tags != null) {
+                hu.openTag("span", Map.of("class", "tags")).text(" " + tags).closeTag("span");
+            }
+            hu.text(" (" + e.getValue().size() + ")\n");
         }
         if (!first) {
             hu.closeTag("p").nl();
