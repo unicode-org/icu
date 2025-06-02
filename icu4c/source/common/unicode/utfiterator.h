@@ -1254,6 +1254,12 @@ public:
     }
     U_FORCE_INLINE bool operator!=(const UTFIterator &other) const { return !operator==(other); }
 
+#if defined(__cpp_lib_ranges)
+    U_FORCE_INLINE bool operator==(std::default_sentinel_t) const {
+      return p_ == limit_;
+    }
+#endif
+
     U_FORCE_INLINE CodeUnits<CP32, UnitIter> operator*() const {
         if (!ahead_) {
             units_ = Impl::readAndInc(p_, p_, limit_);

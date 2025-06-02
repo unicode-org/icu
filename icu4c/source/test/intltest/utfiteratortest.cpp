@@ -487,8 +487,23 @@ public:
         static_assert(!std::ranges::common_range<CodeUnitRange>);
         static_assert(std::ranges::input_range<CodeUnitRange>);
         static_assert(!std::ranges::forward_range<CodeUnitRange>);
-        auto it = utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits.begin(), codeUnits.end());
-        // TODO: Use `it`.
+        // TODO(egg): UTFStringCodePoints could support this.
+        struct CodePoints : std::ranges::view_interface<CodePoints> {
+            using iterator =
+                UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, std::ranges::iterator_t<CodeUnitRange>,
+                            std::ranges::sentinel_t<CodeUnitRange>>;
+            CodePoints(CodeUnitRange codeUnits) : codeUnits(codeUnits) {}
+            iterator begin() { return iterator(codeUnits.begin(), codeUnits.end()); }
+            std::default_sentinel_t end() {
+                return std::default_sentinel;
+            }
+            CodeUnitRange codeUnits;
+        };
+        using CodeUnits = CodePoints::iterator::value_type;
+        assertTrue("uncommon input concatenated range",
+                   std::ranges::equal(CodePoints(codeUnits) |
+                                          std::ranges::views::transform(&CodeUnits::codePoint),
+                                      std::u32string_view(U"𒌉𒂍𒁾𒁀𒀀𒌓𒌌𒆷𒀀𒀭𒈨𒂠𒉌𒁺𒉈𒂗")));
     }
 
     void testUncommonForwardRange() {
