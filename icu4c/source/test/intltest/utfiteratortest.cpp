@@ -503,7 +503,7 @@ public:
         assertTrue("uncommon input concatenated range",
                    std::ranges::equal(CodePoints(codeUnits) |
                                           std::ranges::views::transform(&CodeUnits::codePoint),
-                                      std::u32string_view(U"𒌉𒂍𒁾𒁀𒀀𒌓𒌌𒆷𒀀𒀭𒈨𒂠𒉌𒁺𒉈𒂗")));
+                                      std::u32string_view(U"𒀭𒊺𒉀\u200B𒍠𒊩")));
     }
 
     void testUncommonForwardRange() {
