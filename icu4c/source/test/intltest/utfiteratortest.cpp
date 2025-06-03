@@ -492,17 +492,14 @@ public:
         static_assert(!std::ranges::forward_range<CodeUnitRange>);
         // TODO(egg): UTFStringCodePoints could support this.
         struct CodePoints : std::ranges::view_interface<CodePoints> {
-            using iterator =
-                UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, std::ranges::iterator_t<CodeUnitRange>,
-                            std::ranges::sentinel_t<CodeUnitRange>>;
             CodePoints(CodeUnitRange codeUnits) : codeUnits(codeUnits) {}
-            iterator begin() { return iterator(codeUnits.begin(), codeUnits.end()); }
-            std::default_sentinel_t end() {
-                return std::default_sentinel;
+            auto begin() {
+                return utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits.begin(), codeUnits.end());
             }
+            auto end() { return codeUnits.end(); }
             CodeUnitRange codeUnits;
         };
-        using CodeUnits = CodePoints::iterator::value_type;
+        using CodeUnits = decltype(*std::declval<CodePoints>().begin());
         static_assert(!std::ranges::common_range<CodePoints>);
         static_assert(std::ranges::input_range<CodePoints>);
         static_assert(!std::ranges::forward_range<CodePoints>);
@@ -515,6 +512,11 @@ public:
                                          std::default_sentinel, [](CodeUnits u) {
                                              return u.codePoint() == U'𒊩';
                                          }) == std::default_sentinel);
+
+        // TODO: Test unsafe.
+        auto unsafeIter = unsafeUTFIterator<char32_t>(
+            streamCodeUnits(std::stringstream(source)).begin());
+        (void)unsafeIter;
     }
 
     void testUncommonForwardRange() {
@@ -548,6 +550,10 @@ public:
                    std::ranges::equal(CodePoints(codeUnits) |
                                           std::ranges::views::transform(&CodeUnits::codePoint),
                                       std::u32string_view(U"𒂍𒁾𒁀𒀀 𒀀𒈾𒀀𒀭 𒉌𒀝")));
+
+        // TODO: Test unsafe.
+        auto unsafeIter = unsafeUTFIterator<char32_t>(codeUnits.begin());
+        (void)unsafeIter;
     }
 
     void testUncommonContiguousRange() {
