@@ -317,9 +317,10 @@ public:
 #if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2021'10
         TESTCASE_AUTO(testUncommonInputRange);
         TESTCASE_AUTO(testUncommonForwardRange);
+        TESTCASE_AUTO(testUncommonContiguousRange);
         TESTCASE_AUTO(testCommonForwardRange);
         TESTCASE_AUTO(testCommonBidirectionalRange);
-        TESTCASE_AUTO(testContiguousRange);
+        TESTCASE_AUTO(testCommonContiguousRange);
 #endif
 
         TESTCASE_AUTO_END;
@@ -500,6 +501,9 @@ public:
             CodeUnitRange codeUnits;
         };
         using CodeUnits = CodePoints::iterator::value_type;
+        static_assert(!std::ranges::common_range<CodePoints>);
+        static_assert(std::ranges::input_range<CodePoints>);
+        static_assert(!std::ranges::forward_range<CodePoints>);
         assertTrue("uncommon input concatenated range",
                    std::ranges::equal(CodePoints(codeUnits) |
                                           std::ranges::views::transform(&CodeUnits::codePoint),
@@ -521,8 +525,52 @@ public:
         // Even though `source` is contiguous, the lazy split makes this forward-only.
         static_assert(std::ranges::forward_range<CodeUnitRange>);
         static_assert(!std::ranges::bidirectional_range<CodeUnitRange>);
-        // TODO(egg): This does not compile.
-        // UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, std::ranges::iterator_t<CodeUnitRange>> it;
+        // TODO(egg): UTFStringCodePoints could support this.
+        struct CodePoints : std::ranges::view_interface<CodePoints> {
+            using iterator =
+                UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, std::ranges::iterator_t<CodeUnitRange>,
+                            std::ranges::sentinel_t<CodeUnitRange>>;
+            CodePoints(CodeUnitRange codeUnits) : codeUnits(codeUnits) {}
+            iterator begin() { return iterator(codeUnits.begin(), codeUnits.end()); }
+            std::ranges::sentinel_t<CodeUnitRange> end() { return codeUnits.end(); }
+            CodeUnitRange codeUnits;
+        };
+        using CodeUnits = CodePoints::iterator::value_type;
+        static_assert(!std::ranges::common_range<CodePoints>);
+        static_assert(std::ranges::forward_range<CodePoints>);
+        static_assert(!std::ranges::bidirectional_range<CodePoints>);
+        assertTrue("uncommon forward concatenated range",
+                   std::ranges::equal(CodePoints(codeUnits) |
+                                          std::ranges::views::transform(&CodeUnits::codePoint),
+                                      std::u32string_view(U"𒂍𒁾𒁀𒀀 𒀀𒈾𒀀𒀭 𒉌𒀝")));
+    }
+
+    void testUncommonContiguousRange() {
+        const std::u8string text = u8"𒀭𒊺𒉀 𒍠𒊩  # ᵈnisaba za₃-mim";
+        // Code units before the #.
+        auto codeUnits = text | std::ranges::views::take_while([](char8_t c) { return c != u8'#'; });
+        using CodeUnitRange = decltype(codeUnits);
+        // This range has a sentinel.
+        static_assert(!std::ranges::common_range<CodeUnitRange>);
+        static_assert(std::ranges::contiguous_range<CodeUnitRange>);
+        // TODO(egg): UTFStringCodePoints could support this.
+        struct CodePoints : std::ranges::view_interface<CodePoints> {
+            using iterator =
+                UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, std::ranges::iterator_t<CodeUnitRange>,
+                            std::ranges::sentinel_t<CodeUnitRange>>;
+            CodePoints(CodeUnitRange codeUnits) : codeUnits(codeUnits) {}
+            iterator begin() { return iterator(codeUnits.begin(), codeUnits.end()); }
+            std::ranges::sentinel_t<CodeUnitRange> end() { return codeUnits.end(); }
+            CodeUnitRange codeUnits;
+        };
+        using CodeUnits = CodePoints::iterator::value_type;
+        static_assert(!std::ranges::common_range<CodePoints>);
+        static_assert(std::ranges::bidirectional_range<CodePoints>);
+        static_assert(!std::ranges::random_access_range<CodePoints>);
+        assertTrue("uncommon contiguous concatenated range",
+                   std::ranges::equal(CodePoints(codeUnits) |
+                                          std::ranges::views::transform(&CodeUnits::codePoint),
+                                      std::u32string_view(U"𒀭𒊺𒉀 𒍠𒊩  ")));
     }
 
     void testCommonForwardRange() {
@@ -591,13 +639,15 @@ public:
                                       std::u32string_view(U"𒉭")));
     }
 
-    void testContiguousRange() {
+    void testCommonContiguousRange() {
         const std::u16string codeUnits = u"𒀭𒊺𒉀​𒍠𒊩";
         static_assert(std::ranges::contiguous_range<decltype(codeUnits)>);
         auto codePoints = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits);
+        static_assert(std::ranges::common_range<decltype(codePoints)>);
         static_assert(std::ranges::bidirectional_range<decltype(codePoints)>);
         static_assert(!std::ranges::random_access_range<decltype(codePoints)>);
         auto unsafeCodePoints = unsafeUTFStringCodePoints<char32_t>(codeUnits);
+        static_assert(std::ranges::common_range<decltype(unsafeCodePoints)>);
         static_assert(std::ranges::bidirectional_range<decltype(unsafeCodePoints)>);
         static_assert(!std::ranges::random_access_range<decltype(unsafeCodePoints)>);
         assertTrue("safe contiguous range",
