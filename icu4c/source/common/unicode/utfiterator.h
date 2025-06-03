@@ -1245,7 +1245,7 @@ public:
 
 #if defined(__cpp_lib_ranges)
     U_FORCE_INLINE bool operator==(std::default_sentinel_t) const {
-      return p_ == limit_;
+      return p_ == limit_ && !ahead_;
     }
 #endif
 
