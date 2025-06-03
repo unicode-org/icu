@@ -949,7 +949,7 @@ template<typename CP32, UTFIllFormedBehavior behavior,
          typename UnitIter, typename LimitIter = UnitIter, typename = void>
 class UTFIterator {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
-    using Impl = UTFImpl<CP32, behavior, UnitIter>;
+    using Impl = UTFImpl<CP32, behavior, UnitIter, LimitIter>;
 
     // Proxy type for operator->() (required by LegacyInputIterator)
     // so that we don't promise always returning CodeUnits.
@@ -1053,17 +1053,6 @@ public:
     operator==(const Sentinel &other) const {
         return getLogicalPosition() == other;
     }
-    /**
-     * @param other A unit iterator sentinel
-     * @return true if this iterator’s position is not equal to the sentinel
-     * @draft ICU 78
-     */
-    template<typename Sentinel>
-    U_FORCE_INLINE
-    std::enable_if_t<
-        !std::is_same_v<Sentinel, UTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
-        bool>
-    operator!=(const Sentinel &other) const { return !operator==(other); }
 
     /**
      * Decodes the code unit sequence at the current position.
