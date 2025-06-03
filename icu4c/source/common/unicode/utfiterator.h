@@ -1214,7 +1214,7 @@ class UTFIterator<
         UnitIter, LimitIter,
         std::enable_if_t<!prv::forward_iterator<UnitIter>>> {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
-    using Impl = UTFImpl<CP32, behavior, UnitIter>;
+    using Impl = UTFImpl<CP32, behavior, UnitIter, LimitIter>;
 
     // Proxy type for post-increment return value, to make *iter++ work.
     // Also for operator->() (required by LegacyInputIterator)
