@@ -480,10 +480,12 @@ public:
 
 #if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2021'10 // See above for the value.
     void testUncommonInputRange() {
-        std::istringstream stream("D808 DC2D D808 DEBA D808 DE40 200B D808 DF60 D808 DEA9");
+        constexpr char source[] = "D808 DC2D D808 DEBA D808 DE40 200B D808 DF60 D808 DEA9";
         // Reads a sequence of space-separated hex code units from a stream.
-        auto codeUnits = std::views::istream<uint16_t>(stream >> std::hex);
-        using CodeUnitRange = decltype(codeUnits);
+        auto streamCodeUnits = [](std::stringstream&& s) {
+            return std::views::istream<uint16_t>(s >> std::hex);
+        };
+        using CodeUnitRange = decltype(streamCodeUnits(std::stringstream(source)));
         // This range has a sentinel.
         static_assert(!std::ranges::common_range<CodeUnitRange>);
         static_assert(std::ranges::input_range<CodeUnitRange>);
@@ -505,9 +507,14 @@ public:
         static_assert(std::ranges::input_range<CodePoints>);
         static_assert(!std::ranges::forward_range<CodePoints>);
         assertTrue("uncommon input streamed range",
-                   std::ranges::equal(CodePoints(codeUnits) |
+                   std::ranges::equal(CodePoints(streamCodeUnits(std::stringstream(source))) |
                                           std::ranges::views::transform(&CodeUnits::codePoint),
                                       std::u32string_view(U"𒀭𒊺𒉀\u200B𒍠𒊩")));
+        assertFalse("uncommon input streamed range: find",
+                    std::ranges::find_if(CodePoints(streamCodeUnits(std::stringstream(source))).begin(),
+                                         std::default_sentinel, [](CodeUnits u) {
+                                             return u.codePoint() == U'𒊩';
+                                         }) == std::default_sentinel);
     }
 
     void testUncommonForwardRange() {
