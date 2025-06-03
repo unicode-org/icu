@@ -504,7 +504,7 @@ public:
         static_assert(!std::ranges::common_range<CodePoints>);
         static_assert(std::ranges::input_range<CodePoints>);
         static_assert(!std::ranges::forward_range<CodePoints>);
-        assertTrue("uncommon input concatenated range",
+        assertTrue("uncommon input streamed range",
                    std::ranges::equal(CodePoints(codeUnits) |
                                           std::ranges::views::transform(&CodeUnits::codePoint),
                                       std::u32string_view(U"𒀭𒊺𒉀\u200B𒍠𒊩")));
@@ -537,7 +537,7 @@ public:
         static_assert(!std::ranges::common_range<CodePoints>);
         static_assert(std::ranges::forward_range<CodePoints>);
         static_assert(!std::ranges::bidirectional_range<CodePoints>);
-        assertTrue("uncommon forward concatenated range",
+        assertTrue("uncommon forward lazily split range",
                    std::ranges::equal(CodePoints(codeUnits) |
                                           std::ranges::views::transform(&CodeUnits::codePoint),
                                       std::u32string_view(U"𒂍𒁾𒁀𒀀 𒀀𒈾𒀀𒀭 𒉌𒀝")));
@@ -565,7 +565,7 @@ public:
         static_assert(!std::ranges::common_range<CodePoints>);
         static_assert(std::ranges::bidirectional_range<CodePoints>);
         static_assert(!std::ranges::random_access_range<CodePoints>);
-        assertTrue("uncommon contiguous concatenated range",
+        assertTrue("uncommon contiguous prefix range",
                    std::ranges::equal(CodePoints(codeUnits) |
                                           std::ranges::views::transform(&CodeUnits::codePoint),
                                       std::u32string_view(U"𒀭𒊺𒉀 𒍠𒊩  ")));
