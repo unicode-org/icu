@@ -218,7 +218,7 @@ template<typename Range>
 struct range_type<
     Range,
     std::void_t<decltype(std::declval<Range>().begin()),
-    decltype(std::declval<Range>().end())>> : std::true_type {};
+                decltype(std::declval<Range>().end())>> : std::true_type {};
 template<typename Range>
 constexpr bool range = range_type<Range>::value;
 

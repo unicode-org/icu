@@ -605,9 +605,6 @@ public:
         static_assert(std::ranges::common_range<CodePoints>);
         static_assert(std::ranges::forward_range<CodePoints>);
         static_assert(!std::ranges::bidirectional_range<CodePoints>);
-        for (auto cp : CodePoints(codeUnits)) {
-            cp.codePoint();
-        }
         using CodeUnits = CodePoints::iterator::value_type;
         assertTrue("common forward concatenated range",
                    std::ranges::equal(CodePoints(codeUnits) |
@@ -648,8 +645,6 @@ public:
         const std::u16string codeUnits = u"𒀭𒊺𒉀​𒍠𒊩";
         static_assert(std::ranges::contiguous_range<decltype(codeUnits)>);
         auto codePoints = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits);
-        auto end = codePoints.end();
-        static_assert(std::sentinel_for < decltype(end), decltype(codePoints.begin())>);
         static_assert(std::ranges::common_range<decltype(codePoints)>);
         static_assert(std::ranges::bidirectional_range<decltype(codePoints)>);
         static_assert(!std::ranges::random_access_range<decltype(codePoints)>);
