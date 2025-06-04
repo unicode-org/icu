@@ -185,6 +185,9 @@ constexpr bool forward_iterator = std::forward_iterator<Iter>;
 template<typename Iter>
 constexpr bool bidirectional_iterator = std::bidirectional_iterator<Iter>;
 
+template<typename Range>
+constexpr bool range = std::ranges::range<Range>;
+
 #else
 
 /** @internal */
@@ -208,6 +211,16 @@ constexpr bool bidirectional_iterator =
     std::is_base_of_v<
         std::bidirectional_iterator_tag,
         typename std::iterator_traits<Iter>::iterator_category>;
+
+template<typename Range, typename = void>
+struct range_type : std::false_type {};
+template<typename Range>
+struct range_type<
+    Range,
+    std::void_t<decltype(std::declval<Range>().begin()),
+    decltype(std::declval<Range>().end())>> : std::true_type {};
+template<typename Range>
+constexpr bool range = range_type<Range>::value;
 
 #endif
 }  // namespace prv
@@ -1622,10 +1635,28 @@ public:
     /** Copy assignment operator. @draft ICU 78 */
     UTFStringCodePoints &operator=(const UTFStringCodePoints &other) = default;
 
+    // If a const `begin()` is available for the code unit `Range`, only a const
+    // `begin()` is provided for this type.  The alternative would be to provide
+    // not only both non-const and const `begin()`, but also non-const and const
+    // `end()`: if `begin()` is non-const and based on the code unit `iterator`,
+    // but `end()` is const only and based on the code unit `const_iterator`, we
+    // end up with uncommon non-const `UTFStringCodePoints` for a `common_range`
+    // `Range`.
+
     /**
      * @return the range start iterator
      * @draft ICU 78
      */
+    template <typename R = Range, typename = std::enable_if_t<!prv::range<const R>>>
+    auto begin() {
+        return utfIterator<CP32, behavior>(unitRange.begin(), unitRange.end());
+    }
+
+    /**
+     * @return the range start iterator
+     * @draft ICU 78
+     */
+    template <typename R = Range, typename = std::enable_if_t<prv::range<const R>>>
     auto begin() const {
         return utfIterator<CP32, behavior>(unitRange.begin(), unitRange.end());
     }
@@ -1635,8 +1666,8 @@ public:
      * @draft ICU 78
      */
     auto end() const {
-        using UnitIter = decltype(unitRange.begin());
-        using LimitIter = decltype(unitRange.end());
+        using UnitIter = decltype(std::declval<Range>().begin());
+        using LimitIter = decltype(std::declval<Range>().end());
         if constexpr (!std::is_same_v<UnitIter, LimitIter>) {
             // Return the code unit sentinel.
             return unitRange.end();

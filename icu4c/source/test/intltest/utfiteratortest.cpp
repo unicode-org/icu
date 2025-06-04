@@ -490,41 +490,9 @@ public:
         static_assert(!std::ranges::common_range<CodeUnitRange>);
         static_assert(std::ranges::input_range<CodeUnitRange>);
         static_assert(!std::ranges::forward_range<CodeUnitRange>);
-#if 0
         auto codePoints = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(
             streamCodeUnits(std::stringstream(source)));
         using CodePoints = decltype(codePoints);
-        // TODO
-../../../../src/icu4c/source/common/unicode/utfiterator.h:1630:44: error: 'this' argument to member function 'begin' has type 'const std::ranges::basic_istream_view<unsigned short, char>', but function is not marked const
- 1630 |         return utfIterator<CP32, behavior>(unitRange.begin(), unitRange.end());
-      |                                            ^~~~~~~~~
-../../../../src/icu4c/source/test/intltest/utfiteratortest.cpp:529:64: note: in instantiation of member function 'icu::header::UTFStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD, std::ranges::basic_istream_view<unsigned short, char>>::begin' requested here
-  529 |         using CodeUnits = decltype(*std::declval<CodePoints>().begin());
-      |                                                                ^
-/usr/lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14/ranges:805:7: note: 'begin' declared here
-  805 |       begin()
-      |       ^
-../../../../src/icu4c/source/test/intltest/utfiteratortest.cpp:531:23: error: static assertion failed
-  531 |         static_assert(std::ranges::input_range<CodePoints>);
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../../../../src/icu4c/source/test/intltest/utfiteratortest.cpp:531:23: note: because 'CodePoints' (aka 'UTFStringCodePoints<char32_t, (UTFIllFormedBehavior)1U, std::ranges::basic_istream_view<unsigned short, char, std::char_traits<char>>>') does not satisfy 'input_range'
-/usr/lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14/bits/ranges_base.h:588:27: note: because 'icu::header::UTFStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD, std::ranges::basic_istream_view<unsigned short, char>>' does not satisfy 'range'
-  588 |     concept input_range = range<_Tp> && input_iterator<iterator_t<_Tp>>;
-      |                           ^
-/usr/lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14/bits/ranges_base.h:501:2: note: because 'ranges::begin(__t)' would be invalid: no matching function for call to object of type 'const ranges::__access::_Begin'
-  501 |         ranges::begin(__t);
-      |         ^
-#else
-        // TODO(egg): UTFStringCodePoints could support this.
-        struct CodePoints : std::ranges::view_interface<CodePoints> {
-            CodePoints(CodeUnitRange codeUnits) : codeUnits(codeUnits) {}
-            auto begin() {
-                return utfIterator<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits.begin(), codeUnits.end());
-            }
-            auto end() { return codeUnits.end(); }
-            CodeUnitRange codeUnits;
-        };
-#endif
         using CodeUnits = decltype(*std::declval<CodePoints>().begin());
         static_assert(!std::ranges::common_range<CodePoints>);
         static_assert(std::ranges::input_range<CodePoints>);
@@ -680,6 +648,8 @@ public:
         const std::u16string codeUnits = u"𒀭𒊺𒉀​𒍠𒊩";
         static_assert(std::ranges::contiguous_range<decltype(codeUnits)>);
         auto codePoints = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits);
+        auto end = codePoints.end();
+        static_assert(std::sentinel_for < decltype(end), decltype(codePoints.begin())>);
         static_assert(std::ranges::common_range<decltype(codePoints)>);
         static_assert(std::ranges::bidirectional_range<decltype(codePoints)>);
         static_assert(!std::ranges::random_access_range<decltype(codePoints)>);
