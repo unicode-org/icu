@@ -30,10 +30,10 @@
  * #include "unicode/utypes.h"
  * #include "unicode/utfiterator.h"
  *
- * using U_HEADER_ONLY_NAMESPACE::utfIterator;
- * using U_HEADER_ONLY_NAMESPACE::utfStringCodePoints;
- * using U_HEADER_ONLY_NAMESPACE::unsafeUTFIterator;
- * using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
+ * using icu::header::utfIterator;
+ * using icu::header::utfStringCodePoints;
+ * using icu::header::unsafeUTFIterator;
+ * using icu::header::unsafeUTFStringCodePoints;
  *
  * int32_t rangeLoop16(std::u16string_view s) {
  *     // We are just adding up the code points for minimal-code demonstration purposes.
