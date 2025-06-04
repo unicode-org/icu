@@ -270,25 +270,34 @@ public:
      */
     uint8_t length() const { return len_; }
 
-    // C++17: There is no test for contiguous_iterator, so we just work with pointers
-    // and with string and string_view iterators.
+#if U_CPLUSPLUS_VERSION >= 20
     /**
      * @return a string_view of the code unit sequence for one code point.
-     * Only enabled if UnitIter is a pointer, a string_view::iterator, or a string::iterator.
+     * Only works if UnitIter is a pointer or a contiguous_iterator.
+     * @draft ICU 78
+     */
+    template<std::contiguous_iterator Iter = UnitIter>
+    std::basic_string_view<Unit> stringView() const {
+        return std::basic_string_view<Unit>(begin(), end());
+    }
+#else
+    /**
+     * @return a string_view of the code unit sequence for one code point.
+     * Only works if UnitIter is a pointer or a contiguous_iterator.
      * @draft ICU 78
      */
     template<typename Iter = UnitIter>
     std::enable_if_t<
-        std::is_pointer_v<Iter> ||
-            std::is_same_v<Iter, typename std::basic_string<Unit>::iterator> ||
-            std::is_same_v<Iter, typename std::basic_string_view<Unit>::iterator>,
+        std::is_base_of_v<
+            std::random_access_iterator_tag,
+            typename std::iterator_traits<Iter>::iterator_category>,
         std::basic_string_view<Unit>>
     stringView() const {
-        // C++20:
-        // - require https://en.cppreference.com/w/cpp/iterator/contiguous_iterator
-        // - return string_view(begin(), end())
+        // This fails if Iter is a random_access_iterator but not a contiguous_iterator.
+        // C++17 has no contiguous_iterator_tag so we cannot reliably test more specifically.
         return std::basic_string_view<Unit>(&*start_, len_);
     }
+#endif
 
 private:
     // Order of fields with padding and access frequency in mind.
@@ -1503,76 +1512,8 @@ private:
 namespace U_HEADER_ONLY_NAMESPACE {
 
 /**
- * A C++ "range" for validating iteration over all of the code points of a Unicode string.
- *
- * Call utfStringCodePoints() to have the compiler deduce the Unit type.
- *
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if UTF_BEHAVIOR_NEGATIVE
- * @tparam behavior How to handle ill-formed Unicode strings
- * @tparam Unit Code unit type:
- *     UTF-8: char or char8_t or uint8_t;
- *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t;
- *     UTF-32: char32_t or UChar32=int32_t or (on Linux) wchar_t
- * @draft ICU 78
- * @see utfStringCodePoints
- */
-template<typename CP32, UTFIllFormedBehavior behavior, typename Unit>
-class UTFStringCodePoints {
-    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
-    using UnitIter = typename std::basic_string_view<Unit>::iterator;
-public:
-    /**
-     * Constructs a C++ "range" object over the code points in the string.
-     * @draft ICU 78
-     */
-    explicit UTFStringCodePoints(std::basic_string_view<Unit> s) : s(s) {}
-
-    /** Copy constructor. @draft ICU 78 */
-    UTFStringCodePoints(const UTFStringCodePoints &other) = default;
-
-    /** Copy assignment operator. @draft ICU 78 */
-    UTFStringCodePoints &operator=(const UTFStringCodePoints &other) = default;
-
-    /**
-     * @return the range start iterator
-     * @draft ICU 78
-     */
-    auto begin() const {
-        return UTFIterator<CP32, behavior, UnitIter>(s.begin(), s.begin(), s.end());
-    }
-
-    /**
-     * @return the range limit (exclusive end) iterator
-     * @draft ICU 78
-     */
-    auto end() const {
-        return UTFIterator<CP32, behavior, UnitIter>(s.begin(), s.end(), s.end());
-    }
-
-    /**
-     * @return std::reverse_iterator(end())
-     * @draft ICU 78
-     */
-    auto rbegin() const {
-        return std::make_reverse_iterator(end());
-    }
-
-    /**
-     * @return std::reverse_iterator(begin())
-     * @draft ICU 78
-     */
-    auto rend() const {
-        return std::make_reverse_iterator(begin());
-    }
-
-private:
-    std::basic_string_view<Unit> s;
-};
-
-/**
  * UTFIterator factory function for start <= p < limit.
- * Deduces the UnitIter template parameter from the inputs.
+ * Deduces the UnitIter and LimitIter template parameters from the inputs.
  * Only enabled if UnitIter is a (multi-pass) forward_iterator or better.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
@@ -1599,7 +1540,7 @@ auto utfIterator(UnitIter start, UnitIter p, LimitIter limit) {
 
 /**
  * UTFIterator factory function for start = p < limit.
- * Deduces the UnitIter template parameter from the inputs.
+ * Deduces the UnitIter and LimitIter template parameters from the inputs.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @tparam behavior How to handle ill-formed Unicode strings
@@ -1650,96 +1591,99 @@ auto utfIterator(UnitIter p) {
 }
 
 /**
- * UTFStringCodePoints factory function for a "range" of code points in a string,
- * which validates while decoding.
- * Avoids having to explicitly specify the Unit template parameter for the UTFStringCodePoints.
+ * A C++ "range" for validating iteration over all of the code points of a code unit range.
+ *
+ * Call utfStringCodePoints() to have the compiler deduce the Range type.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if UTF_BEHAVIOR_NEGATIVE
  * @tparam behavior How to handle ill-formed Unicode strings
- * @param s input string
- * @return a UTFStringCodePoints&lt;CP32, behavior, Unit&gt;
- *     for the given std::basic_string_view&lt;Unit&gt;
+ * @tparam Range A C++ "range" of Unicode UTF-8/16/32 code units
  * @draft ICU 78
+ * @see utfStringCodePoints
  */
-template<typename CP32, UTFIllFormedBehavior behavior>
-auto utfStringCodePoints(std::string_view s) {
-    return UTFStringCodePoints<CP32, behavior, decltype(s)::value_type>(s);
-}
+template<typename CP32, UTFIllFormedBehavior behavior, typename Range>
+class UTFStringCodePoints {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
+public:
+    /**
+     * Constructs a C++ "range" object over the code points in the string.
+     * @param unitRange input range
+     * @draft ICU 78
+     */
+    explicit UTFStringCodePoints(Range unitRange) : unitRange(std::move(unitRange)) {}
+    // TODO: If I just take a const Range &unitRange and keep the reference in this object,
+    // then some tests fail & others crash.
+    // Should we take the reference and change the test code?
+
+    /** Copy constructor. @draft ICU 78 */
+    UTFStringCodePoints(const UTFStringCodePoints &other) = default;
+
+    /** Copy assignment operator. @draft ICU 78 */
+    UTFStringCodePoints &operator=(const UTFStringCodePoints &other) = default;
+
+    /**
+     * @return the range start iterator
+     * @draft ICU 78
+     */
+    auto begin() const {
+        return utfIterator<CP32, behavior>(unitRange.begin(), unitRange.end());
+    }
+
+    /**
+     * @return the range limit (exclusive end) iterator
+     * @draft ICU 78
+     */
+    auto end() const {
+        using UnitIter = decltype(unitRange.begin());
+        using LimitIter = decltype(unitRange.end());
+        if constexpr (!std::is_same_v<UnitIter, LimitIter>) {
+            // Return the code unit sentinel.
+            return unitRange.end();
+        } else if constexpr (prv::bidirectional_iterator<UnitIter>) {
+            return utfIterator<CP32, behavior>(unitRange.begin(), unitRange.end(), unitRange.end());
+        } else {
+            // The input iterator specialization has no three-argument constructor.
+            return utfIterator<CP32, behavior>(unitRange.end(), unitRange.end());
+        }
+    }
+
+    /**
+     * @return std::reverse_iterator(end())
+     * @draft ICU 78
+     */
+    auto rbegin() const {
+        return std::make_reverse_iterator(end());
+    }
+
+    /**
+     * @return std::reverse_iterator(begin())
+     * @draft ICU 78
+     */
+    auto rend() const {
+        return std::make_reverse_iterator(begin());
+    }
+
+private:
+    Range unitRange;
+};
 
 /**
- * UTFStringCodePoints factory function for a "range" of code points in a string,
+ * UTFStringCodePoints factory function for a "range" of code points in a code unit range,
  * which validates while decoding.
- * Avoids having to explicitly specify the Unit template parameter for the UTFStringCodePoints.
+ * Deduces the Range template parameter from the input.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if UTF_BEHAVIOR_NEGATIVE
  * @tparam behavior How to handle ill-formed Unicode strings
- * @param s input string
- * @return a UTFStringCodePoints&lt;CP32, behavior, Unit&gt;
- *     for the given std::basic_string_view&lt;Unit&gt;
+ * @tparam Range A C++ "range" of Unicode UTF-8/16/32 code units
+ * @param unitRange input range
+ * @return a UTFStringCodePoints&lt;CP32, behavior, Range&gt; for the given unitRange
  * @draft ICU 78
  */
-template<typename CP32, UTFIllFormedBehavior behavior>
-auto utfStringCodePoints(std::u16string_view s) {
-    return UTFStringCodePoints<CP32, behavior, decltype(s)::value_type>(s);
-}
-
-/**
- * UTFStringCodePoints factory function for a "range" of code points in a string,
- * which validates while decoding.
- * Avoids having to explicitly specify the Unit template parameter for the UTFStringCodePoints.
- *
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if UTF_BEHAVIOR_NEGATIVE
- * @tparam behavior How to handle ill-formed Unicode strings
- * @param s input string
- * @return a UTFStringCodePoints&lt;CP32, behavior, Unit&gt;
- *     for the given std::basic_string_view&lt;Unit&gt;
- * @draft ICU 78
- */
-template<typename CP32, UTFIllFormedBehavior behavior>
-auto utfStringCodePoints(std::u32string_view s) {
-    return UTFStringCodePoints<CP32, behavior, decltype(s)::value_type>(s);
-}
-
-#if U_CPLUSPLUS_VERSION >= 20
-// The new type char8_t is distinct from char. u8"literals" are now char8_t literals.
-/**
- * UTFStringCodePoints factory function for a "range" of code points in a string,
- * which validates while decoding.
- * Avoids having to explicitly specify the Unit template parameter for the UTFStringCodePoints.
- *
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if UTF_BEHAVIOR_NEGATIVE
- * @tparam behavior How to handle ill-formed Unicode strings
- * @param s input string
- * @return a UTFStringCodePoints&lt;CP32, behavior, Unit&gt;
- *     for the given std::basic_string_view&lt;Unit&gt;
- * @draft ICU 78
- */
-template<typename CP32, UTFIllFormedBehavior behavior>
-auto utfStringCodePoints(std::u8string_view s) {
-    return UTFStringCodePoints<CP32, behavior, decltype(s)::value_type>(s);
-}
-#endif
-
-/**
- * UTFStringCodePoints factory function for a "range" of code points in a string,
- * which validates while decoding.
- * Avoids having to explicitly specify the Unit template parameter for the UTFStringCodePoints.
- *
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
- *              should be signed if UTF_BEHAVIOR_NEGATIVE
- * @tparam behavior How to handle ill-formed Unicode strings
- * @param s input string
- * @return a UTFStringCodePoints&lt;CP32, behavior, Unit&gt;
- *     for the given std::basic_string_view&lt;Unit&gt;
- * @draft ICU 78
- */
-template<typename CP32, UTFIllFormedBehavior behavior>
-auto utfStringCodePoints(std::wstring_view s) {
-    return UTFStringCodePoints<CP32, behavior, decltype(s)::value_type>(s);
+template<typename CP32, UTFIllFormedBehavior behavior, typename Range>
+auto utfStringCodePoints(Range unitRange) {
+    return UTFStringCodePoints<CP32, behavior, Range>(unitRange);
 }
 
 // Non-validating iterators ------------------------------------------------ ***
@@ -2277,73 +2221,6 @@ private:
 namespace U_HEADER_ONLY_NAMESPACE {
 
 /**
- * A C++ "range" for non-validating iteration over all of the code points of a Unicode string.
- * The string must be well-formed.
- *
- * Call unsafeUTFStringCodePoints() to have the compiler deduce the Unit type.
- *
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
- * @tparam Unit Code unit type:
- *     UTF-8: char or char8_t or uint8_t;
- *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t;
- *     UTF-32: char32_t or UChar32=int32_t or (on Linux) wchar_t
- * @draft ICU 78
- * @see unsafeUTFStringCodePoints
- */
-template<typename CP32, typename Unit>
-class UnsafeUTFStringCodePoints {
-    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
-    using UnitIter = typename std::basic_string_view<Unit>::iterator;
-public:
-    /**
-     * Constructs a C++ "range" object over the code points in the string.
-     * @draft ICU 78
-     */
-    explicit UnsafeUTFStringCodePoints(std::basic_string_view<Unit> s) : s(s) {}
-
-    /** Copy constructor. @draft ICU 78 */
-    UnsafeUTFStringCodePoints(const UnsafeUTFStringCodePoints &other) = default;
-
-    /** Copy assignment operator. @draft ICU 78 */
-    UnsafeUTFStringCodePoints &operator=(const UnsafeUTFStringCodePoints &other) = default;
-
-    /**
-     * @return the range start iterator
-     * @draft ICU 78
-     */
-    auto begin() const {
-        return UnsafeUTFIterator<CP32, UnitIter>(s.begin());
-    }
-
-    /**
-     * @return the range limit (exclusive end) iterator
-     * @draft ICU 78
-     */
-    auto end() const {
-        return UnsafeUTFIterator<CP32, UnitIter>(s.end());
-    }
-
-    /**
-     * @return std::reverse_iterator(end())
-     * @draft ICU 78
-     */
-    auto rbegin() const {
-        return std::make_reverse_iterator(end());
-    }
-
-    /**
-     * @return std::reverse_iterator(begin())
-     * @draft ICU 78
-     */
-    auto rend() const {
-        return std::make_reverse_iterator(begin());
-    }
-
-private:
-    std::basic_string_view<Unit> s;
-};
-
-/**
  * UnsafeUTFIterator factory function.
  * Deduces the UnitIter template parameter from the input.
  *
@@ -2364,91 +2241,90 @@ auto unsafeUTFIterator(UnitIter iter) {
 }
 
 /**
- * UnsafeUTFStringCodePoints factory function for a "range" of code points in a string.
+ * A C++ "range" for non-validating iteration over all of the code points of a code unit range.
  * The string must be well-formed.
- * Avoids having to explicitly specify the Unit template parameter
- * for the UnsafeUTFStringCodePoints.
+ *
+ * Call unsafeUTFStringCodePoints() to have the compiler deduce the Range type.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
- * @param s input string
- * @return an UnsafeUTFStringCodePoints&lt;CP32, Unit&gt;
- *     for the given std::basic_string_view&lt;Unit&gt;
+ * @tparam Range A C++ "range" of Unicode UTF-8/16/32 code units
  * @draft ICU 78
+ * @see unsafeUTFStringCodePoints
  */
-template<typename CP32>
-auto unsafeUTFStringCodePoints(std::string_view s) {
-    return UnsafeUTFStringCodePoints<CP32, decltype(s)::value_type>(s);
-}
+template<typename CP32, typename Range>
+class UnsafeUTFStringCodePoints {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
+public:
+    /**
+     * Constructs a C++ "range" object over the code points in the string.
+     * @param unitRange input range
+     * @draft ICU 78
+     */
+    explicit UnsafeUTFStringCodePoints(Range unitRange) : unitRange(std::move(unitRange)) {}
+
+    /** Copy constructor. @draft ICU 78 */
+    UnsafeUTFStringCodePoints(const UnsafeUTFStringCodePoints &other) = default;
+
+    /** Copy assignment operator. @draft ICU 78 */
+    UnsafeUTFStringCodePoints &operator=(const UnsafeUTFStringCodePoints &other) = default;
+
+    /**
+     * @return the range start iterator
+     * @draft ICU 78
+     */
+    auto begin() const {
+        return unsafeUTFIterator<CP32>(unitRange.begin());
+    }
+
+    /**
+     * @return the range limit (exclusive end) iterator
+     * @draft ICU 78
+     */
+    auto end() const {
+        using UnitIter = decltype(unitRange.begin());
+        using LimitIter = decltype(unitRange.end());
+        if constexpr (!std::is_same_v<UnitIter, LimitIter>) {
+            // Return the code unit sentinel.
+            return unitRange.end();
+        } else {
+            return unsafeUTFIterator<CP32>(unitRange.end());
+        }
+    }
+
+    /**
+     * @return std::reverse_iterator(end())
+     * @draft ICU 78
+     */
+    auto rbegin() const {
+        return std::make_reverse_iterator(end());
+    }
+
+    /**
+     * @return std::reverse_iterator(begin())
+     * @draft ICU 78
+     */
+    auto rend() const {
+        return std::make_reverse_iterator(begin());
+    }
+
+private:
+    Range unitRange;
+};
 
 /**
- * UnsafeUTFStringCodePoints factory function for a "range" of code points in a string.
+ * UnsafeUTFStringCodePoints factory function for a "range" of code points in a code unit range.
  * The string must be well-formed.
- * Avoids having to explicitly specify the Unit template parameter
- * for the UnsafeUTFStringCodePoints.
+ * Deduces the Range template parameter from the input.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
- * @param s input string
- * @return an UnsafeUTFStringCodePoints&lt;CP32, Unit&gt;
- *     for the given std::basic_string_view&lt;Unit&gt;
+ * @tparam Range A C++ "range" of Unicode UTF-8/16/32 code units
+ * @param unitRange input range
+ * @return an UnsafeUTFStringCodePoints&lt;CP32, Range&gt; for the given unitRange
  * @draft ICU 78
  */
-template<typename CP32>
-auto unsafeUTFStringCodePoints(std::u16string_view s) {
-    return UnsafeUTFStringCodePoints<CP32, decltype(s)::value_type>(s);
-}
-
-/**
- * UnsafeUTFStringCodePoints factory function for a "range" of code points in a string.
- * The string must be well-formed.
- * Avoids having to explicitly specify the Unit template parameter
- * for the UnsafeUTFStringCodePoints.
- *
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
- * @param s input string
- * @return an UnsafeUTFStringCodePoints&lt;CP32, Unit&gt;
- *     for the given std::basic_string_view&lt;Unit&gt;
- * @draft ICU 78
- */
-template<typename CP32>
-auto unsafeUTFStringCodePoints(std::u32string_view s) {
-    return UnsafeUTFStringCodePoints<CP32, decltype(s)::value_type>(s);
-}
-
-#if U_CPLUSPLUS_VERSION >= 20
-// The new type char8_t is distinct from char. u8"literals" are now char8_t literals.
-/**
- * UnsafeUTFStringCodePoints factory function for a "range" of code points in a string.
- * The string must be well-formed.
- * Avoids having to explicitly specify the Unit template parameter
- * for the UnsafeUTFStringCodePoints.
- *
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
- * @param s input string
- * @return an UnsafeUTFStringCodePoints&lt;CP32, Unit&gt;
- *     for the given std::basic_string_view&lt;Unit&gt;
- * @draft ICU 78
- */
-template<typename CP32>
-auto unsafeUTFStringCodePoints(std::u8string_view s) {
-    return UnsafeUTFStringCodePoints<CP32, decltype(s)::value_type>(s);
-}
-#endif
-
-/**
- * UnsafeUTFStringCodePoints factory function for a "range" of code points in a string.
- * The string must be well-formed.
- * Avoids having to explicitly specify the Unit template parameter
- * for the UnsafeUTFStringCodePoints.
- *
- * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
- * @param s input string
- * @return an UnsafeUTFStringCodePoints&lt;CP32, Unit&gt;
- *     for the given std::basic_string_view&lt;Unit&gt;
- * @draft ICU 78
- */
-template<typename CP32>
-auto unsafeUTFStringCodePoints(std::wstring_view s) {
-    return UnsafeUTFStringCodePoints<CP32, decltype(s)::value_type>(s);
+template<typename CP32, typename Range>
+auto unsafeUTFStringCodePoints(Range unitRange) {
+    return UnsafeUTFStringCodePoints<CP32, Range>(unitRange);
 }
 
 }  // namespace U_HEADER_ONLY_NAMESPACE
