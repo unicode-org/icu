@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.math.MathContext;
 
 import com.ibm.icu.impl.CollectionSet;
 import com.ibm.icu.impl.ICUData;
@@ -63,7 +64,7 @@ public class MeasureUnit implements Serializable {
                 String[] parts = conversionRateToBaseUnit.split("/");
                 BigDecimal numerator = new BigDecimal(parts[0]);
                 BigDecimal denominator = new BigDecimal(parts[1]);
-                this.conversionRateToBaseUnit = numerator.divide(denominator);
+                this.conversionRateToBaseUnit = numerator.divide(denominator, MathContext.DECIMAL128);
             } else {
                 this.conversionRateToBaseUnit = new BigDecimal(conversionRateToBaseUnit);
             }
@@ -71,7 +72,7 @@ public class MeasureUnit implements Serializable {
                 String[] parts = offsetToBaseUnit.split("/");
                 BigDecimal numerator = new BigDecimal(parts[0]);
                 BigDecimal denominator = new BigDecimal(parts[1]);
-                this.offsetToBaseUnit = numerator.divide(denominator);
+                this.offsetToBaseUnit = numerator.divide(denominator, MathContext.DECIMAL128);
             } else {
                 this.offsetToBaseUnit = new BigDecimal(offsetToBaseUnit);
             }
@@ -514,7 +515,8 @@ public class MeasureUnit implements Serializable {
 
         BigDecimal conversionRateFromCurrentUnitToOtherUnit;
         if (convertibility == Convertibility.CONVERTIBLE) {
-            conversionRateFromCurrentUnitToOtherUnit = conversionRateToBaseUnit.divide(conversionRateOfOtherUnitToBase);
+            conversionRateFromCurrentUnitToOtherUnit = conversionRateOfOtherUnitToBase.divide(conversionRateToBaseUnit,
+                    MathContext.DECIMAL128);
         } else {
             conversionRateFromCurrentUnitToOtherUnit = conversionRateToBaseUnit
                     .multiply(conversionRateOfOtherUnitToBase);
@@ -1917,7 +1919,8 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of length: centimeter
      * @stable ICU 53
      */
-    public static final MeasureUnit CENTIMETER = MeasureUnit.internalGetInstance("length", "centimeter");
+    public static final MeasureUnit CENTIMETER = MeasureUnit.internalGetInstance("length", "centimeter",
+            new ConversionInfo("0.01", "0.0", "meter", "per-meter"));
 
     /**
      * Constant for unit of length: chain

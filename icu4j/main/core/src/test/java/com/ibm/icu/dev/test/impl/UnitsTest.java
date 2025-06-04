@@ -879,4 +879,22 @@ public class UnitsTest {
             // Expected exception
         }
     }
+
+    @Test
+    public void testNewMeasureUnitConversion() {
+        MeasureUnit meter = MeasureUnit.METER;
+        MeasureUnit kilometer = MeasureUnit.KILOMETER;
+        MeasureUnit mile = MeasureUnit.MILE;
+        MeasureUnit foot = MeasureUnit.FOOT;
+        MeasureUnit inch = MeasureUnit.INCH;
+        MeasureUnit centimeter = MeasureUnit.CENTIMETER;
+
+        assertEquals(0.01, meter.convertFrom(centimeter, BigDecimal.ONE).doubleValue(), 1e-9);
+        assertEquals(0.00001, kilometer.convertFrom(centimeter, BigDecimal.ONE).doubleValue(), 1e-9);
+        assertEquals(6.21371e-6, mile.convertFrom(centimeter, BigDecimal.ONE).doubleValue(), 1e-5);
+        assertEquals(0.03280839895, foot.convertFrom(centimeter, BigDecimal.ONE).doubleValue(), 1e-9);
+        assertEquals(0.3937007874, inch.convertFrom(centimeter, BigDecimal.ONE).doubleValue(), 1e-9);
+        assertEquals(100, centimeter.convertFrom(meter, BigDecimal.ONE).doubleValue(), 1e-9);
+        assertEquals(100000, centimeter.convertFrom(kilometer, BigDecimal.ONE).doubleValue(), 1e-9);
+    }
 }
