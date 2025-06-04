@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1748904226699,
+  "lastUpdate": 1749074842451,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35127,6 +35127,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 336.33396850723506,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "18be9a0133c918d8ee2554162dd94a79abce7b2f",
+          "message": "ICU-23055 Fix broken links in docs\n\nSee #3279",
+          "timestamp": "2025-06-04T14:58:11-07:00",
+          "tree_id": "4e3fcd014bbfeab21d6eef03b3b68753df3ac7f2",
+          "url": "https://github.com/unicode-org/icu/commit/18be9a0133c918d8ee2554162dd94a79abce7b2f"
+        },
+        "date": 1749074566344,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 377.6962966322958,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
