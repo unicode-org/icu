@@ -30,10 +30,10 @@
  * #include "unicode/utypes.h"
  * #include "unicode/utfiterator.h"
  *
- * using U_HEADER_ONLY_NAMESPACE::utfIterator;
- * using U_HEADER_ONLY_NAMESPACE::utfStringCodePoints;
- * using U_HEADER_ONLY_NAMESPACE::unsafeUTFIterator;
- * using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
+ * using icu::header::utfIterator;
+ * using icu::header::utfStringCodePoints;
+ * using icu::header::unsafeUTFIterator;
+ * using icu::header::unsafeUTFStringCodePoints;
  *
  * int32_t rangeLoop16(std::u16string_view s) {
  *     // We are just adding up the code points for minimal-code demonstration purposes.
@@ -185,6 +185,7 @@ constexpr bool forward_iterator = std::forward_iterator<Iter>;
 template<typename Iter>
 constexpr bool bidirectional_iterator = std::bidirectional_iterator<Iter>;
 
+/** @internal */
 template<typename Range>
 constexpr bool range = std::ranges::range<Range>;
 
@@ -212,13 +213,18 @@ constexpr bool bidirectional_iterator =
         std::bidirectional_iterator_tag,
         typename std::iterator_traits<Iter>::iterator_category>;
 
+/** @internal */
 template<typename Range, typename = void>
 struct range_type : std::false_type {};
+
+/** @internal */
 template<typename Range>
 struct range_type<
     Range,
     std::void_t<decltype(std::declval<Range>().begin()),
                 decltype(std::declval<Range>().end())>> : std::true_type {};
+
+/** @internal */
 template<typename Range>
 constexpr bool range = range_type<Range>::value;
 
@@ -951,7 +957,7 @@ public:
  * an input_iterator, a forward_iterator, or a bidirectional_iterator (including a pointer).
  * The UTFIterator will have the corresponding iterator_category.
  *
- * Call utfIterator() to have the compiler deduce the UnitIter type.
+ * Call utfIterator() to have the compiler deduce the UnitIter and LimitIter types.
  *
  * For reverse iteration, either use this iterator directly as in <code>*--iter</code>
  * or wrap it using std::make_reverse_iterator(iter).
@@ -1004,6 +1010,9 @@ public:
      * All of these iterators/pointers should be at code point boundaries.
      * Only enabled if UnitIter is a (multi-pass) forward_iterator or better.
      *
+     * When using a code unit sentinel (UnitIter≠LimitIter),
+     * then that sentinel also works as a sentinel for this code point iterator.
+     *
      * @param start Start of the range
      * @param p Initial position inside the range
      * @param limit Limit (exclusive end) of the range
@@ -1015,6 +1024,9 @@ public:
      * Constructor with start == p < limit.
      * All of these iterators/pointers should be at code point boundaries.
      *
+     * When using a code unit sentinel (UnitIter≠LimitIter),
+     * then that sentinel also works as a sentinel for this code point iterator.
+     *
      * @param p Start of the range, and the initial position
      * @param limit Limit (exclusive end) of the range
      * @draft ICU 78
@@ -1025,6 +1037,9 @@ public:
      * Constructs an iterator start or limit sentinel.
      * The iterator/pointer should be at a code point boundary.
      * Requires UnitIter to be copyable.
+     *
+     * When using a code unit sentinel (UnitIter≠LimitIter),
+     * then that sentinel also works as a sentinel for this code point iterator.
      *
      * @param p Range start or limit
      * @draft ICU 78
@@ -1539,7 +1554,9 @@ namespace U_HEADER_ONLY_NAMESPACE {
  * @tparam LimitIter Either the same as UnitIter, or an iterator sentinel type.
  * @param start start code unit iterator
  * @param p current-position code unit iterator
- * @param limit limit (exclusive-end) code unit iterator
+ * @param limit limit (exclusive-end) code unit iterator.
+ *     When using a code unit sentinel (UnitIter≠LimitIter),
+ *     then that sentinel also works as a sentinel for the code point iterator.
  * @return a UTFIterator&lt;CP32, behavior, UnitIter&gt;
  *     for the given code unit iterators or character pointers
  * @draft ICU 78
@@ -1564,7 +1581,9 @@ auto utfIterator(UnitIter start, UnitIter p, LimitIter limit) {
  *     UTF-32: char32_t or UChar32=int32_t or (on Linux) wchar_t
  * @tparam LimitIter Either the same as UnitIter, or an iterator sentinel type.
  * @param p start and current-position code unit iterator
- * @param limit limit (exclusive-end) code unit iterator
+ * @param limit limit (exclusive-end) code unit iterator.
+ *     When using a code unit sentinel (UnitIter≠LimitIter),
+ *     then that sentinel also works as a sentinel for the code point iterator.
  * @return a UTFIterator&lt;CP32, behavior, UnitIter&gt;
  *     for the given code unit iterators or character pointers
  * @draft ICU 78
@@ -1593,7 +1612,9 @@ auto utfIterator(UnitIter p, LimitIter limit) {
  *     UTF-8: char or char8_t or uint8_t;
  *     UTF-16: char16_t or uint16_t or (on Windows) wchar_t;
  *     UTF-32: char32_t or UChar32=int32_t or (on Linux) wchar_t
- * @param p code unit iterator
+ * @param p code unit iterator.
+ *     When using a code unit sentinel,
+ *     then that sentinel also works as a sentinel for the code point iterator.
  * @return a UTFIterator&lt;CP32, behavior, UnitIter&gt;
  *     for the given code unit iterator or character pointer
  * @draft ICU 78
@@ -1773,6 +1794,9 @@ public:
 
     /**
      * Constructor; the iterator/pointer should be at a code point boundary.
+     *
+     * When using a code unit sentinel,
+     * then that sentinel also works as a sentinel for this code point iterator.
      *
      * @param p Initial position inside the range, or a range sentinel
      * @draft ICU 78
