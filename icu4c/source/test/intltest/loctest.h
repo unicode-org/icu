@@ -91,6 +91,7 @@ public:
    void TestGetUnicodeKeywordValueStdString();
 
    /* Test setting keyword values */
+   void TestSetKeywordValueImp();
    void TestSetKeywordValue();
    void TestSetKeywordValueStringPiece();
    void TestSetUnicodeKeywordValueStringPiece();
