@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1748905135859,
+  "lastUpdate": 1749075691947,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -112317,6 +112317,96 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIsWhiteSpace",
             "value": 4.6137,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "18be9a0133c918d8ee2554162dd94a79abce7b2f",
+          "message": "ICU-23055 Fix broken links in docs\n\nSee #3279",
+          "timestamp": "2025-06-04T14:58:11-07:00",
+          "tree_id": "4e3fcd014bbfeab21d6eef03b3b68753df3ac7f2",
+          "url": "https://github.com/unicode-org/icu/commit/18be9a0133c918d8ee2554162dd94a79abce7b2f"
+        },
+        "date": 1749075425426,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIsAlpha",
+            "value": 4.3065,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsUpper",
+            "value": 4.2844,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsLower",
+            "value": 4.3039,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsDigit",
+            "value": 4.5986,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsSpace",
+            "value": 5.2172,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsAlphaNumeric",
+            "value": 4.5972,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsPrint",
+            "value": 4.599,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsControl",
+            "value": 4.3017,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToLower",
+            "value": 5.476,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToUpper",
+            "value": 5.5145,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsWhiteSpace",
+            "value": 4.6124,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
