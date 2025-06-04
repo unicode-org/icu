@@ -51,16 +51,30 @@ public class MeasureUnit implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public class ConversionInfo {
+    public static class ConversionInfo {
         private final BigDecimal conversionRateToBaseUnit;
         private final BigDecimal offsetToBaseUnit;
         private final String baseUnit;
         private final String reciprocalBaseUnit;
 
-        public ConversionInfo(BigDecimal conversionRateToBaseUnit, BigDecimal offsetToBaseUnit, String baseUnit,
+        public ConversionInfo(String conversionRateToBaseUnit, String offsetToBaseUnit, String baseUnit,
                 String reciprocalBaseUnit) {
-            this.conversionRateToBaseUnit = conversionRateToBaseUnit;
-            this.offsetToBaseUnit = offsetToBaseUnit;
+            if (conversionRateToBaseUnit.contains("/")) {
+                String[] parts = conversionRateToBaseUnit.split("/");
+                BigDecimal numerator = new BigDecimal(parts[0]);
+                BigDecimal denominator = new BigDecimal(parts[1]);
+                this.conversionRateToBaseUnit = numerator.divide(denominator);
+            } else {
+                this.conversionRateToBaseUnit = new BigDecimal(conversionRateToBaseUnit);
+            }
+            if (offsetToBaseUnit.contains("/")) {
+                String[] parts = offsetToBaseUnit.split("/");
+                BigDecimal numerator = new BigDecimal(parts[0]);
+                BigDecimal denominator = new BigDecimal(parts[1]);
+                this.offsetToBaseUnit = numerator.divide(denominator);
+            } else {
+                this.offsetToBaseUnit = new BigDecimal(offsetToBaseUnit);
+            }
             this.baseUnit = baseUnit;
             this.reciprocalBaseUnit = reciprocalBaseUnit;
         }
@@ -1001,6 +1015,40 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
+     * Creates a MeasureUnit instance (creates a singleton instance) or returns one
+     * from the cache.
+     * <p>
+     * Normally this method should not be used, since there will be no formatting
+     * data
+     * available for it, and it may not be returned by getAvailable().
+     * However, for special purposes (such as CLDR tooling), it is available.
+     *
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static MeasureUnit internalGetInstance(String type, String subType, ConversionInfo conversionInfo) {
+        if (type == null || subType == null || conversionInfo == null) {
+            throw new NullPointerException("Type, subType and conversionInfo must be non-null");
+        }
+        if (!"currency".equals(type)) {
+            if (!ASCII.containsAll(type) || !ASCII_HYPHEN_DIGITS.containsAll(subType)) {
+                throw new IllegalArgumentException("The type or subType are invalid.");
+            }
+        }
+        Factory factory;
+        if ("currency".equals(type)) {
+            factory = CURRENCY_FACTORY;
+        } else if ("duration".equals(type)) {
+            factory = TIMEUNIT_FACTORY;
+        } else {
+            factory = UNIT_FACTORY;
+        }
+
+        return MeasureUnit.addUnit(type, subType, factory, conversionInfo);
+    }
+
+    /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -1030,12 +1078,25 @@ public class MeasureUnit implements Serializable {
          */
         @Deprecated
         MeasureUnit create(String type, String subType);
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        MeasureUnit create(String type, String subType, ConversionInfo conversionInfo);
+
     }
 
     private static Factory UNIT_FACTORY = new Factory() {
         @Override
         public MeasureUnit create(String type, String subType) {
             return new MeasureUnit(type, subType);
+        }
+
+        @Override
+        public MeasureUnit create(String type, String subType, ConversionInfo conversionInfo) {
+            return new MeasureUnit(type, subType, conversionInfo);
         }
     };
 
@@ -1044,11 +1105,21 @@ public class MeasureUnit implements Serializable {
         public MeasureUnit create(String unusedType, String subType) {
             return new Currency(subType);
         }
+
+        @Override
+        public MeasureUnit create(String unusedType, String subType, ConversionInfo conversionInfo) {
+            return new Currency(subType);
+        }
     };
 
     static Factory TIMEUNIT_FACTORY = new Factory() {
         @Override
         public MeasureUnit create(String type, String subType) {
+            return new TimeUnit(type, subType);
+        }
+
+        @Override
+        public MeasureUnit create(String type, String subType, ConversionInfo conversionInfo) {
             return new TimeUnit(type, subType);
         }
     };
@@ -1153,6 +1224,26 @@ public class MeasureUnit implements Serializable {
         return unit;
     }
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected synchronized static MeasureUnit addUnit(String type, String unitName, Factory factory,
+            ConversionInfo conversionInfo) {
+        Map<String, MeasureUnit> tmp = cache.get(type);
+        if (tmp == null) {
+            cache.put(type, tmp = new HashMap<>());
+        } else {
+            // "intern" the type by setting to first item's type.
+            type = tmp.entrySet().iterator().next().getValue().type;
+        }
+        MeasureUnit unit = tmp.get(unitName);
+        if (unit == null) {
+            tmp.put(unitName, unit = factory.create(type, unitName, conversionInfo));
+        }
+        return unit;
+    }
 
     /*
      * Useful constants. Not necessarily complete: see {@link #getAvailable()}.
@@ -1856,7 +1947,8 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of length: foot
      * @stable ICU 53
      */
-    public static final MeasureUnit FOOT = MeasureUnit.internalGetInstance("length", "foot");
+    public static final MeasureUnit FOOT = MeasureUnit.internalGetInstance("length", "foot",
+            new ConversionInfo("0.3048", "0.0", "meter", "per-meter"));
 
     /**
      * Constant for unit of length: furlong
@@ -1868,7 +1960,8 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of length: inch
      * @stable ICU 53
      */
-    public static final MeasureUnit INCH = MeasureUnit.internalGetInstance("length", "inch");
+    public static final MeasureUnit INCH = MeasureUnit.internalGetInstance("length", "inch",
+            new ConversionInfo("0.0254", "0.0", "meter", "per-meter"));
 
     /**
      * Constant for unit of length: jo-jp
@@ -1886,7 +1979,8 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of length: kilometer
      * @stable ICU 53
      */
-    public static final MeasureUnit KILOMETER = MeasureUnit.internalGetInstance("length", "kilometer");
+    public static final MeasureUnit KILOMETER = MeasureUnit.internalGetInstance("length", "kilometer",
+            new ConversionInfo("1000.0", "0.0", "meter", "per-meter"));
 
     /**
      * Constant for unit of length: light-year
@@ -1898,19 +1992,22 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of length: meter
      * @stable ICU 53
      */
-    public static final MeasureUnit METER = MeasureUnit.internalGetInstance("length", "meter");
+    public static final MeasureUnit METER = MeasureUnit.internalGetInstance("length", "meter",
+            new ConversionInfo("1.0", "0.0", "meter", "per-meter"));
 
     /**
      * Constant for unit of length: micrometer
      * @stable ICU 54
      */
-    public static final MeasureUnit MICROMETER = MeasureUnit.internalGetInstance("length", "micrometer");
+    public static final MeasureUnit MICROMETER = MeasureUnit.internalGetInstance("length", "micrometer",
+            new ConversionInfo("1e-6", "0.0", "meter", "per-meter"));
 
     /**
      * Constant for unit of length: mile
      * @stable ICU 53
      */
-    public static final MeasureUnit MILE = MeasureUnit.internalGetInstance("length", "mile");
+    public static final MeasureUnit MILE = MeasureUnit.internalGetInstance("length", "mile",
+            new ConversionInfo("1609.344", "0.0", "meter", "per-meter"));
 
     /**
      * Constant for unit of length: mile-scandinavian
@@ -1922,13 +2019,15 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of length: millimeter
      * @stable ICU 53
      */
-    public static final MeasureUnit MILLIMETER = MeasureUnit.internalGetInstance("length", "millimeter");
+    public static final MeasureUnit MILLIMETER = MeasureUnit.internalGetInstance("length", "millimeter",
+            new ConversionInfo("1e-3", "0.0", "meter", "per-meter"));
 
     /**
      * Constant for unit of length: nanometer
      * @stable ICU 54
      */
-    public static final MeasureUnit NANOMETER = MeasureUnit.internalGetInstance("length", "nanometer");
+    public static final MeasureUnit NANOMETER = MeasureUnit.internalGetInstance("length", "nanometer",
+            new ConversionInfo("1e-9", "0.0", "meter", "per-meter"));
 
     /**
      * Constant for unit of length: nautical-mile
@@ -2267,7 +2366,8 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of speed: kilometer-per-hour
      * @stable ICU 53
      */
-    public static final MeasureUnit KILOMETER_PER_HOUR = MeasureUnit.internalGetInstance("speed", "kilometer-per-hour");
+    public static final MeasureUnit KILOMETER_PER_HOUR = MeasureUnit.internalGetInstance("speed", "kilometer-per-hour",
+            new ConversionInfo("5/18", "0.0", "meter-per-second", "second-per-meter"));
 
     /**
      * Constant for unit of speed: knot
@@ -2285,25 +2385,29 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of speed: meter-per-second
      * @stable ICU 53
      */
-    public static final MeasureUnit METER_PER_SECOND = MeasureUnit.internalGetInstance("speed", "meter-per-second");
+    public static final MeasureUnit METER_PER_SECOND = MeasureUnit.internalGetInstance("speed", "meter-per-second",
+            new ConversionInfo("1.0", "0.0", "meter-per-second", "second-per-meter"));
 
     /**
      * Constant for unit of speed: mile-per-hour
      * @stable ICU 53
      */
-    public static final MeasureUnit MILE_PER_HOUR = MeasureUnit.internalGetInstance("speed", "mile-per-hour");
+    public static final MeasureUnit MILE_PER_HOUR = MeasureUnit.internalGetInstance("speed", "mile-per-hour",
+            new ConversionInfo("1609.344/3600", "0.0", "meter-per-second", "second-per-meter"));
 
     /**
      * Constant for unit of temperature: celsius
      * @stable ICU 53
      */
-    public static final MeasureUnit CELSIUS = MeasureUnit.internalGetInstance("temperature", "celsius");
+    public static final MeasureUnit CELSIUS = MeasureUnit.internalGetInstance("temperature", "celsius",
+            new ConversionInfo("1.0", "273.15", "kelvin", "per-kelvin"));
 
     /**
      * Constant for unit of temperature: fahrenheit
      * @stable ICU 53
      */
-    public static final MeasureUnit FAHRENHEIT = MeasureUnit.internalGetInstance("temperature", "fahrenheit");
+    public static final MeasureUnit FAHRENHEIT = MeasureUnit.internalGetInstance("temperature", "fahrenheit",
+            new ConversionInfo("5/9", "45967/180", "kelvin", "per-kelvin"));
 
     /**
      * Constant for unit of temperature: generic
@@ -2315,7 +2419,8 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of temperature: kelvin
      * @stable ICU 54
      */
-    public static final MeasureUnit KELVIN = MeasureUnit.internalGetInstance("temperature", "kelvin");
+    public static final MeasureUnit KELVIN = MeasureUnit.internalGetInstance("temperature", "kelvin",
+            new ConversionInfo("1.0", "0.0", "kelvin", "per-kelvin"));
 
     /**
      * Constant for unit of temperature: rankine
@@ -2387,13 +2492,15 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of volume: cubic-meter
      * @stable ICU 54
      */
-    public static final MeasureUnit CUBIC_METER = MeasureUnit.internalGetInstance("volume", "cubic-meter");
+    public static final MeasureUnit CUBIC_METER = MeasureUnit.internalGetInstance("volume", "cubic-meter",
+            new ConversionInfo("1.0", "0.0", "cubic-meter", "per-cubic-meter"));
 
     /**
      * Constant for unit of volume: cubic-mile
      * @stable ICU 53
      */
-    public static final MeasureUnit CUBIC_MILE = MeasureUnit.internalGetInstance("volume", "cubic-mile");
+    public static final MeasureUnit CUBIC_MILE = MeasureUnit.internalGetInstance("volume", "cubic-mile",
+            new ConversionInfo("4168181825.44", "0.0", "cubic-meter", "per-cubic-meter"));
 
     /**
      * Constant for unit of volume: cubic-yard
@@ -2429,7 +2536,8 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of volume: deciliter
      * @stable ICU 54
      */
-    public static final MeasureUnit DECILITER = MeasureUnit.internalGetInstance("volume", "deciliter");
+    public static final MeasureUnit DECILITER = MeasureUnit.internalGetInstance("volume", "deciliter",
+            new ConversionInfo("0.1", "0.0", "liter", "per-liter"));
 
     /**
      * Constant for unit of volume: dessert-spoon
@@ -2477,7 +2585,8 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of volume: gallon
      * @stable ICU 54
      */
-    public static final MeasureUnit GALLON = MeasureUnit.internalGetInstance("volume", "gallon");
+    public static final MeasureUnit GALLON = MeasureUnit.internalGetInstance("volume", "gallon",
+            new ConversionInfo("3.785411784", "0.0", "liter", "per-liter"));
 
     /**
      * Constant for unit of volume: gallon-imperial
