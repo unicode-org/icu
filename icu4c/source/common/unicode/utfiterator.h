@@ -185,6 +185,7 @@ constexpr bool forward_iterator = std::forward_iterator<Iter>;
 template<typename Iter>
 constexpr bool bidirectional_iterator = std::bidirectional_iterator<Iter>;
 
+/** @internal */
 template<typename Range>
 constexpr bool range = std::ranges::range<Range>;
 
@@ -212,13 +213,18 @@ constexpr bool bidirectional_iterator =
         std::bidirectional_iterator_tag,
         typename std::iterator_traits<Iter>::iterator_category>;
 
+/** @internal */
 template<typename Range, typename = void>
 struct range_type : std::false_type {};
+
+/** @internal */
 template<typename Range>
 struct range_type<
     Range,
     std::void_t<decltype(std::declval<Range>().begin()),
     decltype(std::declval<Range>().end())>> : std::true_type {};
+
+/** @internal */
 template<typename Range>
 constexpr bool range = range_type<Range>::value;
 
