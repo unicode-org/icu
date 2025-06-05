@@ -1449,6 +1449,20 @@ ICU Java classes and methods.
 
 ### Code style
 
+ICU uses a source formatter to ensure a consistent code style automatically,
+and it uses a single common formatter to avoid spurious diff noise in code reviews.
+This is now enforced via a
+[formatter](https://github.com/google/google-java-format)
+that is configured in the Maven build
+via a [Maven plugin](https://github.com/diffplug/spotless/tree/main/plugin-maven)
+and checked by continuous integration on pull requests.
+
+When creating pull requests, you can check the formatting locally using the command `mvn spotless:check`. You can apply the formatter's changes using the command `mvn spotless:apply`. Continuous integration errors for formatting can be fixed by committing the changes resulting from applying the formatter locally and pushing the new commit.
+
+The following are further guidelines for code style,
+but they will be superceded by the automated formatter in CI that is mentioned above
+if the guidelines differ in style.
+
 The standard order for modifier keywords on APIs is:
 
 * `public static final synchronized strictfp`

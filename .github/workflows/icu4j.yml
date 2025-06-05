@@ -64,6 +64,33 @@ jobs:
           cd icu4j;
           mvn ${SHARED_MVN_ARGS} dependency:go-offline -P '!old_jdk_taglet'
 
+  # Using the Java style formatter google-java-style provided by the Spotless
+  # plugin configured in the root pom.xml using 4-space indents (AOSP style).
+  # Spotless is configured to run only on files in this branch (PR) that differ
+  # from origin/main
+  formatter:
+    name: Formatter + Style checker
+    needs: icu4j-mvn-init-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # fetch all branches so that Spotless can resolve `origin/main`
+      - name: Restore read-only cache of local Maven repository
+        uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
+      - name: Check Java style
+        run: |
+          cd icu4j;
+          mvn spotless:check || (echo "Style checker failed. Formatting changes can be applied by 'mvn spotless:apply'" && exit 1)
+
   # ICU4J build and unit test using Maven
   # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
   icu4j-mvn-build-and-test:
