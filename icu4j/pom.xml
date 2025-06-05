@@ -116,6 +116,9 @@
     <mf.Manifest-Version>1.0</mf.Manifest-Version>
     <mf.Bundle-ManifestVersion>2</mf.Bundle-ManifestVersion>
     <mf.Bundle-Copyright>© 2016 and later: Unicode, Inc. and others. License &amp; terms of use: http://www.unicode.org/copyright.html</mf.Bundle-Copyright>
+
+    <formatter.plugin.spotless.version>2.43.0</formatter.plugin.spotless.version>
+    <formatter.google-java-style.version>1.22.0</formatter.google-java-style.version>
   </properties>
 
   <licenses>
@@ -504,6 +507,33 @@
               <ruleset>/category/java/performance.xml</ruleset>
               -->
             </rulesets>
+          </configuration>
+        </plugin>
+        <!-- 
+          Spotless info:
+            - How to preview what `mvn spotless:apply` will do: https://github.com/diffplug/spotless/tree/main/plugin-maven#how-do-i-preview-what-mvn-spotlessapply-will-do
+            - Apply Spotless to specific files: https://github.com/diffplug/spotless/tree/main/plugin-maven#can-i-apply-spotless-to-specific-files
+        -->
+        <plugin>
+          <groupId>com.diffplug.spotless</groupId>
+          <artifactId>spotless-maven-plugin</artifactId>
+          <version>${formatter.plugin.spotless.version}</version>
+          <configuration>
+            <!-- optional: limit format enforcement to just the files changed by this feature branch -->
+            <!-- You can explicitly disable ratchet functionality by providing the value 'NONE': -->
+            <ratchetFrom>NONE</ratchetFrom>
+            <!-- define a language-specific format -->
+            <java>
+              <toggleOffOn />
+              <!-- no need to specify files, inferred automatically, but you can if you want -->
+              <!-- apply a specific flavor of google-java-format and reflow long strings -->
+              <googleJavaFormat>
+                <!-- version of google-java-style -->
+                <version>${google-java-style.version}</version>
+                <style>AOSP</style>
+                <reflowLongStrings>false</reflowLongStrings>
+              </googleJavaFormat>
+            </java>
           </configuration>
         </plugin>
       </plugins>
