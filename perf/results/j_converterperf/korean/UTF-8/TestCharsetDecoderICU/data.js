@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749155584399,
+  "lastUpdate": 1749160014962,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34857,6 +34857,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.2933322213845533,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "af17808838dba659a168021818dee359ec1cc7fd",
+          "message": "ICU-22763 MF2: Handle time zones correctly in :datetime\n\nAdds a new `DateInfo` struct, which is now the return type of `Formattable::getDate()`. This struct pairs a raw timestamp with a time zone string.",
+          "timestamp": "2025-06-05T14:24:58-07:00",
+          "tree_id": "8f14c1cac90f6e88e7aae6d17ad74b7849f6c099",
+          "url": "https://github.com/unicode-org/icu/commit/af17808838dba659a168021818dee359ec1cc7fd"
+        },
+        "date": 1749159745104,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.2306412430794462,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
