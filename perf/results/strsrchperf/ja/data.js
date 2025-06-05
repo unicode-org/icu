@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749152100384,
+  "lastUpdate": 1749155542952,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42873,6 +42873,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 56.0909,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "068ae1f3f8e7257b810e40774f39ba2dd75d14d7",
+          "message": "ICU-23131 Bugfix: Set proper end of ByteSink upon early exit.",
+          "timestamp": "2025-06-05T22:05:03+02:00",
+          "tree_id": "3e994df47eca24f634a0be2517e555845d61039b",
+          "url": "https://github.com/unicode-org/icu/commit/068ae1f3f8e7257b810e40774f39ba2dd75d14d7"
+        },
+        "date": 1749155272885,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 30.4754,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 55.8825,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
