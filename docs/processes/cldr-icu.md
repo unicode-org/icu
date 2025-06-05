@@ -166,9 +166,10 @@ export CLDR_DATA_DIR=$HOME/cldr-staging/production
 
 1c. ICU variables
 ```sh
-export ICU4C_DIR=$HOME/icu-myfork/icu4c
-export ICU4J_ROOT=$HOME/icu-myfork/icu4j
-export TOOLS_ROOT=$HOME/icu-myfork/tools
+export ICU_DIR=$HOME/icu-myfork
+export ICU4C_DIR=$ICU_DIR/icu4c
+export ICU4J_ROOT=$ICU_DIR/icu4j
+export TOOLS_ROOT=$ICU_DIR/tools
 ```
 
 1d. Directory for logs/notes (create if does not exist)
@@ -196,13 +197,13 @@ make clean
 make check 2>&1 | tee $NOTES/icu4c-oldData-makeCheck.txt
 ```
 
-2b. Now with ICU4J, build and test without new data first, to verify that
-there are no pre-existing errors (or at least to have the pre-existing errors
-as a base for comparison):
+2b. Build, test, and install ICU4J without new data first. This is to verify that
+there are no pre-existing errors, or at least to have the pre-existing errors
+as a base for comparison:
 ```sh
 cd $ICU4J_ROOT
 mvn clean
-mvn verify 2>&1 | tee $NOTES/icu4j-oldData-mvnCheck.txt
+mvn install 2>&1 | tee $NOTES/icu4j-oldData-mvnCheck.txt
 ```
 
 ## 3 Make pre-adjustments
@@ -272,30 +273,17 @@ already present in the ICU4C sources. This process uses the `LdmlConverter` in
 `$ICU_DIR/tools/cldr/cldr-to-icu/`; see `$ICU_DIR/tools/cldr/cldr-to-icu/README.md`.
 
 * This process will take several minutes, during most of which there will be no log
-  output (so do not assume nothing is happening). Keep a log so you can investigate
+  output (so do not assume that nothing is happening). Keep a log so you can investigate
   anything that looks suspicious.
-* The conversion tool
-  will automatically run its own "clean" step to delete files it cannot determine to
-  be ones that it would generate, except for pasts listed in `<retain>` elements such as
-  `coll/de__PHONEBOOK.txt`, `coll/de_.txt`, etc.
+* The conversion tool will automatically run its own "clean" step to delete files it
+  cannot determine to be ones that it would generate, except for pasts listed in
+  `<retain>` elements such as `coll/de__PHONEBOOK.txt`, `coll/de_.txt`, etc.
 * Before running the tool to regenerate the data, make any necessary changes to the
   `config.xml` file, such as adding new locales etc.
-* **Temporary note 2025-04-07:** There are some steps mentioned in `$ICU_DIR/tools/cldr/cldr-to-icu/README.md`
-  that were not mentioned in these instructions but seem to be necessary for the next step to
-  work properly, these are:
-    * Build ICU4J:
-    ```
-    cd "$ICU_DIR"
-    mvn clean install -f icu4j -DskipTests -DskipITs
-    ```
-    * Build the conversion tool:
-    ```
-    cd "$ICU_DIR/tools/cldr/cldr-to-icu/"
-    mvn clean package -DskipTests -DskipITs
-    ```
 
 ```sh
-cd $ICU_DIR/tools/cldr/cldr-to-icu
+cd $TOOLS_ROOT/cldr/cldr-to-icu
+mvn clean package -DskipTests -DskipITs
 java -jar target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar --cldrDataDir="$CLDR_TMP_DIR/production" | tee $NOTES/cldr-newData-builddataLog.txt
 ```
 

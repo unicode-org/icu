@@ -12,9 +12,10 @@
 	</identity>
     <rbnf>
         <rulesetGrouping type="DurationRules">
-            <ruleset type="duration">
-                <rbnfrule value="0">=#,##0=;</rbnfrule>
-            </ruleset>
+            <rbnfRules><![CDATA[
+%duration:
+0: =#,##0=;
+]]></rbnfRules>
         </rulesetGrouping>
     </rbnf>
 </ldml>

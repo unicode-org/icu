@@ -34,18 +34,18 @@ import com.ibm.icu.util.UResourceBundleIterator;
 /**
  * The RuleBasedNumberFormat class formats numbers according to a set of rules.
  *
- * <p>This number formatter is typically used for spelling out numeric values in words (e.g., 25,3476
+ * <p>This number formatter is typically used for spelling out numeric values in words (e.g., 25,376
  * as &quot;twenty-five thousand three hundred seventy-six&quot; or &quot;vingt-cinq mille trois
- * cents soixante-seize&quot; or
+ * cent soixante-seize&quot; or
  * &quot;f&uuml;nfundzwanzigtausenddreihundertsechsundsiebzig&quot;), but can also be used for
- * other complicated formatting tasks, such as formatting a number of seconds as hours,
- * minutes and seconds (e.g., 3,730 as &quot;1:02:10&quot;).</p>
+ * other complicated formatting tasks. For example, formatting a number as Roman numerals (e.g. 8 as VIII)
+ * or as ordinal digits (e.g. 1st, 2nd, 3rd, 4th).</p>
  *
  * <p>The resources contain three predefined formatters for each locale: spellout, which
  * spells out a value in words (123 is &quot;one hundred twenty-three&quot;); ordinal, which
  * appends an ordinal suffix to the end of a numeral (123 is &quot;123rd&quot;); and
- * duration, which shows a duration in seconds as hours, minutes, and seconds (123 is
- * &quot;2:03&quot;).&nbsp; The client can also define more specialized <code>RuleBasedNumberFormat</code>s
+ * numbering system, which shows a number in other non-decimal based systems (e.g. Roman numerals).
+ * The client can also define more specialized <code>RuleBasedNumberFormat</code>s
  * by supplying programmer-defined rule sets.</p>
  *
  * <p>The behavior of a <code>RuleBasedNumberFormat</code> is specified by a textual description
@@ -105,7 +105,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * <pre>
  * 1000: &lt;&lt; thousand[ &gt;&gt;];</pre>
  *
- * <p>Again, the meanings of the brackets and substitution tokens shift because the rule's
+ * <p>Just like the 100 rule, the meanings of the brackets and substitution tokens shift because the rule's
  * base value is a higher power of 10, changing the rule's divisor. This rule can actually be
  * used all the way up to 999,999. This allows us to finish out the rules as follows:</p>
  *
@@ -117,14 +117,14 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *
  * <p>Commas, periods, and spaces can be used in the base values to improve legibility and
  * are ignored by the rule parser. The last rule in the list is customarily treated as an
- * &quot;overflow rule,&quot; applying to everything from its base value on up, and often (as
+ * &quot;overflow rule&quot;, applying to everything from its base value on up, and often (as
  * in this example) being used to print out an error message or default representation.
  * Notice also that the size of the major groupings in large numbers is controlled by the
  * spacing of the rules: because in English we group numbers by thousand, the higher rules
  * are separated from each other by a factor of 1,000.</p>
  *
- * <p>To see how these rules actually work in practice, consider the following example:
- * Formatting 25,430 with this rule set would work like this:</p>
+ * <p>To see how these rules actually work in practice, consider the following example.
+ * Formatting 25,340 with this rule set would work like this:</p>
  *
  * <table style="border-collapse: collapse;">
  *   <tr>
@@ -164,7 +164,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * &gt;&gt; token here means &quot;find the number's absolute value, format it with these
  * rules, and put the result here.&quot;</p>
  *
- * <p>We also add a special rule called a <em>fraction rule </em>for numbers with fractional
+ * <p>We also add a special rule called a <em>fraction rule</em> for numbers with fractional
  * parts:</p>
  *
  * <pre>x.x: &lt;&lt; point &gt;&gt;;</pre>
@@ -187,10 +187,10 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * <hr>
  *
  * <p>The description of a <code>RuleBasedNumberFormat</code>'s behavior consists of one or more <em>rule
- * sets.</em> Each rule set consists of a name, a colon, and a list of <em>rules.</em> A rule
- * set name must begin with a % sign. Rule sets with names that begin with a single % sign
- * are <em>public:</em> the caller can specify that they be used to format and parse numbers.
- * Rule sets with names that begin with %% are <em>private:</em> they exist only for the use
+ * sets.</em> Each rule set consists of a name, a colon, and a list of <em>rules</em>. A rule
+ * set name must begin with a % sign. Rule sets with a name that begins with a single % sign
+ * are <em>public</em>, and that name can be referenced to format and parse numbers.
+ * Rule sets with names that begin with %% are <em>private.</em>. They exist only for the use
  * of other rule sets. If a formatter only has one rule set, the name may be omitted.</p>
  *
  * <p>The user can also specify a special &quot;rule set&quot; named <code>%%lenient-parse</code>.
@@ -291,7 +291,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     <td style="vertical-align: top;"><em>nothing</em></td>
  *     <td style="vertical-align: top;">If the rule's rule descriptor is left out, the base value is one plus the
  *     preceding rule's base value (or zero if this is the first rule in the list) in a normal
- *     rule set.&nbsp; In a fraction rule set, the base value is the same as the preceding rule's
+ *     rule set. In a fraction rule set, the base value is the same as the preceding rule's
  *     base value.</td>
  *   </tr>
  * </table>
@@ -306,8 +306,8 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *
  * <ul>
  *   <li>If the rule set includes a default rule (and the number was passed in as a <code>double</code>),
- *     use the default rule.&nbsp; (If the number being formatted was passed in as a <code>long</code>,
- *     the default rule is ignored.)</li>
+ *     use the default rule. If the number being formatted was passed in as a <code>long</code>,
+ *     the default rule is ignored.</li>
  *   <li>If the number is negative, use the negative-number rule.</li>
  *   <li>If the number has a fractional part and is greater than 1, use the improper fraction
  *     rule.</li>
@@ -394,7 +394,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *         and format the resulting value.<br>
  *         If there is a DecimalFormat pattern between the &lt; characters and the
  *         rule does NOT also contain a &gt;&gt; substitution, we DON'T perform
- *         floor() on the quotient-- the quotient is passed through to the DecimalFormat
+ *         floor() on the quotient. The quotient is passed through to the DecimalFormat
  *         intact.  That is, for the value 1,900:<br>
  *         - "1/1000: &lt;&lt; thousand;" will produce "one thousand"<br>
  *         - "1/1000: &lt;0&lt; thousand;" will produce "2 thousand" (NOT "1 thousand")<br>
@@ -419,7 +419,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     <td>Format the number unchanged</td>
  *   </tr>
  *   <tr style="border-top: 1px solid black;">
- *     <td style="white-space: nowrap;" rowspan="6">[]<br>[|]</td>
+ *     <td style="white-space: nowrap;" rowspan="6">[]<br/>[|]</td>
  *     <td style="white-space: nowrap; vertical-align: top; padding-left: 1em; padding-right: 1em;">in normal rule</td>
  *     <td>
  *       <ul>
@@ -509,7 +509,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *   <tr style="border-top: 1px solid black;">
  *     <td style="vertical-align: top;">a DecimalFormat pattern</td>
  *     <td>Perform the mathematical operation on the number, and format the result using a
- *     DecimalFormat with the specified pattern.&nbsp; The pattern must begin with 0 or #.</td>
+ *     DecimalFormat with the specified pattern. The pattern must begin with 0 or #.</td>
  *   </tr>
  *   <tr style="border-top: 1px solid black;">
  *     <td style="vertical-align: top;">nothing</td>
@@ -535,6 +535,10 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *
  * <p>See the resource data and the demo program for annotated examples of real rule sets
  * using these features.</p>
+ *
+ * <p><em>User subclasses are not supported.</em> While clients may write
+ * subclasses, such code will not necessarily work and will not be
+ * guaranteed to work stably from release to release.
  *
  * @author Richard Gillam
  * @see NumberFormat

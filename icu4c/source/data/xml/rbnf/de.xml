@@ -7,16 +7,15 @@
 <!DOCTYPE ldml SYSTEM "../../dtd/cldr/common/dtd/ldml.dtd">
 <ldml>
 	<identity>
-
 		<version number="$Revision$"/>
 		<language type="de"/>
 	</identity>
     <rbnf>
         <rulesetGrouping type="SpelloutRules">
-            <ruleset type="lenient-parse" access="private">
-                <rbnfrule value="0">&amp;ue=ü&amp;ae=ä&amp;oe=ö&amp;[last primary ignorable ] ←← ' ' ←← ',' ←← '-' ←← '­';</rbnfrule>
-            </ruleset>
+            <rbnfRules><![CDATA[
+%%lenient-parse:
+&ue=ü&ae=ä&oe=ö&[last primary ignorable ] << ' ' << ',' << '-' << '­';
+]]></rbnfRules>
         </rulesetGrouping>
- 
    </rbnf>
 </ldml>
