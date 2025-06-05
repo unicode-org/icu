@@ -53,7 +53,7 @@ final class STZInfo implements Serializable {
             }
         }
     }*/
-    
+
     void applyTo(com.ibm.icu.util.SimpleTimeZone stz) {
         if (sy != -1) {
             stz.setStartYear(sy);
@@ -77,11 +77,10 @@ final class STZInfo implements Serializable {
             }
         }
     }
-    
+
     int sy = -1;
     int sm = -1, sdwm, sdw, st, sdm;
     boolean sa;
     int em = -1, edwm, edw, et, edm;
     boolean ea;
 }
-

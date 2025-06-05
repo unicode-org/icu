@@ -1,21 +1,19 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2001-2010, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * @test
@@ -32,13 +30,12 @@ public class ErrorTest extends TestFmwk {
         String newIDRules = "zzz > Z; f <> ph";
         String bogusRules = "a } [b-g m-p ";
         ReplaceableString testString =
-            new ReplaceableString("A quick fox jumped over the lazy dog.");
+                new ReplaceableString("A quick fox jumped over the lazy dog.");
         String insertString = "cats and dogs";
         int stoppedAt = 0, len;
         Transliterator.Position pos = new Transliterator.Position();
 
-        Transliterator t =
-            Transliterator.getInstance(trans, Transliterator.FORWARD);
+        Transliterator t = Transliterator.getInstance(trans, Transliterator.FORWARD);
         if (t == null) {
             errln("FAIL: construction of Latin-Greek");
             return;
@@ -48,16 +45,14 @@ public class ErrorTest extends TestFmwk {
         if (stoppedAt != -1) {
             errln("FAIL: Out of bounds check failed (1).");
         } else if (testString.length() != len) {
-            testString =
-                new ReplaceableString("A quick fox jumped over the lazy dog.");
+            testString = new ReplaceableString("A quick fox jumped over the lazy dog.");
             errln("FAIL: Transliterate fails and the target string was modified.");
         }
         stoppedAt = t.transliterate(testString, 100, testString.length() - 1);
         if (stoppedAt != -1) {
             errln("FAIL: Out of bounds check failed (2).");
         } else if (testString.length() != len) {
-            testString =
-                new ReplaceableString("A quick fox jumped over the lazy dog.");
+            testString = new ReplaceableString("A quick fox jumped over the lazy dog.");
             errln("FAIL: Transliterate fails and the target string was modified.");
         }
         pos.start = 100;
@@ -84,7 +79,8 @@ public class ErrorTest extends TestFmwk {
         try {
             t.transliterate(testString, pos, insertString);
             if (len == pos.limit) {
-                errln("FAIL: Test insertion with string: the transliteration position limit didn't change as expected.");
+                errln(
+                        "FAIL: Test insertion with string: the transliteration position limit didn't change as expected.");
             }
         } catch (IllegalArgumentException e) {
             errln("Insertion test with string failed for some reason.");
@@ -96,7 +92,8 @@ public class ErrorTest extends TestFmwk {
         try {
             t.transliterate(testString, pos, 0x0061);
             if (len == pos.limit) {
-                errln("FAIL: Test insertion with character: the transliteration position limit didn't change as expected.");
+                errln(
+                        "FAIL: Test insertion with character: the transliteration position limit didn't change as expected.");
             }
         } catch (IllegalArgumentException e) {
             errln("FAIL: Insertion test with UTF-16 code point failed for some reason.");
@@ -123,27 +120,23 @@ public class ErrorTest extends TestFmwk {
         } catch (IllegalArgumentException e) {
         }
 
-        //try { // unneeded - Exception cannot be thrown
+        // try { // unneeded - Exception cannot be thrown
         Transliterator t2 =
-            Transliterator.createFromRules(
-                newID,
-                newIDRules,
-                Transliterator.FORWARD);
+                Transliterator.createFromRules(newID, newIDRules, Transliterator.FORWARD);
         try {
             Transliterator t3 = t2.getInverse();
-            errln("FAIL: The newID transliterator was not registered so createInverse should fail.");
+            errln(
+                    "FAIL: The newID transliterator was not registered so createInverse should fail.");
             if (t3 != null) {
-                errln("FAIL: The newID transliterator was not registered so createInverse should fail.");
+                errln(
+                        "FAIL: The newID transliterator was not registered so createInverse should fail.");
             }
         } catch (Exception e) {
         }
-        //} catch (Exception e) { }
+        // } catch (Exception e) { }
         try {
             Transliterator t4 =
-                Transliterator.createFromRules(
-                    newID,
-                    bogusRules,
-                    Transliterator.FORWARD);
+                    Transliterator.createFromRules(newID, bogusRules, Transliterator.FORWARD);
             if (t4 != null) {
                 errln("FAIL: The rules is malformed but error was not reported.");
             }
@@ -155,7 +148,7 @@ public class ErrorTest extends TestFmwk {
     public void TestUnicodeSetErrors() {
         String badPattern = "[[:L:]-[0x0300-0x0400]";
         UnicodeSet set = new UnicodeSet();
-        //String result;
+        // String result;
 
         if (!set.isEmpty()) {
             errln("FAIL: The default ctor of UnicodeSet created a non-empty object.");
@@ -174,29 +167,30 @@ public class ErrorTest extends TestFmwk {
         }
     }
 
-//    public void TestUniToHexErrors() {
-//        Transliterator t = null;
-//        try {
-//            t = new UnicodeToHexTransliterator("", true, null);
-//            if (t != null) {
-//                errln("FAIL: Created a UnicodeToHexTransliterator with an empty pattern.");
-//            }
-//        } catch (IllegalArgumentException e) {
-//        }
-//        try {
-//            t = new UnicodeToHexTransliterator("\\x", true, null);
-//            if (t != null) {
-//                errln("FAIL: Created a UnicodeToHexTransliterator with a bad pattern.");
-//            }
-//        } catch (IllegalArgumentException e) {
-//        }
-//        t = new UnicodeToHexTransliterator();
-//        try {
-//            ((UnicodeToHexTransliterator) t).applyPattern("\\x");
-//            errln("FAIL: UnicodeToHexTransliterator::applyPattern succeeded with a bad pattern.");
-//        } catch (Exception e) {
-//        }
-//    }
+    //    public void TestUniToHexErrors() {
+    //        Transliterator t = null;
+    //        try {
+    //            t = new UnicodeToHexTransliterator("", true, null);
+    //            if (t != null) {
+    //                errln("FAIL: Created a UnicodeToHexTransliterator with an empty pattern.");
+    //            }
+    //        } catch (IllegalArgumentException e) {
+    //        }
+    //        try {
+    //            t = new UnicodeToHexTransliterator("\\x", true, null);
+    //            if (t != null) {
+    //                errln("FAIL: Created a UnicodeToHexTransliterator with a bad pattern.");
+    //            }
+    //        } catch (IllegalArgumentException e) {
+    //        }
+    //        t = new UnicodeToHexTransliterator();
+    //        try {
+    //            ((UnicodeToHexTransliterator) t).applyPattern("\\x");
+    //            errln("FAIL: UnicodeToHexTransliterator::applyPattern succeeded with a bad
+    // pattern.");
+    //        } catch (Exception e) {
+    //        }
+    //    }
 
     @Test
     public void TestRBTErrors() {
@@ -209,7 +203,7 @@ public class ErrorTest extends TestFmwk {
             set = new UnicodeSet(goodPattern);
             try {
                 Transliterator t =
-                    Transliterator.createFromRules(id, rules, Transliterator.REVERSE);
+                        Transliterator.createFromRules(id, rules, Transliterator.REVERSE);
                 t.setFilter(set);
                 Transliterator.registerClass(id, t.getClass(), null);
                 Transliterator.unregister(id);
@@ -227,24 +221,26 @@ public class ErrorTest extends TestFmwk {
         }
     }
 
-//    public void TestHexToUniErrors() {
-//        Transliterator t = null;
-//        //try { // unneeded - exception cannot be thrown
-//        t = new HexToUnicodeTransliterator("", null);
-//        //} catch (Exception e) {
-//        //    errln("FAIL: Could not create a HexToUnicodeTransliterator with an empty pattern.");
-//        //}
-//        try {
-//            t = new HexToUnicodeTransliterator("\\x", null);
-//            errln("FAIL: Created a HexToUnicodeTransliterator with a bad pattern.");
-//        } catch (IllegalArgumentException e) {
-//        }
-//
-//        t = new HexToUnicodeTransliterator();
-//        try {
-//            ((HexToUnicodeTransliterator) t).applyPattern("\\x");
-//            errln("FAIL: HexToUnicodeTransliterator::applyPattern succeeded with a bad pattern.");
-//        } catch (IllegalArgumentException e) {
-//        }
-//    }
+    //    public void TestHexToUniErrors() {
+    //        Transliterator t = null;
+    //        //try { // unneeded - exception cannot be thrown
+    //        t = new HexToUnicodeTransliterator("", null);
+    //        //} catch (Exception e) {
+    //        //    errln("FAIL: Could not create a HexToUnicodeTransliterator with an empty
+    // pattern.");
+    //        //}
+    //        try {
+    //            t = new HexToUnicodeTransliterator("\\x", null);
+    //            errln("FAIL: Created a HexToUnicodeTransliterator with a bad pattern.");
+    //        } catch (IllegalArgumentException e) {
+    //        }
+    //
+    //        t = new HexToUnicodeTransliterator();
+    //        try {
+    //            ((HexToUnicodeTransliterator) t).applyPattern("\\x");
+    //            errln("FAIL: HexToUnicodeTransliterator::applyPattern succeeded with a bad
+    // pattern.");
+    //        } catch (IllegalArgumentException e) {
+    //        }
+    //    }
 }

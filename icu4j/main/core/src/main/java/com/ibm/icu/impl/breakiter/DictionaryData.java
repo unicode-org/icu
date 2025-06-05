@@ -9,18 +9,17 @@
 
 package com.ibm.icu.impl.breakiter;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.UResourceBundle;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 final class DictionaryData {
     // disallow instantiation
-    private DictionaryData() { }
+    private DictionaryData() {}
 
     public static final int TRIE_TYPE_BYTES = 0;
     public static final int TRIE_TYPE_UCHARS = 1;
@@ -44,7 +43,8 @@ final class DictionaryData {
     private static final int DATA_FORMAT_ID = 0x44696374;
 
     public static DictionaryMatcher loadDictionaryFor(String dictType) throws IOException {
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BRKITR_BASE_NAME);
+        ICUResourceBundle rb =
+                (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BRKITR_BASE_NAME);
         String dictFileName = rb.getStringWithFallback("dictionaries/" + dictType);
         dictFileName = ICUData.ICU_BRKITR_NAME + '/' + dictFileName;
         ByteBuffer bytes = ICUBinary.getRequiredData(dictFileName);

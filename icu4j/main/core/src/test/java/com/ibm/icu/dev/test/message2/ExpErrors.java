@@ -11,7 +11,7 @@ import java.util.List;
 // Workaround for not being able to get the class of a generic type.
 
 class ExpErrors {
-    public final static String ANY_ERROR = "*-any";
+    public static final String ANY_ERROR = "*-any";
     final List<String> errors;
     final boolean hasErrors;
 

@@ -7,18 +7,17 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
- * A DecimalQuantity with internal storage as a 64-bit BCD, with fallback to a byte array for numbers
- * that don't fit into the standard BCD.
+ * A DecimalQuantity with internal storage as a 64-bit BCD, with fallback to a byte array for
+ * numbers that don't fit into the standard BCD.
  */
 public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_AbstractBCD {
 
     /**
-     * The BCD of the 16 digits of the number represented by this object. Every 4 bits of the long map to
-     * one digit. For example, the number "12345" in BCD is "0x12345".
+     * The BCD of the 16 digits of the number represented by this object. Every 4 bits of the long
+     * map to one digit. For example, the number "12345" in BCD is "0x12345".
      *
-     * <p>
-     * Whenever bcd changes internally, {@link #compact()} must be called, except in special cases like
-     * setting the digit to zero.
+     * <p>Whenever bcd changes internally, {@link #compact()} must be called, except in special
+     * cases like setting the digit to zero.
      */
     private byte[] bcdBytes;
 
@@ -94,8 +93,7 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
      * @param s The String to parse
      */
     public static DecimalQuantity fromExponentString(String num) {
-        if (num.contains("e") || num.contains("c")
-                || num.contains("E") || num.contains("C")) {
+        if (num.contains("e") || num.contains("c") || num.contains("E") || num.contains("C")) {
             int ePos = num.lastIndexOf('e');
             if (ePos < 0) {
                 ePos = num.lastIndexOf('c');
@@ -121,7 +119,8 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
             return dq;
         } else {
             int numFracDigit = getVisibleFractionCount(num);
-            DecimalQuantity_DualStorageBCD dq = new DecimalQuantity_DualStorageBCD(new BigDecimal(num));
+            DecimalQuantity_DualStorageBCD dq =
+                    new DecimalQuantity_DualStorageBCD(new BigDecimal(num));
             dq.setMinFraction(numFracDigit);
             return dq;
         }
@@ -139,12 +138,10 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
     @Override
     protected byte getDigitPos(int position) {
         if (usingBytes) {
-            if (position < 0 || position >= precision)
-                return 0;
+            if (position < 0 || position >= precision) return 0;
             return bcdBytes[position];
         } else {
-            if (position < 0 || position >= 16)
-                return 0;
+            if (position < 0 || position >= 16) return 0;
             return (byte) ((bcdLong >>> (position * 4)) & 0xf);
         }
     }
@@ -368,8 +365,7 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
     }
 
     private void ensureCapacity(int capacity) {
-        if (capacity == 0)
-            return;
+        if (capacity == 0) return;
         int oldCapacity = usingBytes ? bcdBytes.length : 0;
         if (!usingBytes) {
             bcdBytes = new byte[capacity];
@@ -416,7 +412,8 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
     }
 
     /**
-     * Checks whether the bytes stored in this instance are all valid. For internal unit testing only.
+     * Checks whether the bytes stored in this instance are all valid. For internal unit testing
+     * only.
      *
      * @return An error message if this instance is invalid, or null if this instance is healthy.
      * @internal
@@ -425,25 +422,18 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
     @Deprecated
     public String checkHealth() {
         if (usingBytes) {
-            if (bcdLong != 0)
-                return "Value in bcdLong but we are in byte mode";
-            if (precision == 0)
-                return "Zero precision but we are in byte mode";
-            if (precision > bcdBytes.length)
-                return "Precision exceeds length of byte array";
+            if (bcdLong != 0) return "Value in bcdLong but we are in byte mode";
+            if (precision == 0) return "Zero precision but we are in byte mode";
+            if (precision > bcdBytes.length) return "Precision exceeds length of byte array";
             if (getDigitPos(precision - 1) == 0)
                 return "Most significant digit is zero in byte mode";
-            if (getDigitPos(0) == 0)
-                return "Least significant digit is zero in long mode";
+            if (getDigitPos(0) == 0) return "Least significant digit is zero in long mode";
             for (int i = 0; i < precision; i++) {
-                if (getDigitPos(i) >= 10)
-                    return "Digit exceeding 10 in byte array";
-                if (getDigitPos(i) < 0)
-                    return "Digit below 0 in byte array";
+                if (getDigitPos(i) >= 10) return "Digit exceeding 10 in byte array";
+                if (getDigitPos(i) < 0) return "Digit below 0 in byte array";
             }
             for (int i = precision; i < bcdBytes.length; i++) {
-                if (getDigitPos(i) != 0)
-                    return "Nonzero digits outside of range in byte array";
+                if (getDigitPos(i) != 0) return "Nonzero digits outside of range in byte array";
             }
         } else {
             if (bcdBytes != null) {
@@ -454,21 +444,17 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
             }
             if (precision == 0 && bcdLong != 0)
                 return "Value in bcdLong even though precision is zero";
-            if (precision > 16)
-                return "Precision exceeds length of long";
+            if (precision > 16) return "Precision exceeds length of long";
             if (precision != 0 && getDigitPos(precision - 1) == 0)
                 return "Most significant digit is zero in long mode";
             if (precision != 0 && getDigitPos(0) == 0)
                 return "Least significant digit is zero in long mode";
             for (int i = 0; i < precision; i++) {
-                if (getDigitPos(i) >= 10)
-                    return "Digit exceeding 10 in long";
-                if (getDigitPos(i) < 0)
-                    return "Digit below 0 in long (?!)";
+                if (getDigitPos(i) >= 10) return "Digit exceeding 10 in long";
+                if (getDigitPos(i) < 0) return "Digit below 0 in long (?!)";
             }
             for (int i = precision; i < 16; i++) {
-                if (getDigitPos(i) != 0)
-                    return "Nonzero digits outside of range in long";
+                if (getDigitPos(i) != 0) return "Nonzero digits outside of range in long";
             }
         }
 
@@ -490,7 +476,8 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
 
     @Override
     public String toString() {
-        return String.format("<DecimalQuantity %d:%d %s %s%s>",
+        return String.format(
+                "<DecimalQuantity %d:%d %s %s%s>",
                 lReqPos,
                 rReqPos,
                 (usingBytes ? "bytes" : "long"),

@@ -2,8 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
-import org.junit.Test;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
@@ -17,8 +15,11 @@ import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
+import org.junit.Test;
 
-/** @author sffc */
+/**
+ * @author sffc
+ */
 public class PatternStringTest extends CoreTestFmwk {
 
     @Test
@@ -33,37 +34,44 @@ public class PatternStringTest extends CoreTestFmwk {
         String localized = "’.'ab'c'b''a'''#,##0a0b'a%'";
         String toStandard = "+-'ab'c'b''a'''#,##0.0%'a%'";
 
-        assertEquals("Localized decimal format symbols", localized, PatternStringUtils.convertLocalized(standard, symbols, true));
-        assertEquals("Standard (unlocalized) decimal format symbols", toStandard, PatternStringUtils.convertLocalized(localized, symbols, false));
+        assertEquals(
+                "Localized decimal format symbols",
+                localized,
+                PatternStringUtils.convertLocalized(standard, symbols, true));
+        assertEquals(
+                "Standard (unlocalized) decimal format symbols",
+                toStandard,
+                PatternStringUtils.convertLocalized(localized, symbols, false));
     }
 
     @Test
     public void testToPatternSimple() {
         String[][] cases = {
-                { "#", "0" },
-                { "0", "0" },
-                { "#0", "0" },
-                { "###", "0" },
-                { "0.##", "0.##" },
-                { "0.00", "0.00" },
-                { "0.00#", "0.00#" },
-                { "0.05", "0.05" },
-                { "#E0", "#E0" },
-                { "0E0", "0E0" },
-                { "#00E00", "#00E00" },
-                { "#,##0", "#,##0" },
-                { "0¤", "0¤"},
-                { "0¤a", "0¤a"},
-                { "0¤00", "0¤00"},
-                { "#;#", "0;0" },
-                { "#;-#", "0" }, // ignore a negative prefix pattern of '-' since that is the default
-                { "pp#,000;(#)", "pp#,000;(#,000)" },
-                { "**##0", "**##0" },
-                { "*'x'##0", "*x##0" },
-                { "a''b0", "a''b0" },
-                { "*''##0", "*''##0" },
-                { "*📺##0", "*'📺'##0" },
-                { "*'நி'##0", "*'நி'##0" }, };
+            {"#", "0"},
+            {"0", "0"},
+            {"#0", "0"},
+            {"###", "0"},
+            {"0.##", "0.##"},
+            {"0.00", "0.00"},
+            {"0.00#", "0.00#"},
+            {"0.05", "0.05"},
+            {"#E0", "#E0"},
+            {"0E0", "0E0"},
+            {"#00E00", "#00E00"},
+            {"#,##0", "#,##0"},
+            {"0¤", "0¤"},
+            {"0¤a", "0¤a"},
+            {"0¤00", "0¤00"},
+            {"#;#", "0;0"},
+            {"#;-#", "0"}, // ignore a negative prefix pattern of '-' since that is the default
+            {"pp#,000;(#)", "pp#,000;(#,000)"},
+            {"**##0", "**##0"},
+            {"*'x'##0", "*x##0"},
+            {"a''b0", "a''b0"},
+            {"*''##0", "*''##0"},
+            {"*📺##0", "*'📺'##0"},
+            {"*'நி'##0", "*'நி'##0"},
+        };
 
         for (String[] cas : cases) {
             String input = cas[0];
@@ -71,7 +79,8 @@ public class PatternStringTest extends CoreTestFmwk {
 
             DecimalFormatProperties properties = PatternStringParser.parseToProperties(input);
             String actual = PatternStringUtils.propertiesToPatternString(properties);
-            assertEquals("Failed on input pattern '" + input + "', properties " + properties,
+            assertEquals(
+                    "Failed on input pattern '" + input + "', properties " + properties,
                     output,
                     actual);
         }
@@ -80,20 +89,21 @@ public class PatternStringTest extends CoreTestFmwk {
     @Test
     public void testToPatternWithProperties() {
         Object[][] cases = {
-                { new DecimalFormatProperties().setPositivePrefix("abc"), "abc#;-#" },
-                { new DecimalFormatProperties().setPositiveSuffix("abc"), "#abc;-#" },
-                { new DecimalFormatProperties().setPositivePrefixPattern("abc"), "abc#" },
-                { new DecimalFormatProperties().setPositiveSuffixPattern("abc"), "#abc" },
-                { new DecimalFormatProperties().setNegativePrefix("abc"), "#;abc#" },
-                { new DecimalFormatProperties().setNegativeSuffix("abc"), "#;-#abc" },
-                { new DecimalFormatProperties().setNegativePrefixPattern("abc"), "#;abc#" },
-                { new DecimalFormatProperties().setNegativeSuffixPattern("abc"), "#;-#abc" },
-                { new DecimalFormatProperties().setPositivePrefix("+"), "'+'#;-#" },
-                { new DecimalFormatProperties().setPositivePrefixPattern("+"), "+#" },
-                { new DecimalFormatProperties().setPositivePrefix("+'"), "'+'''#;-#" },
-                { new DecimalFormatProperties().setPositivePrefix("'+"), "'''+'#;-#" },
-                { new DecimalFormatProperties().setPositivePrefix("'"), "''#;-#" },
-                { new DecimalFormatProperties().setPositivePrefixPattern("+''"), "+''#" }, };
+            {new DecimalFormatProperties().setPositivePrefix("abc"), "abc#;-#"},
+            {new DecimalFormatProperties().setPositiveSuffix("abc"), "#abc;-#"},
+            {new DecimalFormatProperties().setPositivePrefixPattern("abc"), "abc#"},
+            {new DecimalFormatProperties().setPositiveSuffixPattern("abc"), "#abc"},
+            {new DecimalFormatProperties().setNegativePrefix("abc"), "#;abc#"},
+            {new DecimalFormatProperties().setNegativeSuffix("abc"), "#;-#abc"},
+            {new DecimalFormatProperties().setNegativePrefixPattern("abc"), "#;abc#"},
+            {new DecimalFormatProperties().setNegativeSuffixPattern("abc"), "#;-#abc"},
+            {new DecimalFormatProperties().setPositivePrefix("+"), "'+'#;-#"},
+            {new DecimalFormatProperties().setPositivePrefixPattern("+"), "+#"},
+            {new DecimalFormatProperties().setPositivePrefix("+'"), "'+'''#;-#"},
+            {new DecimalFormatProperties().setPositivePrefix("'+"), "'''+'#;-#"},
+            {new DecimalFormatProperties().setPositivePrefix("'"), "''#;-#"},
+            {new DecimalFormatProperties().setPositivePrefixPattern("+''"), "+''#"},
+        };
 
         for (Object[] cas : cases) {
             DecimalFormatProperties input = (DecimalFormatProperties) cas[0];
@@ -107,18 +117,9 @@ public class PatternStringTest extends CoreTestFmwk {
     @Test
     public void testExceptionOnInvalid() {
         String[] invalidPatterns = {
-                "#.#.#",
-                "0#",
-                "0#.",
-                ".#0",
-                "0#.#0",
-                "@0",
-                "0@",
-                "0,",
-                "0,,",
-                "0,,0",
-                "0,,0,",
-                "#,##0E0" };
+            "#.#.#", "0#", "0#.", ".#0", "0#.#0", "@0", "0@", "0,", "0,,", "0,,0", "0,,0,",
+            "#,##0E0"
+        };
 
         for (String pattern : invalidPatterns) {
             try {
@@ -144,21 +145,19 @@ public class PatternStringTest extends CoreTestFmwk {
         macros.unit = Currency.getInstance("EUR");
         macros.affixProvider = patternInfo;
         LocalizedNumberFormatter nf = NumberFormatter.with().macros(macros).locale(ULocale.ROOT);
-    
+
         // Test that the output is as expected
         FormattedNumber fn = nf.format(3.14);
         assertEquals("Should substitute currency symbol", "a3€14b", fn.toString());
-    
+
         // Test field positions
-        Object[][] expectedFieldPositions = new Object[][] {
-                {com.ibm.icu.text.NumberFormat.Field.INTEGER, 1, 2},
-                {com.ibm.icu.text.NumberFormat.Field.CURRENCY, 2, 3},
-                {com.ibm.icu.text.NumberFormat.Field.FRACTION, 3, 5}};
+        Object[][] expectedFieldPositions =
+                new Object[][] {
+                    {com.ibm.icu.text.NumberFormat.Field.INTEGER, 1, 2},
+                    {com.ibm.icu.text.NumberFormat.Field.CURRENCY, 2, 3},
+                    {com.ibm.icu.text.NumberFormat.Field.FRACTION, 3, 5}
+                };
         FormattedValueTest.checkFormattedValue(
-            "Currency as decimal basic field positions",
-            fn,
-            "a3€14b",
-            expectedFieldPositions
-        );
+                "Currency as decimal basic field positions", fn, "a3€14b", expectedFieldPositions);
     }
 }

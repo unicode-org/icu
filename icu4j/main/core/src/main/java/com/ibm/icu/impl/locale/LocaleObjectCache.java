@@ -21,7 +21,9 @@ public abstract class LocaleObjectCache<K, V> {
     }
 
     public LocaleObjectCache(int initialCapacity, float loadFactor, int concurrencyLevel) {
-        _map = new ConcurrentHashMap<K, CacheEntry<K, V>>(initialCapacity, loadFactor, concurrencyLevel);
+        _map =
+                new ConcurrentHashMap<K, CacheEntry<K, V>>(
+                        initialCapacity, loadFactor, concurrencyLevel);
     }
 
     public V get(K key) {
@@ -69,7 +71,7 @@ public abstract class LocaleObjectCache<K, V> {
     @SuppressWarnings("unchecked")
     private void cleanStaleEntries() {
         CacheEntry<K, V> entry;
-        while ((entry = (CacheEntry<K, V>)_queue.poll()) != null) {
+        while ((entry = (CacheEntry<K, V>) _queue.poll()) != null) {
             _map.remove(entry.getKey());
         }
     }

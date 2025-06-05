@@ -16,8 +16,8 @@ package com.ibm.icu.impl.coll;
 import com.ibm.icu.text.Collator;
 
 public final class CollationCompare /* all static */ {
-    public static int compareUpToQuaternary(CollationIterator left, CollationIterator right,
-            CollationSettings settings) {
+    public static int compareUpToQuaternary(
+            CollationIterator left, CollationIterator right, CollationSettings settings) {
         int options = settings.options;
         long variableTop;
         if ((options & CollationSettings.ALTERNATE_MASK) == 0) {
@@ -29,7 +29,7 @@ public final class CollationCompare /* all static */ {
         boolean anyVariable = false;
 
         // Fetch CEs, compare primaries, store secondary & tertiary weights.
-        for (;;) {
+        for (; ; ) {
             // We fetch CEs until we get a non-ignorable primary or reach the end.
             long leftPrimary;
             do {
@@ -42,7 +42,7 @@ public final class CollationCompare /* all static */ {
                     do {
                         // Store only the primary of the variable CE.
                         left.setCurrentCE(ce & 0xffffffff00000000L);
-                        for (;;) {
+                        for (; ; ) {
                             ce = left.nextCE();
                             leftPrimary = ce >>> 32;
                             if (leftPrimary == 0) {
@@ -51,7 +51,8 @@ public final class CollationCompare /* all static */ {
                                 break;
                             }
                         }
-                    } while (leftPrimary < variableTop && leftPrimary > Collation.MERGE_SEPARATOR_PRIMARY);
+                    } while (leftPrimary < variableTop
+                            && leftPrimary > Collation.MERGE_SEPARATOR_PRIMARY);
                 }
             } while (leftPrimary == 0);
 
@@ -59,14 +60,15 @@ public final class CollationCompare /* all static */ {
             do {
                 long ce = right.nextCE();
                 rightPrimary = ce >>> 32;
-                if (rightPrimary < variableTop && rightPrimary > Collation.MERGE_SEPARATOR_PRIMARY) {
+                if (rightPrimary < variableTop
+                        && rightPrimary > Collation.MERGE_SEPARATOR_PRIMARY) {
                     // Variable CE, shift it to quaternary level.
                     // Ignore all following primary ignorables, and shift further variable CEs.
                     anyVariable = true;
                     do {
                         // Store only the primary of the variable CE.
                         right.setCurrentCE(ce & 0xffffffff00000000L);
-                        for (;;) {
+                        for (; ; ) {
                             ce = right.nextCE();
                             rightPrimary = ce >>> 32;
                             if (rightPrimary == 0) {
@@ -75,7 +77,8 @@ public final class CollationCompare /* all static */ {
                                 break;
                             }
                         }
-                    } while (rightPrimary < variableTop && rightPrimary > Collation.MERGE_SEPARATOR_PRIMARY);
+                    } while (rightPrimary < variableTop
+                            && rightPrimary > Collation.MERGE_SEPARATOR_PRIMARY);
                 }
             } while (rightPrimary == 0);
 
@@ -99,7 +102,7 @@ public final class CollationCompare /* all static */ {
             if ((options & CollationSettings.BACKWARD_SECONDARY) == 0) {
                 int leftIndex = 0;
                 int rightIndex = 0;
-                for (;;) {
+                for (; ; ) {
                     int leftSecondary;
                     do {
                         leftSecondary = ((int) left.getCE(leftIndex++)) >>> 16;
@@ -111,7 +114,9 @@ public final class CollationCompare /* all static */ {
                     } while (rightSecondary == 0);
 
                     if (leftSecondary != rightSecondary) {
-                        return (leftSecondary < rightSecondary) ? Collation.LESS : Collation.GREATER;
+                        return (leftSecondary < rightSecondary)
+                                ? Collation.LESS
+                                : Collation.GREATER;
                     }
                     if (leftSecondary == Collation.NO_CE_WEIGHT16) {
                         break;
@@ -122,7 +127,7 @@ public final class CollationCompare /* all static */ {
                 // within segments separated by the merge separator (U+FFFE, weight 02).
                 int leftStart = 0;
                 int rightStart = 0;
-                for (;;) {
+                for (; ; ) {
                     // Find the merge separator or the NO_CE terminator.
                     long p;
                     int leftLimit = leftStart;
@@ -139,7 +144,7 @@ public final class CollationCompare /* all static */ {
                     // Compare the segments.
                     int leftIndex = leftLimit;
                     int rightIndex = rightLimit;
-                    for (;;) {
+                    for (; ; ) {
                         int leftSecondary = 0;
                         while (leftSecondary == 0 && leftIndex > leftStart) {
                             leftSecondary = ((int) left.getCE(--leftIndex)) >>> 16;
@@ -151,7 +156,9 @@ public final class CollationCompare /* all static */ {
                         }
 
                         if (leftSecondary != rightSecondary) {
-                            return (leftSecondary < rightSecondary) ? Collation.LESS : Collation.GREATER;
+                            return (leftSecondary < rightSecondary)
+                                    ? Collation.LESS
+                                    : Collation.GREATER;
                         }
                         if (leftSecondary == 0) {
                             break;
@@ -176,7 +183,7 @@ public final class CollationCompare /* all static */ {
             int strength = CollationSettings.getStrength(options);
             int leftIndex = 0;
             int rightIndex = 0;
-            for (;;) {
+            for (; ; ) {
                 int leftCase, leftLower32, rightCase;
                 if (strength == Collator.PRIMARY) {
                     // Primary+caseLevel: Ignore case level weights of primary ignorables.
@@ -248,12 +255,13 @@ public final class CollationCompare /* all static */ {
         int leftIndex = 0;
         int rightIndex = 0;
         int anyQuaternaries = 0;
-        for (;;) {
+        for (; ; ) {
             int leftLower32, leftTertiary;
             do {
                 leftLower32 = (int) left.getCE(leftIndex++);
                 anyQuaternaries |= leftLower32;
-                assert ((leftLower32 & Collation.ONLY_TERTIARY_MASK) != 0 || (leftLower32 & 0xc0c0) == 0);
+                assert ((leftLower32 & Collation.ONLY_TERTIARY_MASK) != 0
+                        || (leftLower32 & 0xc0c0) == 0);
                 leftTertiary = leftLower32 & tertiaryMask;
             } while (leftTertiary == 0);
 
@@ -261,7 +269,8 @@ public final class CollationCompare /* all static */ {
             do {
                 rightLower32 = (int) right.getCE(rightIndex++);
                 anyQuaternaries |= rightLower32;
-                assert ((rightLower32 & Collation.ONLY_TERTIARY_MASK) != 0 || (rightLower32 & 0xc0c0) == 0);
+                assert ((rightLower32 & Collation.ONLY_TERTIARY_MASK) != 0
+                        || (rightLower32 & 0xc0c0) == 0);
                 rightTertiary = rightLower32 & tertiaryMask;
             } while (rightTertiary == 0);
 
@@ -305,7 +314,7 @@ public final class CollationCompare /* all static */ {
 
         leftIndex = 0;
         rightIndex = 0;
-        for (;;) {
+        for (; ; ) {
             long leftQuaternary;
             do {
                 long ce = left.getCE(leftIndex++);

@@ -8,7 +8,6 @@ import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author sffc
- *
  */
 public class NanMatcher extends SymbolMatcher {
 
@@ -42,5 +41,4 @@ public class NanMatcher extends SymbolMatcher {
     public String toString() {
         return "<NanMatcher>";
     }
-
 }

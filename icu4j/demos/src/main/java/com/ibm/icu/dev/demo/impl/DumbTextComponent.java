@@ -7,6 +7,7 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.impl;
+
 import java.awt.AWTEventMulticaster;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -37,17 +38,14 @@ import java.text.BreakIterator;
 
 // LIU: Changed from final to non-final
 public class DumbTextComponent extends Canvas
-  implements KeyListener, MouseListener, MouseMotionListener, FocusListener
-{
-    
-    /**
-     * For serialization
-     */
+        implements KeyListener, MouseListener, MouseMotionListener, FocusListener {
+
+    /** For serialization */
     private static final long serialVersionUID = 8265547730738652151L;
 
-//    private transient static final String copyright =
-//      "Copyright \u00A9 1998, Mark Davis. All Rights Reserved.";
-    private transient static boolean DEBUG = false;
+    //    private transient static final String copyright =
+    //      "Copyright \u00A9 1998, Mark Davis. All Rights Reserved.";
+    private static transient boolean DEBUG = false;
 
     private String contents = "";
     private Selection selection = new Selection();
@@ -82,8 +80,8 @@ public class DumbTextComponent extends Canvas
     private transient Point endPoint = new Point();
     private transient Point caretPoint = new Point();
     private transient Point activePoint = new Point();
-    
-    //private transient static String clipBoard;
+
+    // private transient static String clipBoard;
 
     private static final char CR = '\015'; // LIU
 
@@ -95,10 +93,9 @@ public class DumbTextComponent extends Canvas
         addKeyListener(this);
         addFocusListener(this);
         setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-
     }
 
-// ================ Events ====================
+    // ================ Events ====================
 
     // public boolean isFocusTraversable() { return true; }
 
@@ -123,7 +120,7 @@ public class DumbTextComponent extends Canvas
     public void mousePressed(MouseEvent e) {
         if (DEBUG) System.out.println("mousePressed");
         if (pressed) {
-            select(e,false);
+            select(e, false);
         } else {
             doubleClick = e.getClickCount() > 1;
             requestFocus();
@@ -143,16 +140,16 @@ public class DumbTextComponent extends Canvas
     }
 
     public void mouseEntered(MouseEvent e) {
-        //if (pressed) select(e, false);
+        // if (pressed) select(e, false);
     }
 
-    public void mouseExited(MouseEvent e){
-        //if (pressed) select(e, false);
+    public void mouseExited(MouseEvent e) {
+        // if (pressed) select(e, false);
     }
 
     public void mouseClicked(MouseEvent e) {}
-    public void mouseMoved(MouseEvent e) {}
 
+    public void mouseMoved(MouseEvent e) {}
 
     public void focusGained(FocusEvent e) {
         if (DEBUG) System.out.println("focusGained");
@@ -160,6 +157,7 @@ public class DumbTextComponent extends Canvas
         valid = false;
         repaint(16);
     }
+
     public void focusLost(FocusEvent e) {
         if (DEBUG) System.out.println("focusLost");
         focus = false;
@@ -181,104 +179,105 @@ public class DumbTextComponent extends Canvas
         }
         select(tempSelection);
     }
-    
+
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        if (DEBUG) System.out.println("keyPressed "
-          + hex((char)code) + ", " + hex((char)e.getModifiers()));
+        if (DEBUG)
+            System.out.println(
+                    "keyPressed " + hex((char) code) + ", " + hex((char) e.getModifiers()));
         int start = selection.getStart();
         int end = selection.getEnd();
         boolean shift = (e.getModifiers() & InputEvent.SHIFT_MASK) != 0;
         boolean ctrl = (e.getModifiers() & InputEvent.CTRL_MASK) != 0;
-                
+
         switch (code) {
-        case KeyEvent.VK_Q:
-            if (!ctrl || !editable) break;
-            setKeyStart(-1);
-            fixHex();
-            break;
-        case KeyEvent.VK_V:
-            if (!ctrl) break;
-            if (!editable) {
-                this.getToolkit().beep();
-            } else {
-                paste();
-            }
-            break;
-        case KeyEvent.VK_C:
-            if (!ctrl) break;
-            copy();
-            break;
-        case KeyEvent.VK_X:
-            if (!ctrl) break;
-            if (!editable) {
-                this.getToolkit().beep();
-            } else {
-                copy();
-                insertText("");
-            }
-            break;
-        case KeyEvent.VK_A:
-            if (!ctrl) break;
-            setKeyStart(-1);
-            select(Integer.MAX_VALUE, 0, false);
-            break;
-        case KeyEvent.VK_RIGHT:
-            setKeyStart(-1);
-            tempSelection.set(selection);
-            tempSelection.nextBound(ctrl ? wordBreaker : charBreaker, +1, shift);
-            select(tempSelection);
-            break;
-        case KeyEvent.VK_LEFT:
-            setKeyStart(-1);
-            tempSelection.set(selection);
-            tempSelection.nextBound(ctrl ? wordBreaker : charBreaker, -1, shift);
-            select(tempSelection);
-            break;
-        case KeyEvent.VK_UP: // LIU: Add support for up arrow
-            setKeyStart(-1);
-            tempSelection.set(selection);
-            tempSelection.caret = lineDelta(tempSelection.caret, -1);
-            if (!shift) {
-                tempSelection.anchor = tempSelection.caret;
-            }
-            select(tempSelection);
-            break;
-        case KeyEvent.VK_DOWN: // LIU: Add support for down arrow
-            setKeyStart(-1);
-            tempSelection.set(selection);
-            tempSelection.caret = lineDelta(tempSelection.caret, +1);
-            if (!shift) {
-                tempSelection.anchor = tempSelection.caret;
-            }
-            select(tempSelection);
-            break;
-        case KeyEvent.VK_DELETE: // LIU: Add delete key support
-            if (!editable) break;
-            setKeyStart(-1);
-            if (contents.length() == 0) break;
-            start = selection.getStart();
-            end = selection.getEnd();
-            if (start == end) {
-                ++end;
-                if (end > contents.length()) {
-                    getToolkit().beep();
-                    return;
+            case KeyEvent.VK_Q:
+                if (!ctrl || !editable) break;
+                setKeyStart(-1);
+                fixHex();
+                break;
+            case KeyEvent.VK_V:
+                if (!ctrl) break;
+                if (!editable) {
+                    this.getToolkit().beep();
+                } else {
+                    paste();
                 }
-            }
-            replaceRange("", start, end);
-            break;            
+                break;
+            case KeyEvent.VK_C:
+                if (!ctrl) break;
+                copy();
+                break;
+            case KeyEvent.VK_X:
+                if (!ctrl) break;
+                if (!editable) {
+                    this.getToolkit().beep();
+                } else {
+                    copy();
+                    insertText("");
+                }
+                break;
+            case KeyEvent.VK_A:
+                if (!ctrl) break;
+                setKeyStart(-1);
+                select(Integer.MAX_VALUE, 0, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                setKeyStart(-1);
+                tempSelection.set(selection);
+                tempSelection.nextBound(ctrl ? wordBreaker : charBreaker, +1, shift);
+                select(tempSelection);
+                break;
+            case KeyEvent.VK_LEFT:
+                setKeyStart(-1);
+                tempSelection.set(selection);
+                tempSelection.nextBound(ctrl ? wordBreaker : charBreaker, -1, shift);
+                select(tempSelection);
+                break;
+            case KeyEvent.VK_UP: // LIU: Add support for up arrow
+                setKeyStart(-1);
+                tempSelection.set(selection);
+                tempSelection.caret = lineDelta(tempSelection.caret, -1);
+                if (!shift) {
+                    tempSelection.anchor = tempSelection.caret;
+                }
+                select(tempSelection);
+                break;
+            case KeyEvent.VK_DOWN: // LIU: Add support for down arrow
+                setKeyStart(-1);
+                tempSelection.set(selection);
+                tempSelection.caret = lineDelta(tempSelection.caret, +1);
+                if (!shift) {
+                    tempSelection.anchor = tempSelection.caret;
+                }
+                select(tempSelection);
+                break;
+            case KeyEvent.VK_DELETE: // LIU: Add delete key support
+                if (!editable) break;
+                setKeyStart(-1);
+                if (contents.length() == 0) break;
+                start = selection.getStart();
+                end = selection.getEnd();
+                if (start == end) {
+                    ++end;
+                    if (end > contents.length()) {
+                        getToolkit().beep();
+                        return;
+                    }
+                }
+                replaceRange("", start, end);
+                break;
         }
     }
 
     void copy() {
         Clipboard cb = this.getToolkit().getSystemClipboard();
-        StringSelection ss = new StringSelection(
-            contents.substring(selection.getStart(), selection.getEnd()));
+        StringSelection ss =
+                new StringSelection(contents.substring(selection.getStart(), selection.getEnd()));
         cb.setContents(ss, ss);
     }
-    
-    void paste () {
+
+    void paste() {
         Clipboard cb = this.getToolkit().getSystemClipboard();
         Transferable t = cb.getContents(this);
         if (t == null) {
@@ -290,12 +289,12 @@ public class DumbTextComponent extends Canvas
             insertText(temp);
         } catch (Exception e) {
             this.getToolkit().beep();
-        }            
+        }
     }
 
     /**
-     * LIU: Given an offset into contents, moves up or down by lines,
-     * according to lineStarts[].
+     * LIU: Given an offset into contents, moves up or down by lines, according to lineStarts[].
+     *
      * @param off the offset into contents
      * @param delta how many lines to move up (< 0) or down (> 0)
      * @return the new offset into contents
@@ -311,62 +310,63 @@ public class DumbTextComponent extends Canvas
             return contents.length();
         }
         off = lineStarts[line] + posInLine;
-        if (off >= lineStarts[line+1]) {
-            off = lineStarts[line+1] - 1;
+        if (off >= lineStarts[line + 1]) {
+            off = lineStarts[line + 1] - 1;
         }
         return off;
     }
-      
+
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
-        if (DEBUG) System.out.println("keyReleased "
-          + hex((char)code) + ", " + hex((char)e.getModifiers()));
+        if (DEBUG)
+            System.out.println(
+                    "keyReleased " + hex((char) code) + ", " + hex((char) e.getModifiers()));
     }
 
     public void keyTyped(KeyEvent e) {
         char ch = e.getKeyChar();
-        if (DEBUG) System.out.println("keyTyped "
-          + hex((char)ch) + ", " + hex((char)e.getModifiers()));
+        if (DEBUG)
+            System.out.println("keyTyped " + hex((char) ch) + ", " + hex((char) e.getModifiers()));
         if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0) return;
         int start, end;
         switch (ch) {
-        case KeyEvent.CHAR_UNDEFINED:
-            break;
-        case KeyEvent.VK_BACK_SPACE:
-            //setKeyStart(-1);
-            if (!editable) break;
-            if (contents.length() == 0) break;
-            start = selection.getStart();
-            end = selection.getEnd();
-            if (start == end) {
-                --start;
-                if (start < 0) {
-                    getToolkit().beep(); // LIU: Add audio feedback of NOP
-                    return;
+            case KeyEvent.CHAR_UNDEFINED:
+                break;
+            case KeyEvent.VK_BACK_SPACE:
+                // setKeyStart(-1);
+                if (!editable) break;
+                if (contents.length() == 0) break;
+                start = selection.getStart();
+                end = selection.getEnd();
+                if (start == end) {
+                    --start;
+                    if (start < 0) {
+                        getToolkit().beep(); // LIU: Add audio feedback of NOP
+                        return;
+                    }
                 }
-            }
-            replaceRange("", start, end);
-            break;        
-        case KeyEvent.VK_DELETE:
-            //setKeyStart(-1);
-            if (!editable) break;
-            if (contents.length() == 0) break;
-            start = selection.getStart();
-            end = selection.getEnd();
-            if (start == end) {
-                ++end;
-                if (end > contents.length()) {
-                    getToolkit().beep(); // LIU: Add audio feedback of NOP
-                    return;
+                replaceRange("", start, end);
+                break;
+            case KeyEvent.VK_DELETE:
+                // setKeyStart(-1);
+                if (!editable) break;
+                if (contents.length() == 0) break;
+                start = selection.getStart();
+                end = selection.getEnd();
+                if (start == end) {
+                    ++end;
+                    if (end > contents.length()) {
+                        getToolkit().beep(); // LIU: Add audio feedback of NOP
+                        return;
+                    }
                 }
-            }
-            replaceRange("", start, end);
-            break;
-        default:
-            if (!editable) break;
-            // LIU: Dispatch to subclass API
-            handleKeyTyped(e);
-            break;
+                replaceRange("", start, end);
+                break;
+            default:
+                if (!editable) break;
+                // LIU: Dispatch to subclass API
+                handleKeyTyped(e);
+                break;
         }
     }
 
@@ -374,26 +374,26 @@ public class DumbTextComponent extends Canvas
     protected void handleKeyTyped(KeyEvent e) {
         insertText(String.valueOf(e.getKeyChar()));
     }
-    
+
     protected void setKeyStart(int keyStart) {
         if (activeStart != keyStart) {
             activeStart = keyStart;
             repaint(10);
         }
     }
-    
+
     protected void validateKeyStart() {
         if (activeStart > selection.getStart()) {
             activeStart = selection.getStart();
             repaint(10);
         }
     }
-    
+
     protected int getKeyStart() {
         return activeStart;
     }
 
-// ===================== Control ======================
+    // ===================== Control ======================
 
     public synchronized void setEditable(boolean b) {
         editable = b;
@@ -409,8 +409,8 @@ public class DumbTextComponent extends Canvas
             selection.set(newSelection);
             if (selectionListener != null) {
                 selectionListener.actionPerformed(
-                  new ActionEvent(this, ActionEvent.ACTION_PERFORMED,
-                    "Selection Changed", 0));
+                        new ActionEvent(
+                                this, ActionEvent.ACTION_PERFORMED, "Selection Changed", 0));
             }
             repaint(10);
             valid = false;
@@ -435,20 +435,20 @@ public class DumbTextComponent extends Canvas
     }
 
     public void setBounds(int x, int y, int w, int h) {
-        super.setBounds(x,y,w,h);
+        super.setBounds(x, y, w, h);
         redoLines = true;
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(lastWidth,lastHeight);
+        return new Dimension(lastWidth, lastHeight);
     }
 
     public Dimension getMaximumSize() {
-        return new Dimension(lastWidth,lastHeight);
+        return new Dimension(lastWidth, lastHeight);
     }
 
     public Dimension getMinimumSize() {
-        return new Dimension(lastHeight,lastHeight);
+        return new Dimension(lastHeight, lastHeight);
     }
 
     public void setText(String text) {
@@ -463,8 +463,7 @@ public class DumbTextComponent extends Canvas
         lineBreaker.setText(text);
         redoLines = true;
         if (textListener != null)
-            textListener.textValueChanged(
-              new TextEvent(this, TextEvent.TEXT_VALUE_CHANGED));
+            textListener.textValueChanged(new TextEvent(this, TextEvent.TEXT_VALUE_CHANGED));
         repaint(16);
     }
 
@@ -474,10 +473,8 @@ public class DumbTextComponent extends Canvas
     }
 
     public void replaceRange(String s, int start, int end) {
-        setText2(contents.substring(0,start) + s
-          + contents.substring(end));
-        select(tempSelection.set(selection).
-          fixAfterReplace(start, end, s.length()));
+        setText2(contents.substring(0, start) + s + contents.substring(end));
+        select(tempSelection.set(selection).fixAfterReplace(start, end, s.length()));
         validateKeyStart();
     }
 
@@ -501,8 +498,8 @@ public class DumbTextComponent extends Canvas
     public void paint(Graphics g) {
         mySize = getSize();
         if (cacheImage == null
-          || cacheImage.getHeight(this) != mySize.height
-          || cacheImage.getWidth(this) != mySize.width) {
+                || cacheImage.getHeight(this) != mySize.height
+                || cacheImage.getWidth(this) != mySize.width) {
             cacheImage = createImage(mySize.width, mySize.height);
             valid = false;
         }
@@ -511,12 +508,19 @@ public class DumbTextComponent extends Canvas
             paint2(cacheImage.getGraphics());
             valid = true;
         }
-        //getToolkit().sync();
+        // getToolkit().sync();
         if (DEBUG) System.out.println("copying");
-        g.drawImage(cacheImage,
-          0, 0, mySize.width, mySize.height,
-          0, 0, mySize.width, mySize.height,
-          this);
+        g.drawImage(
+                cacheImage,
+                0,
+                0,
+                mySize.width,
+                mySize.height,
+                0,
+                0,
+                mySize.width,
+                mySize.height,
+                this);
     }
 
     public void paint2(Graphics g) {
@@ -524,9 +528,8 @@ public class DumbTextComponent extends Canvas
         if (DEBUG) System.out.println("print");
         if (focus) g.setColor(Color.black);
         else g.setColor(Color.gray);
-        g.drawRect(0,0,mySize.width-1,mySize.height-1);
-        g.setClip(1,1,
-          mySize.width-2,mySize.height-2);
+        g.drawRect(0, 0, mySize.width - 1, mySize.height - 1);
+        g.setClip(1, 1, mySize.width - 2, mySize.height - 2);
         g.setColor(Color.black);
         g.setFont(getFont());
         fm = g.getFontMetrics();
@@ -535,25 +538,24 @@ public class DumbTextComponent extends Canvas
         lineHeight = lineAscent + fm.getDescent() + lineLeading;
         int y = yInset + lineAscent;
         String lastSubstring = "";
-        if (redoLines) fixLineStarts(mySize.width-xInset-xInset);
+        if (redoLines) fixLineStarts(mySize.width - xInset - xInset);
         for (int i = 0; i < lineCount; y += lineHeight, ++i) {
             // LIU: Don't display terminating ^M characters
-            int lim = lineStarts[i+1];
-            if (lim > 0 && contents.length() > 0 &&
-                contents.charAt(lim-1) == CR) --lim;
-            lastSubstring = contents.substring(lineStarts[i],lim);
+            int lim = lineStarts[i + 1];
+            if (lim > 0 && contents.length() > 0 && contents.charAt(lim - 1) == CR) --lim;
+            lastSubstring = contents.substring(lineStarts[i], lim);
             g.drawString(lastSubstring, xInset, y);
         }
         drawSelection(g, lastSubstring);
         lastHeight = y + yInset - lineHeight + yInset;
-        lastWidth = mySize.width-xInset-xInset;
+        lastWidth = mySize.width - xInset - xInset;
     }
 
     void paintRect(Graphics g, int x, int y, int w, int h) {
         if (focus) {
             g.fillRect(x, y, w, h);
         } else {
-            g.drawRect(x, y, w-1, h-1);
+            g.drawRect(x, y, w - 1, h - 1);
         }
     }
 
@@ -572,19 +574,30 @@ public class DumbTextComponent extends Canvas
             else g.setColor(Color.yellow);
             offset2Point(selection.getStart(), true, startPoint);
             offset2Point(selection.getEnd(), false, endPoint);
-            if (selection.getStart() == selection.caret)
-                caretPoint.setLocation(startPoint);
+            if (selection.getStart() == selection.caret) caretPoint.setLocation(startPoint);
             else caretPoint.setLocation(endPoint);
             if (startPoint.y == endPoint.y) {
-                paintRect(g, startPoint.x, startPoint.y,
-                  Math.max(1,endPoint.x-startPoint.x), lineHeight);
+                paintRect(
+                        g,
+                        startPoint.x,
+                        startPoint.y,
+                        Math.max(1, endPoint.x - startPoint.x),
+                        lineHeight);
             } else {
-                paintRect(g, startPoint.x, startPoint.y,
-                  (mySize.width-xInset)-startPoint.x, lineHeight);
+                paintRect(
+                        g,
+                        startPoint.x,
+                        startPoint.y,
+                        (mySize.width - xInset) - startPoint.x,
+                        lineHeight);
                 if (startPoint.y + lineHeight < endPoint.y)
-                  paintRect(g, xInset, startPoint.y + lineHeight,
-                  (mySize.width-xInset)-xInset, endPoint.y - startPoint.y - lineHeight);
-                paintRect(g, xInset, endPoint.y, endPoint.x-xInset, lineHeight);
+                    paintRect(
+                            g,
+                            xInset,
+                            startPoint.y + lineHeight,
+                            (mySize.width - xInset) - xInset,
+                            endPoint.y - startPoint.y - lineHeight);
+                paintRect(g, xInset, endPoint.y, endPoint.x - xInset, lineHeight);
             }
         }
         if (focus || selection.isCaret()) {
@@ -592,7 +605,7 @@ public class DumbTextComponent extends Canvas
             else g.setColor(Color.red);
             int line = caretPoint.x - (selection.clickAfter ? 0 : 1);
             g.fillRect(line, caretPoint.y, 1, lineHeight);
-            int w = lineHeight/12 + 1;
+            int w = lineHeight / 12 + 1;
             int braces = line - (selection.clickAfter ? -1 : w);
             g.fillRect(braces, caretPoint.y, w, 1);
             g.fillRect(braces, caretPoint.y + lineHeight - 1, w, 1);
@@ -603,14 +616,12 @@ public class DumbTextComponent extends Canvas
         int line = findLine(off, start);
         int width = 0;
         try {
-            width = fm.stringWidth(
-              contents.substring(lineStarts[line], off));
+            width = fm.stringWidth(contents.substring(lineStarts[line], off));
         } catch (Exception e) {
             System.out.println(e);
         }
         p.x = width + xInset;
-        if (p.x > mySize.width - xInset)
-            p.x = mySize.width - xInset;
+        if (p.x > mySize.width - xInset) p.x = mySize.width - xInset;
         p.y = lineHeight * line + yInset;
         return p;
     }
@@ -621,14 +632,16 @@ public class DumbTextComponent extends Canvas
         for (int i = 1; i < lineCount; ++i) {
             // LIU: This was <= ; changed to < to make caret after
             // final CR in line appear at START of next line.
-            if (off < lineStarts[i]) return i-1;
+            if (off < lineStarts[i]) return i - 1;
         }
         // LIU: Check for special case; after CR at end of the last line
-        if (off == lineStarts[lineCount] &&
-            off > 0 && contents.length() > 0 && contents.charAt(off-1) == CR) {
+        if (off == lineStarts[lineCount]
+                && off > 0
+                && contents.length() > 0
+                && contents.charAt(off - 1) == CR) {
             return lineCount;
         }
-        return lineCount-1;
+        return lineCount - 1;
     }
 
     // offsets on any line will go from start,true to end,false
@@ -639,7 +652,7 @@ public class DumbTextComponent extends Canvas
             o.clickAfter = true;
             return o;
         }
-        int line = (p.y - yInset)/lineHeight;
+        int line = (p.y - yInset) / lineHeight;
         if (line >= lineCount) {
             o.caret = contents.length();
             o.clickAfter = false;
@@ -653,16 +666,16 @@ public class DumbTextComponent extends Canvas
         }
         int lowGuess = lineStarts[line];
         int lowWidth = 0;
-        int highGuess = lineStarts[line+1];
-        int highWidth = fm.stringWidth(contents.substring(lineStarts[line],highGuess));
+        int highGuess = lineStarts[line + 1];
+        int highWidth = fm.stringWidth(contents.substring(lineStarts[line], highGuess));
         if (target >= highWidth) {
-            o.caret = lineStarts[line+1];
+            o.caret = lineStarts[line + 1];
             o.clickAfter = false;
             return o;
         }
         while (lowGuess < highGuess - 1) {
-            int guess = (lowGuess + highGuess)/2;
-            int width = fm.stringWidth(contents.substring(lineStarts[line],guess));
+            int guess = (lowGuess + highGuess) / 2;
+            int width = fm.stringWidth(contents.substring(lineStarts[line], guess));
             if (width <= target) {
                 lowGuess = guess;
                 lowWidth = width;
@@ -677,9 +690,9 @@ public class DumbTextComponent extends Canvas
         int lowBound = charBreaker.previous();
         // we are now at character boundaries
         if (lowBound != lowGuess)
-            lowWidth = fm.stringWidth(contents.substring(lineStarts[line],lowBound));
+            lowWidth = fm.stringWidth(contents.substring(lineStarts[line], lowBound));
         if (highBound != highGuess)
-            highWidth = fm.stringWidth(contents.substring(lineStarts[line],highBound));
+            highWidth = fm.stringWidth(contents.substring(lineStarts[line], highBound));
         // we now have the right widths
         if (target - lowWidth < highWidth - target) {
             o.caret = lowBound;
@@ -701,8 +714,7 @@ public class DumbTextComponent extends Canvas
         }
         int end = 0;
         // LIU: Add check for MAX_LINES
-        for (int start = 0; start < contents.length() && lineCount < MAX_LINES;
-             start = end) {
+        for (int start = 0; start < contents.length() && lineCount < MAX_LINES; start = end) {
             end = nextLine(fm, start, width);
             lineStarts[lineCount++] = end;
             if (end == start) { // LIU: Assertion
@@ -721,14 +733,13 @@ public class DumbTextComponent extends Canvas
             char ch = (contents.charAt(i));
             if (ch >= 0x000A && ch <= 0x000D || ch == 0x2028 || ch == 0x2029) {
                 len = i + 1;
-                if (ch == 0x000D && i+1 < len && contents.charAt(i+1) == 0x000A) // crlf
-                    ++len; // grab extra char
+                if (ch == 0x000D && i + 1 < len && contents.charAt(i + 1) == 0x000A) // crlf
+                ++len; // grab extra char
                 break;
             }
         }
-        String subject = contents.substring(start,len);
-        if (visibleWidth(fMtr, subject) <= width)
-          return len;
+        String subject = contents.substring(start, len);
+        if (visibleWidth(fMtr, subject) <= width) return len;
 
         // LIU: Remainder of this method rewritten to accommodate lines
         // longer than the component width by first trying to break
@@ -744,23 +755,21 @@ public class DumbTextComponent extends Canvas
     }
 
     /**
-     * LIU: Finds the longest substring that fits a given width
-     * composed of subunits returned by a BreakIterator.  If the smallest
-     * subunit is too long, returns 0.
+     * LIU: Finds the longest substring that fits a given width composed of subunits returned by a
+     * BreakIterator. If the smallest subunit is too long, returns 0.
+     *
      * @param fMtr metrics to use
      * @param line the string to be fix into width
      * @param width line.substring(0, result) must be <= width
      * @param breaker the BreakIterator that will be used to find subunits
-     * @return maximum characters, at boundaries returned by breaker,
-     * that fit into width, or zero on failure
+     * @return maximum characters, at boundaries returned by breaker, that fit into width, or zero
+     *     on failure
      */
-    private int findFittingBreak(FontMetrics fMtr, String line, int width,
-                                 BreakIterator breaker) {
+    private int findFittingBreak(FontMetrics fMtr, String line, int width, BreakIterator breaker) {
         breaker.setText(line);
         int last = breaker.first();
         int end = breaker.next();
-        while (end != BreakIterator.DONE &&
-               visibleWidth(fMtr, line.substring(0, end)) <= width) {
+        while (end != BreakIterator.DONE && visibleWidth(fMtr, line.substring(0, end)) <= width) {
             last = end;
             end = breaker.next();
         }
@@ -769,24 +778,24 @@ public class DumbTextComponent extends Canvas
 
     public int visibleWidth(FontMetrics fMtr, String s) {
         int i;
-        for (i = s.length()-1; i >= 0; --i) {
+        for (i = s.length() - 1; i >= 0; --i) {
             char ch = s.charAt(i);
             if (!(ch == ' ' || ch >= 0x000A && ch <= 0x000D || ch == 0x2028 || ch == 0x2029))
-                return fMtr.stringWidth(s.substring(0,i+1));
+                return fMtr.stringWidth(s.substring(0, i + 1));
         }
         return 0;
     }
 
-// =============== Utility ====================
+    // =============== Utility ====================
 
     private void fixHex() {
         if (selection.getEnd() == 0) return;
         int store = 0;
         int places = 1;
         int count = 0;
-        int min = Math.min(8,selection.getEnd());
+        int min = Math.min(8, selection.getEnd());
         for (int i = 0; i < min; ++i) {
-            char ch = contents.charAt(selection.getEnd()-1-i);
+            char ch = contents.charAt(selection.getEnd() - 1 - i);
             int value = Character.getNumericValue(ch);
             if (value < 0 || value > 15) break;
             store += places * value;
@@ -795,35 +804,39 @@ public class DumbTextComponent extends Canvas
         }
         String add = "";
         int bottom = store & 0xFFFF;
-        if (store >= 0xD8000000 && store < 0xDC000000
-          && bottom >= 0xDC00 && bottom < 0xE000) { // surrogates
-            add = "" + (char)(store >> 16) + (char)bottom;
+        if (store >= 0xD8000000
+                && store < 0xDC000000
+                && bottom >= 0xDC00
+                && bottom < 0xE000) { // surrogates
+            add = "" + (char) (store >> 16) + (char) bottom;
         } else if (store > 0xFFFF && store <= 0x10FFFF) {
             store -= 0x10000;
-            add = "" + (char)(((store >> 10) & 0x3FF) + 0xD800)
-              + (char)((store & 0x3FF) + 0xDC00);
-              
+            add =
+                    ""
+                            + (char) (((store >> 10) & 0x3FF) + 0xD800)
+                            + (char) ((store & 0x3FF) + 0xDC00);
+
         } else if (count >= 4) {
             count = 4;
-            add = ""+(char)(store & 0xFFFF);
+            add = "" + (char) (store & 0xFFFF);
         } else {
             count = 1;
-            char ch = contents.charAt(selection.getEnd()-1);
+            char ch = contents.charAt(selection.getEnd() - 1);
             add = hex(ch);
             if (ch >= 0xDC00 && ch <= 0xDFFF && selection.getEnd() > 1) {
-                ch = contents.charAt(selection.getEnd()-2);
+                ch = contents.charAt(selection.getEnd() - 2);
                 if (ch >= 0xD800 && ch <= 0xDBFF) {
                     count = 2;
                     add = hex(ch) + add;
                 }
             }
         }
-        replaceRange(add, selection.getEnd()-count, selection.getEnd());
+        replaceRange(add, selection.getEnd() - count, selection.getEnd());
     }
 
     public static String hex(char ch) {
-        String result = Integer.toString(ch,16).toUpperCase();
-        result = "0000".substring(result.length(),4) + result;
+        String result = Integer.toString(ch, 16).toUpperCase();
+        result = "0000".substring(result.length(), 4) + result;
         return result;
     }
 }

@@ -37,32 +37,27 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.MeasureUnit;
 
-
 /**
- * This is the "brain" of the number formatting pipeline. It ties all the pieces together, taking in a
- * MacroProps and a DecimalQuantity and outputting a properly formatted number string.
+ * This is the "brain" of the number formatting pipeline. It ties all the pieces together, taking in
+ * a MacroProps and a DecimalQuantity and outputting a properly formatted number string.
  *
- * <p>
- * This class, as well as NumberPropertyMapper, could go into the impl package, but they depend on too
- * many package-private members of the public APIs.
+ * <p>This class, as well as NumberPropertyMapper, could go into the impl package, but they depend
+ * on too many package-private members of the public APIs.
  */
 class NumberFormatterImpl {
 
-    /**
-     * Builds a "safe" MicroPropsGenerator, which is thread-safe and can be used repeatedly.
-     */
+    /** Builds a "safe" MicroPropsGenerator, which is thread-safe and can be used repeatedly. */
     public NumberFormatterImpl(MacroProps macros) {
         micros = new MicroProps(true);
         microPropsGenerator = macrosToMicroGenerator(macros, micros, true);
     }
 
     /**
-     * Builds and evaluates an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once.
+     * Builds and evaluates an "unsafe" MicroPropsGenerator, which is cheaper but can be used only
+     * once.
      */
     public static MicroProps formatStatic(
-            MacroProps macros,
-            DecimalQuantity inValue,
-            FormattedStringBuilder outString) {
+            MacroProps macros, DecimalQuantity inValue, FormattedStringBuilder outString) {
         MicroProps result = preProcessUnsafe(macros, inValue);
         int length = writeNumber(result, inValue, outString, 0);
         writeAffixes(result, outString, 0, length);
@@ -72,14 +67,11 @@ class NumberFormatterImpl {
     /**
      * Prints only the prefix and suffix; used for DecimalFormat getters.
      *
-     * @return The index into the output at which the prefix ends and the suffix starts; in other words,
-     *         the prefix length.
+     * @return The index into the output at which the prefix ends and the suffix starts; in other
+     *     words, the prefix length.
      */
     public static int getPrefixSuffixStatic(
-            MacroProps macros,
-            byte signum,
-            StandardPlural plural,
-            FormattedStringBuilder output) {
+            MacroProps macros, byte signum, StandardPlural plural, FormattedStringBuilder output) {
         MicroProps micros = new MicroProps(false);
         MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, micros, false);
         return getPrefixSuffixImpl(microPropsGenerator, signum, output);
@@ -90,9 +82,7 @@ class NumberFormatterImpl {
     final MicroProps micros;
     final MicroPropsGenerator microPropsGenerator;
 
-    /**
-     * Evaluates the "safe" MicroPropsGenerator created by "fromMacros".
-     */
+    /** Evaluates the "safe" MicroPropsGenerator created by "fromMacros". */
     public MicroProps format(DecimalQuantity inValue, FormattedStringBuilder outString) {
         MicroProps result = preProcess(inValue);
         int length = writeNumber(result, inValue, outString, 0);
@@ -131,10 +121,12 @@ class NumberFormatterImpl {
         return getPrefixSuffixImpl(microPropsGenerator, signum, output);
     }
 
-    private static int getPrefixSuffixImpl(MicroPropsGenerator generator, byte signum, FormattedStringBuilder output) {
+    private static int getPrefixSuffixImpl(
+            MicroPropsGenerator generator, byte signum, FormattedStringBuilder output) {
         // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
         // TODO: Clean this up, closer to C++. The pattern modifier is not as accessible as in C++.
-        // Right now, ignore the plural form, run the pipeline with number 0, and get the modifier from the result.
+        // Right now, ignore the plural form, run the pipeline with number 0, and get the modifier
+        // from the result.
         DecimalQuantity_DualStorageBCD quantity = new DecimalQuantity_DualStorageBCD(0);
         if (signum < 0) {
             quantity.negate();
@@ -168,19 +160,19 @@ class NumberFormatterImpl {
     }
 
     /**
-     * Synthesizes the MacroProps into a MicroPropsGenerator. All information, including the locale, is
-     * encoded into the MicroPropsGenerator, except for the quantity itself, which is left abstract and
-     * must be provided to the returned MicroPropsGenerator instance.
+     * Synthesizes the MacroProps into a MicroPropsGenerator. All information, including the locale,
+     * is encoded into the MicroPropsGenerator, except for the quantity itself, which is left
+     * abstract and must be provided to the returned MicroPropsGenerator instance.
      *
      * @see MicroPropsGenerator
-     * @param macros
-     *            The {@link MacroProps} to consume. This method does not mutate the MacroProps instance.
-     * @param safe
-     *            If true, the returned MicroPropsGenerator will be thread-safe. If false, the returned
-     *            value will <em>not</em> be thread-safe, intended for a single "one-shot" use only.
-     *            Building the thread-safe object is more expensive.
+     * @param macros The {@link MacroProps} to consume. This method does not mutate the MacroProps
+     *     instance.
+     * @param safe If true, the returned MicroPropsGenerator will be thread-safe. If false, the
+     *     returned value will <em>not</em> be thread-safe, intended for a single "one-shot" use
+     *     only. Building the thread-safe object is more expensive.
      */
-    private static MicroPropsGenerator macrosToMicroGenerator(MacroProps macros, MicroProps micros, boolean safe) {
+    private static MicroPropsGenerator macrosToMicroGenerator(
+            MacroProps macros, MicroProps micros, boolean safe) {
         MicroPropsGenerator chain = micros;
 
         // TODO: Normalize the currency (accept symbols from DecimalFormatSymbols)?
@@ -192,10 +184,11 @@ class NumberFormatterImpl {
         boolean isPercent = unitIsPercent(macros.unit);
         boolean isPermille = unitIsPermille(macros.unit);
         boolean isCompactNotation = (macros.notation instanceof CompactNotation);
-        boolean isAccounting = macros.sign == SignDisplay.ACCOUNTING
-                || macros.sign == SignDisplay.ACCOUNTING_ALWAYS
-                || macros.sign == SignDisplay.ACCOUNTING_EXCEPT_ZERO
-                || macros.sign == SignDisplay.ACCOUNTING_NEGATIVE;
+        boolean isAccounting =
+                macros.sign == SignDisplay.ACCOUNTING
+                        || macros.sign == SignDisplay.ACCOUNTING_ALWAYS
+                        || macros.sign == SignDisplay.ACCOUNTING_EXCEPT_ZERO
+                        || macros.sign == SignDisplay.ACCOUNTING_NEGATIVE;
         Currency currency = isCurrency ? (Currency) macros.unit : DEFAULT_CURRENCY;
         UnitWidth unitWidth = UnitWidth.SHORT;
         if (macros.unitWidth != null) {
@@ -207,14 +200,16 @@ class NumberFormatterImpl {
         // long name was requested OR if compact notation is being used, since
         // compact notation overrides the middle modifier (micros.modMiddle)
         // normally used for the percent pattern.
-        boolean isCldrUnit = !isCurrency
-            && !isBaseUnit
-            && (unitWidth == UnitWidth.FULL_NAME
-                || !(isPercent || isPermille)
-                || isCompactNotation
-            );
-        boolean isMixedUnit = isCldrUnit && macros.unit.getType() == null &&
-                              macros.unit.getComplexity() == MeasureUnit.Complexity.MIXED;
+        boolean isCldrUnit =
+                !isCurrency
+                        && !isBaseUnit
+                        && (unitWidth == UnitWidth.FULL_NAME
+                                || !(isPercent || isPermille)
+                                || isCompactNotation);
+        boolean isMixedUnit =
+                isCldrUnit
+                        && macros.unit.getType() == null
+                        && macros.unit.getComplexity() == MeasureUnit.Complexity.MIXED;
 
         PluralRules rules = macros.rules;
 
@@ -257,13 +252,15 @@ class NumberFormatterImpl {
                 patternStyle = NumberFormat.NUMBERSTYLE;
             } else if (isAccounting) {
                 // NOTE: Although ACCOUNTING and ACCOUNTING_ALWAYS are only supported in currencies
-                // right now, the API contract allows us to add support to other units in the future.
+                // right now, the API contract allows us to add support to other units in the
+                // future.
                 patternStyle = NumberFormat.ACCOUNTINGCURRENCYSTYLE;
             } else {
                 patternStyle = NumberFormat.CURRENCYSTYLE;
             }
-            pattern = NumberFormat
-                    .getPatternForStyleAndNumberingSystem(macros.loc, micros.nsName, patternStyle);
+            pattern =
+                    NumberFormat.getPatternForStyleAndNumberingSystem(
+                            macros.loc, micros.nsName, patternStyle);
         }
         ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(pattern);
 
@@ -278,7 +275,9 @@ class NumberFormatterImpl {
                 throw new IllegalIcuArgumentException(
                         "We only support \"usage\" when the input unit is specified, and is a CLDR Unit.");
             }
-            chain = usagePrefsHandler = new UsagePrefsHandler(macros.loc, macros.unit, macros.usage, chain);
+            chain =
+                    usagePrefsHandler =
+                            new UsagePrefsHandler(macros.loc, macros.unit, macros.usage, chain);
         } else if (isMixedUnit) {
             chain = new UnitConversionHandler(macros.unit, chain);
         }
@@ -302,8 +301,9 @@ class NumberFormatterImpl {
             micros.rounder = Precision.DEFAULT_MAX_FRAC_6;
         }
         if (macros.roundingMode != null) {
-            micros.rounder = micros.rounder.withMode(
-                    RoundingUtils.mathContextUnlimited(macros.roundingMode));
+            micros.rounder =
+                    micros.rounder.withMode(
+                            RoundingUtils.mathContextUnlimited(macros.roundingMode));
         }
         micros.rounder = micros.rounder.withLocaleData(currency);
 
@@ -353,7 +353,9 @@ class NumberFormatterImpl {
 
         // Inner modifier (scientific notation)
         if (macros.notation instanceof ScientificNotation) {
-            chain = ((ScientificNotation) macros.notation).withLocaleData(micros.symbols, safe, chain);
+            chain =
+                    ((ScientificNotation) macros.notation)
+                            .withLocaleData(micros.symbols, safe, chain);
         } else {
             // No inner modifier required
             micros.modInner = ConstantAffixModifier.EMPTY;
@@ -363,11 +365,13 @@ class NumberFormatterImpl {
         // The default middle modifier is weak (thus the false argument).
         MutablePatternModifier patternMod = new MutablePatternModifier(false);
         AffixPatternProvider affixProvider =
-            (macros.affixProvider != null && (
-                    // For more information on this condition, see ICU-22073
-                    !isCompactNotation || isCurrency == macros.affixProvider.hasCurrencySign()))
-                ? macros.affixProvider
-                : patternInfo;
+                (macros.affixProvider != null
+                                && (
+                                // For more information on this condition, see ICU-22073
+                                !isCompactNotation
+                                        || isCurrency == macros.affixProvider.hasCurrencySign()))
+                        ? macros.affixProvider
+                        : patternInfo;
         patternMod.setPatternInfo(affixProvider, null);
         boolean approximately = (macros.approximately != null) ? macros.approximately : false;
         patternMod.setPatternAttributes(micros.sign, isPermille, approximately);
@@ -400,27 +404,28 @@ class NumberFormatterImpl {
                 // Lazily create PluralRules
                 rules = PluralRules.forLocale(macros.loc);
             }
-            PluralRules pluralRules = macros.rules != null ?
-                    macros.rules :
-                    PluralRules.forLocale(macros.loc);
+            PluralRules pluralRules =
+                    macros.rules != null ? macros.rules : PluralRules.forLocale(macros.loc);
 
             if (macros.usage != null) {
                 assert usagePrefsHandler != null;
-                chain = LongNameMultiplexer.forMeasureUnits(
-                        macros.loc,
-                        usagePrefsHandler.getOutputUnits(),
-                        unitWidth,
-                        unitDisplayCase,
-                        pluralRules,
-                        chain);
+                chain =
+                        LongNameMultiplexer.forMeasureUnits(
+                                macros.loc,
+                                usagePrefsHandler.getOutputUnits(),
+                                unitWidth,
+                                unitDisplayCase,
+                                pluralRules,
+                                chain);
             } else if (isMixedUnit) {
-                chain = MixedUnitLongNameHandler.forMeasureUnit(
-                        macros.loc,
-                        macros.unit,
-                        unitWidth,
-                        unitDisplayCase,
-                        pluralRules,
-                        chain);
+                chain =
+                        MixedUnitLongNameHandler.forMeasureUnit(
+                                macros.loc,
+                                macros.unit,
+                                unitWidth,
+                                unitDisplayCase,
+                                pluralRules,
+                                chain);
             } else {
                 MeasureUnit unit = macros.unit;
                 if (macros.perUnit != null) {
@@ -429,18 +434,16 @@ class NumberFormatterImpl {
                     // out when perUnit became a backward-compatibility thing:
                     // unit/perUnit use case is only valid if both units are
                     // built-ins, or the product is a built-in.
-                    if (unit.getType() == null && (macros.unit.getType() == null || macros.perUnit.getType() == null)) {
+                    if (unit.getType() == null
+                            && (macros.unit.getType() == null
+                                    || macros.perUnit.getType() == null)) {
                         throw new UnsupportedOperationException(
-                            "perUnit() can only be used if unit and perUnit are both built-ins, or the combination is a built-in");
+                                "perUnit() can only be used if unit and perUnit are both built-ins, or the combination is a built-in");
                     }
                 }
-                chain = LongNameHandler.forMeasureUnit(
-                        macros.loc,
-                        unit,
-                        unitWidth,
-                        unitDisplayCase,
-                        pluralRules,
-                        chain);
+                chain =
+                        LongNameHandler.forMeasureUnit(
+                                macros.loc, unit, unitWidth, unitDisplayCase, pluralRules, chain);
             }
         } else if (isCurrency && unitWidth == UnitWidth.FULL_NAME) {
             if (rules == null) {
@@ -459,16 +462,20 @@ class NumberFormatterImpl {
                 // Lazily create PluralRules
                 rules = PluralRules.forLocale(macros.loc);
             }
-            CompactType compactType = (macros.unit instanceof Currency
-                    && macros.unitWidth != UnitWidth.FULL_NAME) ? CompactType.CURRENCY
+            CompactType compactType =
+                    (macros.unit instanceof Currency && macros.unitWidth != UnitWidth.FULL_NAME)
+                            ? CompactType.CURRENCY
                             : CompactType.DECIMAL;
-            chain = ((CompactNotation) macros.notation).withLocaleData(macros.loc,
-                    micros.nsName,
-                    compactType,
-                    rules,
-                    patternMod,
-                    safe,
-                    chain);
+            chain =
+                    ((CompactNotation) macros.notation)
+                            .withLocaleData(
+                                    macros.loc,
+                                    micros.nsName,
+                                    compactType,
+                                    rules,
+                                    patternMod,
+                                    safe,
+                                    chain);
         }
 
         // Always add the pattern modifier as the last element of the chain.
@@ -483,18 +490,14 @@ class NumberFormatterImpl {
 
     //////////
 
-    /**
-     * Adds the affixes.  Intended to be called immediately after formatNumber.
-     */
+    /** Adds the affixes. Intended to be called immediately after formatNumber. */
     public static int writeAffixes(
-            MicroProps micros,
-            FormattedStringBuilder string,
-            int start,
-            int end) {
+            MicroProps micros, FormattedStringBuilder string, int start, int end) {
         // Always apply the inner modifier (which is "strong").
         int length = micros.modInner.apply(string, start, end);
         if (micros.padding.isValid()) {
-            micros.padding.padAndApply(micros.modMiddle, micros.modOuter, string, start, end + length);
+            micros.padding.padAndApply(
+                    micros.modMiddle, micros.modOuter, string, start, end + length);
         } else {
             length += micros.modMiddle.apply(string, start, end + length);
             length += micros.modOuter.apply(string, start, end + length);
@@ -503,20 +506,23 @@ class NumberFormatterImpl {
     }
 
     /**
-     * Synthesizes the output string from a MicroProps and DecimalQuantity.
-     * This method formats only the main number, not affixes.
+     * Synthesizes the output string from a MicroProps and DecimalQuantity. This method formats only
+     * the main number, not affixes.
      */
     public static int writeNumber(
-            MicroProps micros,
-            DecimalQuantity quantity,
-            FormattedStringBuilder string,
-            int index) {
+            MicroProps micros, DecimalQuantity quantity, FormattedStringBuilder string, int index) {
         int length = 0;
         if (quantity.isInfinite()) {
-            length += string.insert(length + index, micros.symbols.getInfinity(), NumberFormat.Field.INTEGER);
+            length +=
+                    string.insert(
+                            length + index,
+                            micros.symbols.getInfinity(),
+                            NumberFormat.Field.INTEGER);
 
         } else if (quantity.isNaN()) {
-            length += string.insert(length + index, micros.symbols.getNaN(), NumberFormat.Field.INTEGER);
+            length +=
+                    string.insert(
+                            length + index, micros.symbols.getNaN(), NumberFormat.Field.INTEGER);
 
         } else {
             // Add the integer digits
@@ -528,20 +534,23 @@ class NumberFormatterImpl {
                 if (micros.currencyAsDecimal != null) {
                     // Note: This unconditionally substitutes the standard short symbol.
                     // TODO: Should we support narrow or other variants?
-                    length += string.insert(
-                        length + index,
-                        micros.currencyAsDecimal,
-                        NumberFormat.Field.CURRENCY);
+                    length +=
+                            string.insert(
+                                    length + index,
+                                    micros.currencyAsDecimal,
+                                    NumberFormat.Field.CURRENCY);
                 } else if (micros.useCurrency) {
-                    length += string.insert(
-                        length + index,
-                        micros.symbols.getMonetaryDecimalSeparatorString(),
-                        NumberFormat.Field.DECIMAL_SEPARATOR);
+                    length +=
+                            string.insert(
+                                    length + index,
+                                    micros.symbols.getMonetaryDecimalSeparatorString(),
+                                    NumberFormat.Field.DECIMAL_SEPARATOR);
                 } else {
-                    length += string.insert(
-                        length + index,
-                        micros.symbols.getDecimalSeparatorString(),
-                        NumberFormat.Field.DECIMAL_SEPARATOR);
+                    length +=
+                            string.insert(
+                                    length + index,
+                                    micros.symbols.getDecimalSeparatorString(),
+                                    NumberFormat.Field.DECIMAL_SEPARATOR);
                 }
             }
 
@@ -551,13 +560,17 @@ class NumberFormatterImpl {
             if (length == 0) {
                 // Force output of the digit for value 0
                 if (micros.symbols.getCodePointZero() != -1) {
-                    length += string.insertCodePoint(index,
-                            micros.symbols.getCodePointZero(),
-                            NumberFormat.Field.INTEGER);
+                    length +=
+                            string.insertCodePoint(
+                                    index,
+                                    micros.symbols.getCodePointZero(),
+                                    NumberFormat.Field.INTEGER);
                 } else {
-                    length += string.insert(index,
-                            micros.symbols.getDigitStringsLocal()[0],
-                            NumberFormat.Field.INTEGER);
+                    length +=
+                            string.insert(
+                                    index,
+                                    micros.symbols.getDigitStringsLocal()[0],
+                                    NumberFormat.Field.INTEGER);
                 }
             }
         }
@@ -566,52 +579,59 @@ class NumberFormatterImpl {
     }
 
     private static int writeIntegerDigits(
-            MicroProps micros,
-            DecimalQuantity quantity,
-            FormattedStringBuilder string,
-            int index) {
+            MicroProps micros, DecimalQuantity quantity, FormattedStringBuilder string, int index) {
         int length = 0;
         int integerCount = quantity.getUpperDisplayMagnitude() + 1;
         for (int i = 0; i < integerCount; i++) {
             // Add grouping separator
             if (micros.grouping.groupAtPosition(i, quantity)) {
-                length += string.insert(index,
-                        micros.useCurrency ? micros.symbols.getMonetaryGroupingSeparatorString()
-                                : micros.symbols.getGroupingSeparatorString(),
-                        NumberFormat.Field.GROUPING_SEPARATOR);
+                length +=
+                        string.insert(
+                                index,
+                                micros.useCurrency
+                                        ? micros.symbols.getMonetaryGroupingSeparatorString()
+                                        : micros.symbols.getGroupingSeparatorString(),
+                                NumberFormat.Field.GROUPING_SEPARATOR);
             }
 
             // Get and append the next digit value
             byte nextDigit = quantity.getDigit(i);
             if (micros.symbols.getCodePointZero() != -1) {
-                length += string.insertCodePoint(index,
-                        micros.symbols.getCodePointZero() + nextDigit,
-                        NumberFormat.Field.INTEGER);
+                length +=
+                        string.insertCodePoint(
+                                index,
+                                micros.symbols.getCodePointZero() + nextDigit,
+                                NumberFormat.Field.INTEGER);
             } else {
-                length += string.insert(index,
-                        micros.symbols.getDigitStringsLocal()[nextDigit],
-                        NumberFormat.Field.INTEGER);
+                length +=
+                        string.insert(
+                                index,
+                                micros.symbols.getDigitStringsLocal()[nextDigit],
+                                NumberFormat.Field.INTEGER);
             }
         }
         return length;
     }
 
     private static int writeFractionDigits(
-            MicroProps micros,
-            DecimalQuantity quantity,
-            FormattedStringBuilder string,
-            int index) {
+            MicroProps micros, DecimalQuantity quantity, FormattedStringBuilder string, int index) {
         int length = 0;
         int fractionCount = -quantity.getLowerDisplayMagnitude();
         for (int i = 0; i < fractionCount; i++) {
             // Get and append the next digit value
             byte nextDigit = quantity.getDigit(-i - 1);
             if (micros.symbols.getCodePointZero() != -1) {
-                length += string.insertCodePoint(length + index, micros.symbols.getCodePointZero() + nextDigit,
-                        NumberFormat.Field.FRACTION);
+                length +=
+                        string.insertCodePoint(
+                                length + index,
+                                micros.symbols.getCodePointZero() + nextDigit,
+                                NumberFormat.Field.FRACTION);
             } else {
-                length += string.insert(length + index, micros.symbols.getDigitStringsLocal()[nextDigit],
-                        NumberFormat.Field.FRACTION);
+                length +=
+                        string.insert(
+                                length + index,
+                                micros.symbols.getDigitStringsLocal()[nextDigit],
+                                NumberFormat.Field.FRACTION);
             }
         }
         return length;

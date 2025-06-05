@@ -9,44 +9,40 @@ import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
-/**
- * A full options object for grouping sizes.
- */
+/** A full options object for grouping sizes. */
 public class Grouper {
 
     private static final Grouper GROUPER_NEVER = new Grouper((short) -1, (short) -1, (short) -2);
     private static final Grouper GROUPER_MIN2 = new Grouper((short) -2, (short) -2, (short) -3);
     private static final Grouper GROUPER_AUTO = new Grouper((short) -2, (short) -2, (short) -2);
-    private static final Grouper GROUPER_ON_ALIGNED = new Grouper((short) -4, (short) -4, (short) 1);
+    private static final Grouper GROUPER_ON_ALIGNED =
+            new Grouper((short) -4, (short) -4, (short) 1);
 
     private static final Grouper GROUPER_WESTERN = new Grouper((short) 3, (short) 3, (short) 1);
     private static final Grouper GROUPER_INDIC = new Grouper((short) 3, (short) 2, (short) 1);
-    private static final Grouper GROUPER_WESTERN_MIN2 = new Grouper((short) 3, (short) 3, (short) 2);
+    private static final Grouper GROUPER_WESTERN_MIN2 =
+            new Grouper((short) 3, (short) 3, (short) 2);
     private static final Grouper GROUPER_INDIC_MIN2 = new Grouper((short) 3, (short) 2, (short) 2);
 
-    /**
-     * Convert from the GroupingStrategy enum to a Grouper object.
-     */
+    /** Convert from the GroupingStrategy enum to a Grouper object. */
     public static Grouper forStrategy(GroupingStrategy grouping) {
         switch (grouping) {
-        case OFF:
-            return GROUPER_NEVER;
-        case MIN2:
-            return GROUPER_MIN2;
-        case AUTO:
-            return GROUPER_AUTO;
-        case ON_ALIGNED:
-            return GROUPER_ON_ALIGNED;
-        case THOUSANDS:
-            return GROUPER_WESTERN;
-        default:
-            throw new AssertionError();
+            case OFF:
+                return GROUPER_NEVER;
+            case MIN2:
+                return GROUPER_MIN2;
+            case AUTO:
+                return GROUPER_AUTO;
+            case ON_ALIGNED:
+                return GROUPER_ON_ALIGNED;
+            case THOUSANDS:
+                return GROUPER_WESTERN;
+            default:
+                throw new AssertionError();
         }
     }
 
-    /**
-     * Resolve the values in Properties to a Grouper object.
-     */
+    /** Resolve the values in Properties to a Grouper object. */
     public static Grouper forProperties(DecimalFormatProperties properties) {
         if (!properties.getGroupingUsed()) {
             return GROUPER_NEVER;
@@ -77,37 +73,41 @@ public class Grouper {
 
     private static short getMinGroupingForLocale(ULocale locale) {
         // TODO: Cache this?
-        ICUResourceBundle resource = (ICUResourceBundle) UResourceBundle
-                .getBundleInstance(ICUData.ICU_BASE_NAME, locale);
+        ICUResourceBundle resource =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
         String result = resource.getStringWithFallback("NumberElements/minimumGroupingDigits");
         return Short.parseShort(result);
     }
 
     /**
      * The primary grouping size, with the following special values:
+     *
      * <ul>
-     * <li>-1 = no grouping
-     * <li>-2 = needs locale data
-     * <li>-4 = fall back to Western grouping if not in locale
+     *   <li>-1 = no grouping
+     *   <li>-2 = needs locale data
+     *   <li>-4 = fall back to Western grouping if not in locale
      * </ul>
      */
     private final short grouping1;
 
     /**
      * The secondary grouping size, with the following special values:
+     *
      * <ul>
-     * <li>-1 = no grouping
-     * <li>-2 = needs locale data
-     * <li>-4 = fall back to Western grouping if not in locale
+     *   <li>-1 = no grouping
+     *   <li>-2 = needs locale data
+     *   <li>-4 = fall back to Western grouping if not in locale
      * </ul>
      */
     private final short grouping2;
 
     /**
      * The minimum grouping size, with the following special values:
+     *
      * <ul>
-     * <li>-2 = needs locale data
-     * <li>-3 = no less than 2
+     *   <li>-2 = needs locale data
+     *   <li>-3 = no less than 2
      * </ul>
      */
     private final short minGrouping;
@@ -130,7 +130,7 @@ public class Grouper {
 
         if (this.grouping1 != -2 && this.grouping2 != -4) {
             if (minGrouping == this.minGrouping) {
-              return this;
+                return this;
             }
             return getInstance(this.grouping1, this.grouping2, minGrouping);
         }

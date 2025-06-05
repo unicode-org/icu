@@ -8,7 +8,6 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 
 /**
  * @author sffc
- *
  */
 public class PlusSignMatcher extends SymbolMatcher {
 
@@ -50,5 +49,4 @@ public class PlusSignMatcher extends SymbolMatcher {
     public String toString() {
         return "<PlusSignMatcher>";
     }
-
 }

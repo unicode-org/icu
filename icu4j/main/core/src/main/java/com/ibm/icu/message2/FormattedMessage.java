@@ -3,18 +3,18 @@
 
 package com.ibm.icu.message2;
 
-import java.text.AttributedCharacterIterator;
-
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.FormattedValue;
+import java.text.AttributedCharacterIterator;
 
 /**
  * Not yet implemented: The result of a message formatting operation.
  *
- * <p>This contains information about where the various fields and placeholders
- * ended up in the final result.</p>
- * <p>This class allows the result to be exported in several data types,
- * including a {@link String}, {@link AttributedCharacterIterator}, more (TBD).</p>
+ * <p>This contains information about where the various fields and placeholders ended up in the
+ * final result.
+ *
+ * <p>This class allows the result to be exported in several data types, including a {@link String},
+ * {@link AttributedCharacterIterator}, more (TBD).
  *
  * @internal ICU 72 technology preview
  * @deprecated This API is for ICU internal use only.
@@ -36,7 +36,7 @@ public class FormattedMessage implements FormattedValue {
     /**
      * Not yet implemented.
      *
-     * {@inheritDoc}
+     * <p>{@inheritDoc}
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for ICU internal use only.
@@ -50,7 +50,7 @@ public class FormattedMessage implements FormattedValue {
     /**
      * Not yet implemented.
      *
-     * {@inheritDoc}
+     * <p>{@inheritDoc}
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for ICU internal use only.
@@ -64,7 +64,7 @@ public class FormattedMessage implements FormattedValue {
     /**
      * Not yet implemented.
      *
-     * {@inheritDoc}
+     * <p>{@inheritDoc}
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for ICU internal use only.
@@ -78,7 +78,7 @@ public class FormattedMessage implements FormattedValue {
     /**
      * Not yet implemented.
      *
-     * {@inheritDoc}
+     * <p>{@inheritDoc}
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for ICU internal use only.
@@ -92,7 +92,7 @@ public class FormattedMessage implements FormattedValue {
     /**
      * Not yet implemented.
      *
-     * {@inheritDoc}
+     * <p>{@inheritDoc}
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for ICU internal use only.
@@ -106,7 +106,7 @@ public class FormattedMessage implements FormattedValue {
     /**
      * Not yet implemented.
      *
-     * {@inheritDoc}
+     * <p>{@inheritDoc}
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for ICU internal use only.

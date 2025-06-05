@@ -1,61 +1,50 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
-*******************************************************************************
-* Copyright (C) 2002-2010, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*/
-/**
- * This is a tool to check the tags on ICU4J files.  In particular, we're looking for:
- *
- * - methods that have no tags
- * - custom tags: @draft, @stable, @internal?
- * - standard tags: @since, @deprecated
- *
- * Syntax of tags:
- * '@draft ICU X.X.X'
- * '@stable ICU X.X.X'
- * '@internal'
- * '@since  (don't use)'
- * '@obsolete ICU X.X.X'
- * '@deprecated to be removed in ICU X.X. [Use ...]'
- *
- * flags names of classes and their members that have no tags or incorrect syntax.
- *
- * Use build.xml 'checktags' ant target, or
- * run from directory containing CheckTags.class as follows:
- * javadoc -classpath ${JAVA_HOME}/lib/tools.jar -doclet CheckTags -sourcepath ${ICU4J_src} [packagenames]
+ * ****************************************************************************** Copyright (C)
+ * 2002-2010, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
-
+/**
+ * This is a tool to check the tags on ICU4J files. In particular, we're looking for:
+ *
+ * <p>- methods that have no tags - custom tags: @draft, @stable, @internal? - standard
+ * tags: @since, @deprecated
+ *
+ * <p>Syntax of tags: '@draft ICU X.X.X' '@stable ICU X.X.X' '@internal' '@since (don't use)'
+ * '@obsolete ICU X.X.X' '@deprecated to be removed in ICU X.X. [Use ...]'
+ *
+ * <p>flags names of classes and their members that have no tags or incorrect syntax.
+ *
+ * <p>Use build.xml 'checktags' ant target, or run from directory containing CheckTags.class as
+ * follows: javadoc -classpath ${JAVA_HOME}/lib/tools.jar -doclet CheckTags -sourcepath ${ICU4J_src}
+ * [packagenames]
+ */
 package com.ibm.icu.dev.tool.docs;
 
+import com.sun.source.doctree.BlockTagTree;
+import com.sun.source.doctree.DocCommentTree;
+import com.sun.source.doctree.DocTree;
+import com.sun.source.doctree.InlineTagTree;
+import com.sun.source.tree.CompilationUnitTree;
+import com.sun.source.util.DocTrees;
+import com.sun.source.util.TreePath;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.util.Elements;
-
-import com.sun.source.doctree.BlockTagTree;
-import com.sun.source.doctree.InlineTagTree;
-import com.sun.source.doctree.DocCommentTree;
-import com.sun.source.doctree.DocTree;
-import com.sun.source.tree.CompilationUnitTree;
-import com.sun.source.util.DocTrees;
-import com.sun.source.util.TreePath;
-
 import jdk.javadoc.doclet.Doclet;
 
 class JavadocHelper {
 
     // ===== Kind =====
 
-    /** The standard {@code isClass()} test returns true for both {@code CLASS}
-     * and {@code ENUM}.
-     * If what you need is CLASS only, use {@link #isKindClassExact(Element element)}@
+    /**
+     * The standard {@code isClass()} test returns true for both {@code CLASS} and {@code ENUM}. If
+     * what you need is CLASS only, use {@link #isKindClassExact(Element element)}@
      */
     static boolean isKindClass(Element element) {
         return element.getKind().isClass();
@@ -65,9 +54,10 @@ class JavadocHelper {
         return element.getKind() == ElementKind.CLASS;
     }
 
-    /** The standard {@code isInterface()} test returns true for both {@code INTERFACE}
-     * and {@code ANNOTATION_TYPE}.
-     * If what you need is INTERFACE only, use {@link #isKindInterfaceExact(Element element)}@
+    /**
+     * The standard {@code isInterface()} test returns true for both {@code INTERFACE} and {@code
+     * ANNOTATION_TYPE}. If what you need is INTERFACE only, use {@link
+     * #isKindInterfaceExact(Element element)}@
      */
     static boolean isKindInterface(Element element) {
         return element.getKind().isInterface();
@@ -89,9 +79,10 @@ class JavadocHelper {
         return element.getKind() == ElementKind.ENUM;
     }
 
-    /** The standard {@code isField()} test returns true for both {@code FIELD}
-     * and {@code ENUM_CONSTANT}.
-     * If what you need is FIELD only, use {@link #isKindFieldExact(Element element)}@
+    /**
+     * The standard {@code isField()} test returns true for both {@code FIELD} and {@code
+     * ENUM_CONSTANT}. If what you need is FIELD only, use {@link #isKindFieldExact(Element
+     * element)}@
      */
     static boolean isKindField(Element element) {
         return element.getKind().isField();
@@ -170,14 +161,18 @@ class JavadocHelper {
     static String position(Elements el, DocTrees docTrees, Element element) {
         TreePath path = docTrees.getPath(element);
         if (path == null) {
-            // I've seen this happening for values() and valueOf(), which are created by the compiler
+            // I've seen this happening for values() and valueOf(), which are created by the
+            // compiler
             // in enums. So they "exist", but there is no location in the file for them.
-            // After ignoring values() and valueOf() (we can't tag them anyway), this error never happens.
-            // But let's keep it here, for future safety. Who knows what else the compiler will start creating.
+            // After ignoring values() and valueOf() (we can't tag them anyway), this error never
+            // happens.
+            // But let's keep it here, for future safety. Who knows what else the compiler will
+            // start creating.
             return "<unknown_location>:<unknown_line>";
         }
         CompilationUnitTree cu = path.getCompilationUnit();
-        long startPos = docTrees.getSourcePositions().getStartPosition(cu, docTrees.getTree(element));
+        long startPos =
+                docTrees.getSourcePositions().getStartPosition(cu, docTrees.getTree(element));
         return cu.getSourceFile().getName() + ":" + cu.getLineMap().getLineNumber(startPos);
     }
 
@@ -229,7 +224,8 @@ class JavadocHelper {
             // Remove the `{` and `}` from an inline tag (`{@foo some text here}`)
             result = result.substring(1, result.length() - 1);
         }
-        // Remove the `@foo` part of the tag, applies to the block tags, and the inline tag cleaned above
+        // Remove the `@foo` part of the tag, applies to the block tags, and the inline tag cleaned
+        // above
         if (result.startsWith("@")) {
             result = result.replaceFirst("^@[a-zA-Z0-9_]+\\s+", "");
         }
@@ -241,7 +237,8 @@ class JavadocHelper {
     // method for these is not always the same as the position of
     // the class, though it often is, so we can't use that.
     static boolean isIgnoredEnumMethod(Element doc) {
-        if (JavadocHelper.isKindMethod(doc) && JavadocHelper.isKindEnum(doc.getEnclosingElement())) {
+        if (JavadocHelper.isKindMethod(doc)
+                && JavadocHelper.isKindEnum(doc.getEnclosingElement())) {
             String name = doc.getSimpleName().toString();
             // assume we don't have enums that overload these method names.
             return "values".equals(name) || "valueOf".equals(name);

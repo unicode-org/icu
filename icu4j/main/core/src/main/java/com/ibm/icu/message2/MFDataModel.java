@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This maps closely to the official specification.
- * Since it is not final, we will not add javadoc everywhere.
+ * This maps closely to the official specification. Since it is not final, we will not add javadoc
+ * everywhere.
  *
- * <p>See <a target="github" href="https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model/README.md">the
- * latest description</a>.</p>
+ * <p>See <a target="github"
+ * href="https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model/README.md">the
+ * latest description</a>.
  *
  * @internal ICU 72 technology preview
  * @deprecated This API is for technology preview only.
@@ -165,7 +166,8 @@ public class MFDataModel {
      */
     @Deprecated
     public static class CatchallKey implements LiteralOrCatchallKey {
-        final static String AS_KEY_STRING = "<<::CatchallKey::>>";
+        static final String AS_KEY_STRING = "<<::CatchallKey::>>";
+
         // String value; // Always '*' in MF2
 
         public static boolean isCatchAll(String key) {
@@ -258,8 +260,7 @@ public class MFDataModel {
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public VariableExpression(
-                VariableRef arg, Function function, List<Attribute> attributes) {
+        public VariableExpression(VariableRef arg, Function function, List<Attribute> attributes) {
             this.arg = arg;
             this.function = function;
             this.attributes = attributes;

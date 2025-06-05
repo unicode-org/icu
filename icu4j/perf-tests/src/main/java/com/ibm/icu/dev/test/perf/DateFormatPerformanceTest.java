@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
  * ******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and others.  * 
+ * Copyright (C) 2007, International Business Machines Corporation and others.  *
  * All Rights Reserved.                                                         *
  * ******************************************************************************
  */
@@ -38,8 +38,7 @@ public class DateFormatPerformanceTest extends PerfTest {
 
             pattern = args[0];
 
-            if (locale == null)
-                locale = Locale.getDefault();
+            if (locale == null) locale = Locale.getDefault();
 
             icuDateFormat = new com.ibm.icu.text.SimpleDateFormat[threads];
             jdkDateFormat = new java.text.SimpleDateFormat[threads];
@@ -56,7 +55,6 @@ public class DateFormatPerformanceTest extends PerfTest {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
-
     }
 
     PerfTest.Function TestICUConstruction() {

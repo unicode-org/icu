@@ -1,16 +1,16 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2006-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2006-2010, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  *
- *******************************************************************************
+ * <p>******************************************************************************
  */
-
 package com.ibm.icu.charset;
 
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
@@ -18,15 +18,13 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.text.UnicodeSet;
-
 /**
  * @author Niti Hantaweepant
  */
 class CharsetUTF8 extends CharsetICU {
 
-    private static final byte[] fromUSubstitution = new byte[] { (byte) 0xef, (byte) 0xbf, (byte) 0xbd };
+    private static final byte[] fromUSubstitution =
+            new byte[] {(byte) 0xef, (byte) 0xbf, (byte) 0xbd};
 
     public CharsetUTF8(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
@@ -36,7 +34,7 @@ class CharsetUTF8 extends CharsetICU {
         maxCharsPerByte = 1;
     }
 
-    private static final int BITMASK_FROM_UTF8[] = { -1, 0x7f, 0x1f, 0xf, 0x7 };
+    private static final int BITMASK_FROM_UTF8[] = {-1, 0x7f, 0x1f, 0xf, 0x7};
 
     private final boolean isCESU8 = this instanceof CharsetCESU8;
 
@@ -47,8 +45,8 @@ class CharsetUTF8 extends CharsetICU {
         }
 
         @Override
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets,
-                boolean flush) {
+        protected CoderResult decodeLoop(
+                ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             if (!source.hasRemaining()) {
                 /* no input, nothing to do */
                 return CoderResult.UNDERFLOW;
@@ -88,7 +86,8 @@ class CharsetUTF8 extends CharsetICU {
                     toULength = 0;
                 }
 
-                outer: while (true) {
+                outer:
+                while (true) {
                     if (bytesSoFar < bytesExpected) {
                         /* read a trail byte and insert its relevant bits into char32 */
                         if (sourceIndex >= sourceLimit) {
@@ -101,7 +100,10 @@ class CharsetUTF8 extends CharsetICU {
                         }
                         toUBytesArray[bytesSoFar] = ch = sourceArray[sourceIndex++];
                         if (!UTF8.isValidTrail(char32, ch, bytesSoFar, bytesExpected)
-                                && !(isCESU8 && bytesSoFar == 1 && char32 == 0xd && UTF8.isTrail(ch))) {
+                                && !(isCESU8
+                                        && bytesSoFar == 1
+                                        && char32 == 0xd
+                                        && UTF8.isTrail(ch))) {
                             sourceIndex--;
                             toULength = bytesSoFar;
                             cr = CoderResult.malformedForLength(bytesSoFar);
@@ -123,15 +125,24 @@ class CharsetUTF8 extends CharsetICU {
                             char32 -= UConverterConstants.HALF_BASE;
 
                             /* write out the surrogates */
-                            targetArray[targetIndex++] = (char) ((char32 >>> UConverterConstants.HALF_SHIFT) + UConverterConstants.SURROGATE_HIGH_START);
+                            targetArray[targetIndex++] =
+                                    (char)
+                                            ((char32 >>> UConverterConstants.HALF_SHIFT)
+                                                    + UConverterConstants.SURROGATE_HIGH_START);
 
                             if (targetIndex >= targetLimit) {
                                 /* put in overflow buffer (not handled here) */
-                                charErrorBufferArray[charErrorBufferLength++] = (char) ((char32 & UConverterConstants.HALF_MASK) + UConverterConstants.SURROGATE_LOW_START);
+                                charErrorBufferArray[charErrorBufferLength++] =
+                                        (char)
+                                                ((char32 & UConverterConstants.HALF_MASK)
+                                                        + UConverterConstants.SURROGATE_LOW_START);
                                 cr = CoderResult.OVERFLOW;
                                 break;
                             }
-                            targetArray[targetIndex++] = (char) ((char32 & UConverterConstants.HALF_MASK) + UConverterConstants.SURROGATE_LOW_START);
+                            targetArray[targetIndex++] =
+                                    (char)
+                                            ((char32 & UConverterConstants.HALF_MASK)
+                                                    + UConverterConstants.SURROGATE_LOW_START);
                         }
 
                         /*
@@ -210,7 +221,8 @@ class CharsetUTF8 extends CharsetICU {
                     toULength = 0;
                 }
 
-                outer: while (true) {
+                outer:
+                while (true) {
                     if (bytesSoFar < bytesExpected) {
                         /* read a trail byte and insert its relevant bits into char32 */
                         if (sourceIndex >= sourceLimit) {
@@ -223,7 +235,10 @@ class CharsetUTF8 extends CharsetICU {
                         }
                         toUBytesArray[bytesSoFar] = ch = source.get(sourceIndex++);
                         if (!UTF8.isValidTrail(char32, ch, bytesSoFar, bytesExpected)
-                                && !(isCESU8 && bytesSoFar == 1 && char32 == 0xd && UTF8.isTrail(ch))) {
+                                && !(isCESU8
+                                        && bytesSoFar == 1
+                                        && char32 == 0xd
+                                        && UTF8.isTrail(ch))) {
                             sourceIndex--;
                             toULength = bytesSoFar;
                             cr = CoderResult.malformedForLength(bytesSoFar);
@@ -247,17 +262,24 @@ class CharsetUTF8 extends CharsetICU {
                             /* write out the surrogates */
                             target.put(
                                     targetIndex++,
-                                    (char) ((char32 >>> UConverterConstants.HALF_SHIFT) + UConverterConstants.SURROGATE_HIGH_START));
+                                    (char)
+                                            ((char32 >>> UConverterConstants.HALF_SHIFT)
+                                                    + UConverterConstants.SURROGATE_HIGH_START));
 
                             if (targetIndex >= targetLimit) {
                                 /* put in overflow buffer (not handled here) */
-                                charErrorBufferArray[charErrorBufferLength++] = (char) ((char32 & UConverterConstants.HALF_MASK) + UConverterConstants.SURROGATE_LOW_START);
+                                charErrorBufferArray[charErrorBufferLength++] =
+                                        (char)
+                                                ((char32 & UConverterConstants.HALF_MASK)
+                                                        + UConverterConstants.SURROGATE_LOW_START);
                                 cr = CoderResult.OVERFLOW;
                                 break;
                             }
                             target.put(
                                     targetIndex++,
-                                    (char) ((char32 & UConverterConstants.HALF_MASK) + UConverterConstants.SURROGATE_LOW_START));
+                                    (char)
+                                            ((char32 & UConverterConstants.HALF_MASK)
+                                                    + UConverterConstants.SURROGATE_LOW_START));
                         }
 
                         /*
@@ -309,7 +331,6 @@ class CharsetUTF8 extends CharsetICU {
                 return cr;
             }
         }
-
     }
 
     class CharsetEncoderUTF8 extends CharsetEncoderICU {
@@ -325,8 +346,8 @@ class CharsetUTF8 extends CharsetICU {
         }
 
         @Override
-        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets,
-                boolean flush) {
+        protected CoderResult encodeLoop(
+                CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             if (!source.hasRemaining()) {
                 /* no input, nothing to do */
                 return CoderResult.UNDERFLOW;
@@ -354,8 +375,13 @@ class CharsetUTF8 extends CharsetICU {
 
                     sourceIndex = srcIdx;
                     targetIndex = tgtIdx;
-                    cr = encodeFourBytes(sourceArray, targetArray, sourceLimit, targetLimit,
-                            fromUChar32);
+                    cr =
+                            encodeFourBytes(
+                                    sourceArray,
+                                    targetArray,
+                                    sourceLimit,
+                                    targetLimit,
+                                    fromUChar32);
                     srcIdx = sourceIndex;
                     tgtIdx = targetIndex;
                     if (cr != null) {
@@ -422,12 +448,12 @@ class CharsetUTF8 extends CharsetICU {
 
                         sourceIndex = srcIdx;
                         targetIndex = tgtIdx;
-                        cr = encodeFourBytes(sourceArray, targetArray, sourceLimit, targetLimit,
-                                char32);
+                        cr =
+                                encodeFourBytes(
+                                        sourceArray, targetArray, sourceLimit, targetLimit, char32);
                         srcIdx = sourceIndex;
                         tgtIdx = targetIndex;
-                        if (cr != null)
-                            break;
+                        if (cr != null) break;
                     }
                 }
 
@@ -445,8 +471,7 @@ class CharsetUTF8 extends CharsetICU {
                     /* 4 bytes to encode from char32 and a following char in source */
 
                     cr = encodeFourBytes(source, target, fromUChar32);
-                    if (cr != null)
-                        return cr;
+                    if (cr != null) return cr;
                 }
 
                 while (true) {
@@ -505,8 +530,7 @@ class CharsetUTF8 extends CharsetICU {
                         /* 4 bytes to encode from char32 and a following char in source */
 
                         cr = encodeFourBytes(source, target, char32);
-                        if (cr != null)
-                            break;
+                        if (cr != null) break;
                     }
                 }
 
@@ -515,14 +539,17 @@ class CharsetUTF8 extends CharsetICU {
             }
         }
 
-        private final CoderResult encodeFourBytes(char[] sourceArray, byte[] targetArray,
-                int sourceLimit, int targetLimit, int char32) {
+        private final CoderResult encodeFourBytes(
+                char[] sourceArray,
+                byte[] targetArray,
+                int sourceLimit,
+                int targetLimit,
+                int char32) {
 
             /* we need to read another char to match up the surrogate stored in char32 */
             /* handle the surrogate stuff, returning on a non-null CoderResult */
-            CoderResult cr = handleSurrogates(sourceArray, sourceIndex, sourceLimit, (char)char32);
-            if (cr != null)
-                return cr;
+            CoderResult cr = handleSurrogates(sourceArray, sourceIndex, sourceLimit, (char) char32);
+            if (cr != null) return cr;
 
             sourceIndex++;
             char32 = fromUChar32;
@@ -557,12 +584,12 @@ class CharsetUTF8 extends CharsetICU {
             return null;
         }
 
-        private final CoderResult encodeFourBytes(CharBuffer source, ByteBuffer target, int char32) {
+        private final CoderResult encodeFourBytes(
+                CharBuffer source, ByteBuffer target, int char32) {
 
             /* handle the surrogate stuff, returning on a non-null CoderResult */
-            CoderResult cr = handleSurrogates(source, (char)char32);
-            if (cr != null)
-                return cr;
+            CoderResult cr = handleSurrogates(source, (char) char32);
+            if (cr != null) return cr;
 
             char32 = fromUChar32;
             fromUChar32 = 0;
@@ -599,7 +626,6 @@ class CharsetUTF8 extends CharsetICU {
         private int sourceIndex;
 
         private int targetIndex;
-
     }
 
     private static final byte encodeHeadOf1(int char32) {
@@ -640,9 +666,8 @@ class CharsetUTF8 extends CharsetICU {
         return new CharsetEncoderUTF8(this);
     }
 
-
     @Override
-    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
+    void getUnicodeSetImpl(UnicodeSet setFillIn, int which) {
         getNonSurrogateUnicodeSet(setFillIn);
     }
 }

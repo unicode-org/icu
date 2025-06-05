@@ -3,14 +3,6 @@
 
 package com.ibm.icu.message2;
 
-import java.time.temporal.Temporal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.message2.MFDataModel.Declaration;
 import com.ibm.icu.message2.MFDataModel.Expression;
@@ -32,10 +24,17 @@ import com.ibm.icu.message2.MessageFormatter.BidiIsolation;
 import com.ibm.icu.message2.MessageFormatter.ErrorHandlingBehavior;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.CurrencyAmount;
+import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
- * Takes an {@link MFDataModel} and formats it to a {@link String}
- * (and later on we will also implement formatting to a {@code FormattedMessage}).
+ * Takes an {@link MFDataModel} and formats it to a {@link String} (and later on we will also
+ * implement formatting to a {@code FormattedMessage}).
  */
 // TODO: move this in the MessageFormatter?
 class MFDataModelFormatter {
@@ -61,10 +60,11 @@ class MFDataModelFormatter {
             BidiIsolation bidiIsolation,
             MFFunctionRegistry customFunctionRegistry) {
         this.locale = locale;
-        this.errorHandlingBehavior = errorHandlingBehavior == null
-                ? ErrorHandlingBehavior.BEST_EFFORT : errorHandlingBehavior;
-        this.bidiIsolation = bidiIsolation == null
-                ? BidiIsolation.NONE : bidiIsolation;
+        this.errorHandlingBehavior =
+                errorHandlingBehavior == null
+                        ? ErrorHandlingBehavior.BEST_EFFORT
+                        : errorHandlingBehavior;
+        this.bidiIsolation = bidiIsolation == null ? BidiIsolation.NONE : bidiIsolation;
         this.dm = dm;
         this.customFunctions =
                 customFunctionRegistry == null ? EMPTY_REGISTY : customFunctionRegistry;
@@ -152,7 +152,8 @@ class MFDataModelFormatter {
         return result.toString();
     }
 
-    private void implementBiDiDefault(StringBuilder result, Directionality msgdir, FormattedPlaceholder formattedExpression) {
+    private void implementBiDiDefault(
+            StringBuilder result, Directionality msgdir, FormattedPlaceholder formattedExpression) {
         String fmt = formattedExpression.getFormattedValue().toString();
         Directionality dir = formattedExpression.getDirectionality();
         boolean isolate = formattedExpression.getIsolate();
@@ -231,7 +232,9 @@ class MFDataModelFormatter {
         if (res.size() != selectors.size()) {
             fatalFormattingError(
                     "Something went wrong, not enough selector functions, "
-                            + res.size() + " vs. " + selectors.size());
+                            + res.size()
+                            + " vs. "
+                            + selectors.size());
         }
 
         // ====================================
@@ -263,7 +266,8 @@ class MFDataModelFormatter {
             }
             // spec: Let `rv` be the resolved value at index `i` of `res`.
             ResolvedSelector rv = res.get(i);
-            // spec: Let `matches` be the result of calling the method MatchSelectorKeys(`rv`, `keys`)
+            // spec: Let `matches` be the result of calling the method MatchSelectorKeys(`rv`,
+            // `keys`)
             List<String> matches = matchSelectorKeys(rv, keys);
             // spec: Append `matches` as the last element of the list `pref`.
             pref.add(matches);
@@ -412,14 +416,11 @@ class MFDataModelFormatter {
     }
 
     /**
-     * spec:
-     * The method MatchSelectorKeys is determined by the implementation.
-     * It takes as arguments a resolved _selector_ value `rv` and a list of string keys `keys`,
-     * and returns a list of string keys in preferential order.
-     * The returned list MUST contain only unique elements of the input list `keys`.
-     * The returned list MAY be empty.
-     * The most-preferred key is first,
-     * with each successive key appearing in order by decreasing preference.
+     * spec: The method MatchSelectorKeys is determined by the implementation. It takes as arguments
+     * a resolved _selector_ value `rv` and a list of string keys `keys`, and returns a list of
+     * string keys in preferential order. The returned list MUST contain only unique elements of the
+     * input list `keys`. The returned list MAY be empty. The most-preferred key is first, with each
+     * successive key appearing in order by decreasing preference.
      */
     @SuppressWarnings("static-method")
     private List<String> matchSelectorKeys(ResolvedSelector rv, List<String> keys) {
@@ -471,9 +472,7 @@ class MFDataModelFormatter {
     }
 
     private static Object resolveLiteralOrVariable(
-            LiteralOrVariableRef value,
-            MapWithNfcKeys localVars,
-            MapWithNfcKeys arguments) {
+            LiteralOrVariableRef value, MapWithNfcKeys localVars, MapWithNfcKeys arguments) {
         if (value instanceof Literal) {
             String val = ((Literal) value).value;
             // "The resolution of a text or literal MUST resolve to a string."
@@ -494,9 +493,7 @@ class MFDataModelFormatter {
     }
 
     private static MapWithNfcKeys convertOptions(
-            Map<String, Option> options,
-            MapWithNfcKeys localVars,
-            MapWithNfcKeys arguments) {
+            Map<String, Option> options, MapWithNfcKeys localVars, MapWithNfcKeys arguments) {
         MapWithNfcKeys result = new MapWithNfcKeys();
         for (Option option : options.values()) {
             result.put(option.name, resolveLiteralOrVariable(option.value, localVars, arguments));
@@ -555,8 +552,7 @@ class MFDataModelFormatter {
             if (expression == null) {
                 fatalFormattingError("unexpected null expression");
             } else {
-                fatalFormattingError("unknown expression type "
-                        + expression.getClass().getName());
+                fatalFormattingError("unknown expression type " + expression.getClass().getName());
             }
         }
 
@@ -572,7 +568,8 @@ class MFDataModelFormatter {
             if (errorHandlingBehavior == ErrorHandlingBehavior.STRICT) {
                 fatalFormattingError("unable to find function at " + fallbackString);
             }
-            return new FormattedPlaceholder(expression, new PlainStringFormattedValue(fallbackString));
+            return new FormattedPlaceholder(
+                    expression, new PlainStringFormattedValue(fallbackString));
         }
         // TODO 78: hack.
         // How do we pass the error handling policy to formatters?
@@ -597,8 +594,11 @@ class MFDataModelFormatter {
             return new FormattedPlaceholder(resExpression, new PlainStringFormattedValue(res));
         }
         // We wrap the result in a ResolvedExpression, but also propagate the direction info
-        return new FormattedPlaceholder(resExpression, new PlainStringFormattedValue(res),
-                resultToWrap.getDirectionality(), resultToWrap.getIsolate());
+        return new FormattedPlaceholder(
+                resExpression,
+                new PlainStringFormattedValue(res),
+                resultToWrap.getDirectionality(),
+                resultToWrap.getIsolate());
     }
 
     static class ResolvedExpression implements Expression {
@@ -640,7 +640,7 @@ class MFDataModelFormatter {
                     variables.put(StringUtils.toNfc(name), fmt);
                 } catch (IllegalArgumentException e) {
                     if (this.errorHandlingBehavior == ErrorHandlingBehavior.STRICT) {
-                        throw(e);
+                        throw (e);
                     }
                 } catch (Exception e) {
                     // It's OK to ignore the failure in this context, see comment above.

@@ -1,13 +1,13 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2001-2010, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
 package com.ibm.icu.dev.tool.translit;
 
+import com.ibm.icu.text.Transliterator;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,10 +16,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-import com.ibm.icu.text.Transliterator;
-
 /**
  * A command-line interface to the ICU4J transliterators.
+ *
  * @author Alan Liu
  */
 public class Trans {
@@ -73,10 +72,11 @@ public class Trans {
         out.close();
     }
 
-    static void trans(Transliterator trans, String inText,
-                      BufferedReader in, PrintWriter out, boolean isHTML) throws IOException {
+    static void trans(
+            Transliterator trans, String inText, BufferedReader in, PrintWriter out, boolean isHTML)
+            throws IOException {
         boolean inTag = false; // If true, we are within a <tag>
-        for (;;) {
+        for (; ; ) {
             String line = null;
             if (inText != null) {
                 line = inText;
@@ -94,33 +94,33 @@ public class Trans {
                 if (inTag) {
                     right = line.indexOf('>');
                     if (right < 0) {
-                        right = line.length()-1;
+                        right = line.length() - 1;
                     }
-                    buf.append(line.substring(0, right+1));
-                    if (DEBUG) System.out.println("*S:" + line.substring(0, right+1));
+                    buf.append(line.substring(0, right + 1));
+                    if (DEBUG) System.out.println("*S:" + line.substring(0, right + 1));
                     inTag = false;
                 }
-                for (;;) {
-                    int left = line.indexOf('<', right+1);
+                for (; ; ) {
+                    int left = line.indexOf('<', right + 1);
                     if (left < 0) {
-                        if (right < line.length()-1) {
-                            buf.append(trans.transliterate(line.substring(right+1)));
-                            if (DEBUG) System.out.println("T:" + line.substring(right+1));
+                        if (right < line.length() - 1) {
+                            buf.append(trans.transliterate(line.substring(right + 1)));
+                            if (DEBUG) System.out.println("T:" + line.substring(right + 1));
                         }
                         break;
                     }
                     // Append transliterated segment right+1..left-1
-                    buf.append(trans.transliterate(line.substring(right+1, left)));
-                    if (DEBUG) System.out.println("T:" + line.substring(right+1, left));
-                    right = line.indexOf('>', left+1);
+                    buf.append(trans.transliterate(line.substring(right + 1, left)));
+                    if (DEBUG) System.out.println("T:" + line.substring(right + 1, left));
+                    right = line.indexOf('>', left + 1);
                     if (right < 0) {
                         inTag = true;
                         buf.append(line.substring(left));
                         if (DEBUG) System.out.println("S:" + line.substring(left));
                         break;
                     }
-                    buf.append(line.substring(left, right+1));
-                    if (DEBUG) System.out.println("S:" + line.substring(left, right+1));
+                    buf.append(line.substring(left, right + 1));
+                    if (DEBUG) System.out.println("S:" + line.substring(left, right + 1));
                 }
                 line = buf.toString();
             } else {
@@ -132,11 +132,10 @@ public class Trans {
 
     static final boolean DEBUG = false;
 
-    /**
-     * Emit usage and die.
-     */
+    /** Emit usage and die. */
     static void usage() {
-        System.out.println("Usage: java com.ibm.icu.dev.tool.translit.Trans [-html] <trans> ( <input> | -i <infile>) [ -o <outfile> ]");
+        System.out.println(
+                "Usage: java com.ibm.icu.dev.tool.translit.Trans [-html] <trans> ( <input> | -i <infile>) [ -o <outfile> ]");
         System.out.println("<trans>   Name of transliterator");
         System.out.println("<input>   Text to transliterate");
         System.out.println("<infile>  Name of input file");

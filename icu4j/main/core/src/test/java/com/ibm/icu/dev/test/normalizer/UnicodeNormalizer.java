@@ -16,43 +16,34 @@ import com.ibm.icu.dev.test.UTF16Util;
 /**
  * Implements Unicode Normalization Forms C, D, KC, KD.<br>
  * See UTR#15 for details.<br>
- * @author Mark Davis
- * Updates for supplementary code points:
- * Vladimir Weinstein & Markus Scherer
+ *
+ * @author Mark Davis Updates for supplementary code points: Vladimir Weinstein & Markus Scherer
  */
 public class UnicodeNormalizer {
-//    static final String copyright = "Copyright (C) 1998-2003 International Business Machines Corporation and Unicode, Inc.";
+    //    static final String copyright = "Copyright (C) 1998-2003 International Business Machines
+    // Corporation and Unicode, Inc.";
 
-    /**
-     * Create a normalizer for a given form.
-     */
+    /** Create a normalizer for a given form. */
     public UnicodeNormalizer(byte form, boolean fullData) {
         this.form = form;
         if (data == null) data = NormalizerBuilder.build(fullData); // load 1st time
     }
 
-    /**
-    * Masks for the form selector
-    */
-    static final byte
-        COMPATIBILITY_MASK = 1,
-        COMPOSITION_MASK = 2;
+    /** Masks for the form selector */
+    static final byte COMPATIBILITY_MASK = 1, COMPOSITION_MASK = 2;
+
+    /** Normalization Form Selector */
+    public static final byte D = 0,
+            C = COMPOSITION_MASK,
+            KD = COMPATIBILITY_MASK,
+            KC = (byte) (COMPATIBILITY_MASK + COMPOSITION_MASK);
 
     /**
-    * Normalization Form Selector
-    */
-    public static final byte
-        D = 0 ,
-        C = COMPOSITION_MASK,
-        KD = COMPATIBILITY_MASK,
-        KC = (byte)(COMPATIBILITY_MASK + COMPOSITION_MASK);
-
-    /**
-    * Normalizes text according to the chosen form,
-    * replacing contents of the target buffer.
-    * @param   source      the original text, unnormalized
-    * @param   target      the resulting normalized text
-    */
+     * Normalizes text according to the chosen form, replacing contents of the target buffer.
+     *
+     * @param source the original text, unnormalized
+     * @param target the resulting normalized text
+     */
     public StringBuffer normalize(String source, StringBuffer target) {
 
         // First decompose the source into target,
@@ -68,10 +59,11 @@ public class UnicodeNormalizer {
     }
 
     /**
-    * Normalizes text according to the chosen form
-    * @param   source      the original text, unnormalized
-    * @return  target      the resulting normalized text
-    */
+     * Normalizes text according to the chosen form
+     *
+     * @param source the original text, unnormalized
+     * @return target the resulting normalized text
+     */
     public String normalize(String source) {
         return normalize(source, new StringBuffer()).toString();
     }
@@ -80,38 +72,35 @@ public class UnicodeNormalizer {
     //                  PRIVATES
     // ======================================
 
-    /**
-     * The current form.
-     */
+    /** The current form. */
     private byte form;
 
     /**
-    * Decomposes text, either canonical or compatibility,
-    * replacing contents of the target buffer.
-    * @param   form        the normalization form. If COMPATIBILITY_MASK
-    *                      bit is on in this byte, then selects the recursive
-    *                      compatibility decomposition, otherwise selects
-    *                      the recursive canonical decomposition.
-    * @param   source      the original text, unnormalized
-    * @param   target      the resulting normalized text
-    */
+     * Decomposes text, either canonical or compatibility, replacing contents of the target buffer.
+     *
+     * @param form the normalization form. If COMPATIBILITY_MASK bit is on in this byte, then
+     *     selects the recursive compatibility decomposition, otherwise selects the recursive
+     *     canonical decomposition.
+     * @param source the original text, unnormalized
+     * @param target the resulting normalized text
+     */
     private void internalDecompose(String source, StringBuffer target) {
         StringBuffer buffer = new StringBuffer();
         boolean canonical = (form & COMPATIBILITY_MASK) == 0;
         int ch;
-        for (int i = 0; i < source.length();) {
+        for (int i = 0; i < source.length(); ) {
             buffer.setLength(0);
             ch = UTF16Util.nextCodePoint(source, i);
-            i+=UTF16Util.codePointLength(ch);
+            i += UTF16Util.codePointLength(ch);
             data.getRecursiveDecomposition(canonical, ch, buffer);
 
             // add all of the characters in the decomposition.
             // (may be just the original character, if there was
             // no decomposition mapping)
 
-            for (int j = 0; j < buffer.length();) {
+            for (int j = 0; j < buffer.length(); ) {
                 ch = UTF16Util.nextCodePoint(buffer, j);
-                j+=UTF16Util.codePointLength(ch);
+                j += UTF16Util.codePointLength(ch);
                 int chClass = data.getCanonicalClass(ch);
                 int k = target.length(); // insertion point
                 if (chClass != 0) {
@@ -130,15 +119,14 @@ public class UnicodeNormalizer {
     }
 
     /**
-    * Composes text in place. Target must already
-    * have been decomposed.
-    * @param   target      input: decomposed text.
-    *                      output: the resulting normalized text.
-    */
+     * Composes text in place. Target must already have been decomposed.
+     *
+     * @param target input: decomposed text. output: the resulting normalized text.
+     */
     private void internalCompose(StringBuffer target) {
 
         int starterPos = 0;
-        int starterCh = UTF16Util.nextCodePoint(target,0);
+        int starterCh = UTF16Util.nextCodePoint(target, 0);
         int compPos = UTF16Util.codePointLength(starterCh);
         int lastClass = data.getCanonicalClass(starterCh);
         if (lastClass != 0) lastClass = 256; // fix for irregular combining sequence
@@ -151,13 +139,13 @@ public class UnicodeNormalizer {
             int chClass = data.getCanonicalClass(ch);
             int composite = data.getPairwiseComposition(starterCh, ch);
             if (composite != NormalizerData.NOT_COMPOSITE
-            && (lastClass < chClass || lastClass == 0)) {
+                    && (lastClass < chClass || lastClass == 0)) {
                 UTF16Util.setCodePointAt(target, starterPos, composite);
                 starterCh = composite;
             } else {
                 if (chClass == 0) {
                     starterPos = compPos;
-                    starterCh  = ch;
+                    starterCh = ch;
                 }
                 lastClass = chClass;
                 decompPos += UTF16Util.setCodePointAt(target, compPos, ch);
@@ -168,22 +156,18 @@ public class UnicodeNormalizer {
     }
 
     /**
-    * Contains normalization data from the Unicode Character Database.
-    * use false for the minimal set, true for the real set.
-    */
+     * Contains normalization data from the Unicode Character Database. use false for the minimal
+     * set, true for the real set.
+     */
     private static NormalizerData data = null;
 
-    /**
-    * Just accessible for testing.
-    */
-    boolean getExcluded (char ch) {
+    /** Just accessible for testing. */
+    boolean getExcluded(char ch) {
         return data.getExcluded(ch);
     }
 
-    /**
-    * Just accessible for testing.
-    */
-    String getRawDecompositionMapping (char ch) {
+    /** Just accessible for testing. */
+    String getRawDecompositionMapping(char ch) {
         return data.getRawDecompositionMapping(ch);
     }
 }

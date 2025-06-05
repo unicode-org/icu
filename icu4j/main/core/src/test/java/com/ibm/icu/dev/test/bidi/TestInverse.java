@@ -1,27 +1,24 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-*   Copyright (C) 2001-2013, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2001-2013, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
 
 package com.ibm.icu.dev.test.bidi;
 
-import java.util.Arrays;
-
-import org.junit.Test;
-
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Bidi;
+import java.util.Arrays;
+import org.junit.Test;
 
 /**
  * Regression test for the basic "inverse" Bidi mode.
  *
- * ported from C by Lina Kemmel, Matitiahu Allouche
+ * <p>ported from C by Lina Kemmel, Matitiahu Allouche
  */
-
 public class TestInverse extends BidiFmwk {
 
     private int countRoundtrips = 0;
@@ -42,15 +39,13 @@ public class TestInverse extends BidiFmwk {
 
         logln("\nEntering TestInverse\n");
         bidi = new Bidi();
-        log("inverse Bidi: testInverse(L) with " + testCases.length +
-            " test cases ---\n");
-        for(i = 0; i < testCases.length; ++i) {
+        log("inverse Bidi: testInverse(L) with " + testCases.length + " test cases ---\n");
+        for (i = 0; i < testCases.length; ++i) {
             logln("Testing case " + i);
             _testInverseBidi(bidi, testCases[i], Bidi.DIRECTION_LEFT_TO_RIGHT);
         }
 
-        log("inverse Bidi: testInverse(R) with " + testCases.length +
-            " test cases ---\n");
+        log("inverse Bidi: testInverse(R) with " + testCases.length + " test cases ---\n");
         for (i = 0; i < testCases.length; ++i) {
             logln("Testing case " + i);
             _testInverseBidi(bidi, testCases[i], Bidi.DIRECTION_RIGHT_TO_LEFT);
@@ -59,8 +54,11 @@ public class TestInverse extends BidiFmwk {
         _testManyInverseBidi(bidi, Bidi.DIRECTION_LEFT_TO_RIGHT);
         _testManyInverseBidi(bidi, Bidi.DIRECTION_RIGHT_TO_LEFT);
 
-        logln("inverse Bidi: roundtrips: " + countRoundtrips +
-              "   non-roundtrips: " + countNonRoundtrips);
+        logln(
+                "inverse Bidi: roundtrips: "
+                        + countRoundtrips
+                        + "   non-roundtrips: "
+                        + countNonRoundtrips);
 
         _testWriteReverse();
 
@@ -72,22 +70,23 @@ public class TestInverse extends BidiFmwk {
     }
 
     private static final char[][] repeatSegments = {
-        { 0x61, 0x62 },     /* L */
-        { 0x5d0, 0x5d1 },   /* R */
-        { 0x627, 0x628 },   /* AL */
-        { 0x31, 0x32 },     /* EN */
-        { 0x661, 0x662 },   /* AN */
-        { 0x20, 0x20 }      /* WS (N) */
+        {0x61, 0x62}, /* L */
+        {0x5d0, 0x5d1}, /* R */
+        {0x627, 0x628}, /* AL */
+        {0x31, 0x32}, /* EN */
+        {0x661, 0x662}, /* AN */
+        {0x20, 0x20} /* WS (N) */
     };
     private static final int COUNT_REPEAT_SEGMENTS = 6;
 
     private void _testManyInverseBidi(Bidi bidi, int direction) {
-        char[] text = { 0, 0, 0x20, 0, 0, 0x20, 0, 0 };
+        char[] text = {0, 0, 0x20, 0, 0, 0x20, 0, 0};
         int i, j, k;
 
-        log("inverse Bidi: testManyInverseBiDi(" +
-            (direction == Bidi.DIRECTION_LEFT_TO_RIGHT ? 'L' : 'R') +
-            ") - test permutations of text snippets ---\n");
+        log(
+                "inverse Bidi: testManyInverseBiDi("
+                        + (direction == Bidi.DIRECTION_LEFT_TO_RIGHT ? 'L' : 'R')
+                        + ") - test permutations of text snippets ---\n");
         for (i = 0; i < COUNT_REPEAT_SEGMENTS; ++i) {
             text[0] = repeatSegments[i][0];
             text[1] = repeatSegments[i][1];
@@ -98,8 +97,7 @@ public class TestInverse extends BidiFmwk {
                     text[6] = repeatSegments[k][0];
                     text[7] = repeatSegments[k][1];
 
-                    log("inverse Bidi: testManyInverseBiDi()[" +
-                        i + " " + j + " " + k + "]\n");
+                    log("inverse Bidi: testManyInverseBiDi()[" + i + " " + j + " " + k + "]\n");
                     _testInverseBidi(bidi, new String(text), direction);
                 }
             }
@@ -124,8 +122,7 @@ public class TestInverse extends BidiFmwk {
                 if (!src.equals(bidi.getTextAsString())) {
                     err("Wrong value returned by getTextAsString\n");
                 }
-                logicalDest = bidi.writeReordered(Bidi.DO_MIRRORING |
-                                                  Bidi.INSERT_LRM_FOR_NUMERIC);
+                logicalDest = bidi.writeReordered(Bidi.DO_MIRRORING | Bidi.INSERT_LRM_FOR_NUMERIC);
                 log("  v ");
                 printUnicode(src.toCharArray(), bidi.getLevels());
                 log("\n");
@@ -136,8 +133,7 @@ public class TestInverse extends BidiFmwk {
                     err("Error while doing setInverse(false)\n");
                 }
                 bidi.setPara(logicalDest, Bidi.LTR, null);
-                visualDest = bidi.writeReordered(Bidi.DO_MIRRORING |
-                                                 Bidi.REMOVE_BIDI_CONTROLS);
+                visualDest = bidi.writeReordered(Bidi.DO_MIRRORING | Bidi.REMOVE_BIDI_CONTROLS);
             } else {
                 logln("inverse Bidi: testInverse(R)\n");
 
@@ -150,8 +146,7 @@ public class TestInverse extends BidiFmwk {
                 /* convert visual RTL to logical */
                 bidi.setInverse(true);
                 bidi.setPara(visualLTR, Bidi.LTR, null);
-                logicalDest = bidi.writeReordered(Bidi.DO_MIRRORING |
-                                                  Bidi.INSERT_LRM_FOR_NUMERIC);
+                logicalDest = bidi.writeReordered(Bidi.DO_MIRRORING | Bidi.INSERT_LRM_FOR_NUMERIC);
                 log("  vl");
                 printUnicode(visualLTR.toCharArray(), bidi.getLevels());
                 log("\n");
@@ -159,8 +154,11 @@ public class TestInverse extends BidiFmwk {
                 /* convert back to visual RTL */
                 bidi.setInverse(false);
                 bidi.setPara(logicalDest, Bidi.LTR, null);
-                visualDest = bidi.writeReordered(Bidi.DO_MIRRORING |
-                             Bidi.REMOVE_BIDI_CONTROLS | Bidi.OUTPUT_REVERSE);
+                visualDest =
+                        bidi.writeReordered(
+                                Bidi.DO_MIRRORING
+                                        | Bidi.REMOVE_BIDI_CONTROLS
+                                        | Bidi.OUTPUT_REVERSE);
             }
             log("  l ");
             printUnicode(logicalDest.toCharArray(), bidi.getLevels());
@@ -187,12 +185,10 @@ public class TestInverse extends BidiFmwk {
 
     private void _testWriteReverse() {
         /* U+064e and U+0650 are combining marks (Mn) */
-        final String
-            forward = "\u200f\u0627\u064e\u0650\u0020\u0028\u0031\u0029",
-            reverseKeepCombining =
-                "\u0029\u0031\u0028\u0020\u0627\u064e\u0650\u200f",
-            reverseRemoveControlsKeepCombiningDoMirror =
-                "\u0028\u0031\u0029\u0020\u0627\u064e\u0650";
+        final String forward = "\u200f\u0627\u064e\u0650\u0020\u0028\u0031\u0029",
+                reverseKeepCombining = "\u0029\u0031\u0028\u0020\u0627\u064e\u0650\u200f",
+                reverseRemoveControlsKeepCombiningDoMirror =
+                        "\u0028\u0031\u0029\u0020\u0627\u064e\u0650";
 
         String reverse;
 
@@ -203,22 +199,33 @@ public class TestInverse extends BidiFmwk {
             errln("Failure in Bidi.writeReverse(KEEP_BASE_COMBINING)");
             reverse = null;
         }
-        assertEquals("\nFailure in " + getClass().toString() +
-                     " in Bidi.writeReverse", reverseKeepCombining,
-                     reverse, forward, null, "KEEP_BASE_COMBINING", null);
+        assertEquals(
+                "\nFailure in " + getClass().toString() + " in Bidi.writeReverse",
+                reverseKeepCombining,
+                reverse,
+                forward,
+                null,
+                "KEEP_BASE_COMBINING",
+                null);
 
         try {
-            reverse = Bidi.writeReverse(forward, Bidi.REMOVE_BIDI_CONTROLS |
-                                        Bidi.DO_MIRRORING | Bidi.KEEP_BASE_COMBINING);
+            reverse =
+                    Bidi.writeReverse(
+                            forward,
+                            Bidi.REMOVE_BIDI_CONTROLS
+                                    | Bidi.DO_MIRRORING
+                                    | Bidi.KEEP_BASE_COMBINING);
         } catch (Exception e) {
             errln("Failure in Bidi.writeReverse(KEEP_BASE_COMBINING)");
         }
-        assertEquals("\nFailure in " + getClass().toString() +
-                     " in Bidi.writeReverse",
-                     reverseRemoveControlsKeepCombiningDoMirror,
-                     reverse, forward, null,
-                     "REMOVE_BIDI_CONTROLS|DO_MIRRORING|KEEP_BASE_COMBINING",
-                     null);
+        assertEquals(
+                "\nFailure in " + getClass().toString() + " in Bidi.writeReverse",
+                reverseRemoveControlsKeepCombiningDoMirror,
+                reverse,
+                forward,
+                null,
+                "REMOVE_BIDI_CONTROLS|DO_MIRRORING|KEEP_BASE_COMBINING",
+                null);
     }
 
     private void printUnicode(char[] chars, byte[] levels) {
@@ -238,24 +245,23 @@ public class TestInverse extends BidiFmwk {
     private void _testManyAddedPoints() {
         Bidi bidi = new Bidi();
         char[] text = new char[90];
-        for (int i = 0; i < text.length; i+=3) {
+        for (int i = 0; i < text.length; i += 3) {
             text[i] = 'a';
-            text[i+1] = '\u05d0';
-            text[i+2] = '3';
+            text[i + 1] = '\u05d0';
+            text[i + 2] = '3';
         }
         bidi.setReorderingMode(Bidi.REORDER_INVERSE_LIKE_DIRECT);
         bidi.setReorderingOptions(Bidi.OPTION_INSERT_MARKS);
         bidi.setPara(text, Bidi.LTR, null);
         String out = bidi.writeReordered(0);
         char[] expected = new char[120];
-        for (int i = 0; i < expected.length; i+=4) {
+        for (int i = 0; i < expected.length; i += 4) {
             expected[i] = 'a';
-            expected[i+1] = '\u05d0';
-            expected[i+2] = '\u200e';
-            expected[i+3] = '3';
+            expected[i + 1] = '\u05d0';
+            expected[i + 2] = '\u200e';
+            expected[i + 3] = '3';
         }
-        assertEquals("\nInvalid output with many added points",
-                     new String(expected), out);
+        assertEquals("\nInvalid output with many added points", new String(expected), out);
     }
 
     private void _testMisc() {
@@ -263,7 +269,6 @@ public class TestInverse extends BidiFmwk {
         bidi.setInverse(true);
         bidi.setPara("   ", Bidi.RTL, null);
         String out = bidi.writeReordered(Bidi.OUTPUT_REVERSE | Bidi.INSERT_LRM_FOR_NUMERIC);
-        assertEquals("\nInvalid output with RLM at both sides",
-                     "\u200f   \u200f", out);
+        assertEquals("\nInvalid output with RLM at both sides", "\u200f   \u200f", out);
     }
 }

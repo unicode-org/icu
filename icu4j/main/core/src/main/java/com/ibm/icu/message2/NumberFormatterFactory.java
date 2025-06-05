@@ -3,14 +3,6 @@
 
 package com.ibm.icu.message2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Pattern;
-
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.number.FormattedNumber;
@@ -28,10 +20,17 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
- * Creates a {@link Formatter} doing numeric formatting, similar to <code>{exp, number}</code>
- * in {@link com.ibm.icu.text.MessageFormat}.
+ * Creates a {@link Formatter} doing numeric formatting, similar to <code>{exp, number}</code> in
+ * {@link com.ibm.icu.text.MessageFormat}.
  */
 class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
     private final String kind;
@@ -50,17 +49,13 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         this.kind = kind;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
         return new NumberFormatterImpl(locale, fixedOptions, kind);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public Selector createSelector(Locale locale, Map<String, Object> fixedOptions) {
         String type = OptUtils.getString(fixedOptions, "select", "");
@@ -97,20 +92,17 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
             return icuFormatter;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
             return format(toFormat, variableOptions).toString();
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
-            boolean reportErrors = OptUtils.reportErrors(fixedOptions) || OptUtils.reportErrors(variableOptions);
+            boolean reportErrors =
+                    OptUtils.reportErrors(fixedOptions) || OptUtils.reportErrors(variableOptions);
             LocalizedNumberFormatter realFormatter;
             Map<String, Object> mergedOptions = new HashMap<>(fixedOptions);
             if (variableOptions.isEmpty()) {
@@ -154,7 +146,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 throw new NullPointerException("Argument to format can't be null");
             } else if (toFormat instanceof Double) {
                 if (isInt) toFormat = Math.floor((double) toFormat);
-                double toFormatAdjusted =(double) toFormat - offset;
+                double toFormatAdjusted = (double) toFormat - offset;
                 if (mathOperand != null) {
                     toFormatAdjusted += mathOperand;
                 }
@@ -224,9 +216,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
             this.kind = kind;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public List<String> matches(
                 Object value, List<String> keys, Map<String, Object> variableOptions) {
@@ -325,7 +315,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
     }
 
     // Currency ISO code
-    private final static Pattern CURRENCY_ISO_CODE =
+    private static final Pattern CURRENCY_ISO_CODE =
             Pattern.compile("^[A-Z][A-Z][A-Z]$", Pattern.CASE_INSENSITIVE);
 
     private static LocalizedNumberFormatter formatterForOptions(
@@ -523,7 +513,9 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                     throw new IllegalArgumentException(
                             "bad-option: :math function needs an `add` or `subtract` option.");
                 } else {
-                    operand = -OptUtils.asNumber(reportErrors, "subtract", subtractOption).doubleValue();
+                    operand =
+                            -OptUtils.asNumber(reportErrors, "subtract", subtractOption)
+                                    .doubleValue();
                 }
             } else {
                 if (subtractOption == null) {
@@ -537,5 +529,4 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
             return new ResolvedMathOptions(operand, reportErrors);
         }
     }
-
 }

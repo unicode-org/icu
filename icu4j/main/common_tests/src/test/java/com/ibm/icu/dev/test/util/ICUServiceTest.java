@@ -1,29 +1,11 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2001-2013, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2001-2013, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
-
-import java.text.Collator;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.ICULocaleService;
@@ -40,35 +22,52 @@ import com.ibm.icu.impl.ICUService.ServiceListener;
 import com.ibm.icu.impl.ICUService.SimpleFactory;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.util.ULocale;
+import java.text.Collator;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EventListener;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class ICUServiceTest extends CoreTestFmwk
-{
+public class ICUServiceTest extends CoreTestFmwk {
     private String lrmsg(String message, Object lhs, Object rhs) {
-    return message + " lhs: " + lhs + " rhs: " + rhs;
+        return message + " lhs: " + lhs + " rhs: " + rhs;
     }
 
     public void confirmBoolean(String message, boolean val) {
-    msg(message, val ? LOG : ERR, !val, true);
+        msg(message, val ? LOG : ERR, !val, true);
     }
 
     public void confirmEqual(String message, Object lhs, Object rhs) {
-        msg(lrmsg(message, lhs, rhs), (lhs == null ? rhs == null : lhs.equals(rhs)) ? LOG : ERR, true, true);
+        msg(
+                lrmsg(message, lhs, rhs),
+                (lhs == null ? rhs == null : lhs.equals(rhs)) ? LOG : ERR,
+                true,
+                true);
     }
 
     public void confirmIdentical(String message, Object lhs, Object rhs) {
-    msg(lrmsg(message, lhs, rhs), lhs == rhs ? LOG : ERR, true, true);
+        msg(lrmsg(message, lhs, rhs), lhs == rhs ? LOG : ERR, true, true);
     }
 
     public void confirmIdentical(String message, int lhs, int rhs) {
-    msg(message + " lhs: " + lhs + " rhs: " + rhs, lhs == rhs ? LOG : ERR, true, true);
+        msg(message + " lhs: " + lhs + " rhs: " + rhs, lhs == rhs ? LOG : ERR, true, true);
     }
 
     /**
-     * Convenience override of getDisplayNames(ULocale, Comparator, String) that
-     * uses the current default ULocale as the locale, the default collator for
-     * the locale as the comparator to sort the display names, and null for
-     * the matchID.
+     * Convenience override of getDisplayNames(ULocale, Comparator, String) that uses the current
+     * default ULocale as the locale, the default collator for the locale as the comparator to sort
+     * the display names, and null for the matchID.
      */
     public SortedMap<String, String> getDisplayNames(ICUService service) {
         ULocale locale = ULocale.getDefault();
@@ -77,20 +76,21 @@ public class ICUServiceTest extends CoreTestFmwk
     }
 
     /**
-     * Convenience override of getDisplayNames(ULocale, Comparator, String) that
-     * uses the default collator for the locale as the comparator to
-     * sort the display names, and null for the matchID.
+     * Convenience override of getDisplayNames(ULocale, Comparator, String) that uses the default
+     * collator for the locale as the comparator to sort the display names, and null for the
+     * matchID.
      */
     public SortedMap<String, String> getDisplayNames(ICUService service, ULocale locale) {
         Collator col = Collator.getInstance(locale.toLocale());
         return service.getDisplayNames(locale, col, null);
     }
+
     /**
-     * Convenience override of getDisplayNames(ULocale, Comparator, String) that
-     * uses the default collator for the locale as the comparator to
-     * sort the display names.
+     * Convenience override of getDisplayNames(ULocale, Comparator, String) that uses the default
+     * collator for the locale as the comparator to sort the display names.
      */
-    public SortedMap<String, String> getDisplayNames(ICUService service, ULocale locale, String matchID) {
+    public SortedMap<String, String> getDisplayNames(
+            ICUService service, ULocale locale, String matchID) {
         Collator col = Collator.getInstance(locale.toLocale());
         return service.getDisplayNames(locale, col, matchID);
     }
@@ -101,314 +101,312 @@ public class ICUServiceTest extends CoreTestFmwk
             super("Test Service");
         }
 
-    @Override
-    public Key createKey(String id) {
-        return LocaleKey.createWithCanonicalFallback(id, null); // no fallback locale
-    }
+        @Override
+        public Key createKey(String id) {
+            return LocaleKey.createWithCanonicalFallback(id, null); // no fallback locale
+        }
     }
 
     @Test
     public void TestAPI() {
-    // create a service using locale keys,
-    ICUService service = new TestService();
+        // create a service using locale keys,
+        ICUService service = new TestService();
 
         logln("service name:" + service.getName());
 
-    // register an object with one locale,
-    // search for an object with a more specific locale
-    // should return the original object
-    Integer singleton0 = 0;
-    service.registerObject(singleton0, "en_US");
-    Object result = service.get("en_US_FOO");
-    confirmIdentical("1) en_US_FOO -> en_US", result, singleton0);
+        // register an object with one locale,
+        // search for an object with a more specific locale
+        // should return the original object
+        Integer singleton0 = 0;
+        service.registerObject(singleton0, "en_US");
+        Object result = service.get("en_US_FOO");
+        confirmIdentical("1) en_US_FOO -> en_US", result, singleton0);
 
-    // register a new object with the more specific locale
-    // search for an object with that locale
-    // should return the new object
-    Integer singleton1 = 1;
-    service.registerObject(singleton1, "en_US_FOO");
-    result = service.get("en_US_FOO");
-    confirmIdentical("2) en_US_FOO -> en_US_FOO", result, singleton1);
+        // register a new object with the more specific locale
+        // search for an object with that locale
+        // should return the new object
+        Integer singleton1 = 1;
+        service.registerObject(singleton1, "en_US_FOO");
+        result = service.get("en_US_FOO");
+        confirmIdentical("2) en_US_FOO -> en_US_FOO", result, singleton1);
 
-    // search for an object that falls back to the first registered locale
-    result = service.get("en_US_BAR");
-    confirmIdentical("3) en_US_BAR -> en_US", result, singleton0);
-
-    // get a list of the factories, should be two
-    List<Factory> factories = service.factories();
-    confirmIdentical("4) factory size", factories.size(), 2);
-
-    // register a new object with yet another locale
-    // original factory list is unchanged
-    Integer singleton2 = 2;
-    service.registerObject(singleton2, "en");
-    confirmIdentical("5) factory size", factories.size(), 2);
-
-    // search for an object with the new locale
-    // stack of factories is now en, en_US_FOO, en_US
-    // search for en_US should still find en_US object
-    result = service.get("en_US_BAR");
-    confirmIdentical("6) en_US_BAR -> en_US", result, singleton0);
-
-    // register a new object with an old id, should hide earlier factory using this id, but leave it there
-    Integer singleton3 = 3;
-    service.registerObject(singleton3, "en_US");
-    factories = service.factories();
-    confirmIdentical("9) factory size", factories.size(), 4);
-
-    // should get data from that new factory
-    result = service.get("en_US_BAR");
-    confirmIdentical("10) en_US_BAR -> (3)", result, singleton3);
-
-    // remove new factory
-    // should have fewer factories again
-    service.unregisterFactory((Factory)factories.get(0));
-    factories = service.factories();
-    confirmIdentical("11) factory size", factories.size(), 3);
-
-    // should get original data again after remove factory
-    result = service.get("en_US_BAR");
-    confirmIdentical("12) en_US_BAR -> 0", result, singleton0);
-
-    // shouldn't find unregistered ids
-    result = service.get("foo");
-    confirmIdentical("13) foo -> null", result, null);
-
-    // should find non-canonical strings
-    String[] resultID = new String[1];
-    result = service.get("EN_us_fOo", resultID);
-    confirmEqual("14) find non-canonical", resultID[0], "en_US_FOO");
-
-    // should be able to register non-canonical strings and get them canonicalized
-    service.registerObject(singleton3, "eN_ca_dUde");
-    result = service.get("En_Ca_DuDe", resultID);
-    confirmEqual("15) register non-canonical", resultID[0], "en_CA_DUDE");
-
-    // should be able to register invisible factories, these will not
-    // be visible by default, but if you know the secret password you
-    // can still access these services...
-    Integer singleton4 = 4;
-    service.registerObject(singleton4, "en_US_BAR", false);
-    result = service.get("en_US_BAR");
-    confirmIdentical("17) get invisible", result, singleton4);
-
-    // should not be able to locate invisible services
-    Set<String> ids = service.getVisibleIDs();
-    confirmBoolean("18) find invisible", !ids.contains("en_US_BAR"));
-
-    service.reset();
-    // an anonymous factory than handles all ids
-    {
-        Factory factory = new Factory() {
-            @Override
-            public Object create(Key key, ICUService unusedService) {
-                return new ULocale(key.currentID());
-            }
-
-            @Override
-            public void updateVisibleIDs(Map<String, Factory> unusedResult) {
-            }
-
-            @Override
-            public String getDisplayName(String id, ULocale l) {
-                return null;
-            }
-        };
-        service.registerFactory(factory);
-
-        // anonymous factory will still handle the id
-        result = service.get(ULocale.US.toString());
-        confirmEqual("21) locale", result, ULocale.US);
-
-        // still normalizes id
-        result = service.get("EN_US_BAR");
-        confirmEqual("22) locale", result, new ULocale("en_US_BAR"));
-
-        // we can override for particular ids
-        service.registerObject(singleton3, "en_US_BAR");
+        // search for an object that falls back to the first registered locale
         result = service.get("en_US_BAR");
-        confirmIdentical("23) override super", result, singleton3);
+        confirmIdentical("3) en_US_BAR -> en_US", result, singleton0);
 
-    }
+        // get a list of the factories, should be two
+        List<Factory> factories = service.factories();
+        confirmIdentical("4) factory size", factories.size(), 2);
 
-    // empty service should not recognize anything
-    service.reset();
-    result = service.get("en_US");
-    confirmIdentical("24) empty", result, null);
+        // register a new object with yet another locale
+        // original factory list is unchanged
+        Integer singleton2 = 2;
+        service.registerObject(singleton2, "en");
+        confirmIdentical("5) factory size", factories.size(), 2);
 
-    // create a custom multiple key factory
-    {
-        String[] xids = { "en_US_VALLEY_GIRL",
-                  "en_US_VALLEY_BOY",
-                  "en_US_SURFER_GAL",
-                  "en_US_SURFER_DUDE"
-        };
-        service.registerFactory(new TestLocaleKeyFactory(xids, "Later"));
-    }
+        // search for an object with the new locale
+        // stack of factories is now en, en_US_FOO, en_US
+        // search for en_US should still find en_US object
+        result = service.get("en_US_BAR");
+        confirmIdentical("6) en_US_BAR -> en_US", result, singleton0);
 
-    // iterate over the visual ids returned by the multiple factory
-    {
-        Set<String> vids = service.getVisibleIDs();
-        Iterator<String> iter = vids.iterator();
-        int count = 0;
-        while (iter.hasNext()) {
-            ++count;
-            String id = (String)iter.next();
-            logln("  " + id + " --> " + service.get(id));
+        // register a new object with an old id, should hide earlier factory using this id, but
+        // leave it there
+        Integer singleton3 = 3;
+        service.registerObject(singleton3, "en_US");
+        factories = service.factories();
+        confirmIdentical("9) factory size", factories.size(), 4);
+
+        // should get data from that new factory
+        result = service.get("en_US_BAR");
+        confirmIdentical("10) en_US_BAR -> (3)", result, singleton3);
+
+        // remove new factory
+        // should have fewer factories again
+        service.unregisterFactory((Factory) factories.get(0));
+        factories = service.factories();
+        confirmIdentical("11) factory size", factories.size(), 3);
+
+        // should get original data again after remove factory
+        result = service.get("en_US_BAR");
+        confirmIdentical("12) en_US_BAR -> 0", result, singleton0);
+
+        // shouldn't find unregistered ids
+        result = service.get("foo");
+        confirmIdentical("13) foo -> null", result, null);
+
+        // should find non-canonical strings
+        String[] resultID = new String[1];
+        result = service.get("EN_us_fOo", resultID);
+        confirmEqual("14) find non-canonical", resultID[0], "en_US_FOO");
+
+        // should be able to register non-canonical strings and get them canonicalized
+        service.registerObject(singleton3, "eN_ca_dUde");
+        result = service.get("En_Ca_DuDe", resultID);
+        confirmEqual("15) register non-canonical", resultID[0], "en_CA_DUDE");
+
+        // should be able to register invisible factories, these will not
+        // be visible by default, but if you know the secret password you
+        // can still access these services...
+        Integer singleton4 = 4;
+        service.registerObject(singleton4, "en_US_BAR", false);
+        result = service.get("en_US_BAR");
+        confirmIdentical("17) get invisible", result, singleton4);
+
+        // should not be able to locate invisible services
+        Set<String> ids = service.getVisibleIDs();
+        confirmBoolean("18) find invisible", !ids.contains("en_US_BAR"));
+
+        service.reset();
+        // an anonymous factory than handles all ids
+        {
+            Factory factory =
+                    new Factory() {
+                        @Override
+                        public Object create(Key key, ICUService unusedService) {
+                            return new ULocale(key.currentID());
+                        }
+
+                        @Override
+                        public void updateVisibleIDs(Map<String, Factory> unusedResult) {}
+
+                        @Override
+                        public String getDisplayName(String id, ULocale l) {
+                            return null;
+                        }
+                    };
+            service.registerFactory(factory);
+
+            // anonymous factory will still handle the id
+            result = service.get(ULocale.US.toString());
+            confirmEqual("21) locale", result, ULocale.US);
+
+            // still normalizes id
+            result = service.get("EN_US_BAR");
+            confirmEqual("22) locale", result, new ULocale("en_US_BAR"));
+
+            // we can override for particular ids
+            service.registerObject(singleton3, "en_US_BAR");
+            result = service.get("en_US_BAR");
+            confirmIdentical("23) override super", result, singleton3);
         }
-        // four visible ids
-        confirmIdentical("25) visible ids", count, 4);
-    }
 
-    // iterate over the display names
-    {
-        Map<String, String> dids = getDisplayNames(service, ULocale.GERMANY);
-        Iterator<Map.Entry<String, String>> iter = dids.entrySet().iterator();
-        int count = 0;
-        while (iter.hasNext()) {
-            ++count;
-            Map.Entry<String, String> e = iter.next();
-            logln("  " + e.getKey() + " -- > " + e.getValue());
+        // empty service should not recognize anything
+        service.reset();
+        result = service.get("en_US");
+        confirmIdentical("24) empty", result, null);
+
+        // create a custom multiple key factory
+        {
+            String[] xids = {
+                "en_US_VALLEY_GIRL", "en_US_VALLEY_BOY", "en_US_SURFER_GAL", "en_US_SURFER_DUDE"
+            };
+            service.registerFactory(new TestLocaleKeyFactory(xids, "Later"));
         }
-        // four display names, in german
-        confirmIdentical("26) display names", count, 4);
-    }
 
-    // no valid display name
-    confirmIdentical("27) get display name", service.getDisplayName("en_US_VALLEY_GEEK"), null);
+        // iterate over the visual ids returned by the multiple factory
+        {
+            Set<String> vids = service.getVisibleIDs();
+            Iterator<String> iter = vids.iterator();
+            int count = 0;
+            while (iter.hasNext()) {
+                ++count;
+                String id = (String) iter.next();
+                logln("  " + id + " --> " + service.get(id));
+            }
+            // four visible ids
+            confirmIdentical("25) visible ids", count, 4);
+        }
 
-    {
-        String name = service.getDisplayName("en_US_SURFER_DUDE", ULocale.US);
-        confirmEqual("28) get display name", name, "English (United States, SURFER_DUDE)");
-    }
+        // iterate over the display names
+        {
+            Map<String, String> dids = getDisplayNames(service, ULocale.GERMANY);
+            Iterator<Map.Entry<String, String>> iter = dids.entrySet().iterator();
+            int count = 0;
+            while (iter.hasNext()) {
+                ++count;
+                Map.Entry<String, String> e = iter.next();
+                logln("  " + e.getKey() + " -- > " + e.getValue());
+            }
+            // four display names, in german
+            confirmIdentical("26) display names", count, 4);
+        }
 
-    // register another multiple factory
-    {
-        String[] xids = {
-        "en_US_SURFER", "en_US_SURFER_GAL", "en_US_SILICON", "en_US_SILICON_GEEK"
-        };
-        service.registerFactory(new TestLocaleKeyFactory(xids, "Rad dude"));
-    }
+        // no valid display name
+        confirmIdentical("27) get display name", service.getDisplayName("en_US_VALLEY_GEEK"), null);
 
-    // this time, we have seven display names
+        {
+            String name = service.getDisplayName("en_US_SURFER_DUDE", ULocale.US);
+            confirmEqual("28) get display name", name, "English (United States, SURFER_DUDE)");
+        }
+
+        // register another multiple factory
+        {
+            String[] xids = {
+                "en_US_SURFER", "en_US_SURFER_GAL", "en_US_SILICON", "en_US_SILICON_GEEK"
+            };
+            service.registerFactory(new TestLocaleKeyFactory(xids, "Rad dude"));
+        }
+
+        // this time, we have seven display names
         // Rad dude's surfer gal 'replaces' later's surfer gal
-    {
-        Map<String, String> dids = getDisplayNames(service);
-        Iterator<Map.Entry<String, String>> iter = dids.entrySet().iterator();
-        int count = 0;
-        while (iter.hasNext()) {
-            ++count;
-            Map.Entry<String, String> e = iter.next();
-            logln("  " + e.getKey() + " --> " + e.getValue());
+        {
+            Map<String, String> dids = getDisplayNames(service);
+            Iterator<Map.Entry<String, String>> iter = dids.entrySet().iterator();
+            int count = 0;
+            while (iter.hasNext()) {
+                ++count;
+                Map.Entry<String, String> e = iter.next();
+                logln("  " + e.getKey() + " --> " + e.getValue());
+            }
+            // seven display names, in spanish
+            confirmIdentical("29) display names", count, 7);
         }
-        // seven display names, in spanish
-        confirmIdentical("29) display names", count, 7);
-    }
 
-    // we should get the display name corresponding to the actual id
-    // returned by the id we used.
-    {
-        String[] actualID = new String[1];
-        String id = "en_us_surfer_gal";
-        String gal = (String)service.get(id, actualID);
-        if (gal != null) {
+        // we should get the display name corresponding to the actual id
+        // returned by the id we used.
+        {
+            String[] actualID = new String[1];
+            String id = "en_us_surfer_gal";
+            String gal = (String) service.get(id, actualID);
+            if (gal != null) {
                 logln("actual id: " + actualID[0]);
-        String displayName = service.getDisplayName(actualID[0], ULocale.US);
-        logln("found actual: " + gal + " with display name: " + displayName);
-        confirmBoolean("30) found display name for actual", displayName != null);
+                String displayName = service.getDisplayName(actualID[0], ULocale.US);
+                logln("found actual: " + gal + " with display name: " + displayName);
+                confirmBoolean("30) found display name for actual", displayName != null);
 
-        displayName = service.getDisplayName(id, ULocale.US);
-        logln("found query: " + gal + " with display name: " + displayName);
-        // this is no longer a bug, we want to return display names for anything
-        // that a factory handles.  since we handle it, we should return a display
-        // name.  see jb3549
-        // confirmBoolean("31) found display name for query", displayName == null);
-        } else {
-        errln("30) service could not find entry for " + id);
-        }
+                displayName = service.getDisplayName(id, ULocale.US);
+                logln("found query: " + gal + " with display name: " + displayName);
+                // this is no longer a bug, we want to return display names for anything
+                // that a factory handles.  since we handle it, we should return a display
+                // name.  see jb3549
+                // confirmBoolean("31) found display name for query", displayName == null);
+            } else {
+                errln("30) service could not find entry for " + id);
+            }
 
             // this should be handled by the 'dude' factory, since it overrides en_US_SURFER.
-        id = "en_US_SURFER_BOZO";
-        String bozo = (String)service.get(id, actualID);
-        if (bozo != null) {
-        String displayName = service.getDisplayName(actualID[0], ULocale.US);
-        logln("found actual: " + bozo + " with display name: " + displayName);
-        confirmBoolean("32) found display name for actual", displayName != null);
+            id = "en_US_SURFER_BOZO";
+            String bozo = (String) service.get(id, actualID);
+            if (bozo != null) {
+                String displayName = service.getDisplayName(actualID[0], ULocale.US);
+                logln("found actual: " + bozo + " with display name: " + displayName);
+                confirmBoolean("32) found display name for actual", displayName != null);
 
-        displayName = service.getDisplayName(id, ULocale.US);
-        logln("found actual: " + bozo + " with display name: " + displayName);
-        // see above and jb3549
-        // confirmBoolean("33) found display name for query", displayName == null);
-        } else {
-        errln("32) service could not find entry for " + id);
-        }
+                displayName = service.getDisplayName(id, ULocale.US);
+                logln("found actual: " + bozo + " with display name: " + displayName);
+                // see above and jb3549
+                // confirmBoolean("33) found display name for query", displayName == null);
+            } else {
+                errln("32) service could not find entry for " + id);
+            }
 
             confirmBoolean("34) is default ", !service.isDefault());
-    }
-
-        /*
-      // disallow hiding for now
-
-      // hiding factory should obscure 'sublocales'
-      {
-      String[] xids = {
-      "en_US_VALLEY", "en_US_SILICON"
-      };
-      service.registerFactory(new TestHidingFactory(xids, "hiding"));
-      }
-
-      {
-      Map dids = service.getDisplayNames();
-      Iterator iter = dids.entrySet().iterator();
-      int count = 0;
-      while (iter.hasNext()) {
-      ++count;
-      Entry e = (Entry)iter.next();
-      logln("  " + e.getKey() + " -- > " + e.getValue());
-      }
-      confirmIdentical("35) hiding factory", count, 5);
-      }
-        */
-
-    {
-        Set<String> xids = service.getVisibleIDs();
-        Iterator<String> iter = xids.iterator();
-        while (iter.hasNext()) {
-            String xid = (String)iter.next();
-            logln(xid + "?  " + service.get(xid));
         }
 
-        logln("valleygirl?  " + service.get("en_US_VALLEY_GIRL"));
-        logln("valleyboy?   " + service.get("en_US_VALLEY_BOY"));
-        logln("valleydude?  " + service.get("en_US_VALLEY_DUDE"));
-        logln("surfergirl?  " + service.get("en_US_SURFER_GIRL"));
-    }
+        /*
+        // disallow hiding for now
 
-    // resource bundle factory.
-    service.reset();
-    service.registerFactory(new ICUResourceBundleFactory());
+        // hiding factory should obscure 'sublocales'
+        {
+        String[] xids = {
+        "en_US_VALLEY", "en_US_SILICON"
+        };
+        service.registerFactory(new TestHidingFactory(xids, "hiding"));
+        }
 
-    // list all of the resources
-    {
+        {
+        Map dids = service.getDisplayNames();
+        Iterator iter = dids.entrySet().iterator();
+        int count = 0;
+        while (iter.hasNext()) {
+        ++count;
+        Entry e = (Entry)iter.next();
+        logln("  " + e.getKey() + " -- > " + e.getValue());
+        }
+        confirmIdentical("35) hiding factory", count, 5);
+        }
+          */
+
+        {
+            Set<String> xids = service.getVisibleIDs();
+            Iterator<String> iter = xids.iterator();
+            while (iter.hasNext()) {
+                String xid = (String) iter.next();
+                logln(xid + "?  " + service.get(xid));
+            }
+
+            logln("valleygirl?  " + service.get("en_US_VALLEY_GIRL"));
+            logln("valleyboy?   " + service.get("en_US_VALLEY_BOY"));
+            logln("valleydude?  " + service.get("en_US_VALLEY_DUDE"));
+            logln("surfergirl?  " + service.get("en_US_SURFER_GIRL"));
+        }
+
+        // resource bundle factory.
+        service.reset();
+        service.registerFactory(new ICUResourceBundleFactory());
+
+        // list all of the resources
+        {
             logln("all visible ids: " + service.getVisibleIDs());
             /*
-          Set xids = service.getVisibleIDs();
-          StringBuffer buf = new StringBuffer("{");
-          boolean notfirst = false;
-          Iterator iter = xids.iterator();
-          while (iter.hasNext()) {
-          String xid = (String)iter.next();
-          if (notfirst) {
-          buf.append(", ");
-          } else {
-          notfirst = true;
-          }
-          buf.append(xid);
-          }
-          buf.append("}");
-          logln(buf.toString());
-            */
-    }
+            Set xids = service.getVisibleIDs();
+            StringBuffer buf = new StringBuffer("{");
+            boolean notfirst = false;
+            Iterator iter = xids.iterator();
+            while (iter.hasNext()) {
+            String xid = (String)iter.next();
+            if (notfirst) {
+            buf.append(", ");
+            } else {
+            notfirst = true;
+            }
+            buf.append(xid);
+            }
+            buf.append("}");
+            logln(buf.toString());
+              */
+        }
 
         // list only the resources for es, default locale
         // since we're using the default Key, only "es" is matched
@@ -424,43 +422,47 @@ public class ICUServiceTest extends CoreTestFmwk
 
         // list the display names in reverse order
         {
-            logln("display names in reverse order: " +
-                    service.getDisplayNames(ULocale.US, new Comparator<Object>() {
-                        @Override
-                        public int compare(Object lhs, Object rhs) {
-                            return -String.CASE_INSENSITIVE_ORDER.compare((String)lhs, (String)rhs);
-                        }
-                    }));
+            logln(
+                    "display names in reverse order: "
+                            + service.getDisplayNames(
+                                    ULocale.US,
+                                    new Comparator<Object>() {
+                                        @Override
+                                        public int compare(Object lhs, Object rhs) {
+                                            return -String.CASE_INSENSITIVE_ORDER.compare(
+                                                    (String) lhs, (String) rhs);
+                                        }
+                                    }));
         }
 
-    // get all the display names of these resources
-    // this should be fast since the display names were cached.
-    {
-        logln("service display names for de_DE");
-        Map<String, String> names = getDisplayNames(service, new ULocale("de_DE"));
-        StringBuffer buf = new StringBuffer("{");
-        Iterator<Map.Entry<String, String>> iter = names.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry<String, String> e = iter.next();
-            String name = e.getKey();
-            String id = e.getValue();
-            buf.append("\n   " + name + " --> " + id);
+        // get all the display names of these resources
+        // this should be fast since the display names were cached.
+        {
+            logln("service display names for de_DE");
+            Map<String, String> names = getDisplayNames(service, new ULocale("de_DE"));
+            StringBuffer buf = new StringBuffer("{");
+            Iterator<Map.Entry<String, String>> iter = names.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry<String, String> e = iter.next();
+                String name = e.getKey();
+                String id = e.getValue();
+                buf.append("\n   " + name + " --> " + id);
+            }
+            buf.append("\n}");
+            logln(buf.toString());
         }
-        buf.append("\n}");
-        logln(buf.toString());
-    }
 
         CalifornioLanguageFactory califactory = new CalifornioLanguageFactory();
         service.registerFactory(califactory);
-    // get all the display names of these resources
-    {
+        // get all the display names of these resources
+        {
             logln("californio language factory");
-        StringBuffer buf = new StringBuffer("{");
+            StringBuffer buf = new StringBuffer("{");
             String[] idNames = {
                 CalifornioLanguageFactory.californio,
-        CalifornioLanguageFactory.valley,
-        CalifornioLanguageFactory.surfer,
-        CalifornioLanguageFactory.geek
+                CalifornioLanguageFactory.valley,
+                CalifornioLanguageFactory.surfer,
+                CalifornioLanguageFactory.geek
             };
             for (int i = 0; i < idNames.length; ++i) {
                 String idName = idNames[i];
@@ -473,101 +475,106 @@ public class ICUServiceTest extends CoreTestFmwk
                     String id = e.getValue();
                     buf.append("\n    " + name + " --> " + id);
                 }
+            }
+            buf.append("\n}");
+            logln(buf.toString());
         }
-        buf.append("\n}");
-        logln(buf.toString());
-    }
 
-    // test notification
-    // simple registration
-    {
+        // test notification
+        // simple registration
+        {
             logln("simple registration notification");
-        ICULocaleService ls = new ICULocaleService();
-        ServiceListener l1 = new ServiceListener() {
-            private int n;
-            @Override
-            public void serviceChanged(ICUService s) {
-            logln("listener 1 report " + n++ + " service changed: " + s);
-            }
-        };
-        ls.addListener(l1);
-        ServiceListener l2 = new ServiceListener() {
-            private int n;
-            @Override
-            public void serviceChanged(ICUService s) {
-            logln("listener 2 report " + n++ + " service changed: " + s);
-            }
-        };
-        ls.addListener(l2);
-        logln("registering foo... ");
-        ls.registerObject("Foo", "en_FOO");
-        logln("registering bar... ");
-        ls.registerObject("Bar", "en_BAR");
-        logln("getting foo...");
-        logln((String)ls.get("en_FOO"));
-        logln("removing listener 2...");
-        ls.removeListener(l2);
-        logln("registering baz...");
-        ls.registerObject("Baz", "en_BAZ");
-        logln("removing listener 1");
-        ls.removeListener(l1);
-        logln("registering burp...");
-        ls.registerObject("Burp", "en_BURP");
+            ICULocaleService ls = new ICULocaleService();
+            ServiceListener l1 =
+                    new ServiceListener() {
+                        private int n;
 
-        // should only get one notification even if register multiple times
-        logln("... trying multiple registration");
-        ls.addListener(l1);
-        ls.addListener(l1);
-        ls.addListener(l1);
-        ls.addListener(l2);
-        ls.registerObject("Foo", "en_FOO");
-        logln("... registered foo");
+                        @Override
+                        public void serviceChanged(ICUService s) {
+                            logln("listener 1 report " + n++ + " service changed: " + s);
+                        }
+                    };
+            ls.addListener(l1);
+            ServiceListener l2 =
+                    new ServiceListener() {
+                        private int n;
 
-        // since in a separate thread, we can callback and not deadlock
-        ServiceListener l3 = new ServiceListener() {
-            private int n;
-            @Override
-            public void serviceChanged(ICUService s) {
-            logln("listener 3 report " + n++ + " service changed...");
-            if (s.get("en_BOINK") == null) { // don't recurse on ourselves!!!
-                logln("registering boink...");
-                s.registerObject("boink", "en_BOINK");
-            }
-            }
-        };
-        ls.addListener(l3);
-        logln("registering boo...");
-        ls.registerObject("Boo", "en_BOO");
-        logln("...done");
+                        @Override
+                        public void serviceChanged(ICUService s) {
+                            logln("listener 2 report " + n++ + " service changed: " + s);
+                        }
+                    };
+            ls.addListener(l2);
+            logln("registering foo... ");
+            ls.registerObject("Foo", "en_FOO");
+            logln("registering bar... ");
+            ls.registerObject("Bar", "en_BAR");
+            logln("getting foo...");
+            logln((String) ls.get("en_FOO"));
+            logln("removing listener 2...");
+            ls.removeListener(l2);
+            logln("registering baz...");
+            ls.registerObject("Baz", "en_BAZ");
+            logln("removing listener 1");
+            ls.removeListener(l1);
+            logln("registering burp...");
+            ls.registerObject("Burp", "en_BURP");
 
-        try {
-        Thread.sleep(100);
+            // should only get one notification even if register multiple times
+            logln("... trying multiple registration");
+            ls.addListener(l1);
+            ls.addListener(l1);
+            ls.addListener(l1);
+            ls.addListener(l2);
+            ls.registerObject("Foo", "en_FOO");
+            logln("... registered foo");
+
+            // since in a separate thread, we can callback and not deadlock
+            ServiceListener l3 =
+                    new ServiceListener() {
+                        private int n;
+
+                        @Override
+                        public void serviceChanged(ICUService s) {
+                            logln("listener 3 report " + n++ + " service changed...");
+                            if (s.get("en_BOINK") == null) { // don't recurse on ourselves!!!
+                                logln("registering boink...");
+                                s.registerObject("boink", "en_BOINK");
+                            }
+                        }
+                    };
+            ls.addListener(l3);
+            logln("registering boo...");
+            ls.registerObject("Boo", "en_BOO");
+            logln("...done");
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
         }
-        catch (InterruptedException e) {
-        }
-    }
     }
 
     static class TestLocaleKeyFactory extends LocaleKeyFactory {
-    protected final Set<String> ids;
-    protected final String factoryID;
+        protected final Set<String> ids;
+        protected final String factoryID;
 
-    public TestLocaleKeyFactory(String[] ids, String factoryID) {
+        public TestLocaleKeyFactory(String[] ids, String factoryID) {
             super(VISIBLE, factoryID);
 
-        this.ids = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(ids)));
+            this.ids = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(ids)));
             this.factoryID = factoryID + ": ";
-    }
+        }
 
-    @Override
-    protected Object handleCreate(ULocale loc, int kind, ICUService service) {
+        @Override
+        protected Object handleCreate(ULocale loc, int kind, ICUService service) {
             return factoryID + loc.toString();
-    }
+        }
 
-    @Override
-    protected Set<String> getSupportedIDs() {
+        @Override
+        protected Set<String> getSupportedIDs() {
             return ids;
-    }
+        }
     }
 
     /*
@@ -621,11 +628,12 @@ public class ICUServiceTest extends CoreTestFmwk
     */
 
     static class CalifornioLanguageFactory extends ICUResourceBundleFactory {
-    public static String californio = "en_US_CA";
-    public static String valley = californio + "_VALLEY";
-    public static String surfer = californio + "_SURFER";
-    public static String geek = californio + "_GEEK";
+        public static String californio = "en_US_CA";
+        public static String valley = californio + "_VALLEY";
+        public static String surfer = californio + "_SURFER";
+        public static String geek = californio + "_GEEK";
         public static Set<String> supportedIDs;
+
         static {
             HashSet<String> result = new HashSet<>();
             result.addAll(ICUResourceBundle.getAvailableLocaleNameSet());
@@ -636,68 +644,68 @@ public class ICUServiceTest extends CoreTestFmwk
             supportedIDs = Collections.unmodifiableSet(result);
         }
 
-    @Override
-    public Set<String> getSupportedIDs() {
+        @Override
+        public Set<String> getSupportedIDs() {
             return supportedIDs;
-    }
-
-    @Override
-    public String getDisplayName(String id, ULocale locale) {
-        String prefix = "";
-        String suffix = "";
-        String ls = locale.toString();
-        if (LocaleUtility.isFallbackOf(californio, ls)) {
-        if (ls.equalsIgnoreCase(valley)) {
-            prefix = "Like, you know, it's so totally ";
-        } else if (ls.equalsIgnoreCase(surfer)) {
-            prefix = "Dude, its ";
-        } else if (ls.equalsIgnoreCase(geek)) {
-            prefix = "I'd estimate it's approximately ";
-        } else {
-            prefix = "Huh?  Maybe ";
-        }
-        }
-        if (LocaleUtility.isFallbackOf(californio, id)) {
-        if (id.equalsIgnoreCase(valley)) {
-            suffix = "like the Valley, you know?  Let's go to the mall!";
-        } else if (id.equalsIgnoreCase(surfer)) {
-            suffix = "time to hit those gnarly waves, Dude!!!";
-        } else if (id.equalsIgnoreCase(geek)) {
-            suffix = "all systems go.  T-Minus 9, 8, 7...";
-        } else {
-            suffix = "No Habla Englais";
-        }
-        } else {
-        suffix = super.getDisplayName(id, locale);
         }
 
-        return prefix + suffix;
-    }
+        @Override
+        public String getDisplayName(String id, ULocale locale) {
+            String prefix = "";
+            String suffix = "";
+            String ls = locale.toString();
+            if (LocaleUtility.isFallbackOf(californio, ls)) {
+                if (ls.equalsIgnoreCase(valley)) {
+                    prefix = "Like, you know, it's so totally ";
+                } else if (ls.equalsIgnoreCase(surfer)) {
+                    prefix = "Dude, its ";
+                } else if (ls.equalsIgnoreCase(geek)) {
+                    prefix = "I'd estimate it's approximately ";
+                } else {
+                    prefix = "Huh?  Maybe ";
+                }
+            }
+            if (LocaleUtility.isFallbackOf(californio, id)) {
+                if (id.equalsIgnoreCase(valley)) {
+                    suffix = "like the Valley, you know?  Let's go to the mall!";
+                } else if (id.equalsIgnoreCase(surfer)) {
+                    suffix = "time to hit those gnarly waves, Dude!!!";
+                } else if (id.equalsIgnoreCase(geek)) {
+                    suffix = "all systems go.  T-Minus 9, 8, 7...";
+                } else {
+                    suffix = "No Habla Englais";
+                }
+            } else {
+                suffix = super.getDisplayName(id, locale);
+            }
+
+            return prefix + suffix;
+        }
     }
 
     @Test
     public void TestLocale() {
-    ICULocaleService service = new ICULocaleService("test locale");
-    service.registerObject("root", ULocale.ROOT);
-    service.registerObject("german", "de");
-    service.registerObject("german_Germany", ULocale.GERMANY);
-    service.registerObject("japanese", "ja");
-    service.registerObject("japanese_Japan", ULocale.JAPAN);
+        ICULocaleService service = new ICULocaleService("test locale");
+        service.registerObject("root", ULocale.ROOT);
+        service.registerObject("german", "de");
+        service.registerObject("german_Germany", ULocale.GERMANY);
+        service.registerObject("japanese", "ja");
+        service.registerObject("japanese_Japan", ULocale.JAPAN);
 
-    Object target = service.get("de_US");
-    confirmEqual("test de_US", "german", target);
+        Object target = service.get("de_US");
+        confirmEqual("test de_US", "german", target);
 
         ULocale de = new ULocale("de");
         ULocale de_US = new ULocale("de_US");
 
         target = service.get(de_US);
-    confirmEqual("test de_US 2", "german", target);
+        confirmEqual("test de_US 2", "german", target);
 
         target = service.get(de_US, LocaleKey.KIND_ANY);
-    confirmEqual("test de_US 3", "german", target);
+        confirmEqual("test de_US 3", "german", target);
 
         target = service.get(de_US, 1234);
-    confirmEqual("test de_US 4", "german", target);
+        confirmEqual("test de_US 4", "german", target);
 
         ULocale[] actualReturn = new ULocale[1];
         target = service.get(de_US, actualReturn);
@@ -710,7 +718,7 @@ public class ICUServiceTest extends CoreTestFmwk
 
         actualReturn[0] = null;
         target = service.get(de_US, 1234, actualReturn);
-    confirmEqual("test de_US 8", "german", target);
+        confirmEqual("test de_US 8", "german", target);
         confirmEqual("test de_US 9", actualReturn[0], de);
 
         service.registerObject("one/de_US", de_US, 1);
@@ -736,25 +744,25 @@ public class ICUServiceTest extends CoreTestFmwk
         lkey.fallback();
         logln("lkey descriptor 3: " + lkey.currentDescriptor());
 
-    target = service.get("za_PPP");
-    confirmEqual("test zappp", "root", target);
+        target = service.get("za_PPP");
+        confirmEqual("test zappp", "root", target);
 
-    ULocale loc = ULocale.getDefault();
-    ULocale.setDefault(ULocale.JAPANESE);
-    target = service.get("za_PPP");
-    confirmEqual("test with ja locale", "japanese", target);
+        ULocale loc = ULocale.getDefault();
+        ULocale.setDefault(ULocale.JAPANESE);
+        target = service.get("za_PPP");
+        confirmEqual("test with ja locale", "japanese", target);
 
-    for (String id : service.getVisibleIDs()) {
-        logln("id: " + id);
-    }
+        for (String id : service.getVisibleIDs()) {
+            logln("id: " + id);
+        }
 
-    ULocale.setDefault(loc);
-    for (String id : service.getVisibleIDs()) {
-        logln("id: " + id);
-    }
+        ULocale.setDefault(loc);
+        for (String id : service.getVisibleIDs()) {
+            logln("id: " + id);
+        }
 
-    target = service.get("za_PPP");
-    confirmEqual("test with en locale", "root", target);
+        target = service.get("za_PPP");
+        confirmEqual("test with en locale", "root", target);
 
         ULocale[] locales = service.getAvailableULocales();
         confirmIdentical("test available locales", locales.length, 6);
@@ -780,14 +788,17 @@ public class ICUServiceTest extends CoreTestFmwk
         // since we're using locale keys, we should get all and only the es locales
         // hmmm, the default toString function doesn't print in sorted order for TreeMap
         {
-            SortedMap<String, String> map = service.getDisplayNames(ULocale.US,
-                    new Comparator<Object>() {
-                            @Override
-                            public int compare(Object lhs, Object rhs) {
-                                return -String.CASE_INSENSITIVE_ORDER.compare((String)lhs, (String)rhs);
-                            }
-                    },
-                    "es");
+            SortedMap<String, String> map =
+                    service.getDisplayNames(
+                            ULocale.US,
+                            new Comparator<Object>() {
+                                @Override
+                                public int compare(Object lhs, Object rhs) {
+                                    return -String.CASE_INSENSITIVE_ORDER.compare(
+                                            (String) lhs, (String) rhs);
+                                }
+                            },
+                            "es");
 
             logln("es display names in reverse order " + map);
         }
@@ -825,186 +836,172 @@ public class ICUServiceTest extends CoreTestFmwk
         }
         service.registerFactory(new WrapFactory());
 
-        confirmEqual("wrap test: ", service.get(greetingID), "A different greeting: \"" + greeting + "\"");
+        confirmEqual(
+                "wrap test: ",
+                service.get(greetingID),
+                "A different greeting: \"" + greeting + "\"");
     }
 
     // misc coverage tests
     @Test
     public void TestCoverage() {
-    // Key
-    Key key = new Key("foobar");
-    logln("ID: " + key.id());
-    logln("canonicalID: " + key.canonicalID());
-    logln("currentID: " + key.currentID());
-    logln("has fallback: " + key.fallback());
+        // Key
+        Key key = new Key("foobar");
+        logln("ID: " + key.id());
+        logln("canonicalID: " + key.canonicalID());
+        logln("currentID: " + key.currentID());
+        logln("has fallback: " + key.fallback());
 
-    // SimpleFactory
-    Object obj = new Object();
-    SimpleFactory sf = new SimpleFactory(obj, "object");
-    try {
-        sf = new SimpleFactory(null, null);
-        errln("didn't throw exception");
-    }
-    catch (IllegalArgumentException e) {
-        logln("OK: " + e.getMessage());
-    }
-    catch (Exception e) {
-        errln("threw wrong exception" + e);
-    }
-    logln(sf.getDisplayName("object", null));
+        // SimpleFactory
+        Object obj = new Object();
+        SimpleFactory sf = new SimpleFactory(obj, "object");
+        try {
+            sf = new SimpleFactory(null, null);
+            errln("didn't throw exception");
+        } catch (IllegalArgumentException e) {
+            logln("OK: " + e.getMessage());
+        } catch (Exception e) {
+            errln("threw wrong exception" + e);
+        }
+        logln(sf.getDisplayName("object", null));
 
-    // ICUService
-    ICUService service = new ICUService();
-    service.registerFactory(sf);
+        // ICUService
+        ICUService service = new ICUService();
+        service.registerFactory(sf);
 
-    try {
-        service.get(null, null);
-        errln("didn't throw exception");
-    }
-    catch (NullPointerException e) {
-        logln("OK: " + e.getMessage());
-    }
+        try {
+            service.get(null, null);
+            errln("didn't throw exception");
+        } catch (NullPointerException e) {
+            logln("OK: " + e.getMessage());
+        }
         /*
-      catch (Exception e) {
-      errln("threw wrong exception" + e);
-      }
-        */
-    try {
-        service.registerFactory(null);
-        errln("didn't throw exception");
-    }
-    catch (NullPointerException e) {
-        logln("OK: " + e.getMessage());
-    }
-    catch (Exception e) {
+        catch (Exception e) {
         errln("threw wrong exception" + e);
-    }
+        }
+          */
+        try {
+            service.registerFactory(null);
+            errln("didn't throw exception");
+        } catch (NullPointerException e) {
+            logln("OK: " + e.getMessage());
+        } catch (Exception e) {
+            errln("threw wrong exception" + e);
+        }
 
-    try {
-        service.unregisterFactory(null);
-        errln("didn't throw exception");
-    }
-    catch (NullPointerException e) {
-        logln("OK: " + e.getMessage());
-    }
-    catch (Exception e) {
-        errln("threw wrong exception" + e);
-    }
+        try {
+            service.unregisterFactory(null);
+            errln("didn't throw exception");
+        } catch (NullPointerException e) {
+            logln("OK: " + e.getMessage());
+        } catch (Exception e) {
+            errln("threw wrong exception" + e);
+        }
 
-    logln("object is: " + service.get("object"));
+        logln("object is: " + service.get("object"));
 
-    logln("stats: " + service.stats());
+        logln("stats: " + service.stats());
 
-    // ICURWLock
+        // ICURWLock
 
-    ICURWLock rwlock = new ICURWLock();
-    rwlock.resetStats();
+        ICURWLock rwlock = new ICURWLock();
+        rwlock.resetStats();
 
-    rwlock.acquireRead();
-    rwlock.releaseRead();
-
-    rwlock.acquireWrite();
-    rwlock.releaseWrite();
-    logln("stats: " + rwlock.getStats());
-    logln("stats: " + rwlock.clearStats());
-    rwlock.acquireRead();
-    rwlock.releaseRead();
-    rwlock.acquireWrite();
-    rwlock.releaseWrite();
-    logln("stats: " + rwlock.getStats());
-
-    try {
+        rwlock.acquireRead();
         rwlock.releaseRead();
-        errln("no error thrown");
-    }
-    catch (Exception e) {
-        logln("OK: " + e.getMessage());
-    }
 
-    try {
+        rwlock.acquireWrite();
         rwlock.releaseWrite();
-        errln("no error thrown");
-    }
-    catch (Exception e) {
-        logln("OK: " + e.getMessage());
-    }
+        logln("stats: " + rwlock.getStats());
+        logln("stats: " + rwlock.clearStats());
+        rwlock.acquireRead();
+        rwlock.releaseRead();
+        rwlock.acquireWrite();
+        rwlock.releaseWrite();
+        logln("stats: " + rwlock.getStats());
+
+        try {
+            rwlock.releaseRead();
+            errln("no error thrown");
+        } catch (Exception e) {
+            logln("OK: " + e.getMessage());
+        }
+
+        try {
+            rwlock.releaseWrite();
+            errln("no error thrown");
+        } catch (Exception e) {
+            logln("OK: " + e.getMessage());
+        }
 
         // ICULocaleService
 
-    // LocaleKey
+        // LocaleKey
 
-    // LocaleKey lkey = LocaleKey.create("en_US", "ja_JP");
-    // lkey = LocaleKey.create(null, null);
-    LocaleKey lkey = LocaleKey.createWithCanonicalFallback("en_US", "ja_JP");
+        // LocaleKey lkey = LocaleKey.create("en_US", "ja_JP");
+        // lkey = LocaleKey.create(null, null);
+        LocaleKey lkey = LocaleKey.createWithCanonicalFallback("en_US", "ja_JP");
         logln("lkey: " + lkey);
 
         lkey = LocaleKey.createWithCanonicalFallback(null, null);
         logln("lkey from null,null: " + lkey);
 
-    // LocaleKeyFactory
-    LocaleKeyFactory lkf = new LKFSubclass(false);
+        // LocaleKeyFactory
+        LocaleKeyFactory lkf = new LKFSubclass(false);
         logln("lkf: " + lkf);
-    logln("obj: " + lkf.create(lkey, null));
-    logln(lkf.getDisplayName("foo", null));
-    logln(lkf.getDisplayName("bar", null));
-    lkf.updateVisibleIDs(new HashMap<>());
+        logln("obj: " + lkf.create(lkey, null));
+        logln(lkf.getDisplayName("foo", null));
+        logln(lkf.getDisplayName("bar", null));
+        lkf.updateVisibleIDs(new HashMap<>());
 
-    LocaleKeyFactory invisibleLKF = new LKFSubclass(false);
-    logln("obj: " + invisibleLKF.create(lkey, null));
-    logln(invisibleLKF.getDisplayName("foo", null));
-    logln(invisibleLKF.getDisplayName("bar", null));
-    invisibleLKF.updateVisibleIDs(new HashMap<>());
+        LocaleKeyFactory invisibleLKF = new LKFSubclass(false);
+        logln("obj: " + invisibleLKF.create(lkey, null));
+        logln(invisibleLKF.getDisplayName("foo", null));
+        logln(invisibleLKF.getDisplayName("bar", null));
+        invisibleLKF.updateVisibleIDs(new HashMap<>());
 
-    // ResourceBundleFactory
-    ICUResourceBundleFactory rbf = new ICUResourceBundleFactory();
-    logln("RB: " + rbf.create(lkey, null));
+        // ResourceBundleFactory
+        ICUResourceBundleFactory rbf = new ICUResourceBundleFactory();
+        logln("RB: " + rbf.create(lkey, null));
 
-    // ICUNotifier
-    ICUNotifier nf = new ICUNSubclass();
-    try {
-        nf.addListener(null);
-        errln("added null listener");
-    }
-    catch (NullPointerException e) {
-        logln(e.getMessage());
-    }
-    catch (Exception e) {
-        errln("got wrong exception");
-    }
+        // ICUNotifier
+        ICUNotifier nf = new ICUNSubclass();
+        try {
+            nf.addListener(null);
+            errln("added null listener");
+        } catch (NullPointerException e) {
+            logln(e.getMessage());
+        } catch (Exception e) {
+            errln("got wrong exception");
+        }
 
-    try {
-        nf.addListener(new WrongListener());
-        errln("added wrong listener");
-    }
-    catch (IllegalStateException e) {
-        logln(e.getMessage());
-    }
-    catch (Exception e) {
-        errln("got wrong exception");
-    }
+        try {
+            nf.addListener(new WrongListener());
+            errln("added wrong listener");
+        } catch (IllegalStateException e) {
+            logln(e.getMessage());
+        } catch (Exception e) {
+            errln("got wrong exception");
+        }
 
-    try {
-        nf.removeListener(null);
-        errln("removed null listener");
-    }
-    catch (NullPointerException e) {
-        logln(e.getMessage());
-    }
-    catch (Exception e) {
-        errln("got wrong exception");
-    }
+        try {
+            nf.removeListener(null);
+            errln("removed null listener");
+        } catch (NullPointerException e) {
+            logln(e.getMessage());
+        } catch (Exception e) {
+            errln("got wrong exception");
+        }
 
-    nf.removeListener(new MyListener());
-    nf.notifyChanged();
-    nf.addListener(new MyListener());
-    nf.removeListener(new MyListener());
+        nf.removeListener(new MyListener());
+        nf.notifyChanged();
+        nf.addListener(new MyListener());
+        nf.removeListener(new MyListener());
     }
 
-    static class MyListener implements EventListener {
-    }
+    static class MyListener implements EventListener {}
 
-    static class WrongListener implements EventListener {
-    }
+    static class WrongListener implements EventListener {}
 
     static class ICUNSubclass extends ICUNotifier {
         @Override
@@ -1014,18 +1011,17 @@ public class ICUServiceTest extends CoreTestFmwk
 
         // not used, just needed to implement abstract base
         @Override
-        public void notifyListener(EventListener l) {
-        }
+        public void notifyListener(EventListener l) {}
     }
 
     static class LKFSubclass extends LocaleKeyFactory {
-    LKFSubclass(boolean visible) {
-        super(visible ? VISIBLE : INVISIBLE);
-    }
+        LKFSubclass(boolean visible) {
+            super(visible ? VISIBLE : INVISIBLE);
+        }
 
-    @Override
-    protected Set<String> getSupportedIDs() {
-        return Collections.emptySet();
-    }
+        @Override
+        protected Set<String> getSupportedIDs() {
+            return Collections.emptySet();
+        }
     }
 }

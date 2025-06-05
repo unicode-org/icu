@@ -3,12 +3,6 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import com.ibm.icu.message2.FormattedPlaceholder;
 import com.ibm.icu.message2.Formatter;
 import com.ibm.icu.message2.FormatterFactory;
@@ -17,11 +11,16 @@ import com.ibm.icu.message2.PlainStringFormattedValue;
 import com.ibm.icu.message2.Selector;
 import com.ibm.icu.message2.SelectorFactory;
 import com.ibm.icu.text.FormattedValue;
+import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
- * Locale-independent functions for formatting and selection.
- * Implements the functionality required by `:test:function`, `:test:format`, and `:test:select`.  
- * Used only for testing (see test/README.md in the MF2 repository).
+ * Locale-independent functions for formatting and selection. Implements the functionality required
+ * by `:test:function`, `:test:format`, and `:test:select`. Used only for testing (see
+ * test/README.md in the MF2 repository).
  */
 public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
     private final String kind;
@@ -74,8 +73,9 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
         }
 
         @Override
-        public List<String> matches(Object value, List<String> keys, Map<String, Object> variableOptions) {
-//            ParsedOptions parsedOptions = ParsedOptions.of(variableOptions);
+        public List<String> matches(
+                Object value, List<String> keys, Map<String, Object> variableOptions) {
+            //            ParsedOptions parsedOptions = ParsedOptions.of(variableOptions);
             if (parsedOptions.failsSelect) {
                 throw new InvalidParameterException("Expected the test to always fail.");
             }
@@ -123,7 +123,8 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
         final boolean failsSelect;
         final int decimalPlaces;
 
-        ParsedOptions(boolean reportErrors, boolean failsFormat, boolean failsSelect, int decimalPlaces) {
+        ParsedOptions(
+                boolean reportErrors, boolean failsFormat, boolean failsSelect, int decimalPlaces) {
             this.failsFormat = failsFormat;
             this.failsSelect = failsSelect;
             this.decimalPlaces = decimalPlaces;
@@ -141,7 +142,7 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
             }
 
             String option = getStringOption(options, "icu:impl:errorPolicy", null);
-            reportErrors= "STRICT".equals(option);
+            reportErrors = "STRICT".equals(option);
 
             option = getStringOption(options, "fails", "never");
             if (option == null) {
@@ -188,7 +189,8 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
         }
     }
 
-    private static String getStringOption(Map<String, Object> options, String key, String defaultVal) {
+    private static String getStringOption(
+            Map<String, Object> options, String key, String defaultVal) {
         if (options == null) {
             return defaultVal;
         }
@@ -224,7 +226,8 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
         }
         if (dblToFormat == null) {
             if (parsedOptions.reportErrors) {
-                throw new NullPointerException("unresolved-variable: argument to format can't be null");
+                throw new NullPointerException(
+                        "unresolved-variable: argument to format can't be null");
             }
             result = new PlainStringFormattedValue("{|" + toFormat + "|}");
         } else {
@@ -241,7 +244,8 @@ public class TestFunctionFactory implements FormatterFactory, SelectorFactory {
                 // 1. If `DecimalPlaces` is 1, then
                 //   1. The character `.` U+002E Full Stop.
                 buffer.append('.');
-                //   1. The single decimal digit character representing the value floor((abs(`Input`) - floor(abs(`Input`))) \* 10)
+                //   1. The single decimal digit character representing the value
+                // floor((abs(`Input`) - floor(abs(`Input`))) \* 10)
                 buffer.append((int) ((dblToFormat - dblToFormat.intValue()) * 10));
             }
             result = new PlainStringFormattedValue(buffer.toString());

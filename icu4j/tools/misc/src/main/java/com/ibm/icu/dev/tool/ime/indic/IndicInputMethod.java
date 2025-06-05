@@ -17,18 +17,16 @@ import java.awt.im.spi.InputMethodContext;
 import java.lang.Character.Subset;
 import java.util.Locale;
 
-/**
- * This stub delegates to the simpler IndicInputMethodImpl.
- */
+/** This stub delegates to the simpler IndicInputMethodImpl. */
 class IndicInputMethod implements InputMethod {
     private IndicInputMethodImpl impl;
     private Locale locale;
-    
+
     IndicInputMethod(Locale theLocale, IndicInputMethodImpl theImplementation) {
         locale = theLocale;
         impl = theImplementation;
     }
-    
+
     public void setInputMethodContext(InputMethodContext context) {
         impl.setInputMethodContext(context);
     }
@@ -40,9 +38,8 @@ class IndicInputMethod implements InputMethod {
     public Locale getLocale() {
         return locale;
     }
-    
-    public void setCharacterSubsets(Subset[] subsets) {
-    }
+
+    public void setCharacterSubsets(Subset[] subsets) {}
 
     public void setCompositionEnabled(boolean enable) {
         throw new UnsupportedOperationException();
@@ -62,31 +59,24 @@ class IndicInputMethod implements InputMethod {
             if (event.getID() == KeyEvent.KEY_TYPED) {
                 impl.handleKeyTyped(keyEvent);
             }
-
         }
     }
 
-    public void notifyClientWindowChange(Rectangle bounds) {
-    }
+    public void notifyClientWindowChange(Rectangle bounds) {}
 
-    public void activate() {
-    }
+    public void activate() {}
 
-    public void deactivate(boolean isTemporary) {
-    }
+    public void deactivate(boolean isTemporary) {}
 
-    public void hideWindows() {
-    }
-  
-    public void removeNotify() {
-    }
+    public void hideWindows() {}
+
+    public void removeNotify() {}
 
     public void endComposition() {
         impl.endComposition();
     }
 
-    public void dispose() {
-    }
+    public void dispose() {}
 
     public Object getControlObject() {
         return null;

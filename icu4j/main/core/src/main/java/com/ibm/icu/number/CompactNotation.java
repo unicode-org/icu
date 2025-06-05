@@ -2,11 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.ibm.icu.impl.number.CompactData;
 import com.ibm.icu.impl.number.CompactData.CompactType;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
@@ -21,14 +16,17 @@ import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.ULocale;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A class that defines the scientific notation style to be used when formatting numbers in
  * NumberFormatter.
  *
- * <p>
- * This class exposes no public functionality. To create a CompactNotation, use one of the factory
- * methods in {@link Notation}.
+ * <p>This class exposes no public functionality. To create a CompactNotation, use one of the
+ * factory methods in {@link Notation}.
  *
  * @stable ICU 60
  * @see NumberFormatter
@@ -40,12 +38,14 @@ public class CompactNotation extends Notation {
 
     /**
      * Create a compact notation with custom data.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      * @see DecimalFormatProperties#setCompactCustomData
      */
     @Deprecated
-    public static CompactNotation forCustomData(Map<String, Map<String, String>> compactCustomData) {
+    public static CompactNotation forCustomData(
+            Map<String, Map<String, String>> compactCustomData) {
         return new CompactNotation(compactCustomData);
     }
 
@@ -67,8 +67,10 @@ public class CompactNotation extends Notation {
             MutablePatternModifier buildReference,
             boolean safe,
             MicroPropsGenerator parent) {
-        // TODO: Add a data cache? It would be keyed by locale, nsName, compact type, and compact style.
-        return new CompactHandler(this, locale, nsName, compactType, rules, buildReference, safe, parent);
+        // TODO: Add a data cache? It would be keyed by locale, nsName, compact type, and compact
+        // style.
+        return new CompactHandler(
+                this, locale, nsName, compactType, rules, buildReference, safe, parent);
     }
 
     private static class CompactHandler implements MicroPropsGenerator {
@@ -114,7 +116,8 @@ public class CompactNotation extends Notation {
             data.getUniquePatterns(allPatterns);
 
             for (String patternString : allPatterns) {
-                ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(patternString);
+                ParsedPatternInfo patternInfo =
+                        PatternStringParser.parseToPatternInfo(patternString);
                 buildReference.setPatternInfo(patternInfo, NumberFormat.Field.COMPACT);
                 precomputedMods.put(patternString, buildReference.createImmutable());
             }
@@ -149,7 +152,8 @@ public class CompactNotation extends Notation {
             } else {
                 // Unsafe code path.
                 // Overwrite the PatternInfo in the existing modMiddle.
-                ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(patternString);
+                ParsedPatternInfo patternInfo =
+                        PatternStringParser.parseToPatternInfo(patternString);
                 unsafePatternModifier.setPatternInfo(patternInfo, NumberFormat.Field.COMPACT);
                 unsafePatternModifier.setNumberProperties(quantity.signum(), null);
                 micros.modMiddle = unsafePatternModifier;

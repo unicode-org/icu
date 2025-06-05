@@ -8,7 +8,7 @@ import com.ibm.icu.util.ULocale;
 /**
  * Encodes info about the direction of the message.
  *
- * <p>It is used to implement the @code u:dir} functionality.</p>
+ * <p>It is used to implement the @code u:dir} functionality.
  *
  * @internal ICU 77 technology preview
  * @deprecated This API is for technology preview only.
@@ -50,8 +50,8 @@ public enum Directionality {
     @Deprecated
     AUTO,
     /**
-     * Directionality inherited from the <i>message</i> or from the <i>resolved value</i>
-     * of the <i>operand</i> without requiring isolation of the <i>expression</i> value.
+     * Directionality inherited from the <i>message</i> or from the <i>resolved value</i> of the
+     * <i>operand</i> without requiring isolation of the <i>expression</i> value.
      *
      * @internal ICU 77 technology preview
      * @deprecated This API is for technology preview only.
@@ -64,13 +64,12 @@ public enum Directionality {
      *
      * @param ulocale the locale to determine the directionality from.
      * @return the appropriate directionality for the locale given.
-     *
      * @internal ICU 77 technology preview
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static Directionality of(ULocale ulocale) {
-        if (ulocale == null ) {
+        if (ulocale == null) {
             return Directionality.INHERIT;
         }
         return ulocale.isRightToLeft() ? Directionality.RTL : Directionality.LTR;

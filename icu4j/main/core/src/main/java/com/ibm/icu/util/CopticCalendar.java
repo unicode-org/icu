@@ -14,119 +14,119 @@ import java.util.Locale;
 
 /**
  * Implement the Coptic calendar system.
- * <p>
- * CopticCalendar usually should be instantiated using
- * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
- * with the tag <code>"@calendar=coptic"</code>.</p>
+ *
+ * <p>CopticCalendar usually should be instantiated using {@link
+ * com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code> with the tag
+ * <code>"@calendar=coptic"</code>.
  *
  * @see com.ibm.icu.util.Calendar
  * @stable ICU 3.4
  */
-public final class CopticCalendar extends CECalendar
-{
+public final class CopticCalendar extends CECalendar {
     // jdk1.4.2 serialver
     private static final long serialVersionUID = 5903818751846742911L;
 
     /**
-     * Constant for ωογτ / تﻮﺗ,
-     * the 1st month of the Coptic year.
+     * Constant for ωογτ / تﻮﺗ, the 1st month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int TOUT = 0;
 
     /**
-     * Constant for Παοπι / ﻪﺑﺎﺑ,
-     * the 2nd month of the Coptic year.
+     * Constant for Παοπι / ﻪﺑﺎﺑ, the 2nd month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int BABA = 1;
 
     /**
-     * Constant for Αθορ / رﻮﺗﺎﻫ,
-     * the 3rd month of the Coptic year.
+     * Constant for Αθορ / رﻮﺗﺎﻫ, the 3rd month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int HATOR = 2;
 
     /**
-     * Constant for Χοιακ / ﻚﻬﻴﻛ;,
-     * the 4th month of the Coptic year.
+     * Constant for Χοιακ / ﻚﻬﻴﻛ;, the 4th month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int KIAHK = 3;
 
     /**
-     * Constant for Τωβι / طﻮﺒﻫ,
-     * the 5th month of the Coptic year.
+     * Constant for Τωβι / طﻮﺒﻫ, the 5th month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int TOBA = 4;
 
     /**
-     * Constant for Μεϣιρ / ﺮﻴﺸﻣأ,
-     * the 6th month of the Coptic year.
+     * Constant for Μεϣιρ / ﺮﻴﺸﻣأ, the 6th month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int AMSHIR = 5;
 
     /**
-     * Constant for Παρεμϩατ / تﺎﻬﻣﺮﺑ,
-     * the 7th month of the Coptic year.
+     * Constant for Παρεμϩατ / تﺎﻬﻣﺮﺑ, the 7th month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int BARAMHAT = 6;
 
     /**
-     * Constant for Φαρμοθι / هدﻮﻣﺮﺑ,
-     * the 8th month of the Coptic year.
+     * Constant for Φαρμοθι / هدﻮﻣﺮﺑ, the 8th month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int BARAMOUDA = 7;
 
     /**
-     * Constant for Παϣαν / ﺲﻨﺸﺑ;,
-     * the 9th month of the Coptic year.
+     * Constant for Παϣαν / ﺲﻨﺸﺑ;, the 9th month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int BASHANS = 8;
 
     /**
-     * Constant for Παωνι / ﻪﻧؤﻮﺑ,
-     * the 10th month of the Coptic year.
+     * Constant for Παωνι / ﻪﻧؤﻮﺑ, the 10th month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int PAONA = 9;
 
     /**
-     * Constant for Επηπ / ﺐﻴﺑأ,
-     * the 11th month of the Coptic year.
+     * Constant for Επηπ / ﺐﻴﺑأ, the 11th month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int EPEP = 10;
 
     /**
-     * Constant for Μεϲωρη / ىﺮﺴﻣ,
-     * the 12th month of the Coptic year.
+     * Constant for Μεϲωρη / ىﺮﺴﻣ, the 12th month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int MESRA = 11;
 
     /**
-     * Constant for Πικογϫι μαβοτ / ﺮﻴﻐﺼﻟاﺮﻬﺸﻟا,
-     * the 13th month of the Coptic year.
+     * Constant for Πικογϫι μαβοτ / ﺮﻴﻐﺼﻟاﺮﻬﺸﻟا, the 13th month of the Coptic year.
+     *
      * @stable ICU 3.4
      */
     public static final int NASIE = 12;
 
-    private static final int JD_EPOCH_OFFSET  = 1824665;
+    private static final int JD_EPOCH_OFFSET = 1824665;
 
     // Eras
     private static final int BCE = 0;
     private static final int CE = 1;
 
     /**
-     * Constructs a default <code>CopticCalendar</code> using the current time
-     * in the default time zone with the default locale.
+     * Constructs a default <code>CopticCalendar</code> using the current time in the default time
+     * zone with the default locale.
+     *
      * @stable ICU 3.4
      */
     public CopticCalendar() {
@@ -134,8 +134,8 @@ public final class CopticCalendar extends CECalendar
     }
 
     /**
-     * Constructs a <code>CopticCalendar</code> based on the current time
-     * in the given time zone with the default locale.
+     * Constructs a <code>CopticCalendar</code> based on the current time in the given time zone
+     * with the default locale.
      *
      * @param zone The time zone for the new calendar.
      * @stable ICU 3.4
@@ -145,8 +145,8 @@ public final class CopticCalendar extends CECalendar
     }
 
     /**
-     * Constructs a <code>CopticCalendar</code> based on the current time
-     * in the default time zone with the given locale.
+     * Constructs a <code>CopticCalendar</code> based on the current time in the default time zone
+     * with the given locale.
      *
      * @param aLocale The locale for the new calendar.
      * @stable ICU 3.4
@@ -156,8 +156,8 @@ public final class CopticCalendar extends CECalendar
     }
 
     /**
-     * Constructs a <code>CopticCalendar</code> based on the current time
-     * in the default time zone with the given locale.
+     * Constructs a <code>CopticCalendar</code> based on the current time in the default time zone
+     * with the given locale.
      *
      * @param locale The icu locale for the new calendar.
      * @stable ICU 3.4
@@ -167,8 +167,8 @@ public final class CopticCalendar extends CECalendar
     }
 
     /**
-     * Constructs a <code>CopticCalendar</code> based on the current time
-     * in the given time zone with the given locale.
+     * Constructs a <code>CopticCalendar</code> based on the current time in the given time zone
+     * with the given locale.
      *
      * @param zone The time zone for the new calendar.
      * @param aLocale The locale for the new calendar.
@@ -179,8 +179,8 @@ public final class CopticCalendar extends CECalendar
     }
 
     /**
-     * Constructs a <code>CopticCalendar</code> based on the current time
-     * in the given time zone with the given locale.
+     * Constructs a <code>CopticCalendar</code> based on the current time in the given time zone
+     * with the given locale.
      *
      * @param zone The time zone for the new calendar.
      * @param locale The icu locale for the new calendar.
@@ -191,13 +191,13 @@ public final class CopticCalendar extends CECalendar
     }
 
     /**
-     * Constructs a <code>CopticCalendar</code> with the given date set
-     * in the default time zone with the default locale.
+     * Constructs a <code>CopticCalendar</code> with the given date set in the default time zone
+     * with the default locale.
      *
-     * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field.
-     * @param month     The value used to set the calendar's {@link #MONTH MONTH} time field.
-     *                  The value is 0-based. e.g., 0 for Tout.
-     * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
+     * @param year The value used to set the calendar's {@link #YEAR YEAR} time field.
+     * @param month The value used to set the calendar's {@link #MONTH MONTH} time field. The value
+     *     is 0-based. e.g., 0 for Tout.
+     * @param date The value used to set the calendar's {@link #DATE DATE} time field.
      * @stable ICU 3.4
      */
     public CopticCalendar(int year, int month, int date) {
@@ -205,10 +205,10 @@ public final class CopticCalendar extends CECalendar
     }
 
     /**
-     * Constructs a <code>CopticCalendar</code> with the given date set
-     * in the default time zone with the default locale.
+     * Constructs a <code>CopticCalendar</code> with the given date set in the default time zone
+     * with the default locale.
      *
-     * @param date      The date to which the new calendar is set.
+     * @param date The date to which the new calendar is set.
      * @stable ICU 3.4
      */
     public CopticCalendar(Date date) {
@@ -216,25 +216,25 @@ public final class CopticCalendar extends CECalendar
     }
 
     /**
-     * Constructs a <code>CopticCalendar</code> with the given date
-     * and time set for the default time zone with the default locale.
+     * Constructs a <code>CopticCalendar</code> with the given date and time set for the default
+     * time zone with the default locale.
      *
-     * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field.
-     * @param month     The value used to set the calendar's {@link #MONTH MONTH} time field.
-     *                  The value is 0-based. e.g., 0 for Tout.
-     * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
-     * @param hour      The value used to set the calendar's {@link #HOUR_OF_DAY HOUR_OF_DAY} time field.
-     * @param minute    The value used to set the calendar's {@link #MINUTE MINUTE} time field.
-     * @param second    The value used to set the calendar's {@link #SECOND SECOND} time field.
+     * @param year The value used to set the calendar's {@link #YEAR YEAR} time field.
+     * @param month The value used to set the calendar's {@link #MONTH MONTH} time field. The value
+     *     is 0-based. e.g., 0 for Tout.
+     * @param date The value used to set the calendar's {@link #DATE DATE} time field.
+     * @param hour The value used to set the calendar's {@link #HOUR_OF_DAY HOUR_OF_DAY} time field.
+     * @param minute The value used to set the calendar's {@link #MINUTE MINUTE} time field.
+     * @param second The value used to set the calendar's {@link #SECOND SECOND} time field.
      * @stable ICU 3.4
      */
-    public CopticCalendar(int year, int month, int date, int hour,
-                          int minute, int second) {
+    public CopticCalendar(int year, int month, int date, int hour, int minute, int second) {
         super(year, month, date, hour, minute, second);
     }
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -244,6 +244,7 @@ public final class CopticCalendar extends CECalendar
 
     /**
      * {@inheritDoc}
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -255,6 +256,7 @@ public final class CopticCalendar extends CECalendar
 
     /**
      * {@inheritDoc}
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -278,6 +280,7 @@ public final class CopticCalendar extends CECalendar
 
     /**
      * {@inheritDoc}
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -289,17 +292,19 @@ public final class CopticCalendar extends CECalendar
 
     /**
      * {@inheritDoc}
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     @Override
     protected int extendedYearToYear(int eyear) {
-        return (eyear <= 0) ? 1-eyear : eyear;
+        return (eyear <= 0) ? 1 - eyear : eyear;
     }
 
     /**
      * {@inheritDoc}
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -336,4 +341,3 @@ public final class CopticCalendar extends CECalendar
         return COPTIC_CALENDAR_RELATED_YEAR_DIFFERENCE;
     }
 }
-

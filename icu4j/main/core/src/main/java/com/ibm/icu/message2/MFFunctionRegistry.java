@@ -8,22 +8,21 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This class is used to register mappings between various function
- * names and the factories that can create those functions.
+ * This class is used to register mappings between various function names and the factories that can
+ * create those functions.
  *
- * <p>For example to add formatting for a {@code Person} object one would need to:</p>
+ * <p>For example to add formatting for a {@code Person} object one would need to:
+ *
  * <ul>
- *   <li>write a function (class, lambda, etc.) that does the formatting proper
- *     (implementing {@link Formatter})</li>
- *   <li>write a factory that creates such a function
- *     (implementing {@link FormatterFactory})</li>
- *  <li>add a mapping from the function name as used in the syntax
- *    (for example {@code "person"}) to the factory</li>
- *  <li>optionally add a mapping from the class to format ({@code ...Person.class}) to
- *     the formatter name ({@code "person"}), so that one can use a placeholder in the message
- *     without specifying a function (for example {@code "... {$me} ..."} instead of
- *     {@code "... {$me :person} ..."}, if the class of {@code $me} is an {@code instanceof Person}).
- *     </li>
+ *   <li>write a function (class, lambda, etc.) that does the formatting proper (implementing {@link
+ *       Formatter})
+ *   <li>write a factory that creates such a function (implementing {@link FormatterFactory})
+ *   <li>add a mapping from the function name as used in the syntax (for example {@code "person"})
+ *       to the factory
+ *   <li>optionally add a mapping from the class to format ({@code ...Person.class}) to the
+ *       formatter name ({@code "person"}), so that one can use a placeholder in the message without
+ *       specifying a function (for example {@code "... {$me} ..."} instead of {@code "... {$me
+ *       :person} ..."}, if the class of {@code $me} is an {@code instanceof Person}).
  * </ul>
  *
  * <p><b>NOTE:</b> all function and selector names are normalized to NFC.
@@ -47,7 +46,6 @@ public class MFFunctionRegistry {
      * Creates a builder.
      *
      * @return the Builder.
-     *
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
@@ -57,21 +55,20 @@ public class MFFunctionRegistry {
     }
 
     /**
-     * Returns the formatter factory used to create the formatter for function
-     * named {@code name}.
+     * Returns the formatter factory used to create the formatter for function named {@code name}.
      *
-     * <p>Note: function name here means the name used to refer to the function in the
-     * MessageFormat 2 syntax, for example {@code "... {$exp :datetime} ..."}<br>
-     * The function name here is {@code "datetime"}, and does not have to correspond to the
-     * name of the methods / classes used to implement the functionality.</p>
+     * <p>Note: function name here means the name used to refer to the function in the MessageFormat
+     * 2 syntax, for example {@code "... {$exp :datetime} ..."}<br>
+     * The function name here is {@code "datetime"}, and does not have to correspond to the name of
+     * the methods / classes used to implement the functionality.
      *
-     * <p>For example one might write a {@code PersonFormatterFactory} returning a {@code PersonFormatter},
-     * and map that to the MessageFormat function named {@code "person"}.<br>
-     * The only name visible to the users of MessageFormat syntax will be {@code "person"}.</p>
+     * <p>For example one might write a {@code PersonFormatterFactory} returning a {@code
+     * PersonFormatter}, and map that to the MessageFormat function named {@code "person"}.<br>
+     * The only name visible to the users of MessageFormat syntax will be {@code "person"}.
      *
      * @param formatterName the function name.
-     * @return the factory creating formatters for {@code name}. Returns {@code null} if none is registered.
-     *
+     * @return the factory creating formatters for {@code name}. Returns {@code null} if none is
+     *     registered.
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
@@ -84,7 +81,6 @@ public class MFFunctionRegistry {
      * Get all know names that have a mappings from name to {@link FormatterFactory}.
      *
      * @return a set of all the known formatter names.
-     *
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
@@ -98,7 +94,6 @@ public class MFFunctionRegistry {
      *
      * @param clazz the class of the object to format.
      * @return the name of the formatter class, if registered. Returns {@code null} otherwise.
-     *
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
@@ -125,7 +120,6 @@ public class MFFunctionRegistry {
      * Get all know classes that have a mappings from class to function name.
      *
      * @return a set of all the known classes that have mapping to function names.
-     *
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
@@ -135,15 +129,14 @@ public class MFFunctionRegistry {
     }
 
     /**
-     * Returns the selector factory used to create the selector for function
-     * named {@code name}.
+     * Returns the selector factory used to create the selector for function named {@code name}.
      *
-     * <p>Note: the same comments about naming as the ones on {@code getFormatter} apply.</p>
+     * <p>Note: the same comments about naming as the ones on {@code getFormatter} apply.
      *
      * @param selectorName the selector name.
-     * @return the factory creating selectors for {@code name}. Returns {@code null} if none is registered.
+     * @return the factory creating selectors for {@code name}. Returns {@code null} if none is
+     *     registered.
      * @see #getFormatter(String)
-     *
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
@@ -156,7 +149,6 @@ public class MFFunctionRegistry {
      * Get all know names that have a mappings from name to {@link SelectorFactory}.
      *
      * @return a set of all the known selector names.
-     *
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
@@ -185,7 +177,6 @@ public class MFFunctionRegistry {
          *
          * @param functionRegistry the registry to copy from.
          * @return the builder, for fluent use.
-         *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
@@ -203,7 +194,6 @@ public class MFFunctionRegistry {
          * @param formatterName the function name (as used in the MessageFormat 2 syntax).
          * @param formatterFactory the factory that handles the name.
          * @return the builder, for fluent use.
-         *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
@@ -218,7 +208,6 @@ public class MFFunctionRegistry {
          *
          * @param formatterName the name of the formatter to remove.
          * @return the builder, for fluent use.
-         *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
@@ -232,7 +221,6 @@ public class MFFunctionRegistry {
          * Remove all the formatter mappings.
          *
          * @return the builder, for fluent use.
-         *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
@@ -248,7 +236,6 @@ public class MFFunctionRegistry {
          * @param clazz the class of the type to format.
          * @param formatterName the formatter name (as used in the MessageFormat 2 syntax).
          * @return the builder, for fluent use.
-         *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
@@ -263,7 +250,6 @@ public class MFFunctionRegistry {
          *
          * @param clazz the class to remove the mapping for.
          * @return the builder, for fluent use.
-         *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
@@ -277,7 +263,6 @@ public class MFFunctionRegistry {
          * Remove all the class to formatter-names mappings.
          *
          * @return the builder, for fluent use.
-         *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
@@ -293,7 +278,6 @@ public class MFFunctionRegistry {
          * @param selectorName the function name (as used in the MessageFormat 2 syntax).
          * @param selectorFactory the factory that handles the name.
          * @return the builder, for fluent use.
-         *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
@@ -308,7 +292,6 @@ public class MFFunctionRegistry {
          *
          * @param selectorName the name of the selector to remove.
          * @return the builder, for fluent use.
-         *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
@@ -322,7 +305,6 @@ public class MFFunctionRegistry {
          * Remove all the selector mappings.
          *
          * @return the builder, for fluent use.
-         *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
@@ -336,7 +318,6 @@ public class MFFunctionRegistry {
          * Builds an instance of {@link MFFunctionRegistry}.
          *
          * @return the function registry created.
-         *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */

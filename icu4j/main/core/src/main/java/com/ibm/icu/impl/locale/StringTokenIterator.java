@@ -80,7 +80,8 @@ public class StringTokenIterator {
 
     private int nextDelimiter(int start) {
         int idx = start;
-        outer: while (idx < _text.length()) {
+        outer:
+        while (idx < _text.length()) {
             char c = _text.charAt(idx);
             for (int i = 0; i < _dlms.length(); i++) {
                 if (c == _dlms.charAt(i)) {
@@ -92,4 +93,3 @@ public class StringTokenIterator {
         return idx;
     }
 }
-

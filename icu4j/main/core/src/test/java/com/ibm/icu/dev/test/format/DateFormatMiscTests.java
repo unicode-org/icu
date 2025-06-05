@@ -8,28 +8,23 @@
  */
 
 /**
- * Port From:   ICU4C v1.8.1 : format : DateFormatMiscTests
- * Source File: $ICU4CRoot/source/test/intltest/miscdtfm.cpp
- **/
-
+ * Port From: ICU4C v1.8.1 : format : DateFormatMiscTests Source File:
+ * $ICU4CRoot/source/test/intltest/miscdtfm.cpp
+ */
 package com.ibm.icu.dev.test.format;
-
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.util.Date;
-import java.util.Locale;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Locale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-/**
- * Performs miscellaneous tests for DateFormat, SimpleDateFormat, DateFormatSymbols
- **/
+/** Performs miscellaneous tests for DateFormat, SimpleDateFormat, DateFormatSymbols */
 @RunWith(JUnit4.class)
 public class DateFormatMiscTests extends CoreTestFmwk {
     /*
@@ -41,27 +36,27 @@ public class DateFormatMiscTests extends CoreTestFmwk {
         // Date parse requiring 4 digit year.
         //
         String dstring[] = {
-            "97", "1997", "97", "1997", "01", "2001", "01", "2001",
-             "1", "1", "11", "11", "111", "111"};
+            "97", "1997", "97", "1997", "01", "2001", "01", "2001", "1", "1", "11", "11", "111",
+            "111"
+        };
 
-        String dformat[] =
-            {
-                "yy", "yy", "yyyy", "yyyy", "yy", "yy", "yyyy", "yyyy",
-                "yy", "yyyy", "yy", "yyyy", "yy", "yyyy"};
+        String dformat[] = {
+            "yy", "yy", "yyyy", "yyyy", "yy", "yy", "yyyy", "yyyy", "yy", "yyyy", "yy", "yyyy",
+            "yy", "yyyy"
+        };
 
         SimpleDateFormat formatter;
         SimpleDateFormat resultFormatter = new SimpleDateFormat("yyyy");
         logln("Format\tSource\tResult");
         logln("-------\t-------\t-------");
-        for (int i = 0; i < dstring.length ; i++) {
+        for (int i = 0; i < dstring.length; i++) {
             log(dformat[i] + "\t" + dstring[i] + "\t");
             formatter = new SimpleDateFormat(dformat[i]);
             try {
                 StringBuffer str = new StringBuffer("");
                 FieldPosition pos = new FieldPosition(0);
                 logln(resultFormatter.format(formatter.parse(dstring[i]), str, pos).toString());
-            }
-            catch (ParseException exception) {
+            } catch (ParseException exception) {
                 errln("exception --> " + exception);
             }
             logln("");
@@ -75,7 +70,7 @@ public class DateFormatMiscTests extends CoreTestFmwk {
     @Test
     public void Test4099975new() {
         Date d = new Date();
-        //test SimpleDateFormat Constructor
+        // test SimpleDateFormat Constructor
         {
             DateFormatSymbols symbols = new DateFormatSymbols(Locale.US);
             SimpleDateFormat df = new SimpleDateFormat("E hh:mm", symbols);
@@ -96,7 +91,7 @@ public class DateFormatMiscTests extends CoreTestFmwk {
                 errln("The Clone Object does not equal with the original source");
             }
         }
-        //test SimpleDateFormat.setDateFormatSymbols()
+        // test SimpleDateFormat.setDateFormatSymbols()
         {
             DateFormatSymbols symbols = new DateFormatSymbols(Locale.US);
             SimpleDateFormat df = new SimpleDateFormat("E hh:mm");

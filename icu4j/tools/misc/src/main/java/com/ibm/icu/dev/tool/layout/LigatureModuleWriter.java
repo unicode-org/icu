@@ -12,16 +12,12 @@
  */
 package com.ibm.icu.dev.tool.layout;
 
-
-public class LigatureModuleWriter extends ModuleWriter
-{
-    public LigatureModuleWriter()
-    {
+public class LigatureModuleWriter extends ModuleWriter {
+    public LigatureModuleWriter() {
         super();
     }
 
-    public void writeTable(OpenTypeTableWriter tableWriter)
-    {
+    public void writeTable(OpenTypeTableWriter tableWriter) {
         tableWriter.writeTable(output);
     }
 }

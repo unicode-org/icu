@@ -6,14 +6,13 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
- * A mutable String wrapper with a variable offset and length and
- * support for case folding. The charAt, length, and subSequence methods all
- * operate relative to the fixed offset into the String.
+ * A mutable String wrapper with a variable offset and length and support for case folding. The
+ * charAt, length, and subSequence methods all operate relative to the fixed offset into the String.
  *
- * Intended to be useful for parsing.
+ * <p>Intended to be useful for parsing.
  *
- * CAUTION: Since this class is mutable, it must not be used anywhere that an
- * immutable object is required, like in a cache or as the key of a hash map.
+ * <p>CAUTION: Since this class is mutable, it must not be used anywhere that an immutable object is
+ * required, like in a cache or as the key of a hash map.
  *
  * @author sffc (Shane Carr)
  */
@@ -42,11 +41,10 @@ public class StringSegment implements CharSequence {
     /**
      * Equivalent to <code>setOffset(getOffset()+delta)</code>.
      *
-     * <p>
-     * Number parsing note: This method is usually called by a Matcher to register that a char was
-     * consumed. If the char is strong (it usually is, except for things like whitespace), follow this
-     * with a call to ParsedNumber#setCharsConsumed(). For more information on strong chars, see that
-     * method.
+     * <p>Number parsing note: This method is usually called by a Matcher to register that a char
+     * was consumed. If the char is strong (it usually is, except for things like whitespace),
+     * follow this with a call to ParsedNumber#setCharsConsumed(). For more information on strong
+     * chars, see that method.
      */
     public void adjustOffset(int delta) {
         assert start + delta >= 0;
@@ -54,9 +52,7 @@ public class StringSegment implements CharSequence {
         start += delta;
     }
 
-    /**
-     * Adjusts the offset by the width of the current lead code point, either 1 or 2 chars.
-     */
+    /** Adjusts the offset by the width of the current lead code point, either 1 or 2 chars. */
     public void adjustOffsetByCodePoint() {
         start += Character.charCount(getCodePoint());
     }
@@ -89,9 +85,8 @@ public class StringSegment implements CharSequence {
     /**
      * Returns the first code point in the string segment.
      *
-     * <p>
-     * <strong>Important:</strong> Most of the time, you should use {@link #startsWith}, which handles
-     * case folding logic, instead of this method.
+     * <p><strong>Important:</strong> Most of the time, you should use {@link #startsWith}, which
+     * handles case folding logic, instead of this method.
      */
     public int getCodePoint() {
         assert start < end;
@@ -105,9 +100,7 @@ public class StringSegment implements CharSequence {
         return lead;
     }
 
-    /**
-     * Returns the code point at the given index relative to the current offset.
-     */
+    /** Returns the code point at the given index relative to the current offset. */
     public int codePointAt(int index) {
         return str.codePointAt(start + index);
     }
@@ -115,16 +108,13 @@ public class StringSegment implements CharSequence {
     /**
      * Returns true if the first code point of this StringSegment equals the given code point.
      *
-     * <p>
-     * This method will perform case folding if case folding is enabled for the parser.
+     * <p>This method will perform case folding if case folding is enabled for the parser.
      */
     public boolean startsWith(int otherCp) {
         return codePointsEqual(getCodePoint(), otherCp, foldCase);
     }
 
-    /**
-     * Returns true if the first code point of this StringSegment is in the given UnicodeSet.
-     */
+    /** Returns true if the first code point of this StringSegment is in the given UnicodeSet. */
     public boolean startsWith(UnicodeSet uniset) {
         // TODO: Move UnicodeSet case-folding logic here.
         // TODO: Handle string matches here instead of separately.
@@ -136,8 +126,8 @@ public class StringSegment implements CharSequence {
     }
 
     /**
-     * Returns true if there is at least one code point of overlap between this StringSegment and the
-     * given CharSequence. Null-safe.
+     * Returns true if there is at least one code point of overlap between this StringSegment and
+     * the given CharSequence. Null-safe.
      */
     public boolean startsWith(CharSequence other) {
         if (other == null || other.length() == 0 || length() == 0) {
@@ -150,25 +140,23 @@ public class StringSegment implements CharSequence {
 
     /**
      * Returns the length of the prefix shared by this StringSegment and the given CharSequence. For
-     * example, if this string segment is "aab", and the char sequence is "aac", this method returns 2,
-     * since the first 2 characters are the same.
+     * example, if this string segment is "aab", and the char sequence is "aac", this method returns
+     * 2, since the first 2 characters are the same.
      *
-     * <p>
-     * This method only returns offsets along code point boundaries.
+     * <p>This method only returns offsets along code point boundaries.
      *
-     * <p>
-     * This method will perform case folding if case folding was enabled in the constructor.
+     * <p>This method will perform case folding if case folding was enabled in the constructor.
      *
-     * <p>
-     * IMPORTANT: The given CharSequence must not be empty! It is the caller's responsibility to check.
+     * <p>IMPORTANT: The given CharSequence must not be empty! It is the caller's responsibility to
+     * check.
      */
     public int getCommonPrefixLength(CharSequence other) {
         return getPrefixLengthInternal(other, foldCase);
     }
 
     /**
-     * Like {@link #getCommonPrefixLength}, but never performs case folding, even if case folding was
-     * enabled in the constructor.
+     * Like {@link #getCommonPrefixLength}, but never performs case folding, even if case folding
+     * was enabled in the constructor.
      */
     public int getCaseSensitivePrefixLength(CharSequence other) {
         return getPrefixLengthInternal(other, false);
@@ -177,7 +165,7 @@ public class StringSegment implements CharSequence {
     private int getPrefixLengthInternal(CharSequence other, boolean foldCase) {
         assert other.length() != 0;
         int offset = 0;
-        for (; offset < Math.min(length(), other.length());) {
+        for (; offset < Math.min(length(), other.length()); ) {
             // TODO: case-fold code points, not chars
             int cp1 = Character.codePointAt(this, offset);
             int cp2 = Character.codePointAt(other, offset);

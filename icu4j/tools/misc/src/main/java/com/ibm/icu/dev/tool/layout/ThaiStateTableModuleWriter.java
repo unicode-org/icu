@@ -12,20 +12,17 @@
  */
 package com.ibm.icu.dev.tool.layout;
 
-public class ThaiStateTableModuleWriter extends ModuleWriter
-{
-    public ThaiStateTableModuleWriter()
-    {
+public class ThaiStateTableModuleWriter extends ModuleWriter {
+    public ThaiStateTableModuleWriter() {
         super();
     }
 
-    public void writeTables()
-    {
+    public void writeTables() {
         writeHeader(null, includeFiles);
-        
+
         ThaiCharacterClasses.writeClassTable(output);
         ThaiStateTable.writeStateTable(output);
-        
+
         writeTrailer();
     }
 

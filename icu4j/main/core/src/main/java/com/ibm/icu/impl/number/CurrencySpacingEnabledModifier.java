@@ -12,7 +12,8 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
 
     // These are the default currency spacing UnicodeSets in CLDR.
     // Pre-compute them for performance.
-    // The unit test testCurrencySpacingPatternStability() will start failing if these change in CLDR.
+    // The unit test testCurrencySpacingPatternStability() will start failing if these change in
+    // CLDR.
     private static final UnicodeSet UNISET_DIGIT = new UnicodeSet("[:digit:]").freeze();
     private static final UnicodeSet UNISET_NOTSZ = new UnicodeSet("[[:^S:]&[:^Z:]]").freeze();
 
@@ -38,7 +39,8 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
 
         // Check for currency spacing. Do not build the UnicodeSets unless there is
         // a currency code point at a boundary.
-        if (prefix.length() > 0 && prefix.fieldAt(prefix.length() - 1) == NumberFormat.Field.CURRENCY) {
+        if (prefix.length() > 0
+                && prefix.fieldAt(prefix.length() - 1) == NumberFormat.Field.CURRENCY) {
             int prefixCp = prefix.getLastCodePoint();
             UnicodeSet prefixUnicodeSet = getUnicodeSet(symbols, IN_CURRENCY, PREFIX);
             if (prefixUnicodeSet.contains(prefixCp)) {
@@ -116,15 +118,11 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
 
     /** Unsafe code path */
     private static int applyCurrencySpacingAffix(
-            FormattedStringBuilder output,
-            int index,
-            byte affix,
-            DecimalFormatSymbols symbols) {
+            FormattedStringBuilder output, int index, byte affix, DecimalFormatSymbols symbols) {
         // NOTE: For prefix, output.fieldAt(index-1) gets the last field type in the prefix.
         // This works even if the last code point in the prefix is 2 code units because the
         // field value gets populated to both indices in the field array.
-        Object affixField = (affix == PREFIX) ? output.fieldAt(index - 1)
-                : output.fieldAt(index);
+        Object affixField = (affix == PREFIX) ? output.fieldAt(index - 1) : output.fieldAt(index);
         if (affixField != NumberFormat.Field.CURRENCY) {
             return 0;
         }
@@ -133,7 +131,8 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
         if (!affixUniset.contains(affixCp)) {
             return 0;
         }
-        int numberCp = (affix == PREFIX) ? output.codePointAt(index) : output.codePointBefore(index);
+        int numberCp =
+                (affix == PREFIX) ? output.codePointAt(index) : output.codePointBefore(index);
         UnicodeSet numberUniset = getUnicodeSet(symbols, IN_NUMBER, affix);
         if (!numberUniset.contains(numberCp)) {
             return 0;
@@ -149,10 +148,12 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
         return output.insert(index, spacingString, null);
     }
 
-    private static UnicodeSet getUnicodeSet(DecimalFormatSymbols symbols, short position, byte affix) {
-        String pattern = symbols
-                .getPatternForCurrencySpacing(
-                        position == IN_CURRENCY ? DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH
+    private static UnicodeSet getUnicodeSet(
+            DecimalFormatSymbols symbols, short position, byte affix) {
+        String pattern =
+                symbols.getPatternForCurrencySpacing(
+                        position == IN_CURRENCY
+                                ? DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH
                                 : DecimalFormatSymbols.CURRENCY_SPC_SURROUNDING_MATCH,
                         affix == SUFFIX);
         if (pattern.equals("[:digit:]")) {
@@ -165,7 +166,7 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
     }
 
     private static String getInsertString(DecimalFormatSymbols symbols, byte affix) {
-        return symbols.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT,
-                affix == SUFFIX);
+        return symbols.getPatternForCurrencySpacing(
+                DecimalFormatSymbols.CURRENCY_SPC_INSERT, affix == SUFFIX);
     }
 }

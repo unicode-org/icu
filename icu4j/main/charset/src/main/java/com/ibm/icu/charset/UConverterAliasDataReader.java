@@ -9,11 +9,9 @@
 
 package com.ibm.icu.charset;
 
+import com.ibm.icu.impl.ICUBinary;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-
-import com.ibm.icu.impl.ICUBinary;
-
 
 /* Format of cnvalias.icu -----------------------------------------------------
  *
@@ -125,38 +123,36 @@ import com.ibm.icu.impl.ICUBinary;
  */
 
 final class UConverterAliasDataReader implements ICUBinary.Authenticate {
-//    private final static boolean debug = ICUDebug.enabled("UConverterAliasDataReader");
+    //    private final static boolean debug = ICUDebug.enabled("UConverterAliasDataReader");
 
-   /**
-    * <p>Protected constructor.</p>
-    * @param bytes ICU uprop.dat file buffer
-    * @exception IOException throw if data file fails authentication
-    */
-    protected UConverterAliasDataReader(ByteBuffer bytes)
-                                        throws IOException{
-        //if(debug) System.out.println("Bytes in buffer " + bytes.remaining());
+    /**
+     * Protected constructor.
+     *
+     * @param bytes ICU uprop.dat file buffer
+     * @exception IOException throw if data file fails authentication
+     */
+    protected UConverterAliasDataReader(ByteBuffer bytes) throws IOException {
+        // if(debug) System.out.println("Bytes in buffer " + bytes.remaining());
 
         byteBuffer = bytes;
-        /*unicodeVersion = */ICUBinary.readHeader(byteBuffer, DATA_FORMAT_ID, this);
+        /* unicodeVersion= */ ICUBinary.readHeader(byteBuffer, DATA_FORMAT_ID, this);
 
-        //if(debug) System.out.println("Bytes left in byteBuffer " + byteBuffer.remaining());
+        // if(debug) System.out.println("Bytes left in byteBuffer " + byteBuffer.remaining());
     }
 
     // protected methods -------------------------------------------------
 
-    protected int[] readToc(int n)throws IOException
-    {
-        //Read the toc
+    protected int[] readToc(int n) throws IOException {
+        // Read the toc
         return ICUBinary.getInts(byteBuffer, n, 0);
     }
 
     @Override
-    public boolean isDataVersionAcceptable(byte version[])
-    {
+    public boolean isDataVersionAcceptable(byte version[]) {
         return version.length >= DATA_FORMAT_VERSION.length
-            && version[0] == DATA_FORMAT_VERSION[0]
-            && version[1] == DATA_FORMAT_VERSION[1]
-            && version[2] == DATA_FORMAT_VERSION[2];
+                && version[0] == DATA_FORMAT_VERSION[0]
+                && version[1] == DATA_FORMAT_VERSION[1]
+                && version[2] == DATA_FORMAT_VERSION[2];
     }
 
     /*byte[] getUnicodeVersion(){
@@ -164,20 +160,17 @@ final class UConverterAliasDataReader implements ICUBinary.Authenticate {
     }*/
     // private data members -------------------------------------------------
 
-
-    /**
-    * ICU data file buffer
-    */
+    /** ICU data file buffer */
     private ByteBuffer byteBuffer;
 
-//    private int unicodeVersion;
+    //    private int unicodeVersion;
 
     /**
-    * File format version that this class understands.
-    * No guarantees are made if a older version is used
-    * see store.c of gennorm for more information and values
-    */
-        // DATA_FORMAT_ID_ values taken from icu4c isAcceptable (ucnv_io.c)
+     * File format version that this class understands. No guarantees are made if a older version is
+     * used see store.c of gennorm for more information and values
+     */
+    // DATA_FORMAT_ID_ values taken from icu4c isAcceptable (ucnv_io.c)
     private static final int DATA_FORMAT_ID = 0x4376416c; // dataFormat="CvAl"
+
     private static final byte DATA_FORMAT_VERSION[] = {3, 0, 1};
 }

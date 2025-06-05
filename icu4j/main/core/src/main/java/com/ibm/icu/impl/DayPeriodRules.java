@@ -8,12 +8,11 @@
  */
 package com.ibm.icu.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class DayPeriodRules {
     public enum DayPeriod {
@@ -33,33 +32,65 @@ public final class DayPeriodRules {
         public static DayPeriod[] VALUES = DayPeriod.values();
 
         private static DayPeriod fromStringOrNull(CharSequence str) {
-            if ("midnight".contentEquals(str)) { return MIDNIGHT; }
-            if ("noon".contentEquals(str)) { return NOON; }
-            if ("morning1".contentEquals(str)) { return MORNING1; }
-            if ("afternoon1".contentEquals(str)) { return AFTERNOON1; }
-            if ("evening1".contentEquals(str)) { return EVENING1; }
-            if ("night1".contentEquals(str)) { return NIGHT1; }
-            if ("morning2".contentEquals(str)) { return MORNING2; }
-            if ("afternoon2".contentEquals(str)) { return AFTERNOON2; }
-            if ("evening2".contentEquals(str)) { return EVENING2; }
-            if ("night2".contentEquals(str)) { return NIGHT2; }
-            if ("am".contentEquals(str)) { return AM; }
-            if ("pm".contentEquals(str)) { return PM; }
+            if ("midnight".contentEquals(str)) {
+                return MIDNIGHT;
+            }
+            if ("noon".contentEquals(str)) {
+                return NOON;
+            }
+            if ("morning1".contentEquals(str)) {
+                return MORNING1;
+            }
+            if ("afternoon1".contentEquals(str)) {
+                return AFTERNOON1;
+            }
+            if ("evening1".contentEquals(str)) {
+                return EVENING1;
+            }
+            if ("night1".contentEquals(str)) {
+                return NIGHT1;
+            }
+            if ("morning2".contentEquals(str)) {
+                return MORNING2;
+            }
+            if ("afternoon2".contentEquals(str)) {
+                return AFTERNOON2;
+            }
+            if ("evening2".contentEquals(str)) {
+                return EVENING2;
+            }
+            if ("night2".contentEquals(str)) {
+                return NIGHT2;
+            }
+            if ("am".contentEquals(str)) {
+                return AM;
+            }
+            if ("pm".contentEquals(str)) {
+                return PM;
+            }
             return null;
         }
     }
 
     private enum CutoffType {
         BEFORE,
-        AFTER,  // TODO: AFTER is deprecated in CLDR 29. Remove.
+        AFTER, // TODO: AFTER is deprecated in CLDR 29. Remove.
         FROM,
         AT;
 
         private static CutoffType fromStringOrNull(CharSequence str) {
-            if ("from".contentEquals(str)) { return CutoffType.FROM; }
-            if ("before".contentEquals(str)) { return CutoffType.BEFORE; }
-            if ("after".contentEquals(str)) { return CutoffType.AFTER; }
-            if ("at".contentEquals(str)) { return CutoffType.AT; }
+            if ("from".contentEquals(str)) {
+                return CutoffType.FROM;
+            }
+            if ("before".contentEquals(str)) {
+                return CutoffType.BEFORE;
+            }
+            if ("after".contentEquals(str)) {
+                return CutoffType.AFTER;
+            }
+            if ("at".contentEquals(str)) {
+                return CutoffType.AT;
+            }
             return null;
         }
     }
@@ -102,7 +133,9 @@ public final class DayPeriodRules {
                 UResource.Table ruleSet = value.getTable();
                 for (int j = 0; ruleSet.getKeyAndValue(j, key, value); ++j) {
                     period = DayPeriod.fromStringOrNull(key);
-                    if (period == null) { throw new ICUException("Unknown day period in data."); }
+                    if (period == null) {
+                        throw new ICUException("Unknown day period in data.");
+                    }
 
                     UResource.Table periodDefinition = value.getTable();
                     for (int k = 0; periodDefinition.getKeyAndValue(k, key, value); ++k) {
@@ -128,14 +161,15 @@ public final class DayPeriodRules {
                 }
                 for (DayPeriod period : data.rules[ruleSetNum].dayPeriodForHour) {
                     if (period == null) {
-                        throw new ICUException("Rules in data don't cover all 24 hours (they should).");
+                        throw new ICUException(
+                                "Rules in data don't cover all 24 hours (they should).");
                     }
                 }
             }
         }
 
         // Members.
-        private int cutoffs[] = new int[25];  // [0] thru [24]; 24 is allowed is "before 24".
+        private int cutoffs[] = new int[25]; // [0] thru [24]; 24 is allowed is "before 24".
 
         // "Path" to data.
         private int ruleSetNum;
@@ -144,7 +178,9 @@ public final class DayPeriodRules {
 
         // Helpers.
         private void addCutoff(CutoffType type, String hourStr) {
-            if (type == null) { throw new ICUException("Cutoff type not recognized."); }
+            if (type == null) {
+                throw new ICUException("Cutoff type not recognized.");
+            }
             int hour = parseHour(hourStr);
             cutoffs[hour] |= 1 << type.ordinal();
         }
@@ -164,15 +200,17 @@ public final class DayPeriodRules {
                 }
 
                 // FROM/AFTER and BEFORE must come in a pair.
-                if ((cutoffs[startHour] & (1 << CutoffType.FROM.ordinal())) > 0 ||
-                        (cutoffs[startHour] & (1 << CutoffType.AFTER.ordinal())) > 0) {
-                    for (int hour = startHour + 1;; ++hour) {
+                if ((cutoffs[startHour] & (1 << CutoffType.FROM.ordinal())) > 0
+                        || (cutoffs[startHour] & (1 << CutoffType.AFTER.ordinal())) > 0) {
+                    for (int hour = startHour + 1; ; ++hour) {
                         if (hour == startHour) {
                             // We've gone around the array once and can't find a BEFORE.
                             throw new ICUException(
                                     "FROM/AFTER cutoffs must have a matching BEFORE cutoff.");
                         }
-                        if (hour == 25) { hour = 0; }
+                        if (hour == 25) {
+                            hour = 0;
+                        }
                         if ((cutoffs[hour] & (1 << CutoffType.BEFORE.ordinal())) > 0) {
                             rule.add(startHour, hour, period);
                             break;
@@ -202,7 +240,7 @@ public final class DayPeriodRules {
 
             return hour;
         }
-    }  // DayPeriodRulesDataSink
+    } // DayPeriodRulesDataSink
 
     private static class DayPeriodRulesCountSink extends UResource.Sink {
         private DayPeriodRulesData data;
@@ -236,14 +274,17 @@ public final class DayPeriodRules {
     }
 
     /**
-     * Get a DayPeriodRules object given a locale.
-     * If data hasn't been loaded, it will be loaded for all locales at once.
+     * Get a DayPeriodRules object given a locale. If data hasn't been loaded, it will be loaded for
+     * all locales at once.
+     *
      * @param locale locale for which the DayPeriodRules object is requested.
      * @return a DayPeriodRules object for {@code locale}.
      */
     public static DayPeriodRules getInstance(ULocale locale) {
         String localeCode = locale.getBaseName();
-        if (localeCode.isEmpty()) { localeCode = "root"; }
+        if (localeCode.isEmpty()) {
+            localeCode = "root";
+        }
 
         Integer ruleSetNum = null;
         while (ruleSetNum == null) {
@@ -287,11 +328,12 @@ public final class DayPeriodRules {
 
     private static DayPeriodRulesData loadData() {
         DayPeriodRulesData data = new DayPeriodRulesData();
-        ICUResourceBundle rb = ICUResourceBundle.getBundleInstance(
-                ICUData.ICU_BASE_NAME,
-                "dayPeriods",
-                ICUResourceBundle.ICU_DATA_CLASS_LOADER,
-                true);
+        ICUResourceBundle rb =
+                ICUResourceBundle.getBundleInstance(
+                        ICUData.ICU_BASE_NAME,
+                        "dayPeriods",
+                        ICUResourceBundle.ICU_DATA_CLASS_LOADER,
+                        true);
 
         DayPeriodRulesCountSink countSink = new DayPeriodRulesCountSink(data);
         rb.getAllItemsWithFallback("rules", countSink);
@@ -304,8 +346,12 @@ public final class DayPeriodRules {
     }
 
     private int getStartHourForDayPeriod(DayPeriod dayPeriod) throws IllegalArgumentException {
-        if (dayPeriod == DayPeriod.MIDNIGHT) { return 0; }
-        if (dayPeriod == DayPeriod.NOON) { return 12; }
+        if (dayPeriod == DayPeriod.MIDNIGHT) {
+            return 0;
+        }
+        if (dayPeriod == DayPeriod.NOON) {
+            return 12;
+        }
 
         if (dayPeriodForHour[0] == dayPeriod && dayPeriodForHour[23] == dayPeriod) {
             // dayPeriod wraps around midnight. Start hour is later than end hour.
@@ -327,8 +373,12 @@ public final class DayPeriodRules {
     }
 
     private int getEndHourForDayPeriod(DayPeriod dayPeriod) {
-        if (dayPeriod == DayPeriod.MIDNIGHT) { return 0; }
-        if (dayPeriod == DayPeriod.NOON) { return 12; }
+        if (dayPeriod == DayPeriod.MIDNIGHT) {
+            return 0;
+        }
+        if (dayPeriod == DayPeriod.NOON) {
+            return 12;
+        }
 
         if (dayPeriodForHour[0] == dayPeriod && dayPeriodForHour[23] == dayPeriod) {
             // dayPeriod wraps around midnight. End hour is before start hour.
@@ -351,14 +401,24 @@ public final class DayPeriodRules {
     }
 
     // Getters.
-    public boolean hasMidnight() { return hasMidnight; }
-    public boolean hasNoon() { return hasNoon; }
-    public DayPeriod getDayPeriodForHour(int hour) { return dayPeriodForHour[hour]; }
+    public boolean hasMidnight() {
+        return hasMidnight;
+    }
+
+    public boolean hasNoon() {
+        return hasNoon;
+    }
+
+    public DayPeriod getDayPeriodForHour(int hour) {
+        return dayPeriodForHour[hour];
+    }
 
     // Helpers.
     private void add(int startHour, int limitHour, DayPeriod period) {
         for (int i = startHour; i != limitHour; ++i) {
-            if (i == 24) { i = 0; }
+            if (i == 24) {
+                i = 0;
+            }
             dayPeriodForHour[i] = period;
         }
     }
@@ -368,7 +428,8 @@ public final class DayPeriodRules {
             throw new ICUException("Set number should start with \"set\".");
         }
 
-        String numStr = setNumStr.substring(3);  // e.g. "set17" -> "17"
-        return Integer.parseInt(numStr);  // This throws NumberFormatException if numStr isn't a proper number.
+        String numStr = setNumStr.substring(3); // e.g. "set17" -> "17"
+        return Integer.parseInt(
+                numStr); // This throws NumberFormatException if numStr isn't a proper number.
     }
 }

@@ -1,32 +1,31 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-* Copyright (C) 2013-2014, International Business Machines
-* Corporation and others.  All Rights Reserved.
-*******************************************************************************
-* SharedObject.java, ported from sharedobject.h/.cpp
-*
-* C++ version created on: 2013dec19
-* created by: Markus W. Scherer
-*/
+ *******************************************************************************
+ * Copyright (C) 2013-2014, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ * SharedObject.java, ported from sharedobject.h/.cpp
+ *
+ * C++ version created on: 2013dec19
+ * created by: Markus W. Scherer
+ */
 
 package com.ibm.icu.impl.coll;
 
+import com.ibm.icu.util.ICUCloneNotSupportedException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.ibm.icu.util.ICUCloneNotSupportedException;
-
 /**
- * Base class for shared, reference-counted, auto-deleted objects.
- * Java subclasses are mutable and must implement clone().
+ * Base class for shared, reference-counted, auto-deleted objects. Java subclasses are mutable and
+ * must implement clone().
  *
- * <p>In C++, the SharedObject base class is used for both memory and ownership management.
- * In Java, memory management (deletion after last reference is gone)
- * is up to the garbage collector,
- * but the reference counter is still used to see whether the referent is the sole owner.
+ * <p>In C++, the SharedObject base class is used for both memory and ownership management. In Java,
+ * memory management (deletion after last reference is gone) is up to the garbage collector, but the
+ * reference counter is still used to see whether the referent is the sole owner.
  *
  * <p>Usage:
+ *
  * <pre>
  * class S extends SharedObject {
  *     public clone() { ... }
@@ -86,22 +85,20 @@ import com.ibm.icu.util.ICUCloneNotSupportedException;
  * }
  * </pre>
  *
- * Either use only Java memory management, or use addRef()/removeRef().
- * Sharing requires reference-counting.
+ * Either use only Java memory management, or use addRef()/removeRef(). Sharing requires
+ * reference-counting.
  *
- * TODO: Consider making this more widely available inside ICU,
- * or else adopting a different model.
+ * <p>TODO: Consider making this more widely available inside ICU, or else adopting a different
+ * model.
  */
 public class SharedObject implements Cloneable {
-    /**
-     * Similar to a smart pointer, basically a port of the static methods of C++ SharedObject.
-     */
+    /** Similar to a smart pointer, basically a port of the static methods of C++ SharedObject. */
     public static final class Reference<T extends SharedObject> implements Cloneable {
         private T ref;
 
         public Reference(T r) {
             ref = r;
-            if(r != null) {
+            if (r != null) {
                 r.addRef();
             }
         }
@@ -111,30 +108,33 @@ public class SharedObject implements Cloneable {
         public Reference<T> clone() {
             Reference<T> c;
             try {
-                c = (Reference<T>)super.clone();
+                c = (Reference<T>) super.clone();
             } catch (CloneNotSupportedException e) {
                 // Should never happen.
                 throw new ICUCloneNotSupportedException(e);
             }
-            if(ref != null) {
+            if (ref != null) {
                 ref.addRef();
             }
             return c;
         }
 
-        public T readOnly() { return ref; }
+        public T readOnly() {
+            return ref;
+        }
 
         /**
-         * Returns a writable version of the reference.
-         * If there is exactly one owner, then the reference itself is returned.
-         * If there are multiple owners, then the reference is replaced with a clone,
-         * and that is returned.
+         * Returns a writable version of the reference. If there is exactly one owner, then the
+         * reference itself is returned. If there are multiple owners, then the reference is
+         * replaced with a clone, and that is returned.
          */
         public T copyOnWrite() {
             T r = ref;
-            if(r.getRefCount() <= 1) { return r; }
+            if (r.getRefCount() <= 1) {
+                return r;
+            }
             @SuppressWarnings("unchecked")
-            T r2 = (T)r.clone();
+            T r2 = (T) r.clone();
             r.removeRef();
             ref = r2;
             r2.addRef();
@@ -142,7 +142,7 @@ public class SharedObject implements Cloneable {
         }
 
         public void clear() {
-            if(ref != null) {
+            if (ref != null) {
                 ref.removeRef();
                 ref = null;
             }
@@ -163,7 +163,7 @@ public class SharedObject implements Cloneable {
     public SharedObject clone() {
         SharedObject c;
         try {
-            c = (SharedObject)super.clone();
+            c = (SharedObject) super.clone();
         } catch (CloneNotSupportedException e) {
             // Should never happen.
             throw new ICUCloneNotSupportedException(e);
@@ -172,23 +172,24 @@ public class SharedObject implements Cloneable {
         return c;
     }
 
+    /** Increments the number of references to this object. Thread-safe. */
+    public final void addRef() {
+        refCount.incrementAndGet();
+    }
+
     /**
-     * Increments the number of references to this object. Thread-safe.
-     */
-    public final void addRef() { refCount.incrementAndGet(); }
-    /**
-     * Decrements the number of references to this object,
-     * and auto-deletes "this" if the number becomes 0. Thread-safe.
+     * Decrements the number of references to this object, and auto-deletes "this" if the number
+     * becomes 0. Thread-safe.
      */
     public final void removeRef() {
         // Deletion in Java is up to the garbage collector.
         refCount.decrementAndGet();
     }
 
-    /**
-     * Returns the reference counter. Uses a memory barrier.
-     */
-    public final int getRefCount() { return refCount.get(); }
+    /** Returns the reference counter. Uses a memory barrier. */
+    public final int getRefCount() {
+        return refCount.get();
+    }
 
     public final void deleteIfZeroRefCount() {
         // Deletion in Java is up to the garbage collector.

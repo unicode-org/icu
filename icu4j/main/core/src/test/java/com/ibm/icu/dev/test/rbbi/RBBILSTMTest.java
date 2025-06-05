@@ -2,32 +2,27 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.rbbi;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.impl.breakiter.LSTMBreakEngine;
+import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.BreakIterator;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.impl.breakiter.LSTMBreakEngine;
-import com.ibm.icu.lang.UScript;
-import com.ibm.icu.text.BreakIterator;
-
 /**
- * RBBILSTMTest data driven test.
- *      Perform the tests from the file *_Test.txt against the RBBI method
- *      under LSTM configuration. The test will not run if it is not under LSTM configuration.
- *      The test data file is common to both ICU4C and ICU4J.
- *      See the data file for a description of the tests.
+ * RBBILSTMTest data driven test. Perform the tests from the file *_Test.txt against the RBBI method
+ * under LSTM configuration. The test will not run if it is not under LSTM configuration. The test
+ * data file is common to both ICU4C and ICU4J. See the data file for a description of the tests.
  */
 @RunWith(JUnit4.class)
 public class RBBILSTMTest extends CoreTestFmwk {
-    public RBBILSTMTest() {
-    }
+    public RBBILSTMTest() {}
 
     @Test
     public void TestLSTMThai() {
@@ -46,7 +41,8 @@ public class RBBILSTMTest extends CoreTestFmwk {
 
         BreakIterator bi = BreakIterator.getWordInstance();
         String testString;
-        InputStream is = RBBILSTMTest.class.getResourceAsStream("/com/ibm/icu/dev/test/rbbi/" + filename);
+        InputStream is =
+                RBBILSTMTest.class.getResourceAsStream("/com/ibm/icu/dev/test/rbbi/" + filename);
         if (is == null) {
             errln("Could not open test data file " + filename);
             return;
@@ -63,8 +59,12 @@ public class RBBILSTMTest extends CoreTestFmwk {
                 if (fields[0].equals("Model:")) {
                     String actualModelName = LSTMBreakEngine.createData(script).fName;
                     if (!actualModelName.equals(fields[1])) {
-                        errln("The name of the built in model " + actualModelName +
-                            " does not match the model (" + fields[1] + ") expected for this test");
+                        errln(
+                                "The name of the built in model "
+                                        + actualModelName
+                                        + " does not match the model ("
+                                        + fields[1]
+                                        + ") expected for this test");
                         return;
                     }
                 } else if (fields[0].equals("Input:")) {
@@ -82,7 +82,7 @@ public class RBBILSTMTest extends CoreTestFmwk {
                         }
                     }
                     sb.append('}');
-                    actual =  sb.toString();
+                    actual = sb.toString();
                 } else if (fields[0].equals("Output:")) {
                     StringBuilder sb = new StringBuilder();
                     int sep;
@@ -103,13 +103,13 @@ public class RBBILSTMTest extends CoreTestFmwk {
                     }
                     sb.append(", ").append(curr + input.length() - start);
                     sb.append('}');
-                    expected =  sb.toString();
-                    assertEquals(input + " Test Case#" + caseNum , expected, actual);
+                    expected = sb.toString();
+                    assertEquals(input + " Test Case#" + caseNum, expected, actual);
                     actual = "";
                 }
             }
         } catch (IOException e) {
-           errln("Exception while reading lines of test data file " + filename + e.toString());
+            errln("Exception while reading lines of test data file " + filename + e.toString());
         }
     }
 }

@@ -8,12 +8,11 @@
  */
 package com.ibm.icu.impl.javaspi.util;
 
-import java.util.Locale;
-import java.util.TimeZone;
-
 import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
 import com.ibm.icu.text.TimeZoneNames;
 import com.ibm.icu.text.TimeZoneNames.NameType;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class TimeZoneNameProviderICU extends java.util.spi.TimeZoneNameProvider {
 
@@ -24,7 +23,9 @@ public class TimeZoneNameProviderICU extends java.util.spi.TimeZoneNameProvider 
         String canonicalID = com.ibm.icu.util.TimeZone.getCanonicalID(ID, isSystemID);
         if (isSystemID[0]) {
             long date = System.currentTimeMillis();
-            TimeZoneNames tznames = TimeZoneNames.getInstance(ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
+            TimeZoneNames tznames =
+                    TimeZoneNames.getInstance(
+                            ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
 
             {
                 // Workaround for Java bug. Java needs all 4 names available at the same time.
@@ -36,30 +37,34 @@ public class TimeZoneNameProviderICU extends java.util.spi.TimeZoneNameProvider 
 
                 if (lstd != null && ldst != null && sstd != null && sdst != null) {
                     switch (style) {
-                    case TimeZone.LONG:
-                        dispName = daylight ? ldst : lstd;
-                        break;
-                    case TimeZone.SHORT:
-                        dispName = daylight ? sdst : sstd;
-                        break;
+                        case TimeZone.LONG:
+                            dispName = daylight ? ldst : lstd;
+                            break;
+                        case TimeZone.SHORT:
+                            dispName = daylight ? sdst : sstd;
+                            break;
                     }
                 }
             }
 
-//            {
-//                switch (style) {
-//                case TimeZone.LONG:
-//                    dispName = daylight ?
-//                            tznames.getDisplayName(canonicalID, NameType.LONG_DAYLIGHT, date) :
-//                            tznames.getDisplayName(canonicalID, NameType.LONG_STANDARD, date);
-//                    break;
-//                case TimeZone.SHORT:
-//                    dispName = daylight ?
-//                            tznames.getDisplayName(canonicalID, NameType.SHORT_DAYLIGHT, date) :
-//                            tznames.getDisplayName(canonicalID, NameType.SHORT_STANDARD, date);
-//                    break;
-//                }
-//            }
+            //            {
+            //                switch (style) {
+            //                case TimeZone.LONG:
+            //                    dispName = daylight ?
+            //                            tznames.getDisplayName(canonicalID,
+            // NameType.LONG_DAYLIGHT, date) :
+            //                            tznames.getDisplayName(canonicalID,
+            // NameType.LONG_STANDARD, date);
+            //                    break;
+            //                case TimeZone.SHORT:
+            //                    dispName = daylight ?
+            //                            tznames.getDisplayName(canonicalID,
+            // NameType.SHORT_DAYLIGHT, date) :
+            //                            tznames.getDisplayName(canonicalID,
+            // NameType.SHORT_STANDARD, date);
+            //                    break;
+            //                }
+            //            }
         }
         return dispName;
     }
@@ -68,5 +73,4 @@ public class TimeZoneNameProviderICU extends java.util.spi.TimeZoneNameProvider 
     public Locale[] getAvailableLocales() {
         return ICULocaleServiceProvider.getAvailableLocales();
     }
-
 }

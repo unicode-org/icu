@@ -8,14 +8,14 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 
 /**
  * @author sffc
- *
  */
 public class MinusSignMatcher extends SymbolMatcher {
 
     private static final MinusSignMatcher DEFAULT = new MinusSignMatcher(false);
     private static final MinusSignMatcher DEFAULT_ALLOW_TRAILING = new MinusSignMatcher(true);
 
-    public static MinusSignMatcher getInstance(DecimalFormatSymbols symbols, boolean allowTrailing) {
+    public static MinusSignMatcher getInstance(
+            DecimalFormatSymbols symbols, boolean allowTrailing) {
         String symbolString = symbols.getMinusSignString();
         if (DEFAULT.uniSet.contains(symbolString)) {
             return allowTrailing ? DEFAULT_ALLOW_TRAILING : DEFAULT;

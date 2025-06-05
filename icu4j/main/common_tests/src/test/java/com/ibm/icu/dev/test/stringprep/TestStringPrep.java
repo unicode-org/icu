@@ -5,22 +5,19 @@
  * Copyright (C) 2003-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
-*/
+ */
 package com.ibm.icu.dev.test.stringprep;
-
-import java.util.Locale;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.StringPrep;
 import com.ibm.icu.text.StringPrepParseException;
+import java.util.Locale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * @author ram
- *
  */
 @RunWith(JUnit4.class)
 public class TestStringPrep extends CoreTestFmwk {
@@ -52,7 +49,7 @@ public class TestStringPrep extends CoreTestFmwk {
        appended "@" and should appear in the form "xxxx@" (note: no domain
        name after the "@").  For example: ANONYMOUS@.
     */
-    private String[] mixed_prep_data ={
+    private String[] mixed_prep_data = {
         "OWNER@",
         "GROUP@",
         "EVERYONE@",
@@ -103,147 +100,173 @@ public class TestStringPrep extends CoreTestFmwk {
         "test@www.\u0024.com",
         "help@\u00C3\u00BC.com",
     };
+
     @Test
-    public void TestNFS4MixedPrep(){
-        for(int i=0; i< mixed_prep_data.length; i++){
-            try{
+    public void TestNFS4MixedPrep() {
+        for (int i = 0; i < mixed_prep_data.length; i++) {
+            try {
                 String src = mixed_prep_data[i];
                 byte[] dest = NFS4StringPrep.mixed_prepare(src.getBytes("UTF-8"));
                 String destString = new String(dest, "UTF-8");
                 int destIndex = destString.indexOf('@');
-                if(destIndex < 0){
+                if (destIndex < 0) {
                     errln("Delimiter @ disappeared from the output!");
                 }
-            }catch(Exception e){
-                errln("mixed_prepare for string: " + mixed_prep_data[i] +" failed with " + e.toString());
+            } catch (Exception e) {
+                errln(
+                        "mixed_prepare for string: "
+                                + mixed_prep_data[i]
+                                + " failed with "
+                                + e.toString());
             }
         }
         /* test the error condition */
         {
             String src = "OWNER@oss.software.ibm.com";
-            try{
+            try {
                 byte[] dest = NFS4StringPrep.mixed_prepare(src.getBytes("UTF-8"));
-                if(dest!=null){
+                if (dest != null) {
                     errln("Did not get the expected exception");
                 }
-            }catch(Exception e){
-                logln("mixed_prepare for string: " + src +" passed with " + e.toString());
+            } catch (Exception e) {
+                logln("mixed_prepare for string: " + src + " passed with " + e.toString());
             }
-
-         }
+        }
     }
-    @Test
-    public void TestCISPrep(){
 
-        for(int i=0;i< (TestData.conformanceTestCases.length);i++){
+    @Test
+    public void TestCISPrep() {
+
+        for (int i = 0; i < (TestData.conformanceTestCases.length); i++) {
             TestData.ConformanceTestCase testCase = TestData.conformanceTestCases[i];
             String src = testCase.input;
             Exception expected = testCase.expected;
             String expectedDest = testCase.output;
-            try{
-                byte[] dest =NFS4StringPrep.cis_prepare(src.getBytes("UTF-8"));
+            try {
+                byte[] dest = NFS4StringPrep.cis_prepare(src.getBytes("UTF-8"));
                 String destString = new String(dest, "UTF-8");
-                if(!expectedDest.equalsIgnoreCase(destString)){
-                      errln("Did not get the expected output for nfs4_cis_prep at index " + i);
+                if (!expectedDest.equalsIgnoreCase(destString)) {
+                    errln("Did not get the expected output for nfs4_cis_prep at index " + i);
                 }
-            }catch(Exception e){
-                if(!expected.equals(e)){
+            } catch (Exception e) {
+                if (!expected.equals(e)) {
                     errln("Did not get the expected exception");
                 }
             }
-
         }
     }
 
     @Test
-    public void TestCSPrep(){
+    public void TestCSPrep() {
 
         // Checking for bidi is turned off
-        String src = "\uC138\uACC4\uC758\uBAA8\uB4E0\uC0AC\uB78C\uB4E4\uC774\u0644\u064A\u0647\uD55C\uAD6D\uC5B4\uB97C\uC774\uD574\uD55C\uB2E4\uBA74";
-        try{
+        String src =
+                "\uC138\uACC4\uC758\uBAA8\uB4E0\uC0AC\uB78C\uB4E4\uC774\u0644\u064A\u0647\uD55C\uAD6D\uC5B4\uB97C\uC774\uD574\uD55C\uB2E4\uBA74";
+        try {
             NFS4StringPrep.cs_prepare(src.getBytes("UTF-8"), false);
-        }catch(Exception e){
+        } catch (Exception e) {
             errln("Got unexpected exception: " + e.toString());
         }
 
         // normalization is turned off
-        try{
+        try {
             src = "www.\u00E0\u00B3\u00AF.com";
             byte[] dest = NFS4StringPrep.cs_prepare(src.getBytes("UTF-8"), false);
             String destStr = new String(dest, "UTF-8");
-            if(!src.equals(destStr)){
-                errln("Did not get expected output. Expected: "+ prettify(src)+
-                      " Got: " + prettify(destStr));
+            if (!src.equals(destStr)) {
+                errln(
+                        "Did not get expected output. Expected: "
+                                + prettify(src)
+                                + " Got: "
+                                + prettify(destStr));
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             errln("Got unexpected exception: " + e.toString());
         }
 
         // test case insensitive string
-        try{
+        try {
             src = "THISISATEST";
             byte[] dest = NFS4StringPrep.cs_prepare(src.getBytes("UTF-8"), false);
             String destStr = new String(dest, "UTF-8");
-            if(!src.toLowerCase().equals(destStr)){
-                errln("Did not get expected output. Expected: "+ prettify(src)+
-                      " Got: " + prettify(destStr));
+            if (!src.toLowerCase().equals(destStr)) {
+                errln(
+                        "Did not get expected output. Expected: "
+                                + prettify(src)
+                                + " Got: "
+                                + prettify(destStr));
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             errln("Got unexpected exception: " + e.toString());
         }
         // test case sensitive string
-        try{
+        try {
             src = "THISISATEST";
             byte[] dest = NFS4StringPrep.cs_prepare(src.getBytes("UTF-8"), true);
             String destStr = new String(dest, "UTF-8");
-            if(!src.equals(destStr)){
-                errln("Did not get expected output. Expected: "+ prettify(src)+
-                      " Got: " + prettify(destStr));
+            if (!src.equals(destStr)) {
+                errln(
+                        "Did not get expected output. Expected: "
+                                + prettify(src)
+                                + " Got: "
+                                + prettify(destStr));
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             errln("Got unexpected exception: " + e.toString());
         }
     }
 
     @Test
-    public void TestCoverage(){
-        if (new StringPrepParseException("coverage", 0, "", 0,0) == null){
+    public void TestCoverage() {
+        if (new StringPrepParseException("coverage", 0, "", 0, 0) == null) {
             errln("Construct StringPrepParseException(String, int, String, int, int)");
         }
     }
 
     /* Tests the method public static StringPrep getInstance(int profile) */
     @Test
-    public void TestGetInstance(){
+    public void TestGetInstance() {
         // Tests when "if (profile < 0 || profile > MAX_PROFILE)" is true
-        int[] neg_num_cases = {-100,-50,-10,-5,-2,-1};
-        for(int i=0; i<neg_num_cases.length; i++){
-            try{
+        int[] neg_num_cases = {-100, -50, -10, -5, -2, -1};
+        for (int i = 0; i < neg_num_cases.length; i++) {
+            try {
                 StringPrep.getInstance(neg_num_cases[i]);
-                errln("StringPrep.getInstance(int) expected an exception for " +
-                        "an invalid parameter of " + neg_num_cases[i]);
-            } catch(Exception e){
+                errln(
+                        "StringPrep.getInstance(int) expected an exception for "
+                                + "an invalid parameter of "
+                                + neg_num_cases[i]);
+            } catch (Exception e) {
             }
         }
 
-        int[] max_profile_cases = {StringPrep.RFC4518_LDAP_CI+1, StringPrep.RFC4518_LDAP_CI+2, StringPrep.RFC4518_LDAP_CI+5, StringPrep.RFC4518_LDAP_CI+10};
-        for(int i=0; i<max_profile_cases.length; i++){
-            try{
+        int[] max_profile_cases = {
+            StringPrep.RFC4518_LDAP_CI + 1,
+            StringPrep.RFC4518_LDAP_CI + 2,
+            StringPrep.RFC4518_LDAP_CI + 5,
+            StringPrep.RFC4518_LDAP_CI + 10
+        };
+        for (int i = 0; i < max_profile_cases.length; i++) {
+            try {
                 StringPrep.getInstance(max_profile_cases[i]);
-                errln("StringPrep.getInstance(int) expected an exception for " +
-                        "an invalid parameter of " + max_profile_cases[i]);
-            } catch(Exception e){
+                errln(
+                        "StringPrep.getInstance(int) expected an exception for "
+                                + "an invalid parameter of "
+                                + max_profile_cases[i]);
+            } catch (Exception e) {
             }
         }
 
-        // Tests when "if (instance == null)", "if (stream != null)", "if (instance != null)", and "if (ref != null)" is true
+        // Tests when "if (instance == null)", "if (stream != null)", "if (instance != null)", and
+        // "if (ref != null)" is true
         int[] cases = {0, 1, StringPrep.RFC4518_LDAP_CI};
-        for(int i=0; i<cases.length; i++){
-            try{
+        for (int i = 0; i < cases.length; i++) {
+            try {
                 StringPrep.getInstance(cases[i]);
-            } catch(Exception e){
-                errln("StringPrep.getInstance(int) did not expected an exception for " +
-                        "an valid parameter of " + cases[i]);
+            } catch (Exception e) {
+                errln(
+                        "StringPrep.getInstance(int) did not expected an exception for "
+                                + "an valid parameter of "
+                                + cases[i]);
             }
         }
     }
@@ -278,62 +301,75 @@ public class TestStringPrep extends CoreTestFmwk {
 
     /* Tests the method public boolean equals(Object other) for StringPrepParseException */
     @Test
-    public void TestStringPrepParseExceptionEquals(){
-        StringPrepParseException sppe = new StringPrepParseException("dummy",0,"dummy",0,0);
-        StringPrepParseException sppe_clone = new StringPrepParseException("dummy",0,"dummy",0,0);
-        StringPrepParseException sppe1 = new StringPrepParseException("dummy1",1,"dummy1",0,0);
+    public void TestStringPrepParseExceptionEquals() {
+        StringPrepParseException sppe = new StringPrepParseException("dummy", 0, "dummy", 0, 0);
+        StringPrepParseException sppe_clone =
+                new StringPrepParseException("dummy", 0, "dummy", 0, 0);
+        StringPrepParseException sppe1 = new StringPrepParseException("dummy1", 1, "dummy1", 0, 0);
 
         // Tests when "if(!(other instanceof StringPrepParseException))" is true
-        if(sppe.equals(0)){
-            errln("StringPrepParseException.equals(Object) is suppose to return false when " +
-                    "passing integer '0'");
+        if (sppe.equals(0)) {
+            errln(
+                    "StringPrepParseException.equals(Object) is suppose to return false when "
+                            + "passing integer '0'");
         }
-        if(sppe.equals(0.0)){
-            errln("StringPrepParseException.equals(Object) is suppose to return false when " +
-                    "passing float/double '0.0'");
+        if (sppe.equals(0.0)) {
+            errln(
+                    "StringPrepParseException.equals(Object) is suppose to return false when "
+                            + "passing float/double '0.0'");
         }
-        if(sppe.equals("0")){
-            errln("StringPrepParseException.equals(Object) is suppose to return false when " +
-                    "passing string '0'");
+        if (sppe.equals("0")) {
+            errln(
+                    "StringPrepParseException.equals(Object) is suppose to return false when "
+                            + "passing string '0'");
         }
 
         // Tests when "if(!(other instanceof StringPrepParseException))" is true
-        if(!sppe.equals(sppe)){
-            errln("StringPrepParseException.equals(Object) is suppose to return true when " +
-            "comparing to the same object");
+        if (!sppe.equals(sppe)) {
+            errln(
+                    "StringPrepParseException.equals(Object) is suppose to return true when "
+                            + "comparing to the same object");
         }
-        if(!sppe.equals(sppe_clone)){
-            errln("StringPrepParseException.equals(Object) is suppose to return true when " +
-            "comparing to the same initiated object");
+        if (!sppe.equals(sppe_clone)) {
+            errln(
+                    "StringPrepParseException.equals(Object) is suppose to return true when "
+                            + "comparing to the same initiated object");
         }
-        if(sppe.equals(sppe1)){
-            errln("StringPrepParseException.equals(Object) is suppose to return false when " +
-            "comparing to another object that isn't the same");
+        if (sppe.equals(sppe1)) {
+            errln(
+                    "StringPrepParseException.equals(Object) is suppose to return false when "
+                            + "comparing to another object that isn't the same");
         }
     }
 
     /* Tests the method public int getError() */
     @Test
-    public void TestGetError(){
-        for(int i=0; i < 5; i++){
-            StringPrepParseException sppe = new StringPrepParseException("dummy",i,"dummy",0,0);
-            if(sppe.getError() != i){
-                errln("StringPrepParseExcpetion.getError() was suppose to return " + i + " but got " + sppe.getError());
+    public void TestGetError() {
+        for (int i = 0; i < 5; i++) {
+            StringPrepParseException sppe = new StringPrepParseException("dummy", i, "dummy", 0, 0);
+            if (sppe.getError() != i) {
+                errln(
+                        "StringPrepParseExcpetion.getError() was suppose to return "
+                                + i
+                                + " but got "
+                                + sppe.getError());
             }
         }
     }
 
     /* Tests the private void setPreContext(char[] str, int pos) */
     @Test
-    public void TestSetPreContext(){
+    public void TestSetPreContext() {
         String WordAtLeast16Characters = "abcdefghijklmnopqrstuvwxyz";
-        for(int i=0; i < 5; i++){
-            try{
+        for (int i = 0; i < 5; i++) {
+            try {
                 @SuppressWarnings("unused")
-                StringPrepParseException sppe = new StringPrepParseException("dummy",i,WordAtLeast16Characters,0,0);
-                sppe = new StringPrepParseException(WordAtLeast16Characters,i,"dummy",0,0);
-            } catch(Exception e){
-                errln("StringPrepParseException.setPreContext was not suppose to return an exception");
+                StringPrepParseException sppe =
+                        new StringPrepParseException("dummy", i, WordAtLeast16Characters, 0, 0);
+                sppe = new StringPrepParseException(WordAtLeast16Characters, i, "dummy", 0, 0);
+            } catch (Exception e) {
+                errln(
+                        "StringPrepParseException.setPreContext was not suppose to return an exception");
             }
         }
     }

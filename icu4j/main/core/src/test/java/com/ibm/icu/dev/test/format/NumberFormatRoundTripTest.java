@@ -8,26 +8,21 @@
  */
 
 /**
- * Porting From: ICU4C v1.8.1 : format : NumberFormatRoundTripTest
- * Source File: $ICU4CRoot/source/test/intltest/nmfmtrt.cpp
- **/
-
+ * Porting From: ICU4C v1.8.1 : format : NumberFormatRoundTripTest Source File:
+ * $ICU4CRoot/source/test/intltest/nmfmtrt.cpp
+ */
 package com.ibm.icu.dev.test.format;
-
-import java.util.Locale;
-import java.util.Random;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
+import java.util.Locale;
+import java.util.Random;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-/**
- * Performs round-trip tests for NumberFormat
- **/
+/** Performs round-trip tests for NumberFormat */
 @RunWith(JUnit4.class)
 public class NumberFormatRoundTripTest extends CoreTestFmwk {
 
@@ -59,15 +54,13 @@ public class NumberFormatRoundTripTest extends CoreTestFmwk {
         fmt = NumberFormat.getPercentInstance();
         _test(fmt);
 
-
         int locCount = 0;
         final Locale[] loc = NumberFormat.getAvailableLocales();
-        if(quick) {
-            if(locCount > 5)
-                locCount = 5;
+        if (quick) {
+            if (locCount > 5) locCount = 5;
             logln("Quick mode: only _testing first 5 Locales");
         }
-        for(int i = 0; i < locCount; ++i) {
+        for (int i = 0; i < locCount; ++i) {
             logln(loc[i].getDisplayName());
 
             fmt = NumberFormat.getInstance(loc[i]);
@@ -83,15 +76,14 @@ public class NumberFormatRoundTripTest extends CoreTestFmwk {
         logln("Numeric error " + min_numeric_error + " to " + max_numeric_error);
     }
 
-    /**
-     * Return a random value from -range..+range.
-     */
+    /** Return a random value from -range..+range. */
     private Random random;
+
     public double randomDouble(double range) {
         if (random == null) {
             random = createRandom(); // use test framework's random seed
         }
-        return  random.nextDouble() * range;
+        return random.nextDouble() * range;
     }
 
     private void _test(NumberFormat fmt) {
@@ -109,9 +101,9 @@ public class NumberFormatRoundTripTest extends CoreTestFmwk {
         _test(fmt, negZero);
         _test(fmt, 9223372036854775808.0d);
         _test(fmt, -9223372036854775809.0d);
-        //_test(fmt, 6.936065876100493E74d);
+        // _test(fmt, 6.936065876100493E74d);
 
-    //    _test(fmt, 6.212122845281909E48d);
+        //    _test(fmt, 6.212122845281909E48d);
         for (int i = 0; i < 10; ++i) {
 
             _test(fmt, randomDouble(1));
@@ -160,30 +152,24 @@ public class NumberFormatRoundTripTest extends CoreTestFmwk {
         String s, s2;
         if (value.getClass().getName().equalsIgnoreCase("java.lang.Double"))
             s = fmt.format(value.doubleValue());
-        else
-            s = fmt.format(value.longValue());
+        else s = fmt.format(value.longValue());
 
         Number n = 0d;
         boolean show = verbose;
-        if (DEBUG)
-            logln(
-            /*value.getString(temp) +*/ " F> " + s);
+        if (DEBUG) logln(/*value.getString(temp) +*/ " F> " + s);
         try {
             n = fmt.parse(s);
         } catch (java.text.ParseException e) {
             System.out.println(e);
         }
 
-        if (DEBUG)
-            logln(s + " P> " /*+ n.getString(temp)*/);
+        if (DEBUG) logln(s + " P> " /*+ n.getString(temp)*/);
 
         if (value.getClass().getName().equalsIgnoreCase("java.lang.Double"))
             s2 = fmt.format(n.doubleValue());
-        else
-            s2 = fmt.format(n.longValue());
+        else s2 = fmt.format(n.longValue());
 
-        if (DEBUG)
-            logln(/*n.getString(temp) +*/ " F> " + s2);
+        if (DEBUG) logln(/*n.getString(temp) +*/ " F> " + s2);
 
         if (STRING_COMPARE) {
             if (!s.equals(s2)) {
@@ -206,35 +192,33 @@ public class NumberFormatRoundTripTest extends CoreTestFmwk {
                 show = true;
             }
 
-            if (error > max_numeric_error)
-                max_numeric_error = error;
-            if (error < min_numeric_error)
-                min_numeric_error = error;
+            if (error > max_numeric_error) max_numeric_error = error;
+            if (error < min_numeric_error) min_numeric_error = error;
         }
 
         if (show)
             logln(
-            /*value.getString(temp) +*/ value.getClass().getName() + " F> " + s + " P> " +
-            /*n.getString(temp) +*/ n.getClass().getName() + " F> " + s2);
-
+                    /*value.getString(temp) +*/ value.getClass().getName()
+                            + " F> "
+                            + s
+                            + " P> "
+                            +
+                            /*n.getString(temp) +*/ n.getClass().getName()
+                            + " F> "
+                            + s2);
     }
 
     private double proportionalError(Number a, Number b) {
-        double aa,bb;
+        double aa, bb;
 
-        if(a.getClass().getName().equalsIgnoreCase("java.lang.Double"))
-            aa = a.doubleValue();
-        else
-            aa = a.longValue();
+        if (a.getClass().getName().equalsIgnoreCase("java.lang.Double")) aa = a.doubleValue();
+        else aa = a.longValue();
 
-        if(a.getClass().getName().equalsIgnoreCase("java.lang.Double"))
-            bb = b.doubleValue();
-        else
-            bb = b.longValue();
+        if (a.getClass().getName().equalsIgnoreCase("java.lang.Double")) bb = b.doubleValue();
+        else bb = b.longValue();
 
         double error = aa - bb;
-        if(aa != 0 && bb != 0)
-            error /= aa;
+        if (aa != 0 && bb != 0) error /= aa;
 
         return Math.abs(error);
     }

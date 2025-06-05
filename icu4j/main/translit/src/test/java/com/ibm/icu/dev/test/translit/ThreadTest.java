@@ -8,14 +8,12 @@
  */
 package com.ibm.icu.dev.test.translit;
 
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.Transliterator;
 import java.util.ArrayList;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.Transliterator;
 
 // Test for ICU Ticket #7201.  With threading bugs in RuleBasedTransliterator, this
 //   test would reliably crash.
@@ -26,7 +24,7 @@ public class ThreadTest extends TestFmwk {
     private int iterationCount = 50000;
 
     @Test
-    public void TestThreads()  {
+    public void TestThreads() {
         if (TestFmwk.getExhaustiveness() >= 9) {
             // Exhaustive test.  Run longer.
             iterationCount = 1000000;
@@ -38,7 +36,7 @@ public class ThreadTest extends TestFmwk {
             thread.start();
         }
         long expectedCount = 0;
-        for (Worker thread: threads) {
+        for (Worker thread : threads) {
             try {
                 thread.join();
                 if (expectedCount == 0) {
@@ -54,10 +52,11 @@ public class ThreadTest extends TestFmwk {
         }
     }
 
-    private static final String [] WORDS = {"edgar", "allen", "poe"};
+    private static final String[] WORDS = {"edgar", "allen", "poe"};
 
     private class Worker extends Thread {
         public long count = 0;
+
         @Override
         public void run() {
             Transliterator tx = Transliterator.getInstance("Latin-Thai");
@@ -78,18 +77,19 @@ public class ThreadTest extends TestFmwk {
     public void TestAnyTranslit() {
         final Transliterator tx = Transliterator.getInstance("Any-Latin");
         ArrayList<Thread> threads = new ArrayList<Thread>();
-        for (int i=0; i<8; i++) {
-            threads.add(new Thread() {
-                @Override
-                public void run() {
-                    tx.transliterate("διαφορετικούς");
-                }
-            });
+        for (int i = 0; i < 8; i++) {
+            threads.add(
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            tx.transliterate("διαφορετικούς");
+                        }
+                    });
         }
-        for (Thread th:threads) {
+        for (Thread th : threads) {
             th.start();
         }
-        for (Thread th:threads) {
+        for (Thread th : threads) {
             try {
                 th.join();
             } catch (InterruptedException e) {
@@ -97,5 +97,4 @@ public class ThreadTest extends TestFmwk {
             }
         }
     }
-
 }

@@ -7,6 +7,8 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.translit;
+
+import com.ibm.icu.dev.demo.impl.AppletFrame;
 import java.applet.Applet;
 import java.awt.Button;
 import java.awt.Dimension;
@@ -15,25 +17,21 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import com.ibm.icu.dev.demo.impl.AppletFrame;
-
 /**
- * A simple Applet that shows a button.  When pressed, the button
- * shows the DemoAppletFrame.  This Applet is meant to be embedded
- * in a web page.
+ * A simple Applet that shows a button. When pressed, the button shows the DemoAppletFrame. This
+ * Applet is meant to be embedded in a web page.
  *
- * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
+ * <p>Copyright (c) IBM Corporation 1999. All rights reserved.
  *
  * @author Alan Liu
  */
 public class DemoApplet extends Applet {
 
-    /**
-     * For serialization
-     */
+    /** For serialization */
     private static final long serialVersionUID = 8214879807740061678L;
+
     Demo frame = null;
-    
+
     public static void main(String args[]) {
         final DemoApplet applet = new DemoApplet();
         new AppletFrame("Transliteration Demo", applet, 640, 480);
@@ -42,20 +40,22 @@ public class DemoApplet extends Applet {
     public void init() {
 
         Button button = new Button("Transliteration Demo");
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (frame == null) {
-                    frame = new Demo(600, 200);
-                    frame.addWindowListener(new WindowAdapter() {
-                        public void windowClosing(WindowEvent we) {
-                            frame = null;
+        button.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (frame == null) {
+                            frame = new Demo(600, 200);
+                            frame.addWindowListener(
+                                    new WindowAdapter() {
+                                        public void windowClosing(WindowEvent we) {
+                                            frame = null;
+                                        }
+                                    });
                         }
-                    });
-                }
-                frame.setVisible(true);
-                frame.toFront();
-            }
-        });
+                        frame.setVisible(true);
+                        frame.toFront();
+                    }
+                });
 
         add(button);
 
@@ -65,7 +65,7 @@ public class DemoApplet extends Applet {
 
         resize(size);
     }
-    
+
     public void stop() {
         if (frame != null) {
             frame.dispose();

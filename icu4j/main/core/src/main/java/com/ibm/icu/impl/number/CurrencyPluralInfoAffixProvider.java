@@ -8,8 +8,10 @@ import com.ibm.icu.text.CurrencyPluralInfo;
 public class CurrencyPluralInfoAffixProvider implements AffixPatternProvider {
     private final PropertiesAffixPatternProvider[] affixesByPlural;
 
-    public CurrencyPluralInfoAffixProvider(CurrencyPluralInfo cpi, DecimalFormatProperties properties) {
-        // We need to use a PropertiesAffixPatternProvider, not the simpler version ParsedPatternInfo,
+    public CurrencyPluralInfoAffixProvider(
+            CurrencyPluralInfo cpi, DecimalFormatProperties properties) {
+        // We need to use a PropertiesAffixPatternProvider, not the simpler version
+        // ParsedPatternInfo,
         // because user-specified affix overrides still need to work.
         affixesByPlural = new PropertiesAffixPatternProvider[StandardPlural.COUNT];
         DecimalFormatProperties pluralProperties = new DecimalFormatProperties();
@@ -17,7 +19,8 @@ public class CurrencyPluralInfoAffixProvider implements AffixPatternProvider {
         for (StandardPlural plural : StandardPlural.VALUES) {
             String pattern = cpi.getCurrencyPluralPattern(plural.getKeyword());
             PatternStringParser.parseToExistingProperties(pattern, pluralProperties);
-            affixesByPlural[plural.ordinal()] = new PropertiesAffixPatternProvider(pluralProperties);
+            affixesByPlural[plural.ordinal()] =
+                    new PropertiesAffixPatternProvider(pluralProperties);
         }
     }
 

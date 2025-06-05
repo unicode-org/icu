@@ -1,19 +1,17 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-* Copyright (C) 2013-2014, International Business Machines
-* Corporation and others.  All Rights Reserved.
-*******************************************************************************
-* TailoredSet.java, ported from collationsets.h/.cpp
-*
-* C++ version created on: 2013feb09
-* created by: Markus W. Scherer
-*/
+ *******************************************************************************
+ * Copyright (C) 2013-2014, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ * TailoredSet.java, ported from collationsets.h/.cpp
+ *
+ * C++ version created on: 2013feb09
+ * created by: Markus W. Scherer
+ */
 
 package com.ibm.icu.impl.coll;
-
-import java.util.Iterator;
 
 import com.ibm.icu.impl.Normalizer2Impl.Hangul;
 import com.ibm.icu.impl.Trie2;
@@ -21,21 +19,20 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CharsTrie.Entry;
+import java.util.Iterator;
 
 /**
- * Finds the set of characters and strings that sort differently in the tailoring
- * from the base data.
+ * Finds the set of characters and strings that sort differently in the tailoring from the base
+ * data.
  *
- * Every mapping in the tailoring needs to be compared to the base,
- * because some mappings are copied for optimization, and
- * all contractions for a character are copied if any contractions for that character
- * are added, modified or removed.
+ * <p>Every mapping in the tailoring needs to be compared to the base, because some mappings are
+ * copied for optimization, and all contractions for a character are copied if any contractions for
+ * that character are added, modified or removed.
  *
- * It might be simpler to re-parse the rule string, but:
- * - That would require duplicating some of the from-rules builder code.
- * - That would make the runtime code depend on the builder.
- * - That would only work if we have the rule string, and we allow users to
- *   omit the rule string from data files.
+ * <p>It might be simpler to re-parse the rule string, but: - That would require duplicating some of
+ * the from-rules builder code. - That would make the runtime code depend on the builder. - That
+ * would only work if we have the rule string, and we allow users to omit the rule string from data
+ * files.
  */
 public final class TailoredSet {
 
@@ -126,7 +123,8 @@ public final class TailoredSet {
                 } else {
                     baseCE32 = baseData.getFinalCE32(baseData.getCE32FromContexts(baseIndex));
                 }
-                compareContractions(c, data.contexts, dataIndex + 2, baseData.contexts, baseIndex + 2);
+                compareContractions(
+                        c, data.contexts, dataIndex + 2, baseData.contexts, baseIndex + 2);
             } else {
                 addContractions(c, data.contexts, dataIndex + 2);
             }
@@ -144,7 +142,8 @@ public final class TailoredSet {
             // Currently, the tailoring data builder does not write offset tags.
             // They might be useful for saving space,
             // but they would complicate the builder,
-            // and in tailorings we assume that performance of tailored characters is more important.
+            // and in tailorings we assume that performance of tailored characters is more
+            // important.
             assert (tag != Collation.OFFSET_TAG);
         } else {
             tag = -1;
@@ -221,7 +220,8 @@ public final class TailoredSet {
         } else if (tag == Collation.HANGUL_TAG) {
             StringBuilder jamos = new StringBuilder();
             int length = Hangul.decompose(c, jamos);
-            if (tailored.contains(jamos.charAt(0)) || tailored.contains(jamos.charAt(1))
+            if (tailored.contains(jamos.charAt(0))
+                    || tailored.contains(jamos.charAt(1))
                     || (length == 3 && tailored.contains(jamos.charAt(2)))) {
                 add(c);
             }
@@ -240,7 +240,7 @@ public final class TailoredSet {
         // U+FFFF is untailorable and will not occur in prefixes.
         String none = "\uffff";
         Entry te = null, be = null;
-        for (;;) {
+        for (; ; ) {
             if (tp == null) {
                 if (prefixes.hasNext()) {
                     te = prefixes.next();
@@ -297,7 +297,7 @@ public final class TailoredSet {
         // as a single suffix character for a root-collator boundary contraction.
         String none = "\uffff\uffff";
         Entry te = null, be = null;
-        for (;;) {
+        for (; ; ) {
             if (ts == null) {
                 if (suffixes.hasNext()) {
                     te = suffixes.next();
@@ -394,4 +394,3 @@ public final class TailoredSet {
         unreversedPrefix.setLength(0);
     }
 }
-

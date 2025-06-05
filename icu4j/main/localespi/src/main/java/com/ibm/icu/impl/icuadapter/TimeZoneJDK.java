@@ -8,19 +8,18 @@
  */
 package com.ibm.icu.impl.icuadapter;
 
+import com.ibm.icu.impl.Grego;
+import com.ibm.icu.impl.jdkadapter.TimeZoneICU;
+import com.ibm.icu.util.ULocale;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import com.ibm.icu.impl.Grego;
-import com.ibm.icu.impl.jdkadapter.TimeZoneICU;
-import com.ibm.icu.util.ULocale;
-
 /**
- * TimeZoneJDK is an adapter class which wraps java.util.TimeZone and
- * implements ICU4J TimeZone APIs.
+ * TimeZoneJDK is an adapter class which wraps java.util.TimeZone and implements ICU4J TimeZone
+ * APIs.
  */
 public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
 
@@ -30,18 +29,18 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
     private transient Calendar fJdkCal;
 
     private TimeZoneJDK(TimeZone jdkTz) {
-        fJdkTz = (TimeZone)jdkTz.clone();
+        fJdkTz = (TimeZone) jdkTz.clone();
     }
 
     public static com.ibm.icu.util.TimeZone wrap(TimeZone jdkTz) {
         if (jdkTz instanceof TimeZoneICU) {
-            return ((TimeZoneICU)jdkTz).unwrap();
+            return ((TimeZoneICU) jdkTz).unwrap();
         }
         return new TimeZoneJDK(jdkTz);
     }
 
     public TimeZone unwrap() {
-        return (TimeZone)fJdkTz.clone();
+        return (TimeZone) fJdkTz.clone();
     }
 
     @Override
@@ -55,15 +54,15 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof TimeZoneJDK) {
-            return (((TimeZoneJDK)obj).fJdkTz).equals(fJdkTz);
+            return (((TimeZoneJDK) obj).fJdkTz).equals(fJdkTz);
         }
         return false;
     }
 
-    //public String getDisplayName()
-    //public String getDisplayName(boolean daylight, int style)
-    //public String getDisplayName(Locale locale)
-    //public String getDisplayName(ULocale locale)
+    // public String getDisplayName()
+    // public String getDisplayName(boolean daylight, int style)
+    // public String getDisplayName(Locale locale)
+    // public String getDisplayName(ULocale locale)
     @Override
     public String getDisplayName(boolean daylight, int style, Locale locale) {
         return fJdkTz.getDisplayName(daylight, style, locale);
@@ -96,7 +95,7 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
 
     @Override
     public void getOffset(long date, boolean local, int[] offsets) {
-        synchronized(this) {
+        synchronized (this) {
             if (fJdkCal == null) {
                 fJdkCal = new GregorianCalendar(fJdkTz);
             }
@@ -122,12 +121,21 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
                 sec1 = fJdkCal.get(java.util.Calendar.SECOND);
                 mil1 = fJdkCal.get(java.util.Calendar.MILLISECOND);
 
-                if (fields[4] != doy1 || hour != hour1 || min != min1 || sec != sec1 || mil != mil1) {
+                if (fields[4] != doy1
+                        || hour != hour1
+                        || min != min1
+                        || sec != sec1
+                        || mil != mil1) {
                     // Calendar field(s) were changed due to the adjustment for non-existing time
-                    // Note: This code does not support non-existing local time at year boundary properly.
+                    // Note: This code does not support non-existing local time at year boundary
+                    // properly.
                     // But, it should work fine for real timezones.
                     int dayDelta = Math.abs(doy1 - fields[4]) > 1 ? 1 : doy1 - fields[4];
-                    int delta = ((((dayDelta * 24) + hour1 - hour) * 60 + min1 - min) * 60 + sec1 - sec) * 1000 + mil1 - mil;
+                    int delta =
+                            ((((dayDelta * 24) + hour1 - hour) * 60 + min1 - min) * 60 + sec1 - sec)
+                                            * 1000
+                                    + mil1
+                                    - mil;
 
                     // In this case, we use the offsets before the transition
                     fJdkCal.setTimeInMillis(fJdkCal.getTimeInMillis() - delta - 1);
@@ -163,7 +171,8 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
     @Override
     public void setID(String ID) {
         if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify a frozen TimeZoneJDK instance.");
+            throw new UnsupportedOperationException(
+                    "Attempt to modify a frozen TimeZoneJDK instance.");
         }
         fJdkTz.setID(ID);
     }
@@ -171,7 +180,8 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
     @Override
     public void setRawOffset(int offsetMillis) {
         if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify a frozen TimeZoneJDK instance.");
+            throw new UnsupportedOperationException(
+                    "Attempt to modify a frozen TimeZoneJDK instance.");
         }
         fJdkTz.setRawOffset(offsetMillis);
     }
@@ -187,7 +197,7 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
     }
 
     // Freezable stuffs
-    private volatile transient boolean fIsFrozen = false;
+    private transient volatile boolean fIsFrozen = false;
 
     @Override
     public boolean isFrozen() {
@@ -202,11 +212,10 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
 
     @Override
     public com.ibm.icu.util.TimeZone cloneAsThawed() {
-        TimeZoneJDK tz = (TimeZoneJDK)super.cloneAsThawed();
-        tz.fJdkTz = (TimeZone)fJdkTz.clone();
-        tz.fJdkCal = null;  // To be instantiated when necessary
+        TimeZoneJDK tz = (TimeZoneJDK) super.cloneAsThawed();
+        tz.fJdkTz = (TimeZone) fJdkTz.clone();
+        tz.fJdkCal = null; // To be instantiated when necessary
         tz.fIsFrozen = false;
         return tz;
     }
-
 }

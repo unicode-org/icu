@@ -1,22 +1,22 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2001-2010, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
 package com.ibm.icu.impl;
 
 public final class ICUDebug {
     private static String params;
+
     static {
         try {
             params = System.getProperty("ICUDebug");
-        }
-        catch (SecurityException e) {
+        } catch (SecurityException e) {
         }
     }
+
     private static boolean debug = params != null;
     private static boolean help = debug && (params.equals("") || params.indexOf("help") != -1);
 

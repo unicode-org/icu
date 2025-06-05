@@ -1,45 +1,39 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
-*******************************************************************************
-* Copyright (C) 1999-2010, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*/
-
+ * ****************************************************************************** Copyright (C)
+ * 1999-2010, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
+ */
 package com.ibm.icu.dev.test.lang;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.lang.UScriptRun;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class TestUScriptRun extends CoreTestFmwk
-{
-    public TestUScriptRun()
-    {
+public class TestUScriptRun extends CoreTestFmwk {
+    public TestUScriptRun() {
         // nothing
     }
 
-    private static final class RunTestData
-    {
+    private static final class RunTestData {
         String runText;
-        int    runScript;
+        int runScript;
 
-        public RunTestData(String theText, int theScriptCode)
-        {
-            runText   = theText;
+        public RunTestData(String theText, int theScriptCode) {
+            runText = theText;
             runScript = theScriptCode;
         }
     }
 
     private static final RunTestData[][] m_testData = {
         {
-            new RunTestData("\u0020\u0946\u0939\u093F\u0928\u094D\u0926\u0940\u0020", UScript.DEVANAGARI),
+            new RunTestData(
+                    "\u0020\u0946\u0939\u093F\u0928\u094D\u0926\u0940\u0020", UScript.DEVANAGARI),
             new RunTestData("\u0627\u0644\u0639\u0631\u0628\u064A\u0629\u0020", UScript.ARABIC),
             new RunTestData("\u0420\u0443\u0441\u0441\u043A\u0438\u0439\u0020", UScript.CYRILLIC),
             new RunTestData("English (", UScript.LATIN),
@@ -50,35 +44,51 @@ public class TestUScriptRun extends CoreTestFmwk
             new RunTestData("\u30AB\u30BF\u30AB\u30CA", UScript.KATAKANA),
             new RunTestData("\uD801\uDC00\uD801\uDC01\uD801\uDC02\uD801\uDC03", UScript.DESERET),
         },
-        {
-            new RunTestData("((((((((((abc))))))))))", UScript.LATIN)
-        }
+        {new RunTestData("((((((((((abc))))))))))", UScript.LATIN)}
     };
 
     private static final String padding = "This string is used for padding...";
 
-    private void CheckScriptRuns(UScriptRun scriptRun, int[] runStarts, RunTestData[] testData)
-    {
+    private void CheckScriptRuns(UScriptRun scriptRun, int[] runStarts, RunTestData[] testData) {
         int run, runStart, runLimit;
         int runScript;
 
         /* iterate over all the runs */
         run = 0;
         while (scriptRun.next()) {
-            runStart  = scriptRun.getScriptStart();
-            runLimit  = scriptRun.getScriptLimit();
+            runStart = scriptRun.getScriptStart();
+            runLimit = scriptRun.getScriptLimit();
             runScript = scriptRun.getScriptCode();
 
             if (runStart != runStarts[run]) {
-                errln("Incorrect start offset for run " + run + ": expected " + runStarts[run] + ", got " + runStart);
+                errln(
+                        "Incorrect start offset for run "
+                                + run
+                                + ": expected "
+                                + runStarts[run]
+                                + ", got "
+                                + runStart);
             }
 
             if (runLimit != runStarts[run + 1]) {
-                errln("Incorrect limit offset for run " + run + ": expected " + runStarts[run + 1] + ", got " + runLimit);
+                errln(
+                        "Incorrect limit offset for run "
+                                + run
+                                + ": expected "
+                                + runStarts[run + 1]
+                                + ", got "
+                                + runLimit);
             }
 
             if (runScript != testData[run].runScript) {
-                errln("Incorrect script for run " + run + ": expected \"" + UScript.getName(testData[run].runScript) + "\", got \"" + UScript.getName(runScript) + "\"");
+                errln(
+                        "Incorrect script for run "
+                                + run
+                                + ": expected \""
+                                + UScript.getName(testData[run].runScript)
+                                + "\", got \""
+                                + UScript.getName(runScript)
+                                + "\"");
             }
 
             run += 1;
@@ -96,36 +106,39 @@ public class TestUScriptRun extends CoreTestFmwk
     }
 
     @Test
-    public void TestContstruction()
-    {
+    public void TestContstruction() {
         UScriptRun scriptRun = null;
-        char[] nullChars  = null, dummyChars  = {'d', 'u', 'm', 'm', 'y'};
+        char[] nullChars = null, dummyChars = {'d', 'u', 'm', 'm', 'y'};
         String nullString = null, dummyString = new String(dummyChars);
 
         try {
             scriptRun = new UScriptRun(nullString, 0, 100);
-            errln("new UScriptRun(nullString, 0, 100) did not produce an IllegalArgumentException!");
+            errln(
+                    "new UScriptRun(nullString, 0, 100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(nullString, 100, 0);
-            errln("new UScriptRun(nullString, 100, 0) did not produce an IllegalArgumentException!");
+            errln(
+                    "new UScriptRun(nullString, 100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(nullString, 0, -100);
-            errln("new UScriptRun(nullString, 0, -100) did not produce an IllegalArgumentException!");
+            errln(
+                    "new UScriptRun(nullString, 0, -100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(nullString, -100, 0);
-            errln("new UScriptRun(nullString, -100, 0) did not produce an IllegalArgumentException!");
+            errln(
+                    "new UScriptRun(nullString, -100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UScriptRun failed as expected");
         }
@@ -146,14 +159,16 @@ public class TestUScriptRun extends CoreTestFmwk
 
         try {
             scriptRun = new UScriptRun(nullChars, 0, -100);
-            errln("new UScriptRun(nullChars, 0, -100) did not produce an IllegalArgumentException!");
+            errln(
+                    "new UScriptRun(nullChars, 0, -100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(nullChars, -100, 0);
-            errln("new UScriptRun(nullChars, -100, 0) did not produce an IllegalArgumentException!");
+            errln(
+                    "new UScriptRun(nullChars, -100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UScriptRun failed as expected");
         }
@@ -168,13 +183,14 @@ public class TestUScriptRun extends CoreTestFmwk
         try {
             scriptRun = new UScriptRun(dummyString, 6, 0);
             errln("new UScriptRun(dummy, 6, 0) did not produce an IllegalArgumentException!");
-        }catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             logln("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(dummyString, 0, -100);
-            errln("new UScriptRun(dummyString, 0, -100) did not produce an IllegalArgumentException!");
+            errln(
+                    "new UScriptRun(dummyString, 0, -100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UScriptRun failed as expected");
         }
@@ -196,13 +212,14 @@ public class TestUScriptRun extends CoreTestFmwk
         try {
             scriptRun = new UScriptRun(dummyChars, 6, 0);
             errln("new UScriptRun(dummyChars, 6, 0) did not produce an IllegalArgumentException!");
-        }catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             logln("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(dummyChars, 0, -100);
-            errln("new UScriptRun(dummyChars, 0, -100) did not produce an IllegalArgumentException!");
+            errln(
+                    "new UScriptRun(dummyChars, 0, -100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UScriptRun failed as expected");
         }
@@ -213,14 +230,13 @@ public class TestUScriptRun extends CoreTestFmwk
         } catch (IllegalArgumentException iae) {
             logln("PASS: UScriptRun failed as expected");
         }
-        if(scriptRun!=null){
+        if (scriptRun != null) {
             errln("Did not get the expected Exception");
         }
     }
 
     @Test
-    public void TestReset()
-    {
+    public void TestReset() {
         UScriptRun scriptRun = null;
         char[] dummy = {'d', 'u', 'm', 'm', 'y'};
 
@@ -268,7 +284,7 @@ public class TestUScriptRun extends CoreTestFmwk
         try {
             scriptRun.reset(dummy, 6, 0);
             errln("scriptRun.reset(dummy, 6, 0) did not produce an IllegalArgumentException!");
-        }catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             logln("PASS: scriptRun.reset failed as expected");
         }
 
@@ -292,7 +308,6 @@ public class TestUScriptRun extends CoreTestFmwk
             errln("scriptRun.reset(dummy, 0, dummy.length) produced an IllegalArgumentException!");
         }
 
-
         try {
             scriptRun.reset(0, 6);
             errln("scriptRun.reset(0, 6) did not produce an IllegalArgumentException!");
@@ -310,26 +325,25 @@ public class TestUScriptRun extends CoreTestFmwk
         try {
             scriptRun.reset(dummy, 0, dummy.length);
             scriptRun.reset();
-        } catch(IllegalArgumentException iae){
+        } catch (IllegalArgumentException iae) {
             errln("scriptRun.reset() produced an IllegalArgumentException!");
         }
 
         try {
             scriptRun.reset((char[]) null);
-        } catch(IllegalArgumentException iae){
+        } catch (IllegalArgumentException iae) {
             errln("scriptRun.reset((char[])null) produced an IllegalArgumentException!");
         }
 
         try {
             scriptRun.reset((String) null);
-        } catch(IllegalArgumentException iae){
+        } catch (IllegalArgumentException iae) {
             errln("scriptRun.reset((String)null) produced an IllegalArgumentException!");
         }
     }
 
     @Test
-    public void TestRuns()
-    {
+    public void TestRuns() {
         for (int i = 0; i < m_testData.length; i += 1) {
             RunTestData[] test = m_testData[i];
             int stringLimit = 0;
@@ -343,7 +357,7 @@ public class TestUScriptRun extends CoreTestFmwk
             for (int run = 0; run < test.length; run += 1) {
                 runStarts[run] = stringLimit;
                 stringLimit += test[run].runText.length();
-                testString  += test[run].runText;
+                testString += test[run].runText;
             }
 
             /* The limit of the last run */
@@ -360,21 +374,24 @@ public class TestUScriptRun extends CoreTestFmwk
                 scriptRun.reset();
                 CheckScriptRuns(scriptRun, runStarts, test);
             } catch (IllegalArgumentException iae) {
-                errln("scriptRun.reset() on a valid UScriptRun produced an IllegalArgumentException!");
+                errln(
+                        "scriptRun.reset() on a valid UScriptRun produced an IllegalArgumentException!");
             }
 
             try {
                 scriptRun = new UScriptRun(testString.toCharArray());
                 CheckScriptRuns(scriptRun, runStarts, test);
             } catch (IllegalArgumentException iae) {
-                errln("new UScriptRun(testString.toCharArray()) produced an IllegalArgumentException!");
+                errln(
+                        "new UScriptRun(testString.toCharArray()) produced an IllegalArgumentException!");
             }
 
             try {
                 scriptRun.reset();
                 CheckScriptRuns(scriptRun, runStarts, test);
             } catch (IllegalArgumentException iae) {
-                errln("scriptRun.reset() on a valid UScriptRun produced an IllegalArgumentException!");
+                errln(
+                        "scriptRun.reset() on a valid UScriptRun produced an IllegalArgumentException!");
             }
 
             try {
@@ -391,14 +408,16 @@ public class TestUScriptRun extends CoreTestFmwk
                 scriptRun.reset(testString, 0, testString.length());
                 CheckScriptRuns(scriptRun, runStarts, test);
             } catch (IllegalArgumentException iae) {
-                errln("scriptRun.reset(testString, 0, testString.length) produced an IllegalArgumentException!");
+                errln(
+                        "scriptRun.reset(testString, 0, testString.length) produced an IllegalArgumentException!");
             }
 
             try {
                 scriptRun.reset(testString.toCharArray(), 0, testString.length());
                 CheckScriptRuns(scriptRun, runStarts, test);
             } catch (IllegalArgumentException iae) {
-                errln("scriptRun.reset(testString.toCharArray(), 0, testString.length) produced an IllegalArgumentException!");
+                errln(
+                        "scriptRun.reset(testString.toCharArray(), 0, testString.length) produced an IllegalArgumentException!");
             }
 
             String paddedTestString = padding + testString + padding;
@@ -413,22 +432,24 @@ public class TestUScriptRun extends CoreTestFmwk
                 scriptRun.reset(paddedTestString, startOffset, count);
                 CheckScriptRuns(scriptRun, runStarts, test);
             } catch (IllegalArgumentException iae) {
-                errln("scriptRun.reset(paddedTestString, startOffset, count) produced an IllegalArgumentException!");
+                errln(
+                        "scriptRun.reset(paddedTestString, startOffset, count) produced an IllegalArgumentException!");
             }
 
             try {
                 scriptRun.reset(paddedTestString.toCharArray(), startOffset, count);
                 CheckScriptRuns(scriptRun, runStarts, test);
             } catch (IllegalArgumentException iae) {
-                errln("scriptRun.reset(paddedTestString.toCharArray(), startOffset, count) produced an IllegalArgumentException!");
+                errln(
+                        "scriptRun.reset(paddedTestString.toCharArray(), startOffset, count) produced an IllegalArgumentException!");
             }
 
             /* Tests "public final void reset()" */
             // Tests when "while (stackIsNotEmpty())" is true
-            try{
-                UScriptRun usr = new UScriptRun((String)null);
+            try {
+                UScriptRun usr = new UScriptRun((String) null);
                 usr.reset();
-            } catch (Exception e){
+            } catch (Exception e) {
                 errln("scriptRun.reset() was not suppose to produce an exception.");
             }
         }

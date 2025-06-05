@@ -14,9 +14,6 @@ public class TestMessages extends ListResourceBundle {
 
     @Override
     protected Object[][] getContents() {
-        return new Object[][] {
-                {"bundleContainer", "TestMessages.class"}
-        };
+        return new Object[][] {{"bundleContainer", "TestMessages.class"}};
     }
-
 }

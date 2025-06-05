@@ -12,14 +12,13 @@ public class PatternStringParser {
     public static final int IGNORE_ROUNDING_ALWAYS = 2;
 
     /**
-     * Runs the recursive descent parser on the given pattern string, returning a data structure with raw
-     * information about the pattern string.
+     * Runs the recursive descent parser on the given pattern string, returning a data structure
+     * with raw information about the pattern string.
      *
-     * <p>
-     * To obtain a more useful form of the data, consider using {@link #parseToProperties} instead.
+     * <p>To obtain a more useful form of the data, consider using {@link #parseToProperties}
+     * instead.
      *
-     * @param patternString
-     *            The LDML decimal format pattern (Excel-style pattern) to parse.
+     * @param patternString The LDML decimal format pattern (Excel-style pattern) to parse.
      * @return The results of the parse.
      */
     public static ParsedPatternInfo parseToPatternInfo(String patternString) {
@@ -32,18 +31,15 @@ public class PatternStringParser {
     /**
      * Parses a pattern string into a new property bag.
      *
-     * @param pattern
-     *            The pattern string, like "#,##0.00"
-     * @param ignoreRounding
-     *            Whether to leave out rounding information (minFrac, maxFrac, and rounding increment)
-     *            when parsing the pattern. This may be desirable if a custom rounding mode, such as
-     *            CurrencyUsage, is to be used instead. One of
-     *            {@link PatternStringParser#IGNORE_ROUNDING_ALWAYS},
-     *            {@link PatternStringParser#IGNORE_ROUNDING_IF_CURRENCY}, or
-     *            {@link PatternStringParser#IGNORE_ROUNDING_NEVER}.
+     * @param pattern The pattern string, like "#,##0.00"
+     * @param ignoreRounding Whether to leave out rounding information (minFrac, maxFrac, and
+     *     rounding increment) when parsing the pattern. This may be desirable if a custom rounding
+     *     mode, such as CurrencyUsage, is to be used instead. One of {@link
+     *     PatternStringParser#IGNORE_ROUNDING_ALWAYS}, {@link
+     *     PatternStringParser#IGNORE_ROUNDING_IF_CURRENCY}, or {@link
+     *     PatternStringParser#IGNORE_ROUNDING_NEVER}.
      * @return A property bag object.
-     * @throws IllegalArgumentException
-     *             If there is a syntax error in the pattern string.
+     * @throws IllegalArgumentException If there is a syntax error in the pattern string.
      */
     public static DecimalFormatProperties parseToProperties(String pattern, int ignoreRounding) {
         DecimalFormatProperties properties = new DecimalFormatProperties();
@@ -56,34 +52,27 @@ public class PatternStringParser {
     }
 
     /**
-     * Parses a pattern string into an existing property bag. All properties that can be encoded into a
-     * pattern string will be overwritten with either their default value or with the value coming from
-     * the pattern string. Properties that cannot be encoded into a pattern string, such as rounding
-     * mode, are not modified.
+     * Parses a pattern string into an existing property bag. All properties that can be encoded
+     * into a pattern string will be overwritten with either their default value or with the value
+     * coming from the pattern string. Properties that cannot be encoded into a pattern string, such
+     * as rounding mode, are not modified.
      *
-     * @param pattern
-     *            The pattern string, like "#,##0.00"
-     * @param properties
-     *            The property bag object to overwrite.
-     * @param ignoreRounding
-     *            See {@link #parseToProperties(String pattern, int ignoreRounding)}.
-     * @throws IllegalArgumentException
-     *             If there was a syntax error in the pattern string.
+     * @param pattern The pattern string, like "#,##0.00"
+     * @param properties The property bag object to overwrite.
+     * @param ignoreRounding See {@link #parseToProperties(String pattern, int ignoreRounding)}.
+     * @throws IllegalArgumentException If there was a syntax error in the pattern string.
      */
     public static void parseToExistingProperties(
-            String pattern,
-            DecimalFormatProperties properties,
-            int ignoreRounding) {
+            String pattern, DecimalFormatProperties properties, int ignoreRounding) {
         parseToExistingPropertiesImpl(pattern, properties, ignoreRounding);
     }
 
-    public static void parseToExistingProperties(String pattern, DecimalFormatProperties properties) {
+    public static void parseToExistingProperties(
+            String pattern, DecimalFormatProperties properties) {
         parseToExistingProperties(pattern, properties, PatternStringParser.IGNORE_ROUNDING_NEVER);
     }
 
-    /**
-     * Contains raw information about the parsed decimal format pattern string.
-     */
+    /** Contains raw information about the parsed decimal format pattern string. */
     public static class ParsedPatternInfo implements AffixPatternProvider {
         public String pattern;
         public ParsedSubpatternInfo positive;
@@ -294,9 +283,7 @@ public class PatternStringParser {
     }
 
     private static void consumePadding(
-            ParserState state,
-            ParsedSubpatternInfo result,
-            PadPosition paddingLocation) {
+            ParserState state, ParsedSubpatternInfo result, PadPosition paddingLocation) {
         if (state.peek() != '*') {
             return;
         }
@@ -313,47 +300,48 @@ public class PatternStringParser {
     private static long consumeAffix(ParserState state, ParsedSubpatternInfo result) {
         // literals := { literal }
         long endpoints = state.offset;
-        outer: while (true) {
+        outer:
+        while (true) {
             switch (state.peek()) {
-            case '#':
-            case '@':
-            case ';':
-            case '*':
-            case '.':
-            case ',':
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case -1:
-                // Characters that cannot appear unquoted in a literal
-                break outer;
+                case '#':
+                case '@':
+                case ';':
+                case '*':
+                case '.':
+                case ',':
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                case -1:
+                    // Characters that cannot appear unquoted in a literal
+                    break outer;
 
-            case '%':
-                result.hasPercentSign = true;
-                break;
+                case '%':
+                    result.hasPercentSign = true;
+                    break;
 
-            case '‰':
-                result.hasPerMilleSign = true;
-                break;
+                case '‰':
+                    result.hasPerMilleSign = true;
+                    break;
 
-            case '¤':
-                result.hasCurrencySign = true;
-                break;
+                case '¤':
+                    result.hasCurrencySign = true;
+                    break;
 
-            case '-':
-                result.hasMinusSign = true;
-                break;
+                case '-':
+                    result.hasMinusSign = true;
+                    break;
 
-            case '+':
-                result.hasPlusSign = true;
-                break;
+                case '+':
+                    result.hasPlusSign = true;
+                    break;
             }
             consumeLiteral(state);
         }
@@ -419,67 +407,68 @@ public class PatternStringParser {
     }
 
     private static void consumeIntegerFormat(ParserState state, ParsedSubpatternInfo result) {
-        outer: while (true) {
+        outer:
+        while (true) {
             switch (state.peek()) {
-            case ',':
-                result.widthExceptAffixes += 1;
-                result.groupingSizes <<= 16;
-                break;
+                case ',':
+                    result.widthExceptAffixes += 1;
+                    result.groupingSizes <<= 16;
+                    break;
 
-            case '#':
-                if (result.integerNumerals > 0) {
-                    throw state.toParseException("# cannot follow 0 before decimal point");
-                }
-                result.widthExceptAffixes += 1;
-                result.groupingSizes += 1;
-                if (result.integerAtSigns > 0) {
-                    result.integerTrailingHashSigns += 1;
-                } else {
-                    result.integerLeadingHashSigns += 1;
-                }
-                result.integerTotal += 1;
-                break;
+                case '#':
+                    if (result.integerNumerals > 0) {
+                        throw state.toParseException("# cannot follow 0 before decimal point");
+                    }
+                    result.widthExceptAffixes += 1;
+                    result.groupingSizes += 1;
+                    if (result.integerAtSigns > 0) {
+                        result.integerTrailingHashSigns += 1;
+                    } else {
+                        result.integerLeadingHashSigns += 1;
+                    }
+                    result.integerTotal += 1;
+                    break;
 
-            case '@':
-                if (result.integerNumerals > 0) {
-                    throw state.toParseException("Cannot mix 0 and @");
-                }
-                if (result.integerTrailingHashSigns > 0) {
-                    throw state.toParseException("Cannot nest # inside of a run of @");
-                }
-                result.widthExceptAffixes += 1;
-                result.groupingSizes += 1;
-                result.integerAtSigns += 1;
-                result.integerTotal += 1;
-                break;
+                case '@':
+                    if (result.integerNumerals > 0) {
+                        throw state.toParseException("Cannot mix 0 and @");
+                    }
+                    if (result.integerTrailingHashSigns > 0) {
+                        throw state.toParseException("Cannot nest # inside of a run of @");
+                    }
+                    result.widthExceptAffixes += 1;
+                    result.groupingSizes += 1;
+                    result.integerAtSigns += 1;
+                    result.integerTotal += 1;
+                    break;
 
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                if (result.integerAtSigns > 0) {
-                    throw state.toParseException("Cannot mix @ and 0");
-                }
-                result.widthExceptAffixes += 1;
-                result.groupingSizes += 1;
-                result.integerNumerals += 1;
-                result.integerTotal += 1;
-                if (state.peek() != '0' && result.rounding == null) {
-                    result.rounding = new DecimalQuantity_DualStorageBCD();
-                }
-                if (result.rounding != null) {
-                    result.rounding.appendDigit((byte) (state.peek() - '0'), 0, true);
-                }
-                break;
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    if (result.integerAtSigns > 0) {
+                        throw state.toParseException("Cannot mix @ and 0");
+                    }
+                    result.widthExceptAffixes += 1;
+                    result.groupingSizes += 1;
+                    result.integerNumerals += 1;
+                    result.integerTotal += 1;
+                    if (state.peek() != '0' && result.rounding == null) {
+                        result.rounding = new DecimalQuantity_DualStorageBCD();
+                    }
+                    if (result.rounding != null) {
+                        result.rounding.appendDigit((byte) (state.peek() - '0'), 0, true);
+                    }
+                    break;
 
-            default:
-                break outer;
+                default:
+                    break outer;
             }
             state.next(); // consume the symbol
         }
@@ -500,42 +489,43 @@ public class PatternStringParser {
         int zeroCounter = 0;
         while (true) {
             switch (state.peek()) {
-            case '#':
-                result.widthExceptAffixes += 1;
-                result.fractionHashSigns += 1;
-                result.fractionTotal += 1;
-                zeroCounter++;
-                break;
-
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                if (result.fractionHashSigns > 0) {
-                    throw state.toParseException("0 cannot follow # after decimal point");
-                }
-                result.widthExceptAffixes += 1;
-                result.fractionNumerals += 1;
-                result.fractionTotal += 1;
-                if (state.peek() == '0') {
+                case '#':
+                    result.widthExceptAffixes += 1;
+                    result.fractionHashSigns += 1;
+                    result.fractionTotal += 1;
                     zeroCounter++;
-                } else {
-                    if (result.rounding == null) {
-                        result.rounding = new DecimalQuantity_DualStorageBCD();
-                    }
-                    result.rounding.appendDigit((byte) (state.peek() - '0'), zeroCounter, false);
-                    zeroCounter = 0;
-                }
-                break;
+                    break;
 
-            default:
-                return;
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    if (result.fractionHashSigns > 0) {
+                        throw state.toParseException("0 cannot follow # after decimal point");
+                    }
+                    result.widthExceptAffixes += 1;
+                    result.fractionNumerals += 1;
+                    result.fractionTotal += 1;
+                    if (state.peek() == '0') {
+                        zeroCounter++;
+                    } else {
+                        if (result.rounding == null) {
+                            result.rounding = new DecimalQuantity_DualStorageBCD();
+                        }
+                        result.rounding.appendDigit(
+                                (byte) (state.peek() - '0'), zeroCounter, false);
+                        zeroCounter = 0;
+                    }
+                    break;
+
+                default:
+                    return;
             }
             state.next(); // consume the symbol
         }
@@ -567,9 +557,7 @@ public class PatternStringParser {
     ///////////////////////////////////////////////////
 
     private static void parseToExistingPropertiesImpl(
-            String pattern,
-            DecimalFormatProperties properties,
-            int ignoreRounding) {
+            String pattern, DecimalFormatProperties properties, int ignoreRounding) {
         if (pattern == null || pattern.length() == 0) {
             // Backwards compatibility requires that we reset to the default values.
             // TODO: Only overwrite the properties that "saveToProperties" normally touches?
@@ -707,9 +695,10 @@ public class PatternStringParser {
         // Padding settings
         if (positive.paddingLocation != null) {
             // The width of the positive prefix and suffix templates are included in the padding
-            int paddingWidth = positive.widthExceptAffixes
-                    + AffixUtils.estimateLength(posPrefix)
-                    + AffixUtils.estimateLength(posSuffix);
+            int paddingWidth =
+                    positive.widthExceptAffixes
+                            + AffixUtils.estimateLength(posPrefix)
+                            + AffixUtils.estimateLength(posSuffix);
             properties.setFormatWidth(paddingWidth);
             String rawPaddingString = patternInfo.getString(AffixPatternProvider.Flags.PADDING);
             if (rawPaddingString.length() == 1) {
@@ -721,7 +710,8 @@ public class PatternStringParser {
                     properties.setPadString(rawPaddingString);
                 }
             } else {
-                properties.setPadString(rawPaddingString.substring(1, rawPaddingString.length() - 1));
+                properties.setPadString(
+                        rawPaddingString.substring(1, rawPaddingString.length() - 1));
             }
             assert positive.paddingLocation != null;
             properties.setPadPosition(positive.paddingLocation);
@@ -737,8 +727,10 @@ public class PatternStringParser {
         properties.setPositivePrefixPattern(posPrefix);
         properties.setPositiveSuffixPattern(posSuffix);
         if (patternInfo.negative != null) {
-            properties.setNegativePrefixPattern(patternInfo.getString(
-                    AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN | AffixPatternProvider.Flags.PREFIX));
+            properties.setNegativePrefixPattern(
+                    patternInfo.getString(
+                            AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN
+                                    | AffixPatternProvider.Flags.PREFIX));
             properties.setNegativeSuffixPattern(
                     patternInfo.getString(AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN));
         } else {

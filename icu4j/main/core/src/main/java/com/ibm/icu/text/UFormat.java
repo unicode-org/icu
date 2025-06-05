@@ -8,14 +8,12 @@
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.util.ULocale;
 import java.text.Format;
 
-import com.ibm.icu.util.ULocale;
-
 /**
- * An abstract class that extends {@link java.text.Format} to provide
- * additional ICU protocol, specifically, the {@code getLocale()}
- * API.  All ICU format classes are subclasses of this class.
+ * An abstract class that extends {@link java.text.Format} to provide additional ICU protocol,
+ * specifically, the {@code getLocale()} API. All ICU format classes are subclasses of this class.
  *
  * @see com.ibm.icu.util.ULocale
  * @author weiv
@@ -27,12 +25,12 @@ public abstract class UFormat extends Format {
     private static final long serialVersionUID = -4964390515840164416L;
 
     /**
-     * A field that represents a span of text that may be composed with other fields.
-     * SpanField classes usually have an associated value.
+     * A field that represents a span of text that may be composed with other fields. SpanField
+     * classes usually have an associated value.
      *
      * @stable ICU 64
      */
-    public static abstract class SpanField extends Format.Field {
+    public abstract static class SpanField extends Format.Field {
         private static final long serialVersionUID = -4732719509273350606L;
 
         /**
@@ -55,45 +53,38 @@ public abstract class UFormat extends Format {
     // -------- BEGIN ULocale boilerplate --------
 
     /**
-     * Return the locale that was used to create this object, or null.
-     * This may may differ from the locale requested at the time of
-     * this object's creation.  For example, if an object is created
-     * for locale {@code en_US_CALIFORNIA}, the actual data may be
-     * drawn from {@code en} (the <i>actual</i> locale), and
-     * {@code en_US} may be the most specific locale that exists (the
+     * Return the locale that was used to create this object, or null. This may may differ from the
+     * locale requested at the time of this object's creation. For example, if an object is created
+     * for locale {@code en_US_CALIFORNIA}, the actual data may be drawn from {@code en} (the
+     * <i>actual</i> locale), and {@code en_US} may be the most specific locale that exists (the
      * <i>valid</i> locale).
      *
-     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
-     * contains a partial preview implementation.  The <i>actual</i>
-     * locale is returned correctly, but the <i>valid</i> locale is
-     * not, in most cases.
+     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8 contains a partial preview
+     * implementation. The <i>actual</i> locale is returned correctly, but the <i>valid</i> locale
+     * is not, in most cases.
+     *
      * @param type type of information requested, either {@link
-     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
-     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
-     * @return the information specified by <i>type</i>, or null if
-     * this object was not constructed from locale data.
+     *     com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
+     * @return the information specified by <i>type</i>, or null if this object was not constructed
+     *     from locale data.
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
      */
     public final ULocale getLocale(ULocale.Type type) {
-        return type == ULocale.ACTUAL_LOCALE ?
-            this.actualLocale : this.validLocale;
+        return type == ULocale.ACTUAL_LOCALE ? this.actualLocale : this.validLocale;
     }
 
     /**
-     * Set information about the locales that were used to create this
-     * object.  If the object was not constructed from locale data,
-     * both arguments should be set to null.  Otherwise, neither
-     * should be null.  The actual locale must be at the same level or
-     * less specific than the valid locale.  This method is intended
-     * for use by factories or other entities that create objects of
-     * this class.
-     * @param valid the most specific locale containing any resource
-     * data, or null
-     * @param actual the locale containing data used to construct this
-     * object, or null
+     * Set information about the locales that were used to create this object. If the object was not
+     * constructed from locale data, both arguments should be set to null. Otherwise, neither should
+     * be null. The actual locale must be at the same level or less specific than the valid locale.
+     * This method is intended for use by factories or other entities that create objects of this
+     * class.
+     *
+     * @param valid the most specific locale containing any resource data, or null
+     * @param actual the locale containing data used to construct this object, or null
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
@@ -101,9 +92,9 @@ public abstract class UFormat extends Format {
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
         if ((valid == null) != (actual == null)) {
-            ///CLOVER:OFF
+            /// CLOVER:OFF
             throw new IllegalArgumentException();
-            ///CLOVER:ON
+            /// CLOVER:ON
         }
         // Another check we could do is that the actual locale is at
         // the same level or less specific than the valid locale.
@@ -113,13 +104,14 @@ public abstract class UFormat extends Format {
 
     /**
      * The most specific locale containing any resource data, or null.
+     *
      * @see com.ibm.icu.util.ULocale
      */
     private ULocale validLocale;
 
     /**
-     * The locale containing data used to construct this object, or
-     * null.
+     * The locale containing data used to construct this object, or null.
+     *
      * @see com.ibm.icu.util.ULocale
      */
     private ULocale actualLocale;

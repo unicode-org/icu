@@ -8,13 +8,12 @@
  */
 package com.ibm.icu.dev.test.impl;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.CacheValue;
 import com.ibm.icu.impl.CacheValue.Strength;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class CacheTest extends CoreTestFmwk {
@@ -29,9 +28,11 @@ public class CacheTest extends CoreTestFmwk {
         assertTrue("null CacheValue reset==null", nv.resetIfCleared(null) == null);
         try {
             Object v = nv.resetIfCleared(this);
-            fail("null CacheValue reset(not null) should throw an Exception, returned " +
-                    v + " instead");
-        } catch(Exception expected) {
+            fail(
+                    "null CacheValue reset(not null) should throw an Exception, returned "
+                            + v
+                            + " instead");
+        } catch (Exception expected) {
         }
     }
 
@@ -40,7 +41,8 @@ public class CacheTest extends CoreTestFmwk {
     public void testStrongCacheValue() {
         boolean wasStrong = CacheValue.futureInstancesWillBeStrong();
         CacheValue.setStrength(Strength.STRONG);
-        assertTrue("setStrength(STRONG).futureInstancesWillBeStrong()",
+        assertTrue(
+                "setStrength(STRONG).futureInstancesWillBeStrong()",
                 CacheValue.futureInstancesWillBeStrong());
         CacheValue<Object> sv = CacheValue.<Object>getInstance(this);
         assertFalse("strong CacheValue not isNull()", sv.isNull());
@@ -59,7 +61,8 @@ public class CacheTest extends CoreTestFmwk {
     public void testSoftCacheValue() {
         boolean wasStrong = CacheValue.futureInstancesWillBeStrong();
         CacheValue.setStrength(Strength.SOFT);
-        assertFalse("setStrength(SOFT).futureInstancesWillBeStrong()",
+        assertFalse(
+                "setStrength(SOFT).futureInstancesWillBeStrong()",
                 CacheValue.futureInstancesWillBeStrong());
         CacheValue<Object> sv = CacheValue.<Object>getInstance(this);
         assertFalse("soft CacheValue not isNull()", sv.isNull());

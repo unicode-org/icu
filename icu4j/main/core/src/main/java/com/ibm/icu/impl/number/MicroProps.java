@@ -2,8 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
-import java.util.List;
-
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -11,11 +9,12 @@ import com.ibm.icu.number.Precision;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
+import java.util.List;
 
 /**
- * MicroProps is the first MicroPropsGenerator that should be should be called,
- * producing an initialized MicroProps instance that will be passed on and
- * modified throughout the rest of the chain of MicroPropsGenerator instances.
+ * MicroProps is the first MicroPropsGenerator that should be should be called, producing an
+ * initialized MicroProps instance that will be passed on and modified throughout the rest of the
+ * chain of MicroPropsGenerator instances.
  */
 public class MicroProps implements Cloneable, MicroPropsGenerator {
     // Populated globally:
@@ -57,36 +56,30 @@ public class MicroProps implements Cloneable, MicroPropsGenerator {
     // play.
     public MeasureUnit outputUnit;
 
-    /**
-     * Contains all the measures.
-     */
+    /** Contains all the measures. */
     public List<Measure> mixedMeasures;
 
-    /**
-     * Points to quantity position, -1 if the position is not set yet.
-     */
+    /** Points to quantity position, -1 if the position is not set yet. */
     public int indexOfQuantity = -1;
 
     private volatile boolean exhausted;
 
     /**
-     * @param immutable
-     *            Whether this MicroProps should behave as an immutable after construction with respect
-     *            to the quantity chain.
+     * @param immutable Whether this MicroProps should behave as an immutable after construction
+     *     with respect to the quantity chain.
      */
     public MicroProps(boolean immutable) {
         this.immutable = immutable;
     }
 
     /**
-     * As MicroProps is the "base instance", this implementation of
-     * {@code MircoPropsGenerator.processQuantity()} just ensures that the output
-     * {@code micros} is correctly initialized.
-     * <p>
-     * For the "safe" invocation of this function, micros must not be *this,
-     * such that a copy of the base instance is made. For the "unsafe" path,
-     * this function can be used only once, because the base MicroProps instance
-     * will be modified and thus not be available for re-use.
+     * As MicroProps is the "base instance", this implementation of {@code
+     * MircoPropsGenerator.processQuantity()} just ensures that the output {@code micros} is
+     * correctly initialized.
+     *
+     * <p>For the "safe" invocation of this function, micros must not be *this, such that a copy of
+     * the base instance is made. For the "unsafe" path, this function can be used only once,
+     * because the base MicroProps instance will be modified and thus not be available for re-use.
      *
      * @param quantity The quantity for consideration and optional mutation.
      * @return an initialized MicroProps instance.

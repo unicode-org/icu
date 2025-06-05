@@ -13,13 +13,16 @@
 
 package com.ibm.icu.dev.tool.layout;
 
-public abstract class TagValueData
-{
-    abstract public int getMinValue();
-    abstract public int getMaxValue();
-    
-    abstract public String getName(int value);
-    abstract public String getTag(int value);
-    abstract public String getTagLabel(int value);
-    abstract public String makeTag(int value);
+public abstract class TagValueData {
+    public abstract int getMinValue();
+
+    public abstract int getMaxValue();
+
+    public abstract String getName(int value);
+
+    public abstract String getTag(int value);
+
+    public abstract String getTagLabel(int value);
+
+    public abstract String makeTag(int value);
 }

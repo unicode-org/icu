@@ -8,25 +8,24 @@
  */
 package com.ibm.icu.dev.test.localespi;
 
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.TimeZoneNames;
+import com.ibm.icu.text.TimeZoneNames.NameType;
+import com.ibm.icu.util.ULocale;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.TimeZoneNames;
-import com.ibm.icu.text.TimeZoneNames.NameType;
-import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
 public class TimeZoneNameTest extends TestFmwk {
 
     private static final Set<String> ProblematicZones = new HashSet<>();
+
     static {
         // Since tzdata2013e, Pacific/Johnston is defined as below:
         //
@@ -62,12 +61,27 @@ public class TimeZoneNameTest extends TestFmwk {
                 String icuStdShort = getIcuDisplayName(tzid, false, TimeZone.SHORT, loc);
                 String icuDstShort = getIcuDisplayName(tzid, true, TimeZone.SHORT, loc);
 
-                if (icuStdLong != null && icuDstLong != null && icuStdShort != null && icuDstShort != null) {
-                    checkDisplayNamePair(TimeZone.SHORT, tzid, loc, warningOnly || ProblematicZones.contains(tzid));
-                    checkDisplayNamePair(TimeZone.LONG, tzid, loc, warningOnly || ProblematicZones.contains(tzid));
+                if (icuStdLong != null
+                        && icuDstLong != null
+                        && icuStdShort != null
+                        && icuDstShort != null) {
+                    checkDisplayNamePair(
+                            TimeZone.SHORT,
+                            tzid,
+                            loc,
+                            warningOnly || ProblematicZones.contains(tzid));
+                    checkDisplayNamePair(
+                            TimeZone.LONG,
+                            tzid,
+                            loc,
+                            warningOnly || ProblematicZones.contains(tzid));
                 } else {
-                    logln("Localized long standard name is not available for "
-                            + tzid + " in locale " + loc + " in ICU");
+                    logln(
+                            "Localized long standard name is not available for "
+                                    + tzid
+                                    + " in locale "
+                                    + loc
+                                    + " in ICU");
                 }
             }
         }
@@ -102,22 +116,34 @@ public class TimeZoneNameTest extends TestFmwk {
             long date = System.currentTimeMillis();
             TimeZoneNames tznames = TimeZoneNames.getInstance(ULocale.forLocale(loc));
             switch (style) {
-            case TimeZone.LONG:
-                icuName = daylight ?
-                        tznames.getDisplayName(canonicalID, NameType.LONG_DAYLIGHT, date) :
-                        tznames.getDisplayName(canonicalID, NameType.LONG_STANDARD, date);
-                break;
-            case TimeZone.SHORT:
-                icuName = daylight ?
-                        tznames.getDisplayName(canonicalID, NameType.SHORT_DAYLIGHT, date) :
-                        tznames.getDisplayName(canonicalID, NameType.SHORT_STANDARD, date);
-                break;
+                case TimeZone.LONG:
+                    icuName =
+                            daylight
+                                    ? tznames.getDisplayName(
+                                            canonicalID, NameType.LONG_DAYLIGHT, date)
+                                    : tznames.getDisplayName(
+                                            canonicalID, NameType.LONG_STANDARD, date);
+                    break;
+                case TimeZone.SHORT:
+                    icuName =
+                            daylight
+                                    ? tznames.getDisplayName(
+                                            canonicalID, NameType.SHORT_DAYLIGHT, date)
+                                    : tznames.getDisplayName(
+                                            canonicalID, NameType.SHORT_STANDARD, date);
+                    break;
             }
         }
         return icuName;
     }
 
-    private void checkDisplayName(boolean daylight, int style,  String tzid, Locale loc, String icuname, boolean warnOnly) {
+    private void checkDisplayName(
+            boolean daylight,
+            int style,
+            String tzid,
+            Locale loc,
+            String icuname,
+            boolean warnOnly) {
         String styleStr = (style == TimeZone.SHORT) ? "SHORT" : "LONG";
         TimeZone tz = TimeZone.getTimeZone(tzid);
         String name = tz.getDisplayName(daylight, style, loc);
@@ -126,34 +152,89 @@ public class TimeZoneNameTest extends TestFmwk {
             // The name should be taken from ICU
             if (!name.equals(icuname)) {
                 if (warnOnly) {
-                    logln("WARNING: TimeZone name by ICU is " + icuname + ", but got " + name
-                            + " for time zone " + tz.getID() + " in locale " + loc
-                            + " (daylight=" + daylight + ", style=" + styleStr + ")");
+                    logln(
+                            "WARNING: TimeZone name by ICU is "
+                                    + icuname
+                                    + ", but got "
+                                    + name
+                                    + " for time zone "
+                                    + tz.getID()
+                                    + " in locale "
+                                    + loc
+                                    + " (daylight="
+                                    + daylight
+                                    + ", style="
+                                    + styleStr
+                                    + ")");
 
                 } else {
-                    errln("FAIL: TimeZone name by ICU is " + icuname + ", but got " + name
-                            + " for time zone " + tz.getID() + " in locale " + loc
-                            + " (daylight=" + daylight + ", style=" + styleStr + ")");
+                    errln(
+                            "FAIL: TimeZone name by ICU is "
+                                    + icuname
+                                    + ", but got "
+                                    + name
+                                    + " for time zone "
+                                    + tz.getID()
+                                    + " in locale "
+                                    + loc
+                                    + " (daylight="
+                                    + daylight
+                                    + ", style="
+                                    + styleStr
+                                    + ")");
                 }
             }
         } else {
             if (!name.equals(icuname)) {
-                logln("INFO: TimeZone name by ICU is " + icuname + ", but got " + name
-                        + " for time zone " + tz.getID() + " in locale " + loc
-                        + " (daylight=" + daylight + ", style=" + styleStr + ")");
+                logln(
+                        "INFO: TimeZone name by ICU is "
+                                + icuname
+                                + ", but got "
+                                + name
+                                + " for time zone "
+                                + tz.getID()
+                                + " in locale "
+                                + loc
+                                + " (daylight="
+                                + daylight
+                                + ", style="
+                                + styleStr
+                                + ")");
             }
             // Try explicit ICU locale (xx_yy_ICU)
             Locale icuLoc = TestUtil.toICUExtendedLocale(loc);
             name = tz.getDisplayName(daylight, style, icuLoc);
             if (!name.equals(icuname)) {
                 if (warnOnly) {
-                    logln("WARNING: TimeZone name by ICU is " + icuname + ", but got " + name
-                            + " for time zone " + tz.getID() + " in locale " + icuLoc
-                            + " (daylight=" + daylight + ", style=" + styleStr + ")");
+                    logln(
+                            "WARNING: TimeZone name by ICU is "
+                                    + icuname
+                                    + ", but got "
+                                    + name
+                                    + " for time zone "
+                                    + tz.getID()
+                                    + " in locale "
+                                    + icuLoc
+                                    + " (daylight="
+                                    + daylight
+                                    + ", style="
+                                    + styleStr
+                                    + ")");
                 } else {
-                    errln("FAIL: TimeZone name by ICU is " + icuname + ", but got " + name
-                            + " for time zone " + tz.getID() + " in locale " + icuLoc
-                            + " (daylight=" + daylight + ", style=" + styleStr + ")");
+                    errln(
+                            "FAIL: TimeZone name by ICU is "
+                                    + icuname
+                                    + ", but got "
+                                    + name
+                                    + " for time zone "
+                                    + tz.getID()
+                                    + " in locale "
+                                    + icuLoc
+                                    + " (daylight="
+                                    + daylight
+                                    + ", style="
+                                    + styleStr
+                                    + ")");
                 }
             }
         }
@@ -195,11 +276,15 @@ public class TimeZoneNameTest extends TestFmwk {
     @Test
     public void testGetAvailableMetaZoneIDs_String() {
         TimeZoneNames japaneseNames = TimeZoneNames.getInstance(ULocale.JAPANESE);
-        assertEquals("Timezone name mismatch", Collections.singleton("America_Pacific"),
+        assertEquals(
+                "Timezone name mismatch",
+                Collections.singleton("America_Pacific"),
                 japaneseNames.getAvailableMetaZoneIDs("America/Los_Angeles"));
 
         TimeZoneNames tzdbNames = TimeZoneNames.getTZDBInstance(ULocale.CHINESE);
-        assertEquals("Timezone name mismatch", Collections.singleton("Taipei"),
+        assertEquals(
+                "Timezone name mismatch",
+                Collections.singleton("Taipei"),
                 tzdbNames.getAvailableMetaZoneIDs("Asia/Taipei"));
     }
 
@@ -207,14 +292,16 @@ public class TimeZoneNameTest extends TestFmwk {
     public void testGetMetaZoneDisplayName() {
         TimeZoneNames usNames = TimeZoneNames.getInstance(ULocale.US);
 
-        String europeanCentralName = usNames.getMetaZoneDisplayName("Europe_Central",
-                TimeZoneNames.NameType.LONG_STANDARD);
-        assertEquals("Timezone name mismatch", "Central European Standard Time",
-                europeanCentralName);
+        String europeanCentralName =
+                usNames.getMetaZoneDisplayName(
+                        "Europe_Central", TimeZoneNames.NameType.LONG_STANDARD);
+        assertEquals(
+                "Timezone name mismatch", "Central European Standard Time", europeanCentralName);
 
         TimeZoneNames tzdbNames = TimeZoneNames.getTZDBInstance(ULocale.CHINESE);
-        String americaPacificName = tzdbNames.getMetaZoneDisplayName("America_Pacific",
-                TimeZoneNames.NameType.SHORT_DAYLIGHT);
+        String americaPacificName =
+                tzdbNames.getMetaZoneDisplayName(
+                        "America_Pacific", TimeZoneNames.NameType.SHORT_DAYLIGHT);
         assertEquals("Timezone name mismatch", "PDT", americaPacificName);
     }
 
@@ -237,12 +324,14 @@ public class TimeZoneNameTest extends TestFmwk {
     @Test
     public void testGetTimeZoneDisplayName() {
         TimeZoneNames frenchNames = TimeZoneNames.getInstance(ULocale.FRENCH);
-        String dublinName = frenchNames.getTimeZoneDisplayName("Europe/Dublin",
-                TimeZoneNames.NameType.LONG_DAYLIGHT);
+        String dublinName =
+                frenchNames.getTimeZoneDisplayName(
+                        "Europe/Dublin", TimeZoneNames.NameType.LONG_DAYLIGHT);
         assertEquals("Timezone name mismatch", "heure d’été irlandaise", dublinName);
 
-        String dublinLocation = frenchNames.getTimeZoneDisplayName("Europe/Dublin",
-                TimeZoneNames.NameType.EXEMPLAR_LOCATION);
+        String dublinLocation =
+                frenchNames.getTimeZoneDisplayName(
+                        "Europe/Dublin", TimeZoneNames.NameType.EXEMPLAR_LOCATION);
         assertEquals("Timezone name mismatch", "Dublin", dublinLocation);
 
         // All the names returned by this are null.

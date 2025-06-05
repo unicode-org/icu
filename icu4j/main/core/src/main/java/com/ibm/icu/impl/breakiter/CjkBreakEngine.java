@@ -13,10 +13,6 @@ import static com.ibm.icu.impl.CharacterIteration.current32;
 import static com.ibm.icu.impl.CharacterIteration.next32;
 import static com.ibm.icu.impl.CharacterIteration.previous32;
 
-import java.io.IOException;
-import java.text.CharacterIterator;
-import java.util.HashSet;
-
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.ICUData;
@@ -25,6 +21,9 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
+import java.io.IOException;
+import java.text.CharacterIterator;
+import java.util.HashSet;
 
 public class CjkBreakEngine extends DictionaryBreakEngine {
     private UnicodeSet fHangulWordSet;
@@ -49,14 +48,16 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
         fDictionary = DictionaryData.loadDictionaryFor("Hira");
         if (korean) {
             setCharacters(fHangulWordSet);
-        } else { //Chinese and Japanese
+        } else { // Chinese and Japanese
             isCj = true;
-            UnicodeSet cjSet = new UnicodeSet("[[:Han:][:Hiragana:][:Katakana:]\\u30fc\\uff70\\uff9e\\uff9f]");
+            UnicodeSet cjSet =
+                    new UnicodeSet("[[:Han:][:Hiragana:][:Katakana:]\\u30fc\\uff70\\uff9e\\uff9f]");
             setCharacters(cjSet);
             if (Boolean.parseBoolean(
                     ICUConfig.get("com.ibm.icu.impl.breakiter.useMLPhraseBreaking", "false"))) {
-                fMlBreakEngine = new MlBreakEngine(fDigitOrOpenPunctuationOrAlphabetSet,
-                        fClosePunctuationSet);
+                fMlBreakEngine =
+                        new MlBreakEngine(
+                                fDigitOrOpenPunctuationOrAlphabetSet, fClosePunctuationSet);
             } else {
                 initializeJapanesePhraseParamater();
             }
@@ -90,7 +91,7 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof CjkBreakEngine) {
-            CjkBreakEngine other = (CjkBreakEngine)obj;
+            CjkBreakEngine other = (CjkBreakEngine) obj;
             return this.fSet.equals(other.fSet);
         }
         return false;
@@ -105,19 +106,24 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
     private static final int kMaxKatakanaGroupLength = 20;
     private static final int maxSnlp = 255;
     private static final int kint32max = Integer.MAX_VALUE;
+
     private static int getKatakanaCost(int wordlength) {
-        int katakanaCost[] =  new int[] { 8192, 984, 408, 240, 204, 252, 300, 372, 480 };
+        int katakanaCost[] = new int[] {8192, 984, 408, 240, 204, 252, 300, 372, 480};
         return (wordlength > kMaxKatakanaLength) ? 8192 : katakanaCost[wordlength];
     }
 
     private static boolean isKatakana(int value) {
-        return (value >= 0x30A1 && value <= 0x30FE && value != 0x30FB) ||
-                (value >= 0xFF66 && value <= 0xFF9F);
+        return (value >= 0x30A1 && value <= 0x30FE && value != 0x30FB)
+                || (value >= 0xFF66 && value <= 0xFF9F);
     }
 
     @Override
-    public int divideUpDictionaryRange(CharacterIterator inText, int startPos, int endPos,
-            DequeI foundBreaks, boolean isPhraseBreaking) {
+    public int divideUpDictionaryRange(
+            CharacterIterator inText,
+            int startPos,
+            int endPos,
+            DequeI foundBreaks,
+            boolean isPhraseBreaking) {
         if (startPos >= endPos) {
             return 0;
         }
@@ -133,8 +139,9 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
             inText.next();
         }
         String prenormstr = s.toString();
-        boolean isNormalized = Normalizer.quickCheck(prenormstr, Normalizer.NFKC) == Normalizer.YES ||
-                               Normalizer.isNormalized(prenormstr, Normalizer.NFKC, 0);
+        boolean isNormalized =
+                Normalizer.quickCheck(prenormstr, Normalizer.NFKC) == Normalizer.YES
+                        || Normalizer.isNormalized(prenormstr, Normalizer.NFKC, 0);
         CharacterIterator text;
         int numCodePts = 0;
         if (isNormalized) {
@@ -166,8 +173,8 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
                 ICUConfig.get("com.ibm.icu.impl.breakiter.useMLPhraseBreaking", "false"))) {
             // PhraseBreaking is supported in ja and ko; MlBreakEngine only supports ja.
             if (isPhraseBreaking && isCj) {
-                return fMlBreakEngine.divideUpRange(inText, startPos, endPos, text,
-                        numCodePts, charPositions, foundBreaks);
+                return fMlBreakEngine.divideUpRange(
+                        inText, startPos, endPos, text, numCodePts, charPositions, foundBreaks);
             }
         }
 
@@ -211,8 +218,10 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
             // with the highest value possible (i.e. the least likely to occur).
             // Exclude Korean characters from this treatment, as they should be
             // left together by default.
-            text.setIndex(ix);  // fDictionary.matches() advances the text position; undo that.
-            if ((count == 0 || lengths[0] != 1) && current32(text) != DONE32 && !fHangulWordSet.contains(current32(text))) {
+            text.setIndex(ix); // fDictionary.matches() advances the text position; undo that.
+            if ((count == 0 || lengths[0] != 1)
+                    && current32(text) != DONE32
+                    && !fHangulWordSet.contains(current32(text))) {
                 values[count] = maxSnlp;
                 lengths[count] = 1;
                 count++;
@@ -235,7 +244,9 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
             if (!is_prev_katakana && is_katakana) {
                 int j = i + 1;
                 next32(text);
-                while (j < numCodePts && (j - i) < kMaxKatakanaGroupLength && isKatakana(current32(text))) {
+                while (j < numCodePts
+                        && (j - i) < kMaxKatakanaGroupLength
+                        && isKatakana(current32(text))) {
                     next32(text);
                     ++j;
                 }
@@ -264,7 +275,7 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
             for (int i = prev[numCodePts]; i > 0; i = prev[i]) {
                 codeUnitIdx = prenormstr.offsetByCodePoints(0, i);
                 prevCodeUnitIdx = prenormstr.offsetByCodePoints(0, prevIdx);
-                length =  prevCodeUnitIdx - codeUnitIdx;
+                length = prevCodeUnitIdx - codeUnitIdx;
                 prevIdx = i;
                 String pattern = getPatternFromText(text, s, codeUnitIdx, length);
                 // Keep the breakpoint if the pattern is not in the fSkipSet and continuous Katakana
@@ -298,8 +309,9 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
             inText.setIndex(pos);
             if (pos > previous) {
                 if (pos != startPos
-                        || (isPhraseBreaking && pos > 0
-                        && fClosePunctuationSet.contains(previous32(inText)))) {
+                        || (isPhraseBreaking
+                                && pos > 0
+                                && fClosePunctuationSet.contains(previous32(inText)))) {
                     foundBreaks.push(charPositions[t_boundary[i]] + startPos);
                     correctedNumBreaks++;
                 }
@@ -325,13 +337,12 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
                 correctedNumBreaks--;
             }
         }
-        if (!foundBreaks.isEmpty())
-            inText.setIndex(foundBreaks.peek());
+        if (!foundBreaks.isEmpty()) inText.setIndex(foundBreaks.peek());
         return correctedNumBreaks;
     }
 
-    private String getPatternFromText(CharacterIterator text, StringBuffer sb, int start,
-            int length) {
+    private String getPatternFromText(
+            CharacterIterator text, StringBuffer sb, int start, int length) {
         sb.setLength(0);
         if (length > 0) {
             text.setIndex(start);

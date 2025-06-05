@@ -1,23 +1,22 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 2007-2010, International Business Machines Corporation and   *
+ * others. All Rights Reserved.                                               *
+ ******************************************************************************
+ */
 
 // Copyright 2006 Google Inc.  All Rights Reserved.
 
 package com.ibm.icu.dev.test.duration;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.duration.Period;
 import com.ibm.icu.impl.duration.TimeUnit;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class PeriodTest extends CoreTestFmwk {
@@ -72,8 +71,7 @@ public class PeriodTest extends CoreTestFmwk {
 
     @Test
     public void testAnd() {
-        Period p = Period.at(1, TimeUnit.YEAR).and(3, TimeUnit.MONTH)
-                .inFuture();
+        Period p = Period.at(1, TimeUnit.YEAR).and(3, TimeUnit.MONTH).inFuture();
         assertTrue(null, p.isSet(TimeUnit.YEAR));
         assertTrue(null, p.isSet(TimeUnit.MONTH));
         assertEquals(null, 3f, p.getCount(TimeUnit.MONTH), .1f);

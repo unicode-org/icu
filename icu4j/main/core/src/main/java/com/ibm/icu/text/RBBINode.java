@@ -8,102 +8,97 @@
 
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.Assert;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.ibm.icu.impl.Assert;
-
-/**
- *   This class represents a node in the parse tree created by the RBBI Rule compiler.
- */
+/** This class represents a node in the parse tree created by the RBBI Rule compiler. */
 class RBBINode {
 
+    //   enum NodeType {
+    static final int setRef = 0;
+    static final int uset = 1;
+    static final int varRef = 2;
+    static final int leafChar = 3;
+    static final int lookAhead = 4;
+    static final int tag = 5;
+    static final int endMark = 6;
+    static final int opStart = 7;
+    static final int opCat = 8;
+    static final int opOr = 9;
+    static final int opStar = 10;
+    static final int opPlus = 11;
+    static final int opQuestion = 12;
+    static final int opBreak = 13;
+    static final int opReverse = 14;
+    static final int opLParen = 15;
+    static final int nodeTypeLimit = 16; //  For Assertion checking only.
 
- //   enum NodeType {
-     static final int    setRef = 0;
-     static final int    uset = 1;
-     static final int    varRef = 2;
-     static final int    leafChar = 3;
-     static final int    lookAhead = 4;
-     static final int    tag = 5;
-     static final int    endMark = 6;
-     static final int    opStart = 7;
-     static final int    opCat = 8;
-     static final int    opOr = 9;
-     static final int    opStar = 10;
-     static final int    opPlus = 11;
-     static final int    opQuestion = 12;
-     static final int    opBreak = 13;
-     static final int    opReverse = 14;
-     static final int    opLParen = 15;
-     static final int    nodeTypeLimit = 16;    //  For Assertion checking only.
+    static final String[] nodeTypeNames = {
+        "setRef",
+        "uset",
+        "varRef",
+        "leafChar",
+        "lookAhead",
+        "tag",
+        "endMark",
+        "opStart",
+        "opCat",
+        "opOr",
+        "opStar",
+        "opPlus",
+        "opQuestion",
+        "opBreak",
+        "opReverse",
+        "opLParen"
+    };
 
-     static final String []  nodeTypeNames = {
-         "setRef",
-         "uset",
-         "varRef",
-         "leafChar",
-         "lookAhead",
-         "tag",
-         "endMark",
-         "opStart",
-         "opCat",
-         "opOr",
-         "opStar",
-         "opPlus",
-         "opQuestion",
-         "opBreak",
-         "opReverse",
-         "opLParen"
-     };
+    //    enum OpPrecedence {
+    static final int precZero = 0;
+    static final int precStart = 1;
+    static final int precLParen = 2;
+    static final int precOpOr = 3;
+    static final int precOpCat = 4;
 
-//    enum OpPrecedence {
-    static final int    precZero   = 0;
-    static final int    precStart  = 1;
-    static final int    precLParen = 2;
-    static final int    precOpOr   = 3;
-    static final int    precOpCat  = 4;
+    int fType; // enum NodeType
+    RBBINode fParent;
+    RBBINode fLeftChild;
+    RBBINode fRightChild;
+    UnicodeSet fInputSet; // For uset nodes only.
+    int fPrecedence = precZero; // enum OpPrecedence, For binary ops only.
 
-    int          fType;   // enum NodeType
-    RBBINode      fParent;
-    RBBINode      fLeftChild;
-    RBBINode      fRightChild;
-    UnicodeSet    fInputSet;           // For uset nodes only.
-    int          fPrecedence = precZero;   // enum OpPrecedence, For binary ops only.
+    String fText; // Text corresponding to this node.
+    //   May be lazily evaluated when (if) needed
+    //   for some node types.
+    int fFirstPos; // Position in the rule source string of the
+    //   first text associated with the node.
+    //   If there's a left child, this will be the same
+    //   as that child's left pos.
+    int fLastPos; //  Last position in the rule source string
+    //    of any text associated with this node.
+    //    If there's a right child, this will be the same
+    //    as that child's last position.
 
-    String       fText;                 // Text corresponding to this node.
-                                        //   May be lazily evaluated when (if) needed
-                                        //   for some node types.
-    int           fFirstPos;            // Position in the rule source string of the
-                                        //   first text associated with the node.
-                                        //   If there's a left child, this will be the same
-                                        //   as that child's left pos.
-    int           fLastPos;             //  Last position in the rule source string
-                                        //    of any text associated with this node.
-                                        //    If there's a right child, this will be the same
-                                        //    as that child's last position.
+    boolean fNullable; //  See Aho DFA table generation algorithm
+    int fVal; // For leafChar nodes, the value.
+    //   Values are the character category,
+    //   corresponds to columns in the final
+    //   state transition table.
 
-    boolean      fNullable;            //  See Aho DFA table generation algorithm
-    int           fVal;                 // For leafChar nodes, the value.
-                                        //   Values are the character category,
-                                        //   corresponds to columns in the final
-                                        //   state transition table.
+    boolean fLookAheadEnd; // For endMark nodes, set true if
+    //   marking the end of a look-ahead rule.
 
-    boolean      fLookAheadEnd;        // For endMark nodes, set true if
-                                       //   marking the end of a look-ahead rule.
+    boolean fRuleRoot; // True if this node is the root of a rule.
+    boolean fChainIn; // True if chaining into this rule is allowed
+    //     (no '^' present).
 
-    boolean      fRuleRoot;             // True if this node is the root of a rule.
-    boolean      fChainIn;              // True if chaining into this rule is allowed
-                                        //     (no '^' present).
+    Set<RBBINode> fFirstPosSet; // See Aho DFA table generation algorithm
+    Set<RBBINode> fLastPosSet; // See Aho.
+    Set<RBBINode> fFollowPos; // See Aho.
 
-
-    Set<RBBINode> fFirstPosSet;         // See Aho DFA table generation algorithm
-    Set<RBBINode> fLastPosSet;          // See Aho.
-    Set<RBBINode> fFollowPos;           // See Aho.
-
-    int           fSerialNum;           //  Debugging aids.  Each node gets a unique serial number.
-    static int    gLastSerial;
+    int fSerialNum; //  Debugging aids.  Each node gets a unique serial number.
+    static int gLastSerial;
 
     RBBINode(int t) {
         Assert.assrt(t < nodeTypeLimit);
@@ -143,7 +138,7 @@ class RBBINode {
         fFollowPos = new HashSet<RBBINode>(other.fFollowPos);
     }
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     //
     //        cloneTree Make a copy of the subtree rooted at this node.
     //                      Discard any variable references encountered along the way,
@@ -151,7 +146,7 @@ class RBBINode {
     //                      Used to replicate the expression underneath variable
     //                      references in preparation for generating the DFA tables.
     //
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     RBBINode cloneTree() {
         RBBINode n;
 
@@ -175,8 +170,7 @@ class RBBINode {
         return n;
     }
 
-
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     //
     //       flattenVariables Walk a parse tree, replacing any variable
     //                          references with a copy of the variable's definition.
@@ -193,38 +187,39 @@ class RBBINode {
     //                          found, then calling cloneTree() at that point. Any
     //                          nested references are handled by cloneTree(), not here.
     //
-    //-------------------------------------------------------------------------
-    static final private int kRecursiveDepthLimit = 3500;
+    // -------------------------------------------------------------------------
+    private static final int kRecursiveDepthLimit = 3500;
+
     RBBINode flattenVariables(int depth) {
         if (depth > kRecursiveDepthLimit) {
             throw new IllegalArgumentException("The input is too long");
         }
         if (fType == varRef) {
-            RBBINode retNode  = fLeftChild.cloneTree();
+            RBBINode retNode = fLeftChild.cloneTree();
             retNode.fRuleRoot = this.fRuleRoot;
-            retNode.fChainIn  = this.fChainIn;
+            retNode.fChainIn = this.fChainIn;
             return retNode;
         }
 
         if (fLeftChild != null) {
-            fLeftChild = fLeftChild.flattenVariables(depth+1);
+            fLeftChild = fLeftChild.flattenVariables(depth + 1);
             fLeftChild.fParent = this;
         }
         if (fRightChild != null) {
-            fRightChild = fRightChild.flattenVariables(depth+1);
+            fRightChild = fRightChild.flattenVariables(depth + 1);
             fRightChild.fParent = this;
         }
         return this;
     }
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     //
     //      flattenSets Walk the parse tree, replacing any nodes of type setRef
     //                     with a copy of the expression tree for the set. A set's
     //                     equivalent expression tree is precomputed and saved as
     //                     the left child of the uset node.
     //
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     void flattenSets() {
         Assert.assrt(fType != setRef);
 
@@ -254,12 +249,12 @@ class RBBINode {
         }
     }
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     //
     //       findNodes() Locate all the nodes of the specified type, starting
     //                       at the specified root.
     //
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     void findNodes(List<RBBINode> dest, int kind) {
         if (fType == kind) {
             dest.add(this);
@@ -272,24 +267,22 @@ class RBBINode {
         }
     }
 
-
-
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     //
     //        print. Print out a single node, for debugging.
     //
-    //-------------------------------------------------------------------------
-    ///CLOVER:OFF
+    // -------------------------------------------------------------------------
+    /// CLOVER:OFF
     static void printNode(RBBINode n) {
 
-        if (n==null) {
-            System.out.print (" -- null --\n");
+        if (n == null) {
+            System.out.print(" -- null --\n");
         } else {
-            RBBINode.printInt( n.fSerialNum, 10);
+            RBBINode.printInt(n.fSerialNum, 10);
             RBBINode.printString(nodeTypeNames[n.fType], 11);
-            RBBINode.printInt(n.fParent==null? 0     : n.fParent.fSerialNum, 11);
-            RBBINode.printInt(n.fLeftChild==null? 0  : n.fLeftChild.fSerialNum, 11);
-            RBBINode.printInt(n.fRightChild==null? 0 : n.fRightChild.fSerialNum, 12);
+            RBBINode.printInt(n.fParent == null ? 0 : n.fParent.fSerialNum, 11);
+            RBBINode.printInt(n.fLeftChild == null ? 0 : n.fLeftChild.fSerialNum, 11);
+            RBBINode.printInt(n.fRightChild == null ? 0 : n.fRightChild.fSerialNum, 12);
             RBBINode.printInt(n.fFirstPos, 12);
             RBBINode.printInt(n.fVal, 7);
 
@@ -299,12 +292,12 @@ class RBBINode {
         }
         System.out.println("");
     }
-    ///CLOVER:ON
 
+    /// CLOVER:ON
 
     // Print a String in a fixed field size.
     // Debugging function.
-    ///CLOVER:OFF
+    /// CLOVER:OFF
     static void printString(String s, int minWidth) {
         for (int i = minWidth; i < 0; i++) {
             // negative width means pad leading spaces, not fixed width.
@@ -315,54 +308,57 @@ class RBBINode {
         }
         System.out.print(s);
     }
-    ///CLOVER:ON
+
+    /// CLOVER:ON
 
     //
     //  Print an int in a fixed size field.
     //  Debugging function.
     //
-    ///CLOVER:OFF
+    /// CLOVER:OFF
     static void printInt(int i, int minWidth) {
         String s = Integer.toString(i);
         printString(s, Math.max(minWidth, s.length() + 1));
     }
-    ///CLOVER:ON
 
-    ///CLOVER:OFF
+    /// CLOVER:ON
+
+    /// CLOVER:OFF
     static void printHex(int i, int minWidth) {
         String s = Integer.toString(i, 16);
-        String leadingZeroes = "00000"
-                .substring(0, Math.max(0, 5 - s.length()));
+        String leadingZeroes = "00000".substring(0, Math.max(0, 5 - s.length()));
         s = leadingZeroes + s;
         printString(s, minWidth);
     }
-    ///CLOVER:ON
 
+    /// CLOVER:ON
 
     // -------------------------------------------------------------------------
     //
     //        print. Print out the tree of nodes rooted at "this"
     //
     // -------------------------------------------------------------------------
-    ///CLOVER:OFF
+    /// CLOVER:OFF
     void printTree(boolean printHeading) {
         if (printHeading) {
-            System.out.println( "-------------------------------------------------------------------");
-            System.out.println("    Serial       type     Parent  LeftChild  RightChild    position  value");
+            System.out.println(
+                    "-------------------------------------------------------------------");
+            System.out.println(
+                    "    Serial       type     Parent  LeftChild  RightChild    position  value");
         }
         printNode(this);
-            // Only dump the definition under a variable reference if asked to.
-            // Unconditionally dump children of all other node types.
-            if (fType != varRef) {
-                if (fLeftChild != null) {
-                    fLeftChild.printTree(false);
-                }
-
-                if (fRightChild != null) {
-                    fRightChild.printTree(false);
-                }
+        // Only dump the definition under a variable reference if asked to.
+        // Unconditionally dump children of all other node types.
+        if (fType != varRef) {
+            if (fLeftChild != null) {
+                fLeftChild.printTree(false);
             }
+
+            if (fRightChild != null) {
+                fRightChild.printTree(false);
+            }
+        }
     }
-    ///CLOVER:ON
+    /// CLOVER:ON
 
 }

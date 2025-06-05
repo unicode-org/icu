@@ -70,7 +70,7 @@ class Unit {
     /**
      * Creates and returns a new Unit created by merging the current unit with the `other` one.
      *
-     * <p>Each value in `other`, if not null, will override the corresponding current value.</p>
+     * <p>Each value in `other`, if not null, will override the corresponding current value.
      *
      * @param other the unit to merge into the current one
      * @return a new unit created by merging `this` unit and `other`
@@ -91,20 +91,30 @@ class Unit {
         }
 
         StringBuilder result = new StringBuilder();
-        str.chars().forEach(c -> {
-                switch (c) {
-                    case '\\': result.append("\\\\"); break;
-                    case '\t': result.append("\\t"); break;
-                    case '\n': result.append("\\n"); break;
-                    case '\r': result.append("\\r"); break;
-                    default:
-                        if (c < 0x0020 || (c >= 0x3000 && c <= 3020)) {
-                            result.append(String.format("\\u%04X", c));
-                        } else {
-                            result.append((char) c);
-                        }
-                }
-        });
+        str.chars()
+                .forEach(
+                        c -> {
+                            switch (c) {
+                                case '\\':
+                                    result.append("\\\\");
+                                    break;
+                                case '\t':
+                                    result.append("\\t");
+                                    break;
+                                case '\n':
+                                    result.append("\\n");
+                                    break;
+                                case '\r':
+                                    result.append("\\r");
+                                    break;
+                                default:
+                                    if (c < 0x0020 || (c >= 0x3000 && c <= 3020)) {
+                                        result.append(String.format("\\u%04X", c));
+                                    } else {
+                                        result.append((char) c);
+                                    }
+                            }
+                        });
         return "\"" + result.toString() + "\"";
     }
 }

@@ -8,18 +8,16 @@
 
 package com.ibm.icu.text;
 
-import java.util.Locale;
-
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ChineseCalendar;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
+import java.util.Locale;
 
 /**
- * A subclass of {@link DateFormatSymbols} for {@link ChineseDateFormat}.
- * This class contains additional symbols corresponding to the
- * <code>ChineseCalendar.IS_LEAP_MONTH</code> field.
+ * A subclass of {@link DateFormatSymbols} for {@link ChineseDateFormat}. This class contains
+ * additional symbols corresponding to the <code>ChineseCalendar.IS_LEAP_MONTH</code> field.
  *
  * @see ChineseDateFormat
  * @see com.ibm.icu.util.ChineseCalendar
@@ -39,6 +37,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
 
     /**
      * Construct a ChineseDateFormatSymbols for the default <code>FORMAT</code> locale.
+     *
      * @see Category#FORMAT
      * @deprecated ICU 50
      */
@@ -49,6 +48,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
 
     /**
      * Construct a ChineseDateFormatSymbols for the provided locale.
+     *
      * @param locale the locale
      * @deprecated ICU 50
      */
@@ -59,6 +59,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
 
     /**
      * Construct a ChineseDateFormatSymbols for the provided locale.
+     *
      * @param locale the locale
      * @deprecated ICU 50
      */
@@ -69,6 +70,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
 
     /**
      * Construct a ChineseDateFormatSymbols for the provided calendar and locale.
+     *
      * @param cal the Calendar
      * @param locale the locale
      * @deprecated ICU 50
@@ -81,6 +83,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
 
     /**
      * Construct a ChineseDateFormatSymbols for the provided calendar and locale.
+     *
      * @param cal the Calendar
      * @param locale the locale
      * @deprecated ICU 50
@@ -102,6 +105,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
 
     /**
      * {@inheritDoc}
+     *
      * @deprecated ICU 50
      */
     @Deprecated
@@ -116,7 +120,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
         super.initializeData(dfs);
         if (dfs instanceof ChineseDateFormatSymbols) {
             // read-only array, no need to clone
-            this.isLeapMonth = ((ChineseDateFormatSymbols)dfs).isLeapMonth;
+            this.isLeapMonth = ((ChineseDateFormatSymbols) dfs).isLeapMonth;
         } else {
             initializeIsLeapMonth();
         }
@@ -124,11 +128,14 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
 
     private void initializeIsLeapMonth() {
         // The old way, obsolete:
-        //isLeapMonth = calData.getStringArray("isLeapMonth");
+        // isLeapMonth = calData.getStringArray("isLeapMonth");
         // The new way to fake this for backward compatibility (no longer used to format/parse):
 
         isLeapMonth = new String[2];
         isLeapMonth[0] = "";
-        isLeapMonth[1] = (leapMonthPatterns != null)? leapMonthPatterns[DT_LEAP_MONTH_PATTERN_FORMAT_WIDE].replace("{0}", ""): "";
+        isLeapMonth[1] =
+                (leapMonthPatterns != null)
+                        ? leapMonthPatterns[DT_LEAP_MONTH_PATTERN_FORMAT_WIDE].replace("{0}", "")
+                        : "";
     }
 }

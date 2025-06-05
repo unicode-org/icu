@@ -11,19 +11,6 @@
 
 package com.ibm.icu.dev.test.duration;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.duration.BasicPeriodFormatterService;
 import com.ibm.icu.impl.duration.Period;
@@ -35,29 +22,44 @@ import com.ibm.icu.impl.duration.TimeUnit;
 import com.ibm.icu.impl.duration.TimeUnitConstants;
 import com.ibm.icu.impl.duration.impl.DataRecord.ECountVariant;
 import com.ibm.icu.impl.duration.impl.DataRecord.EUnitVariant;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-/**
- * Test cases for en
- */
+/** Test cases for en */
 @RunWith(JUnit4.class)
 public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitConstants {
 
     private static final TimeUnit[] units = {
-        TimeUnit.YEAR, TimeUnit.MONTH, TimeUnit.WEEK, TimeUnit.DAY, TimeUnit.HOUR,
-        TimeUnit.MINUTE, TimeUnit.SECOND, TimeUnit.MILLISECOND
+        TimeUnit.YEAR,
+        TimeUnit.MONTH,
+        TimeUnit.WEEK,
+        TimeUnit.DAY,
+        TimeUnit.HOUR,
+        TimeUnit.MINUTE,
+        TimeUnit.SECOND,
+        TimeUnit.MILLISECOND
     };
 
     protected boolean inheritTargets() {
         return true;
     }
 
-    private static final BasicPeriodFormatterService pfs = BasicPeriodFormatterService
-            .getInstance();
+    private static final BasicPeriodFormatterService pfs =
+            BasicPeriodFormatterService.getInstance();
 
     private TestData data;
     private String locale;
 
-    //private DurationFormatterFactory dfFactory;
+    // private DurationFormatterFactory dfFactory;
     private PeriodFormatterFactory pfFactory;
     private PeriodBuilderFactory pbFactory;
 
@@ -66,8 +68,14 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
     private static final Map<String, TestData> datacache = new HashMap<>(); // String->TestData
 
     private static final long[] approxDurations = {
-        36525L*24*60*60*10, 3045*24*60*60*10L, 7*24*60*60*1000L, 24*60*60*1000L,
-        60*60*1000L, 60*1000L, 1000L, 1L
+        36525L * 24 * 60 * 60 * 10,
+        3045 * 24 * 60 * 60 * 10L,
+        7 * 24 * 60 * 60 * 1000L,
+        24 * 60 * 60 * 1000L,
+        60 * 60 * 1000L,
+        60 * 1000L,
+        1000L,
+        1L
     };
 
     private static long approximateDuration(TimeUnit unit) {
@@ -82,13 +90,12 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
         TestData data = datacache.get(locale);
         if (data == null) {
             try {
-                InputStream is = LanguageTestFmwk.class
-                        .getResourceAsStream("testdata/testdata_" + locale
-                                + ".txt");
+                InputStream is =
+                        LanguageTestFmwk.class.getResourceAsStream(
+                                "testdata/testdata_" + locale + ".txt");
                 // debug
                 if (is == null) {
-                    System.out.println("test data for locale '" + locale
-                            + "' is null");
+                    System.out.println("test data for locale '" + locale + "' is null");
                 }
                 InputStreamReader isr = new InputStreamReader(is, "UTF-8");
                 try {
@@ -116,47 +123,46 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
         this.locale = locale;
     }
 
-//    public static void writeData(PrintWriter pw, String locale)
-//            throws Exception {
-//        LanguageTestRoot test = new LanguageTestRoot(DefaultData.getInstance(),
-//                locale);
-//        test.writeData(pw);
-//    }
+    //    public static void writeData(PrintWriter pw, String locale)
+    //            throws Exception {
+    //        LanguageTestRoot test = new LanguageTestRoot(DefaultData.getInstance(),
+    //                locale);
+    //        test.writeData(pw);
+    //    }
 
-//    private void writeData(PrintWriter writer) throws Exception {
-///*
-//      pw = writer;
-//      setUp();
-//      testFullPluralizedForms();
-//      tearDown();
-//      setUp();
-//      testMediumForms();
-//      tearDown();
-//      setUp();
-//      testShortForms();
-//      tearDown();
-//      setUp();
-//      testCustomMinutes();
-//      tearDown();
-//      setUp();
-//      testLimitedUnits();
-//      tearDown();
-//      setUp();
-//      testHalfUnits();
-//      tearDown();
-//      setUp();
-//      testFractionalUnits();
-//      tearDown();
-//      setUp();
-//      testMultipleUnits();
-//      tearDown();
-//      pw = null;
-//      writer.flush();
-//*/
-//    }
+    //    private void writeData(PrintWriter writer) throws Exception {
+    /// *
+    //      pw = writer;
+    //      setUp();
+    //      testFullPluralizedForms();
+    //      tearDown();
+    //      setUp();
+    //      testMediumForms();
+    //      tearDown();
+    //      setUp();
+    //      testShortForms();
+    //      tearDown();
+    //      setUp();
+    //      testCustomMinutes();
+    //      tearDown();
+    //      setUp();
+    //      testLimitedUnits();
+    //      tearDown();
+    //      setUp();
+    //      testHalfUnits();
+    //      tearDown();
+    //      setUp();
+    //      testFractionalUnits();
+    //      tearDown();
+    //      setUp();
+    //      testMultipleUnits();
+    //      tearDown();
+    //      pw = null;
+    //      writer.flush();
+    // */
+    //    }
 
-    protected void xAssertEquals(String msg, String[] expected, int n,
-            String actual) {
+    protected void xAssertEquals(String msg, String[] expected, int n, String actual) {
         if (pw != null) {
             pw.println(actual);
         } else {
@@ -165,11 +171,16 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
                 assertEquals(msg, expected[n], actual);
             } else {
                 if (!actual.equals(expected[n])) {
-                    fail("\n(!!"
-                            + msg
-                            + ") "
-                            + asciify("expected '" + expected[n]
-                                    + "' but got '" + actual + "'"));
+                    fail(
+                            "\n(!!"
+                                    + msg
+                                    + ") "
+                                    + asciify(
+                                            "expected '"
+                                                    + expected[n]
+                                                    + "' but got '"
+                                                    + actual
+                                                    + "'"));
                 }
             }
         }
@@ -218,8 +229,7 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
             }
         }
         if (sb != null) {
-            System.out.println("asciify '" + s + "' --> '" + sb.toString()
-                    + "'");
+            System.out.println("asciify '" + s + "' --> '" + sb.toString() + "'");
         }
         return sb == null ? s : sb.toString();
     }
@@ -343,28 +353,28 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
         int n = 0;
         for (int i = 0; i < 3; ++i) {
             switch (i) {
-            case 0:
-                p = p.at();
-                break;
-            case 1:
-                p = p.lessThan();
-                break;
-            case 2:
-                p = p.moreThan();
-                break;
+                case 0:
+                    p = p.at();
+                    break;
+                case 1:
+                    p = p.lessThan();
+                    break;
+                case 2:
+                    p = p.moreThan();
+                    break;
             }
             for (int j = 0; j < 3; ++j) {
                 pfFactory.setDisplayPastFuture(true);
                 switch (j) {
-                case 0:
-                    pfFactory.setDisplayPastFuture(false);
-                    break;
-                case 1:
-                    p = p.inPast();
-                    break;
-                case 2:
-                    p = p.inFuture();
-                    break;
+                    case 0:
+                        pfFactory.setDisplayPastFuture(false);
+                        break;
+                    case 1:
+                        p = p.inPast();
+                        break;
+                    case 2:
+                        p = p.inFuture();
+                        break;
                 }
 
                 PeriodFormatter pf = pfFactory.getFormatter();
@@ -383,28 +393,28 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
         p = p.omit(MONTH).omit(WEEK).omit(DAY).and(1, HOUR);
         for (int i = 0; i < 3; ++i) {
             switch (i) {
-            case 0:
-                p = p.at();
-                break;
-            case 1:
-                p = p.lessThan();
-                break;
-            case 2:
-                p = p.moreThan();
-                break;
+                case 0:
+                    p = p.at();
+                    break;
+                case 1:
+                    p = p.lessThan();
+                    break;
+                case 2:
+                    p = p.moreThan();
+                    break;
             }
             for (int j = 0; j < 3; ++j) {
                 pfFactory.setDisplayPastFuture(true);
                 switch (j) {
-                case 0:
-                    pfFactory.setDisplayPastFuture(false);
-                    break;
-                case 1:
-                    p = p.inPast();
-                    break;
-                case 2:
-                    p = p.inFuture();
-                    break;
+                    case 0:
+                        pfFactory.setDisplayPastFuture(false);
+                        break;
+                    case 1:
+                        p = p.inPast();
+                        break;
+                    case 2:
+                        p = p.inFuture();
+                        break;
                 }
 
                 PeriodFormatter pf = pfFactory.getFormatter();
@@ -503,27 +513,35 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
             if (i < units.length - 2) {
                 p = Period.at(1, units[i]).and(3, units[i + 2]);
                 xAssertEquals(targets, n++, pf.format(p));
-                p = Period.at(1, units[i]).and(2, units[i + 1]).and(3,
-                        units[i + 2]);
+                p = Period.at(1, units[i]).and(2, units[i + 1]).and(3, units[i + 2]);
                 xAssertEquals(targets, n++, pf.format(p));
             }
         }
     }
 
-    public static abstract class TestData {
+    public abstract static class TestData {
         abstract int[] getFullPluralizedFormCounts();
+
         abstract String[] getFullPluralizedFormTargets();
+
         abstract String[] getMediumFormTargets();
+
         abstract String[] getShortFormTargets();
+
         abstract String[] getCustomMinuteTargets();
+
         abstract String[] getLimitedUnitTargets();
+
         abstract int[] getHalfUnitCounts();
+
         abstract String[] getHalfUnitTargets();
+
         abstract float[] getFractionalUnitCounts();
+
         abstract String[] getFractionalUnitTargets();
+
         abstract String[] getMultipleUnitTargets();
     }
-
 }
 
 class FileTestData extends LanguageTestFmwk.TestData {
@@ -605,63 +623,62 @@ class FileTestData extends LanguageTestFmwk.TestData {
             String[] stringArray;
 
             void wrapup(List<String> list, Element element) {
-                if (list == null)
-                    return;
+                if (list == null) return;
 
                 switch (element.mode) {
-                case EMode.mString:
-                    stringArray = list.toArray(new String[list.size()]);
-                    break;
+                    case EMode.mString:
+                        stringArray = list.toArray(new String[list.size()]);
+                        break;
 
-                case EMode.mInt:
-                    intArray = new int[list.size()];
-                    for (int i = 0, e = intArray.length; i < e; ++i) {
-                        intArray[i] = Integer.parseInt((String) list.get(i));
-                    }
-                    break;
+                    case EMode.mInt:
+                        intArray = new int[list.size()];
+                        for (int i = 0, e = intArray.length; i < e; ++i) {
+                            intArray[i] = Integer.parseInt((String) list.get(i));
+                        }
+                        break;
 
-                case EMode.mFloat:
-                    floatArray = new float[list.size()];
-                    for (int i = 0, e = floatArray.length; i < e; ++i) {
-                        floatArray[i] = Float.parseFloat((String) list.get(i));
-                    }
-                    break;
+                    case EMode.mFloat:
+                        floatArray = new float[list.size()];
+                        for (int i = 0, e = floatArray.length; i < e; ++i) {
+                            floatArray[i] = Float.parseFloat((String) list.get(i));
+                        }
+                        break;
                 }
 
                 switch (element.which) {
-                case Element.XfullPluralizedFormCounts:
-                    FileTestData.this.fullPluralizedFormCounts = intArray;
-                    break;
-                case Element.XfullPluralizedFormTargets:
-                    FileTestData.this.fullPluralizedFormTargets = stringArray;
-                    break;
-                case Element.XmediumFormTargets:
-                    FileTestData.this.mediumFormTargets = stringArray;
-                    break;
-                case Element.XshortFormTargets:
-                    FileTestData.this.shortFormTargets = stringArray;
-                    break;
-                case Element.XcustomMinuteTargets:
-                    FileTestData.this.customMinuteTargets = stringArray;
-                    break;
-                case Element.XlimitedUnitTargets:
-                    FileTestData.this.limitedUnitTargets = stringArray;
-                    break;
-                case Element.XhalfUnitCounts:
-                    FileTestData.this.halfUnitCounts = intArray;
-                    break;
-                case Element.XhalfUnitTargets:
-                    FileTestData.this.halfUnitTargets = stringArray;
-                    break;
-                case Element.XfractionalUnitCounts:
-                    FileTestData.this.fractionalUnitCounts = floatArray;
-                    break;
-                case Element.XfractionalUnitTargets:
-                    FileTestData.this.fractionalUnitTargets = stringArray;
-                    break;
-                case Element.XmultipleUnitTargets:
-                    FileTestData.this.multipleUnitTargets = stringArray;
-                    break;
+                    case Element.XfullPluralizedFormCounts:
+                        FileTestData.this.fullPluralizedFormCounts = intArray;
+                        break;
+                    case Element.XfullPluralizedFormTargets:
+                        FileTestData.this.fullPluralizedFormTargets = stringArray;
+                        break;
+                    case Element.XmediumFormTargets:
+                        FileTestData.this.mediumFormTargets = stringArray;
+                        break;
+                    case Element.XshortFormTargets:
+                        FileTestData.this.shortFormTargets = stringArray;
+                        break;
+                    case Element.XcustomMinuteTargets:
+                        FileTestData.this.customMinuteTargets = stringArray;
+                        break;
+                    case Element.XlimitedUnitTargets:
+                        FileTestData.this.limitedUnitTargets = stringArray;
+                        break;
+                    case Element.XhalfUnitCounts:
+                        FileTestData.this.halfUnitCounts = intArray;
+                        break;
+                    case Element.XhalfUnitTargets:
+                        FileTestData.this.halfUnitTargets = stringArray;
+                        break;
+                    case Element.XfractionalUnitCounts:
+                        FileTestData.this.fractionalUnitCounts = floatArray;
+                        break;
+                    case Element.XfractionalUnitTargets:
+                        FileTestData.this.fractionalUnitTargets = stringArray;
+                        break;
+                    case Element.XmultipleUnitTargets:
+                        FileTestData.this.multipleUnitTargets = stringArray;
+                        break;
                 }
             }
         }
@@ -672,8 +689,7 @@ class FileTestData extends LanguageTestFmwk.TestData {
         String line = null;
         while (null != (line = br.readLine())) {
             line = line.trim();
-            if (line.length() == 0 || line.charAt(0) == '#')
-                continue;
+            if (line.length() == 0 || line.charAt(0) == '#') continue;
             if (line.charAt(0) == '=') {
                 w.wrapup(list, element);
 
@@ -690,19 +706,17 @@ class FileTestData extends LanguageTestFmwk.TestData {
 }
 
 class DefaultData extends LanguageTestFmwk.TestData {
-    private static final int[] fullPluralizedFormCounts = { -3, -2, -1, 0, 1,
-            2, 3, 5, 10, 11, 12, 20, 21, 22, 23, 25 };
+    private static final int[] fullPluralizedFormCounts = {
+        -3, -2, -1, 0, 1, 2, 3, 5, 10, 11, 12, 20, 21, 22, 23, 25
+    };
 
-    private static final int[] halfUnitCounts = { 0, 1, 2, 5, 10, 11, 12, 20,
-            21, 22 };
+    private static final int[] halfUnitCounts = {0, 1, 2, 5, 10, 11, 12, 20, 21, 22};
 
-    private static final float[] fractionalUnitCounts = { 0.025f, 1.0f, 1.205f,
-            2.125f, 12.05f };
+    private static final float[] fractionalUnitCounts = {0.025f, 1.0f, 1.205f, 2.125f, 12.05f};
 
     private static final DefaultData instance = new DefaultData();
 
-    private DefaultData() {
-    }
+    private DefaultData() {}
 
     public static DefaultData getInstance() {
         return instance;
@@ -804,34 +818,28 @@ class Element {
     static final int XfractionalUnitTargets = 9;
     static final int XmultipleUnitTargets = 10;
 
-    static final Element fullPluralizedFormCounts = new Element(
-            "fullPluralizedFormCounts", EMode.mInt);
+    static final Element fullPluralizedFormCounts =
+            new Element("fullPluralizedFormCounts", EMode.mInt);
 
-    static final Element fullPluralizedFormTargets = new Element(
-            "fullPluralizedFormTargets");
+    static final Element fullPluralizedFormTargets = new Element("fullPluralizedFormTargets");
 
     static final Element mediumFormTargets = new Element("mediumFormTargets");
 
     static final Element shortFormTargets = new Element("shortFormTargets");
 
-    static final Element customMinuteTargets = new Element(
-            "customMinuteTargets");
+    static final Element customMinuteTargets = new Element("customMinuteTargets");
 
     static final Element limitedUnitTargets = new Element("limitedUnitTargets");
 
-    static final Element halfUnitCounts = new Element("halfUnitCounts",
-            EMode.mInt);
+    static final Element halfUnitCounts = new Element("halfUnitCounts", EMode.mInt);
 
     static final Element halfUnitTargets = new Element("halfUnitTargets");
 
-    static final Element fractionalUnitCounts = new Element(
-            "fractionalUnitCounts", EMode.mFloat);
+    static final Element fractionalUnitCounts = new Element("fractionalUnitCounts", EMode.mFloat);
 
-    static final Element fractionalUnitTargets = new Element(
-            "fractionalUnitTargets");
+    static final Element fractionalUnitTargets = new Element("fractionalUnitTargets");
 
-    static final Element multipleUnitTargets = new Element(
-            "multipleUnitTargets");
+    static final Element multipleUnitTargets = new Element("multipleUnitTargets");
 
     static Element forString(String s) {
         for (int i = 0; i < list.length; ++i) {

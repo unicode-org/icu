@@ -14,51 +14,42 @@ package com.ibm.icu.dev.tool.layout;
 
 /**
  * This class holds the list of languages.
- * 
- * @author emader
  *
+ * @author emader
  */
-public class LanguageData extends TagValueData
-{
-    public static class Record
-    {
+public class LanguageData extends TagValueData {
+    public static class Record {
         private String tag;
         private String name;
-        
-        public Record(String tag, String name)
-        {
+
+        public Record(String tag, String name) {
             this.tag = tag;
             this.name = name;
         }
-        
-        public String tag()
-        {
+
+        public String tag() {
             return tag;
         }
-        
-        public String name()
-        {
+
+        public String name() {
             return name;
         }
-        
-        public String label()
-        {
+
+        public String label() {
             return TagUtilities.tagLabel(tag);
         }
-        
-        public String makeTag()
-        {
+
+        public String makeTag() {
             return TagUtilities.makeTag(tag);
         }
     }
-        
+
     /*
      * This is temporary data until there is some resolution between
      * the OpenType language system tags and the ISO and RFC standards...
      */
-    private Record[] languages =
-    {
-        new Record("",    "null"),
+    private Record[] languages = {
+        new Record("", "null"),
         new Record("ARA", "Arabic"),
         new Record("ASM", "Assamese"),
         new Record("BEN", "Bengali"),
@@ -88,7 +79,7 @@ public class LanguageData extends TagValueData
         new Record("ZHP", "Chinese (Phonetic)"),
         new Record("ZHS", "Chinese (Simplified)"),
         new Record("ZHT", "Chinese (Traditional)"),
-        
+
         // languages added on 03/13/2008
         // TODO: need to deal with the fact that
         // these codes should be @draft, and the above
@@ -109,7 +100,7 @@ public class LanguageData extends TagValueData
         new Record("ETI", "Estonian"),
         new Record("EUQ", "Basque"),
         new Record("FIN", "Finnish"),
-      //new Record("FLE", "Flemish"), // Flemish has the same ISO 639-2 code as Dutch (NLD)
+        // new Record("FLE", "Flemish"), // Flemish has the same ISO 639-2 code as Dutch (NLD)
         new Record("FRA", "French"),
         new Record("GAE", "Gaelic"),
         new Record("HAU", "Hausa"),
@@ -137,52 +128,47 @@ public class LanguageData extends TagValueData
         new Record("TRK", "Turkish"),
         new Record("WEL", "Welsh")
     };
-    
+
     private int minLanguage = 0;
     private int maxLanguage = minLanguage + languages.length - 1;
-    
-    public int getMinValue()
-    {
+
+    public int getMinValue() {
         return minLanguage;
     }
-    
-    public int getMaxValue()
-    {
+
+    public int getMaxValue() {
         return maxLanguage;
     }
-    
-    public String getTag(int value)
-    {
+
+    public String getTag(int value) {
         if (value < minLanguage || value > maxLanguage) {
             return null;
         }
-        
+
         return languages[value - minLanguage].tag();
     }
-    
-    public String getTagLabel(int value)
-    {
+
+    public String getTagLabel(int value) {
         if (value < minLanguage || value > maxLanguage) {
             return null;
         }
-        
+
         return languages[value - minLanguage].label();
     }
-    
-    public String makeTag(int value)
-    {
+
+    public String makeTag(int value) {
         if (value < minLanguage || value > maxLanguage) {
             return null;
         }
-        
+
         return languages[value - minLanguage].makeTag();
     }
-    
+
     public String getName(int value) {
         if (value < minLanguage || value > maxLanguage) {
             return "(UNKNOWN)";
         }
-        
+
         return languages[value - minLanguage].name();
     }
 }

@@ -21,8 +21,7 @@ public class ICUException extends RuntimeException {
      *
      * @stable ICU 53
      */
-    public ICUException() {
-    }
+    public ICUException() {}
 
     /**
      * Constructor.

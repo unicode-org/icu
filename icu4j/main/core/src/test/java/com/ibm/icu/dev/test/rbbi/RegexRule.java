@@ -11,20 +11,18 @@ import java.util.regex.Pattern;
 /**
  * A regex rule expressed as in UAXes #14 and #29.
  *
- * The rule consists of two regexes for context before and after a position in
- * the remapped text,
- * and of a resolution (break or not) that applies to the corresponding position
- * in the original
+ * <p>The rule consists of two regexes for context before and after a position in the remapped text,
+ * and of a resolution (break or not) that applies to the corresponding position in the original
  * string if both match.
  */
 class RegexRule extends SegmentationRule {
-    RegexRule(String name, String before, Resolution resolution,
-            String after) {
+    RegexRule(String name, String before, Resolution resolution, String after) {
         super(name);
         resolution_ = resolution;
         before_ = Pattern.compile(expandUnicodeSets(before), Pattern.COMMENTS | Pattern.DOTALL);
-        endsWithBefore_ = Pattern.compile(
-                ".*(" + expandUnicodeSets(before) + ")", Pattern.COMMENTS | Pattern.DOTALL);
+        endsWithBefore_ =
+                Pattern.compile(
+                        ".*(" + expandUnicodeSets(before) + ")", Pattern.COMMENTS | Pattern.DOTALL);
         after_ = Pattern.compile(expandUnicodeSets(after), Pattern.COMMENTS | Pattern.DOTALL);
     }
 
@@ -53,7 +51,7 @@ class RegexRule extends SegmentationRule {
         beforeSearch.useAnchoringBounds(false);
         afterSearch.useAnchoringBounds(false);
         if (beforeSearch.find() && afterSearch.find()) {
-            for (;;) {
+            for (; ; ) {
                 if (afterSearch.start() < beforeSearch.start()) {
                     afterSearch.region(beforeSearch.start(), remapped.length());
                     if (!afterSearch.find()) {
@@ -63,24 +61,35 @@ class RegexRule extends SegmentationRule {
                     if (beforeSearch.start() == remapped.length()) {
                         break;
                     }
-                    beforeSearch.region(remapped.offsetByCodePoints(beforeSearch.start(), 1),
+                    beforeSearch.region(
+                            remapped.offsetByCodePoints(beforeSearch.start(), 1),
                             remapped.length());
                     if (!beforeSearch.find()) {
                         break;
                     }
                 } else {
-                    final Optional<BreakContext> position = Arrays.stream(resolved)
-                            .filter(r -> r.indexInRemapped != null && r.indexInRemapped == afterSearch.start())
-                            .findFirst();
+                    final Optional<BreakContext> position =
+                            Arrays.stream(resolved)
+                                    .filter(
+                                            r ->
+                                                    r.indexInRemapped != null
+                                                            && r.indexInRemapped
+                                                                    == afterSearch.start())
+                                    .findFirst();
                     if (!position.isPresent()) {
-                        throw new IllegalArgumentException(("Rule " + name() +
-                                " matched at position " + afterSearch.start() +
-                                " in " + remapped +
-                                " which does not correspond to an index in " +
-                                "the original string"));
+                        throw new IllegalArgumentException(
+                                ("Rule "
+                                        + name()
+                                        + " matched at position "
+                                        + afterSearch.start()
+                                        + " in "
+                                        + remapped
+                                        + " which does not correspond to an index in "
+                                        + "the original string"));
                     }
-                    if (position.get().appliedRule == null &&
-                            endsWithBefore_.matcher(remapped)
+                    if (position.get().appliedRule == null
+                            && endsWithBefore_
+                                    .matcher(remapped)
                                     .useAnchoringBounds(false)
                                     .region(beforeSearch.start(), afterSearch.start())
                                     .matches()) {
@@ -89,8 +98,8 @@ class RegexRule extends SegmentationRule {
                     if (afterSearch.start() == remapped.length()) {
                         break;
                     }
-                    afterSearch.region(remapped.offsetByCodePoints(afterSearch.start(), 1),
-                            remapped.length());
+                    afterSearch.region(
+                            remapped.offsetByCodePoints(afterSearch.start(), 1), remapped.length());
                     if (!afterSearch.find()) {
                         break;
                     }

@@ -8,13 +8,10 @@
  */
 package com.ibm.icu.dev.tool.layout;
 
-
-public class ScriptModuleWriter extends ModuleWriter
-{
-    public ScriptModuleWriter(ScriptData theScriptData, LanguageData theLanguageData)
-    {
+public class ScriptModuleWriter extends ModuleWriter {
+    public ScriptModuleWriter(ScriptData theScriptData, LanguageData theLanguageData) {
         super();
-        
+
         scriptData = theScriptData;
         languageData = theLanguageData;
     }

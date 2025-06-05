@@ -2,10 +2,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number.parse;
 
-import java.util.Comparator;
-
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
+import java.util.Comparator;
 
 /**
  * Struct-like class to hold the results of a parsing routine.
@@ -14,37 +13,27 @@ import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
  */
 public class ParsedNumber {
 
-    /**
-     * The numerical value that was parsed.
-     */
+    /** The numerical value that was parsed. */
     public DecimalQuantity_DualStorageBCD quantity;
 
     /**
-     * The index of the last char consumed during parsing. If parsing started at index 0, this is equal
-     * to the number of chars consumed. This is NOT necessarily the same as the StringSegment offset;
-     * "weak" chars, like whitespace, change the offset, but the charsConsumed is not touched until a
-     * "strong" char is encountered.
+     * The index of the last char consumed during parsing. If parsing started at index 0, this is
+     * equal to the number of chars consumed. This is NOT necessarily the same as the StringSegment
+     * offset; "weak" chars, like whitespace, change the offset, but the charsConsumed is not
+     * touched until a "strong" char is encountered.
      */
     public int charEnd;
 
-    /**
-     * Boolean flags (see constants below).
-     */
+    /** Boolean flags (see constants below). */
     public int flags;
 
-    /**
-     * The pattern string corresponding to the prefix that got consumed.
-     */
+    /** The pattern string corresponding to the prefix that got consumed. */
     public String prefix;
 
-    /**
-     * The pattern string corresponding to the suffix that got consumed.
-     */
+    /** The pattern string corresponding to the suffix that got consumed. */
     public String suffix;
 
-    /**
-     * The currency that got consumed.
-     */
+    /** The currency that got consumed. */
     public String currencyCode;
 
     public static final int FLAG_NEGATIVE = 0x0001;
@@ -58,20 +47,19 @@ public class ParsedNumber {
     public static final int FLAG_FAIL = 0x0100;
 
     /** A Comparator that favors ParsedNumbers with the most chars consumed. */
-    public static final Comparator<ParsedNumber> COMPARATOR = new Comparator<ParsedNumber>() {
-        @Override
-        public int compare(ParsedNumber o1, ParsedNumber o2) {
-            return o1.charEnd - o2.charEnd;
-        }
-    };
+    public static final Comparator<ParsedNumber> COMPARATOR =
+            new Comparator<ParsedNumber>() {
+                @Override
+                public int compare(ParsedNumber o1, ParsedNumber o2) {
+                    return o1.charEnd - o2.charEnd;
+                }
+            };
 
     public ParsedNumber() {
         clear();
     }
 
-    /**
-     * Clears the data from this ParsedNumber, in effect failing the current parse.
-     */
+    /** Clears the data from this ParsedNumber, in effect failing the current parse. */
     public void clear() {
         quantity = null;
         charEnd = 0;
@@ -82,8 +70,10 @@ public class ParsedNumber {
     }
 
     public void copyFrom(ParsedNumber other) {
-        quantity = other.quantity == null ? null
-                : (DecimalQuantity_DualStorageBCD) other.quantity.createCopy();
+        quantity =
+                other.quantity == null
+                        ? null
+                        : (DecimalQuantity_DualStorageBCD) other.quantity.createCopy();
         charEnd = other.charEnd;
         flags = other.flags;
         prefix = other.prefix;
@@ -92,20 +82,18 @@ public class ParsedNumber {
     }
 
     /**
-     * Call this method to register that a "strong" char was consumed. This should be done after calling
-     * {@link StringSegment#setOffset} or {@link StringSegment#adjustOffset} except when the char is
-     * "weak", like whitespace.
+     * Call this method to register that a "strong" char was consumed. This should be done after
+     * calling {@link StringSegment#setOffset} or {@link StringSegment#adjustOffset} except when the
+     * char is "weak", like whitespace.
      *
-     * <p>
-     * <strong>What is a strong versus weak char?</strong> The behavior of number parsing is to "stop"
-     * after reading the number, even if there is other content following the number. For example, after
-     * parsing the string "123 " (123 followed by a space), the cursor should be set to 3, not 4, even
-     * though there are matchers that accept whitespace. In this example, the digits are strong, whereas
-     * the whitespace is weak. Grouping separators are weak, whereas decimal separators are strong. Most
-     * other chars are strong.
+     * <p><strong>What is a strong versus weak char?</strong> The behavior of number parsing is to
+     * "stop" after reading the number, even if there is other content following the number. For
+     * example, after parsing the string "123 " (123 followed by a space), the cursor should be set
+     * to 3, not 4, even though there are matchers that accept whitespace. In this example, the
+     * digits are strong, whereas the whitespace is weak. Grouping separators are weak, whereas
+     * decimal separators are strong. Most other chars are strong.
      *
-     * @param segment
-     *            The current StringSegment, usually immediately following a call to setOffset.
+     * @param segment The current StringSegment, usually immediately following a call to setOffset.
      */
     public void setCharsConsumed(StringSegment segment) {
         charEnd = segment.getOffset();
@@ -119,8 +107,8 @@ public class ParsedNumber {
     }
 
     /**
-     * Returns whether this the parse was successful. To be successful, at least one char must have been
-     * consumed, and the failure flag must not be set.
+     * Returns whether this the parse was successful. To be successful, at least one char must have
+     * been consumed, and the failure flag must not be set.
      */
     public boolean success() {
         return charEnd > 0 && 0 == (flags & FLAG_FAIL);
@@ -134,7 +122,9 @@ public class ParsedNumber {
         return getNumber(0);
     }
 
-    /** @param parseFlags Configuration settings from ParsingUtils.java */
+    /**
+     * @param parseFlags Configuration settings from ParsingUtils.java
+     */
     public Number getNumber(int parseFlags) {
         boolean sawNaN = 0 != (flags & FLAG_NAN);
         boolean sawInfinity = 0 != (flags & FLAG_INFINITY);
@@ -162,7 +152,6 @@ public class ParsedNumber {
         } else {
             return quantity.toBigDecimal();
         }
-
     }
 
     boolean isBetterThan(ParsedNumber other) {

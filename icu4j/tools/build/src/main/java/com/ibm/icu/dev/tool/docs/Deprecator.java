@@ -1,12 +1,10 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
-*******************************************************************************
-* Copyright (C) 2005-2010, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*/
-
+ * ****************************************************************************** Copyright (C)
+ * 2005-2010, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
+ */
 package com.ibm.icu.dev.tool.docs;
 
 import java.io.BufferedReader;
@@ -105,8 +103,7 @@ public final class Deprecator {
                 System.out.println("done");
                 System.out.flush();
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Unexpected error: " + e);
         }
     }
@@ -124,18 +121,19 @@ public final class Deprecator {
     }
 
     static final String stoplist = "!CVS";
-    static final FilenameFilter ff = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                if (name.endsWith(".java")) return true;
-                if (new File(dir, name).isDirectory()) {
-                    if (stoplist.indexOf("!"+name) == -1) {
-                        return true;
+    static final FilenameFilter ff =
+            new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    if (name.endsWith(".java")) return true;
+                    if (new File(dir, name).isDirectory()) {
+                        if (stoplist.indexOf("!" + name) == -1) {
+                            return true;
+                        }
                     }
+                    return false;
                 }
-                return false;
-            }
-        };
-            
+            };
+
     void process(File srcDir, File dstDir) {
         File[] files = srcDir.listFiles(ff);
         for (int i = 0; i < files.length; ++i) {
@@ -162,10 +160,10 @@ public final class Deprecator {
     }
 
     /*
- @ deprecated
- *** @deprecated
- ** ** ** @deprecated
-    */
+    @ deprecated
+    *** @deprecated
+    ** ** ** @deprecated
+       */
     static final Pattern pat = Pattern.compile("^[\\s*]*@\\s*deprecated.*");
 
     void processFile(File srcFile, File dstFile) {
@@ -174,7 +172,8 @@ public final class Deprecator {
         }
 
         try {
-            BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(srcFile)));
+            BufferedReader r =
+                    new BufferedReader(new InputStreamReader(new FileInputStream(srcFile)));
             int n = 0;
             String line = null;
             while (null != (line = r.readLine())) {
@@ -187,8 +186,7 @@ public final class Deprecator {
                 }
             }
             r.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.flush();
             System.err.println("caught exception: " + e);
         }

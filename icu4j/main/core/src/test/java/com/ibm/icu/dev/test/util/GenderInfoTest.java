@@ -5,20 +5,18 @@
  * Copyright (C) 2003-2012, Google, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
-*/
+ */
 package com.ibm.icu.dev.test.util;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.GenderInfo;
 import com.ibm.icu.util.GenderInfo.Gender;
 import com.ibm.icu.util.ULocale;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class GenderInfoTest extends CoreTestFmwk {
@@ -65,7 +63,13 @@ public class GenderInfoTest extends CoreTestFmwk {
 
     @Test
     public void TestFallback() {
-        assertEquals("Strange locale = root", GenderInfo.getInstance(ULocale.ROOT), GenderInfo.getInstance(new ULocale("xxx")));
-        assertEquals("Strange locale = root", GenderInfo.getInstance(ULocale.FRANCE), GenderInfo.getInstance(ULocale.CANADA_FRENCH));
+        assertEquals(
+                "Strange locale = root",
+                GenderInfo.getInstance(ULocale.ROOT),
+                GenderInfo.getInstance(new ULocale("xxx")));
+        assertEquals(
+                "Strange locale = root",
+                GenderInfo.getInstance(ULocale.FRANCE),
+                GenderInfo.getInstance(ULocale.CANADA_FRENCH));
     }
 }

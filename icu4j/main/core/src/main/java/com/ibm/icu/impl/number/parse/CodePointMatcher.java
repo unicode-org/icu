@@ -45,5 +45,4 @@ public class CodePointMatcher implements NumberParseMatcher {
     public String toString() {
         return "<CodePointMatcher U+" + Integer.toHexString(cp) + ">";
     }
-
 }

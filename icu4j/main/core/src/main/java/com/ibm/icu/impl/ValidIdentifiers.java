@@ -8,6 +8,9 @@
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.impl.locale.AsciiUtil;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceBundleIterator;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -16,13 +19,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.ibm.icu.impl.locale.AsciiUtil;
-import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.UResourceBundleIterator;
-
 /**
  * @author markdavis
- *
  */
 public class ValidIdentifiers {
 
@@ -52,13 +50,14 @@ public class ValidIdentifiers {
 
     public static class ValiditySet {
         public final Set<String> regularData;
-        public final Map<String,Set<String>> subdivisionData;
+        public final Map<String, Set<String>> subdivisionData;
+
         public ValiditySet(Set<String> plainData, boolean makeMap) {
             if (makeMap) {
-                HashMap<String,Set<String>> _subdivisionData = new HashMap<String,Set<String>>();
+                HashMap<String, Set<String>> _subdivisionData = new HashMap<String, Set<String>>();
                 for (String s : plainData) {
                     int pos = s.indexOf('-'); // read v28 data also
-                    int pos2 = pos+1;
+                    int pos2 = pos + 1;
                     if (pos < 0) {
                         pos2 = pos = s.charAt(0) < 'A' ? 3 : 2;
                     }
@@ -72,13 +71,15 @@ public class ValidIdentifiers {
                     oldSet.add(subdivision);
                 }
                 this.regularData = null;
-                HashMap<String,Set<String>> _subdivisionData2 = new HashMap<String,Set<String>>();
+                HashMap<String, Set<String>> _subdivisionData2 = new HashMap<String, Set<String>>();
                 // protect the sets
                 for (Entry<String, Set<String>> e : _subdivisionData.entrySet()) {
                     Set<String> value = e.getValue();
                     // optimize a bit by using singleton
-                    Set<String> set = value.size() == 1 ? Collections.singleton(value.iterator().next()) 
-                            : Collections.unmodifiableSet(value);
+                    Set<String> set =
+                            value.size() == 1
+                                    ? Collections.singleton(value.iterator().next())
+                                    : Collections.unmodifiableSet(value);
                     _subdivisionData2.put(e.getKey(), set);
                 }
 
@@ -94,17 +95,17 @@ public class ValidIdentifiers {
                 return regularData.contains(code);
             } else {
                 int pos = code.indexOf('-');
-                String key = code.substring(0,pos);
-                final String value = code.substring(pos+1);
+                String key = code.substring(0, pos);
+                final String value = code.substring(pos + 1);
                 return contains(key, value);
             }
         }
-        
+
         public boolean contains(String key, String value) {
             Set<String> oldSet = subdivisionData.get(key);
             return oldSet != null && oldSet.contains(value);
         }
-        
+
         @Override
         public String toString() {
             if (regularData != null) {
@@ -116,22 +117,26 @@ public class ValidIdentifiers {
     }
 
     private static class ValidityData {
-        static final Map<Datatype,Map<Datasubtype,ValiditySet>> data;
+        static final Map<Datatype, Map<Datasubtype, ValiditySet>> data;
+
         static {
-            Map<Datatype, Map<Datasubtype, ValiditySet>> _data = new EnumMap<Datatype,Map<Datasubtype,ValiditySet>>(Datatype.class);
-            UResourceBundle suppData = UResourceBundle.getBundleInstance(
-                    ICUData.ICU_BASE_NAME,
-                    "supplementalData",
-                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            Map<Datatype, Map<Datasubtype, ValiditySet>> _data =
+                    new EnumMap<Datatype, Map<Datasubtype, ValiditySet>>(Datatype.class);
+            UResourceBundle suppData =
+                    UResourceBundle.getBundleInstance(
+                            ICUData.ICU_BASE_NAME,
+                            "supplementalData",
+                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle validityInfo = suppData.get("idValidity");
-            for(UResourceBundleIterator datatypeIterator = validityInfo.getIterator(); 
-                    datatypeIterator.hasNext();) {
+            for (UResourceBundleIterator datatypeIterator = validityInfo.getIterator();
+                    datatypeIterator.hasNext(); ) {
                 UResourceBundle datatype = datatypeIterator.next();
                 String rawKey = datatype.getKey();
                 Datatype key = Datatype.valueOf(rawKey);
-                Map<Datasubtype,ValiditySet> values = new EnumMap<Datasubtype,ValiditySet>(Datasubtype.class);
-                for(UResourceBundleIterator datasubtypeIterator = datatype.getIterator(); 
-                        datasubtypeIterator.hasNext();) {
+                Map<Datasubtype, ValiditySet> values =
+                        new EnumMap<Datasubtype, ValiditySet>(Datasubtype.class);
+                for (UResourceBundleIterator datasubtypeIterator = datatype.getIterator();
+                        datasubtypeIterator.hasNext(); ) {
                     UResourceBundle datasubtype = datasubtypeIterator.next();
                     String rawsubkey = datasubtype.getKey();
                     Datasubtype subkey = Datasubtype.valueOf(rawsubkey);
@@ -150,25 +155,26 @@ public class ValidIdentifiers {
             }
             data = Collections.unmodifiableMap(_data);
         }
+
         private static void addRange(String string, Set<String> subvalues) {
             string = AsciiUtil.toLowerString(string);
             int pos = string.indexOf('~');
             if (pos < 0) {
                 subvalues.add(string);
             } else {
-                StringRange.expand(string.substring(0,pos), string.substring(pos+1), false, subvalues);
+                StringRange.expand(
+                        string.substring(0, pos), string.substring(pos + 1), false, subvalues);
             }
         }
     }
-    
+
     public static Map<Datatype, Map<Datasubtype, ValiditySet>> getData() {
         return ValidityData.data;
     }
 
-    /**
-     * Returns the Datasubtype containing the code, or null if there is none.
-     */
-    public static Datasubtype isValid(Datatype datatype, Set<Datasubtype> datasubtypes, String code) {
+    /** Returns the Datasubtype containing the code, or null if there is none. */
+    public static Datasubtype isValid(
+            Datatype datatype, Set<Datasubtype> datasubtypes, String code) {
         Map<Datasubtype, ValiditySet> subtable = ValidityData.data.get(datatype);
         if (subtable != null) {
             for (Datasubtype datasubtype : datasubtypes) {
@@ -182,8 +188,9 @@ public class ValidIdentifiers {
         }
         return null;
     }
-    
-    public static Datasubtype isValid(Datatype datatype, Set<Datasubtype> datasubtypes, String code, String value) {
+
+    public static Datasubtype isValid(
+            Datatype datatype, Set<Datasubtype> datasubtypes, String code, String value) {
         Map<Datasubtype, ValiditySet> subtable = ValidityData.data.get(datatype);
         if (subtable != null) {
             code = AsciiUtil.toLowerString(code);

@@ -4,12 +4,13 @@ package com.ibm.icu.impl.number.parse;
 
 /**
  * @author sffc
- *
  */
 public class RequireDecimalSeparatorValidator extends ValidationMatcher {
 
-    private static final RequireDecimalSeparatorValidator A = new RequireDecimalSeparatorValidator(true);
-    private static final RequireDecimalSeparatorValidator B = new RequireDecimalSeparatorValidator(false);
+    private static final RequireDecimalSeparatorValidator A =
+            new RequireDecimalSeparatorValidator(true);
+    private static final RequireDecimalSeparatorValidator B =
+            new RequireDecimalSeparatorValidator(false);
 
     private final boolean patternHasDecimalSeparator;
 
@@ -23,8 +24,11 @@ public class RequireDecimalSeparatorValidator extends ValidationMatcher {
 
     @Override
     public void postProcess(ParsedNumber result) {
-        boolean parseIsInfNaN = 0 != (result.flags & ParsedNumber.FLAG_INFINITY) || 0 != (result.flags & ParsedNumber.FLAG_NAN);
-        boolean parseHasDecimalSeparator = 0 != (result.flags & ParsedNumber.FLAG_HAS_DECIMAL_SEPARATOR);
+        boolean parseIsInfNaN =
+                0 != (result.flags & ParsedNumber.FLAG_INFINITY)
+                        || 0 != (result.flags & ParsedNumber.FLAG_NAN);
+        boolean parseHasDecimalSeparator =
+                0 != (result.flags & ParsedNumber.FLAG_HAS_DECIMAL_SEPARATOR);
         if (!parseIsInfNaN && parseHasDecimalSeparator != patternHasDecimalSeparator) {
             result.flags |= ParsedNumber.FLAG_FAIL;
         }

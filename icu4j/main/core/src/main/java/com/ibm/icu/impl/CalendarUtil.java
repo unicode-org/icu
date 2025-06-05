@@ -8,33 +8,30 @@
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.TreeMap;
 
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
-
 /**
  * Calendar utilities.
  *
- * Date/time format service classes in com.ibm.icu.text packages
- * sometimes need to access calendar internal APIs.  But calendar
- * classes are in com.ibm.icu.util package, so the package local
- * cannot be used.  This class is added in com.ibm.icu.impl
- * package for sharing some calendar internal code for calendar
- * and date format.
+ * <p>Date/time format service classes in com.ibm.icu.text packages sometimes need to access
+ * calendar internal APIs. But calendar classes are in com.ibm.icu.util package, so the package
+ * local cannot be used. This class is added in com.ibm.icu.impl package for sharing some calendar
+ * internal code for calendar and date format.
  */
 public final class CalendarUtil {
     private static final String CALKEY = "calendar";
     private static final String DEFCAL = "gregorian";
 
     /**
-     * Returns a calendar type for the given locale.
-     * When the given locale has calendar keyword, the
-     * value of calendar keyword is returned.  Otherwise,
-     * the default calendar type for the locale is returned.
+     * Returns a calendar type for the given locale. When the given locale has calendar keyword, the
+     * value of calendar keyword is returned. Otherwise, the default calendar type for the locale is
+     * returned.
+     *
      * @param loc The locale
      * @return Calendar type string, such as "gregorian"
      */
@@ -66,8 +63,10 @@ public final class CalendarUtil {
 
         CalendarPreferences() {
             try {
-                ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(
-                        ICUData.ICU_BASE_NAME, "supplementalData");
+                ICUResourceBundle rb =
+                        (ICUResourceBundle)
+                                UResourceBundle.getBundleInstance(
+                                        ICUData.ICU_BASE_NAME, "supplementalData");
                 rb.getAllItemsWithFallback("calendarPreferenceData", this);
             } catch (MissingResourceException mre) {
                 // Always use "gregorian".

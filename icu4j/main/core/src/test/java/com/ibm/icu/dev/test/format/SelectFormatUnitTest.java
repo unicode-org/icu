@@ -9,25 +9,21 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.text.SelectFormat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.text.SelectFormat;
-
 /**
- * @author kirtig
- * This class does the unit testing for the SelectFormat
+ * @author kirtig This class does the unit testing for the SelectFormat
  */
 @RunWith(JUnit4.class)
 public class SelectFormatUnitTest extends CoreTestFmwk {
 
     static final String SIMPLE_PATTERN = "feminine {feminineVerbValue} other{otherVerbValue}";
 
-    /**
-     * Unit tests for pattern syntax
-     */
+    /** Unit tests for pattern syntax */
     @Test
     public void TestPatternSyntax() {
         String checkSyntaxData[] = {
@@ -41,14 +37,16 @@ public class SelectFormatUnitTest extends CoreTestFmwk {
             "odd{fo{o1}other{foo2}}"
         };
 
-        //Test SelectFormat pattern syntax
+        // Test SelectFormat pattern syntax
         SelectFormat selFmt = new SelectFormat(SIMPLE_PATTERN);
-        for (int i=0; i<checkSyntaxData.length; ++i) {
+        for (int i = 0; i < checkSyntaxData.length; ++i) {
             try {
                 selFmt.applyPattern(checkSyntaxData[i]);
-                errln("\nERROR: Unexpected result - SelectFormat Unit Test failed "
-                      + "to detect syntax error with pattern: "+checkSyntaxData[i]);
-            } catch (IllegalArgumentException e){
+                errln(
+                        "\nERROR: Unexpected result - SelectFormat Unit Test failed "
+                                + "to detect syntax error with pattern: "
+                                + checkSyntaxData[i]);
+            } catch (IllegalArgumentException e) {
                 // ok
                 continue;
             }
@@ -56,14 +54,16 @@ public class SelectFormatUnitTest extends CoreTestFmwk {
 
         // ICU 4.8 does not check for duplicate keywords any more.
         selFmt.applyPattern("odd{foo} odd{bar} other{foobar}");
-        assertEquals("should use first occurrence of the 'odd' keyword", "foo", selFmt.format("odd"));
+        assertEquals(
+                "should use first occurrence of the 'odd' keyword", "foo", selFmt.format("odd"));
         selFmt.applyPattern("odd{foo} other{bar} other{foobar}");
-        assertEquals("should use first occurrence of the 'other' keyword", "bar", selFmt.format("other"));
+        assertEquals(
+                "should use first occurrence of the 'other' keyword",
+                "bar",
+                selFmt.format("other"));
     }
 
-    /**
-     * Unit tests for invalid keywords
-     */
+    /** Unit tests for invalid keywords */
     @Test
     public void TestInvalidKeyword() {
         // Test formatting with invalid keyword:
@@ -82,27 +82,29 @@ public class SelectFormatUnitTest extends CoreTestFmwk {
 
         String expected = "Invalid formatting argument.";
         SelectFormat selFmt = new SelectFormat(SIMPLE_PATTERN);
-        for (int i = 0; i< 6; i++ ){
+        for (int i = 0; i < 6; i++) {
             try {
-                selFmt.format( keywords[i]);
-                fail("Error:TestInvalidKeyword failed to detect invalid keyword "
-                     + "for keyword: " + keywords[i]  );
-            } catch (IllegalArgumentException e){
-                assertEquals("Error:TestInvalidKeyword failed with unexpected "
-                            +"error message for keyword: " + keywords[i]
-                            , expected , e.getMessage() );
+                selFmt.format(keywords[i]);
+                fail(
+                        "Error:TestInvalidKeyword failed to detect invalid keyword "
+                                + "for keyword: "
+                                + keywords[i]);
+            } catch (IllegalArgumentException e) {
+                assertEquals(
+                        "Error:TestInvalidKeyword failed with unexpected "
+                                + "error message for keyword: "
+                                + keywords[i],
+                        expected,
+                        e.getMessage());
                 continue;
             }
         }
-
     }
 
-    /**
-     * API tests for  applyPattern and format
-     */
+    /** API tests for applyPattern and format */
     @Test
     public void TestApplyFormat() {
-        //Test applying and formatting with various pattern
+        // Test applying and formatting with various pattern
         String patternTestData[] = {
             "fem {femValue} other{even}",
             "other{odd or even}",
@@ -110,22 +112,14 @@ public class SelectFormatUnitTest extends CoreTestFmwk {
             "odd{The number {1} is odd}other{The number {1} is even}"
         };
 
-        String formatArgs[] = {
-            "fem",
-            "other",
-            "odd"
-        };
+        String formatArgs[] = {"fem", "other", "odd"};
 
         String expFormatResult[][] = {
             {
-                "femValue",
-                "even",
-                "even",
+                "femValue", "even", "even",
             },
             {
-                "odd or even",
-            "odd or even",
-            "odd or even",
+                "odd or even", "odd or even", "odd or even",
             },
             {
                 "The number {0, number, integer} is even.",
@@ -133,30 +127,30 @@ public class SelectFormatUnitTest extends CoreTestFmwk {
                 "The number {0, number, integer} is odd.",
             },
             {
-                "The number {1} is even",
-                "The number {1} is even",
-                "The number {1} is odd",
+                "The number {1} is even", "The number {1} is even", "The number {1} is odd",
             }
         };
 
         log("SelectFormat Unit test: Testing  applyPattern() and format() ...");
         SelectFormat selFmt = new SelectFormat(SIMPLE_PATTERN);
 
-        for (int i=0; i<patternTestData.length; ++i) {
+        for (int i = 0; i < patternTestData.length; ++i) {
             try {
                 selFmt.applyPattern(patternTestData[i]);
-            } catch (IllegalArgumentException e){
-                errln("ERROR: SelectFormat Unit Test failed to apply pattern- "
-                     + patternTestData[i] );
+            } catch (IllegalArgumentException e) {
+                errln(
+                        "ERROR: SelectFormat Unit Test failed to apply pattern- "
+                                + patternTestData[i]);
                 continue;
             }
 
-            //Format with the keyword array
-            for (int j=0; j<3; j++) {
-                assertEquals("ERROR: SelectFormat Unit test failed in format() with unexpected result", selFmt.format(formatArgs[j]) ,expFormatResult[i][j] );
+            // Format with the keyword array
+            for (int j = 0; j < 3; j++) {
+                assertEquals(
+                        "ERROR: SelectFormat Unit test failed in format() with unexpected result",
+                        selFmt.format(formatArgs[j]),
+                        expFormatResult[i][j]);
             }
         }
     }
-
 }
-

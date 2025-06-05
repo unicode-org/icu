@@ -8,17 +8,15 @@
  */
 package com.ibm.icu.dev.test.localespi;
 
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.util.ULocale;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
 public class LocaleNameTest extends TestFmwk {
@@ -27,7 +25,8 @@ public class LocaleNameTest extends TestFmwk {
     static {
         Method mGetDisplayScript = null;
         try {
-            mGetDisplayScript = Locale.class.getMethod("getDisplayScript", new Class[] {Locale.class});
+            mGetDisplayScript =
+                    Locale.class.getMethod("getDisplayScript", new Class[] {Locale.class});
         } catch (Exception e) {
             // fall through
         }
@@ -76,19 +75,40 @@ public class LocaleNameTest extends TestFmwk {
                 if (TestUtil.isICUExtendedLocale(inLocale)) {
                     // The name should be taken from ICU
                     if (!name.equals(icuname)) {
-                        errln("FAIL: Language name by ICU is " + icuname + ", but got " + name
-                                + " for locale " + forLocale + " in locale " + inLocale);
+                        errln(
+                                "FAIL: Language name by ICU is "
+                                        + icuname
+                                        + ", but got "
+                                        + name
+                                        + " for locale "
+                                        + forLocale
+                                        + " in locale "
+                                        + inLocale);
                     }
                 } else {
                     if (!name.equals(icuname)) {
-                        logln("INFO: Language name by JDK is " + name + ", but " + icuname +
-                              " by ICU, for locale " + forLocale + " in locale " + inLocale);
+                        logln(
+                                "INFO: Language name by JDK is "
+                                        + name
+                                        + ", but "
+                                        + icuname
+                                        + " by ICU, for locale "
+                                        + forLocale
+                                        + " in locale "
+                                        + inLocale);
                     }
                     // Try explicit ICU locale (xx_yy_ICU)
                     name = forLocale.getDisplayLanguage(inLocaleICU);
                     if (!name.equals(icuname)) {
-                        errln("FAIL: Language name by ICU is " + icuname + ", but got " + name
-                              + " for locale " + forLocale + " in locale " + inLocaleICU);
+                        errln(
+                                "FAIL: Language name by ICU is "
+                                        + icuname
+                                        + ", but got "
+                                        + name
+                                        + " for locale "
+                                        + forLocale
+                                        + " in locale "
+                                        + inLocaleICU);
                     }
                 }
             }
@@ -123,34 +143,69 @@ public class LocaleNameTest extends TestFmwk {
 
                 String name = null;
                 try {
-                    name = (String)GETDISPLAYSCRIPT_METHOD.invoke(forLocale, new Object[] {inLocale});
+                    name =
+                            (String)
+                                    GETDISPLAYSCRIPT_METHOD.invoke(
+                                            forLocale, new Object[] {inLocale});
                 } catch (Exception e) {
-                    errln("FAIL: JDK Locale#getDisplayScript(\"" + inLocale + "\") throws exception: " + e.getMessage());
+                    errln(
+                            "FAIL: JDK Locale#getDisplayScript(\""
+                                    + inLocale
+                                    + "\") throws exception: "
+                                    + e.getMessage());
                     continue;
                 }
 
                 if (TestUtil.isICUExtendedLocale(inLocale)) {
                     // The name should be taken from ICU
                     if (!name.equals(icuname)) {
-                        errln("FAIL: Script name by ICU is " + icuname + ", but got " + name
-                                + " for locale " + forLocale + " in locale " + inLocale);
+                        errln(
+                                "FAIL: Script name by ICU is "
+                                        + icuname
+                                        + ", but got "
+                                        + name
+                                        + " for locale "
+                                        + forLocale
+                                        + " in locale "
+                                        + inLocale);
                     }
                 } else {
                     // The name might be taken from JDK
                     if (!name.equals(icuname)) {
-                        logln("INFO: Script name by JDK is " + name + ", but " + icuname +
-                                " in ICU, for locale " + forLocale + " in locale " + inLocale);
+                        logln(
+                                "INFO: Script name by JDK is "
+                                        + name
+                                        + ", but "
+                                        + icuname
+                                        + " in ICU, for locale "
+                                        + forLocale
+                                        + " in locale "
+                                        + inLocale);
                     }
                     // Try explicit ICU locale (xx_yy_ICU)
                     try {
-                        name = (String)GETDISPLAYSCRIPT_METHOD.invoke(forLocale, new Object[] {inLocaleICU});
+                        name =
+                                (String)
+                                        GETDISPLAYSCRIPT_METHOD.invoke(
+                                                forLocale, new Object[] {inLocaleICU});
                     } catch (Exception e) {
-                        errln("FAIL: JDK Locale#getDisplayScript(\"" + inLocaleICU + "\") throws exception: " + e.getMessage());
+                        errln(
+                                "FAIL: JDK Locale#getDisplayScript(\""
+                                        + inLocaleICU
+                                        + "\") throws exception: "
+                                        + e.getMessage());
                         continue;
                     }
                     if (!name.equals(icuname)) {
-                        errln("FAIL: Script name by ICU is " + icuname + ", but got " + name
-                                + " for locale " + forLocale + " in locale " + inLocaleICU);
+                        errln(
+                                "FAIL: Script name by ICU is "
+                                        + icuname
+                                        + ", but got "
+                                        + name
+                                        + " for locale "
+                                        + forLocale
+                                        + " in locale "
+                                        + inLocaleICU);
                     }
                 }
             }
@@ -183,20 +238,41 @@ public class LocaleNameTest extends TestFmwk {
                 if (TestUtil.isICUExtendedLocale(inLocale)) {
                     // The name should be taken from ICU
                     if (!name.equals(icuname)) {
-                        errln("FAIL: Country name by ICU is " + icuname + ", but got " + name
-                                + " for locale " + forLocale + " in locale " + inLocale);
+                        errln(
+                                "FAIL: Country name by ICU is "
+                                        + icuname
+                                        + ", but got "
+                                        + name
+                                        + " for locale "
+                                        + forLocale
+                                        + " in locale "
+                                        + inLocale);
                     }
                 } else {
                     // The name might be taken from JDK
                     if (!name.equals(icuname)) {
-                        logln("INFO: Country name by JDK is " + name + ", but " + icuname +
-                              " in ICU, for locale " + forLocale + " in locale " + inLocale);
+                        logln(
+                                "INFO: Country name by JDK is "
+                                        + name
+                                        + ", but "
+                                        + icuname
+                                        + " in ICU, for locale "
+                                        + forLocale
+                                        + " in locale "
+                                        + inLocale);
                     }
                     // Try explicit ICU locale (xx_yy_ICU)
                     name = forLocale.getDisplayCountry(inLocaleICU);
                     if (!name.equals(icuname)) {
-                        errln("FAIL: Country name by ICU is " + icuname + ", but got " + name
-                              + " for locale " + forLocale + " in locale " + inLocaleICU);
+                        errln(
+                                "FAIL: Country name by ICU is "
+                                        + icuname
+                                        + ", but got "
+                                        + name
+                                        + " for locale "
+                                        + forLocale
+                                        + " in locale "
+                                        + inLocaleICU);
                     }
                 }
             }
@@ -238,10 +314,14 @@ public class LocaleNameTest extends TestFmwk {
 
                 for (String locSingleVar : locVarSubtags) {
                     if (locSingleVar.equals(TestUtil.ICU_VARIANT)
-                            || locSingleVar.equals("Cyrl") || locSingleVar.equals("Latn")) { // IBM Java 6 has locales with 'variant' Cryl/Latn
+                            || locSingleVar.equals("Cyrl")
+                            || locSingleVar.equals(
+                                    "Latn")) { // IBM Java 6 has locales with 'variant' Cryl/Latn
                         continue;
                     }
-                    Locale forLocaleSingleVar = new Locale(forLocale.getLanguage(), forLocale.getCountry(), locSingleVar);
+                    Locale forLocaleSingleVar =
+                            new Locale(
+                                    forLocale.getLanguage(), forLocale.getCountry(), locSingleVar);
                     ULocale forULocaleSingleVar = new ULocale("und_ZZ_" + locSingleVar);
                     String icuname = forULocaleSingleVar.getDisplayVariant(inULocale);
                     if (icuname.equals(locSingleVar) || icuname.length() == 0) {
@@ -257,19 +337,40 @@ public class LocaleNameTest extends TestFmwk {
                     if (TestUtil.isICUExtendedLocale(inLocale)) {
                         // The name should be taken from ICU
                         if (!name.equals(icuname)) {
-                            errln("FAIL: Variant name by ICU is " + icuname + ", but got " + name
-                                    + " for locale " + forLocaleSingleVar + " in locale " + inLocale);
+                            errln(
+                                    "FAIL: Variant name by ICU is "
+                                            + icuname
+                                            + ", but got "
+                                            + name
+                                            + " for locale "
+                                            + forLocaleSingleVar
+                                            + " in locale "
+                                            + inLocale);
                         }
                     } else {
                         if (!name.equals(icuname)) {
-                            logln("INFO: Variant name by JDK is " + name + ", but " + icuname +
-                                  " in ICU, for locale " + forLocaleSingleVar + " in locale " + inLocale);
+                            logln(
+                                    "INFO: Variant name by JDK is "
+                                            + name
+                                            + ", but "
+                                            + icuname
+                                            + " in ICU, for locale "
+                                            + forLocaleSingleVar
+                                            + " in locale "
+                                            + inLocale);
                         }
                         // Try explicit ICU locale (xx_yy_ICU)
                         name = forLocaleSingleVar.getDisplayVariant(inLocaleICU);
                         if (!name.equals(icuname)) {
-                            errln("FAIL: Variant name by ICU is " + icuname + ", but got " + name
-                                  + " for locale " + forLocaleSingleVar + " in locale " + inLocaleICU);
+                            errln(
+                                    "FAIL: Variant name by ICU is "
+                                            + icuname
+                                            + ", but got "
+                                            + name
+                                            + " for locale "
+                                            + forLocaleSingleVar
+                                            + " in locale "
+                                            + inLocaleICU);
                         }
                     }
                 }
@@ -279,14 +380,15 @@ public class LocaleNameTest extends TestFmwk {
 
     @Test
     public void Test20639_DeprecatesISO3Language() {
-        String[][] cases = new String[][]{
-            {"nb", "nob"},
-            {"no", "nor"}, // why not nob?
-            {"he", "heb"},
-            {"iw", "heb"},
-            {"ro", "ron"},
-            {"mo", "ron"},
-        };
+        String[][] cases =
+                new String[][] {
+                    {"nb", "nob"},
+                    {"no", "nor"}, // why not nob?
+                    {"he", "heb"},
+                    {"iw", "heb"},
+                    {"ro", "ron"},
+                    {"mo", "ron"},
+                };
         for (String[] cas : cases) {
             ULocale loc = new ULocale(cas[0]);
             String actual = loc.getISO3Language();

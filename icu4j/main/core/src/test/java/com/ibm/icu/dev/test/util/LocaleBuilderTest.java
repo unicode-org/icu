@@ -8,20 +8,16 @@
  */
 package com.ibm.icu.dev.test.util;
 
-import java.util.Arrays;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Builder;
+import java.util.Arrays;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-/**
- * Test cases for ULocale.LocaleBuilder
- */
+/** Test cases for ULocale.LocaleBuilder */
 @RunWith(JUnit4.class)
 public class LocaleBuilderTest extends CoreTestFmwk {
     @Test
@@ -44,67 +40,220 @@ public class LocaleBuilderTest extends CoreTestFmwk {
         // "X": indicates an exception must be thrown
         // "T": +1 = expected language tag / +2 = expected locale string
         String[][] TESTCASE = {
-                {"L", "en", "R", "us", "T", "en-US", "en_US"},
-                {"L", "en", "R", "CA", "L", null, "T", "und-CA", "_CA"},
-                {"L", "en", "R", "CA", "L", "", "T", "und-CA", "_CA"},
-                {"L", "en", "R", "FR", "L", "fr", "T", "fr-FR", "fr_FR"},
-                {"L", "123", "X"},
-                {"R", "us", "T", "und-US", "_US"},
-                {"R", "usa", "X"},
-                {"R", "123", "L", "it", "R", null, "T", "it", "it"},
-                {"R", "123", "L", "it", "R", "", "T", "it", "it"},
-                {"R", "123", "L", "en", "T", "en-123", "en_123"},
-                {"S", "LATN", "L", "DE", "T", "de-Latn", "de_Latn"},
-                {"L", "De", "S", "latn", "R", "de", "S", "", "T", "de-DE", "de_DE"},
-                {"L", "De", "S", "latn", "R", "de", "S", null, "T", "de-DE", "de_DE"},
-                {"S", "latin", "X"},
-                {"V", "1234", "L", "en", "T", "en-1234", "en__1234"},
-                {"V", "1234", "L", "en", "V", "5678", "T", "en-5678", "en__5678"},
-                {"V", "1234", "L", "en", "V", null, "T", "en", "en"},
-                {"V", "1234", "L", "en", "V", "", "T", "en", "en"},
-                {"V", "123", "X"},
-                {"U", "en_US", "T", "en-US", "en_US"},
-                {"U", "en_US_WIN", "X"},
-                {"B", "fr-FR-1606nict-u-ca-gregory-x-test", "T", "fr-FR-1606nict-u-ca-gregory-x-test", "fr_FR_1606NICT@calendar=gregorian;x=test"},
-                {"B", "ab-cde-fghij", "T", "cde-fghij", "cde__FGHIJ"},
-                {"B", "und-CA", "T", "und-CA", "_CA"},
-                {"B", "en-US-x-test-lvariant-var", "T", "en-US-x-test-lvariant-var", "en_US_VAR@x=test"},
-                {"B", "en-US-VAR", "X"},
-                {"U", "ja_JP@calendar=japanese;currency=JPY", "L", "ko", "T", "ko-JP-u-ca-japanese-cu-jpy", "ko_JP@calendar=japanese;currency=jpy"},
-                {"U", "ja_JP@calendar=japanese;currency=JPY", "K", "ca", null, "T", "ja-JP-u-cu-jpy", "ja_JP@currency=jpy"},
-                {"U", "ja_JP@calendar=japanese;currency=JPY", "E", "u", "attr1-ca-gregory", "T", "ja-JP-u-attr1-ca-gregory", "ja_JP@attribute=attr1;calendar=gregorian"},
-                {"U", "en@colnumeric=yes", "K", "kn", "", "T", "en-u-kn", "en@colnumeric=yes"},
-                {"L", "th", "R", "th", "K", "nu", "thai", "T", "th-TH-u-nu-thai", "th_TH@numbers=thai"},
-                {"U", "zh_Hans", "R", "sg", "K", "ca", "badcalendar", "X"},
-                {"U", "zh_Hans", "R", "sg", "K", "cal", "gregory", "X"},
-                {"E", "z", "ExtZ", "L", "en", "T", "en-z-extz", "en@z=extz"},
-                {"E", "z", "ExtZ", "L", "en", "E", "z", "", "T", "en", "en"},
-                {"E", "z", "ExtZ", "L", "en", "E", "z", null, "T", "en", "en"},
-                {"E", "a", "x", "X"},
-                {"E", "a", "abc_def", "T", "und-a-abc-def", "@a=abc-def"},
-                // Design limitation - typeless u extension keyword 0a below is interpreted as a boolean value true/yes.
-                // With the legacy keyword syntax, "yes" is used for such boolean value instead of "true".
-                // However, once the legacy keyword is translated back to BCP 47 u extension, key "0a" is unknown,
-                // so "yes" is preserved - not mapped to "true". We could change the code to automatically transform
-                // "yes" to "true", but it will break roundtrip conversion if BCP 47 u extension has "0a-yes".
-                {"L", "en", "E", "u", "bbb-aaa-0a", "T", "en-u-aaa-bbb-0a", "en@0a=yes;attribute=aaa-bbb"},
-                {"L", "fr", "R", "FR", "P", "Yoshito-ICU", "T", "fr-FR-x-yoshito-icu", "fr_FR@x=yoshito-icu"},
-                {"L", "ja", "R", "jp", "K", "ca", "japanese", "T", "ja-JP-u-ca-japanese", "ja_JP@calendar=japanese"},
-                {"K", "co", "PHONEBK", "K", "ca", "gregory", "L", "De", "T", "de-u-ca-gregory-co-phonebk", "de@calendar=gregorian;collation=phonebook"},
-                {"E", "o", "OPQR", "E", "a", "aBcD", "T", "und-a-abcd-o-opqr", "@a=abcd;o=opqr"},
-                {"E", "u", "nu-thai-ca-gregory", "L", "TH", "T", "th-u-ca-gregory-nu-thai", "th@calendar=gregorian;numbers=thai"},
-                {"L", "en", "K", "tz", "usnyc", "R", "US", "T", "en-US-u-tz-usnyc", "en_US@timezone=America/New_York"},
-                {"L", "de", "K", "co", "phonebk", "K", "ks", "level1", "K", "kk", "true", "T", "de-u-co-phonebk-kk-ks-level1", "de@collation=phonebook;colnormalization=yes;colstrength=primary"},
-                {"L", "en", "R", "US", "K", "ca", "gregory", "T", "en-US-u-ca-gregory", "en_US@calendar=gregorian"},
-                {"L", "en", "R", "US", "K", "cal", "gregory", "X"},
-                {"L", "en", "R", "US", "K", "ca", "gregorian", "X"},
-                {"L", "en", "R", "US", "K", "kn", "", "T", "en-US-u-kn", "en_US@colnumeric=yes"},
-                {"B", "de-DE-u-co-phonebk", "C", "L", "pt", "T", "pt", "pt"},
-                {"B", "ja-jp-u-ca-japanese", "N", "T", "ja-JP", "ja_JP"},
-                {"B", "es-u-def-abc-co-trad", "A", "hij", "D", "def", "T", "es-u-abc-hij-co-trad", "es@attribute=abc-hij;collation=traditional"},
-                {"B", "es-u-def-abc-co-trad", "A", "hij", "D", "def", "D", "def", "T", "es-u-abc-hij-co-trad", "es@attribute=abc-hij;collation=traditional"},
-                {"L", "en", "A", "aa", "X"},
-                {"B", "fr-u-attr1-cu-eur", "D", "attribute1", "X"},
+            {"L", "en", "R", "us", "T", "en-US", "en_US"},
+            {"L", "en", "R", "CA", "L", null, "T", "und-CA", "_CA"},
+            {"L", "en", "R", "CA", "L", "", "T", "und-CA", "_CA"},
+            {"L", "en", "R", "FR", "L", "fr", "T", "fr-FR", "fr_FR"},
+            {"L", "123", "X"},
+            {"R", "us", "T", "und-US", "_US"},
+            {"R", "usa", "X"},
+            {"R", "123", "L", "it", "R", null, "T", "it", "it"},
+            {"R", "123", "L", "it", "R", "", "T", "it", "it"},
+            {"R", "123", "L", "en", "T", "en-123", "en_123"},
+            {"S", "LATN", "L", "DE", "T", "de-Latn", "de_Latn"},
+            {"L", "De", "S", "latn", "R", "de", "S", "", "T", "de-DE", "de_DE"},
+            {"L", "De", "S", "latn", "R", "de", "S", null, "T", "de-DE", "de_DE"},
+            {"S", "latin", "X"},
+            {"V", "1234", "L", "en", "T", "en-1234", "en__1234"},
+            {"V", "1234", "L", "en", "V", "5678", "T", "en-5678", "en__5678"},
+            {"V", "1234", "L", "en", "V", null, "T", "en", "en"},
+            {"V", "1234", "L", "en", "V", "", "T", "en", "en"},
+            {"V", "123", "X"},
+            {"U", "en_US", "T", "en-US", "en_US"},
+            {"U", "en_US_WIN", "X"},
+            {
+                "B",
+                "fr-FR-1606nict-u-ca-gregory-x-test",
+                "T",
+                "fr-FR-1606nict-u-ca-gregory-x-test",
+                "fr_FR_1606NICT@calendar=gregorian;x=test"
+            },
+            {"B", "ab-cde-fghij", "T", "cde-fghij", "cde__FGHIJ"},
+            {"B", "und-CA", "T", "und-CA", "_CA"},
+            {
+                "B",
+                "en-US-x-test-lvariant-var",
+                "T",
+                "en-US-x-test-lvariant-var",
+                "en_US_VAR@x=test"
+            },
+            {"B", "en-US-VAR", "X"},
+            {
+                "U",
+                "ja_JP@calendar=japanese;currency=JPY",
+                "L",
+                "ko",
+                "T",
+                "ko-JP-u-ca-japanese-cu-jpy",
+                "ko_JP@calendar=japanese;currency=jpy"
+            },
+            {
+                "U",
+                "ja_JP@calendar=japanese;currency=JPY",
+                "K",
+                "ca",
+                null,
+                "T",
+                "ja-JP-u-cu-jpy",
+                "ja_JP@currency=jpy"
+            },
+            {
+                "U",
+                "ja_JP@calendar=japanese;currency=JPY",
+                "E",
+                "u",
+                "attr1-ca-gregory",
+                "T",
+                "ja-JP-u-attr1-ca-gregory",
+                "ja_JP@attribute=attr1;calendar=gregorian"
+            },
+            {"U", "en@colnumeric=yes", "K", "kn", "", "T", "en-u-kn", "en@colnumeric=yes"},
+            {"L", "th", "R", "th", "K", "nu", "thai", "T", "th-TH-u-nu-thai", "th_TH@numbers=thai"},
+            {"U", "zh_Hans", "R", "sg", "K", "ca", "badcalendar", "X"},
+            {"U", "zh_Hans", "R", "sg", "K", "cal", "gregory", "X"},
+            {"E", "z", "ExtZ", "L", "en", "T", "en-z-extz", "en@z=extz"},
+            {"E", "z", "ExtZ", "L", "en", "E", "z", "", "T", "en", "en"},
+            {"E", "z", "ExtZ", "L", "en", "E", "z", null, "T", "en", "en"},
+            {"E", "a", "x", "X"},
+            {"E", "a", "abc_def", "T", "und-a-abc-def", "@a=abc-def"},
+            // Design limitation - typeless u extension keyword 0a below is interpreted as a boolean
+            // value true/yes.
+            // With the legacy keyword syntax, "yes" is used for such boolean value instead of
+            // "true".
+            // However, once the legacy keyword is translated back to BCP 47 u extension, key "0a"
+            // is unknown,
+            // so "yes" is preserved - not mapped to "true". We could change the code to
+            // automatically transform
+            // "yes" to "true", but it will break roundtrip conversion if BCP 47 u extension has
+            // "0a-yes".
+            {
+                "L",
+                "en",
+                "E",
+                "u",
+                "bbb-aaa-0a",
+                "T",
+                "en-u-aaa-bbb-0a",
+                "en@0a=yes;attribute=aaa-bbb"
+            },
+            {
+                "L",
+                "fr",
+                "R",
+                "FR",
+                "P",
+                "Yoshito-ICU",
+                "T",
+                "fr-FR-x-yoshito-icu",
+                "fr_FR@x=yoshito-icu"
+            },
+            {
+                "L",
+                "ja",
+                "R",
+                "jp",
+                "K",
+                "ca",
+                "japanese",
+                "T",
+                "ja-JP-u-ca-japanese",
+                "ja_JP@calendar=japanese"
+            },
+            {
+                "K",
+                "co",
+                "PHONEBK",
+                "K",
+                "ca",
+                "gregory",
+                "L",
+                "De",
+                "T",
+                "de-u-ca-gregory-co-phonebk",
+                "de@calendar=gregorian;collation=phonebook"
+            },
+            {"E", "o", "OPQR", "E", "a", "aBcD", "T", "und-a-abcd-o-opqr", "@a=abcd;o=opqr"},
+            {
+                "E",
+                "u",
+                "nu-thai-ca-gregory",
+                "L",
+                "TH",
+                "T",
+                "th-u-ca-gregory-nu-thai",
+                "th@calendar=gregorian;numbers=thai"
+            },
+            {
+                "L",
+                "en",
+                "K",
+                "tz",
+                "usnyc",
+                "R",
+                "US",
+                "T",
+                "en-US-u-tz-usnyc",
+                "en_US@timezone=America/New_York"
+            },
+            {
+                "L",
+                "de",
+                "K",
+                "co",
+                "phonebk",
+                "K",
+                "ks",
+                "level1",
+                "K",
+                "kk",
+                "true",
+                "T",
+                "de-u-co-phonebk-kk-ks-level1",
+                "de@collation=phonebook;colnormalization=yes;colstrength=primary"
+            },
+            {
+                "L",
+                "en",
+                "R",
+                "US",
+                "K",
+                "ca",
+                "gregory",
+                "T",
+                "en-US-u-ca-gregory",
+                "en_US@calendar=gregorian"
+            },
+            {"L", "en", "R", "US", "K", "cal", "gregory", "X"},
+            {"L", "en", "R", "US", "K", "ca", "gregorian", "X"},
+            {"L", "en", "R", "US", "K", "kn", "", "T", "en-US-u-kn", "en_US@colnumeric=yes"},
+            {"B", "de-DE-u-co-phonebk", "C", "L", "pt", "T", "pt", "pt"},
+            {"B", "ja-jp-u-ca-japanese", "N", "T", "ja-JP", "ja_JP"},
+            {
+                "B",
+                "es-u-def-abc-co-trad",
+                "A",
+                "hij",
+                "D",
+                "def",
+                "T",
+                "es-u-abc-hij-co-trad",
+                "es@attribute=abc-hij;collation=traditional"
+            },
+            {
+                "B",
+                "es-u-def-abc-co-trad",
+                "A",
+                "hij",
+                "D",
+                "def",
+                "D",
+                "def",
+                "T",
+                "es-u-abc-hij-co-trad",
+                "es@attribute=abc-hij;collation=traditional"
+            },
+            {"L", "en", "A", "aa", "X"},
+            {"B", "fr-u-attr1-cu-eur", "D", "attribute1", "X"},
         };
 
         Builder bld_st = new Builder();
@@ -156,8 +305,9 @@ public class LocaleBuilderTest extends CoreTestFmwk {
                     }
                     // result
                     else if (method.equals("X")) {
-                        errln("FAIL: No excetion was thrown - test csae: "
-                                + Arrays.toString(TESTCASE[tidx]));
+                        errln(
+                                "FAIL: No excetion was thrown - test csae: "
+                                        + Arrays.toString(TESTCASE[tidx]));
                     } else if (method.equals("T")) {
                         expected = new String[2];
                         expected[0] = TESTCASE[tidx][i];
@@ -173,21 +323,30 @@ public class LocaleBuilderTest extends CoreTestFmwk {
                         // This exception is expected
                         break;
                     } else {
-                        errln("FAIL: IllformedLocaleException at offset " + i
-                                + " in test case: " + Arrays.toString(TESTCASE[tidx]));
+                        errln(
+                                "FAIL: IllformedLocaleException at offset "
+                                        + i
+                                        + " in test case: "
+                                        + Arrays.toString(TESTCASE[tidx]));
                     }
                 }
             }
             if (expected != null) {
                 ULocale loc = bld.build();
                 if (!expected[1].equals(loc.toString())) {
-                    errln("FAIL: Wrong locale ID - " + loc +
-                            " for test case: " + Arrays.toString(TESTCASE[tidx]));
+                    errln(
+                            "FAIL: Wrong locale ID - "
+                                    + loc
+                                    + " for test case: "
+                                    + Arrays.toString(TESTCASE[tidx]));
                 }
                 String langtag = loc.toLanguageTag();
                 if (!expected[0].equals(langtag)) {
-                    errln("FAIL: Wrong language tag - " + langtag +
-                            " for test case: " + Arrays.toString(TESTCASE[tidx]));
+                    errln(
+                            "FAIL: Wrong language tag - "
+                                    + langtag
+                                    + " for test case: "
+                                    + Arrays.toString(TESTCASE[tidx]));
                 }
                 ULocale loc1 = ULocale.forLanguageTag(langtag);
                 if (!loc.equals(loc1)) {
@@ -205,13 +364,23 @@ public class LocaleBuilderTest extends CoreTestFmwk {
             bld.setLocale(loc);
             ULocale loc1 = bld.build();
             if (!loc.equals(loc1)) {
-                errln("FAIL: Locale loc1 " + loc1 + " was returned by the builder.  Expected " + loc);
+                errln(
+                        "FAIL: Locale loc1 "
+                                + loc1
+                                + " was returned by the builder.  Expected "
+                                + loc);
             }
-            bld.setLanguage("").setUnicodeLocaleKeyword("ca", "buddhist")
-                .setLanguage("TH").setUnicodeLocaleKeyword("ca", "gregory");
+            bld.setLanguage("")
+                    .setUnicodeLocaleKeyword("ca", "buddhist")
+                    .setLanguage("TH")
+                    .setUnicodeLocaleKeyword("ca", "gregory");
             ULocale loc2 = bld.build();
             if (!loc.equals(loc2)) {
-                errln("FAIL: Locale loc2 " + loc2 + " was returned by the builder.  Expected " + loc);
+                errln(
+                        "FAIL: Locale loc2 "
+                                + loc2
+                                + " was returned by the builder.  Expected "
+                                + loc);
             }
         } catch (IllformedLocaleException e) {
             errln("FAIL: IllformedLocaleException: " + e.getMessage());

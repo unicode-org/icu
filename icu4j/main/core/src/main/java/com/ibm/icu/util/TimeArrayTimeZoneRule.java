@@ -7,12 +7,13 @@
  *******************************************************************************
  */
 package com.ibm.icu.util;
+
 import java.util.Arrays;
 import java.util.Date;
 
 /**
- * <code>TimeArrayTimeZoneRule</code> represents a time zone rule whose start times are
- * defined by an array of milliseconds since the standard base time.
+ * <code>TimeArrayTimeZoneRule</code> represents a time zone rule whose start times are defined by
+ * an array of milliseconds since the standard base time.
  *
  * @stable ICU 3.8
  */
@@ -24,24 +25,22 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
     private final int timeType;
 
     /**
-     * Constructs a <code>TimeArrayTimeZoneRule</code> with the name, the GMT offset of its
-     * standard time, the amount of daylight saving offset adjustment and
-     * the array of times when this rule takes effect.
+     * Constructs a <code>TimeArrayTimeZoneRule</code> with the name, the GMT offset of its standard
+     * time, the amount of daylight saving offset adjustment and the array of times when this rule
+     * takes effect.
      *
-     * @param name          The time zone name.
-     * @param rawOffset     The UTC offset of its standard time in milliseconds.
-     * @param dstSavings    The amount of daylight saving offset adjustment in
-     *                      milliseconds.  If this ia a rule for standard time,
-     *                      the value of this argument is 0.
-     * @param startTimes    The start times in milliseconds since the base time
-     *                      (January 1, 1970, 00:00:00).
-     * @param timeType      The time type of the start times, which is one of
-     *                      <code>DataTimeRule.WALL_TIME</code>, <code>STANDARD_TIME</code>
-     *                      and <code>UTC_TIME</code>.
-     *
+     * @param name The time zone name.
+     * @param rawOffset The UTC offset of its standard time in milliseconds.
+     * @param dstSavings The amount of daylight saving offset adjustment in milliseconds. If this ia
+     *     a rule for standard time, the value of this argument is 0.
+     * @param startTimes The start times in milliseconds since the base time (January 1, 1970,
+     *     00:00:00).
+     * @param timeType The time type of the start times, which is one of <code>
+     *     DataTimeRule.WALL_TIME</code>, <code>STANDARD_TIME</code> and <code>UTC_TIME</code>.
      * @stable ICU 3.8
      */
-    public TimeArrayTimeZoneRule(String name, int rawOffset, int dstSavings, long[] startTimes, int timeType) {
+    public TimeArrayTimeZoneRule(
+            String name, int rawOffset, int dstSavings, long[] startTimes, int timeType) {
         super(name, rawOffset, dstSavings);
         if (startTimes == null || startTimes.length == 0) {
             throw new IllegalArgumentException("No start times are specified.");
@@ -55,8 +54,8 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
     /**
      * Gets the array of start times used by this rule.
      *
-     * @return  An array of the start times in milliseconds since the base time
-     *          (January 1, 1970, 00:00:00 GMT).
+     * @return An array of the start times in milliseconds since the base time (January 1, 1970,
+     *     00:00:00 GMT).
      * @stable ICU 3.8
      */
     public long[] getStartTimes() {
@@ -64,9 +63,9 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
     }
 
     /**
-     * Gets the time type of the start times used by this rule.  The return value
-     * is either <code>DateTimeRule.WALL_TIME</code> or <code>DateTimeRule.STANDARD_TIME</code>
-     * or <code>DateTimeRule.UTC_TIME</code>.
+     * Gets the time type of the start times used by this rule. The return value is either <code>
+     * DateTimeRule.WALL_TIME</code> or <code>DateTimeRule.STANDARD_TIME</code> or <code>
+     * DateTimeRule.UTC_TIME</code>.
      *
      * @return The time type used of the start times used by this rule.
      * @stable ICU 3.8
@@ -77,6 +76,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -86,6 +86,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -95,6 +96,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -114,6 +116,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -130,6 +133,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -137,16 +141,18 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
         if (!(other instanceof TimeArrayTimeZoneRule)) {
             return false;
         }
-        if (timeType == ((TimeArrayTimeZoneRule)other).timeType
-                && Arrays.equals(startTimes, ((TimeArrayTimeZoneRule)other).startTimes)) {
+        if (timeType == ((TimeArrayTimeZoneRule) other).timeType
+                && Arrays.equals(startTimes, ((TimeArrayTimeZoneRule) other).startTimes)) {
             return super.isEquivalentTo(other);
         }
         return false;
     }
 
     /**
-     * {@inheritDoc}<br><br>
+     * {@inheritDoc}<br>
+     * <br>
      * Note: This method in <code>TimeArrayTimeZoneRule</code> always returns true.
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -166,9 +172,9 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
     }
 
     /**
-     * Returns a <code>String</code> representation of this <code>TimeArrayTimeZoneRule</code> object.
-     * This method is used for debugging purpose only.  The string representation can be changed
-     * in future version of ICU without any notice.
+     * Returns a <code>String</code> representation of this <code>TimeArrayTimeZoneRule</code>
+     * object. This method is used for debugging purpose only. The string representation can be
+     * changed in future version of ICU without any notice.
      *
      * @stable ICU 3.8
      */

@@ -1,28 +1,25 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-**********************************************************************
-* Copyright (c) 2004-2013, International Business Machines
-* Corporation and others.  All Rights Reserved.
-**********************************************************************
-* Author: Alan Liu
-* Created: April 20, 2004
-* Since: ICU 3.0
-**********************************************************************
-*/
+ **********************************************************************
+ * Copyright (c) 2004-2013, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ * Author: Alan Liu
+ * Created: April 20, 2004
+ * Since: ICU 3.0
+ **********************************************************************
+ */
 package com.ibm.icu.util;
 
-
 /**
- * An amount of a specified unit, consisting of a Number and a Unit.
- * For example, a length measure consists of a Number and a length
- * unit, such as feet or meters.
+ * An amount of a specified unit, consisting of a Number and a Unit. For example, a length measure
+ * consists of a Number and a length unit, such as feet or meters.
  *
- * <p>Measure objects are parsed and formatted by subclasses of
- * MeasureFormat.
+ * <p>Measure objects are parsed and formatted by subclasses of MeasureFormat.
  *
- * <p>Measure objects are immutable. All subclasses must guarantee that.
- * (However, subclassing is discouraged.)
+ * <p>Measure objects are immutable. All subclasses must guarantee that. (However, subclassing is
+ * discouraged.)
  *
  * @see java.lang.Number
  * @see com.ibm.icu.util.MeasureUnit
@@ -37,6 +34,7 @@ public class Measure {
 
     /**
      * Constructs a new object given a number and a unit.
+     *
      * @param number the number
      * @param unit the unit
      * @stable ICU 3.0
@@ -51,6 +49,7 @@ public class Measure {
 
     /**
      * Returns true if the given object is equal to this object.
+     *
      * @return true if this object is equal to the given object
      * @stable ICU 3.0
      */
@@ -72,7 +71,8 @@ public class Measure {
      * @param b Another number to be compared with
      * @return Returns true if two numbers are identical or have the same double value.
      */
-    // TODO improve this to catch more cases (two different longs that have same double values, BigDecimals, etc)
+    // TODO improve this to catch more cases (two different longs that have same double values,
+    // BigDecimals, etc)
     private static boolean numbersEqual(Number a, Number b) {
         if (a.equals(b)) {
             return true;
@@ -85,6 +85,7 @@ public class Measure {
 
     /**
      * Returns a hashcode for this object.
+     *
      * @return a 32-bit hash
      * @stable ICU 3.0
      */
@@ -95,8 +96,9 @@ public class Measure {
 
     /**
      * Returns a string representation of this object.
-     * @return a string representation consisting of the ISO currency
-     * code together with the numeric amount
+     *
+     * @return a string representation consisting of the ISO currency code together with the numeric
+     *     amount
      * @stable ICU 3.0
      */
     @Override
@@ -106,6 +108,7 @@ public class Measure {
 
     /**
      * Returns the numeric value of this object.
+     *
      * @return this object's Number
      * @stable ICU 3.0
      */
@@ -115,6 +118,7 @@ public class Measure {
 
     /**
      * Returns the unit of this object.
+     *
      * @return this object's Unit
      * @stable ICU 3.0
      */

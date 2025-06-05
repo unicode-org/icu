@@ -8,16 +8,6 @@
  */
 package com.ibm.icu.dev.test.util;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.ValidIdentifiers;
 import com.ibm.icu.impl.ValidIdentifiers.Datasubtype;
@@ -27,161 +17,164 @@ import com.ibm.icu.impl.locale.KeyTypeData;
 import com.ibm.icu.impl.locale.LocaleValidityChecker;
 import com.ibm.icu.impl.locale.LocaleValidityChecker.Where;
 import com.ibm.icu.util.ULocale;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * @author markdavis
- *
  */
 @RunWith(JUnit4.class)
 public class TestLocaleValidity extends CoreTestFmwk {
     @Test
     public void testBasic() {
         String[][] tests = {
-                {"OK", "eng-us"},
-                {"OK", "en-u-ca-chinese"},
-                {"OK", "en-x-abcdefg"},
-                {"OK", "x-abcdefg"},
-                {"OK", "en-u-sd-usca"},
-                {"OK", "en-US-u-sd-usca"},
-                {"OK", "en-t-it"},
-                {"OK", "und-Cyrl-t-und-latn"},
-                {"OK", "und"},
-                {"OK", "en"},
-                {"OK", "en-Hant"},
-                {"OK", "zh-Hant-1606nict-1694acad"},
-                {"OK", "zh-Hant"},
-                {"OK", "zh-Hant-AQ"},
-                {"OK", "x-abcdefg-g-foobar"},
+            {"OK", "eng-us"},
+            {"OK", "en-u-ca-chinese"},
+            {"OK", "en-x-abcdefg"},
+            {"OK", "x-abcdefg"},
+            {"OK", "en-u-sd-usca"},
+            {"OK", "en-US-u-sd-usca"},
+            {"OK", "en-t-it"},
+            {"OK", "und-Cyrl-t-und-latn"},
+            {"OK", "und"},
+            {"OK", "en"},
+            {"OK", "en-Hant"},
+            {"OK", "zh-Hant-1606nict-1694acad"},
+            {"OK", "zh-Hant"},
+            {"OK", "zh-Hant-AQ"},
+            {"OK", "x-abcdefg-g-foobar"},
+            {"OK", "en-u-ca-buddhist"},
+            {"OK", "en-u-ca-islamic-umalqura"}, // additive
+            {"OK", "en-u-cf-account"},
+            {"{u, co-big5han}", "en-u-co-big5han"}, // deprecated in 47
+            {"OK", "en-u-cu-adp"},
+            {"OK", "en-u-fw-fri"},
+            {"OK", "en-u-dx-thai"},
+            {"OK", "en-u-hc-h11"},
+            {"OK", "en-u-ka-noignore"},
+            {"OK", "en-u-kb-false"},
+            {"OK", "en-u-kc-false"},
+            {"OK", "en-u-kf-false"},
+            {"OK", "en-u-kk-false"},
+            {"OK", "en-u-kn-false"},
+            {"OK", "en-u-kr-latn-digit-symbol"}, // reorder codes, multiple
+            {"OK", "en-u-kr-latn-digit-others-Cyrl"}, // reorder codes, duplicat
+            {"OK", "en-u-ks-identic"},
+            {"OK", "en-u-kv-currency"},
+            {"OK", "en-u-mu-celsius"},
+            {"OK", "en-u-nu-ahom"},
+            {"OK", "en-u-sd-usny"},
+            {"OK", "en-u-tz-adalv"},
+            {"OK", "en-u-va-posix"},
+            {"OK", "en-t-d0-accents"},
+            {"OK", "en-u-em-default"},
+            {"OK", "en-t-i0-handwrit"},
+            {"OK", "en-t-k0-101key"},
+            {"OK", "en-u-lb-loose"},
+            {"OK", "en-u-lw-breakall"},
+            {"OK", "en-t-m0-alaloc"},
+            {"OK", "en-u-ms-uksystem"},
+            {"OK", "en-t-s0-accents"},
+            {"OK", "en-u-ss-none"},
+            {"OK", "en-t-t0-und"},
+            {"OK", "en-t-x0-12345678"},
+            {"OK", "en-u-tz-camtr"}, // CLDR 43 no longer deprecated, see CLDR-16489
 
-                {"OK", "en-u-ca-buddhist"},
-                {"OK", "en-u-ca-islamic-umalqura"}, // additive
-                {"OK", "en-u-cf-account"},
-                {"{u, co-big5han}", "en-u-co-big5han"}, // deprecated in 47
-                {"OK", "en-u-cu-adp"},
-                {"OK", "en-u-fw-fri"},
-                {"OK", "en-u-dx-thai"},
-                {"OK", "en-u-hc-h11"},
-                {"OK", "en-u-ka-noignore"},
-                {"OK", "en-u-kb-false"},
-                {"OK", "en-u-kc-false"},
-                {"OK", "en-u-kf-false"},
-                {"OK", "en-u-kk-false"},
-                {"OK", "en-u-kn-false"},
-                {"OK", "en-u-kr-latn-digit-symbol"}, // reorder codes, multiple
-                {"OK", "en-u-kr-latn-digit-others-Cyrl"}, // reorder codes, duplicat
-                {"OK", "en-u-ks-identic"},
-                {"OK", "en-u-kv-currency"},
-                {"OK", "en-u-mu-celsius"},
-                {"OK", "en-u-nu-ahom"},
-                {"OK", "en-u-sd-usny"},
-                {"OK", "en-u-tz-adalv"},
-                {"OK", "en-u-va-posix"},
+            // tests from LDML spec section on Hybrid Locale Identifiers
+            {"OK", "hi-t-en-h0-hybrid"},
+            {"OK", "en-t-zh-h0-hybrid"},
+            {"OK", "haw-t-en-h0-hybrid"},
+            {"OK", "en-t-haw-h0-hybrid"},
+            {"OK", "en-u-rg-uszzzz"},
+            {"OK", "en-u-rg-USZZZZ"},
+            {"{region, 001}", "en-u-rg-001zzzz"}, // well-formed but invalid
+            {"OK", "en-u-sd-uszzzz"},
 
-                {"OK", "en-t-d0-accents"},
-                {"OK", "en-u-em-default"},
-                {"OK", "en-t-i0-handwrit"},
-                {"OK", "en-t-k0-101key"},
-                {"OK", "en-u-lb-loose"},
-                {"OK", "en-u-lw-breakall"},
-                {"OK", "en-t-m0-alaloc"},
-                {"OK", "en-u-ms-uksystem"},
-                {"OK", "en-t-s0-accents"},
-                {"OK", "en-u-ss-none"},
-                {"OK", "en-t-t0-und"},
-                {"OK", "en-t-x0-12345678"},
-                {"OK", "en-u-tz-camtr"}, // CLDR 43 no longer deprecated, see CLDR-16489
+            // really long case
 
+            {
+                "OK",
+                "en-u-ca-buddhist-ca-islamic-umalqura-cf-account-co-pinyin-cu-adp-fw-fri-hc-h11-ka-noignore-kb-false-kc-false-kf-false-kk-false-kn-false-kr-latn-digit-symbol-ks-identic-kv-currency-nu-ahom-sd-usny-tz-adalv-va-posix"
+            },
 
-                // tests from LDML spec section on Hybrid Locale Identifiers
-                {"OK", "hi-t-en-h0-hybrid"},
-                {"OK", "en-t-zh-h0-hybrid"},
-                {"OK", "haw-t-en-h0-hybrid"},
-                {"OK", "en-t-haw-h0-hybrid"},
+            // root is canonicalized to the root locale (ICU-20273)
+            {"OK", "root"},
 
-                {"OK", "en-u-rg-uszzzz"},
-                {"OK", "en-u-rg-USZZZZ"},
-                {"{region, 001}", "en-u-rg-001zzzz"}, // well-formed but invalid
+            // deprecated, but turned into valid by ULocale.Builder()
+            {"OK", "en-u-ca-islamicc"}, // deprecated
+            {"OK", "en-u-tz-aqams"}, // deprecated
 
-                {"OK", "en-u-sd-uszzzz"},
+            // Bad syntax (caught by ULocale.Builder())
+            {"Invalid subtag: t [at index 0]", "t-it"},
+            {"Invalid subtag: u [at index 0]", "u-it"},
+            {"Incomplete extension 'u' [at index 3]", "en-u"},
+            {"Incomplete extension 't' [at index 3]", "en-t"},
+            {"Empty subtag [at index 0]", ""},
+            {"Incomplete privateuse [at index 0]", "x-abc$defg"},
+            {"Invalid subtag: $ [at index 3]", "EN-$"},
+            {"Invalid subtag: $ [at index 0]", "$"},
 
-                // really long case
+            // bad extension
 
-                {"OK", "en-u-ca-buddhist-ca-islamic-umalqura-cf-account-co-pinyin-cu-adp-fw-fri-hc-h11-ka-noignore-kb-false-kc-false-kf-false-kk-false-kn-false-kr-latn-digit-symbol-ks-identic-kv-currency-nu-ahom-sd-usny-tz-adalv-va-posix"},
+            {"{illegal, q}", "en-q-abcdefg"},
+            {"Incomplete privateuse [at index 3]", "en-x-123456789"},
+            {"Empty subtag [at index 14]", "en-x-12345678--a"},
 
-                // root is canonicalized to the root locale (ICU-20273)
-                {"OK", "root"},
+            // bad subtags
 
-                // deprecated, but turned into valid by ULocale.Builder()
-                {"OK", "en-u-ca-islamicc"}, // deprecated
-                {"OK", "en-u-tz-aqams"}, // deprecated
+            {"{variant, FOOBAR}", "zh-Hant-1606nict-1694acad-foobar"},
+            {"{region, AB}", "zh-Hant-AB"},
+            {"{language, ex}", "ex"},
+            {"{script, Hanx}", "zh-Hanx"},
+            {"{language, qaa}", "qaa"},
 
-                // Bad syntax (caught by ULocale.Builder())
-                {"Invalid subtag: t [at index 0]", "t-it"},
-                {"Invalid subtag: u [at index 0]", "u-it"},
+            // bad types for keys
 
-                {"Incomplete extension 'u' [at index 3]", "en-u"},
-                {"Incomplete extension 't' [at index 3]", "en-t"},
-                {"Empty subtag [at index 0]", ""},
-                {"Incomplete privateuse [at index 0]", "x-abc$defg"},
-                {"Invalid subtag: $ [at index 3]", "EN-$"},
-                {"Invalid subtag: $ [at index 0]", "$"},
+            {"{u, ca-chinesx}", "en-u-ca-chinesx"},
+            {"{script, Latx}", "und-Cyrl-t-und-latx"},
+            {"{u, sd-usca}", "en-AQ-u-sd-usca"},
+            {"{u, ca-buddhisx}", "en-u-ca-buddhisx"},
+            {"{u, ca-islamic-umalqurx}", "en-u-ca-islamic-umalqurx"}, // additive
+            {"{u, cf-accounx}", "en-u-cf-accounx"},
+            {"{u, co-big5hax}", "en-u-co-big5hax"},
+            {"{u, cu-adx}", "en-u-cu-adx"},
+            {"{u, fw-frx}", "en-u-fw-frx"},
+            {"{u, hc-h1x}", "en-u-hc-h1x"},
+            {"{u, ka-noignorx}", "en-u-ka-noignorx"},
+            {"{u, kb-falsx}", "en-u-kb-falsx"},
+            {"{u, kc-falsx}", "en-u-kc-falsx"},
+            {"{u, kf-falsx}", "en-u-kf-falsx"},
+            {"{u, kk-falsx}", "en-u-kk-falsx"},
+            {"{u, kn-falsx}", "en-u-kn-falsx"},
+            {"{u, kr-symbox}", "en-u-kr-latn-digit-symbox"}, // reorder codes, multiple
+            {"{u, kr-latn}", "en-u-kr-latn-digit-latn"}, // reorder codes, duplicat
+            {"{u, kr-zzzz}", "en-u-kr-latn-others-digit-Zzzz"}, // reorder codes, duplicat
+            {"{u, kr-zsym}", "en-u-kr-Zsym"}, // reorder codes, duplicat
+            {"{u, kr-qaai}", "en-u-kr-Qaai"}, // reorder codes, duplicat
+            {"{u, ks-identix}", "en-u-ks-identix"},
+            {"{u, kv-currencx}", "en-u-kv-currencx"},
+            {"{u, nu-ahox}", "en-u-nu-ahox"},
+            {"{u, sd-usnx}", "en-u-sd-usnx"},
+            {"{u, tz-adalx}", "en-u-tz-adalx"},
+            {"{u, va-posit}", "en-u-va-posit"},
 
-                // bad extension
+            // too many items
 
-                {"{illegal, q}", "en-q-abcdefg"},
+            {"{u, cu-usd}", "en-u-cu-adp-usd"},
 
-                {"Incomplete privateuse [at index 3]", "en-x-123456789"},
-                {"Empty subtag [at index 14]", "en-x-12345678--a"},
-
-                // bad subtags
-
-                {"{variant, FOOBAR}", "zh-Hant-1606nict-1694acad-foobar"},
-                {"{region, AB}", "zh-Hant-AB"},
-                {"{language, ex}", "ex"},
-                {"{script, Hanx}", "zh-Hanx"},
-                {"{language, qaa}", "qaa"},
-
-                // bad types for keys
-
-                {"{u, ca-chinesx}", "en-u-ca-chinesx"},
-                {"{script, Latx}", "und-Cyrl-t-und-latx"},
-                {"{u, sd-usca}", "en-AQ-u-sd-usca"},
-
-                {"{u, ca-buddhisx}", "en-u-ca-buddhisx"},
-                {"{u, ca-islamic-umalqurx}", "en-u-ca-islamic-umalqurx"}, // additive
-                {"{u, cf-accounx}", "en-u-cf-accounx"},
-                {"{u, co-big5hax}", "en-u-co-big5hax"},
-                {"{u, cu-adx}", "en-u-cu-adx"},
-                {"{u, fw-frx}", "en-u-fw-frx"},
-                {"{u, hc-h1x}", "en-u-hc-h1x"},
-                {"{u, ka-noignorx}", "en-u-ka-noignorx"},
-                {"{u, kb-falsx}", "en-u-kb-falsx"},
-                {"{u, kc-falsx}", "en-u-kc-falsx"},
-                {"{u, kf-falsx}", "en-u-kf-falsx"},
-                {"{u, kk-falsx}", "en-u-kk-falsx"},
-                {"{u, kn-falsx}", "en-u-kn-falsx"},
-                {"{u, kr-symbox}", "en-u-kr-latn-digit-symbox"}, // reorder codes, multiple
-                {"{u, kr-latn}", "en-u-kr-latn-digit-latn"}, // reorder codes, duplicat
-                {"{u, kr-zzzz}", "en-u-kr-latn-others-digit-Zzzz"}, // reorder codes, duplicat
-                {"{u, kr-zsym}", "en-u-kr-Zsym"}, // reorder codes, duplicat
-                {"{u, kr-qaai}", "en-u-kr-Qaai"}, // reorder codes, duplicat
-                {"{u, ks-identix}", "en-u-ks-identix"},
-                {"{u, kv-currencx}", "en-u-kv-currencx"},
-                {"{u, nu-ahox}", "en-u-nu-ahox"},
-                {"{u, sd-usnx}", "en-u-sd-usnx"},
-                {"{u, tz-adalx}", "en-u-tz-adalx"},
-                {"{u, va-posit}", "en-u-va-posit"},
-
-                // too many items
-
-                {"{u, cu-usd}", "en-u-cu-adp-usd"},
-
-                // use deprecated subtags. testDeprecated checks if they work when Datasubtype.deprecated is added
-                //{"{u, ca-civil}", "en-u-ca-islamicc"}, // deprecated, but turns into valid
-                {"{u, co-direct}", "en-u-co-direct"}, // deprecated
-                {"{u, kh}", "en-u-kh-false"}, // deprecated
-                //{"{u, tz-camtr}", "en-u-tz-camtr"}, // CLDR 43 no longer deprecated, see CLDR-16489
-                {"{u, vt}", "en-u-vt-0020-0041"}, // deprecated
+            // use deprecated subtags. testDeprecated checks if they work when
+            // Datasubtype.deprecated is added
+            // {"{u, ca-civil}", "en-u-ca-islamicc"}, // deprecated, but turns into valid
+            {"{u, co-direct}", "en-u-co-direct"}, // deprecated
+            {"{u, kh}", "en-u-kh-false"}, // deprecated
+            // {"{u, tz-camtr}", "en-u-tz-camtr"}, // CLDR 43 no longer deprecated, see CLDR-16489
+            {"{u, vt}", "en-u-vt-0020-0041"}, // deprecated
         };
         final LinkedHashSet<String> foundKeys = new LinkedHashSet<String>();
         check(tests, foundKeys, Datasubtype.regular, Datasubtype.unknown);
@@ -191,7 +184,7 @@ public class TestLocaleValidity extends CoreTestFmwk {
         if (!assertEquals("Missing keys", Collections.EMPTY_SET, missing)) {
             // print out template for missing cases for adding
             for (String key : missing) {
-                char extension = key.charAt(key.length()-1) < 'A' ? 't' : 'u';
+                char extension = key.charAt(key.length() - 1) < 'A' ? 't' : 'u';
                 String bestType = null;
                 for (String type : KeyTypeData.getBcp47KeyTypes(key)) {
                     if (KeyTypeData.isDeprecated(key, type)) {
@@ -201,7 +194,8 @@ public class TestLocaleValidity extends CoreTestFmwk {
                     bestType = type;
                     break;
                 }
-                System.out.println("{\"OK\", \"en-" + extension + "-" + key + "-" + bestType + "\"},");
+                System.out.println(
+                        "{\"OK\", \"en-" + extension + "-" + key + "-" + bestType + "\"},");
             }
         }
     }
@@ -209,10 +203,10 @@ public class TestLocaleValidity extends CoreTestFmwk {
     @Test
     public void testMissing() {
         String[][] tests = {
-                {"OK", "en-u-lb-loose"},
-                {"OK", "en-u-lw-breakall"},
-                {"OK", "en-u-ms-metric"},
-                {"OK", "en-u-ss-none"},
+            {"OK", "en-u-lb-loose"},
+            {"OK", "en-u-lw-breakall"},
+            {"OK", "en-u-ms-metric"},
+            {"OK", "en-u-ss-none"},
         };
         check(tests, null, Datasubtype.regular, Datasubtype.unknown);
     }
@@ -220,13 +214,13 @@ public class TestLocaleValidity extends CoreTestFmwk {
     @Test
     public void testTSubtags() {
         String[][] tests = {
-                //                {"OK", "und-Cyrl-t-und-latn-m0-ungegn-2007"},
-                //                {"{t, ungegg}", "und-Cyrl-t-und-latn-m0-ungegg-2007"},
-                //                {"OK", "en-t-i0-handwrit"},
-                //                {"OK", "en-t-k0-101key"},
-                //                {"OK", "en-t-m0-alaloc"},
-                //                {"OK", "en-t-t0-und"},
-                //                {"OK", "en-t-x0-anythin"},
+            //                {"OK", "und-Cyrl-t-und-latn-m0-ungegn-2007"},
+            //                {"{t, ungegg}", "und-Cyrl-t-und-latn-m0-ungegg-2007"},
+            //                {"OK", "en-t-i0-handwrit"},
+            //                {"OK", "en-t-k0-101key"},
+            //                {"OK", "en-t-m0-alaloc"},
+            //                {"OK", "en-t-t0-und"},
+            //                {"OK", "en-t-x0-anythin"},
         };
         check(tests, null, Datasubtype.regular, Datasubtype.unknown);
     }
@@ -234,10 +228,10 @@ public class TestLocaleValidity extends CoreTestFmwk {
     @Test
     public void testDeprecated() {
         String[][] tests = {
-                {"OK", "en-u-co-direct"}, // deprecated
-                {"OK", "en-u-kh-false"}, // deprecated
-                {"OK", "en-u-tz-camtr"}, // deprecated
-                {"OK", "en-u-vt-0020"}, // deprecated
+            {"OK", "en-u-co-direct"}, // deprecated
+            {"OK", "en-u-kh-false"}, // deprecated
+            {"OK", "en-u-tz-camtr"}, // deprecated
+            {"OK", "en-u-vt-0020"}, // deprecated
         };
         check(tests, null, Datasubtype.regular, Datasubtype.unknown, Datasubtype.deprecated);
     }
@@ -250,7 +244,12 @@ public class TestLocaleValidity extends CoreTestFmwk {
         }
     }
 
-    private void check(int count, LocaleValidityChecker all, String expected, String locale, Set<String> keys) {
+    private void check(
+            int count,
+            LocaleValidityChecker all,
+            String expected,
+            String locale,
+            Set<String> keys) {
         ULocale ulocale;
         try {
             ulocale = new ULocale.Builder().setLanguageTag(locale).build();
@@ -272,7 +271,8 @@ public class TestLocaleValidity extends CoreTestFmwk {
         //            return;
         //        }
         //        all.isValid(ulocale2, where);
-        //        assertEquals(ulocale2 + ", " + ulocale2.toLanguageTag(), expected, where.toString());
+        //        assertEquals(ulocale2 + ", " + ulocale2.toLanguageTag(), expected,
+        // where.toString());
 
         // problem: ULocale("$").toLanguageTag() becomes valid
     }
@@ -280,29 +280,41 @@ public class TestLocaleValidity extends CoreTestFmwk {
     private void addKeys(ULocale ulocale, Set<String> keys) {
         for (char cp : ulocale.getExtensionKeys()) {
             switch (cp) {
-            case 't':
-            case 'u':
-                String extensionString = ulocale.getExtension(cp);
-                String[] parts = extensionString.split("-");
-                for (String part : parts) {
-                    if (part.length() == 2) { // key
-                        keys.add(part);
+                case 't':
+                case 'u':
+                    String extensionString = ulocale.getExtension(cp);
+                    String[] parts = extensionString.split("-");
+                    for (String part : parts) {
+                        if (part.length() == 2) { // key
+                            keys.add(part);
+                        }
                     }
-                }
-                break;
+                    break;
             }
         }
     }
-
 
     // Quick testing for now
 
     @Test
     public void testValidIdentifierData() {
-        showValid(Datasubtype.unknown, Datatype.script, EnumSet.of(Datasubtype.regular, Datasubtype.unknown), "Zzzz");
+        showValid(
+                Datasubtype.unknown,
+                Datatype.script,
+                EnumSet.of(Datasubtype.regular, Datasubtype.unknown),
+                "Zzzz");
         showValid(null, Datatype.script, EnumSet.of(Datasubtype.regular), "Zzzz");
-        showValid(Datasubtype.regular, Datatype.subdivision, EnumSet.of(Datasubtype.regular), "US-CA");
-        showValid(Datasubtype.regular, Datatype.subdivision, EnumSet.of(Datasubtype.regular), "US", "CA");
+        showValid(
+                Datasubtype.regular,
+                Datatype.subdivision,
+                EnumSet.of(Datasubtype.regular),
+                "US-CA");
+        showValid(
+                Datasubtype.regular,
+                Datatype.subdivision,
+                EnumSet.of(Datasubtype.regular),
+                "US",
+                "CA");
         showValid(null, Datatype.subdivision, EnumSet.of(Datasubtype.regular), "US-?");
         showValid(null, Datatype.subdivision, EnumSet.of(Datasubtype.regular), "US", "?");
         if (isVerbose()) {
@@ -321,11 +333,18 @@ public class TestLocaleValidity extends CoreTestFmwk {
         }
     }
 
-    private void showValid(Datasubtype expected, Datatype datatype, Set<Datasubtype> datasubtypes, String code) {
+    private void showValid(
+            Datasubtype expected, Datatype datatype, Set<Datasubtype> datasubtypes, String code) {
         Datasubtype value = ValidIdentifiers.isValid(datatype, datasubtypes, code);
         assertEquals(datatype + ", " + datasubtypes + ", " + code, expected, value);
     }
-    private void showValid(Datasubtype expected, Datatype datatype, Set<Datasubtype> datasubtypes, String code, String code2) {
+
+    private void showValid(
+            Datasubtype expected,
+            Datatype datatype,
+            Set<Datasubtype> datasubtypes,
+            String code,
+            String code2) {
         Datasubtype value = ValidIdentifiers.isValid(datatype, datasubtypes, code, code2);
         assertEquals(datatype + ", " + datasubtypes + ", " + code + ", " + code2, expected, value);
     }

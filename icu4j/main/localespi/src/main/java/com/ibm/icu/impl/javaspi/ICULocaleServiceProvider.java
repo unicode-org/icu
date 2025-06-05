@@ -8,6 +8,9 @@
  */
 package com.ibm.icu.impl.javaspi;
 
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Builder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -19,17 +22,18 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.ULocale.Builder;
-
 public class ICULocaleServiceProvider {
-    private static final String SPI_PROP_FILE = "com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties";
+    private static final String SPI_PROP_FILE =
+            "com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties";
 
-    private static final String SUFFIX_KEY = "com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.icuVariantSuffix";
-    private static final String ENABLE_VARIANTS_KEY = "com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.enableIcuVariants";
-    private static final String ENABLE_ISO3_LANG_KEY = "com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.enableIso3Languages";
-    private static final String USE_DECIMALFORMAT_KEY = "com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.useDecimalFormat";
+    private static final String SUFFIX_KEY =
+            "com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.icuVariantSuffix";
+    private static final String ENABLE_VARIANTS_KEY =
+            "com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.enableIcuVariants";
+    private static final String ENABLE_ISO3_LANG_KEY =
+            "com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.enableIso3Languages";
+    private static final String USE_DECIMALFORMAT_KEY =
+            "com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.useDecimalFormat";
 
     private static boolean configLoaded = false;
 
@@ -73,7 +77,8 @@ public class ICULocaleServiceProvider {
         String variantNoSuffix = null;
         if (variant.equals(suffix)) {
             variantNoSuffix = "";
-        } else if (variant.endsWith(suffix) && variant.charAt(variant.length() - suffix.length() - 1) == '_') {
+        } else if (variant.endsWith(suffix)
+                && variant.charAt(variant.length() - suffix.length() - 1) == '_') {
             variantNoSuffix = variant.substring(0, variant.length() - suffix.length() - 1);
         }
         if (variantNoSuffix == null) {
@@ -119,7 +124,12 @@ public class ICULocaleServiceProvider {
         for (Locale spLoc : SPECIAL_LOCALES) {
             String var = spLoc.getVariant();
             if (var.length() > 0) {
-                splocs.put(new Locale(spLoc.getLanguage(), spLoc.getCountry(), var + "_" + getIcuSuffix()), spLoc);
+                splocs.put(
+                        new Locale(
+                                spLoc.getLanguage(),
+                                spLoc.getCountry(),
+                                var + "_" + getIcuSuffix()),
+                        spLoc);
             }
         }
         SPECIAL_LOCALES_MAP = Collections.unmodifiableMap(splocs);
@@ -232,13 +242,19 @@ public class ICULocaleServiceProvider {
                 is.close();
             }
 
-            String val = (String)spiConfigProps.get(SUFFIX_KEY);
+            String val = (String) spiConfigProps.get(SUFFIX_KEY);
             if (val != null && val.length() > 0) {
                 suffix = val;
             }
-            enableVariants = parseBooleanString((String)spiConfigProps.get(ENABLE_VARIANTS_KEY), enableVariants);
-            enableIso3Lang = parseBooleanString((String)spiConfigProps.get(ENABLE_ISO3_LANG_KEY), enableIso3Lang);
-            useDecimalFormat = parseBooleanString((String)spiConfigProps.get(USE_DECIMALFORMAT_KEY), useDecimalFormat);
+            enableVariants =
+                    parseBooleanString(
+                            (String) spiConfigProps.get(ENABLE_VARIANTS_KEY), enableVariants);
+            enableIso3Lang =
+                    parseBooleanString(
+                            (String) spiConfigProps.get(ENABLE_ISO3_LANG_KEY), enableIso3Lang);
+            useDecimalFormat =
+                    parseBooleanString(
+                            (String) spiConfigProps.get(USE_DECIMALFORMAT_KEY), useDecimalFormat);
         } catch (IOException ioe) {
             // Any IO errors, ignore
         }

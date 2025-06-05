@@ -1,40 +1,31 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-******************************************************************************
-* Copyright (C) 2003-2011, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 2003-2011, International Business Machines Corporation and   *
+ * others. All Rights Reserved.                                               *
+ ******************************************************************************
+ */
 
 package com.ibm.icu.impl;
 
+import com.ibm.icu.impl.locale.AsciiUtil;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.ibm.icu.impl.locale.AsciiUtil;
-
-/**
- * Utility class to parse and normalize locale ids (including POSIX style)
- */
+/** Utility class to parse and normalize locale ids (including POSIX style) */
 public final class LocaleIDParser {
 
-    /**
-     * Char array representing the locale ID.
-     */
+    /** Char array representing the locale ID. */
     private char[] id;
 
-    /**
-     * Current position in {@link #id} (while parsing).
-     */
+    /** Current position in {@link #id} (while parsing). */
     private int index;
 
-    /**
-     * Temporary buffer for parsed sections of data.
-     */
+    /** Temporary buffer for parsed sections of data. */
     private StringBuilder buffer;
 
     // um, don't handle POSIX ids unless we request it.  why not?  well... because.
@@ -45,16 +36,15 @@ public final class LocaleIDParser {
     Map<String, String> keywords;
     String baseName;
 
-    /**
-     * Parsing constants.
-     */
-    private static final char KEYWORD_SEPARATOR     = '@';
-    private static final char HYPHEN                = '-';
-    private static final char KEYWORD_ASSIGN        = '=';
-    private static final char COMMA                 = ',';
-    private static final char ITEM_SEPARATOR        = ';';
-    private static final char DOT                   = '.';
-    private static final char UNDERSCORE            = '_';
+    /** Parsing constants. */
+    private static final char KEYWORD_SEPARATOR = '@';
+
+    private static final char HYPHEN = '-';
+    private static final char KEYWORD_ASSIGN = '=';
+    private static final char COMMA = ',';
+    private static final char ITEM_SEPARATOR = ';';
+    private static final char DOT = '.';
+    private static final char UNDERSCORE = '_';
 
     public LocaleIDParser(String localeID) {
         this(localeID, false);
@@ -74,9 +64,7 @@ public final class LocaleIDParser {
 
     // utilities for working on text in the buffer
 
-    /**
-     * Append c to the buffer.
-     */
+    /** Append c to the buffer. */
     private void append(char c) {
         buffer.append(c);
     }
@@ -85,39 +73,31 @@ public final class LocaleIDParser {
         append(UNDERSCORE);
     }
 
-    /**
-     * Returns the text in the buffer from start to blen as a String.
-     */
+    /** Returns the text in the buffer from start to blen as a String. */
     private String getString(int start) {
         return buffer.substring(start);
     }
 
-    /**
-     * Set the length of the buffer to pos, then append the string.
-     */
+    /** Set the length of the buffer to pos, then append the string. */
     private void set(int pos, String s) {
         buffer.delete(pos, buffer.length());
         buffer.insert(pos, s);
     }
 
-    /**
-     * Append the string to the buffer.
-     */
+    /** Append the string to the buffer. */
     private void append(String s) {
         buffer.append(s);
     }
 
     // utilities for parsing text out of the id
 
-    /**
-     * Character to indicate no more text is available in the id.
-     */
+    /** Character to indicate no more text is available in the id. */
     private static final char DONE = '\uffff';
 
     /**
-     * Returns the character at index in the id, and advance index.  The returned character
-     * is DONE if index was at the limit of the buffer.  The index is advanced regardless
-     * so that decrementing the index will always 'unget' the last character returned.
+     * Returns the character at index in the id, and advance index. The returned character is DONE
+     * if index was at the limit of the buffer. The index is advanced regardless so that
+     * decrementing the index will always 'unget' the last character returned.
      */
     private char next() {
         if (index == id.length) {
@@ -128,40 +108,35 @@ public final class LocaleIDParser {
         return id[index++];
     }
 
-    /**
-     * Advance index until the next terminator or id separator, and leave it there.
-     */
+    /** Advance index until the next terminator or id separator, and leave it there. */
     private void skipUntilTerminatorOrIDSeparator() {
-        while (!isTerminatorOrIDSeparator(next()));
+        while (!isTerminatorOrIDSeparator(next()))
+            ;
         --index;
     }
 
-    /**
-     * Returns true if the character at index in the id is a terminator.
-     */
+    /** Returns true if the character at index in the id is a terminator. */
     private boolean atTerminator() {
         return index >= id.length || isTerminator(id[index]);
     }
 
     /**
-     * Returns true if the character is a terminator (keyword separator, dot, or DONE).
-     * Dot is a terminator because of the POSIX form, where dot precedes the codepage.
+     * Returns true if the character is a terminator (keyword separator, dot, or DONE). Dot is a
+     * terminator because of the POSIX form, where dot precedes the codepage.
      */
     private boolean isTerminator(char c) {
         // always terminate at DOT, even if not handling POSIX.  It's an error...
         return c == KEYWORD_SEPARATOR || c == DONE || c == DOT;
     }
 
-    /**
-     * Returns true if the character is a terminator or id separator.
-     */
+    /** Returns true if the character is a terminator or id separator. */
     private boolean isTerminatorOrIDSeparator(char c) {
         return c == UNDERSCORE || c == HYPHEN || isTerminator(c);
     }
 
     /**
-     * Returns true if the start of the buffer has an experimental or private language
-     * prefix, the pattern '[ixIX][-_].' shows the syntax checked.
+     * Returns true if the start of the buffer has an experimental or private language prefix, the
+     * pattern '[ixIX][-_].' shows the syntax checked.
      */
     private boolean haveExperimentalLanguagePrefix() {
         if (id.length > 2) {
@@ -174,9 +149,7 @@ public final class LocaleIDParser {
         return false;
     }
 
-    /**
-     * Returns true if a value separator occurs at or after index.
-     */
+    /** Returns true if a value separator occurs at or after index. */
     private boolean haveKeywordAssign() {
         // assume it is safe to start from index
         for (int i = index; i < id.length; ++i) {
@@ -188,9 +161,9 @@ public final class LocaleIDParser {
     }
 
     /**
-     * Advance index past language, and accumulate normalized language code in buffer.
-     * Index must be at 0 when this is called.  Index is left at a terminator or id
-     * separator.  Returns the start of the language code in the buffer.
+     * Advance index past language, and accumulate normalized language code in buffer. Index must be
+     * at 0 when this is called. Index is left at a terminator or id separator. Returns the start of
+     * the language code in the buffer.
      */
     private int parseLanguage() {
         int startLength = buffer.length();
@@ -202,7 +175,7 @@ public final class LocaleIDParser {
         }
 
         char c;
-        while(!isTerminatorOrIDSeparator(c = next())) {
+        while (!isTerminatorOrIDSeparator(c = next())) {
             append(AsciiUtil.toLower(c));
         }
         --index; // unget
@@ -218,8 +191,8 @@ public final class LocaleIDParser {
     }
 
     /**
-     * Advance index past language.  Index must be at 0 when this is called.  Index
-     * is left at a terminator or id separator.
+     * Advance index past language. Index must be at 0 when this is called. Index is left at a
+     * terminator or id separator.
      */
     private void skipLanguage() {
         if (haveExperimentalLanguagePrefix()) {
@@ -229,23 +202,22 @@ public final class LocaleIDParser {
     }
 
     /**
-     * Advance index past script, and accumulate normalized script in buffer.
-     * Index must be immediately after the language.
-     * If the item at this position is not a script (is not four characters
-     * long) leave index and buffer unchanged.  Otherwise index is left at
-     * a terminator or id separator.  Returns the start of the script code
-     * in the buffer (this may be equal to the buffer length, if there is no
-     * script).
+     * Advance index past script, and accumulate normalized script in buffer. Index must be
+     * immediately after the language. If the item at this position is not a script (is not four
+     * characters long) leave index and buffer unchanged. Otherwise index is left at a terminator or
+     * id separator. Returns the start of the script code in the buffer (this may be equal to the
+     * buffer length, if there is no script).
      */
     private int parseScript() {
         if (!atTerminator()) {
             int oldIndex = index; // save original index
             ++index;
 
-            int oldBlen = buffer.length(); // get before append hyphen, if we truncate everything is undone
+            int oldBlen = buffer.length(); // get before append hyphen, if we truncate everything is
+            // undone
             char c;
             boolean firstPass = true;
-            while(!isTerminatorOrIDSeparator(c = next()) && AsciiUtil.isAlpha(c)) {
+            while (!isTerminatorOrIDSeparator(c = next()) && AsciiUtil.isAlpha(c)) {
                 if (firstPass) {
                     addSeparator();
                     append(AsciiUtil.toUpper(c));
@@ -270,11 +242,9 @@ public final class LocaleIDParser {
     }
 
     /**
-     * Advance index past script.
-     * Index must be immediately after the language and IDSeparator.
-     * If the item at this position is not a script (is not four characters
-     * long) leave index.  Otherwise index is left at a terminator or
-     * id separator.
+     * Advance index past script. Index must be immediately after the language and IDSeparator. If
+     * the item at this position is not a script (is not four characters long) leave index.
+     * Otherwise index is left at a terminator or id separator.
      */
     private void skipScript() {
         if (!atTerminator()) {
@@ -282,7 +252,8 @@ public final class LocaleIDParser {
             ++index;
 
             char c;
-            while (!isTerminatorOrIDSeparator(c = next()) && AsciiUtil.isAlpha(c));
+            while (!isTerminatorOrIDSeparator(c = next()) && AsciiUtil.isAlpha(c))
+                ;
             --index;
 
             if (index - oldIndex != 5) { // +1 to account for separator
@@ -292,9 +263,9 @@ public final class LocaleIDParser {
     }
 
     /**
-     * Advance index past country, and accumulate normalized country in buffer.
-     * Index must be immediately after the script (if there is one, else language)
-     * and IDSeparator.  Return the start of the country code in the buffer.
+     * Advance index past country, and accumulate normalized country in buffer. Index must be
+     * immediately after the script (if there is one, else language) and IDSeparator. Return the
+     * start of the country code in the buffer.
      */
     private int parseCountry() {
         if (!atTerminator()) {
@@ -319,16 +290,14 @@ public final class LocaleIDParser {
 
             if (charsAppended == 0) {
                 // Do nothing.
-            }
-            else if (charsAppended < 2 || charsAppended > 3) {
+            } else if (charsAppended < 2 || charsAppended > 3) {
                 // It's not a country, so return index and blen to
                 // their previous values.
                 index = oldIndex;
                 --oldBlen;
                 buffer.delete(oldBlen, buffer.length());
                 hadCountry = false;
-            }
-            else if (charsAppended == 3) {
+            } else if (charsAppended == 3) {
                 String region = LocaleIDs.threeToTwoLetterRegion(getString(oldBlen));
                 if (region != null) {
                     set(oldBlen, region);
@@ -342,9 +311,8 @@ public final class LocaleIDParser {
     }
 
     /**
-     * Advance index past country.
-     * Index must be immediately after the script (if there is one, else language)
-     * and IDSeparator.
+     * Advance index past country. Index must be immediately after the script (if there is one, else
+     * language) and IDSeparator.
      */
     private void skipCountry() {
         if (!atTerminator()) {
@@ -375,28 +343,22 @@ public final class LocaleIDParser {
     private static final int MAX_VARIANTS_LENGTH = 179;
 
     /**
-     * Advance index past variant, and accumulate normalized variant in buffer.  This ignores
-     * the codepage information from POSIX ids.  Index must be immediately after the country
-     * or script.  Index is left at the keyword separator or at the end of the text.  Return
-     * the start of the variant code in the buffer.
+     * Advance index past variant, and accumulate normalized variant in buffer. This ignores the
+     * codepage information from POSIX ids. Index must be immediately after the country or script.
+     * Index is left at the keyword separator or at the end of the text. Return the start of the
+     * variant code in the buffer.
      *
-     * In standard form, we can have the following forms:
-     * ll__VVVV
-     * ll_CC_VVVV
-     * ll_Ssss_VVVV
+     * <p>In standard form, we can have the following forms: ll__VVVV ll_CC_VVVV ll_Ssss_VVVV
      * ll_Ssss_CC_VVVV
      *
-     * This also handles POSIX ids, which can have the following forms (pppp is code page id):
-     * ll_CC.pppp          --> ll_CC
-     * ll_CC.pppp@VVVV     --> ll_CC_VVVV
-     * ll_CC@VVVV          --> ll_CC_VVVV
+     * <p>This also handles POSIX ids, which can have the following forms (pppp is code page id):
+     * ll_CC.pppp --> ll_CC ll_CC.pppp@VVVV --> ll_CC_VVVV ll_CC@VVVV --> ll_CC_VVVV
      *
-     * We identify this use of '@' in POSIX ids by looking for an '=' following
-     * the '@'.  If there is one, we consider '@' to start a keyword list, instead of
-     * being part of a POSIX id.
+     * <p>We identify this use of '@' in POSIX ids by looking for an '=' following the '@'. If there
+     * is one, we consider '@' to start a keyword list, instead of being part of a POSIX id.
      *
-     * Note:  since it was decided that we want an option to not handle POSIX ids, this
-     * becomes a bit more complex.
+     * <p>Note: since it was decided that we want an option to not handle POSIX ids, this becomes a
+     * bit more complex.
      */
     private int parseVariant() {
         int oldBlen = buffer.length();
@@ -453,26 +415,20 @@ public final class LocaleIDParser {
     // no need for skipvariant, to get the keywords we'll just scan directly for
     // the keyword separator
 
-    /**
-     * Returns the normalized language id, or the empty string.
-     */
+    /** Returns the normalized language id, or the empty string. */
     public String getLanguage() {
         reset();
         return getString(parseLanguage());
     }
 
-    /**
-     * Returns the normalized script id, or the empty string.
-     */
+    /** Returns the normalized script id, or the empty string. */
     public String getScript() {
         reset();
         skipLanguage();
         return getString(parseScript());
     }
 
-    /**
-     * return the normalized country id, or the empty string.
-     */
+    /** return the normalized country id, or the empty string. */
     public String getCountry() {
         reset();
         skipLanguage();
@@ -480,9 +436,7 @@ public final class LocaleIDParser {
         return getString(parseCountry());
     }
 
-    /**
-     * Returns the normalized variant id, or the empty string.
-     */
+    /** Returns the normalized variant id, or the empty string. */
     public String getVariant() {
         reset();
         skipLanguage();
@@ -491,16 +445,14 @@ public final class LocaleIDParser {
         return getString(parseVariant());
     }
 
-    /**
-     * Returns the language, script, country, and variant as separate strings.
-     */
+    /** Returns the language, script, country, and variant as separate strings. */
     public String[] getLanguageScriptCountryVariant() {
         reset();
         return new String[] {
-                getString(parseLanguage()),
-                getString(parseScript()),
-                getString(parseCountry()),
-                getString(parseVariant())
+            getString(parseLanguage()),
+            getString(parseScript()),
+            getString(parseCountry()),
+            getString(parseVariant())
         };
     }
 
@@ -527,8 +479,7 @@ public final class LocaleIDParser {
     }
 
     /**
-     * Returns the normalized base form of the locale id.  The base
-     * form does not include keywords.
+     * Returns the normalized base form of the locale id. The base form does not include keywords.
      */
     public String getBaseName() {
         if (baseName != null) {
@@ -539,8 +490,8 @@ public final class LocaleIDParser {
     }
 
     /**
-     * Returns the normalized full form of the locale id.  The full
-     * form includes keywords if they are present.
+     * Returns the normalized full form of the locale id. The full form includes keywords if they
+     * are present.
      */
     public String getName() {
         parseBaseName();
@@ -551,8 +502,8 @@ public final class LocaleIDParser {
     // keyword utilities
 
     /**
-     * If we have keywords, advance index to the start of the keywords and return true,
-     * otherwise return false.
+     * If we have keywords, advance index to the start of the keywords and return true, otherwise
+     * return false.
      */
     private boolean setToKeywordStart() {
         for (int i = index; i < id.length; ++i) {
@@ -586,33 +537,30 @@ public final class LocaleIDParser {
 
     private String getKeyword() {
         int start = index;
-        while (!isDoneOrKeywordAssign(next())) {
-        }
+        while (!isDoneOrKeywordAssign(next())) {}
         --index;
-        return AsciiUtil.toLowerString(new String(id, start, index-start).trim());
+        return AsciiUtil.toLowerString(new String(id, start, index - start).trim());
     }
 
     private String getValue() {
         int start = index;
-        while (!isDoneOrItemSeparator(next())) {
-        }
+        while (!isDoneOrItemSeparator(next())) {}
         --index;
-        return new String(id, start, index-start).trim(); // leave case alone
+        return new String(id, start, index - start).trim(); // leave case alone
     }
 
     private Comparator<String> getKeyComparator() {
-        final Comparator<String> comp = new Comparator<String>() {
-            @Override
-            public int compare(String lhs, String rhs) {
-                return lhs.compareTo(rhs);
-            }
-        };
+        final Comparator<String> comp =
+                new Comparator<String>() {
+                    @Override
+                    public int compare(String lhs, String rhs) {
+                        return lhs.compareTo(rhs);
+                    }
+                };
         return comp;
     }
 
-    /**
-     * Returns a map of the keywords and values, or null if there are none.
-     */
+    /** Returns a map of the keywords and values, or null if there are none. */
     public Map<String, String> getKeywordMap() {
         if (keywords == null) {
             TreeMap<String, String> m = null;
@@ -640,7 +588,8 @@ public final class LocaleIDParser {
                     if (m == null) {
                         m = new TreeMap<String, String>(getKeyComparator());
                     } else if (m.containsKey(key)) {
-                        // throw new IllegalArgumentException("key '" + key + "' already has a value.");
+                        // throw new IllegalArgumentException("key '" + key + "' already has a
+                        // value.");
                         continue;
                     }
                     m.put(key, value);
@@ -652,10 +601,7 @@ public final class LocaleIDParser {
         return keywords;
     }
 
-
-    /**
-     * Parse the keywords and return start of the string in the buffer.
-     */
+    /** Parse the keywords and return start of the string in the buffer. */
     private int parseKeywords() {
         int oldBlen = buffer.length();
         Map<String, String> m = getKeywordMap();
@@ -675,45 +621,36 @@ public final class LocaleIDParser {
         return oldBlen;
     }
 
-    /**
-     * Returns an iterator over the keywords, or null if we have an empty map.
-     */
+    /** Returns an iterator over the keywords, or null if we have an empty map. */
     public Iterator<String> getKeywords() {
         Map<String, String> m = getKeywordMap();
         return m.isEmpty() ? null : m.keySet().iterator();
     }
 
-    /**
-     * Returns the value for the named keyword, or null if the keyword is not
-     * present.
-     */
+    /** Returns the value for the named keyword, or null if the keyword is not present. */
     public String getKeywordValue(String keywordName) {
         Map<String, String> m = getKeywordMap();
         return m.isEmpty() ? null : m.get(AsciiUtil.toLowerString(keywordName.trim()));
     }
 
-    /**
-     * Set the keyword value only if it is not already set to something else.
-     */
+    /** Set the keyword value only if it is not already set to something else. */
     public void defaultKeywordValue(String keywordName, String value) {
         setKeywordValue(keywordName, value, false);
     }
 
     /**
-     * Set the value for the named keyword, or unset it if value is null.  If
-     * keywordName itself is null, unset all keywords.  If keywordName is not null,
-     * value must not be null.
+     * Set the value for the named keyword, or unset it if value is null. If keywordName itself is
+     * null, unset all keywords. If keywordName is not null, value must not be null.
      */
     public void setKeywordValue(String keywordName, String value) {
         setKeywordValue(keywordName, value, true);
     }
 
     /**
-     * Set the value for the named keyword, or unset it if value is null.  If
-     * keywordName itself is null, unset all keywords.  If keywordName is not null,
-     * value must not be null.  If reset is true, ignore any previous value for
-     * the keyword, otherwise do not change the keyword (including removal of
-     * one or all keywords).
+     * Set the value for the named keyword, or unset it if value is null. If keywordName itself is
+     * null, unset all keywords. If keywordName is not null, value must not be null. If reset is
+     * true, ignore any previous value for the keyword, otherwise do not change the keyword
+     * (including removal of one or all keywords).
      */
     private void setKeywordValue(String keywordName, String value, boolean reset) {
         if (keywordName == null) {

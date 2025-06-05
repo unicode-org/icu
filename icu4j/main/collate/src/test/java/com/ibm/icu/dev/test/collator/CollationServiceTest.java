@@ -9,6 +9,10 @@
 
 package com.ibm.icu.dev.test.collator;
 
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.Collator.CollatorFactory;
+import com.ibm.icu.util.ULocale;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,15 +22,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.Collator;
-import com.ibm.icu.text.Collator.CollatorFactory;
-import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
 public class CollationServiceTest extends TestFmwk {
@@ -79,22 +77,22 @@ public class CollationServiceTest extends TestFmwk {
             if (!found) {
                 errln("new locale fu_FU not reported as supported locale");
             }
-            try{
+            try {
                 String name = Collator.getDisplayName(fu_FU);
                 if (!"fu (FU, FOO)".equals(name)
                         && !"fu_FU_FOO".equals(name) /* no LocaleDisplayNamesImpl */) {
                     errln("found " + name + " for fu_FU");
                 }
-            }catch(MissingResourceException ex){
+            } catch (MissingResourceException ex) {
                 warnln("Could not load locale data.");
             }
-            try{
+            try {
                 String name = Collator.getDisplayName(fu_FU, fu_FU);
                 if (!"fu (FU, FOO)".equals(name)
                         && !"fu_FU_FOO".equals(name) /* no LocaleDisplayNamesImpl */) {
                     errln("found " + name + " for fu_FU");
                 }
-            }catch(MissingResourceException ex){
+            } catch (MissingResourceException ex) {
                 warnln("Could not load locale data.");
             }
 
@@ -226,7 +224,7 @@ public class CollationServiceTest extends TestFmwk {
         fuFUNames.put(ULocale.US, "little bunny Foo Foo");
 
         Collator frcol = Collator.getInstance(ULocale.FRANCE);
-       /* Collator uscol = */Collator.getInstance(ULocale.US);
+        /* Collator uscol = */ Collator.getInstance(ULocale.US);
         Collator gecol = Collator.getInstance(ULocale.GERMANY);
         Collator jpcol = Collator.getInstance(ULocale.JAPAN);
         Collator fucol = Collator.getInstance(fu_FU);
@@ -237,19 +235,21 @@ public class CollationServiceTest extends TestFmwk {
             new CollatorInfo(fu_FU, jpcol, fuFUNames),
         };
         TestFactory factory = null;
-        try{
+        try {
             factory = new TestFactory(info);
-        }catch(MissingResourceException ex){
+        } catch (MissingResourceException ex) {
             warnln("Could not load locale data.");
         }
         // coverage
         {
-            TestFactoryWrapper wrapper = new TestFactoryWrapper(factory); // in java, gc lets us easily multiply reference!
+            TestFactoryWrapper wrapper =
+                    new TestFactoryWrapper(
+                            factory); // in java, gc lets us easily multiply reference!
             Object key = Collator.registerFactory(wrapper);
             String name = null;
-            try{
+            try {
                 name = Collator.getDisplayName(fu_FU, fu_FU_FOO);
-            }catch(MissingResourceException ex){
+            } catch (MissingResourceException ex) {
                 warnln("Could not load locale data.");
             }
             logln("*** default name: " + name);
@@ -259,7 +259,7 @@ public class CollationServiceTest extends TestFmwk {
             Collator col = Collator.getInstance(bar_BAR);
             ULocale valid = col.getLocale(ULocale.VALID_LOCALE);
             String validName = valid.getName();
-            if(validName.length() != 0 && !validName.equals("root")) {
+            if (validName.length() != 0 && !validName.equals("root")) {
                 errln("Collation from bar_BAR is really \"" + validName + "\" but should be root");
             }
         }
@@ -308,8 +308,8 @@ public class CollationServiceTest extends TestFmwk {
             }
 
             int n3 = checkAvailable("after unregister");
-            assertTrue("register increases count", n2>n1);
-            assertTrue("unregister restores count", n3==n1);
+            assertTrue("register increases count", n2 > n1);
+            assertTrue("unregister restores count", n3 == n1);
 
             ncol = Collator.getInstance(fu_FU);
             if (!fucol.equals(ncol)) {
@@ -319,64 +319,54 @@ public class CollationServiceTest extends TestFmwk {
     }
 
     /**
-     * Check the integrity of the results of Collator.getAvailableULocales().
-     * Return the number of items returned.
+     * Check the integrity of the results of Collator.getAvailableULocales(). Return the number of
+     * items returned.
      */
     int checkAvailable(String msg) {
         Locale locs[] = Collator.getAvailableLocales();
-        if (!assertTrue("getAvailableLocales != null", locs!=null)) return -1;
+        if (!assertTrue("getAvailableLocales != null", locs != null)) return -1;
         checkArray(msg, locs, null);
         ULocale ulocs[] = Collator.getAvailableULocales();
-        if (!assertTrue("getAvailableULocales != null", ulocs!=null)) return -1;
+        if (!assertTrue("getAvailableULocales != null", ulocs != null)) return -1;
         checkArray(msg, ulocs, null);
         // This is not true because since ULocale objects with script code cannot be
         // converted to Locale objects
-        //assertTrue("getAvailableLocales().length == getAvailableULocales().length", locs.length == ulocs.length);
+        // assertTrue("getAvailableLocales().length == getAvailableULocales().length", locs.length
+        // == ulocs.length);
         return locs.length;
     }
 
-    private static final String KW[] = {
-        "collation"
-    };
+    private static final String KW[] = {"collation"};
 
     private static final String KWVAL[] = {
-        "phonebook",
-        "stroke",
-        "emoji",
-        "eor",
+        "phonebook", "stroke", "emoji", "eor",
     };
 
     @Test
     public void TestSeparateTrees() {
         String kw[] = Collator.getKeywords();
-        if (!assertTrue("getKeywords != null", kw!=null)) return;
+        if (!assertTrue("getKeywords != null", kw != null)) return;
         checkArray("getKeywords", kw, KW);
 
         String kwval[] = Collator.getKeywordValues(KW[0]);
-        if (!assertTrue("getKeywordValues != null", kwval!=null)) return;
+        if (!assertTrue("getKeywordValues != null", kwval != null)) return;
         checkArray("getKeywordValues", kwval, KWVAL);
 
         boolean isAvailable[] = new boolean[1];
-        ULocale equiv = Collator.getFunctionalEquivalent(KW[0],
-                                                         new ULocale("de"),
-                                                         isAvailable);
-        if (assertTrue("getFunctionalEquivalent(de)!=null", equiv!=null)) {
+        ULocale equiv = Collator.getFunctionalEquivalent(KW[0], new ULocale("de"), isAvailable);
+        if (assertTrue("getFunctionalEquivalent(de)!=null", equiv != null)) {
             assertEquals("getFunctionalEquivalent(de)", "", equiv.toString());
         }
-        assertTrue("getFunctionalEquivalent(de).isAvailable==true",
-                   isAvailable[0] == true);
+        assertTrue("getFunctionalEquivalent(de).isAvailable==true", isAvailable[0] == true);
 
-        equiv = Collator.getFunctionalEquivalent(KW[0],
-                                                 new ULocale("de_DE"),
-                                                 isAvailable);
-        if (assertTrue("getFunctionalEquivalent(de_DE)!=null", equiv!=null)) {
+        equiv = Collator.getFunctionalEquivalent(KW[0], new ULocale("de_DE"), isAvailable);
+        if (assertTrue("getFunctionalEquivalent(de_DE)!=null", equiv != null)) {
             assertEquals("getFunctionalEquivalent(de_DE)", "", equiv.toString());
         }
-        assertTrue("getFunctionalEquivalent(de_DE).isAvailable==false",
-                   isAvailable[0] == false);
+        assertTrue("getFunctionalEquivalent(de_DE).isAvailable==false", isAvailable[0] == false);
 
         equiv = Collator.getFunctionalEquivalent(KW[0], new ULocale("zh_Hans"));
-        if (assertTrue("getFunctionalEquivalent(zh_Hans)!=null", equiv!=null)) {
+        if (assertTrue("getFunctionalEquivalent(zh_Hans)!=null", equiv != null)) {
             assertEquals("getFunctionalEquivalent(zh_Hans)", "zh", equiv.toString());
         }
     }
@@ -385,82 +375,106 @@ public class CollationServiceTest extends TestFmwk {
     public void TestGetFunctionalEquivalent() {
         String kw[] = Collator.getKeywords();
         final String DATA[] = {
-                          "sv", "sv", "t",
-                          "sv@collation=direct", "sv", "t",
-                          "sv@collation=traditional", "sv@collation=traditional", "t",
-                          "sv@collation=gb2312han", "sv", "t",
-                          "sv@collation=stroke", "sv", "t",
-                          "sv@collation=pinyin", "sv", "t",
-                          "sv@collation=standard", "sv", "t",
-                          "sv@collation=reformed", "sv", "t",
-                          "sv@collation=big5han", "sv", "t",
-                          "sv_FI", "sv", "f",
-                          "sv_FI@collation=direct", "sv", "f",
-                          "sv_FI@collation=traditional", "sv@collation=traditional", "f",
-                          "sv_FI@collation=gb2312han", "sv", "f",
-                          "sv_FI@collation=stroke", "sv", "f",
-                          "sv_FI@collation=pinyin", "sv", "f",
-                          "sv_FI@collation=standard", "sv", "f",
-                          "sv_FI@collation=reformed", "sv", "f",
-                          "sv_FI@collation=big5han", "sv", "f",
-                          "nl", "root", "t",
-                          "nl@collation=direct", "root", "t",
-                          "nl_BE", "root", "f",
-                          "nl_BE@collation=direct", "root", "f",
-                          "nl_BE@collation=traditional", "root", "f",
-                          "nl_BE@collation=gb2312han", "root", "f",
-                          "nl_BE@collation=stroke", "root", "f",
-                          "nl_BE@collation=pinyin", "root", "f",
-                          "nl_BE@collation=big5han", "root", "f",
-                          "nl_BE@collation=phonebook", "root", "f",
-                          "en_US_VALLEYGIRL","root","f"
-                        };
-        final int DATA_COUNT=(DATA.length/3);
+            "sv", "sv", "t",
+            "sv@collation=direct", "sv", "t",
+            "sv@collation=traditional", "sv@collation=traditional", "t",
+            "sv@collation=gb2312han", "sv", "t",
+            "sv@collation=stroke", "sv", "t",
+            "sv@collation=pinyin", "sv", "t",
+            "sv@collation=standard", "sv", "t",
+            "sv@collation=reformed", "sv", "t",
+            "sv@collation=big5han", "sv", "t",
+            "sv_FI", "sv", "f",
+            "sv_FI@collation=direct", "sv", "f",
+            "sv_FI@collation=traditional", "sv@collation=traditional", "f",
+            "sv_FI@collation=gb2312han", "sv", "f",
+            "sv_FI@collation=stroke", "sv", "f",
+            "sv_FI@collation=pinyin", "sv", "f",
+            "sv_FI@collation=standard", "sv", "f",
+            "sv_FI@collation=reformed", "sv", "f",
+            "sv_FI@collation=big5han", "sv", "f",
+            "nl", "root", "t",
+            "nl@collation=direct", "root", "t",
+            "nl_BE", "root", "f",
+            "nl_BE@collation=direct", "root", "f",
+            "nl_BE@collation=traditional", "root", "f",
+            "nl_BE@collation=gb2312han", "root", "f",
+            "nl_BE@collation=stroke", "root", "f",
+            "nl_BE@collation=pinyin", "root", "f",
+            "nl_BE@collation=big5han", "root", "f",
+            "nl_BE@collation=phonebook", "root", "f",
+            "en_US_VALLEYGIRL", "root", "f"
+        };
+        final int DATA_COUNT = (DATA.length / 3);
 
-        for(int i=0;i<DATA_COUNT;i++) {
+        for (int i = 0; i < DATA_COUNT; i++) {
             boolean isAvailable[] = new boolean[1];
-            ULocale input = new ULocale(DATA[(i*3)+0]);
-            ULocale expect = new ULocale(DATA[(i*3)+1]);
-            boolean expectAvailable = DATA[(i*3)+2].equals("t");
-            ULocale actual = Collator.getFunctionalEquivalent(kw[0],input,isAvailable);
-            if(!actual.equals(expect) || (expectAvailable!=isAvailable[0])) {
-                errln("#" + i + ": Collator.getFunctionalEquivalent(" + input + ")=" + actual + ", avail " + isAvailable[0] + ", " +
-                        "expected " + expect + " avail " + expectAvailable);
+            ULocale input = new ULocale(DATA[(i * 3) + 0]);
+            ULocale expect = new ULocale(DATA[(i * 3) + 1]);
+            boolean expectAvailable = DATA[(i * 3) + 2].equals("t");
+            ULocale actual = Collator.getFunctionalEquivalent(kw[0], input, isAvailable);
+            if (!actual.equals(expect) || (expectAvailable != isAvailable[0])) {
+                errln(
+                        "#"
+                                + i
+                                + ": Collator.getFunctionalEquivalent("
+                                + input
+                                + ")="
+                                + actual
+                                + ", avail "
+                                + isAvailable[0]
+                                + ", "
+                                + "expected "
+                                + expect
+                                + " avail "
+                                + expectAvailable);
             } else {
-                logln("#" + i + ": Collator.getFunctionalEquivalent(" + input + ")=" + actual + ", avail " + isAvailable[0]);
+                logln(
+                        "#"
+                                + i
+                                + ": Collator.getFunctionalEquivalent("
+                                + input
+                                + ")="
+                                + actual
+                                + ", avail "
+                                + isAvailable[0]);
             }
         }
     }
 
-//    public void PrintFunctionalEquivalentList() {
-//        ULocale[] locales = Collator.getAvailableULocales();
-//        String[] keywords = Collator.getKeywords();
-//        logln("Collation");
-//        logln("Possible keyword=values pairs:");
-//        for (int i = 0; i < Collator.getKeywords().length; ++i) {
-//                String[] values = Collator.getKeywordValues(keywords[i]);
-//                for (int j = 0; j < values.length; ++j) {
-//                        System.out.println(keywords[i] + "=" + values[j]);
-//                }
-//        }
-//        logln("Differing Collators:");
-//        boolean[] isAvailable = {true};
-//        for (int k = 0; k < locales.length; ++k) {
-//                logln(locales[k].getDisplayName(ULocale.ENGLISH) + " [" +locales[k] + "]");
-//                for (int i = 0; i < Collator.getKeywords().length; ++i) {
-//                        ULocale base = Collator.getFunctionalEquivalent(keywords[i],locales[k]);
-//                        String[] values = Collator.getKeywordValues(keywords[i]);
-//                        for (int j = 0; j < Collator.getKeywordValues(keywords[i]).length;++j) {
-//                                ULocale other = Collator.getFunctionalEquivalent(keywords[i],
-//                                        new ULocale(locales[k] + "@" + keywords[i] + "=" + values[j]),
-//                                        isAvailable);
-//                                if (isAvailable[0] && !other.equals(base)) {
-//                                        logln("\t" + keywords[i] + "=" + values[j] + ";\t" + base + ";\t" + other);
-//                                }
-//                        }
-//                }
-//        }
-//    }
+    //    public void PrintFunctionalEquivalentList() {
+    //        ULocale[] locales = Collator.getAvailableULocales();
+    //        String[] keywords = Collator.getKeywords();
+    //        logln("Collation");
+    //        logln("Possible keyword=values pairs:");
+    //        for (int i = 0; i < Collator.getKeywords().length; ++i) {
+    //                String[] values = Collator.getKeywordValues(keywords[i]);
+    //                for (int j = 0; j < values.length; ++j) {
+    //                        System.out.println(keywords[i] + "=" + values[j]);
+    //                }
+    //        }
+    //        logln("Differing Collators:");
+    //        boolean[] isAvailable = {true};
+    //        for (int k = 0; k < locales.length; ++k) {
+    //                logln(locales[k].getDisplayName(ULocale.ENGLISH) + " [" +locales[k] + "]");
+    //                for (int i = 0; i < Collator.getKeywords().length; ++i) {
+    //                        ULocale base =
+    // Collator.getFunctionalEquivalent(keywords[i],locales[k]);
+    //                        String[] values = Collator.getKeywordValues(keywords[i]);
+    //                        for (int j = 0; j < Collator.getKeywordValues(keywords[i]).length;++j)
+    // {
+    //                                ULocale other = Collator.getFunctionalEquivalent(keywords[i],
+    //                                        new ULocale(locales[k] + "@" + keywords[i] + "=" +
+    // values[j]),
+    //                                        isAvailable);
+    //                                if (isAvailable[0] && !other.equals(base)) {
+    //                                        logln("\t" + keywords[i] + "=" + values[j] + ";\t" +
+    // base + ";\t" + other);
+    //                                }
+    //                        }
+    //                }
+    //        }
+    //    }
 
     private static boolean arrayContains(String[] array, String s) {
         for (int i = 0; i < array.length; ++i) {
@@ -472,24 +486,24 @@ public class CollationServiceTest extends TestFmwk {
     }
 
     @Test
-    public void TestGetKeywordValues(){
+    public void TestGetKeywordValues() {
         final String[][] PREFERRED = {
-            {"und",             "standard", "eor", "search"},
-            {"en_US",           "standard", "eor", "search"},
-            {"en_029",          "standard", "eor", "search"},
-            {"de_DE",           "standard", "phonebook", "search", "eor"},
-            {"de_Latn_DE",      "standard", "phonebook", "search", "eor"},
-            {"zh",              "pinyin", "stroke", "eor", "search", "standard"},
-            {"zh_Hans",         "pinyin", "stroke", "eor", "search", "standard"},
-            {"zh_CN",           "pinyin", "stroke", "eor", "search", "standard"},
-            {"zh_Hant",         "stroke", "pinyin", "eor", "search", "standard"},
-            {"zh_TW",           "stroke", "pinyin", "eor", "search", "standard"},
-            {"zh__PINYIN",      "pinyin", "stroke", "eor", "search", "standard"},
-            {"es_ES",           "standard", "search", "traditional", "eor"},
+            {"und", "standard", "eor", "search"},
+            {"en_US", "standard", "eor", "search"},
+            {"en_029", "standard", "eor", "search"},
+            {"de_DE", "standard", "phonebook", "search", "eor"},
+            {"de_Latn_DE", "standard", "phonebook", "search", "eor"},
+            {"zh", "pinyin", "stroke", "eor", "search", "standard"},
+            {"zh_Hans", "pinyin", "stroke", "eor", "search", "standard"},
+            {"zh_CN", "pinyin", "stroke", "eor", "search", "standard"},
+            {"zh_Hant", "stroke", "pinyin", "eor", "search", "standard"},
+            {"zh_TW", "stroke", "pinyin", "eor", "search", "standard"},
+            {"zh__PINYIN", "pinyin", "stroke", "eor", "search", "standard"},
+            {"es_ES", "standard", "search", "traditional", "eor"},
             {"es__TRADITIONAL", "traditional", "search", "standard", "eor"},
-            {"und@collation=phonebook",     "standard", "eor", "search"},
-            {"de_DE@collation=big5han",     "standard", "phonebook", "search", "eor"},
-            {"zzz@collation=xxx",           "standard", "eor", "search"},
+            {"und@collation=phonebook", "standard", "eor", "search"},
+            {"de_DE@collation=big5han", "standard", "phonebook", "search", "eor"},
+            {"zzz@collation=xxx", "standard", "eor", "search"},
         };
 
         for (int i = 0; i < PREFERRED.length; i++) {
@@ -524,8 +538,13 @@ public class CollationServiceTest extends TestFmwk {
                 }
             }
             if (!matchAll) {
-                errln("FAIL: All values for locale " + loc
-                        + " got:" + Arrays.toString(all) + " expected:" + Arrays.toString(pref));
+                errln(
+                        "FAIL: All values for locale "
+                                + loc
+                                + " got:"
+                                + Arrays.toString(all)
+                                + " expected:"
+                                + Arrays.toString(pref));
             }
         }
     }

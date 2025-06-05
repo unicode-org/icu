@@ -2,43 +2,32 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.units;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@code UnitsRouter} responsible for converting from a single unit (such as {@code meter} or
- * {@code meter-per-second}) to one of the complex units based on the limits.
- * For example:
- * if the input is {@code meter} and the output as following
- * {{@code foot+inch}, limit: 3.0}
- * {{@code inch}     , limit: no value (-inf)}
- * Thus means if the input in {@code meter} is greater than or equal to {@code 3.0 feet},
- * the output will be in {@code foot+inch}, otherwise, the output will be in {@code inch}.
- * <p>
- * NOTE:
- * the output units and their limits MUST BE in order, for example, if the output units, from the
- * previous example, are the following:
- * {{@code inch}     , limit: no value (-inf)}
- * {{@code foot+inch}, limit: 3.0}
- * IN THIS CASE THE OUTPUT WILL BE ALWAYS IN {@code inch}.
- * <p>
- * NOTE:
- * the output units and their limits will be extracted from the units preferences database by knowing
- * the followings:
- * - input unit
- * - locale
- * - usage
- * <p>
- * DESIGN:
- * {@code UnitRouter} uses internally {@code ComplexUnitConverter} in order to convert the input
- * units to the desired complex units and to check the limit too.
+ * {@code meter-per-second}) to one of the complex units based on the limits. For example: if the
+ * input is {@code meter} and the output as following {{@code foot+inch}, limit: 3.0} {{@code inch}
+ * , limit: no value (-inf)} Thus means if the input in {@code meter} is greater than or equal to
+ * {@code 3.0 feet}, the output will be in {@code foot+inch}, otherwise, the output will be in
+ * {@code inch}.
+ *
+ * <p>NOTE: the output units and their limits MUST BE in order, for example, if the output units,
+ * from the previous example, are the following: {{@code inch} , limit: no value (-inf)} {{@code
+ * foot+inch}, limit: 3.0} IN THIS CASE THE OUTPUT WILL BE ALWAYS IN {@code inch}.
+ *
+ * <p>NOTE: the output units and their limits will be extracted from the units preferences database
+ * by knowing the followings: - input unit - locale - usage
+ *
+ * <p>DESIGN: {@code UnitRouter} uses internally {@code ComplexUnitConverter} in order to convert
+ * the input units to the desired complex units and to check the limit too.
  */
 public class UnitsRouter {
     // List of possible output units. TODO: converterPreferences_ now also has
@@ -57,7 +46,8 @@ public class UnitsRouter {
         UnitsData data = new UnitsData();
 
         String category = data.getCategory(inputUnit);
-        UnitPreferences.UnitPreference[] unitPreferences = data.getPreferencesFor(category, usage, locale);
+        UnitPreferences.UnitPreference[] unitPreferences =
+                data.getPreferencesFor(category, usage, locale);
 
         for (int i = 0; i < unitPreferences.length; ++i) {
             UnitPreferences.UnitPreference preference = unitPreferences[i];
@@ -68,7 +58,8 @@ public class UnitsRouter {
             String precision = preference.getSkeleton();
 
             // For now, we only have "precision-increment" in Units Preferences skeleton.
-            // Therefore, we check if the skeleton starts with "precision-increment" and force the program to
+            // Therefore, we check if the skeleton starts with "precision-increment" and force the
+            // program to
             // fail otherwise.
             // NOTE:
             //  It is allowed to have an empty precision.
@@ -77,9 +68,13 @@ public class UnitsRouter {
             }
 
             outputUnits_.add(complexTargetUnitImpl.build());
-            converterPreferences_.add(new ConverterPreference(inputUnit, complexTargetUnitImpl,
-                    preference.getGeq(), precision,
-                    data.getConversionRates()));
+            converterPreferences_.add(
+                    new ConverterPreference(
+                            inputUnit,
+                            complexTargetUnitImpl,
+                            preference.getGeq(),
+                            precision,
+                            data.getConversionRates()));
         }
     }
 
@@ -89,8 +84,8 @@ public class UnitsRouter {
         ConverterPreference converterPreference = null;
         for (ConverterPreference itr : converterPreferences_) {
             converterPreference = itr;
-            if (converterPreference.converter.greaterThanOrEqual(quantity.abs(),
-                                                                 converterPreference.limit)) {
+            if (converterPreference.converter.greaterThanOrEqual(
+                    quantity.abs(), converterPreference.limit)) {
                 break;
             }
         }
@@ -99,7 +94,7 @@ public class UnitsRouter {
 
         // Set up the rounder for this preference's precision
         if (rounder != null && rounder instanceof Precision.BogusRounder) {
-            Precision.BogusRounder bogus = (Precision.BogusRounder)rounder;
+            Precision.BogusRounder bogus = (Precision.BogusRounder) rounder;
             if (converterPreference.precision.length() > 0) {
                 rounder = bogus.into(parseSkeletonToPrecision(converterPreference.precision));
             } else {
@@ -115,8 +110,7 @@ public class UnitsRouter {
         }
         return new RouteResult(
                 converterPreference.converter.convert(quantity, rounder),
-                converterPreference.targetUnit
-        );
+                converterPreference.targetUnit);
     }
 
     private static Precision parseSkeletonToPrecision(String precisionSkeleton) {
@@ -134,24 +128,23 @@ public class UnitsRouter {
     }
 
     /**
-     * Returns the list of possible output units, i.e. the full set of
-     * preferences, for the localized, usage-specific unit preferences.
-     * <p>
-     * The returned pointer should be valid for the lifetime of the
-     * UnitsRouter instance.
+     * Returns the list of possible output units, i.e. the full set of preferences, for the
+     * localized, usage-specific unit preferences.
+     *
+     * <p>The returned pointer should be valid for the lifetime of the UnitsRouter instance.
      */
     public List<MeasureUnit> getOutputUnits() {
         return this.outputUnits_;
     }
 
     /**
-     * Contains the complex unit converter and the limit which representing the smallest value that the
-     * converter should accept. For example, if the converter is converting to {@code foot+inch} and the
-     * limit equals 3.0, thus means the converter should not convert to a value less than {@code 3.0 feet}.
-     * <p>
-     * NOTE:
-     * if the limit doest not has a value (i.e. {@code std::numeric_limits<double>::lowest()}),
-     * this mean there is no limit for the converter.
+     * Contains the complex unit converter and the limit which representing the smallest value that
+     * the converter should accept. For example, if the converter is converting to {@code foot+inch}
+     * and the limit equals 3.0, thus means the converter should not convert to a value less than
+     * {@code 3.0 feet}.
+     *
+     * <p>NOTE: if the limit doest not has a value (i.e. {@code
+     * std::numeric_limits<double>::lowest()}), this mean there is no limit for the converter.
      */
     public static class ConverterPreference {
         // The output unit for this ConverterPreference. This may be a MIXED unit -
@@ -162,19 +155,29 @@ public class UnitsRouter {
         final String precision;
 
         // In case there is no limit, the limit will be -inf.
-        public ConverterPreference(MeasureUnitImpl source, MeasureUnitImpl targetUnit,
-                                   String precision, ConversionRates conversionRates) {
-            this(source, targetUnit, BigDecimal.valueOf(Double.MIN_VALUE), precision,
+        public ConverterPreference(
+                MeasureUnitImpl source,
+                MeasureUnitImpl targetUnit,
+                String precision,
+                ConversionRates conversionRates) {
+            this(
+                    source,
+                    targetUnit,
+                    BigDecimal.valueOf(Double.MIN_VALUE),
+                    precision,
                     conversionRates);
         }
 
-        public ConverterPreference(MeasureUnitImpl source, MeasureUnitImpl targetUnit,
-                                   BigDecimal limit, String precision, ConversionRates conversionRates) {
+        public ConverterPreference(
+                MeasureUnitImpl source,
+                MeasureUnitImpl targetUnit,
+                BigDecimal limit,
+                String precision,
+                ConversionRates conversionRates) {
             this.converter = new ComplexUnitsConverter(source, targetUnit, conversionRates);
             this.limit = limit;
             this.precision = precision;
             this.targetUnit = targetUnit;
-
         }
     }
 
@@ -186,7 +189,9 @@ public class UnitsRouter {
         // elements.
         public final MeasureUnitImpl outputUnit;
 
-        RouteResult(ComplexUnitsConverter.ComplexConverterResult complexConverterResult, MeasureUnitImpl outputUnit) {
+        RouteResult(
+                ComplexUnitsConverter.ComplexConverterResult complexConverterResult,
+                MeasureUnitImpl outputUnit) {
             this.complexConverterResult = complexConverterResult;
             this.outputUnit = outputUnit;
         }

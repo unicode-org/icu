@@ -2,19 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.MathContext;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.impl.number.DecimalQuantity_64BitBCD;
 import com.ibm.icu.dev.impl.number.DecimalQuantity_ByteArrayBCD;
 import com.ibm.icu.dev.impl.number.DecimalQuantity_SimpleStorage;
@@ -34,6 +21,17 @@ import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.util.ULocale;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class DecimalQuantityTest extends CoreTestFmwk {
@@ -49,58 +47,71 @@ public class DecimalQuantityTest extends CoreTestFmwk {
 
         DecimalFormatProperties properties = new DecimalFormatProperties();
         formats.add(
-                NumberFormatter.fromDecimalFormat(properties, symbols, null).locale(ULocale.ENGLISH));
+                NumberFormatter.fromDecimalFormat(properties, symbols, null)
+                        .locale(ULocale.ENGLISH));
 
-        properties = new DecimalFormatProperties().setMinimumSignificantDigits(3)
-                .setMaximumSignificantDigits(3).setCompactStyle(CompactStyle.LONG);
+        properties =
+                new DecimalFormatProperties()
+                        .setMinimumSignificantDigits(3)
+                        .setMaximumSignificantDigits(3)
+                        .setCompactStyle(CompactStyle.LONG);
         formats.add(
-                NumberFormatter.fromDecimalFormat(properties, symbols, null).locale(ULocale.ENGLISH));
+                NumberFormatter.fromDecimalFormat(properties, symbols, null)
+                        .locale(ULocale.ENGLISH));
 
-        properties = new DecimalFormatProperties().setMinimumExponentDigits(1).setMaximumIntegerDigits(3)
-                .setMaximumFractionDigits(1);
+        properties =
+                new DecimalFormatProperties()
+                        .setMinimumExponentDigits(1)
+                        .setMaximumIntegerDigits(3)
+                        .setMaximumFractionDigits(1);
         formats.add(
-                NumberFormatter.fromDecimalFormat(properties, symbols, null).locale(ULocale.ENGLISH));
+                NumberFormatter.fromDecimalFormat(properties, symbols, null)
+                        .locale(ULocale.ENGLISH));
 
         properties = new DecimalFormatProperties().setRoundingIncrement(new BigDecimal("0.5"));
         formats.add(
-                NumberFormatter.fromDecimalFormat(properties, symbols, null).locale(ULocale.ENGLISH));
+                NumberFormatter.fromDecimalFormat(properties, symbols, null)
+                        .locale(ULocale.ENGLISH));
 
         String[] cases = {
-                "1.0",
-                "2.01",
-                "1234.56",
-                "3000.0",
-                "0.00026418",
-                "0.01789261",
-                "468160.0",
-                "999000.0",
-                "999900.0",
-                "999990.0",
-                "0.0",
-                "12345678901.0",
-                "-5193.48", };
+            "1.0",
+            "2.01",
+            "1234.56",
+            "3000.0",
+            "0.00026418",
+            "0.01789261",
+            "468160.0",
+            "999000.0",
+            "999900.0",
+            "999990.0",
+            "0.0",
+            "12345678901.0",
+            "-5193.48",
+        };
 
         String[] hardCases = {
-                "9999999999999900.0",
-                "789000000000000000000000.0",
-                "789123123567853156372158.0",
-                "987654321987654321987654321987654321987654311987654321.0", };
+            "9999999999999900.0",
+            "789000000000000000000000.0",
+            "789123123567853156372158.0",
+            "987654321987654321987654321987654321987654311987654321.0",
+        };
 
         String[] doubleCases = {
-                "512.0000000000017",
-                "4095.9999999999977",
-                "4095.999999999998",
-                "4095.9999999999986",
-                "4095.999999999999",
-                "4095.9999999999995",
-                "4096.000000000001",
-                "4096.000000000002",
-                "4096.000000000003",
-                "4096.000000000004",
-                "4096.000000000005",
-                "4096.0000000000055",
-                "4096.000000000006",
-                "4096.000000000007", };
+            "512.0000000000017",
+            "4095.9999999999977",
+            "4095.999999999998",
+            "4095.9999999999986",
+            "4095.999999999999",
+            "4095.9999999999995",
+            "4096.000000000001",
+            "4096.000000000002",
+            "4096.000000000003",
+            "4096.000000000004",
+            "4096.000000000005",
+            "4096.0000000000055",
+            "4096.000000000006",
+            "4096.000000000007",
+        };
 
         int i = 0;
         for (String str : cases) {
@@ -119,10 +130,7 @@ public class DecimalQuantityTest extends CoreTestFmwk {
     }
 
     static void testDecimalQuantity(
-            int t,
-            String str,
-            List<LocalizedNumberFormatter> formats,
-            int mode) {
+            int t, String str, List<LocalizedNumberFormatter> formats, int mode) {
         if (mode == 2) {
             assertEquals("Double is not valid", Double.toString(Double.parseDouble(str)), str);
         }
@@ -130,16 +138,14 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         List<DecimalQuantity> qs = new ArrayList<>();
         BigDecimal d = new BigDecimal(str);
         qs.add(new DecimalQuantity_SimpleStorage(d));
-        if (mode == 0)
-            qs.add(new DecimalQuantity_64BitBCD(d));
+        if (mode == 0) qs.add(new DecimalQuantity_64BitBCD(d));
         qs.add(new DecimalQuantity_ByteArrayBCD(d));
         qs.add(new DecimalQuantity_DualStorageBCD(d));
 
         if (new BigDecimal(Double.toString(d.doubleValue())).compareTo(d) == 0) {
             double dv = d.doubleValue();
             qs.add(new DecimalQuantity_SimpleStorage(dv));
-            if (mode == 0)
-                qs.add(new DecimalQuantity_64BitBCD(dv));
+            if (mode == 0) qs.add(new DecimalQuantity_64BitBCD(dv));
             qs.add(new DecimalQuantity_ByteArrayBCD(dv));
             qs.add(new DecimalQuantity_DualStorageBCD(dv));
         }
@@ -147,8 +153,7 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         if (new BigDecimal(Long.toString(d.longValue())).compareTo(d) == 0) {
             double lv = d.longValue();
             qs.add(new DecimalQuantity_SimpleStorage(lv));
-            if (mode == 0)
-                qs.add(new DecimalQuantity_64BitBCD(lv));
+            if (mode == 0) qs.add(new DecimalQuantity_64BitBCD(lv));
             qs.add(new DecimalQuantity_ByteArrayBCD(lv));
             qs.add(new DecimalQuantity_DualStorageBCD(lv));
         }
@@ -177,14 +182,20 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         q0.setMinInteger(1);
         q0.setMinFraction(1);
         String actual = q0.toPlainString();
-        assertEquals("Unexpected output from simple string conversion (" + q0 + ")", expected, actual);
+        assertEquals(
+                "Unexpected output from simple string conversion (" + q0 + ")", expected, actual);
     }
 
-    private static final MathContext MATH_CONTEXT_HALF_EVEN = new MathContext(0, RoundingMode.HALF_EVEN);
-    private static final MathContext MATH_CONTEXT_CEILING = new MathContext(0, RoundingMode.CEILING);
+    private static final MathContext MATH_CONTEXT_HALF_EVEN =
+            new MathContext(0, RoundingMode.HALF_EVEN);
+    private static final MathContext MATH_CONTEXT_CEILING =
+            new MathContext(0, RoundingMode.CEILING);
+
     @SuppressWarnings("unused")
     private static final MathContext MATH_CONTEXT_FLOOR = new MathContext(0, RoundingMode.FLOOR);
-    private static final MathContext MATH_CONTEXT_PRECISION = new MathContext(3, RoundingMode.HALF_UP);
+
+    private static final MathContext MATH_CONTEXT_PRECISION =
+            new MathContext(3, RoundingMode.HALF_UP);
 
     private static void testDecimalQuantityRounding(DecimalQuantity rq0, DecimalQuantity rq1) {
         DecimalQuantity q0 = rq0.createCopy();
@@ -206,7 +217,8 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         testDecimalQuantityBehavior(q0, q1);
     }
 
-    private static void testDecimalQuantityRoundingInterval(DecimalQuantity rq0, DecimalQuantity rq1) {
+    private static void testDecimalQuantityRoundingInterval(
+            DecimalQuantity rq0, DecimalQuantity rq1) {
         DecimalQuantity q0 = rq0.createCopy();
         DecimalQuantity q1 = rq1.createCopy();
         q0.roundToIncrement(new BigDecimal("0.05"), MATH_CONTEXT_HALF_EVEN);
@@ -235,9 +247,7 @@ public class DecimalQuantityTest extends CoreTestFmwk {
     }
 
     private static void testDecimalQuantityWithFormats(
-            DecimalQuantity rq0,
-            DecimalQuantity rq1,
-            List<LocalizedNumberFormatter> formats) {
+            DecimalQuantity rq0, DecimalQuantity rq1, List<LocalizedNumberFormatter> formats) {
         for (LocalizedNumberFormatter format : formats) {
             DecimalQuantity q0 = rq0.createCopy();
             DecimalQuantity q1 = rq1.createCopy();
@@ -257,47 +267,48 @@ public class DecimalQuantityTest extends CoreTestFmwk {
 
         assertEquals("Different sign (" + q0 + ", " + q1 + ")", q0.isNegative(), q1.isNegative());
 
-        assertEquals("Different fingerprint (" + q0 + ", " + q1 + ")",
+        assertEquals(
+                "Different fingerprint (" + q0 + ", " + q1 + ")",
                 q0.getPositionFingerprint(),
                 q1.getPositionFingerprint());
 
-        assertDoubleEquals("Different double values (" + q0 + ", " + q1 + ")",
-                q0.toDouble(),
-                q1.toDouble());
+        assertDoubleEquals(
+                "Different double values (" + q0 + ", " + q1 + ")", q0.toDouble(), q1.toDouble());
 
-        assertBigDecimalEquals("Different BigDecimal values (" + q0 + ", " + q1 + ")",
+        assertBigDecimalEquals(
+                "Different BigDecimal values (" + q0 + ", " + q1 + ")",
                 q0.toBigDecimal(),
                 q1.toBigDecimal());
 
-        assertEquals("Different long values (" + q0 + ", " + q1 + ")",
-                q0.toLong(true),
-                q1.toLong(true));
+        assertEquals(
+                "Different long values (" + q0 + ", " + q1 + ")", q0.toLong(true), q1.toLong(true));
 
         q0.roundToInfinity();
         q1.roundToInfinity();
 
-        assertEquals("Different lower display magnitude",
+        assertEquals(
+                "Different lower display magnitude",
                 q0.getLowerDisplayMagnitude(),
                 q1.getLowerDisplayMagnitude());
-        assertEquals("Different upper display magnitude",
+        assertEquals(
+                "Different upper display magnitude",
                 q0.getUpperDisplayMagnitude(),
                 q1.getUpperDisplayMagnitude());
 
         for (int m = q0.getUpperDisplayMagnitude(); m >= q0.getLowerDisplayMagnitude(); m--) {
-            assertEquals("Different digit at magnitude " + m + " (" + q0 + ", " + q1 + ")",
+            assertEquals(
+                    "Different digit at magnitude " + m + " (" + q0 + ", " + q1 + ")",
                     q0.getDigit(m),
                     q1.getDigit(m));
         }
 
         if (rq0 instanceof DecimalQuantity_DualStorageBCD) {
             String message = ((DecimalQuantity_DualStorageBCD) rq0).checkHealth();
-            if (message != null)
-                errln(message);
+            if (message != null) errln(message);
         }
         if (rq1 instanceof DecimalQuantity_DualStorageBCD) {
             String message = ((DecimalQuantity_DualStorageBCD) rq1).checkHealth();
-            if (message != null)
-                errln(message);
+            if (message != null) errln(message);
         }
     }
 
@@ -380,18 +391,19 @@ public class DecimalQuantityTest extends CoreTestFmwk {
     @Test
     public void testUseApproximateDoubleWhenAble() {
         Object[][] cases = {
-                { 1.2345678, 1, MATH_CONTEXT_HALF_EVEN, false },
-                { 1.2345678, 7, MATH_CONTEXT_HALF_EVEN, false },
-                { 1.2345678, 12, MATH_CONTEXT_HALF_EVEN, false },
-                { 1.2345678, 13, MATH_CONTEXT_HALF_EVEN, true },
-                { 1.235, 1, MATH_CONTEXT_HALF_EVEN, false },
-                { 1.235, 2, MATH_CONTEXT_HALF_EVEN, true },
-                { 1.235, 3, MATH_CONTEXT_HALF_EVEN, false },
-                { 1.000000000000001, 0, MATH_CONTEXT_HALF_EVEN, false },
-                { 1.000000000000001, 0, MATH_CONTEXT_CEILING, true },
-                { 1.235, 1, MATH_CONTEXT_CEILING, false },
-                { 1.235, 2, MATH_CONTEXT_CEILING, false },
-                { 1.235, 3, MATH_CONTEXT_CEILING, true } };
+            {1.2345678, 1, MATH_CONTEXT_HALF_EVEN, false},
+            {1.2345678, 7, MATH_CONTEXT_HALF_EVEN, false},
+            {1.2345678, 12, MATH_CONTEXT_HALF_EVEN, false},
+            {1.2345678, 13, MATH_CONTEXT_HALF_EVEN, true},
+            {1.235, 1, MATH_CONTEXT_HALF_EVEN, false},
+            {1.235, 2, MATH_CONTEXT_HALF_EVEN, true},
+            {1.235, 3, MATH_CONTEXT_HALF_EVEN, false},
+            {1.000000000000001, 0, MATH_CONTEXT_HALF_EVEN, false},
+            {1.000000000000001, 0, MATH_CONTEXT_CEILING, true},
+            {1.235, 1, MATH_CONTEXT_CEILING, false},
+            {1.235, 2, MATH_CONTEXT_CEILING, false},
+            {1.235, 3, MATH_CONTEXT_CEILING, true}
+        };
 
         for (Object[] cas : cases) {
             double d = (Double) cas[0];
@@ -403,7 +415,12 @@ public class DecimalQuantityTest extends CoreTestFmwk {
             assertTrue("Should be using approximate double", !fq.explicitExactDouble);
             fq.roundToMagnitude(-maxFrac, mc);
             assertEquals(
-                    "Using approximate double after rounding: " + d + " maxFrac=" + maxFrac + " " + mc,
+                    "Using approximate double after rounding: "
+                            + d
+                            + " maxFrac="
+                            + maxFrac
+                            + " "
+                            + mc,
                     usesExact,
                     fq.explicitExactDouble);
         }
@@ -452,9 +469,12 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         quantity.setToLong(1234567890123456789L);
         assertTrue("A number between 10^19 and max long should fit", quantity.fitsInLong());
         quantity.setToLong(1234567890000000000L);
-        assertTrue("A number with trailing zeros less than max long should fit", quantity.fitsInLong());
+        assertTrue(
+                "A number with trailing zeros less than max long should fit",
+                quantity.fitsInLong());
         quantity.setToLong(9223372026854775808L);
-        assertTrue("A number less than max long but with similar digits should fit",
+        assertTrue(
+                "A number less than max long but with similar digits should fit",
                 quantity.fitsInLong());
         quantity.setToLong(9223372036854775806L);
         assertTrue("One less than max long should fit", quantity.fitsInLong());
@@ -473,7 +493,8 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         quantity.setToBigInteger(new BigInteger("9223372046854775806"));
         assertFalse("A number between max long and 10^20 should not fit", quantity.fitsInLong());
         quantity.setToBigInteger(new BigInteger("9223372046800000000"));
-        assertFalse("A large 10^19 number with trailing zeros should not fit", quantity.fitsInLong());
+        assertFalse(
+                "A large 10^19 number with trailing zeros should not fit", quantity.fitsInLong());
         quantity.setToBigInteger(new BigInteger("10000000000000000000"));
         assertFalse("10^20 should not fit", quantity.fitsInLong());
     }
@@ -483,20 +504,21 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         // This test is somewhat duplicated from previous tests, but it is needed
         // for ICU4C compatibility.
         Object[][] cases = {
-                { 512.0000000000017, "512.0000000000017" },
-                { 4095.9999999999977, "4095.9999999999977" },
-                { 4095.999999999998, "4095.999999999998" },
-                { 4095.9999999999986, "4095.9999999999986" },
-                { 4095.999999999999, "4095.999999999999" },
-                { 4095.9999999999995, "4095.9999999999995" },
-                { 4096.000000000001, "4096.000000000001" },
-                { 4096.000000000002, "4096.000000000002" },
-                { 4096.000000000003, "4096.000000000003" },
-                { 4096.000000000004, "4096.000000000004" },
-                { 4096.000000000005, "4096.000000000005" },
-                { 4096.0000000000055, "4096.0000000000055" },
-                { 4096.000000000006, "4096.000000000006" },
-                { 4096.000000000007, "4096.000000000007" } };
+            {512.0000000000017, "512.0000000000017"},
+            {4095.9999999999977, "4095.9999999999977"},
+            {4095.999999999998, "4095.999999999998"},
+            {4095.9999999999986, "4095.9999999999986"},
+            {4095.999999999999, "4095.999999999999"},
+            {4095.9999999999995, "4095.9999999999995"},
+            {4096.000000000001, "4096.000000000001"},
+            {4096.000000000002, "4096.000000000002"},
+            {4096.000000000003, "4096.000000000003"},
+            {4096.000000000004, "4096.000000000004"},
+            {4096.000000000005, "4096.000000000005"},
+            {4096.0000000000055, "4096.0000000000055"},
+            {4096.000000000006, "4096.000000000006"},
+            {4096.000000000007, "4096.000000000007"}
+        };
 
         for (Object[] cas : cases) {
             double input = (Double) cas[0];
@@ -511,11 +533,12 @@ public class DecimalQuantityTest extends CoreTestFmwk {
 
     @Test
     public void testToDouble() {
-        Object[][] cases = new Object[][] {
-            { "0", 0.0 },
-            { "514.23", 514.23 },
-            { "-3.142E-271", -3.142e-271 }
-        };
+        Object[][] cases =
+                new Object[][] {
+                    {"0", 0.0},
+                    {"514.23", 514.23},
+                    {"-3.142E-271", -3.142e-271}
+                };
 
         for (Object[] cas : cases) {
             String input = (String) cas[0];
@@ -546,60 +569,61 @@ public class DecimalQuantityTest extends CoreTestFmwk {
 
     @Test
     public void testNickelRounding() {
-        Object[][] cases = new Object[][] {
-            {1.000, -2, RoundingMode.HALF_EVEN, "1"},
-            {1.001, -2, RoundingMode.HALF_EVEN, "1"},
-            {1.010, -2, RoundingMode.HALF_EVEN, "1"},
-            {1.020, -2, RoundingMode.HALF_EVEN, "1"},
-            {1.024, -2, RoundingMode.HALF_EVEN, "1"},
-            {1.025, -2, RoundingMode.HALF_EVEN, "1"},
-            {1.025, -2, RoundingMode.HALF_DOWN, "1"},
-            {1.025, -2, RoundingMode.HALF_UP,   "1.05"},
-            {1.026, -2, RoundingMode.HALF_EVEN, "1.05"},
-            {1.030, -2, RoundingMode.HALF_EVEN, "1.05"},
-            {1.040, -2, RoundingMode.HALF_EVEN, "1.05"},
-            {1.050, -2, RoundingMode.HALF_EVEN, "1.05"},
-            {1.060, -2, RoundingMode.HALF_EVEN, "1.05"},
-            {1.070, -2, RoundingMode.HALF_EVEN, "1.05"},
-            {1.074, -2, RoundingMode.HALF_EVEN, "1.05"},
-            {1.075, -2, RoundingMode.HALF_DOWN, "1.05"},
-            {1.075, -2, RoundingMode.HALF_UP,   "1.1"},
-            {1.075, -2, RoundingMode.HALF_EVEN, "1.1"},
-            {1.076, -2, RoundingMode.HALF_EVEN, "1.1"},
-            {1.080, -2, RoundingMode.HALF_EVEN, "1.1"},
-            {1.090, -2, RoundingMode.HALF_EVEN, "1.1"},
-            {1.099, -2, RoundingMode.HALF_EVEN, "1.1"},
-            {1.999, -2, RoundingMode.HALF_EVEN, "2"},
-            {2.25, -1, RoundingMode.HALF_EVEN, "2"},
-            {2.25, -1, RoundingMode.HALF_UP,   "2.5"},
-            {2.75, -1, RoundingMode.HALF_DOWN, "2.5"},
-            {2.75, -1, RoundingMode.HALF_EVEN, "3"},
-            {3.00, -1, RoundingMode.CEILING, "3"},
-            {3.25, -1, RoundingMode.CEILING, "3.5"},
-            {3.50, -1, RoundingMode.CEILING, "3.5"},
-            {3.75, -1, RoundingMode.CEILING, "4"},
-            {4.00, -1, RoundingMode.FLOOR, "4"},
-            {4.25, -1, RoundingMode.FLOOR, "4"},
-            {4.50, -1, RoundingMode.FLOOR, "4.5"},
-            {4.75, -1, RoundingMode.FLOOR, "4.5"},
-            {5.00, -1, RoundingMode.UP, "5"},
-            {5.25, -1, RoundingMode.UP, "5.5"},
-            {5.50, -1, RoundingMode.UP, "5.5"},
-            {5.75, -1, RoundingMode.UP, "6"},
-            {6.00, -1, RoundingMode.DOWN, "6"},
-            {6.25, -1, RoundingMode.DOWN, "6"},
-            {6.50, -1, RoundingMode.DOWN, "6.5"},
-            {6.75, -1, RoundingMode.DOWN, "6.5"},
-            {7.00, -1, RoundingMode.UNNECESSARY, "7"},
-            {7.50, -1, RoundingMode.UNNECESSARY, "7.5"},
-        };
+        Object[][] cases =
+                new Object[][] {
+                    {1.000, -2, RoundingMode.HALF_EVEN, "1"},
+                    {1.001, -2, RoundingMode.HALF_EVEN, "1"},
+                    {1.010, -2, RoundingMode.HALF_EVEN, "1"},
+                    {1.020, -2, RoundingMode.HALF_EVEN, "1"},
+                    {1.024, -2, RoundingMode.HALF_EVEN, "1"},
+                    {1.025, -2, RoundingMode.HALF_EVEN, "1"},
+                    {1.025, -2, RoundingMode.HALF_DOWN, "1"},
+                    {1.025, -2, RoundingMode.HALF_UP, "1.05"},
+                    {1.026, -2, RoundingMode.HALF_EVEN, "1.05"},
+                    {1.030, -2, RoundingMode.HALF_EVEN, "1.05"},
+                    {1.040, -2, RoundingMode.HALF_EVEN, "1.05"},
+                    {1.050, -2, RoundingMode.HALF_EVEN, "1.05"},
+                    {1.060, -2, RoundingMode.HALF_EVEN, "1.05"},
+                    {1.070, -2, RoundingMode.HALF_EVEN, "1.05"},
+                    {1.074, -2, RoundingMode.HALF_EVEN, "1.05"},
+                    {1.075, -2, RoundingMode.HALF_DOWN, "1.05"},
+                    {1.075, -2, RoundingMode.HALF_UP, "1.1"},
+                    {1.075, -2, RoundingMode.HALF_EVEN, "1.1"},
+                    {1.076, -2, RoundingMode.HALF_EVEN, "1.1"},
+                    {1.080, -2, RoundingMode.HALF_EVEN, "1.1"},
+                    {1.090, -2, RoundingMode.HALF_EVEN, "1.1"},
+                    {1.099, -2, RoundingMode.HALF_EVEN, "1.1"},
+                    {1.999, -2, RoundingMode.HALF_EVEN, "2"},
+                    {2.25, -1, RoundingMode.HALF_EVEN, "2"},
+                    {2.25, -1, RoundingMode.HALF_UP, "2.5"},
+                    {2.75, -1, RoundingMode.HALF_DOWN, "2.5"},
+                    {2.75, -1, RoundingMode.HALF_EVEN, "3"},
+                    {3.00, -1, RoundingMode.CEILING, "3"},
+                    {3.25, -1, RoundingMode.CEILING, "3.5"},
+                    {3.50, -1, RoundingMode.CEILING, "3.5"},
+                    {3.75, -1, RoundingMode.CEILING, "4"},
+                    {4.00, -1, RoundingMode.FLOOR, "4"},
+                    {4.25, -1, RoundingMode.FLOOR, "4"},
+                    {4.50, -1, RoundingMode.FLOOR, "4.5"},
+                    {4.75, -1, RoundingMode.FLOOR, "4.5"},
+                    {5.00, -1, RoundingMode.UP, "5"},
+                    {5.25, -1, RoundingMode.UP, "5.5"},
+                    {5.50, -1, RoundingMode.UP, "5.5"},
+                    {5.75, -1, RoundingMode.UP, "6"},
+                    {6.00, -1, RoundingMode.DOWN, "6"},
+                    {6.25, -1, RoundingMode.DOWN, "6"},
+                    {6.50, -1, RoundingMode.DOWN, "6.5"},
+                    {6.75, -1, RoundingMode.DOWN, "6.5"},
+                    {7.00, -1, RoundingMode.UNNECESSARY, "7"},
+                    {7.50, -1, RoundingMode.UNNECESSARY, "7.5"},
+                };
         for (Object[] cas : cases) {
             double input = (Double) cas[0];
             int magnitude = (Integer) cas[1];
             RoundingMode roundingMode = (RoundingMode) cas[2];
             String expected = (String) cas[3];
             String message = input + " @ " + magnitude + " / " + roundingMode;
-            for (int i=0; i<2; i++) {
+            for (int i = 0; i < 2; i++) {
                 DecimalQuantity dq;
                 if (i == 0) {
                     dq = new DecimalQuantity_DualStorageBCD(input);
@@ -625,53 +649,155 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         ULocale locale = new ULocale("fr-FR");
 
         Object[][] casesData = {
-                // unlocalized formatter skeleton, input, string output, long output,
-                // double output, BigDecimal output, plain string,
-                // suppressed scientific exponent, suppressed compact exponent
-                {"",              123456789, "123 456 789",  123456789L, 123456789.0, new BigDecimal("123456789"), "123456789", 0, 0},
-                {"compact-long",  123456789, "123 millions", 123000000L, 123000000.0, new BigDecimal("123000000"), "123000000", 6, 6},
-                {"compact-short", 123456789, "123 M",        123000000L, 123000000.0, new BigDecimal("123000000"), "123000000", 6, 6},
-                {"scientific",    123456789, "1,234568E8",   123456800L, 123456800.0, new BigDecimal("123456800"), "123456800", 8, 8},
-
-                {"",              1234567, "1 234 567",   1234567L, 1234567.0, new BigDecimal("1234567"), "1234567", 0, 0},
-                {"compact-long",  1234567, "1,2 million", 1200000L, 1200000.0, new BigDecimal("1200000"), "1200000", 6, 6},
-                {"compact-short", 1234567, "1,2 M",       1200000L, 1200000.0, new BigDecimal("1200000"), "1200000", 6, 6},
-                {"scientific",    1234567, "1,234567E6",  1234567L, 1234567.0, new BigDecimal("1234567"), "1234567", 6, 6},
-
-                {"",              123456, "123 456",   123456L, 123456.0, new BigDecimal("123456"), "123456", 0, 0},
-                {"compact-long",  123456, "123 mille", 123000L, 123000.0, new BigDecimal("123000"), "123000", 3, 3},
-                {"compact-short", 123456, "123 k",     123000L, 123000.0, new BigDecimal("123000"), "123000", 3, 3},
-                {"scientific",    123456, "1,23456E5", 123456L, 123456.0, new BigDecimal("123456"), "123456", 5, 5},
-
-                {"",              123, "123",    123L, 123.0, new BigDecimal("123"), "123", 0, 0},
-                {"compact-long",  123, "123",    123L, 123.0, new BigDecimal("123"), "123", 0, 0},
-                {"compact-short", 123, "123",    123L, 123.0, new BigDecimal("123"), "123", 0, 0},
-                {"scientific",    123, "1,23E2", 123L, 123.0, new BigDecimal("123"), "123", 2, 2},
-
-                {"",              1.2, "1,2",   1L, 1.2, new BigDecimal("1.2"), "1.2", 0, 0},
-                {"compact-long",  1.2, "1,2",   1L, 1.2, new BigDecimal("1.2"), "1.2", 0, 0},
-                {"compact-short", 1.2, "1,2",   1L, 1.2, new BigDecimal("1.2"), "1.2", 0, 0},
-                {"scientific",    1.2, "1,2E0", 1L, 1.2, new BigDecimal("1.2"), "1.2", 0, 0},
-
-                {"",              0.12, "0,12",   0L, 0.12, new BigDecimal("0.12"), "0.12",  0,  0},
-                {"compact-long",  0.12, "0,12",   0L, 0.12, new BigDecimal("0.12"), "0.12",  0,  0},
-                {"compact-short", 0.12, "0,12",   0L, 0.12, new BigDecimal("0.12"), "0.12",  0,  0},
-                {"scientific",    0.12, "1,2E-1", 0L, 0.12, new BigDecimal("0.12"), "0.12", -1, -1},
-
-                {"",              0.012, "0,012",   0L, 0.012, new BigDecimal("0.012"), "0.012",  0,  0},
-                {"compact-long",  0.012, "0,012",   0L, 0.012, new BigDecimal("0.012"), "0.012",  0,  0},
-                {"compact-short", 0.012, "0,012",   0L, 0.012, new BigDecimal("0.012"), "0.012",  0,  0},
-                {"scientific",    0.012, "1,2E-2",  0L, 0.012, new BigDecimal("0.012"), "0.012", -2, -2},
-
-                {"",              999.9, "999,9",     999L,  999.9,  new BigDecimal("999.9"), "999.9", 0, 0},
-                {"compact-long",  999.9, "mille",     1000L, 1000.0, new BigDecimal("1000"),  "1000",  3, 3},
-                {"compact-short", 999.9, "1 k",       1000L, 1000.0, new BigDecimal("1000"),  "1000",  3, 3},
-                {"scientific",    999.9, "9,999E2",   999L,  999.9,  new BigDecimal("999.9"), "999.9", 2, 2},
-
-                {"",              1000.0, "1 000",     1000L, 1000.0, new BigDecimal("1000"), "1000", 0, 0},
-                {"compact-long",  1000.0, "mille",     1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
-                {"compact-short", 1000.0, "1 k",       1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
-                {"scientific",    1000.0, "1E3",       1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
+            // unlocalized formatter skeleton, input, string output, long output,
+            // double output, BigDecimal output, plain string,
+            // suppressed scientific exponent, suppressed compact exponent
+            {
+                "",
+                123456789,
+                "123 456 789",
+                123456789L,
+                123456789.0,
+                new BigDecimal("123456789"),
+                "123456789",
+                0,
+                0
+            },
+            {
+                "compact-long",
+                123456789,
+                "123 millions",
+                123000000L,
+                123000000.0,
+                new BigDecimal("123000000"),
+                "123000000",
+                6,
+                6
+            },
+            {
+                "compact-short",
+                123456789,
+                "123 M",
+                123000000L,
+                123000000.0,
+                new BigDecimal("123000000"),
+                "123000000",
+                6,
+                6
+            },
+            {
+                "scientific",
+                123456789,
+                "1,234568E8",
+                123456800L,
+                123456800.0,
+                new BigDecimal("123456800"),
+                "123456800",
+                8,
+                8
+            },
+            {
+                "",
+                1234567,
+                "1 234 567",
+                1234567L,
+                1234567.0,
+                new BigDecimal("1234567"),
+                "1234567",
+                0,
+                0
+            },
+            {
+                "compact-long",
+                1234567,
+                "1,2 million",
+                1200000L,
+                1200000.0,
+                new BigDecimal("1200000"),
+                "1200000",
+                6,
+                6
+            },
+            {
+                "compact-short",
+                1234567,
+                "1,2 M",
+                1200000L,
+                1200000.0,
+                new BigDecimal("1200000"),
+                "1200000",
+                6,
+                6
+            },
+            {
+                "scientific",
+                1234567,
+                "1,234567E6",
+                1234567L,
+                1234567.0,
+                new BigDecimal("1234567"),
+                "1234567",
+                6,
+                6
+            },
+            {"", 123456, "123 456", 123456L, 123456.0, new BigDecimal("123456"), "123456", 0, 0},
+            {
+                "compact-long",
+                123456,
+                "123 mille",
+                123000L,
+                123000.0,
+                new BigDecimal("123000"),
+                "123000",
+                3,
+                3
+            },
+            {
+                "compact-short",
+                123456,
+                "123 k",
+                123000L,
+                123000.0,
+                new BigDecimal("123000"),
+                "123000",
+                3,
+                3
+            },
+            {
+                "scientific",
+                123456,
+                "1,23456E5",
+                123456L,
+                123456.0,
+                new BigDecimal("123456"),
+                "123456",
+                5,
+                5
+            },
+            {"", 123, "123", 123L, 123.0, new BigDecimal("123"), "123", 0, 0},
+            {"compact-long", 123, "123", 123L, 123.0, new BigDecimal("123"), "123", 0, 0},
+            {"compact-short", 123, "123", 123L, 123.0, new BigDecimal("123"), "123", 0, 0},
+            {"scientific", 123, "1,23E2", 123L, 123.0, new BigDecimal("123"), "123", 2, 2},
+            {"", 1.2, "1,2", 1L, 1.2, new BigDecimal("1.2"), "1.2", 0, 0},
+            {"compact-long", 1.2, "1,2", 1L, 1.2, new BigDecimal("1.2"), "1.2", 0, 0},
+            {"compact-short", 1.2, "1,2", 1L, 1.2, new BigDecimal("1.2"), "1.2", 0, 0},
+            {"scientific", 1.2, "1,2E0", 1L, 1.2, new BigDecimal("1.2"), "1.2", 0, 0},
+            {"", 0.12, "0,12", 0L, 0.12, new BigDecimal("0.12"), "0.12", 0, 0},
+            {"compact-long", 0.12, "0,12", 0L, 0.12, new BigDecimal("0.12"), "0.12", 0, 0},
+            {"compact-short", 0.12, "0,12", 0L, 0.12, new BigDecimal("0.12"), "0.12", 0, 0},
+            {"scientific", 0.12, "1,2E-1", 0L, 0.12, new BigDecimal("0.12"), "0.12", -1, -1},
+            {"", 0.012, "0,012", 0L, 0.012, new BigDecimal("0.012"), "0.012", 0, 0},
+            {"compact-long", 0.012, "0,012", 0L, 0.012, new BigDecimal("0.012"), "0.012", 0, 0},
+            {"compact-short", 0.012, "0,012", 0L, 0.012, new BigDecimal("0.012"), "0.012", 0, 0},
+            {"scientific", 0.012, "1,2E-2", 0L, 0.012, new BigDecimal("0.012"), "0.012", -2, -2},
+            {"", 999.9, "999,9", 999L, 999.9, new BigDecimal("999.9"), "999.9", 0, 0},
+            {"compact-long", 999.9, "mille", 1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
+            {"compact-short", 999.9, "1 k", 1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
+            {"scientific", 999.9, "9,999E2", 999L, 999.9, new BigDecimal("999.9"), "999.9", 2, 2},
+            {"", 1000.0, "1 000", 1000L, 1000.0, new BigDecimal("1000"), "1000", 0, 0},
+            {"compact-long", 1000.0, "mille", 1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
+            {"compact-short", 1000.0, "1 k", 1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
+            {"scientific", 1000.0, "1E3", 1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
         };
 
         for (Object[] caseDatum : casesData) {
@@ -679,8 +805,7 @@ public class DecimalQuantityTest extends CoreTestFmwk {
 
             String skeleton = (String) caseDatum[0];
             LocalizedNumberFormatter formatter =
-                    NumberFormatter.forSkeleton(skeleton)
-                        .locale(locale);
+                    NumberFormatter.forSkeleton(skeleton).locale(locale);
             double input = ((Number) caseDatum[1]).doubleValue();
             String expectedString = (String) caseDatum[2];
             long expectedLong = (long) caseDatum[3];
@@ -691,8 +816,8 @@ public class DecimalQuantityTest extends CoreTestFmwk {
             int expectedSuppressedCompactExponent = (int) caseDatum[8];
 
             FormattedNumber fn = formatter.format(input);
-            DecimalQuantity_DualStorageBCD dq = (DecimalQuantity_DualStorageBCD)
-                    fn.getFixedDecimal();
+            DecimalQuantity_DualStorageBCD dq =
+                    (DecimalQuantity_DualStorageBCD) fn.getFixedDecimal();
             String actualString = fn.toString();
             long actualLong = dq.toLong(true);
             double actualDouble = dq.toDouble();
@@ -722,11 +847,14 @@ public class DecimalQuantityTest extends CoreTestFmwk {
                     expectedPlainString,
                     actualPlainString);
             assertEquals(
-                    String.format("formatted number %s suppressed scientific exponent: %f", skeleton, input),
+                    String.format(
+                            "formatted number %s suppressed scientific exponent: %f",
+                            skeleton, input),
                     expectedSuppressedScientificExponent,
                     actualSuppressedScientificExponent);
             assertEquals(
-                    String.format("formatted number %s suppressed compact exponent: %f", skeleton, input),
+                    String.format(
+                            "formatted number %s suppressed compact exponent: %f", skeleton, input),
                     expectedSuppressedCompactExponent,
                     actualSuppressedCompactExponent);
 
@@ -764,20 +892,18 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         }
     }
 
-
     @Test
     public void testCompactNotationFractionPluralOperands() {
         ULocale locale = new ULocale("fr-FR");
         LocalizedNumberFormatter formatter =
                 NumberFormatter.withLocale(locale)
-                    .notation(Notation.compactLong())
-                    .precision(Precision.fixedFraction(5))
-                    .scale(Scale.powerOfTen(-1));
+                        .notation(Notation.compactLong())
+                        .precision(Precision.fixedFraction(5))
+                        .scale(Scale.powerOfTen(-1));
         double formatterInput = 12345;
         double inputVal = 1234.5;
         FormattedNumber fn = formatter.format(formatterInput);
-        DecimalQuantity_DualStorageBCD dq = (DecimalQuantity_DualStorageBCD)
-                fn.getFixedDecimal();
+        DecimalQuantity_DualStorageBCD dq = (DecimalQuantity_DualStorageBCD) fn.getFixedDecimal();
 
         double expectedNOperand = 1234.5;
         double expectedIOperand = 1234;
@@ -840,19 +966,17 @@ public class DecimalQuantityTest extends CoreTestFmwk {
     public void testSuppressedExponentUnchangedByInitialScaling() {
         ULocale locale = new ULocale("fr-FR");
         LocalizedNumberFormatter withLocale = NumberFormatter.withLocale(locale);
-        LocalizedNumberFormatter compactLong =
-                withLocale.notation(Notation.compactLong());
-        LocalizedNumberFormatter compactScaled =
-                compactLong.scale(Scale.powerOfTen(3));
+        LocalizedNumberFormatter compactLong = withLocale.notation(Notation.compactLong());
+        LocalizedNumberFormatter compactScaled = compactLong.scale(Scale.powerOfTen(3));
 
         Object[][] casesData = {
-                // input, compact long string output,
-                // compact n operand, compact i operand, compact e operand,
-                // compact c operand
-                {123456789, "123 millions", 123000000.0, 123000000.0, 6.0, 6.0},
-                {1234567,   "1,2 million",  1200000.0,   1200000.0,   6.0, 6.0},
-                {123456,    "123 mille",    123000.0,    123000.0,    3.0, 3.0},
-                {123,       "123",          123.0,       123.0,       0.0, 0.0},
+            // input, compact long string output,
+            // compact n operand, compact i operand, compact e operand,
+            // compact c operand
+            {123456789, "123 millions", 123000000.0, 123000000.0, 6.0, 6.0},
+            {1234567, "1,2 million", 1200000.0, 1200000.0, 6.0, 6.0},
+            {123456, "123 mille", 123000.0, 123000.0, 3.0, 3.0},
+            {123, "123", 123.0, 123.0, 0.0, 0.0},
         };
 
         for (Object[] caseDatum : casesData) {
@@ -910,23 +1034,23 @@ public class DecimalQuantityTest extends CoreTestFmwk {
     @Test
     public void testDecimalQuantityParseFormatRoundTrip() {
         Object[] casesData = {
-                // number string
-                "0",
-                "1",
-                "1.0",
-                "1.00",
-                "1.1",
-                "1.10",
-                "-1.10",
-                "0.0",
-                "1c5",
-                "1.0c5",
-                "1.1c5",
-                "1.10c5",
-                "0.00",
-                "0.1",
-                "1c-1",
-                "1.0c-1"
+            // number string
+            "0",
+            "1",
+            "1.0",
+            "1.00",
+            "1.1",
+            "1.10",
+            "-1.10",
+            "0.0",
+            "1c5",
+            "1.0c5",
+            "1.1c5",
+            "1.10c5",
+            "0.00",
+            "0.1",
+            "1c-1",
+            "1.0c-1"
         };
 
         for (Object caseDatum : casesData) {
@@ -934,13 +1058,16 @@ public class DecimalQuantityTest extends CoreTestFmwk {
             DecimalQuantity dq = DecimalQuantity_DualStorageBCD.fromExponentString(numStr);
             String roundTrip = dq.toExponentString();
 
-            assertEquals("DecimalQuantity format(parse(s)) should equal original s", numStr, roundTrip);
+            assertEquals(
+                    "DecimalQuantity format(parse(s)) should equal original s", numStr, roundTrip);
         }
 
-        assertEquals("Zero ignored for visible exponent",
+        assertEquals(
+                "Zero ignored for visible exponent",
                 "1",
                 DecimalQuantity_DualStorageBCD.fromExponentString("1c0").toExponentString());
-        assertEquals("Zero ignored for visible exponent",
+        assertEquals(
+                "Zero ignored for visible exponent",
                 "1.0",
                 DecimalQuantity_DualStorageBCD.fromExponentString("1.0c0").toExponentString());
     }

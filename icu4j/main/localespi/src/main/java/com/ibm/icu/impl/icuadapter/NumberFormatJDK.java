@@ -8,20 +8,19 @@
  */
 package com.ibm.icu.impl.icuadapter;
 
+import com.ibm.icu.impl.jdkadapter.NumberFormatICU;
+import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.CurrencyAmount;
 import java.math.RoundingMode;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
-import com.ibm.icu.impl.jdkadapter.NumberFormatICU;
-import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.CurrencyAmount;
-
 /**
- * NumberFormatJDK is an adapter class which wraps java.text.NumberFormat and
- * implements ICU4J NumberFormat APIs.
+ * NumberFormatJDK is an adapter class which wraps java.text.NumberFormat and implements ICU4J
+ * NumberFormat APIs.
  */
 public class NumberFormatJDK extends com.ibm.icu.text.NumberFormat {
 
@@ -35,7 +34,7 @@ public class NumberFormatJDK extends com.ibm.icu.text.NumberFormat {
 
     public static com.ibm.icu.text.NumberFormat wrap(NumberFormat jdkNfmt) {
         if (jdkNfmt instanceof NumberFormatICU) {
-            return ((NumberFormatICU)jdkNfmt).unwrap();
+            return ((NumberFormatICU) jdkNfmt).unwrap();
         }
         return new NumberFormatJDK(jdkNfmt);
     }
@@ -46,24 +45,25 @@ public class NumberFormatJDK extends com.ibm.icu.text.NumberFormat {
 
     @Override
     public Object clone() {
-        NumberFormatJDK other = (NumberFormatJDK)super.clone();
-        other.fJdkNfmt = (NumberFormat)fJdkNfmt.clone();
+        NumberFormatJDK other = (NumberFormatJDK) super.clone();
+        other.fJdkNfmt = (NumberFormat) fJdkNfmt.clone();
         return other;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof NumberFormatJDK) {
-            return ((NumberFormatJDK)obj).fJdkNfmt.equals(fJdkNfmt);
+            return ((NumberFormatJDK) obj).fJdkNfmt.equals(fJdkNfmt);
         }
         return false;
     }
 
-    //public String format(java.math.BigDecimal number)
-    //public String format(BigDecimal number)
+    // public String format(java.math.BigDecimal number)
+    // public String format(BigDecimal number)
 
     @Override
-    public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+    public StringBuffer format(
+            java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
         return fJdkNfmt.format(number, toAppendTo, pos);
     }
 
@@ -73,13 +73,14 @@ public class NumberFormatJDK extends com.ibm.icu.text.NumberFormat {
     }
 
     @Override
-    public StringBuffer format(java.math.BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
+    public StringBuffer format(
+            java.math.BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
         return fJdkNfmt.format(number, toAppendTo, pos);
     }
 
-    //public String format(java.math.BigInteger number) 
+    // public String format(java.math.BigInteger number)
 
-    //String format(CurrencyAmount currAmt)
+    // String format(CurrencyAmount currAmt)
 
     @Override
     public StringBuffer format(CurrencyAmount currAmt, StringBuffer toAppendTo, FieldPosition pos) {
@@ -96,14 +97,14 @@ public class NumberFormatJDK extends com.ibm.icu.text.NumberFormat {
         return toAppendTo;
     }
 
-    //public String format(double number)
+    // public String format(double number)
 
     @Override
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
         return fJdkNfmt.format(number, toAppendTo, pos);
     }
 
-    //public String format(long number)
+    // public String format(long number)
 
     @Override
     public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {
@@ -124,7 +125,7 @@ public class NumberFormatJDK extends com.ibm.icu.text.NumberFormat {
         return Currency.getInstance(jdkCurrency.getCurrencyCode());
     }
 
-    //protected Currency getEffectiveCurrency()
+    // protected Currency getEffectiveCurrency()
 
     @Override
     public int getMaximumFractionDigits() {
@@ -201,7 +202,7 @@ public class NumberFormatJDK extends com.ibm.icu.text.NumberFormat {
         return fJdkNfmt.parse(text, parsePosition);
     }
 
-    //public Object parseObject(String source, ParsePosition parsePosition)
+    // public Object parseObject(String source, ParsePosition parsePosition)
 
     @Override
     public void setCurrency(Currency theCurrency) {
@@ -252,30 +253,30 @@ public class NumberFormatJDK extends com.ibm.icu.text.NumberFormat {
     public void setRoundingMode(int roundingMode) {
         RoundingMode mode = null;
         switch (roundingMode) {
-        case BigDecimal.ROUND_CEILING:
-            mode = RoundingMode.CEILING;
-            break;
-        case BigDecimal.ROUND_DOWN:
-            mode = RoundingMode.DOWN;
-            break;
-        case BigDecimal.ROUND_FLOOR:
-            mode = RoundingMode.FLOOR;
-            break;
-        case BigDecimal.ROUND_HALF_DOWN:
-            mode = RoundingMode.HALF_DOWN;
-            break;
-        case BigDecimal.ROUND_HALF_EVEN:
-            mode = RoundingMode.HALF_EVEN;
-            break;
-        case BigDecimal.ROUND_HALF_UP:
-            mode = RoundingMode.HALF_UP;
-            break;
-        case BigDecimal.ROUND_UNNECESSARY:
-            mode = RoundingMode.UNNECESSARY;
-            break;
-        case BigDecimal.ROUND_UP:
-            mode = RoundingMode.UP;
-            break;
+            case BigDecimal.ROUND_CEILING:
+                mode = RoundingMode.CEILING;
+                break;
+            case BigDecimal.ROUND_DOWN:
+                mode = RoundingMode.DOWN;
+                break;
+            case BigDecimal.ROUND_FLOOR:
+                mode = RoundingMode.FLOOR;
+                break;
+            case BigDecimal.ROUND_HALF_DOWN:
+                mode = RoundingMode.HALF_DOWN;
+                break;
+            case BigDecimal.ROUND_HALF_EVEN:
+                mode = RoundingMode.HALF_EVEN;
+                break;
+            case BigDecimal.ROUND_HALF_UP:
+                mode = RoundingMode.HALF_UP;
+                break;
+            case BigDecimal.ROUND_UNNECESSARY:
+                mode = RoundingMode.UNNECESSARY;
+                break;
+            case BigDecimal.ROUND_UP:
+                mode = RoundingMode.UP;
+                break;
         }
         if (mode == null) {
             throw new IllegalArgumentException("Invalid rounding mode: " + roundingMode);

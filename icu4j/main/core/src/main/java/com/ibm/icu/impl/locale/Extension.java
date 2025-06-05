@@ -8,7 +8,6 @@
  */
 package com.ibm.icu.impl.locale;
 
-
 public class Extension {
     private char _key;
     protected String _value;

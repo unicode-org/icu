@@ -11,10 +11,9 @@
 
 package com.ibm.icu.charset;
 
+import com.ibm.icu.impl.ICUBinary;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-
-import com.ibm.icu.impl.ICUBinary;
 
 final class UConverterAlias {
     static final int UNNORMALIZED = 0;
@@ -22,7 +21,7 @@ final class UConverterAlias {
     static final int STD_NORMALIZED = 1;
 
     static final int AMBIGUOUS_ALIAS_MAP_BIT = 0x8000;
-    
+
     static final int CONTAINS_OPTION_BIT = 0x4000;
 
     static final int CONVERTER_INDEX_MASK = 0xFFF;
@@ -60,15 +59,14 @@ final class UConverterAlias {
     private static final String extractString(byte[] sArray, int sBegin) {
         char[] buf = new char[strlen(sArray, sBegin)];
         for (int i = 0; i < buf.length; i++) {
-           buf[i] = (char)(sArray[sBegin + i] & 0xff);
+            buf[i] = (char) (sArray[sBegin + i] & 0xff);
         }
         return new String(buf);
     }
 
-    private static final int strlen(byte[] sArray, int sBegin)
-    {
+    private static final int strlen(byte[] sArray, int sBegin) {
         int i = sBegin;
-        while(i < sArray.length && sArray[i++] != 0) {}
+        while (i < sArray.length && sArray[i++] != 0) {}
         return i - sBegin - 1;
     }
 
@@ -116,8 +114,7 @@ final class UConverterAlias {
 
     private static final String CNVALIAS_DATA_FILE_NAME = "cnvalias.icu";
 
-    private static final synchronized boolean haveAliasData() 
-                                               throws IOException{
+    private static final synchronized boolean haveAliasData() throws IOException {
         boolean needInit;
 
         needInit = gAliasData == null;
@@ -143,13 +140,13 @@ final class UConverterAlias {
             gTaggedAliasArray = ICUBinary.getChars(b, tableArray[taggedAliasArrayIndex], 0);
             gTaggedAliasLists = ICUBinary.getChars(b, tableArray[taggedAliasListsIndex], 0);
             gOptionTable = ICUBinary.getChars(b, tableArray[optionTableIndex], 0);
-            gStringTable = new byte[tableArray[stringTableIndex]*2];
+            gStringTable = new byte[tableArray[stringTableIndex] * 2];
             b.get(gStringTable);
-            gNormalizedStringTable = new byte[tableArray[normalizedStringTableIndex]*2];
+            gNormalizedStringTable = new byte[tableArray[normalizedStringTableIndex] * 2];
             b.get(gNormalizedStringTable);
 
-            data =  ByteBuffer.allocate(0); // dummy UDataMemory object in absence
-                                        // of memory mapping
+            data = ByteBuffer.allocate(0); // dummy UDataMemory object in absence
+            // of memory mapping
 
             if (gOptionTable[0] != STD_NORMALIZED) {
                 throw new IOException("Unsupported alias normalization");
@@ -166,18 +163,18 @@ final class UConverterAlias {
 
     // U_CFUNC const char * io_getConverterName(const char *alias, UErrorCode
     // *pErrorCode)
-//    public static final String io_getConverterName(String alias)
-//                                    throws IOException{
-//        if (haveAliasData() && isAlias(alias)) {
-//            boolean[] isAmbigous = new boolean[1];
-//            int convNum = findConverter(alias, isAmbigous);
-//            if (convNum < gConverterList.length) {
-//                return GET_STRING(gConverterList[(int) convNum]);
-//            }
-//            /* else converter not found */
-//        }
-//        return null;
-//    }
+    //    public static final String io_getConverterName(String alias)
+    //                                    throws IOException{
+    //        if (haveAliasData() && isAlias(alias)) {
+    //            boolean[] isAmbigous = new boolean[1];
+    //            int convNum = findConverter(alias, isAmbigous);
+    //            if (convNum < gConverterList.length) {
+    //                return GET_STRING(gConverterList[(int) convNum]);
+    //            }
+    //            /* else converter not found */
+    //        }
+    //        return null;
+    //    }
 
     /*
      * search for an alias return the converter number index for gConverterList
@@ -200,9 +197,10 @@ final class UConverterAlias {
         mid = limit;
         lastMid = Integer.MAX_VALUE;
 
-        for (;;) {
+        for (; ; ) {
             mid = (start + limit) / 2;
-            if (lastMid == mid) { /* Have we moved? */
+            if (lastMid == mid) {
+                /* Have we moved? */
                 break; /* We haven't moved, and it wasn't found. */
             }
             lastMid = mid;
@@ -220,7 +218,7 @@ final class UConverterAlias {
                  * map an alias to different converters.
                  */
                 if ((gUntaggedConvArray[mid] & AMBIGUOUS_ALIAS_MAP_BIT) != 0) {
-                    isAmbigous[0]=true;
+                    isAmbigous[0] = true;
                 }
                 /* State whether the canonical converter name contains an option.
                 This information is contained in this list in order to maintain backward & forward compatibility. */
@@ -237,9 +235,9 @@ final class UConverterAlias {
     }
 
     /**
-     * stripForCompare Remove the underscores, dashes and spaces from
-     * the name, and convert the name to lower case.
-     * 
+     * stripForCompare Remove the underscores, dashes and spaces from the name, and convert the name
+     * to lower case.
+     *
      * @param dst The destination buffer, which is <= the buffer of name.
      * @param name The alias to strip
      * @return the destination buffer.
@@ -254,24 +252,27 @@ final class UConverterAlias {
     private static final byte NONZERO = 2;
     static final byte MINLETTER = 3; /* any values from here on are lowercase letter mappings */
     // }
-    
+
     /* character types for ASCII 00..7F */
-    static final byte asciiTypes[] = new byte[] {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        ZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, 0, 0, 0, 0, 0, 0,
-        0, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f,
-        0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0, 0, 0, 0, 0,
-        0, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f,
-        0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0, 0, 0, 0, 0
-    };
+    static final byte asciiTypes[] =
+            new byte[] {
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ZERO, NONZERO, NONZERO,
+                NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, 0, 0, 0, 0, 0, 0, 0,
+                0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e,
+                0x6f, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0, 0, 0, 0,
+                0, 0, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d,
+                0x6e, 0x6f, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0, 0,
+                0, 0, 0
+            };
 
     private static final char GET_CHAR_TYPE(char c) {
-        return (char)((c < asciiTypes.length) ? asciiTypes[c] : (char)IGNORE);
+        return (char) ((c < asciiTypes.length) ? asciiTypes[c] : (char) IGNORE);
     }
-    
-    /** @see UConverterAlias#compareNames */
+
+    /**
+     * @see UConverterAlias#compareNames
+     */
     private static final StringBuilder io_stripASCIIForCompare(StringBuilder dst, String name) {
         int nameIndex = 0;
         char type, nextType;
@@ -282,24 +283,24 @@ final class UConverterAlias {
             c1 = name.charAt(nameIndex++);
             type = GET_CHAR_TYPE(c1);
             switch (type) {
-            case IGNORE:
-                afterDigit = false;
-                continue; /* ignore all but letters and digits */
-            case ZERO:
-                if (!afterDigit && nameIndex < name.length()) {
-                    nextType = GET_CHAR_TYPE(name.charAt(nameIndex));
-                    if (nextType == ZERO || nextType == NONZERO) {
-                        continue; /* ignore leading zero before another digit */
+                case IGNORE:
+                    afterDigit = false;
+                    continue; /* ignore all but letters and digits */
+                case ZERO:
+                    if (!afterDigit && nameIndex < name.length()) {
+                        nextType = GET_CHAR_TYPE(name.charAt(nameIndex));
+                        if (nextType == ZERO || nextType == NONZERO) {
+                            continue; /* ignore leading zero before another digit */
+                        }
                     }
-                }
-                break;
-            case NONZERO:
-                afterDigit = true;
-                break;
-            default:
-                c1 = type; /* lowercased letter */
-                afterDigit = false;
-                break;
+                    break;
+                case NONZERO:
+                    afterDigit = true;
+                    break;
+                default:
+                    c1 = type; /* lowercased letter */
+                    afterDigit = false;
+                    break;
             }
             dst.append(c1);
         }
@@ -307,55 +308,49 @@ final class UConverterAlias {
     }
 
     /**
-     * Do a fuzzy compare of a two converter/alias names. The comparison is
-     * case-insensitive. It also ignores the characters '-', '_', and ' ' (dash,
-     * underscore, and space). Thus the strings "UTF-8", "utf_8", and "Utf 8"
-     * are exactly equivalent.
-     * 
-     * This is a symmetrical (commutative) operation; order of arguments is
-     * insignificant. This is an important property for sorting the list (when
-     * the list is preprocessed into binary form) and for performing binary
-     * searches on it at run time.
-     * 
-     * @param name1
-     *            a converter name or alias, zero-terminated
-     * @param name2
-     *            a converter name or alias, zero-terminated
-     * @return 0 if the names match, or a negative value if the name1 lexically
-     *         precedes name2, or a positive value if the name1 lexically
-     *         follows name2.
-     * 
+     * Do a fuzzy compare of a two converter/alias names. The comparison is case-insensitive. It
+     * also ignores the characters '-', '_', and ' ' (dash, underscore, and space). Thus the strings
+     * "UTF-8", "utf_8", and "Utf 8" are exactly equivalent.
+     *
+     * <p>This is a symmetrical (commutative) operation; order of arguments is insignificant. This
+     * is an important property for sorting the list (when the list is preprocessed into binary
+     * form) and for performing binary searches on it at run time.
+     *
+     * @param name1 a converter name or alias, zero-terminated
+     * @param name2 a converter name or alias, zero-terminated
+     * @return 0 if the names match, or a negative value if the name1 lexically precedes name2, or a
+     *     positive value if the name1 lexically follows name2.
      * @see UConverterAlias#stripForCompare
      */
-    static int compareNames(String name1, String name2){
+    static int compareNames(String name1, String name2) {
         int rc, name1Index = 0, name2Index = 0;
         char type, nextType;
         char c1 = 0, c2 = 0;
         boolean afterDigit1 = false, afterDigit2 = false;
 
-        for (;;) {
+        for (; ; ) {
             while (name1Index < name1.length()) {
                 c1 = name1.charAt(name1Index++);
                 type = GET_CHAR_TYPE(c1);
                 switch (type) {
-                case IGNORE:
-                    afterDigit1 = false;
-                    continue; /* ignore all but letters and digits */
-                case ZERO:
-                    if (!afterDigit1 && name1Index < name1.length()) {
-                        nextType = GET_CHAR_TYPE(name1.charAt(name1Index));
-                        if (nextType == ZERO || nextType == NONZERO) {
-                            continue; /* ignore leading zero before another digit */
+                    case IGNORE:
+                        afterDigit1 = false;
+                        continue; /* ignore all but letters and digits */
+                    case ZERO:
+                        if (!afterDigit1 && name1Index < name1.length()) {
+                            nextType = GET_CHAR_TYPE(name1.charAt(name1Index));
+                            if (nextType == ZERO || nextType == NONZERO) {
+                                continue; /* ignore leading zero before another digit */
+                            }
                         }
-                    }
-                    break;
-                case NONZERO:
-                    afterDigit1 = true;
-                    break;
-                default:
-                    c1 = type; /* lowercased letter */
-                    afterDigit1 = false;
-                    break;
+                        break;
+                    case NONZERO:
+                        afterDigit1 = true;
+                        break;
+                    default:
+                        c1 = type; /* lowercased letter */
+                        afterDigit1 = false;
+                        break;
                 }
                 break; /* deliver c1 */
             }
@@ -363,24 +358,24 @@ final class UConverterAlias {
                 c2 = name2.charAt(name2Index++);
                 type = GET_CHAR_TYPE(c2);
                 switch (type) {
-                case IGNORE:
-                    afterDigit2 = false;
-                    continue; /* ignore all but letters and digits */
-                case ZERO:
-                    if (!afterDigit2 && name1Index < name1.length()) {
-                        nextType = GET_CHAR_TYPE(name2.charAt(name2Index));
-                        if (nextType == ZERO || nextType == NONZERO) {
-                            continue; /* ignore leading zero before another digit */
+                    case IGNORE:
+                        afterDigit2 = false;
+                        continue; /* ignore all but letters and digits */
+                    case ZERO:
+                        if (!afterDigit2 && name1Index < name1.length()) {
+                            nextType = GET_CHAR_TYPE(name2.charAt(name2Index));
+                            if (nextType == ZERO || nextType == NONZERO) {
+                                continue; /* ignore leading zero before another digit */
+                            }
                         }
-                    }
-                    break;
-                case NONZERO:
-                    afterDigit2 = true;
-                    break;
-                default:
-                    c2 = type; /* lowercased letter */
-                    afterDigit2 = false;
-                    break;
+                        break;
+                    case NONZERO:
+                        afterDigit2 = true;
+                        break;
+                    default:
+                        c2 = type; /* lowercased letter */
+                        afterDigit2 = false;
+                        break;
                 }
                 break; /* deliver c2 */
             }
@@ -391,22 +386,21 @@ final class UConverterAlias {
             }
 
             /* Case-insensitive comparison */
-            rc = (int)c1 - (int)c2;
+            rc = (int) c1 - (int) c2;
             if (rc != 0) {
                 return rc;
             }
         }
     }
 
-    static int io_countAliases(String alias) 
-                        throws IOException{
+    static int io_countAliases(String alias) throws IOException {
         if (haveAliasData() && isAlias(alias)) {
             boolean[] isAmbigous = new boolean[1];
             int convNum = findConverter(alias, isAmbigous);
             if (convNum < gConverterList.length) {
                 /* tagListNum - 1 is the ALL tag */
-                int listOffset = gTaggedAliasArray[(gTagList.length - 1)
-                        * gConverterList.length + convNum];
+                int listOffset =
+                        gTaggedAliasArray[(gTagList.length - 1) * gConverterList.length + convNum];
 
                 if (listOffset != 0) {
                     return gTaggedAliasLists[listOffset];
@@ -420,30 +414,30 @@ final class UConverterAlias {
 
     /**
      * Return the number of all aliases (and converter names).
-     * 
+     *
      * @return the number of all aliases
      */
     // U_CFUNC uint16_t io_countTotalAliases(UErrorCode *pErrorCode);
-//    static int io_countTotalAliases() throws IOException{
-//        if (haveAliasData()) {
-//            return (int) gAliasList.length;
-//        }
-//        return 0;
-//    }
+    //    static int io_countTotalAliases() throws IOException{
+    //        if (haveAliasData()) {
+    //            return (int) gAliasList.length;
+    //        }
+    //        return 0;
+    //    }
 
     // U_CFUNC const char * io_getAlias(const char *alias, uint16_t n,
     // UErrorCode *pErrorCode)
-    static String io_getAlias(String alias, int n) throws IOException{
+    static String io_getAlias(String alias, int n) throws IOException {
         if (haveAliasData() && isAlias(alias)) {
             boolean[] isAmbigous = new boolean[1];
-            int convNum = findConverter(alias,isAmbigous);
+            int convNum = findConverter(alias, isAmbigous);
             if (convNum < gConverterList.length) {
                 /* tagListNum - 1 is the ALL tag */
-                int listOffset = gTaggedAliasArray[(gTagList.length - 1)
-                        * gConverterList.length + convNum];
+                int listOffset =
+                        gTaggedAliasArray[(gTagList.length - 1) * gConverterList.length + convNum];
 
                 if (listOffset != 0) {
-                    //int listCount = gTaggedAliasListsArray[listOffset];
+                    // int listCount = gTaggedAliasListsArray[listOffset];
                     /* +1 to skip listCount */
                     int currListArrayIndex = listOffset + 1;
 
@@ -457,25 +451,25 @@ final class UConverterAlias {
     }
 
     // U_CFUNC uint16_t io_countStandards(UErrorCode *pErrorCode) {
-//    static int io_countStandards() throws IOException{
-//        if (haveAliasData()) {
-//            return (int) (gTagList.length - NUM_HIDDEN_TAGS);
-//        }
-//        return 0;
-//    }
+    //    static int io_countStandards() throws IOException{
+    //        if (haveAliasData()) {
+    //            return (int) (gTagList.length - NUM_HIDDEN_TAGS);
+    //        }
+    //        return 0;
+    //    }
 
     // U_CAPI const char * U_EXPORT2getStandard(uint16_t n, UErrorCode
     // *pErrorCode)
-//    static String getStandard(int n) throws IOException{
-//        if (haveAliasData()) {
-//            return GET_STRING(gTagList[n]);
-//        }
-//        return null;
-//    }
+    //    static String getStandard(int n) throws IOException{
+    //        if (haveAliasData()) {
+    //            return GET_STRING(gTagList[n]);
+    //        }
+    //        return null;
+    //    }
 
     // U_CAPI const char * U_EXPORT2 getStandardName(const char *alias, const
     // char *standard, UErrorCode *pErrorCode)
-    static final String getStandardName(String alias, String standard)throws IOException {
+    static final String getStandardName(String alias, String standard) throws IOException {
         if (haveAliasData() && isAlias(alias)) {
             int listOffset = findTaggedAliasListsOffset(alias, standard);
 
@@ -491,37 +485,38 @@ final class UConverterAlias {
 
     // U_CAPI uint16_t U_EXPORT2 countAliases(const char *alias, UErrorCode
     // *pErrorCode)
-    static int countAliases(String alias) throws IOException{
+    static int countAliases(String alias) throws IOException {
         return io_countAliases(alias);
     }
 
     // U_CAPI const char* U_EXPORT2 getAlias(const char *alias, uint16_t n,
     // UErrorCode *pErrorCode)
-    static String getAlias(String alias, int n) throws IOException{
+    static String getAlias(String alias, int n) throws IOException {
         return io_getAlias(alias, n);
     }
 
     // U_CFUNC uint16_t countStandards(void)
-//    static int countStandards()throws IOException{
-//        return io_countStandards();
-//    }
-    
+    //    static int countStandards()throws IOException{
+    //        return io_countStandards();
+    //    }
+
     /*returns a single Name from the list, will return NULL if out of bounds
      */
-    static String getAvailableName (int n){
-        try{
-          if (0 <= n && n <= 0xffff) {
-            String name = bld_getAvailableConverter(n);
-            return name;
-          }
-        }catch(IOException ex){
-            //throw away exception
+    static String getAvailableName(int n) {
+        try {
+            if (0 <= n && n <= 0xffff) {
+                String name = bld_getAvailableConverter(n);
+                return name;
+            }
+        } catch (IOException ex) {
+            // throw away exception
         }
         return null;
     }
+
     // U_CAPI const char * U_EXPORT2 getCanonicalName(const char *alias, const
     // char *standard, UErrorCode *pErrorCode) {
-    static String getCanonicalName(String alias, String standard) throws IOException{
+    static String getCanonicalName(String alias, String standard) throws IOException {
         if (haveAliasData() && isAlias(alias)) {
             int convNum = findTaggedConverterNum(alias, standard);
 
@@ -532,33 +527,34 @@ final class UConverterAlias {
 
         return null;
     }
-    static int countAvailable (){
-        try{
+
+    static int countAvailable() {
+        try {
             return bld_countAvailableConverters();
-        }catch(IOException ex){
-            //throw away exception
+        } catch (IOException ex) {
+            // throw away exception
         }
         return -1;
     }
-        
+
     // U_CAPI UEnumeration * U_EXPORT2 openStandardNames(const char *convName,
     // const char *standard, UErrorCode *pErrorCode)
-/*    static final UConverterAliasesEnumeration openStandardNames(String convName, String standard)throws IOException {
+    /*    static final UConverterAliasesEnumeration openStandardNames(String convName, String standard)throws IOException {
         UConverterAliasesEnumeration aliasEnum = null;
         if (haveAliasData() && isAlias(convName)) {
             int listOffset = findTaggedAliasListsOffset(convName, standard);
 
-            
+
              * When listOffset == 0, we want to acknowledge that the converter
              * name and standard are okay, but there is nothing to enumerate.
-             
+
             if (listOffset < gTaggedAliasLists.length) {
 
                 UConverterAliasesEnumeration.UAliasContext context = new UConverterAliasesEnumeration.UAliasContext(listOffset, 0);
                 aliasEnum = new UConverterAliasesEnumeration();
                 aliasEnum.setContext(context);
             }
-             else converter or tag not found 
+             else converter or tag not found
         }
         return aliasEnum;
     }*/
@@ -588,15 +584,12 @@ final class UConverterAlias {
         /* Make a quick guess. Hopefully they used a TR22 canonical alias. */
         convNum = findConverter(alias, isAmbigous);
 
-        if (tagNum < (gTagList.length - NUM_HIDDEN_TAGS)
-                && convNum < gConverterList.length) {
-            listOffset = gTaggedAliasArray[tagNum
-                    * gConverterList.length + convNum];
-            if (listOffset != 0
-                    && gTaggedAliasLists[listOffset + 1] != 0) {
+        if (tagNum < (gTagList.length - NUM_HIDDEN_TAGS) && convNum < gConverterList.length) {
+            listOffset = gTaggedAliasArray[tagNum * gConverterList.length + convNum];
+            if (listOffset != 0 && gTaggedAliasLists[listOffset + 1] != 0) {
                 return listOffset;
             }
-            if (isAmbigous[0]==true) {
+            if (isAmbigous[0] == true) {
                 /*
                  * Uh Oh! They used an ambiguous alias. We have to search the
                  * whole swiss cheese starting at the highest standard affinity.
@@ -607,12 +600,10 @@ final class UConverterAlias {
                     listOffset = gTaggedAliasArray[idx];
                     if (listOffset != 0 && isAliasInList(alias, listOffset)) {
                         int currTagNum = idx / gConverterList.length;
-                        int currConvNum = (idx - currTagNum
-                                * gConverterList.length);
-                        int tempListOffset = gTaggedAliasArray[tagNum
-                                * gConverterList.length + currConvNum];
-                        if (tempListOffset != 0
-                                && gTaggedAliasLists[tempListOffset + 1] != 0) {
+                        int currConvNum = (idx - currTagNum * gConverterList.length);
+                        int tempListOffset =
+                                gTaggedAliasArray[tagNum * gConverterList.length + currConvNum];
+                        if (tempListOffset != 0 && gTaggedAliasLists[tempListOffset + 1] != 0) {
                             return tempListOffset;
                         }
                         /*
@@ -642,14 +633,12 @@ final class UConverterAlias {
         int convNum;
         int tagNum = getTagNumber(standard);
         boolean[] isAmbigous = new boolean[1];
-        
-        /* Make a quick guess. Hopefully they used a TR22 canonical alias. */
-        convNum = findConverter(alias, isAmbigous);        
 
-        if (tagNum < (gTagList.length - NUM_HIDDEN_TAGS)
-                && convNum < gConverterList.length) {
-            listOffset = gTaggedAliasArray[tagNum
-                    * gConverterList.length + convNum];
+        /* Make a quick guess. Hopefully they used a TR22 canonical alias. */
+        convNum = findConverter(alias, isAmbigous);
+
+        if (tagNum < (gTagList.length - NUM_HIDDEN_TAGS) && convNum < gConverterList.length) {
+            listOffset = gTaggedAliasArray[tagNum * gConverterList.length + convNum];
             if (listOffset != 0 && isAliasInList(alias, listOffset)) {
                 return convNum;
             }
@@ -687,8 +676,10 @@ final class UConverterAlias {
             for (currAlias = 0; currAlias < listCount; currAlias++) {
                 if (gTaggedAliasLists[currAlias + currListArrayIndex] != 0
                         && compareNames(
-                                alias,
-                                GET_STRING(gTaggedAliasLists[currAlias + currListArrayIndex])) == 0) {
+                                        alias,
+                                        GET_STRING(
+                                                gTaggedAliasLists[currAlias + currListArrayIndex]))
+                                == 0) {
                     return true;
                 }
             }
@@ -704,7 +695,7 @@ final class UConverterAlias {
     static String gDefaultConverterName = null;
 
     // static UBool haveAvailableConverterList(UErrorCode *pErrorCode)
-    static boolean haveAvailableConverterList() throws IOException{
+    static boolean haveAvailableConverterList() throws IOException {
         if (gAvailableConverters == null) {
             int idx;
             int localConverterCount;
@@ -722,10 +713,9 @@ final class UConverterAlias {
 
             for (idx = 0; idx < gConverterList.length; idx++) {
                 converterName = GET_STRING(gConverterList[idx]);
-                //UConverter cnv = UConverter.open(converterName);
-                //TODO: Fix me
+                // UConverter cnv = UConverter.open(converterName);
+                // TODO: Fix me
                 localConverterList[localConverterCount++] = converterName;
-                
             }
 
             // agljport:todo umtx_lock(NULL);
@@ -742,7 +732,7 @@ final class UConverterAlias {
     }
 
     // U_CFUNC uint16_t bld_countAvailableConverters(UErrorCode *pErrorCode)
-    static int bld_countAvailableConverters() throws IOException{
+    static int bld_countAvailableConverters() throws IOException {
         if (haveAvailableConverterList()) {
             return gAvailableConverterCount;
         }
@@ -751,7 +741,7 @@ final class UConverterAlias {
 
     // U_CFUNC const char * bld_getAvailableConverter(uint16_t n, UErrorCode
     // *pErrorCode)
-    static String bld_getAvailableConverter(int n) throws IOException{
+    static String bld_getAvailableConverter(int n) throws IOException {
         if (haveAvailableConverterList()) {
             if (n < gAvailableConverterCount) {
                 return gAvailableConverters[n];

@@ -2,11 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
-import java.math.BigInteger;
-import java.text.Format;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLongFieldUpdater;
-
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.DecimalQuantity;
@@ -18,11 +13,16 @@ import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
+import java.math.BigInteger;
+import java.text.Format;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 
 /**
- * A NumberFormatter that has a locale associated with it; this means .format() methods are available.
+ * A NumberFormatter that has a locale associated with it; this means .format() methods are
+ * available.
  *
- * Instances of this class are immutable and thread-safe.
+ * <p>Instances of this class are immutable and thread-safe.
  *
  * @see NumberFormatter
  * @stable ICU 60
@@ -30,8 +30,8 @@ import com.ibm.icu.util.MeasureUnit;
  */
 public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedNumberFormatter> {
 
-    static final AtomicLongFieldUpdater<LocalizedNumberFormatter> callCount = AtomicLongFieldUpdater
-            .newUpdater(LocalizedNumberFormatter.class, "callCountInternal");
+    static final AtomicLongFieldUpdater<LocalizedNumberFormatter> callCount =
+            AtomicLongFieldUpdater.newUpdater(LocalizedNumberFormatter.class, "callCountInternal");
 
     volatile long callCountInternal; // do not access directly; use callCount instead
     volatile LocalizedNumberFormatter savedWithUnit;
@@ -45,8 +45,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * Format the given byte, short, int, or long to a string using the settings specified in the
      * NumberFormatter fluent setting chain.
      *
-     * @param input
-     *            The number to format.
+     * @param input The number to format.
      * @return A FormattedNumber object; call .toString() to get the string.
      * @stable ICU 60
      * @see NumberFormatter
@@ -56,11 +55,10 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     }
 
     /**
-     * Format the given float or double to a string using the settings specified in the NumberFormatter
-     * fluent setting chain.
+     * Format the given float or double to a string using the settings specified in the
+     * NumberFormatter fluent setting chain.
      *
-     * @param input
-     *            The number to format.
+     * @param input The number to format.
      * @return A FormattedNumber object; call .toString() to get the string.
      * @stable ICU 60
      * @see NumberFormatter
@@ -70,11 +68,10 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     }
 
     /**
-     * Format the given {@link BigInteger}, {@link BigDecimal}, or other {@link Number} to a string using
-     * the settings specified in the NumberFormatter fluent setting chain.
+     * Format the given {@link BigInteger}, {@link BigDecimal}, or other {@link Number} to a string
+     * using the settings specified in the NumberFormatter fluent setting chain.
      *
-     * @param input
-     *            The number to format.
+     * @param input The number to format.
      * @return A FormattedNumber object; call .toString() to get the string.
      * @stable ICU 60
      * @see NumberFormatter
@@ -87,12 +84,11 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * Format the given {@link Measure} or {@link CurrencyAmount} to a string using the settings
      * specified in the NumberFormatter fluent setting chain.
      *
-     * <p>
-     * The unit specified here overrides any unit that may have been specified in the setter chain. This
-     * method is intended for cases when each input to the number formatter has a different unit.
+     * <p>The unit specified here overrides any unit that may have been specified in the setter
+     * chain. This method is intended for cases when each input to the number formatter has a
+     * different unit.
      *
-     * @param input
-     *            The number to format.
+     * @param input The number to format.
      * @return A FormattedNumber object; call .toString() to get the string.
      * @stable ICU 60
      * @see NumberFormatter
@@ -106,12 +102,13 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     }
 
     /**
-     * Creates a representation of this LocalizedNumberFormat as a {@link java.text.Format}, enabling the
-     * use of this number formatter with APIs that need an object of that type, such as MessageFormat.
-     * <p>
-     * This API is not intended to be used other than for enabling API compatibility. The {@link #format}
-     * methods should normally be used when formatting numbers, not the Format object returned by this
-     * method.
+     * Creates a representation of this LocalizedNumberFormat as a {@link java.text.Format},
+     * enabling the use of this number formatter with APIs that need an object of that type, such as
+     * MessageFormat.
+     *
+     * <p>This API is not intended to be used other than for enabling API compatibility. The {@link
+     * #format} methods should normally be used when formatting numbers, not the Format object
+     * returned by this method.
      *
      * @return A Format wrapping this LocalizedNumberFormatter.
      * @stable ICU 62
@@ -131,9 +128,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
         return new UnlocalizedNumberFormatter(this, KEY_LOCALE, null);
     }
 
-    /**
-     *  Helper method that creates a FormattedStringBuilder and formats.
-     */
+    /** Helper method that creates a FormattedStringBuilder and formats. */
     private FormattedNumber format(DecimalQuantity fq) {
         FormattedStringBuilder string = new FormattedStringBuilder();
         MicroProps micros = formatImpl(fq, string);
@@ -142,17 +137,13 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
 
     /**
      * This is the core entrypoint to the number formatting pipeline. It performs self-regulation: a
-     * static code path for the first few calls, and compiling a more efficient data structure if called
-     * repeatedly.
+     * static code path for the first few calls, and compiling a more efficient data structure if
+     * called repeatedly.
      *
-     * <p>
-     * This function is very hot, being called in every call to the number formatting pipeline.
+     * <p>This function is very hot, being called in every call to the number formatting pipeline.
      *
-     * @param fq
-     *            The quantity to be formatted.
-     * @param string
-     *            The string builder into which to insert the result.
-     *
+     * @param fq The quantity to be formatted.
+     * @param string The string builder into which to insert the result.
      * @internal
      * @deprecated ICU 60 This API is ICU internal only.
      */
@@ -171,11 +162,11 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * @deprecated ICU 67 This API is ICU internal only.
      */
     @Deprecated
-    public MicroProps formatImpl(DecimalQuantity fq, MeasureUnit unit, FormattedStringBuilder string) {
+    public MicroProps formatImpl(
+            DecimalQuantity fq, MeasureUnit unit, FormattedStringBuilder string) {
         // Use this formatter if possible
         if (Objects.equals(resolve().unit, unit)) {
             return formatImpl(fq, string);
-
         }
         // This mechanism saves the previously used unit, so if the user calls this method with the
         // same unit multiple times in a row, they get a more efficient code path.
@@ -189,8 +180,8 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
 
     /**
      * @internal
-     * @deprecated This API is ICU internal only. Use {@link FormattedNumber#nextPosition}
-     *             for related functionality.
+     * @deprecated This API is ICU internal only. Use {@link FormattedNumber#nextPosition} for
+     *     related functionality.
      */
     @Deprecated
     public String getAffixImpl(boolean isPrefix, boolean isNegative) {
@@ -202,7 +193,8 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
         if (computeCompiled()) {
             prefixLength = compiled.getPrefixSuffix(signum, plural, string);
         } else {
-            prefixLength = NumberFormatterImpl.getPrefixSuffixStatic(resolve(), signum, plural, string);
+            prefixLength =
+                    NumberFormatterImpl.getPrefixSuffixStatic(resolve(), signum, plural, string);
         }
         if (isPrefix) {
             return string.subSequence(0, prefixLength).toString();

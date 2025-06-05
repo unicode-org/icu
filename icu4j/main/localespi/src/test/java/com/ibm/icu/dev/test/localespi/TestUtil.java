@@ -8,12 +8,11 @@
  */
 package com.ibm.icu.dev.test.localespi;
 
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Builder;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.ULocale.Builder;
 
 public class TestUtil {
 

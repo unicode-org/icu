@@ -8,25 +8,22 @@
  */
 
 /**
- * Port From:   ICU4C v2.1 : Collate/CollationTurkishTest
- * Source File: $ICU4CRoot/source/test/intltest/trcoll.cpp
- **/
-
+ * Port From: ICU4C v2.1 : Collate/CollationTurkishTest Source File:
+ * $ICU4CRoot/source/test/intltest/trcoll.cpp
+ */
 package com.ibm.icu.dev.test.collator;
 
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.CollationKey;
+import com.ibm.icu.text.Collator;
 import java.util.Locale;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.CollationKey;
-import com.ibm.icu.text.Collator;
-
 @RunWith(JUnit4.class)
-public class CollationTurkishTest extends TestFmwk{
+public class CollationTurkishTest extends TestFmwk {
     private static char[][] testSourceCases = {
         {0x73, 0x0327},
         {0x76, 0x00E4, 0x74},
@@ -64,7 +61,7 @@ public class CollationTurkishTest extends TestFmwk{
         -1,
         -1,
         1,
-    // test priamry > 8
+        // test priamry > 8
         -1,
         -1,
         1
@@ -72,12 +69,10 @@ public class CollationTurkishTest extends TestFmwk{
 
     private Collator myCollation = null;
 
-    public CollationTurkishTest() {
-
-    }
+    public CollationTurkishTest() {}
 
     @Before
-    public void init()throws Exception{
+    public void init() throws Exception {
         myCollation = Collator.getInstance(new Locale("tr", ""));
     }
 
@@ -85,7 +80,7 @@ public class CollationTurkishTest extends TestFmwk{
     public void TestTertiary() {
         int i = 0;
         myCollation.setStrength(Collator.TERTIARY);
-        for (i = 0; i < 8 ; i++) {
+        for (i = 0; i < 8; i++) {
             doTest(testSourceCases[i], testTargetCases[i], results[i]);
         }
     }
@@ -99,7 +94,6 @@ public class CollationTurkishTest extends TestFmwk{
         }
     }
 
-
     // main test routine, tests rules specific to turkish locale
     private void doTest(char[] source, char[] target, int result) {
         String s = new String(source);
@@ -110,11 +104,17 @@ public class CollationTurkishTest extends TestFmwk{
         sortKey2 = myCollation.getCollationKey(t);
         int keyResult = sortKey1.compareTo(sortKey2);
         reportCResult(s, t, sortKey1, sortKey2, compareResult, keyResult, compareResult, result);
-
     }
 
-    private void reportCResult( String source, String target, CollationKey sourceKey, CollationKey targetKey,
-                                int compareResult, int keyResult, int incResult, int expectedResult ) {
+    private void reportCResult(
+            String source,
+            String target,
+            CollationKey sourceKey,
+            CollationKey targetKey,
+            int compareResult,
+            int keyResult,
+            int incResult,
+            int expectedResult) {
         if (expectedResult < -1 || expectedResult > 1) {
             errln("***** invalid call to reportCResult ****");
             return;
@@ -127,7 +127,7 @@ public class CollationTurkishTest extends TestFmwk{
         if (ok1 && ok2 && ok3 && !isVerbose()) {
             return;
         } else {
-            String msg1 = ok1? "Ok: compare(\"" : "FAIL: compare(\"";
+            String msg1 = ok1 ? "Ok: compare(\"" : "FAIL: compare(\"";
             String msg2 = "\", \"";
             String msg3 = "\") returned ";
             String msg4 = "; expected ";
@@ -152,7 +152,11 @@ public class CollationTurkishTest extends TestFmwk{
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
                 msg1 = "  ";
                 msg2 = " vs. ";
-                errln(msg1 + CollationTest.prettify(sourceKey) + msg2 + CollationTest.prettify(targetKey));
+                errln(
+                        msg1
+                                + CollationTest.prettify(sourceKey)
+                                + msg2
+                                + CollationTest.prettify(targetKey));
             }
 
             msg1 = ok3 ? "Ok: incCompare(\"" : "FAIL: incCompare(\"";

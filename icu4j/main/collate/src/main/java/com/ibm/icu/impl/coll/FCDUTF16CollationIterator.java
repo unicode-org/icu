@@ -1,27 +1,23 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-* Copyright (C) 2010-2014, International Business Machines
-* Corporation and others.  All Rights Reserved.
-*******************************************************************************
-* FCDUTF16CollationIterator.java, ported from utf16collationiterator.h/.cpp
-*
-* C++ version created on: 2010oct27
-* created by: Markus W. Scherer
-*/
+ *******************************************************************************
+ * Copyright (C) 2010-2014, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ * FCDUTF16CollationIterator.java, ported from utf16collationiterator.h/.cpp
+ *
+ * C++ version created on: 2010oct27
+ * created by: Markus W. Scherer
+ */
 
 package com.ibm.icu.impl.coll;
 
 import com.ibm.icu.impl.Normalizer2Impl;
 
-/**
- * Incrementally checks the input text for FCD and normalizes where necessary.
- */
+/** Incrementally checks the input text for FCD and normalizes where necessary. */
 public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
-    /**
-     * Partial constructor, see {@link CollationIterator#CollationIterator(CollationData)}.
-     */
+    /** Partial constructor, see {@link CollationIterator#CollationIterator(CollationData)}. */
     public FCDUTF16CollationIterator(CollationData d) {
         super(d);
         nfcImpl = d.nfcImpl;
@@ -40,12 +36,11 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
     public boolean equals(Object other) {
         // Skip the UTF16CollationIterator and call its parent.
         if (!(other instanceof CollationIterator)
-            || !((CollationIterator)this).equals(other)
-            || !(other instanceof FCDUTF16CollationIterator))
-        {
+                || !((CollationIterator) this).equals(other)
+                || !(other instanceof FCDUTF16CollationIterator)) {
             return false;
         }
-        FCDUTF16CollationIterator o = (FCDUTF16CollationIterator)other;
+        FCDUTF16CollationIterator o = (FCDUTF16CollationIterator) other;
         // Compare the iterator state but not the text: Assume that the caller does that.
         if (checkDir != o.checkDir) {
             return false;
@@ -55,10 +50,9 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
         }
         if (checkDir != 0 || seq == rawSeq) {
             return (pos - rawStart) == (o.pos - /*o.*/ rawStart);
-        }
-        else {
-            return (segmentStart - rawStart) == (o.segmentStart - /*o.*/ rawStart) &&
-                    (pos - start) == (o.pos - o.start);
+        } else {
+            return (segmentStart - rawStart) == (o.segmentStart - /*o.*/ rawStart)
+                    && (pos - start) == (o.pos - o.start);
         }
     }
 
@@ -79,9 +73,9 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
 
     @Override
     public int getOffset() {
-        if(checkDir != 0 || seq == rawSeq) {
+        if (checkDir != 0 || seq == rawSeq) {
             return pos - rawStart;
-        } else if(pos == start) {
+        } else if (pos == start) {
             return segmentStart - rawStart;
         } else {
             return segmentLimit - rawStart;
@@ -100,22 +94,22 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
     @Override
     public int nextCodePoint() {
         char c;
-        for(;;) {
-            if(checkDir > 0) {
-                if(pos == limit) {
+        for (; ; ) {
+            if (checkDir > 0) {
+                if (pos == limit) {
                     return Collation.SENTINEL_CP;
                 }
                 c = seq.charAt(pos++);
-                if(CollationFCD.hasTccc(c)) {
-                    if(CollationFCD.maybeTibetanCompositeVowel(c) ||
-                            (pos != limit && CollationFCD.hasLccc(seq.charAt(pos)))) {
+                if (CollationFCD.hasTccc(c)) {
+                    if (CollationFCD.maybeTibetanCompositeVowel(c)
+                            || (pos != limit && CollationFCD.hasLccc(seq.charAt(pos)))) {
                         --pos;
                         nextSegment();
                         c = seq.charAt(pos++);
                     }
                 }
                 break;
-            } else if(checkDir == 0 && pos != limit) {
+            } else if (checkDir == 0 && pos != limit) {
                 c = seq.charAt(pos++);
                 break;
             } else {
@@ -123,8 +117,9 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
             }
         }
         char trail;
-        if(Character.isHighSurrogate(c) && pos != limit &&
-                Character.isLowSurrogate(trail = seq.charAt(pos))) {
+        if (Character.isHighSurrogate(c)
+                && pos != limit
+                && Character.isLowSurrogate(trail = seq.charAt(pos))) {
             ++pos;
             return Character.toCodePoint(c, trail);
         } else {
@@ -135,22 +130,22 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
     @Override
     public int previousCodePoint() {
         char c;
-        for(;;) {
-            if(checkDir < 0) {
-                if(pos == start) {
+        for (; ; ) {
+            if (checkDir < 0) {
+                if (pos == start) {
                     return Collation.SENTINEL_CP;
                 }
                 c = seq.charAt(--pos);
-                if(CollationFCD.hasLccc(c)) {
-                    if(CollationFCD.maybeTibetanCompositeVowel(c) ||
-                            (pos != start && CollationFCD.hasTccc(seq.charAt(pos - 1)))) {
+                if (CollationFCD.hasLccc(c)) {
+                    if (CollationFCD.maybeTibetanCompositeVowel(c)
+                            || (pos != start && CollationFCD.hasTccc(seq.charAt(pos - 1)))) {
                         ++pos;
                         previousSegment();
                         c = seq.charAt(--pos);
                     }
                 }
                 break;
-            } else if(checkDir == 0 && pos != start) {
+            } else if (checkDir == 0 && pos != start) {
                 c = seq.charAt(--pos);
                 break;
             } else {
@@ -158,8 +153,9 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
             }
         }
         char lead;
-        if(Character.isLowSurrogate(c) && pos != start &&
-                Character.isHighSurrogate(lead = seq.charAt(pos - 1))) {
+        if (Character.isLowSurrogate(c)
+                && pos != start
+                && Character.isHighSurrogate(lead = seq.charAt(pos - 1))) {
             --pos;
             return Character.toCodePoint(lead, c);
         } else {
@@ -170,22 +166,22 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
     @Override
     protected long handleNextCE32() {
         char c;
-        for(;;) {
-            if(checkDir > 0) {
-                if(pos == limit) {
+        for (; ; ) {
+            if (checkDir > 0) {
+                if (pos == limit) {
                     return NO_CP_AND_CE32;
                 }
                 c = seq.charAt(pos++);
-                if(CollationFCD.hasTccc(c)) {
-                    if(CollationFCD.maybeTibetanCompositeVowel(c) ||
-                            (pos != limit && CollationFCD.hasLccc(seq.charAt(pos)))) {
+                if (CollationFCD.hasTccc(c)) {
+                    if (CollationFCD.maybeTibetanCompositeVowel(c)
+                            || (pos != limit && CollationFCD.hasLccc(seq.charAt(pos)))) {
                         --pos;
                         nextSegment();
                         c = seq.charAt(pos++);
                     }
                 }
                 break;
-            } else if(checkDir == 0 && pos != limit) {
+            } else if (checkDir == 0 && pos != limit) {
                 c = seq.charAt(pos++);
                 break;
             } else {
@@ -201,7 +197,7 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
     protected void forwardNumCodePoints(int num) {
         // Specify the class to avoid a virtual-function indirection.
         // In Java, we would declare this class final.
-        while(num > 0 && nextCodePoint() >= 0) {
+        while (num > 0 && nextCodePoint() >= 0) {
             --num;
         }
     }
@@ -210,30 +206,29 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
     protected void backwardNumCodePoints(int num) {
         // Specify the class to avoid a virtual-function indirection.
         // In Java, we would declare this class final.
-        while(num > 0 && previousCodePoint() >= 0) {
+        while (num > 0 && previousCodePoint() >= 0) {
             --num;
         }
     }
 
     /**
-     * Switches to forward checking if possible.
-     * To be called when checkDir < 0 || (checkDir == 0 && pos == limit).
-     * Returns with checkDir > 0 || (checkDir == 0 && pos != limit).
+     * Switches to forward checking if possible. To be called when checkDir < 0 || (checkDir == 0 &&
+     * pos == limit). Returns with checkDir > 0 || (checkDir == 0 && pos != limit).
      */
     private void switchToForward() {
-        assert((checkDir < 0 && seq == rawSeq) || (checkDir == 0 && pos == limit));
-        if(checkDir < 0) {
+        assert ((checkDir < 0 && seq == rawSeq) || (checkDir == 0 && pos == limit));
+        if (checkDir < 0) {
             // Turn around from backward checking.
             start = segmentStart = pos;
-            if(pos == segmentLimit) {
+            if (pos == segmentLimit) {
                 limit = rawLimit;
-                checkDir = 1;  // Check forward.
-            } else {  // pos < segmentLimit
-                checkDir = 0;  // Stay in FCD segment.
+                checkDir = 1; // Check forward.
+            } else { // pos < segmentLimit
+                checkDir = 0; // Stay in FCD segment.
             }
         } else {
             // Reached the end of the FCD segment.
-            if(seq == rawSeq) {
+            if (seq == rawSeq) {
                 // The input text segment is FCD, extend it forward.
             } else {
                 // The input text segment needed to be normalized.
@@ -243,7 +238,8 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
                 // Note: If this segment is at the end of the input text,
                 // then it might help to return false to indicate that, so that
                 // we do not have to re-check and normalize when we turn around and go backwards.
-                // However, that would complicate the call sites for an optimization of an unusual case.
+                // However, that would complicate the call sites for an optimization of an unusual
+                // case.
             }
             limit = rawLimit;
             checkDir = 1;
@@ -251,69 +247,70 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
     }
 
     /**
-     * Extend the FCD text segment forward or normalize around pos.
-     * To be called when checkDir > 0 && pos != limit.
-     * Returns with checkDir == 0 and pos != limit.
+     * Extend the FCD text segment forward or normalize around pos. To be called when checkDir > 0
+     * && pos != limit. Returns with checkDir == 0 and pos != limit.
      */
     private void nextSegment() {
-        assert(checkDir > 0 && seq == rawSeq && pos != limit);
+        assert (checkDir > 0 && seq == rawSeq && pos != limit);
         // The input text [segmentStart..pos[ passes the FCD check.
         int p = pos;
         int prevCC = 0;
-        for(;;) {
+        for (; ; ) {
             // Fetch the next character's fcd16 value.
             int q = p;
             int c = Character.codePointAt(seq, p);
             p += Character.charCount(c);
             int fcd16 = nfcImpl.getFCD16(c);
             int leadCC = fcd16 >> 8;
-            if(leadCC == 0 && q != pos) {
+            if (leadCC == 0 && q != pos) {
                 // FCD boundary before the [q, p[ character.
                 limit = segmentLimit = q;
                 break;
             }
-            if(leadCC != 0 && (prevCC > leadCC || CollationFCD.isFCD16OfTibetanCompositeVowel(fcd16))) {
+            if (leadCC != 0
+                    && (prevCC > leadCC || CollationFCD.isFCD16OfTibetanCompositeVowel(fcd16))) {
                 // Fails FCD check. Find the next FCD boundary and normalize.
                 do {
                     q = p;
-                    if(p == rawLimit) { break; }
+                    if (p == rawLimit) {
+                        break;
+                    }
                     c = Character.codePointAt(seq, p);
                     p += Character.charCount(c);
-                } while(nfcImpl.getFCD16(c) > 0xff);
+                } while (nfcImpl.getFCD16(c) > 0xff);
                 normalize(pos, q);
                 pos = start;
                 break;
             }
             prevCC = fcd16 & 0xff;
-            if(p == rawLimit || prevCC == 0) {
+            if (p == rawLimit || prevCC == 0) {
                 // FCD boundary after the last character.
                 limit = segmentLimit = p;
                 break;
             }
         }
-        assert(pos != limit);
+        assert (pos != limit);
         checkDir = 0;
     }
 
     /**
-     * Switches to backward checking.
-     * To be called when checkDir > 0 || (checkDir == 0 && pos == start).
-     * Returns with checkDir < 0 || (checkDir == 0 && pos != start).
+     * Switches to backward checking. To be called when checkDir > 0 || (checkDir == 0 && pos ==
+     * start). Returns with checkDir < 0 || (checkDir == 0 && pos != start).
      */
     private void switchToBackward() {
-        assert((checkDir > 0 && seq == rawSeq) || (checkDir == 0 && pos == start));
-        if(checkDir > 0) {
+        assert ((checkDir > 0 && seq == rawSeq) || (checkDir == 0 && pos == start));
+        if (checkDir > 0) {
             // Turn around from forward checking.
             limit = segmentLimit = pos;
-            if(pos == segmentStart) {
+            if (pos == segmentStart) {
                 start = rawStart;
-                checkDir = -1;  // Check backward.
-            } else {  // pos > segmentStart
-                checkDir = 0;  // Stay in FCD segment.
+                checkDir = -1; // Check backward.
+            } else { // pos > segmentStart
+                checkDir = 0; // Stay in FCD segment.
             }
         } else {
             // Reached the start of the FCD segment.
-            if(seq == rawSeq) {
+            if (seq == rawSeq) {
                 // The input text segment is FCD, extend it backward.
             } else {
                 // The input text segment needed to be normalized.
@@ -327,53 +324,55 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
     }
 
     /**
-     * Extend the FCD text segment backward or normalize around pos.
-     * To be called when checkDir < 0 && pos != start.
-     * Returns with checkDir == 0 and pos != start.
+     * Extend the FCD text segment backward or normalize around pos. To be called when checkDir < 0
+     * && pos != start. Returns with checkDir == 0 and pos != start.
      */
     private void previousSegment() {
-        assert(checkDir < 0 && seq == rawSeq && pos != start);
+        assert (checkDir < 0 && seq == rawSeq && pos != start);
         // The input text [pos..segmentLimit[ passes the FCD check.
         int p = pos;
         int nextCC = 0;
-        for(;;) {
+        for (; ; ) {
             // Fetch the previous character's fcd16 value.
             int q = p;
             int c = Character.codePointBefore(seq, p);
             p -= Character.charCount(c);
             int fcd16 = nfcImpl.getFCD16(c);
             int trailCC = fcd16 & 0xff;
-            if(trailCC == 0 && q != pos) {
+            if (trailCC == 0 && q != pos) {
                 // FCD boundary after the [p, q[ character.
                 start = segmentStart = q;
                 break;
             }
-            if(trailCC != 0 && ((nextCC != 0 && trailCC > nextCC) ||
-                                CollationFCD.isFCD16OfTibetanCompositeVowel(fcd16))) {
+            if (trailCC != 0
+                    && ((nextCC != 0 && trailCC > nextCC)
+                            || CollationFCD.isFCD16OfTibetanCompositeVowel(fcd16))) {
                 // Fails FCD check. Find the previous FCD boundary and normalize.
                 do {
                     q = p;
-                    if(fcd16 <= 0xff || p == rawStart) { break; }
+                    if (fcd16 <= 0xff || p == rawStart) {
+                        break;
+                    }
                     c = Character.codePointBefore(seq, p);
                     p -= Character.charCount(c);
-                } while((fcd16 = nfcImpl.getFCD16(c)) != 0);
+                } while ((fcd16 = nfcImpl.getFCD16(c)) != 0);
                 normalize(q, pos);
                 pos = limit;
                 break;
             }
             nextCC = fcd16 >> 8;
-            if(p == rawStart || nextCC == 0) {
+            if (p == rawStart || nextCC == 0) {
                 // FCD boundary before the following character.
                 start = segmentStart = p;
                 break;
             }
         }
-        assert(pos != start);
+        assert (pos != start);
         checkDir = 0;
     }
 
     private void normalize(int from, int to) {
-        if(normalized == null) {
+        if (normalized == null) {
             normalized = new StringBuilder();
         }
         // NFD without argument checking.

@@ -7,10 +7,10 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * The interface that must be implemented for each selection function
- * that can be used from {@link MessageFormatter}.
+ * The interface that must be implemented for each selection function that can be used from {@link
+ * MessageFormatter}.
  *
- * <p>The we use it to create and cache various selectors with various options.</p>
+ * <p>The we use it to create and cache various selectors with various options.
  *
  * @internal ICU 72 technology preview
  * @deprecated This API is for technology preview only.
@@ -21,9 +21,9 @@ public interface SelectorFactory {
      * The method that is called to create a selector.
      *
      * @param locale the locale to use for selection.
-     * @param fixedOptions the options to use for selection. The keys and values are function dependent.
+     * @param fixedOptions the options to use for selection. The keys and values are function
+     *     dependent.
      * @return The Selector.
-     *
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */

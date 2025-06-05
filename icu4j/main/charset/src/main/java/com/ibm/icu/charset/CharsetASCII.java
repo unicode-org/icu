@@ -1,15 +1,16 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2006-2011, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2006-2011, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  *
- *******************************************************************************
+ * <p>******************************************************************************
  */
 package com.ibm.icu.charset;
 
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
@@ -17,11 +18,8 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.text.UnicodeSet;
-
 class CharsetASCII extends CharsetICU {
-    protected byte[] fromUSubstitution = new byte[] { (byte) 0x1a };
+    protected byte[] fromUSubstitution = new byte[] {(byte) 0x1a};
 
     public CharsetASCII(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
@@ -37,8 +35,8 @@ class CharsetASCII extends CharsetICU {
         }
 
         @Override
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets,
-                boolean flush) {
+        protected CoderResult decodeLoop(
+                ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             if (!source.hasRemaining()) {
                 /* no input, nothing to do */
                 return CoderResult.UNDERFLOW;
@@ -69,15 +67,23 @@ class CharsetASCII extends CharsetICU {
                 int targetIndex = oldTarget + targetOffset;
                 int targetLength = target.limit() - oldTarget;
 
-                int limit = ((sourceLength < targetLength) ? sourceLength : targetLength)
-                        + sourceIndex;
+                int limit =
+                        ((sourceLength < targetLength) ? sourceLength : targetLength) + sourceIndex;
                 int offset = targetIndex - sourceIndex;
 
                 /*
                  * perform the core loop... if it returns null, it must be due to an overflow or
                  * underflow
                  */
-                cr = decodeLoopCoreOptimized(source, target, sourceArray, targetArray, sourceIndex, offset, limit);
+                cr =
+                        decodeLoopCoreOptimized(
+                                source,
+                                target,
+                                sourceArray,
+                                targetArray,
+                                sourceIndex,
+                                offset,
+                                limit);
                 if (cr == null) {
                     if (sourceLength <= targetLength) {
                         source.position(oldSource + sourceLength);
@@ -108,8 +114,14 @@ class CharsetASCII extends CharsetICU {
             return cr;
         }
 
-        protected CoderResult decodeLoopCoreOptimized(ByteBuffer source, CharBuffer target,
-                byte[] sourceArray, char[] targetArray, int oldSource, int offset, int limit) {
+        protected CoderResult decodeLoopCoreOptimized(
+                ByteBuffer source,
+                CharBuffer target,
+                byte[] sourceArray,
+                char[] targetArray,
+                int oldSource,
+                int offset,
+                int limit) {
             int i, ch = 0;
 
             /*
@@ -128,8 +140,7 @@ class CharsetASCII extends CharsetICU {
                 source.position(i + 1);
                 target.position(i + offset);
                 return decodeMalformedOrUnmappable(ch);
-            } else
-                return null;
+            } else return null;
         }
 
         protected CoderResult decodeLoopCoreUnoptimized(ByteBuffer source, CharBuffer target) {
@@ -144,7 +155,7 @@ class CharsetASCII extends CharsetICU {
 
                 if ((ch & 0x80) == 0) {
                     if (target.hasRemaining()) {
-                        target.put((char)ch);
+                        target.put((char) ch);
                     } else {
                         return CoderResult.OVERFLOW;
                     }
@@ -178,7 +189,7 @@ class CharsetASCII extends CharsetICU {
             implReset();
         }
 
-        private final static int NEED_TO_WRITE_BOM = 1;
+        private static final int NEED_TO_WRITE_BOM = 1;
 
         @Override
         protected void implReset() {
@@ -187,8 +198,8 @@ class CharsetASCII extends CharsetICU {
         }
 
         @Override
-        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets,
-                boolean flush) {
+        protected CoderResult encodeLoop(
+                CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             if (!source.hasRemaining()) {
                 /* no input, nothing to do */
                 return CoderResult.UNDERFLOW;
@@ -227,15 +238,25 @@ class CharsetASCII extends CharsetICU {
                     int targetIndex = oldTarget + targetOffset;
                     int targetLength = target.limit() - oldTarget;
 
-                    int limit = ((sourceLength < targetLength) ? sourceLength : targetLength)
-                            + sourceIndex;
+                    int limit =
+                            ((sourceLength < targetLength) ? sourceLength : targetLength)
+                                    + sourceIndex;
                     int offset = targetIndex - sourceIndex;
 
                     /*
                      * perform the core loop... if it returns null, it must be due to an overflow or
                      * underflow
                      */
-                    cr = encodeLoopCoreOptimized(source, target, sourceArray, targetArray, sourceIndex, offset, limit, flush);
+                    cr =
+                            encodeLoopCoreOptimized(
+                                    source,
+                                    target,
+                                    sourceArray,
+                                    targetArray,
+                                    sourceIndex,
+                                    offset,
+                                    limit,
+                                    flush);
                     if (cr == null) {
                         if (sourceLength <= targetLength) {
                             source.position(oldSource + sourceLength);
@@ -268,8 +289,14 @@ class CharsetASCII extends CharsetICU {
             return cr;
         }
 
-        protected CoderResult encodeLoopCoreOptimized(CharBuffer source, ByteBuffer target,
-                char[] sourceArray, byte[] targetArray, int oldSource, int offset, int limit,
+        protected CoderResult encodeLoopCoreOptimized(
+                CharBuffer source,
+                ByteBuffer target,
+                char[] sourceArray,
+                byte[] targetArray,
+                int oldSource,
+                int offset,
+                int limit,
                 boolean flush) {
             int i, ch = 0;
 
@@ -289,11 +316,11 @@ class CharsetASCII extends CharsetICU {
                 source.position((i + 1) - source.arrayOffset());
                 target.position(i + offset);
                 return encodeMalformedOrUnmappable(source, ch, flush);
-            } else
-                return null;
+            } else return null;
         }
 
-        protected CoderResult encodeLoopCoreUnoptimized(CharBuffer source, ByteBuffer target, boolean flush) {
+        protected CoderResult encodeLoopCoreUnoptimized(
+                CharBuffer source, ByteBuffer target, boolean flush) {
             int ch;
 
             /*
@@ -321,7 +348,8 @@ class CharsetASCII extends CharsetICU {
             return CoderResult.UNDERFLOW;
         }
 
-        protected final CoderResult encodeMalformedOrUnmappable(CharBuffer source, int ch, boolean flush) {
+        protected final CoderResult encodeMalformedOrUnmappable(
+                CharBuffer source, int ch, boolean flush) {
             /*
              * if the character is a lead surrogate, we need to call encodeTrail to attempt to match
              * it up with a trail surrogate. if not, the character is unmappable.
@@ -340,11 +368,10 @@ class CharsetASCII extends CharsetICU {
             if (cr != null) {
                 return cr;
             } else {
-                //source.position(source.position() - 2);
+                // source.position(source.position() - 2);
                 return CoderResult.unmappableForLength(2);
             }
         }
-
     }
 
     @Override
@@ -358,7 +385,7 @@ class CharsetASCII extends CharsetICU {
     }
 
     @Override
-    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
-        setFillIn.add(0,0x7f);
-     }
+    void getUnicodeSetImpl(UnicodeSet setFillIn, int which) {
+        setFillIn.add(0, 0x7f);
+    }
 }

@@ -8,27 +8,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Convenience class that provides the same functionality as
- * <code>Map.of</code> introduced in JDK 11, which can't be used yet for ICU4J.
+ * Convenience class that provides the same functionality as <code>Map.of</code> introduced in JDK
+ * 11, which can't be used yet for ICU4J.
  *
- * <p>The returned Map is immutable, to prove that the
- * {@link com.ibm.icu.message2.MessageFormatter} does not change it</p>
+ * <p>The returned Map is immutable, to prove that the {@link com.ibm.icu.message2.MessageFormatter}
+ * does not change it
  */
 @SuppressWarnings("javadoc")
 public class Args {
 
     public static final Map<String, Object> NONE = new HashMap<>();
 
-    public static Map<String, Object> of(
-            String argName0, Object argValue0) {
+    public static Map<String, Object> of(String argName0, Object argValue0) {
         Map<String, Object> result = new HashMap<>();
         result.put(argName0, argValue0);
         return Collections.unmodifiableMap(result);
     }
 
     public static Map<String, Object> of(
-            String argName0, Object argValue0,
-            String argName1, Object argValue1) {
+            String argName0, Object argValue0, String argName1, Object argValue1) {
         Map<String, Object> result = new HashMap<>();
         result.put(argName0, argValue0);
         result.put(argName1, argValue1);
@@ -36,9 +34,12 @@ public class Args {
     }
 
     public static Map<String, Object> of(
-            String argName0, Object argValue0,
-            String argName1, Object argValue1,
-            String argName2, Object argValue2) {
+            String argName0,
+            Object argValue0,
+            String argName1,
+            Object argValue1,
+            String argName2,
+            Object argValue2) {
         Map<String, Object> result = new HashMap<>();
         result.put(argName0, argValue0);
         result.put(argName1, argValue1);
@@ -47,10 +48,14 @@ public class Args {
     }
 
     public static Map<String, Object> of(
-            String argName0, Object argValue0,
-            String argName1, Object argValue1,
-            String argName2, Object argValue2,
-            String argName3, Object argValue3) {
+            String argName0,
+            Object argValue0,
+            String argName1,
+            Object argValue1,
+            String argName2,
+            Object argValue2,
+            String argName3,
+            Object argValue3) {
         Map<String, Object> result = new HashMap<>();
         result.put(argName0, argValue0);
         result.put(argName1, argValue1);
@@ -60,11 +65,16 @@ public class Args {
     }
 
     public static Map<String, Object> of(
-            String argName0, Object argValue0,
-            String argName1, Object argValue1,
-            String argName2, Object argValue2,
-            String argName3, Object argValue3,
-            String argName4, Object argValue4) {
+            String argName0,
+            Object argValue0,
+            String argName1,
+            Object argValue1,
+            String argName2,
+            Object argValue2,
+            String argName3,
+            Object argValue3,
+            String argName4,
+            Object argValue4) {
         Map<String, Object> result = new HashMap<>();
         result.put(argName0, argValue0);
         result.put(argName1, argValue1);
@@ -75,12 +85,18 @@ public class Args {
     }
 
     public static Map<String, Object> of(
-            String argName0, Object argValue0,
-            String argName1, Object argValue1,
-            String argName2, Object argValue2,
-            String argName3, Object argValue3,
-            String argName4, Object argValue4,
-            String argName5, Object argValue5) {
+            String argName0,
+            Object argValue0,
+            String argName1,
+            Object argValue1,
+            String argName2,
+            Object argValue2,
+            String argName3,
+            Object argValue3,
+            String argName4,
+            Object argValue4,
+            String argName5,
+            Object argValue5) {
         Map<String, Object> result = new HashMap<>();
         result.put(argName0, argValue0);
         result.put(argName1, argValue1);
@@ -92,13 +108,20 @@ public class Args {
     }
 
     public static Map<String, Object> of(
-            String argName0, Object argValue0,
-            String argName1, Object argValue1,
-            String argName2, Object argValue2,
-            String argName3, Object argValue3,
-            String argName4, Object argValue4,
-            String argName5, Object argValue5,
-            String argName6, Object argValue6) {
+            String argName0,
+            Object argValue0,
+            String argName1,
+            Object argValue1,
+            String argName2,
+            Object argValue2,
+            String argName3,
+            Object argValue3,
+            String argName4,
+            Object argValue4,
+            String argName5,
+            Object argValue5,
+            String argName6,
+            Object argValue6) {
         Map<String, Object> result = new HashMap<>();
         result.put(argName0, argValue0);
         result.put(argName1, argValue1);
@@ -111,14 +134,22 @@ public class Args {
     }
 
     public static Map<String, Object> of(
-            String argName0, Object argValue0,
-            String argName1, Object argValue1,
-            String argName2, Object argValue2,
-            String argName3, Object argValue3,
-            String argName4, Object argValue4,
-            String argName5, Object argValue5,
-            String argName6, Object argValue6,
-            String argName7, Object argValue7) {
+            String argName0,
+            Object argValue0,
+            String argName1,
+            Object argValue1,
+            String argName2,
+            Object argValue2,
+            String argName3,
+            Object argValue3,
+            String argName4,
+            Object argValue4,
+            String argName5,
+            Object argValue5,
+            String argName6,
+            Object argValue6,
+            String argName7,
+            Object argValue7) {
         Map<String, Object> result = new HashMap<>();
         result.put(argName0, argValue0);
         result.put(argName1, argValue1);
@@ -132,15 +163,24 @@ public class Args {
     }
 
     public static Map<String, Object> of(
-            String argName0, Object argValue0,
-            String argName1, Object argValue1,
-            String argName2, Object argValue2,
-            String argName3, Object argValue3,
-            String argName4, Object argValue4,
-            String argName5, Object argValue5,
-            String argName6, Object argValue6,
-            String argName7, Object argValue7,
-            String argName8, Object argValue8) {
+            String argName0,
+            Object argValue0,
+            String argName1,
+            Object argValue1,
+            String argName2,
+            Object argValue2,
+            String argName3,
+            Object argValue3,
+            String argName4,
+            Object argValue4,
+            String argName5,
+            Object argValue5,
+            String argName6,
+            Object argValue6,
+            String argName7,
+            Object argValue7,
+            String argName8,
+            Object argValue8) {
         Map<String, Object> result = new HashMap<>();
         result.put(argName0, argValue0);
         result.put(argName1, argValue1);
@@ -155,16 +195,26 @@ public class Args {
     }
 
     public static Map<String, Object> of(
-            String argName0, Object argValue0,
-            String argName1, Object argValue1,
-            String argName2, Object argValue2,
-            String argName3, Object argValue3,
-            String argName4, Object argValue4,
-            String argName5, Object argValue5,
-            String argName6, Object argValue6,
-            String argName7, Object argValue7,
-            String argName8, Object argValue8,
-            String argName9, Object argValue9) {
+            String argName0,
+            Object argValue0,
+            String argName1,
+            Object argValue1,
+            String argName2,
+            Object argValue2,
+            String argName3,
+            Object argValue3,
+            String argName4,
+            Object argValue4,
+            String argName5,
+            Object argValue5,
+            String argName6,
+            Object argValue6,
+            String argName7,
+            Object argValue7,
+            String argName8,
+            Object argValue8,
+            String argName9,
+            Object argValue9) {
         Map<String, Object> result = new HashMap<>();
         result.put(argName0, argValue0);
         result.put(argName1, argValue1);

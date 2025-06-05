@@ -12,8 +12,7 @@ class MF2Test {
     final DefaultTestProperties defaultTestProperties;
     final Unit[] tests;
 
-    MF2Test(DefaultTestProperties defaultTestProperties,
-            Unit[] tests) {
+    MF2Test(DefaultTestProperties defaultTestProperties, Unit[] tests) {
         this.defaultTestProperties = defaultTestProperties;
         this.tests = tests;
     }

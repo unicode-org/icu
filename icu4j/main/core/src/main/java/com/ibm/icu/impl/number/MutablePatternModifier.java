@@ -13,24 +13,21 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 
 /**
- * This class is a {@link Modifier} that wraps a decimal format pattern. It applies the pattern's affixes
- * in {@link Modifier#apply}.
+ * This class is a {@link Modifier} that wraps a decimal format pattern. It applies the pattern's
+ * affixes in {@link Modifier#apply}.
  *
- * <p>
- * In addition to being a Modifier, this class contains the business logic for substituting the correct
- * locale symbols into the affixes of the decimal format pattern.
+ * <p>In addition to being a Modifier, this class contains the business logic for substituting the
+ * correct locale symbols into the affixes of the decimal format pattern.
  *
- * <p>
- * In order to use this class, create a new instance and call the following four setters:
- * {@link #setPatternInfo}, {@link #setPatternAttributes}, {@link #setSymbols}, and
- * {@link #setNumberProperties}. After calling these four setters, the instance will be ready for use as
- * a Modifier.
+ * <p>In order to use this class, create a new instance and call the following four setters: {@link
+ * #setPatternInfo}, {@link #setPatternAttributes}, {@link #setSymbols}, and {@link
+ * #setNumberProperties}. After calling these four setters, the instance will be ready for use as a
+ * Modifier.
  *
- * <p>
- * This is a MUTABLE, NON-THREAD-SAFE class designed for performance. Do NOT save references to this or
- * attempt to use it from multiple threads! Instead, you can obtain a safe, immutable decimal format
- * pattern modifier by calling {@link MutablePatternModifier#createImmutable}, in effect treating this
- * instance as a builder for the immutable variant.
+ * <p>This is a MUTABLE, NON-THREAD-SAFE class designed for performance. Do NOT save references to
+ * this or attempt to use it from multiple threads! Instead, you can obtain a safe, immutable
+ * decimal format pattern modifier by calling {@link MutablePatternModifier#createImmutable}, in
+ * effect treating this instance as a builder for the immutable variant.
  */
 public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPropsGenerator {
 
@@ -61,22 +58,20 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     StringBuilder currentAffix;
 
     /**
-     * @param isStrong
-     *            Whether the modifier should be considered strong. For more information, see
-     *            {@link Modifier#isStrong()}. Most of the time, decimal format pattern modifiers should
-     *            be considered as non-strong.
+     * @param isStrong Whether the modifier should be considered strong. For more information, see
+     *     {@link Modifier#isStrong()}. Most of the time, decimal format pattern modifiers should be
+     *     considered as non-strong.
      */
     public MutablePatternModifier(boolean isStrong) {
         this.isStrong = isStrong;
     }
 
     /**
-     * Sets a reference to the parsed decimal format pattern, usually obtained from
-     * {@link PatternStringParser#parseToPatternInfo(String)}, but any implementation of
-     * {@link AffixPatternProvider} is accepted.
+     * Sets a reference to the parsed decimal format pattern, usually obtained from {@link
+     * PatternStringParser#parseToPatternInfo(String)}, but any implementation of {@link
+     * AffixPatternProvider} is accepted.
      *
-     * @param field
-     *            Which field to use for literal characters in the pattern.
+     * @param field Which field to use for literal characters in the pattern.
      */
     public void setPatternInfo(AffixPatternProvider patternInfo, Field field) {
         this.patternInfo = patternInfo;
@@ -84,33 +79,29 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     }
 
     /**
-     * Sets attributes that imply changes to the literal interpretation of the pattern string affixes.
+     * Sets attributes that imply changes to the literal interpretation of the pattern string
+     * affixes.
      *
-     * @param signDisplay
-     *            Whether to force a plus sign on positive numbers.
-     * @param perMille
-     *            Whether to substitute the percent sign in the pattern with a permille sign.
-     * @param approximately
-     *            Whether to prepend approximately to the sign
+     * @param signDisplay Whether to force a plus sign on positive numbers.
+     * @param perMille Whether to substitute the percent sign in the pattern with a permille sign.
+     * @param approximately Whether to prepend approximately to the sign
      */
-    public void setPatternAttributes(SignDisplay signDisplay, boolean perMille, boolean approximately) {
+    public void setPatternAttributes(
+            SignDisplay signDisplay, boolean perMille, boolean approximately) {
         this.signDisplay = signDisplay;
         this.perMilleReplacesPercent = perMille;
         this.approximately = approximately;
     }
 
     /**
-     * Sets locale-specific details that affect the symbols substituted into the pattern string affixes.
+     * Sets locale-specific details that affect the symbols substituted into the pattern string
+     * affixes.
      *
-     * @param symbols
-     *            The desired instance of DecimalFormatSymbols.
-     * @param currency
-     *            The currency to be used when substituting currency values into the affixes.
-     * @param unitWidth
-     *            The width used to render currencies.
-     * @param rules
-     *            Required if the triple currency sign, "¤¤¤", appears in the pattern, which can be
-     *            determined from the convenience method {@link #needsPlurals()}.
+     * @param symbols The desired instance of DecimalFormatSymbols.
+     * @param currency The currency to be used when substituting currency values into the affixes.
+     * @param unitWidth The width used to render currencies.
+     * @param rules Required if the triple currency sign, "¤¤¤", appears in the pattern, which can
+     *     be determined from the convenience method {@link #needsPlurals()}.
      */
     public void setSymbols(
             DecimalFormatSymbols symbols,
@@ -127,11 +118,9 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     /**
      * Sets attributes of the current number being processed.
      *
-     * @param signum
-     *            -1 if negative; +1 if positive; or 0 if zero.
-     * @param plural
-     *            The plural form of the number, required only if the pattern contains the triple
-     *            currency sign, "¤¤¤" (and as indicated by {@link #needsPlurals()}).
+     * @param signum -1 if negative; +1 if positive; or 0 if zero.
+     * @param plural The plural form of the number, required only if the pattern contains the triple
+     *     currency sign, "¤¤¤" (and as indicated by {@link #needsPlurals()}).
      */
     public void setNumberProperties(Signum signum, StandardPlural plural) {
         assert (plural != null) == needsPlurals();
@@ -140,21 +129,20 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     }
 
     /**
-     * Returns true if the pattern represented by this MurkyModifier requires a plural keyword in order
-     * to localize. This is currently true only if there is a currency long name placeholder in the
-     * pattern ("¤¤¤").
+     * Returns true if the pattern represented by this MurkyModifier requires a plural keyword in
+     * order to localize. This is currently true only if there is a currency long name placeholder
+     * in the pattern ("¤¤¤").
      */
     public boolean needsPlurals() {
         return patternInfo.containsSymbolType(AffixUtils.TYPE_CURRENCY_TRIPLE);
     }
 
     /**
-     * Creates a new quantity-dependent Modifier that behaves the same as the current instance, but which
-     * is immutable and can be saved for future use. The number properties in the current instance are
-     * mutated; all other properties are left untouched.
+     * Creates a new quantity-dependent Modifier that behaves the same as the current instance, but
+     * which is immutable and can be saved for future use. The number properties in the current
+     * instance are mutated; all other properties are left untouched.
      *
-     * <p>
-     * The resulting modifier cannot be used in a QuantityChain.
+     * <p>The resulting modifier cannot be used in a QuantityChain.
      *
      * @return An immutable that supports both positive and negative numbers.
      */
@@ -186,29 +174,28 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
             Modifier negZero = createConstantModifier(a, b);
             setNumberProperties(Signum.NEG, null);
             Modifier negative = createConstantModifier(a, b);
-            AdoptingModifierStore pm = new AdoptingModifierStore(positive, posZero, negZero, negative);
+            AdoptingModifierStore pm =
+                    new AdoptingModifierStore(positive, posZero, negZero, negative);
             return new ImmutablePatternModifier(pm, null);
         }
     }
 
     /**
-     * Uses the current properties to create a single {@link ConstantMultiFieldModifier} with currency
-     * spacing support if required.
+     * Uses the current properties to create a single {@link ConstantMultiFieldModifier} with
+     * currency spacing support if required.
      *
-     * @param a
-     *            A working FormattedStringBuilder object; passed from the outside to prevent the need to
-     *            create many new instances if this method is called in a loop.
-     * @param b
-     *            Another working FormattedStringBuilder object.
+     * @param a A working FormattedStringBuilder object; passed from the outside to prevent the need
+     *     to create many new instances if this method is called in a loop.
+     * @param b Another working FormattedStringBuilder object.
      * @return The constant modifier object.
      */
     private ConstantMultiFieldModifier createConstantModifier(
-            FormattedStringBuilder a,
-            FormattedStringBuilder b) {
+            FormattedStringBuilder a, FormattedStringBuilder b) {
         insertPrefix(a.clear(), 0);
         insertSuffix(b.clear(), 0);
         if (patternInfo.hasCurrencySign()) {
-            return new CurrencySpacingEnabledModifier(a, b, !patternInfo.hasBody(), isStrong, symbols);
+            return new CurrencySpacingEnabledModifier(
+                    a, b, !patternInfo.hasBody(), isStrong, symbols);
         } else {
             return new ConstantMultiFieldModifier(a, b, !patternInfo.hasBody(), isStrong);
         }
@@ -219,9 +206,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
         final PluralRules rules;
         /* final */ MicroPropsGenerator parent;
 
-        ImmutablePatternModifier(
-                AdoptingModifierStore pm,
-                PluralRules rules) {
+        ImmutablePatternModifier(AdoptingModifierStore pm, PluralRules rules) {
             this.pm = pm;
             this.rules = rules;
             this.parent = null;
@@ -249,7 +234,8 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
             if (rules == null) {
                 micros.modMiddle = pm.getModifierWithoutPlural(quantity.signum());
             } else {
-                StandardPlural pluralForm = RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
+                StandardPlural pluralForm =
+                        RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
                 micros.modMiddle = pm.getModifier(quantity.signum(), pluralForm);
             }
         }
@@ -298,9 +284,11 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
         // If the pattern had no decimal stem body (like #,##0.00), overwrite the value.
         int overwriteLen = 0;
         if (!patternInfo.hasBody()) {
-            overwriteLen = output.splice(leftIndex + prefixLen, rightIndex + prefixLen, "", 0, 0, null);
+            overwriteLen =
+                    output.splice(leftIndex + prefixLen, rightIndex + prefixLen, "", 0, 0, null);
         }
-        CurrencySpacingEnabledModifier.applyCurrencySpacing(output,
+        CurrencySpacingEnabledModifier.applyCurrencySpacing(
+                output,
                 leftIndex,
                 prefixLen,
                 rightIndex + prefixLen + overwriteLen,
@@ -366,17 +354,18 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     }
 
     /**
-     * Pre-processes the prefix or suffix into the currentAffix field, creating and mutating that field
-     * if necessary. Calls down to {@link PatternStringUtils#affixPatternProviderToStringBuilder}.
+     * Pre-processes the prefix or suffix into the currentAffix field, creating and mutating that
+     * field if necessary. Calls down to {@link
+     * PatternStringUtils#affixPatternProviderToStringBuilder}.
      *
-     * @param isPrefix
-     *            true to prepare the prefix; false to prepare the suffix.
+     * @param isPrefix true to prepare the prefix; false to prepare the suffix.
      */
     private void prepareAffix(boolean isPrefix) {
         if (currentAffix == null) {
             currentAffix = new StringBuilder();
         }
-        PatternStringUtils.patternInfoToStringBuilder(patternInfo,
+        PatternStringUtils.patternInfoToStringBuilder(
+                patternInfo,
                 isPrefix,
                 PatternStringUtils.resolveSignDisplay(signDisplay, signum),
                 approximately,
@@ -385,45 +374,41 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
                 currentAffix);
     }
 
-    /**
-     * Returns the string that substitutes a given symbol type in a pattern.
-     */
+    /** Returns the string that substitutes a given symbol type in a pattern. */
     @Override
     public CharSequence getSymbol(int type) {
         switch (type) {
-        case AffixUtils.TYPE_MINUS_SIGN:
-            return symbols.getMinusSignString();
-        case AffixUtils.TYPE_PLUS_SIGN:
-            return symbols.getPlusSignString();
-        case AffixUtils.TYPE_APPROXIMATELY_SIGN:
-            return symbols.getApproximatelySignString();
-        case AffixUtils.TYPE_PERCENT:
-            return symbols.getPercentString();
-        case AffixUtils.TYPE_PERMILLE:
-            return symbols.getPerMillString();
-        case AffixUtils.TYPE_CURRENCY_SINGLE:
-            return getCurrencySymbolForUnitWidth();
-        case AffixUtils.TYPE_CURRENCY_DOUBLE:
-            return currency.getCurrencyCode();
-        case AffixUtils.TYPE_CURRENCY_TRIPLE:
-            // NOTE: This is the code path only for patterns containing "¤¤¤".
-            // Plural currencies set via the API are formatted in LongNameHandler.
-            // This code path is used by DecimalFormat via CurrencyPluralInfo.
-            assert plural != null;
-            return currency
-                    .getName(symbols.getULocale(), Currency.PLURAL_LONG_NAME, plural.getKeyword(), null);
-        case AffixUtils.TYPE_CURRENCY_QUAD:
-            return "\uFFFD";
-        case AffixUtils.TYPE_CURRENCY_QUINT:
-            return currency.getName(symbols.getULocale(), Currency.NARROW_SYMBOL_NAME, null);
-        default:
-            throw new AssertionError();
+            case AffixUtils.TYPE_MINUS_SIGN:
+                return symbols.getMinusSignString();
+            case AffixUtils.TYPE_PLUS_SIGN:
+                return symbols.getPlusSignString();
+            case AffixUtils.TYPE_APPROXIMATELY_SIGN:
+                return symbols.getApproximatelySignString();
+            case AffixUtils.TYPE_PERCENT:
+                return symbols.getPercentString();
+            case AffixUtils.TYPE_PERMILLE:
+                return symbols.getPerMillString();
+            case AffixUtils.TYPE_CURRENCY_SINGLE:
+                return getCurrencySymbolForUnitWidth();
+            case AffixUtils.TYPE_CURRENCY_DOUBLE:
+                return currency.getCurrencyCode();
+            case AffixUtils.TYPE_CURRENCY_TRIPLE:
+                // NOTE: This is the code path only for patterns containing "¤¤¤".
+                // Plural currencies set via the API are formatted in LongNameHandler.
+                // This code path is used by DecimalFormat via CurrencyPluralInfo.
+                assert plural != null;
+                return currency.getName(
+                        symbols.getULocale(), Currency.PLURAL_LONG_NAME, plural.getKeyword(), null);
+            case AffixUtils.TYPE_CURRENCY_QUAD:
+                return "\uFFFD";
+            case AffixUtils.TYPE_CURRENCY_QUINT:
+                return currency.getName(symbols.getULocale(), Currency.NARROW_SYMBOL_NAME, null);
+            default:
+                throw new AssertionError();
         }
     }
 
-    /**
-     * Returns the currency symbol for the unit width specified in setSymbols()
-     */
+    /** Returns the currency symbol for the unit width specified in setSymbols() */
     public String getCurrencySymbolForUnitWidth() {
         // UnitWidth ISO, HIDDEN, or NARROW overrides the singular currency symbol.
         if (unitWidth == UnitWidth.ISO_CODE) {

@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DataRecord contains the data used by PeriodFormatterData. Fields are
- * package-private for ease of access. This is a struct, it knows how to read
- * and write itself to/from simple XML, that's all.
+ * DataRecord contains the data used by PeriodFormatterData. Fields are package-private for ease of
+ * access. This is a struct, it knows how to read and write itself to/from simple XML, that's all.
  */
 public class DataRecord {
     byte pl;
@@ -70,10 +69,8 @@ public class DataRecord {
             record.rqdSuffixes = in.stringArray("rqdSuffix");
             record.optSuffixes = in.stringArray("optSuffix");
             record.halves = in.stringArray("halves");
-            record.halfPlacements = in.namedIndexArray("halfPlacement",
-                    EHalfPlacement.names);
-            record.halfSupport = in.namedIndexArray("halfSupport",
-                    EHalfSupport.names);
+            record.halfPlacements = in.namedIndexArray("halfPlacement", EHalfPlacement.names);
+            record.halfSupport = in.namedIndexArray("halfSupport", EHalfSupport.names);
             record.fifteenMinutes = in.string("fifteenMinutes");
             record.fiveMinutes = in.string("fiveMinutes");
             record.requiresDigitSeparator = in.bool("requiresDigitSeparator");
@@ -83,23 +80,18 @@ public class DataRecord {
             record.unitSep = in.stringArray("unitSep");
             record.unitSepRequiresDP = in.boolArray("unitSepRequiresDP");
             record.requiresSkipMarker = in.boolArray("requiresSkipMarker");
-            record.numberSystem = in.namedIndex("numberSystem",
-                    ENumberSystem.names);
+            record.numberSystem = in.namedIndex("numberSystem", ENumberSystem.names);
             record.zero = in.character("zero");
             record.decimalSep = in.character("decimalSep");
             record.omitSingularCount = in.bool("omitSingularCount");
             record.omitDualCount = in.bool("omitDualCount");
-            record.zeroHandling = in.namedIndex("zeroHandling",
-                    EZeroHandling.names);
-            record.decimalHandling = in.namedIndex("decimalHandling",
-                    EDecimalHandling.names);
-            record.fractionHandling = in.namedIndex("fractionHandling",
-                    EFractionHandling.names);
+            record.zeroHandling = in.namedIndex("zeroHandling", EZeroHandling.names);
+            record.decimalHandling = in.namedIndex("decimalHandling", EDecimalHandling.names);
+            record.fractionHandling = in.namedIndex("fractionHandling", EFractionHandling.names);
             record.skippedUnitMarker = in.string("skippedUnitMarker");
             record.allowZero = in.bool("allowZero");
             record.weeksAloneOnly = in.bool("weeksAloneOnly");
-            record.useMilliseconds = in.namedIndex("useMilliseconds",
-                    EMilliSupport.names);
+            record.useMilliseconds = in.namedIndex("useMilliseconds", EMilliSupport.names);
             if (in.open("ScopeDataList")) {
                 List<ScopeData> list = new ArrayList<ScopeData>(); // of ScopeData
                 ScopeData data;
@@ -115,8 +107,7 @@ public class DataRecord {
                 return record;
             }
         } else {
-            throw new InternalError("did not find DataRecord while reading "
-                    + ln);
+            throw new InternalError("did not find DataRecord while reading " + ln);
         }
         throw new InternalError("null data read while reading " + ln);
         // Thread.dumpStack();
@@ -137,8 +128,7 @@ public class DataRecord {
         out.stringArray("rqdSuffix", rqdSuffixes);
         out.stringArray("optSuffix", optSuffixes);
         out.stringArray("halves", halves);
-        out.namedIndexArray("halfPlacement", EHalfPlacement.names,
-                halfPlacements);
+        out.namedIndexArray("halfPlacement", EHalfPlacement.names, halfPlacements);
         out.namedIndexArray("halfSupport", EHalfSupport.names, halfSupport);
         out.string("fifteenMinutes", fifteenMinutes);
         out.string("fiveMinutes", fiveMinutes);
@@ -155,10 +145,8 @@ public class DataRecord {
         out.bool("omitSingularCount", omitSingularCount);
         out.bool("omitDualCount", omitDualCount);
         out.namedIndex("zeroHandling", EZeroHandling.names, zeroHandling);
-        out.namedIndex("decimalHandling", EDecimalHandling.names,
-                decimalHandling);
-        out.namedIndex("fractionHandling", EFractionHandling.names,
-                fractionHandling);
+        out.namedIndex("decimalHandling", EDecimalHandling.names, decimalHandling);
+        out.namedIndex("fractionHandling", EFractionHandling.names, fractionHandling);
         out.string("skippedUnitMarker", skippedUnitMarker);
         out.bool("allowZero", allowZero);
         out.bool("weeksAloneOnly", weeksAloneOnly);
@@ -204,21 +192,21 @@ public class DataRecord {
         public static final byte NOLIMIT = 0;
         public static final byte LT = 1;
         public static final byte MT = 2;
-        public static final String[] names = { "NOLIMIT", "LT", "MT" };
+        public static final String[] names = {"NOLIMIT", "LT", "MT"};
     }
 
     public static interface ETimeDirection {
         public static final byte NODIRECTION = 0;
         public static final byte PAST = 1;
         public static final byte FUTURE = 2;
-        public static final String[] names = { "NODIRECTION", "PAST", "FUTURE" };
+        public static final String[] names = {"NODIRECTION", "PAST", "FUTURE"};
     }
 
     public static interface EUnitVariant {
         public static final byte PLURALIZED = 0;
         public static final byte MEDIUM = 1;
         public static final byte SHORT = 2;
-        public static final String[] names = { "PLURALIZED", "MEDIUM", "SHORT" };
+        public static final String[] names = {"PLURALIZED", "MEDIUM", "SHORT"};
     }
 
     public static interface ECountVariant {
@@ -228,8 +216,9 @@ public class DataRecord {
         public static final byte DECIMAL1 = 3;
         public static final byte DECIMAL2 = 4;
         public static final byte DECIMAL3 = 5;
-        public static final String[] names = { "INTEGER", "INTEGER_CUSTOM",
-            "HALF_FRACTION", "DECIMAL1", "DECIMAL2", "DECIMAL3" };
+        public static final String[] names = {
+            "INTEGER", "INTEGER_CUSTOM", "HALF_FRACTION", "DECIMAL1", "DECIMAL2", "DECIMAL3"
+        };
     }
 
     public static interface EPluralization {
@@ -239,15 +228,16 @@ public class DataRecord {
         public static final byte PAUCAL = 3;
         public static final byte HEBREW = 4;
         public static final byte ARABIC = 5;
-        public static final String[] names = { "NONE", "PLURAL", "DUAL",
-            "PAUCAL", "HEBREW", "ARABIC" };
+        public static final String[] names = {
+            "NONE", "PLURAL", "DUAL", "PAUCAL", "HEBREW", "ARABIC"
+        };
     }
 
     public static interface EHalfPlacement {
         public static final byte PREFIX = 0;
         public static final byte AFTER_FIRST = 1;
         public static final byte LAST = 2;
-        public static final String[] names = { "PREFIX", "AFTER_FIRST", "LAST" };
+        public static final String[] names = {"PREFIX", "AFTER_FIRST", "LAST"};
     }
 
     public static interface ENumberSystem {
@@ -255,14 +245,15 @@ public class DataRecord {
         public static final byte CHINESE_TRADITIONAL = 1;
         public static final byte CHINESE_SIMPLIFIED = 2;
         public static final byte KOREAN = 3;
-        public static final String[] names = { "DEFAULT",
-            "CHINESE_TRADITIONAL", "CHINESE_SIMPLIFIED", "KOREAN" };
+        public static final String[] names = {
+            "DEFAULT", "CHINESE_TRADITIONAL", "CHINESE_SIMPLIFIED", "KOREAN"
+        };
     }
 
     public static interface EZeroHandling {
         public static final byte ZPLURAL = 0;
         public static final byte ZSINGULAR = 1;
-        public static final String[] names = { "ZPLURAL", "ZSINGULAR" };
+        public static final String[] names = {"ZPLURAL", "ZSINGULAR"};
     }
 
     public static interface EDecimalHandling {
@@ -270,8 +261,9 @@ public class DataRecord {
         public static final byte DSINGULAR = 1;
         public static final byte DSINGULAR_SUBONE = 2;
         public static final byte DPAUCAL = 3;
-        public static final String[] names = { "DPLURAL", "DSINGULAR",
-            "DSINGULAR_SUBONE", "DPAUCAL" };
+        public static final String[] names = {
+            "DPLURAL", "DSINGULAR", "DSINGULAR_SUBONE", "DPAUCAL"
+        };
     }
 
     public static interface EFractionHandling {
@@ -279,35 +271,36 @@ public class DataRecord {
         public static final byte FSINGULAR_PLURAL = 1;
         public static final byte FSINGULAR_PLURAL_ANDAHALF = 2;
         public static final byte FPAUCAL = 3;
-        public static final String[] names = { "FPLURAL", "FSINGULAR_PLURAL",
-            "FSINGULAR_PLURAL_ANDAHALF", "FPAUCAL" };
+        public static final String[] names = {
+            "FPLURAL", "FSINGULAR_PLURAL", "FSINGULAR_PLURAL_ANDAHALF", "FPAUCAL"
+        };
     }
 
     public static interface EHalfSupport {
         public static final byte YES = 0;
         public static final byte NO = 1;
         public static final byte ONE_PLUS = 2;
-        public static final String[] names = { "YES", "NO", "ONE_PLUS" };
+        public static final String[] names = {"YES", "NO", "ONE_PLUS"};
     }
 
     public static interface EMilliSupport {
         public static final byte YES = 0;
         public static final byte NO = 1;
         public static final byte WITH_SECONDS = 2;
-        public static final String[] names = { "YES", "NO", "WITH_SECONDS" };
+        public static final String[] names = {"YES", "NO", "WITH_SECONDS"};
     }
 
     public static interface ESeparatorVariant {
         public static final byte NONE = 0;
         public static final byte SHORT = 1;
         public static final byte FULL = 2;
-        public static final String[] names = { "NONE", "SHORT", "FULL" };
+        public static final String[] names = {"NONE", "SHORT", "FULL"};
     }
 
     public static interface EGender {
         public static final byte M = 0;
         public static final byte F = 1;
         public static final byte N = 2;
-        public static final String[] names = { "M", "F", "N" };
+        public static final String[] names = {"M", "F", "N"};
     }
 }

@@ -13,8 +13,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Standard CLDR plural form/category constants.
- * See http://www.unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules
+ * Standard CLDR plural form/category constants. See
+ * http://www.unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules
  */
 public enum StandardPlural {
     ZERO("zero"),
@@ -26,21 +26,16 @@ public enum StandardPlural {
     EQ_0("=0"),
     EQ_1("=1");
 
-    /**
-     * Numeric index of OTHER, same as OTHER.ordinal().
-     */
+    /** Numeric index of OTHER, same as OTHER.ordinal(). */
     public static final int OTHER_INDEX = OTHER.ordinal();
 
     /**
-     * Unmodifiable List of all standard plural form constants.
-     * List version of {@link #values()}.
+     * Unmodifiable List of all standard plural form constants. List version of {@link #values()}.
      */
     public static final List<StandardPlural> VALUES =
             Collections.unmodifiableList(Arrays.asList(values()));
 
-    /**
-     * Number of standard plural forms/categories.
-     */
+    /** Number of standard plural forms/categories. */
     public static final int COUNT = VALUES.size();
 
     private final String keyword;
@@ -62,43 +57,43 @@ public enum StandardPlural {
      */
     public static final StandardPlural orNullFromString(CharSequence keyword) {
         switch (keyword.length()) {
-        case 1:
-            if (keyword.charAt(0) == '0') {
-                return EQ_0;
-            } else if (keyword.charAt(0) == '1') {
-                return EQ_1;
-            }
-            break;
-        case 2:
-            if ("=0".contentEquals(keyword)) {
-                return EQ_0;
-            } else if ("=1".contentEquals(keyword)) {
-                return EQ_1;
-            }
-            break;    
-        case 3:
-            if ("one".contentEquals(keyword)) {
-                return ONE;
-            } else if ("two".contentEquals(keyword)) {
-                return TWO;
-            } else if ("few".contentEquals(keyword)) {
-                return FEW;
-            }
-            break;
-        case 4:
-            if ("many".contentEquals(keyword)) {
-                return MANY;
-            } else if ("zero".contentEquals(keyword)) {
-                return ZERO;
-            }
-            break;
-        case 5:
-            if ("other".contentEquals(keyword)) {
-                return OTHER;
-            }
-            break;
-        default:
-            break;
+            case 1:
+                if (keyword.charAt(0) == '0') {
+                    return EQ_0;
+                } else if (keyword.charAt(0) == '1') {
+                    return EQ_1;
+                }
+                break;
+            case 2:
+                if ("=0".contentEquals(keyword)) {
+                    return EQ_0;
+                } else if ("=1".contentEquals(keyword)) {
+                    return EQ_1;
+                }
+                break;
+            case 3:
+                if ("one".contentEquals(keyword)) {
+                    return ONE;
+                } else if ("two".contentEquals(keyword)) {
+                    return TWO;
+                } else if ("few".contentEquals(keyword)) {
+                    return FEW;
+                }
+                break;
+            case 4:
+                if ("many".contentEquals(keyword)) {
+                    return MANY;
+                } else if ("zero".contentEquals(keyword)) {
+                    return ZERO;
+                }
+                break;
+            case 5:
+                if ("other".contentEquals(keyword)) {
+                    return OTHER;
+                }
+                break;
+            default:
+                break;
         }
         return null;
     }

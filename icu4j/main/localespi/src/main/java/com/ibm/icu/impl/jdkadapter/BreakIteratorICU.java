@@ -8,13 +8,12 @@
  */
 package com.ibm.icu.impl.jdkadapter;
 
+import com.ibm.icu.text.BreakIterator;
 import java.text.CharacterIterator;
 
-import com.ibm.icu.text.BreakIterator;
-
 /**
- * BreakIteratorICU is an adapter class which wraps ICU4J BreakIterator and
- * implements java.text.BreakIterator APIs.
+ * BreakIteratorICU is an adapter class which wraps ICU4J BreakIterator and implements
+ * java.text.BreakIterator APIs.
  */
 public class BreakIteratorICU extends java.text.BreakIterator {
 
@@ -34,8 +33,8 @@ public class BreakIteratorICU extends java.text.BreakIterator {
 
     @Override
     public Object clone() {
-        BreakIteratorICU other = (BreakIteratorICU)super.clone();
-        other.fIcuBrkItr = (BreakIterator)fIcuBrkItr.clone();
+        BreakIteratorICU other = (BreakIteratorICU) super.clone();
+        other.fIcuBrkItr = (BreakIterator) fIcuBrkItr.clone();
         return other;
     }
 
@@ -98,5 +97,4 @@ public class BreakIteratorICU extends java.text.BreakIterator {
     public void setText(String newText) {
         fIcuBrkItr.setText(newText);
     }
-
 }

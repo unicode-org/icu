@@ -1,13 +1,7 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-
 package com.ibm.icu.impl.units;
-
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -15,18 +9,25 @@ import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.UResourceBundle;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ConversionRates {
 
     /**
-     * Map from any simple unit (i.e. "meter", "foot", "inch") to its basic/root conversion rate info.
+     * Map from any simple unit (i.e. "meter", "foot", "inch") to its basic/root conversion rate
+     * info.
      */
     private HashMap<String, ConversionRateInfo> mapToConversionRate;
 
     public ConversionRates() {
         // Read the conversion rates from the data (units.txt).
         ICUResourceBundle resource;
-        resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "units");
+        resource =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "units");
         ConversionRatesSink sink = new ConversionRatesSink();
         resource.getAllItemsWithFallback(UnitsData.Constants.CONVERSION_UNIT_TABLE_NAME, sink);
         this.mapToConversionRate = sink.getMapToConversionRate();
@@ -42,7 +43,9 @@ public class ConversionRates {
     private UnitsConverter.Factor getFactorToBase(SingleUnitImpl singleUnit) {
         int power = singleUnit.getDimensionality();
         MeasureUnit.MeasurePrefix unitPrefix = singleUnit.getPrefix();
-        UnitsConverter.Factor result = UnitsConverter.Factor.processFactor(mapToConversionRate.get(singleUnit.getSimpleUnitID()).getConversionRate());
+        UnitsConverter.Factor result =
+                UnitsConverter.Factor.processFactor(
+                        mapToConversionRate.get(singleUnit.getSimpleUnitID()).getConversionRate());
 
         // Prefix before power, because:
         // - square-kilometer to square-meter: (1000)^2
@@ -52,8 +55,7 @@ public class ConversionRates {
 
     public UnitsConverter.Factor getFactorToBase(MeasureUnitImpl measureUnit) {
         UnitsConverter.Factor result = new UnitsConverter.Factor();
-        for (SingleUnitImpl singleUnit :
-                measureUnit.getSingleUnits()) {
+        for (SingleUnitImpl singleUnit : measureUnit.getSingleUnits()) {
             result = result.multiply(getFactorToBase(singleUnit));
         }
 
@@ -65,9 +67,14 @@ public class ConversionRates {
     }
 
     // In ICU4C, this functionality is found in loadConversionRate().
-    protected BigDecimal getOffset(MeasureUnitImpl source, MeasureUnitImpl target, UnitsConverter.Factor
-            sourceToBase, UnitsConverter.Factor targetToBase, UnitsConverter.Convertibility convertibility) {
-        if (convertibility != UnitsConverter.Convertibility.CONVERTIBLE) return BigDecimal.valueOf(0);
+    protected BigDecimal getOffset(
+            MeasureUnitImpl source,
+            MeasureUnitImpl target,
+            UnitsConverter.Factor sourceToBase,
+            UnitsConverter.Factor targetToBase,
+            UnitsConverter.Convertibility convertibility) {
+        if (convertibility != UnitsConverter.Convertibility.CONVERTIBLE)
+            return BigDecimal.valueOf(0);
         if (!(checkSimpleUnit(source) && checkSimpleUnit(target))) return BigDecimal.valueOf(0);
 
         String sourceSimpleIdentifier = source.getSingleUnits().get(0).getSimpleUnitID();
@@ -78,8 +85,6 @@ public class ConversionRates {
         return sourceOffset
                 .subtract(targetOffset)
                 .divide(targetToBase.getConversionRate(), MathContext.DECIMAL128);
-
-
     }
 
     // Map the MeasureUnitImpl for a simple unit to its corresponding SimpleUnitID,
@@ -95,8 +100,7 @@ public class ConversionRates {
         ArrayList<SingleUnitImpl> baseUnits = this.extractBaseUnits(measureUnit);
 
         MeasureUnitImpl result = new MeasureUnitImpl();
-        for (SingleUnitImpl baseUnit :
-                baseUnits) {
+        for (SingleUnitImpl baseUnit : baseUnits) {
             result.appendSingleUnit(baseUnit);
         }
 
@@ -106,8 +110,7 @@ public class ConversionRates {
     public ArrayList<SingleUnitImpl> extractBaseUnits(MeasureUnitImpl measureUnitImpl) {
         ArrayList<SingleUnitImpl> result = new ArrayList<>();
         ArrayList<SingleUnitImpl> singleUnits = measureUnitImpl.getSingleUnits();
-        for (SingleUnitImpl singleUnit :
-                singleUnits) {
+        for (SingleUnitImpl singleUnit : singleUnits) {
             result.addAll(extractBaseUnits(singleUnit));
         }
 
@@ -116,10 +119,10 @@ public class ConversionRates {
 
     /**
      * @param singleUnit An instance of SingleUnitImpl.
-     * @return The base units in the {@code SingleUnitImpl} with applying the dimensionality only and not the SI prefix.
-     * <p>
-     * NOTE:
-     * This method is helpful when checking the convertibility because no need to check convertibility.
+     * @return The base units in the {@code SingleUnitImpl} with applying the dimensionality only
+     *     and not the SI prefix.
+     *     <p>NOTE: This method is helpful when checking the convertibility because no need to check
+     *     convertibility.
      */
     public ArrayList<SingleUnitImpl> extractBaseUnits(SingleUnitImpl singleUnit) {
         String target = mapToConversionRate.get(singleUnit.getSimpleUnitID()).getTarget();
@@ -158,7 +161,8 @@ public class ConversionRates {
 
     public static class ConversionRatesSink extends UResource.Sink {
         /**
-         * Map from any simple unit (i.e. "meter", "foot", "inch") to its basic/root conversion rate info.
+         * Map from any simple unit (i.e. "meter", "foot", "inch") to its basic/root conversion rate
+         * info.
          */
         private HashMap<String, ConversionRateInfo> mapToConversionRate = new HashMap<>();
 
@@ -181,7 +185,6 @@ public class ConversionRates {
                 for (int j = 0; simpleUnitConversionInfo.getKeyAndValue(j, key, value); j++) {
                     assert (value.getType() == UResourceBundle.STRING);
 
-
                     String keyString = key.toString();
                     String valueString = value.toString().replace(" ", "");
                     if ("target".equals(keyString)) {
@@ -191,11 +194,14 @@ public class ConversionRates {
                     } else if ("offset".equals(keyString)) {
                         offset = valueString;
                     } else if ("special".equals(keyString)) {
-                        special = valueString; // the name of a special mapping used instead of factor + optional offset.
+                        special =
+                                valueString; // the name of a special mapping used instead of factor
+                        // + optional offset.
                     } else if ("systems".equals(keyString)) {
                         systems = value.toString(); // still want the spaces here
                     } else {
-                        assert false : "The key must be target, factor, offset, special, or systems";
+                        assert false
+                                : "The key must be target, factor, offset, special, or systems";
                     }
                 }
 
@@ -203,10 +209,11 @@ public class ConversionRates {
                 assert (target != null);
                 assert (factor != null || special != null);
 
-                mapToConversionRate.put(simpleUnit, new ConversionRateInfo(simpleUnit, target, factor, offset, special, systems));
+                mapToConversionRate.put(
+                        simpleUnit,
+                        new ConversionRateInfo(
+                                simpleUnit, target, factor, offset, special, systems));
             }
-
-
         }
 
         public HashMap<String, ConversionRateInfo> getMapToConversionRate() {
@@ -218,13 +225,22 @@ public class ConversionRates {
 
         @SuppressWarnings("unused")
         private final String simpleUnit;
+
         private final String target;
         private final String conversionRate;
         private final BigDecimal offset;
-        private final String specialMappingName; // the name of a special mapping used instead of factor + optional offset.
+        private final String
+                specialMappingName; // the name of a special mapping used instead of factor +
+        // optional offset.
         private final String systems;
 
-        public ConversionRateInfo(String simpleUnit, String target, String conversionRate, String offset, String special, String systems) {
+        public ConversionRateInfo(
+                String simpleUnit,
+                String target,
+                String conversionRate,
+                String offset,
+                String special,
+                String systems) {
             this.simpleUnit = simpleUnit;
             this.target = target;
             this.conversionRate = conversionRate;
@@ -241,14 +257,14 @@ public class ConversionRates {
                 return new BigDecimal(numbers[0]);
             }
 
-            return new BigDecimal(numbers[0]).divide(new BigDecimal(numbers[1]), MathContext.DECIMAL128);
+            return new BigDecimal(numbers[0])
+                    .divide(new BigDecimal(numbers[1]), MathContext.DECIMAL128);
         }
 
         /**
          * @return the base unit.
-         * <p>
-         * For example:
-         * ("meter", "foot", "inch", "mile" ... etc.) have "meter" as a base/root unit.
+         *     <p>For example: ("meter", "foot", "inch", "mile" ... etc.) have "meter" as a
+         *     base/root unit.
          */
         public String getTarget() {
             return this.target;
@@ -265,14 +281,16 @@ public class ConversionRates {
          * @return The conversion rate from this unit to the base unit.
          */
         public String getConversionRate() {
-            if (conversionRate==null) {
-                throw new IllegalIcuArgumentException("trying to use a null conversion rate (for special?)");
+            if (conversionRate == null) {
+                throw new IllegalIcuArgumentException(
+                        "trying to use a null conversion rate (for special?)");
             }
             return conversionRate;
         }
 
         /**
-         * @return The name of the special conversion system for this unit (used instead of factor + optional offset).
+         * @return The name of the special conversion system for this unit (used instead of factor +
+         *     optional offset).
          */
         public String getSpecialMappingName() {
             return specialMappingName;

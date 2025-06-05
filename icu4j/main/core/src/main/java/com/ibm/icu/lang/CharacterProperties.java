@@ -11,22 +11,22 @@ import com.ibm.icu.util.CodePointTrie;
 import com.ibm.icu.util.MutableCodePointTrie;
 
 /**
- * Sets and maps for Unicode properties.
- * The methods here return an object per property:
- * A set for each ICU-supported binary property with all code points for which the property is true.
- * A map for each ICU-supported enumerated/catalog/int-valued property
- * which maps all Unicode code points to their values for that property.
+ * Sets and maps for Unicode properties. The methods here return an object per property: A set for
+ * each ICU-supported binary property with all code points for which the property is true. A map for
+ * each ICU-supported enumerated/catalog/int-valued property which maps all Unicode code points to
+ * their values for that property.
  *
- * <p>For details see the method descriptions.
- * For lookup of property values by code point see class {@link UCharacter}.
+ * <p>For details see the method descriptions. For lookup of property values by code point see class
+ * {@link UCharacter}.
  *
  * @stable ICU 63
  */
 public final class CharacterProperties {
-    private CharacterProperties() {}  // all-static
+    private CharacterProperties() {} // all-static
 
     private static final UnicodeSet sets[] = new UnicodeSet[UProperty.BINARY_LIMIT];
-    private static final CodePointMap maps[] = new CodePointMap[UProperty.INT_LIMIT - UProperty.INT_START];
+    private static final CodePointMap maps[] =
+            new CodePointMap[UProperty.INT_LIMIT - UProperty.INT_START];
 
     private static UnicodeSet makeSet(int property) {
         UnicodeSet set = new UnicodeSet();
@@ -112,8 +112,8 @@ public final class CharacterProperties {
     }
 
     /**
-     * Returns a frozen UnicodeSet for a binary property.
-     * Throws an exception if the property number is not one for a binary property.
+     * Returns a frozen UnicodeSet for a binary property. Throws an exception if the property number
+     * is not one for a binary property.
      *
      * <p>The returned set contains all code points for which the property is true.
      *
@@ -125,10 +125,10 @@ public final class CharacterProperties {
      */
     public static final UnicodeSet getBinaryPropertySet(int property) {
         if (property < 0 || UProperty.BINARY_LIMIT <= property) {
-            throw new IllegalArgumentException("" + property +
-                    " is not a constant for a UProperty binary property");
+            throw new IllegalArgumentException(
+                    "" + property + " is not a constant for a UProperty binary property");
         }
-        synchronized(sets) {
+        synchronized (sets) {
             UnicodeSet set = sets[property];
             if (set == null) {
                 sets[property] = set = makeSet(property);
@@ -138,14 +138,14 @@ public final class CharacterProperties {
     }
 
     /**
-     * Returns an immutable CodePointMap for an enumerated/catalog/int-valued property.
-     * Throws an exception if the property number is not one for an "int property".
+     * Returns an immutable CodePointMap for an enumerated/catalog/int-valued property. Throws an
+     * exception if the property number is not one for an "int property".
      *
-     * <p>The returned object maps all Unicode code points to their values for that property.
-     * For documentation of the integer values see {@link UCharacter#getIntPropertyValue(int, int)}.
+     * <p>The returned object maps all Unicode code points to their values for that property. For
+     * documentation of the integer values see {@link UCharacter#getIntPropertyValue(int, int)}.
      *
-     * <p>The actual type of the returned object differs between properties
-     * and may change over time.
+     * <p>The actual type of the returned object differs between properties and may change over
+     * time.
      *
      * @param property {@link UProperty#INT_START}..{@link UProperty#INT_LIMIT}-1
      * @return the property as a map
@@ -155,10 +155,10 @@ public final class CharacterProperties {
      */
     public static final CodePointMap getIntPropertyMap(int property) {
         if (property < UProperty.INT_START || UProperty.INT_LIMIT <= property) {
-            throw new IllegalArgumentException("" + property +
-                    " is not a constant for a UProperty int property");
+            throw new IllegalArgumentException(
+                    "" + property + " is not a constant for a UProperty int property");
         }
-        synchronized(maps) {
+        synchronized (maps) {
             CodePointMap map = maps[property - UProperty.INT_START];
             if (map == null) {
                 maps[property - UProperty.INT_START] = map = makeMap(property);

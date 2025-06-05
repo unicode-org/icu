@@ -12,28 +12,23 @@
  */
 package com.ibm.icu.dev.tool.layout;
 
-
 import com.ibm.icu.impl.Utility;
 
-public class TaggedRecord
-{
+public class TaggedRecord {
     private String tag;
-        
-    public TaggedRecord(String theTag)
-    {
+
+    public TaggedRecord(String theTag) {
         tag = theTag;
     }
-        
-    public String getTag()
-    {
+
+    public String getTag() {
         return tag;
     }
-        
+
     //
     // Straight insertion sort from Knuth vol. III, pg. 81
     //
-    public static void sort(TaggedRecord[] table, int count)
-    {
+    public static void sort(TaggedRecord[] table, int count) {
         for (int j = 1; j < count; j += 1) {
             int i;
             TaggedRecord v = table[j];
@@ -50,9 +45,8 @@ public class TaggedRecord
             table[i + 1] = v;
         }
     }
-    
-    public static int search(TaggedRecord[] table, int count, String tag)
-    {
+
+    public static int search(TaggedRecord[] table, int count, String tag) {
         int log2 = Utility.highBit(count);
         int power = 1 << log2;
         int extra = count - power;
@@ -78,4 +72,3 @@ public class TaggedRecord
         return -1;
     }
 }
-    

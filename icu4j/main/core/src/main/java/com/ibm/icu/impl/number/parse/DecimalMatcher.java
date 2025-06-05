@@ -13,7 +13,6 @@ import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author sffc
- *
  */
 public class DecimalMatcher implements NumberParseMatcher {
 
@@ -36,7 +35,8 @@ public class DecimalMatcher implements NumberParseMatcher {
     private final String groupingSeparator;
     private final String decimalSeparator;
 
-    // Assumption: these sets all consist of single code points. If this assumption needs to be broken,
+    // Assumption: these sets all consist of single code points. If this assumption needs to be
+    // broken,
     // fix getLeadCodePoints() as well as matching logic. Be careful of the performance impact.
     private final UnicodeSet groupingUniSet;
     private final UnicodeSet decimalUniSet;
@@ -45,9 +45,7 @@ public class DecimalMatcher implements NumberParseMatcher {
     private final String[] digitStrings;
 
     public static DecimalMatcher getInstance(
-            DecimalFormatSymbols symbols,
-            Grouper grouper,
-            int parseFlags) {
+            DecimalFormatSymbols symbols, Grouper grouper, int parseFlags) {
         // TODO: Cache popular instances?
         return new DecimalMatcher(symbols, grouper, parseFlags);
     }
@@ -66,9 +64,11 @@ public class DecimalMatcher implements NumberParseMatcher {
         // Attempt to find separators in the static cache
 
         groupingUniSet = StaticUnicodeSets.get(groupingKey);
-        Key decimalKey = StaticUnicodeSets.chooseFrom(decimalSeparator,
-                strictSeparators ? Key.STRICT_COMMA : Key.COMMA,
-                strictSeparators ? Key.STRICT_PERIOD : Key.PERIOD);
+        Key decimalKey =
+                StaticUnicodeSets.chooseFrom(
+                        decimalSeparator,
+                        strictSeparators ? Key.STRICT_COMMA : Key.COMMA,
+                        strictSeparators ? Key.STRICT_PERIOD : Key.PERIOD);
         if (decimalKey != null) {
             decimalUniSet = StaticUnicodeSets.get(decimalKey);
         } else if (!decimalSeparator.isEmpty()) {
@@ -80,8 +80,11 @@ public class DecimalMatcher implements NumberParseMatcher {
         if (groupingKey != null && decimalKey != null) {
             // Everything is available in the static cache
             separatorSet = groupingUniSet;
-            leadSet = StaticUnicodeSets.get(strictSeparators ? Key.DIGITS_OR_ALL_SEPARATORS
-                    : Key.DIGITS_OR_STRICT_ALL_SEPARATORS);
+            leadSet =
+                    StaticUnicodeSets.get(
+                            strictSeparators
+                                    ? Key.DIGITS_OR_ALL_SEPARATORS
+                                    : Key.DIGITS_OR_STRICT_ALL_SEPARATORS);
         } else {
             separatorSet = new UnicodeSet().addAll(groupingUniSet).addAll(decimalUniSet).freeze();
             leadSet = null;
@@ -111,10 +114,10 @@ public class DecimalMatcher implements NumberParseMatcher {
     }
 
     /**
-     * @param exponentSign
-     *            -1 means a negative exponent; +1 means a positive exponent; 0 means NO exponent. If -1
-     *            or +1, the number will be saved by scaling the pre-existing DecimalQuantity in the
-     *            ParsedNumber. If 0, a new DecimalQuantity will be created to store the number.
+     * @param exponentSign -1 means a negative exponent; +1 means a positive exponent; 0 means NO
+     *     exponent. If -1 or +1, the number will be saved by scaling the pre-existing
+     *     DecimalQuantity in the ParsedNumber. If 0, a new DecimalQuantity will be created to store
+     *     the number.
      */
     public boolean match(StringSegment segment, ParsedNumber result, int exponentSign) {
         if (result.seenNumber() && exponentSign == 0) {

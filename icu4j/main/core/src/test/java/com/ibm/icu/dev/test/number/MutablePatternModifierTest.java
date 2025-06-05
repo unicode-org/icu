@@ -6,8 +6,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
-
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
@@ -20,6 +18,7 @@ import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
+import org.junit.Test;
 
 public class MutablePatternModifierTest {
 
@@ -28,7 +27,8 @@ public class MutablePatternModifierTest {
         MutablePatternModifier mod = new MutablePatternModifier(false);
         mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b"), null);
         mod.setPatternAttributes(SignDisplay.AUTO, false, false);
-        mod.setSymbols(DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
+        mod.setSymbols(
+                DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
                 Currency.getInstance("USD"),
                 UnitWidth.SHORT,
                 null);
@@ -90,7 +90,8 @@ public class MutablePatternModifierTest {
         MutablePatternModifier mod = new MutablePatternModifier(false);
         mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b;c-0d"), null);
         mod.setPatternAttributes(SignDisplay.AUTO, false, false);
-        mod.setSymbols(DecimalFormatSymbols.getInstance(ULocale.ENGLISH), null, UnitWidth.SHORT, null);
+        mod.setSymbols(
+                DecimalFormatSymbols.getInstance(ULocale.ENGLISH), null, UnitWidth.SHORT, null);
         DecimalQuantity fq = new DecimalQuantity_DualStorageBCD(1);
 
         FormattedStringBuilder nsb1 = new FormattedStringBuilder();
@@ -120,7 +121,8 @@ public class MutablePatternModifierTest {
         MutablePatternModifier mod = new MutablePatternModifier(false);
         mod.setPatternInfo(PatternStringParser.parseToPatternInfo("abc"), null);
         mod.setPatternAttributes(SignDisplay.AUTO, false, false);
-        mod.setSymbols(DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
+        mod.setSymbols(
+                DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
                 Currency.getInstance("USD"),
                 UnitWidth.SHORT,
                 null);

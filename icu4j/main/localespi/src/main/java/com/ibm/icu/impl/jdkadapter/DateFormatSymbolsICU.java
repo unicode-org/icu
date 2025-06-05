@@ -11,8 +11,8 @@ package com.ibm.icu.impl.jdkadapter;
 import com.ibm.icu.text.DateFormatSymbols;
 
 /**
- * DateFormatSymbolsICU is an adapter class which wraps ICU4J DateFormatSymbols and
- * implements java.text.DateFormatSymbols APIs.
+ * DateFormatSymbolsICU is an adapter class which wraps ICU4J DateFormatSymbols and implements
+ * java.text.DateFormatSymbols APIs.
  */
 public class DateFormatSymbolsICU extends java.text.DateFormatSymbols {
 
@@ -34,7 +34,7 @@ public class DateFormatSymbolsICU extends java.text.DateFormatSymbols {
     //          return fIcuDfs.methodX();
     //
     //      to prevent NPE. For more details, please refer #11733
-    
+
     private DateFormatSymbolsICU(DateFormatSymbols icuDfs) {
         fIcuDfs = icuDfs;
     }
@@ -52,12 +52,12 @@ public class DateFormatSymbolsICU extends java.text.DateFormatSymbols {
 
     @Override
     public Object clone() {
-        DateFormatSymbolsICU other = (DateFormatSymbolsICU)super.clone();
+        DateFormatSymbolsICU other = (DateFormatSymbolsICU) super.clone();
         if (fIcuDfs != null) {
             // fIcuDfs must not be null except for premature instance.
             // A premature instance might be created by Java DateFormatSymbols'
             // internal cache. See #11733 for more details.
-            other.fIcuDfs = (DateFormatSymbols)this.fIcuDfs.clone();
+            other.fIcuDfs = (DateFormatSymbols) this.fIcuDfs.clone();
         }
         return other;
     }
@@ -69,9 +69,9 @@ public class DateFormatSymbolsICU extends java.text.DateFormatSymbols {
         }
         if (obj instanceof DateFormatSymbolsICU) {
             if (this.fIcuDfs == null) {
-                return ((DateFormatSymbolsICU)obj).fIcuDfs == null;
+                return ((DateFormatSymbolsICU) obj).fIcuDfs == null;
             }
-            return this.fIcuDfs.equals(((DateFormatSymbolsICU)obj).fIcuDfs);
+            return this.fIcuDfs.equals(((DateFormatSymbolsICU) obj).fIcuDfs);
         }
         return false;
     }

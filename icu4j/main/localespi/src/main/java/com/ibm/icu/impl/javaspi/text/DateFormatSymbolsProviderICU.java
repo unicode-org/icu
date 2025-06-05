@@ -8,19 +8,19 @@
  */
 package com.ibm.icu.impl.javaspi.text;
 
+import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
+import com.ibm.icu.impl.jdkadapter.DateFormatSymbolsICU;
 import java.text.DateFormatSymbols;
 import java.text.spi.DateFormatSymbolsProvider;
 import java.util.Locale;
-
-import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
-import com.ibm.icu.impl.jdkadapter.DateFormatSymbolsICU;
 
 public class DateFormatSymbolsProviderICU extends DateFormatSymbolsProvider {
 
     @Override
     public DateFormatSymbols getInstance(Locale locale) {
-        com.ibm.icu.text.DateFormatSymbols icuDfs = com.ibm.icu.text.DateFormatSymbols.getInstance(
-                ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
+        com.ibm.icu.text.DateFormatSymbols icuDfs =
+                com.ibm.icu.text.DateFormatSymbols.getInstance(
+                        ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
         return DateFormatSymbolsICU.wrap(icuDfs);
     }
 
@@ -28,5 +28,4 @@ public class DateFormatSymbolsProviderICU extends DateFormatSymbolsProvider {
     public Locale[] getAvailableLocales() {
         return ICULocaleServiceProvider.getAvailableLocales();
     }
-
 }

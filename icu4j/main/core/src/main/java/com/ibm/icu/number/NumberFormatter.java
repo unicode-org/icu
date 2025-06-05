@@ -2,16 +2,15 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
-import java.util.Locale;
-
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
+import java.util.Locale;
 
 /**
  * All-in-one formatter for localized numbers, currencies, and units.
  *
- * For a full list of options, see {@link NumberFormatterSettings}.
+ * <p>For a full list of options, see {@link NumberFormatterSettings}.
  *
  * <pre>
  * // Most basic usage:
@@ -39,15 +38,12 @@ import com.ibm.icu.util.ULocale;
  * template.locale(...).format(new Measure(1234, MeasureUnit.METER)).toString();  // +1,234 meters in en-US
  * </pre>
  *
- * <p>
- * This API offers more features than {@link com.ibm.icu.text.DecimalFormat} and is geared toward new
- * users of ICU.
+ * <p>This API offers more features than {@link com.ibm.icu.text.DecimalFormat} and is geared toward
+ * new users of ICU.
  *
- * <p>
- * NumberFormatter instances (i.e., LocalizedNumberFormatter and UnlocalizedNumberFormatter)
- * are immutable and thread safe. This means that invoking a configuration
- * method has no effect on the receiving instance; you must store and use the new number formatter
- * instance it returns instead.
+ * <p>NumberFormatter instances (i.e., LocalizedNumberFormatter and UnlocalizedNumberFormatter) are
+ * immutable and thread safe. This means that invoking a configuration method has no effect on the
+ * receiving instance; you must store and use the new number formatter instance it returns instead.
  *
  * <pre>
  * UnlocalizedNumberFormatter formatter = UnlocalizedNumberFormatter.with()
@@ -56,13 +52,11 @@ import com.ibm.icu.util.ULocale;
  * formatter.locale(ULocale.ENGLISH).format(9.8765).toString(); // prints "9.8765E0", not "9.88E0"
  * </pre>
  *
- * <p>
- * This API is based on the <em>fluent</em> design pattern popularized by libraries such as Google's
- * Guava. For extensive details on the design of this API, read <a href="https://goo.gl/szi5VB">the
- * design doc</a>.
+ * <p>This API is based on the <em>fluent</em> design pattern popularized by libraries such as
+ * Google's Guava. For extensive details on the design of this API, read <a
+ * href="https://goo.gl/szi5VB">the design doc</a>.
  *
- * <p>
- * Note: To format monetary/currency values, specify the currency in the `.unit()` function.
+ * <p>Note: To format monetary/currency values, specify the currency in the `.unit()` function.
  *
  * @author Shane Carr
  * @stable ICU 60
@@ -78,36 +72,36 @@ public final class NumberFormatter {
      * <p>There are two modes, RELAXED and STRICT:
      *
      * <ul>
-     * <li> RELAXED: Relax one of the two constraints (fraction digits or significant digits) in order
-     *   to round the number to a higher level of precision.
-     * <li> STRICT: Enforce both constraints, resulting in the number being rounded to a lower
-     *   level of precision.
+     *   <li>RELAXED: Relax one of the two constraints (fraction digits or significant digits) in
+     *       order to round the number to a higher level of precision.
+     *   <li>STRICT: Enforce both constraints, resulting in the number being rounded to a lower
+     *       level of precision.
      * </ul>
      *
-     * <p>The default settings for compact notation rounding are Max-Fraction = 0 (round to the nearest
-     * integer), Max-Significant = 2 (round to 2 significant digits), and priority RELAXED (choose
-     * the constraint that results in more digits being displayed).
+     * <p>The default settings for compact notation rounding are Max-Fraction = 0 (round to the
+     * nearest integer), Max-Significant = 2 (round to 2 significant digits), and priority RELAXED
+     * (choose the constraint that results in more digits being displayed).
      *
-     * <p>Conflicting <i>minimum</i> fraction and significant digits are always resolved in the direction that
-     * results in more trailing zeros.
+     * <p>Conflicting <i>minimum</i> fraction and significant digits are always resolved in the
+     * direction that results in more trailing zeros.
      *
      * <p>Example 1: Consider the number 3.141, with various different settings:
      *
      * <ul>
-     * <li> Max-Fraction = 1: "3.1"
-     * <li> Max-Significant = 3: "3.14"
+     *   <li>Max-Fraction = 1: "3.1"
+     *   <li>Max-Significant = 3: "3.14"
      * </ul>
      *
      * <p>The rounding priority determines how to resolve the conflict when both Max-Fraction and
-     * Max-Significant are set. With RELAXED, the less-strict setting (the one that causes more digits
-     * to be displayed) will be used; Max-Significant wins. With STRICT, the more-strict setting (the
-     * one that causes fewer digits to be displayed) will be used; Max-Fraction wins.
+     * Max-Significant are set. With RELAXED, the less-strict setting (the one that causes more
+     * digits to be displayed) will be used; Max-Significant wins. With STRICT, the more-strict
+     * setting (the one that causes fewer digits to be displayed) will be used; Max-Fraction wins.
      *
      * <p>Example 2: Consider the number 8317, with various different settings:
      *
      * <ul>
-     * <li> Max-Fraction = 1: "8317"
-     * <li> Max-Significant = 3: "8320"
+     *   <li>Max-Fraction = 1: "8317"
+     *   <li>Max-Significant = 3: "8320"
      * </ul>
      *
      * <p>Here, RELAXED favors Max-Fraction and STRICT favors Max-Significant. Note that this larger
@@ -132,33 +126,31 @@ public final class NumberFormatter {
     }
 
     /**
-     * An enum declaring how to render units, including currencies. Example outputs when formatting 123
-     * USD and 123 meters in <em>en-CA</em>:
+     * An enum declaring how to render units, including currencies. Example outputs when formatting
+     * 123 USD and 123 meters in <em>en-CA</em>:
      *
      * <ul>
-     * <li>NARROW: "$123.00" and "123 m"
-     * <li>SHORT: "US$ 123.00" and "123 m"
-     * <li>FULL_NAME: "123.00 US dollars" and "123 meters"
-     * <li>ISO_CODE: "USD 123.00" and undefined behavior
-     * <li>HIDDEN: "123.00" and "123"
+     *   <li>NARROW: "$123.00" and "123 m"
+     *   <li>SHORT: "US$ 123.00" and "123 m"
+     *   <li>FULL_NAME: "123.00 US dollars" and "123 meters"
+     *   <li>ISO_CODE: "USD 123.00" and undefined behavior
+     *   <li>HIDDEN: "123.00" and "123"
      * </ul>
      *
-     * <p>
-     * This enum is similar to {@link com.ibm.icu.text.MeasureFormat.FormatWidth}.
+     * <p>This enum is similar to {@link com.ibm.icu.text.MeasureFormat.FormatWidth}.
      *
      * @stable ICU 60
      * @see NumberFormatter
      */
     public static enum UnitWidth {
         /**
-         * Print an abbreviated version of the unit name. Similar to SHORT, but always use the shortest
-         * available abbreviation or symbol. This option can be used when the context hints at the
-         * identity of the unit. For more information on the difference between NARROW and SHORT, see
-         * SHORT.
+         * Print an abbreviated version of the unit name. Similar to SHORT, but always use the
+         * shortest available abbreviation or symbol. This option can be used when the context hints
+         * at the identity of the unit. For more information on the difference between NARROW and
+         * SHORT, see SHORT.
          *
-         * <p>
-         * In CLDR, this option corresponds to the "Narrow" format for measure units and the "¤¤¤¤¤"
-         * placeholder for currencies.
+         * <p>In CLDR, this option corresponds to the "Narrow" format for measure units and the
+         * "¤¤¤¤¤" placeholder for currencies.
          *
          * @stable ICU 60
          * @see NumberFormatter
@@ -166,15 +158,14 @@ public final class NumberFormatter {
         NARROW,
 
         /**
-         * Print an abbreviated version of the unit name. Similar to NARROW, but use a slightly wider
-         * abbreviation or symbol when there may be ambiguity. This is the default behavior.
+         * Print an abbreviated version of the unit name. Similar to NARROW, but use a slightly
+         * wider abbreviation or symbol when there may be ambiguity. This is the default behavior.
          *
-         * <p>
-         * For example, in <em>es-US</em>, the SHORT form for Fahrenheit is "{0} °F", but the NARROW form
-         * is "{0}°", since Fahrenheit is the customary unit for temperature in that locale.
+         * <p>For example, in <em>es-US</em>, the SHORT form for Fahrenheit is "{0} °F", but the
+         * NARROW form is "{0}°", since Fahrenheit is the customary unit for temperature in that
+         * locale.
          *
-         * <p>
-         * In CLDR, this option corresponds to the "Short" format for measure units and the "¤"
+         * <p>In CLDR, this option corresponds to the "Short" format for measure units and the "¤"
          * placeholder for currencies.
          *
          * @stable ICU 60
@@ -185,8 +176,7 @@ public final class NumberFormatter {
         /**
          * Print the full name of the unit, without any abbreviations.
          *
-         * <p>
-         * In CLDR, this option corresponds to the default format for measure units and the "¤¤¤"
+         * <p>In CLDR, this option corresponds to the default format for measure units and the "¤¤¤"
          * placeholder for currencies.
          *
          * @stable ICU 60
@@ -197,11 +187,9 @@ public final class NumberFormatter {
         /**
          * Use the three-digit ISO XXX code in place of the symbol for displaying currencies.
          *
-         * <p>
-         * Behavior of this option with non-currency units is not defined at this time.
+         * <p>Behavior of this option with non-currency units is not defined at this time.
          *
-         * <p>
-         * In CLDR, this option corresponds to the "¤¤" placeholder for currencies.
+         * <p>In CLDR, this option corresponds to the "¤¤" placeholder for currencies.
          *
          * @stable ICU 60
          * @see NumberFormatter
@@ -212,8 +200,7 @@ public final class NumberFormatter {
          * Use the formal variant of the currency symbol; for example, "NT$" for the New Taiwan
          * dollar in zh-TW.
          *
-         * <p>
-         * Behavior of this option with non-currency units is not defined at this time.
+         * <p>Behavior of this option with non-currency units is not defined at this time.
          *
          * @stable ICU 67
          * @see NumberFormatter
@@ -221,11 +208,10 @@ public final class NumberFormatter {
         FORMAL,
 
         /**
-         * Use the alternate variant of the currency symbol; for example, "TL" for the Turkish
-         * lira (TRY).
+         * Use the alternate variant of the currency symbol; for example, "TL" for the Turkish lira
+         * (TRY).
          *
-         * <p>
-         * Behavior of this option with non-currency units is not defined at this time.
+         * <p>Behavior of this option with non-currency units is not defined at this time.
          *
          * @stable ICU 67
          * @see NumberFormatter
@@ -234,8 +220,8 @@ public final class NumberFormatter {
 
         /**
          * Format the number according to the specified unit, but do not display the unit. For
-         * currencies, apply monetary symbols and formats as with SHORT, but omit the currency symbol.
-         * For measure units, the behavior is equivalent to not specifying the unit at all.
+         * currencies, apply monetary symbols and formats as with SHORT, but omit the currency
+         * symbol. For measure units, the behavior is equivalent to not specifying the unit at all.
          *
          * @stable ICU 60
          * @see NumberFormatter
@@ -246,26 +232,24 @@ public final class NumberFormatter {
     /**
      * An enum declaring the strategy for when and how to display grouping separators (i.e., the
      * separator, often a comma or period, after every 2-3 powers of ten). The choices are several
-     * pre-built strategies for different use cases that employ locale data whenever possible. Example
-     * outputs for 1234 and 1234567 in <em>en-IN</em>:
+     * pre-built strategies for different use cases that employ locale data whenever possible.
+     * Example outputs for 1234 and 1234567 in <em>en-IN</em>:
      *
      * <ul>
-     * <li>OFF: 1234 and 12345
-     * <li>MIN2: 1234 and 12,34,567
-     * <li>AUTO: 1,234 and 12,34,567
-     * <li>ON_ALIGNED: 1,234 and 12,34,567
-     * <li>THOUSANDS: 1,234 and 1,234,567
+     *   <li>OFF: 1234 and 12345
+     *   <li>MIN2: 1234 and 12,34,567
+     *   <li>AUTO: 1,234 and 12,34,567
+     *   <li>ON_ALIGNED: 1,234 and 12,34,567
+     *   <li>THOUSANDS: 1,234 and 1,234,567
      * </ul>
      *
-     * <p>
-     * The default is AUTO, which displays grouping separators unless the locale data says that grouping
-     * is not customary. To force grouping for all numbers greater than 1000 consistently across locales,
-     * use ON_ALIGNED. On the other hand, to display grouping less frequently than the default, use MIN2
-     * or OFF. See the docs of each option for details.
+     * <p>The default is AUTO, which displays grouping separators unless the locale data says that
+     * grouping is not customary. To force grouping for all numbers greater than 1000 consistently
+     * across locales, use ON_ALIGNED. On the other hand, to display grouping less frequently than
+     * the default, use MIN2 or OFF. See the docs of each option for details.
      *
-     * <p>
-     * Note: This enum specifies the strategy for grouping sizes. To set which character to use as the
-     * grouping separator, use the "symbols" setter.
+     * <p>Note: This enum specifies the strategy for grouping sizes. To set which character to use
+     * as the grouping separator, use the "symbols" setter.
      *
      * @stable ICU 61
      * @see NumberFormatter
@@ -280,15 +264,15 @@ public final class NumberFormatter {
         OFF,
 
         /**
-         * Display grouping using locale defaults, except do not show grouping on values smaller than
-         * 10000 (such that there is a <em>minimum of two digits</em> before the first separator).
+         * Display grouping using locale defaults, except do not show grouping on values smaller
+         * than 10000 (such that there is a <em>minimum of two digits</em> before the first
+         * separator).
          *
-         * <p>
-         * Note that locales may restrict grouping separators to be displayed only on 1 million or
-         * greater (for example, ee and hu) or disable grouping altogether (for example, bg currency).
+         * <p>Note that locales may restrict grouping separators to be displayed only on 1 million
+         * or greater (for example, ee and hu) or disable grouping altogether (for example, bg
+         * currency).
          *
-         * <p>
-         * Locale data is used to determine whether to separate larger numbers into groups of 2
+         * <p>Locale data is used to determine whether to separate larger numbers into groups of 2
          * (customary in South Asia) or groups of 3 (customary in Europe and the Americas).
          *
          * @stable ICU 61
@@ -297,14 +281,14 @@ public final class NumberFormatter {
         MIN2,
 
         /**
-         * Display grouping using the default strategy for all locales. This is the default behavior.
+         * Display grouping using the default strategy for all locales. This is the default
+         * behavior.
          *
-         * <p>
-         * Note that locales may restrict grouping separators to be displayed only on 1 million or
-         * greater (for example, ee and hu) or disable grouping altogether (for example, bg currency).
+         * <p>Note that locales may restrict grouping separators to be displayed only on 1 million
+         * or greater (for example, ee and hu) or disable grouping altogether (for example, bg
+         * currency).
          *
-         * <p>
-         * Locale data is used to determine whether to separate larger numbers into groups of 2
+         * <p>Locale data is used to determine whether to separate larger numbers into groups of 2
          * (customary in South Asia) or groups of 3 (customary in Europe and the Americas).
          *
          * @stable ICU 61
@@ -315,13 +299,11 @@ public final class NumberFormatter {
         /**
          * Always display the grouping separator on values of at least 1000.
          *
-         * <p>
-         * This option ignores the locale data that restricts or disables grouping, described in MIN2 and
-         * AUTO. This option may be useful to normalize the alignment of numbers, such as in a
-         * spreadsheet.
+         * <p>This option ignores the locale data that restricts or disables grouping, described in
+         * MIN2 and AUTO. This option may be useful to normalize the alignment of numbers, such as
+         * in a spreadsheet.
          *
-         * <p>
-         * Locale data is used to determine whether to separate larger numbers into groups of 2
+         * <p>Locale data is used to determine whether to separate larger numbers into groups of 2
          * (customary in South Asia) or groups of 3 (customary in Europe and the Americas).
          *
          * @stable ICU 61
@@ -330,8 +312,8 @@ public final class NumberFormatter {
         ON_ALIGNED,
 
         /**
-         * Use the Western defaults: groups of 3 and enabled for all numbers 1000 or greater. Do not use
-         * locale data for determining the grouping strategy.
+         * Use the Western defaults: groups of 3 and enabled for all numbers 1000 or greater. Do not
+         * use locale data for determining the grouping strategy.
          *
          * @stable ICU 61
          * @see NumberFormatter
@@ -340,32 +322,31 @@ public final class NumberFormatter {
     }
 
     /**
-     * An enum declaring how to denote positive and negative numbers. Example outputs when formatting
-     * 123, 0, and -123 in <em>en-US</em>:
+     * An enum declaring how to denote positive and negative numbers. Example outputs when
+     * formatting 123, 0, and -123 in <em>en-US</em>:
      *
      * <ul>
-     * <li>AUTO: "123", "0", and "-123"
-     * <li>ALWAYS: "+123", "+0", and "-123"
-     * <li>NEVER: "123", "0", and "123"
-     * <li>ACCOUNTING: "$123", "$0", and "($123)"
-     * <li>ACCOUNTING_ALWAYS: "+$123", "+$0", and "($123)"
-     * <li>EXCEPT_ZERO: "+123", "0", and "-123"
-     * <li>ACCOUNTING_EXCEPT_ZERO: "+$123", "$0", and "($123)"
+     *   <li>AUTO: "123", "0", and "-123"
+     *   <li>ALWAYS: "+123", "+0", and "-123"
+     *   <li>NEVER: "123", "0", and "123"
+     *   <li>ACCOUNTING: "$123", "$0", and "($123)"
+     *   <li>ACCOUNTING_ALWAYS: "+$123", "+$0", and "($123)"
+     *   <li>EXCEPT_ZERO: "+123", "0", and "-123"
+     *   <li>ACCOUNTING_EXCEPT_ZERO: "+$123", "$0", and "($123)"
      * </ul>
      *
-     * <p>
-     * The exact format, including the position and the code point of the sign, differ by locale.
+     * <p>The exact format, including the position and the code point of the sign, differ by locale.
      *
      * @stable ICU 60
      * @see NumberFormatter
      */
     public static enum SignDisplay {
         /**
-         * Show the minus sign on negative numbers, and do not show the sign on positive numbers. This is
-         * the default behavior.
+         * Show the minus sign on negative numbers, and do not show the sign on positive numbers.
+         * This is the default behavior.
          *
-         * If using this option, a sign will be displayed on negative zero, including negative numbers
-         * that round to zero. To hide the sign on negative zero, use the NEGATIVE option.
+         * <p>If using this option, a sign will be displayed on negative zero, including negative
+         * numbers that round to zero. To hide the sign on negative zero, use the NEGATIVE option.
          *
          * @stable ICU 60
          * @see NumberFormatter
@@ -373,8 +354,8 @@ public final class NumberFormatter {
         AUTO,
 
         /**
-         * Show the minus sign on negative numbers and the plus sign on positive numbers, including zero.
-         * To hide the sign on zero, see {@link #EXCEPT_ZERO}.
+         * Show the minus sign on negative numbers and the plus sign on positive numbers, including
+         * zero. To hide the sign on zero, see {@link #EXCEPT_ZERO}.
          *
          * @stable ICU 60
          * @see NumberFormatter
@@ -390,17 +371,15 @@ public final class NumberFormatter {
         NEVER,
 
         /**
-         * Use the locale-dependent accounting format on negative numbers, and do not show the sign on
-         * positive numbers.
+         * Use the locale-dependent accounting format on negative numbers, and do not show the sign
+         * on positive numbers.
          *
-         * <p>
-         * The accounting format is defined in CLDR and varies by locale; in many Western locales, the
-         * format is a pair of parentheses around the number.
+         * <p>The accounting format is defined in CLDR and varies by locale; in many Western
+         * locales, the format is a pair of parentheses around the number.
          *
-         * <p>
-         * Note: Since CLDR defines the accounting format in the monetary context only, this option falls
-         * back to the AUTO sign display strategy when formatting without a currency unit. This
-         * limitation may be lifted in the future.
+         * <p>Note: Since CLDR defines the accounting format in the monetary context only, this
+         * option falls back to the AUTO sign display strategy when formatting without a currency
+         * unit. This limitation may be lifted in the future.
          *
          * @stable ICU 60
          * @see NumberFormatter
@@ -410,8 +389,8 @@ public final class NumberFormatter {
         /**
          * Use the locale-dependent accounting format on negative numbers, and show the plus sign on
          * positive numbers, including zero. For more information on the accounting format, see the
-         * ACCOUNTING sign display strategy. To hide the sign on zero, see
-         * {@link #ACCOUNTING_EXCEPT_ZERO}.
+         * ACCOUNTING sign display strategy. To hide the sign on zero, see {@link
+         * #ACCOUNTING_EXCEPT_ZERO}.
          *
          * @stable ICU 60
          * @see NumberFormatter
@@ -419,8 +398,8 @@ public final class NumberFormatter {
         ACCOUNTING_ALWAYS,
 
         /**
-         * Show the minus sign on negative numbers and the plus sign on positive numbers. Do not show a
-         * sign on zero, numbers that round to zero, or NaN.
+         * Show the minus sign on negative numbers and the plus sign on positive numbers. Do not
+         * show a sign on zero, numbers that round to zero, or NaN.
          *
          * @stable ICU 61
          * @see NumberFormatter
@@ -429,8 +408,8 @@ public final class NumberFormatter {
 
         /**
          * Use the locale-dependent accounting format on negative numbers, and show the plus sign on
-         * positive numbers. Do not show a sign on zero, numbers that round to zero, or NaN. For more
-         * information on the accounting format, see the ACCOUNTING sign display strategy.
+         * positive numbers. Do not show a sign on zero, numbers that round to zero, or NaN. For
+         * more information on the accounting format, see the ACCOUNTING sign display strategy.
          *
          * @stable ICU 61
          * @see NumberFormatter
@@ -453,12 +432,12 @@ public final class NumberFormatter {
     }
 
     /**
-     * An enum declaring how to render the decimal separator. Example outputs when formatting 1 and 1.1
-     * in <em>en-US</em>:
+     * An enum declaring how to render the decimal separator. Example outputs when formatting 1 and
+     * 1.1 in <em>en-US</em>:
      *
      * <ul>
-     * <li>AUTO: "1" and "1.1"
-     * <li>ALWAYS: "1." and "1.1"
+     *   <li>AUTO: "1" and "1.1"
+     *   <li>ALWAYS: "1." and "1.1"
      * </ul>
      *
      * @stable ICU 60
@@ -466,8 +445,8 @@ public final class NumberFormatter {
      */
     public static enum DecimalSeparatorDisplay {
         /**
-         * Show the decimal separator when there are one or more digits to display after the separator,
-         * and do not show it otherwise. This is the default behavior.
+         * Show the decimal separator when there are one or more digits to display after the
+         * separator, and do not show it otherwise. This is the default behavior.
          *
          * @stable ICU 60
          * @see NumberFormatter
@@ -475,7 +454,8 @@ public final class NumberFormatter {
         AUTO,
 
         /**
-         * Always show the decimal separator, even if there are no digits to display after the separator.
+         * Always show the decimal separator, even if there are no digits to display after the
+         * separator.
          *
          * @stable ICU 60
          * @see NumberFormatter
@@ -487,15 +467,16 @@ public final class NumberFormatter {
      * An enum declaring how to render trailing zeros.
      *
      * <ul>
-     * <li>AUTO: 0.90, 1.00, 1.10
-     * <li>HIDE_IF_WHOLE: 0.90, 1, 1.10
+     *   <li>AUTO: 0.90, 1.00, 1.10
+     *   <li>HIDE_IF_WHOLE: 0.90, 1, 1.10
      * </ul>
      *
      * @stable ICU 69
      */
     public static enum TrailingZeroDisplay {
         /**
-         * Display trailing zeros according to the settings for minimum fraction and significant digits.
+         * Display trailing zeros according to the settings for minimum fraction and significant
+         * digits.
          *
          * @stable ICU 69
          */
@@ -511,20 +492,17 @@ public final class NumberFormatter {
 
     /**
      * Use a default threshold of 3. This means that the third time .format() is called, the data
-     * structures get built using the "safe" code path. The first two calls to .format() will trigger the
-     * unsafe code path.
+     * structures get built using the "safe" code path. The first two calls to .format() will
+     * trigger the unsafe code path.
      */
     static final long DEFAULT_THRESHOLD = 3;
 
-    /**
-     * Private constructor, not designed for instantiation.
-     */
-    private NumberFormatter() {
-    }
+    /** Private constructor, not designed for instantiation. */
+    private NumberFormatter() {}
 
     /**
-     * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is not
-     * currently known at the call site.
+     * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is
+     * not currently known at the call site.
      *
      * @return An {@link UnlocalizedNumberFormatter}, to be used for chaining.
      * @stable ICU 60
@@ -534,11 +512,10 @@ public final class NumberFormatter {
     }
 
     /**
-     * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is known
-     * at the call site.
+     * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is
+     * known at the call site.
      *
-     * @param locale
-     *            The locale from which to load formats and symbols for number formatting.
+     * @param locale The locale from which to load formats and symbols for number formatting.
      * @return A {@link LocalizedNumberFormatter}, to be used for chaining.
      * @stable ICU 60
      */
@@ -547,11 +524,10 @@ public final class NumberFormatter {
     }
 
     /**
-     * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is known
-     * at the call site.
+     * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is
+     * known at the call site.
      *
-     * @param locale
-     *            The locale from which to load formats and symbols for number formatting.
+     * @param locale The locale from which to load formats and symbols for number formatting.
      * @return A {@link LocalizedNumberFormatter}, to be used for chaining.
      * @stable ICU 60
      */
@@ -560,16 +536,16 @@ public final class NumberFormatter {
     }
 
     /**
-     * Call this method at the beginning of a NumberFormatter fluent chain to create an instance based
-     * on a given number skeleton string.
+     * Call this method at the beginning of a NumberFormatter fluent chain to create an instance
+     * based on a given number skeleton string.
      *
-     * For more information on number skeleton strings, see:
+     * <p>For more information on number skeleton strings, see:
      * https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html
      *
-     * @param skeleton
-     *            The skeleton string off of which to base this NumberFormatter.
+     * @param skeleton The skeleton string off of which to base this NumberFormatter.
      * @return An {@link UnlocalizedNumberFormatter}, to be used for chaining.
-     * @throws SkeletonSyntaxException If the given string is not a valid number formatting skeleton.
+     * @throws SkeletonSyntaxException If the given string is not a valid number formatting
+     *     skeleton.
      * @stable ICU 62
      */
     public static UnlocalizedNumberFormatter forSkeleton(String skeleton) {
@@ -577,8 +553,8 @@ public final class NumberFormatter {
     }
 
     /**
-     * Note: In Java, since NumberPropertyMapper is package-private, this method is here so that it is
-     * accessible to tests.
+     * Note: In Java, since NumberPropertyMapper is package-private, this method is here so that it
+     * is accessible to tests.
      *
      * @internal
      * @deprecated ICU 60 This API is ICU internal only.

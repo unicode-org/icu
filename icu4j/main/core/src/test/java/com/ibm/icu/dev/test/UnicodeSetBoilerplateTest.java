@@ -8,25 +8,20 @@
  */
 package com.ibm.icu.dev.test;
 
+import com.ibm.icu.text.UnicodeSet;
 import java.util.List;
-
 import org.junit.Test;
 
-import com.ibm.icu.text.UnicodeSet;
-
-/**
- * Moved from UnicodeMapTest
- */
+/** Moved from UnicodeMapTest */
 public class UnicodeSetBoilerplateTest extends TestBoilerplate<UnicodeSet> {
 
-    public void TestUnicodeSetBoilerplate() throws Exception {
-    }
- 
+    public void TestUnicodeSetBoilerplate() throws Exception {}
+
     @Test
     public void test() throws Exception {
         _test();
     }
-    
+
     /* (non-Javadoc)
      * @see com.ibm.icu.dev.test.TestBoilerplate#_hasSameBehavior(java.lang.Object, java.lang.Object)
      */

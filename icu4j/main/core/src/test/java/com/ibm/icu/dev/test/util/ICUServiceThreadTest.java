@@ -1,13 +1,19 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2001-2013, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2001-2013, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.ICULocaleService;
+import com.ibm.icu.impl.ICUService;
+import com.ibm.icu.impl.ICUService.Factory;
+import com.ibm.icu.impl.ICUService.SimpleFactory;
+import com.ibm.icu.util.ULocale;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,22 +28,12 @@ import java.util.MissingResourceException;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Factory;
-import com.ibm.icu.impl.ICUService.SimpleFactory;
-import com.ibm.icu.util.ULocale;
-
 @RunWith(JUnit4.class)
-public class ICUServiceThreadTest extends CoreTestFmwk
-{
+public class ICUServiceThreadTest extends CoreTestFmwk {
     private static final boolean PRINTSTATS = false;
 
     private static final String[] countries = {
@@ -46,9 +42,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk
     private static final String[] languages = {
         "", "ZY", "YX", "XW", "WV", "VU", "UT", "TS", "SR", "RQ", "QP"
     };
-    private static final String[] variants = {
-        "", "", "", "GOLD", "SILVER", "BRONZE"
-    };
+    private static final String[] variants = {"", "", "", "GOLD", "SILVER", "BRONZE"};
 
     private static class TestFactory extends SimpleFactory {
         TestFactory(String id) {
@@ -57,7 +51,9 @@ public class ICUServiceThreadTest extends CoreTestFmwk
 
         @Override
         public String getDisplayName(String idForDisplay, ULocale locale) {
-            return (visible && idForDisplay.equals(this.id)) ? "(" + locale.toString() + ") " + idForDisplay : null;
+            return (visible && idForDisplay.equals(this.id))
+                    ? "(" + locale.toString() + ") " + idForDisplay
+                    : null;
         }
 
         @Override
@@ -65,23 +61,25 @@ public class ICUServiceThreadTest extends CoreTestFmwk
             return "Factory_" + id;
         }
     }
+
     /**
-     * Convenience override of getDisplayNames(ULocale, Comparator, String) that
-     * uses the default collator for the locale as the comparator to
-     * sort the display names, and null for the matchID.
+     * Convenience override of getDisplayNames(ULocale, Comparator, String) that uses the default
+     * collator for the locale as the comparator to sort the display names, and null for the
+     * matchID.
      */
     public static SortedMap<String, String> getDisplayNames(ICUService service, ULocale locale) {
         Collator col;
         try {
             col = Collator.getInstance(locale.toLocale());
-        }
-        catch (MissingResourceException e) {
+        } catch (MissingResourceException e) {
             // if no collator resources, we can't collate
             col = null;
         }
         return service.getDisplayNames(locale, col, null);
     }
-    private static final Random r = new Random(); // this is a multi thread test, can't 'unrandomize'
+
+    private static final Random r =
+            new Random(); // this is a multi thread test, can't 'unrandomize'
 
     private static String getCLV() {
         String c = countries[r.nextInt(countries.length)];
@@ -109,18 +107,17 @@ public class ICUServiceThreadTest extends CoreTestFmwk
             GO = false;
 
             Thread.sleep(300);
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
         }
     }
 
     static class TestThread extends Thread {
-        //private final String name;
+        // private final String name;
         protected ICUService service;
         private final long delay;
 
         public TestThread(String name, ICUService service, long delay) {
-            //this.name = name + " ";
+            // this.name = name + " ";
             this.service = service;
             this.delay = delay;
             this.setDaemon(true);
@@ -139,13 +136,11 @@ public class ICUServiceThreadTest extends CoreTestFmwk
                         Thread.sleep(delay);
                     }
                 }
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
             }
         }
 
-        protected void iterate() {
-        }
+        protected void iterate() {}
 
         /*
           public boolean logging() {
@@ -221,7 +216,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk
                 factories = service.factories();
             } else {
                 int n = r.nextInt(s);
-                Factory f = (Factory)factories.remove(n);
+                Factory f = (Factory) factories.remove(n);
                 boolean success = service.unregisterFactory(f);
                 TestFmwk.logln("factory: " + f + (success ? " succeeded." : " *** failed."));
             }
@@ -232,7 +227,8 @@ public class ICUServiceThreadTest extends CoreTestFmwk
         Factory[] factories;
         int n;
 
-        UnregisterFactoryListThread(String name, ICUService service, long delay, Factory[] factories) {
+        UnregisterFactoryListThread(
+                String name, ICUService service, long delay, Factory[] factories) {
             super("UNREG " + name, service, delay);
 
             this.factories = factories;
@@ -247,7 +243,6 @@ public class ICUServiceThreadTest extends CoreTestFmwk
             }
         }
     }
-
 
     static class GetVisibleThread extends TestThread {
         GetVisibleThread(String name, ICUService service, long delay) {
@@ -278,13 +273,13 @@ public class ICUServiceThreadTest extends CoreTestFmwk
 
         @Override
         protected void iterate() {
-            Map<String, String> names = getDisplayNames(service,locale);
+            Map<String, String> names = getDisplayNames(service, locale);
             Iterator<Map.Entry<String, String>> iter = names.entrySet().iterator();
             int n = 10;
             while (--n >= 0 && iter.hasNext()) {
                 Map.Entry<String, String> e = iter.next();
-                String dname = (String)e.getKey();
-                String id = (String)e.getValue();
+                String dname = (String) e.getKey();
+                String id = (String) e.getValue();
                 Object result = service.get(id);
 
                 // Note: IllegalMonitorStateException is thrown by the code
@@ -292,10 +287,8 @@ public class ICUServiceThreadTest extends CoreTestFmwk
                 // int to String out of this statement resolves the issue.
 
                 String num = Integer.toString(n);
-                TestFmwk.logln(" iter: " + num +
-                        " dname: " + dname +
-                        " id: " + id +
-                        " result: " + result);
+                TestFmwk.logln(
+                        " iter: " + num + " dname: " + dname + " id: " + id + " result: " + result);
             }
         }
     }
@@ -365,16 +358,17 @@ public class ICUServiceThreadTest extends CoreTestFmwk
             stableService = new ICULocaleService();
             registerFactories(stableService, getFactoryCollection(50));
         }
-        if (PRINTSTATS) stableService.stats();  // Enable the stats collection
+        if (PRINTSTATS) stableService.stats(); // Enable the stats collection
         return stableService;
     }
+
     private ICUService stableService;
 
     // run multiple get on a stable service
     @Test
     public void Test00_ConcurrentGet() {
-        for(int i = 0; i < 10; ++i) {
-            new GetThread("[" + Integer.toString(i) + "]",  stableService(), 0).start();
+        for (int i = 0; i < 10; ++i) {
+            new GetThread("[" + Integer.toString(i) + "]", stableService(), 0).start();
         }
         runThreads();
         if (PRINTSTATS) System.out.println(stableService.stats());
@@ -383,8 +377,8 @@ public class ICUServiceThreadTest extends CoreTestFmwk
     // run multiple getVisibleID on a stable service
     @Test
     public void Test01_ConcurrentGetVisible() {
-        for(int i = 0; i < 10; ++i) {
-            new GetVisibleThread("[" + Integer.toString(i) + "]",  stableService(), 0).start();
+        for (int i = 0; i < 10; ++i) {
+            new GetVisibleThread("[" + Integer.toString(i) + "]", stableService(), 0).start();
         }
         runThreads();
         if (PRINTSTATS) System.out.println(stableService.stats());
@@ -393,15 +387,11 @@ public class ICUServiceThreadTest extends CoreTestFmwk
     // run multiple getDisplayName on a stable service
     @Test
     public void Test02_ConcurrentGetDisplay() {
-        String[] localeNames = {
-            "en", "es", "de", "fr", "zh", "it", "no", "sv"
-        };
-        for(int i = 0; i < localeNames.length; ++i) {
+        String[] localeNames = {"en", "es", "de", "fr", "zh", "it", "no", "sv"};
+        for (int i = 0; i < localeNames.length; ++i) {
             String locale = localeNames[i];
-            new GetDisplayThread("[" + locale + "]",
-                                 stableService(),
-                                 0,
-                                 new ULocale(locale)).start();
+            new GetDisplayThread("[" + locale + "]", stableService(), 0, new ULocale(locale))
+                    .start();
         }
         runThreads();
         if (PRINTSTATS) System.out.println(stableService.stats());
@@ -411,7 +401,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk
     @Test
     public void Test03_ConcurrentRegUnreg() {
         ICUService service = new ICULocaleService();
-        if (PRINTSTATS) service.stats();    // Enable the stats collection
+        if (PRINTSTATS) service.stats(); // Enable the stats collection
         for (int i = 0; i < 5; ++i) {
             new RegisterFactoryThread("[" + i + "]", service, 0).start();
         }
@@ -425,18 +415,19 @@ public class ICUServiceThreadTest extends CoreTestFmwk
     @Test
     public void Test04_WitheringService() {
         ICUService service = new ICULocaleService();
-        if (PRINTSTATS) service.stats();    // Enable the stats collection
+        if (PRINTSTATS) service.stats(); // Enable the stats collection
 
         Collection<Factory> fc = getFactoryCollection(50);
         registerFactories(service, fc);
 
         Factory[] factories = fc.toArray(new Factory[fc.size()]);
-        Comparator<Factory> comp = new Comparator<Factory>() {
-                @Override
-                public int compare(Factory lhs, Factory rhs) {
-                    return lhs.toString().compareTo(rhs.toString());
-                }
-            };
+        Comparator<Factory> comp =
+                new Comparator<Factory>() {
+                    @Override
+                    public int compare(Factory lhs, Factory rhs) {
+                        return lhs.toString().compareTo(rhs.toString());
+                    }
+                };
         Arrays.sort(factories, comp);
 
         new GetThread("", service, 0).start();
@@ -455,25 +446,21 @@ public class ICUServiceThreadTest extends CoreTestFmwk
     @Test
     public void Test05_ConcurrentEverything() {
         ICUService service = new ICULocaleService();
-        if (PRINTSTATS) service.stats();    // Enable the stats collection
+        if (PRINTSTATS) service.stats(); // Enable the stats collection
 
         new RegisterFactoryThread("", service, 500).start();
 
-        for(int i = 0; i < 15; ++i) {
+        for (int i = 0; i < 15; ++i) {
             new GetThread("[" + Integer.toString(i) + "]", service, 0).start();
         }
 
-        new GetVisibleThread("",  service, 50).start();
+        new GetVisibleThread("", service, 50).start();
 
-        String[] localeNames = {
-            "en", "de"
-        };
-        for(int i = 0; i < localeNames.length; ++i) {
+        String[] localeNames = {"en", "de"};
+        for (int i = 0; i < localeNames.length; ++i) {
             String locale = localeNames[i];
-            new GetDisplayThread("[" + locale + "]",
-                                 stableService(),
-                                 500,
-                                 new ULocale(locale)).start();
+            new GetDisplayThread("[" + locale + "]", stableService(), 500, new ULocale(locale))
+                    .start();
         }
 
         new UnregisterFactoryThread("", service, 500).start();

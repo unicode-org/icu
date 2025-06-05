@@ -1,11 +1,11 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-******************************************************************************
-* Copyright (C) 2003-2010, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 2003-2010, International Business Machines Corporation and   *
+ * others. All Rights Reserved.                                               *
+ ******************************************************************************
+ */
 
 package com.ibm.icu.dev.tool.localeconverter;
 
@@ -18,16 +18,16 @@ import java.math.BigInteger;
  * of information.  It's also used as a hashing function.  Unlike a regular
  * checksum, it's sensitive to the order of the characters.
  * It produces a 32 bit
- * 
+ *
  * @author Michael Lecuyer (mjl@theorem.com)
  * @version 1.1 August 11, 1998
  */
- 
+
 /* ICU is not endian portable, because ICU data generated on big endian machines can be
- * ported to big endian machines but not to little endian machines and vice versa. The 
- * conversion is not portable across platforms with different endianness. 
+ * ported to big endian machines but not to little endian machines and vice versa. The
+ * conversion is not portable across platforms with different endianness.
  */
- 
+
 public class CalculateCRC32 {
     static int CRCTable[];
     static int cachedCRC;
@@ -58,8 +58,8 @@ public class CalculateCRC32 {
     public static int computeCRC32(byte buffer[]) {
         return computeCRC32(buffer, 0xFFFFFFFF);
     }
-   
-    public static int computeCRC32(String buffer, int crc){
+
+    public static int computeCRC32(String buffer, int crc) {
         return computeCRC32(buffer.getBytes(), crc);
     }
 
@@ -67,22 +67,22 @@ public class CalculateCRC32 {
         return computeCRC32(buffer, 0, buffer.length, crc);
     }
 
-    public static int computeCRC32(byte buffer[], int start, int count, int lastcrc){
-        buildCRCTable();  
+    public static int computeCRC32(byte buffer[], int start, int count, int lastcrc) {
+        buildCRCTable();
         int temp1, temp2;
         int i = start;
         cachedCRC = lastcrc;
-      
-        while (count-- != 0){
+
+        while (count-- != 0) {
             temp1 = cachedCRC >>> 8;
             byte s = buffer[i++];
-            temp2 = CRCTable[(cachedCRC ^s) & 0xFF];
+            temp2 = CRCTable[(cachedCRC ^ s) & 0xFF];
             cachedCRC = temp1 ^ temp2;
         }
         return cachedCRC;
     }
 
-    public byte [] toBytes() {
+    public byte[] toBytes() {
         return new BigInteger(Integer.valueOf(cachedCRC).toString()).toByteArray();
     }
 }

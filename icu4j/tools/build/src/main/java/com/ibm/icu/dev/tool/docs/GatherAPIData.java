@@ -1,50 +1,38 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2004-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2004-2014, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
 
 /**
- * Generate a list of ICU's public APIs, sorted by qualified name and signature
- * public APIs are all non-internal, non-package apis in com.ibm.icu.[lang|math|text|util].
- * For each API, list
- * - public, package, protected, or private (PB PK PT PR)
- * - static or non-static (STK NST)
- * - final or non-final (FN NF)
- * - synchronized or non-synchronized (SYN NSY)
- * - stable, draft, deprecated, obsolete (ST DR DP OB)
- * - abstract or non-abstract (AB NA)
- * - constructor, member, field (C M F)
+ * Generate a list of ICU's public APIs, sorted by qualified name and signature public APIs are all
+ * non-internal, non-package apis in com.ibm.icu.[lang|math|text|util]. For each API, list - public,
+ * package, protected, or private (PB PK PT PR) - static or non-static (STK NST) - final or
+ * non-final (FN NF) - synchronized or non-synchronized (SYN NSY) - stable, draft, deprecated,
+ * obsolete (ST DR DP OB) - abstract or non-abstract (AB NA) - constructor, member, field (C M F)
  *
- * Requires JDK 1.5 or later
+ * <p>Requires JDK 1.5 or later
  *
- * Sample compilation:
- * c:/doug/java/jdk1.5/build/windows-i586/bin/javac *.java
+ * <p>Sample compilation: c:/doug/java/jdk1.5/build/windows-i586/bin/javac *.java
  *
- * Sample execution
- * c:/j2sdk1.5/bin/javadoc
- *   -classpath c:/jd2sk1.5/lib/tools.jar
- *   -doclet com.ibm.icu.dev.tool.docs.GatherAPIData
- *   -docletpath c:/doug/icu4j/tools/build/out/lib/icu4j-build-tools.jar
- *   -sourcepath c:/doug/icu4j/main/classes/core/src
- *   -name "ICU4J 4.2"
- *   -output icu4j42.api2
- *   -gzip
- *   -source 1.5
- *   com.ibm.icu.lang com.ibm.icu.math com.ibm.icu.text com.ibm.icu.util
+ * <p>Sample execution c:/j2sdk1.5/bin/javadoc -classpath c:/jd2sk1.5/lib/tools.jar -doclet
+ * com.ibm.icu.dev.tool.docs.GatherAPIData -docletpath
+ * c:/doug/icu4j/tools/build/out/lib/icu4j-build-tools.jar -sourcepath
+ * c:/doug/icu4j/main/classes/core/src -name "ICU4J 4.2" -output icu4j42.api2 -gzip -source 1.5
+ * com.ibm.icu.lang com.ibm.icu.math com.ibm.icu.text com.ibm.icu.util
  *
- * todo: provide command-line control of filters of which subclasses/packages to process
- * todo: record full inheritance hierarchy, not just immediate inheritance
- * todo: allow for aliasing comparisons (force (pkg.)*class to be treated as though it
- *       were in a different pkg/class hierarchy (facilitates comparison of icu4j and java)
+ * <p>todo: provide command-line control of filters of which subclasses/packages to process todo:
+ * record full inheritance hierarchy, not just immediate inheritance todo: allow for aliasing
+ * comparisons (force (pkg.)*class to be treated as though it were in a different pkg/class
+ * hierarchy (facilitates comparison of icu4j and java)
  */
-
 package com.ibm.icu.dev.tool.docs;
 
 // standard release sdk won't work, need internal build to get access to javadoc
+import com.sun.source.doctree.BlockTagTree;
+import com.sun.source.util.DocTrees;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -60,7 +48,6 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
@@ -83,10 +70,6 @@ import javax.lang.model.type.TypeVisitor;
 import javax.lang.model.type.UnionType;
 import javax.lang.model.type.WildcardType;
 import javax.lang.model.util.Elements;
-
-import com.sun.source.doctree.BlockTagTree;
-import com.sun.source.util.DocTrees;
-
 import jdk.javadoc.doclet.Doclet;
 import jdk.javadoc.doclet.DocletEnvironment;
 import jdk.javadoc.doclet.Reporter;
@@ -116,8 +99,7 @@ public class GatherAPIData implements Doclet {
     }
 
     @Override
-    public void init(Locale locale, Reporter reporter) {
-    }
+    public void init(Locale locale, Reporter reporter) {}
 
     @Override
     public String getName() {
@@ -207,8 +189,8 @@ public class GatherAPIData implements Doclet {
 
     private boolean isAbstractClassDefaultConstructor(Element element) {
         return JavadocHelper.isKindConstructor(element)
-            && JavadocHelper.isAbstract(element.getEnclosingElement())
-            && ((ExecutableElement) element).getParameters().isEmpty();
+                && JavadocHelper.isAbstract(element.getEnclosingElement())
+                && ((ExecutableElement) element).getParameters().isEmpty();
     }
 
     private static final boolean IGNORE_NO_ARG_ABSTRACT_CTOR = false;
@@ -231,7 +213,8 @@ public class GatherAPIData implements Doclet {
         }
 
         if (element.toString().contains(".misc")) {
-            System.out.println("misc: " + element.toString()); {
+            System.out.println("misc: " + element.toString());
+            {
                 return true;
             }
         }
@@ -335,9 +318,11 @@ public class GatherAPIData implements Doclet {
         PackageElement packageElement = elementUtils.getPackageOf(element);
         info.setPackage(trimBase(packageElement.getQualifiedName().toString()));
 
-        String className = (JavadocHelper.isKindClassOrInterface(element) || element.getEnclosingElement() == null)
-                ? ""
-                : withoutPackage(element.getEnclosingElement());
+        String className =
+                (JavadocHelper.isKindClassOrInterface(element)
+                                || element.getEnclosingElement() == null)
+                        ? ""
+                        : withoutPackage(element.getEnclosingElement());
         info.setClassName(className);
 
         String name = element.getSimpleName().toString();
@@ -377,15 +362,18 @@ public class GatherAPIData implements Doclet {
                         buf.append(",");
                     }
                     buf.append(" ");
-                    buf.append(imp.get(i).toString()
-                            .replaceAll("<[^<>]+>", "") // interfaces with parameters.
-                            .replaceAll("<[^<>]+>", "") // 3 nesting levels should be enough
-                            .replaceAll("<[^<>]+>", "") // max I've seen was 2
-                    );
+                    buf.append(
+                            imp.get(i)
+                                    .toString()
+                                    .replaceAll("<[^<>]+>", "") // interfaces with parameters.
+                                    .replaceAll("<[^<>]+>", "") // 3 nesting levels should be enough
+                                    .replaceAll("<[^<>]+>", "") // max I've seen was 2
+                            );
                 }
             }
             hackSetSignature(info, trimBase(buf.toString()));
-        } else if (JavadocHelper.isKindMethod(element) || JavadocHelper.isKindConstructor(element)) {
+        } else if (JavadocHelper.isKindMethod(element)
+                || JavadocHelper.isKindConstructor(element)) {
             ExecutableElement execElement = (ExecutableElement) element;
             if (JavadocHelper.isSynchronized(execElement)) {
                 info.setSynchronized();
@@ -405,7 +393,8 @@ public class GatherAPIData implements Doclet {
 
                 String retSig = stringFromTypeMirror(execElement.getReturnType());
 
-                // Signature, as returned by default, can be something like this: "boolean<T>containsAll(java.util.Iterator<T>)"
+                // Signature, as returned by default, can be something like this:
+                // "boolean<T>containsAll(java.util.Iterator<T>)"
                 // The old API returned "boolean(java.util.Iterator<T>)"
                 // Consider using the signature "as is" (including the method name)
                 hackSetSignature(info, trimBase(retSig + toTheBracket(execElement.toString())));
@@ -460,6 +449,7 @@ public class GatherAPIData implements Doclet {
         class Result {
             boolean deprecatedFlag = false;
             int res = -1;
+
             void set(int val) {
                 if (res != -1) {
                     boolean isValid = true;
@@ -472,7 +462,7 @@ public class GatherAPIData implements Doclet {
                         // @deprecated should be always used along with @internal.
                         // update status
                         if (res == APIInfo.STA_DEPRECATED) {
-                            res = val;  // APIInfo.STA_INTERNAL
+                            res = val; // APIInfo.STA_INTERNAL
                         } else {
                             isValid = false;
                         }
@@ -480,7 +470,7 @@ public class GatherAPIData implements Doclet {
                         // @deprecated should be always used along with @obsolete.
                         // update status
                         if (res == APIInfo.STA_DEPRECATED) {
-                            res = val;  // APIInfo.STA_OBSOLETE
+                            res = val; // APIInfo.STA_OBSOLETE
                         } else {
                             isValid = false;
                         }
@@ -492,9 +482,13 @@ public class GatherAPIData implements Doclet {
                         isValid = false;
                     }
                     if (!isValid) {
-                        System.err.println("bad element: " + element + " both: "
-                                           + APIInfo.getTypeValName(APIInfo.STA, res) + " and: "
-                                           + APIInfo.getTypeValName(APIInfo.STA, val));
+                        System.err.println(
+                                "bad element: "
+                                        + element
+                                        + " both: "
+                                        + APIInfo.getTypeValName(APIInfo.STA, res)
+                                        + " and: "
+                                        + APIInfo.getTypeValName(APIInfo.STA, val));
                         return;
                     }
                 } else {
@@ -505,6 +499,7 @@ public class GatherAPIData implements Doclet {
                     }
                 }
             }
+
             int get() {
                 if (res == -1) {
                     System.err.println("warning: no tag for " + element);
@@ -595,16 +590,22 @@ public class GatherAPIData implements Doclet {
         return "";
     }
 
-    private final static Set<Doclet.Option> SUPPORTED_OPTIONS = Set.of(
-        new JavadocHelper.GatherApiDataOption(1, "-name", "the_name", "the description of name"),
-        new JavadocHelper.GatherApiDataOption(1, "-output", "the_output", "the description of output"),
-        new JavadocHelper.GatherApiDataOption(1, "-base", "the_base", "the description of base"),
-        new JavadocHelper.GatherApiDataOption(1, "--filter", "the_filter", "the description of filter"),
-        new JavadocHelper.GatherApiDataOption(0, "-zip", "the description of zip"),
-        new JavadocHelper.GatherApiDataOption(0, "-gzip", "the description of gzip"),
-        new JavadocHelper.GatherApiDataOption(0, "-internal", "the description of internal"),
-        new JavadocHelper.GatherApiDataOption(0, "-version", "the description of version")
-    );
+    private static final Set<Doclet.Option> SUPPORTED_OPTIONS =
+            Set.of(
+                    new JavadocHelper.GatherApiDataOption(
+                            1, "-name", "the_name", "the description of name"),
+                    new JavadocHelper.GatherApiDataOption(
+                            1, "-output", "the_output", "the description of output"),
+                    new JavadocHelper.GatherApiDataOption(
+                            1, "-base", "the_base", "the description of base"),
+                    new JavadocHelper.GatherApiDataOption(
+                            1, "--filter", "the_filter", "the description of filter"),
+                    new JavadocHelper.GatherApiDataOption(0, "-zip", "the description of zip"),
+                    new JavadocHelper.GatherApiDataOption(0, "-gzip", "the description of gzip"),
+                    new JavadocHelper.GatherApiDataOption(
+                            0, "-internal", "the description of internal"),
+                    new JavadocHelper.GatherApiDataOption(
+                            0, "-version", "the description of version"));
 
     private void initFromOptions() {
         for (Doclet.Option opt : SUPPORTED_OPTIONS) {
@@ -718,5 +719,4 @@ public class GatherAPIData implements Doclet {
             throw new RuntimeException("Unexpected visitor ErrorType:" + t);
         }
     }
-
 }

@@ -22,8 +22,7 @@ class ErrorProneReport {
     private static final String HTML_REPORT_FILE2 = "errorprone2.html";
     private static final String SORTTABLE_JS_FILE = "sorttable.js";
     private static final String SORTTABLE_CSS_FILE = "errorprone.css";
-    private static final String [] EMBEDDED_FILES =
-        { SORTTABLE_JS_FILE, SORTTABLE_CSS_FILE };
+    private static final String[] EMBEDDED_FILES = {SORTTABLE_JS_FILE, SORTTABLE_CSS_FILE};
 
     public static void genReports(String icuDir, String mavenStdOut, String outDir, String baseUrl)
             throws IOException {
@@ -45,8 +44,9 @@ class ErrorProneReport {
         }
     }
 
-    private static void genReport1(Map<String, List<ErrorProneEntry>> errors,
-            String outDir, String baseUrl) throws IOException {
+    private static void genReport1(
+            Map<String, List<ErrorProneEntry>> errors, String outDir, String baseUrl)
+            throws IOException {
 
         Path outFileName = Paths.get(outDir, HTML_REPORT_FILE);
         System.out.println("Report generated: " + outFileName);
@@ -85,14 +85,17 @@ class ErrorProneReport {
 
                     // Error type
                     hu.openTag("td", Map.of("class", "tag"));
-                    Map<String, String> attr = error.url == null
-                            ? Map.of("target", "errWin")
-                            : Map.of("href", error.url, "target", "errWin");
+                    Map<String, String> attr =
+                            error.url == null
+                                    ? Map.of("target", "errWin")
+                                    : Map.of("href", error.url, "target", "errWin");
                     hu.openTag("a", attr).text(error.type).closeTag("a");
 
                     String tags = ErrorProneUtils.getTags(error.type);
                     if (tags != null) {
-                        hu.openTag("span", Map.of("class", "tags")).text(" " + tags).closeTag("span");
+                        hu.openTag("span", Map.of("class", "tags"))
+                                .text(" " + tags)
+                                .closeTag("span");
                     }
                     hu.closeTag("td");
 
@@ -109,8 +112,9 @@ class ErrorProneReport {
         }
     }
 
-    private static void genReport2(Map<String, List<ErrorProneEntry>> errors,
-            String outDir, String baseUrl) throws IOException {
+    private static void genReport2(
+            Map<String, List<ErrorProneEntry>> errors, String outDir, String baseUrl)
+            throws IOException {
         Path outFileName = Paths.get(outDir, HTML_REPORT_FILE2);
         System.out.println("Report generated: " + outFileName);
         try (PrintStream wrt = new PrintStream(outFileName.toString(), StandardCharsets.UTF_8)) {
@@ -144,7 +148,9 @@ class ErrorProneReport {
                 // "class", "severity_" + errorSeverity)
                 hu.openTag("h3", Map.of("id", "name_" + errorType))
                         .text("[" + firstEntry.severity + "] ")
-                        .openTag("span", Map.of("class", "tag")).text(errorType).closeTag("span");
+                        .openTag("span", Map.of("class", "tag"))
+                        .text(errorType)
+                        .closeTag("span");
                 String tags = ErrorProneUtils.getTags(errorType);
                 if (tags != null) {
                     hu.openTag("span", Map.of("class", "tags")).text(" " + tags).closeTag("span");
@@ -158,9 +164,10 @@ class ErrorProneReport {
                 }
                 hu.closeTag("h2");
 
-                Map<String, String> attr = errorType == null
-                        ? Map.of("target", "errWin")
-                        : Map.of("href", errorType, "target", "errWin");
+                Map<String, String> attr =
+                        errorType == null
+                                ? Map.of("target", "errWin")
+                                : Map.of("href", errorType, "target", "errWin");
 
                 hu.openTag("table", Map.of("class", "sortable"));
 
@@ -233,8 +240,8 @@ class ErrorProneReport {
         hu.openTag("h1").text(title).closeTag("h1");
     }
 
-    private static void outSummary(HtmlUtils hu, Map<String, List<ErrorProneEntry>> errors,
-            String severityLevel) {
+    private static void outSummary(
+            HtmlUtils hu, Map<String, List<ErrorProneEntry>> errors, String severityLevel) {
         boolean first = true;
         for (Map.Entry<String, List<ErrorProneEntry>> e : errors.entrySet()) {
             String errorSeverity = ErrorProneUtils.getErrorLevel(e.getKey());
@@ -249,9 +256,11 @@ class ErrorProneReport {
                 hu.text(" \u2022 "); // bullet
             }
             // <a href="#name_error"><code>MissingFail</code></a> [3]
-            hu.openTag("a", Map.of(
-                            "href", "#name_" + e.getKey(),
-                            "class", "severity_" + errorSeverity))
+            hu.openTag(
+                            "a",
+                            Map.of(
+                                    "href", "#name_" + e.getKey(),
+                                    "class", "severity_" + errorSeverity))
                     .openTag("span", Map.of("class", "tag"))
                     .text(e.getKey())
                     .closeTag("span")

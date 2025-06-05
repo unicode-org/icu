@@ -8,32 +8,25 @@
  */
 package com.ibm.icu.dev.test.lang;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.lang.UCharacter;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.lang.UCharacter;
-
 /**
  * @author aheninger
- *
  */
 @RunWith(JUnit4.class)
 public class UCharacterThreadTest extends CoreTestFmwk {
-  // constructor -----------------------------------------------------------
+    // constructor -----------------------------------------------------------
 
-    /**
-    * Private constructor to prevent initialization
-    */
-    public UCharacterThreadTest()
-    {
-    }
+    /** Private constructor to prevent initialization */
+    public UCharacterThreadTest() {}
 
-      // public methods --------------------------------------------------------
+    // public methods --------------------------------------------------------
 
     //
     //  Test multi-threaded parallel calls to UCharacter.getName(codePoint)
@@ -42,39 +35,44 @@ public class UCharacterThreadTest extends CoreTestFmwk {
     @Test
     public void TestUCharactersGetName() throws InterruptedException {
         List<GetNameThread> threads = new ArrayList<>();
-        for(int t=0; t<20; t++) {
-          int codePoint = 47 + t;
-          String correctName = UCharacter.getName(codePoint);
-          GetNameThread thread = new GetNameThread(codePoint, correctName);
-          thread.start();
-          threads.add(thread);
+        for (int t = 0; t < 20; t++) {
+            int codePoint = 47 + t;
+            String correctName = UCharacter.getName(codePoint);
+            GetNameThread thread = new GetNameThread(codePoint, correctName);
+            thread.start();
+            threads.add(thread);
         }
         for (GetNameThread thread : threads) {
             thread.join();
             if (!thread.correctName.equals(thread.actualName)) {
-                errln("FAIL, expected \"" + thread.correctName + "\", got \"" + thread.actualName + "\"");
+                errln(
+                        "FAIL, expected \""
+                                + thread.correctName
+                                + "\", got \""
+                                + thread.actualName
+                                + "\"");
             }
         }
-      }
+    }
 
-      private static class GetNameThread extends Thread {
+    private static class GetNameThread extends Thread {
         private final int codePoint;
         private final String correctName;
         private String actualName;
 
         GetNameThread(int codePoint, String correctName) {
-           this.codePoint = codePoint;
-           this.correctName = correctName;
+            this.codePoint = codePoint;
+            this.correctName = correctName;
         }
 
         @Override
         public void run() {
-          for(int i=0; i<10000; i++) {
-            actualName = UCharacter.getName(codePoint);
-            if (!correctName.equals(actualName)) {
-              break;
+            for (int i = 0; i < 10000; i++) {
+                actualName = UCharacter.getName(codePoint);
+                if (!correctName.equals(actualName)) {
+                    break;
+                }
             }
-          }
         }
-      }
+    }
 }

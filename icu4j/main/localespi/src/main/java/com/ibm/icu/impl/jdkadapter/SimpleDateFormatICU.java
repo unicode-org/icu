@@ -8,6 +8,10 @@
  */
 package com.ibm.icu.impl.jdkadapter;
 
+import com.ibm.icu.impl.icuadapter.NumberFormatJDK;
+import com.ibm.icu.impl.icuadapter.TimeZoneJDK;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.text.CharacterIterator;
@@ -23,14 +27,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 
-import com.ibm.icu.impl.icuadapter.NumberFormatJDK;
-import com.ibm.icu.impl.icuadapter.TimeZoneJDK;
-import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.text.SimpleDateFormat;
-
 /**
- * SimpleDateFormatICU is an adapter class which wraps ICU4J SimpleDateFormat and
- * implements java.text.SimpleDateFormat APIs.
+ * SimpleDateFormatICU is an adapter class which wraps ICU4J SimpleDateFormat and implements
+ * java.text.SimpleDateFormat APIs.
  */
 public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
 
@@ -60,15 +59,15 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
 
     @Override
     public Object clone() {
-        SimpleDateFormatICU other = (SimpleDateFormatICU)super.clone();
-        other.fIcuSdf = (SimpleDateFormat)this.fIcuSdf.clone();
+        SimpleDateFormatICU other = (SimpleDateFormatICU) super.clone();
+        other.fIcuSdf = (SimpleDateFormat) this.fIcuSdf.clone();
         return other;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof SimpleDateFormatICU) {
-            return ((SimpleDateFormatICU)obj).fIcuSdf.equals(this.fIcuSdf);
+            return ((SimpleDateFormatICU) obj).fIcuSdf.equals(this.fIcuSdf);
         }
         return false;
     }
@@ -95,7 +94,7 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
         AttributedString resstr = new AttributedString(sb.toString());
 
         // Mapping attributes
-        Map<AttributedCharacterIterator.Attribute,Object> attributes = null;
+        Map<AttributedCharacterIterator.Attribute, Object> attributes = null;
         int index = aci.getBeginIndex();
         int residx = 0;
         while (true) {
@@ -105,15 +104,15 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
             attributes = aci.getAttributes();
             if (attributes != null) {
                 int end = aci.getRunLimit();
-                Map<AttributedCharacterIterator.Attribute,Object> jdkAttributes = 
-                    new HashMap<AttributedCharacterIterator.Attribute,Object>();
-                for (Entry<AttributedCharacterIterator.Attribute, Object> entry
-                        : attributes.entrySet()) {
+                Map<AttributedCharacterIterator.Attribute, Object> jdkAttributes =
+                        new HashMap<AttributedCharacterIterator.Attribute, Object>();
+                for (Entry<AttributedCharacterIterator.Attribute, Object> entry :
+                        attributes.entrySet()) {
                     AttributedCharacterIterator.Attribute key = entry.getKey();
                     AttributedCharacterIterator.Attribute jdkKey = mapAttribute(key);
                     Object jdkVal = entry.getValue();
                     if (jdkVal instanceof AttributedCharacterIterator.Attribute) {
-                        jdkVal = mapAttribute((AttributedCharacterIterator.Attribute)jdkVal);
+                        jdkVal = mapAttribute((AttributedCharacterIterator.Attribute) jdkVal);
                     }
                     jdkAttributes.put(jdkKey, jdkVal);
                 }
@@ -156,7 +155,7 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
     public void setDateFormatSymbols(DateFormatSymbols newFormatSymbols) {
         com.ibm.icu.text.DateFormatSymbols icuDfs = null;
         if (newFormatSymbols instanceof DateFormatSymbolsICU) {
-            icuDfs = ((DateFormatSymbolsICU)newFormatSymbols).unwrap();
+            icuDfs = ((DateFormatSymbolsICU) newFormatSymbols).unwrap();
         } else if (fIcuSdf.getCalendar() instanceof com.ibm.icu.util.GregorianCalendar) {
             // Java 6 uses DateFormatSymbols exclusively for Gregorian
             // calendar.
@@ -201,7 +200,8 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
         } else {
             // For other calendars, JDK's standard DateFormatSymbols
             // cannot be used.
-            throw new UnsupportedOperationException("JDK DateFormatSymbols cannot be used for the calendar type.");
+            throw new UnsupportedOperationException(
+                    "JDK DateFormatSymbols cannot be used for the calendar type.");
         }
         fIcuSdf.setDateFormatSymbols(icuDfs);
     }
@@ -227,10 +227,10 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
     public NumberFormat getNumberFormat() {
         com.ibm.icu.text.NumberFormat nfmt = fIcuSdf.getNumberFormat();
         if (nfmt instanceof NumberFormatJDK) {
-            return ((NumberFormatJDK)nfmt).unwrap();
+            return ((NumberFormatJDK) nfmt).unwrap();
         }
         if (nfmt instanceof com.ibm.icu.text.DecimalFormat) {
-            return DecimalFormatICU.wrap((com.ibm.icu.text.DecimalFormat)nfmt);
+            return DecimalFormatICU.wrap((com.ibm.icu.text.DecimalFormat) nfmt);
         }
         return NumberFormatICU.wrap(nfmt);
     }
@@ -245,7 +245,7 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
         return fIcuSdf.isLenient();
     }
 
-    private static final long SAMPLE_TIME = 962409600000L; //2000-07-01T00:00:00Z
+    private static final long SAMPLE_TIME = 962409600000L; // 2000-07-01T00:00:00Z
     private static final int JAPANESE_YEAR = 12; // Japanese calendar year @ SAMPLE_TIME
     private static final int THAI_YEAR = 2543; // Thai Buddhist calendar year @ SAMPLE_TIME
 
@@ -253,7 +253,7 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
     public void setCalendar(Calendar newCalendar) {
         com.ibm.icu.util.Calendar icuCal = null;
         if (newCalendar instanceof CalendarICU) {
-            icuCal = ((CalendarICU)newCalendar).unwrap();
+            icuCal = ((CalendarICU) newCalendar).unwrap();
         } else {
             // Note:    There is no easy way to implement ICU Calendar with
             //          JDK Calendar implementation.  For now, this code assumes
@@ -272,7 +272,8 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
                     icuCal = new com.ibm.icu.util.BuddhistCalendar(icuTz);
                 } else {
                     // We cannot support the case
-                    throw new UnsupportedOperationException("Unsupported calendar type by ICU Calendar adapter.");
+                    throw new UnsupportedOperationException(
+                            "Unsupported calendar type by ICU Calendar adapter.");
                 }
             }
             // Copy the original calendar settings
@@ -291,9 +292,9 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
     @Override
     public void setNumberFormat(NumberFormat newNumberFormat) {
         if (newNumberFormat instanceof DecimalFormatICU) {
-            fIcuSdf.setNumberFormat(((DecimalFormatICU)newNumberFormat).unwrap());
+            fIcuSdf.setNumberFormat(((DecimalFormatICU) newNumberFormat).unwrap());
         } else if (newNumberFormat instanceof NumberFormatICU) {
-            fIcuSdf.setNumberFormat(((NumberFormatICU)newNumberFormat).unwrap());
+            fIcuSdf.setNumberFormat(((NumberFormatICU) newNumberFormat).unwrap());
         } else {
             fIcuSdf.setNumberFormat(NumberFormatJDK.wrap(newNumberFormat));
         }
@@ -313,7 +314,8 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
         return curData;
     }
 
-    private static AttributedCharacterIterator.Attribute mapAttribute(AttributedCharacterIterator.Attribute icuAttribute) {
+    private static AttributedCharacterIterator.Attribute mapAttribute(
+            AttributedCharacterIterator.Attribute icuAttribute) {
         AttributedCharacterIterator.Attribute jdkAttribute = icuAttribute;
 
         if (icuAttribute == DateFormat.Field.AM_PM) {
@@ -372,5 +374,4 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
 
         return jdkAttribute;
     }
-
 }

@@ -2,21 +2,19 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number.parse;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Objects;
-
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.impl.number.PatternStringUtils.PatternSignType;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * @author sffc
- *
  */
 public class AffixMatcher implements NumberParseMatcher {
     private final AffixPatternMatcher prefix;
@@ -24,30 +22,29 @@ public class AffixMatcher implements NumberParseMatcher {
     private final int flags;
 
     /**
-     * Comparator for two AffixMatcher instances which prioritizes longer prefixes followed by longer
-     * suffixes, ensuring that the longest prefix/suffix pair is always chosen.
+     * Comparator for two AffixMatcher instances which prioritizes longer prefixes followed by
+     * longer suffixes, ensuring that the longest prefix/suffix pair is always chosen.
      */
-    public static final Comparator<AffixMatcher> COMPARATOR = new Comparator<AffixMatcher>() {
-        @Override
-        public int compare(AffixMatcher lhs, AffixMatcher rhs) {
-            if (length(lhs.prefix) != length(rhs.prefix)) {
-                return length(lhs.prefix) > length(rhs.prefix) ? -1 : 1;
-            } else if (length(lhs.suffix) != length(rhs.suffix)) {
-                return length(lhs.suffix) > length(rhs.suffix) ? -1 : 1;
-            } else if (!lhs.equals(rhs)) {
-                // If the prefix and suffix are the same length, arbitrarily break ties.
-                // We can't return zero unless the elements are equal.
-                return lhs.hashCode() > rhs.hashCode() ? -1 : 1;
-            } else {
-                return 0;
-            }
-        }
-    };
+    public static final Comparator<AffixMatcher> COMPARATOR =
+            new Comparator<AffixMatcher>() {
+                @Override
+                public int compare(AffixMatcher lhs, AffixMatcher rhs) {
+                    if (length(lhs.prefix) != length(rhs.prefix)) {
+                        return length(lhs.prefix) > length(rhs.prefix) ? -1 : 1;
+                    } else if (length(lhs.suffix) != length(rhs.suffix)) {
+                        return length(lhs.suffix) > length(rhs.suffix) ? -1 : 1;
+                    } else if (!lhs.equals(rhs)) {
+                        // If the prefix and suffix are the same length, arbitrarily break ties.
+                        // We can't return zero unless the elements are equal.
+                        return lhs.hashCode() > rhs.hashCode() ? -1 : 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            };
 
     private static boolean isInteresting(
-            AffixPatternProvider patternInfo,
-            IgnorablesMatcher ignorables,
-            int parseFlags) {
+            AffixPatternProvider patternInfo, IgnorablesMatcher ignorables, int parseFlags) {
         String posPrefixString = patternInfo.getString(AffixPatternProvider.FLAG_POS_PREFIX);
         String posSuffixString = patternInfo.getString(AffixPatternProvider.FLAG_POS_SUFFIX);
         String negPrefixString = null;
@@ -62,7 +59,8 @@ public class AffixMatcher implements NumberParseMatcher {
                 && AffixUtils.containsOnlySymbolsAndIgnorables(posSuffixString, ignorables.getSet())
                 && AffixUtils.containsOnlySymbolsAndIgnorables(negPrefixString, ignorables.getSet())
                 && AffixUtils.containsOnlySymbolsAndIgnorables(negSuffixString, ignorables.getSet())
-                // HACK: Plus and minus sign are a special case: we accept them trailing only if they are
+                // HACK: Plus and minus sign are a special case: we accept them trailing only if
+                // they are
                 // trailing in the pattern string.
                 && !AffixUtils.containsType(posSuffixString, AffixUtils.TYPE_PLUS_SIGN)
                 && !AffixUtils.containsType(posSuffixString, AffixUtils.TYPE_MINUS_SIGN)
@@ -89,7 +87,8 @@ public class AffixMatcher implements NumberParseMatcher {
         // Use initial capacity of 6, the highest possible number of AffixMatchers.
         StringBuilder sb = new StringBuilder();
         ArrayList<AffixMatcher> matchers = new ArrayList<>(6);
-        boolean includeUnpaired = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES);
+        boolean includeUnpaired =
+                0 != (parseFlags & ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES);
 
         AffixPatternMatcher posPrefix = null;
         AffixPatternMatcher posSuffix = null;
@@ -109,27 +108,17 @@ public class AffixMatcher implements NumberParseMatcher {
 
             // Generate Prefix
             // TODO: Handle approximately sign?
-            PatternStringUtils.patternInfoToStringBuilder(patternInfo,
-                    true,
-                    type,
-                    false,
-                    StandardPlural.OTHER,
-                    false,
-                    sb);
-            AffixPatternMatcher prefix = AffixPatternMatcher
-                    .fromAffixPattern(sb.toString(), factory, parseFlags);
+            PatternStringUtils.patternInfoToStringBuilder(
+                    patternInfo, true, type, false, StandardPlural.OTHER, false, sb);
+            AffixPatternMatcher prefix =
+                    AffixPatternMatcher.fromAffixPattern(sb.toString(), factory, parseFlags);
 
             // Generate Suffix
             // TODO: Handle approximately sign?
-            PatternStringUtils.patternInfoToStringBuilder(patternInfo,
-                    false,
-                    type,
-                    false,
-                    StandardPlural.OTHER,
-                    false,
-                    sb);
-            AffixPatternMatcher suffix = AffixPatternMatcher
-                    .fromAffixPattern(sb.toString(), factory, parseFlags);
+            PatternStringUtils.patternInfoToStringBuilder(
+                    patternInfo, false, type, false, StandardPlural.OTHER, false, sb);
+            AffixPatternMatcher suffix =
+                    AffixPatternMatcher.fromAffixPattern(sb.toString(), factory, parseFlags);
 
             if (type == PatternSignType.POS) {
                 posPrefix = prefix;
@@ -146,7 +135,8 @@ public class AffixMatcher implements NumberParseMatcher {
             // We still need to add that matcher for strict mode to work.
             matchers.add(getInstance(prefix, suffix, flags));
             if (includeUnpaired && prefix != null && suffix != null) {
-                // The following if statements are designed to prevent adding two identical matchers.
+                // The following if statements are designed to prevent adding two identical
+                // matchers.
                 if (type == PatternSignType.POS || !Objects.equals(prefix, posPrefix)) {
                     matchers.add(getInstance(prefix, null, flags));
                 }
@@ -162,9 +152,7 @@ public class AffixMatcher implements NumberParseMatcher {
     }
 
     private static final AffixMatcher getInstance(
-            AffixPatternMatcher prefix,
-            AffixPatternMatcher suffix,
-            int flags) {
+            AffixPatternMatcher prefix, AffixPatternMatcher suffix, int flags) {
         // TODO: Special handling for common cases like both strings empty.
         return new AffixMatcher(prefix, suffix, flags);
     }
@@ -222,7 +210,8 @@ public class AffixMatcher implements NumberParseMatcher {
 
     @Override
     public void postProcess(ParsedNumber result) {
-        // Check to see if our affix is the one that was matched. If so, set the flags in the result.
+        // Check to see if our affix is the one that was matched. If so, set the flags in the
+        // result.
         if (matched(prefix, result.prefix) && matched(suffix, result.suffix)) {
             // Fill in the result prefix and suffix with non-null values (empty string).
             // Used by strict mode to determine whether an entire affix pair was matched.
@@ -243,18 +232,16 @@ public class AffixMatcher implements NumberParseMatcher {
     }
 
     /**
-     * Helper method to return whether the given AffixPatternMatcher equals the given pattern string.
-     * Either both arguments must be null or the pattern string inside the AffixPatternMatcher must equal
-     * the given pattern string.
+     * Helper method to return whether the given AffixPatternMatcher equals the given pattern
+     * string. Either both arguments must be null or the pattern string inside the
+     * AffixPatternMatcher must equal the given pattern string.
      */
     static boolean matched(AffixPatternMatcher affix, String patternString) {
         return (affix == null && patternString == null)
                 || (affix != null && affix.getPattern().equals(patternString));
     }
 
-    /**
-     * Helper method to return the length of the given AffixPatternMatcher. Returns 0 for null.
-     */
+    /** Helper method to return the length of the given AffixPatternMatcher. Returns 0 for null. */
     private static int length(AffixPatternMatcher matcher) {
         return matcher == null ? 0 : matcher.getPattern().length();
     }

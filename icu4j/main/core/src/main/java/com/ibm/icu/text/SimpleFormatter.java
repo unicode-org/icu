@@ -11,18 +11,18 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 
 /**
- * Formats simple patterns like "{1} was born in {0}".
- * Minimal subset of MessageFormat; fast, simple, minimal dependencies.
- * Supports only numbered arguments with no type nor style parameters,
- * and formats only string values.
- * Quoting via ASCII apostrophe compatible with ICU MessageFormat default behavior.
+ * Formats simple patterns like "{1} was born in {0}". Minimal subset of MessageFormat; fast,
+ * simple, minimal dependencies. Supports only numbered arguments with no type nor style parameters,
+ * and formats only string values. Quoting via ASCII apostrophe compatible with ICU MessageFormat
+ * default behavior.
  *
- * <p>Factory methods throw exceptions for syntax errors
- * and for too few or too many arguments/placeholders.
+ * <p>Factory methods throw exceptions for syntax errors and for too few or too many
+ * arguments/placeholders.
  *
  * <p>SimpleFormatter objects are immutable and can be safely cached like strings.
  *
  * <p>Example:
+ *
  * <pre>
  * SimpleFormatter fmt = SimpleFormatter.compile("{1} '{born}' in {0}");
  *
@@ -42,6 +42,7 @@ public final class SimpleFormatter {
 
     /**
      * Binary representation of the compiled pattern.
+     *
      * @see SimpleFormatterImpl
      */
     private final String compiledPattern;
@@ -63,9 +64,9 @@ public final class SimpleFormatter {
     }
 
     /**
-     * Creates a formatter from the pattern string.
-     * The number of arguments checked against the given limits is the
-     * highest argument number plus one, not the number of occurrences of arguments.
+     * Creates a formatter from the pattern string. The number of arguments checked against the
+     * given limits is the highest argument number plus one, not the number of occurrences of
+     * arguments.
      *
      * @param pattern The pattern string.
      * @param min The pattern must have at least this many arguments.
@@ -76,7 +77,8 @@ public final class SimpleFormatter {
      */
     public static SimpleFormatter compileMinMaxArguments(CharSequence pattern, int min, int max) {
         StringBuilder sb = new StringBuilder();
-        String compiledPattern = SimpleFormatterImpl.compileToStringMinMaxArguments(pattern, sb, min, max);
+        String compiledPattern =
+                SimpleFormatterImpl.compileToStringMinMaxArguments(pattern, sb, min, max);
         return new SimpleFormatter(compiledPattern);
     }
 
@@ -90,6 +92,7 @@ public final class SimpleFormatter {
 
     /**
      * Formats the given values.
+     *
      * @stable ICU 57
      */
     public String format(CharSequence... values) {
@@ -100,14 +103,11 @@ public final class SimpleFormatter {
      * Formats the given values, appending to the appendTo builder.
      *
      * @param appendTo Gets the formatted pattern and values appended.
-     * @param offsets offsets[i] receives the offset of where
-     *                values[i] replaced pattern argument {i}.
-     *                Can be null, or can be shorter or longer than values.
-     *                If there is no {i} in the pattern, then offsets[i] is set to -1.
-     * @param values The argument values.
-     *               An argument value must not be the same object as appendTo.
-     *               values.length must be at least getArgumentLimit().
-     *               Can be null if getArgumentLimit()==0.
+     * @param offsets offsets[i] receives the offset of where values[i] replaced pattern argument
+     *     {i}. Can be null, or can be shorter or longer than values. If there is no {i} in the
+     *     pattern, then offsets[i] is set to -1.
+     * @param values The argument values. An argument value must not be the same object as appendTo.
+     *     values.length must be at least getArgumentLimit(). Can be null if getArgumentLimit()==0.
      * @return appendTo
      * @stable ICU 57
      */
@@ -117,18 +117,16 @@ public final class SimpleFormatter {
     }
 
     /**
-     * Formats the given values, replacing the contents of the result builder.
-     * May optimize by actually appending to the result if it is the same object
-     * as the value corresponding to the initial argument in the pattern.
+     * Formats the given values, replacing the contents of the result builder. May optimize by
+     * actually appending to the result if it is the same object as the value corresponding to the
+     * initial argument in the pattern.
      *
      * @param result Gets its contents replaced by the formatted pattern and values.
-     * @param offsets offsets[i] receives the offset of where
-     *                values[i] replaced pattern argument {i}.
-     *                Can be null, or can be shorter or longer than values.
-     *                If there is no {i} in the pattern, then offsets[i] is set to -1.
-     * @param values The argument values.
-     *               An argument value may be the same object as result.
-     *               values.length must be at least getArgumentLimit().
+     * @param offsets offsets[i] receives the offset of where values[i] replaced pattern argument
+     *     {i}. Can be null, or can be shorter or longer than values. If there is no {i} in the
+     *     pattern, then offsets[i] is set to -1.
+     * @param values The argument values. An argument value may be the same object as result.
+     *     values.length must be at least getArgumentLimit().
      * @return result
      * @stable ICU 57
      */
@@ -152,8 +150,8 @@ public final class SimpleFormatter {
     }
 
     /**
-     * Returns the pattern text with none of the arguments.
-     * Like formatting with all-empty string values.
+     * Returns the pattern text with none of the arguments. Like formatting with all-empty string
+     * values.
      *
      * @stable ICU 57
      */

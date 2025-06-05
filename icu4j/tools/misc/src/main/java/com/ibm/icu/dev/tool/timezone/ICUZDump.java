@@ -10,6 +10,12 @@
 
 package com.ibm.icu.dev.tool.timezone;
 
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.ULocale;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,16 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.SimpleDateFormat;
-import com.ibm.icu.util.GregorianCalendar;
-import com.ibm.icu.util.SimpleTimeZone;
-import com.ibm.icu.util.ULocale;
-
-/**
- * TimeZone transition dump tool.
- */
+/** TimeZone transition dump tool. */
 public class ICUZDump {
     private static final String DEFAULT_LINE_SEP;
 
@@ -50,13 +47,12 @@ public class ICUZDump {
     private DumpFormatter formatter;
     private String linesep = DEFAULT_LINE_SEP;
 
-    public ICUZDump() {
-    }
-    
+    public ICUZDump() {}
+
     public void setLowYear(int loyear) {
         this.loyear = loyear;
     }
-    
+
     public void setHighYear(int hiyear) {
         this.hiyear = hiyear;
     }
@@ -67,7 +63,7 @@ public class ICUZDump {
         }
         this.tick = tick;
     }
-    
+
     public void setTimeZone(Object tzimpl) {
         this.tz = new TimeZoneImpl(tzimpl);
     }
@@ -75,11 +71,11 @@ public class ICUZDump {
     public void setDumpFormatter(DumpFormatter formatter) {
         this.formatter = formatter;
     }
-    
+
     public void setLineSeparator(String sep) {
         this.linesep = sep;
     }
-    
+
     public void dump(Writer w) throws IOException {
         if (tz == null) {
             throw new IllegalStateException("timezone is not initialized");
@@ -88,7 +84,7 @@ public class ICUZDump {
         if (formatter == null) {
             formatter = new DumpFormatter();
         }
-        
+
         final long SEARCH_INCREMENT = 12 * 60 * 60 * 1000; // half day
         long cutovers[] = getCutOverTimes();
         long t = cutovers[0];
@@ -125,9 +121,8 @@ public class ICUZDump {
             }
             t = newt;
         }
-
     }
-    
+
     private long[] getCutOverTimes() {
         long[] cutovers = new long[2];
         cutovers[0] = tz.getTime(loyear, 0, 1, 0, 0, 0);
@@ -137,7 +132,7 @@ public class ICUZDump {
 
     private class TimeZoneImpl {
         private Object tzobj;
-        
+
         public TimeZoneImpl(Object tzobj) {
             this.tzobj = tzobj;
         }
@@ -146,7 +141,7 @@ public class ICUZDump {
             try {
                 Method method = tzobj.getClass().getMethod("getOffset", new Class[] {long.class});
                 Object result = method.invoke(tzobj, new Object[] {time});
-                return ((Integer)result).intValue();
+                return ((Integer) result).intValue();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -155,9 +150,10 @@ public class ICUZDump {
 
         public boolean inDaylightTime(long time) {
             try {
-                Method method = tzobj.getClass().getMethod("inDaylightTime", new Class[] {Date.class});
+                Method method =
+                        tzobj.getClass().getMethod("inDaylightTime", new Class[] {Date.class});
                 Object result = method.invoke(tzobj, new Object[] {new Date(time)});
-                return ((Boolean)result).booleanValue();
+                return ((Boolean) result).booleanValue();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -168,13 +164,13 @@ public class ICUZDump {
             long time;
             if (tzobj instanceof com.ibm.icu.util.TimeZone) {
                 GregorianCalendar cal = new GregorianCalendar();
-                cal.setTimeZone((com.ibm.icu.util.TimeZone)tzobj);
+                cal.setTimeZone((com.ibm.icu.util.TimeZone) tzobj);
                 cal.clear();
                 cal.set(year, month, dayOfMonth, hour, minute, second);
                 time = cal.getTimeInMillis();
             } else if (tzobj instanceof java.util.TimeZone) {
                 java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
-                cal.setTimeZone((java.util.TimeZone)tzobj);
+                cal.setTimeZone((java.util.TimeZone) tzobj);
                 cal.clear();
                 cal.set(year, month, dayOfMonth, hour, minute, second);
                 time = cal.getTimeInMillis();
@@ -228,9 +224,9 @@ public class ICUZDump {
 
     /*
      * Usage:
-     * 
+     *
      * java -cp icu4j.jar com.ibm.icu.dev.tool.timezone [-j] [-a] [-c[<low_year>,]<high_year>] [-d<dir>] [-l<sep>] [<zone_name> [<zone_name>]]
-     * 
+     *
      * Options:
      *      -j      : Use JDK TimeZone.  By default, ICU TimeZone is used.
      *      -a      : Dump all available zones.
@@ -266,7 +262,7 @@ public class ICUZDump {
                 dir = args[i].substring(2);
             } else if (args[i].startsWith("-l")) {
                 newLineMode = args[i].substring(2);
-            } else if (!args[i].startsWith("-")){
+            } else if (!args[i].startsWith("-")) {
                 idlist.add(args[i].trim());
             }
         }
@@ -278,10 +274,10 @@ public class ICUZDump {
             } else if (newLineMode.equalsIgnoreCase("LF")) {
                 lineSep = "\n";
             } else if (newLineMode.equalsIgnoreCase("CRLF")) {
-                lineSep = "\r\n";            
+                lineSep = "\r\n";
             }
         }
-        
+
         String[] tzids = null;
 
         if (all) {
@@ -299,7 +295,7 @@ public class ICUZDump {
             Iterator it = set.iterator();
             int i = 0;
             while (it.hasNext()) {
-                tzids[i++] = (String)it.next();
+                tzids[i++] = (String) it.next();
             }
         } else {
             int len = idlist.size();
@@ -309,7 +305,7 @@ public class ICUZDump {
             } else {
                 tzids = new String[idlist.size()];
                 idlist.toArray(tzids);
-            }            
+            }
         }
 
         File dirfile = null;
@@ -335,7 +331,8 @@ public class ICUZDump {
 
             try {
                 for (int i = 0; i < tzids.length; i++) {
-                    FileOutputStream fos = new FileOutputStream(new File(dirfile, tzids[i].replace('/', '-')));
+                    FileOutputStream fos =
+                            new FileOutputStream(new File(dirfile, tzids[i].replace('/', '-')));
                     Writer w = new BufferedWriter(new OutputStreamWriter(fos));
                     dumpZone(w, lineSep, tzids[i], low, high, jdk);
                     w.close();
@@ -346,7 +343,9 @@ public class ICUZDump {
         }
     }
 
-    private static void dumpZone(Writer w, String lineSep, String tzid, int low, int high, boolean isJdk) throws IOException {
+    private static void dumpZone(
+            Writer w, String lineSep, String tzid, int low, int high, boolean isJdk)
+            throws IOException {
         ICUZDump dumper = new ICUZDump();
         Object tzimpl;
         if (isJdk) {

@@ -8,21 +8,19 @@
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.lang.CharSequences;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.ibm.icu.lang.CharSequences;
-
-/**
- * Simple internal utility class for helping with getSource/TargetSet
- */
+/** Simple internal utility class for helping with getSource/TargetSet */
 class SourceTargetUtility {
     final Transform<String, String> transform;
     final UnicodeSet sourceCache;
     final Set<String> sourceStrings;
     static final UnicodeSet NON_STARTERS = new UnicodeSet("[:^ccc=0:]").freeze();
     static Normalizer2 NFC = Normalizer2.getNFCInstance();
-    //static final UnicodeSet TRAILING_COMBINING = new UnicodeSet();
+
+    // static final UnicodeSet TRAILING_COMBINING = new UnicodeSet();
 
     public SourceTargetUtility(Transform<String, String> transform) {
         this(transform, null);
@@ -31,30 +29,30 @@ class SourceTargetUtility {
     public SourceTargetUtility(Transform<String, String> transform, Normalizer2 normalizer) {
         this.transform = transform;
         if (normalizer != null) {
-//            synchronized (SourceTargetUtility.class) {
-//                if (NFC == null) {
-//                    NFC = Normalizer2.getInstance(null, "nfc", Mode.COMPOSE);
-//                    for (int i = 0; i <= 0x10FFFF; ++i) {
-//                        String d = NFC.getDecomposition(i);
-//                        if (d == null) {
-//                            continue;
-//                        }
-//                        String s = NFC.normalize(d);
-//                        if (!CharSequences.equals(i, s)) {
-//                            continue;
-//                        }
-//                        // composes
-//                        boolean first = false;
-//                        for (int trailing : CharSequences.codePoints(d)) {
-//                            if (first) {
-//                                first = false;
-//                            } else {
-//                                TRAILING_COMBINING.add(trailing);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
+            //            synchronized (SourceTargetUtility.class) {
+            //                if (NFC == null) {
+            //                    NFC = Normalizer2.getInstance(null, "nfc", Mode.COMPOSE);
+            //                    for (int i = 0; i <= 0x10FFFF; ++i) {
+            //                        String d = NFC.getDecomposition(i);
+            //                        if (d == null) {
+            //                            continue;
+            //                        }
+            //                        String s = NFC.normalize(d);
+            //                        if (!CharSequences.equals(i, s)) {
+            //                            continue;
+            //                        }
+            //                        // composes
+            //                        boolean first = false;
+            //                        for (int trailing : CharSequences.codePoints(d)) {
+            //                            if (first) {
+            //                                first = false;
+            //                            } else {
+            //                                TRAILING_COMBINING.add(trailing);
+            //                            }
+            //                        }
+            //                    }
+            //                }
+            //            }
             sourceCache = new UnicodeSet("[:^ccc=0:]");
         } else {
             sourceCache = new UnicodeSet();
@@ -86,13 +84,13 @@ class SourceTargetUtility {
                 continue;
             }
             // see if any of the non-starters change s; if so, add i
-//            for (String ns : TRAILING_COMBINING) {
-//                String s2 = transform.transform(s + ns);
-//                if (!s2.startsWith(s)) {
-//                    sourceCache.add(i);
-//                    break;
-//                }
-//            }
+            //            for (String ns : TRAILING_COMBINING) {
+            //                String s2 = transform.transform(s + ns);
+            //                if (!s2.startsWith(s)) {
+            //                    sourceCache.add(i);
+            //                    break;
+            //                }
+            //            }
 
             // int endOfFirst = CharSequences.onCharacterBoundary(d, 1) ? 1 : 2;
             // if (endOfFirst >= d.length()) {
@@ -113,7 +111,10 @@ class SourceTargetUtility {
         sourceCache.freeze();
     }
 
-    public void addSourceTargetSet(Transliterator transliterator, UnicodeSet inputFilter, UnicodeSet sourceSet,
+    public void addSourceTargetSet(
+            Transliterator transliterator,
+            UnicodeSet inputFilter,
+            UnicodeSet sourceSet,
             UnicodeSet targetSet) {
         UnicodeSet myFilter = transliterator.getFilterAsUnicodeSet(inputFilter);
         UnicodeSet affectedCharacters = new UnicodeSet(sourceCache).retainAll(myFilter);
