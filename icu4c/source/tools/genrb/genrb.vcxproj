@@ -34,7 +34,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <CompileAs>Default</CompileAs>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\common;..\toolutil;..\..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\common;..\toolutil;..\..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile>$(OutDir)/genrb.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(OutDir)/</AssemblerListingLocation>
       <ObjectFileName>$(OutDir)/</ObjectFileName>

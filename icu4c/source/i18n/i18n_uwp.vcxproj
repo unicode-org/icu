@@ -70,7 +70,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\include;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <!-- U_DISABLE_RENAMING -->
       <!-- U_HIDE_DRAFT_API & U_HIDE_DEPRECATED_API -->
       <PreprocessorDefinitions>U_ATTRIBUTE_DEPRECATED=;_CRT_SECURE_NO_DEPRECATE;U_I18N_IMPLEMENTATION;U_PLATFORM_USES_ONLY_WIN32_API=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
