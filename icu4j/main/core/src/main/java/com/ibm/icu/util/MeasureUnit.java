@@ -484,6 +484,29 @@ public class MeasureUnit implements Serializable {
         this.conversionInfo = conversionInfo;
     }
 
+    /**
+     * Converts a numeric value from another unit to this unit.
+     *
+     * <p>Example usage:</p>
+     * <pre>{@code
+     * MeasureUnit meter = MeasureUnit.METER;
+     * MeasureUnit centimeter = MeasureUnit.CENTIMETER;
+     * BigDecimal valueInCentimeters = new BigDecimal("100");
+     * BigDecimal valueInMeters = meter.convertFrom(centimeter, valueInCentimeters);
+     * }</pre>
+     *
+     * <p>Note: This method supports conversion only between SINGLE and COMPOUND units.
+     * Conversion involving MIXED units is not supported.</p>
+     *
+     * <p>See {@link Complexity} for details on unit types.</p>
+     *
+     * @param other The unit from which the value is being converted.
+     * @param value The numeric value in the other unit to be converted.
+     * @return The value converted to this unit.
+     * @throws UnsupportedOperationException if the units are not convertible or if one of the units is MIXED.
+     *
+     * @draft ICU 77
+     */
     public BigDecimal convertFrom(MeasureUnit other, BigDecimal value) {
         if (this.getComplexity() == Complexity.MIXED || other.getComplexity() == Complexity.MIXED) {
             throw new UnsupportedOperationException("Conversion between mixed units is not supported");
