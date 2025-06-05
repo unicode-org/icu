@@ -36,7 +36,7 @@
     <ClCompile>
       <PreprocessorDefinitions>U_ATTRIBUTE_DEPRECATED=;U_I18N_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\include;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>Default</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeaderOutputFile>$(OutDir)/icuin.pch</PrecompiledHeaderOutputFile>

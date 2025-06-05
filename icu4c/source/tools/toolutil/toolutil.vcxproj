@@ -29,7 +29,7 @@
   <!-- Options that are common to *all* project configurations -->
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\common;..\..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\common;..\..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>U_TOOLUTIL_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>Level3</WarningLevel>
       <CompileAs>Default</CompileAs>

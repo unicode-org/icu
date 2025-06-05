@@ -34,7 +34,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <CompileAs>Default</CompileAs>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\tools\ctestfw;..\..\common;..\..\i18n;..\..\tools\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\tools\ctestfw;..\..\common;..\..\i18n;..\..\tools\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>U_ATTRIBUTE_DEPRECATED=;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderOutputFile>$(OutDir)\cintltst.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(OutDir)/</AssemblerListingLocation>
