@@ -376,10 +376,10 @@ jobs:
             build_flags: '/p:Configuration=Debug /p:Platform=Win32'
           - test_flags: 'arm Release'
             build_flags: '/p:Configuration=Release /p:Platform=ARM'
+          - test_flags: 'x64 Release cpplatest'
+            build_flags: '/p:OverrideLanguageStandard=stdcpplatest /p:Configuration=Release /p:Platform=x64'
           - test_flags: 'x64 Release'
-            build_flags: '/p:LanguageStandard=stdcpplatest /p:Configuration=Release /p:Platform=x64'
-          - test_flags: 'x64 Release'
-            build_flags: '/p:_HAS_EXCEPTIONS=0 /p:Configuration=Release /p:Platform=x64'
+            build_flags: '/p:Configuration=Release /p:Platform=x64'
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Set up MSBuild
