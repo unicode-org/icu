@@ -1229,7 +1229,7 @@ Locale::getScript() const
 U_COMMON_API inline const char*
 Locale::getVariant() const
 {
-    return fIsBogus ? "" : &baseName[variantBegin];
+    return isBogus() ? "" : &baseName[variantBegin];
 }
 
 U_COMMON_API inline const char*
