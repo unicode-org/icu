@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749159414817,
+  "lastUpdate": 1749248368445,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35157,6 +35157,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetAdd",
             "value": 7.915697297964057,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f89d435eca2c670c222225b9a7e9cbcd8cba5719",
+          "message": "ICU-23055 add contacts page from ICU Site\n\nSee #3519",
+          "timestamp": "2025-06-06T15:12:47-07:00",
+          "tree_id": "aa43cbab636d50929e0b99620726f42dfdaa050a",
+          "url": "https://github.com/unicode-org/icu/commit/f89d435eca2c670c222225b9a7e9cbcd8cba5719"
+        },
+        "date": 1749248099095,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetAdd",
+            "value": 7.9156391689243835,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
