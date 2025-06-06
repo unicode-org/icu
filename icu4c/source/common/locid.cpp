@@ -477,7 +477,7 @@ Locale::clone() const {
 bool
 Locale::operator==( const   Locale& other) const
 {
-    return (uprv_strcmp(other.fullName, fullName) == 0);
+    return uprv_strcmp(other.getName(), getName()) == 0;
 }
 
 namespace {
@@ -1965,7 +1965,7 @@ Locale& Locale::init(StringPiece localeID, UBool canonicalize)
         }
 
         if (canonicalize) {
-            if (!isKnownCanonicalizedLocale(fullName, err)) {
+            if (!isKnownCanonicalizedLocale(getName(), err)) {
                 CharString replaced;
                 // Not sure it is already canonicalized
                 if (canonicalizeLocale(*this, replaced, err)) {
@@ -2030,7 +2030,7 @@ Locale::initBaseName(UErrorCode &status) {
 int32_t
 Locale::hashCode() const
 {
-    return ustr_hashCharsN(fullName, static_cast<int32_t>(uprv_strlen(fullName)));
+    return ustr_hashCharsN(getName(), static_cast<int32_t>(uprv_strlen(getName())));
 }
 
 void
@@ -2088,7 +2088,7 @@ Locale::addLikelySubtags(UErrorCode& status) {
         return;
     }
 
-    CharString maximizedLocaleID = ulocimp_addLikelySubtags(fullName, status);
+    CharString maximizedLocaleID = ulocimp_addLikelySubtags(getName(), status);
 
     if (U_FAILURE(status)) {
         return;
@@ -2110,7 +2110,7 @@ Locale::minimizeSubtags(bool favorScript, UErrorCode& status) {
         return;
     }
 
-    CharString minimizedLocaleID = ulocimp_minimizeSubtags(fullName, favorScript, status);
+    CharString minimizedLocaleID = ulocimp_minimizeSubtags(getName(), favorScript, status);
 
     if (U_FAILURE(status)) {
         return;
@@ -2131,7 +2131,7 @@ Locale::canonicalize(UErrorCode& status) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    CharString uncanonicalized(fullName, status);
+    CharString uncanonicalized(getName(), status);
     if (U_FAILURE(status)) {
         return;
     }
@@ -2196,7 +2196,7 @@ Locale::toLanguageTag(ByteSink& sink, UErrorCode& status) const
         return;
     }
 
-    ulocimp_toLanguageTag(fullName, sink, /*strict=*/false, status);
+    ulocimp_toLanguageTag(getName(), sink, /*strict=*/false, status);
 }
 
 Locale U_EXPORT2
@@ -2229,14 +2229,14 @@ Locale::createCanonical(const char* name) {
 const char *
 Locale::getISO3Language() const
 {
-    return uloc_getISO3Language(fullName);
+    return uloc_getISO3Language(getName());
 }
 
 
 const char *
 Locale::getISO3Country() const
 {
-    return uloc_getISO3Country(fullName);
+    return uloc_getISO3Country(getName());
 }
 
 /**
@@ -2249,7 +2249,7 @@ Locale::getISO3Country() const
 uint32_t
 Locale::getLCID() const
 {
-    return uloc_getLCID(fullName);
+    return uloc_getLCID(getName());
 }
 
 const char* const* U_EXPORT2 Locale::getISOCountries()
@@ -2556,8 +2556,8 @@ Locale::createKeywords(UErrorCode &status) const
         return result;
     }
 
-    const char* variantStart = uprv_strchr(fullName, '@');
-    const char* assignment = uprv_strchr(fullName, '=');
+    const char* variantStart = uprv_strchr(getName(), '@');
+    const char* assignment = uprv_strchr(getName(), '=');
     if(variantStart) {
         if(assignment > variantStart) {
             CharString keywords = ulocimp_getKeywords(variantStart + 1, '@', false, status);
@@ -2583,8 +2583,8 @@ Locale::createUnicodeKeywords(UErrorCode &status) const
         return result;
     }
 
-    const char* variantStart = uprv_strchr(fullName, '@');
-    const char* assignment = uprv_strchr(fullName, '=');
+    const char* variantStart = uprv_strchr(getName(), '@');
+    const char* assignment = uprv_strchr(getName(), '=');
     if(variantStart) {
         if(assignment > variantStart) {
             CharString keywords = ulocimp_getKeywords(variantStart + 1, '@', false, status);
@@ -2604,7 +2604,7 @@ Locale::createUnicodeKeywords(UErrorCode &status) const
 int32_t
 Locale::getKeywordValue(const char* keywordName, char *buffer, int32_t bufLen, UErrorCode &status) const
 {
-    return uloc_getKeywordValue(fullName, keywordName, buffer, bufLen, &status);
+    return uloc_getKeywordValue(getName(), keywordName, buffer, bufLen, &status);
 }
 
 void
@@ -2618,7 +2618,7 @@ Locale::getKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& sta
         return;
     }
 
-    ulocimp_getKeywordValue(fullName, keywordName, sink, status);
+    ulocimp_getKeywordValue(getName(), keywordName, sink, status);
 }
 
 void
@@ -2664,7 +2664,7 @@ Locale::setKeywordValue(StringPiece keywordName,
         status = U_ZERO_ERROR;
     }
 
-    int32_t length = static_cast<int32_t>(uprv_strlen(fullName));
+    int32_t length = static_cast<int32_t>(uprv_strlen(getName()));
     int32_t capacity = fullName == fullNameBuffer ? ULOC_FULLNAME_CAPACITY : length + 1;
 
     const char* start = locale_getKeywordsStart(fullName);
