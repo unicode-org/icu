@@ -35,6 +35,10 @@
 
 #if U_SHOW_CPLUSPLUS_API
 
+#include <memory>
+#include <string_view>
+#include <variant>
+
 #include "unicode/bytestream.h"
 #include "unicode/localpointer.h"
 #include "unicode/strenum.h"
@@ -296,12 +300,6 @@ public:
     Locale(Locale&& other) noexcept;
 
     /**
-     * Destructor
-     * @stable ICU 2.0
-     */
-    virtual ~Locale() ;
-
-    /**
      * Replaces the entire contents of *this with the specified value.
      *
      * @param other The Locale object being copied in.
@@ -469,7 +467,7 @@ public:
      * @return      An alias to the code
      * @stable ICU 2.0
      */
-    inline const char *  getLanguage( ) const;
+    const char* getLanguage() const;
 
     /**
      * Returns the locale's ISO-15924 abbreviation script code.
@@ -478,21 +476,21 @@ public:
      * @see uscript_getCode
      * @stable ICU 2.8
      */
-    inline const char *  getScript( ) const;
+    const char* getScript() const;
 
     /**
      * Returns the locale's ISO-3166 country code.
      * @return      An alias to the code
      * @stable ICU 2.0
      */
-    inline const char *  getCountry( ) const;
+    const char* getCountry() const;
 
     /**
      * Returns the locale's variant code.
      * @return      An alias to the code
      * @stable ICU 2.0
      */
-    inline const char *  getVariant( ) const;
+    const char* getVariant() const;
 
     /**
      * Returns the programmatic name of the entire locale, with the language,
@@ -502,7 +500,7 @@ public:
      * @return      A pointer to "name".
      * @stable ICU 2.0
      */
-    inline const char * getName() const;
+    const char* getName() const;
 
     /**
      * Returns the programmatic name of the entire locale as getName() would return,
@@ -511,7 +509,7 @@ public:
      * @see getName
      * @stable ICU 2.8
      */
-    const char * getBaseName() const;
+    const char* getBaseName() const;
 
     /**
      * Add the likely subtags for this Locale, per the algorithm described
@@ -1157,17 +1155,74 @@ private:
      */
     static Locale* getLocaleCache();
 
-    char language[ULOC_LANG_CAPACITY];
-    char script[ULOC_SCRIPT_CAPACITY];
-    char country[ULOC_COUNTRY_CAPACITY];
-    int32_t variantBegin;
-    char* fullName;
-    char fullNameBuffer[ULOC_FULLNAME_CAPACITY];
-    // name without keywords
-    char* baseName;
-    void initBaseName(UErrorCode& status);
+    /**
+     * Locale data that can be nested directly within the std::variant object.
+     * @internal
+     */
+    struct U_COMMON_API Nest {
+        static constexpr size_t SIZE = 32;
 
-    UBool fIsBogus;
+        char language[4];
+        char script[5];
+        char region[4];
+        uint8_t variantBegin;
+        char baseName[SIZE - sizeof language - sizeof script - sizeof region - sizeof variantBegin];
+
+        const char* getLanguage() const { return language; }
+        const char* getScript() const { return script; }
+        const char* getRegion() const { return region; }
+        const char* getVariant() const { return variantBegin == 0 ? "" : getBaseName() + variantBegin; }
+        const char* getBaseName() const { return baseName; }
+
+        // Doesn't inherit from UMemory, shouldn't be heap allocated.
+        static void* U_EXPORT2 operator new(size_t) noexcept = delete;
+        static void* U_EXPORT2 operator new[](size_t) noexcept = delete;
+
+        Nest();
+        ~Nest();
+
+        Nest(const Nest& other);
+        Nest& operator=(const Nest& other);
+
+        void init(std::string_view language,
+                  std::string_view script,
+                  std::string_view region,
+                  uint8_t variantBegin);
+
+        static bool fits(int32_t length,
+                         std::string_view language,
+                         std::string_view script,
+                         std::string_view region) {
+            return length < static_cast<int32_t>(sizeof Nest::baseName) &&
+                   language.size() < sizeof Nest::language &&
+                   script.size() < sizeof Nest::script &&
+                   region.size() < sizeof Nest::region;
+        }
+    };
+    static_assert(sizeof(Nest) == Nest::SIZE);
+
+    /**
+     * Locale data that needs to be heap allocated in a std::unique_ptr object.
+     * @internal
+     */
+    struct U_COMMON_API Heap;
+
+    std::variant<std::monostate, Nest, std::unique_ptr<Heap>> payload;
+
+    /**
+     * Call a field getter function on either Nest or Heap in payload.
+     * (This is kind of std::visit but simpler and without exceptions.)
+     *
+     * @tparam NEST Pointer to the Nest getter function.
+     * @tparam HEAP Pointer to the Heap getter function.
+     * @return the result from the getter, or the empty string if isBogus().
+     * @internal
+     */
+    template <const char* (Nest::*const NEST)() const,
+              const char* (Heap::*const HEAP)() const>
+    const char* getField() const;
+
+    void initBaseName(UErrorCode& status);
 
     static const Locale &getLocale(int locid);
 
@@ -1181,6 +1236,13 @@ private:
      * @internal (private)
      */
     friend void U_CALLCONV locale_available_init();
+
+public:
+    /**
+     * Destructor
+     * @stable ICU 2.0
+     */
+    virtual ~Locale();
 };
 
 inline bool
@@ -1197,36 +1259,6 @@ Locale::toLanguageTag(UErrorCode& status) const
     StringByteSink<StringClass> sink(&result);
     toLanguageTag(sink, status);
     return result;
-}
-
-inline const char *
-Locale::getCountry() const
-{
-    return country;
-}
-
-inline const char *
-Locale::getLanguage() const
-{
-    return language;
-}
-
-inline const char *
-Locale::getScript() const
-{
-    return script;
-}
-
-inline const char *
-Locale::getVariant() const
-{
-    return isBogus() ? "" : &baseName[variantBegin];
-}
-
-inline const char *
-Locale::getName() const
-{
-    return fullName;
 }
 
 template<typename StringClass, typename OutputIterator> inline void
@@ -1287,10 +1319,23 @@ Locale::getUnicodeKeywordValue(StringPiece keywordName, UErrorCode& status) cons
 
 inline UBool
 Locale::isBogus() const {
-    return fIsBogus;
+    return std::holds_alternative<std::monostate>(payload);
 }
 
 U_NAMESPACE_END
+
+/// @cond DOXYGEN_IGNORE
+// Export an explicit template instantiation of the payload std::variant.
+// (When building DLLs for Windows this is required.)
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+#if defined(U_REAL_MSVC) && defined(_MSVC_STL_VERSION)
+template class U_COMMON_API
+    std::_Variant_storage_<false, std::monostate, icu::Locale::Nest, std::unique_ptr<icu::Locale::Heap>>;
+#endif
+template class U_COMMON_API
+    std::variant<std::monostate, icu::Locale::Nest, std::unique_ptr<icu::Locale::Heap>>;
+#endif
+/// @endcond
 
 #endif /* U_SHOW_CPLUSPLUS_API */
 
