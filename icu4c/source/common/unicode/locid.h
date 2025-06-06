@@ -1220,7 +1220,7 @@ Locale::getScript() const
 inline const char *
 Locale::getVariant() const
 {
-    return fIsBogus ? "" : &baseName[variantBegin];
+    return isBogus() ? "" : &baseName[variantBegin];
 }
 
 inline const char *

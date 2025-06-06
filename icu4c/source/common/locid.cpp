@@ -2191,7 +2191,7 @@ Locale::toLanguageTag(ByteSink& sink, UErrorCode& status) const
         return;
     }
 
-    if (fIsBogus) {
+    if (isBogus()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -2613,7 +2613,7 @@ Locale::getKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& sta
         return;
     }
 
-    if (fIsBogus) {
+    if (isBogus()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
