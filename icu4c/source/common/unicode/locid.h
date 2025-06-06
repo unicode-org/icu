@@ -35,6 +35,10 @@
 
 #if U_SHOW_CPLUSPLUS_API
 
+#include <memory>
+#include <string_view>
+#include <variant>
+
 #include "unicode/bytestream.h"
 #include "unicode/localpointer.h"
 #include "unicode/strenum.h"
@@ -468,7 +472,7 @@ public:
      * @return      An alias to the code
      * @stable ICU 2.0
      */
-    U_COMMON_API inline const char* getLanguage() const;
+    U_COMMON_API const char* getLanguage() const;
 
     /**
      * Returns the locale's ISO-15924 abbreviation script code.
@@ -477,21 +481,21 @@ public:
      * @see uscript_getCode
      * @stable ICU 2.8
      */
-    U_COMMON_API inline const char* getScript() const;
+    U_COMMON_API const char* getScript() const;
 
     /**
      * Returns the locale's ISO-3166 country code.
      * @return      An alias to the code
      * @stable ICU 2.0
      */
-    U_COMMON_API inline const char* getCountry() const;
+    U_COMMON_API const char* getCountry() const;
 
     /**
      * Returns the locale's variant code.
      * @return      An alias to the code
      * @stable ICU 2.0
      */
-    U_COMMON_API inline const char* getVariant() const;
+    U_COMMON_API const char* getVariant() const;
 
     /**
      * Returns the programmatic name of the entire locale, with the language,
@@ -501,7 +505,7 @@ public:
      * @return      A pointer to "name".
      * @stable ICU 2.0
      */
-    U_COMMON_API inline const char* getName() const;
+    U_COMMON_API const char* getName() const;
 
     /**
      * Returns the programmatic name of the entire locale as getName() would return,
@@ -1166,17 +1170,74 @@ private:
      */
     static Locale* getLocaleCache();
 
-    char language[ULOC_LANG_CAPACITY];
-    char script[ULOC_SCRIPT_CAPACITY];
-    char country[ULOC_COUNTRY_CAPACITY];
-    int32_t variantBegin;
-    char* fullName;
-    char fullNameBuffer[ULOC_FULLNAME_CAPACITY];
-    // name without keywords
-    char* baseName;
-    void initBaseName(UErrorCode& status);
+    /**
+     * Locale data that can be nested directly within the std::variant object.
+     * @internal
+     */
+    struct Nest {
+        static constexpr size_t SIZE = 32;
 
-    UBool fIsBogus;
+        char language[4];
+        char script[5];
+        char region[4];
+        uint8_t variantBegin;
+        char baseName[SIZE - sizeof language - sizeof script - sizeof region - sizeof variantBegin];
+
+        const char* getLanguage() const { return language; }
+        const char* getScript() const { return script; }
+        const char* getRegion() const { return region; }
+        const char* getVariant() const { return variantBegin == 0 ? "" : getBaseName() + variantBegin; }
+        const char* getBaseName() const { return baseName; }
+
+        // Doesn't inherit from UMemory, shouldn't be heap allocated.
+        static void* U_EXPORT2 operator new(size_t) noexcept = delete;
+        static void* U_EXPORT2 operator new[](size_t) noexcept = delete;
+
+        Nest();
+        ~Nest();
+
+        Nest(const Nest& other);
+        Nest& operator=(const Nest& other);
+
+        void init(std::string_view language,
+                  std::string_view script,
+                  std::string_view region,
+                  uint8_t variantBegin);
+
+        static bool fits(int32_t length,
+                         std::string_view language,
+                         std::string_view script,
+                         std::string_view region) {
+            return length < static_cast<int32_t>(sizeof Nest::baseName) &&
+                   language.size() < sizeof Nest::language &&
+                   script.size() < sizeof Nest::script &&
+                   region.size() < sizeof Nest::region;
+        }
+    };
+    static_assert(sizeof(Nest) == Nest::SIZE);
+
+    /**
+     * Locale data that needs to be heap allocated in a std::unique_ptr object.
+     * @internal
+     */
+    struct Heap;
+
+    std::variant<std::monostate, Nest, std::unique_ptr<Heap>> payload;
+
+    /**
+     * Call a field getter function on either Nest or Heap in payload.
+     * (This is kind of std::visit but simpler and without exceptions.)
+     *
+     * @tparam NEST Pointer to the Nest getter function.
+     * @tparam HEAP Pointer to the Heap getter function.
+     * @return the result from the getter, or the empty string if isBogus().
+     * @internal
+     */
+    template <const char* (Nest::*const NEST)() const,
+              const char* (Heap::*const HEAP)() const>
+    const char* getField() const;
+
+    void initBaseName(UErrorCode& status);
 
     static const Locale &getLocale(int locid);
 
@@ -1206,36 +1267,6 @@ Locale::toLanguageTag(UErrorCode& status) const
     StringByteSink<StringClass> sink(&result);
     toLanguageTag(sink, status);
     return result;
-}
-
-U_COMMON_API inline const char*
-Locale::getCountry() const
-{
-    return country;
-}
-
-U_COMMON_API inline const char*
-Locale::getLanguage() const
-{
-    return language;
-}
-
-U_COMMON_API inline const char*
-Locale::getScript() const
-{
-    return script;
-}
-
-U_COMMON_API inline const char*
-Locale::getVariant() const
-{
-    return isBogus() ? "" : &baseName[variantBegin];
-}
-
-U_COMMON_API inline const char*
-Locale::getName() const
-{
-    return fullName;
 }
 
 template<typename StringClass, typename OutputIterator> inline void
@@ -1296,7 +1327,7 @@ Locale::getUnicodeKeywordValue(StringPiece keywordName, UErrorCode& status) cons
 
 U_COMMON_API inline UBool
 Locale::isBogus() const {
-    return fIsBogus;
+    return std::holds_alternative<std::monostate>(payload);
 }
 
 U_NAMESPACE_END
